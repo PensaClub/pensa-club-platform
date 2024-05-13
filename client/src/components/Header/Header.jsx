@@ -1,10 +1,11 @@
 import { useState } from "react";
 import './header.css'
 
-export const Header= () =>{
+export const Header = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
-    return(
-<section className="site-header">
+    
+    return (
+        <section className="site-header">
             <header className={isMenuOpen ? 'scrolled' : ''}>
                 <a href="/">
                     <img src='/images/homePage/logo.png' alt="logo" className="logo" /> Penca Club
@@ -14,7 +15,6 @@ export const Header= () =>{
                     <i className="bx bx-menu" id="menu-icon"></i>
                     <i className="bx bx-x" id="close-icon"></i>
                 </label>
-
                 <nav className="navbar">
                     <a href="/#" className="nav-item" style={{ '--i': 0 }}>Map</a>
                     <a href="/#" className="nav-item" style={{ '--i': 1 }}>Craigslist</a>
