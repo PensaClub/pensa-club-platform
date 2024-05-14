@@ -15,7 +15,6 @@ export const Hero = () => {
                             <a href="">Join Community</a>
                         </div>
                     </div>
-
                     <Testimonials />
                 </div>
             </section>
