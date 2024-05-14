@@ -14,7 +14,6 @@ export const Footer = () => {
                     <p>Communities</p>
                     <p>Map</p>
                     <p>Craiglist</p>
-
                 </div>
                 <div className="footer-links">
                     <h3>Партньори</h3>
@@ -40,9 +39,6 @@ export const Footer = () => {
                 <p>Privacy</p>
                 <p>&copy; 2024 Pensa club. All rights reserved</p>
             </section>
-
-
-
         </footer>
 
     );
