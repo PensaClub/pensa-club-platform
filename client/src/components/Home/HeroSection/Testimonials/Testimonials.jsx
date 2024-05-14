@@ -77,7 +77,6 @@ const Testimonials = () => {
                             <div className="content">
                                 <h2>{testimonial.title}</h2>
                                 <p>{testimonial.description}</p>
-                                <h2>{testimonial.name}</h2>
                             </div>
                             <div className="hero">
                                 <img src={testimonial.imageUrl} alt={testimonial.name} />
