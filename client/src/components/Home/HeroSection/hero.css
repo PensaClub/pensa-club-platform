@@ -1,0 +1,100 @@
+.hero-section {
+    background-image: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff);
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6em;
+}
+
+.parent-hero {
+    display: flex;
+
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 4em;
+}
+
+.left-side {
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #5c5d61;
+    max-width: 70%;
+    align-items: center;
+    padding-top: 5em;
+}
+
+.left-side h1 {
+    font-size: 1.8em;
+    color: var(--green);
+    padding-bottom: 0.4em;
+}
+
+.left-side p {
+    font-size: 1.2em;
+}
+
+.btn-hero {
+    display: flex;
+    gap: 2em;
+    margin-top: 1.2em;
+}
+
+.btn-hero a {
+    padding: 0.7em 1.4em;
+    border-radius: 20px;
+    color: white;
+    font-size: 1em;
+    text-align: center;
+
+}
+
+.btn-hero :nth-child(1) {
+    background-color: var(--green);
+}
+
+.btn-hero :nth-child(1):hover {
+    opacity: 0.7;
+}
+
+.btn-hero :nth-child(2) {
+    background-color: var(--orange);
+}
+
+.btn-hero :nth-child(2):hover {
+    opacity: 0.7;
+}
+
+/* desktop */
+@media (min-width: 750px) {
+    .parent-hero {
+        flex-direction: row;
+        gap: 8em;
+    }
+
+    .left-side {
+        flex: 0 0 30%;
+    }
+
+    .left-side h1 {
+        font-size: 2.5em;
+    }
+
+    .left-side p {
+        font-size: 1.25em;
+        text-align: center;
+    }
+
+    .btn-hero {
+        padding-top: 1em;
+    }
+
+    .btn-hero a {
+        font-size: 1.25em;
+    }
+}
