@@ -6,7 +6,7 @@ export const LastPosts = () => {
     return (
         <>
             <section className="last-posts">
-                <h2>Последно от блога</h2>
+                <h2>Последните наши обяви</h2>
                 <section className="home-posts">
                     <div className="single-card card-1">
                         <img src="/images/homePage/test1.webp" alt="" />
