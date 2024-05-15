@@ -4,6 +4,7 @@ import { NotFound } from './components/NotFound/NotFound';
 import { Home } from './components/Home/Home';
 
 import { Routes, Route } from 'react-router-dom';
+import { ServerError } from './components/ServerError/ServerError';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/server-error" element={<ServerError />}/>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </main>
