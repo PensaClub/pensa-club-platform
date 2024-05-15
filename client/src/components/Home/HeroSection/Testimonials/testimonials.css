@@ -1,0 +1,179 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+
+
+main {
+    width: 800px;
+}
+
+main h1 {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    color: #fff;
+    margin-bottom: 70px;
+}
+
+.slide-row {
+    display: flex;
+    width: 4000px;
+    transition: 0.5s;
+}
+
+.slide-col {
+    position: relative;
+    width: 800px;
+    height: 400px;
+}
+
+.hero {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    
+}
+
+.hero img {
+    height: 100%;
+    border-radius: 10px;
+    width: 360px;
+    object-fit: fill;
+    pointer-events: none;
+    user-select: none;
+}
+
+.content {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 520px;
+    height: 270px;
+    color: #4d4352;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.5px);
+    -webkit-backdrop-filter: blur(4.5px);
+    border-radius: 10px;
+    padding: 2em;
+    z-index: 2;
+    user-select: none;
+}
+
+.content p {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+.content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.2em;
+    color: #4d4352;
+}
+
+.indicator {
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+}
+
+.indicator .btn {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    margin: 4px;
+    border-radius: 15px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+}
+
+.btn.active {
+    width: 30px;
+}
+
+.slider {
+    width: 100%;
+    overflow: hidden;
+}
+
+@media (max-width: 850px) {
+    main {
+        width: 500px;
+    }
+
+    .slide-row {
+        width: 2500px;
+    }
+
+
+    .slide-col {
+        width: 500px;
+        height: 250px;
+    }
+
+    .hero img {
+        width: 200px;
+    }
+
+    .content {
+        width: 320px;
+        height: 200px;
+        padding: 20px;
+    }
+
+    .content p {
+        font-size: 0.9rem;
+    }
+
+    .content h2 {
+        font-size: 1rem;
+        /* margin-top: 0.8em; */
+    }
+
+    .indicator .btn {
+        background-color: var(--red);
+    }
+}
+
+@media (max-width: 550px) {
+    main {
+        width: 300px;
+    }
+
+    .slide-row {
+        width: 1500px;
+    }
+
+    .slide-col {
+        width: 500px;
+        height: 360px;
+    }
+
+    .hero {
+        top: 72%;
+        height: 100px;
+        z-index: 5;
+    }
+
+    .hero img {
+        width: 100px;
+    }
+
+    .content {
+        width: 300px;
+    }
+
+    .indicator .btn {
+        background-color: var(--red);
+        margin-bottom: 2em;
+    }
+}
+/* @media screen and (orientation:landscape) {
+    .indicator .btn {
+        background-color: var(--red);
+        margin-bottom: 2em;
+    }
+} */
