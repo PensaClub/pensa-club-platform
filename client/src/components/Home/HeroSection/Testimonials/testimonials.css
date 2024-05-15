@@ -171,9 +171,9 @@ main h1 {
         margin-bottom: 2em;
     }
 }
-@media screen and (orientation:landscape) {
+/* @media screen and (orientation:landscape) {
     .indicator .btn {
         background-color: var(--red);
         margin-bottom: 2em;
     }
-}
+} */
