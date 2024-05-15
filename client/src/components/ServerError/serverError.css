@@ -1,19 +1,19 @@
-.not-found {
+.server-error {
   text-align: center;
   height: 100vh;
 }
 
-h1 {
+.server-error > h1 {
   font-size: 48px;
   color: #333;
 }
 
-h2 {
+.server-error > h2 {
   font-size: 36px;
   color: #5c5d61;
 }
 
-p {
+.server-error > p {
   font-size: 18px;
   color: #5c5d61;
 }

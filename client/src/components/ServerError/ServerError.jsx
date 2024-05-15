@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const ServerError = () => {
   return (
-    <div className="not-found">
+    <div className="server-error">
       <h1>500 </h1>
       <h2>Сървърна грешка</h2>
       <p>Върнете се към</p>
