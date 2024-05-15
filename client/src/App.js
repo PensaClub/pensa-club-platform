@@ -8,7 +8,7 @@ import { ServerError } from './components/ServerError/ServerError';
 
 function App() {
   return (
-    <main>
+    <>
       <Header />
 
       <Routes>
@@ -19,7 +19,7 @@ function App() {
 
       <Footer />
 
-    </main>
+    </>
   );
 }
 
