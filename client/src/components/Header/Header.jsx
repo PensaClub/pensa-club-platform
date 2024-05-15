@@ -8,7 +8,7 @@ export const Header = () => {
         <section className="site-header">
             <header className={isMenuOpen ? 'scrolled' : ''}>
                 <a href="/">
-                    <img src='/images/homePage/logo.png' alt="logo" className="logo" /> Penca Club
+                    <img src='/images/homePage/logo.png' alt="logo" className="logo" /> Pensa Club
                 </a>
                 <input type="checkbox" id="check" checked={isMenuOpen} onChange={() => setMenuOpen(!isMenuOpen)} />
                 <label htmlFor="check" className="icons">
