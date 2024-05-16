@@ -1,0 +1,76 @@
+.subscribe-news {
+    width: 100%;
+
+    background: linear-gradient(90deg, #f7db77 0, #a9e3f0);
+    display: flex;
+    flex-direction: column;
+
+    /* align-items: center; */
+    padding: 2em 1em;
+}
+
+.single-subscribe-info {
+    padding: 2em 0;
+    font-family: Archer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.single-subscribe-info h3 {
+    font-size: 2.5em;
+    font-weight: 700;
+    text-align: center;
+
+}
+
+.single-subscribe-info h3>span {
+    font-weight: 500;
+}
+
+.single-subscribe-info p {
+    font-size: 1.5em;
+    font-weight: 500;
+    padding-top: 1em;
+    text-align: center;
+
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 0.7em;
+}
+
+.form-row {
+    display: flex;
+    padding-bottom: 1em;
+
+}
+
+.col-subscribe {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+}
+
+.col-subscribe input {
+    width: 100%;
+    padding: 0.5em 0.2em;
+    font-size: 1.25em;
+}
+
+.news-btn {
+display: flex;
+flex-direction: column;
+margin: 0.7em;
+}
+.news-btn button {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 0.4em;
+    background-color: var(--green);
+    color: var(--text-white);
+    border: none;
+}

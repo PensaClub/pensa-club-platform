@@ -22,6 +22,8 @@
      font-size: 1em;
      font-weight: 300;
      line-height: 1.4;
+     color: var( --text-white);
+
  }
 
  .footer h3 {
@@ -100,7 +102,7 @@
  .footer-privacy p {
      font-size: 0.8em;
      padding: 0.8em 0;
-
+     color: var( --text-white);
  }
 
  @media (min-width: 750px) {
