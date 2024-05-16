@@ -27,7 +27,7 @@ export const NewsSubscribe = () => {
             }).then(
                 (result) => {
                     console.log("Email sent successfully:", result);
-                    setUserName(""); 
+                    setUserName("");
                     setUserEmail("");
                 },
 
@@ -55,7 +55,6 @@ export const NewsSubscribe = () => {
                     <div className="news-btn">
                         <button type="submit" className="btn btn-light">Абонирай се </button>
                     </div>
-
                 </form>
             </section>
         </>

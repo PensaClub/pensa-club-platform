@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './testimonials.css'
 const Testimonials = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const totalSlides = 5; 
+    const transitioning = useRef(false); 
 
-    const updateSlide = () => {
+    const updateSlide = (shouldAnimate = true) => {
         const main = document.querySelector('main');
         const slideRow = document.getElementById('slide-row');
         const mainWidth = main.offsetWidth;
         const translateValue = currentIndex * -mainWidth;
+
+        slideRow.style.transition = shouldAnimate ? 'transform 0.5s ease' : 'none';
         slideRow.style.transform = `translateX(${translateValue}px)`;
 
         const btns = document.querySelectorAll('.btn');
@@ -17,21 +21,37 @@ const Testimonials = () => {
     };
 
     useEffect(() => {
-        const handleResize = () => {
-            updateSlide();
-        };
+        const handleResize = () => updateSlide(true);
 
         window.addEventListener('resize', handleResize);
 
+        const interval = setInterval(() => {
+            let nextIndex = (currentIndex + 1) % totalSlides;
+            transitioning.current = true; 
+            setCurrentIndex(nextIndex);
+        }, 5000);
 
-        updateSlide();
+        updateSlide(true);
 
         return () => {
             window.removeEventListener('resize', handleResize);
+            clearInterval(interval);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentIndex]);
 
+    useEffect(() => {
+        if (transitioning.current) {
+            if (currentIndex === 0) { 
+                updateSlide(false); 
+                setTimeout(() => updateSlide(true), 20); 
+            } else {
+                updateSlide(true);
+            }
+            transitioning.current = false; 
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentIndex]);
 
 
     const testimonials = [
