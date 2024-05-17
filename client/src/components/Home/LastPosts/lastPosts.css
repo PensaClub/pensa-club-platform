@@ -163,3 +163,21 @@
         object-fit: cover;
     }
 }
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  
+    .home-posts  {
+        width: 100%;
+        flex-direction: column;
+        padding: 2em 2em;
+    }
+    .single-card.card-1{
+        width: 100%;
+        justify-content: center;
+        height: 170px;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+    .single-card.card-2{
+        width: 100%;
+    }
+  }
