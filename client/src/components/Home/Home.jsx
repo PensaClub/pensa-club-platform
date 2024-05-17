@@ -1,3 +1,4 @@
+import { Fade, Slide } from 'react-awesome-reveal'
 import { Hero } from './HeroSection/Hero'
 import { LastPosts } from './LastPosts/LastPosts'
 import { MottoSection } from './MottoSection/MottoSection'
@@ -9,9 +10,16 @@ export const Home = () => {
         <>
             <div className="home-container">
                 <Hero />
-                <MottoSection/>
-                <LastPosts/>
-                <NewsSubscribe/>
+                <Fade delay="50" duration="5000" triggerOnce='true'>
+                    <MottoSection />
+                </Fade>
+                <Slide direction='left' duration="3000" triggerOnce='true'>
+                    <LastPosts />
+                </Slide>
+                <Fade delay="50" duration="5000" triggerOnce='true'>
+                    <NewsSubscribe />
+                </Fade>
+
             </div>
         </>
 
