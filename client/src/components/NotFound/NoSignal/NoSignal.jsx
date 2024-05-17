@@ -28,7 +28,7 @@ export const NoSignal = () => {
       ctx.putImageData(imgData, 0, 0);
     };
 
-    const flickerInterval = setInterval(flickering, 30);
+    const flickerInterval = setInterval(flickering, 50);
 
     return () => {
       clearInterval(flickerInterval);

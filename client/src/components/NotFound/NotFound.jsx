@@ -5,9 +5,10 @@ import { NoSignal } from './NoSignal/NoSignal';
 export const NotFound = () => {
   return (
     <>
+      <div className="bg-container"></div>
       <div className="not-found-container">
         <div className="not-found">
-          <h1>404</h1>
+          <h1>Грешка 404</h1>
 
           <h2>Не съществува такава страница</h2>
           {/* <h3>Върнете се към</h3> */}
@@ -32,7 +33,7 @@ export const NotFound = () => {
         </div>
       </div>
 
-      <NoSignal />
+      {/* <NoSignal /> */}
     </>
   );
 };
