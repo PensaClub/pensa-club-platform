@@ -10,7 +10,7 @@ export const Home = () => {
         <>
             <div className="home-container">
                 <Hero />
-                <Fade delay="50" duration="5000" triggerOnce='true'>
+                <Fade delay="50" duration="5000" fraction="0.4"triggerOnce='true'>
                     <MottoSection />
                 </Fade>
                 <Slide direction='left' duration="3000" triggerOnce='true'>
