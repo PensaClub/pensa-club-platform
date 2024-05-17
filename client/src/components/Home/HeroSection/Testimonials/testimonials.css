@@ -32,14 +32,14 @@ main h1 {
     right: 0;
     height: 100%;
     /* perspective: 1000px; */
-    
+
 }
 
 .hero img {
     height: 100%;
     border-radius: 10px;
     width: 460px;
-    object-fit:fill;
+    object-fit: fill;
     pointer-events: none;
     user-select: none;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -176,9 +176,10 @@ main h1 {
         margin-bottom: 2em;
     }
 }
+
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
     .indicator .btn {
         background-color: var(--red);
         margin-bottom: 2em;
     }
-} 
+}
