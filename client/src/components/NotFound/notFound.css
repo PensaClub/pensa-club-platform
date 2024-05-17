@@ -23,6 +23,7 @@
   width: 80%;
   max-width: 1200px;
   height: 600px;
+  min-height: 300px;
   background-color: rgba(255, 255, 255, 0.8);
 
   border-radius: 20px;
@@ -34,13 +35,14 @@
 .not-found > h1 {
   font-size: 72px;
   color: var(--red);
+  margin: 0 30px;
 }
 
 .not-found > h2 {
   font-size: 36px;
   color: var(--bg-black);
   display: inline-block;
-  margin: 0 20px;
+  margin: 20px 20px;
 }
 
 .not-found > h3 {
@@ -58,11 +60,12 @@
 }
 
 .menu-item {
-  width: 150px;
+  width: 8em;
   margin-top: 20px;
   padding: 0.7em 1.4em;
   background-color: var(--green);
   border-radius: 20px;
+  font-size: 1.5em;
 }
 
 .menu-link {
@@ -89,5 +92,9 @@
     flex-direction: row;
     justify-content: space-evenly;
     margin-top: 2em;
+  }
+
+  .menu-item {
+    width: 8em;
   }
 }
