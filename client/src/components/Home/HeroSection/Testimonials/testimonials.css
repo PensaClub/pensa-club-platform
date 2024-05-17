@@ -4,6 +4,7 @@
 
 main {
     width: 800px;
+    /* padding-top: 5em; */
 }
 
 main h1 {
@@ -30,16 +31,20 @@ main h1 {
     top: 0;
     right: 0;
     height: 100%;
+    /* perspective: 1000px; */
     
 }
 
 .hero img {
     height: 100%;
     border-radius: 10px;
-    width: 360px;
-    object-fit: fill;
+    width: 460px;
+    object-fit:fill;
     pointer-events: none;
     user-select: none;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 12px 40px rgba(0, 0, 0, 0.3);
+    transform: perspective(1000px) rotateY(10deg) rotateX(10deg) scale(1.05); */
 }
 
 .content {
@@ -81,8 +86,8 @@ main h1 {
 
 .indicator .btn {
     display: inline-block;
-    height: 15px;
-    width: 15px;
+    height: 25px;
+    width: 25px;
     margin: 4px;
     border-radius: 15px;
     background: #fff;
@@ -91,7 +96,7 @@ main h1 {
 }
 
 .btn.active {
-    width: 30px;
+    width: 50px;
 }
 
 .slider {

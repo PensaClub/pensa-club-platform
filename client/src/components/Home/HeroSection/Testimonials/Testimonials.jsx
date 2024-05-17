@@ -29,7 +29,7 @@ const Testimonials = () => {
             let nextIndex = (currentIndex + 1) % totalSlides;
             transitioning.current = true; 
             setCurrentIndex(nextIndex);
-        }, 5000);
+        }, 7000);
 
         updateSlide(true);
 
@@ -59,31 +59,31 @@ const Testimonials = () => {
 
             title: 'Първа индустриална революция ',
             description: 'Отличава се с въвеждането на парната машина, което доведе до механизацията на производството и развитието на железопътния транспорт.',
-            imageUrl: '/images/homePage/1model.png'
+            imageUrl: '/images/homePage/FIR.webp'
         },
         {
 
             title: 'Втора индустриална революция',
             description: 'Характеризира се с масовото разпространение на електрическата енергия и поточните линии, което увеличи производствената ефективност и стимулира индустриалния растеж.',
-            imageUrl: '/images/homePage/model2.png'
+            imageUrl: '/images/homePage/SIR.webp'
         },
         {
 
             title: 'Трета индустриална революция',
             description: 'Наречена още Цифрова революция, тази ера е обозначена с въвеждането на компютрите, интернета и автоматизацията, което радикално промени начина, по който се управляват и контролират производствените процеси.',
-            imageUrl: '/images/homePage/model3.png'
+            imageUrl: '/images/homePage/TIR.png'
         },
         {
 
             title: 'Индустрия 4.0',
             description: 'Съсредоточена върху интелигентните фабрики, които използват интернет на нещата (IoT), автоматизирано вземане на решения и машинно обучение за по-нататъшно повишаване на производствената ефективност.',
-            imageUrl: '/images/homePage/model4.png'
+            imageUrl: '/images/homePage/FourthIR.webp'
         },
         {
 
             title: 'Индустрия 5.0',
             description: 'Това е последният етап в развитието, който включва използването на изкуствен интелект не само за автоматизация, но и за интегриране на човешкия творчески и аналитичен потенциал ',
-            imageUrl: '/images/homePage/model5.png'
+            imageUrl: '/images/homePage/ai2.png'
         }
     ];
 
