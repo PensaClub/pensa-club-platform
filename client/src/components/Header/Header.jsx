@@ -18,8 +18,8 @@ export const Header = () => {
                 <nav className="navbar">
                     <a href="/#" className="nav-item" style={{ '--i': 0 }}>Map</a>
                     <a href="/#" className="nav-item" style={{ '--i': 1 }}>Craigslist</a>
-                    <a href="/#" className="nav-item" style={{ '--i': 2 }}>Login</a>
-                    <a href="/#" className="nav-item" style={{ '--i': 3 }}>Register</a>
+                    <a href="/#" className="nav-item" style={{ '--i': 2 }}>SignUp</a>
+                    {/* <a href="/#" className="nav-item" style={{ '--i': 3 }}>Register</a> */}
                 </nav>
             </header>
             <div className="after-header"></div>

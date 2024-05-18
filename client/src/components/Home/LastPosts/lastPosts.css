@@ -1,6 +1,6 @@
 .last-posts {
     width: 100%;
-    padding: 4em 0;
+    padding: 3em 0 4em 0;
 }
 
 .last-posts h2 {
@@ -9,8 +9,9 @@
     font-size: 2.5em;
     padding: 0 1em;
     font-weight: 200;
-    text-shadow:0 4px 6px rgba(0, 0, 0, 0.4); ;
-
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    ;
+    color: var(--text-black);
 }
 
 .home-posts {
@@ -18,7 +19,7 @@
     padding: 2em 2em;
     display: flex;
     flex-direction: column;
- 
+
     gap: 2em;
 }
 
@@ -34,7 +35,8 @@
     width: 100%;
     height: 200px;
     object-fit: cover;
-    /* overflow: hidden; */
+
+
 }
 
 .card-info {
@@ -48,13 +50,31 @@
 
 .card-info h4 {
     padding-top: 1em;
-    
+
 }
 
 .color-line {
     width: 100%;
     height: 14px;
     background: linear-gradient(304deg, #1B6D4D, #E26020 22%, #BB1D3D 93%);
+}
+
+.more-btn {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.more-btn a {
+    color: var(--text-white);
+    background-color: var(--orange);
+    padding: 0.5em 1.2em;
+    border-radius: 10px;
+    font-size: 1.2em;
+}
+
+.more-btn a:hover {
+    opacity: 0.7;
 }
 
 @media (min-width: 550px) {
@@ -87,7 +107,7 @@
 
 }
 
-@media (min-width: 750px) {
+@media (min-width: 850px) {
     .home-posts {
         flex-direction: row;
         flex-wrap: wrap;
@@ -98,33 +118,67 @@
 
     .single-card {
         min-height: 120px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease; 
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0); 
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
         cursor: pointer;
+        overflow: hidden;
     }
+
     .single-card:hover {
-        transform: translateY(-10px); 
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        border-radius: 15px;
+
     }
+
     .single-card.card-1 {
         width: 98%;
         justify-content: center;
         height: 170px;
-        transition: transform 0.3s box-shadow 0.3s ease; 
+        border-radius: 15px;
+        overflow: hidden;
+
+        transition: transform 0.3s box-shadow 0.3s ease;
+
     }
+
     .single-card.card-1:hover {
-     
-        box-shadow: none; 
+        border-radius: 15px;
+        overflow: hidden;
     }
+
     .single-card.card-2 {
-        flex: 0 0 43%;
+        flex: 0 0 48%;
         justify-content: center;
         height: 170px;
-
+        overflow: hidden;
+        border-radius: 15px;
     }
 
     .single-card img {
-        width: 40%;
+        width: 50%;
         object-fit: cover;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1280px) and (orientation: landscape) {
+
+    .home-posts {
+        width: 100%;
+        flex-direction: column;
+        padding: 2em 2em;
+    }
+
+    .single-card.card-1 {
+        width: 100%;
+        justify-content: center;
+        height: 170px;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+
+    .single-card.card-2 {
+        flex:initial;
     }
 }
