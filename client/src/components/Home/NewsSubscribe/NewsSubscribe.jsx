@@ -85,12 +85,12 @@ export const NewsSubscribe = () => {
                     <div className="form-row">
                         <div className="col-subscribe form-group">
                             <div className="error-username">
-                            <input type="text" name="user_name" className="form-control" id="name" placeholder="Име*" value={userName} onChange={handleNameChange} />
-                            {errors.userName && <div className="error-message">{errors.userName}</div>}
+                                <input type="text" name="user_name" className="form-control" id="name" placeholder="Име*" value={userName} onChange={handleNameChange} />
+                                {errors.userName && <div className="error-message">{errors.userName}</div>}
                             </div>
                             <div className="error-email">
-                            <input type="email" className="form-control" name="user_email" id="email" placeholder="Имейл адрес*" value={userEmail} onChange={handleEmailChange} />
-                            {errors.userEmail && <div className="error-message">{errors.userEmail}</div>}
+                                <input type="email" className="form-control" name="user_email" id="email" placeholder="Имейл адрес*" value={userEmail} onChange={handleEmailChange} />
+                                {errors.userEmail && <div className="error-message">{errors.userEmail}</div>}
                             </div>
                         </div>
                     </div>
