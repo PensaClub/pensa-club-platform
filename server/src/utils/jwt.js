@@ -3,7 +3,7 @@ const { secret } = process.env;
 
 function tokenCreator(data) {
   const payload = {
-    userId: data._id.toString(),
+    userId: data.id.toString(),
     phoneNumber: data.phoneNumber,
   };
 
