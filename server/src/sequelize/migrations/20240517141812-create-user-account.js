@@ -2,18 +2,29 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('testUsers', {
+    await queryInterface.createTable('user_accounts', {
       id: {
         allowNull: false,
+        unique: true,
+        notEmpty: true,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING
+      phone_number: {
+        type: Sequelize.STRING(10),
+        unique: true,
+        allowNull: false,
+        notEmpty: true,
+        is: {
+          args: /^(\+?\d{1,3})?\s*\d{9}$/,
+          msg: 'Phone number is not a valid.'
+        }
       },
-      email: {
-        type: Sequelize.STRING
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        notEmpty: true,
       },
       createdAt: {
         allowNull: false,
@@ -26,6 +37,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('testUsers');
+    await queryInterface.dropTable('user_accounts');
   }
 };
