@@ -190,9 +190,10 @@ main h1 {
 
 }
 
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+@media (min-width: 768px) and (max-width: 1280px) and (orientation: landscape) {
     .indicator .btn {
         background-color: var(--red);
-        margin-bottom: 2em;
+        margin-bottom: 2.2em;
     }
+
 }
