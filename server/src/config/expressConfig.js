@@ -6,6 +6,8 @@ const testDatabaseConnection = require('../sequelize/testDatabaseConnection');
 
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const dataTrimmer = require("../middlewares/dataTrimmer");
+const errorHandler = require("../middlewares/errorHandler");
 
 const corsOptions = {
   origin: frontend_server,
@@ -20,10 +22,12 @@ const corsOptions = {
 module.exports = function expressConfig(app) {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(dataTrimmer);
   app.use(cors(corsOptions));
   app.use(cookieParser());
-  app.listen(port, async () => {
-    console.log(`Server is listening on port: ${port}`)
-    await testDatabaseConnection();
+  
+  app.use((err, req, res, next) => {
+    errorHandler(err, req, res, err.statusCode || 500);
   });
+  app.listen(port, () => console.log(`Server is listening on port: ${port}`));
 };
