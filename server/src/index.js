@@ -11,7 +11,3 @@ expressConfig(app);
 
 app.use(router);
 
-const testDatabaseConnection = require('./sequelize/testDatabaseConnection');
-(async () => {
-    await testDatabaseConnection();
-})();
