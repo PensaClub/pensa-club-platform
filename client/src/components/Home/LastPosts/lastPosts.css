@@ -1,6 +1,6 @@
 .last-posts {
     width: 100%;
-    padding: 4em 0;
+    padding: 3em 0 4em 0;
 }
 
 .last-posts h2 {
@@ -59,11 +59,12 @@
     background: linear-gradient(304deg, #1B6D4D, #E26020 22%, #BB1D3D 93%);
 }
 
-.more-btn{
+.more-btn {
     display: flex;
     justify-content: center;
     align-self: center;
 }
+
 .more-btn a {
     color: var(--text-white);
     background-color: var(--orange);
@@ -71,9 +72,11 @@
     border-radius: 10px;
     font-size: 1.2em;
 }
-.more-btn a:hover{
+
+.more-btn a:hover {
     opacity: 0.7;
 }
+
 @media (min-width: 550px) {
     .single-card {
         flex-direction: row;
@@ -104,7 +107,7 @@
 
 }
 
-@media (min-width: 750px) {
+@media (min-width: 850px) {
     .home-posts {
         flex-direction: row;
         flex-wrap: wrap;
@@ -141,7 +144,7 @@
     }
 
     .single-card.card-1:hover {
-   
+
         /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); */
         border-radius: 15px;
 
@@ -163,21 +166,24 @@
         object-fit: cover;
     }
 }
+
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  
-    .home-posts  {
+
+    .home-posts {
         width: 100%;
         flex-direction: column;
         padding: 2em 2em;
     }
-    .single-card.card-1{
+
+    .single-card.card-1 {
         width: 100%;
         justify-content: center;
         height: 170px;
         overflow: hidden;
         border-radius: 15px;
     }
-    .single-card.card-2{
+
+    .single-card.card-2 {
         width: 100%;
     }
-  }
+}

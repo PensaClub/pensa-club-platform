@@ -10,13 +10,13 @@ export const Home = () => {
         <>
             <div className="home-container">
                 <Hero />
-                <Fade delay="50" duration="5000" fraction="0.3"triggerOnce='true'>
+                <Fade delay="30" duration="3000" fraction="0.1" triggerOnce='true'>
                     <MottoSection />
                 </Fade>
                 <Slide direction='left' duration="3000" triggerOnce='true'>
                     <LastPosts />
                 </Slide>
-                <Fade delay="50" duration="5000" triggerOnce='true'>
+                <Fade delay="10" duration="2000" triggerOnce='true'>
                     <NewsSubscribe />
                 </Fade>
 

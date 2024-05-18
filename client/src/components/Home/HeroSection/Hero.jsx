@@ -9,19 +9,19 @@ export const Hero = () => {
         <>
             <section className="hero-section">
                 <div className="parent-hero">
-                <Slide direction='left' duration="3000" triggerOnce='true'>
-                    <div className="left-side">
-                        <h1>Explore Our Resources</h1>
-                        <p>Discover a vibrant community of pensioners, connect with like-minded individuals, and explore a world of opportunities.</p>
-                        <div className="btn-hero">
-                            <a href="">View Resources</a>
-                            <a href="">Join Community</a>
+                    <Slide direction='left' duration="2000" triggerOnce='true'>
+                        <div className="left-side">
+                            <h1>Explore Our Resources</h1>
+                            <p>Discover a vibrant community of pensioners, connect with like-minded individuals, and explore a world of opportunities.</p>
+                            <div className="btn-hero">
+                                <a href="">View Resources</a>
+                                <a href="">Join Community</a>
+                            </div>
                         </div>
-                    </div>
                     </Slide>
-                <Fade direction='right' duration="3000" triggerOnce='true'>
+                    <Fade direction='right' duration="2000" triggerOnce='true'>
 
-                    <Testimonials />
+                        <Testimonials />
                     </Fade>
 
                 </div>

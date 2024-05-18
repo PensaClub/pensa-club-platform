@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import './testimonials.css'
 const Testimonials = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const totalSlides = 5; 
-    const transitioning = useRef(false); 
+    const [isPaused, setIsPaused] = useState(false);
+    const totalSlides = 5;
+    const transitioning = useRef(false);
+    const intervalRef = useRef(null);
 
     const updateSlide = (shouldAnimate = true) => {
         const main = document.querySelector('main');
@@ -22,36 +24,54 @@ const Testimonials = () => {
 
     useEffect(() => {
         const handleResize = () => updateSlide(true);
-
         window.addEventListener('resize', handleResize);
 
-        const interval = setInterval(() => {
-            let nextIndex = (currentIndex + 1) % totalSlides;
-            transitioning.current = true; 
-            setCurrentIndex(nextIndex);
-        }, 7000);
+        if (!isPaused) {
+            startAutoSlide();
+        }
 
         updateSlide(true);
 
         return () => {
             window.removeEventListener('resize', handleResize);
-            clearInterval(interval);
+            stopAutoSlide();
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentIndex]);
+    }, [isPaused]);
 
     useEffect(() => {
         if (transitioning.current) {
-            if (currentIndex === 0) { 
-                updateSlide(false); 
-                setTimeout(() => updateSlide(true), 20); 
-            } else {
+            updateSlide(false);
+            setTimeout(() => {
                 updateSlide(true);
-            }
-            transitioning.current = false; 
+                transitioning.current = false;
+            }, 10);
+        } else {
+            updateSlide(true);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentIndex]);
+
+    const startAutoSlide = () => {
+        stopAutoSlide();
+        intervalRef.current = setInterval(() => {
+            if (!isPaused) {
+                setCurrentIndex((prevIndex) => {
+                    if (prevIndex + 1 === totalSlides) {
+                        transitioning.current = true;
+                        return 0;
+                    } else {
+                        return prevIndex + 1;
+                    }
+                });
+            }
+        }, 5000);
+    };
+
+    const stopAutoSlide = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
+    };
 
 
     const testimonials = [
@@ -88,8 +108,10 @@ const Testimonials = () => {
     ];
 
     return (
-        <main>
-
+        <main
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+        >
             <div className="slider">
                 <div className="slide-row" id="slide-row">
                     {testimonials.map((testimonial, index) => (
@@ -99,7 +121,7 @@ const Testimonials = () => {
                                 <p>{testimonial.description}</p>
                             </div>
                             <div className="hero">
-                                <img src={testimonial.imageUrl} alt={testimonial.name} />
+                                <img src={testimonial.imageUrl} alt={testimonial.title} />
                             </div>
                         </div>
                     ))}

@@ -58,8 +58,8 @@ header.scrolled {
 }
 
 header a:nth-child(1) {
-    font-size: 1.2em;
-    font-weight: 500;
+    font-size: 1.5em;
+    font-weight: 600;
     line-height: 25px;
     letter-spacing: -0.13px;
     text-decoration: none;
@@ -131,7 +131,8 @@ header a:nth-child(1) {
 }
 
 .navbar a {
-    font-size: 1.2em;
+    font-size: 1.5em;
+    font-weight: 600;
 }
 
 .nav-item:hover::after {
@@ -150,7 +151,7 @@ header a:nth-child(1) {
 
 
 
-@media (min-width: 750px) {
+@media (min-width: 850px) {
     header::before {
         background-color: var(--bg-white);
     }

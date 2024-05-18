@@ -175,6 +175,19 @@ main h1 {
         background-color: var(--red);
         margin-bottom: 2em;
     }
+
+    .content {
+        /* width: 320px; */
+        /* text-align: center; */
+        height: 270px;
+        padding: 10px;
+        z-index: 9;
+    }
+
+    .content p {
+        font-size: 1.1rem;
+    }
+
 }
 
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {

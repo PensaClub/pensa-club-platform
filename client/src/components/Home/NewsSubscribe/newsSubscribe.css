@@ -77,20 +77,8 @@ margin: 0.7em;
     border:none;
     border-radius: 10px;
 }
-/* @media (min-width: 550px) {
-    .col-subscribe {
-        flex-direction: row;
-    }
-    .news-form {
-        display: flex;
-        justify-content: center;
-    }
-    .news-btn button{
-   
-        font-size: 1em;
-    }
-} */
-@media (min-width: 750px) {
+
+@media (min-width: 850px) {
     .col-subscribe {
         flex-direction: row;
     }

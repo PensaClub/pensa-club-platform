@@ -28,11 +28,6 @@ export const Footer = () => {
                     <p>бул. Скобелев, 13А</p>
                     <p>Тел.: (359) 2 881 95 53</p>
                     <p>Факс: (359) 2 881 95 55</p>
-                    <div className="footer-social">
-                        <FontAwesomeIcon icon={faFacebook} />
-                        <FontAwesomeIcon icon={faLinkedin} />
-                        <FontAwesomeIcon icon={faYoutube} />
-                    </div>
                 </div>
             </section>
             <section className='footer-privacy'>
