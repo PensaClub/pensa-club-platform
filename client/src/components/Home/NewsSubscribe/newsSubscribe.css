@@ -77,6 +77,11 @@ margin: 0.7em;
     border:none;
     border-radius: 10px;
 }
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
 
 @media (min-width: 850px) {
     .col-subscribe {
@@ -88,5 +93,13 @@ margin: 0.7em;
     }
     .news-btn button:hover {
         opacity: 0.7;
+    }
+    .error-email{
+        display: flex;
+        flex-direction: column;
+    }
+    .error-username{
+        display: flex;
+        flex-direction: column;
     }
 }

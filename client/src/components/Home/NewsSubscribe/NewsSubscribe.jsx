@@ -6,14 +6,49 @@ import './newsSubscribe.css'
 export const NewsSubscribe = () => {
     const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
+    const [errors, setErrors] = useState({ userEmail: '', userName: '' })
 
+    const validateEmail = (email) => {
+        const ve = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return ve.test(email);
+    }
+
+    const handleNameChange = (e) => {
+        setUserName(e.target.value)
+        if (e.target.value) {
+            setErrors(prev => ({ ...prev, userName: "" }))
+        }
+    }
+    const handleEmailChange = (e) => {
+        setUserEmail(e.target.value)
+        if (validateEmail(e.target.value)) {
+            setErrors(prev => ({ ...prev, userEmail: "" }))
+        }
+    }
     const form = useRef()
     const sendEmail = (e) => {
         e.preventDefault()
-        if (!userName || !userEmail) {
-            alert("Please fill in all required fields");
+        let hasError = false;
+        let newErrors = { userName: "", userEmail: "" }
+        if (!userName) {
+            newErrors.userName = "Моля, въведете име";
+            hasError = true;
+        }
+
+
+        if (!userEmail) {
+            newErrors.userEmail = "Моля, въведете имейл адрес.";
+            hasError = true;
+        } else if (!validateEmail(userEmail)) {
+            newErrors.userEmail = "Моля, въведете валиден имейл адрес.";
+            hasError = true;
+        }
+
+        if (hasError) {
+            setErrors(newErrors);
             return;
         }
+
 
         emailjs
             .sendForm(
@@ -29,6 +64,7 @@ export const NewsSubscribe = () => {
                     console.log("Email sent successfully:", result);
                     setUserName("");
                     setUserEmail("");
+                    setErrors({ userName: '', userEmail: '' });
                 },
 
                 (err) => {
@@ -48,8 +84,14 @@ export const NewsSubscribe = () => {
                 <form ref={form} onSubmit={sendEmail} className="news-form mb-lg-0">
                     <div className="form-row">
                         <div className="col-subscribe form-group">
-                            <input type="text" name="user_name" className="form-control" id="name" placeholder="Име*" value={userName} onChange={(e) => setUserName(e.target.value)} />
-                            <input type="email" className="form-control" name="user_email" id="email" placeholder="Имейл адрес*" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
+                            <div className="error-username">
+                            <input type="text" name="user_name" className="form-control" id="name" placeholder="Име*" value={userName} onChange={handleNameChange} />
+                            {errors.userName && <div className="error-message">{errors.userName}</div>}
+                            </div>
+                            <div className="error-email">
+                            <input type="email" className="form-control" name="user_email" id="email" placeholder="Имейл адрес*" value={userEmail} onChange={handleEmailChange} />
+                            {errors.userEmail && <div className="error-message">{errors.userEmail}</div>}
+                            </div>
                         </div>
                     </div>
                     <div className="news-btn">
