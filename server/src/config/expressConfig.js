@@ -2,6 +2,8 @@ const express = require("express");
 
 const { port, frontend_server } = require("./envConfig");
 
+const testDatabaseConnection = require('../sequelize/testDatabaseConnection');
+
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -20,5 +22,8 @@ module.exports = function expressConfig(app) {
   app.use(express.urlencoded({ extended: true }));
   app.use(cors(corsOptions));
   app.use(cookieParser());
-  app.listen(port, () => console.log(`Server is listening on port: ${port}`));
+  app.listen(port, async () => {
+    console.log(`Server is listening on port: ${port}`)
+    await testDatabaseConnection();
+  });
 };
