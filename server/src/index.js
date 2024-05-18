@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
 
 const express = require("express");
 const expressConfig = require("./config/expressConfig");
@@ -11,7 +11,7 @@ expressConfig(app);
 
 app.use(router);
 
-const testDatabaseConnection = require('./sequelize/testDatabaseConnection');
-(async () => {
-    await testDatabaseConnection();
-})();
+// const testDatabaseConnection = require("./sequelize/testDatabaseConnection");
+// (async () => {
+//   await testDatabaseConnection();
+// })();

@@ -1,7 +1,11 @@
-const { PORT, SECRET, FRONTEND_SERVER } = process.env;
+const env = process.env;
 
 module.exports = {
-  port: PORT,
-  secret: SECRET,
-  frontend_server: FRONTEND_SERVER,
+  port: env.PORT,
+  secret: env.SECRET,
+  frontend_server: env.FRONTEND_SERVER,
+  db_url: env.DB_URL,
+  db_name: env.DB_NAME,
+  db_user: env.DB_USER,
+  db_password: env.DB_PASSWORD,
 };
