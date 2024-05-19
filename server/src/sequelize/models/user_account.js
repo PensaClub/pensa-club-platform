@@ -15,15 +15,19 @@ module.exports = (sequelize, DataTypes) => {
 
   user_account.init({
     phone_number: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(16),
       unique: true,
       allowNull: false,
       notEmpty: true,
       validate: {
+        len: {
+          args: [10, 16],
+          msg: 'Phone number is not valid.'
+        },
         is: {
-          args: /^(\+?\d{1,3})?\s*\d{9}$/,
-          msg: 'Phone number is not a valid.'
-        }
+          args: /^(\+?\d{1,3})?\d{12}$/,
+          msg: 'Phone number is not valid.'
+        },
       }
     },
     password: {

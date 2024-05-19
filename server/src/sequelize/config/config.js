@@ -1,19 +1,20 @@
-const { db_url, db_name, db_user, db_password } = process.env;
+const dotenv = require("dotenv");
+dotenv.config({ path: ".env" });
 
 module.exports = {
-  development: {
-    username: db_user,
-    password: db_password,
-    database: db_name,
-    host: db_url,
-    dialect: "postgres",
+  "development": {
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_URL,
+    "dialect": "postgres"
   },
 
-  production: {
-    username: "postgres",
-    password: "pensaclub24",
-    database: "pensaclub_db",
-    host: "",
-    dialect: "postgres",
-  },
-};
+  "production": {
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: '',
+    "dialect": "postgres"
+  }
+}
