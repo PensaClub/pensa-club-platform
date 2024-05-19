@@ -1,26 +1,32 @@
 :root {
 	--gray: #333;
 }
+.banner-section {
+	background-image: url("../../../public/images/sign-up/selfie-seniors2.jpg");
+	background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 3em 0;
+	
+}
 
 .login-register-wrapper {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
-	background: var(--bg-white);
 	padding: 20px;
 	box-sizing: border-box;
 }
 
 .form__title {
-	font-weight: 300;
+	text-transform: uppercase;
 	color: var(--orange);
 	margin: 2rem 1.5rem 1.5rem 1.5rem;
 }
 
 .link {
 	color: var(--gray);
-	font-size: 0.9rem;
 	margin: 1rem 0;
 	text-decoration: none;
 }
@@ -30,18 +36,18 @@
 }
 .error {
 	color: var(--red);
-	visibility: hidden;
+	/* visibility: hidden; */
 }
 .container {
 	background-image: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff);
 	border-radius: 0.7rem;
 	box-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
-	/* height: 440px; */
-	height: 30rem;
-	max-width: 400px;
+	min-height: 30rem;
+	max-width: 27rem;
 	overflow: hidden;
 	position: relative;
 	width: 100%;
+	opacity: 0.93;
 }
 
 .container__form {
@@ -89,7 +95,7 @@
 	border: 1px solid var(--orange);
 	color: var(--bg-white);
 	cursor: pointer;
-	font-size: 0.8rem;
+	/* font-size: 0.8rem; */
 	font-weight: bold;
 	letter-spacing: 0.1rem;
 	padding: 0.9rem 4rem;
@@ -122,10 +128,11 @@
 .input{
 	background-color: var(--bg-white);
 	padding: 0.9rem 0.9rem;
-	margin: 0.5rem 0;
+	margin: 0.5rem 0 1rem 0;
 	width: 100%;
 	border: 0.3px solid #ccc;
 	border-radius: 10px;
+	
 }
 
 @keyframes show {
@@ -144,7 +151,7 @@
 }
 @media (min-width: 750px) {
 	.container {
-		max-width: 760px;
+		max-width: 55rem;
 		background-image: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff);
 	}
 	
@@ -241,8 +248,11 @@
 		background-color: var(--bg-white);
 	}
 }
-label {
+.label {
 	color: var(--gray);
-	
-
+	letter-spacing: 0.05rem;
+	text-align: left;
+	align-self: flex-start;
+	text-indent: 0.3rem;
 }
+
