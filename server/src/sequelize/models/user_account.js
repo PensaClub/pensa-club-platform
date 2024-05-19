@@ -21,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       notEmpty: true,
       validate: {
         len: {
-          args: [10, 16],
+          args: [8, 16],
           msg: 'Phone number is not valid.'
         },
         is: {
-          args: /^(\+?\d{1,3})?\d{12}$/,
+          args: /^(?:\+\d{7,15}|\d{10})$/,
           msg: 'Phone number is not valid.'
         },
       }

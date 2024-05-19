@@ -8,7 +8,7 @@ const { where } = require("sequelize");
 const { user_account } = require("../sequelize/models/index");
 
 // const phoneRegex = /^(\+359|0)(87|88|89)\d{7}$/;
-const phoneRegex = /^(\+?\d{1,3})?\s?\d{9}$/;
+const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
 
 userController.post("/register", async (req, res, next) => {
   let errors = {};
