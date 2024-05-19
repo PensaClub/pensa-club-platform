@@ -1,7 +1,7 @@
 
 import './footer.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebook, faLinkedin, faYoutube } from "@fortawesome/free-brands-svg-icons";
+
+import {Link} from 'react-router-dom'
 
 export const Footer = () => {
 
