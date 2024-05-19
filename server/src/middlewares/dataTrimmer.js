@@ -10,6 +10,7 @@ module.exports = function dataTrimmer(req, res, next) {
     if (req.params) {
       trimmer(req.params);
     }
+    next();
   } catch (err) {
     next(new CustomError({ message: "Invalid data", statusCode: 400, details: err.message }));
   }

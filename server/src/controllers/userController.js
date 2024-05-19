@@ -4,10 +4,11 @@ const bcrypt = require("bcrypt");
 const { tokenCreator } = require("../utils/jwt");
 const CustomError = require("../utils/customError");
 
-const userModel = require("../sequelize/models/user_account");
+const { where } = require("sequelize");
+const { user_account } = require("../sequelize/models/index");
 
 // const phoneRegex = /^(\+359|0)(87|88|89)\d{7}$/;
-const phoneRegex = /^(\+?\d{1,3})?\s*\d{9}$/;
+const phoneRegex = /^(\+?\d{1,3})?\s?\d{9}$/;
 
 userController.post("/register", async (req, res, next) => {
   let errors = {};
@@ -41,7 +42,7 @@ userController.post("/register", async (req, res, next) => {
       throw new CustomError({ message: "Validation errors", statusCode: 400, details: errors });
     }
 
-    const userExist = await userModel.findOne({ where: { phoneNumber } });
+    const userExist = await user_account.findOne({ where: { phone_number: phoneNumber } });
 
     if (userExist) {
       return res.status(401).json({ message: "User already exists with this phone number." });
@@ -49,7 +50,7 @@ userController.post("/register", async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await userModel.create({ phoneNumber, password: hashedPassword });
+    const user = await user_account.create({ phone_number: phoneNumber, password: hashedPassword });
 
     const token = tokenCreator(user);
 
