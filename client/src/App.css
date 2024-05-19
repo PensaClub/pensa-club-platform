@@ -1,3 +1,18 @@
+:root{
+  --bg-white: #fff;
+  --bg-black: #000;
+  --orange: #E26020;
+  --green: #1B6D4D;
+  --red: #BB1D3D;
+  --text-white: #fff;
+  --text-black: #000;
+}
+
+@font-face {
+  font-family: Phenomena;
+  src: url("../../client/public/Phenomena-Regular.woff");
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,14 +20,17 @@
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Phenomena", "Poppins", sans-serif;
   /* background: linear-gradient(rgba(12, 3, 51, 0.3), rgba(12, 3, 51, 0.3));
    */
-   background: #fff;
+  background: var(--bg-white);
   min-height: 100vh;
 }
 
-html, body { height: 100%; }
+html, body { 
+  height: 100%;
+}
+
 /* body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 a{
     text-decoration: none;
