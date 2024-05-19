@@ -104,6 +104,8 @@ header a:nth-child(1) {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: all 0.3s ease;
+    z-index: 99;
+
 }
 
 #check:checked~.navbar {
