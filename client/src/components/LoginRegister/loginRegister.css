@@ -1,12 +1,9 @@
-:root {
-	--gray: #333;
-}
 .banner-section {
 	background-image: url("../../../public/images/sign-up/selfie-seniors2.jpg");
 	background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    padding: 3em 0;
+    padding: var(--xl-space) 0;
 	
 }
 
@@ -15,7 +12,7 @@
 	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
-	padding: 20px;
+	padding: var(--m-space);
 	box-sizing: border-box;
 }
 
@@ -39,9 +36,9 @@
 	/* visibility: hidden; */
 }
 .container {
-	background-image: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff);
+	background-image: var(--bg-gradient);
 	border-radius: 0.7rem;
-	box-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
+	box-shadow: var(--container-shadow);
 	min-height: 30rem;
 	max-width: 27rem;
 	overflow: hidden;
