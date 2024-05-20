@@ -5,3 +5,5 @@ class CustomError extends Error {
     this.details = details;
   }
 }
+
+module.exports = CustomError;

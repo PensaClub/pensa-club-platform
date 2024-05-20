@@ -1,4 +1,5 @@
 const { ValidationError, UniqueConstraintError, ForeignKeyConstraintError, DatabaseError } = require("sequelize");
+const CustomError = require("../utils/customError");
 
 function errorHandler(error, req, res, next) {
   let message = "Something went wrong!";
@@ -19,7 +20,7 @@ function errorHandler(error, req, res, next) {
       details = error.message;
     }
   }
-  console.log(`Error: ${req.method} >> ${req.baseUrl}`, error);
+  console.log(`Error: ${req.method} >> ${req.baseUrl}`, error.message);
   res.status(statusCode).json({ message, statusCode, details });
 }
 
