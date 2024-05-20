@@ -1,11 +1,35 @@
 :root{
+  /* Colors */
   --bg-white: #fff;
   --bg-black: #000;
+  --bg-gradient: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff);
+
   --orange: #E26020;
   --green: #1B6D4D;
   --red: #BB1D3D;
   --text-white: #fff;
   --text-black: #000;
+
+  /* Font Size */ 
+  --xl-font-size: 72px; 
+  --l-font-size: 48px;
+  --m-font-size: 30px;
+  --s-font-size: 24px;
+  --xs-font-size: 18px;
+ 
+
+  /* Border Radius */ 
+  --radius: 20px;
+
+  /* Spacing eg. Margin and Padding*/
+  --l-space: 30px;
+  --m-space: 20px;
+  --s-space: 10px;
+
+  /* Container Dimensions */
+  --container-max-width: 1200px;
+  --container-min-width: 340px;
+
 }
 
 @font-face {
@@ -34,4 +58,41 @@ html, body {
 /* body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 a{
     text-decoration: none;
+}
+
+/* Genral Button Styles */
+.btn-general {
+  display: inline-block;
+  width: 200px;
+  margin-top: 20px;
+  padding: 14px 28px;
+  border-radius: var(--radius);
+
+  transition: background-color 0.3s ease;
+
+  background-color: var(--green);
+  color: var(--bg-white);
+
+  font-size: var(--s-font-size);
+  text-decoration: none;
+  font-weight: 500;    
+}
+
+.btn-general:hover {
+  opacity: 0.7;
+}
+
+/* Button Colors */
+.btn-orange {
+  background-color: var(--orange);
+  color: var(--bg-white);
+}
+.btn-green {
+  background-color: var(--green);
+  color: var(--bg-white);
+}
+
+.btn-red {
+  background-color: var(--red);
+  color: var(--bg-white);
 }
