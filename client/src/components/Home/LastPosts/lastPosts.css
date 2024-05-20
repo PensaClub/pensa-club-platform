@@ -171,7 +171,9 @@
         flex-direction: column;
         padding: 2em 2em;
     }
-
+  .single-card.card-1 .card-info{
+        width:initial;
+    }
     .single-card.card-1 {
         width: 100%;
         justify-content: center;
