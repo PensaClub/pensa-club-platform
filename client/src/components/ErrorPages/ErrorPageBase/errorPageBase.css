@@ -29,7 +29,7 @@
   
   .not-found > h2 {
     font-size: var(--l-font-size);
-    color: var(--bg-black);
+    color: var(--text-black);
     display: inline-block;
     margin: var(--m-space);
   }
