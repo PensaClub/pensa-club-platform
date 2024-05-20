@@ -1,7 +1,7 @@
 
 import './footer.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebook, faLinkedin, faYoutube } from "@fortawesome/free-brands-svg-icons";
+
+import {Link} from 'react-router-dom'
 
 export const Footer = () => {
 
@@ -24,10 +24,13 @@ export const Footer = () => {
                         <img src="/images/homePage/logo.png" alt="logo" />
                         <h3>Pensa club &copy;</h3>
                     </div>
+                    <div className="info-desc">
                     <p>България, София</p>
                     <p>бул. Скобелев, 13А</p>
                     <p>Тел.: (359) 2 881 95 53</p>
                     <p>Факс: (359) 2 881 95 55</p>
+                    <p>Имейл: info@pensa.club</p>
+                    </div>
                 </div>
             </section>
             <section className='footer-privacy'>

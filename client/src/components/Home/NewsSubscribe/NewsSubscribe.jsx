@@ -76,6 +76,7 @@ export const NewsSubscribe = () => {
     }
     return (
         <>
+
             <section className="subscribe-news">
                 <div className="single-subscribe-info">
                     <h3>Бъдете в течение с <span>Pensa club</span></h3>
@@ -98,7 +99,10 @@ export const NewsSubscribe = () => {
                         <button type="submit" className="btn btn-light">Абонирай се </button>
                     </div>
                 </form>
+
             </section>
+            <div className="after-news"></div>
+
         </>
     )
 

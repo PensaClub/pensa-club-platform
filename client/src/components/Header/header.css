@@ -1,6 +1,3 @@
-
-
-
 header {
     position: fixed;
     top: 0;
@@ -12,7 +9,7 @@ header {
     gap: 4em;
     align-items: center;
     transition: all 0.3s ease;
-    z-index: 5;
+    z-index: 99;
     background-color: var(--bg-white);
 
 
@@ -24,6 +21,8 @@ header {
     height: 71px;
     background-image: linear-gradient(359deg, rgb(239 128 152 / 40%), #efa560 57%, #fff);
     position: fixed;
+    z-index: 98;
+
 }
 
 header::before {
@@ -96,8 +95,8 @@ header a:nth-child(1) {
 
 .navbar {
     position: absolute;
-     top: 100%;
-    left: 0; 
+    top: 100%;
+    left: 0;
     width: 100%;
     height: 0;
     background: transparent;
@@ -105,6 +104,8 @@ header a:nth-child(1) {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: all 0.3s ease;
+    z-index: 99;
+
 }
 
 #check:checked~.navbar {
@@ -127,7 +128,7 @@ header a:nth-child(1) {
     opacity: 0;
     transition: all 0.3s ease;
     cursor: pointer;
-   
+
 }
 
 .navbar a {
@@ -155,36 +156,36 @@ header a:nth-child(1) {
     header::before {
         background-color: var(--bg-white);
     }
+
     .navbar {
-          position: relative;
-     top: auto;
-    left: auto; 
-    width: auto;
-    height: auto;
-    background:none;
-    backdrop-filter: none;
-    box-shadow: none;
-    overflow:initial;
-    transition: none;
+        position: relative;
+        top: auto;
+        left: auto;
+        width: auto;
+        height: auto;
+        background: none;
+        backdrop-filter: none;
+        box-shadow: none;
+        overflow: initial;
+        transition: none;
     }
+
     .icons {
         display: none;
     }
+
     .navbar a {
         font-size: 1.25em;
     }
+
     header a:nth-child(1) {
         font-size: 1.25em;
-        font-weight: 540;
-        /* 
-        line-height: 25px;
-        letter-spacing: -0.13px; */
-    
-    
+
     }
+
     .nav-item {
         position: relative;
-        color:rgb(92, 93, 97);
+        color: rgb(92, 93, 97);
         display: inline;
         font-size: 1.2rem;
         font-weight: 540;
@@ -194,12 +195,12 @@ header a:nth-child(1) {
         margin-left: 2.5rem;
         transition: all 0.5s ease;
         cursor: pointer;
-        transform:none;
+        transform: none;
         opacity: 1;
-        transition:none;
+        transition: none;
 
     }
-   
+
     .nav-item:hover {
         color: #dc9ebd
     }
@@ -222,6 +223,6 @@ header a:nth-child(1) {
         width: 100%;
     }
 
-    
-  
+
+
 }

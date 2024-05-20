@@ -1,4 +1,12 @@
- 
+.bg-container {
+    width: 100%;
+    min-height: 100vh;
+    background-image: url("../../../../public/images/errorPage/broken-tv-screen.jpg");
+    background-size: cover;
+    background-position: center;
+    z-index: -1; /* Ensures the background is behind other elements */
+  }
+  
   .not-found {
     position: absolute;    
 

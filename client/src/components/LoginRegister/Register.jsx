@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import './loginRegister.css';
+import { trimFields, resetFields, validatePhoneNumber, validatePassword, validateRePassword } from '../../utils/signUp';
 
 export const Register = ({ navToLogin }) => {
 
@@ -8,73 +11,36 @@ export const Register = ({ navToLogin }) => {
   const [rePassword, setRePassword] = useState('');
   const [errors, setErrors] = useState({});
 
-  const phoneRegex = /^(\+?\d{1,3})?\s?\d{9}$/;
-
-  const trimFields = () => {
-    setPhoneNumber(phoneNumber.trim());
-    setPassword(password.trim());
-    setRePassword(rePassword.trim());
+  
+  const handleTrimFields = () => {
+    const [trimmedPhoneNumber, trimmedPassword, trimmedRePassword] = trimFields([phoneNumber, password, rePassword]);
+    setPhoneNumber(trimmedPhoneNumber);
+    setPassword(trimmedPassword);
+    setRePassword(trimmedRePassword);
   };
 
-  const validatePhoneNumber = () => {
-    if (!phoneNumber) {
-      setErrors(prevErrors => ({
-        ...prevErrors, phoneNumber: "Полето е задължително!"
-      }));
-    } else if (!phoneRegex.test(phoneNumber)) {
-      setErrors(prevErrors => ({
-        ...prevErrors, phoneNumber: "Невалиден телефонен номер!"
-      }));
-    } else {
-      setErrors(prevErrors => ({
-        ...prevErrors, phoneNumber: ''
-      }));
-    }
-  };
-
-  const validatePassword = () => {
-    if (!password) {
-      setErrors(prevErrors => ({
-        ...prevErrors, password: "Полето е задължително!"
-      }));
-    } else if (password.length < 3) {
-      setErrors(prevErrors => ({
-        ...prevErrors, password: "Паролата трябва да бъде поне 3 символа!"
-      }));
-    } else {
-      setErrors(prevErrors => ({
-        ...prevErrors, password: ''
-      }));
-    }
-  };
-
-  const validateRePassword = () => {
-    if (password && rePassword !== password) {
-      setErrors(prevErrors => ({
-        ...prevErrors, rePassword: 'Паролите не съвпадат!'
-      }));
-    } else {
-      setErrors(prevErrors => ({
-        ...prevErrors, rePassword: ''
-      }));
-    }
+  const handleResetFields = () => {
+    resetFields([setPhoneNumber, setPassword, setRePassword, () => setErrors({})]);
   };
 
   const validate = () => {
-    validatePhoneNumber();
-    validatePassword();
-    validateRePassword();
-    return Object.keys(errors).some(key => !errors[key]);
+    validatePhoneNumber(phoneNumber, setErrors);
+    validatePassword(password, setErrors);
+    validateRePassword(password, rePassword, setErrors);
+    return Object.keys(errors).every(key => !errors[key]);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    trimFields();
+    handleTrimFields();
+
     if (validate()) {
       console.log('Valid form');
       console.log('phone number:', phoneNumber)
       console.log('password:', password)
       console.log('rePassword:', rePassword)
+      handleResetFields();
+
     } else {
       console.log('Invalid form');
     }
@@ -92,7 +58,7 @@ export const Register = ({ navToLogin }) => {
           className="input"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          onBlur={() => { trimFields(); validatePhoneNumber(); }}
+          onBlur={() => { handleTrimFields(); validatePhoneNumber(phoneNumber, setErrors); }}
         />
         {errors.phoneNumber && <p className="error">{errors.phoneNumber}</p>}
 
@@ -103,7 +69,7 @@ export const Register = ({ navToLogin }) => {
           className="input"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          onBlur={() => { trimFields(); validatePassword(); }}
+          onBlur={() => { handleTrimFields(); validatePassword(password, setErrors); }}
         />
         {errors.password && <p className="error">{errors.password}</p>}
 
@@ -114,12 +80,12 @@ export const Register = ({ navToLogin }) => {
           className="input"
           value={rePassword}
           onChange={(e) => setRePassword(e.target.value)}
-          onBlur={() => { trimFields(); validateRePassword(); }}
+          onBlur={() => { handleTrimFields(); validateRePassword(password, rePassword, setErrors); }}
         />
         {errors.rePassword && <p className="error">{errors.rePassword}</p>}
 
         <button className="btn">Регистрация</button>
-        <a href="#" className="link link-hidden" onClick={navToLogin}>Вече имаш акаунт? <span>Вход</span></a>
+        <Link to="#" className="link link-hidden" onClick={navToLogin}>Вече имаш акаунт? <span>Вход</span></Link>
       </form>
     </div>
   );
