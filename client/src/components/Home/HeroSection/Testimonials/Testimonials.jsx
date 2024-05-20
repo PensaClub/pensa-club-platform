@@ -131,7 +131,7 @@ const Testimonials = () => {
                 {testimonials.map((_, index) => (
                     <span
                         key={index}
-                        className={`btn ${index === currentIndex ? 'active' : ''}`}
+                        className={`btn-news ${index === currentIndex ? 'active' : ''}`}
                         onClick={() => setCurrentIndex(index)}
                     ></span>
                 ))}

@@ -63,11 +63,17 @@ footer {
   z-index: 2;
 
 }
+.info-desc {
+  width:50%;
+display: flex;
+flex-direction: column;
+align-items: start;
 
+}
 .second-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
 }
 
 .footer-info img {

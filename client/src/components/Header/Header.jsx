@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {Link} from 'react-router-dom'
 import './header.css'
-import  { Link } from "react-router-dom";
+
 
 export const Header = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
@@ -20,7 +20,7 @@ export const Header = () => {
                 <nav className="navbar">
                     <Link to="/map"className="nav-item" style={{ '--i': 0 }}>Map</Link>
                     <Link to="/craigslist" className="nav-item" style={{ '--i': 1 }}>Craigslist</Link>
-                    <Link to="/#" className="nav-item" style={{ '--i': 2 }}>SignUp</Link>
+                    <Link to="/sign-up" className="nav-item" style={{ '--i': 2 }}>SignUp</Link>
                     {/* <a href="/#" className="nav-item" style={{ '--i': 3 }}>Register</a> */}
                 </nav>
             </header>
