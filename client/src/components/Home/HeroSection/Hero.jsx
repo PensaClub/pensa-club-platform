@@ -1,5 +1,6 @@
 import Testimonials from './Testimonials/Testimonials';
-import { Bounce, Fade, Flip, Hinge, JackInTheBox, Roll, Rotate, Slide, Zoom } from "react-awesome-reveal";
+import { Fade, Slide, } from "react-awesome-reveal";
+import {Link} from 'react-router-dom'
 
 import './hero.css';
 
@@ -14,8 +15,8 @@ export const Hero = () => {
                             <h1>Explore Our Resources</h1>
                             <p>Discover a vibrant community of pensioners, connect with like-minded individuals, and explore a world of opportunities.</p>
                             <div className="btn-hero">
-                                <a href="">View Resources</a>
-                                <a href="">Join Community</a>
+                                <Link to="/#">View Resources</Link>
+                                <Link to="/#">Join Community</Link>
                             </div>
                         </div>
                     </Slide>

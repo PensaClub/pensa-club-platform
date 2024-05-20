@@ -1,4 +1,5 @@
 
+import { Link } from 'react-router-dom'
 import './lastPosts.css'
 
 export const LastPosts = () => {
@@ -36,7 +37,7 @@ export const LastPosts = () => {
                         <div className="color-line"></div>
                     </div>
                     <div className="more-btn">
-                        <a href="">Вижте още публикации</a>
+                        <Link to="/#">Вижте още публикации</Link>
                     </div>
                 </section>
 

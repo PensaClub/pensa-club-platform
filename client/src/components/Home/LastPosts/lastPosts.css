@@ -142,7 +142,9 @@
         transition: transform 0.3s box-shadow 0.3s ease;
 
     }
-
+    .single-card.card-1 .card-info{
+        width: 46%;
+    }
     .single-card.card-1:hover {
         border-radius: 15px;
         overflow: hidden;
@@ -157,7 +159,7 @@
     }
 
     .single-card img {
-        width: 50%;
+        width: 55%;
         object-fit: cover;
     }
 }
