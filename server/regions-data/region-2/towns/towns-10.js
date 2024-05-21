@@ -1,0 +1,62 @@
+module.exports = [
+    {
+        id: 1,
+        en: "Atiya",
+        bg: "Атия"
+    },
+    {
+        id: 2,
+        en: "Varshilo",
+        bg: "Вършило"
+    },
+    {
+        id: 3,
+        en: "Gabar",
+        bg: "Габър"
+    },
+    {
+        id: 4,
+        en: "Zidarovo",
+        bg: "Зидарово"
+    },
+    {
+        id: 5,
+        en: "Indzhe Voyvoda",
+        bg: "Индже войвода"
+    },
+    {
+        id: 6,
+        en: "Krushevets",
+        bg: "Крушевец"
+    },
+    {
+        id: 7,
+        en: "Prisad",
+        bg: "Присад"
+    },
+    {
+        id: 8,
+        en: "Ravadinovo",
+        bg: "Равадиново"
+    },
+    {
+        id: 9,
+        en: "Ravna Gora",
+        bg: "Равна гора"
+    },
+    {
+        id: 10,
+        en: "Rosen",
+        bg: "Росен"
+    },
+    {
+        id: 11,
+        en: "Sozopol",
+        bg: "Созопол"
+    },
+    {
+        id: 12,
+        en: "Chernomorets",
+        bg: "Черноморец"
+    }
+];

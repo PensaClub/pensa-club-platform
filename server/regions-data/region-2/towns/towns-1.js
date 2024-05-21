@@ -1,0 +1,87 @@
+module.exports = [
+    {
+        id: 1,
+        en: "Aytos",
+        bg: "Айтос"
+    },
+    {
+        id: 2,
+        en: "Dryankovets",
+        bg: "Дрянковец"
+    },
+    {
+        id: 3,
+        en: "Zetyovo",
+        bg: "Зетьово"
+    },
+    {
+        id: 4,
+        en: "Karageorgievo",
+        bg: "Карагеоргиево"
+    },
+    {
+        id: 5,
+        en: "Karanovo",
+        bg: "Караново"
+    },
+    {
+        id: 6,
+        en: "Lyaskovo",
+        bg: "Лясково"
+    },
+    {
+        id: 7,
+        en: "Malka Polyana",
+        bg: "Малка поляна"
+    },
+    {
+        id: 8,
+        en: "Muglen",
+        bg: "Мъглен"
+    },
+    {
+        id: 9,
+        en: "Peshtersko",
+        bg: "Пещерско"
+    },
+    {
+        id: 10,
+        en: "Pirne",
+        bg: "Пирне"
+    },
+    {
+        id: 11,
+        en: "Polyanovo",
+        bg: "Поляново"
+    },
+    {
+        id: 12,
+        en: "Raklinovo",
+        bg: "Раклиново"
+    },
+    {
+        id: 13,
+        en: "Sadievo",
+        bg: "Съдиево"
+    },
+    {
+        id: 14,
+        en: "Topolitsa",
+        bg: "Тополица"
+    },
+    {
+        id: 15,
+        en: "Cherna Mogila",
+        bg: "Черна могила"
+    },
+    {
+        id: 16,
+        en: "Chernograd",
+        bg: "Черноград"
+    },
+    {
+        id: 17,
+        en: "Chukarka",
+        bg: "Чукарка"
+    }
+];

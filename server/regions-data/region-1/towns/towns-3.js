@@ -1,0 +1,27 @@
+module.exports = [
+    {
+        id: 1,
+        en: "Belo pole",
+        bg: "Бело поле"
+    },
+    {
+        id: 2,
+        en: "Bistritsa",
+        bg: "Бистрица"
+    },
+    {
+        id: 3,
+        en: "Blagoevgrad",
+        bg: "Благоевград"
+    },
+    {
+        id: 4,
+        en: "Gorno Harsovo",
+        bg: "Горно Хърсово"
+    },
+    {
+        id: 5,
+        en: "Elenovo",
+        bg: "Еленово"
+    }
+];

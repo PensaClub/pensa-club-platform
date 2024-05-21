@@ -1,0 +1,157 @@
+module.exports = [
+    {
+        id: 0,
+        en: "Asparuhovo",
+        bg: "Аспарухово"
+    },
+    {
+        id: 1,
+        en: "Venets",
+        bg: "Венец"
+    },
+    {
+        id: 2,
+        en: "Glumche",
+        bg: "Глумче"
+    },
+    {
+        id: 3,
+        en: "Devetak",
+        bg: "Деветак"
+    },
+    {
+        id: 4,
+        en: "Devetintsi",
+        bg: "Деветинци"
+    },
+    {
+        id: 5,
+        en: "Detelina",
+        bg: "Детелина"
+    },
+    {
+        id: 6,
+        en: "Dobrinovo",
+        bg: "Добриново"
+    },
+    {
+        id: 7,
+        en: "Dragantsi",
+        bg: "Драганци"
+    },
+    {
+        id: 8,
+        en: "Dragovo",
+        bg: "Драгово"
+    },
+    {
+        id: 9,
+        en: "Ekzarh Antimovo",
+        bg: "Екзарх Антимово"
+    },
+    {
+        id: 10,
+        en: "Zheleznik",
+        bg: "Железник"
+    },
+    {
+        id: 11,
+        en: "Zhitosvyat",
+        bg: "Житосвят"
+    },
+    {
+        id: 12,
+        en: "Zimen",
+        bg: "Зимен"
+    },
+    {
+        id: 13,
+        en: "Iskra",
+        bg: "Искра"
+    },
+    {
+        id: 14,
+        en: "Karnobat",
+        bg: "Карнобат"
+    },
+    {
+        id: 15,
+        en: "Klikach",
+        bg: "Кликач"
+    },
+    {
+        id: 16,
+        en: "Kozare",
+        bg: "Козаре"
+    },
+    {
+        id: 17,
+        en: "Krumovo Gradishte",
+        bg: "Крумово градище"
+    },
+    {
+        id: 18,
+        en: "Krushovo",
+        bg: "Крушово"
+    },
+    {
+        id: 19,
+        en: "Mudrino",
+        bg: "Мъдрино"
+    },
+    {
+        id: 20,
+        en: "Nevestino",
+        bg: "Невестино"
+    },
+    {
+        id: 21,
+        en: "Ognen",
+        bg: "Огнен"
+    },
+    {
+        id: 22,
+        en: "Raklitsa",
+        bg: "Раклица"
+    },
+    {
+        id: 23,
+        en: "San-Stefano",
+        bg: "Сан-Стефано"
+    },
+    {
+        id: 24,
+        en: "Sigmen",
+        bg: "Сигмен"
+    },
+    {
+        id: 25,
+        en: "Smolnik",
+        bg: "Смолник"
+    },
+    {
+        id: 26,
+        en: "Sokolovo",
+        bg: "Соколово"
+    },
+    {
+        id: 27,
+        en: "Sarnevo",
+        bg: "Сърнево"
+    },
+    {
+        id: 28,
+        en: "Hadzhiite",
+        bg: "Хаджиите"
+    },
+    {
+        id: 29,
+        en: "Tserkovski",
+        bg: "Церковски"
+    },
+    {
+        id: 30,
+        en: "Cherkovo",
+        bg: "Черково"
+    }
+];

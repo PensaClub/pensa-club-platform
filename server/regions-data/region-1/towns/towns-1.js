@@ -1,0 +1,12 @@
+module.exports = [
+    {
+        id: 1,
+        en: "Bansko",
+        bg: "Банско"
+    },
+    {
+        id: 2,
+        en: "Dobrinishte",
+        bg: "Добринище"
+    }
+]

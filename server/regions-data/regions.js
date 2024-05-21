@@ -1,0 +1,143 @@
+module.exports = [
+    {
+        id: 1,
+        en: "Blagoevgrad",
+        bg: "Благоевград"
+    },
+    {
+        id: 2,
+        en: "Burgas",
+        bg: "Бургас"
+    },
+    {
+        id: 3,
+        en: "Varna",
+        bg: "Варна"
+    },
+    {
+        id: 4,
+        en: "Veliko Tarnovo",
+        bg: "Велико Търново"
+    },
+    {
+        id: 5,
+        en: "Vidin",
+        bg: "Видин"
+    },
+    {
+        id: 6,
+        en: "Vratsa",
+        bg: "Враца"
+    },
+    {
+        id: 7,
+        en: "Gabrovo",
+        bg: "Габрово"
+    },
+    {
+        id: 8,
+        en: "Dobrich",
+        bg: "Добрич"
+    },
+    {
+        id: 9,
+        en: "Kardzhali",
+        bg: "Кърджали"
+    },
+    {
+        id: 10,
+        en: "Kyustendil",
+        bg: "Кюстендил"
+    },
+    {
+        id: 11,
+        en: "Lovech",
+        bg: "Ловеч"
+    },
+    {
+        id: 12,
+        en: "Montana",
+        bg: "Монтана"
+    },
+    {
+        id: 13,
+        en: "Pazardzhik",
+        bg: "Пазарджик"
+    },
+    {
+        id: 14,
+        en: "Pernik",
+        bg: "Перник"
+    },
+    {
+        id: 15,
+        en: "Pleven",
+        bg: "Плевен"
+    },
+    {
+        id: 16,
+        en: "Plovdiv",
+        bg: "Пловдив"
+    },
+    {
+        id: 17,
+        en: "Razgrad",
+        bg: "Разград"
+    },
+    {
+        id: 18,
+        en: "Ruse",
+        bg: "Русе"
+    },
+    {
+        id: 19,
+        en: "Silistra",
+        bg: "Силистра"
+    },
+    {
+        id: 20,
+        en: "Sliven",
+        bg: "Сливен"
+    },
+    {
+        id: 21,
+        en: "Smolyan",
+        bg: "Смолян"
+    },
+    {
+        id: 22,
+        en: "Sofia",
+        bg: "София"
+    },
+    {
+        id: 23,
+        en: "Sofia-capital",
+        bg: "София-столица"
+    },
+    {
+        id: 24,
+        en: "Stara Zagora",
+        bg: "Стара Загора"
+    },
+    {
+        id: 25,
+        en: "Targovishte",
+        bg: "Търговище"
+    },
+    {
+        id: 26,
+        en: "Haskovo",
+        bg: "Хасково"
+    },
+    {
+        id: 27,
+        en: "Shumen",
+        bg: "Шумен"
+    },
+    {
+        id: 28,
+        en: "Yambol",
+        bg: "Ямбол"
+    },
+
+]
