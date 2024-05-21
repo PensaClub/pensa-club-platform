@@ -1,0 +1,17 @@
+[
+  { "id": 1, "bg": "Вързулица", "en": "Varzulitsa" },
+  { "id": 2, "bg": "Иванча", "en": "Ivancha" },
+  { "id": 3, "bg": "Каранци", "en": "Karantsi" },
+  { "id": 4, "bg": "Климентово", "en": "Klimentovo" },
+  { "id": 5, "bg": "Куцина", "en": "Kutsina" },
+  { "id": 6, "bg": "Масларево", "en": "Maslarevo" },
+  { "id": 7, "bg": "Обединение", "en": "Obedinenie" },
+  { "id": 8, "bg": "Орловец", "en": "Orlovets" },
+  { "id": 9, "bg": "Павел", "en": "Pavel" },
+  { "id": 10, "bg": "Петко Каравелово", "en": "Petko Karavelovo" },
+  { "id": 11, "bg": "Полски Сеновец", "en": "Polski Senovets" },
+  { "id": 12, "bg": "Полски Тръмбеш", "en": "Polski Trambesh" },
+  { "id": 13, "bg": "Раданово", "en": "Radanovo" },
+  { "id": 14, "bg": "Стефан Стамболово", "en": "Stefan Stambolovo" },
+  { "id": 15, "bg": "Страхилово", "en": "Strahilovo" }
+]

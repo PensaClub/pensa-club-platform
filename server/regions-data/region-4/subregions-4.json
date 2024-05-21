@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Велико Търново", "en": "Veliko Tarnovo" },
+  { "id": 2, "bg": "Горна Оряховица", "en": "Gorna Oryahovitsa" },
+  { "id": 3, "bg": "Елена", "en": "Elena" },
+  { "id": 4, "bg": "Златарица", "en": "Zlataritsa" },
+  { "id": 5, "bg": "Лясковец", "en": "Lyaskovets" },
+  { "id": 6, "bg": "Павликени", "en": "Pavlikeni" },
+  { "id": 7, "bg": "Полски Тръмбеш", "en": "Polski Trambesh" },
+  { "id": 8, "bg": "Свищов", "en": "Svishtov" },
+  { "id": 9, "bg": "Стражица", "en": "Strazhitsa" },
+  { "id": 10, "bg": "Сухиндол", "en": "Suhindol" }
+]

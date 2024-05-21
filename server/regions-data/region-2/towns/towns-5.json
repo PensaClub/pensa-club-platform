@@ -1,67 +1,67 @@
 [
-    {
-        "id": 1,
-        "en": "Bliznak",
-        "bg": "Близнак"
-    },
-    {
-        "id": 2,
-        "en": "Brashlyan",
-        "bg": "Бръшлян"
-    },
-    {
-        "id": 3,
-        "en": "Byala Voda",
-        "bg": "Бяла вода"
-    },
-    {
-        "id": 4,
-        "en": "Vizitsa",
-        "bg": "Визица"
-    },
-    {
-        "id": 5,
-        "en": "Gramatikovo",
-        "bg": "Граматиково"
-    },
-    {
-        "id": 6,
-        "en": "Evr"en"ozovo",
-        "bg": "Евренозово"
-    },
-    {
-        "id": 7,
-        "en": "Zabernovo",
-        "bg": "Заберново"
-    },
-    {
-        "id": 8,
-        "en": "Zvezdets",
-        "bg": "Звездец"
-    },
-    {
-        "id": 9,
-        "en": "Kalovo",
-        "bg": "Калово"
-    },
-    {
-        "id": 10,
-        "en": "Malko Tarnovo",
-        "bg": "Малко Търново"
-    },
-    {
-        "id": 11,
-        "en": "Mladezhko",
-        "bg": "Младежко"
-    },
-    {
-        "id": 12,
-        "en": "Slivarovo",
-        "bg": "Сливарово"
-    },
-    {
-        "id": 13,
-        "en": "Stoilovo",
-        "bg": "Стоилово"
-    }
+  {
+    "id": 1,
+    "en": "Bliznak",
+    "bg": "Близнак"
+  },
+  {
+    "id": 2,
+    "en": "Brashlyan",
+    "bg": "Бръшлян"
+  },
+  {
+    "id": 3,
+    "en": "Byala Voda",
+    "bg": "Бяла вода"
+  },
+  {
+    "id": 4,
+    "en": "Vizitsa",
+    "bg": "Визица"
+  },
+  {
+    "id": 5,
+    "en": "Gramatikovo",
+    "bg": "Граматиково"
+  },
+  {
+    "id": 6,
+    "en": "Evrenozovo",
+    "bg": "Евренозово"
+  },
+  {
+    "id": 7,
+    "en": "Zabernovo",
+    "bg": "Заберново"
+  },
+  {
+    "id": 8,
+    "en": "Zvezdets",
+    "bg": "Звездец"
+  },
+  {
+    "id": 9,
+    "en": "Kalovo",
+    "bg": "Калово"
+  },
+  {
+    "id": 10,
+    "en": "Malko Tarnovo",
+    "bg": "Малко Търново"
+  },
+  {
+    "id": 11,
+    "en": "Mladezhko",
+    "bg": "Младежко"
+  },
+  {
+    "id": 12,
+    "en": "Slivarovo",
+    "bg": "Сливарово"
+  },
+  {
+    "id": 13,
+    "en": "Stoilovo",
+    "bg": "Стоилово"
+  }
 ]
