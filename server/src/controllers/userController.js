@@ -7,13 +7,13 @@ const CustomError = require("../utils/customError");
 const { where } = require("sequelize");
 const { user_account } = require("../sequelize/models/index");
 
-// const phoneRegex = /^(\+359|0)(87|88|89)\d{7}$/;
 const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 userController.post("/register", async (req, res, next) => {
   let errors = {};
   try {
-    const { phoneNumber, password, repeatPassword } = req.body;
+    const { phoneNumber, password, rePassword } = req.body;
 
     Object.entries(req.body).forEach(([fieldName, value]) => {
       if (value === "") {
@@ -30,11 +30,11 @@ userController.post("/register", async (req, res, next) => {
       errors.phoneNumber = "Invalid phone number.";
     }
 
-    if (password.length < 4) {
-      errors.password = "Password must be at least 4 characters.";
+    if (!passwordRegex.test(password)) {
+      errors.password = "Password must be at least 8 characters long, contain at least one letter and one number.";
     }
 
-    if (password !== repeatPassword) {
+    if (password !== rePassword) {
       errors.repeatPassword = "Passwords do not match.";
     }
 
