@@ -96,7 +96,7 @@ export const NewsSubscribe = () => {
                         </div>
                     </div>
                     <div className="news-btn">
-                        <button type="submit" className="btn btn-light">Абонирай се </button>
+                        <button type="submit" className="btn-light">Абонирай се </button>
                     </div>
                 </form>
 
