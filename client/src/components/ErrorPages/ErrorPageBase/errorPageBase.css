@@ -4,7 +4,7 @@
     background-image: url("../../../../public/images/errorPage/broken-tv-screen.jpg");
     background-size: cover;
     background-position: center;
-    z-index: -1; /* Ensures the background is behind other elements */
+    z-index: -1;
   }
   
   .not-found {
@@ -21,10 +21,11 @@
     text-align: center;
     margin: auto;
     width: 80%;
-    max-width: var(--desktop-max);
-    height: 600px;
-    min-height: 400px;
-    background-color: rgba(255, 255, 255, 0.7);
+    max-width: var(--container-max-width);
+    height: var(--container-height);
+    min-height: var(--container-min-height);
+    background-color: var(--bg-white);
+    opacity: 0.8;
   
     border-radius: var(--radius);
   }
