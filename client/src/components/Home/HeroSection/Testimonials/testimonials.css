@@ -144,6 +144,10 @@ main h1 {
     .indicator .btn-news {
         background-color: var(--red);
     }
+    .btn-news.active {
+        width: 50px;
+        background-color: var(--bg-white);
+    }
 }
 
 @media (max-width: 550px) {
@@ -189,7 +193,10 @@ main h1 {
     .content p {
         font-size: 1.1rem;
     }
-
+    .btn-news.active {
+        width: 50px;
+        background-color: var(--bg-white);
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1280px) and (orientation: landscape) {
@@ -197,5 +204,8 @@ main h1 {
         background-color: var(--red);
         margin-bottom: 2.2em;
     }
-
+    .btn-news.active {
+        width: 50px;
+        background-color: var(--bg-white);
+    }
 }
