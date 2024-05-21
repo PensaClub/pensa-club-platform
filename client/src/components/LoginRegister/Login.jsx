@@ -68,7 +68,7 @@ export const Login = ({ navToRegister }) => {
         {errors.password && <p className="error">{errors.password}</p>}
 
         <Link to="#" className="link">Забравена парола?</Link>
-        <button className="btn">Вход</button>
+        <button className="btn-general btn-orange">Вход</button>
         <Link to="/sign-up" className="link link-hidden" onClick={navToRegister}>Нямате акаунт? <span>Регистрация</span></Link>
       </form>
     </div>
