@@ -4,9 +4,12 @@
     /* background: linear-gradient(90deg, #f7db77 0, #a9e3f0); */
     display: flex;
     flex-direction: column;
+    justify-content: center;;
 
-    /* align-items: center; */
+    align-items: center;
     padding: 2em 1em;
+
+    
 }
 
 .single-subscribe-info {
@@ -15,6 +18,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 80%;
+}
+
+.news-form {
+    max-width: 80%;
 }
 
 .single-subscribe-info h3 {
@@ -68,9 +76,9 @@
     /* min-width: 350px */
 }
 
-#email, #name {
+/* #email, #name {
     min-width: 350px;
-}
+} */
 
 .news-btn {
 display: flex;
