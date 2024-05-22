@@ -1,0 +1,15 @@
+[
+  { "id": 1, "bg": "Василковска махала", "en": "Vasilkovska mahala" },
+  { "id": 2, "bg": "Голец", "en": "Golets" },
+  { "id": 3, "bg": "Драгана", "en": "Dragana" },
+  { "id": 4, "bg": "Каленик", "en": "Kalenik" },
+  { "id": 5, "bg": "Катунец", "en": "Katunets" },
+  { "id": 6, "bg": "Киркова махала", "en": "Kirkova mahala" },
+  { "id": 7, "bg": "Кирчево", "en": "Kirchevo" },
+  { "id": 8, "bg": "Лесидрен", "en": "Lesidren" },
+  { "id": 9, "bg": "Микре", "en": "Mikre" },
+  { "id": 10, "bg": "Орляне", "en": "Orlyane" },
+  { "id": 11, "bg": "Славщица", "en": "Slavshtitsa" },
+  { "id": 12, "bg": "Сопот", "en": "Sopot" },
+  { "id": 13, "bg": "Угърчин", "en": "Ugarchin" }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "en": "Bulair",
+    "bg": "Булаир"
+  },
+  {
+    "id": 2,
+    "en": "Bardarevo",
+    "bg": "Бърдарево"
+  },
+  {
+    "id": 3,
+    "en": "Venelin",
+    "bg": "Венелин"
+  },
+  {
+    "id": 4,
+    "en": "Goren chiflik",
+    "bg": "Горен чифлик"
+  },
+  {
+    "id": 5,
+    "en": "Grozdyovo",
+    "bg": "Гроздьово"
+  },
+  {
+    "id": 6,
+    "en": "Detelina",
+    "bg": "Детелина"
+  },
+  {
+    "id": 7,
+    "en": "Dolni chiflik",
+    "bg": "Долни чифлик"
+  },
+  {
+    "id": 8,
+    "en": "Krivini",
+    "bg": "Кривини"
+  },
+  {
+    "id": 9,
+    "en": "Nova Shipka",
+    "bg": "Нова Шипка"
+  },
+  {
+    "id": 10,
+    "en": "Novo Oryahovo",
+    "bg": "Ново Оряхово"
+  },
+  {
+    "id": 11,
+    "en": "Pchelnik",
+    "bg": "Пчелник"
+  },
+  {
+    "id": 12,
+    "en": "Solnik",
+    "bg": "Солник"
+  },
+  {
+    "id": 13,
+    "en": "Shkorpilovtsi",
+    "bg": "Шкорпиловци"
+  },
+  {
+    "id": 14,
+    "en": "Yunets",
+    "bg": "Юнец"
+  }
+]

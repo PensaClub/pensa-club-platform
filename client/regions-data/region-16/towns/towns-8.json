@@ -1,0 +1,23 @@
+[
+  { "id": 1, "bg": "Белащица", "en": "Belashtitsa" },
+  { "id": 2, "bg": "Бойково", "en": "Boykovo" },
+  { "id": 3, "bg": "Браниполе", "en": "Branipole" },
+  { "id": 4, "bg": "Брестник", "en": "Brestnik" },
+  { "id": 5, "bg": "Брестовица", "en": "Brestovitsa" },
+  { "id": 6, "bg": "Дедово", "en": "Dedovo" },
+  { "id": 7, "bg": "Златитрап", "en": "Zlatitrap" },
+  { "id": 8, "bg": "Извор", "en": "Izvor" },
+  { "id": 9, "bg": "Кадиево", "en": "Kadievo" },
+  { "id": 10, "bg": "Крумово", "en": "Krumovo" },
+  { "id": 11, "bg": "Лилково", "en": "Lilkovo" },
+  { "id": 12, "bg": "Марково", "en": "Markovo" },
+  { "id": 13, "bg": "Оризари", "en": "Orizari" },
+  { "id": 14, "bg": "Първенец", "en": "Parvenets" },
+  { "id": 15, "bg": "Ситово", "en": "Sitovo" },
+  { "id": 16, "bg": "Скобелево", "en": "Skobelevo" },
+  { "id": 17, "bg": "Устина", "en": "Ustina" },
+  { "id": 18, "bg": "Храбрино", "en": "Hrabrino" },
+  { "id": 19, "bg": "Цалапица", "en": "Tsalapitsa" },
+  { "id": 20, "bg": "Чурен", "en": "Churen" },
+  { "id": 21, "bg": "Ягодово", "en": "Yagodovo" }
+]

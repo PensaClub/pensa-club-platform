@@ -1,0 +1,139 @@
+.subscribe-news {
+    width: 100%;
+    background-image: linear-gradient(360deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff);
+    /* background: linear-gradient(90deg, #f7db77 0, #a9e3f0); */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;;
+
+    align-items: center;
+    padding: 2em 1em;
+
+    
+}
+
+.single-subscribe-info {
+    padding: var(--l-space) 0;
+    /* font-family: Archer; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 80%;
+}
+
+.news-form {
+    max-width: 80%;
+}
+
+.single-subscribe-info h3 {
+    font-size: var(--l-font-size);
+    font-weight: 700;
+    text-align: center;
+
+}
+
+.single-subscribe-info h3>span {
+    font-size: inherit;
+    font-weight: 500;
+}
+
+.single-subscribe-info p {
+    font-size: var(--s-font-size);
+    font-weight: 500;
+    padding-top: var(--l-space);
+    text-align: center;
+
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 0.7em;
+}
+
+.form-row {
+    display: flex;
+    padding-bottom: 1em;
+
+}
+
+.col-subscribe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7em;
+}
+
+/* .col-subscribe input {
+    width: 100%;
+    padding: 0.5em 0.2em;
+    font-size: 1.25em;
+} */
+
+#btn-subscribe {
+    margin-top: 0;
+    /* min-width: 350px */
+}
+
+/* #email, #name {
+    min-width: 350px;
+} */
+
+.news-btn {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin: 0.7em;
+}
+/* .news-btn button {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 0.4em;
+    background-color: var(--green);
+    color: var(--text-white);
+    cursor: pointer;
+
+    border:none;
+    border-radius: 10px;
+} */
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+.after-news {
+    width: 100%;
+    height: 7px;
+    background-image: linear-gradient(359deg, rgb(239 128 152 / 40%), #efa560 57%, rgb(239 128 152 / 40%));
+
+}
+@media (min-width: 850px) {
+    .col-subscribe {
+        flex-direction: row;
+    }
+    .news-form {
+        display: flex;
+        justify-content: center;
+    }
+    .news-btn button:hover {
+        opacity: 0.7;
+    }
+    .error-email{
+        display: flex;
+        flex-direction: column;
+    }
+    .error-username{
+        display: flex;
+        flex-direction: column;
+    }
+
+    #email, #name {
+        min-width: auto;
+    }
+
+    #btn-subscribe {
+        margin-top: 5px;
+        min-width: auto;
+    }
+}

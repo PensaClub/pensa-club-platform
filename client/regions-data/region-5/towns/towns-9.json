@@ -1,0 +1,9 @@
+[
+  { "id": 1, "bg": "Бело поле", "en": "Belo pole" },
+  { "id": 2, "bg": "Гюргич", "en": "Gyurgich" },
+  { "id": 3, "bg": "Динково", "en": "Dinkovo" },
+  { "id": 4, "bg": "Дреновец", "en": "Drenovets" },
+  { "id": 5, "bg": "Плешивец", "en": "Pleshivets" },
+  { "id": 6, "bg": "Ружинци", "en": "Ruzhintsi" },
+  { "id": 7, "bg": "Тополовец", "en": "Topolovets" }
+]

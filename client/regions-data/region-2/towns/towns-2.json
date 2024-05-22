@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "en": "Bryastovets",
+    "bg": "Брястовец"
+  },
+  {
+    "id": 2,
+    "en": "Burgas",
+    "bg": "Бургас"
+  },
+  {
+    "id": 3,
+    "en": "Balgarovo",
+    "bg": "Българово"
+  },
+  {
+    "id": 4,
+    "en": "Dimchevo",
+    "bg": "Димчево"
+  },
+  {
+    "id": 5,
+    "en": "Draganovo",
+    "bg": "Драганово"
+  },
+  {
+    "id": 6,
+    "en": "Izvor",
+    "bg": "Извор"
+  },
+  {
+    "id": 7,
+    "en": "Iztvorishte",
+    "bg": "Изворище"
+  },
+  {
+    "id": 8,
+    "en": "Marinka",
+    "bg": "Маринка"
+  },
+  {
+    "id": 9,
+    "en": "Mirolyubovo",
+    "bg": "Миролюбово"
+  },
+  {
+    "id": 10,
+    "en": "Ravnets",
+    "bg": "Равнец"
+  },
+  {
+    "id": 11,
+    "en": "Tvurditsa",
+    "bg": "Твърдица"
+  }
+]

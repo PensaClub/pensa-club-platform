@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "en": "General Todorov",
+    "bg": "Генерал Тодоров"
+  },
+  {
+    "id": 2,
+    "en": "Kulata",
+    "bg": "Кулата"
+  },
+  {
+    "id": 3,
+    "en": "Marikostinovo",
+    "bg": "Марикостиново"
+  },
+  {
+    "id": 4,
+    "en": "Mitino",
+    "bg": "Митино"
+  },
+  {
+    "id": 5,
+    "en": "Petrich",
+    "bg": "Петрич"
+  },
+  {
+    "id": 6,
+    "en": "Rupite",
+    "bg": "Рупите"
+  },
+  {
+    "id": 7,
+    "en": "Razhdak",
+    "bg": "Ръждак"
+  },
+  {
+    "id": 8,
+    "en": "Chuchuligovo",
+    "bg": "Чучулигово"
+  }
+]

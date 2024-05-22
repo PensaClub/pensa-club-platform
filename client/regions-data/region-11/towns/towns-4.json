@@ -1,0 +1,14 @@
+[
+  { "id": 1, "bg": "Бежаново", "en": "Bezhanovo" },
+  { "id": 2, "bg": "Беленци", "en": "Belentsi" },
+  { "id": 3, "bg": "Дерманци", "en": "Dermantsi" },
+  { "id": 4, "bg": "Дъбен", "en": "Daben" },
+  { "id": 5, "bg": "Карлуково", "en": "Karlukovo" },
+  { "id": 6, "bg": "Луковит", "en": "Lukovit" },
+  { "id": 7, "bg": "Петревене", "en": "Petrevene" },
+  { "id": 8, "bg": "Пещерна", "en": "Peshterna" },
+  { "id": 9, "bg": "Румянцево", "en": "Rumyantsevo" },
+  { "id": 10, "bg": "Тодоричене", "en": "Todorichene" },
+  { "id": 11, "bg": "Торос", "en": "Toros" },
+  { "id": 12, "bg": "Ъглен", "en": "Aglen" }
+]

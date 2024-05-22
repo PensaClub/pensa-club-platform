@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Борущица", "en": "Borushtitsa" },
+  { "id": 2, "bg": "Дъбово", "en": "Dabovo" },
+  { "id": 3, "bg": "Зимница", "en": "Zimnitsa" },
+  { "id": 4, "bg": "Мъглиж", "en": "Maglizh" },
+  { "id": 5, "bg": "Селце", "en": "Seltse" },
+  { "id": 6, "bg": "Сливито", "en": "Slivito" },
+  { "id": 7, "bg": "Тулово", "en": "Tulovo" },
+  { "id": 8, "bg": "Шаново", "en": "Shanovo" },
+  { "id": 9, "bg": "Юлиево", "en": "Yulievo" },
+  { "id": 10, "bg": "Ягода", "en": "Yagoda" }
+]

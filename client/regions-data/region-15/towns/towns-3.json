@@ -1,0 +1,10 @@
+[
+  { "id": 1, "bg": "Байкал", "en": "Baykal" },
+  { "id": 2, "bg": "Биволаре", "en": "Bivolare" },
+  { "id": 3, "bg": "Божурица", "en": "Bozhuritsa" },
+  { "id": 4, "bg": "Горна Митрополия", "en": "Gorna Mitropoliya" },
+  { "id": 5, "bg": "Долна Митрополия", "en": "Dolna Mitropoliya" },
+  { "id": 6, "bg": "Победа", "en": "Pobeda" },
+  { "id": 7, "bg": "Подем", "en": "Podem" },
+  { "id": 8, "bg": "Тръстеник", "en": "Trastenik" }
+]

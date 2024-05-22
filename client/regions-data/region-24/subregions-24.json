@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Братя Даскалови", "en": "Bratya Daskalovi" },
+  { "id": 2, "bg": "Гурково", "en": "Gurkovo" },
+  { "id": 3, "bg": "Гълъбово", "en": "Galabovo" },
+  { "id": 4, "bg": "Казанлък", "en": "Kazanlak" },
+  { "id": 5, "bg": "Мъглиж", "en": "Maglizh" },
+  { "id": 6, "bg": "Николаево", "en": "Nikolaevo" },
+  { "id": 7, "bg": "Павел баня", "en": "Pavel banya" },
+  { "id": 8, "bg": "Раднево", "en": "Radnevo" },
+  { "id": 9, "bg": "Стара Загора", "en": "Stara Zagora" },
+  { "id": 10, "bg": "Чирпан", "en": "Chirpan" }
+]

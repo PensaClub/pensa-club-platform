@@ -1,0 +1,14 @@
+[
+  { "id": 1, "bg": "Велики Преслав", "en": "Veliki Preslav" },
+  { "id": 2, "bg": "Драгоево", "en": "Dragoevo" },
+  { "id": 3, "bg": "Златар", "en": "Zlatar" },
+  { "id": 4, "bg": "Имренчево", "en": "Imrenchevo" },
+  { "id": 5, "bg": "Кочово", "en": "Kochovo" },
+  { "id": 6, "bg": "Миланово", "en": "Milanovo" },
+  { "id": 7, "bg": "Мокреш", "en": "Mokresh" },
+  { "id": 8, "bg": "Мостич", "en": "Mostich" },
+  { "id": 9, "bg": "Осмар", "en": "Osmar" },
+  { "id": 10, "bg": "Суха река", "en": "Suha reka" },
+  { "id": 11, "bg": "Троица", "en": "Troitsa" },
+  { "id": 12, "bg": "Хан Крум", "en": "Han Krum" }
+]

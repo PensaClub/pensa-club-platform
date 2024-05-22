@@ -1,0 +1,126 @@
+.hero-section {
+    background-image: var(--bg-gradient);
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6em;
+}
+
+.parent-hero {
+    display: flex;
+
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 2em;
+}
+
+.left-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #5c5d61;
+    max-width: 100%;
+    align-items: center;
+
+    padding-top: 6em;
+}
+
+.left-side h1 {
+    font-size: 1.8em;
+    color: var(--green);
+    padding-bottom: 0.4em;
+}
+
+.left-side p {
+    text-align: center;
+    padding: 0 2em;
+    font-size: 1.2em;
+}
+
+.btn-hero {
+    display: flex;
+    gap: 2em;
+    margin-top: 1.2em;
+}
+
+.btn-hero a {
+    padding: 0.7em 1.4em;
+    border-radius: 20px;
+    color: white;
+    font-size: 1em;
+    text-align: center;
+
+}
+
+.btn-hero :nth-child(1) {
+    background-color: var(--green);
+}
+
+.btn-hero :nth-child(1):hover {
+    opacity: 0.7;
+}
+
+.btn-hero :nth-child(2) {
+    background-color: var(--orange);
+}
+
+.btn-hero :nth-child(2):hover {
+    opacity: 0.7;
+}
+
+/* desktop */
+@media (min-width: 850px) {
+    .hero-section {
+        padding: 0 10em;
+    }
+
+    .parent-hero {
+        flex-direction: row;
+        gap: 8em;
+    }
+
+    .left-side {
+        flex: 0 0 30%;
+    }
+
+    .left-side h1 {
+        font-size: 2.5em;
+    }
+
+    .left-side p {
+        font-size: 1.25em;
+        text-align: center;
+    }
+
+    .btn-hero {
+        padding-top: 1em;
+    }
+
+    .btn-hero a {
+        font-size: 1.25em;
+    }
+}
+
+@media screen and (orientation:landscape) and (min-device-width: 319px) and (max-device-width: 480px) {
+    .parent-hero {
+        flex-direction: column;
+        gap: 8em;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1280px) and (orientation: landscape) {
+
+    .parent-hero {
+        display: flex;
+
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 6em;
+    }
+
+}

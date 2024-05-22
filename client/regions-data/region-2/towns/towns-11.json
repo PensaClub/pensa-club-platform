@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "en": "Belevren",
+    "bg": "Белеврен"
+  },
+  {
+    "id": 2,
+    "en": "Belila",
+    "bg": "Белила"
+  },
+  {
+    "id": 3,
+    "en": "Bistrets",
+    "bg": "Бистрец"
+  },
+  {
+    "id": 4,
+    "en": "Bogdanovo",
+    "bg": "Богданово"
+  },
+  {
+    "id": 5,
+    "en": "Varovnik",
+    "bg": "Варовник"
+  },
+  {
+    "id": 6,
+    "en": "Valchanovo",
+    "bg": "Вълчаново"
+  },
+  {
+    "id": 7,
+    "en": "Golyamo Bukovo",
+    "bg": "Голямо Буково"
+  },
+  {
+    "id": 8,
+    "en": "Gorno Yabalkovo",
+    "bg": "Горно Ябълково"
+  },
+  {
+    "id": 9,
+    "en": "Granitets",
+    "bg": "Гранитец"
+  },
+  {
+    "id": 10,
+    "en": "Granichar",
+    "bg": "Граничар"
+  },
+  {
+    "id": 11,
+    "en": "Debelt",
+    "bg": "Дебелт"
+  },
+  {
+    "id": 12,
+    "en": "Dolno Yabalkovo",
+    "bg": "Долно Ябълково"
+  },
+  {
+    "id": 13,
+    "en": "Draka",
+    "bg": "Драка"
+  },
+  {
+    "id": 14,
+    "en": "Drachevo",
+    "bg": "Драчево"
+  },
+  {
+    "id": 15,
+    "en": "Dyulevo",
+    "bg": "Дюлево"
+  },
+  {
+    "id": 16,
+    "en": "Zagortsi",
+    "bg": "Загорци"
+  },
+  {
+    "id": 17,
+    "en": "Zornitsa",
+    "bg": "Зорница"
+  },
+  {
+    "id": 18,
+    "en": "Kirovo",
+    "bg": "Кирово"
+  },
+  {
+    "id": 19,
+    "en": "Kubadin",
+    "bg": "Кубадин"
+  },
+  {
+    "id": 20,
+    "en": "Malina",
+    "bg": "Малина"
+  },
+  {
+    "id": 21,
+    "en": "Momina Tsarkva",
+    "bg": "Момина църква"
+  },
+  {
+    "id": 22,
+    "en": "Orlintsi",
+    "bg": "Орлинци"
+  },
+  {
+    "id": 23,
+    "en": "Prohod",
+    "bg": "Проход"
+  },
+  {
+    "id": 24,
+    "en": "Panchevo",
+    "bg": "Пънчево"
+  },
+  {
+    "id": 25,
+    "en": "Radoynovo",
+    "bg": "Радойново"
+  },
+  {
+    "id": 26,
+    "en": "Rosenovo",
+    "bg": "Росеново"
+  },
+  {
+    "id": 27,
+    "en": "Svetlina",
+    "bg": "Светлина"
+  },
+  {
+    "id": 28,
+    "en": "Sinyo Kamene",
+    "bg": "Синьо камене"
+  },
+  {
+    "id": 29,
+    "en": "Slivovo",
+    "bg": "Сливово"
+  },
+  {
+    "id": 30,
+    "en": "Sredets",
+    "bg": "Средец"
+  },
+  {
+    "id": 31,
+    "en": "Suhodol",
+    "bg": "Суходол"
+  },
+  {
+    "id": 32,
+    "en": "Trakiytsi",
+    "bg": "Тракийци"
+  },
+  {
+    "id": 33,
+    "en": "Fakiya",
+    "bg": "Факия"
+  }
+]

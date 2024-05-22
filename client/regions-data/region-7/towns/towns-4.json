@@ -1,0 +1,21 @@
+[
+  { "id": 1, "bg": "Бангейци", "en": "Bangeytsi" },
+  { "id": 2, "bg": "Белица", "en": "Belitsa" },
+  { "id": 3, "bg": "Бижовци", "en": "Bizhovtsi" },
+  { "id": 4, "bg": "Горни Цоневци", "en": "Gorni Tsonevtsi" },
+  { "id": 5, "bg": "Димиевци", "en": "Dimievtsi" },
+  { "id": 6, "bg": "Долни Радковци", "en": "Dolni Radkovtsi" },
+  { "id": 7, "bg": "Енчовци", "en": "Enchovtsi" },
+  { "id": 8, "bg": "Иринеци", "en": "Irinetsi" },
+  { "id": 9, "bg": "Креслювци", "en": "Kreslyuvtsi" },
+  { "id": 10, "bg": "Ошаните", "en": "Oshanite" },
+  { "id": 11, "bg": "Плачковци", "en": "Plachkovtsi" },
+  { "id": 12, "bg": "Престой", "en": "Prestoy" },
+  { "id": 13, "bg": "Радевци", "en": "Radevtsi" },
+  { "id": 14, "bg": "Станчов хан", "en": "Stanchov han" },
+  { "id": 15, "bg": "Тодореците", "en": "Todoretsite" },
+  { "id": 16, "bg": "Трявна", "en": "Tryavna" },
+  { "id": 17, "bg": "Фъревци", "en": "Farevtsi" },
+  { "id": 18, "bg": "Черновръх", "en": "Chernovrah" },
+  { "id": 19, "bg": "Явор", "en": "Yavor" }
+]

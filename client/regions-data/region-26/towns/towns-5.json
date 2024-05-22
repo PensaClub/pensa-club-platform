@@ -1,0 +1,14 @@
+[
+  { "id": 1, "bg": "Ангел войвода", "en": "Angel voyvoda" },
+  { "id": 2, "bg": "Боян Ботево", "en": "Boyan Botevo" },
+  { "id": 3, "bg": "Брястово", "en": "Bryastovo" },
+  { "id": 4, "bg": "Винево", "en": "Vinevo" },
+  { "id": 5, "bg": "Караманци", "en": "Karamantsi" },
+  { "id": 6, "bg": "Колец", "en": "Kolets" },
+  { "id": 7, "bg": "Минерални бани", "en": "Mineralni bani" },
+  { "id": 8, "bg": "Сираково", "en": "Sirakovo" },
+  { "id": 9, "bg": "Спахиево", "en": "Spahievo" },
+  { "id": 10, "bg": "Сусам", "en": "Susam" },
+  { "id": 11, "bg": "Сърница", "en": "Sarnitsa" },
+  { "id": 12, "bg": "Татарево", "en": "Tatarevo" }
+]

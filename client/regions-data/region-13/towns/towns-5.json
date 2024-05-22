@@ -1,0 +1,9 @@
+[
+  { "id": 1, "bg": "Боримечково", "en": "Borimechkovo" },
+  { "id": 2, "bg": "Динката", "en": "Dinkata" },
+  { "id": 3, "bg": "Калугерово", "en": "Kalugerovo" },
+  { "id": 4, "bg": "Лесичово", "en": "Lesichovo" },
+  { "id": 5, "bg": "Памидово", "en": "Pamidovo" },
+  { "id": 6, "bg": "Церово", "en": "Tserovo" },
+  { "id": 7, "bg": "Щърково", "en": "Shtarkovo" }
+]

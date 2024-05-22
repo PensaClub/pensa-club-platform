@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Бела", "en": "Bela" },
+  { "id": 2, "bg": "Владиченци", "en": "Vladichentsi" },
+  { "id": 3, "bg": "Воднянци", "en": "Vodnyantsi" },
+  { "id": 4, "bg": "Димово", "en": "Dimovo" },
+  { "id": 5, "bg": "Държаница", "en": "Darzhanitsa" },
+  { "id": 6, "bg": "Мали Дреновец", "en": "Mali Drenovets" },
+  { "id": 7, "bg": "Медовница", "en": "Medovnitsa" },
+  { "id": 8, "bg": "Септемврийци", "en": "Septemvriytsi" },
+  { "id": 9, "bg": "Ярловица", "en": "Yarlovitsa" }
+]

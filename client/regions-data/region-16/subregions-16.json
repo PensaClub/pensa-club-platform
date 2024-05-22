@@ -1,0 +1,14 @@
+[
+  { "id": 1, "bg": "Асеновград", "en": "Asenovgrad" },
+  { "id": 2, "bg": "Калояново", "en": "Kaloyanovo" },
+  { "id": 3, "bg": "Карлово", "en": "Karlovo" },
+  { "id": 4, "bg": "Кричим", "en": "Krichim" },
+  { "id": 5, "bg": "Марица", "en": "Maritsa" },
+  { "id": 6, "bg": "Пловдив", "en": "Plovdiv" },
+  { "id": 7, "bg": "Раковски", "en": "Rakovski" },
+  { "id": 8, "bg": "Родопи", "en": "Rodopi" },
+  { "id": 9, "bg": "Сопот", "en": "Sopot" },
+  { "id": 10, "bg": "Стамболийски", "en": "Stamboliyski" },
+  { "id": 11, "bg": "Съединение", "en": "Saedinenie" },
+  { "id": 12, "bg": "Хисаря", "en": "Hisarya" }
+]

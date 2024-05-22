@@ -1,0 +1,13 @@
+[
+  { "id": 1, "bg": "Бистренци", "en": "Bistrentsi" },
+  { "id": 2, "bg": "Босилковци", "en": "Bosilkovtsi" },
+  { "id": 3, "bg": "Ботров", "en": "Botrov" },
+  { "id": 4, "bg": "Бяла", "en": "Byala" },
+  { "id": 5, "bg": "Дряновец", "en": "Dryanovets" },
+  { "id": 6, "bg": "Копривец", "en": "Koprivets" },
+  { "id": 7, "bg": "Лом Черковна", "en": "Lom Cherkovna" },
+  { "id": 8, "bg": "Пейчиново", "en": "Peychinovo" },
+  { "id": 9, "bg": "Пет кладенци", "en": "Pet kladentsi" },
+  { "id": 10, "bg": "Полско Косово", "en": "Polsko Kosovo" },
+  { "id": 11, "bg": "Стърмен", "en": "Starmen" }
+]

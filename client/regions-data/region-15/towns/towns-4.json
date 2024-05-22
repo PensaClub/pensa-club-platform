@@ -1,0 +1,9 @@
+[
+  { "id": 1, "bg": "Бъркач", "en": "Barkach" },
+  { "id": 2, "bg": "Горни Дъбник", "en": "Gorni Dabnik" },
+  { "id": 3, "bg": "Градина", "en": "Gradina" },
+  { "id": 4, "bg": "Долни Дъбник", "en": "Dolni Dabnik" },
+  { "id": 5, "bg": "Крушовица", "en": "Krushovitsa" },
+  { "id": 6, "bg": "Петърница", "en": "Petarnitsa" },
+  { "id": 7, "bg": "Садовец", "en": "Sadovets" }
+]
