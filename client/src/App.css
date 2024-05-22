@@ -134,3 +134,14 @@ button, input {
   background-color: var(--red);
   color: var(--bg-white);
 }
+
+
+/* Container Wrapper */
+.container-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	padding: var(--m-space);
+	box-sizing: border-box;
+}

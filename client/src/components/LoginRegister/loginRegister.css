@@ -7,14 +7,14 @@
 	
 }
 
-.login-register-wrapper {
+/* .login-register-wrapper {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
 	padding: var(--m-space);
 	box-sizing: border-box;
-}
+} */
 
 .form__title {
 	text-transform: uppercase;

@@ -22,7 +22,7 @@ export const LoginRegister = () => {
   return (
     <>
       <section className="banner-section">
-        <div className="login-register-wrapper">
+        <div className="container-wrapper">
           <div className={`container ${activeView ? 'right-panel-active' : ''}`}>
             <Login navToRegister={handleRegisterClick}/>
             <Register navToLogin={handleLoginClick}/>
