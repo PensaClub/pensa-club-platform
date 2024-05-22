@@ -1,0 +1,15 @@
+[
+  { "id": 1, "bg": "Бабинци", "en": "Babintsi" },
+  { "id": 2, "bg": "Български извор", "en": "Balgarski izvor" },
+  { "id": 3, "bg": "Васильово", "en": "Vasilyovo" },
+  { "id": 4, "bg": "Галата", "en": "Galata" },
+  { "id": 5, "bg": "Глогово", "en": "Glogovo" },
+  { "id": 6, "bg": "Гложене", "en": "Glozhene" },
+  { "id": 7, "bg": "Голям извор", "en": "Golyam izvor" },
+  { "id": 8, "bg": "Градежница", "en": "Gradezhnitsa" },
+  { "id": 9, "bg": "Дивчовото", "en": "Divchovoto" },
+  { "id": 10, "bg": "Малка Желязна", "en": "Malka ZHelyazna" },
+  { "id": 11, "bg": "Рибарица", "en": "Ribaritsa" },
+  { "id": 12, "bg": "Тетевен", "en": "Teteven" },
+  { "id": 13, "bg": "Черни Вит", "en": "Cherni Vit" }
+]

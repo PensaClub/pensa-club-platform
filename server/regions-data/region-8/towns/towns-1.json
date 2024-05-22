@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Балчик", "en": "Balchik" },
+  { "id": 2, "bg": "Дъбрава", "en": "Dabrava" },
+  { "id": 3, "bg": "Карвуна", "en": "Karvuna" },
+  { "id": 4, "bg": "Кранево", "en": "Kranevo" },
+  { "id": 5, "bg": "Ляхово", "en": "Lyahovo" },
+  { "id": 6, "bg": "Оброчище", "en": "Obrochishte" },
+  { "id": 7, "bg": "Рогачево", "en": "Rogachevo" },
+  { "id": 8, "bg": "Храброво", "en": "Hrabrovo" },
+  { "id": 9, "bg": "Царичино", "en": "Tsarichino" },
+  { "id": 10, "bg": "Църква", "en": "Tsarkva" }
+]

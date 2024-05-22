@@ -1,0 +1,14 @@
+[
+  { "id": 1, "bg": "Видлица", "en": "Vidlitsa" },
+  { "id": 2, "bg": "Гаврил Геново", "en": "Gavril Genovo" },
+  { "id": 3, "bg": "Георги Дамяново", "en": "Georgi Damyanovo" },
+  { "id": 4, "bg": "Говежда", "en": "Govezhda" },
+  { "id": 5, "bg": "Дива Слатина", "en": "Diva Slatina" },
+  { "id": 6, "bg": "Дълги дел", "en": "Dalgi del" },
+  { "id": 7, "bg": "Еловица", "en": "Elovitsa" },
+  { "id": 8, "bg": "Каменна Рикса", "en": "Kamenna Riksa" },
+  { "id": 9, "bg": "Копиловци", "en": "Kopilovtsi" },
+  { "id": 10, "bg": "Меляне", "en": "Melyane" },
+  { "id": 11, "bg": "Помеждин", "en": "Pomezhdin" },
+  { "id": 12, "bg": "Чемиш", "en": "Chemish" }
+]

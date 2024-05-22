@@ -1,0 +1,15 @@
+[
+  { "id": 1, "bg": "Богослов", "en": "Bogoslov" },
+  { "id": 2, "bg": "Вратца", "en": "Vrattsa" },
+  { "id": 3, "bg": "Грамаждано", "en": "Gramazhdano" },
+  { "id": 4, "bg": "Гърляно", "en": "Garlyano" },
+  { "id": 5, "bg": "Гюешево", "en": "Gyueshevo" },
+  { "id": 6, "bg": "Жеравино", "en": "ZHeravino" },
+  { "id": 7, "bg": "Жиленци", "en": "ZHilentsi" },
+  { "id": 8, "bg": "Каменичка Скакавица", "en": "Kamenichka Skakavitsa" },
+  { "id": 9, "bg": "Кюстендил", "en": "Kyustendil" },
+  { "id": 10, "bg": "Ново село", "en": "Novo selo" },
+  { "id": 11, "bg": "Пиперков чифлик", "en": "Piperkov chiflik" },
+  { "id": 12, "bg": "Раненци", "en": "Ranentsi" },
+  { "id": 13, "bg": "Слокощица", "en": "Slokoshtitsa" }
+]

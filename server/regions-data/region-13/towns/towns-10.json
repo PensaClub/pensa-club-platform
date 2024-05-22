@@ -1,0 +1,17 @@
+[
+  { "id": 1, "bg": "Бошуля", "en": "Boshulya" },
+  { "id": 2, "bg": "Варвара", "en": "Varvara" },
+  { "id": 3, "bg": "Ветрен", "en": "Vetren" },
+  { "id": 4, "bg": "Ветрен дол", "en": "Vetren dol" },
+  { "id": 5, "bg": "Виноградец", "en": "Vinogradets" },
+  { "id": 6, "bg": "Горно вършило", "en": "Gorno varshilo" },
+  { "id": 7, "bg": "Долно вършило", "en": "Dolno varshilo" },
+  { "id": 8, "bg": "Злокучене", "en": "Zlokuchene" },
+  { "id": 9, "bg": "Карабунар", "en": "Karabunar" },
+  { "id": 10, "bg": "Ковачево", "en": "Kovachevo" },
+  { "id": 11, "bg": "Лозен", "en": "Lozen" },
+  { "id": 12, "bg": "Семчиново", "en": "Semchinovo" },
+  { "id": 13, "bg": "Септември", "en": "Septemvri" },
+  { "id": 14, "bg": "Симеоновец", "en": "Simeonovets" },
+  { "id": 15, "bg": "Славовица", "en": "Slavovitsa" }
+]

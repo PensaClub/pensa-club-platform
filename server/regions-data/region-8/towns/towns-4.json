@@ -1,0 +1,23 @@
+[
+  { "id": 1, "bg": "Белгун", "en": "Belgun" },
+  { "id": 2, "bg": "Било", "en": "Bilo" },
+  { "id": 3, "bg": "Божурец", "en": "Bozhurets" },
+  { "id": 4, "bg": "Българево", "en": "Balgarevo" },
+  { "id": 5, "bg": "Видно", "en": "Vidno" },
+  { "id": 6, "bg": "Вранино", "en": "Vranino" },
+  { "id": 7, "bg": "Иречек", "en": "Irechek" },
+  { "id": 8, "bg": "Каварна", "en": "Kavarna" },
+  { "id": 9, "bg": "Камен бряг", "en": "Kamen bryag" },
+  { "id": 10, "bg": "Крупен", "en": "Krupen" },
+  { "id": 11, "bg": "Могилище", "en": "Mogilishte" },
+  { "id": 12, "bg": "Нейково", "en": "Neykovo" },
+  { "id": 13, "bg": "Поручик Чунчево", "en": "Poruchik Chunchevo" },
+  { "id": 14, "bg": "Раковски", "en": "Rakovski" },
+  { "id": 15, "bg": "Свети Никола", "en": "Sveti Nikola" },
+  { "id": 16, "bg": "Селце", "en": "Seltse" },
+  { "id": 17, "bg": "Септемврийци", "en": "Septemvriytsi" },
+  { "id": 18, "bg": "Топола", "en": "Topola" },
+  { "id": 19, "bg": "Травник", "en": "Travnik" },
+  { "id": 20, "bg": "Хаджи Димитър", "en": "Hadzhi Dimitar" },
+  { "id": 21, "bg": "Челопечене", "en": "Chelopechene" }
+]

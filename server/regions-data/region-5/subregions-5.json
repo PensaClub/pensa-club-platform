@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Белоградчик", "en": "Belogradchik" },
+  { "id": 2, "bg": "Брегово", "en": "Bregovo" },
+  { "id": 3, "bg": "Видин", "en": "Vidin" },
+  { "id": 4, "bg": "Грамада", "en": "Gramada" },
+  { "id": 5, "bg": "Димово", "en": "Dimovo" },
+  { "id": 6, "bg": "Кула", "en": "Kula" },
+  { "id": 7, "bg": "Макреш", "en": "Makresh" },
+  { "id": 8, "bg": "Ново село", "en": "Novo selo" },
+  { "id": 9, "bg": "Ружинци", "en": "Ruzhintsi" },
+  { "id": 10, "bg": "Чупрене", "en": "Chuprene" }
+]

@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Балей", "en": "Baley" },
+  { "id": 2, "bg": "Брегово", "en": "Bregovo" },
+  { "id": 3, "bg": "Връв", "en": "Vrav" },
+  { "id": 4, "bg": "Гъмзово", "en": "Gamzovo" },
+  { "id": 5, "bg": "Делейна", "en": "Deleyna" },
+  { "id": 6, "bg": "Калина", "en": "Kalina" },
+  { "id": 7, "bg": "Косово", "en": "Kosovo" },
+  { "id": 8, "bg": "Куделин", "en": "Kudelin" },
+  { "id": 9, "bg": "Ракитница", "en": "Rakitnitsa" },
+  { "id": 10, "bg": "Тияновци", "en": "Tiyanovtsi" }
+]

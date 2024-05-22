@@ -1,0 +1,10 @@
+[
+  { "id": 1, "bg": "Априлци", "en": "Apriltsi" },
+  { "id": 2, "bg": "Летница", "en": "Letnitsa" },
+  { "id": 3, "bg": "Ловеч", "en": "Lovech" },
+  { "id": 4, "bg": "Луковит", "en": "Lukovit" },
+  { "id": 5, "bg": "Тетевен", "en": "Teteven" },
+  { "id": 6, "bg": "Троян", "en": "Troyan" },
+  { "id": 7, "bg": "Угърчин", "en": "Ugarchin" },
+  { "id": 8, "bg": "Ябланица", "en": "Yablanitsa" }
+]

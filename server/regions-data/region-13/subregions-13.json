@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Батак", "en": "Batak" },
+  { "id": 2, "bg": "Белово", "en": "Belovo" },
+  { "id": 3, "bg": "Брацигово", "en": "Bratsigovo" },
+  { "id": 4, "bg": "Велинград", "en": "Velingrad" },
+  { "id": 5, "bg": "Лесичово", "en": "Lesichovo" },
+  { "id": 6, "bg": "Пазарджик", "en": "Pazardzhik" },
+  { "id": 7, "bg": "Панагюрище", "en": "Panagyurishte" },
+  { "id": 8, "bg": "Пещера", "en": "Peshtera" },
+  { "id": 9, "bg": "Ракитово", "en": "Rakitovo" },
+  { "id": 10, "bg": "Септември", "en": "Septemvri" }
+]

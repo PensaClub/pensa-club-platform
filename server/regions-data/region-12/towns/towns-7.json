@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Белимел", "en": "Belimel" },
+  { "id": 2, "bg": "Горна Ковачица", "en": "Gorna Kovachitsa" },
+  { "id": 3, "bg": "Горна Лука", "en": "Gorna Luka" },
+  { "id": 4, "bg": "Железна", "en": "ZHelezna" },
+  { "id": 5, "bg": "Мартиново", "en": "Martinovo" },
+  { "id": 6, "bg": "Митровци", "en": "Mitrovtsi" },
+  { "id": 7, "bg": "Превала", "en": "Prevala" },
+  { "id": 8, "bg": "Равна", "en": "Ravna" },
+  { "id": 9, "bg": "Челюстница", "en": "Chelyustnitsa" },
+  { "id": 10, "bg": "Чипровци", "en": "Chiprovtsi" }
+]
