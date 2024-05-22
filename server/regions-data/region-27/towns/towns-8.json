@@ -1,0 +1,23 @@
+[
+  { "id": 1, "bg": "Байково", "en": "Baykovo" },
+  { "id": 2, "bg": "Близнаци", "en": "Bliznatsi" },
+  { "id": 3, "bg": "Висока поляна", "en": "Visoka polyana" },
+  { "id": 4, "bg": "Върбак", "en": "Varbak" },
+  { "id": 5, "bg": "Длъжко", "en": "Dlazhko" },
+  { "id": 6, "bg": "Добри Войниково", "en": "Dobri Voynikovo" },
+  { "id": 7, "bg": "Единаковци", "en": "Edinakovtsi" },
+  { "id": 8, "bg": "Живково", "en": "ZHivkovo" },
+  { "id": 9, "bg": "Звегор", "en": "Zvegor" },
+  { "id": 10, "bg": "Иглика", "en": "Iglika" },
+  { "id": 11, "bg": "Калино", "en": "Kalino" },
+  { "id": 12, "bg": "Каменяк", "en": "Kamenyak" },
+  { "id": 13, "bg": "Развигорово", "en": "Razvigorovo" },
+  { "id": 14, "bg": "Сливак", "en": "Slivak" },
+  { "id": 15, "bg": "Становец", "en": "Stanovets" },
+  { "id": 16, "bg": "Студеница", "en": "Studenitsa" },
+  { "id": 17, "bg": "Тервел", "en": "Tervel" },
+  { "id": 18, "bg": "Тимарево", "en": "Timarevo" },
+  { "id": 19, "bg": "Трем", "en": "Trem" },
+  { "id": 20, "bg": "Хитрино", "en": "Hitrino" },
+  { "id": 21, "bg": "Черна", "en": "Cherna" }
+]

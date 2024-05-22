@@ -1,0 +1,10 @@
+[
+  { "id": 1, "bg": "Брестака", "en": "Brestaka" },
+  { "id": 2, "bg": "Буново", "en": "Bunovo" },
+  { "id": 3, "bg": "Илинден", "en": "Ilinden" },
+  { "id": 4, "bg": "Каменица", "en": "Kamenitsa" },
+  { "id": 5, "bg": "Мирково", "en": "Mirkovo" },
+  { "id": 6, "bg": "Смолско", "en": "Smolsko" },
+  { "id": 7, "bg": "Хвърчил", "en": "Hvarchil" },
+  { "id": 8, "bg": "Черковище", "en": "Cherkovishte" }
+]

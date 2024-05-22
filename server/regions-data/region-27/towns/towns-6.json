@@ -1,0 +1,18 @@
+[
+  { "id": 1, "bg": "Беджене", "en": "Bedzhene" },
+  { "id": 2, "bg": "Войвода", "en": "Voyvoda" },
+  { "id": 3, "bg": "Енево", "en": "Enevo" },
+  { "id": 4, "bg": "Жилино", "en": "ZHilino" },
+  { "id": 5, "bg": "Зайчино ореше", "en": "Zaychino oreshe" },
+  { "id": 6, "bg": "Избул", "en": "Izbul" },
+  { "id": 7, "bg": "Мировци", "en": "Mirovtsi" },
+  { "id": 8, "bg": "Нови пазар", "en": "Novi pazar" },
+  { "id": 9, "bg": "Памукчии", "en": "Pamukchii" },
+  { "id": 10, "bg": "Писарево", "en": "Pisarevo" },
+  { "id": 11, "bg": "Правенци", "en": "Praventsi" },
+  { "id": 12, "bg": "Преселка", "en": "Preselka" },
+  { "id": 13, "bg": "Сечище", "en": "Sechishte" },
+  { "id": 14, "bg": "Стан", "en": "Stan" },
+  { "id": 15, "bg": "Стоян Михайловски", "en": "Stoyan Mihaylovski" },
+  { "id": 16, "bg": "Тръница", "en": "Tranitsa" }
+]

@@ -1,0 +1,16 @@
+[
+  { "id": 1, "bg": "Богданци", "en": "Bogdantsi" },
+  { "id": 2, "bg": "Богомилци", "en": "Bogomiltsi" },
+  { "id": 3, "bg": "Владимировци", "en": "Vladimirovtsi" },
+  { "id": 4, "bg": "Голяма вода", "en": "Golyama voda" },
+  { "id": 5, "bg": "Голям извор", "en": "Golyam izvor" },
+  { "id": 6, "bg": "Желязковец", "en": "ZHelyazkovets" },
+  { "id": 7, "bg": "Здравец", "en": "Zdravets" },
+  { "id": 8, "bg": "Кара Михал", "en": "Kara Mihal" },
+  { "id": 9, "bg": "Кривица", "en": "Krivitsa" },
+  { "id": 10, "bg": "Ножарово", "en": "Nozharovo" },
+  { "id": 11, "bg": "Пчелина", "en": "Pchelina" },
+  { "id": 12, "bg": "Самуил", "en": "Samuil" },
+  { "id": 13, "bg": "Хума", "en": "Huma" },
+  { "id": 14, "bg": "Хърсово", "en": "Harsovo" }
+]

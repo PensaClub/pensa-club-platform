@@ -1,0 +1,21 @@
+[
+  { "id": 1, "bg": "Бенковски", "en": "Benkovski" },
+  { "id": 2, "bg": "Войводиново", "en": "Voyvodinovo" },
+  { "id": 3, "bg": "Войсил", "en": "Voysil" },
+  { "id": 4, "bg": "Граф Игнатиево", "en": "Graf Ignatievo" },
+  { "id": 5, "bg": "Динк", "en": "Dink" },
+  { "id": 6, "bg": "Желязно", "en": "ZHelyazno" },
+  { "id": 7, "bg": "Калековец", "en": "Kalekovets" },
+  { "id": 8, "bg": "Костиево", "en": "Kostievo" },
+  { "id": 9, "bg": "Крислово", "en": "Krislovo" },
+  { "id": 10, "bg": "Маноле", "en": "Manole" },
+  { "id": 11, "bg": "Манолско Конаре", "en": "Manolsko Konare" },
+  { "id": 12, "bg": "Радиново", "en": "Radinovo" },
+  { "id": 13, "bg": "Рогош", "en": "Rogosh" },
+  { "id": 14, "bg": "Скутаре", "en": "Skutare" },
+  { "id": 15, "bg": "Строево", "en": "Stroevo" },
+  { "id": 16, "bg": "Трилистник", "en": "Trilistnik" },
+  { "id": 17, "bg": "Труд", "en": "Trud" },
+  { "id": 18, "bg": "Царацово", "en": "Tsaratsovo" },
+  { "id": 19, "bg": "Ясно поле", "en": "Yasno pole" }
+]

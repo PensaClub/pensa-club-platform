@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Дряново", "en": "Dryanovo" },
+  { "id": 2, "bg": "Калугерово", "en": "Kalugerovo" },
+  { "id": 3, "bg": "Константиново", "en": "Konstantinovo" },
+  { "id": 4, "bg": "Навъсен", "en": "Navasen" },
+  { "id": 5, "bg": "Пясъчево", "en": "Pyasachevo" },
+  { "id": 6, "bg": "Свирково", "en": "Svirkovo" },
+  { "id": 7, "bg": "Симеоновград", "en": "Simeonovgrad" },
+  { "id": 8, "bg": "Троян", "en": "Troyan" },
+  { "id": 9, "bg": "Тянево", "en": "Tyanevo" }
+]

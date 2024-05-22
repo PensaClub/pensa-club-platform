@@ -1,0 +1,15 @@
+[
+  { "id": 1, "bg": "Борци", "en": "Bortsi" },
+  { "id": 2, "bg": "Боян", "en": "Boyan" },
+  { "id": 3, "bg": "Буйновица", "en": "Buynovitsa" },
+  { "id": 4, "bg": "Венец", "en": "Venets" },
+  { "id": 5, "bg": "Габрица", "en": "Gabritsa" },
+  { "id": 6, "bg": "Денница", "en": "Dennitsa" },
+  { "id": 7, "bg": "Дренци", "en": "Drentsi" },
+  { "id": 8, "bg": "Изгрев", "en": "Izgrev" },
+  { "id": 9, "bg": "Капитан Петко", "en": "Kapitan Petko" },
+  { "id": 10, "bg": "Осеновец", "en": "Osenovets" },
+  { "id": 11, "bg": "Страхилица", "en": "Strahilitsa" },
+  { "id": 12, "bg": "Черноглавци", "en": "Chernoglavtsi" },
+  { "id": 13, "bg": "Ясенково", "en": "Yasenkovo" }
+]

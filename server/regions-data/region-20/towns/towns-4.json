@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Близнец", "en": "Bliznets" },
+  { "id": 2, "bg": "Боров дол", "en": "Borov dol" },
+  { "id": 3, "bg": "Бяла паланка", "en": "Byala palanka" },
+  { "id": 4, "bg": "Жълт бряг", "en": "ZHalt bryag" },
+  { "id": 5, "bg": "Оризари", "en": "Orizari" },
+  { "id": 6, "bg": "Сборище", "en": "Sborishte" },
+  { "id": 7, "bg": "Твърдица", "en": "Tvarditsa" },
+  { "id": 8, "bg": "Червенаково", "en": "Chervenakovo" },
+  { "id": 9, "bg": "Шивачево", "en": "Shivachevo" }
+]
