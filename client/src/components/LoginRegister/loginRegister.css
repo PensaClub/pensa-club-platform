@@ -124,15 +124,7 @@
 	text-align: center;
 }
 
-.input{
-	background-color: var(--bg-white);
-	padding: var(--s-space);
-	margin: var(--s-space) 0 var(--m-space) 0;
-	width: 100%;
-	border: 0.3px solid #ccc;
-	border-radius: var(--radius-input);
-	
-}
+
 
 @keyframes show {
 	

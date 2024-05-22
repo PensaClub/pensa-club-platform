@@ -10,28 +10,29 @@
 }
 
 .single-subscribe-info {
-    padding: 2em 0;
-    font-family: Archer;
+    padding: var(--l-space) 0;
+    /* font-family: Archer; */
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .single-subscribe-info h3 {
-    font-size: 2.5em;
+    font-size: var(--l-font-size);
     font-weight: 700;
     text-align: center;
 
 }
 
 .single-subscribe-info h3>span {
+    font-size: inherit;
     font-weight: 500;
 }
 
 .single-subscribe-info p {
-    font-size: 1.5em;
+    font-size: var(--s-font-size);
     font-weight: 500;
-    padding-top: 1em;
+    padding-top: var(--l-space);
     text-align: center;
 
 }
@@ -52,21 +53,32 @@
 .col-subscribe {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 0.7em;
 }
 
-.col-subscribe input {
+/* .col-subscribe input {
     width: 100%;
     padding: 0.5em 0.2em;
     font-size: 1.25em;
+} */
+
+#btn-subscribe {
+    margin-top: 0;
+    /* min-width: 350px */
+}
+
+#email, #name {
+    min-width: 350px;
 }
 
 .news-btn {
 display: flex;
 flex-direction: column;
+align-items: center;
 margin: 0.7em;
 }
-.news-btn button {
+/* .news-btn button {
     text-align: center;
     font-size: 1.5em;
     padding: 0.4em;
@@ -76,7 +88,7 @@ margin: 0.7em;
 
     border:none;
     border-radius: 10px;
-}
+} */
 .error-message {
     color: red;
     font-size: 0.875rem;
@@ -106,5 +118,14 @@ margin: 0.7em;
     .error-username{
         display: flex;
         flex-direction: column;
+    }
+
+    #email, #name {
+        min-width: auto;
+    }
+
+    #btn-subscribe {
+        margin-top: 5px;
+        min-width: auto;
     }
 }

@@ -109,7 +109,7 @@ button, input {
   transition: background-color 0.3s ease;
 
   /* background-color: var(--green); */
-  color: var(--bg-white);
+  color: var(--text-white);
 
   font-size: var(--s-font-size);
   text-decoration: none;
@@ -144,4 +144,15 @@ button, input {
 	min-height: 100vh;
 	padding: var(--m-space);
 	box-sizing: border-box;
+}
+
+/* Input Field */
+.input{
+	background-color: var(--bg-white);
+	padding: 14px;
+	margin: var(--s-space) 0 var(--m-space) 0;
+	width: 100%;
+	border: 0.3px solid #ccc;
+	border-radius: var(--radius-input);
+	
 }
