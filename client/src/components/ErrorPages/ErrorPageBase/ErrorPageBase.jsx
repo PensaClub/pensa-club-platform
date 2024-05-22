@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import './errorPageBase.css'; // Assuming you save the CSS part in an App.css file
+import './errorPageBase.css'; 
 
 export const ErrorPageBase = ({ errorCode, errorDesc }) => {
   return (
-    <div className="not-found-container">
+    
+      <div className="container-wrapper">
       <div className="not-found">
         <h1>Грешка {errorCode}</h1>
-        
 
         <h2>{errorDesc}</h2>
         {/* <h3>Върнете се към</h3> */}
@@ -26,5 +26,6 @@ export const ErrorPageBase = ({ errorCode, errorDesc }) => {
         </div>
       </div>
     </div>
+    
   );
 };

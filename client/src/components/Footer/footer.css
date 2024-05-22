@@ -1,5 +1,5 @@
 footer {
-    width: 100%;
+  width: 100%;
 }
 
 .footer {
@@ -13,25 +13,24 @@ footer {
   gap: 2em;
   align-items: center;
   -webkit-font-smoothing: antialiased;
-  padding: 2em 0;
+  padding: var(--l-space) 0;
   overflow: hidden;
   opacity: 0.6;
 }
 
 .footer p {
-  font-size: 1em;
+  /* font-size: 1em; */
   font-weight: 300;
   line-height: 1.4;
-  color: var( --text-white);
-
+  color: var(--text-white);
 }
 
 .footer h3 {
-  padding-bottom: 0.4em;
-  font-size: 1.5em;
+  padding-bottom: var(--s-space);
+  /* font-size: 1.5em; */
 }
 
-#root>footer>section>img {
+#root > footer > section > img {
   position: absolute;
   left: 2px;
   width: 160px;
@@ -41,17 +40,15 @@ footer {
   rotate: -20deg;
   filter: blur(1px);
   filter: brightness(70%);
-
 }
 
 .footer-links {
   display: flex;
   flex-direction: column;
   gap: 0.4em;
-  margin-top: 1em;
+  margin-top: var(--m-space);
   text-align: center;
   z-index: 2;
-
 }
 
 .footer-info {
@@ -61,14 +58,11 @@ footer {
   gap: 0.3em;
   text-align: center;
   z-index: 2;
-
 }
 .info-desc {
-
-display: flex;
-flex-direction: column;
-align-items: start;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .second-info {
   display: flex;
@@ -90,7 +84,6 @@ align-items: start;
   justify-content: center;
   padding: 0.7em 0;
   cursor: pointer;
-
 }
 
 .footer-privacy {
@@ -102,43 +95,46 @@ align-items: start;
   align-items: center;
 
   opacity: 0.8;
-
 }
 
 .footer-privacy p {
-  font-size: 0.8em;
-  padding: 0.8em 0;
-  color: var( --text-white);
+  font-size: var(--xs-font-size);
+  padding: var(--s-space) 0;
+  color: var(--text-white);
 }
 
 @media (min-width: 850px) {
   .footer {
-      flex-direction: row-reverse;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 3em;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3em;
+  }
+
+  .info-desc {
+    align-items: start;
   }
 
   .footer-info {
-      flex: 0 0 20%;
+    flex: 0 0 20%;
   }
 
   .second-info {
-      flex-direction: row;
-      gap: 0.5em;
-      align-items: center;
+    flex-direction: row;
+    gap: 0.5em;
+    align-items: center;
   }
 
   .footer-info img {
-      width: 40px;
-      height: auto;
+    width: 40px;
+    height: auto;
   }
 
   .footer h3 {
-      padding-bottom: initial;
+    padding-bottom: initial;
   }
 
   .footer-links {
-      margin-top: initial;
+    margin-top: initial;
   }
 }

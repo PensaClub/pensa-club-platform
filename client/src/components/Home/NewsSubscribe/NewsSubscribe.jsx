@@ -86,17 +86,17 @@ export const NewsSubscribe = () => {
                     <div className="form-row">
                         <div className="col-subscribe form-group">
                             <div className="error-username">
-                                <input type="text" name="user_name" className="form-control" id="name" placeholder="Име*" value={userName} onChange={handleNameChange} />
+                                <input type="text" name="user_name" className="input" id="name" placeholder="Име*" value={userName} onChange={handleNameChange} />
                                 {errors.userName && <div className="error-message">{errors.userName}</div>}
                             </div>
                             <div className="error-email">
-                                <input type="email" className="form-control" name="user_email" id="email" placeholder="Имейл адрес*" value={userEmail} onChange={handleEmailChange} />
+                                <input type="email" className="input" name="user_email" id="email" placeholder="Имейл адрес*" value={userEmail} onChange={handleEmailChange} />
                                 {errors.userEmail && <div className="error-message">{errors.userEmail}</div>}
                             </div>
                         </div>
                     </div>
                     <div className="news-btn">
-                        <button type="submit" className="btn-light">Абонирай се </button>
+                        <button type="submit" className="btn-general btn-green" id="btn-subscribe">Абонирай се </button>
                     </div>
                 </form>
 
