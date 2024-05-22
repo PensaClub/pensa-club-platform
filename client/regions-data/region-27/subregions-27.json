@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Велики Преслав", "en": "Veliki Preslav" },
+  { "id": 2, "bg": "Венец", "en": "Venets" },
+  { "id": 3, "bg": "Върбица", "en": "Varbitsa" },
+  { "id": 4, "bg": "Каолиново", "en": "Kaolinovo" },
+  { "id": 5, "bg": "Каспичан", "en": "Kaspichan" },
+  { "id": 6, "bg": "Нови пазар", "en": "Novi pazar" },
+  { "id": 7, "bg": "Смядово", "en": "Smyadovo" },
+  { "id": 8, "bg": "Хитрино", "en": "Hitrino" },
+  { "id": 9, "bg": "Шумен", "en": "Shumen" }
+]

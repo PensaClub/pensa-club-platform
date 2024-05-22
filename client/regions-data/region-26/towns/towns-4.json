@@ -1,0 +1,18 @@
+[
+  { "id": 1, "bg": "Бориславци", "en": "Borislavtsi" },
+  { "id": 2, "bg": "Голяма долина", "en": "Golyama dolina" },
+  { "id": 3, "bg": "Горни Главанак", "en": "Gorni Glavanak" },
+  { "id": 4, "bg": "Горно поле", "en": "Gorno pole" },
+  { "id": 5, "bg": "Долни Главанак", "en": "Dolni Glavanak" },
+  { "id": 6, "bg": "Долно Съдиево", "en": "Dolno Sadievo" },
+  { "id": 7, "bg": "Ефрем", "en": "Efrem" },
+  { "id": 8, "bg": "Златоустово", "en": "Zlatoustovo" },
+  { "id": 9, "bg": "Маджарово", "en": "Madzharovo" },
+  { "id": 10, "bg": "Малки Воден", "en": "Malki Voden" },
+  { "id": 11, "bg": "Малко Брягово", "en": "Malko Bryagovo" },
+  { "id": 12, "bg": "Румелия", "en": "Rumeliya" },
+  { "id": 13, "bg": "Ръженово", "en": "Razhenovo" },
+  { "id": 14, "bg": "Селска поляна", "en": "Selska polyana" },
+  { "id": 15, "bg": "Сеноклас", "en": "Senoklas" },
+  { "id": 16, "bg": "Тополово", "en": "Topolovo" }
+]

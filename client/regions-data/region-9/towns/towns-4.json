@@ -1,0 +1,8 @@
+[
+  { "id": 1, "bg": "Аврен", "en": "Avren" },
+  { "id": 2, "bg": "Звънарка", "en": "Zvanarka" },
+  { "id": 3, "bg": "Крумовград", "en": "Krumovgrad" },
+  { "id": 4, "bg": "Овчари", "en": "Ovchari" },
+  { "id": 5, "bg": "Скалак", "en": "Skalak" },
+  { "id": 6, "bg": "Токачка", "en": "Tokachka" }
+]

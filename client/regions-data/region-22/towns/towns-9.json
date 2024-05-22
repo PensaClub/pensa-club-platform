@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Голак", "en": "Golak" },
+  { "id": 2, "bg": "Горна Василица", "en": "Gorna Vasilitsa" },
+  { "id": 3, "bg": "Долна Василица", "en": "Dolna Vasilitsa" },
+  { "id": 4, "bg": "Костенец", "en": "Kostenets" },
+  { "id": 5, "bg": "Костенец", "en": "Kostenets" },
+  { "id": 6, "bg": "Момин проход", "en": "Momin prohod" },
+  { "id": 7, "bg": "Очуша", "en": "Ochusha" },
+  { "id": 8, "bg": "Подгорие", "en": "Podgorie" },
+  { "id": 9, "bg": "Пчелин", "en": "Pchelin" }
+]

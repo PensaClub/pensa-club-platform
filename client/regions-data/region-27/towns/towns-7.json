@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Александрово", "en": "Aleksandrovo" },
+  { "id": 2, "bg": "Бял бряг", "en": "Byal bryag" },
+  { "id": 3, "bg": "Веселиново", "en": "Veselinovo" },
+  { "id": 4, "bg": "Желъд", "en": "ZHelad" },
+  { "id": 5, "bg": "Кълново", "en": "Kalnovo" },
+  { "id": 6, "bg": "Ново Янково", "en": "Novo Yankovo" },
+  { "id": 7, "bg": "Риш", "en": "Rish" },
+  { "id": 8, "bg": "Смядово", "en": "Smyadovo" },
+  { "id": 9, "bg": "Черни връх", "en": "Cherni vrah" },
+  { "id": 10, "bg": "Янково", "en": "Yankovo" }
+]

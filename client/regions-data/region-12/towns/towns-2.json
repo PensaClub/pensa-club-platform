@@ -1,0 +1,15 @@
+[
+  { "id": 1, "bg": "Бели брег", "en": "Beli breg" },
+  { "id": 2, "bg": "Бели брод", "en": "Beli brod" },
+  { "id": 3, "bg": "Бойчиновци", "en": "Boychinovtsi" },
+  { "id": 4, "bg": "Владимирово", "en": "Vladimirovo" },
+  { "id": 5, "bg": "Громшин", "en": "Gromshin" },
+  { "id": 6, "bg": "Ерден", "en": "Erden" },
+  { "id": 7, "bg": "Кобиляк", "en": "Kobilyak" },
+  { "id": 8, "bg": "Лехчево", "en": "Lehchevo" },
+  { "id": 9, "bg": "Мадан", "en": "Madan" },
+  { "id": 10, "bg": "Мърчево", "en": "Marchevo" },
+  { "id": 11, "bg": "Охрид", "en": "Ohrid" },
+  { "id": 12, "bg": "Палилула", "en": "Palilula" },
+  { "id": 13, "bg": "Портитовци", "en": "Portitovtsi" }
+]

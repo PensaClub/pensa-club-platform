@@ -1,0 +1,18 @@
+[
+  { "id": 1, "bg": "Божаново", "en": "Bozhanovo" },
+  { "id": 2, "bg": "Ваклино", "en": "Vaklino" },
+  { "id": 3, "bg": "Горичане", "en": "Gorichane" },
+  { "id": 4, "bg": "Горун", "en": "Gorun" },
+  { "id": 5, "bg": "Граничар", "en": "Granichar" },
+  { "id": 6, "bg": "Дуранкулак", "en": "Durankulak" },
+  { "id": 7, "bg": "Езерец", "en": "Ezerets" },
+  { "id": 8, "bg": "Захари Стояново", "en": "Zahari Stoyanovo" },
+  { "id": 9, "bg": "Крапец", "en": "Krapets" },
+  { "id": 10, "bg": "Пролез", "en": "Prolez" },
+  { "id": 11, "bg": "Смин", "en": "Smin" },
+  { "id": 12, "bg": "Стаевци", "en": "Staevtsi" },
+  { "id": 13, "bg": "Твърдица", "en": "Tvarditsa" },
+  { "id": 14, "bg": "Тюленово", "en": "Tyulenovo" },
+  { "id": 15, "bg": "Черноморци", "en": "Chernomortsi" },
+  { "id": 16, "bg": "Шабла", "en": "Shabla" }
+]

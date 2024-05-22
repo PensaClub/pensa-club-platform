@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Бабица", "en": "Babitsa" },
+  { "id": 2, "bg": "Бегуновци", "en": "Begunovtsi" },
+  { "id": 3, "bg": "Брезник", "en": "Breznik" },
+  { "id": 4, "bg": "Брезнишки извор", "en": "Breznishki izvor" },
+  { "id": 5, "bg": "Велковци", "en": "Velkovtsi" },
+  { "id": 6, "bg": "Видрица", "en": "Vidritsa" },
+  { "id": 7, "bg": "Гигинци", "en": "Gigintsi" },
+  { "id": 8, "bg": "Режанци", "en": "Rezhantsi" },
+  { "id": 9, "bg": "Садовик", "en": "Sadovik" }
+]

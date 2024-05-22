@@ -1,0 +1,10 @@
+[
+  { "id": 1, "bg": "Айдемир", "en": "Aydemir" },
+  { "id": 2, "bg": "Ветрен", "en": "Vetren" },
+  { "id": 3, "bg": "Калипетрово", "en": "Kalipetrovo" },
+  { "id": 4, "bg": "Полковник Ламбриново", "en": "Polkovnik Lambrinovo" },
+  { "id": 5, "bg": "Професор Иширково", "en": "Profesor Ishirkovo" },
+  { "id": 6, "bg": "Силистра", "en": "Silistra" },
+  { "id": 7, "bg": "Смилец", "en": "Smilets" },
+  { "id": 8, "bg": "Сребърна", "en": "Srebarna" }
+]

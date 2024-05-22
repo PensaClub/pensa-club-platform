@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Баните", "en": "Banite" },
+  { "id": 2, "bg": "Борино", "en": "Borino" },
+  { "id": 3, "bg": "Девин", "en": "Devin" },
+  { "id": 4, "bg": "Доспат", "en": "Dospat" },
+  { "id": 5, "bg": "Златоград", "en": "Zlatograd" },
+  { "id": 6, "bg": "Мадан", "en": "Madan" },
+  { "id": 7, "bg": "Неделино", "en": "Nedelino" },
+  { "id": 8, "bg": "Рудозем", "en": "Rudozem" },
+  { "id": 9, "bg": "Смолян", "en": "Smolyan" },
+  { "id": 10, "bg": "Чепеларе", "en": "Chepelare" }
+]

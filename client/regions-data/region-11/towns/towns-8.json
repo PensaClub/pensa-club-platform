@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Батулци", "en": "Batultsi" },
+  { "id": 2, "bg": "Брестница", "en": "Brestnitsa" },
+  { "id": 3, "bg": "Голяма Брестница", "en": "Golyama Brestnitsa" },
+  { "id": 4, "bg": "Добревци", "en": "Dobrevtsi" },
+  { "id": 5, "bg": "Дъбравата", "en": "Dabravata" },
+  { "id": 6, "bg": "Златна Панега", "en": "Zlatna Panega" },
+  { "id": 7, "bg": "Малък извор", "en": "Malak izvor" },
+  { "id": 8, "bg": "Орешене", "en": "Oreshene" },
+  { "id": 9, "bg": "Ябланица", "en": "Yablanitsa" }
+]

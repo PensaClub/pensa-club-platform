@@ -1,0 +1,18 @@
+[
+  { "id": 1, "bg": "Антон", "en": "Anton" },
+  { "id": 2, "bg": "Божурище", "en": "Bozhurishte" },
+  { "id": 3, "bg": "Ботевград", "en": "Botevgrad" },
+  { "id": 4, "bg": "Долна баня", "en": "Dolna banya" },
+  { "id": 5, "bg": "Елин Пелин", "en": "Elin Pelin" },
+  { "id": 6, "bg": "Златица", "en": "Zlatitsa" },
+  { "id": 7, "bg": "Ихтиман", "en": "Ihtiman" },
+  { "id": 8, "bg": "Копривщица", "en": "Koprivshtitsa" },
+  { "id": 9, "bg": "Костенец", "en": "Kostenets" },
+  { "id": 10, "bg": "Костинброд", "en": "Kostinbrod" },
+  { "id": 11, "bg": "Мирково", "en": "Mirkovo" },
+  { "id": 12, "bg": "Пирдоп", "en": "Pirdop" },
+  { "id": 13, "bg": "Самоков", "en": "Samokov" },
+  { "id": 14, "bg": "Сливница", "en": "Slivnitsa" },
+  { "id": 15, "bg": "Чавдар", "en": "Chavdar" },
+  { "id": 16, "bg": "Челопеч", "en": "Chelopech" }
+]

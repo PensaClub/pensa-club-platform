@@ -1,0 +1,9 @@
+[
+  { "id": 1, "bg": "Балчик", "en": "Balchik" },
+  { "id": 2, "bg": "Генерал Тошево", "en": "General Toshevo" },
+  { "id": 3, "bg": "Добрич", "en": "Dobrich" },
+  { "id": 4, "bg": "Каварна", "en": "Kavarna" },
+  { "id": 5, "bg": "Крушари", "en": "Krushari" },
+  { "id": 6, "bg": "Тервел", "en": "Tervel" },
+  { "id": 7, "bg": "Шабла", "en": "Shabla" }
+]

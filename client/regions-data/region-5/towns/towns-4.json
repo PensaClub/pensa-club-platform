@@ -1,0 +1,10 @@
+[
+  { "id": 1, "bg": "Бояново", "en": "Boyanovo" },
+  { "id": 2, "bg": "Бранковци", "en": "Brankovtsi" },
+  { "id": 3, "bg": "Водна", "en": "Vodna" },
+  { "id": 4, "bg": "Грамада", "en": "Gramada" },
+  { "id": 5, "bg": "Медешевци", "en": "Medeshevtsi" },
+  { "id": 6, "bg": "Милчина лъка", "en": "Milchina laka" },
+  { "id": 7, "bg": "Срацимирово", "en": "Sratsimirovo" },
+  { "id": 8, "bg": "Тошевци", "en": "Toshevtsi" }
+]

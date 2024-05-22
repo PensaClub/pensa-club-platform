@@ -1,0 +1,22 @@
+[
+  { "id": 1, "bg": "Боринци", "en": "Borintsi" },
+  { "id": 2, "bg": "Братан", "en": "Bratan" },
+  { "id": 3, "bg": "Градец", "en": "Gradets" },
+  { "id": 4, "bg": "Жеравна", "en": "ZHeravna" },
+  { "id": 5, "bg": "Катунище", "en": "Katunishte" },
+  { "id": 6, "bg": "Кипилово", "en": "Kipilovo" },
+  { "id": 7, "bg": "Котел", "en": "Kotel" },
+  { "id": 8, "bg": "Медвен", "en": "Medven" },
+  { "id": 9, "bg": "Мокрен", "en": "Mokren" },
+  { "id": 10, "bg": "Нейково", "en": "Neykovo" },
+  { "id": 11, "bg": "Орлово", "en": "Orlovo" },
+  { "id": 12, "bg": "Остра могила", "en": "Ostra mogila" },
+  { "id": 13, "bg": "Пъдарево", "en": "Padarevo" },
+  { "id": 14, "bg": "Седларево", "en": "Sedlarevo" },
+  { "id": 15, "bg": "Соколарци", "en": "Sokolartsi" },
+  { "id": 16, "bg": "Стрелци", "en": "Streltsi" },
+  { "id": 17, "bg": "Тича", "en": "Ticha" },
+  { "id": 18, "bg": "Топузево", "en": "Topuzevo" },
+  { "id": 19, "bg": "Филаретово", "en": "Filaretovo" },
+  { "id": 20, "bg": "Ябланово", "en": "Yablanovo" }
+]

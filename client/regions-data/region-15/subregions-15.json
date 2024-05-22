@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Белене", "en": "Belene" },
+  { "id": 2, "bg": "Гулянци", "en": "Gulyantsi" },
+  { "id": 3, "bg": "Долна Митрополия", "en": "Dolna Mitropoliya" },
+  { "id": 4, "bg": "Долни Дъбник", "en": "Dolni Dabnik" },
+  { "id": 5, "bg": "Кнежа", "en": "Knezha" },
+  { "id": 6, "bg": "Левски", "en": "Levski" },
+  { "id": 7, "bg": "Никопол", "en": "Nikopol" },
+  { "id": 8, "bg": "Плевен", "en": "Pleven" },
+  { "id": 9, "bg": "Червен бряг", "en": "Cherven bryag" }
+]

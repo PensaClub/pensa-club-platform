@@ -1,0 +1,9 @@
+[
+  { "id": 1, "bg": "Горна Оряховица", "en": "Gorna Oryahovitsa" },
+  { "id": 2, "bg": "Горски долен Тръмбеш", "en": "Gorski dolen Trambesh" },
+  { "id": 3, "bg": "Драганово", "en": "Draganovo" },
+  { "id": 4, "bg": "Паисий", "en": "Paisiy" },
+  { "id": 5, "bg": "Поликраище", "en": "Polikraishte" },
+  { "id": 6, "bg": "Първомайци", "en": "Parvomaytsi" },
+  { "id": 7, "bg": "Стрелец", "en": "Strelets" }
+]

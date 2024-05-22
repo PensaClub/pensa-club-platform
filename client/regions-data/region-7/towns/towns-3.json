@@ -1,0 +1,21 @@
+[
+  { "id": 1, "bg": "Агатово", "en": "Agatovo" },
+  { "id": 2, "bg": "Батошево", "en": "Batoshevo" },
+  { "id": 3, "bg": "Добромирка", "en": "Dobromirka" },
+  { "id": 4, "bg": "Душево", "en": "Dushevo" },
+  { "id": 5, "bg": "Душевски колиби", "en": "Dushevski kolibi" },
+  { "id": 6, "bg": "Енев рът", "en": "Enev rat" },
+  { "id": 7, "bg": "Карамичевци", "en": "Karamichevtsi" },
+  { "id": 8, "bg": "Кастел", "en": "Kastel" },
+  { "id": 9, "bg": "Кръвеник", "en": "Kravenik" },
+  { "id": 10, "bg": "Ловнидол", "en": "Lovnidol" },
+  { "id": 11, "bg": "Мариновци", "en": "Marinovtsi" },
+  { "id": 12, "bg": "Млечево", "en": "Mlechevo" },
+  { "id": 13, "bg": "Попска", "en": "Popska" },
+  { "id": 14, "bg": "Севлиево", "en": "Sevlievo" },
+  { "id": 15, "bg": "Стоките", "en": "Stokite" },
+  { "id": 16, "bg": "Столът", "en": "Stolat" },
+  { "id": 17, "bg": "Тумбалово", "en": "Tumbalovo" },
+  { "id": 18, "bg": "Шопите", "en": "Shopite" },
+  { "id": 19, "bg": "Шумата", "en": "Shumata" }
+]

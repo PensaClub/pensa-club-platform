@@ -1,0 +1,12 @@
+[
+  { "id": 1, "bg": "Димитровград", "en": "Dimitrovgrad" },
+  { "id": 2, "bg": "Ивайловград", "en": "Ivaylovgrad" },
+  { "id": 3, "bg": "Любимец", "en": "Lyubimets" },
+  { "id": 4, "bg": "Маджарово", "en": "Madzharovo" },
+  { "id": 5, "bg": "Минерални бани", "en": "Mineralni bani" },
+  { "id": 6, "bg": "Свиленград", "en": "Svilengrad" },
+  { "id": 7, "bg": "Симеоновград", "en": "Simeonovgrad" },
+  { "id": 8, "bg": "Стамболово", "en": "Stambolovo" },
+  { "id": 9, "bg": "Харманли", "en": "Harmanli" },
+  { "id": 10, "bg": "Хасково", "en": "Haskovo" }
+]

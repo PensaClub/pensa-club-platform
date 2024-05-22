@@ -1,0 +1,14 @@
+[
+  { "id": 1, "bg": "Алдомировци", "en": "Aldomirovtsi" },
+  { "id": 2, "bg": "Братушково", "en": "Bratushkovo" },
+  { "id": 3, "bg": "Бърложница", "en": "Barlozhnitsa" },
+  { "id": 4, "bg": "Гургулят", "en": "Gurgulyat" },
+  { "id": 5, "bg": "Гълъбовци", "en": "Galabovtsi" },
+  { "id": 6, "bg": "Драготинци", "en": "Dragotintsi" },
+  { "id": 7, "bg": "Извор", "en": "Izvor" },
+  { "id": 8, "bg": "Пищане", "en": "Pishtane" },
+  { "id": 9, "bg": "Повалиръж", "en": "Povalirazh" },
+  { "id": 10, "bg": "Радуловци", "en": "Radulovtsi" },
+  { "id": 11, "bg": "Ракита", "en": "Rakita" },
+  { "id": 12, "bg": "Сливница", "en": "Slivnitsa" }
+]

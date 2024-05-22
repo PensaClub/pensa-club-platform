@@ -1,0 +1,9 @@
+[
+  { "id": 1, "bg": "Вълчек", "en": "Valchek" },
+  { "id": 2, "bg": "Киреево", "en": "Kireevo" },
+  { "id": 3, "bg": "Макреш", "en": "Makresh" },
+  { "id": 4, "bg": "Подгоре", "en": "Podgore" },
+  { "id": 5, "bg": "Раковица", "en": "Rakovitsa" },
+  { "id": 6, "bg": "Толовица", "en": "Tolovitsa" },
+  { "id": 7, "bg": "Цар Шишманово", "en": "Tsar Shishmanovo" }
+]

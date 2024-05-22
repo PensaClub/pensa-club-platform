@@ -1,0 +1,9 @@
+[
+  { "id": 1, "bg": "Ардино", "en": "Ardino" },
+  { "id": 2, "bg": "Джебел", "en": "Dzhebel" },
+  { "id": 3, "bg": "Кирково", "en": "Kirkovo" },
+  { "id": 4, "bg": "Крумовград", "en": "Krumovgrad" },
+  { "id": 5, "bg": "Кърджали", "en": "Kardzhali" },
+  { "id": 6, "bg": "Момчилград", "en": "Momchilgrad" },
+  { "id": 7, "bg": "Черноочене", "en": "Chernoochene" }
+]

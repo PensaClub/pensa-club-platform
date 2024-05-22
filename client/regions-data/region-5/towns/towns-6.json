@@ -1,0 +1,11 @@
+[
+  { "id": 1, "bg": "Големаново", "en": "Golemanovo" },
+  { "id": 2, "bg": "Извор махала", "en": "Izvor mahala" },
+  { "id": 3, "bg": "Коста Перчево", "en": "Kosta Perchevo" },
+  { "id": 4, "bg": "Кула", "en": "Kula" },
+  { "id": 5, "bg": "Полетковци", "en": "Poletkovtsi" },
+  { "id": 6, "bg": "Старопатица", "en": "Staropatitsa" },
+  { "id": 7, "bg": "Тополовец", "en": "Topolovets" },
+  { "id": 8, "bg": "Цар-Петрово", "en": "Tsar-Petrovo" },
+  { "id": 9, "bg": "Чичил", "en": "Chichil" }
+]

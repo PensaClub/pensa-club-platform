@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "en": "Banya",
+        "bg": "Баня"
+    },
+    {
+        "id": 2,
+        "en": "Bachevo",
+        "bg": "Бачево"
+    },
+    {
+        "id": 3,
+        "en": "Godlevo",
+        "bg": "Годлево"
+    },
+    {
+        "id": 4,
+        "en": "Gorno Draglishte",
+        "bg": "Горно Драглище"
+    },
+    {
+        "id": 5,
+        "en": "Dobarsko",
+        "bg": "Добърско"
+    },
+    {
+        "id": 6,
+        "en": "Dolno Draglishte",
+        "bg": "Долно Драглище"
+    },
+    {
+        "id": 7,
+        "en": "Eleshnitsa",
+        "bg": "Елешница"
+    },
+    {
+        "id": 8,
+        "en": "Razlog",
+        "bg": "Разлог"
+    }
+]

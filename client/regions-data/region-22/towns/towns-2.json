@@ -1,0 +1,10 @@
+[
+  { "id": 1, "bg": "Гурмазово", "en": "Gurmazovo" },
+  { "id": 2, "bg": "Златуша", "en": "Zlatusha" },
+  { "id": 3, "bg": "Мала Раковица", "en": "Mala Rakovitsa" },
+  { "id": 4, "bg": "Пожарево", "en": "Pozharevo" },
+  { "id": 5, "bg": "Пролеша", "en": "Prolesha" },
+  { "id": 6, "bg": "Росоман", "en": "Rosoman" },
+  { "id": 7, "bg": "Хераково", "en": "Herakovo" },
+  { "id": 8, "bg": "Храбърско", "en": "Hrabarsko" }
+]
