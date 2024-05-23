@@ -158,9 +158,6 @@ main {
   }
 
   .hero {
-    top: 72%;
-    height: 100px;
-    z-index: 5;
     display: none;
   }
 
@@ -173,6 +170,7 @@ main {
   }
 
   .indicator .btn-news {
+    margin-top: -4rem;
     background-color: var(--red);
     margin-bottom: 2em;
   }
