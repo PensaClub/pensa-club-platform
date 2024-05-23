@@ -2,6 +2,7 @@
   /* Colors */
   --bg-white: #fff;
   --bg-black: #000;
+  --bg-gray: #f4f4f4;
   --bg-gradient: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff);
 
   --orange: #E26020;
@@ -20,6 +21,8 @@
   --s-font-size: 24px;
   --xs-font-size: 18px;
   --xxs-font-size: 14px;
+
+  --text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
  
 
   /* Border Radius */ 
@@ -27,6 +30,7 @@
   --radius-input: 10px;
 
   /* Spacing eg. Margin and Padding*/
+  --xxl-space: 60px;
   --xl-space: 50px;
   --l-space: 30px;
   --m-space: 20px;
@@ -101,7 +105,7 @@ button, input {
 /* Genral Button Styles */
 .btn-general {
   display: inline-block;
-  width: 200px;
+  /* width: 200px; */
   margin-top: 20px;
   padding: 14px 28px;
   border-radius: var(--radius);
