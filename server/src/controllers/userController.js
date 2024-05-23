@@ -31,9 +31,6 @@ userController.post("/register", async (req, res, next) => {
       errors.phoneNumber = "Invalid phone number.";
     }
 
-    if (password.length < 4) {
-      errors.password = "Password must be at least 4 characters.";
-    }
     if (!passwordRegex.test(password)) {
       errors.password = "Password must be at least 8 characters long, contain at least one letter and one number.";
     }
@@ -77,7 +74,6 @@ userController.post("/login", async (req, res, next) => {
   let errors = {};
   try {
     const { phoneNumber, password } = req.body;
-    console.log("body",req.body);
     Object.entries(req.body).forEach(([fieldName, value]) => {
     
       if (value === "") {
