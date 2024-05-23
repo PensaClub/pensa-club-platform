@@ -2,7 +2,7 @@
     padding: 5em 0;
     width: 100%;
     margin: 0 auto;
-    font-family: Archer;
+    /* font-family: Archer; */
 
 }
 
@@ -33,7 +33,7 @@
 
 .motto-info h3 {
 
-    font-size: 2em;
+    font-size: var(--l-font-size);
     text-align: center;
     padding-bottom: 2em;
     text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
@@ -43,7 +43,7 @@
 }
 
 .motto-info p {
-    font-size: 1.5em;
+    /* font-size: 1.5em; */
     text-align: center;
     font-weight: 500;
     padding-bottom: 1em;
@@ -56,17 +56,21 @@
     letter-spacing: 1px;
 }
 
-.btn-join {
+/* .btn-join {
     font-size: 1.5em;
     color: var(--text-white);
     background-color: var(--red);
     padding: 0.5em 1.2em;
     border-radius: 10px;
+} */
+
+#btn-join {
+    width: auto;
 }
 
-.btn-join:hover {
+/* .btn-join:hover {
     opacity: 0.7;
-}
+} */
 
 @media (min-width: 850px) {
     .motto-desc {
@@ -75,12 +79,12 @@
     }
 
     .motto-info h3 {
-        padding-bottom: 1em;
-        font-size: 2.5em;
+        padding-bottom: var(--xl-space);
+        /* font-size: 2.5em; */
     }
 
     .motto-info p {
-        font-size: 1.5em;
+        font-size: var(--m-font-size);
     }
 
     .motto-info span {
