@@ -30,8 +30,8 @@ userController.post("/register", async (req, res, next) => {
       errors.phoneNumber = "Invalid phone number.";
     }
 
-    if (!passwordRegex.test(password)) {
-      errors.password = "Password must be at least 8 characters long, contain at least one letter and one number.";
+    if (password.length < 4) {
+      errors.password = "Password must be at least 4 characters.";
     }
 
     if (password !== rePassword) {
@@ -64,7 +64,7 @@ userController.post("/register", async (req, res, next) => {
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.status(201).json({ message: "User successfully created!", data,token });
+    res.status(201).json({ message: "User successfully created!", data, token });
   } catch (err) {
     next(err);
   }
