@@ -144,18 +144,7 @@
 }
 .password-input-container {
 	position: relative;
-	width: 1create logic
-	create userService
-	create userContext 
-	create requester for fetch 
-	create useForm hook
-	Moving of validations то useForm hook
-	create logic for authentication
-	add token to server user-controls
-	add some css styles to login and register forms 
-	add new regex for validation phone number and password 
-	create Logout component 
-	add UserProvider in app.jsx  00%;
+	width: 100%;
   }
   
   .password-input-container .input {
