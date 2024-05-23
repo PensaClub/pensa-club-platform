@@ -124,9 +124,15 @@
 	text-align: center;
 }
 
-<<<<<<< Updated upstream
-
-=======
+.input{
+	background-color: var(--bg-white);
+	padding: 0.9rem 0.9rem;
+	margin: 0.5rem 0 1rem 0;
+	width: 100%;
+	border: 0.3px solid #ccc;
+	border-radius: 10px;
+	
+}
 .input{
 	background-color: var(--bg-white);
 	padding: 0.9rem 0.9rem;
@@ -138,7 +144,18 @@
 }
 .password-input-container {
 	position: relative;
-	width: 100%;
+	width: 1create logic
+	create userService
+	create userContext 
+	create requester for fetch 
+	create useForm hook
+	Moving of validations то useForm hook
+	create logic for authentication
+	add token to server user-controls
+	add some css styles to login and register forms 
+	add new regex for validation phone number and password 
+	create Logout component 
+	add UserProvider in app.jsx  00%;
   }
   
   .password-input-container .input {
@@ -155,7 +172,6 @@
 	cursor: pointer;
 	pointer-events: auto;
   }
->>>>>>> Stashed changes
 
 @keyframes show {
 	
