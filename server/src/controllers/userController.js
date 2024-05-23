@@ -9,6 +9,7 @@ const { user_account } = require("../sequelize/models/index");
 
 // const phoneRegex = /^(\+359|0)(87|88|89)\d{7}$/;
 const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 userController.post("/register", async (req, res, next) => {
   let errors = {};
@@ -33,7 +34,6 @@ userController.post("/register", async (req, res, next) => {
     if (!passwordRegex.test(password)) {
       errors.password = "Password must be at least 8 characters long, contain at least one letter and one number.";
     }
-
     if (password !== rePassword) {
       errors.rePassword = "Passwords do not match.";
     }
@@ -64,7 +64,7 @@ userController.post("/register", async (req, res, next) => {
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.status(201).json({ message: "User successfully created!", data,token });
+    res.status(201).json({ message: "User successfully created!", data, token });
   } catch (err) {
     next(err);
   }
@@ -74,8 +74,8 @@ userController.post("/login", async (req, res, next) => {
   let errors = {};
   try {
     const { phoneNumber, password } = req.body;
-
     Object.entries(req.body).forEach(([fieldName, value]) => {
+    
       if (value === "") {
         let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
         errors[fieldName] = `${error} is required.`;
