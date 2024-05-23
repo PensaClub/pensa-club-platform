@@ -31,8 +31,9 @@ export const UserProvider = ({ children }) => {
     }
 
     const onLoginSubmit= async (data) => {
+        const{ rePassword, ...newData}= data
         try {
-            const response = await userService.login(data);
+            const response = await userService.login(newData);
             const {password,...newUser} = response
             setIsAuth(newUser)  
             navigate('/')
