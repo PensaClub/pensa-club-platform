@@ -30,31 +30,34 @@
 }
 
 .left-side h1 {
-    font-size: 1.8em;
+    font-size: var(--l-font-size);
     color: var(--green);
-    padding-bottom: 0.4em;
+    padding-bottom: var(--m-space);
+    text-align: center;
 }
 
 .left-side p {
     text-align: center;
-    padding: 0 2em;
-    font-size: 1.2em;
+    padding: 0 var(--m-space);
+    font-size: var(--s-font-size);
 }
 
 .btn-hero {
     display: flex;
-    gap: 2em;
-    margin-top: 1.2em;
+    /* gap: 2em; */
+    margin-top: var(--s-space);
+
+    flex-direction: column;
 }
 
-.btn-hero a {
+/* .btn-hero a {
     padding: 0.7em 1.4em;
     border-radius: 20px;
     color: white;
     font-size: 1em;
     text-align: center;
 
-}
+} */
 
 .btn-hero :nth-child(1) {
     background-color: var(--green);
@@ -87,28 +90,35 @@
         flex: 0 0 30%;
     }
 
-    .left-side h1 {
+    /* .left-side h1 {
         font-size: 2.5em;
-    }
+    } */
 
     .left-side p {
-        font-size: 1.25em;
+        /* font-size: 1.25em; */
         text-align: center;
     }
 
     .btn-hero {
+        flex-direction: row;
+        gap: 2em;
         padding-top: 1em;
     }
 
-    .btn-hero a {
+    /* .btn-hero a {
         font-size: 1.25em;
-    }
+    } */
 }
 
 @media screen and (orientation:landscape) and (min-device-width: 319px) and (max-device-width: 480px) {
     .parent-hero {
         flex-direction: column;
         gap: 8em;
+    }
+
+    .btn-hero {           
+        flex-direction: row;
+        gap: 2em;
     }
 }
 
@@ -121,6 +131,11 @@
         flex-direction: column;
         align-items: center;
         gap: 6em;
+    }
+
+    .btn-hero {           
+        flex-direction: row;
+        gap: 2em;
     }
 
 }
