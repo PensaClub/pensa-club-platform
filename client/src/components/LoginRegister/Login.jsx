@@ -1,70 +1,58 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+
 
 import './loginRegister.css';
-import { trimFields, resetFields, validatePhoneNumber, validatePassword } from '../../utils/signUp';
+import { useAuthContext } from '../contexts/UserContext';
+import { useForm } from '../hooks/useForm';
+import { useState } from 'react';
 
 export const Login = ({ navToRegister }) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
+  const { onLoginSubmit } = useAuthContext();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleTrimFields = () => {
-    const [trimmedPhoneNumber, trimmedPassword] = trimFields([phoneNumber, password]);
-    setPhoneNumber(trimmedPhoneNumber);
-    setPassword(trimmedPassword);
-  };
 
-  const handleResetFields = () => {
-    resetFields([setPhoneNumber, setPassword, () => setErrors({})]);
-  };
-
-  const validate = () => {
-    validatePhoneNumber(phoneNumber, setErrors);
-    validatePassword(password, setErrors);
-    return Object.values(errors).every(error => !error);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleTrimFields();
-
-    if (validate()) {
-      console.log('phone number:', phoneNumber);
-      console.log('password:', password);
-      console.log('Valid form');
-      handleResetFields(); 
-
-    } else {
-      console.log('Invalid form');
-    }
-  };
-
+  const { onSubmit, values, onChangeHandler, onBlurHandler, errors } = useForm({
+    phoneNumber: '',
+    password: '',
+  }, onLoginSubmit);
+  const toggleShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  }
   return (
     <div className="container__form container--signin">
-      <form action="#" className="form" id="form2" onSubmit={handleSubmit}>
+      <form action="#" className="form" id="form2" onSubmit={onSubmit}>
         <h2 className="form__title">Вход</h2>
 
         <label className="label" htmlFor="phoneNumber">Телефонен номер</label>
+
         <input
           type="text"
           placeholder="Телефонен номер +359..."
           className="input"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          onBlur={() => { handleTrimFields(); validatePhoneNumber(phoneNumber, setErrors); }}
+          name="phoneNumber"
+          value={values.phoneNumber}
+          onChange={onChangeHandler}
+          onBlur={onBlurHandler}
         />
+
         {errors.phoneNumber && <p className="error">{errors.phoneNumber}</p>}
 
         <label className="label" htmlFor="password">Парола</label>
-        <input
-          type="password"
-          placeholder="Парола"
-          className="input"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onBlur={() => { handleTrimFields(); validatePassword(password, setErrors); }}
-        />
+        <div className="password-input-container">
+
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Парола"
+            className="input"
+            name="password"
+            value={values.password}
+            onChange={onChangeHandler}
+            onBlur={onBlurHandler}
+          />
+          <span className="toggle-password" onClick={toggleShowPassword}>
+            {showPassword ? "👁️" : "👁️‍🗨️"}
+          </span>
+        </div>
         {errors.password && <p className="error">{errors.password}</p>}
 
         <Link to="#" className="link">Забравена парола?</Link>

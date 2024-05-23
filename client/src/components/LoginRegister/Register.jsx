@@ -1,54 +1,32 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import './loginRegister.css';
-import { trimFields, resetFields, validatePhoneNumber, validatePassword, validateRePassword } from '../../utils/signUp';
+
+import { UserContext } from '../contexts/UserContext';
+import { useContext, useState } from 'react';
+import { useForm } from '../hooks/useForm';
 
 export const Register = ({ navToLogin }) => {
+  const { onRegisterSubmit } = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRePassword, setReShowPassword] = useState(false);
 
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
-  const [errors, setErrors] = useState({});
+  const { onSubmit, values, onChangeHandler, onBlurHandler, errors } = useForm({
+    phoneNumber: '',
+    password: '',
+    rePassword: ''
+  }, onRegisterSubmit);
 
-  
-  const handleTrimFields = () => {
-    const [trimmedPhoneNumber, trimmedPassword, trimmedRePassword] = trimFields([phoneNumber, password, rePassword]);
-    setPhoneNumber(trimmedPhoneNumber);
-    setPassword(trimmedPassword);
-    setRePassword(trimmedRePassword);
-  };
+  const toggleShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  }
 
-  const handleResetFields = () => {
-    resetFields([setPhoneNumber, setPassword, setRePassword, () => setErrors({})]);
-  };
-
-  const validate = () => {
-    validatePhoneNumber(phoneNumber, setErrors);
-    validatePassword(password, setErrors);
-    validateRePassword(password, rePassword, setErrors);
-    return Object.keys(errors).every(key => !errors[key]);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleTrimFields();
-
-    if (validate()) {
-      console.log('Valid form');
-      console.log('phone number:', phoneNumber)
-      console.log('password:', password)
-      console.log('rePassword:', rePassword)
-      handleResetFields();
-
-    } else {
-      console.log('Invalid form');
-    }
-  };
+  const toggleShowRePassword = () => {
+    setReShowPassword((prevState) => !prevState);
+  }
 
   return (
     <div className="container__form container--signup">
-      <form action="#" className="form" id="form1" onSubmit={handleSubmit}>
+      <form action="#" className="form" id="form1" onSubmit={onSubmit}>
         <h2 className="form__title">Регистрация</h2>
 
         <label className="label" htmlFor="phoneNumber">Телефонен номер</label>
@@ -56,32 +34,48 @@ export const Register = ({ navToLogin }) => {
           type="text"
           placeholder="Телефонен номер +359.."
           className="input"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          onBlur={() => { handleTrimFields(); validatePhoneNumber(phoneNumber, setErrors); }}
+          name="phoneNumber"
+          value={values.phoneNumber}
+          onChange={onChangeHandler}
+          onBlur={onBlurHandler}
         />
         {errors.phoneNumber && <p className="error">{errors.phoneNumber}</p>}
 
         <label className="label" htmlFor="password">Парола</label>
-        <input
-          type="password"
-          placeholder="Парола"
-          className="input"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onBlur={() => { handleTrimFields(); validatePassword(password, setErrors); }}
-        />
+        <div className="password-input-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Парола"
+            className="input"
+            name="password"
+            value={values.password}
+            onChange={onChangeHandler}
+            onBlur={onBlurHandler}
+          />
+          <span className="toggle-password" onClick={toggleShowPassword}>
+            {showPassword ? "👁️" : "👁️‍🗨️"}
+          </span>
+        </div>
         {errors.password && <p className="error">{errors.password}</p>}
 
         <label className="label" htmlFor="rePassword">Повтори парола</label>
-        <input
-          type="password"
-          placeholder="Повтори парола"
-          className="input"
-          value={rePassword}
-          onChange={(e) => setRePassword(e.target.value)}
-          onBlur={() => { handleTrimFields(); validateRePassword(password, rePassword, setErrors); }}
-        />
+        <div className="password-input-container">
+
+          <input
+            type={showRePassword ? "text" : "password"}
+            placeholder="Повтори парола"
+            className="input"
+            name="rePassword"
+            value={values.rePassword}
+            onChange={onChangeHandler}
+            onBlur={onBlurHandler}
+          />
+          <span className="toggle-password" onClick={toggleShowRePassword}>
+            {showRePassword ? "👁️" : "👁️‍🗨️"}
+          </span>
+
+        </div>
+
         {errors.rePassword && <p className="error">{errors.rePassword}</p>}
 
         <button className="btn-general btn-orange">Регистрация</button>

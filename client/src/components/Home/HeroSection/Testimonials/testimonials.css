@@ -4,7 +4,7 @@
 
 main {
     width: 800px;
-    /* padding-top: 5em; */
+ 
 }
 
 main h1 {
@@ -31,7 +31,7 @@ main h1 {
     top: 0;
     right: 0;
     height: 100%;
-    /* perspective: 1000px; */
+
 
 }
 
@@ -165,13 +165,14 @@ main h1 {
     }
 
     .hero {
-        top: 72%;
-        height: 100px;
-        z-index: 5;
+        width: 150px;
+        top: 66%;
+        height: 118px;
+        z-index: 10;
     }
 
     .hero img {
-        width: 100px;
+        width: 145px;
     }
 
     .content {
