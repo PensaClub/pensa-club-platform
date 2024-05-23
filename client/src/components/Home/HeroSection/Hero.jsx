@@ -15,8 +15,8 @@ export const Hero = () => {
                             <h1>Explore Our Resources</h1>
                             <p>Discover a vibrant community of pensioners, connect with like-minded individuals, and explore a world of opportunities.</p>
                             <div className="btn-hero">
-                                <Link to="/#">View Resources</Link>
-                                <Link to="/#">Join Community</Link>
+                                <Link to="/#" className="btn-general btn-green">View Resources</Link>
+                                <Link to="/sign-up" className="btn-general btn-orange">Join Community</Link>
                             </div>
                         </div>
                     </Slide>
