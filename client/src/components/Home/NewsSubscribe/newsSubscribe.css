@@ -4,14 +4,15 @@
     /* background: linear-gradient(90deg, #f7db77 0, #a9e3f0); */
     display: flex;
     flex-direction: column;
-    justify-content: center;;
-
+    justify-content: center;
     align-items: center;
     padding: 2em 1em;
 
     
 }
-
+.news-form {
+    width: 100%;
+}
 .single-subscribe-info {
     padding: var(--l-space) 0;
     /* font-family: Archer; */
@@ -61,7 +62,7 @@
 .col-subscribe {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
     gap: 0.7em;
 }
 
