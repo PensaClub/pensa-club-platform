@@ -11,6 +11,7 @@ function tokenCreator(data) {
 }
 
 function tokenVerification(token) {
+  console.log("here" + secret)
   return jwt.verify(token, secret);
 }
 
