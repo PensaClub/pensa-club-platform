@@ -1,24 +1,24 @@
 .last-posts {
     width: 100%;
-    padding: 3em 0 4em 0;
+    padding: var(--xl-space) 0 var(--xxl-space) 0;
 }
 
 .last-posts h2 {
-    font-family: Archer;
+    /* font-family: Archer; */
     text-align: center;
-    font-size: 2.5em;
+    /* font-size: 2.5em; */
     padding: 0 1em;
     font-weight: 200;
-    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-    ;
+    text-shadow: var(--text-shadow);
     color: var(--text-black);
 }
 
 .home-posts {
     margin: 0 auto;
-    padding: 2em 2em;
+    padding: var(--m-space);
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     gap: 2em;
 }
@@ -28,6 +28,8 @@
     flex-direction: column;
     padding: 0;
     min-height: 200px;
+
+    border-radius: var(--radius);
 }
 
 .single-card img {
@@ -42,14 +44,14 @@
 .card-info {
     display: flex;
     flex-direction: column;
-    padding: 1.5em 1em;
-    background: #f4f4f4;
+    padding: var(--m-space) var(--s-space);
+    background: var(--bg-gray);
     position: relative;
 
 }
 
 .card-info h4 {
-    padding-top: 1em;
+    padding-top: var(--s-space);
 
 }
 
@@ -59,23 +61,29 @@
     background: linear-gradient(304deg, #1B6D4D, #E26020 22%, #BB1D3D 93%);
 }
 
-.more-btn {
+/* .more-btn {
     display: flex;
     justify-content: center;
     align-self: center;
+} */
+
+#more-btn {
+    width: auto;
+    color: white;
+    text-align: center;
 }
 
-.more-btn a {
+/* .more-btn a {
     color: var(--text-white);
     background-color: var(--orange);
     padding: 0.5em 1.2em;
     border-radius: 10px;
     font-size: 1.2em;
-}
+} */
 
-.more-btn a:hover {
+/* .more-btn a:hover {
     opacity: 0.7;
-}
+} */
 
 @media (min-width: 550px) {
     .single-card {
@@ -169,7 +177,7 @@
     .home-posts {
         width: 100%;
         flex-direction: column;
-        padding: 2em 2em;
+        padding: var(--m-space);
     }
   .single-card.card-1 .card-info{
         width:initial;
@@ -179,10 +187,11 @@
         justify-content: center;
         height: 170px;
         overflow: hidden;
-        border-radius: 15px;
+        border-radius: var(--radius);
     }
 
     .single-card.card-2 {
+        width: 100%;
         flex:initial;
     }
 }
