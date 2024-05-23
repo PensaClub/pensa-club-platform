@@ -1,8 +1,7 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"); */
 
 main {
-  width: 800px;
-  /* padding-top: 5em; */
+    width: 800px;
 }
 
 /* main h1 {
@@ -159,9 +158,7 @@ main {
   }
 
   .hero {
-    top: 72%;
-    height: 100px;
-    z-index: 5;
+    display: none;
   }
 
   .hero img {
@@ -173,6 +170,7 @@ main {
   }
 
   .indicator .btn-news {
+    margin-top: -4rem;
     background-color: var(--red);
     margin-bottom: 2em;
   }

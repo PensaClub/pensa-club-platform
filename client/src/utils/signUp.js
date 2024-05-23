@@ -2,11 +2,11 @@ export const trimFields = (fields) => {
     return fields.map(field => field.trim());
   };
 
-const phoneRegex = /^(\+?\d{1,3})?\s?\d{9}$/;
-
-export const resetFields = (setFields) => {
-  setFields.forEach(setFields => setFields(''));
-}
+  const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+export const resetFields = (setFieldFunctions) => {
+  setFieldFunctions.forEach(setField => setField({ phoneNumber: '', password: '', rePassword: '' }));
+};
 
 export const validatePhoneNumber = (phoneNumber, setErrors) => {
   if (!phoneNumber) {
@@ -28,6 +28,10 @@ export const validatePassword = (password, setErrors) => {
   if (!password) {
     setErrors(prevErrors => ({
       ...prevErrors, password: "Полето е задължително!"
+    }));
+  } else if (!passwordRegex.test(password)) {
+    setErrors(prevErrors => ({
+      ...prevErrors, password: "Паролата трябва да бъде поне 8 символа и да съдържа малка буква,  главна  буква и цифра!"
     }));
   } else if (password.length < 3) {
     setErrors(prevErrors => ({
