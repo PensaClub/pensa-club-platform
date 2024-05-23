@@ -9,7 +9,7 @@ async function testDatabaseConnection() {
     }
     try {
         if (process.env.NODE_ENV === 'development') {
-            await sequelize.sync({ force: true });
+            await sequelize.sync({ force: false });
             console.log('All models were synchronized successfully.');
         }
     }
