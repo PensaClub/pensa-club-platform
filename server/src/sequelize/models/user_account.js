@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      user_account.hasOne(models.user_details, {
+        foreignKey: 'user_accounts_id', // Foreign key in user_details table
+        sourceKey: 'id' // Primary key in user_accounts table
+      });
       // define association here
     }
   }
