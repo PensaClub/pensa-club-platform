@@ -1,33 +1,40 @@
 const nominatimURL = "https://nominatim.openstreetmap.org/search";
-// region, municipality, settlement, district, block, street, streetNumber
+const CustomError = require("./customError");
+
 module.exports = async function geoCoder(data) {
   try {
-    // const params = {
-    //   street: `${data.streetNumber} ${data.street}`,
-    //   city: data.settlement,
-    //   county: data.municipality,
-    //   state: data.region,
-    //   suburb: data.district,
-    //   country: "bulgaria",
-    //   countrycodes: "bg",
-    //   format: "json",
-    // };
     const params = filterEmptyValues(data);
+    const info = {
+      street: `${params.streetNumber} ${params.street}`,
+      ...Object.fromEntries(Object.entries(params).filter(([key]) => key !== "streetNumber" && key !== "street")),
+    };
 
-    const address = `${params.streetNumber} ${params.street}, ${params.district}, ${params.settlement}, ${params.municipality}, ${params.region}, 'Bulgaria'`;
+    const address = `${info.street}${info.district ? `, ${info.district}` : ""}, ${info.settlement}, ${info.municipality}, ${info.region}, Bulgaria`;
 
     const urlParams = new URLSearchParams({
       q: address,
       format: "json",
+      limit: 1,
     });
-    const newData = await fetch(`${nominatimURL}?${urlParams.toString()}`);
-    console.log(`${nominatimURL}?${urlParams.toString()}`);
-    return newData.json();
+    const response = await fetch(`${nominatimURL}?${urlParams.toString()}`);
+
+    if (!response.ok) {
+      throw new CustomError({ message: `Nominatim API Error: ${response.statusText}`, statusCode: response.status });
+    }
+
+    const newData = await response.json();
+    console.log(await newData);
+    return newData;
   } catch (err) {
-    console.log(err);
+    throw new CustomError({ message: "Can not get lat/lon", statusCode: 500 });
   }
 };
 
 function filterEmptyValues(obj) {
-  return Object.fromEntries(Object.entries(obj).filter(([_, value]) => value !== null));
+  return Object.keys(obj).reduce((acc, key) => {
+    if (obj[key] !== null && obj[key] !== undefined && obj[key] !== "") {
+      acc[key] = obj[key];
+    }
+    return acc;
+  }, {});
 }
