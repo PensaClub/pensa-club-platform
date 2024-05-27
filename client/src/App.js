@@ -8,6 +8,7 @@ import { ServerError } from './components/ErrorPages/ServerError/ServerError';
 import { LoginRegister } from './components/LoginRegister/LoginRegister';
 import { UserProvider } from './components/contexts/UserContext';
 import { Logout } from './components/Logout/Logout';
+import { Profile } from './components/Profile/Profile';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/sign-up" element={<LoginRegister />} />
           <Route path="/server-error" element={<ServerError />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

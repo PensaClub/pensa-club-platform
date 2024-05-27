@@ -28,6 +28,7 @@ export const Header = () => {
 
                     {isAuthentication && <>
                         <Link to="/logout" className="nav-item" style={{ '--i': 2 }}>Logout</Link>
+                        <Link to="/profile" className="nav-item" style={{ '--i': 2 }}>Profile</Link>
                     </>}
                 </nav>
             </header>
