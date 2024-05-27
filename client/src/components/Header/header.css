@@ -206,7 +206,7 @@ header a:nth-child(1) {
   align-items: center;
 }
 
-/* desctop */
+/* desktop */
 @media (min-width: 850px) {
 
   header.scrolled {

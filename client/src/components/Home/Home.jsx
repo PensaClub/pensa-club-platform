@@ -6,6 +6,7 @@ import { NewsSubscribe } from './NewsSubscribe/NewsSubscribe'
 import './home.css'
 
 export const Home = () => {
+
     return (
         <>
             <div className="home-container">
