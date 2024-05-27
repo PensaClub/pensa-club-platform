@@ -9,38 +9,99 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.INTEGER
       },
+      phone_number: {
+        type: DataTypes.STRING(16),
+        unique: true,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+          len: {
+            args: [8, 16],
+            msg: 'Phone number is not valid.'
+          },
+          is: {
+            args: /^(?:\+\d{7,15}|\d{10})$/,
+            msg: 'Phone number is not valid.'
+          },
+        }
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+          len: [6, 16],
+          is: /^[a-zA-Z][a-zA-Z0-9_]*$/
+        }
+      },
       region: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       municipality: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       settlement: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       work: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       hobby: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       interest: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       district: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       block: {
         type: DataTypes.STRING
       },
       street: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       street_number: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
       },
       location: {
         type: DataTypes.JSONB,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       user_accounts_id: {
         type: DataTypes.INTEGER,

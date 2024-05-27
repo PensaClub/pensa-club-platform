@@ -18,17 +18,100 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   user_details.init({
-    region: DataTypes.STRING,
-    municipality: DataTypes.STRING,
-    settlement: DataTypes.STRING,
-    work: DataTypes.STRING,
-    hobby: DataTypes.STRING,
-    interest: DataTypes.STRING,
-    district: DataTypes.STRING,
-    block: DataTypes.STRING,
-    street: DataTypes.STRING,
-    street_number: DataTypes.STRING,
-    location: DataTypes.JSONB,
+    phone_number: {
+      type: DataTypes.STRING(16),
+      unique: true,
+      // allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: {
+          args: [8, 16],
+          msg: 'Phone number is not valid.'
+        },
+        is: {
+          args: /^(?:\+\d{7,15}|\d{10})$/,
+          msg: 'Phone number is not valid.'
+        },
+      }
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [6, 16],
+        is: /^[a-zA-Z][a-zA-Z0-9_]*$/
+      }
+    },
+    region: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
+    municipality: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
+    settlement: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
+    work: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
+    hobby: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
+    interest: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
+    block: {
+      type: DataTypes.STRING
+    },
+    street: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
+    street_number: {
+      type: DataTypes.STRING,
+    },
+    location: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    },
     user_accounts_id: DataTypes.INTEGER
   }, {
     sequelize,
