@@ -4,9 +4,12 @@ import { LastPosts } from './LastPosts/LastPosts'
 import { MottoSection } from './MottoSection/MottoSection'
 import { NewsSubscribe } from './NewsSubscribe/NewsSubscribe'
 import './home.css'
+import { useEffect } from 'react'
 
 export const Home = () => {
-
+    useEffect(() =>{
+        window.scrollTo({top:0})
+    },[])
     return (
         <>
             <div className="home-container">

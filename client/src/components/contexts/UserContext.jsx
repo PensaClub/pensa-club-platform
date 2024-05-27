@@ -64,8 +64,9 @@ export const UserProvider = ({ children }) => {
             setIsLoading(true);
             userService.logout()
             setIsAuth({})
-            setIsLoading(false);
             localStorage.removeItem("auth");
+            setIsLoading(false);
+
         } catch (error) {
             setIsAuth({})
             showErrorAndSetTimeouts(error.message)
