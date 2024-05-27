@@ -7,9 +7,9 @@ const ErrorPageBoundary = () => {
     const { error, errorInfo } = location.state || { error: "Unknown error", errorInfo: "No additional information" };
 
     return (
-        <ErrorPageBase 
-            errorCode={error} 
-            errorDesc={errorInfo} 
+        <ErrorPageBase
+            errorCode={error}
+            errorDesc={errorInfo}
         />
     );
 };

@@ -11,6 +11,7 @@ import { Logout } from './components/Logout/Logout';
 
 import ErrorBoundary from './tools/errorBoundary';
 import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary';
+import { Loader } from './components/Loader/Loader';
 
 function App() {
 
