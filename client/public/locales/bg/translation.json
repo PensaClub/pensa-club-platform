@@ -52,7 +52,11 @@
     "desc": "Регистрирайте се за последните новини, актуализации и съвети.",
     "name-placeholder": "Име*",
     "email-placeholder": "Имейл адрес*",
-    "subscribe-btn": "Абонирай се"
+    "subscribe-btn": "Абонирай се",
+    "errors": {
+      "required-field": "Полето е задължително!",
+      "invalid-email": "Невалиден имейл адрес!"
+    }
   },
 
   "form": {
@@ -66,6 +70,7 @@
     "rePassword-placeholder": "Повтори паролата",
     "register-redirect": "Вече имате регистрация?",
     "login-redirect": "Все още нямате регистрация?",
+    "password-forgotten": "Забравена парола?",
     "errors": {
       "required-field": "Полето е задължително!",
       "invalid-email": "Невалиден имейл адрес",

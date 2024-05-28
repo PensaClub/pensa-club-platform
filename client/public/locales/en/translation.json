@@ -52,7 +52,11 @@
     "desc": "Sign up for the latest news, updates and tips.",
     "name-placeholder": "Name*",
     "email-placeholder": "Email*",
-    "subscribe-btn": "Subscribe"
+    "subscribe-btn": "Subscribe",
+    "errors": {
+      "required-field": "This field is required!",
+      "invalid-email": "Email is invalid!"
+    }
   },
 
   "form": {
@@ -66,6 +70,7 @@
     "rePassword-placeholder": "Repeat Password",
     "register-redirect": "Already have an account?",
     "login-redirect": "Don't have an account?",
+    "password-forgotten": "Password forgotten?",
     "errors": {
       "required-field": "This field is required!",
       "invalid-email": "Email is invalid!",
@@ -80,6 +85,6 @@
     "map": "Map",
     "craigslist": "Craigslist",
     "404-desc": "The page you are trying to reach does not excist",
-    "500-desc": "Server cannot complete the request"
+    "500-desc": "Internal Server Error"
   }
 }

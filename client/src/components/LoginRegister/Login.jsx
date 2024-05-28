@@ -1,11 +1,17 @@
-import { Link } from "react-router-dom";
+import './loginRegister.css';
+
+import { Link } from 'react-router-dom';
+
 
 import './loginRegister.css';
 import { useAuthContext } from '../contexts/UserContext';
 import { useForm } from '../hooks/useForm';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const Login = ({ navToRegister }) => {
+  const { t } = useTranslation();
+
   const { onLoginSubmit } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -26,15 +32,15 @@ export const Login = ({ navToRegister }) => {
   return (
     <div className="container__form container--signin">
       <form action="#" className="form" id="form2" onSubmit={onSubmit}>
-        <h2 className="form__title">Вход</h2>
+        <h2 className="form__title">{t('form.login')}</h2>
 
         <label className="label" htmlFor="email">
-          Имейл
+        {t('form.email-label')}
         </label>
 
         <input
           type="text"
-          placeholder="ivanIvanov@abv.bg"
+          placeholder={t('form.email-placeholder')}
           className="input"
           name="email"
           value={values.email}
@@ -44,13 +50,11 @@ export const Login = ({ navToRegister }) => {
 
         {errors.email && <p className="error">{errors.email}</p>}
 
-        <label className="label" htmlFor="password">
-          Парола
-        </label>
+        <label className="label" htmlFor="password">{t('form.password-label')}</label>
         <div className="password-input-container">
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Парола"
+            placeholder={t('form.password-placeholder')}
             className="input"
             name="password"
             value={values.password}
@@ -64,13 +68,18 @@ export const Login = ({ navToRegister }) => {
         {errors.password && <p className="error">{errors.password}</p>}
 
         <Link to="#" className="link">
-          Забравена парола?
+          {t('form.password-forgotten')}
         </Link>
-        <button className="btn-general btn-orange">Вход</button>
-        <Link to="/sign-up" className="link link-hidden" onClick={navToRegister}>
-          Нямате акаунт? <span>Регистрация</span>
+        <button className="btn-general btn-orange">{t('form.login')}</button>
+        <Link
+          to="/sign-up"
+          className="link link-hidden"
+          onClick={navToRegister}
+        >
+          {t('form.login-redirect')} <span>{t('form.register')}</span>
         </Link>
       </form>
     </div>
   );
 };
+

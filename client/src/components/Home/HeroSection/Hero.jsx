@@ -1,11 +1,13 @@
+import './hero.css';
+
 import Testimonials from './Testimonials/Testimonials';
 import { Fade, Slide, } from "react-awesome-reveal";
 import {Link} from 'react-router-dom'
-
-import './hero.css';
+import { useTranslation } from "react-i18next";
 
 
 export const Hero = () => {
+    const {t} = useTranslation();
     return (
         <>
             <section className="hero-section">

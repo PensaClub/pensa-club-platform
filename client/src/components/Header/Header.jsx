@@ -1,6 +1,7 @@
+import './header.css'
+
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from 'react-router-dom'
-import './header.css'
 import { UserContext } from "../contexts/UserContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightToBracket, faAddressCard, faUser, faArrowRightFromBracket, faMap, faBars, faCircleQuestion, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';import { LanguageSwitcher } from "./LanguageSwitcher";

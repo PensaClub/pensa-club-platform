@@ -1,9 +1,11 @@
+import './newsSubscribe.css'
 
 import { useRef, useState } from 'react'
 import emailjs from '@emailjs/browser'
-import './newsSubscribe.css'
+import { useTranslation } from "react-i18next";
 
 export const NewsSubscribe = () => {
+    const {t} = useTranslation();
     const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
     const [errors, setErrors] = useState({ userEmail: '', userName: '' })
@@ -31,16 +33,16 @@ export const NewsSubscribe = () => {
         let hasError = false;
         let newErrors = { userName: "", userEmail: "" }
         if (!userName) {
-            newErrors.userName = "Моля, въведете име";
+            newErrors.userName = "Моля, въведете име"; //TODO: translate
             hasError = true;
         }
 
 
         if (!userEmail) {
-            newErrors.userEmail = "Моля, въведете имейл адрес.";
+            newErrors.userEmail = "Моля, въведете имейл адрес."; //TODO: translate
             hasError = true;
         } else if (!validateEmail(userEmail)) {
-            newErrors.userEmail = "Моля, въведете валиден имейл адрес.";
+            newErrors.userEmail = "Моля, въведете валиден имейл адрес."; //TODO: translate
             hasError = true;
         }
 
@@ -79,24 +81,24 @@ export const NewsSubscribe = () => {
 
             <section className="subscribe-news">
                 <div className="single-subscribe-info">
-                    <h3>Бъдете в течение с <span>Pensa club</span></h3>
-                    <p>Регистрирайте се за последните новини, актуализации и съвети.</p>
+                    <h3>{t('news-subscribe.title')} <span>Pensa club</span></h3>
+                    <p>{t('news-subscribe.desc')}</p>
                 </div>
                 <form ref={form} onSubmit={sendEmail} className="news-form mb-lg-0">
                     <div className="form-row">
                         <div className="col-subscribe form-group">
                             <div className="error-username">
-                                <input type="text" name="user_name" className="input" id="name" placeholder="Име*" value={userName} onChange={handleNameChange} />
+                                <input type="text" name="user_name" className="input" id="name" placeholder={t('news-subscribe.name-placeholder')} value={userName} onChange={handleNameChange} />
                                 {errors.userName && <div className="error-message">{errors.userName}</div>}
                             </div>
                             <div className="error-email">
-                                <input type="email" className="input" name="user_email" id="email" placeholder="Имейл адрес*" value={userEmail} onChange={handleEmailChange} />
+                                <input type="email" className="input" name="user_email" id="email" placeholder={t('news-subscribe.email-placeholder')} value={userEmail} onChange={handleEmailChange} />
                                 {errors.userEmail && <div className="error-message">{errors.userEmail}</div>}
                             </div>
                         </div>
                     </div>
                     <div className="news-btn">
-                        <button type="submit" className="btn-general btn-green" id="btn-subscribe">Абонирай се </button>
+                        <button type="submit" className="btn-general btn-green" id="btn-subscribe">{t('news-subscribe.subscribe-btn')}</button>
                     </div>
                 </form>
 

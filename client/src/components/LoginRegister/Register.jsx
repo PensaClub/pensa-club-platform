@@ -1,11 +1,17 @@
-import { Link } from "react-router-dom";
-import "./loginRegister.css";
+import './loginRegister.css';
+
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import './loginRegister.css';
 
 import { UserContext } from '../contexts/UserContext';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from '../hooks/useForm';
+import { useTranslation } from 'react-i18next';
 
 export const Register = ({ navToLogin }) => {
+  const { t } = useTranslation();
+
   const { onRegisterSubmit } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setReShowPassword] = useState(false);
@@ -34,14 +40,14 @@ export const Register = ({ navToLogin }) => {
   return (
     <div className="container__form container--signup">
       <form action="#" className="form" id="form1" onSubmit={onSubmit}>
-        <h2 className="form__title">Регистрация</h2>
+        <h2 className="form__title">{t('form.register')}</h2>
 
         <label className="label" htmlFor="Email">
-          Имейл
+        {t('form.email-label')}
         </label>
         <input
           type="text"
-          placeholder="ivanIvanov@abv.bg"
+          placeholder={t('form.email-laceholder')}
           className="input"
           name="email"
           value={values.email}
@@ -50,13 +56,11 @@ export const Register = ({ navToLogin }) => {
         />
         {errors.email && <p className="error">{errors.email}</p>}
 
-        <label className="label" htmlFor="password">
-          Парола
-        </label>
+        <label className="label" htmlFor="password">{t('form.password-label')}</label>
         <div className="password-input-container">
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Парола"
+            placeholder={t('form.password-placeholder')}
             className="input"
             name="password"
             value={values.password}
@@ -69,13 +73,11 @@ export const Register = ({ navToLogin }) => {
         </div>
         {errors.password && <p className="error">{errors.password}</p>}
 
-        <label className="label" htmlFor="rePassword">
-          Повтори парола
-        </label>
+        <label className="label" htmlFor="rePassword">{t('form.rePassword-label')}</label>
         <div className="password-input-container">
           <input
             type={showRePassword ? "text" : "password"}
-            placeholder="Повтори парола"
+            placeholder={t('form.rePassword-placeholder')}
             className="input"
             name="rePassword"
             value={values.rePassword}
@@ -89,9 +91,9 @@ export const Register = ({ navToLogin }) => {
 
         {errors.rePassword && <p className="error">{errors.rePassword}</p>}
 
-        <button className="btn-general btn-orange">Регистрация</button>
+        <button className="btn-general btn-orange">{t('form.register')}</button>
         <Link to="#" className="link link-hidden" onClick={navToLogin}>
-          Вече имаш акаунт? <span>Вход</span>
+        {t('form.register-redirect')} <span>{t('form.login')}</span>
         </Link>
       </form>
     </div>
