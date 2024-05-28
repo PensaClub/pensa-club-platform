@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import './header.css'
 import { UserContext } from "../contexts/UserContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightToBracket, faAddressCard, faUser, faArrowRightFromBracket, faMap, faBars, faCircleQuestion, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightToBracket, faAddressCard, faUser, faArrowRightFromBracket, faMap, faBars, faCircleQuestion, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";
 
 export const Header = () => {
@@ -47,6 +48,7 @@ export const Header = () => {
 
         }
     }, [isFinish])
+    const {t, i18n} = useTranslation();
 
     return (
         <section className="site-header">
