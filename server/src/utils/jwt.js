@@ -4,7 +4,7 @@ const { secret } = process.env;
 function tokenCreator(data) {
   const payload = {
     userId: data.id.toString(),
-    phoneNumber: data.phoneNumber,
+    email: data.email,
   };
 
   return jwt.sign(payload, secret, { expiresIn: "24h" });
