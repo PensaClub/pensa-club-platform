@@ -6,31 +6,33 @@ module.exports = {
       id: {
         allowNull: false,
         unique: true,
-        notEmpty: true,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      phone_number: {
-        type: DataTypes.STRING(16),
-        unique: true,
+      email: {
+        type: DataTypes.STRING,
         allowNull: false,
-        notEmpty: true,
+        unique: true,
         validate: {
-          len: {
-            args: [8, 16],
-            msg: 'Phone number is not valid.'
-          },
-          is: {
-            args: /^(?:\+\d{7,15}|\d{10})$/,
-            msg: 'Phone number is not valid.'
-          },
+          isEmail: true,
+          notEmpty: true,
         }
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-        notEmpty: true,
+        validate: {
+          notEmpty: true,
+        }
+      },
+      finished: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       createdAt: {
         allowNull: false,
