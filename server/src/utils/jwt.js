@@ -6,11 +6,13 @@ function tokenCreator(data) {
     userId: data.id.toString(),
     phoneNumber: data.phoneNumber,
   };
+  console.log("here" + secret)
 
   return jwt.sign(payload, secret, { expiresIn: "24h" });
 }
 
 function tokenVerification(token) {
+  console.log("here" + secret)
   return jwt.verify(token, secret);
 }
 
