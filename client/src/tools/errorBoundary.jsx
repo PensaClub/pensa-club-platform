@@ -12,8 +12,6 @@ export default class ErrorBoundary extends Component {
             error: null,
             errorInfo: null
         }
-
-
     }
 
     // static getDerivedStateFromError(error) {
