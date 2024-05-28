@@ -2,6 +2,9 @@ import { NavLink } from 'react-router-dom';
 import './errorPageBase.css'; 
 
 export const ErrorPageBase = ({ errorCode, errorDesc }) => {
+
+
+  
   return (
     
       <div className="container-wrapper">

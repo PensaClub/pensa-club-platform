@@ -1,0 +1,50 @@
+
+
+
+
+
+.error-message {
+    position: fixed;
+    top: 75px;;
+    left: 100%;
+    transform: translateX(-100%);
+ 
+    color: var(--bg-white);
+    padding: 10px;
+    border-radius: 5px;
+    width: calc(var(--container-min-width) * (300 / 340));
+    z-index:1000;
+    opacity: 0; 
+    transition: opacity 0.5s ease-in-out;
+    animation: slideIn 0.5s ease-in-out;
+     background-color: var(--red);
+    color: var( --text-white); 
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+        transform: translateX(0) translateY(-100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-100%) translateY(0);
+    }
+  }
+  .error-message.show-error {
+    opacity: 1; 
+  }
+  .error-message.custom-style {
+    opacity: 1; 
+    background-color: var(--red);
+    color: var( --text-white); 
+  }
+  .error-message.custom-style p{
+    font-size: calc(var(--s-font-size) * (22 / 24));;
+    color: var( --text-white); 
+  }
+  @media (min-width: 850px) and (orientation: landscape) {
+    .error-message {
+      top: 130px;
+    }
+  }

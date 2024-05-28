@@ -1,18 +1,30 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { userServiceFactory } from "../Services/userService";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
-
+import './error.css'
 
 export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useLocalStorage('auth', {})
+    const [errorMessage, setErrorMessage] = useState('');
+    console.error("err",errorMessage)
     const userService = userServiceFactory(isAuth.token)
 
     const navigate = useNavigate()
 
+    const showErrorAndSetTimeouts = (error) => {
 
+        setErrorMessage(error)
+        console.log("Setting error message:", error);
+        setTimeout(() => {
+            setErrorMessage('')
+            console.log("Clearing error message");
+        }, 4000);
+       
+    
+    }
 
 
     const onRegisterSubmit = async (data) => {
@@ -24,7 +36,7 @@ export const UserProvider = ({ children }) => {
             navigate('/')
          
         } catch (error) {
-            console.log(error.message)
+            showErrorAndSetTimeouts(error.message)
 
         }
         
@@ -38,7 +50,8 @@ export const UserProvider = ({ children }) => {
             setIsAuth(newUser)  
             navigate('/')
         } catch (error) {
-            console.log(error.message)
+            showErrorAndSetTimeouts(error.message)
+
 
             
         }
@@ -52,7 +65,8 @@ export const UserProvider = ({ children }) => {
             setIsAuth({})
             localStorage.removeItem("auth");
         } catch (error) {
-           console.log(error.message)
+            showErrorAndSetTimeouts(error.message)
+
 
         }
     }
@@ -72,6 +86,12 @@ export const UserProvider = ({ children }) => {
     return (
         <UserContext.Provider value={contextService}>
             {children}
+            {errorMessage && (
+                <div className={`error-message show-error custom-style`}>
+                    <p>{errorMessage}</p>
+                    {console.log("Rendering error message:", errorMessage)}
+                </div>
+            )}
         </UserContext.Provider>
     )
 
