@@ -7,10 +7,10 @@ const geoCoder = require("../utils/geoCoder");
 userDetailsController.post("/details", async (req, res, next) => {
   let errors = {};
   try {
-    const { region, municipality, settlement, district, block, street, streetNumber } = req.body;
+    const { region, municipality, settlement, district, block, streetName, streetNumber } = req.body;
 
     Object.entries(req.body).forEach(([fieldName, value]) => {
-      if (value === "" && fieldName !== "block" && fieldName !== "district") {
+      if (value === "" && fieldName !== "block" && fieldName !== "district" && fieldName !== "streetNumber") {
         let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
         errors[fieldName] = `${error} is required.`;
       }
@@ -20,11 +20,8 @@ userDetailsController.post("/details", async (req, res, next) => {
       throw new CustomError({ message: "Validation errors", statusCode: 400, details: errors });
     }
 
-    const data = await geoCoder({ streetNumber, street, district, settlement, municipality, region });
-    // console.log(data[0].lat);
-    // console.log(data[0].lon);
-    // console.log(data);
-    res.status(200).send({ message: "random-test", data });
+    const location = await geoCoder({ streetNumber, streetName, district, settlement, municipality, region });
+    res.status(200).send({ message: "random-test", location });
   } catch (err) {
     console.log(err);
     next(err);
