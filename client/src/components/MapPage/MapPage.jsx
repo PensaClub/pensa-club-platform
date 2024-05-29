@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { FiltersMap } from './FitlersMap/FiltersMap'
 import { MapEditor } from './MapEditor/MapEditor'
 import SearchCard from './SearchCard.jsx/SearchCard'
@@ -10,7 +11,10 @@ import './mapPage.css'
 
 export const MapPage = () => {
 
-
+    useEffect(() => {
+        window.scrollTo({top:0})
+      },[])
+      
 
     return (
         <>
