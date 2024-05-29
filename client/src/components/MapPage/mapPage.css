@@ -1,0 +1,58 @@
+.map-section {
+    /* display: flex; */
+    position: relative;
+
+    min-height: 100vh;
+    background-image: url('../../../public/images/map/back-us.webp');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.map{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+       
+}
+.search-card-map-page{
+  
+    left: 0px;
+    top: 0;
+    z-index: 500;
+}
+.map-line{
+    display: none;
+}
+.map-main {
+    padding-top: 7em;
+    position: relative;
+}
+
+@media (min-width: 850px) {
+    .search-card-map-page{
+        position: absolute;
+    }
+    .map-line {
+        /* padding-top: 4em; */
+        position: absolute;
+        top: 4em;
+  z-index: 100;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        background: linear-gradient(243.17deg, #f3811f, #e72725);
+        margin-bottom: 2em;
+    
+    }
+    
+    .map-line h4 {
+        padding: 1em 2em;
+        font-size: 14px;
+        color: white;
+        font-weight: 200;
+     
+    }
+    .map-main{
+        padding: 7em 0 3em 0 ;
+    }
+}

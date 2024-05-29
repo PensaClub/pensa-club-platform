@@ -1,0 +1,18 @@
+{
+    "fruitOptions": [
+      { "name": "Sport", "value": "sport" },
+      { "name": "Art", "value": "art", "defaultValue": true },
+      { "name": "Health", "value": "health" }
+    ],
+    "workOptions": [
+      { "name": "Engineer", "value": "engineer" },
+      { "name": "Doctor", "value": "doctor", "defaultValue": true },
+      { "name": "Artist", "value": "artist" }
+    ],
+    "interestOptions": [
+      { "name": "Reading", "value": "reading" },
+      { "name": "Traveling", "value": "traveling", "defaultValue": true },
+      { "name": "Cooking", "value": "cooking" }
+    ]
+  }
+  
