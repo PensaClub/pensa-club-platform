@@ -4,7 +4,8 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from 'react-router-dom'
 import { UserContext } from "../contexts/UserContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightToBracket, faAddressCard, faUser, faArrowRightFromBracket, faMap, faBars, faCircleQuestion, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';import { LanguageSwitcher } from "./LanguageSwitcher";
+import { faArrowRightToBracket, faAddressCard, faUser, faArrowRightFromBracket, faMap, faBars, faCircleQuestion, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";
 
@@ -61,6 +62,7 @@ export const Header = () => {
                     <nav className="navbar">
                         <Link to="/map" className="nav-item" style={{ '--i': 0 }}>Map</Link>
                         <Link to="/craigslist" className="nav-item" style={{ '--i': 1 }}>Craigslist</Link>
+                        <LanguageSwitcher />
                     </nav>
                     <div className="dropdown" ref={dropdownRef}>
                         <input
