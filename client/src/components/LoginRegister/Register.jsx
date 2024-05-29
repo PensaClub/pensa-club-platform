@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
 import "./loginRegister.css";
 
-import { UserContext } from "../contexts/UserContext";
-import { useContext, useState } from "react";
-import { useForm } from "../hooks/useForm";
+import { UserContext } from '../contexts/UserContext';
+import { useContext, useEffect, useState } from 'react';
+import { useForm } from '../hooks/useForm';
 
 export const Register = ({ navToLogin }) => {
   const { onRegisterSubmit } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setReShowPassword] = useState(false);
 
+  useEffect(() => {
+  window.scrollTo({top:0})
+},[])
+  
   const { onSubmit, values, onChangeHandler, onBlurHandler, errors } = useForm(
     {
       email: "",
