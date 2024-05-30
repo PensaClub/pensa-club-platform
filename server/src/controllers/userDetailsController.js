@@ -1,9 +1,10 @@
 const userDetailsController = require("express").Router();
 
 const CustomError = require("../utils/customError");
-const { user_details } = require("../sequelize/models/index");
+const { user_details, user_account } = require("../sequelize/models/index");
 const geoCoder = require("../utils/geoCoder");
 const isAuth = require("../middlewares/isAuth.js");
+const { where } = require("sequelize");
 
 //district, firstName, lastName to be added
 const notRequiredFields = ["block", "streetNumber"];
@@ -35,6 +36,10 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
       errors.username = "Username must start with a letter, be 6-16 characters long, and contain only letters, numbers, or underscores.";
     }
 
+    if (Object.keys(errors).length > 0) {
+      throw new CustomError({ message: "Validation errors", statusCode: 400, details: errors });
+    }
+
     const location = await geoCoder({ streetNumber, street, district, settlement, municipality, region });
 
     const data = {
@@ -56,7 +61,10 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
 
     const details = await user_details.create(data);
 
-    res.status(200).send({ message: "Details successfully updated!", details });
+    await user_account.update({ finished: true }, { where: { email: req.user.email }, returning: true, plain: true });
+
+    const updatedDetails = { ...details.dataValues, enabled: true };
+    res.status(200).send({ message: "Details successfully updated!", details: updatedDetails });
   } catch (err) {
     next(err);
   }
