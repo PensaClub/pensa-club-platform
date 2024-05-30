@@ -2,7 +2,10 @@
   "header": {
     "map": "Карта",
     "craigslist": "Лист",
-    "sign-up": "Вход/Регистрация"
+    "login": "Вход",
+    "register": "Регистрация",
+    "profile": "Профил",
+    "logout": "Излез от профила"
   },
 
   "footer": {

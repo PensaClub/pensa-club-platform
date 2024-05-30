@@ -2,7 +2,10 @@
   "header": {
     "map": "Map",
     "craigslist": "Craigslist",
-    "sign-up": "Sign Up"
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "logout": "Logout"
   },
 
   "footer": {
