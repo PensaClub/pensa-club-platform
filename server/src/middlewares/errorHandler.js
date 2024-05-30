@@ -7,19 +7,24 @@ function errorHandler(error, req, res, next) {
   let details = error.details;
   if (error instanceof CustomError) {
     message = error.message;
-  } else if (
-    error instanceof ValidationError ||
-    error instanceof UniqueConstraintError ||
-    error instanceof ForeignKeyConstraintError ||
-    error instanceof DatabaseError
-  ) {
-    const dbError = dbErrors[error.original.code];
+  } else if (error instanceof UniqueConstraintError || error instanceof ForeignKeyConstraintError || error instanceof DatabaseError) {
+    const dbError = dbErrors[error.original?.code];
     if (dbError) {
       message = dbError.message;
       statusCode = dbError.statusCode;
       details = error.message;
     }
+  } else if (error instanceof ValidationError) {
+    const validationErrors = error.errors.map((err) => ({
+      message: err.message,
+      path: err.path,
+      value: err.value,
+    }));
+    message = "Validation error(s)";
+    details = validationErrors;
+    statusCode = 400;
   }
+
   console.log(`Error: ${req.method} >> ${req.baseUrl}`, error.message);
   res.status(statusCode).json({ message, statusCode, details });
 }

@@ -33,11 +33,11 @@ module.exports = async function geoCoder(data) {
   try {
     const filteredData = filterEmptyValues({
       streetNumber: data.streetNumber,
-      streetName: data.streetName,
+      streetName: data.street,
       municipality: data.municipality,
-      municipalitySubdivision: data.region,
       countrySubdivision: data.region,
       countryTertiarySubdivision: data.settlement,
+      CountrySecondarySubdivision: data.district,
     });
 
     const queryParams = new URLSearchParams({

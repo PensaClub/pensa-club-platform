@@ -50,7 +50,7 @@ userController.post("/register", async (req, res, next) => {
     const userExist = await user_account.findOne({ where: { email } });
 
     if (userExist) {
-      return res.status(401).json({ message: "User already exists with this phone number." });
+      return res.status(401).json({ message: "User already exists with this email." });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -93,13 +93,13 @@ userController.post("/login", async (req, res, next) => {
     const user = await user_account.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(401).json({ message: "Email or password are invalid" });
+      return res.status(401).json({ message: "Email or password are invalid." });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "email or password are invalid" });
+      return res.status(401).json({ message: "Email or password are invalid." });
     }
     const data = {
       userId: user.id,
@@ -119,10 +119,14 @@ userController.post("/login", async (req, res, next) => {
 });
 
 userController.post("/logout", isAuth, async (req, res, next) => {
-  if (req.user) {
-    res.status(200).json({ message: "Logout successful" });
-  } else {
-    throw new CustomError({ message: "Invalid or missing token!", statusCode: 401 });
+  try {
+    if (req.user) {
+      res.status(200).json({ message: "Logout successful." });
+    } else {
+      throw new CustomError({ message: "Invalid or missing token!", statusCode: 401 });
+    }
+  } catch (err) {
+    next(err);
   }
 });
 
