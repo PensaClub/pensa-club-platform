@@ -31,21 +31,21 @@ const adsData = [
         name: "John Doe",
         description: "Looking for help with gardening.",
         img: "https://toppng.com/uploads/preview/stock-person-png-stock-photo-man-11563049686zqeb9zmqjd.png",
-        position: [51.505, -0.09]
+        position: [42.7003941385199, 23.388164180994426]
     },
     {
         id: 2,
         name: "Jane Smith",
         description: "Need assistance with grocery shopping.",
         img: "https://toppng.com/uploads/preview/free-png-happy-black-person-png-images-transparent-black-man-thumbs-up-11563648491mkncpzrjrf.png",
-        position: [51.515, -0.1]
+        position: [42.701655682184395, 23.335979128141805]
     },
     {
         id: 2,
         name: "Bobi Iliev",
         description: "Need assistance with grocery shopping.",
         img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqZctoWcCyQuSUlcN9bKPmSD-B8Gyy_mVo5A&s",
-        position: [51.515, -0.2]
+        position: [42.68373935990047, 23.33872570987089]
     },
 
 ];
