@@ -8,6 +8,7 @@ import { ServerError } from './components/ErrorPages/ServerError/ServerError';
 import { LoginRegister } from './components/LoginRegister/LoginRegister';
 import { UserProvider } from './components/contexts/UserContext';
 import { Logout } from './components/Logout/Logout';
+import { Profile } from './components/Profile/Profile';
 
 import ErrorBoundary from './tools/errorBoundary';
 import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary';
