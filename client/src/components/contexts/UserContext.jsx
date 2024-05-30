@@ -62,7 +62,7 @@ export const UserProvider = ({ children }) => {
     const onLogout = () => {
         try {
             setIsLoading(true);
-            userService.logout()
+            userService.logout(isAuth.token)
             setIsAuth({})
             localStorage.removeItem("auth");
             setIsLoading(false);

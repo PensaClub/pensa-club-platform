@@ -91,7 +91,19 @@
   background-color: var(--bg-white);
   z-index: 500;
 }
+.options::-webkit-scrollbar {
+  width: 10px;
+}
 
+.options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.options::-webkit-scrollbar-thumb {
+  background-color: var(--orange);
+  border: 2px solid #f1f1f1;
+  border-radius: var(--radius-input);
+}
 .social-input {
   display: flex;
   align-items: center;
@@ -111,6 +123,8 @@
 .options {
   max-height: calc(var(--container-min-height) / 2);
   overflow-y: auto;
+  /* max-height: 300px; */
+  overflow-y: auto; 
 }
 
 .option {

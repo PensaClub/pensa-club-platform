@@ -28,8 +28,8 @@ export const userServiceFactory = (token) => {
       return requester.post(`${apiUrl}/auth/register`, data)
 
     },
-    logout: (token) => {
- 
+    logout: () => {
+  
       return requester.post(`${apiUrl}/auth/logout`)
 
     },

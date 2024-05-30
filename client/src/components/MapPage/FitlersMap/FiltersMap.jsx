@@ -75,9 +75,9 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
 };
 
 export const FiltersMap = () => {
-    const { hobbiesOptions, workOptions, interestOptions } = optionsData;
-    const [selectedHobbies, setSelectedHobbies] = useState([]);
-    console.log('hobbiesOptions', selectedHobbies)
+    const { skills, workOptions, interestOptions } = optionsData;
+    const [selectedSkills, setSelectedSkills] = useState([]);
+    console.log('hobbiesOptions', selectedSkills)
 
     const [selectedWorks, setSelectedWorks] = useState([]);
     const [selectedInterests, setSelectedInterests] = useState([]);
@@ -89,12 +89,12 @@ export const FiltersMap = () => {
             </div>
             <div className="filters">
                 <div className="filter-main">
-                    <label>Хобита</label>
+                    <label>Умения</label>
                     <CustomSelect
                         icon={faUniversalAccess}
-                        options={hobbiesOptions}
-                        selectedValues={selectedHobbies}
-                        onChange={setSelectedHobbies}
+                        options={skills}
+                        selectedValues={selectedSkills}
+                        onChange={setSelectedSkills}
                         searchPlaceholder="Search Fruits..."
                     />
                 </div>
