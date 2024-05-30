@@ -21,8 +21,8 @@ export const UserProvider = ({ children }) => {
         setErrorMessage(error)
         setTimeout(() => {
             setErrorMessage('')
-
-        }, 4000);
+            setIsLoading(false)
+        }, 3000);
 
     }
 
