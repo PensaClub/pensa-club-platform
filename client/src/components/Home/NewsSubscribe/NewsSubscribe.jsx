@@ -33,16 +33,16 @@ export const NewsSubscribe = () => {
         let hasError = false;
         let newErrors = { userName: "", userEmail: "" }
         if (!userName) {
-            newErrors.userName = "Моля, въведете име"; //TODO: translate
+            newErrors.userName = "news-subscribe.errors.required-field";
             hasError = true;
         }
 
 
         if (!userEmail) {
-            newErrors.userEmail = "Моля, въведете имейл адрес."; //TODO: translate
+            newErrors.userEmail = "news-subscribe.errors.required-field"; 
             hasError = true;
         } else if (!validateEmail(userEmail)) {
-            newErrors.userEmail = "Моля, въведете валиден имейл адрес."; //TODO: translate
+            newErrors.userEmail = "news-subscribe.errors.invalid-email";
             hasError = true;
         }
 
@@ -89,11 +89,11 @@ export const NewsSubscribe = () => {
                         <div className="col-subscribe form-group">
                             <div className="error-username">
                                 <input type="text" name="user_name" className="input" id="name" placeholder={t('news-subscribe.name-placeholder')} value={userName} onChange={handleNameChange} />
-                                {errors.userName && <div className="error-message">{errors.userName}</div>}
+                                {errors.userName && <div className="error-message">{t(`${errors.userName}`)}</div>}
                             </div>
                             <div className="error-email">
                                 <input type="email" className="input" name="user_email" id="email" placeholder={t('news-subscribe.email-placeholder')} value={userEmail} onChange={handleEmailChange} />
-                                {errors.userEmail && <div className="error-message">{errors.userEmail}</div>}
+                                {errors.userEmail && <div className="error-message">{t(`${errors.userEmail}`)}</div>}
                             </div>
                         </div>
                     </div>
