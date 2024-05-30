@@ -11,17 +11,7 @@ const db = {};
 
 
 console.log(env)
-const sequelize = new Sequelize(
-  config.database_uri,{
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    }
-  }
-);
-
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
 fs.readdirSync(__dirname)
   .filter((file) => {
     return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js" && file.indexOf(".test.js") === -1;

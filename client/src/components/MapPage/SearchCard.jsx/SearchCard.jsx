@@ -10,37 +10,43 @@ const adsData = [
         id: 1,
         name: "John Doe",
         description: "Looking for help with gardening.",
-        img: "http://1.gravatar.com/avatar/47db31bd2e0b161008607d84c74305b5?s=96&d=mm&r=g"
+        img: "https://toppng.com/uploads/preview/stock-person-png-stock-photo-man-11563049686zqeb9zmqjd.png",
     },
+
+
+
     {
-        id: 2,
+        id: 22,
         name: "Jane Smith",
         description: "Need assistance with grocery shopping.",
-        img: "http://1.gravatar.com/avatar/47db31bd2e0b161008607d84c74305b5?s=96&d=mm&r=g"
+        img: "https://toppng.com/uploads/preview/free-png-happy-black-person-png-images-transparent-black-man-thumbs-up-11563648491mkncpzrjrf.png",
     },
     {
-        id: 2,
+        id: 13,
         name: "Jane Smith",
         description: "Need assistance with grocery shopping.",
-        img: "http://1.gravatar.com/avatar/47db31bd2e0b161008607d84c74305b5?s=96&d=mm&r=g"
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqZctoWcCyQuSUlcN9bKPmSD-B8Gyy_mVo5A&s",
     },
     {
-        id: 2,
+        id: 14,
         name: "Jane Smith",
         description: "Need assistance with grocery shopping.",
-        img: "http://1.gravatar.com/avatar/47db31bd2e0b161008607d84c74305b5?s=96&d=mm&r=g"
+        img: "https://toppng.com/uploads/preview/stock-person-png-stock-photo-man-11563049686zqeb9zmqjd.png",
+
     },
     {
-        id: 2,
+        id: 15,
         name: "Jane Smith",
         description: "Need assistance with grocery shopping.",
-        img: "http://1.gravatar.com/avatar/47db31bd2e0b161008607d84c74305b5?s=96&d=mm&r=g"
+        img: "https://toppng.com/uploads/preview/free-png-happy-black-person-png-images-transparent-black-man-thumbs-up-11563648491mkncpzrjrf.png",
+
     },
     {
-        id: 2,
+        id: 36,
         name: "Jane Smith",
         description: "Need assistance with grocery shopping.",
-        img: "http://1.gravatar.com/avatar/47db31bd2e0b161008607d84c74305b5?s=96&d=mm&r=g"
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqZctoWcCyQuSUlcN9bKPmSD-B8Gyy_mVo5A&s",
+
     },
 
 ];
@@ -52,31 +58,33 @@ const SearchCard = ({ ads = adsData }) => {
 
     const filteredAds = ads.filter(ad =>
         ad.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ad.description.toLowerCase().includes(searchTerm.toLowerCase())
+        ad.description.toLowerCase().includes(searchTerm.toLowerCase()) // да се добавят още опции за филтриране 
     );
 
     const handleToggle = () => {
         setIsOpen(!isOpen);
     };
 
-    const handleClickOutside = (event) => {
-        if (containerRef.current && !containerRef.current.contains(event.target)) {
-            setIsOpen(false);
-        }
-    };
+    // const handleClickOutside = (event) => {
+    //     if (containerRef.current && !containerRef.current.contains(event.target)) {
+    //         setIsOpen(false);
+    //     }
+    // };
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    // Изключил съм го пробно 
+
+    // useEffect(() => {
+    //     document.addEventListener('mousedown', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutside);
+    //     };
+    // }, []); 
 
     return (
         <div className="search-carts-container" ref={containerRef}>
             <div className="selected-option-search" onClick={handleToggle}>
                 <FontAwesomeIcon icon={faSquarePollHorizontal} style={{ marginRight: '8px' }} />
-                <span>{ads.length} - Резултатa от търсенето...</span>
+                {ads.length > 0 ? <span>{ads.length} - Резултатa от търсенето...</span> : <span> Няма намерени ресултати ...</span>}
                 <span className={`arrow ${isOpen ? 'open' : ''}`}></span>
             </div>
             {isOpen && (

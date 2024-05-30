@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useLocalStorage('auth', {})
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    console.error("err", errorMessage)
+
     const userService = userServiceFactory(isAuth.token)
 
     const navigate = useNavigate()

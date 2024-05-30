@@ -1,5 +1,5 @@
 {
-    "fruitOptions": [
+    "hobbiesOptions": [
       { "name": "Sport", "value": "sport" },
       { "name": "Art", "value": "art", "defaultValue": true },
       { "name": "Health", "value": "health" }

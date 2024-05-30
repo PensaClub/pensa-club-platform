@@ -31,11 +31,18 @@
   /* flex: 0 0 100%; */
 
 }
-
-.filter-main label {
+.filter-main label:first-child {
   display: block;
   margin-bottom: var(--s-space);
-  font-size: var(--s-font-size);
+  font-size: calc(var(--xs-font-size) + 2px);
+  font-weight: bold;
+  text-align: center;
+  text-shadow: var(--text-shadow);
+}
+.filter-main label {
+  display: block;
+  /* margin-bottom: var(--s-space); */
+  font-size: calc(var(--xs-font-size) + 2px);
   font-weight: bold;
   text-align: center;
   text-shadow: var(--text-shadow);
@@ -48,10 +55,10 @@
 
 .selected-option {
   padding: var(--s-space);
-  font-size: 1rem;
+  font-size: var(--xs-font-size);
   border: 1px solid #ccc;
   border-radius: var(--radius-input);
-
+  font-weight: 800;
   box-shadow: var(--text-shadow);
   cursor: pointer;
   display: flex;
@@ -107,12 +114,18 @@
 }
 
 .option {
+  display: flex;
+  align-items: center;
   padding: var(--s-space);
   cursor: pointer;
   font-size: calc(var( --xs-font-size) + 2px );
 
 }
-
+.option input[type="checkbox"] {
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+}
 .option:hover {
   background-color: #f0f0f0;
 }

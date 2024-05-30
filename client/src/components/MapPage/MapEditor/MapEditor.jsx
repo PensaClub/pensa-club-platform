@@ -67,7 +67,7 @@ export const MapEditor = () => {
             chunkedLoading 
             iconCreateFunction={createCustomClusterIcon}
           
-            showCoverageOnHover={true}
+            showCoverageOnHover={false}
             >
                 {adsData.map(ad => (
                     <Marker key={ad.id} position={ad.position}>
