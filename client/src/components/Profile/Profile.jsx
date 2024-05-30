@@ -1,7 +1,11 @@
-import { Link, Route, Routes } from 'react-router-dom';
-import { ProfileData } from './ProfileData';
+import { Link } from 'react-router-dom';
+import { ProfileData }  from './ProfileData';
 import ProfileForm from './ProfileForm';
+import ProfileAddress from './ProfileAddress';
 import './profile.css'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faLocationDot , faUser, faLock, faScroll, faMountainSun} from '@fortawesome/free-solid-svg-icons'
 
 export const Profile = () => {
     return (
@@ -10,12 +14,12 @@ export const Profile = () => {
             <section className="profile-section">
                 <section className="account-menu">
                     <h3>Акаунт</h3>
-                    <Link to="data">Лични данни</Link>
-                    <Link to="address">Адрес</Link>
-                    <Link to="password">Парола</Link>
-                    <Link to="announced">Обяви</Link>
-                    <Link to="interests">Интереси</Link>
-                    <Link to="anothers">Други</Link>
+                    <Link to="data"><FontAwesomeIcon icon={faUser} className="icon"/>Лични данни</Link>
+                    <Link to="address"><FontAwesomeIcon icon={faLocationDot} className="icon"/>Адрес</Link>
+                    <Link to="password"><FontAwesomeIcon icon={faLock} className="icon" />Парола</Link>
+                    <Link to="announced"><FontAwesomeIcon icon={faScroll} className="icon"/>Обяви</Link>
+                    <Link to="interests"><FontAwesomeIcon icon={faMountainSun} className="icon"/>Интереси</Link>
+                    <Link to="anothers"> <FontAwesomeIcon icon={faMountainSun} className="icon"/>Други</Link>
                 </section>
                 <div className="main-profile">
                     <section className="profile-data">
@@ -31,8 +35,9 @@ export const Profile = () => {
                             <p>Имейл: example@gmail.com</p>
                         </div>
                     </section>
-                   <ProfileData />
                    <ProfileForm />
+                   <ProfileData />
+                   <ProfileAddress />
                     {/* <Outlet /> */}
                 </div>
             </section>

@@ -1,14 +1,20 @@
 import './profile.css'
+import { Link } from 'react-router-dom'
 
 export const ProfileData = () => {
     return (
         <section className="profile-section-edit">
             <form className="profile-form">
+            <h3>Лични данни</h3>
                 <div className="avatar">
                     <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
-                    <p className="change-avatar-link">Смени снимка</p>
+                    <Link to="#" className="change-avatar-link">Смени снимка</Link>
                 </div>
                 <div className="user-data">
+                    <div>
+                        <label htmlFor="username">Потребителско име:</label>
+                        <input type="text" id="username" name="username" />
+                    </div>
                     <div>
                         <label htmlFor="firstName">Име:</label>
                         <input type="text" id="firstName" name="firstName" />

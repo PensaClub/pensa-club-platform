@@ -1,52 +1,66 @@
-/* Основни стилове */
+
 .profile-section {
-    background-image: url(../../../public/images/sign-up/background-2.jpg);
+    background-image: url(../../../public/images/sign-up/background.jpg);
     padding: var(--l-space);
     padding-top: 8em;
     display: flex;
     flex-direction: column;
-    background-size: cover;
-  
+    background-size: cover; 
 }
-
 
 .main-profile {
     display: flex;
     flex-direction: column;
     width: 100%;
-   
 }
 
 .account-menu {
     margin-bottom: 2rem;
-    
+    position: sticky; 
+
 }
-.account-menu a {
+.account-menu a,
+.change-avatar-link {
     font-size: x-large;
     display: inline-block;
     padding-right: 1.5rem;
     margin-bottom: 0.5rem;
     color: var(--green);
     text-decoration: none;
+    /* background-color: #ccc;
+    padding: 1rem;
+    border-radius: var(--s-space); */
+}
+.change-avatar-link{
+    font-size: 1.2rem;
 }
 
 .account-menu a:hover {
     text-decoration: underline;
 }
+.account-menu .icon{
+    padding-right: 1rem;
+    width: 25px;
+}
+.profile-data {
+    margin-bottom: 2rem;
+}
 
-@media (min-width: 650px) {
+@media (min-width: 800px) {
     .profile-section {
         flex-direction: row;
         align-items: flex-start;
     }
 
     .account-menu {
+        height: 100vh; 
         position: sticky;
         top: 8em; 
         width: 20%;
         margin-right: 2rem;
         margin-left: 2rem;
-        text-align: center;
+        box-shadow: 2px 0 0 rgba(0, 0, 0, 0.1); 
+       
     }
 .account-menu a {
     display: block;
@@ -68,9 +82,10 @@
     margin: 0 auto;
 }
 
-.profile-form label {
+.profile-form label,
+.user-data div{
     margin-bottom: 10px;
-    padding-bottom: var(--s-space);
+    /* padding-bottom: var(--xs-space); */
     font-weight: bold;
 }
 
@@ -79,7 +94,9 @@
     width: 100%;
     padding: var(--s-space);
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: var(--s-space);
+    box-shadow: var(--container-shadow);
+    margin-top: 0.5rem;
 }
 
 .btn-profile {
@@ -156,10 +173,18 @@
 
 @media (min-width: 650px) {
     .profile-data {
+        border-radius: var(--m-space);
+        box-shadow: var(--container-shadow);
+        padding: var(--l-space);
+        margin: 0 auto;
+        height: 60vh;
+        width: 60vw;
         display: flex;
-        /* flex-direction: column; */
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
         gap: 4rem;
+       margin-bottom: 2rem;
     }
     .avatar img {
         width: 150px;
@@ -171,5 +196,12 @@
     .profile-section-edit #email,
     .profile-section-edit #name {
         width: 100%;
+    }
+    .profile-section #email{
+        padding: var(--s-space);
+    }
+    .profile-data{
+        flex-direction: row;
+   
     }
 }

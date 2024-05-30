@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
-const ProfileForm = () => {
+
+const ProfileAddress= () => {
     const [form, setForm] = useState({
         region: '',
         municipality: '',
@@ -72,41 +72,8 @@ const ProfileForm = () => {
 
     return (
         <form onSubmit={handleSubmit} className="profile-form">
-            <h3>Попълнете данните си</h3>
-            
-                <div className="avatar">
-                    <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
-                    <Link to="#" className="change-avatar-link">Смени снимка</Link>
-                </div>
-                <div className="user-data">
-                    <div>
-                        <label htmlFor="username">Потребителско име:</label>
-                        <input type="text" id="username" name="username" />
-                    </div>
-                    <div>
-                        <label htmlFor="email">Имейл:</label>
-                        <input type="email" id="email" name="email" />
-                    </div>
-
-
-                    <div>
-
-                        <label htmlFor="firstName">Име:</label>
-                        <input type="text" id="firstName" name="firstName" />
-                    </div>
-                    <div>
-                        <label htmlFor="lastName">Фамилия:</label>
-                        <input type="text" id="lastName" name="lastName" />
-                    </div>
+            <h3>Адресна форма</h3>
                 
-
-                <div>
-                    <label htmlFor="phoneNumber">Телефон:</label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" />
-                </div>
-              
-            </div>
-
             <label>
                 Област (Region):
                 <select name="region" value={form.region} onChange={handleRegionChange} required>
@@ -155,4 +122,4 @@ const ProfileForm = () => {
     );
 };
 
-export default ProfileForm;
+export default ProfileAddress;
