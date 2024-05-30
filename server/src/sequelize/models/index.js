@@ -9,21 +9,37 @@ const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
 const db = {};
 
-// const sequelize = new Sequelize(
-//   config.database_uri,{
-//     dialectOptions: {
-//       ssl: {
-//         require: true,
-//         rejectUnauthorized: false,
-//       },
-//     }
-//   }
-// );
+const getSequelizeConfig = (env, config) => {
+  const { database, username, password, database_uri } = config;
+  const commonConfig = {
+    logging: false, 
+  };
 
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: config.host,
-  dialect: config.dialect,
-});
+  if (env === 'development') {
+    return {
+      ...commonConfig,
+      database,
+      username,
+      password,
+      host: config.host,
+      dialect: 'postgres',
+    };
+  } else {
+    return {
+      ...commonConfig,
+      url: database_uri,
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
+    };
+  }
+};
+
+const sequelizeConfig = getSequelizeConfig(process.env.NODE_ENV, config);
+const sequelize = new Sequelize(sequelizeConfig);
 
 fs.readdirSync(__dirname)
   .filter((file) => {
