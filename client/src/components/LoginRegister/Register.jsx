@@ -51,7 +51,7 @@ export const Register = ({ navToLogin }) => {
           onChange={onChangeHandler}
           onBlur={onBlurHandler}
         />
-        {errors.email && <p className="error">{errors.email}</p>}
+        {errors.email && <p className="error">{t(`${errors.email}`)}</p>}
 
         <label className="label" htmlFor="password">{t('form.password-label')}</label>
         <div className="password-input-container">
@@ -68,7 +68,7 @@ export const Register = ({ navToLogin }) => {
             {showPassword ? "👁️" : "👁️‍🗨️"}
           </span>
         </div>
-        {errors.password && <p className="error">{errors.password}</p>}
+        {errors.password && <p className="error">{t(`${errors.password}`)}</p>}
 
         <label className="label" htmlFor="rePassword">{t('form.rePassword-label')}</label>
         <div className="password-input-container">
@@ -86,7 +86,7 @@ export const Register = ({ navToLogin }) => {
           </span>
         </div>
 
-        {errors.rePassword && <p className="error">{errors.rePassword}</p>}
+        {errors.rePassword && <p className="error">{t(`${errors.rePassword}`)}</p>}
 
         <button className="btn-general btn-orange">{t('form.register')}</button>
         <Link to="#" className="link link-hidden" onClick={navToLogin}>

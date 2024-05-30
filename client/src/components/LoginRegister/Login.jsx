@@ -48,7 +48,7 @@ export const Login = ({ navToRegister }) => {
           onBlur={onBlurHandler}
         />
 
-        {errors.email && <p className="error">{errors.email}</p>}
+        {errors.email && <p className="error">{t(`${errors.email}`)}</p>}
 
         <label className="label" htmlFor="password">{t('form.password-label')}</label>
         <div className="password-input-container">
@@ -65,7 +65,7 @@ export const Login = ({ navToRegister }) => {
             {showPassword ? "👁️" : "👁️‍🗨️"}
           </span>
         </div>
-        {errors.password && <p className="error">{errors.password}</p>}
+        {errors.password && <p className="error">{t(`${errors.password}`)}</p>}
 
         <Link to="#" className="link">
           {t('form.password-forgotten')}

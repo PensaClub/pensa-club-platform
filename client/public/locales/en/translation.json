@@ -77,7 +77,7 @@
     "errors": {
       "required-field": "This field is required!",
       "invalid-email": "Email is invalid!",
-      "password-too-short": "Password must be at least 8 characters long!",
+      "password-format": "Password must be at least 8 characters long, containing at least one small letter, one capital letter and a number!",
       "passwords-not-match": "Passwords do not match!"
     }
   },
