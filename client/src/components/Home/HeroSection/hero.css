@@ -1,6 +1,7 @@
 .hero-section {
-    background-image: var(--bg-gradient);
-    min-height: 100vh;
+    background-image: var(--bg-image);
+    background-size: 100%;
+    min-height: 70vh;
     width: 100%;
     display: flex;
     align-items: center;
@@ -30,7 +31,7 @@
 }
 
 .left-side h1 {
-    font-size: var(--l-font-size);
+    font-size: var(--xl-font-size);
     color: var(--green);
     padding-bottom: var(--m-space);
     text-align: center;
@@ -39,7 +40,7 @@
 .left-side p {
     text-align: center;
     padding: 0 var(--m-space);
-    font-size: var(--s-font-size);
+    font-size: var(--m-font-size);
 }
 
 .btn-hero {
@@ -78,6 +79,7 @@
 /* desktop */
 @media (min-width: 850px) and (orientation: landscape) {
     .hero-section {
+        
         padding: 0 10em;
     }
 
@@ -123,6 +125,7 @@
 }
 
 @media (min-width: 768px) and (max-width: 1280px) and (orientation: landscape) {
+    
 
     .parent-hero {
         display: flex;
