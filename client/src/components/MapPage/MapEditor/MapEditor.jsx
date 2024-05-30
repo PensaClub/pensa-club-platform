@@ -57,7 +57,7 @@ export const MapEditor = () => {
         // url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYmVibzEzMTMzIiwiYSI6ImNsd3E4N2Y2MzEzNWsyanFxcXl0c3g3c24ifQ.4JNDXk3JlfP59tzu1stwOw`}
 
 
-        <MapContainer center={position} zoom={8} scrollWheelZoom={true} style={{ height: "70vh", width: "100%" }}>
+        <MapContainer center={position} zoom={8} scrollWheelZoom={false} style={{ height: "70vh", width: "100%" }}>
             <TileLayer
                 attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url={'https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png'}
