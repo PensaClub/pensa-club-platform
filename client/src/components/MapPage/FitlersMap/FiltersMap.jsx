@@ -104,6 +104,7 @@ export const FiltersMap = () => {
                 </div>
                 <div className="filter-main">
                     <label>Интереси</label>
+                    
                     <CustomSelect
                         icon={faUsersGear}
                         options={interestOptions}

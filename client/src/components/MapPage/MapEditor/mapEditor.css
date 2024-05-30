@@ -1,4 +1,4 @@
-.ad-card-editor{
+.ad-card-editor {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
@@ -6,39 +6,46 @@
     padding-bottom: 1em;
     flex-direction: column;
     flex-wrap: wrap;
-    
-    max-width: 250px; 
+
+    max-width: 250px;
 }
-.leaflet-popup-content-wrapper{
-    box-shadow: var( --container-shadow);
+
+.leaflet-popup-content-wrapper {
+    box-shadow: var(--container-shadow);
     border: 2px inset var(--orange);
     border: 2.5px outset var(--orange);
 }
-.leaflet-popup-close-button span{
+
+.leaflet-popup-close-button span {
     font-size: var(--s-font-size);
-    color: black ;
+    color: black;
     font-weight: 500;
-  
+
 }
+
 .leaflet-container a.leaflet-popup-close-button {
     top: 4px;
     right: 4px;
-    
+
 }
-.ad-details-editor{
-    flex: 2; 
+
+.ad-details-editor {
+    flex: 2;
 }
-.ad-name-editor{
+
+.ad-name-editor {
     margin: 0;
     font-size: var(--xxs-font-size);
     font-weight: bold;
 
 }
-.ad-img-editor{
+
+.ad-img-editor {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
+    object-fit: fill;
 }
 
 .leaflet-top.leaflet-left {
@@ -47,11 +54,12 @@
     z-index: 400;
 }
 
-.ad-description-editor{
+.ad-description-editor {
     /* margin: 15px 0; */
-    font-size:var(--xxs-font-size);
+    font-size: var(--xxs-font-size);
 }
-#read-more-editor{
+
+#read-more-editor {
     color: white;
     cursor: pointer;
     border-radius: 20px;
@@ -60,23 +68,44 @@
     text-decoration: none
 }
 
-@media (min-width: 850px){
-    .ad-card-editor{
+.custom-marker-cluster {
+    height: 3em!important;
+    width: 3em!important;
+    border-radius: 50%;
+    background-color: var(--red);
+
+    transform: translate(-25%, -25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    border: 2px outset var(--orange);
+    box-shadow: var(  --cluster-red-shadow);
+ 
+     opacity: 0.9 !important;
+}
+
+@media (min-width: 850px) {
+    .ad-card-editor {
         flex-direction: row-reverse;
-        max-width: calc(450px / (340px / var(--container-min-width))); /* 450px*/
+        max-width: calc(450px / (340px / var(--container-min-width)));
+        /* 450px*/
 
     }
-    .ad-img-editor{
+
+    .ad-img-editor {
         width: 80px;
         height: 80px;
         border-radius: 50%;
         margin-right: 10px;
     }
-    .ad-name-editor{
+
+    .ad-name-editor {
         font-size: var(--s-font-size);
 
     }
-    .ad-description-editor{
+
+    .ad-description-editor {
         margin: calc(var(--s-space) * (15 / 10)) 0;
     }
 }
