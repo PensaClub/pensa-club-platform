@@ -15,7 +15,7 @@ const getSequelizeConfig = (env, config) => {
     logging: false, 
     dialect: 'postgres'
   };
-
+  console.log(env)
   if (env === 'development') {
     return {
       ...commonConfig,
