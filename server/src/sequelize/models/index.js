@@ -28,7 +28,7 @@ const getSequelizeConfig = (env, config) => {
   } else {
     return {
       ...commonConfig,
-      url: database_uri,
+      database_uri,
       dialectOptions: {
         ssl: {
           require: true,
