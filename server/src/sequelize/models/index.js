@@ -13,6 +13,7 @@ const getSequelizeConfig = (env, config) => {
   const { database, username, password, database_uri } = config;
   const commonConfig = {
     logging: false, 
+    dialect: 'postgres'
   };
 
   if (env === 'development') {
