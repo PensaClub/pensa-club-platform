@@ -95,7 +95,7 @@ export const FiltersMap = () => {
                         options={skills}
                         selectedValues={selectedSkills}
                         onChange={setSelectedSkills}
-                        searchPlaceholder="Search Fruits..."
+                        searchPlaceholder="Намери умения..."
                     />
                 </div>
                 <div className="filter-main">
@@ -105,7 +105,7 @@ export const FiltersMap = () => {
                         options={workOptions}
                         selectedValues={selectedWorks}
                         onChange={setSelectedWorks}
-                        searchPlaceholder="Search Work..."
+                        searchPlaceholder="Намери професия..."
                     />
                 </div>
                 <div className="filter-main">
@@ -115,7 +115,7 @@ export const FiltersMap = () => {
                         options={interestOptions}
                         selectedValues={selectedInterests}
                         onChange={setSelectedInterests}
-                        searchPlaceholder="Search Interests..."
+                        searchPlaceholder="Намери интереси..."
                     />
                 </div>
             </div>
