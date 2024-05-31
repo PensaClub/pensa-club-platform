@@ -101,7 +101,7 @@ export const MapEditor = () => {
     };
 
     return (
-        <MapContainer center={position} zoom={7} scrollWheelZoom={false} style={{ height: "70vh", width: "100%" }} fullscreenControl={true}>
+        <MapContainer center={position} zoom={7} scrollWheelZoom={true} style={{ height: "70vh", width: "100%" }} fullscreenControl={true}>
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url={'https://tile.openstreetmap.org/{z}/{x}/{y}.png'}
