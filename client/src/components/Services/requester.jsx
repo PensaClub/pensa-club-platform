@@ -17,27 +17,16 @@ const requester = async (method, url, data) => {
   if (serializedAuth) {
     const auth = JSON.parse(serializedAuth);
 
-    if (auth.accessToken) {
+    if (auth.token) {
       options.headers = {
         ...options.headers,
-        Authorization: `Bearer ${auth.accessToken}`,
+        Authorization: `Bearer ${auth.token}`,
       };
     }
 
-    // if (auth.email === "peter@abv.bg") {
-
-    //     options.headers = {
-    //         ...options.headers,
-    //         'X-Admin': auth.accessToken,
-    //     };
-    // }
   }
 
   const response = await fetch(url, options);
-
-  // if (response.status === 204) {
-  //     return {};
-  // }
 
   const result = await response.json();
 
