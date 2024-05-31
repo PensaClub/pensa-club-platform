@@ -1,3 +1,7 @@
+@import "~leaflet-fullscreen/dist/leaflet.fullscreen.css";
+
+
+
 .ad-card-editor {
     display: flex;
     align-items: center;
@@ -22,7 +26,9 @@
     font-weight: 500;
 
 }
-
+.city-label{
+    font-size: 40em;
+}
 .leaflet-container a.leaflet-popup-close-button {
     top: 4px;
     right: 4px;
