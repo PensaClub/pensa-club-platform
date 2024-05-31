@@ -9,32 +9,42 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      user_account.hasOne(models.user_details, {
+        foreignKey: 'user_accounts_id', // Foreign key in user_details table
+        sourceKey: 'id' // Primary key in user_accounts table
+      });
       // define association here
     }
   }
 
   user_account.init({
-    phone_number: {
-      type: DataTypes.STRING(16),
-      unique: true,
+    email: {
+      type: DataTypes.STRING,
       allowNull: false,
-      notEmpty: true,
+      unique: true,
       validate: {
-        len: {
-          args: [8, 16],
-          msg: 'Phone number is not valid.'
+        isEmail: {
+          msg: 'Email format is incorrect.'
         },
-        is: {
-          args: /^(?:\+\d{7,15}|\d{10})$/,
-          msg: 'Phone number is not valid.'
+        notEmpty: {
+          msg: 'Email is required.'
         },
       }
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      notEmpty: true,
-    }
+      validate: {
+        notEmpty: {
+          msg: 'Password is required.'
+        },
+      }
+    },
+    finished: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   }, {
     sequelize,
     modelName: 'user_account',

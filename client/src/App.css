@@ -3,7 +3,12 @@
   --bg-white: #fff;
   --bg-black: #000;
   --bg-gray: #f4f4f4;
-  --bg-gradient: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff);
+  --bg-in-gray: #dad7d7;
+  --bg-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url('../public/images/homePage/orange-pattern.jpg');
+  --bg-image-rotated: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url('../public/images/homePage/orange-pattern.jpg');
+  /* --bg-gradient: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff); */
+  /* --bg-line-gradient-hd: linear-gradient(359deg, rgb(239 128 152 / 40%), #efa560 57%, #fff);
+  --bg-line-gradient-an: linear-gradient(359deg, rgb(239 128 152 / 40%), #efa560 57%, rgb(239 128 152 / 40%)); */
 
   --orange: #E26020;
   --green: #1B6D4D;
@@ -11,7 +16,7 @@
   --gray: #333;
   --text-white: #fff;
   --text-black: #000;
-
+  --text-pink: #dc9ebd;
   --container-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
 
   /* Font Size */ 

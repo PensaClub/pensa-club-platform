@@ -20,10 +20,10 @@ export const Hero = () => {
                             </div>
                         </div>
                     </Slide>
-                    <Fade direction='right' duration="2000" triggerOnce='true'>
+                    {/* <Fade direction='right' duration="2000" triggerOnce='true'>
 
                         <Testimonials />
-                    </Fade>
+                    </Fade> */}
 
                 </div>
             </section>
