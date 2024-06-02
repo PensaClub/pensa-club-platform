@@ -101,7 +101,7 @@ export const NewsSubscribe = () => {
                 </form>
 
             </section>
-            <div className="after-news"></div>
+            {/* <div className="after-news"></div> */}
 
         </>
     )

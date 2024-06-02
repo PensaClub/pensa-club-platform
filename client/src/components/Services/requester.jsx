@@ -24,20 +24,9 @@ const requester = async (method, url, data) => {
       };
     }
 
-    // if (auth.email === "peter@abv.bg") {
-
-    //     options.headers = {
-    //         ...options.headers,
-    //         'X-Admin': auth.accessToken,
-    //     };
-    // }
   }
 
   const response = await fetch(url, options);
-
-  // if (response.status === 204) {
-  //     return {};
-  // }
 
   const result = await response.json();
 
