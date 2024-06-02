@@ -87,4 +87,22 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
   }
 });
 
+userDetailsController.get("/all-users", isAuth, async (req, res, next) => {
+  try {
+    const accounts = await user_account.findAll({
+      attributes: ["id", "email", ["finished", "enabled"]],
+      include: [
+        {
+          model: user_details,
+          as: "details",
+          attributes: ["phone_number", "username", "first_name", "last_name", "work", "hobby", "interest", "location"],
+        },
+      ],
+    });
+    res.status(200).json({ message: "User data retrieved successfully.", accounts });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = userDetailsController;
