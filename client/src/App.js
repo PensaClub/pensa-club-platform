@@ -28,18 +28,12 @@ function App() {
             <Route path="/sign-up" element={<LoginRegister />} />
             <Route path="/server-error" element={<ServerError />} />
             <Route path="/logout" element={<Logout />} />
+            <Route path="/profile/*" element={<Profile />} />
             <Route path="/errors/*" element={<ErrorPageBoundary />} />
             <Route path="404/*" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sign-up" element={<LoginRegister />} />
-          <Route path="/server-error" element={<ServerError />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+
 
           <Footer />
         </UserProvider>

@@ -12,7 +12,7 @@ export const ProfileData = () => {
                 </div>
                 <div className="user-data">
                     <div>
-                        <label htmlFor="username">Потребителско име:</label>
+                        <label htmlFor="username">Потребителско име: <span>*</span></label>
                         <input type="text" id="username" name="username" />
                     </div>
                     <div>
@@ -24,11 +24,11 @@ export const ProfileData = () => {
                         <input type="text" id="lastName" name="lastName" />
                     </div>
                     <div>
-                        <label htmlFor="email">Имейл:</label>
+                        <label htmlFor="email">Имейл: <span>*</span></label>
                         <input type="email" id="email" name="email" />
                     </div>
                     <div>
-                        <label htmlFor="phoneNumber">Телефон:</label>
+                        <label htmlFor="phoneNumber">Телефон: <span>*</span></label>
                         <input type="text" id="phoneNumber" name="phoneNumber" />
                     </div>
                 </div>
