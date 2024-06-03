@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom'
 import './header.css'
 import { UserContext } from "../contexts/UserContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightToBracket, faAddressCard, faUser, faArrowRightFromBracket, faMap,faBars } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightToBracket, faAddressCard, faUser, faArrowRightFromBracket, faMap, faBars, faCircleQuestion, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import AlertModal from "./AlertModal/AlertModal";
 
 export const Header = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const { isAuthentication, isFinish } = useContext(UserContext)
+    const [finishProfile, setFinishProfile] = useState(false);
 
-    const { isAuthentication, } = useContext(UserContext)
     const dropdownRef = useRef(null)
 
     const handleClickOutside = (event) => {
@@ -27,7 +30,15 @@ export const Header = () => {
         setDropdownOpen(false);
         setMenuOpen(!isMenuOpen)
     };
+
+    const handleModalToggle = () => {
+        setModalOpen(!isModalOpen);
+    };
+
     useEffect(() => {
+
+        setFinishProfile(isFinish)
+
         document.addEventListener('mousedown', handleClickOutside)
         setMenuOpen(!isMenuOpen)
         return () => {
@@ -35,8 +46,8 @@ export const Header = () => {
             setMenuOpen(!isMenuOpen)
 
         }
-    }, [])
- 
+    }, [isFinish])
+
     return (
         <section className="site-header">
             <header className={isMenuOpen ? 'scrolled' : ''}>
@@ -56,22 +67,28 @@ export const Header = () => {
                             checked={isDropdownOpen}
                             onChange={handleDropdownToggle}
                         />
+                        {!finishProfile && !isDropdownOpen && (
+                            <span className="warning-icon-image" onClick={(e) => {
+                                e.stopPropagation();
+                                handleModalToggle();
+                            }}><FontAwesomeIcon icon={faCircleExclamation} /></span>
+                        )}
                         <label htmlFor="dropdown-toggle" className="dropdown-toggle">
                             <img src="http://1.gravatar.com/avatar/47db31bd2e0b161008607d84c74305b5?s=96&d=mm&r=g" alt="Profile" className="profile-img" />
                         </label>
 
                         <div className={`dropdown-menu dropdown-menu-right rounded-0 ${isDropdownOpen ? 'active' : ''}`}>
                             <div className="social-icons-header">
-                                <FontAwesomeIcon icon={faMap} className= "social-mobile"/>
+                                <FontAwesomeIcon icon={faMap} className="social-mobile" />
                                 <Link to="/map" className="dropdown-item desktop-unactive" onClick={handleDropdownItemClick}>Map</Link>
                             </div>
                             <div className="social-icons-header">
-                            <FontAwesomeIcon className= "social-mobile" icon={faBars} />
+                                <FontAwesomeIcon className="social-mobile" icon={faBars} />
                                 <Link to="/craigslist" className="dropdown-item desktop-unactive" onClick={handleDropdownItemClick}>Craiglist</Link>
                             </div>
                             {!isAuthentication && <>
                                 <div className="social-icons-header">
-                                    <FontAwesomeIcon icon={faArrowRightToBracket} /> 
+                                    <FontAwesomeIcon icon={faArrowRightToBracket} />
                                     <Link to="/sign-up?view=login" className="dropdown-item" onClick={handleDropdownItemClick}>Login</Link>
                                 </div>
                                 <div className="social-icons-header">
@@ -81,7 +98,18 @@ export const Header = () => {
                             </>}
                             {isAuthentication && <>
                                 <div className="social-icons-header"><FontAwesomeIcon icon={faUser} />
-                                    <Link to="/profile" className="dropdown-item" onClick={handleDropdownItemClick}>Profile</Link>
+                                    <div className="alert-modal">
+                                        <Link to="/profile" className={`dropdown-item ${!finishProfile ? 'incomplete-profile' : ''}`} onClick={handleDropdownItemClick}>
+                                            Profile
+                                        </Link>
+                                        {!finishProfile && (
+                                            <span className="warning-icon" onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleModalToggle();
+                                            }}><FontAwesomeIcon icon={faCircleExclamation} /></span>
+                                        )}
+                                    </div>
+
                                 </div>
 
                                 <div className="social-icons-header"><FontAwesomeIcon icon={faArrowRightFromBracket} />
@@ -94,6 +122,9 @@ export const Header = () => {
                 </section>
             </header>
             <div className="after-header"></div>
+            <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>
+                <p>Вашият профил е непълен. Моля, завършете го, за да продължите да използвате всички възможности на платформата.</p>
+            </AlertModal>
         </section>
 
     )
