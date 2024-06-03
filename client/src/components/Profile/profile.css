@@ -1,0 +1,285 @@
+.profile-section {
+    background-image: url('../../../public/images/sign-up/background.jpg');
+    padding: var(--l-space);
+    padding-top: 8em;
+    display: flex;
+    flex-direction: column;
+    background-size: auto;
+
+}
+
+.profile-form span {
+    color: var(--red);
+}
+
+.main-profile {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+.menu-toggle {
+    display: none;
+    position: fixed;
+    right: 2rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--orange);
+    z-index: 10;
+    cursor: pointer;
+
+}
+
+.account-menu {
+    margin: 2rem 0;
+    position: sticky;
+
+}
+
+.account-menu a,
+.change-avatar-link {
+    font-size: x-large;
+    display: block;
+    margin-top: 1rem;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--orange);
+    text-decoration: none;
+    text-shadow: var(--container-shadow);
+}
+
+.change-avatar-link {
+    font-size: 1.2rem;
+}
+
+.account-menu a:hover {
+    text-decoration: underline;
+}
+
+.account-menu .icon {
+    padding-right: 1rem;
+    width: 25px;
+}
+
+.profile-data {
+    margin-bottom: 2rem;
+
+}
+
+
+@media (max-width: 800px) {
+    .menu-toggle {
+        display: block;
+        top: 6rem;
+
+    }
+
+    .account-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        height: 100%;
+        background: #fff;
+        transition: right 0.3s ease;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+        z-index: 9;
+        overflow-y: auto;
+        transition: all 0.9s ease-in;
+    }
+
+    .account-menu.open {
+        right: 0;
+    }
+}
+
+@media (min-width: 800px) {
+    .profile-section {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .account-menu {
+        height: 100vh;
+        position: sticky;
+        top: 8em;
+        width: 20%;
+        margin-right: 2rem;
+        margin-left: 2rem;
+        box-shadow: 2px 0 0 rgba(0, 0, 0, 0.1);
+
+    }
+
+    .account-menu a {
+        display: block;
+    }
+
+    .main-profile {
+        flex-direction: column;
+        width: 75%;
+    }
+}
+
+
+.profile-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--m-space);
+    box-shadow: var(--container-shadow);
+    padding: var(--l-space);
+    margin: 0 auto;
+
+}
+
+.profile-form label,
+.user-data div {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.profile-section .gender,
+.profile-section .date {
+    display: flex;
+    justify-content: flex-start;
+    gap: 3rem;
+
+
+}
+
+.profile-section .gender-options {
+    display: flex;
+    gap: 3em;
+}
+
+.profile-section .date {
+    gap: 2rem;
+}
+
+.profile-form input,
+.profile-form select {
+    width: 100%;
+    padding: var(--s-space);
+    border: 1px solid #ccc;
+    border-radius: var(--s-space);
+    margin-top: 0.5rem;
+}
+
+.profile-form input:not(div.gender) {
+
+    box-shadow: none;
+
+}
+
+.btn-profile {
+    width: 200px;
+    align-self: center;
+}
+
+.profile-section h3 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 600px) and (orientation: landscape) {
+    .profile-form {
+        width: 80%;
+        margin: auto;
+    }
+}
+
+@media (min-width: 850px) and (orientation: landscape) {
+    .profile-form {
+        width: 60%;
+        margin: auto;
+    }
+
+    .profile-form #email,
+    .profile-form #name {
+        width: 100%;
+    }
+}
+
+.avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.avatar img {
+    box-shadow: var(--container-shadow);
+    border: 5px solid var(--bg-white);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-section-edit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.profile-section-edit .user-data {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-section-edit .user-data>div {
+    margin-bottom: 15px;
+}
+
+.profile-section-edit .btn-inline {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.profile-section-edit button {
+    cursor: pointer;
+}
+
+@media (min-width: 650px) {
+    .profile-data {
+        border-radius: var(--m-space);
+        box-shadow: var(--container-shadow);
+        padding: var(--l-space);
+        margin: 0 auto;
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4rem;
+        margin-bottom: 2rem;
+    }
+
+    .avatar img {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (min-width: 850px) and (orientation: landscape) {
+
+    .profile-section-edit #email,
+    .profile-section-edit #name {
+        width: 100%;
+    }
+
+    .profile-section #email {
+        padding: var(--s-space);
+    }
+
+    .profile-data {
+        flex-direction: row;
+
+    }
+}
