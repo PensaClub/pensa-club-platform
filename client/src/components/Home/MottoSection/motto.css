@@ -1,8 +1,9 @@
 .motto-section {
-    padding: 5em 0;
+    padding: var(--xl-space) 0;
     width: 100%;
     margin: 0 auto;
     text-align: center;
+    padding-bottom: calc(var(--xxl-space) + 1em);
 
 }
 
@@ -19,7 +20,7 @@
     max-width: 60px;
     height: auto;
     opacity: 0.6;
-
+    padding-bottom: var( --l-space);
     overflow: hidden;
 }
 
@@ -44,19 +45,21 @@
 }
 
 .motto-info p {
-
     text-align: center;
     font-weight: 500;
-
-}
-
-.motto-info span {
     padding: 1em 0;
     font-style: italic;
     font-weight: 10;
     letter-spacing: 1px;
+    font-size: var(--s-font-size);
+
 }
 
+.motto-info span {
+    font-weight: 900;
+    font-size: var(--s-font-size);
+
+}
 
 #btn-join {
     width: auto;
@@ -75,11 +78,15 @@
     }
 
     .motto-info p {
-        font-size: var(--m-font-size);
+        font-weight: 100;
+        font-size: var(--s-font-size);
+        letter-spacing: 1.3px;
+
     }
 
     .motto-info span {
-        letter-spacing: 1.3px;
+        font-size: var(--s-font-size);
+
 
     }
 
