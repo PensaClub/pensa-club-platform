@@ -7,9 +7,11 @@
     background-size: auto;
 
 }
+
 .profile-form span {
     color: var(--red);
 }
+
 .main-profile {
     display: flex;
     flex-direction: column;
@@ -27,7 +29,7 @@
     color: var(--orange);
     z-index: 10;
     cursor: pointer;
- 
+
 }
 
 .account-menu {
@@ -70,8 +72,8 @@
 @media (max-width: 800px) {
     .menu-toggle {
         display: block;
-        top:6rem;
-        
+        top: 6rem;
+
     }
 
     .account-menu {
@@ -138,14 +140,37 @@
     font-weight: bold;
 }
 
+.profile-section .gender,
+.profile-section .date {
+    display: flex;
+    justify-content: flex-start;
+    gap: 3rem;
+
+
+}
+
+.profile-section .gender-options {
+    display: flex;
+    gap: 3em;
+}
+
+.profile-section .date {
+    gap: 2rem;
+}
+
 .profile-form input,
 .profile-form select {
     width: 100%;
     padding: var(--s-space);
     border: 1px solid #ccc;
     border-radius: var(--s-space);
-    box-shadow: var(--container-shadow);
     margin-top: 0.5rem;
+}
+
+.profile-form input:not(div.gender) {
+
+    box-shadow: none;
+
 }
 
 .btn-profile {

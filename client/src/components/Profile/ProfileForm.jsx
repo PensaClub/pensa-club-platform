@@ -19,6 +19,10 @@ const ProfileForm = () => {
     const [regions, setRegions] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
     const [settlements, setSettlements] = useState([]);
+
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedYear, setSelectedYear] = useState('');
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -39,7 +43,7 @@ const ProfileForm = () => {
         setForm({ ...form, region: regionId, municipality: '', settlement: '' });
         setMunicipalities([]);
         setSettlements([]);
-    
+
         try {
             const response = await fetch(`/region-${regionId}/towns/subregions-${regionId}.json`);
             const data = await response.json();
@@ -50,18 +54,18 @@ const ProfileForm = () => {
     };
 
     const handleMunicipalityChange = async (e) => {
-    const municipalityId = e.target.value;
-    setForm({ ...form, municipality: municipalityId, settlement: '' });
-    setSettlements([]);
+        const municipalityId = e.target.value;
+        setForm({ ...form, municipality: municipalityId, settlement: '' });
+        setSettlements([]);
 
-    try {
-        const response = await fetch(`/region-${form.region}/towns/towns-${municipalityId}.json`);
-        const data = await response.json();
-        setSettlements(data);
-    } catch (error) {
-        console.error('Failed to load settlements data', error);
-    }
-};
+        try {
+            const response = await fetch(`/region-${form.region}/towns/towns-${municipalityId}.json`);
+            const data = await response.json();
+            setSettlements(data);
+        } catch (error) {
+            console.error('Failed to load settlements data', error);
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -79,36 +83,109 @@ const ProfileForm = () => {
         return form.region && form.municipality && form.settlement && form.district && form.block && form.street && form.streetNumber;
     };
 
+    const generateNumberOptions = (start, end) => {
+        const options = [];
+        for (let i = start; i <= end; i++) {
+            options.push(<option key={i} value={i}>{i}</option>);
+        }
+        return options;
+    };
+
     return (
         <form onSubmit={handleSubmit} className="profile-form">
             <h3>Попълнете данните си</h3>
-            
-                <div className="avatar">
-                    <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
-                    <Link to="#" className="change-avatar-link">Смени снимка</Link>
+
+            <div className="avatar">
+                <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
+                <Link to="#" className="change-avatar-link">Смени снимка</Link>
+            </div>
+            <div className="user-data">
+                <div>
+                    <label htmlFor="username">Потребителско име: <span>*</span></label>
+                    <input type="text" id="username" name="username" />
                 </div>
-                <div className="user-data">
+                <div className="gender">
+                    <label>Пол:</label>
+                    <div className="gender-options">
                     <div>
-                        <label htmlFor="username">Потребителско име: <span>*</span></label>
-                        <input type="text" id="username" name="username" />
+                        <label>
+                            Мъж
+                            <input
+                                type="radio"
+                            // value="male"
+                            // checked={selectedGender === 'male'}
+                            // onChange={handleGenderChange}
+                            />
+                        </label>
                     </div>
-                   
                     <div>
+                        <label>
+                            Жена
+                            <input
+                                type="radio"
+                            // value="female"
+                            // checked={selectedGender === 'female'}
+                            // onChange={handleGenderChange}
+                            />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Друго
+                            <input
+                                type="radio"
+                            // value="other"
+                            // checked={selectedGender === 'other'}
+                            // onChange={handleGenderChange}
+                            />
+                        </label>
+                    </div>
+                    </div>
+                </div>
+                <div>
 
-                        <label htmlFor="firstName">Име:</label>
-                        <input type="text" id="firstName" name="firstName" />
+                    <label htmlFor="firstName">Име:</label>
+                    <input type="text" id="firstName" name="firstName" />
+                </div>
+                <div>
+                    <label htmlFor="lastName">Фамилия:</label>
+                    <input type="text" id="lastName" name="lastName" />
+                </div>
+                <div className="date">
+                    <label>Възраст</label>
+                    <div>
+                        <label>
+                          
+                            <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)}>
+                                <option value="">Ден</option>
+                                {generateNumberOptions(1, 31)}
+                            </select>
+                        </label>
                     </div>
                     <div>
-                        <label htmlFor="lastName">Фамилия:</label>
-                        <input type="text" id="lastName" name="lastName" />
+                        <label>
+                        
+                            <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+                                <option value="">Месец</option>
+                                {generateNumberOptions(1, 12)}
+                            </select>
+                        </label>
                     </div>
-                
-
+                    <div>
+                        <label>
+                      
+                            <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+                                <option value="">Година</option>
+                                {generateNumberOptions(1900, new Date().getFullYear())}
+                            </select>
+                        </label>
+                    </div>
+                </div>
                 <div>
                     <label htmlFor="phoneNumber">Телефон: <span>*</span></label>
                     <input type="text" id="phoneNumber" name="phoneNumber" />
                 </div>
-              
+
             </div>
 
             <label>
