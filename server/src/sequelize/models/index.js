@@ -12,7 +12,7 @@ const db = {};
 const getSequelizeConfig = (env, config) => {
   const { database, username, password, database_uri } = config;
   const commonConfig = {
-    logging: false,
+    // logging: false,
     dialect: 'postgres'
   };
   
@@ -27,6 +27,7 @@ const getSequelizeConfig = (env, config) => {
     };
   } else {
     return {
+      ...commonConfig,
       database_uri,
       dialectOptions: {
         ssl: {
