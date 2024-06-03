@@ -74,7 +74,7 @@ export const Header = () => {
                             }}><FontAwesomeIcon icon={faCircleExclamation} /></span>
                         )}
                         <label htmlFor="dropdown-toggle" className="dropdown-toggle">
-                            <img src="http://1.gravatar.com/avatar/47db31bd2e0b161008607d84c74305b5?s=96&d=mm&r=g" alt="Profile" className="profile-img" />
+                            <img src="/images/homePage/avatar2.png" alt="Profile" className="profile-img" />
                         </label>
 
                         <div className={`dropdown-menu dropdown-menu-right rounded-0 ${isDropdownOpen ? 'active' : ''}`}>
