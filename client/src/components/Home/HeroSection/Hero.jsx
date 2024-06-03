@@ -12,12 +12,8 @@ export const Hero = () => {
                 <div className="parent-hero">
                     <Slide direction='left' duration="2000" triggerOnce='true'>
                         <div className="left-side">
-                            <h1>Explore Our Resources</h1>
-                            <p>Discover a vibrant community of pensioners, connect with like-minded individuals, and explore a world of opportunities.</p>
-                            <div className="btn-hero">
-                                <Link to="/#" className="btn-general btn-green">View Resources</Link>
-                                <Link to="/sign-up" className="btn-general btn-orange">Join Community</Link>
-                            </div>
+                            <h1>ДОСТОЕН ЖИВОТ ЗА ХОРАТА  ОТ ТРЕТАТА ВЪЗРАСТ</h1>
+                            <p>	България е държавата в Европейския съюз (ЕС), в която <span> възрастните хора </span> са най-заплашени от бедност, социално изключване и материални затруднения, показват данни на европейската статистическа служба Евростат. <span>Българските пенсионери</span> са и най-изолираните от интернет в ЕС. Едва един от всеки десет души ползва мрежата, а от тези, които имат интернет, половината пишат имейли, четат новини и търсят информация за стоки. <span>Само 2 на сто </span>от тях пазаруват онлайн, а всеки трети влиза в социалните мрежи. </p>
                         </div>
                     </Slide>
                     {/* <Fade direction='right' duration="2000" triggerOnce='true'>
