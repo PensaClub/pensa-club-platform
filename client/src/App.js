@@ -13,6 +13,8 @@ import { Profile } from './components/Profile/Profile';
 import ErrorBoundary from './tools/errorBoundary';
 import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary';
 import { Loader } from './components/Loader/Loader';
+import {FiltersMap} from './components/MapPage/FitlersMap/FiltersMap';
+import { MapPage } from './components/MapPage/MapPage';
 
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
             <Route path="/server-error" element={<ServerError />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/profile/*" element={<Profile />} />
+            <Route path="/filter" element={<FiltersMap />} />
+            <Route path="/map" element={<MapPage />} />
             <Route path="/errors/*" element={<ErrorPageBoundary />} />
             <Route path="404/*" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />

@@ -9,9 +9,10 @@ export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useLocalStorage('auth', {})
+    
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    console.error("err", errorMessage)
+
     const userService = userServiceFactory(isAuth.token)
 
     const navigate = useNavigate()
@@ -22,6 +23,7 @@ export const UserProvider = ({ children }) => {
         setIsLoading(false)
         setTimeout(() => {
             setErrorMessage('')
+            setIsLoading(false)
         }, 3000);
 
     }
@@ -82,7 +84,7 @@ export const UserProvider = ({ children }) => {
         token: isAuth.token,
         isAuthentication: !!isAuth.token,
         onLogout,
-
+        isFinish: isAuth.data?.enabled
     }
 
 

@@ -29,7 +29,7 @@ export const userServiceFactory = (token) => {
 
     },
     logout: () => {
- 
+  
       return requester.post(`${apiUrl}/auth/logout`)
 
     },
