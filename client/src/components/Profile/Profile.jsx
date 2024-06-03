@@ -1,25 +1,35 @@
 import { Link } from 'react-router-dom';
-import { ProfileData }  from './ProfileData';
+import { useState } from 'react';
+import { Routes, Route, Outlet } from 'react-router-dom';
+import { ProfileData } from './ProfileData';
 import ProfileForm from './ProfileForm';
 import ProfileAddress from './ProfileAddress';
 import './profile.css'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faLocationDot , faUser, faLock, faScroll, faMountainSun} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes, faBars } from '@fortawesome/free-solid-svg-icons'
 
 export const Profile = () => {
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    };
     return (
         <>
-             
+
             <section className="profile-section">
-                <section className="account-menu">
+                <button className="menu-toggle" onClick={toggleMenu}>
+                    <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
+                </button>
+                <section className={`account-menu ${menuOpen ? 'open' : ''}`}>
                     <h3>Акаунт</h3>
-                    <Link to="data"><FontAwesomeIcon icon={faUser} className="icon"/>Лични данни</Link>
-                    <Link to="address"><FontAwesomeIcon icon={faLocationDot} className="icon"/>Адрес</Link>
-                    <Link to="password"><FontAwesomeIcon icon={faLock} className="icon" />Парола</Link>
-                    <Link to="announced"><FontAwesomeIcon icon={faScroll} className="icon"/>Обяви</Link>
-                    <Link to="interests"><FontAwesomeIcon icon={faMountainSun} className="icon"/>Интереси</Link>
-                    <Link to="anothers"> <FontAwesomeIcon icon={faMountainSun} className="icon"/>Други</Link>
+                    <Link to="data" onClick={toggleMenu}><FontAwesomeIcon icon={faUser} className="icon" />Лични данни</Link>
+                    <Link to="address" onClick={toggleMenu}><FontAwesomeIcon icon={faLocationDot} className="icon" />Адрес</Link>
+                    <Link to="password" onClick={toggleMenu}><FontAwesomeIcon icon={faLock} className="icon" />Парола</Link>
+                    <Link to="announced" onClick={toggleMenu}><FontAwesomeIcon icon={faScroll} className="icon" />Обяви</Link>
+                    <Link to="interests" onClick={toggleMenu}><FontAwesomeIcon icon={faMountainSun} className="icon" />Интереси</Link>
+                    <Link to="anothers" onClick={toggleMenu}><FontAwesomeIcon icon={faMountainSun} className="icon" />Други</Link>
                 </section>
                 <div className="main-profile">
                     <section className="profile-data">
@@ -35,13 +45,22 @@ export const Profile = () => {
                             <p>Имейл: example@gmail.com</p>
                         </div>
                     </section>
-                   <ProfileForm />
-                   <ProfileData />
-                   <ProfileAddress />
-                    {/* <Outlet /> */}
+                    {/* <ProfileForm /> */}
+                    {/* <ProfileData /> */}
+                    {/* <ProfileAddress /> */}
+
+                    <Outlet />
+                    <Routes>
+                        <Route path="data" element={<ProfileData />} />
+                        <Route path="address" element={<ProfileAddress />} />
+                        {/* <Route path="password" element={<ProfilePassword />} /> */}
+                        {/* <Route path="announced" element={<ProfileAnnounced />} /> */}
+                        {/* <Route path="interests" element={<ProfileInterests />} /> */}
+                        {/* <Route path="anothers" element={<ProfileOthers />} /> */}
+                        <Route path="profile-form" element={<ProfileForm />} />
+                    </Routes>
                 </div>
             </section>
-                    
         </>
     )
 }

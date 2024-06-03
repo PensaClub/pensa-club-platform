@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 
 const ProfileForm = () => {
     const [form, setForm] = useState({
+        username: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
         region: '',
         municipality: '',
         settlement: '',
@@ -14,12 +19,14 @@ const ProfileForm = () => {
     const [regions, setRegions] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
     const [settlements, setSettlements] = useState([]);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const loadRegions = async () => {
             try {
-                const response = await import('../client/regions-data/regions.json');
-                setRegions(response.default);
+                const response = await fetch('/regions.json');
+                const data = await response.json();
+                setRegions(data);
             } catch (error) {
                 console.error('Failed to load regions data', error);
             }
@@ -32,27 +39,29 @@ const ProfileForm = () => {
         setForm({ ...form, region: regionId, municipality: '', settlement: '' });
         setMunicipalities([]);
         setSettlements([]);
-
+    
         try {
-            const response = await import(`../client/regions-data/region-${regionId}/towns/subregions-${regionId}.json`);
-            setMunicipalities(response.default);
+            const response = await fetch(`/region-${regionId}/towns/subregions-${regionId}.json`);
+            const data = await response.json();
+            setMunicipalities(data);
         } catch (error) {
             console.error('Failed to load municipalities data', error);
         }
     };
 
     const handleMunicipalityChange = async (e) => {
-        const municipalityId = e.target.value;
-        setForm({ ...form, municipality: municipalityId, settlement: '' });
-        setSettlements([]);
+    const municipalityId = e.target.value;
+    setForm({ ...form, municipality: municipalityId, settlement: '' });
+    setSettlements([]);
 
-        try {
-            const response = await import(`../client/regions-data/region-${form.region}/towns/towns-${municipalityId}.json`);
-            setSettlements(response.default);
-        } catch (error) {
-            console.error('Failed to load settlements data', error);
-        }
-    };
+    try {
+        const response = await fetch(`/region-${form.region}/towns/towns-${municipalityId}.json`);
+        const data = await response.json();
+        setSettlements(data);
+    } catch (error) {
+        console.error('Failed to load settlements data', error);
+    }
+};
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -80,15 +89,10 @@ const ProfileForm = () => {
                 </div>
                 <div className="user-data">
                     <div>
-                        <label htmlFor="username">Потребителско име:</label>
+                        <label htmlFor="username">Потребителско име: <span>*</span></label>
                         <input type="text" id="username" name="username" />
                     </div>
-                    <div>
-                        <label htmlFor="email">Имейл:</label>
-                        <input type="email" id="email" name="email" />
-                    </div>
-
-
+                   
                     <div>
 
                         <label htmlFor="firstName">Име:</label>
@@ -101,14 +105,14 @@ const ProfileForm = () => {
                 
 
                 <div>
-                    <label htmlFor="phoneNumber">Телефон:</label>
+                    <label htmlFor="phoneNumber">Телефон: <span>*</span></label>
                     <input type="text" id="phoneNumber" name="phoneNumber" />
                 </div>
               
             </div>
 
             <label>
-                Област (Region):
+                Област (Region): <span>*</span>
                 <select name="region" value={form.region} onChange={handleRegionChange} required>
                     <option value="">Изберете регион</option>
                     {regions.map((region, index) => (
@@ -117,7 +121,7 @@ const ProfileForm = () => {
                 </select>
             </label>
             <label>
-                Oбщина (Municipality):
+                Oбщина (Municipality): <span>*</span>
                 <select name="municipality" value={form.municipality} onChange={handleMunicipalityChange} required>
                     <option value="">Изберете община</option>
                     {municipalities.map((municipality, index) => (
@@ -126,7 +130,7 @@ const ProfileForm = () => {
                 </select>
             </label>
             <label>
-                Населено място (Settlement):
+                Населено място (Settlement): <span>*</span>
                 <select name="settlement" value={form.settlement} onChange={handleInputChange} required>
                     <option value="">Избетере населено място</option>
                     {settlements.map((settlement, index) => (
@@ -139,15 +143,15 @@ const ProfileForm = () => {
                 <input type="text" name="district" value={form.district} onChange={handleInputChange} required />
             </label>
             <label>
-                Блок (Block):
+                Блок (Block): <span>*</span>
                 <input type="text" name="block" value={form.block} onChange={handleInputChange} required />
             </label>
             <label>
-                Улица (Street):
+                Улица (Street): <span>*</span>
                 <input type="text" name="street" value={form.street} onChange={handleInputChange} required />
             </label>
             <label>
-                Номер улица (Street Number):
+                Номер улица (Street Number): <span>*</span>
                 <input type="text" name="streetNumber" value={form.streetNumber} onChange={handleInputChange} required />
             </label>
             <button className="btn-general btn-green btn-profile" type="submit">Запази</button>

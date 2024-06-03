@@ -75,7 +75,7 @@ const ProfileAddress= () => {
             <h3>Адресна форма</h3>
                 
             <label>
-                Област (Region):
+                Област (Region): <span>*</span>
                 <select name="region" value={form.region} onChange={handleRegionChange} required>
                     <option value="">Изберете регион</option>
                     {regions.map((region, index) => (
@@ -84,7 +84,7 @@ const ProfileAddress= () => {
                 </select>
             </label>
             <label>
-                Oбщина (Municipality):
+                Oбщина (Municipality): <span>*</span>
                 <select name="municipality" value={form.municipality} onChange={handleMunicipalityChange} required>
                     <option value="">Изберете община</option>
                     {municipalities.map((municipality, index) => (
@@ -93,7 +93,7 @@ const ProfileAddress= () => {
                 </select>
             </label>
             <label>
-                Населено място (Settlement):
+                Населено място (Settlement): <span>*</span>
                 <select name="settlement" value={form.settlement} onChange={handleInputChange} required>
                     <option value="">Избетере населено място</option>
                     {settlements.map((settlement, index) => (
@@ -106,15 +106,15 @@ const ProfileAddress= () => {
                 <input type="text" name="district" value={form.district} onChange={handleInputChange} required />
             </label>
             <label>
-                Блок (Block):
+                Блок (Block): <span>*</span>
                 <input type="text" name="block" value={form.block} onChange={handleInputChange} required />
             </label>
             <label>
-                Улица (Street):
+                Улица (Street): <span>*</span>
                 <input type="text" name="street" value={form.street} onChange={handleInputChange} required />
             </label>
             <label>
-                Номер улица (Street Number):
+                Номер улица (Street Number): <span>*</span>
                 <input type="text" name="streetNumber" value={form.streetNumber} onChange={handleInputChange} required />
             </label>
             <button className="btn-general btn-green btn-profile" type="submit">Запази</button>
