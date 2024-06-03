@@ -27,7 +27,6 @@ const getSequelizeConfig = (env, config) => {
     };
   } else {
     return {
-      ...commonConfig,
       database_uri,
       dialectOptions: {
         ssl: {
@@ -40,16 +39,7 @@ const getSequelizeConfig = (env, config) => {
 };
 
 const sequelizeConfig = getSequelizeConfig(process.env.NODE_ENV, config);
-const sequelize = new Sequelize(
-  config.database_uri, {
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  }
-}
-);
+const sequelize = new Sequelize(sequelizeConfig);
 fs.readdirSync(__dirname)
   .filter((file) => {
     return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js" && file.indexOf(".test.js") === -1;
