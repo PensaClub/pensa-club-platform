@@ -267,7 +267,7 @@ header a:nth-child(1) {
   transform: translateY(-50%);
   right: -25px; 
   z-index: 1;
-  animation: bounce 2s infinite; 
+  animation: bounce 4s infinite; 
 }
 /* .warning-icon:hover {
   background-color: darkred;
