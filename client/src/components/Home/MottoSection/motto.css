@@ -2,7 +2,7 @@
     padding: 5em 0;
     width: 100%;
     margin: 0 auto;
-    /* font-family: Archer; */
+    text-align: center;
 
 }
 
@@ -29,13 +29,14 @@
     flex-direction: column;
     align-items: center;
     line-height: 1.2;
+    gap: 3em;
 }
 
 .motto-info h3 {
 
-    font-size: var(--l-font-size);
+    font-size: calc(var(--l-font-size) - 8px);
     text-align: center;
-    padding-bottom: 2em;
+
     text-shadow: var(--text-shadow);
     font-weight: 500;
     letter-spacing: 1px;
@@ -43,10 +44,10 @@
 }
 
 .motto-info p {
-    /* font-size: 1.5em; */
+
     text-align: center;
     font-weight: 500;
-    padding-bottom: 1em;
+
 }
 
 .motto-info span {
@@ -56,21 +57,12 @@
     letter-spacing: 1px;
 }
 
-/* .btn-join {
-    font-size: 1.5em;
-    color: var(--text-white);
-    background-color: var(--red);
-    padding: 0.5em 1.2em;
-    border-radius: 10px;
-} */
 
 #btn-join {
     width: auto;
 }
 
-/* .btn-join:hover {
-    opacity: 0.7;
-} */
+
 
 @media (min-width: 850px) {
     .motto-desc {
@@ -79,8 +71,7 @@
     }
 
     .motto-info h3 {
-        padding-bottom: var(--xl-space);
-        /* font-size: 2.5em; */
+        font-size: var(--l-font-size);
     }
 
     .motto-info p {
