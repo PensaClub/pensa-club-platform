@@ -34,7 +34,7 @@
 
 .motto-info h3 {
 
-    font-size: calc(var(--l-font-size) - 8px);
+    font-size: calc(var(--l-font-size) - 10px);
     text-align: center;
 
     text-shadow: var(--text-shadow);
@@ -71,7 +71,7 @@
     }
 
     .motto-info h3 {
-        font-size: var(--l-font-size);
+        font-size: calc(var(--l-font-size) - 6px);
     }
 
     .motto-info p {
