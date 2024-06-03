@@ -26,16 +26,16 @@ const getSequelizeConfig = (env, config) => {
       dialect: 'postgres',
     };
   } else {
-    return (
-      database_uri, {
-        dialectOptions: {
-          ssl: {
-            require: true,
-            rejectUnauthorized: false,
-          },
-        }
-      }
-    );
+    return {
+      ...commonConfig,
+      url: database_uri,
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
+    };
   }
 };
 
