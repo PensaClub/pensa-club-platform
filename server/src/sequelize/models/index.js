@@ -15,7 +15,7 @@ const getSequelizeConfig = (env, config) => {
     logging: false,
     dialect: 'postgres'
   };
-  
+
   if (env === 'development') {
     return {
       ...commonConfig,
@@ -40,7 +40,25 @@ const getSequelizeConfig = (env, config) => {
 };
 
 const sequelizeConfig = getSequelizeConfig(process.env.NODE_ENV, config);
-const sequelize = new Sequelize(sequelizeConfig);
+let sequelize;
+if (env === 'development') {
+  sequelize = new Sequelize(
+    sequelizeConfig.database,
+    sequelizeConfig.username,
+    sequelizeConfig.password,
+    sequelizeConfig
+  );
+} else {
+  sequelize = new Sequelize(config.database_uri, {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    }
+  });
+}
+
 fs.readdirSync(__dirname)
   .filter((file) => {
     return file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js" && file.indexOf(".test.js") === -1;
