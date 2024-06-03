@@ -9,6 +9,7 @@ export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useLocalStorage('auth', {})
+    
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false)
 
@@ -83,7 +84,7 @@ export const UserProvider = ({ children }) => {
         token: isAuth.token,
         isAuthentication: !!isAuth.token,
         onLogout,
-
+        isFinish: isAuth.data?.enabled
     }
 
 
