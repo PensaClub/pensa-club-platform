@@ -1,0 +1,164 @@
+{
+  "skills": [
+    {
+      "value": "communication_skills",
+      "name": "Комуникационни умения"
+    },
+    {
+      "value": "technical_skills",
+      "name": "Технически умения"
+    },
+    {
+      "value": "agricultural_skills",
+      "name": "Земеделски умения"
+    },
+    {
+      "value": "cooking_skills",
+      "name": "Готварски умения"
+    },
+    {
+      "value": "financial_skills",
+      "name": "Финансови умения"
+    },
+    {
+      "value": "language_skills",
+      "name": "Езикови умения"
+    },
+    {
+      "value": "musical_skills",
+      "name": "Музикални умения"
+    },
+    {
+      "value": "first_aid_skills",
+      "name": "Умения за Първа Помощ"
+    },
+    {
+      "value": "spiritual_practices",
+      "name": "Духовни Практики"
+    },
+    {
+      "value": "meditation_skills",
+      "name": "Медитиране"
+    },
+    {
+      "value": "fashion_design",
+      "name": "Мода и шев"
+    },
+    {
+      "value": "interior_design",
+      "name": "Дизайн, интериор"
+    },
+    {
+      "value": "video_filming",
+      "name": "Видео заснемане"
+    }
+  ],
+  "workOptions": [
+    {
+      "value": "architecture_construction",
+      "name": "Архитектура и Строителство"
+    },
+    {
+      "value": "medicine_healthcare",
+      "name": "Медицина и Здравеопазване"
+    },
+    {
+      "value": "journalism",
+      "name": "Журналистика"
+    },
+    {
+      "value": "teaching",
+      "name": "Преподавател, учител"
+    },
+    {
+      "value": "public_administration",
+      "name": "Публична администрация"
+    },
+    {
+      "value": "security",
+      "name": "Сигурност"
+    },
+    {
+      "value": "social_tourism",
+      "name": "Социална дейност и туризъм"
+    },
+    {
+      "value": "agriculture",
+      "name": "Селско стопанство, земеделие"
+    },
+    {
+      "value": "мanufacturing_and_тrade",
+      "name": "Производство и Търговия"
+    },
+    {
+      "value": "technology",
+      "name": "Техника и Технологии"
+    },
+    {
+      "value": "transport",
+      "name": "Транспорт"
+    },
+    {
+      "value": "law_accounting",
+      "name": "Юридически и Счетоводни дейности"
+    }
+  ],
+  "interestOptions": [
+    {
+      "value": "volunteering",
+      "name": "Доброволчество"
+    },
+    {
+      "value": "spiritual_practices",
+      "name": "Духовни практики и Медитация"
+    },
+    {
+      "value": "new_knowledge",
+      "name": "Нови Знания"
+    },
+    {
+      "value": "board_games",
+      "name": "Настолни игри"
+    },
+    {
+      "value": "agriculture_gardening",
+      "name": "Земеделие, Градинарство"
+    },
+    {
+      "value": "movies",
+      "name": "Филми"
+    },
+    {
+      "value": "photography",
+      "name": "Фотография"
+    },
+    {
+      "value": "sports",
+      "name": "Спорт"
+    },
+    {
+      "value": "reading",
+      "name": "Четене"
+    },
+    {
+      "value": "cooking",
+      "name": "Готвене"
+    },
+    {
+      "value": "travel_tourism",
+      "name": "Пътувания и Туризъм"
+    },
+    {
+      "value": "music",
+      "name": "Музика"
+    },
+    {
+      "value": "drawing_arts",
+      "name": "Рисуване и Изкуства"
+    },
+    {
+      "value": "sewing",
+      "name": "Шев и кройка"
+    }
+  ]
+}

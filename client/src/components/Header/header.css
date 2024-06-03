@@ -10,7 +10,7 @@ header {
   justify-content: space-between;
   align-items: center;
   transition: all 0.3s ease;
-  z-index: 99;
+  z-index: 1000;
   background-color: var(--bg-white);
   height: 70px;
   box-shadow: var(--text-shadow);
