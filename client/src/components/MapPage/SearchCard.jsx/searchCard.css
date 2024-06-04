@@ -151,14 +151,10 @@
         max-width: 700px;
     }
     svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
-        color: rgb(226, 96, 32)
+        /* color: rgb(226, 96, 32) */
     }
     .selected-option-search {
-    
-  
- 
- 
-        background-color: var(--bg-white);
+            background-color: var(--bg-white);
         border-radius: var(--radius-input);
          background-color: var(--bg-white);
         color: var(--text-black);

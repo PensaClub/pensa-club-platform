@@ -1,6 +1,6 @@
 import Testimonials from './Testimonials/Testimonials';
 import { Fade, Slide, } from "react-awesome-reveal";
-import {Link} from 'react-router-dom'
+// import {Link} from 'react-router-dom'
 
 import './hero.css';
 
