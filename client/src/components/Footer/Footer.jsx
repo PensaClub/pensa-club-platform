@@ -1,23 +1,23 @@
-
 import './footer.css'
 
-import {Link} from 'react-router-dom'
+import { useTranslation } from "react-i18next";
 
 export const Footer = () => {
+    const {t} = useTranslation();
 
     return (
         <footer>
             <section className="footer">
                 <img src="/images/homePage/logo.png" alt="logo" />
                 <div className="footer-links">
-                    <h3>Карта на сайта </h3>
-                    <p>Communities</p>
-                    <p>Map</p>
-                    <p>Craiglist</p>
+                    <h3>{t('footer.site-map')}</h3>
+                    <p>{t('footer.communities')}</p>
+                    <p>{t('footer.map')}</p>
+                    <p>{t('footer.craigslist')}</p>
                 </div>
                 <div className="footer-links">
-                    <h3>Партньори</h3>
-                    <p>СофтУни БУДИТЕЛ</p>
+                    <h3>{t('footer.partners')}</h3>
+                    <p>{t('footer.softuni')}</p>
                 </div>
                 <div className="footer-info">
                     <div className="second-info">
@@ -25,17 +25,20 @@ export const Footer = () => {
                         <h3>Pensa club &copy;</h3>
                     </div>
                     <div className="info-desc">
-                    <p>България, София</p>
-                    <p>бул. Скобелев, 13А</p>
-                    <p>Тел.: (359) 2 881 95 53</p>
-                    <p>Факс: (359) 2 881 95 55</p>
-                    <p>Имейл: info@pensa.club</p>
+                    <p>{t('footer.country-city')}</p>
+                    {/* TODO: make clickable */}
+                    <p>{t('footer.street')}</p> 
+                    {/* TODO: make clickable */}
+                    <p>{t('footer.phone')}</p> 
+                    {/* <p>Факс: (359) 2 881 95 55</p> */}
+                    {/* TODO: make clickable */}
+                    <p>{t('footer.email')}</p> 
                     </div>
                 </div>
             </section>
             <section className='footer-privacy'>
-                <p>Privacy</p>
-                <p>&copy; 2024 Pensa club. All rights reserved</p>
+                <p>{t('footer.privacy')}</p>
+                <p>&copy; {t('footer.copyright')}</p>
             </section>
         </footer>
 

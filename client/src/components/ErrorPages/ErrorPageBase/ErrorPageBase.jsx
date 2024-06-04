@@ -1,30 +1,30 @@
-import { NavLink } from 'react-router-dom';
 import './errorPageBase.css'; 
 
+import { NavLink } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
+
 export const ErrorPageBase = ({ errorCode, errorDesc }) => {
-
-
-  
+  const {t} = useTranslation();
   return (
     
       <div className="container-wrapper">
       <div className="not-found">
-        <h1>Грешка {errorCode}</h1>
+        <h1>{t('error-page.error')} {errorCode}</h1>
 
         <h2>{errorDesc}</h2>
         {/* <h3>Върнете се към</h3> */}
 
         <div className="menu-list">
           <NavLink to="/" className="btn-general btn-green">
-            Начало
+          {t('error-page.home')}
           </NavLink>
 
           <NavLink to="/map" className="btn-general btn-green">
-            Карта
+          {t('error-page.map')}
           </NavLink>
 
           <NavLink to="/craigslist" className="btn-general btn-green">
-            Лист
+          {t('error-page.craigslist')}
           </NavLink>
         </div>
       </div>

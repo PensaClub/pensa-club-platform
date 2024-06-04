@@ -2,163 +2,163 @@
   "skills": [
     {
       "value": "communication_skills",
-      "name": "Комуникационни умения"
+      "name": "options.skills.communication_skills"
     },
     {
       "value": "technical_skills",
-      "name": "Технически умения"
+      "name": "options.skills.technical_skills"
     },
     {
       "value": "agricultural_skills",
-      "name": "Земеделски умения"
+      "name": "options.skills.agricultural_skill"
     },
     {
       "value": "cooking_skills",
-      "name": "Готварски умения"
+      "name": "options.skills.cooking_skills"
     },
     {
       "value": "financial_skills",
-      "name": "Финансови умения"
+      "name": "options.skills.financial_skills"
     },
     {
       "value": "language_skills",
-      "name": "Езикови умения"
+      "name": "options.skills.language_skills"
     },
     {
       "value": "musical_skills",
-      "name": "Музикални умения"
+      "name": "options.skills.musical_skills"
     },
     {
       "value": "first_aid_skills",
-      "name": "Умения за Първа Помощ"
+      "name": "options.skills.first_aid_skills"
     },
     {
       "value": "spiritual_practices",
-      "name": "Духовни Практики"
+      "name": "options.skills.spiritual_practices"
     },
     {
       "value": "meditation_skills",
-      "name": "Медитиране"
+      "name": "options.skills.meditation_skills"
     },
     {
       "value": "fashion_design",
-      "name": "Мода и шев"
+      "name": "options.skills.fashion_design"
     },
     {
       "value": "interior_design",
-      "name": "Дизайн, интериор"
+      "name": "options.skills.interior_design"
     },
     {
       "value": "video_filming",
-      "name": "Видео заснемане"
+      "name": "options.skills.video_filming"
     }
   ],
   "workOptions": [
     {
       "value": "architecture_construction",
-      "name": "Архитектура и Строителство"
+      "name": "options.work-options.architecture_construction"
     },
     {
       "value": "medicine_healthcare",
-      "name": "Медицина и Здравеопазване"
+      "name": "options.work-options.medicine_healthcare"
     },
     {
       "value": "journalism",
-      "name": "Журналистика"
+      "name": "options.work-options.journalism"
     },
     {
       "value": "teaching",
-      "name": "Преподавател, учител"
+      "name": "options.work-options.teaching"
     },
     {
       "value": "public_administration",
-      "name": "Публична администрация"
+      "name": "options.work-options.public_administration"
     },
     {
       "value": "security",
-      "name": "Сигурност"
+      "name": "options.work-options.security"
     },
     {
       "value": "social_tourism",
-      "name": "Социална дейност и туризъм"
+      "name": "options.work-options.social_tourism"
     },
     {
       "value": "agriculture",
-      "name": "Селско стопанство, земеделие"
+      "name": "options.work-options.agriculture"
     },
     {
-      "value": "мanufacturing_and_тrade",
-      "name": "Производство и Търговия"
+      "value": "manufacturing_and_trade",
+      "name": "options.work-options.manufacturing_and_trade"
     },
     {
       "value": "technology",
-      "name": "Техника и Технологии"
+      "name": "options.work-options.technology"
     },
     {
       "value": "transport",
-      "name": "Транспорт"
+      "name": "options.work-options.transport"
     },
     {
       "value": "law_accounting",
-      "name": "Юридически и Счетоводни дейности"
+      "name": "options.work-options.law_accounting"
     }
   ],
   "interestOptions": [
     {
       "value": "volunteering",
-      "name": "Доброволчество"
+      "name": "options.interestOptions.volunteering"
     },
     {
       "value": "spiritual_practices",
-      "name": "Духовни практики и Медитация"
+      "name": "options.interestOptions.spiritual_practices"
     },
     {
       "value": "new_knowledge",
-      "name": "Нови Знания"
+      "name": "options.interestOptions.new_knowledge"
     },
     {
       "value": "board_games",
-      "name": "Настолни игри"
+      "name": "options.interestOptions.board_games"
     },
     {
       "value": "agriculture_gardening",
-      "name": "Земеделие, Градинарство"
+      "name": "options.interestOptions.agriculture_gardening"
     },
     {
       "value": "movies",
-      "name": "Филми"
+      "name": "options.interestOptions.movies"
     },
     {
       "value": "photography",
-      "name": "Фотография"
+      "name": "options.interestOptions.photography"
     },
     {
       "value": "sports",
-      "name": "Спорт"
+      "name": "options.interestOptions.sports"
     },
     {
       "value": "reading",
-      "name": "Четене"
+      "name": "options.interestOptions.reading"
     },
     {
       "value": "cooking",
-      "name": "Готвене"
+      "name": "options.interestOptions.cooking"
     },
     {
       "value": "travel_tourism",
-      "name": "Пътувания и Туризъм"
+      "name": "options.interestOptions.travel_tourism"
     },
     {
       "value": "music",
-      "name": "Музика"
+      "name": "options.interestOptions.music"
     },
     {
       "value": "drawing_arts",
-      "name": "Рисуване и Изкуства"
+      "name": "options.interestOptions.drawing_arts"
     },
     {
       "value": "sewing",
-      "name": "Шев и кройка"
+      "name": "options.interestOptions.sewing"
     }
   ]
 }
