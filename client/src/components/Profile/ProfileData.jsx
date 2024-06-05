@@ -106,6 +106,7 @@ export const ProfileData = () => {
                         </label>
                     </div>
                 </div>
+                    <span className="required-fields">Полетата с * са задължителни!</span>
                 </div>
                 <div className="btn-inline">
                     <button type="submit" className="btn-general btn-green">Запази</button>

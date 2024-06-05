@@ -106,7 +106,7 @@ const ProfileAddress= () => {
                 <input type="text" name="district" value={form.district} onChange={handleInputChange} required />
             </label>
             <label>
-                Блок (Block): <span>*</span>
+                Блок (Block): 
                 <input type="text" name="block" value={form.block} onChange={handleInputChange} required />
             </label>
             <label>
@@ -117,6 +117,7 @@ const ProfileAddress= () => {
                 Номер улица (Street Number): <span>*</span>
                 <input type="text" name="streetNumber" value={form.streetNumber} onChange={handleInputChange} required />
             </label>
+            <span className="required-fields">Полетата с * са задължителни!</span>
             <button className="btn-general btn-green btn-profile" type="submit">Запази</button>
         </form>
     );
