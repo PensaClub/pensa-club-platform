@@ -1,6 +1,8 @@
 @import "~leaflet-fullscreen/dist/leaflet.fullscreen.css";
 
-
+.map-container{
+    position: relative;
+}
 
 .ad-card-editor {
     display: flex;
@@ -88,7 +90,7 @@
     border: 2px outset var(--orange);
     box-shadow: var(  --cluster-red-shadow);
  
-     opacity: 0.9 !important;
+    opacity: 0.9 !important;
 }
 
 @media (min-width: 850px) {

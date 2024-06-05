@@ -29,7 +29,7 @@ export const MapPage = () => {
                 <section className="map">
                     <MapEditor/>
                     <div className="search-card-map-page">
-                        <SearchCard/>
+                        {/* <SearchCard/> */}
                     </div>
                 </section>
             </div>
