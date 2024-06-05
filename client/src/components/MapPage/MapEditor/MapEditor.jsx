@@ -6,6 +6,8 @@ import L, { DivIcon, point } from 'leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import './mapEditor.css';
 import './sidebar.css';
+import './scrollModal.css';
+
 import { Link } from 'react-router-dom';
 
 const DefaultIcon = L.icon({
@@ -131,7 +133,10 @@ const MapWithZoomControl = () => {
                 }
             }else{
                 setShowModal(true)
-                setTimeout(()=>{},1000)
+                setTimeout(()=>{
+                setShowModal(false)
+
+                },3000)
             }
         };
 
@@ -143,7 +148,19 @@ const MapWithZoomControl = () => {
         };
     }, [map]);
 
-    return null;
+    return (
+            <>
+                {showModal && (
+                    <div className={`mapeditor-modal-overlay ${showModal ? 'show' : ''}`}>
+                    <div className="mapeditor-modal-content">
+                        Задръжте бутона Ctrl натиснат, докато превъртате,за да промените мащаба на картата
+                    </div>
+                </div>
+                )}
+            
+            </>
+
+    )
 };
 export const MapEditor = () => {
     const [geoJsonData, setGeoJsonData] = useState(null);
