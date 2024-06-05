@@ -4,7 +4,7 @@
 
 body.active-sidebar .leaflet-container {
     pointer-events: none; /* Забраних движенията  с картата докато менюто е отворено */
-    height: 70vh;
+
 }
 
 
