@@ -119,7 +119,7 @@ const userAds = {
 const position = [42.72991533257769, 24.674647996012656];
 const MapWithZoomControl = () => {
     const map = useMap();
-
+    const [showModal,setShowModal]=useState(false);
     useEffect(() => {
         const handleWheel = (e) => {
             if (e.ctrlKey) {
@@ -129,6 +129,9 @@ const MapWithZoomControl = () => {
                 } else {
                     map.zoomIn();
                 }
+            }else{
+                setShowModal(true)
+                setTimeout(()=>{},1000)
             }
         };
 
