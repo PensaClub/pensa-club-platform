@@ -33,6 +33,16 @@ export const userServiceFactory = (token) => {
       return requester.post(`${apiUrl}/auth/logout`)
 
     },
+
+    setUserData: (data, userId) => {
+      //TODO: replace endpoint
+      return requester.put(`${apiUrl}/users/${userId}`, data)
+    },
+
+    getUserData: (userId) => {
+      //TODO: replace endpoint
+      return requester.get(`${apiUrl}/users/${userId}`)
+    },
   }
 
 
