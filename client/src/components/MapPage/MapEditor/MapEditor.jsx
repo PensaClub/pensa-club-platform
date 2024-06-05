@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-fullscreen';
 import L, { DivIcon, point } from 'leaflet';
@@ -117,7 +117,31 @@ const userAds = {
 };
 
 const position = [42.72991533257769, 24.674647996012656];
+const MapWithZoomControl = () => {
+    const map = useMap();
 
+    useEffect(() => {
+        const handleWheel = (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                if (e.deltaY > 0) {
+                    map.zoomOut();
+                } else {
+                    map.zoomIn();
+                }
+            }
+        };
+
+        const container = map.getContainer();
+        container.addEventListener('wheel', handleWheel);
+
+        return () => {
+            container.removeEventListener('wheel', handleWheel);
+        };
+    }, [map]);
+
+    return null;
+};
 export const MapEditor = () => {
     const [geoJsonData, setGeoJsonData] = useState(null);
     const [showGeoJSON, setShowGeoJSON] = useState(true);
@@ -212,6 +236,7 @@ export const MapEditor = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url={'https://tile.openstreetmap.org/{z}/{x}/{y}.png'}
                 />
+                <MapWithZoomControl/>
                 <MapEvents />
 
                 <MarkerClusterGroup
