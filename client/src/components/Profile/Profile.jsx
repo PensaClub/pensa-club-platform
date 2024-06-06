@@ -8,13 +8,13 @@ import './profile.css';
 import { UserContext } from '../contexts/UserContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes,faImage, faBars,  faBriefcase, faUniversalAccess, faUsersGear  } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes,faImage, faBars, faEnvelope,faPhone, faBriefcase, faUniversalAccess, faUsersGear  } from '@fortawesome/free-solid-svg-icons'
 
 export const Profile = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
-    const { isFinish } = useContext(UserContext);
-    //    const isFinish = true;
+    // const { isFinish } = useContext(UserContext);
+       const isFinish = true;
     console.log(isFinish)
     const { userId } = useContext(UserContext);
 
@@ -56,12 +56,12 @@ export const Profile = () => {
                             <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
                         </div>
                         <div className="user-data">
-                            <h2>Профил</h2>
-                            <p>Име: Юзер</p>
-                            <p>Фамилия: Юзер</p>
-                            <p>Телефон: +35659599589</p>
-                            <p>Адрес: гр.София</p>
-                            <p>Имейл: example@gmail.com</p>
+                            <h2>Пoтребителско име</h2>
+                            <p><FontAwesomeIcon icon={faUser} className="icon" /> Име и Фамилия</p>
+                            
+                            <p><FontAwesomeIcon icon={faPhone} className="icon"/> +35659599589</p>
+                            <p><FontAwesomeIcon icon={faLocationDot} className="icon" /> гр.София</p>
+                            <p><FontAwesomeIcon icon={faEnvelope} className="icon"/> example@gmail.com</p>
                         </div>
                     </section>
                 }

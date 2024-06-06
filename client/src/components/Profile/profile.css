@@ -148,15 +148,19 @@
     font-weight: bold;
 }
 
-/* .user-data p,
+.user-data p,
 .user-data h2 {
     color: var(--orange);
     text-shadow: var(--container-shadow);
+    margin-bottom: 0.8rem;
 }
 .user-data h2 {
     margin-bottom: 2rem;
-} */
+} 
 
+.user-data .icon {
+    padding-right: 0.5rem;
+}
 .profile-section .gender{
     margin-bottom: -1rem;
 
