@@ -9,6 +9,7 @@ export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useLocalStorage('auth', {});
+    const [isFinish, setIsFinish] = useState(isAuth.data?.enabled); //TODO: check if ok
     
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -87,13 +88,30 @@ export const UserProvider = ({ children }) => {
             const response = await userService.setUserData(data, isAuth.data?.userId);
             const { ...responseData } = response;
             setProfileData(responseData);
+            setIsFinish(true);
             setIsLoading(false);
 
         } catch (error) {
             showErrorAndSetTimeouts(error.message)
 
         }
+    }
 
+    const onEditProfileDataSubmit = async (data) => {
+    
+        console.log(data);
+
+        try {
+            setIsLoading(true);
+            const response = await userService.editUserData(data, isAuth.data?.userId);
+            const { ...responseData } = response;
+            setProfileData(responseData);
+            setIsLoading(false);
+
+        } catch (error) {
+            showErrorAndSetTimeouts(error.message)
+
+        }
     }
 
     const getProfileData = async (userId) => {
@@ -116,9 +134,12 @@ export const UserProvider = ({ children }) => {
         token: isAuth.token,
         isAuthentication: !!isAuth.token,
         onLogout,
-        isFinish: isAuth.data?.enabled,
+        // isFinish: isAuth.data?.enabled,
+        isFinish,
         onProfileDataSubmit,
-        getProfileData
+        onEditProfileDataSubmit,
+        getProfileData,
+        profileData
     }
 
 

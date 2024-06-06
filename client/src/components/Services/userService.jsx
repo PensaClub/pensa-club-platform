@@ -36,6 +36,12 @@ export const userServiceFactory = (token) => {
 
     setUserData: (data, userId) => {
       //TODO: replace endpoint
+      // return requester.post(`${apiUrl}/users/${userId}`, data)
+      return data;
+    },
+
+    editUserData: (data, userId) => {
+      //TODO: replace endpoint
       return requester.put(`${apiUrl}/users/${userId}`, data)
     },
 
