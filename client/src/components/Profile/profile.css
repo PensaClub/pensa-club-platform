@@ -180,6 +180,7 @@
     padding-right: 2px;
 }
 
+
 .profile-form input,
 .profile-form select {
     width: 100%;
@@ -187,11 +188,11 @@
     border: 1px solid #ccc;
     border-radius: var(--s-space);
     margin-top: 0.5rem;
+    box-shadow: var(--container-shadow);
    
 }
 
-.profile-form input:not(div.gender) {
-
+.profile-form .gender input{
     box-shadow: none;
 
 }
