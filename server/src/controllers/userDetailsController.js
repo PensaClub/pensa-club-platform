@@ -1,22 +1,15 @@
 const userDetailsController = require("express").Router();
 
-const CustomError = require("../utils/customError");
 const { user_details, user_account } = require("../sequelize/models/index");
 const geoCoder = require("../utils/geoCoder");
 const ageCalculate = require("../utils/ageCalculate");
+const userDetailsValidator = require("../utils/userDetailsValidator");
 const isAuth = require("../middlewares/isAuth.js");
 const { where } = require("sequelize");
 
-const notRequiredFields = ["block", "streetNumber", "firstName", "lastName", "district", "work", "gender", "birthDate"];
-
-const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
-const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
-const nameRegex = /^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
-const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
 userDetailsController.post("/details", isAuth, async (req, res, next) => {
-  let errors = {};
   try {
+    userDetailsValidator(req.body, req.path);
     const {
       region,
       municipality,
@@ -28,58 +21,13 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
       phoneNumber,
       username,
       workOptions,
-      skills, // da e skills - hobby
+      skills,
       interestOptions,
       firstName,
       lastName,
       gender,
       birthDate,
     } = req.body;
-
-    Object.entries(req.body).forEach(([fieldName, value]) => {
-      if (value === "" && !notRequiredFields.includes(fieldName)) {
-        let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-        errors[fieldName] = `${error} is required.`;
-      }
-    });
-
-    ["workOptions", "skills", "interestOptions"].forEach((field) => {
-      if (req.body[field] !== undefined && !Array.isArray(req.body[field])) {
-        errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} must be an array.`;
-      }
-    });
-
-    if (Object.keys(errors).length > 0) {
-      throw new CustomError({ message: "Validation errors", statusCode: 400, details: errors });
-    }
-
-    if (phoneNumber && !phoneRegex.test(phoneNumber)) {
-      errors.phoneNumber = "Invalid phone number.";
-    }
-
-    if (!usernameRegex.test(username)) {
-      errors.username = "Username must be 6-16 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.";
-    }
-
-    if (firstName && !nameRegex.test(firstName)) {
-      errors.firstName = "First name must be 3-20 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.";
-    }
-
-    if (lastName && !nameRegex.test(lastName)) {
-      errors.lastName = "Last name must be 3-20 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.";
-    }
-
-    if (gender && (gender !== "male" || gender !== "female" || gender !== "other")) {
-      errors.gender = "Gender must be 'male', 'female', or 'other'.";
-    }
-
-    if (birthDate && (!dateRegex.test(birthDate) || new Date(birthDate) > new Date() || isNaN(new Date(birthDate).getTime()))) {
-      errors.birthDate = "Date format must be YYYY-MM-DD and cannot be in the future.";
-    }
-
-    if (Object.keys(errors).length > 0) {
-      throw new CustomError({ message: "Validation errors", statusCode: 400, details: errors });
-    }
 
     const location = await geoCoder({ streetNumber, street, district, settlement, municipality, region });
 
@@ -105,9 +53,10 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
     };
 
     const details = await user_details.create(data);
+
     const { birth_date, ...restOfDetails } = details.dataValues;
 
-    await user_account.update({ finished: true }, { where: { email: req.user.email }, returning: true, plain: true });
+    await user_account.update({ finished: true }, { where: { id: req.user.userId } });
 
     const updatedDetails = { ...restOfDetails, age: ageCalculate(birth_date), enabled: true };
 
@@ -130,6 +79,46 @@ userDetailsController.get("/all-users", async (req, res, next) => {
       ],
     });
     res.status(200).json({ message: "User data retrieved successfully.", accounts });
+  } catch (err) {
+    next(err);
+  }
+});
+
+userDetailsController.post("/update-details", isAuth, async (req, res, next) => {
+  try {
+    userDetailsValidator(req.body, req.path);
+
+    const data = {};
+
+    const fieldMapping = {
+      phoneNumber: "phone_number",
+      username: "username",
+      region: "region",
+      municipality: "municipality",
+      settlement: "settlement",
+      workOptions: "work_options",
+      skills: "skills",
+      interestOptions: "interest_options",
+      district: "district",
+      block: "block",
+      street: "street",
+      streetNumber: "street_number",
+      location: "location",
+      firstName: "first_name",
+      lastName: "last_name",
+      gender: "gender",
+      birthDate: "birth_date",
+    };
+
+    Object.keys(req.body).forEach((key) => {
+      if (fieldMapping[key]) {
+        data[fieldMapping[key]] = req.body[key];
+      }
+    });
+
+    const [_, details] = await user_details.update(data, { where: { user_accounts_id: req.user.userId }, returning: true, plain: true });
+
+    res.status(200).json({ message: "Details edited successfully!", details });
   } catch (err) {
     next(err);
   }
