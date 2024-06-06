@@ -12,7 +12,7 @@ const db = {};
 const getSequelizeConfig = (env, config) => {
   const { database, username, password, database_uri } = config;
   const commonConfig = {
-    logging: false, 
+    logging: false,
   };
 
   if (env === 'development') {

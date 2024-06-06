@@ -45,6 +45,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    reset_token: DataTypes.STRING,
+    token_expiration: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'user_account',
