@@ -84,7 +84,7 @@ userDetailsController.get("/all-users", async (req, res, next) => {
   }
 });
 
-userDetailsController.post("/update-details", isAuth, async (req, res, next) => {
+userDetailsController.patch("/update-details", isAuth, async (req, res, next) => {
   try {
     userDetailsValidator(req.body, req.path);
 
