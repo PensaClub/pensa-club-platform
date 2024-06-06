@@ -8,7 +8,7 @@ import './profile.css';
 import { UserContext } from '../contexts/UserContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes,faImage, faBars,  faBriefcase, faUniversalAccess, faUsersGear  } from '@fortawesome/free-solid-svg-icons'
 
 export const Profile = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -38,11 +38,14 @@ export const Profile = () => {
 
             <section className={`account-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`}>
                 <h3>Акаунт</h3>
+                <Link to="image" onClick={toggleMenu}><FontAwesomeIcon icon={faImage} className="icon" />Снимка</Link>
                 <Link to="data" onClick={toggleMenu}><FontAwesomeIcon icon={faUser} className="icon" />Лични данни</Link>
                 <Link to="address" onClick={toggleMenu}><FontAwesomeIcon icon={faLocationDot} className="icon" />Адрес</Link>
                 <Link to="password" onClick={toggleMenu}><FontAwesomeIcon icon={faLock} className="icon" />Парола</Link>
                 <Link to="announced" onClick={toggleMenu}><FontAwesomeIcon icon={faScroll} className="icon" />Обяви</Link>
-                <Link to="interests" onClick={toggleMenu}><FontAwesomeIcon icon={faMountainSun} className="icon" />Интереси</Link>
+                <Link to="skills" onClick={toggleMenu}><FontAwesomeIcon icon={faUniversalAccess} className="icon" />Умения</Link>
+                <Link to="workOptions" onClick={toggleMenu}><FontAwesomeIcon icon={faBriefcase} className="icon" />Професия</Link>
+                <Link to="interestOptions" onClick={toggleMenu}><FontAwesomeIcon icon={faUsersGear} className="icon" />Интереси</Link>
                 <Link to="anothers" onClick={toggleMenu}><FontAwesomeIcon icon={faMountainSun} className="icon" />Други</Link>
             </section>
             <div className="main-profile">

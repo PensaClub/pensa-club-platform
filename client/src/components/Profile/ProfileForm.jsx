@@ -198,7 +198,7 @@ const ProfileForm = () => {
 
             <div className="avatar">
                 <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
-                <Link to="#" className="change-avatar-link">Смени снимка</Link>
+                <Link to="#" className="change-avatar-link">Добави снимка</Link>
             </div>
             <div className="user-data">
                 <div>
@@ -339,6 +339,25 @@ const ProfileForm = () => {
                     style={{ borderColor: errors.streetNumber ? '#BB1D3D' : '' }}
                 />
                 {errors.streetNumber && <span className="error">{errors.streetNumber}</span>}
+            </label>
+
+            <label>
+                Умения: 
+                <select name="skills" value={form.skills} onChange={handleRegionChange} onBlur={onBlurHandler}>
+                    <option value="">Изберете</option> 
+                </select>
+            </label>
+            <label>
+                Професия: 
+                <select name="workOptions" value={form.workOptions} onChange={handleRegionChange} onBlur={onBlurHandler}>
+                    <option value="">Изберете</option> 
+                </select>
+            </label>
+            <label>
+            Интереси: 
+                <select name="interestOptions" value={form.interestOptions} onChange={handleRegionChange} onBlur={onBlurHandler}>
+                    <option value="">Изберете</option> 
+                </select>
             </label>
             <span className="required-fields">Полетата с * са задължителни!</span>
             <button className="btn-general btn-green btn-profile" type="submit">Запази</button>
