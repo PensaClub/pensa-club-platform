@@ -44,7 +44,7 @@ export const Register = ({ navToLogin }) => {
         </label>
         <input
           type="text"
-          placeholder={t('form.email-laceholder')}
+          placeholder={t('form.email-placeholder')}
           className="input"
           name="email"
           value={values.email}

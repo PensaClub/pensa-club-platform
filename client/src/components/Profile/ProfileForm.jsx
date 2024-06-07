@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 
 
 const ProfileForm = () => {
+    const {onProfileDataSubmit} = useContext(UserContext);
     const [form, setForm] = useState({
         username: '',
         email: '',
@@ -95,7 +97,7 @@ const ProfileForm = () => {
 
     const handleGenderChange = (e) => {
         setForm({ ...form, gender: e.target.value });
-        console.log(e.target.value)
+        // console.log(e.target.value)
     };
 
 
@@ -120,7 +122,7 @@ const ProfileForm = () => {
         setSelectedYear(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const isValid = Object.keys(form).every((field) => {
@@ -130,6 +132,7 @@ const ProfileForm = () => {
         });
 
         if (isValid) {
+            onProfileDataSubmit(form);
             console.log('Form Submitted:', form);
         }
     };
