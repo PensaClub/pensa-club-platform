@@ -4,17 +4,23 @@ import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { ProfileData } from './ProfileData';
 import ProfileForm from './ProfileForm';
 import ProfileAddress from './ProfileAddress';
+import { ProfilePassword } from './ProfilePassword';
+import  {ProfileImage}  from './ProfileImage';
+
 import './profile.css';
 import { UserContext } from '../contexts/UserContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes,faImage, faBars, faEnvelope,faPhone, faBriefcase, faUniversalAccess, faUsersGear  } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes, faImage, faBars, faEnvelope, faPhone, faBriefcase, faUniversalAccess, faUsersGear } from '@fortawesome/free-solid-svg-icons'
+
 
 export const Profile = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
+    // test for profile conplete or NOT:
+    
     // const { isFinish } = useContext(UserContext);
-       const isFinish = true;
+    const isFinish = true;
     console.log(isFinish)
     const { userId } = useContext(UserContext);
 
@@ -58,10 +64,10 @@ export const Profile = () => {
                         <div className="user-data">
                             <h2>Пoтребителско име</h2>
                             <p><FontAwesomeIcon icon={faUser} className="icon" /> Име и Фамилия</p>
-                            
-                            <p><FontAwesomeIcon icon={faPhone} className="icon"/> +35659599589</p>
+
+                            <p><FontAwesomeIcon icon={faPhone} className="icon" /> +35659599589</p>
                             <p><FontAwesomeIcon icon={faLocationDot} className="icon" /> гр.София</p>
-                            <p><FontAwesomeIcon icon={faEnvelope} className="icon"/> example@gmail.com</p>
+                            <p><FontAwesomeIcon icon={faEnvelope} className="icon" /> example@gmail.com</p>
                         </div>
                     </section>
                 }
@@ -71,10 +77,11 @@ export const Profile = () => {
                 <Outlet />
                 <Routes >
                     {isFinish === false && <Route path="*" element={<Navigate to="profile-form" />} />}
+                    <Route path="image" element={<ProfileImage />} />
                     <Route path="profile-form" element={<ProfileForm />} />
                     <Route path="data" element={<ProfileData />} />
                     <Route path="address" element={<ProfileAddress />} />
-                    {/* <Route path="password" element={<ProfilePassword />} /> */}
+                    <Route path="password" element={<ProfilePassword />} />
                     {/* <Route path="announced" element={<ProfileAnnounced />} /> */}
                     {/* <Route path="interests" element={<ProfileInterests />} /> */}
                     {/* <Route path="anothers" element={<ProfileOthers />} /> */}

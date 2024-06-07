@@ -271,7 +271,8 @@
     margin-bottom: 15px;
 }
 
-.profile-section-edit .btn-inline {
+.profile-section-edit .btn-inline,
+.profile-form .btn-inline {
     display: flex;
     justify-content: center;
     gap: 1rem;

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const ProfileForm = () => {
     const [form, setForm] = useState({
         username: '',
-        email: '',
+        // email: '',
         firstName: '',
         lastName: '',
         phoneNumber: '',
@@ -18,14 +18,19 @@ const ProfileForm = () => {
         street: '',
         streetNumber: '',
         birthDate: '',
-        skills: '',
-        interestOptions: '',
-        workOptions: '',
+        skills: [],
+        interestOptions: [],
+        workOptions: [],
     });
 
     const [regions, setRegions] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
     const [settlements, setSettlements] = useState([]);
+
+    const [skillsOptions, setSkillsOptions] = useState([]);
+    const [workOptions, setWorkOptions] = useState([]);
+    const [interestOptions, setInterestOptions] = useState([]);
+
 
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
@@ -44,8 +49,6 @@ const ProfileForm = () => {
                 const response = await fetch('/regions.json');
                 const data = await response.json();
 
-
-                console.log(data) //връща всички области
                 setRegions(data);
             } catch (error) {
                 console.error('Failed to load regions data', error);
@@ -57,8 +60,6 @@ const ProfileForm = () => {
     const handleRegionChange = async (e) => {
         const regionId = e.target.value;
 
-        console.log("regionsId", regionId) // връща номера на Областта
-
         setForm({ ...form, region: regionId, municipality: '', settlement: '' });
         setMunicipalities([]);
         setSettlements([]);
@@ -67,7 +68,7 @@ const ProfileForm = () => {
             const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`);
 
             const data = await response.json();
-            console.log("data", data)
+
             setMunicipalities(data);
         } catch (error) {
             console.error('Failed to load municipalities data', error);
@@ -91,11 +92,13 @@ const ProfileForm = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
+
+        
     };
 
     const handleGenderChange = (e) => {
         setForm({ ...form, gender: e.target.value });
-        console.log(e.target.value)
+        // console.log(e.target.value)
     };
 
 
@@ -120,17 +123,42 @@ const ProfileForm = () => {
         setSelectedYear(e.target.value);
     };
 
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const response = await fetch('/options.json');
+                const data = await response.json();
+
+                setSkillsOptions(data.skills);
+                setWorkOptions(data.workOptions);
+                setInterestOptions(data.interestOptions);
+            } catch (error) {
+                console.error('Failed to load data', error);
+            }
+        };
+        loadData();
+    }, []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const isValid = Object.keys(form).every((field) => {
-            const value = form[field];
+        const trimmedForm = {};
+        for (const key in form) {
+            if (form.hasOwnProperty(key)) {
+                trimmedForm[key] = typeof form[key] === 'string' ? form[key].trim() : form[key];
+            }
+        }
+        setForm(trimmedForm);
+
+        const isValid = Object.keys(trimmedForm).every((field) => {
+            const value = trimmedForm[field];
             validateField(field, value);
             return !errors[field];
         });
 
         if (isValid) {
-            console.log('Form Submitted:', form);
+            console.log('Form Submitted:', trimmedForm);
         }
     };
 
@@ -140,7 +168,7 @@ const ProfileForm = () => {
         switch (name) {
             case 'username':
                 if (!value) error = 'Потребителското име е задължително';
-                else if (!usernameRegex.test(value)) error = 'Невалидно потребителско име';
+                else if (!usernameRegex.test(value)) error = 'Потребителското име трябва да бъде между 7 и 16 символа. Може да съдържа главни букви, малки букви, цифри и _';
                 break;
             case 'email':
                 if (!value) error = 'Имейлът е задължителен';
@@ -180,7 +208,7 @@ const ProfileForm = () => {
     const onBlurHandler = (e) => {
         const { name, value } = e.target;
         validateField(name, value);
-        console.log({ name, value });
+
     };
 
 
@@ -342,21 +370,30 @@ const ProfileForm = () => {
             </label>
 
             <label>
-                Умения: 
-                <select name="skills" value={form.skills} onChange={handleRegionChange} onBlur={onBlurHandler}>
-                    <option value="">Изберете</option> 
+                Умения:
+                <select name="skills" value={form.skills} onChange={handleInputChange} onBlur={onBlurHandler}>
+                    <option value="">Изберете</option>
+                    {skillsOptions.map(option => (
+                        <option key={option.value} value={option.value}>{option.name}</option>
+                    ))}
                 </select>
             </label>
             <label>
-                Професия: 
-                <select name="workOptions" value={form.workOptions} onChange={handleRegionChange} onBlur={onBlurHandler}>
-                    <option value="">Изберете</option> 
+                Професия:
+                <select name="workOptions" value={form.workOptions} onChange={handleInputChange} onBlur={onBlurHandler}>
+                    <option value="">Изберете</option>
+                    {workOptions.map(option => (
+                        <option key={option.value} value={option.value}>{option.name}</option>
+                    ))}
                 </select>
             </label>
             <label>
-            Интереси: 
-                <select name="interestOptions" value={form.interestOptions} onChange={handleRegionChange} onBlur={onBlurHandler}>
-                    <option value="">Изберете</option> 
+                Интереси:
+                <select name="interestOptions" value={form.interestOptions} onChange={handleInputChange} onBlur={onBlurHandler}>
+                    <option value="">Изберете</option>
+                    {interestOptions.map(option => (
+                        <option key={option.value} value={option.value}>{option.name}</option>
+                    ))}
                 </select>
             </label>
             <span className="required-fields">Полетата с * са задължителни!</span>
