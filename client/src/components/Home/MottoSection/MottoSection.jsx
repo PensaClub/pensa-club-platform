@@ -1,8 +1,11 @@
-import {Link} from 'react-router-dom'
-
 import './motto.css'
 
+import {Link} from 'react-router-dom'
+import { useTranslation, Trans } from "react-i18next";
+
+
 export const MottoSection = () => {
+    const {t} = useTranslation();
 
     return (
         <>
@@ -10,12 +13,12 @@ export const MottoSection = () => {
                 <div className="motto-desc">
                     <img src="/images/homePage/logo.png" alt="logo" />
                     <div className="motto-info">
-                        <h3>Превръщайки се в най-доброто от себе си </h3>
-                        <p>Ние вярваме, че възрастта не е пречка, а възможност да изживеете най-доброто и най-автентичното си аз. </p>
-                        <p><span>Нашата мисия е да създадем общност, в която възрастните хора могат да се свързват, да споделят своите умения и опит, и да навлязат в света на технологиите. Публикувайте обяви за услуги и умения, открийте помощ и предложете своята. Използвайте нашата интерактивна карта, за да намерите нови приятели и съмишленици близо до вас.</span></p>
-                        <p>Присъединете се към Pensa Club и станете част от една активна и подкрепяща общност, където всеки има възможност да реализира своя потенциал и да живее пълноценно.</p>
+                        <h3>{t('motto.title1')} </h3>
+                        <h3>{t('motto.title2')}</h3>
+                        <h3>{t('motto.title3')}  </h3>
+                        <p> <Trans i18nKey="motto.desc" components={{ span: <strong />}} /></p>
                     </div>
-                    <Link to="/#"className="btn-general btn-orange" id="btn-join">Прочетете за Нас</Link> {/*трябва да води към about page*/}
+                    <Link to="/#"className="btn-general btn-orange" id="btn-join">{t('motto.about-btn')}</Link> {/*трябва да води към about page*/}
                 </div>
             </section>
         </>

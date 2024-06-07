@@ -1,8 +1,9 @@
 .motto-section {
-    padding: 5em 0;
+    padding: var(--xl-space) 0;
     width: 100%;
     margin: 0 auto;
-    /* font-family: Archer; */
+    text-align: center;
+    padding-bottom: calc(var(--xxl-space) + 1em);
 
 }
 
@@ -19,7 +20,7 @@
     max-width: 60px;
     height: auto;
     opacity: 0.6;
-
+    padding-bottom: var( --l-space);
     overflow: hidden;
 }
 
@@ -29,13 +30,14 @@
     flex-direction: column;
     align-items: center;
     line-height: 1.2;
+    gap: 3em;
 }
 
 .motto-info h3 {
 
-    font-size: var(--l-font-size);
+    font-size: calc(var(--l-font-size) - 10px);
     text-align: center;
-    padding-bottom: 2em;
+
     text-shadow: var(--text-shadow);
     font-weight: 500;
     letter-spacing: 1px;
@@ -43,34 +45,27 @@
 }
 
 .motto-info p {
-    /* font-size: 1.5em; */
     text-align: center;
     font-weight: 500;
-    padding-bottom: 1em;
-}
-
-.motto-info span {
     padding: 1em 0;
     font-style: italic;
     font-weight: 10;
     letter-spacing: 1px;
+    font-size: var(--s-font-size);
+
 }
 
-/* .btn-join {
-    font-size: 1.5em;
-    color: var(--text-white);
-    background-color: var(--red);
-    padding: 0.5em 1.2em;
-    border-radius: 10px;
-} */
+.motto-info span {
+    font-weight: 900;
+    font-size: var(--s-font-size);
+
+}
 
 #btn-join {
     width: auto;
 }
 
-/* .btn-join:hover {
-    opacity: 0.7;
-} */
+
 
 @media (min-width: 850px) {
     .motto-desc {
@@ -79,16 +74,19 @@
     }
 
     .motto-info h3 {
-        padding-bottom: var(--xl-space);
-        /* font-size: 2.5em; */
+        font-size: calc(var(--l-font-size) - 6px);
     }
 
     .motto-info p {
-        font-size: var(--m-font-size);
+        font-weight: 100;
+        font-size: var(--s-font-size);
+        letter-spacing: 1.3px;
+
     }
 
     .motto-info span {
-        letter-spacing: 1.3px;
+        font-size: var(--s-font-size);
+
 
     }
 

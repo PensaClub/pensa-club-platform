@@ -1,0 +1,140 @@
+{
+  "header": {
+    "map": "Map",
+    "craigslist": "Craigslist",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+
+  "footer": {
+    "site-map": "Site Map",
+    "communities": "Communities",
+    "map": "Map",
+    "craigslist": "Craigslist",
+    "partners": "Partners",
+    "softuni": "SoftUni Buditel",
+    "country-city": "Bulgaria, Sofia",
+    "street": "13A Skobelev blvd.",
+    "phone": "Tel. (359) 2 881 95 53",
+    "email": "Email: info@pensa.club",
+    "privacy": "Privacy Policy",
+    "copyright": "2024 Pensa club. All rights reserved"
+  },
+
+  "hero": {
+    "title": "DECENT LIFE FOR PEOPLE IN THE THIRD AGE",
+    "desc": "Bulgaria is the country in the European Union (EU) in which the <span>elderly</span> are most threatened by poverty, social exclusion and material difficulties, according to data from the European statistical service Eurostat. <span>Bulgarian pensioners</span> are also the most isolated from the Internet in the EU. Only one in ten people uses the web, and half of those who have internet access write e-mails, read news and search for information about goods. Only <span>2%</span> of them shop online, and every third uses on social networks.",
+    "testimonials": {
+      "first-revolution-title": "First Industrial Revolution",
+      "first-revolution-desc": "It is distinguished by the introduction of the steam engine, which led to the mechanization of production and the development of the railway transport.",
+      "second-revolution-title": "Second Industrial Revolution",
+      "second-revolution-desc": "It was characterized by the widespread spread of electricity and power lines, which increased production efficiency and stimulated industrial growth.",
+      "third-revolution-title": "Third Industrial Revolution",
+      "third-revolution-desc": "Also called the Digital Revolution, this era was marked by the introduction of computers, the Internet and automation, which radically changed the way production processes were managed and controlled.",
+      "forth-revolution-title": "Revolution 4.0",
+      "forth-revolution-desc": "Focused on smart factories that use the Internet of Things (IoT), automated decision making and machine learning to further increase manufacturing efficiency.",
+      "fifth-revolution-title": "Revolution 5.0",
+      "fifth-revolution-desc": "This is the latest stage in the development, which involves the use of artificial intelligence not only for automation, but also for the integration of human creative and analytical potential"
+    }
+  },
+
+  "motto": {    
+      "title1": "LET'S BREAK THIS TREND",
+      "title2": "LET'S CHANGE THIS MODEL",
+      "title3": "KEEPING UP WITH THE TIMES",
+      "desc": "Creation of an innovative, digital and <span>interactive platform</span> aimed at improving the quality of life of the elderly by actively including them in modern society, supporting them in the development of new skills and interests and promoting a <span>healthy and full, dignified life.</span>",
+    "about-btn": "Read More About Us"
+  },
+
+  "news-subscribe": {
+    "title": "Stay up to date with",
+    "desc": "Sign up for the latest news, updates and tips.",
+    "name-placeholder": "Name*",
+    "email-placeholder": "Email*",
+    "subscribe-btn": "Subscribe",
+    "errors": {
+      "required-field": "This field is required!",
+      "invalid-email": "Email is invalid!"
+    }
+  },
+
+  "form": {
+    "login": "Login",
+    "register": "Register",
+    "email-label": "Email",
+    "email-placeholder": "john@yahoo.com",
+    "password-label": "Password",
+    "password-placeholder": "Password",
+    "rePassword-label": "Repeat Password",
+    "rePassword-placeholder": "Repeat Password",
+    "register-redirect": "Already have an account?",
+    "login-redirect": "Don't have an account?",
+    "password-forgotten": "Password forgotten?",
+    "errors": {
+      "required-field": "This field is required!",
+      "invalid-email": "Email is invalid!",
+      "password-format": "Password must be at least 8 characters long, containing at least one small letter, one capital letter and a number!",
+      "passwords-not-match": "Passwords do not match!"
+    }
+  },
+
+  "error-page": {
+    "error": "Error",
+    "home": "Home",
+    "map": "Map",
+    "craigslist": "Craigslist",
+    "404-desc": "The page you are trying to reach does not excist",
+    "500-desc": "Internal Server Error"
+  },
+
+  "options": {
+    "skills": {
+      "communication_skills": "Communication Skills",
+      "technical_skills": "Technical Skills",
+      "agricultural_skills": "Agricultural Skills",
+      "cooking_skills": "Cooking Skills",
+      "financial_skills": "Financial Skills",
+      "language_skills": "Language skills",
+      "musical_skills": "Musical Skills",
+      "first_aid_skills": "First Aid Skills",
+      "spiritual_practices": "Spiritual Practices",
+      "meditation_skills": "Meditation Skills",
+      "fashion_design": "Fashion Design",
+      "interior_design": "Interior Design",
+      "video_filming": "Video Filming"
+    },
+    "work-options": {
+      "architecture_construction": "Architecture and Construction",
+      "medicine_healthcare": "Medicine and Healthcare",
+      "journalism": "Journalism",
+      "teaching": "Teaching",
+      "public_administration": "Public Administration",
+      "security": "Security",
+      "social_tourism": "Social and Tourism",
+      "agriculture": "Agriculture",
+      "manufacturing_and_trade": "Manufacturing and Trade",
+      "technology": "Technology",
+      "transport": "Транспорт",
+      "law_accounting": "Law and Accounting"
+    },
+    "interestOptions": {
+      "volunteering": "Volunteering",
+      "spiritual_practices": "Spiritual Practices",
+      "new_knowledge": "New Knowledge",
+      "board_games": "Board Games",
+      "agriculture_gardening": "Agriculture and Gardening",
+      "movies": "Movies",
+      "photography": "Photography",
+      "sports": "Sports",
+      "reading": "Reading",
+      "cooking": "Cooking",
+      "travel_tourism": "Travel and Tourism",
+      "music": "Music",
+      "drawing_arts": "Drawing and Art",
+      "sewing": "Sewing"
+    }
+  }
+
+}

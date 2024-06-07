@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class user_details extends Model {
     /**
@@ -12,170 +10,207 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       user_details.belongsTo(models.user_account, {
-        foreignKey: 'user_accounts_id', // Foreign key in user_details table
-        targetKey: 'id' // Primary key in user_accounts table
-      })
+        foreignKey: "user_accounts_id", // Foreign key in user_details table
+        targetKey: "id", // Primary key in user_accounts table
+        as: "details",
+      });
     }
   }
-  user_details.init({
-    phone_number: {
-      type: DataTypes.STRING(16),
-      unique: true,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Phone number is required.'
+  user_details.init(
+    {
+      phone_number: {
+        type: DataTypes.STRING(16),
+        unique: true,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Phone number is required.",
+          },
+          len: {
+            args: [8, 16],
+            msg: "Phone number must be between 8 and 16 characters.",
+          },
+          is: {
+            args: /^(?:\+\d{7,15}|\d{10})$/,
+            msg: "Phone number format is invalid.",
+          },
         },
-        len: {
-          args: [8, 16],
-          msg: 'Phone number must be between 8 and 16 characters.'
-        },
-        is: {
-          args: /^(?:\+\d{7,15}|\d{10})$/,
-          msg: 'Phone number format is invalid.'
-        },
-      }
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Username is required.'
-        },
-        len: {
-          args: [6, 16],
-          msg: 'Username must be between 6 and 16 characters.'
-        },
-        is: {
-          args: /^[a-zA-Z][a-zA-Z0-9_]*$/,
-          msg: 'Username must start with a letter and can only contain letters, numbers, and underscores.'
-        }
-      }
-    },
-    first_name: {
-      type: DataTypes.STRING(20),
-      validate: {
-        len: {
-          args: [1, 20],
-          msg: 'First name must be between 1 and 20 characters in length.',
-        },
-        is: {
-          args: /^[a-zA-Z]+$/i,
-          msg: 'First name can only contain letters.',
-        },
-        notEmpty: {
-          msg: 'First name cannot be empty.'
-        }
       },
-    },
-    last_name: {
-      type: DataTypes.STRING(30),
-      validate: {
-        len: {
-          args: [1, 30],
-          msg: 'Last name must be between 1 and 30 characters in length.',
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Username is required.",
+          },
+          len: {
+            args: [6, 16],
+            msg: "Username must be between 6 and 16 characters.",
+          },
+          is: {
+            args: /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/,
+            msg: "Username must start with a letter and can only contain letters, numbers, and underscores.",
+          },
         },
-        is: {
-          args: /^[a-zA-Z]+$/i,
-          msg: 'Last name can only contain letters.',
-        },
-        notEmpty: {
-          msg: 'Last name cannot be empty.'
-        }
       },
+      first_name: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+        defaultValue: null,
+        validate: {
+          customValidator(value) {
+            if (value && value.length > 0) {
+              if (value.length < 3 || value.length > 20) {
+                throw new Error("First name must be between 3 and 20 characters in length.");
+              }
+              if (!/^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
+                throw new Error("First name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.");
+              }
+            }
+          },
+        },
+      },
+      last_name: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+        defaultValue: null,
+        validate: {
+          customValidator(value) {
+            if (value && value.length > 0) {
+              if (value.length < 3 || value.length > 20) {
+                throw new Error("Last name must be between 3 and 20 characters in length.");
+              }
+              if (!/^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
+                throw new Error("Last name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.");
+              }
+            }
+          },
+        },
+      },
+      region: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Region is required.",
+          },
+        },
+      },
+      municipality: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Municipality is required.",
+          },
+        },
+      },
+      settlement: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Settlement is required.",
+          },
+        },
+      },
+      work_options: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        validate: {
+          isArray(value) {
+            if (value !== null && !Array.isArray(value)) {
+              throw new Error("Work options must be an array of strings.");
+            }
+          },
+        },
+      },
+      skills: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        validate: {
+          isArray(value) {
+            if (value !== null && !Array.isArray(value)) {
+              throw new Error("Skills must be an array of strings.");
+            }
+          },
+        },
+      },
+      interest_options: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        validate: {
+          isArray(value) {
+            if (value !== null && !Array.isArray(value)) {
+              throw new Error("Interest options must be an array of strings.");
+            }
+          },
+        },
+      },
+      district: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      block: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      street: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Street is required.",
+          },
+        },
+      },
+      street_number: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      location: {
+        type: DataTypes.JSONB,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Location information is required.",
+          },
+        },
+      },
+      gender: {
+        type: DataTypes.ENUM,
+        values: ["male", "female", "other"],
+        allowNull: true,
+        defaultValue: null,
+        validate: {
+          isIn: {
+            args: [["male", "female", "other"]],
+            msg: "Gender must be 'male', 'female', or 'other'.",
+          },
+        },
+      },
+      birth_date: {
+        type: DataTypes.DATEONLY,
+        defaultValue: null,
+        allowNull: true,
+        validate: {
+          isDate: true,
+          isNotInFuture(value) {
+            if (new Date(value) > new Date()) {
+              throw new Error("Date cannot be in the future.");
+            }
+          },
+        },
+      },
+      user_accounts_id: DataTypes.INTEGER,
     },
-    region: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Region is required.'
-        }
-      }
-    },
-    municipality: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Municipality is required.'
-        }
-      }
-    },
-    settlement: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Settlement is required.'
-        }
-      }
-    },
-    work: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Work information is required.'
-        }
-      }
-    },
-    hobby: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Hobby information is required.'
-        }
-      }
-    },
-    interest: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Interest information is required.'
-        }
-      }
-    },
-    district: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'District is required.'
-        }
-      }
-    },
-    block: {
-      type: DataTypes.STRING
-    },
-    street: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Street is required.'
-        }
-      }
-    },
-    street_number: {
-      type: DataTypes.STRING,
-    },
-    location: {
-      type: DataTypes.JSONB,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Location information is required.'
-        }
-      }
-    },
-    user_accounts_id: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'user_details',
-  });
+    {
+      sequelize,
+      modelName: "user_details",
+    }
+  );
   return user_details;
 };

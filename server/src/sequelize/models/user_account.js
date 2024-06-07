@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class user_account extends Model {
@@ -10,27 +10,29 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       user_account.hasOne(models.user_details, {
-        foreignKey: 'user_accounts_id', // Foreign key in user_details table
-        sourceKey: 'id' // Primary key in user_accounts table
+        foreignKey: "user_accounts_id", // Foreign key in user_details table
+        sourceKey: "id", // Primary key in user_accounts table
+        as: "details",
       });
       // define association here
     }
   }
 
-  user_account.init({
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: {
-          msg: 'Email format is incorrect.'
+  user_account.init(
+    {
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: {
+            msg: "Email format is incorrect.",
+          },
+          notEmpty: {
+            msg: "Email is required.",
+          },
         },
-        notEmpty: {
-          msg: 'Email is required.'
-        },
-      }
-    },
+      },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
