@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { FiltersMap } from './FitlersMap/FiltersMap'
 import { MapEditor } from './MapEditor/MapEditor'
 import SearchCard from './SearchCard.jsx/SearchCard'
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -10,6 +11,7 @@ import './mapPage.css'
 
 
 export const MapPage = () => {
+    const {t} = useTranslation();
 
     useEffect(() => {
         window.scrollTo({top:0})
@@ -20,7 +22,7 @@ export const MapPage = () => {
         <>
             <div className="map-section">
                 <div className="map-line">
-                    <h4>Добре дошли в Pensa Club! Открийте местни обяви за взаимопомощ с помощта на нашата Карта - Публикувайте обяви или предложения - Разглеждайте и участвайте в локални инициативи</h4>
+                    <h4>{t('map.welcome')}</h4>
                 </div>
 
                 <div className="map-main">

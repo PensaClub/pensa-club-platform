@@ -3,9 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import './filterMap.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faMagnifyingGlass, faUniversalAccess, faUsersGear } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 
 
 const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
+    const {t} = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const selectRef = useRef();
@@ -43,7 +45,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
         <div className="custom-select" ref={selectRef}>
             <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
                 <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-                {trimString(selectedValues.map(value => options.find(option => option.value === value)?.name).join(' | '),28 )|| 'Избери...'}  {/* //Пробно е пуснато да се види при повече опции */}
+                {trimString(selectedValues.map(value => options.find(option => option.value === value)?.name).join(' | '),28 )|| t('map.choose')}  {/* //Пробно е пуснато да се види при повече опции */}
                 <span className={`arrow ${isOpen ? 'open' : ''}`}></span>
             </div>
             {isOpen && (
@@ -67,7 +69,8 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
                                     checked={selectedValues.includes(option.value)}
                                     onChange={() => handleOptionChange(option.value)}
                                 />
-                                <label htmlFor={`checkbox-${option.value}`}>{option.name}</label>
+                                {/* Translate options */}
+                                <label htmlFor={`checkbox-${option.value}`}>{t(`${option.name}`)}</label> 
                             </div>
                         ))}
                     </div>
@@ -78,6 +81,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
 };
 
 export const FiltersMap = () => {
+    const {t} = useTranslation();
  
     const [optionData, setOptionData] = useState(null)
  
@@ -88,7 +92,9 @@ export const FiltersMap = () => {
         fetch('./options.json')
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 setOptionData(data)
+                console.log(optionData);
             })
             .catch(error => console.error('Failed to load JSON data', error));
     }, [])
@@ -100,33 +106,33 @@ export const FiltersMap = () => {
             </div>
             <div className="filters">
                 <div className="filter-main">
-                    <label>Умения</label>
+                    <label>{t('map.skills')}</label>
                     {optionData ? <CustomSelect
                         icon={faUniversalAccess}
                         options={optionData.skills}
                         selectedValues={selectedSkills}
                         onChange={setSelectedSkills}
-                        searchPlaceholder="Намери умения..."
+                        searchPlaceholder={t('map.skills-placeholder')}
                     /> : <div>Loading...</div>}
                 </div>
                 <div className="filter-main">
-                    <label>Професия</label>
+                    <label>{t('map.job')}</label>
                     {optionData ? <CustomSelect
                         icon={faBriefcase}
                         options={optionData.workOptions}
                         selectedValues={selectedWorks}
                         onChange={setSelectedWorks}
-                        searchPlaceholder="Намери професия..."
+                        searchPlaceholder={t('map.job-placeholder')}
                     /> : <div>Loading...</div>}
                 </div>
                 <div className="filter-main">
-                    <label>Интереси</label>
+                    <label>{t('map.interests')}</label>
                    {optionData ? <CustomSelect
                         icon={faUsersGear}
                         options={optionData.interestOptions}
                         selectedValues={selectedInterests}
                         onChange={setSelectedInterests}
-                        searchPlaceholder="Намери интереси..."
+                        searchPlaceholder={t('map.interests-placeholder')}
                     />:<div>Loading...</div>}
                 </div>
             </div>

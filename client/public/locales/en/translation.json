@@ -89,6 +89,17 @@
     "500-desc": "Internal Server Error"
   },
 
+  "map": {
+    "welcome":"Welcome to Pensa Club! Find local mutual aid announcements using our Map - Post an ad or offer - Browse and participate in local initiatives",
+    "choose": "Choose...",
+    "skills": "Skills",
+    "skills-placeholder": "Search for skills...",
+    "job": "Job",
+    "job-placeholder": "Search for jobs...",
+    "interests": "Interests",
+    "interests-placeholder": "Search for interests..."
+  },
+
   "options": {
     "skills": {
       "communication_skills": "Communication Skills",
