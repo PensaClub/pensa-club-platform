@@ -1,7 +1,7 @@
 {
   "header": {
     "map": "Map",
-    "craigslist": "Craigslist",
+    "craigslist": "Community",
     "login": "Login",
     "register": "Register",
     "profile": "Profile",
@@ -12,7 +12,7 @@
     "site-map": "Site Map",
     "communities": "Communities",
     "map": "Map",
-    "craigslist": "Craigslist",
+    "craigslist": "Community",
     "partners": "Partners",
     "softuni": "SoftUni Buditel",
     "country-city": "Bulgaria, Sofia",
@@ -84,7 +84,7 @@
     "error": "Error",
     "home": "Home",
     "map": "Map",
-    "craigslist": "Craigslist",
+    "craigslist": "Community",
     "404-desc": "The page you are trying to reach does not excist",
     "500-desc": "Internal Server Error"
   },

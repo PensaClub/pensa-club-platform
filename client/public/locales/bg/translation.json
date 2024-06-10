@@ -1,7 +1,7 @@
 {
   "header": {
     "map": "Карта",
-    "craigslist": "Лист",
+    "craigslist": "Общност",
     "login": "Вход",
     "register": "Регистрация",
     "profile": "Профил",
@@ -12,7 +12,7 @@
     "site-map": "Карта на сайта",
     "communities": "Общества",
     "map": "Карта",
-    "craigslist": "Лист",
+    "craigslist": "Общност",
     "partners": "Партньори",
     "softuni": "СофтУни Будител",
     "country-city": "България, София",
@@ -84,7 +84,7 @@
     "error": "Грешка",
     "home": "Начало",
     "map": "Карта",
-    "craigslist": "Craigslist",
+    "craigslist": "Общност",
     "404-desc": "Не съществува такава страница",
     "500-desc": "Сървърът не може да изпълни заявката"
   },
