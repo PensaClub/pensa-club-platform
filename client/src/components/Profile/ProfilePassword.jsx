@@ -1,132 +1,131 @@
 import React, { useState } from 'react';
 import './profile.css';
+import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile';
 
 export const ProfilePassword = () => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-    const [form, setForm] = useState({
+    const initialFormState = {
         password: '',
         newPassword: '',
-        rePassword: ''
+        rePassword: '',
+    };
+
+    // Проверка за паролата на бекенда!!!
+    
+    const [form, setForm] = useState(initialFormState);
+    const [errors, setErrors] = useState({});
+    const [showPasswords, setShowPasswords] = useState({
+        password: false,
+        newPassword: false,
+        rePassword: false,
     });
 
-    const [errors, setErrors] = useState({});
-    const [touched, setTouched] = useState({});
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm({
-            ...form,
-            [name]: value
-        });
-
-        if (touched[name]) {
-            const error = validateField(name, value);
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                [name]: error
-            }));
-        }
+    const toggleShowPassword = (field) => {
+        setShowPasswords((prevState) => ({
+            ...prevState,
+            [field]: !prevState[field],
+        }));
     };
 
-    const validateField = (name, value) => {
-        let error = '';
-        switch (name) {
-            case 'password':
-                if (!passwordRegex.test(value)) {
-                    error = 'Паролата трябва да е поне 8 символа и да съдържа поне една буква и една цифра';
-                }
-                // тодо: проверка за това, дали паролата е тази от регистрацията
-                break;
-            case 'newPassword':
-                if (!passwordRegex.test(value)) {
-                    error = 'Новата парола трябва да е поне 8 символа и да съдържа поне една буква и една цифра';
-                }
-                break;
-            case 'rePassword':
-                if (value !== form.newPassword) {
-                    error = 'Паролите не съвпадат';
-                }
-                break;
-            default:
-                break;
-        }
-        return error;
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prevForm) => ({
+            ...prevForm,
+            [name]: value,
+        }));
     };
 
-    const handleBlur = (e) => {
+    const onBlurHandler = (e) => {
         const { name, value } = e.target;
-        const error = validateField(name, value);
         setErrors((prevErrors) => ({
             ...prevErrors,
-            [name]: error
-        }));
-        setTouched((prevTouched) => ({
-            ...prevTouched,
-            [name]: true
+            [name]: validateField(name, value, form),
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const trimmedForm = trimObjectStrings(form);
+        setForm(trimmedForm);
+
         const newErrors = {};
-        Object.keys(form).forEach((field) => {
-            const error = validateField(field, form[field]);
+        let isValid = true;
+
+        Object.keys(trimmedForm).forEach((field) => {
+            const error = validateField(field, trimmedForm[field], trimmedForm);
+            newErrors[field] = error;
             if (error) {
-                newErrors[field] = error;
+                isValid = false;
             }
         });
+
         setErrors(newErrors);
 
-        if (Object.keys(newErrors).length === 0) {
-            console.log('Form Submitted:', form);
-
+        if (isValid) {
+            console.log('Form Submitted:', trimmedForm);
+            resetFields(setForm, initialFormState);
         }
     };
 
     return (
         <form className="profile-form" onSubmit={handleSubmit}>
             <h3>Смяна на парола</h3>
-            <label>
+            <label htmlFor="password">
                 Стара парола: <span>*</span>
-                <input
-                    type="password"
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                />
+                <div className="password-input-container">
+                    <input
+                        type={showPasswords.password ? 'text' : 'password'}
+                        name="password"
+                        value={form.password}
+                        onChange={handleInputChange}
+                        onBlur={onBlurHandler}
+                        required
+                    />
+                    <span className="toggle-password" onClick={() => toggleShowPassword('password')}>
+                        {showPasswords.password ? '👁️' : '👁️‍🗨️'}
+                    </span>
+                </div>
                 {errors.password && <div className="error">{errors.password}</div>}
             </label>
             <label>
                 Нова парола: <span>*</span>
-                <input
-                    type="password"
-                    name="newPassword"
-                    value={form.newPassword}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                />
+                <div className="password-input-container">
+                    <input
+                        type={showPasswords.newPassword ? 'text' : 'password'}
+                        name="newPassword"
+                        value={form.newPassword}
+                        onChange={handleInputChange}
+                        onBlur={onBlurHandler}
+                        required
+                    />
+                    <span className="toggle-password" onClick={() => toggleShowPassword('newPassword')}>
+                        {showPasswords.newPassword ? '👁️' : '👁️‍🗨️'}
+                    </span>
+                </div>
                 {errors.newPassword && <div className="error">{errors.newPassword}</div>}
             </label>
             <label>
                 Повтори парола: <span>*</span>
-                <input
-                    type="password"
-                    name="rePassword"
-                    value={form.rePassword}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                />
+                <div className="password-input-container">
+                    <input
+                        type={showPasswords.rePassword ? 'text' : 'password'}
+                        name="rePassword"
+                        value={form.rePassword}
+                        onChange={handleInputChange}
+                        onBlur={onBlurHandler}
+                        required
+                    />
+                    <span className="toggle-password" onClick={() => toggleShowPassword('rePassword')}>
+                        {showPasswords.rePassword ? '👁️' : '👁️‍🗨️'}
+                    </span>
+                </div>
                 {errors.rePassword && <div className="error">{errors.rePassword}</div>}
             </label>
             <span className="required-fields">Полетата с * са задължителни!</span>
-            <div className="btn-inline" >
+            <div className="btn-inline">
                 <button type="submit" className="btn-general btn-green">Запази</button>
-                <button type="submit" className="btn-general btn-red">Затвори</button>
+                <button type="button" className="btn-general btn-red" onClick={() => handleReset(setForm, initialFormState)}>
+                    Затвори
+                </button>
             </div>
         </form>
     );

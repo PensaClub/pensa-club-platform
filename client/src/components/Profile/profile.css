@@ -77,6 +77,28 @@
 }
 
 
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-container input {
+    width: calc(100% - 30px); 
+    padding-right: 30px; 
+}
+
+.password-input-container .toggle-password {
+    font-size: 1em;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    pointer-events: auto;
+
+}
+
+
 @media (max-width: 800px) {
     .menu-toggle {
         display: block;
@@ -187,6 +209,8 @@
 
 .profile-form input,
 .profile-form select {
+    font-family: inherit;
+    font-size: inherit;
     width: 100%;
     padding: var(--s-space);
     border: 1px solid #ccc;
@@ -196,10 +220,12 @@
    
 }
 
-.profile-form .gender input{
+.profile-form .gender input,
+.profile-form input[type=checkbox]{
     box-shadow: none;
 
 }
+
 
 .btn-profile {
     width: 200px;
@@ -216,6 +242,7 @@
         width: 80%;
         margin: auto;
     }
+    
     .profile-section .gender-options {
         gap: 3rem;
     }
@@ -234,7 +261,7 @@
     .profile-form #name {
         width: 100%;
     }
-    
+   
 }
 
 .avatar {
@@ -272,7 +299,7 @@
 }
 
 .profile-section-edit .btn-inline,
-.profile-form .btn-inline {
+.profile-form .btn-inline{
     display: flex;
     justify-content: center;
     gap: 1rem;
