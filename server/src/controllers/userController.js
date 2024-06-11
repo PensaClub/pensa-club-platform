@@ -64,6 +64,7 @@ userController.post("/register", async (req, res, next) => {
     const data = {
       userId: user.id,
       email: user.email,
+      role: user.role,
       enabled: user.finished,
     };
 
@@ -110,6 +111,7 @@ userController.post("/login", async (req, res, next) => {
     const data = {
       userId: user.id,
       email: user.email,
+      role: user.role,
       enabled: user.finished,
     };
 
