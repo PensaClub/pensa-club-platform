@@ -13,6 +13,7 @@ import { UserContext } from '../contexts/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes, faImage, faBars, faEnvelope, faPhone, faBriefcase, faUniversalAccess, faUsersGear } from '@fortawesome/free-solid-svg-icons'
 import { ProfileSkills } from './ProfileSkills';
+import { ProfileWorks } from './ProfileWorks';
 
 
 export const Profile = () => {
@@ -84,6 +85,7 @@ export const Profile = () => {
                     <Route path="address" element={<ProfileAddress />} />
                     <Route path="password" element={<ProfilePassword />} />
                     <Route path="skills" element={<ProfileSkills />} />
+                    <Route path="workOptions" element={<ProfileWorks />} />
                     {/* <Route path="announced" element={<ProfileAnnounced />} /> */}
                     {/* <Route path="interests" element={<ProfileInterests />} /> */}
                     {/* <Route path="anothers" element={<ProfileOthers />} /> */}
