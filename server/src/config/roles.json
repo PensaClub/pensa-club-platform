@@ -1,0 +1,21 @@
+{
+  "roles": [
+    {
+      "name": "admin",
+      "permissions": [
+        "create_record",
+        "read_record",
+        "approve_record",
+        "delete_record"
+      ]
+    },
+    {
+      "name": "user",
+      "permissions": ["create_record", "read_record", "update_record"]
+    },
+    {
+      "name": "guest",
+      "permissions": ["read_record"]
+    }
+  ]
+}
