@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
+import CustomSelect from './CustomSelect'; // Adjust the import path based on your file structure
 
 
 const ProfileForm = () => {
-    const [form, setForm] = useState({
+
+    const initialFormState = {
         username: '',
-        // email: '',
         firstName: '',
         lastName: '',
         phoneNumber: '',
@@ -21,7 +23,9 @@ const ProfileForm = () => {
         skills: [],
         interestOptions: [],
         workOptions: [],
-    });
+    }
+    
+    const [form, setForm] = useState(initialFormState);
 
     const [regions, setRegions] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
@@ -35,13 +39,8 @@ const ProfileForm = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
-    const [birthDate, setBirthDate] = useState('');
     const [errors, setErrors] = useState({});
 
-    const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
-    const nameRegex = /^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
-    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const phoneNumberRegex = /^(?:\+\d{7,15}|\d{10})$/;
 
     useEffect(() => {
         const loadRegions = async () => {
@@ -93,12 +92,11 @@ const ProfileForm = () => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
 
-        
+
     };
 
     const handleGenderChange = (e) => {
         setForm({ ...form, gender: e.target.value });
-        // console.log(e.target.value)
     };
 
 
@@ -106,8 +104,10 @@ const ProfileForm = () => {
     useEffect(() => {
         if (selectedDate && selectedMonth && selectedYear) {
             const formattedDate = `${selectedYear}-${selectedMonth}-${selectedDate}`;
-            setBirthDate(formattedDate);
-            setForm({ ...form, birthDate: formattedDate });
+            setForm((prevForm) => ({
+                ...prevForm,
+                birthDate: formattedDate,
+            }));
         }
     }, [selectedDate, selectedMonth, selectedYear]);
 
@@ -143,82 +143,43 @@ const ProfileForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const trimmedForm = {};
-        for (const key in form) {
-            if (form.hasOwnProperty(key)) {
-                trimmedForm[key] = typeof form[key] === 'string' ? form[key].trim() : form[key];
-            }
-        }
+        const trimmedForm = trimObjectStrings(form);
         setForm(trimmedForm);
+
 
         const isValid = Object.keys(trimmedForm).every((field) => {
             const value = trimmedForm[field];
-            validateField(field, value);
-            return !errors[field];
+            const error = validateField(field, value);
+            setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+            return !error;
         });
 
         if (isValid) {
             console.log('Form Submitted:', trimmedForm);
+            resetFields(setForm, initialFormState);
+            setSelectedDate('');
+            setSelectedMonth('');
+            setSelectedYear('');
         }
     };
 
 
-    const validateField = (name, value) => {
-        let error = '';
-        switch (name) {
-            case 'username':
-                if (!value) error = 'Потребителското име е задължително';
-                else if (!usernameRegex.test(value)) error = 'Потребителското име трябва да бъде между 7 и 16 символа. Може да съдържа главни букви, малки букви, цифри и _';
-                break;
-            case 'email':
-                if (!value) error = 'Имейлът е задължителен';
-                else if (!emailRegex.test(value)) error = 'Имейлът не е валиден';
-                break;
-            case 'firstName':
-                if (value && !nameRegex.test(value)) error = 'Невалидно име';
-                break;
-            case 'lastName':
-                if (value && !nameRegex.test(value)) error = 'Невалидно име';
-                break;
-            case 'phoneNumber':
-                if (!value) error = 'Телефонният номер е задължителен';
-                else if (!phoneNumberRegex.test(value)) error = 'Телефонният номер не е валиден';
-                break;
-            case 'region':
-                if (!value) error = 'Регионът е задължителен';
-                break;
-            case 'municipality':
-                if (!value) error = 'Общината е задължителна';
-                break;
-            case 'settlement':
-                if (!value) error = 'Населеното място е задължително';
-                break;
-            case 'street':
-                if (!value) error = 'Улицата е задължителна';
-                break;
-            case 'streetNumber':
-                if (!value) error = 'Номерът на улицата е задължителен';
-                break;
-            default:
-                break;
-        }
-        setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
-    };
+
 
     const onBlurHandler = (e) => {
         const { name, value } = e.target;
-        validateField(name, value);
+        const error = validateField(name, value);
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
 
     };
 
-
-    const generateNumberOptions = (start, end) => {
-        const options = [];
-        for (let i = start; i <= end; i++) {
-            options.push(<option key={i} value={i}>{i}</option>);
-        }
-        return options;
+    const handleResetForm = () => {
+        handleReset(setForm, initialFormState);
+        setSelectedDate('');
+        setSelectedMonth('');
+        setSelectedYear('');
     };
+
 
     return (
         <form onSubmit={handleSubmit} className="profile-form">
@@ -371,33 +332,54 @@ const ProfileForm = () => {
 
             <label>
                 Умения:
-                <select name="skills" value={form.skills} onChange={handleInputChange} onBlur={onBlurHandler}>
+                <CustomSelect
+                
+                options={skillsOptions}
+                selectedOptions={form.skills}
+                onSelect={(selected) => setForm({ ...form, skills: selected })}
+                
+            />
+                {/* <select name="skills" value={form.skills} onChange={handleInputChange} onBlur={onBlurHandler}>
                     <option value="">Изберете</option>
                     {skillsOptions.map(option => (
                         <option key={option.value} value={option.value}>{option.name}</option>
                     ))}
-                </select>
+                </select> */}
             </label>
             <label>
                 Професия:
-                <select name="workOptions" value={form.workOptions} onChange={handleInputChange} onBlur={onBlurHandler}>
+                <CustomSelect
+               options={workOptions}
+               selectedOptions={form.workOptions}
+               onSelect={(selected) => setForm({ ...form, workOptions: selected })}
+            />
+                {/* <select name="workOptions" value={form.workOptions} onChange={handleInputChange} onBlur={onBlurHandler}>
                     <option value="">Изберете</option>
                     {workOptions.map(option => (
                         <option key={option.value} value={option.value}>{option.name}</option>
                     ))}
-                </select>
+                </select> */}
             </label>
             <label>
                 Интереси:
-                <select name="interestOptions" value={form.interestOptions} onChange={handleInputChange} onBlur={onBlurHandler}>
+                <CustomSelect
+               options={interestOptions}
+               selectedOptions={form.interestOptions}
+               onSelect={(selected) => setForm({ ...form, interestOptions: selected })}
+             
+            />
+                {/* <select name="interestOptions" value={form.interestOptions} onChange={handleInputChange} onBlur={onBlurHandler}>
                     <option value="">Изберете</option>
                     {interestOptions.map(option => (
                         <option key={option.value} value={option.value}>{option.name}</option>
                     ))}
-                </select>
+                </select> */}
             </label>
             <span className="required-fields">Полетата с * са задължителни!</span>
-            <button className="btn-general btn-green btn-profile" type="submit">Запази</button>
+            <div className="btn-inline">
+                <button type="submit" className="btn-general btn-green">Запази</button>
+                <button type="submit" className="btn-general btn-red" onClick={handleResetForm}>Затвори</button>
+            </div>
         </form>
     );
 };
