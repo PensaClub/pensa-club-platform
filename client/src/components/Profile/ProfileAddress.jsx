@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 const ProfileAddress= () => {
+    const navigate = useNavigate();
+
     const [form, setForm] = useState({
         region: '',
         municipality: '',
@@ -86,6 +88,7 @@ const ProfileAddress= () => {
 
         if (isValid) {
             console.log('Form Submitted:', trimmedForm);
+            navigate('/profile');
         }
     };
 

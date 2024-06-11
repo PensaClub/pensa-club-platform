@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import { Link } from 'react-router-dom';
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 
 export const ProfileData = () => {
+    const navigate = useNavigate();
+
     const initialFormState = {
         username: '',
         email: '',
@@ -76,6 +79,7 @@ export const ProfileData = () => {
             setSelectedDate('');
             setSelectedMonth('');
             setSelectedYear('');
+            navigate('/profile');
         }
     };
 

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile';
 
 export const ProfilePassword = () => {
+    const navigate = useNavigate();
+
     const initialFormState = {
         password: '',
         newPassword: '',
@@ -10,7 +13,7 @@ export const ProfilePassword = () => {
     };
 
     // Проверка за паролата на бекенда!!!
-    
+
     const [form, setForm] = useState(initialFormState);
     const [errors, setErrors] = useState({});
     const [showPasswords, setShowPasswords] = useState({
@@ -63,6 +66,7 @@ export const ProfilePassword = () => {
         if (isValid) {
             console.log('Form Submitted:', trimmedForm);
             resetFields(setForm, initialFormState);
+            navigate('/profile');
         }
     };
 

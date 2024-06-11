@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
-import CustomSelect from './CustomSelect'; // Adjust the import path based on your file structure
+import CustomSelect from './CustomSelect'; 
 
 
 const ProfileForm = () => {
+
+    const navigate = useNavigate();
 
     const initialFormState = {
         username: '',
@@ -160,6 +163,7 @@ const ProfileForm = () => {
             setSelectedDate('');
             setSelectedMonth('');
             setSelectedYear('');
+            navigate('/profile');
         }
     };
 
