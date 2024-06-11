@@ -48,7 +48,7 @@ export const UserProvider = ({ children }) => {
     }
 
     const onLoginSubmit = async (data) => {
-        const { rePassword, ...newData } = data
+        const { rePassword, ...newData } = data;
         try {
             setIsLoading(true);
 
