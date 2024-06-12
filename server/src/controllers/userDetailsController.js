@@ -74,11 +74,11 @@ userDetailsController.get("/all-users", async (req, res, next) => {
         {
           model: user_details,
           as: "details",
-          attributes: ["phone_number", "username", "first_name", "last_name", "work", "hobby", "interest", "location"],
+          attributes: ["phone_number", "username", "first_name", "last_name", "work_options", "skills", "interest_options", "location"],
         },
       ],
     });
-    res.status(200).json({ message: "User data retrieved successfully.", accounts });
+    res.status(200).json({ message: "Users data retrieved successfully.", accounts });
   } catch (err) {
     next(err);
   }
@@ -119,6 +119,25 @@ userDetailsController.patch("/update-details", isAuth, async (req, res, next) =>
     const [_, details] = await user_details.update(data, { where: { user_accounts_id: req.user.userId }, returning: true, plain: true });
 
     res.status(200).json({ message: "Details edited successfully!", details });
+  } catch (err) {
+    next(err);
+  }
+});
+
+userDetailsController.get("/single-user", isAuth, async (req, res, next) => {
+  try {
+    const user = await user_account.findOne({
+      where: { id: req.user.userId },
+      attributes: ["id", "email", ["finished", "enabled"]],
+      include: [
+        {
+          model: user_details,
+          as: "details",
+          attributes: ["phone_number", "username", "first_name", "last_name", "work_options", "skills", "interest_options", "location"],
+        },
+      ],
+    });
+    res.status(200).json({ message: "User data retrieved successfully.", user });
   } catch (err) {
     next(err);
   }

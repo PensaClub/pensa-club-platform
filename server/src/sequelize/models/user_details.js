@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       user_details.belongsTo(models.user_account, {
         foreignKey: "user_accounts_id", // Foreign key in user_details table
         targetKey: "id", // Primary key in user_accounts table
-        as: "details",
+        as: "account",
       });
     }
   }
