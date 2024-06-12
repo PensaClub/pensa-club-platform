@@ -11,7 +11,7 @@
 
 ## Title and Description:
 
-Title: “PensaClub Backend API”
+Title: “PensaClub Backend API”  
 Description: A versatile and scalable back-end server designed to support the PensaClub front-end application. It offers a robust set of APIs for user management, authentication, and data retrieval, and is built to be easily adaptable for various front-end services.
 
 ## Technologies used
@@ -27,6 +27,8 @@ Description: A versatile and scalable back-end server designed to support the Pe
 [![Zoho](https://img.shields.io/badge/Zoho-CC2927?style=flat&logo=zoho&logoColor=white)](https://www.zoho.com)
 
 ## Environment
+
+For development the file must be .env.development and for production .env.production
 
 ```plaintext
 PORT - The port on which the server runs (default: 8080)
@@ -44,20 +46,19 @@ ZOHO_CLIENT_ID - The client ID obtained from Zoho API Console for OAuth authenti
 ZOHO_CLIENT_SECRET - The client secret paired with the client ID for secure API access
 ZOHO_REFRESH_TOKEN - The token used to refresh the access token without user intervention
 ZOHO_ACCESS_TOKEN - The token that grants temporary access to the user's Zoho account
-
 ```
 
 ## Installation
 
 **Use the terminal to navigate to the project directory.**
 
-1. Navigate to server
+1. Navigate to server:
 
 ```bash
 cd server
 ```
 
-2. Install all the necessary dependencies by running the following command in your terminal::
+2. Install all the necessary dependencies by running the following command in your terminal:
 
 ```bash
 npm install
@@ -66,10 +67,19 @@ npm install
 3. Ensure the .env.development file is correctly set up.
 
 4. Run the server:
-   Start the server (development) with this command:
+
+**Development**
 
 ```bash
 npm run start:dev
+```
+
+or
+
+**Production**
+
+```bash
+npm run start
 ```
 
 ## Database Setup
@@ -106,6 +116,20 @@ The database is pre-configured to connect using the environment variables provid
 
 ## Api Endpoints
 
+- **_userController_** :
+
+  - **/auth/register** : Responsible for registering a new user. It requires user details like email, password and rePassword.
+  - **/auth/login** : Responsible for registering a new user. It requires user details like email, and password.
+  - **/auth/logout** : Responsible for logging out the user from the system.
+  - **/auth/request-reset-password** : Used to request a password reset. It expects an email address and sends a password reset link to that email.
+  - **/auth/reset-password** : Used to reset the password. It requires the new password, a repeated new password for confirmation, and the reset token received by email.
+
+- **_userDetailsController_** :
+
+  - **/user/details** : Used to create a user's details post-registration. It allows adding additional information such as place of residence, city, profession and others.
+  - **/user/all-users** : This endpoint fetches a list of all registered users in the system.
+  - **/user/update-details** : This endpoint updates an existing user's profile. It requires the specific field to be updated, for example, `"workOptions": ["Doctor", "Lawyer"]` to update the work options of the user.
+
 ## Testing
 
-Testing is planned and will be documented in the future
+Testing is planned and will be documented in the future.
