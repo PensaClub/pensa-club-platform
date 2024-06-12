@@ -74,15 +74,6 @@
 }
 
 .profile-data {
-    /* margin-bottom: 2rem;
-    border-radius: var(--m-space);
-    box-shadow: var(--container-shadow);
-    padding: var(--l-space);
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
-        justify-content: center; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -93,7 +84,6 @@
     margin: 2rem 0;
     width: 100%;
     background-color: #fff;
-    overflow: hidden;
 }
 
 
@@ -285,16 +275,17 @@
         width: 100%;
     }
 
-    /**/
     .profile-data {
         flex-direction: row;
         align-items: flex-start;
     }
 
     .avatar-announced,
-    .user-data {
-        width: 50%;
+    .announced .user-data {
+        width: 80%;
+
     }
+
 }
 
 .avatar {
@@ -314,47 +305,34 @@
     object-fit: fill;
 }
 
-/* .avatar-announced img {
-    box-shadow: var(--container-shadow);
-    border: 5px solid var(--bg-white);
-    width: 90%;
-    height: auto;
-    border-radius: var(--s-space);
-    object-fit: cover;   
-} */
 
 .avatar-announced {
     width: 100%;
-    height: 100%;
 }
+
 
 .avatar-announced img {
     width: 100%;
     height: 100%;
-    /* Make the image cover the full height of the container */
     object-fit: cover;
-    /* Ensure the image covers the entire section */
     border-radius: var(--s-space);
     box-shadow: var(--container-shadow);
 }
 
-.user-data {
+.announced .user-data {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-
-    /**/
     padding: var(--l-space);
 }
-
 
 .avatar-announced img {
     width: 100%;
     height: auto;
     border-radius: var(--s-space);
-    object-fit: fill;
+    object-fit: cover;
     box-shadow: var(--container-shadow);
 }
 
@@ -408,11 +386,6 @@
         height: 150px;
     }
 
-    /* .avatar-announced img {
-        width: 90%;
-        max-width: 40rem;
-        height: auto;
-    } */
 }
 
 @media (min-width: 850px) and (orientation: landscape) {
@@ -428,7 +401,6 @@
 
     .profile-data {
         flex-direction: row;
-        /* align-items: stretch; */
 
     }
 }
