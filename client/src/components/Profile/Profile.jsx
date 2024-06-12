@@ -15,6 +15,7 @@ import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes, faImag
 import { ProfileSkills } from './ProfileSkills';
 import { ProfileWorks } from './ProfileWorks';
 import { ProfileInterests } from './ProfileInterests';
+import { ProfileAnnounced } from './ProfileAnnounced';
 
 
 export const Profile = () => {
@@ -87,7 +88,7 @@ export const Profile = () => {
                     <Route path="password" element={<ProfilePassword />} />
                     <Route path="skills" element={<ProfileSkills />} />
                     <Route path="workOptions" element={<ProfileWorks />} />
-                    {/* <Route path="announced" element={<ProfileAnnounced />} /> */}
+                    <Route path="announced" element={<ProfileAnnounced />} />
                     <Route path="interestOptions" element={<ProfileInterests />} />
                     {/* <Route path="anothers" element={<ProfileOthers />} /> */}
                 </Routes>
