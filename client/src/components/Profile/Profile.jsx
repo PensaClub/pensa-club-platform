@@ -21,46 +21,42 @@ import { ProfileAnnounced } from './ProfileAnnounced';
 
 export const Profile = () => {
     const { t } = useTranslation();
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [userData, setUserData] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [userData, setUserData] = useState('');
+  const [isName, setIsName] = useState(false);
 
-    const { isFinish, getProfileData,profileData } = useContext(UserContext);
-    
-    const { userId } = useContext(UserContext);
+  const { userEmail, userId, isFinish, getProfileData, profileData } =
+    useContext(UserContext);
+  //    const isFinish = true;
+  //   console.log(isFinish);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
-    useEffect(() => {
-        window.scrollTo({ top: 0 })
-    }, [])
+  useEffect(() => {
+    if (isFinish) {
+      getProfileData()
+        .then((res) => {
+          setUserData(res);
+        })
+        .catch((err) => console.log(err.message));
+    }
 
-    useEffect(() => {
-        if(isFinish) {
-            // getProfileData()
-            //     .then((res) => {
-            //         setUserData(res)
-            //     })
-            //     .catch((err) => console.log(err.message))
+    // Simona: test purposes only!! to be replaced with the above and tested again
+    // setUserData(profileData);
+    // console.log(profileData);
+  }, []);
 
-            // Simona: test purposes only!! to be replaced with the above and tested again
-            setUserData(profileData);
-            console.log(profileData);
-            
-        }
-    }, [isFinish])
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
-    const toggleMenu = () => {
-        setMenuOpen(!menuOpen);
-    };
-
-
-    return (
-
-
-        <section className="profile-section">
-
-            <button className="menu-toggle" onClick={toggleMenu}>
-                <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
-            </button>
+  return (
+    <section className="profile-section">
+      <button className="menu-toggle" onClick={toggleMenu}>
+        <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
+      </button>
 
             <section className={`account-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`}>
                 <h3>{t('profile.account')}</h3>
@@ -114,6 +110,3 @@ export const Profile = () => {
             </div>
 
         </section>
-
-    )
-}

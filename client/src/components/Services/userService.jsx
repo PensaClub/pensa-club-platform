@@ -15,7 +15,7 @@ export const userServiceFactory = (token) => {
 
 
     getAll: () => {
-      return requester.get(`${apiUrl}/users`)
+      return requester.get(`${apiUrl}/user/all-users`)
     },
     
     login: (data) => {
@@ -36,18 +36,17 @@ export const userServiceFactory = (token) => {
 
     setUserData: (data, userId) => {
       //TODO: replace endpoint
-      // return requester.post(`${apiUrl}/users/${userId}`, data)
-      return data;
+      return requester.post(`${apiUrl}/user/details`, data);
     },
 
     editUserData: (data, userId) => {
       //TODO: replace endpoint
-      return requester.put(`${apiUrl}/users/${userId}`, data)
+      return requester.patch(`${apiUrl}/user/details`, data)
     },
 
     getUserData: (userId) => {
       //TODO: replace endpoint
-      return requester.get(`${apiUrl}/users/${userId}`)
+      return requester.get(`${apiUrl}/user/details`)
     },
   }
 

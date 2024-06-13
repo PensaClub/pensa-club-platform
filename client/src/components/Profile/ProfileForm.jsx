@@ -11,27 +11,32 @@ const ProfileForm = () => {
     const currentLanguage = i18n.language;
 
     const navigate = useNavigate();
+    const { onProfileDataSubmit, userId, userEmail, getProfileData } =
+    useContext(UserContext);
 
     const initialFormState = {
         username: '',
+        username: '',
+        // email: userEmail,
         firstName: '',
         lastName: '',
         phoneNumber: '',
-        gender: '',
+        gender: null,
         region: '',
+        regionId: '',
         municipality: '',
+        municipalityId: '',
         settlement: '',
+        settlementId: '',
         district: '',
         block: '',
         street: '',
         streetNumber: '',
-        birthDate: '',
+        birthDate: null,
         skills: [],
         interestOptions: [],
         workOptions: [],
     }
-    
-    const {onProfileDataSubmit} = useContext(UserContext);
     const [form, setForm] = useState(initialFormState);
 
     const [regions, setRegions] = useState([]);
@@ -49,11 +54,11 @@ const ProfileForm = () => {
     const [errors, setErrors] = useState({});
 
 
-    useEffect(() => {
-        const loadRegions = async () => {
-            try {
-                const response = await fetch('/regions.json');
-                const data = await response.json();
+  useEffect(() => {
+    const loadRegions = async () => {
+      try {
+        const response = await fetch('/regions.json');
+        const data = await response.json();
 
                 setRegions(data);
             } catch (error) {
@@ -63,15 +68,21 @@ const ProfileForm = () => {
         loadRegions();
     }, []);
 
-    const handleRegionChange = async (e) => {
-        const regionId = e.target.value;
+  const handleRegionChange = async (e) => {
+    const regionId = e.target.value;
+    const currRegion = regions.filter((region) => region.id == regionId);
+    const regionName = currRegion[0].bg;  
 
-        setForm({ ...form, region: regionId, municipality: '', settlement: '' });
-        setMunicipalities([]);
-        setSettlements([]);
+    // console.log('regionsId', regionId); // връща номера на Областта
 
-        try {
-            const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`);
+    setForm({ ...form, regionId: regionId, region: regionName, municipality: '', settlement: '' });
+    setMunicipalities([]);
+    setSettlements([]);
+
+    try {
+      const response = await fetch(
+        `/regions-data/region-${regionId}/subregions-${regionId}.json`
+      );
 
             const data = await response.json();
 
@@ -81,26 +92,37 @@ const ProfileForm = () => {
         }
     };
 
-    const handleMunicipalityChange = async (e) => {
-        const municipalityId = e.target.value;
-        setForm({ ...form, municipality: municipalityId, settlement: '' });
-        setSettlements([]);
+  const handleMunicipalityChange = async (e) => {
+    const municipalityId = e.target.value;
+    const currMunicipality = municipalities.filter((municipality) => municipality.id == municipalityId);
+    const municipalityName = currMunicipality[0].bg;
 
-        try {
-            const response = await fetch(`/regions-data/region-${form.region}/towns/towns-${municipalityId}.json`);
-            const data = await response.json();
-            setSettlements(data);
-        } catch (error) {
-            console.error('Failed to load settlements data', error);
-        }
-    };
+    setForm({ ...form, municipalityId: municipalityId, municipality: municipalityName, settlement: '' });
+    setSettlements([]);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setForm({ ...form, [name]: value });
+    try {
+      const response = await fetch(
+        `/regions-data/region-${form.regionId}/towns/towns-${municipalityId}.json`
+      );
+      const data = await response.json();
+      setSettlements(data);
+    } catch (error) {
+      console.error('Failed to load settlements data', error);
+    }
+  };
 
+  const handleSettlementChange = async (e) => {
+    const settlementId = e.target.value;
+    const currSettlement = settlements.filter((settlement) => settlement.id == settlementId);
+    const settlementName = currSettlement[0].bg;
 
-    };
+    setForm({ ...form, settlementId: settlementId, settlement: settlementName });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
     const handleGenderChange = (e) => {
         setForm({ ...form, gender: e.target.value });
@@ -119,13 +141,13 @@ const ProfileForm = () => {
         }
     }, [selectedDate, selectedMonth, selectedYear]);
 
-    const handleSelectedDateChange = (e) => {
-        setSelectedDate(e.target.value);
-    };
+  const handleSelectedDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
 
-    const handleSelectedMonthChange = (e) => {
-        setSelectedMonth(e.target.value);
-    };
+  const handleSelectedMonthChange = (e) => {
+    setSelectedMonth(e.target.value);
+  };
 
     const handleSelectedYearChange = (e) => {
         setSelectedYear(e.target.value);
@@ -168,10 +190,10 @@ const ProfileForm = () => {
         if (isValid) {
 
             console.log('Form Submitted:', trimmedForm);
-            resetFields(setForm, initialFormState);
-            setSelectedDate('');
-            setSelectedMonth('');
-            setSelectedYear('');
+            // resetFields(setForm, initialFormState);
+            // setSelectedDate('');
+            // setSelectedMonth('');
+            // setSelectedYear('');
             navigate('/profile');
 
             onProfileDataSubmit(form);
