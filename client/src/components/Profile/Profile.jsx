@@ -4,11 +4,19 @@ import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { ProfileData } from './ProfileData';
 import ProfileForm from './ProfileForm';
 import ProfileAddress from './ProfileAddress';
+import { ProfilePassword } from './ProfilePassword';
+import  {ProfileImage}  from './ProfileImage';
+
 import './profile.css';
 import { UserContext } from '../contexts/UserContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes,faImage, faBars, faEnvelope,faPhone, faBriefcase, faUniversalAccess, faUsersGear  } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes, faImage, faBars, faEnvelope, faPhone, faBriefcase, faUniversalAccess, faUsersGear } from '@fortawesome/free-solid-svg-icons'
+import { ProfileSkills } from './ProfileSkills';
+import { ProfileWorks } from './ProfileWorks';
+import { ProfileInterests } from './ProfileInterests';
+import { ProfileAnnounced } from './ProfileAnnounced';
+
 
 export const Profile = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -20,6 +28,7 @@ export const Profile = () => {
 
 
     const { userId } = useContext(UserContext);
+
 
     useEffect(() => {
         window.scrollTo({ top: 0 })
@@ -74,6 +83,7 @@ export const Profile = () => {
                             <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
                         </div>
                         <div className="user-data">
+
                             <h2>{profileData.username}</h2>
                             <p><FontAwesomeIcon icon={faUser} className="icon" /> {profileData.firstName} {profileData.lastName}</p>
                             
@@ -81,6 +91,7 @@ export const Profile = () => {
                             {/* TODO: map settlement name */}
                             <p><FontAwesomeIcon icon={faLocationDot} className="icon" /> {profileData.settlement}</p>
                             <p><FontAwesomeIcon icon={faEnvelope} className="icon"/> {profileData.email}</p>
+
                         </div>
                     </section>
                 }
@@ -90,12 +101,15 @@ export const Profile = () => {
                 <Outlet />
                 <Routes >
                     {isFinish === false && <Route path="*" element={<Navigate to="profile-form" />} />}
+                    <Route path="image" element={<ProfileImage />} />
                     <Route path="profile-form" element={<ProfileForm />} />
                     <Route path="data" element={<ProfileData />} />
                     <Route path="address" element={<ProfileAddress />} />
-                    {/* <Route path="password" element={<ProfilePassword />} /> */}
-                    {/* <Route path="announced" element={<ProfileAnnounced />} /> */}
-                    {/* <Route path="interests" element={<ProfileInterests />} /> */}
+                    <Route path="password" element={<ProfilePassword />} />
+                    <Route path="skills" element={<ProfileSkills />} />
+                    <Route path="workOptions" element={<ProfileWorks />} />
+                    <Route path="announced" element={<ProfileAnnounced />} />
+                    <Route path="interestOptions" element={<ProfileInterests />} />
                     {/* <Route path="anothers" element={<ProfileOthers />} /> */}
                 </Routes>
             </div>
