@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 import CustomSelect from './CustomSelect'; 
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, redirect, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 
@@ -71,11 +71,17 @@ const ProfileForm = () => {
   const handleRegionChange = async (e) => {
     const regionId = e.target.value;
     const currRegion = regions.filter((region) => region.id == regionId);
-    const regionName = currRegion[0].bg;  
+    const regionName = currRegion[0].bg;
 
     // console.log('regionsId', regionId); // връща номера на Областта
 
-    setForm({ ...form, regionId: regionId, region: regionName, municipality: '', settlement: '' });
+    setForm({
+      ...form,
+      regionId: regionId,
+      region: regionName,
+      municipality: '',
+      settlement: '',
+    });
     setMunicipalities([]);
     setSettlements([]);
 
@@ -94,10 +100,17 @@ const ProfileForm = () => {
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
-    const currMunicipality = municipalities.filter((municipality) => municipality.id == municipalityId);
+    const currMunicipality = municipalities.filter(
+      (municipality) => municipality.id == municipalityId
+    );
     const municipalityName = currMunicipality[0].bg;
 
-    setForm({ ...form, municipalityId: municipalityId, municipality: municipalityName, settlement: '' });
+    setForm({
+      ...form,
+      municipalityId: municipalityId,
+      municipality: municipalityName,
+      settlement: '',
+    });
     setSettlements([]);
 
     try {
@@ -113,10 +126,16 @@ const ProfileForm = () => {
 
   const handleSettlementChange = async (e) => {
     const settlementId = e.target.value;
-    const currSettlement = settlements.filter((settlement) => settlement.id == settlementId);
+    const currSettlement = settlements.filter(
+      (settlement) => settlement.id == settlementId
+    );
     const settlementName = currSettlement[0].bg;
 
-    setForm({ ...form, settlementId: settlementId, settlement: settlementName });
+    setForm({
+      ...form,
+      settlementId: settlementId,
+      settlement: settlementName,
+    });
   };
 
   const handleInputChange = (e) => {
@@ -154,24 +173,11 @@ const ProfileForm = () => {
     };
 
 
+  const handleModalToggle = () => {
+    setModalOpen(!isModalOpen);
+  };
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const response = await fetch('/options.json');
-                const data = await response.json();
-
-                setSkillsOptions(data.skills);
-                setWorkOptions(data.workOptions);
-                setInterestOptions(data.interestOptions);
-            } catch (error) {
-                console.error('Failed to load data', error);
-            }
-        };
-        loadData();
-    }, []);
-
-  
+ 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -196,8 +202,15 @@ const ProfileForm = () => {
             // setSelectedYear('');
             navigate('/profile');
 
-            onProfileDataSubmit(form);
-            console.log('Form Submitted:', form);
+            onProfileDataSubmit(form)
+        .then(() => {
+          console.log('Form Submitted:', form);
+          handleModalToggle();
+          navigate('/profile')
+        })
+        .catch((err) =>
+          console.log(`Error on profile form submit: ${err.message}`)
+        );
 
         }
     };
@@ -414,7 +427,11 @@ const ProfileForm = () => {
                 <button type="submit" className="btn-general btn-red" onClick={handleResetForm}>{t('profile.close_btn')}</button>
             </div>
         </form>
+        <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>
+        <p>Вашият профил е завършен успешно!</p>
+      </AlertModal>
+      </>
     );
-};
+  };
 
 export default ProfileForm;

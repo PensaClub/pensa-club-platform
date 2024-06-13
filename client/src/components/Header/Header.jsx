@@ -92,7 +92,7 @@ export const Header = () => {
               checked={isDropdownOpen}
               onChange={handleDropdownToggle}
             />
-            {!finishProfile && !isDropdownOpen && (
+            {isAuthentication && !finishProfile && !isDropdownOpen && (
               <span
                 className="warning-icon-image"
                 onClick={(e) => {

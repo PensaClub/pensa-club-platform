@@ -11,14 +11,13 @@ import { Logout } from './components/Logout/Logout';
 import { Profile } from './components/Profile/Profile';
 import ErrorBoundary from './tools/errorBoundary';
 import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary';
-import {FiltersMap} from './components/MapPage/FitlersMap/FiltersMap';
+import { FiltersMap } from './components/MapPage/FitlersMap/FiltersMap';
 import { MapPage } from './components/MapPage/MapPage';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 import { MapProvider } from './components/contexts/MapContext.jsx';
 
 function App() {
-
   return (
     <>
       <ErrorBoundary>
@@ -31,7 +30,7 @@ function App() {
             <Route path="/server-error" element={<ServerError />} />
 
             <Route element={<AuthGuard />}>
-              <Route path="/logout" element={<Logout />} />
+              <Route path="/logout" element={<Logout />} />    
               <Route path="/profile/*" element={<Profile />} />
             </Route>
 
@@ -45,7 +44,6 @@ function App() {
             <Route path="404/*" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-
 
           <Footer />
           </MapProvider>

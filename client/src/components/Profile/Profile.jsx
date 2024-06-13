@@ -35,17 +35,20 @@ export const Profile = () => {
   }, []);
 
   useEffect(() => {
-    if (isFinish) {
-      getProfileData()
-        .then((res) => {
-          setUserData(res);
-        })
-        .catch((err) => console.log(err.message));
-    }
+    // if (isFinish) {
+    //   getProfileData()
+    //     .then((res) => {
+    //       setUserData(res);
+    //     })
+    //     .catch((err) => console.log(err.message));
+    // }
 
-    // Simona: test purposes only!! to be replaced with the above and tested again
-    // setUserData(profileData);
-    // console.log(profileData);
+    if (isFinish) {
+      // Simona: test purposes only!! to be replaced with the above and tested again
+      console.log('Finished');
+    } else {
+      console.log('Not finished');
+    }
   }, []);
 
   const toggleMenu = () => {
@@ -109,4 +112,5 @@ export const Profile = () => {
                 </Routes>
             </div>
 
-        </section>
+        </section>)}
+

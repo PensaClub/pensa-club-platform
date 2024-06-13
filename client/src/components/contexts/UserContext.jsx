@@ -9,7 +9,6 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
-  // const [isFinish, setIsFinish] = useState(isAuth.data?.enabled); //TODO: check if ok
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +34,7 @@ export const UserProvider = ({ children }) => {
       const { password, rePassword, ...newUser } = response;
       setIsAuth(newUser);
       setIsLoading(false);
-      navigate('/');
+      navigate('/profile');
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
@@ -50,7 +49,7 @@ export const UserProvider = ({ children }) => {
       const { password, ...newUser } = response;
       setIsAuth(newUser);
       setIsLoading(false);
-      navigate('/');
+      navigate('/profile');
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
