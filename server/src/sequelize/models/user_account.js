@@ -33,23 +33,22 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Password is required.'
-        },
-      }
-    },
-    finished: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    reset_token: DataTypes.STRING,
-    token_expiration: DataTypes.DATE,
-  }, {
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'Password is required.'
+          },
+        }
+      },
+      finished: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      reset_token: DataTypes.STRING,
+      token_expiration: DataTypes.DATE,
       role: {
         type: DataTypes.STRING,
         values: ['admin', 'user'],

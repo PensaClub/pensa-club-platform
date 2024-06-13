@@ -11,7 +11,12 @@
     },
     {
       "name": "user",
-      "permissions": ["create_record", "read_record", "update_record"]
+      "permissions": [
+        "create_record",
+        "read_record",
+        "update_record",
+        "delete_record"
+      ]
     },
     {
       "name": "guest",

@@ -8,7 +8,7 @@ class Permissions {
 
     getPermissionsByRoleName(roleName) {
         const role = roles.roles.find((r) => r.name === roleName);
-        return role ? role.permissions : ["read_record"];
+        return role ? role.permissions : ["read_record"]; // guest permissions
     }
 }
 module.exports = Permissions;
