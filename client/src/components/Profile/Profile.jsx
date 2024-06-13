@@ -12,12 +12,25 @@ import './profile.css';
 import { UserContext } from '../contexts/UserContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faUser, faLock, faScroll, faMountainSun, faTimes, faImage, faBars, faEnvelope, faPhone, faBriefcase, faUniversalAccess, faUsersGear } from '@fortawesome/free-solid-svg-icons'
+import {
+  faLocationDot,
+  faUser,
+  faLock,
+  faScroll,
+  faMountainSun,
+  faTimes,
+  faImage,
+  faBars,
+  faEnvelope,
+  faPhone,
+  faBriefcase,
+  faUniversalAccess,
+  faUsersGear,
+} from '@fortawesome/free-solid-svg-icons';
 import { ProfileSkills } from './ProfileSkills';
 import { ProfileWorks } from './ProfileWorks';
 import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
-
 
 export const Profile = () => {
     const { t } = useTranslation();
@@ -35,20 +48,37 @@ export const Profile = () => {
   }, []);
 
   useEffect(() => {
+    const loadProfileData = async () => {
+      if (isFinish) {
+        const userDetails = await getProfileData();
+        console.log(userDetails);
+        setUserData(userDetails);
+        console.log(userData);
+      }
+    };
+
+    loadProfileData();
     // if (isFinish) {
     //   getProfileData()
     //     .then((res) => {
-    //       setUserData(res);
+    //       console.log(res);
+    //       const data = JSON.stringify(res);
+    //       if (data) {
+    //         const userData = JSON.parse(data)
+    //         setUserData(userData);          }
     //     })
     //     .catch((err) => console.log(err.message));
+    // }else {
+    //   console.log('Not finished');
     // }
+    // console.log(`Profile Data: ${userData}`);
 
-    if (isFinish) {
-      // Simona: test purposes only!! to be replaced with the above and tested again
-      console.log('Finished');
-    } else {
-      console.log('Not finished');
-    }
+    // if (isFinish) {
+    //   // Simona: test purposes only!! to be replaced with the above and tested again
+    //   console.log('Finished');
+    // } else {
+    //   console.log('Not finished');
+    // }
   }, []);
 
   const toggleMenu = () => {
@@ -96,21 +126,23 @@ export const Profile = () => {
 
 
 
-                <Outlet />
-                <Routes >
-                    {isFinish === false && <Route path="*" element={<Navigate to="profile-form" />} />}
-                    <Route path="image" element={<ProfileImage />} />
-                    <Route path="profile-form" element={<ProfileForm />} />
-                    <Route path="data" element={<ProfileData />} />
-                    <Route path="address" element={<ProfileAddress />} />
-                    <Route path="password" element={<ProfilePassword />} />
-                    <Route path="skills" element={<ProfileSkills />} />
-                    <Route path="workOptions" element={<ProfileWorks />} />
-                    <Route path="announced" element={<ProfileAnnounced />} />
-                    <Route path="interestOptions" element={<ProfileInterests />} />
-                    {/* <Route path="anothers" element={<ProfileOthers />} /> */}
-                </Routes>
-            </div>
-
-        </section>)}
-
+        <Outlet />
+        <Routes>
+          {isFinish === false && (
+            <Route path="*" element={<Navigate to="profile-form" />} />
+          )}
+          <Route path="image" element={<ProfileImage />} />
+          <Route path="profile-form" element={<ProfileForm />} />
+          <Route path="data" element={<ProfileData />} />
+          <Route path="address" element={<ProfileAddress />} />
+          <Route path="password" element={<ProfilePassword />} />
+          <Route path="skills" element={<ProfileSkills />} />
+          <Route path="workOptions" element={<ProfileWorks />} />
+          <Route path="announced" element={<ProfileAnnounced />} />
+          <Route path="interestOptions" element={<ProfileInterests />} />
+          {/* <Route path="anothers" element={<ProfileOthers />} /> */}
+        </Routes>
+      </div>
+    </section>
+  );
+};

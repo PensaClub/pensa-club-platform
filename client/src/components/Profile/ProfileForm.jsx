@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 import CustomSelect from './CustomSelect'; 
 import React, { useState, useEffect, useContext } from 'react';
@@ -145,9 +144,7 @@ const ProfileForm = () => {
 
     const handleGenderChange = (e) => {
         setForm({ ...form, gender: e.target.value });
-
     };
-
 
 
     useEffect(() => {

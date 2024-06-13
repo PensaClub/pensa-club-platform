@@ -103,12 +103,14 @@ export const UserProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await userService.getUserData();
-      console.log(response);
-      const { ...userData } = response;
-      if (userData) {
+      const data = JSON.stringify(response.user.details);
+      if (data) {
+        const userData = JSON.parse(data)
         setProfileData(userData);
+        console.log(profileData);
       } 
       setIsLoading(false);
+      return profileData;
     } catch (error) {
       showErrorAndSetTimeouts(`Error get profile data: ${error.message}`);
     }
