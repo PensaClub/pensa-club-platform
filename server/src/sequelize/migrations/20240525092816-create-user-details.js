@@ -46,33 +46,35 @@ module.exports = {
       },
       first_name: {
         type: DataTypes.STRING(20),
+        allowNull: true,
+        defaultValue: null,
         validate: {
-          len: {
-            args: [3, 20],
-            msg: "First name must be between 3 and 20 characters in length.",
-          },
-          is: {
-            args: /^[a-zA-Zа-яА-Я]{3,20}$/i,
-            msg: "First name must be 3-20 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.",
-          },
-          notEmpty: {
-            msg: "First name cannot be empty.",
+          customValidator(value) {
+            if (value && value.length > 0) {
+              if (value.length < 3 || value.length > 20) {
+                throw new Error("First name must be between 3 and 20 characters in length.");
+              }
+              if (!/^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
+                throw new Error("First name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.");
+              }
+            }
           },
         },
       },
       last_name: {
         type: DataTypes.STRING(20),
+        allowNull: true,
+        defaultValue: null,
         validate: {
-          len: {
-            args: [3, 20],
-            msg: "Last name must be between 3 and 20 characters in length.",
-          },
-          is: {
-            args: /^[a-zA-Zа-яА-Я]{3,20}$/i,
-            msg: "Last name must be 3-20 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.",
-          },
-          notEmpty: {
-            msg: "Last name cannot be empty.",
+          customValidator(value) {
+            if (value && value.length > 0) {
+              if (value.length < 3 || value.length > 20) {
+                throw new Error("Last name must be between 3 and 20 characters in length.");
+              }
+              if (!/^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
+                throw new Error("Last name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.");
+              }
+            }
           },
         },
       },
@@ -103,44 +105,48 @@ module.exports = {
           },
         },
       },
-      work: {
+      work_options: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         validate: {
           isArray(value) {
             if (value !== null && !Array.isArray(value)) {
-              throw new Error("Work must be an array of strings.");
+              throw new Error("Work options must be an array of strings.");
             }
           },
         },
       },
-      hobby: {
+      skills: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         validate: {
           isArray(value) {
             if (value !== null && !Array.isArray(value)) {
-              throw new Error("Hobby must be an array of strings.");
+              throw new Error("Skills must be an array of strings.");
             }
           },
         },
       },
-      interest: {
+      interest_options: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         validate: {
           isArray(value) {
             if (value !== null && !Array.isArray(value)) {
-              throw new Error("Interest must be an array of strings.");
+              throw new Error("Interest options must be an array of strings.");
             }
           },
         },
       },
       district: {
         type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
       },
       block: {
         type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
       },
       street: {
         type: DataTypes.STRING,
@@ -153,6 +159,8 @@ module.exports = {
       },
       street_number: {
         type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
       },
       location: {
         type: DataTypes.JSONB,
@@ -160,6 +168,31 @@ module.exports = {
         validate: {
           notEmpty: {
             msg: "Location cannot be empty.",
+          },
+        },
+      },
+      gender: {
+        type: DataTypes.ENUM,
+        values: ["male", "female", "other"],
+        allowNull: true,
+        defaultValue: null,
+        validate: {
+          isIn: {
+            args: [["male", "female", "other"]],
+            msg: "Gender must be 'male', 'female', or 'other'.",
+          },
+        },
+      },
+      birth_date: {
+        type: DataTypes.DATEONLY,
+        defaultValue: null,
+        allowNull: true,
+        validate: {
+          isDate: true,
+          isNotInFuture(value) {
+            if (new Date(value) > new Date()) {
+              throw new Error("Date cannot be in the future.");
+            }
           },
         },
       },

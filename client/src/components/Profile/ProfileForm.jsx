@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -28,6 +29,7 @@ const ProfileForm = () => {
         workOptions: [],
     }
     
+    const {onProfileDataSubmit} = useContext(UserContext);
     const [form, setForm] = useState(initialFormState);
 
     const [regions, setRegions] = useState([]);
@@ -100,6 +102,7 @@ const ProfileForm = () => {
 
     const handleGenderChange = (e) => {
         setForm({ ...form, gender: e.target.value });
+
     };
 
 
@@ -127,6 +130,7 @@ const ProfileForm = () => {
     };
 
 
+
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -143,7 +147,9 @@ const ProfileForm = () => {
         loadData();
     }, []);
 
-    const handleSubmit = (e) => {
+  
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
 
         const trimmedForm = trimObjectStrings(form);
@@ -158,12 +164,17 @@ const ProfileForm = () => {
         });
 
         if (isValid) {
+
             console.log('Form Submitted:', trimmedForm);
             resetFields(setForm, initialFormState);
             setSelectedDate('');
             setSelectedMonth('');
             setSelectedYear('');
             navigate('/profile');
+
+            onProfileDataSubmit(form);
+            console.log('Form Submitted:', form);
+
         }
     };
 

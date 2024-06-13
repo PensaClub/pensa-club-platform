@@ -20,17 +20,34 @@ import { ProfileAnnounced } from './ProfileAnnounced';
 
 export const Profile = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [userData, setUserData] = useState('');
 
-    // test for profile conplete or NOT:
-    
-    // const { isFinish } = useContext(UserContext);
-    const isFinish = true;
+    const { isFinish, getProfileData,profileData } = useContext(UserContext);
+    //    const isFinish = true;
     console.log(isFinish)
-    // const { userId } = useContext(UserContext);
+
+
+    const { userId } = useContext(UserContext);
+
 
     useEffect(() => {
         window.scrollTo({ top: 0 })
     }, [])
+
+    useEffect(() => {
+        if(isFinish) {
+            // getProfileData()
+            //     .then((res) => {
+            //         setUserData(res)
+            //     })
+            //     .catch((err) => console.log(err.message))
+
+            // Simona: test purposes only!! to be replaced with the above and tested again
+            setUserData(profileData);
+            console.log(profileData);
+            
+        }
+    }, [isFinish])
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -66,12 +83,15 @@ export const Profile = () => {
                             <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
                         </div>
                         <div className="user-data">
-                            <h2>Пoтребителско име</h2>
-                            <p><FontAwesomeIcon icon={faUser} className="icon" /> Име и Фамилия</p>
 
-                            <p><FontAwesomeIcon icon={faPhone} className="icon" /> +35659599589</p>
-                            <p><FontAwesomeIcon icon={faLocationDot} className="icon" /> гр.София</p>
-                            <p><FontAwesomeIcon icon={faEnvelope} className="icon" /> example@gmail.com</p>
+                            <h2>{profileData.username}</h2>
+                            <p><FontAwesomeIcon icon={faUser} className="icon" /> {profileData.firstName} {profileData.lastName}</p>
+                            
+                            <p><FontAwesomeIcon icon={faPhone} className="icon"/> {profileData.phoneNumber}</p>
+                            {/* TODO: map settlement name */}
+                            <p><FontAwesomeIcon icon={faLocationDot} className="icon" /> {profileData.settlement}</p>
+                            <p><FontAwesomeIcon icon={faEnvelope} className="icon"/> {profileData.email}</p>
+
                         </div>
                     </section>
                 }
