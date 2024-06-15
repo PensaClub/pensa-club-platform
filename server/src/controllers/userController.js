@@ -62,7 +62,6 @@ userController.post("/register", async (req, res, next) => {
     const token = tokenCreator(user);
 
     const data = {
-      userId: user.id,
       email: user.email,
       enabled: user.finished,
     };
@@ -108,7 +107,6 @@ userController.post("/login", async (req, res, next) => {
     }
 
     const data = {
-      userId: user.id,
       email: user.email,
       enabled: user.finished,
     };
@@ -139,12 +137,12 @@ userController.post("/logout", isAuth, async (req, res, next) => {
   }
 });
 
-userController.post('/request-reset-password', async (req, res, next) => {
+userController.post("/request-reset-password", async (req, res, next) => {
   const { email } = req.body;
   try {
     const user = await user_account.findOne({ where: { email } });
     if (!user) {
-      return res.status(404).send('There is no user registered with that email address');
+      return res.status(404).send("There is no user registered with that email address");
     }
 
     const resetToken = uuid.v4();
@@ -159,20 +157,18 @@ userController.post('/request-reset-password', async (req, res, next) => {
       res.status(200).send(`A reset password link has been sent to ${email}.`);
     } catch (emailError) {
       console.error(`Error sending email: ${emailError}`);
-      res.status(500).send('An error occurred while sending the reset email.');
+      res.status(500).send("An error occurred while sending the reset email.");
     }
-
-  }
-  catch (err) {
+  } catch (err) {
     next(err);
   }
 });
 
-userController.post('/reset-password', async (req, res, next) => {
+userController.post("/reset-password", async (req, res, next) => {
   const { password, rePassword, resetToken } = req.body;
   try {
     if (password !== rePassword) {
-      return res.status(400).send('Repeat password does not match.');
+      return res.status(400).send("Repeat password does not match.");
     }
     if (!passwordRegex.test(password)) {
       return res.status(400).send("Password must be at least 8 characters long, contain at least one letter and one number.");
@@ -181,11 +177,11 @@ userController.post('/reset-password', async (req, res, next) => {
     const user = await user_account.findOne({ where: { reset_token: resetToken } });
 
     if (!user.token_expiration) {
-      return res.status(404).send('User with that token wasn\'t found.');
+      return res.status(404).send("User with that token wasn't found.");
     }
 
     if (user.token_expiration.getTime() < Date.now()) {
-      return res.status(400).send('Reset token has expired.');
+      return res.status(400).send("Reset token has expired.");
     }
 
     const newHashedPassword = await bcrypt.hash(password, 10);
@@ -193,12 +189,10 @@ userController.post('/reset-password', async (req, res, next) => {
     user.reset_token = null;
     user.token_expiration = null;
     await user.save();
-    res.status(200).send('Password reset was successful.')
-  }
-  catch (err) {
+    res.status(200).send("Password reset was successful.");
+  } catch (err) {
     next(err);
   }
 });
-
 
 module.exports = userController;
