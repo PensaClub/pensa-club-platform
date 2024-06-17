@@ -8,7 +8,8 @@ import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 
 const ProfileForm = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const currentLanguage = i18n.language;
 
     const navigate = useNavigate();
 
@@ -293,7 +294,10 @@ const ProfileForm = () => {
                 >
                     <option value="">{t('profile.select_region')}</option>
                     {regions.map((region, index) => (
-                        <option key={index} value={region.id}>{region.bg}</option>
+                        <option key={index} value={region.id}>
+                            {currentLanguage === 'bg' && `${region.bg}`}
+                            {currentLanguage === 'en' && `${region.en}`}
+                            </option>
                     ))}
                 </select>
                 {errors.region && <span className="error">{errors.region}</span>}
@@ -305,7 +309,10 @@ const ProfileForm = () => {
                 >
                     <option value="">{t('profile.select_municipality')}</option>
                     {municipalities.map((municipality, index) => (
-                        <option key={index} value={municipality.id}>{municipality.bg}</option>
+                        <option key={index} value={municipality.id}>
+                            {currentLanguage === 'bg' && `${municipality.bg}`}
+                            {currentLanguage === 'en' && `${municipality.en}`}
+                            </option>
                     ))}
                 </select>
                 {errors.municipality && <span className="error">{errors.municipality}</span>}
@@ -317,7 +324,10 @@ const ProfileForm = () => {
                 >
                     <option value="">{t('profile.select_settlement')}</option>
                     {settlements.map((settlement, index) => (
-                        <option key={index} value={settlement.id}>{settlement.bg}</option>
+                        <option key={index} value={settlement.id}>
+                           {currentLanguage === 'bg' && `${settlement.bg}`}
+                            {currentLanguage === 'en' && `${settlement.en}`}
+                            </option>
                     ))}
                 </select>
                 {errors.settlement && <span className="error">{errors.settlement}</span>}
