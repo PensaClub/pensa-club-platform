@@ -179,7 +179,14 @@
     "close_btn": "Затвори",
     "select_region": "Изберете регион",
     "select_municipality": "Изберете община",
-    "select_settlement": "Изберете населено място"
+    "select_settlement": "Изберете населено място",
+    "account": "Акаунт",
+    "photo": "Снимка",
+    "personal_data": "Лични данни",
+    "address": "Адрес",
+    "password": "Парола",
+    "announced": "Обяви",
+    "anothers": "Други"
 
   }
 }

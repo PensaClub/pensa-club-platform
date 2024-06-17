@@ -179,7 +179,14 @@
     "close_btn": "Close",
     "select_region": "Select region",
     "select_municipality": "Select municipality",
-    "select_settlement": "Select settlement"
+    "select_settlement": "Select settlement",
+    "account": "Account",
+    "photo": "Photo",
+    "personal_data": "Personal data",
+    "address": "Address",
+    "password": "Password",
+    "announced": "Announced",
+    "anothers": "Anothers"
 
 
 
