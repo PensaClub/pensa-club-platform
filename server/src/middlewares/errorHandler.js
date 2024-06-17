@@ -1,4 +1,5 @@
 const { ValidationError, UniqueConstraintError, ForeignKeyConstraintError, DatabaseError } = require("sequelize");
+const { TokenExpiredError } = require("jsonwebtoken");
 const CustomError = require("../utils/customError");
 
 function errorHandler(error, req, res, next) {
@@ -32,9 +33,12 @@ function errorHandler(error, req, res, next) {
     message = "Validation error(s)";
     details = validationErrors;
     statusCode = 400;
+  } else if (error instanceof TokenExpiredError) {
+    message = "Your session has expired. Please log in again.";
+    statusCode = 401;
   }
 
-  console.log(`Error: ${req.method} >> ${req.baseUrl}`, error.message);
+  console.log(`Error: ${req.method} >> ${req.baseUrl}`, message);
   res.status(statusCode).json({ message, statusCode, details });
 }
 

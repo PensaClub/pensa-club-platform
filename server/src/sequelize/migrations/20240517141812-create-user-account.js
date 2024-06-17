@@ -37,6 +37,8 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      reset_token: DataTypes.STRING,
+      token_expiration: DataTypes.DATE,
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE

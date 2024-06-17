@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './filterMap.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faBriefcase, faUniversalAccess, faUsersGear, faBars, faTimes, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
+import { useTranslation } from 'react-i18next';
+
+
+
 const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
+    const {t} = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const selectRef = useRef();
@@ -42,8 +48,11 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
         <div className="custom-select" ref={selectRef}>
             <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
                 <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-                {trimString(selectedValues.map(value => options.find(option => option.value === value)?.name).join(' | '), 28) || <span style={{ display: 'inline-block', width: '100%', textAlign: 'center' }}>Избери...</span>}
+
+               {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')} {/* //Пробно е пуснато да се види при повече опции */}
+
                 {selectedValues.length > 0 && <p className='number-filters'>({selectedValues.length})</p>}
+
             </div>
             {isOpen && (
                 <div className="options-container">
@@ -66,7 +75,8 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
                                     checked={selectedValues.includes(option.value)}
                                     onChange={() => handleOptionChange(option.value)}
                                 />
-                                <label htmlFor={`checkbox-${option.value}`}>{option.name}</label>
+                                {/* Translate options */}
+                                <label htmlFor={`checkbox-${option.value}`}>{t(`${option.name}`)}</label> 
                             </div>
                         ))}
                     </div>
@@ -95,7 +105,12 @@ const FilterSection = ({ title, options, selectedValues, onChange, icon }) => (
 );
 
 export const FiltersMap = () => {
-    const [optionData, setOptionData] = useState(null);
+
+    const {t} = useTranslation();
+ 
+    const [optionData, setOptionData] = useState(null)
+ 
+
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedWorks, setSelectedWorks] = useState([]);
     const [selectedInterests, setSelectedInterests] = useState([]);
@@ -105,7 +120,9 @@ export const FiltersMap = () => {
         fetch('./options.json')
             .then(response => response.json())
             .then(data => {
+
                 setOptionData(data);
+
             })
             .catch(error => console.error('Failed to load JSON data', error));
     }, []);
@@ -133,42 +150,43 @@ export const FiltersMap = () => {
             </div>
             <div className="filters">
                 <div className="filter-main">
-                    <label>Умения</label>
+
+                    <label>{t('map.skills')}</label>
                     {optionData ? (
                         <CustomSelect
                             icon={faUniversalAccess}
                             options={optionData.skills}
                             selectedValues={selectedSkills}
                             onChange={setSelectedSkills}
-                            searchPlaceholder="Намери умения..."
+                            searchPlaceholder={t('map.skills-placeholder')}
                         />
                     ) : (
                         <div>Loading...</div>
                     )}
                 </div>
                 <div className="filter-main">
-                    <label>Професия</label>
+                    <label>{t('map.skills')}</label>
                     {optionData ? (
                         <CustomSelect
                             icon={faBriefcase}
                             options={optionData.workOptions}
                             selectedValues={selectedWorks}
                             onChange={setSelectedWorks}
-                            searchPlaceholder="Намери професия..."
+                            searchPlaceholder={t('map.job-placeholder')}
                         />
                     ) : (
                         <div>Loading...</div>
                     )}
                 </div>
                 <div className="filter-main">
-                    <label>Интереси</label>
+                    <label>{t('map.skills')}</label>
                     {optionData ? (
                         <CustomSelect
                             icon={faUsersGear}
                             options={optionData.interestOptions}
                             selectedValues={selectedInterests}
                             onChange={setSelectedInterests}
-                            searchPlaceholder="Намери интереси..."
+                            searchPlaceholder={t('map.interests-placeholder')}
                         />
                     ) : (
                         <div>Loading...</div>
@@ -206,6 +224,36 @@ export const FiltersMap = () => {
                     ) : (
                         <div>Loading...</div>
                     )}
+
+                    <label>{t('map.skills')}</label>
+                    {optionData ? <CustomSelect
+                        icon={faUniversalAccess}
+                        options={optionData.skills}
+                        selectedValues={selectedSkills}
+                        onChange={setSelectedSkills}
+                        searchPlaceholder={t('map.skills-placeholder')}
+                    /> : <div>Loading...</div>}
+                </div>
+                <div className="filter-main">
+                    <label>{t('map.job')}</label>
+                    {optionData ? <CustomSelect
+                        icon={faBriefcase}
+                        options={optionData.workOptions}
+                        selectedValues={selectedWorks}
+                        onChange={setSelectedWorks}
+                        searchPlaceholder={t('map.job-placeholder')}
+                    /> : <div>Loading...</div>}
+                </div>
+                <div className="filter-main">
+                    <label>{t('map.interests')}</label>
+                   {optionData ? <CustomSelect
+                        icon={faUsersGear}
+                        options={optionData.interestOptions}
+                        selectedValues={selectedInterests}
+                        onChange={setSelectedInterests}
+                        searchPlaceholder={t('map.interests-placeholder')}
+                    />:<div>Loading...</div>}
+
                 </div>
             </div>
         </div>

@@ -11,12 +11,14 @@ export const resetFields = (setFieldFunctions) => {
 
 export const validateEmail = (email, setErrors) => {
   if (!email) {
-    setErrors(prevErrors => ({
-      ...prevErrors, email: "Полето е задължително!"
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      email: "form.errors.required-field",
     }));
   } else if (!emailRegex.test(email)) {
-    setErrors(prevErrors => ({
-      ...prevErrors, email: "Невалиден имейл адрес!"
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      email: "form.errors.invalid-email",
     }));
   } else {
     setErrors(prevErrors => ({
@@ -29,18 +31,18 @@ export const validatePassword = (password, setErrors) => {
   if (!password) {
     setErrors((prevErrors) => ({
       ...prevErrors,
-      password: "Полето е задължително!",
+      password: "form.errors.required-field",
     }));
   } else if (!passwordRegex.test(password)) {
     setErrors((prevErrors) => ({
       ...prevErrors,
-      password: "Паролата трябва да бъде поне 8 символа и да съдържа малка буква,  главна  буква и цифра!",
+      password: "form.errors.password-format",
     }));
-  } else if (password.length < 3) {
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      password: "Паролата трябва да бъде поне 3 символа!",
-    }));
+  // } else if (password.length < 3) {
+  //   setErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     password: "Паролата трябва да бъде поне 3 символа!",
+  //   }));
   } else {
     setErrors((prevErrors) => ({
       ...prevErrors,
@@ -53,7 +55,7 @@ export const validateRePassword = (password, rePassword, setErrors) => {
   if (password && rePassword !== password) {
     setErrors((prevErrors) => ({
       ...prevErrors,
-      rePassword: "Паролите не съвпадат!",
+      rePassword: "form.errors.passwords-not-match",
     }));
   } else {
     setErrors((prevErrors) => ({

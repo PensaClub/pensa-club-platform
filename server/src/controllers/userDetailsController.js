@@ -1,59 +1,39 @@
 const userDetailsController = require("express").Router();
 
-const CustomError = require("../utils/customError");
 const { user_details, user_account } = require("../sequelize/models/index");
 const geoCoder = require("../utils/geoCoder");
+const ageCalculate = require("../utils/ageCalculate");
+const userDetailsValidator = require("../utils/userDetailsValidator");
 const isAuth = require("../middlewares/isAuth.js");
 const { where } = require("sequelize");
-
-const notRequiredFields = ["block", "streetNumber", "firstName", "lastName", "district", "work"];
-
-const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
-const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
-const nameRegex = /^[a-zA-Zа-яА-Я]{3,20}$/i;
+const { tokenCreator } = require("../utils/jwt.js");
+const fieldSwap = require("../utils/fieldSwap.js");
 
 userDetailsController.post("/details", isAuth, async (req, res, next) => {
-  let errors = {};
+  if (req.user.enabled) {
+    return res.status(403).send({ message: "User details have already been submitted once." });
+  }
+
   try {
-    const { region, municipality, settlement, district, block, street, streetNumber, phoneNumber, username, work, hobby, interest, firstName, lastName } =
-      req.body;
-
-    Object.entries(req.body).forEach(([fieldName, value]) => {
-      if (value === "" && !notRequiredFields.includes(fieldName)) {
-        let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-        errors[fieldName] = `${error} is required.`;
-      }
-    });
-
-    ["work", "hobby", "interest"].forEach((field) => {
-      if (req.body[field] !== undefined && !Array.isArray(req.body[field])) {
-        errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} must be an array.`;
-      }
-    });
-
-    if (Object.keys(errors).length > 0) {
-      throw new CustomError({ message: "Validation errors", statusCode: 400, details: errors });
-    }
-
-    if (phoneNumber && !phoneRegex.test(phoneNumber)) {
-      errors.phoneNumber = "Invalid phone number.";
-    }
-
-    if (!usernameRegex.test(username)) {
-      errors.username = "Username must be 6-16 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.";
-    }
-
-    if (firstName && !nameRegex.test(firstName)) {
-      errors.firstName = "First name must be 3-20 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.";
-    }
-
-    if (lastName && !nameRegex.test(lastName)) {
-      errors.lastName = "Last name must be 3-20 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.";
-    }
-
-    if (Object.keys(errors).length > 0) {
-      throw new CustomError({ message: "Validation errors", statusCode: 400, details: errors });
-    }
+    userDetailsValidator(req.body, req.path);
+    const {
+      region,
+      municipality,
+      settlement,
+      district,
+      block,
+      street,
+      streetNumber,
+      phoneNumber,
+      username,
+      workOptions,
+      skills,
+      interestOptions,
+      firstName,
+      lastName,
+      gender,
+      birthDate,
+    } = req.body;
 
     const location = await geoCoder({ streetNumber, street, district, settlement, municipality, region });
 
@@ -63,9 +43,9 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
       region,
       municipality,
       settlement,
-      work,
-      hobby,
-      interest,
+      work_options: workOptions,
+      skills,
+      interest_options: interestOptions,
       district,
       block,
       street,
@@ -73,33 +53,75 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
       location,
       first_name: firstName,
       last_name: lastName,
+      gender,
+      birth_date: birthDate,
       user_accounts_id: req.user.userId,
     };
 
     const details = await user_details.create(data);
 
-    await user_account.update({ finished: true }, { where: { email: req.user.email }, returning: true, plain: true });
+    const { birth_date, id, user_accounts_id, ...restOfDetails } = details.dataValues;
 
-    const updatedDetails = { ...details.dataValues, enabled: true };
-    res.status(200).send({ message: "Details successfully updated!", details: updatedDetails });
+    const user = await user_account.update({ finished: true }, { where: { id: req.user.userId }, returning: true, plain: true });
+
+    const token = tokenCreator(user[1].dataValues);
+
+    const updatedDetails = { ...restOfDetails, age: ageCalculate(birth_date), enabled: true };
+
+    res.status(200).send({ message: "Details successfully updated!", details: updatedDetails, token });
   } catch (err) {
     next(err);
   }
 });
 
-userDetailsController.get("/all-users", isAuth, async (req, res, next) => {
+userDetailsController.get("/all-users", async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
-      attributes: ["id", "email", ["finished", "enabled"]],
+      attributes: ["email", ["finished", "enabled"]],
       include: [
         {
           model: user_details,
           as: "details",
-          attributes: ["phone_number", "username", "first_name", "last_name", "work", "hobby", "interest", "location"],
+          attributes: ["phone_number", "username", "first_name", "last_name", "work_options", "skills", "interest_options", "location"],
         },
       ],
     });
-    res.status(200).json({ message: "User data retrieved successfully.", accounts });
+    res.status(200).json({ message: "Users data retrieved successfully.", accounts });
+  } catch (err) {
+    next(err);
+  }
+});
+
+userDetailsController.patch("/update-details", isAuth, async (req, res, next) => {
+  try {
+    userDetailsValidator(req.body, req.path);
+
+    const data = fieldSwap(req.body, "mapToDb");
+
+    const [_, details] = await user_details.update(data, { where: { user_accounts_id: req.user.userId }, returning: true, plain: true });
+
+    const updatedDetails = fieldSwap(details.dataValues, "mapFromDb");
+
+    res.status(200).json({ message: "Details edited successfully!", details: updatedDetails });
+  } catch (err) {
+    next(err);
+  }
+});
+
+userDetailsController.get("/single-user", isAuth, async (req, res, next) => {
+  try {
+    const user = await user_account.findOne({
+      where: { id: req.user.userId },
+      attributes: ["email", ["finished", "enabled"]],
+      include: [
+        {
+          model: user_details,
+          as: "details",
+          attributes: { exclude: ["user_accounts_id", "id"] },
+        },
+      ],
+    });
+    res.status(200).json({ message: "User data retrieved successfully.", user });
   } catch (err) {
     next(err);
   }
