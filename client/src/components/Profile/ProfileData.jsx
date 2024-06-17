@@ -1,29 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import { Link } from 'react-router-dom';
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
+import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 
 export const ProfileData = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const initialFormState = {
-        username: '',
-        email: '',
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        gender: '',
-        birthDate: '',
-    }
-    const [form, setForm] = useState(initialFormState);
+    const {userEmail, onEditProfileDataSubmit, profileData} = useContext(UserContext);      
 
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
     const [errors, setErrors] = useState({});
+    // const [profileData, setProfileData] = useState('')
+
+    //TODO: change keys when changed on server!!!
+
+    const initialFormState = {
+        username: profileData.username || '',
+        email: userEmail,
+        firstName: profileData.first_name || '',
+        lastName: profileData.last_name || '',
+        phoneNumber: profileData.phone_number || '',
+        gender: profileData.gender || null, //TODO: sync format with backend
+        birthDate: profileData.birth_date || null, //TODO: sync format with backend
+    }
+    const [form, setForm] = useState(initialFormState);
+
+    // useEffect(() => {
+    //     // debugger
+    //     const serializedData = localStorage.getItem("userDetails");
+    //     const userData = JSON.parse(serializedData);
+    //     if (userData) {
+    //         const userDetails = userData.details;
+    //         console.log(userDetails);
+    //       setProfileData (userDetails);
+    //       setForm({...form, userDetails})
+    //       console.log(form);
+    //     } 
+    //   }, []);
 
 
     const handleInputChange = (e) => {
@@ -76,12 +95,20 @@ export const ProfileData = () => {
         });
 
         if (isValid) {
-            console.log('Form Submitted:', trimmedForm);
-            resetFields(setForm, initialFormState);
-            setSelectedDate('');
-            setSelectedMonth('');
-            setSelectedYear('');
-            navigate('/profile');
+            try {
+                const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
+                const updatedData = Object.fromEntries(updatedDataArr);        
+                onEditProfileDataSubmit(updatedData);
+                console.log('Data Submitted:', updatedData);
+                // resetFields(setForm, initialFormState);
+                // setSelectedDate('');
+                // setSelectedMonth('');
+                // setSelectedYear('');
+                navigate('/profile');
+            } catch (error) {
+                console.log(`Error Profile Data Submit Component: ${error.message}`);
+                
+            }
         }
     };
 

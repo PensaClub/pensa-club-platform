@@ -1,5 +1,11 @@
-import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
-import CustomSelect from './CustomSelect'; 
+import {
+  validateField,
+  generateNumberOptions,
+  trimObjectStrings,
+  resetFields,
+  handleReset,
+} from '../../utils/profile';
+import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, redirect, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
@@ -38,19 +44,18 @@ const ProfileForm = () => {
     }
     const [form, setForm] = useState(initialFormState);
 
-    const [regions, setRegions] = useState([]);
-    const [municipalities, setMunicipalities] = useState([]);
-    const [settlements, setSettlements] = useState([]);
+  const [regions, setRegions] = useState([]);
+  const [municipalities, setMunicipalities] = useState([]);
+  const [settlements, setSettlements] = useState([]);
 
-    const [skillsOptions, setSkillsOptions] = useState([]);
-    const [workOptions, setWorkOptions] = useState([]);
-    const [interestOptions, setInterestOptions] = useState([]);
+  const [skillsOptions, setSkillsOptions] = useState([]);
+  const [workOptions, setWorkOptions] = useState([]);
+  const [interestOptions, setInterestOptions] = useState([]);
 
-
-    const [selectedDate, setSelectedDate] = useState('');
-    const [selectedMonth, setSelectedMonth] = useState('');
-    const [selectedYear, setSelectedYear] = useState('');
-    const [errors, setErrors] = useState({});
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const [errors, setErrors] = useState({});
 
 
   useEffect(() => {
@@ -59,13 +64,13 @@ const ProfileForm = () => {
         const response = await fetch('/regions.json');
         const data = await response.json();
 
-                setRegions(data);
-            } catch (error) {
-                console.error('Failed to load regions data', error);
-            }
-        };
-        loadRegions();
-    }, []);
+        setRegions(data);
+      } catch (error) {
+        console.error('Failed to load regions data', error);
+      }
+    };
+    loadRegions();
+  }, []);
 
   const handleRegionChange = async (e) => {
     const regionId = e.target.value;
@@ -89,13 +94,13 @@ const ProfileForm = () => {
         `/regions-data/region-${regionId}/subregions-${regionId}.json`
       );
 
-            const data = await response.json();
+      const data = await response.json();
 
-            setMunicipalities(data);
-        } catch (error) {
-            console.error('Failed to load municipalities data', error);
-        }
-    };
+      setMunicipalities(data);
+    } catch (error) {
+      console.error('Failed to load municipalities data', error);
+    }
+  };
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
@@ -142,20 +147,19 @@ const ProfileForm = () => {
     setForm({ ...form, [name]: value });
   };
 
-    const handleGenderChange = (e) => {
-        setForm({ ...form, gender: e.target.value });
-    };
+  const handleGenderChange = (e) => {
+    setForm({ ...form, gender: e.target.value });
+  };
 
-
-    useEffect(() => {
-        if (selectedDate && selectedMonth && selectedYear) {
-            const formattedDate = `${selectedYear}-${selectedMonth}-${selectedDate}`;
-            setForm((prevForm) => ({
-                ...prevForm,
-                birthDate: formattedDate,
-            }));
-        }
-    }, [selectedDate, selectedMonth, selectedYear]);
+  useEffect(() => {
+    if (selectedDate && selectedMonth && selectedYear) {
+      const formattedDate = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+      setForm((prevForm) => ({
+        ...prevForm,
+        birthDate: formattedDate,
+      }));
+    }
+  }, [selectedDate, selectedMonth, selectedYear]);
 
   const handleSelectedDateChange = (e) => {
     setSelectedDate(e.target.value);
@@ -165,30 +169,26 @@ const ProfileForm = () => {
     setSelectedMonth(e.target.value);
   };
 
-    const handleSelectedYearChange = (e) => {
-        setSelectedYear(e.target.value);
-    };
-
+  const handleSelectedYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
 
   const handleModalToggle = () => {
     setModalOpen(!isModalOpen);
   };
 
- 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        e.preventDefault();
+    const trimmedForm = trimObjectStrings(form);
+    setForm(trimmedForm);
 
-        const trimmedForm = trimObjectStrings(form);
-        setForm(trimmedForm);
-
-
-        const isValid = Object.keys(trimmedForm).every((field) => {
-            const value = trimmedForm[field];
-            const error = validateField(field, value);
-            setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
-            return !error;
-        });
+    const isValid = Object.keys(trimmedForm).every((field) => {
+      const value = trimmedForm[field];
+      const error = validateField(field, value);
+      setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+      return !error;
+    });
 
         if (isValid) {
 
@@ -199,28 +199,23 @@ const ProfileForm = () => {
             // setSelectedYear('');
             navigate('/profile');
 
-            onProfileDataSubmit(form)
+      onProfileDataSubmit(form)
         .then(() => {
           console.log('Form Submitted:', form);
           handleModalToggle();
-          navigate('/profile')
+          navigate('/profile');
         })
         .catch((err) =>
           console.log(`Error on profile form submit: ${err.message}`)
         );
+    }
+  };
 
-        }
-    };
-
-
-
-
-    const onBlurHandler = (e) => {
-        const { name, value } = e.target;
-        const error = validateField(name, value);
-        setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
-
-    };
+  const onBlurHandler = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+  };
 
     const handleResetForm = () => {
         handleReset(setForm, initialFormState);
@@ -229,10 +224,10 @@ const ProfileForm = () => {
         setSelectedYear('');
     };
 
-
-    return (
-        <form onSubmit={handleSubmit} className="profile-form">
-            <h3>{t('profile.profile_form_title')}</h3>
+  return (
+    <>
+      <form onSubmit={handleSubmit} className="profile-form">
+        <h3>Попълнете данните си</h3>
 
             <div className="avatar">
                 <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
@@ -427,8 +422,8 @@ const ProfileForm = () => {
         <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>
         <p>Вашият профил е завършен успешно!</p>
       </AlertModal>
-      </>
-    );
-  };
+    </>
+  );
+};
 
 export default ProfileForm;

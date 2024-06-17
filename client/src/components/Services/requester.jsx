@@ -24,7 +24,7 @@ const requester = async (method, url, data) => {
       };
     }
 
-    console.log(`Body: ${options.body}`);
+    // console.log(`Body: ${options.body}`);
 
   }
 

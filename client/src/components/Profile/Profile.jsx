@@ -35,51 +35,56 @@ import { ProfileAnnounced } from './ProfileAnnounced';
 export const Profile = () => {
     const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [userData, setUserData] = useState('');
-  const [isName, setIsName] = useState(false);
+  // const [profileData, setProfileData] = useState('');
+  // const [isName, setIsName] = useState(false);
 
-  const { userEmail, userId, isFinish, getProfileData, profileData } =
+  const { userEmail, isFinish, profileData } =
     useContext(UserContext);
   //    const isFinish = true;
   //   console.log(isFinish);
 
+  // const fieldMapping = {
+  //   phone_number: "phoneNumber",
+  //   username: "username",
+  //   region: "region",
+  //   municipality: "municipality",
+  //   settlement: "settlement",
+  //   work_options: "workOptions",
+  //   skills: "skills",
+  //   interest_options: "interestOptions",
+  //   district: "district",
+  //   block: "block",
+  //   street: "street",
+  //   street_number: "streetNumber",
+  //   location: "location",
+  //   first_name: "firstName",
+  //   last_name: "lastName",
+  //   gender: "gender",
+  //   birth_date: "birthDate",
+  // };
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
+    
+    // const serializedData = localStorage.getItem("userDetails");
+    // const userDetails = JSON.parse(serializedData);
+    // if (userDetails) {
+    //   setProfileData (userDetails.details);
+    // } 
   }, []);
 
-  useEffect(() => {
-    const loadProfileData = async () => {
-      if (isFinish) {
-        const userDetails = await getProfileData();
-        console.log(userDetails);
-        setUserData(userDetails);
-        console.log(userData);
-      }
-    };
+  // useEffect(() => {
+  //   const loadProfileData = async () => {
+  //     if (isFinish) {
+  //       const userDetails = await getProfileData(userId);
+  //       // console.log(userDetails);
+  //       setUserData(userDetails);
+  //       console.log(userData);
+  //     }
+  //   };
 
-    loadProfileData();
-    // if (isFinish) {
-    //   getProfileData()
-    //     .then((res) => {
-    //       console.log(res);
-    //       const data = JSON.stringify(res);
-    //       if (data) {
-    //         const userData = JSON.parse(data)
-    //         setUserData(userData);          }
-    //     })
-    //     .catch((err) => console.log(err.message));
-    // }else {
-    //   console.log('Not finished');
-    // }
-    // console.log(`Profile Data: ${userData}`);
-
-    // if (isFinish) {
-    //   // Simona: test purposes only!! to be replaced with the above and tested again
-    //   console.log('Finished');
-    // } else {
-    //   console.log('Not finished');
-    // }
-  }, []);
+  //   loadProfileData();
+  // }, [userId]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -128,11 +133,9 @@ export const Profile = () => {
 
         <Outlet />
         <Routes>
-          {isFinish === false && (
-            <Route path="*" element={<Navigate to="profile-form" />} />
-          )}
-          <Route path="image" element={<ProfileImage />} />
+          {/* {!isFinish && <Route path="profile-form" element={<ProfileForm />} />} */}
           <Route path="profile-form" element={<ProfileForm />} />
+          <Route path="image" element={<ProfileImage />} />
           <Route path="data" element={<ProfileData />} />
           <Route path="address" element={<ProfileAddress />} />
           <Route path="password" element={<ProfilePassword />} />

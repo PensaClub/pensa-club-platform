@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { userServiceFactory } from '../Services/userService';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
@@ -9,14 +9,18 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
+  const [profileData, setProfileData] = useLocalStorage('userDetails', {}); //regionId: '1', municipalityId: '1', settlementId: '1'
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [profileData, setProfileData] = useState({});
 
   const userService = userServiceFactory(isAuth.token);
 
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   getProfileData();
+  // }, [isAuth.data.token]);
 
   const showErrorAndSetTimeouts = (error) => {
     setErrorMessage(error);
@@ -34,7 +38,7 @@ export const UserProvider = ({ children }) => {
       const { password, rePassword, ...newUser } = response;
       setIsAuth(newUser);
       setIsLoading(false);
-      navigate('/profile');
+      navigate('/profile/profile-form');
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
@@ -48,8 +52,15 @@ export const UserProvider = ({ children }) => {
       const response = await userService.login(newData);
       const { password, ...newUser } = response;
       setIsAuth(newUser);
+      console.log(newUser.data.enabled);
       setIsLoading(false);
-      navigate('/profile');
+      if (newUser.data.enabled) {
+        const res = await getProfileData();
+        console.log(res);
+        navigate('/profile');
+      } else {
+        navigate('/profile/profile-form');
+      }
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
@@ -61,6 +72,7 @@ export const UserProvider = ({ children }) => {
       userService.logout();
       setIsAuth({});
       localStorage.removeItem('auth');
+      localStorage.removeItem('userDetails');
       setIsLoading(false);
     } catch (error) {
       setIsAuth({});
@@ -69,7 +81,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const onProfileDataSubmit = async (data) => {
-
     try {
       setIsLoading(true);
       const response = await userService.setUserData(data, isAuth.data?.userId);
@@ -83,32 +94,31 @@ export const UserProvider = ({ children }) => {
   };
 
   const onEditProfileDataSubmit = async (data) => {
-    console.log(data);
-
+    // console.log(data);
     try {
       setIsLoading(true);
-      const response = await userService.editUserData(
-        data,
-        isAuth.data?.userId
-      );
-      const { ...responseData } = response;
-      setProfileData(responseData);
+      const response = await userService.editUserData(data);
+      const updatedData = response.details;
+      if (updatedData) {
+        setProfileData(updatedData);
+      }
       setIsLoading(false);
+      return profileData;
     } catch (error) {
-      showErrorAndSetTimeouts(error.message);
+      showErrorAndSetTimeouts(`Error edit profile data: ${error.message}`);
     }
   };
 
   const getProfileData = async () => {
     try {
+      // debugger
       setIsLoading(true);
+      
       const response = await userService.getUserData();
-      const data = JSON.stringify(response.user.details);
-      if (data) {
-        const userData = JSON.parse(data)
-        setProfileData(userData);
-        console.log(profileData);
-      } 
+      console.log(response.user.details);
+      setProfileData(response.user.details);
+      console.log(profileData);
+
       setIsLoading(false);
       return profileData;
     } catch (error) {
@@ -136,12 +146,12 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider value={contextService}>
       {children}
       {isLoading && <Loader />}
-      {errorMessage && (
+      {/* {errorMessage && (
         <div className={`error-message show-error custom-style`}>
           <p>{errorMessage}</p>
           {console.log('Rendering error message:', errorMessage)}
         </div>
-      )}
+      )} */}
     </UserContext.Provider>
   );
 };
