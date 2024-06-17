@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 import CustomSelect from './CustomSelect'; 
 import { UserContext } from '../contexts/UserContext';
+import { useTranslation } from 'react-i18next';
 
 const ProfileForm = () => {
+    const { t } = useTranslation();
 
     const navigate = useNavigate();
 
@@ -198,15 +200,15 @@ const ProfileForm = () => {
 
     return (
         <form onSubmit={handleSubmit} className="profile-form">
-            <h3>Попълнете данните си</h3>
+            <h3>{t('profile.profile_form_title')}</h3>
 
             <div className="avatar">
                 <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
-                <Link to="#" className="change-avatar-link">Добави снимка</Link>
+                <Link to="#" className="change-avatar-link">{t('profile.add_photo')}</Link>
             </div>
             <div className="user-data">
                 <div>
-                    <label htmlFor="username">Потребителско име: <span>*</span></label>
+                    <label htmlFor="username">{t('profile.username')}: <span>*</span></label>
                     <input type="text" id="username" name="username" value={form.username} onChange={handleInputChange} onBlur={onBlurHandler} required
                         style={{ borderColor: errors.username ? '#BB1D3D' : '' }}
                     />
@@ -214,20 +216,20 @@ const ProfileForm = () => {
                     {errors.username && <span className="error">{errors.username}</span>}
                 </div>
                 <div className="gender">
-                    <label>Пол:</label>
+                    <label>{t('profile.gender')}:</label>
                     <div className="gender-options">
                         <div>
-                            <label>Мъж
+                            <label>{t('profile.male')}
                                 <input type="radio" value="male" checked={form.gender === 'male'} onChange={handleGenderChange} />
                             </label>
                         </div>
                         <div>
-                            <label>Жена
+                            <label>{t('profile.female')}
                                 <input type="radio" value="female" checked={form.gender === 'female'} onChange={handleGenderChange} />
                             </label>
                         </div>
                         <div>
-                            <label> Друго
+                            <label> {t('profile.other')}
                                 <input type="radio" value="other" checked={form.gender === 'other'} onChange={handleGenderChange} />
                             </label>
                         </div>
@@ -235,22 +237,22 @@ const ProfileForm = () => {
                 </div>
                 <div>
 
-                    <label htmlFor="firstName">Име:</label>
+                    <label htmlFor="firstName">{t('profile.first_name')}:</label>
                     <input type="text" id="firstName" name="firstName" value={form.firstName} onChange={handleInputChange} onBlur={onBlurHandler} />
                     {errors.firstName && <span className="error">{errors.firstName}</span>}
                 </div>
                 <div>
-                    <label htmlFor="lastName">Фамилия:</label>
+                    <label htmlFor="lastName">{t('profile.last_name')}:</label>
                     <input type="text" id="lastName" name="lastName" value={form.lastName} onChange={handleInputChange} onBlur={onBlurHandler} />
                     {errors.lastName && <span className="error">{errors.lastName}</span>}
                 </div>
                 <div className="date">
-                    <label>Възраст</label>
+                    <label>{t('profile.age')}</label>
                     <div>
                         <label>
 
                             <select value={selectedDate} onChange={handleSelectedDateChange} onBlur={onBlurHandler}>
-                                <option value="">Ден</option>
+                                <option value="">{t('profile.day')}</option>
                                 {generateNumberOptions(1, 31)}
                             </select>
                         </label>
@@ -259,7 +261,7 @@ const ProfileForm = () => {
                         <label>
 
                             <select value={selectedMonth} onChange={handleSelectedMonthChange} onBlur={onBlurHandler}>
-                                <option value="">Месец</option>
+                                <option value="">{t('profile.month')}</option>
                                 {generateNumberOptions(1, 12)}
                             </select>
                         </label>
@@ -268,14 +270,14 @@ const ProfileForm = () => {
                         <label>
 
                             <select value={selectedYear} onChange={handleSelectedYearChange} onBlur={onBlurHandler}>
-                                <option value="">Година</option>
+                                <option value="">{t('profile.year')}</option>
                                 {generateNumberOptions(1900, new Date().getFullYear())}
                             </select>
                         </label>
                     </div>
                 </div>
                 <div>
-                    <label htmlFor="phoneNumber">Телефон: <span>*</span></label>
+                    <label htmlFor="phoneNumber">{t('profile.phone_number')}: <span>*</span></label>
                     <input type="text" id="phoneNumber" name="phoneNumber" value={form.phoneNumber} onChange={handleInputChange} onBlur={onBlurHandler} required
                         style={{ borderColor: errors.phoneNumber ? '#BB1D3D' : '' }}
                     />
@@ -285,11 +287,11 @@ const ProfileForm = () => {
             </div>
 
             <label>
-                Област (Region): <span>*</span>
+            {t('profile.region')}: <span>*</span>
                 <select name="region" value={form.region} onChange={handleRegionChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.region ? '#BB1D3D' : '' }}
                 >
-                    <option value="">Изберете регион</option>
+                    <option value="">{t('profile.select_region')}</option>
                     {regions.map((region, index) => (
                         <option key={index} value={region.id}>{region.bg}</option>
                     ))}
@@ -297,11 +299,11 @@ const ProfileForm = () => {
                 {errors.region && <span className="error">{errors.region}</span>}
             </label>
             <label>
-                Oбщина (Municipality): <span>*</span>
+            {t('profile.municipality')}: <span>*</span>
                 <select name="municipality" value={form.municipality} onChange={handleMunicipalityChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.municipality ? '#BB1D3D' : '' }}
                 >
-                    <option value="">Изберете община</option>
+                    <option value="">{t('profile.select_municipality')}</option>
                     {municipalities.map((municipality, index) => (
                         <option key={index} value={municipality.id}>{municipality.bg}</option>
                     ))}
@@ -309,11 +311,11 @@ const ProfileForm = () => {
                 {errors.municipality && <span className="error">{errors.municipality}</span>}
             </label>
             <label>
-                Населено място (Settlement): <span>*</span>
+            {t('profile.settlement')}: <span>*</span>
                 <select name="settlement" value={form.settlement} onChange={handleInputChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.settlement ? '#BB1D3D' : '' }}
                 >
-                    <option value="">Избетере населено място</option>
+                    <option value="">{t('profile.select_settlement')}</option>
                     {settlements.map((settlement, index) => (
                         <option key={index} value={settlement.id}>{settlement.bg}</option>
                     ))}
@@ -321,24 +323,24 @@ const ProfileForm = () => {
                 {errors.settlement && <span className="error">{errors.settlement}</span>}
             </label>
             <label>
-                Квартал (District):
+            {t('profile.district')}:
                 <input type="text" name="district" value={form.district} onChange={handleInputChange} />
                 {errors.district && <span className="error">{errors.district}</span>}
             </label>
             <label>
-                Блок (Block):
+            {t('profile.block')}:
                 <input type="text" name="block" value={form.block} onChange={handleInputChange} />
                 {errors.block && <span className="error">{errors.block}</span>}
             </label>
             <label>
-                Улица (Street): <span>*</span>
+            {t('profile.street')}: <span>*</span>
                 <input type="text" name="street" value={form.street} onChange={handleInputChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.street ? '#BB1D3D' : '' }}
                 />
                 {errors.street && <span className="error">{errors.street}</span>}
             </label>
             <label>
-                Номер улица (Street Number): <span>*</span>
+            {t('profile.street_number')}: <span>*</span>
                 <input type="text" name="streetNumber" value={form.streetNumber} onChange={handleInputChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.streetNumber ? '#BB1D3D' : '' }}
                 />
@@ -346,7 +348,7 @@ const ProfileForm = () => {
             </label>
 
             <label>
-                Умения:
+            {t('map.skills')}:
                 <CustomSelect
                 
                 options={skillsOptions}
@@ -354,46 +356,31 @@ const ProfileForm = () => {
                 onSelect={(selected) => setForm({ ...form, skills: selected })}
                 
             />
-                {/* <select name="skills" value={form.skills} onChange={handleInputChange} onBlur={onBlurHandler}>
-                    <option value="">Изберете</option>
-                    {skillsOptions.map(option => (
-                        <option key={option.value} value={option.value}>{option.name}</option>
-                    ))}
-                </select> */}
+           
             </label>
             <label>
-                Професия:
+            {t('map.job')}:
                 <CustomSelect
                options={workOptions}
                selectedOptions={form.workOptions}
                onSelect={(selected) => setForm({ ...form, workOptions: selected })}
             />
-                {/* <select name="workOptions" value={form.workOptions} onChange={handleInputChange} onBlur={onBlurHandler}>
-                    <option value="">Изберете</option>
-                    {workOptions.map(option => (
-                        <option key={option.value} value={option.value}>{option.name}</option>
-                    ))}
-                </select> */}
+
             </label>
             <label>
-                Интереси:
+            {t('map.interests')}:
                 <CustomSelect
                options={interestOptions}
                selectedOptions={form.interestOptions}
                onSelect={(selected) => setForm({ ...form, interestOptions: selected })}
              
             />
-                {/* <select name="interestOptions" value={form.interestOptions} onChange={handleInputChange} onBlur={onBlurHandler}>
-                    <option value="">Изберете</option>
-                    {interestOptions.map(option => (
-                        <option key={option.value} value={option.value}>{option.name}</option>
-                    ))}
-                </select> */}
+               
             </label>
-            <span className="required-fields">Полетата с * са задължителни!</span>
+            <span className="required-fields">{t('profile.required_fields')}</span>
             <div className="btn-inline">
-                <button type="submit" className="btn-general btn-green">Запази</button>
-                <button type="submit" className="btn-general btn-red" onClick={handleResetForm}>Затвори</button>
+                <button type="submit" className="btn-general btn-green">{t('profile.save_btn')}</button>
+                <button type="submit" className="btn-general btn-red" onClick={handleResetForm}>{t('profile.close_btn')}</button>
             </div>
         </form>
     );

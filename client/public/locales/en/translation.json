@@ -152,7 +152,36 @@
     "select_all": "Select all",
     "clear": "Clear",
     "selected" : "selected",
-    "select" : "Select"
+    "select" : "Select",
+    "profile_form_title": "Fill in your details",
+    "add_photo": "Add photo",
+    "username": "Username",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "age": "Age",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year",
+    "phone_number": "Phone Number",
+    "region": "Region",
+    "municipality": "Municipality",
+    "settlement": "Settlement",
+    "district": "District",
+    "block": "Block",
+    "street": "Street",
+    "street_number": "Street number",
+    "required_fields": "Fields marked with * are required!",
+    "save_btn": "Save",
+    "close_btn": "Close",
+    "select_region": "Select region",
+    "select_municipality": "Select municipality",
+    "select_settlement": "Select settlement"
+
+
 
   }
 }
