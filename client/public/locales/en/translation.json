@@ -146,6 +146,13 @@
       "drawing_arts": "Drawing and Art",
       "sewing": "Sewing"
     }
-  }
+  },
 
+  "profile": {
+    "select_all": "Select all",
+    "clear": "Clear",
+    "selected" : "selected",
+    "select" : "Select"
+
+  }
 }

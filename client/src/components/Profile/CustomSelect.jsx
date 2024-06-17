@@ -59,7 +59,8 @@ const CustomSelect = ({ options, selectedOptions, onSelect}) => {
         <div className="custom-select-with-checkbox" ref={dropdownRef}>
             <label className="custom-select-label"></label>
             <div className="custom-select-header" onClick={handleToggleDropdown}>
-                <span>{selectedOptions.length > 0 ? `${selectedOptions.length} избрани ` : 'Изберете'}</span>
+                <span>{selectedOptions.length > 0 ? `${selectedOptions.length}  ${t('profile.selected')}` : t('profile.select')}</span>
+
                 <span className="custom-select-chevron">
                     <FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} />
                 </span>
@@ -68,8 +69,8 @@ const CustomSelect = ({ options, selectedOptions, onSelect}) => {
                 <div className="custom-select-dropdown" onClick={(e) => e.stopPropagation()}>
 
                     <div className="select-all-clear">
-                        <button onClick={handleSelectAll} className="select-all-btn">Изберете всички</button>
-                        <button onClick={handleClearSelection} className="clear-btn">Изчистете</button>
+                        <button onClick={handleSelectAll} className="select-all-btn">{t('profile.select_all')}</button>
+                        <button onClick={handleClearSelection} className="clear-btn">{t('profile.clear')}</button>
                     </div>
 
                     {options.map(option => (
