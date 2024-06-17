@@ -96,7 +96,10 @@
 
 .checkbox-item input[type="checkbox"] {
     margin-right: 8px; 
+    width: auto;
+    box-shadow: none;
 }
+
 
 .checkbox-item label span {
     flex-grow: 1; 

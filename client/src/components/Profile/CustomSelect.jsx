@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import './CustomSelect.css';
+import { useTranslation } from 'react-i18next';
 
 const CustomSelect = ({ options, selectedOptions, onSelect}) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const { t } = useTranslation();
 
     const handleToggleDropdown = (e) => {
         e.preventDefault();
@@ -29,6 +31,7 @@ const CustomSelect = ({ options, selectedOptions, onSelect}) => {
             setIsOpen(false);
         }
     };
+    
 
 
     const handleSelectAll = (e) => {
@@ -44,12 +47,13 @@ const CustomSelect = ({ options, selectedOptions, onSelect}) => {
 
 
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    // useEffect(() => {
+    //     document.addEventListener('mousedown', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutside);
+    //     };
+    // }, []);
+    document.addEventListener('click', handleClickOutside);
 
     return (
         <div className="custom-select-with-checkbox" ref={dropdownRef}>
@@ -79,12 +83,13 @@ const CustomSelect = ({ options, selectedOptions, onSelect}) => {
                                     checked={selectedOptions.includes(option.value)}
                                     onChange={handleCheckboxChange}
                                 />
-                                {option.name}
+                                {t(option.name)}
                             </label>
                         </div>
                     ))}
                 </div>
             )}
+             
         </div>
     );
 };
