@@ -6,8 +6,14 @@ const ageCalculate = require("../utils/ageCalculate");
 const userDetailsValidator = require("../utils/userDetailsValidator");
 const isAuth = require("../middlewares/isAuth.js");
 const { where } = require("sequelize");
+const { tokenCreator } = require("../utils/jwt.js");
+const fieldSwap = require("../utils/fieldSwap.js");
 
 userDetailsController.post("/details", isAuth, async (req, res, next) => {
+  if (req.user.enabled) {
+    return res.status(403).send({ message: "User details have already been submitted once." });
+  }
+
   try {
     userDetailsValidator(req.body, req.path);
     const {
@@ -54,13 +60,15 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
 
     const details = await user_details.create(data);
 
-    const { birth_date, ...restOfDetails } = details.dataValues;
+    const { birth_date, id, user_accounts_id, ...restOfDetails } = details.dataValues;
 
-    await user_account.update({ finished: true }, { where: { id: req.user.userId } });
+    const user = await user_account.update({ finished: true }, { where: { id: req.user.userId }, returning: true, plain: true });
+
+    const token = tokenCreator(user[1].dataValues);
 
     const updatedDetails = { ...restOfDetails, age: ageCalculate(birth_date), enabled: true };
 
-    res.status(200).send({ message: "Details successfully updated!", details: updatedDetails });
+    res.status(200).send({ message: "Details successfully updated!", details: updatedDetails, token });
   } catch (err) {
     next(err);
   }
@@ -69,7 +77,7 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
 userDetailsController.get("/all-users", async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
-      attributes: ["id", "email", ["finished", "enabled"]],
+      attributes: ["email", ["finished", "enabled"]],
       include: [
         {
           model: user_details,
@@ -88,37 +96,13 @@ userDetailsController.patch("/update-details", isAuth, async (req, res, next) =>
   try {
     userDetailsValidator(req.body, req.path);
 
-    const data = {};
-
-    const fieldMapping = {
-      phoneNumber: "phone_number",
-      username: "username",
-      region: "region",
-      municipality: "municipality",
-      settlement: "settlement",
-      workOptions: "work_options",
-      skills: "skills",
-      interestOptions: "interest_options",
-      district: "district",
-      block: "block",
-      street: "street",
-      streetNumber: "street_number",
-      location: "location",
-      firstName: "first_name",
-      lastName: "last_name",
-      gender: "gender",
-      birthDate: "birth_date",
-    };
-
-    Object.keys(req.body).forEach((key) => {
-      if (fieldMapping[key]) {
-        data[fieldMapping[key]] = req.body[key];
-      }
-    });
+    const data = fieldSwap(req.body, "mapToDb");
 
     const [_, details] = await user_details.update(data, { where: { user_accounts_id: req.user.userId }, returning: true, plain: true });
 
-    res.status(200).json({ message: "Details edited successfully!", details });
+    const updatedDetails = fieldSwap(details.dataValues, "mapFromDb");
+
+    res.status(200).json({ message: "Details edited successfully!", details: updatedDetails });
   } catch (err) {
     next(err);
   }
@@ -128,12 +112,12 @@ userDetailsController.get("/single-user", isAuth, async (req, res, next) => {
   try {
     const user = await user_account.findOne({
       where: { id: req.user.userId },
-      attributes: ["id", "email", ["finished", "enabled"]],
+      attributes: ["email", ["finished", "enabled"]],
       include: [
         {
           model: user_details,
           as: "details",
-          attributes: ["phone_number", "username", "first_name", "last_name", "work_options", "skills", "interest_options", "location"],
+          attributes: { exclude: ["user_accounts_id", "id"] },
         },
       ],
     });
