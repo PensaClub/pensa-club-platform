@@ -2,8 +2,12 @@ import './hero.css';
 
 import Testimonials from './Testimonials/Testimonials';
 import { Fade, Slide, } from "react-awesome-reveal";
+
+import './hero.css';
+
 import {Link} from 'react-router-dom'
 import { useTranslation, Trans } from "react-i18next";
+
 
 
 export const Hero = () => {
