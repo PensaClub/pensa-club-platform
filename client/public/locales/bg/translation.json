@@ -196,7 +196,8 @@
     "change_password": "Смяна на парола",
     "old_password": "Стара парола",
     "new_password": "Нова парола",
-    "repeat_password": "Повтори парола"
+    "repeat_password": "Повтори парола",
+    "change_photo": "Смени снимка"
 
   }
 }
