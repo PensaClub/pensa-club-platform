@@ -190,7 +190,9 @@
     "work_options_error": "Choose at least one profession",
     "add_jobs": "Add your proffesion",
     "skills_options_error": "Choose at least one skills",
-    "add_skills": "Add your skill"
+    "add_skills": "Add your skill",
+    "interests_options_error": "Choose at least one interest",
+    "add_interests": "Add your interest"
 
 
 
