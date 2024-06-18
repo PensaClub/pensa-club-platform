@@ -8,15 +8,8 @@ export const mapServiceFactory = (token) => {
     const requester = requestFactory(token)
 
     return {
-
         allUsers: () => {
             return requester.get(`${apiUrl}/user/all-users`)
         }
-
-
-
-
-
-
     }
 }

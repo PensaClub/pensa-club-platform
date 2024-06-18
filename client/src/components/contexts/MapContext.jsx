@@ -10,29 +10,21 @@ export const MapProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [allUsers, setAllUsers] = useState({});
 
-
-const {token} = useAuthContext()
+    const { token } = useAuthContext()
     const mapService = mapServiceFactory(token)
 
 
-    const onAllUsers = async ()=>{
+    const onAllUsers = async () => {
 
         try {
             setIsLoading(true);
-
             const response = await mapService.allUsers()
-            
-            setAllUsers(prev =>({...prev, response}))
+            setAllUsers(prev => ({ ...prev, response }))
             setIsLoading(false);
-        }catch(e) {
+        } catch (e) {
 
         }
     }
-
-
-
-
-
 
     const contextService = {
         onAllUsers,
@@ -42,14 +34,12 @@ const {token} = useAuthContext()
     return (
         <MapContext.Provider value={contextService}>
             {children}
-
             {isLoading && <Loader />}
-
         </MapContext.Provider>
     )
 }
 
-export const useMappingContext = ()=>{
+export const useMappingContext = () => {
     const context = useContext(MapContext)
     return context
 }
