@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 
 const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const selectRef = useRef();
@@ -49,7 +49,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
             <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
                 <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
 
-               {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')} {/* //Пробно е пуснато да се види при повече опции */}
+                {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')} {/* //Пробно е пуснато да се види при повече опции */}
 
                 {selectedValues.length > 0 && <p className='number-filters'>({selectedValues.length})</p>}
 
@@ -76,7 +76,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
                                     onChange={() => handleOptionChange(option.value)}
                                 />
                                 {/* Translate options */}
-                                <label htmlFor={`checkbox-${option.value}`}>{t(`${option.name}`)}</label> 
+                                <label htmlFor={`checkbox-${option.value}`}>{t(`${option.name}`)}</label>
                             </div>
                         ))}
                     </div>
@@ -86,30 +86,32 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
     );
 };
 
-const FilterSection = ({ title, options, selectedValues, onChange, icon }) => (
-    <div className="filter-section">
-        <h4> <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-            {title} {selectedValues.length > 0 && <>({selectedValues.length})</>}</h4>
-        {options.map(option => (
-            <div key={option.value} className="option">
-                <input
-                    type="checkbox"
-                    id={`checkbox-${option.value}`}
-                    checked={selectedValues.includes(option.value)}
-                    onChange={() => onChange(option.value)}
-                />
-                <label htmlFor={`checkbox-${option.value}`}>{option.name}</label>
-            </div>
-        ))}
-    </div>
-);
-
+const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
+    const { t } = useTranslation(); 
+    return (
+        <div className="filter-section">
+            <h4> <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
+                {t(title)} {selectedValues.length > 0 && <>({selectedValues.length})</>}</h4>
+            {options.map(option => (
+                <div key={option.value} className="option">
+                    <input
+                        type="checkbox"
+                        id={`checkbox-${option.value}`}
+                        checked={selectedValues.includes(option.value)}
+                        onChange={() => onChange(option.value)}
+                    />
+                    <label htmlFor={`checkbox-${option.value}`}>{t(option.name)}</label> 
+                </div>
+            ))}
+        </div>
+    );
+};
 export const FiltersMap = () => {
 
-    const {t} = useTranslation();
- 
+    const { t } = useTranslation();
+
     const [optionData, setOptionData] = useState(null)
- 
+
 
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedWorks, setSelectedWorks] = useState([]);
@@ -165,7 +167,7 @@ export const FiltersMap = () => {
                     )}
                 </div>
                 <div className="filter-main">
-                    <label>{t('map.skills')}</label>
+                    <label>{t('map.job')}</label>
                     {optionData ? (
                         <CustomSelect
                             icon={faBriefcase}
@@ -179,7 +181,7 @@ export const FiltersMap = () => {
                     )}
                 </div>
                 <div className="filter-main">
-                    <label>{t('map.skills')}</label>
+                    <label>{t('map.interests')}</label>
                     {optionData ? (
                         <CustomSelect
                             icon={faUsersGear}
@@ -200,14 +202,15 @@ export const FiltersMap = () => {
                         <>
                             <FilterSection
                                 icon={faUniversalAccess}
-                                title="Умения"
+                                title={t('map.skills')}
                                 options={optionData.skills}
                                 selectedValues={selectedSkills}
                                 onChange={handleSkillChange}
+                                
                             />
                             <FilterSection
                                 icon={faBriefcase}
-                                title="Професия"
+                                title={t('map.job')}
                                 options={optionData.workOptions}
                                 selectedValues={selectedWorks}
                                 onChange={handleWorkChange}
@@ -215,7 +218,7 @@ export const FiltersMap = () => {
                             <FilterSection
                                 icon={faUsersGear}
 
-                                title="Интереси"
+                                title={t('map.interests')}
                                 options={optionData.interestOptions}
                                 selectedValues={selectedInterests}
                                 onChange={handleInterestChange}
@@ -224,35 +227,6 @@ export const FiltersMap = () => {
                     ) : (
                         <div>Loading...</div>
                     )}
-
-                    <label>{t('map.skills')}</label>
-                    {optionData ? <CustomSelect
-                        icon={faUniversalAccess}
-                        options={optionData.skills}
-                        selectedValues={selectedSkills}
-                        onChange={setSelectedSkills}
-                        searchPlaceholder={t('map.skills-placeholder')}
-                    /> : <div>Loading...</div>}
-                </div>
-                <div className="filter-main">
-                    <label>{t('map.job')}</label>
-                    {optionData ? <CustomSelect
-                        icon={faBriefcase}
-                        options={optionData.workOptions}
-                        selectedValues={selectedWorks}
-                        onChange={setSelectedWorks}
-                        searchPlaceholder={t('map.job-placeholder')}
-                    /> : <div>Loading...</div>}
-                </div>
-                <div className="filter-main">
-                    <label>{t('map.interests')}</label>
-                   {optionData ? <CustomSelect
-                        icon={faUsersGear}
-                        options={optionData.interestOptions}
-                        selectedValues={selectedInterests}
-                        onChange={setSelectedInterests}
-                        searchPlaceholder={t('map.interests-placeholder')}
-                    />:<div>Loading...</div>}
 
                 </div>
             </div>
