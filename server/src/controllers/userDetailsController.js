@@ -100,7 +100,7 @@ userDetailsController.patch("/update-details", isAuth, async (req, res, next) =>
 
     const [_, details] = await user_details.update(data, { where: { user_accounts_id: req.user.userId }, returning: true, plain: true });
 
-    let updatedDetails = fieldSwap(details.dataValues, "mapFromDb");
+    const updatedDetails = fieldSwap(details.dataValues, "mapFromDb");
 
     updatedDetails.age = ageCalculate(updatedDetails.birthDate);
     delete updatedDetails.birthDate;
