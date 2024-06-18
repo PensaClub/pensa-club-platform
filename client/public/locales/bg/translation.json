@@ -192,7 +192,11 @@
     "skills_options_error": "Изберете поне едно умение",
     "add_skills": "Добавете своите умения",
     "interests_options_error": "Изберете поне един интерес",
-    "add_interests": "Добавете своите интереси"
+    "add_interests": "Добавете своите интереси",
+    "change_password": "Смяна на парола",
+    "old_password": "Стара парола",
+    "new_password": "Нова парола",
+    "repeat_password": "Повтори парола"
 
   }
 }

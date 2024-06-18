@@ -192,7 +192,11 @@
     "skills_options_error": "Choose at least one skills",
     "add_skills": "Add your skill",
     "interests_options_error": "Choose at least one interest",
-    "add_interests": "Add your interest"
+    "add_interests": "Add your interest",
+    "change_password": "Change password",
+    "old_password": "Old password",
+    "new_password": "New password",
+    "repeat_password": "Repeat password"
 
 
 
