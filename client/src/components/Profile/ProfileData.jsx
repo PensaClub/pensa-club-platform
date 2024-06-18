@@ -23,11 +23,11 @@ export const ProfileData = () => {
     const initialFormState = {
         username: profileData.username || '',
         email: userEmail,
-        firstName: profileData.first_name || '',
-        lastName: profileData.last_name || '',
-        phoneNumber: profileData.phone_number || '',
+        firstName: profileData.firstName || '',
+        lastName: profileData.lastName || '',
+        phoneNumber: profileData.phoneNumber || '',
         gender: profileData.gender || null, //TODO: sync format with backend
-        birthDate: profileData.birth_date || null, //TODO: sync format with backend
+        birthDate: profileData.birthDate || null, //TODO: sync format with backend
     }
     const [form, setForm] = useState(initialFormState);
 

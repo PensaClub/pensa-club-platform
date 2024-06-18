@@ -38,53 +38,11 @@ export const Profile = () => {
   // const [profileData, setProfileData] = useState('');
   // const [isName, setIsName] = useState(false);
 
-  const { userEmail, isFinish, profileData } =
-    useContext(UserContext);
-  //    const isFinish = true;
-  //   console.log(isFinish);
-
-  // const fieldMapping = {
-  //   phone_number: "phoneNumber",
-  //   username: "username",
-  //   region: "region",
-  //   municipality: "municipality",
-  //   settlement: "settlement",
-  //   work_options: "workOptions",
-  //   skills: "skills",
-  //   interest_options: "interestOptions",
-  //   district: "district",
-  //   block: "block",
-  //   street: "street",
-  //   street_number: "streetNumber",
-  //   location: "location",
-  //   first_name: "firstName",
-  //   last_name: "lastName",
-  //   gender: "gender",
-  //   birth_date: "birthDate",
-  // };
+  const { userEmail, isFinish, profileData } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
-    
-    // const serializedData = localStorage.getItem("userDetails");
-    // const userDetails = JSON.parse(serializedData);
-    // if (userDetails) {
-    //   setProfileData (userDetails.details);
-    // } 
   }, []);
-
-  // useEffect(() => {
-  //   const loadProfileData = async () => {
-  //     if (isFinish) {
-  //       const userDetails = await getProfileData(userId);
-  //       // console.log(userDetails);
-  //       setUserData(userDetails);
-  //       console.log(userData);
-  //     }
-  //   };
-
-  //   loadProfileData();
-  // }, [userId]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);

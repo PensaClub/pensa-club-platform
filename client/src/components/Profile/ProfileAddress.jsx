@@ -11,6 +11,9 @@ const ProfileAddress = () => {
   const [municipalities, setMunicipalities] = useState([]);
   const [settlements, setSettlements] = useState([]);
   const [errors, setErrors] = useState({});
+  let currRegion;
+  let currMunicipality;
+  let currSettlement;
 
   const initialFormState = {
     region: profileData.region || '',
@@ -67,6 +70,13 @@ const ProfileAddress = () => {
       }
     }
     loadSettlements();
+
+    currRegion = profileData.region;
+    currMunicipality = profileData.municipality;
+    currSettlement = profileData.settlement;
+    console.log(currRegion);
+    console.log(currMunicipality);
+    console.log(currSettlement);
   }, []);
 
   const handleRegionChange = async (e) => {
@@ -192,7 +202,7 @@ const ProfileAddress = () => {
         <select
           name="region"
           //   value={form.region}
-          value={form.region}
+          value={form.region || currRegion}
           onChange={handleRegionChange}
           onBlur={onBlurHandler}
           required
@@ -211,7 +221,7 @@ const ProfileAddress = () => {
         Oбщина (Municipality): <span>*</span>
         <select
           name="municipality"
-          value={form.municipality}
+          value={form.municipality || currMunicipality}
           onChange={handleMunicipalityChange}
           onBlur={onBlurHandler}
           required

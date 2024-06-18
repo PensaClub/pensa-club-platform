@@ -18,31 +18,29 @@ const ProfileForm = () => {
     const navigate = useNavigate();
     const { onProfileDataSubmit, userId, userEmail, getProfileData } =
     useContext(UserContext);
-
     const initialFormState = {
-        username: '',
-        username: '',
-        // email: userEmail,
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        gender: null,
-        region: '',
-        regionId: '',
-        municipality: '',
-        municipalityId: '',
-        settlement: '',
-        settlementId: '',
-        district: '',
-        block: '',
-        street: '',
-        streetNumber: '',
-        birthDate: null,
-        skills: [],
-        interestOptions: [],
-        workOptions: [],
+      username: '',
+      // email: userEmail,
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      gender: null,
+      region: '',
+      regionId: '',
+      municipality: '',
+      municipalityId: '',
+      settlement: '',
+      settlementId: '',
+      district: '',
+      block: '',
+      street: '',
+      streetNumber: '',
+      birthDate: null,
+      skills: [],
+      interestOptions: [],
+      workOptions: [],
     }
-    const [form, setForm] = useState(initialFormState);
+  const [form, setForm] = useState(initialFormState);
 
   const [regions, setRegions] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
@@ -173,10 +171,6 @@ const ProfileForm = () => {
     setSelectedYear(e.target.value);
   };
 
-  const handleModalToggle = () => {
-    setModalOpen(!isModalOpen);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -202,7 +196,6 @@ const ProfileForm = () => {
       onProfileDataSubmit(form)
         .then(() => {
           console.log('Form Submitted:', form);
-          handleModalToggle();
           navigate('/profile');
         })
         .catch((err) =>
