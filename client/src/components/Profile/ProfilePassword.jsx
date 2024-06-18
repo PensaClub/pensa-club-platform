@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile';
+import { useTranslation } from 'react-i18next';
+
 
 export const ProfilePassword = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const initialFormState = {
@@ -72,9 +75,9 @@ export const ProfilePassword = () => {
 
     return (
         <form className="profile-form" onSubmit={handleSubmit}>
-            <h3>Смяна на парола</h3>
+            <h3>{t('profile.change_password')}:</h3>
             <label htmlFor="password">
-                Стара парола: <span>*</span>
+            {t('profile.old_password')}: <span>*</span>
                 <div className="password-input-container">
                     <input
                         type={showPasswords.password ? 'text' : 'password'}
@@ -91,7 +94,7 @@ export const ProfilePassword = () => {
                 {errors.password && <div className="error">{errors.password}</div>}
             </label>
             <label>
-                Нова парола: <span>*</span>
+            {t('profile.new_password')}: <span>*</span>
                 <div className="password-input-container">
                     <input
                         type={showPasswords.newPassword ? 'text' : 'password'}
@@ -108,7 +111,7 @@ export const ProfilePassword = () => {
                 {errors.newPassword && <div className="error">{errors.newPassword}</div>}
             </label>
             <label>
-                Повтори парола: <span>*</span>
+            {t('profile.repeat_password')}: <span>*</span>
                 <div className="password-input-container">
                     <input
                         type={showPasswords.rePassword ? 'text' : 'password'}
@@ -124,11 +127,11 @@ export const ProfilePassword = () => {
                 </div>
                 {errors.rePassword && <div className="error">{errors.rePassword}</div>}
             </label>
-            <span className="required-fields">Полетата с * са задължителни!</span>
+            <span className="required-fields">{t('profile.required_fields')}</span>
             <div className="btn-inline">
-                <button type="submit" className="btn-general btn-green">Запази</button>
+                <button type="submit" className="btn-general btn-green">{t('profile.save_btn')}</button>
                 <button type="button" className="btn-general btn-red" onClick={() => handleReset(setForm, initialFormState)}>
-                    Затвори
+                {t('profile.close_btn')}
                 </button>
             </div>
         </form>

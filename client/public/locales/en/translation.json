@@ -146,6 +146,61 @@
       "drawing_arts": "Drawing and Art",
       "sewing": "Sewing"
     }
-  }
+  },
 
+  "profile": {
+    "select_all": "Select all",
+    "clear": "Clear",
+    "selected" : "selected",
+    "select" : "Select",
+    "profile_form_title": "Fill in your details",
+    "add_photo": "Add photo",
+    "username": "Username",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "age": "Age",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year",
+    "phone_number": "Phone Number",
+    "region": "Region",
+    "municipality": "Municipality",
+    "settlement": "Settlement",
+    "district": "District",
+    "block": "Block",
+    "street": "Street",
+    "street_number": "Street number",
+    "required_fields": "Fields marked with * are required!",
+    "save_btn": "Save",
+    "close_btn": "Close",
+    "select_region": "Select region",
+    "select_municipality": "Select municipality",
+    "select_settlement": "Select settlement",
+    "account": "Account",
+    "photo": "Photo",
+    "personal_data": "Personal data",
+    "address": "Address",
+    "password": "Password",
+    "announced": "Announced",
+    "anothers": "Anothers",
+    "work_options_error": "Choose at least one profession",
+    "add_jobs": "Add your proffesion",
+    "skills_options_error": "Choose at least one skills",
+    "add_skills": "Add your skill",
+    "interests_options_error": "Choose at least one interest",
+    "add_interests": "Add your interest",
+    "change_password": "Change password",
+    "old_password": "Old password",
+    "new_password": "New password",
+    "repeat_password": "Repeat password",
+    "change_photo": "Change photo",
+    "email": "Email"
+
+
+
+  }
 }

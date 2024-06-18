@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import CustomSelect from './CustomSelect';
 import { resetFields, handleReset } from '../../utils/profile';
-
+import { useTranslation } from 'react-i18next';
 
 export const ProfileSkills = () => {
-
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const initialFormState = {
@@ -51,7 +51,7 @@ export const ProfileSkills = () => {
     const validateForm = () => {
         const errors = {};
         if (form?.skills?.length === 0) {
-            errors.skills = 'Изберете поне едно умение';
+            errors.skills = t('profile.skills_options_error');
         }
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -66,17 +66,17 @@ export const ProfileSkills = () => {
     return (
         <form className="profile-form" onSubmit={handleSubmit}>
             <label>
-                <h3>Добавете своите умения:</h3>
+                <h3>{t('profile.add_skills')}:</h3>
                 <CustomSelect
                     options={skillsOptions}
                     selectedOptions={form.skills}
                     onSelect={(selected) => setForm({ ...form, skills: selected })}
                 />
             </label>
-            {errors.skills && <div className="error-message">{errors.skills}</div>}
+            {errors.skills && <div className="error">{errors.skills}</div>}
             <div className="btn-inline">
-                <button type="submit" className="btn-general btn-green">Запази</button>
-                <button type="reset" className="btn-general btn-red" onClick={handleResetForm}>Затвори</button>
+                <button type="submit" className="btn-general btn-green">{t('profile.save_btn')}</button>
+                <button type="reset" className="btn-general btn-red" onClick={handleResetForm}>{t('profile.close_btn')}</button>
             </div>
         </form>
     );
