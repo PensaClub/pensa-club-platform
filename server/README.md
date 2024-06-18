@@ -129,6 +129,7 @@ The database is pre-configured to connect using the environment variables provid
   - **/user/details** : Used to create a user's details post-registration. It allows adding additional information such as place of residence, city, profession and others.
   - **/user/all-users** : This endpoint fetches a list of all registered users in the system.
   - **/user/update-details** : This endpoint updates an existing user's profile. It requires the specific field to be updated, for example, `"workOptions": ["Doctor", "Lawyer"]` to update the work options of the user.
+  - **/user/single-user** : This endpoint fetches a single registered user in the system.
 
 ## Testing
 
