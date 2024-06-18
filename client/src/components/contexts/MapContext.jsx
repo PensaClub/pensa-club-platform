@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { Loader } from "../Loader/Loader";
-import { mapServiceFactory } from "../Services/mapService";
+import { mapServiceFactory } from "../Services/MapService";
 import { useAuthContext } from "./UserContext";
 
 
@@ -8,7 +8,7 @@ export const MapContext = createContext()
 
 export const MapProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [allusers, setAllUsers] = useState();
+    const [allUsers, setAllUsers] = useState({});
 
 
 const {token} = useAuthContext()
@@ -22,7 +22,8 @@ const {token} = useAuthContext()
 
             const response = await mapService.allUsers()
             
-            setAllUsers(response)
+            setAllUsers(prev =>({...prev, response}))
+            setIsLoading(false);
         }catch(e) {
 
         }
@@ -34,11 +35,14 @@ const {token} = useAuthContext()
 
 
     const contextService = {
-
+        onAllUsers,
+        allUsers
     }
 
     return (
         <MapContext.Provider value={contextService}>
+            {children}
+
             {isLoading && <Loader />}
 
         </MapContext.Provider>
