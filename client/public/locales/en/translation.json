@@ -188,7 +188,9 @@
     "announced": "Announced",
     "anothers": "Anothers",
     "work_options_error": "Choose at least one profession",
-    "add_jobs": "Add your proffesion"
+    "add_jobs": "Add your proffesion",
+    "skills_options_error": "Choose at least one skills",
+    "add_skills": "Add your skill"
 
 
 
