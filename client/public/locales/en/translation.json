@@ -197,7 +197,8 @@
     "old_password": "Old password",
     "new_password": "New password",
     "repeat_password": "Repeat password",
-    "change_photo": "Change photo"
+    "change_photo": "Change photo",
+    "email": "Email"
 
 
 
