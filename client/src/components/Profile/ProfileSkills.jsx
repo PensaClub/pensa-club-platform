@@ -8,10 +8,10 @@ import { UserContext } from '../contexts/UserContext';import { useTranslation } 
 export const ProfileSkills = () => {
     const { t } = useTranslation();  
     const navigate = useNavigate();
-  const { onEditProfileDataSubmit } = useContext(UserContext);
+  const { onEditProfileDataSubmit, profileData } = useContext(UserContext);
 
   const initialFormState = {
-    skills: [],
+    skills: profileData.skills || [],
   };
   const [form, setForm] = useState(initialFormState);
   const [skillsOptions, setSkillsOptions] = useState([]);

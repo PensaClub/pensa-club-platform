@@ -7,11 +7,12 @@ import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 
 export const ProfileInterests = () => {
-    const { onEditProfileDataSubmit } = useContext(UserContext);    const { t } = useTranslation();
+    const { onEditProfileDataSubmit, profileData } = useContext(UserContext);    
+    const { t } = useTranslation();
     const navigate = useNavigate();
     
     const initialFormState = {
-        interestOptions: []
+        interestOptions: profileData.interestOptions || [],
     }
     const [form, setForm] = useState(initialFormState);
     const [interestOptions, setInterestOptions] = useState([]);

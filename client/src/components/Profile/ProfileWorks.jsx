@@ -8,11 +8,12 @@ import { useTranslation } from 'react-i18next';
 
 
 export const ProfileWorks = () => {
-    const { onEditProfileDataSubmit } = useContext(UserContext);    const { t } = useTranslation();
+    const { onEditProfileDataSubmit, profileData } = useContext(UserContext);    
+    const { t } = useTranslation();
     const navigate = useNavigate();
     
     const initialFormState = {
-        workOptions: []
+        workOptions: profileData.workOptions || [],
     }
     const [form, setForm] = useState(initialFormState);
     const [workOptions, setWorkOptions] = useState([]);
