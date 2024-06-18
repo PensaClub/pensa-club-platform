@@ -186,7 +186,7 @@ const ProfileForm = () => {
 
         if (isValid) {
 
-            console.log('Form Submitted:', trimmedForm);
+            // console.log('Form Submitted:', trimmedForm);
             // resetFields(setForm, initialFormState);
             // setSelectedDate('');
             // setSelectedMonth('');
@@ -195,6 +195,10 @@ const ProfileForm = () => {
 
       onProfileDataSubmit(form)
         .then(() => {
+          if("No such address was found!") {
+            navigate('/profile/profile-form');
+            return;
+          }
           console.log('Form Submitted:', form);
           navigate('/profile');
         })

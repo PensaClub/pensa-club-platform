@@ -87,6 +87,11 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       const response = await userService.setUserData(data);
       console.log(response);
+      if(response.message === "No such address was found!") {
+        navigate('/profile/profile-form');
+        setIsLoading(false);
+        return response.message;
+      }
       setProfileData(response.details);
       setIsAuth({...isAuth, token: response.token})
       setIsFinish(true)
