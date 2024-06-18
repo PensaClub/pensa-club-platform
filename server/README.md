@@ -5,6 +5,7 @@
 - [Environment](#environment)
 - [Installation](#installation)
 - [Database Setup](#database-setup)
+- [Demo User](#demo-user)
 - [Project Structure](#project-structure)
 - [API Endpoints](#api-endpoints)
 - [Testing](#testing)
@@ -89,6 +90,15 @@ The database is pre-configured to connect using the environment variables provid
 1. Initial User Account Migration: Sets up the user_account table with fields for user authentication and account status.
 
 2. User Details Migration: Establishes the user_details table with comprehensive user information, including contact details and personal attributes.
+
+## Demo User
+
+When the server starts for the first time in a development environment, a demo user account is automatically created if it does not already exist. This allows developers to immediately start testing and interacting with the application without needing to manually set up a test account.
+
+**Credentials for the Demo User:**
+
+- **Email:** test@test.com
+- **Password:** Test1234
 
 ## Project Structure
 
