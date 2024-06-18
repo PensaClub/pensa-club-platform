@@ -10,7 +10,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
-  const [isFinish, setIsFinish] = useState(false);
+  const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);

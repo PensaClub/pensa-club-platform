@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import CustomSelect from './CustomSelect';
 import { resetFields, handleReset } from '../../utils/profile';
+import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 
 export const ProfileInterests = () => {
-    const { t } = useTranslation();
+    const { onEditProfileDataSubmit } = useContext(UserContext);    const { t } = useTranslation();
     const navigate = useNavigate();
     
     const initialFormState = {
@@ -29,10 +30,10 @@ export const ProfileInterests = () => {
         loadData();
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-
+            await onEditProfileDataSubmit(form);
             console.log('Form Submitted:', form);
             resetFields(setForm, initialFormState);
             navigate('/profile');
