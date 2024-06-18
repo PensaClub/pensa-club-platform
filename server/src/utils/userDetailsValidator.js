@@ -44,7 +44,7 @@ function userDetailsValidator(body, path) {
     errors.lastName = "Last name must be 3-20 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.";
   }
 
-  if (gender && (gender !== "male" || gender !== "female" || gender !== "other")) {
+  if (gender && gender !== "male" && gender !== "female" && gender !== "other") {
     errors.gender = "Gender must be 'male', 'female', or 'other'.";
   }
 

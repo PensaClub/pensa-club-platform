@@ -112,6 +112,9 @@ userDetailsController.patch("/update-details", isAuth, async (req, res, next) =>
 
     const updatedDetails = fieldSwap(details.dataValues, "mapFromDb");
 
+    updatedDetails.age = ageCalculate(updatedDetails.birthDate);
+    delete updatedDetails.birthDate;
+
     res.status(200).json({ message: "Details edited successfully!", details: updatedDetails });
   } catch (err) {
     next(err);
@@ -133,6 +136,9 @@ userDetailsController.get("/single-user", isAuth, async (req, res, next) => {
     });
 
     const details = fieldSwap(user.dataValues.details.dataValues, "mapFromDb");
+
+    details.age = ageCalculate(details.birthDate);
+    delete details.birthDate;
 
     res.status(200).json({ message: "User data retrieved successfully.", user: { email: user.dataValues.email, enabled: user.dataValues.enabled, details } });
   } catch (err) {
