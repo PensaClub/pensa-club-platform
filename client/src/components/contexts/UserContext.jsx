@@ -88,7 +88,8 @@ export const UserProvider = ({ children }) => {
       const response = await userService.setUserData(data);
       console.log(response);
       setProfileData(response.details);
-      setIsFinish(response.details.enabled)
+      setIsAuth({...isAuth, token: response.token})
+      setIsFinish(true)
       // setIsFinish(true);
       setIsLoading(false);
     } catch (error) {
@@ -120,6 +121,7 @@ export const UserProvider = ({ children }) => {
       const response = await userService.getUserData();
       console.log(response.user.details);
       setProfileData(response.user.details);
+      setIsFinish(true);
       // console.log(profileData);
 
       setIsLoading(false);
