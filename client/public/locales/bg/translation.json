@@ -186,7 +186,9 @@
     "address": "Адрес",
     "password": "Парола",
     "announced": "Обяви",
-    "anothers": "Други"
+    "anothers": "Други",
+    "work_options_error": "Изберете поне една професия",
+    "add_jobs": "Добавете своите професии"
 
   }
 }

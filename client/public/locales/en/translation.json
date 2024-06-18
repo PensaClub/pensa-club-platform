@@ -186,7 +186,9 @@
     "address": "Address",
     "password": "Password",
     "announced": "Announced",
-    "anothers": "Anothers"
+    "anothers": "Anothers",
+    "work_options_error": "Choose at least one profession",
+    "add_jobs": "Add your proffesion"
 
 
 
