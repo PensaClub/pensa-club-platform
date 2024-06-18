@@ -42,6 +42,7 @@ export const Profile = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
+    console.log(isFinish);
   }, []);
 
   const toggleMenu = () => {

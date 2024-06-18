@@ -17,11 +17,11 @@ const ProfileAddress = () => {
 
   const initialFormState = {
     region: profileData.region || '',
-    regionId: profileData.regionId || '1',
+    regionId: profileData.regionId || '',
     municipality: profileData.municipality || '',
-    municipalityId: profileData.municipalityId || '1',
+    municipalityId: profileData.municipalityId || '',
     settlement: profileData.settlement || '',
-    settlementId: profileData.settlementId || '1',
+    settlementId: profileData.settlementId || '',
     district: profileData.district || '',
     block: profileData.block || '',
     street: profileData.street || '',
@@ -34,56 +34,75 @@ const ProfileAddress = () => {
       try {
         const response = await fetch('/regions.json');
         const data = await response.json();
-
         setRegions(data);
-        console.log(form);
       } catch (error) {
         console.error('Failed to load regions data', error);
       }
     };
-    loadRegions();
-
     const loadMunicipalities = async () => {
+      let regionId;
+      const regionName = form.region;
+      const region = regions.filter((region) => region.bg === regionName);
+      console.log(region[0]);
+      if(region[0]) {
+        regionId = region[0].id;
+      }
+      setForm({...form, regionId});
+
       try {
-        const response = await fetch(
-          `/regions-data/region-${form.regionId}/subregions-${form.regionId}.json`
-        );
-  
-        const data = await response.json();
-  
-        setMunicipalities(data);
+        if (regionId) {
+          const response = await fetch(
+            `/regions-data/region-${regionId}/subregions-${regionId}.json`
+          );
+
+          const data = await response.json();
+          setMunicipalities(data);
+        } else {
+          console.log('No regionId');
+        }
       } catch (error) {
         console.error('Failed to load municipalities data', error);
       }
-    }
-    loadMunicipalities();
+    };
 
     const loadSettlements = async () => {
+      const municipalityName = form.municipality;
+      console.log(municipalityName);
+      const municipalityId = await municipalities.filter((municipality) => municipality.bg === municipalityName)[0].id;
+      console.log(municipalityId);
+      setForm({...form, municipalityId});
+
       try {
         const response = await fetch(
-          `/regions-data/region-${form.regionId}/towns/towns-${form.municipalityId}.json`
+          `/regions-data/region-${form.regionId}/towns/towns-${municipalityId}.json`
         );
         const data = await response.json();
         setSettlements(data);
       } catch (error) {
         console.error('Failed to load settlements data', error);
       }
-    }
-    loadSettlements();
+    };
 
-    currRegion = profileData.region;
-    currMunicipality = profileData.municipality;
-    currSettlement = profileData.settlement;
-    console.log(currRegion);
-    console.log(currMunicipality);
-    console.log(currSettlement);
+    const setSettlemntId = async () => {
+      const settlementName = form.settlement;
+      console.log(settlementName);
+      const settlementId = await settlements.filter((settlement) => settlement.bg === settlementName)[0].id;
+      console.log(settlementId);
+      setForm({...form, settlementId});
+    }
+        
+    loadRegions()
+      .then(() => loadMunicipalities())
+      .then(() => loadSettlements())
+      .then(() => setSettlemntId)
+      .then(console.log(form))
+      .catch((err) => console.log(err));
   }, []);
 
   const handleRegionChange = async (e) => {
     const regionId = e.target.value;
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
-
 
     setForm({
       ...form,
@@ -97,7 +116,7 @@ const ProfileAddress = () => {
 
     try {
       const response = await fetch(
-        `/regions-data/region-${regionId}/subregions-${regionId}.json`
+        `/regions-data/region-${form.regionId}/subregions-${form.regionId}.json`
       );
 
       const data = await response.json();
@@ -110,12 +129,22 @@ const ProfileAddress = () => {
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
-    setForm({ ...form, municipality: municipalityId, settlement: '' });
+    const currMunicipality = municipalities.filter(
+      (municipality) => municipality.id == municipalityId
+    );
+    const municipalityName = currMunicipality[0].bg;
+
+    setForm({
+      ...form,
+      municipalityId: municipalityId,
+      municipality: municipalityName,
+      settlement: '',
+    });
     setSettlements([]);
 
     try {
       const response = await fetch(
-        `/regions-data/region-${form.region}/towns/towns-${municipalityId}.json`
+        `/regions-data/region-${form.regionId}/towns/towns-${form.municipalityId}.json`
       );
       const data = await response.json();
       setSettlements(data);

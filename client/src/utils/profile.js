@@ -40,18 +40,18 @@ export const validateField = (name, value, form = {}) => {
         case 'streetNumber':
             if (!value) error = 'Номерът на улицата е задължителен';
             break;
-        case 'password':
+        case 'currPassword':
             if (!passwordRegex.test(value)) {
                 error = 'Паролата трябва да е поне 8 символа и да съдържа поне една буква и една цифра';
             }
             break;
-        case 'newPassword':
+        case 'password':
             if (!passwordRegex.test(value)) {
                 error = 'Новата парола трябва да е поне 8 символа и да съдържа поне една буква и една цифра';
             }
             break;
         case 'rePassword':
-            if (value !== form.newPassword) {
+            if (value !== form.password) {
                 error = 'Паролите не съвпадат';
             }
            

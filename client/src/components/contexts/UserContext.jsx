@@ -9,7 +9,8 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
-  const [profileData, setProfileData] = useLocalStorage('userDetails', {}); //regionId: '1', municipalityId: '1', settlementId: '1'
+  const [profileData, setProfileData] = useLocalStorage('userDetails', {});
+  const [isFinish, setIsFinish] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +38,7 @@ export const UserProvider = ({ children }) => {
       const response = await userService.register(data);
       const { password, rePassword, ...newUser } = response;
       setIsAuth(newUser);
+      setIsFinish(newUser.data.enabled);
       setIsLoading(false);
       navigate('/profile/profile-form');
     } catch (error) {
@@ -51,8 +53,8 @@ export const UserProvider = ({ children }) => {
 
       const response = await userService.login(newData);
       const { password, ...newUser } = response;
-      setIsAuth(newUser);
-      console.log(newUser.data.enabled);
+      setIsAuth(newUser);      
+      setIsFinish(newUser.data.enabled);
       setIsLoading(false);
       if (newUser.data.enabled) {
         const res = await getProfileData();
@@ -83,9 +85,10 @@ export const UserProvider = ({ children }) => {
   const onProfileDataSubmit = async (data) => {
     try {
       setIsLoading(true);
-      const response = await userService.setUserData(data, isAuth.data?.userId);
-      const { ...responseData } = response;
-      setProfileData(responseData);
+      const response = await userService.setUserData(data);
+      console.log(response);
+      setProfileData(response.details);
+      setIsFinish(response.details.enabled)
       // setIsFinish(true);
       setIsLoading(false);
     } catch (error) {
@@ -117,7 +120,7 @@ export const UserProvider = ({ children }) => {
       const response = await userService.getUserData();
       console.log(response.user.details);
       setProfileData(response.user.details);
-      console.log(profileData);
+      // console.log(profileData);
 
       setIsLoading(false);
       return profileData;
@@ -125,6 +128,20 @@ export const UserProvider = ({ children }) => {
       showErrorAndSetTimeouts(`Error get profile data: ${error.message}`);
     }
   };
+
+  const onPasswordReset = async (data) => {
+    try {
+      const resetToken = isAuth.token;
+      setIsLoading(true);
+      console.log({...data, resetToken});
+      const response = await userService.resetPassword({...data, resetToken});
+      console.log('Password changed');
+      setIsLoading(false);
+    } catch (error) {
+      showErrorAndSetTimeouts(error.message);
+    }
+  };
+  
 
   const contextService = {
     onRegisterSubmit,
@@ -134,8 +151,9 @@ export const UserProvider = ({ children }) => {
     token: isAuth.token,
     isAuthentication: !!isAuth.token,
     onLogout,
-    isFinish: isAuth.data?.enabled,
-    // isFinish,
+    onPasswordReset,
+    // isFinish: isAuth.data?.enabled,
+    isFinish,
     onProfileDataSubmit,
     onEditProfileDataSubmit,
     getProfileData,

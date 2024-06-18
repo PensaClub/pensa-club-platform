@@ -3,7 +3,7 @@ const { TokenExpiredError } = require("jsonwebtoken");
 const CustomError = require("../utils/customError");
 
 function errorHandler(error, req, res, next) {
-  let message = "Something went wrong!";
+  let message = `Something went wrong! ${error}`;
   let statusCode = error.statusCode || 500;
   let details = error.details;
   if (error instanceof CustomError) {
