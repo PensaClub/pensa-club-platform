@@ -7,7 +7,7 @@ import {
 } from '../../utils/profile';
 import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, redirect, useNavigate } from 'react-router-dom';
+import { Link,  useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 
@@ -195,7 +195,7 @@ const ProfileForm = () => {
 
       onProfileDataSubmit(form)
         .then(() => {
-          if("No such address was found!") {
+          if("No such address was found!") { // TODO: preserved data that is already filled and show a message to the user!
             navigate('/profile/profile-form');
             return;
           }

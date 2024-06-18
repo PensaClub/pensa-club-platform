@@ -124,9 +124,10 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       
       const response = await userService.getUserData();
-      console.log(response.user.details);
+      // console.log(response.user.enabled);
+      // console.log(response.user.details);
       setProfileData(response.user.details);
-      setIsFinish(true);
+      setIsFinish(response.user.enabled);
       // console.log(profileData);
 
       setIsLoading(false);

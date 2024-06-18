@@ -42,7 +42,7 @@ const ProfileAddress = () => {
     const loadMunicipalities = async () => {
       let regionId;
       const regionName = form.region;
-      const region = regions.filter((region) => region.bg === regionName);
+      const region = regions.filter((region) => region.bg == regionName);
       console.log(region[0]);
       if(region[0]) {
         regionId = region[0].id;
@@ -68,7 +68,7 @@ const ProfileAddress = () => {
     const loadSettlements = async () => {
       const municipalityName = form.municipality;
       console.log(municipalityName);
-      const municipalityId = await municipalities.filter((municipality) => municipality.bg === municipalityName)[0].id;
+      const municipalityId = await municipalities.filter((municipality) => municipality.bg == municipalityName)[0].id;
       console.log(municipalityId);
       setForm({...form, municipalityId});
 
