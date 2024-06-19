@@ -75,7 +75,6 @@ export const UserProvider = ({ children }) => {
       setIsAuth({});
       localStorage.removeItem('auth');
       localStorage.removeItem('userDetails');
-      localStorage.removeItem('fullData');
       setIsLoading(false);
     } catch (error) {
       setIsAuth({});
@@ -83,27 +82,29 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const onProfileDataSubmit = async (data) => {
+  const onProfileDataSubmit = async (details) => {
     try {
-      const filledData = data;
       setIsLoading(true);
-      const response = await userService.setUserData(data);
-      console.log(response);
-      if (response.message === 'No such address was found!') {
-        navigate('/profile/profile-form');
-        setIsLoading(false);
-        return [response.message, filledData];
-      }
+      const response = await userService.setUserData(details);
+      // console.log(response);
+      // if (response.message === 'No such address was found!') {
+      //   navigate('/profile/profile-form');
+      //   setIsLoading(false);
+      //   return [response.message, filledData];
+      // }
       setProfileData(response.user);
       setIsAuth({
         ...isAuth,
-        token: response.token,
-        email: response.user.email,
-        enabled: response.user.enabled,
+        token: response.token, 
+        data: {
+          ...isAuth.data,
+          enabled: true,
+        }     
       });
-      setIsFinish(true);
-      // setIsFinish(true);
+      console.log(isAuth);
+      setIsFinish(true).then(navigate('/profile'))
       setIsLoading(false);
+      
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
@@ -118,11 +119,10 @@ export const UserProvider = ({ children }) => {
       const updatedData = response.details;
       console.log(updatedData);
       if (updatedData) {
-        setProfileData({...profileData, details: updatedData});
+        setProfileData({ ...profileData, details: updatedData });
         setIsAuth({
           ...isAuth,
           token: response.token,
-          email: response.user.email,
           enabled: response.user.enabled,
         });
       }

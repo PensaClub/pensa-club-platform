@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       phone_number: {
         type: DataTypes.STRING(16),
-        unique: true,
+        // unique: true,
         validate: {
           notEmpty: {
-            args: true,
+            args: false,
             msg: "Phone number is required.",
           },
           len: {

@@ -33,7 +33,7 @@ import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
 
 export const Profile = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isFinish, profileData, userEmail } = useContext(UserContext);
@@ -41,8 +41,8 @@ export const Profile = () => {
   useEffect(() => {
     window.scrollTo({ top: 0 });
     console.log(isFinish);
-    if(!isFinish) {
-      navigate('/profile/profile-form')
+    if (!isFinish) {
+      navigate('/profile/profile-form');
     }
   }, []);
 
@@ -107,28 +107,30 @@ export const Profile = () => {
             </div>
             <div className="user-data">
               <h2>{profileData.details.username}</h2>
-              {profileData.details.firstName || profileData.details.lastName 
-                ? <p>
-                <FontAwesomeIcon icon={faUser} className="icon" />{
-                  profileData.details.firstName ? 
-                  profileData.details.firstName : ''
-                }{' '}
-                {profileData.details.lastName ? profileData.details.lastName : ''}
-              </p>
-                : ''}
+              {profileData.details.firstName || profileData.details.lastName ? (
+                <p>
+                  <FontAwesomeIcon icon={faUser} className="icon" />
+                  {profileData.details.firstName
+                    ? profileData.details.firstName
+                    : ''}{' '}
+                  {profileData.details.lastName
+                    ? profileData.details.lastName
+                    : ''}
+                </p>
+              ) : (
+                ''
+              )}
 
               <p>
                 <FontAwesomeIcon icon={faEnvelope} className="icon" />{' '}
                 {profileData.email}
               </p>
-              
+
               <p>
                 <FontAwesomeIcon icon={faLocationDot} className="icon" />{' '}
                 {profileData.details.settlement},{' '}
-                {profileData.details.municipality},{' '}
-                {profileData.details.region}
+                {profileData.details.municipality}, {profileData.details.region}
               </p>
-              
             </div>
           </section>
         )}
@@ -136,7 +138,8 @@ export const Profile = () => {
         <Outlet />
         <Routes>
           {!isFinish && <Route path="profile-form" element={<ProfileForm />} />}
-          <Route path="profile-form" element={<ProfileForm />} />
+          
+
           <Route path="image" element={<ProfileImage />} />
           <Route path="data" element={<ProfileData />} />
           <Route path="address" element={<ProfileAddress />} />

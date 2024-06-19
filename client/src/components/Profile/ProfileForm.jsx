@@ -10,6 +10,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
+import { loadData } from '../../utils/loadData';
 
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
@@ -57,21 +58,20 @@ const ProfileForm = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    const loadRegions = async () => {
-      try {
-        const response = await fetch('/regions.json');
-        const data = await response.json();
+    loadData('/regions.json')
+      .then((data) => setRegions(data))
+      .catch((err) => console.log(err.message));
 
-        setRegions(data);
-      } catch (error) {
-        console.error('Failed to load regions data', error);
-      }
-    };
-    loadRegions();
+    loadData('/options.json')
+      .then((data) => {
+        setInterestOptions(data.interestOptions);
+        setSkillsOptions(data.skills);
+        setWorkOptions(data.workOptions);
+      })
+      .catch((err) => console.log(err.message));
   }, []);
 
   const handleRegionChange = async (e) => {
-    
     const regionId = e.target.value;
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
@@ -191,10 +191,9 @@ const ProfileForm = () => {
       // setSelectedDate('');
       // setSelectedMonth('');
       // setSelectedYear('');
-      navigate('/profile');
 
       onProfileDataSubmit(form)
-        .then((data) => {
+        .then(() => {
           // if (data[0] === 'No such address was found!') {
           //   // console.log(data[1]);
           //   // setFilledData(data[1])
@@ -205,7 +204,7 @@ const ProfileForm = () => {
           //   return;
           // }
           console.log('Form Submitted:', form);
-          navigate('/profile');
+          // navigate('/profile');
         })
         .catch((err) =>
           console.log(`Error on profile form submit: ${err.message}`)
@@ -364,9 +363,7 @@ const ProfileForm = () => {
             </div>
           </div>
           <div>
-            <label htmlFor="phoneNumber">
-              {t('profile.phone_number')}: <span>*</span>
-            </label>
+            <label htmlFor="phoneNumber">{t('profile.phone_number')}:</label>
             <input
               type="text"
               id="phoneNumber"
@@ -390,7 +387,6 @@ const ProfileForm = () => {
             value={form.regionId}
             onChange={handleRegionChange}
             onBlur={onBlurHandler}
-            required
             style={{ borderColor: errors.region ? '#BB1D3D' : '' }}
           >
             <option value="">{t('profile.select_region')}</option>
@@ -481,14 +477,13 @@ const ProfileForm = () => {
           {errors.street && <span className="error">{errors.street}</span>}
         </label>
         <label>
-          {t('profile.street_number')}: <span>*</span>
+          {t('profile.street_number')}:
           <input
             type="text"
             name="streetNumber"
             value={form.streetNumber}
             onChange={handleInputChange}
             onBlur={onBlurHandler}
-            required
             style={{ borderColor: errors.streetNumber ? '#BB1D3D' : '' }}
           />
           {errors.streetNumber && (
