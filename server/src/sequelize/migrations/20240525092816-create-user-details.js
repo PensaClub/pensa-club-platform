@@ -11,12 +11,9 @@ module.exports = {
       },
       phone_number: {
         type: DataTypes.STRING(16),
-        unique: true,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
         validate: {
-          notEmpty: {
-            msg: "Phone number cannot be empty.",
-          },
           len: {
             args: [8, 16],
             msg: "Phone number has invalid number of characters.",
