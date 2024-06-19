@@ -53,12 +53,12 @@ export const UserProvider = ({ children }) => {
 
       const response = await userService.login(newData);
       const { password, ...newUser } = response;
-      setIsAuth(newUser);      
+      setIsAuth(newUser);
       setIsFinish(newUser.data.enabled);
       setIsLoading(false);
       if (newUser.data.enabled) {
         const res = await getProfileData();
-        console.log(res);
+        // console.log(res);
         navigate('/profile');
       } else {
         navigate('/profile/profile-form');
@@ -75,6 +75,7 @@ export const UserProvider = ({ children }) => {
       setIsAuth({});
       localStorage.removeItem('auth');
       localStorage.removeItem('userDetails');
+      localStorage.removeItem('fullData');
       setIsLoading(false);
     } catch (error) {
       setIsAuth({});
@@ -87,14 +88,19 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       const response = await userService.setUserData(data);
       console.log(response);
-      if(response.message === "No such address was found!") {
+      if (response.message === 'No such address was found!') {
         navigate('/profile/profile-form');
         setIsLoading(false);
         return response.message;
       }
-      setProfileData(response.details);
-      setIsAuth({...isAuth, token: response.token})
-      setIsFinish(true)
+      setProfileData(response.user);
+      setIsAuth({
+        ...isAuth,
+        token: response.token,
+        email: response.user.email,
+        enabled: response.user.enabled,
+      });
+      setIsFinish(true);
       // setIsFinish(true);
       setIsLoading(false);
     } catch (error) {
@@ -107,12 +113,20 @@ export const UserProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await userService.editUserData(data);
+      console.log(response);
       const updatedData = response.details;
+      console.log(updatedData);
       if (updatedData) {
-        setProfileData(updatedData);
+        setProfileData({...profileData, details: updatedData});
+        setIsAuth({
+          ...isAuth,
+          token: response.token,
+          email: response.user.email,
+          enabled: response.user.enabled,
+        });
       }
       setIsLoading(false);
-      return profileData;
+      return updatedData;
     } catch (error) {
       showErrorAndSetTimeouts(`Error edit profile data: ${error.message}`);
     }
@@ -122,16 +136,14 @@ export const UserProvider = ({ children }) => {
     try {
       // debugger
       setIsLoading(true);
-      
+
       const response = await userService.getUserData();
-      // console.log(response.user.enabled);
-      // console.log(response.user.details);
-      setProfileData(response.user.details);
+      setProfileData(response.user);
       setIsFinish(response.user.enabled);
       // console.log(profileData);
 
       setIsLoading(false);
-      return profileData;
+      return response;
     } catch (error) {
       showErrorAndSetTimeouts(`Error get profile data: ${error.message}`);
     }
@@ -141,15 +153,14 @@ export const UserProvider = ({ children }) => {
     try {
       const resetToken = isAuth.token;
       setIsLoading(true);
-      console.log({...data, resetToken});
-      const response = await userService.resetPassword({...data, resetToken});
+      console.log({ ...data, resetToken });
+      const response = await userService.resetPassword({ ...data, resetToken });
       console.log('Password changed');
       setIsLoading(false);
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
   };
-  
 
   const contextService = {
     onRegisterSubmit,

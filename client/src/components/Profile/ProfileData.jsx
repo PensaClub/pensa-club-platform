@@ -21,13 +21,13 @@ export const ProfileData = () => {
     //TODO: change keys when changed on server!!!
 
     const initialFormState = {
-        username: profileData.username || '',
+        username: profileData.details.username || '',
         email: userEmail,
-        firstName: profileData.firstName || '',
-        lastName: profileData.lastName || '',
-        phoneNumber: profileData.phoneNumber || '',
-        gender: profileData.gender || null, //TODO: sync format with backend
-        birthDate: profileData.birthDate || null, //TODO: sync format with backend
+        firstName: profileData.details.firstName || '',
+        lastName: profileData.details.lastName || '',
+        phoneNumber: profileData.details.phoneNumber || '',
+        gender: profileData.details.gender || null,
+        birthDate: profileData.details.birthDate || null, 
     }
     const [form, setForm] = useState(initialFormState);
 
@@ -80,7 +80,7 @@ export const ProfileData = () => {
         setSelectedYear(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const trimmedForm = trimObjectStrings(form);
@@ -98,7 +98,7 @@ export const ProfileData = () => {
             try {
                 const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
                 const updatedData = Object.fromEntries(updatedDataArr);        
-                onEditProfileDataSubmit(updatedData);
+                await onEditProfileDataSubmit(updatedData);
                 console.log('Data Submitted:', updatedData);
                 // resetFields(setForm, initialFormState);
                 // setSelectedDate('');

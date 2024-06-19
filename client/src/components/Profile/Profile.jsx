@@ -5,7 +5,7 @@ import { ProfileData } from './ProfileData';
 import ProfileForm from './ProfileForm';
 import ProfileAddress from './ProfileAddress';
 import { ProfilePassword } from './ProfilePassword';
-import  {ProfileImage}  from './ProfileImage';
+import { ProfileImage } from './ProfileImage';
 import { useTranslation } from 'react-i18next';
 
 import './profile.css';
@@ -33,12 +33,9 @@ import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
 
 export const Profile = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  // const [profileData, setProfileData] = useState('');
-  // const [isName, setIsName] = useState(false);
-
-  const { userEmail, isFinish, profileData } = useContext(UserContext);
+  const { isFinish, profileData } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -55,40 +52,78 @@ export const Profile = () => {
         <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
       </button>
 
-            <section className={`account-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`}>
-                <h3>{t('profile.account')}</h3>
-                <Link to="image" onClick={toggleMenu}><FontAwesomeIcon icon={faImage} className="icon" />{t('profile.photo')}</Link>
-                <Link to="data" onClick={toggleMenu}><FontAwesomeIcon icon={faUser} className="icon" />{t('profile.personal_data')}</Link>
-                <Link to="address" onClick={toggleMenu}><FontAwesomeIcon icon={faLocationDot} className="icon" />{t('profile.address')}</Link>
-                <Link to="password" onClick={toggleMenu}><FontAwesomeIcon icon={faLock} className="icon" />{t('profile.password')}</Link>
-                <Link to="announced" onClick={toggleMenu}><FontAwesomeIcon icon={faScroll} className="icon" />{t('profile.announced')}</Link>
-                <Link to="skills" onClick={toggleMenu}><FontAwesomeIcon icon={faUniversalAccess} className="icon" />{t('map.skills')}</Link>
-                <Link to="workOptions" onClick={toggleMenu}><FontAwesomeIcon icon={faBriefcase} className="icon" />{t('map.job')}</Link>
-                <Link to="interestOptions" onClick={toggleMenu}><FontAwesomeIcon icon={faUsersGear} className="icon" />{t('map.interests')}</Link>
-                <Link to="anothers" onClick={toggleMenu}><FontAwesomeIcon icon={faMountainSun} className="icon" />{t('profile.anothers')}</Link>
-            </section>
-            <div className="main-profile">
+      <section
+        className={`account-menu ${menuOpen ? 'open' : ''} ${
+          !isFinish ? 'disabled' : ''
+        }`}
+      >
+        <h3>{t('profile.account')}</h3>
+        <Link to="image" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faImage} className="icon" />
+          {t('profile.photo')}
+        </Link>
+        <Link to="data" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faUser} className="icon" />
+          {t('profile.personal_data')}
+        </Link>
+        <Link to="address" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faLocationDot} className="icon" />
+          {t('profile.address')}
+        </Link>
+        <Link to="password" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faLock} className="icon" />
+          {t('profile.password')}
+        </Link>
+        <Link to="announced" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faScroll} className="icon" />
+          {t('profile.announced')}
+        </Link>
+        <Link to="skills" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faUniversalAccess} className="icon" />
+          {t('map.skills')}
+        </Link>
+        <Link to="workOptions" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faBriefcase} className="icon" />
+          {t('map.job')}
+        </Link>
+        <Link to="interestOptions" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faUsersGear} className="icon" />
+          {t('map.interests')}
+        </Link>
+        <Link to="anothers" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faMountainSun} className="icon" />
+          {t('profile.anothers')}
+        </Link>
+      </section>
+      <div className="main-profile">
+        {isFinish === true && (
+          <section className="profile-data">
+            <div className="avatar">
+              <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
+            </div>
+            <div className="user-data">
+              <h2>{profileData.details.username}</h2>
+              <p>
+                <FontAwesomeIcon icon={faUser} className="icon" />{' '}
+                {profileData.details.firstName}{' '}
+                {profileData.details.lastName}
+              </p>
 
-                {isFinish === true &&
-                    <section className="profile-data">
-                        <div className="avatar">
-                            <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
-                        </div>
-                        <div className="user-data">
-
-                            <h2>{profileData.username}</h2>
-                            <p><FontAwesomeIcon icon={faUser} className="icon" /> {profileData.firstName} {profileData.lastName}</p>
-                            
-                            <p><FontAwesomeIcon icon={faPhone} className="icon"/> {profileData.phoneNumber}</p>
-                            {/* TODO: map settlement name */}
-                            <p><FontAwesomeIcon icon={faLocationDot} className="icon" /> {profileData.settlement}</p>
-                            <p><FontAwesomeIcon icon={faEnvelope} className="icon"/> {profileData.email}</p>
-
-                        </div>
-                    </section>
-                }
-
-
+              <p>
+                <FontAwesomeIcon icon={faPhone} className="icon" />{' '}
+                {profileData.details.phoneNumber}
+              </p>
+              {/* TODO: map settlement name */}
+              <p>
+                <FontAwesomeIcon icon={faLocationDot} className="icon" />{' '}
+                {profileData.details.settlement},{' '}
+                {profileData.details.municipality},{' '}
+                {profileData.details.region}
+              </p>
+              {/* <p><FontAwesomeIcon icon={faEnvelope} className="icon"/> {isAuth.email}</p> */}
+            </div>
+          </section>
+        )}
 
         <Outlet />
         <Routes>
