@@ -25,7 +25,7 @@ const ProfileAddress = () => {
     district: profileData.details.district || '',
     block: profileData.details.block || '',
     street: profileData.details.street || '',
-    streetNumber: profileData.details.street_number || '',
+    streetNumber: profileData.details.streetNumber || '',
   };
   const [form, setForm] = useState(initialFormState);
 

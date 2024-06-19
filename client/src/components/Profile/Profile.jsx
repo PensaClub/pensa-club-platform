@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { ProfileData } from './ProfileData';
@@ -33,6 +33,7 @@ import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
 
 export const Profile = () => {
+  const navigate = useNavigate()
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isFinish, profileData } = useContext(UserContext);
@@ -40,6 +41,9 @@ export const Profile = () => {
   useEffect(() => {
     window.scrollTo({ top: 0 });
     console.log(isFinish);
+    if(!isFinish) {
+      navigate('/profile/profile-form')
+    }
   }, []);
 
   const toggleMenu = () => {
@@ -127,7 +131,7 @@ export const Profile = () => {
 
         <Outlet />
         <Routes>
-          {/* {!isFinish && <Route path="profile-form" element={<ProfileForm />} />} */}
+          {!isFinish && <Route path="profile-form" element={<ProfileForm />} />}
           <Route path="profile-form" element={<ProfileForm />} />
           <Route path="image" element={<ProfileImage />} />
           <Route path="data" element={<ProfileData />} />
