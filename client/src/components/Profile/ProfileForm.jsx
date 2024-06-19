@@ -41,6 +41,7 @@ const ProfileForm = () => {
     workOptions: [],
   };
   const [form, setForm] = useState(initialFormState);
+  const [filledData, setFilledData] = useState(initialFormState);
 
   const [regions, setRegions] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
@@ -70,7 +71,7 @@ const ProfileForm = () => {
   }, []);
 
   const handleRegionChange = async (e) => {
-    debugger
+    
     const regionId = e.target.value;
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
@@ -193,12 +194,16 @@ const ProfileForm = () => {
       navigate('/profile');
 
       onProfileDataSubmit(form)
-        .then(() => {
-          if ('No such address was found!') {
-            // TODO: preserved data that is already filled and show a message to the user!
-            navigate('/profile/profile-form');
-            return;
-          }
+        .then((data) => {
+          // if (data[0] === 'No such address was found!') {
+          //   // console.log(data[1]);
+          //   // setFilledData(data[1])
+          //   // setForm(filledData);
+          //   // console.log(form);
+          //   // TODO: preserved data that is already filled and show a message to the user!
+          //   navigate('/profile/profile-form');
+          //   return;
+          // }
           console.log('Form Submitted:', form);
           navigate('/profile');
         })
@@ -241,7 +246,7 @@ const ProfileForm = () => {
               type="text"
               id="username"
               name="username"
-              value={form.username}
+              value={form.username || filledData.username}
               onChange={handleInputChange}
               onBlur={onBlurHandler}
               required
