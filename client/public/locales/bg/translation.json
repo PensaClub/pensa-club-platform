@@ -198,7 +198,13 @@
     "new_password": "Нова парола",
     "repeat_password": "Повтори парола",
     "change_photo": "Смени снимка",
-    "email": "Имейл"
+    "email": "Имейл",
+    "address_form": "Адресна форма",
+    "region_required": "Регионът е задължителен",
+    "municipality_required": "Общината е задължителна",
+    "settlement_required": "Населеното място е задължително",
+    "street_required": "Улицата е задължителна"
+    
 
   }
 }

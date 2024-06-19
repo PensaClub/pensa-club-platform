@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { handleReset } from '../../utils/profile';
 
 const ProfileAddress= () => {
+    const { t, i18n } = useTranslation();
+    const currentLanguage = i18n.language;
+
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
@@ -98,23 +103,23 @@ const ProfileAddress= () => {
 
     };
 
+    const handleResetForm = () => {
+        handleReset(setForm, form = []);
+    };
     const validateField = (name, value) => {
         let error = '';
         switch (name) {
             case 'region':
-                if (!value) error = 'Регионът е задължителен';
+                if (!value) error = t('profile.region_required');
                 break;
             case 'municipality':
-                if (!value) error = 'Общината е задължителна';
+                if (!value) error = t('profile.municipality_required');
                 break;
             case 'settlement':
-                if (!value) error = 'Населеното място е задължително';
+                if (!value) error = t('profile.settlement_required');
                 break;
             case 'street':
-                if (!value) error = 'Улицата е задължителна';
-                break;
-            case 'streetNumber':
-                if (!value) error = 'Номерът на улицата е задължителен';
+                if (!value) error = t('profile.street_required');
                 break;
             default:
                 break;
@@ -125,70 +130,82 @@ const ProfileAddress= () => {
 
     return (
         <form onSubmit={handleSubmit} className="profile-form">
-            <h3>Адресна форма</h3>
+            <h3>{t('profile.address_form')}</h3>
                 
             <label>
-                Област (Region): <span>*</span>
+            {t('profile.region')}: <span>*</span>
                 <select name="region" value={form.region} onChange={handleRegionChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.region ? '#BB1D3D' : '' }}
                 >
-                    <option value="">Изберете регион</option>
+                    <option value="">{t('profile.select_region')}</option>
                     {regions.map((region, index) => (
-                        <option key={index} value={region.id}>{region.bg}</option>
+                        <option key={index} value={region.id}>
+                           {currentLanguage === 'bg' && `${region.bg}`}
+                            {currentLanguage === 'en' && `${region.en}`}
+                            </option>
                     ))}
                 </select>
                 {errors.region && <span className="error">{errors.region}</span>}
             </label>
             <label>
-                Oбщина (Municipality): <span>*</span>
+            {t('profile.municipality')}: <span>*</span>
                 <select name="municipality" value={form.municipality} onChange={handleMunicipalityChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.municipality ? '#BB1D3D' : '' }}
                 >
-                    <option value="">Изберете община</option>
+                    <option value="">{t('profile.select_municipality')}</option>
                     {municipalities.map((municipality, index) => (
-                        <option key={index} value={municipality.id}>{municipality.bg}</option>
+                        <option key={index} value={municipality.id}>
+                           {currentLanguage === 'bg' && `${municipality.bg}`}
+                            {currentLanguage === 'en' && `${municipality.en}`}
+                            </option>
                     ))}
                 </select>
                 {errors.municipality && <span className="error">{errors.municipality}</span>}
             </label>
             <label>
-                Населено място (Settlement): <span>*</span>
+            {t('profile.settlement')}: <span>*</span>
                 <select name="settlement" value={form.settlement} onChange={handleInputChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.settlement ? '#BB1D3D' : '' }}
                 >
-                    <option value="">Избетере населено място</option>
+                    <option value="">{t('profile.select_settlement')}</option>
                     {settlements.map((settlement, index) => (
-                        <option key={index} value={settlement.id}>{settlement.bg}</option>
+                        <option key={index} value={settlement.id}>
+                          {currentLanguage === 'bg' && `${settlement.bg}`}
+                            {currentLanguage === 'en' && `${settlement.en}`}
+                            </option>
                     ))}
                 </select>
                 {errors.settlement && <span className="error">{errors.settlement}</span>}
             </label>
             <label>
-                Квартал (District):
+            {t('profile.district')}:
                 <input type="text" name="district" value={form.district} onChange={handleInputChange} />
                 {errors.district && <span className="error">{errors.district}</span>}
             </label>
             <label>
-                Блок (Block):
+            {t('profile.block')}:
                 <input type="text" name="block" value={form.block} onChange={handleInputChange} />
                 {errors.block && <span className="error">{errors.block}</span>}
             </label>
             <label>
-                Улица (Street): <span>*</span>
+            {t('profile.street')}: <span>*</span>
                 <input type="text" name="street" value={form.street} onChange={handleInputChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.street ? '#BB1D3D' : '' }}
                 />
                 {errors.street && <span className="error">{errors.street}</span>}
             </label>
             <label>
-                Номер улица (Street Number): <span>*</span>
-                <input type="text" name="streetNumber" value={form.streetNumber} onChange={handleInputChange} onBlur={onBlurHandler} required
+            {t('profile.street_number')}: 
+                <input type="text" name="streetNumber" value={form.streetNumber} onChange={handleInputChange} onBlur={onBlurHandler} 
                     style={{ borderColor: errors.streetNumber ? '#BB1D3D' : '' }}
                 />
                 {errors.streetNumber && <span className="error">{errors.streetNumber}</span>}
             </label>
-            <span className="required-fields">Полетата с * са задължителни!</span>
-            <button className="btn-general btn-green btn-profile" type="submit">Запази</button>
+            <span className="required-fields">{t('profile.required_fields')}</span>
+            <div className="btn-inline">
+                <button type="submit" className="btn-general btn-green">{t('profile.save_btn')}</button>
+                <button type="submit" className="btn-general btn-red" onClick={handleResetForm}>{t('profile.close_btn')}</button>
+            </div>
         </form>
     );
 };

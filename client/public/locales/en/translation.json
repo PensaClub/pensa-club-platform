@@ -198,7 +198,12 @@
     "new_password": "New password",
     "repeat_password": "Repeat password",
     "change_photo": "Change photo",
-    "email": "Email"
+    "email": "Email",
+    "address_form": "Address form",
+    "region_required": "Region is required",
+    "municipality_required": "Municipality is required",
+    "settlement_required": "Settlement is required",
+    "street_required": "Street is required"
 
 
 
