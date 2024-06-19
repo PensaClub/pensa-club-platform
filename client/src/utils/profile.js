@@ -22,8 +22,7 @@ export const validateField = (name, value, form = {}) => {
             if (value && !nameRegex.test(value)) error = 'Невалидно име';
             break;
         case 'phoneNumber':
-            if (!value) error = 'Телефонният номер е задължителен';
-            else if (!phoneNumberRegex.test(value)) error = 'Телефонният номер не е валиден';
+            if (!phoneNumberRegex.test(value)) error = 'Телефонният номер не е валиден';
             break;
         case 'region':
             if (!value) error = 'Регионът е задължителен';
@@ -37,21 +36,18 @@ export const validateField = (name, value, form = {}) => {
         case 'street':
             if (!value) error = 'Улицата е задължителна';
             break;
-        case 'streetNumber':
-            if (!value) error = 'Номерът на улицата е задължителен';
-            break;
-        case 'password':
+        case 'currPassword':
             if (!passwordRegex.test(value)) {
                 error = 'Паролата трябва да е поне 8 символа и да съдържа поне една буква и една цифра';
             }
             break;
-        case 'newPassword':
+        case 'password':
             if (!passwordRegex.test(value)) {
                 error = 'Новата парола трябва да е поне 8 символа и да съдържа поне една буква и една цифра';
             }
             break;
         case 'rePassword':
-            if (value !== form.newPassword) {
+            if (value !== form.password) {
                 error = 'Паролите не съвпадат';
             }
            

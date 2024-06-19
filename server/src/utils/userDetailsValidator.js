@@ -48,7 +48,7 @@ function userDetailsValidator(body, path) {
     errors.gender = "Gender must be 'male', 'female', or 'other'.";
   }
 
-  if (birthDate && (!dateRegex.test(birthDate) || new Date(birthDate) > new Date() || isNaN(new Date(birthDate).getTime()))) {
+  if (birthDate && (!dateRegex.test(birthDate) && new Date(birthDate) > new Date() && isNaN(new Date(birthDate).getTime()))) {
     errors.birthDate = "Date format must be YYYY-MM-DD and cannot be in the future.";
   }
 
