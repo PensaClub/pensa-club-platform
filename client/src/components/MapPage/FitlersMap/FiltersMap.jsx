@@ -46,7 +46,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
         <div className="custom-select" ref={selectRef}>
             <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
                 <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-                <div className="selected-option-text"> {/* Отметка */}
+                <div className="selected-option-text"> 
                     {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')}
                 </div>
                 {selectedValues.length > 0 && <p className='number-filters'>({selectedValues.length})</p>}
@@ -209,7 +209,7 @@ export const FiltersMap = () => {
                             <div>Loading...</div>
                         )}
                     </div>
-                    <button className="clear-filters" onClick={clearAllFilters}>{t('map.clear-filters')}</button> {/* Отметка */}
+                    <button className="clear-filters" onClick={clearAllFilters}>{t('map.clear-filters')}</button> 
                 </div>
                 <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} className="hamburger" onClick={toggleMenu} />
                 <div className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`}>
