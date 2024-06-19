@@ -1,21 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './filterMap.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { faBriefcase, faUniversalAccess, faUsersGear, faBars, faTimes, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-
 import { useTranslation } from 'react-i18next';
 import { MapEditor } from '../MapEditor/MapEditor';
 import { useMappingContext } from '../../contexts/mapContext';
-
-
 
 const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const selectRef = useRef();
-
 
     const filteredOptions = options.filter(option =>
         option.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -51,11 +46,8 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
         <div className="custom-select" ref={selectRef}>
             <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
                 <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-
                 {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')} {/* //Пробно е пуснато да се види при повече опции */}
-
                 {selectedValues.length > 0 && <p className='number-filters'>({selectedValues.length})</p>}
-
             </div>
             {isOpen && (
                 <div className="options-container">
@@ -78,7 +70,6 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
                                     checked={selectedValues.includes(option.value)}
                                     onChange={() => handleOptionChange(option.value)}
                                 />
-                                {/* Translate options */}
                                 <label htmlFor={`checkbox-${option.value}`}>{t(`${option.name}`)}</label>
                             </div>
                         ))}
@@ -89,30 +80,34 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
     );
 };
 
-const FilterSection = ({ title, options, selectedValues, onChange, icon }) => (
-    <div className="filter-section">
-        <h4> <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-            {title} {selectedValues.length > 0 && <>({selectedValues.length})</>}</h4>
-        {options.map(option => (
-            <div key={option.value} className="option">
-                <input
-                    type="checkbox"
-                    id={`checkbox-${option.value}`}
-                    checked={selectedValues.includes(option.value)}
-                    onChange={() => onChange(option.value)}
-                />
-                <label htmlFor={`checkbox-${option.value}`}>{option.name}</label>
-            </div>
-        ))}
-    </div>
-);
+const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
+    const { t } = useTranslation();
+
+    return (
+        <div className="filter-section">
+            <h4>
+                <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
+                {t(title)} {selectedValues.length > 0 && <>({selectedValues.length})</>}
+            </h4>
+            {options.map(option => (
+                <div key={option.value} className="option">
+                    <input
+                        type="checkbox"
+                        id={`checkbox-${option.value}`}
+                        checked={selectedValues.includes(option.value)}
+                        onChange={() => onChange(option.value)}
+                    />
+                    <label htmlFor={`checkbox-${option.value}`}>{t(option.name)}</label>
+                </div>
+            ))}
+        </div>
+    );
+};
 
 export const FiltersMap = () => {
     const { t } = useTranslation();
-    const {allUsers}= useMappingContext()
-    const [optionData, setOptionData] = useState(null)
-
-
+    const { allUsers } = useMappingContext();
+    const [optionData, setOptionData] = useState(null);
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedWorks, setSelectedWorks] = useState([]);
     const [selectedInterests, setSelectedInterests] = useState([]);
@@ -121,22 +116,31 @@ export const FiltersMap = () => {
     useEffect(() => {
         fetch('./options.json')
             .then(response => response.json())
-            .then(data => {
-
-                setOptionData(data);
-
-            })
+            .then(data => setOptionData(data))
             .catch(error => console.error('Failed to load JSON data', error));
     }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    const handleSkillChange = (value) => {
+        setSelectedSkills(selectedSkills.includes(value) ? selectedSkills.filter(item => item !== value) : [...selectedSkills, value]);
+    };
+
+    const handleWorkChange = (value) => {
+        setSelectedWorks(selectedWorks.includes(value) ? selectedWorks.filter(item => item !== value) : [...selectedWorks, value]);
+    };
+
+    const handleInterestChange = (value) => {
+        setSelectedInterests(selectedInterests.includes(value) ? selectedInterests.filter(item => item !== value) : [...selectedInterests, value]);
+    };
+
     const filterUsers = () => {
         if (!allUsers?.response?.accounts) return [];
-        
+
         return allUsers.response.accounts.filter(user => {
-            const details = user.details || {}; 
+            const details = user.details || {};
 
             const { work_options = [], skills = [], interest_options = [] } = details;
 
@@ -147,8 +151,10 @@ export const FiltersMap = () => {
             return skillsMatch && worksMatch && interestsMatch;
         });
     };
-    const filteredUsers = filterUsers()
-     return (
+
+    const filteredUsers = filterUsers();
+
+    return (
         <>
             <div className="filters-map">
                 <div className="logo-map">
@@ -156,7 +162,6 @@ export const FiltersMap = () => {
                 </div>
                 <div className="filters">
                     <div className="filter-main">
-
                         <label>{t('map.skills')}</label>
                         {optionData ? (
                             <CustomSelect
@@ -206,24 +211,24 @@ export const FiltersMap = () => {
                             <>
                                 <FilterSection
                                     icon={faUniversalAccess}
-                                    title={t('map.skills')}
+                                    title={'map.skills'}
                                     options={optionData.skills}
                                     selectedValues={selectedSkills}
-                                    onChange={setSelectedSkills}
+                                    onChange={handleSkillChange}
                                 />
                                 <FilterSection
                                     icon={faBriefcase}
-                                    title={t('map.job')}
+                                    title={'map.job'}
                                     options={optionData.workOptions}
                                     selectedValues={selectedWorks}
-                                    onChange={setSelectedWorks}
+                                    onChange={handleWorkChange}
                                 />
                                 <FilterSection
                                     icon={faUsersGear}
-                                    title={t('map.interests')}
+                                    title={'map.interests'}
                                     options={optionData.interestOptions}
                                     selectedValues={selectedInterests}
-                                    onChange={setSelectedInterests}
+                                    onChange={handleInterestChange}
                                 />
                             </>
                         ) : (
@@ -231,14 +236,13 @@ export const FiltersMap = () => {
                         )}
                     </div>
                 </div>
-
             </div>
             <section className="map">
-                    <MapEditor filteredUsers={filteredUsers} />
-                    <div className="search-card-map-page">
-                        {/* <SearchCard/> */}
-                    </div>
-                </section>
+                <MapEditor filteredUsers={filteredUsers} />
+                <div className="search-card-map-page">
+                    {/* <SearchCard /> */}
+                </div>
+            </section>
         </>
     );
 };

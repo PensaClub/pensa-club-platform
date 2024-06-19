@@ -51,7 +51,7 @@ const MapWithZoomControl = () => {
         };
 
         const container = map.getContainer();
-        container.addEventListener('wheel', handleWheel);
+        container.addEventListener('wheel', handleWheel,{ passive: true });
 
         return () => {
             container.removeEventListener('wheel', handleWheel);
@@ -172,7 +172,7 @@ export const MapEditor = ({ filteredUsers }) => {
                 >
                     {filteredUsers.map(user => (
                         user.details?.location && (
-                            <Marker key={user.id} position={[user.details.location.lat, user.details.location.lon]}>
+                            <Marker key={user.details.phone_number} position={[user.details.location.lat, user.details.location.lon]}>
                                 <Popup>
                                     <div className="ad-card-editor">
                                         <img src={user.details.img || "/images/homePage/avatar2.png"} alt={user.details.first_name} className="ad-img-editor" />
