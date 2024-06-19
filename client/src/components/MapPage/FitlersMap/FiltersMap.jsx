@@ -105,6 +105,7 @@ const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
 };
 
 export const FiltersMap = () => {
+
     const { t } = useTranslation();
     const { allUsers } = useMappingContext();
     const [optionData, setOptionData] = useState(null);
@@ -159,6 +160,7 @@ export const FiltersMap = () => {
             <div className="filters-map">
                 <div className="logo-map">
                     <img src="/images/map/pensamap2.png" alt="map-logo" />
+
                 </div>
                 <div className="filters">
                     <div className="filter-main">
@@ -166,10 +168,12 @@ export const FiltersMap = () => {
                         {optionData ? (
                             <CustomSelect
                                 icon={faUniversalAccess}
+
                                 options={optionData.skills}
                                 selectedValues={selectedSkills}
                                 onChange={setSelectedSkills}
                                 searchPlaceholder={t('map.skills-placeholder')}
+
                             />
                         ) : (
                             <div>Loading...</div>
@@ -199,6 +203,7 @@ export const FiltersMap = () => {
                                 onChange={setSelectedInterests}
                                 searchPlaceholder={t('map.interests-placeholder')}
                             />
+
                         ) : (
                             <div>Loading...</div>
                         )}

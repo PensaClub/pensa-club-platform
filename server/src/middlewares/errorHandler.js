@@ -38,7 +38,9 @@ function errorHandler(error, req, res, next) {
     statusCode = 401;
   }
 
-  console.log(`Error: ${req.method} >> ${req.baseUrl}`, message);
+  error.details
+    ? console.log(`Error: ${req.method} >> ${req.baseUrl}`, message, error.details)
+    : console.log(`Error: ${req.method} >> ${req.baseUrl}`, message);
   res.status(statusCode).json({ message, statusCode, details });
 }
 
