@@ -6,7 +6,12 @@
   flex-direction: column;
   padding: 1em 0;
 }
-
+.map{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+     
+}
 .filter-main {
   margin: 1rem;
   width: 100%;
@@ -277,4 +282,10 @@
     max-width: calc(var(--container-min-width) - 40px);
     margin-top: 3em;
   }
+}
+.map{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+       
 }

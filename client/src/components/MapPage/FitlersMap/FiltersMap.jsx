@@ -5,14 +5,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faUniversalAccess, faUsersGear, faBars, faTimes, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { useTranslation } from 'react-i18next';
+import { MapEditor } from '../MapEditor/MapEditor';
+import { useMappingContext } from '../../contexts/mapContext';
 
 
 
 const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const selectRef = useRef();
+
 
     const filteredOptions = options.filter(option =>
         option.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -49,7 +52,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
             <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
                 <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
 
-               {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')} {/* //Пробно е пуснато да се види при повече опции */}
+                {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')} {/* //Пробно е пуснато да се види при повече опции */}
 
                 {selectedValues.length > 0 && <p className='number-filters'>({selectedValues.length})</p>}
 
@@ -76,7 +79,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
                                     onChange={() => handleOptionChange(option.value)}
                                 />
                                 {/* Translate options */}
-                                <label htmlFor={`checkbox-${option.value}`}>{t(`${option.name}`)}</label> 
+                                <label htmlFor={`checkbox-${option.value}`}>{t(`${option.name}`)}</label>
                             </div>
                         ))}
                     </div>
@@ -105,11 +108,10 @@ const FilterSection = ({ title, options, selectedValues, onChange, icon }) => (
 );
 
 export const FiltersMap = () => {
-
-    const {t} = useTranslation();
- 
+    const { t } = useTranslation();
+    const {allUsers}= useMappingContext()
     const [optionData, setOptionData] = useState(null)
- 
+
 
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedWorks, setSelectedWorks] = useState([]);
@@ -130,132 +132,113 @@ export const FiltersMap = () => {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+    const filterUsers = () => {
+        if (!allUsers?.response?.accounts) return [];
+        
+        return allUsers.response.accounts.filter(user => {
+            const details = user.details || {}; 
 
-    const handleSkillChange = (value) => {
-        setSelectedSkills(selectedSkills.includes(value) ? selectedSkills.filter(item => item !== value) : [...selectedSkills, value]);
+            const { work_options = [], skills = [], interest_options = [] } = details;
+
+            const skillsMatch = selectedSkills.length === 0 || selectedSkills.some(skill => skills.includes(skill));
+            const worksMatch = selectedWorks.length === 0 || selectedWorks.some(workOption => work_options.includes(workOption));
+            const interestsMatch = selectedInterests.length === 0 || selectedInterests.some(interest => interest_options.includes(interest));
+
+            return skillsMatch && worksMatch && interestsMatch;
+        });
     };
-
-    const handleWorkChange = (value) => {
-        setSelectedWorks(selectedWorks.includes(value) ? selectedWorks.filter(item => item !== value) : [...selectedWorks, value]);
-    };
-
-    const handleInterestChange = (value) => {
-        setSelectedInterests(selectedInterests.includes(value) ? selectedInterests.filter(item => item !== value) : [...selectedInterests, value]);
-    };
-
-    return (
-        <div className="filters-map">
-            <div className="logo-map">
-                <img src="/images/map/pensamap2.png" alt="map-logo" />
-            </div>
-            <div className="filters">
-                <div className="filter-main">
-
-                    <label>{t('map.skills')}</label>
-                    {optionData ? (
-                        <CustomSelect
-                            icon={faUniversalAccess}
-                            options={optionData.skills}
-                            selectedValues={selectedSkills}
-                            onChange={setSelectedSkills}
-                            searchPlaceholder={t('map.skills-placeholder')}
-                        />
-                    ) : (
-                        <div>Loading...</div>
-                    )}
+    const filteredUsers = filterUsers()
+     return (
+        <>
+            <div className="filters-map">
+                <div className="logo-map">
+                    <img src="/images/map/pensamap2.png" alt="map-logo" />
                 </div>
-                <div className="filter-main">
-                    <label>{t('map.skills')}</label>
-                    {optionData ? (
-                        <CustomSelect
-                            icon={faBriefcase}
-                            options={optionData.workOptions}
-                            selectedValues={selectedWorks}
-                            onChange={setSelectedWorks}
-                            searchPlaceholder={t('map.job-placeholder')}
-                        />
-                    ) : (
-                        <div>Loading...</div>
-                    )}
-                </div>
-                <div className="filter-main">
-                    <label>{t('map.skills')}</label>
-                    {optionData ? (
-                        <CustomSelect
-                            icon={faUsersGear}
-                            options={optionData.interestOptions}
-                            selectedValues={selectedInterests}
-                            onChange={setSelectedInterests}
-                            searchPlaceholder={t('map.interests-placeholder')}
-                        />
-                    ) : (
-                        <div>Loading...</div>
-                    )}
-                </div>
-            </div>
-            <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} className="hamburger" onClick={toggleMenu} />
-            <div className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`}>
                 <div className="filters">
-                    {optionData ? (
-                        <>
-                            <FilterSection
+                    <div className="filter-main">
+
+                        <label>{t('map.skills')}</label>
+                        {optionData ? (
+                            <CustomSelect
                                 icon={faUniversalAccess}
-                                title="Умения"
                                 options={optionData.skills}
                                 selectedValues={selectedSkills}
-                                onChange={handleSkillChange}
+                                onChange={setSelectedSkills}
+                                searchPlaceholder={t('map.skills-placeholder')}
                             />
-                            <FilterSection
+                        ) : (
+                            <div>Loading...</div>
+                        )}
+                    </div>
+                    <div className="filter-main">
+                        <label>{t('map.job')}</label>
+                        {optionData ? (
+                            <CustomSelect
                                 icon={faBriefcase}
-                                title="Професия"
                                 options={optionData.workOptions}
                                 selectedValues={selectedWorks}
-                                onChange={handleWorkChange}
+                                onChange={setSelectedWorks}
+                                searchPlaceholder={t('map.job-placeholder')}
                             />
-                            <FilterSection
+                        ) : (
+                            <div>Loading...</div>
+                        )}
+                    </div>
+                    <div className="filter-main">
+                        <label>{t('map.interests')}</label>
+                        {optionData ? (
+                            <CustomSelect
                                 icon={faUsersGear}
-
-                                title="Интереси"
                                 options={optionData.interestOptions}
                                 selectedValues={selectedInterests}
-                                onChange={handleInterestChange}
+                                onChange={setSelectedInterests}
+                                searchPlaceholder={t('map.interests-placeholder')}
                             />
-                        </>
-                    ) : (
-                        <div>Loading...</div>
-                    )}
+                        ) : (
+                            <div>Loading...</div>
+                        )}
+                    </div>
+                </div>
+                <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} className="hamburger" onClick={toggleMenu} />
+                <div className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`}>
+                    <div className="filters">
+                        {optionData ? (
+                            <>
+                                <FilterSection
+                                    icon={faUniversalAccess}
+                                    title={t('map.skills')}
+                                    options={optionData.skills}
+                                    selectedValues={selectedSkills}
+                                    onChange={setSelectedSkills}
+                                />
+                                <FilterSection
+                                    icon={faBriefcase}
+                                    title={t('map.job')}
+                                    options={optionData.workOptions}
+                                    selectedValues={selectedWorks}
+                                    onChange={setSelectedWorks}
+                                />
+                                <FilterSection
+                                    icon={faUsersGear}
+                                    title={t('map.interests')}
+                                    options={optionData.interestOptions}
+                                    selectedValues={selectedInterests}
+                                    onChange={setSelectedInterests}
+                                />
+                            </>
+                        ) : (
+                            <div>Loading...</div>
+                        )}
+                    </div>
+                </div>
 
-                    <label>{t('map.skills')}</label>
-                    {optionData ? <CustomSelect
-                        icon={faUniversalAccess}
-                        options={optionData.skills}
-                        selectedValues={selectedSkills}
-                        onChange={setSelectedSkills}
-                        searchPlaceholder={t('map.skills-placeholder')}
-                    /> : <div>Loading...</div>}
-                </div>
-                <div className="filter-main">
-                    <label>{t('map.job')}</label>
-                    {optionData ? <CustomSelect
-                        icon={faBriefcase}
-                        options={optionData.workOptions}
-                        selectedValues={selectedWorks}
-                        onChange={setSelectedWorks}
-                        searchPlaceholder={t('map.job-placeholder')}
-                    /> : <div>Loading...</div>}
-                </div>
-                <div className="filter-main">
-                    <label>{t('map.interests')}</label>
-                   {optionData ? <CustomSelect
-                        icon={faUsersGear}
-                        options={optionData.interestOptions}
-                        selectedValues={selectedInterests}
-                        onChange={setSelectedInterests}
-                        searchPlaceholder={t('map.interests-placeholder')}
-                    />:<div>Loading...</div>}
-
-                </div>
             </div>
-        </div>
+            <section className="map">
+                    <MapEditor filteredUsers={filteredUsers} />
+                    <div className="search-card-map-page">
+                        {/* <SearchCard/> */}
+                    </div>
+                </section>
+        </>
     );
 };
