@@ -156,8 +156,8 @@ export const ProfileData = () => {
                         {errors.email && <span className="error">{errors.email}</span>}
                     </div>
                     <div>
-                        <label htmlFor="phoneNumber">{t('profile.phone_number')}: <span>*</span></label>
-                        <input type="text" id="phoneNumber" name="phoneNumber" value={form.phoneNumber} onChange={handleInputChange} onBlur={onBlurHandler} required
+                        <label htmlFor="phoneNumber">{t('profile.phone_number')}: </label>
+                        <input type="text" id="phoneNumber" name="phoneNumber" value={form.phoneNumber} onChange={handleInputChange} onBlur={onBlurHandler}
                             style={{ borderColor: errors.phoneNumber ? '#BB1D3D' : '' }}
                         />
                         {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
