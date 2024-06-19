@@ -22,7 +22,7 @@ export const ProfileData = () => {
 
     const initialFormState = {
         username: profileData.details.username || '',
-        email: userEmail,
+        email: profileData.email,
         firstName: profileData.details.firstName || '',
         lastName: profileData.details.lastName || '',
         phoneNumber: profileData.details.phoneNumber || '',

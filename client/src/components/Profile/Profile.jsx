@@ -36,7 +36,7 @@ export const Profile = () => {
   const navigate = useNavigate()
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isFinish, profileData } = useContext(UserContext);
+  const { isFinish, profileData, userEmail } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -107,24 +107,28 @@ export const Profile = () => {
             </div>
             <div className="user-data">
               <h2>{profileData.details.username}</h2>
-              <p>
-                <FontAwesomeIcon icon={faUser} className="icon" />{' '}
-                {profileData.details.firstName}{' '}
-                {profileData.details.lastName}
+              {profileData.details.firstName || profileData.details.lastName 
+                ? <p>
+                <FontAwesomeIcon icon={faUser} className="icon" />{
+                  profileData.details.firstName ? 
+                  profileData.details.firstName : ''
+                }{' '}
+                {profileData.details.lastName ? profileData.details.lastName : ''}
               </p>
+                : ''}
 
               <p>
-                <FontAwesomeIcon icon={faPhone} className="icon" />{' '}
-                {profileData.details.phoneNumber}
+                <FontAwesomeIcon icon={faEnvelope} className="icon" />{' '}
+                {profileData.email}
               </p>
-              {/* TODO: map settlement name */}
+              
               <p>
                 <FontAwesomeIcon icon={faLocationDot} className="icon" />{' '}
                 {profileData.details.settlement},{' '}
                 {profileData.details.municipality},{' '}
                 {profileData.details.region}
               </p>
-              {/* <p><FontAwesomeIcon icon={faEnvelope} className="icon"/> {isAuth.email}</p> */}
+              
             </div>
           </section>
         )}
