@@ -9,6 +9,7 @@ import './sidebar.css';
 import './scrollModal.css';
 
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const DefaultIcon = L.icon({
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -51,7 +52,7 @@ const MapWithZoomControl = () => {
         };
 
         const container = map.getContainer();
-        container.addEventListener('wheel', handleWheel,{ passive: true });
+        container.addEventListener('wheel', handleWheel,);
 
         return () => {
             container.removeEventListener('wheel', handleWheel);
@@ -77,7 +78,7 @@ export const MapEditor = ({ filteredUsers }) => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef(null);
-
+    const { t } = useTranslation(); 
     useEffect(() => {
         fetch('/Bulgaria_admin_level_6.geojson')
             .then(response => response.json())
@@ -177,9 +178,10 @@ export const MapEditor = ({ filteredUsers }) => {
                                     <div className="ad-card-editor">
                                         <img src={user.details.img || "/images/homePage/avatar2.png"} alt={user.details.first_name} className="ad-img-editor" />
                                         <div className="ad-details-editor">
-                                            <h3 className="ad-name-editor">{user.details.first_name} {user.details.last_name}</h3>
-                                            <p className="ad-description-editor">Професия: {user.details.work_options.join(', ')}</p> {/* ако има повече от една професия*/}
-                                            <p className="ad-description-editor">Интереси: {user.details.interest_options.join(', ')}</p>
+                                        <h3 className="ad-name-editor">{user.details.first_name} {user.details.last_name}</h3>
+                                            <p className="ad-description-editor">Професия: {user.details.work_options ? user.details.work_options.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
+                                            <p className="ad-description-editor">Интереси: {user.details.interest_options ? user.details.interest_options.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
+                                            <p className="ad-description-editor">Умения: {user.details.skills ? user.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
                                             <Link to="#" id="read-more-editor" className="read-more" onClick={(e) => handleReadMoreClick(e, user)}>Прочети повече</Link>
                                         </div>
                                     </div>
@@ -200,8 +202,9 @@ export const MapEditor = ({ filteredUsers }) => {
                         <div className="user-map-info">
                             <img className="user-map-img" src={selectedUser.details.img || "/images/homePage/avatar2.png"} alt="user-img" />
                             <div className="map-desc-user">
-                                <p>Професия: {selectedUser.details.work_options.join(', ')}</p>
-                                <p>Интереси: {selectedUser.details.interest_options.join(', ')} </p>
+                            <p>Професия: {selectedUser.details.work_options ? selectedUser.details.work_options.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
+                                <p>Интереси: {selectedUser.details.interest_options ? selectedUser.details.interest_options.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
+                                <p>Имения: {selectedUser.details.skills ? selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
                                 <p>Телефон: <Link to={`tel:${selectedUser.details.phone_number}`}>{selectedUser.details.phone_number}</Link></p>
                                 <p>Имейл: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
                             </div>

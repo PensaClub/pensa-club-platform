@@ -46,7 +46,9 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
         <div className="custom-select" ref={selectRef}>
             <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
                 <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-                {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')} {/* //Пробно е пуснато да се види при повече опции */}
+                <div className="selected-option-text"> {/* Отметка */}
+                    {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')}
+                </div>
                 {selectedValues.length > 0 && <p className='number-filters'>({selectedValues.length})</p>}
             </div>
             {isOpen && (
@@ -105,7 +107,6 @@ const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
 };
 
 export const FiltersMap = () => {
-
     const { t } = useTranslation();
     const { allUsers } = useMappingContext();
     const [optionData, setOptionData] = useState(null);
@@ -136,7 +137,11 @@ export const FiltersMap = () => {
     const handleInterestChange = (value) => {
         setSelectedInterests(selectedInterests.includes(value) ? selectedInterests.filter(item => item !== value) : [...selectedInterests, value]);
     };
-
+    const clearAllFilters = () => {
+        setSelectedSkills([]);
+        setSelectedWorks([]);
+        setSelectedInterests([]);
+    };
     const filterUsers = () => {
         if (!allUsers?.response?.accounts) return [];
 
@@ -160,7 +165,6 @@ export const FiltersMap = () => {
             <div className="filters-map">
                 <div className="logo-map">
                     <img src="/images/map/pensamap2.png" alt="map-logo" />
-
                 </div>
                 <div className="filters">
                     <div className="filter-main">
@@ -168,12 +172,10 @@ export const FiltersMap = () => {
                         {optionData ? (
                             <CustomSelect
                                 icon={faUniversalAccess}
-
                                 options={optionData.skills}
                                 selectedValues={selectedSkills}
                                 onChange={setSelectedSkills}
                                 searchPlaceholder={t('map.skills-placeholder')}
-
                             />
                         ) : (
                             <div>Loading...</div>
@@ -203,11 +205,11 @@ export const FiltersMap = () => {
                                 onChange={setSelectedInterests}
                                 searchPlaceholder={t('map.interests-placeholder')}
                             />
-
                         ) : (
                             <div>Loading...</div>
                         )}
                     </div>
+                    <button className="clear-filters" onClick={clearAllFilters}>{t('map.clear-filters')}</button> {/* Отметка */}
                 </div>
                 <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} className="hamburger" onClick={toggleMenu} />
                 <div className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`}>

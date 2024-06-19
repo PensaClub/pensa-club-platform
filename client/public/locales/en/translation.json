@@ -97,7 +97,8 @@
     "job": "Job",
     "job-placeholder": "Search for jobs...",
     "interests": "Interests",
-    "interests-placeholder": "Search for interests..."
+    "interests-placeholder": "Search for interests...",
+    "clear-filters": "Clear Filters"
   },
 
   "options": {

@@ -283,6 +283,17 @@
     max-width: calc(var(--container-min-width) - 40px);
     margin-top: 3em;
   }
+  .custom-select .selected-option {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    cursor: pointer;
+}
+
+.custom-select .selected-option-text {
+    flex: 1; 
+    text-align: center; 
+}
 }
 .map{
     position: relative;

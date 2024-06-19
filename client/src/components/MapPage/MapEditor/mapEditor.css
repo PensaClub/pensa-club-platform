@@ -45,6 +45,7 @@
     margin: 0;
     font-size: var(--xxs-font-size);
     font-weight: bold;
+    text-align: center;
 
 }
 
@@ -52,7 +53,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-right: 10px;
+    /* margin-right: 10px; */
     object-fit: fill;
 }
 
@@ -95,8 +96,8 @@
 
 @media (min-width: 850px) {
     .ad-card-editor {
-        flex-direction: row-reverse;
-        max-width: calc(450px / (340px / var(--container-min-width)));
+        /* flex-direction: row-reverse; */
+        max-width: calc(550px / (340px / var(--container-min-width)));
         /* 450px*/
 
     }
@@ -105,7 +106,7 @@
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        margin-right: 10px;
+        /* margin-right: 10px; */
     }
 
     .ad-name-editor {
