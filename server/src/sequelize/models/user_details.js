@@ -20,19 +20,16 @@ module.exports = (sequelize, DataTypes) => {
     {
       phone_number: {
         type: DataTypes.STRING(16),
-        // unique: true,
+        allowNull: true,
+        defaultValue: null,
         validate: {
-          notEmpty: {
-            args: false,
-            msg: "Phone number is required.",
-          },
           len: {
             args: [8, 16],
-            msg: "Phone number must be between 8 and 16 characters.",
+            msg: "Phone number has invalid number of characters.",
           },
           is: {
             args: /^(?:\+\d{7,15}|\d{10})$/,
-            msg: "Phone number format is invalid.",
+            msg: "Phone number must be a valid format.",
           },
         },
       },
