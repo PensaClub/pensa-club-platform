@@ -264,6 +264,7 @@
   }
   .selected-option{
     font-size: calc(var( --xs-font-size) + 2px );
+
   }
   .filters-map {
     align-items: start;

@@ -89,27 +89,31 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
     );
 };
 
-const FilterSection = ({ title, options, selectedValues, onChange, icon }) => (
-    <div className="filter-section">
-        <h4> <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-            {title} {selectedValues.length > 0 && <>({selectedValues.length})</>}</h4>
-        {options.map(option => (
-            <div key={option.value} className="option">
-                <input
-                    type="checkbox"
-                    id={`checkbox-${option.value}`}
-                    checked={selectedValues.includes(option.value)}
-                    onChange={() => onChange(option.value)}
-                />
-                <label htmlFor={`checkbox-${option.value}`}>{option.name}</label>
-            </div>
-        ))}
-    </div>
-);
-
+const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
+    const { t } = useTranslation(); 
+    return (
+        <div className="filter-section">
+            <h4> <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
+                {t(title)} {selectedValues.length > 0 && <>({selectedValues.length})</>}</h4>
+            {options.map(option => (
+                <div key={option.value} className="option">
+                    <input
+                        type="checkbox"
+                        id={`checkbox-${option.value}`}
+                        checked={selectedValues.includes(option.value)}
+                        onChange={() => onChange(option.value)}
+                    />
+                    <label htmlFor={`checkbox-${option.value}`}>{t(option.name)}</label> 
+                </div>
+            ))}
+        </div>
+    );
+};
 export const FiltersMap = () => {
+
     const { t } = useTranslation();
     const {allUsers}= useMappingContext()
+
     const [optionData, setOptionData] = useState(null)
 
 
@@ -147,12 +151,14 @@ export const FiltersMap = () => {
             return skillsMatch && worksMatch && interestsMatch;
         });
     };
+
     const filteredUsers = filterUsers()
      return (
         <>
             <div className="filters-map">
                 <div className="logo-map">
                     <img src="/images/map/pensamap2.png" alt="map-logo" />
+
                 </div>
                 <div className="filters">
                     <div className="filter-main">
@@ -161,10 +167,12 @@ export const FiltersMap = () => {
                         {optionData ? (
                             <CustomSelect
                                 icon={faUniversalAccess}
+
                                 options={optionData.skills}
                                 selectedValues={selectedSkills}
                                 onChange={setSelectedSkills}
                                 searchPlaceholder={t('map.skills-placeholder')}
+
                             />
                         ) : (
                             <div>Loading...</div>
@@ -194,6 +202,7 @@ export const FiltersMap = () => {
                                 onChange={setSelectedInterests}
                                 searchPlaceholder={t('map.interests-placeholder')}
                             />
+
                         ) : (
                             <div>Loading...</div>
                         )}
@@ -231,6 +240,7 @@ export const FiltersMap = () => {
                         )}
                     </div>
                 </div>
+
 
             </div>
             <section className="map">

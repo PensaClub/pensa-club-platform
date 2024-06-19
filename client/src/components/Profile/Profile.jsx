@@ -6,6 +6,7 @@ import ProfileForm from './ProfileForm';
 import ProfileAddress from './ProfileAddress';
 import { ProfilePassword } from './ProfilePassword';
 import  {ProfileImage}  from './ProfileImage';
+import { useTranslation } from 'react-i18next';
 
 import './profile.css';
 import { UserContext } from '../contexts/UserContext';
@@ -19,14 +20,12 @@ import { ProfileAnnounced } from './ProfileAnnounced';
 
 
 export const Profile = () => {
+    const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
     const [userData, setUserData] = useState('');
 
     const { isFinish, getProfileData,profileData } = useContext(UserContext);
-    //    const isFinish = true;
-    console.log(isFinish)
-
-
+    
     const { userId } = useContext(UserContext);
 
 
@@ -64,16 +63,16 @@ export const Profile = () => {
             </button>
 
             <section className={`account-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`}>
-                <h3>Акаунт</h3>
-                <Link to="image" onClick={toggleMenu}><FontAwesomeIcon icon={faImage} className="icon" />Снимка</Link>
-                <Link to="data" onClick={toggleMenu}><FontAwesomeIcon icon={faUser} className="icon" />Лични данни</Link>
-                <Link to="address" onClick={toggleMenu}><FontAwesomeIcon icon={faLocationDot} className="icon" />Адрес</Link>
-                <Link to="password" onClick={toggleMenu}><FontAwesomeIcon icon={faLock} className="icon" />Парола</Link>
-                <Link to="announced" onClick={toggleMenu}><FontAwesomeIcon icon={faScroll} className="icon" />Обяви</Link>
-                <Link to="skills" onClick={toggleMenu}><FontAwesomeIcon icon={faUniversalAccess} className="icon" />Умения</Link>
-                <Link to="workOptions" onClick={toggleMenu}><FontAwesomeIcon icon={faBriefcase} className="icon" />Професия</Link>
-                <Link to="interestOptions" onClick={toggleMenu}><FontAwesomeIcon icon={faUsersGear} className="icon" />Интереси</Link>
-                <Link to="anothers" onClick={toggleMenu}><FontAwesomeIcon icon={faMountainSun} className="icon" />Други</Link>
+                <h3>{t('profile.account')}</h3>
+                <Link to="image" onClick={toggleMenu}><FontAwesomeIcon icon={faImage} className="icon" />{t('profile.photo')}</Link>
+                <Link to="data" onClick={toggleMenu}><FontAwesomeIcon icon={faUser} className="icon" />{t('profile.personal_data')}</Link>
+                <Link to="address" onClick={toggleMenu}><FontAwesomeIcon icon={faLocationDot} className="icon" />{t('profile.address')}</Link>
+                <Link to="password" onClick={toggleMenu}><FontAwesomeIcon icon={faLock} className="icon" />{t('profile.password')}</Link>
+                <Link to="announced" onClick={toggleMenu}><FontAwesomeIcon icon={faScroll} className="icon" />{t('profile.announced')}</Link>
+                <Link to="skills" onClick={toggleMenu}><FontAwesomeIcon icon={faUniversalAccess} className="icon" />{t('map.skills')}</Link>
+                <Link to="workOptions" onClick={toggleMenu}><FontAwesomeIcon icon={faBriefcase} className="icon" />{t('map.job')}</Link>
+                <Link to="interestOptions" onClick={toggleMenu}><FontAwesomeIcon icon={faUsersGear} className="icon" />{t('map.interests')}</Link>
+                <Link to="anothers" onClick={toggleMenu}><FontAwesomeIcon icon={faMountainSun} className="icon" />{t('profile.anothers')}</Link>
             </section>
             <div className="main-profile">
 
