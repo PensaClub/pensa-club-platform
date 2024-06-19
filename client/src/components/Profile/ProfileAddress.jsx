@@ -16,16 +16,16 @@ const ProfileAddress = () => {
   let currSettlement;
 
   const initialFormState = {
-    region: profileData.region || '',
-    regionId: profileData.regionId || '',
-    municipality: profileData.municipality || '',
-    municipalityId: profileData.municipalityId || '',
-    settlement: profileData.settlement || '',
-    settlementId: profileData.settlementId || '',
-    district: profileData.district || '',
-    block: profileData.block || '',
-    street: profileData.street || '',
-    streetNumber: profileData.street_number || '',
+    region: profileData.details.region || '',
+    regionId: profileData.details.regionId || '',
+    municipality: profileData.details.municipality || '',
+    municipalityId: profileData.details.municipalityId || '',
+    settlement: profileData.details.settlement || '',
+    settlementId: profileData.details.settlementId || '',
+    district: profileData.details.district || '',
+    block: profileData.details.block || '',
+    street: profileData.details.street || '',
+    streetNumber: profileData.details.street_number || '',
   };
   const [form, setForm] = useState(initialFormState);
 

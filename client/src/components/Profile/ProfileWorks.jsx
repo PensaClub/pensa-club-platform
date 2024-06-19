@@ -13,7 +13,7 @@ export const ProfileWorks = () => {
     const navigate = useNavigate();
     
     const initialFormState = {
-        workOptions: profileData.workOptions || [],
+        workOptions: profileData.details.workOptions || [],
     }
     const [form, setForm] = useState(initialFormState);
     const [workOptions, setWorkOptions] = useState([]);

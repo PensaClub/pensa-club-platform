@@ -12,7 +12,7 @@ export const ProfileInterests = () => {
     const navigate = useNavigate();
     
     const initialFormState = {
-        interestOptions: profileData.interestOptions || [],
+        interestOptions: profileData.details.interestOptions || [],
     }
     const [form, setForm] = useState(initialFormState);
     const [interestOptions, setInterestOptions] = useState([]);

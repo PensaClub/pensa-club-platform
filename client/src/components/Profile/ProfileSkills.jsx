@@ -11,7 +11,7 @@ export const ProfileSkills = () => {
   const { onEditProfileDataSubmit, profileData } = useContext(UserContext);
 
   const initialFormState = {
-    skills: profileData.skills || [],
+    skills: profileData.details.skills || [],
   };
   const [form, setForm] = useState(initialFormState);
   const [skillsOptions, setSkillsOptions] = useState([]);
