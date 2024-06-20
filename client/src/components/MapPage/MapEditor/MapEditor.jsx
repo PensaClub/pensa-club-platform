@@ -173,7 +173,7 @@ export const MapEditor = ({ filteredUsers }) => {
                 >
                     {filteredUsers.map(user => (
                         user.details?.location && (
-                            <Marker key={user.details.phone_number} position={[user.details.location.lat, user.details.location.lon]}>
+                            <Marker key={user.email} position={[user.details.location.lat, user.details.location.lon]}>
                                 <Popup>
                                     <div className="ad-card-editor">
                                         <img src={user.details.img || "/images/homePage/avatar2.png"} alt={user.details.first_name} className="ad-img-editor" />
