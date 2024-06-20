@@ -46,8 +46,8 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
         <div className="custom-select" ref={selectRef}>
             <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
                 <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
-                <div className="selected-option-text"> 
-                    {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 28) || t('map.choose')}
+                <div className="selected-option-text">
+                    {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 25) || t('map.choose')}
                 </div>
                 {selectedValues.length > 0 && <p className='number-filters'>({selectedValues.length})</p>}
             </div>
@@ -115,12 +115,39 @@ export const FiltersMap = () => {
     const [selectedInterests, setSelectedInterests] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+
+    const saveFiltersToLocalStorage = (skills, works, interests) => {
+        localStorage.setItem('selectedSkills', JSON.stringify(skills));
+        localStorage.setItem('selectedWorks', JSON.stringify(works));
+        localStorage.setItem('selectedInterests', JSON.stringify(interests));
+    };
+
+    const loadFiltersFromLocalStorage = () => {
+        const savedSkills = JSON.parse(localStorage.getItem('selectedSkills') || '[]');
+        const savedWorks = JSON.parse(localStorage.getItem('selectedWorks') || '[]');
+        const savedInterests = JSON.parse(localStorage.getItem('selectedInterests') || '[]');
+        setSelectedSkills(savedSkills);
+        setSelectedWorks(savedWorks);
+        setSelectedInterests(savedInterests);
+    };
+
+
+
     useEffect(() => {
         fetch('./options.json')
             .then(response => response.json())
             .then(data => setOptionData(data))
             .catch(error => console.error('Failed to load JSON data', error));
     }, []);
+
+    useEffect(() => {
+        loadFiltersFromLocalStorage();// изтегля,мм филтрите от local storage
+
+    }, [])
+
+    useEffect(() => {
+        saveFiltersToLocalStorage(selectedSkills, selectedWorks, selectedInterests); // запаметявам промените - to do: да се следят рендериранията 
+    }, [selectedSkills, selectedWorks, selectedInterests]);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -141,6 +168,7 @@ export const FiltersMap = () => {
         setSelectedSkills([]);
         setSelectedWorks([]);
         setSelectedInterests([]);
+        saveFiltersToLocalStorage([], [], []); // за изчистване на localstorage
     };
     const filterUsers = () => {
         if (!allUsers?.response?.accounts) return [];
@@ -209,7 +237,7 @@ export const FiltersMap = () => {
                             <div>Loading...</div>
                         )}
                     </div>
-                    <button className="clear-filters" onClick={clearAllFilters}>{t('map.clear-filters')}</button> 
+                    <button className="clear-filters" onClick={clearAllFilters}>{t('map.clear-filters')}</button>
                 </div>
                 <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} className="hamburger" onClick={toggleMenu} />
                 <div className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`}>
@@ -237,6 +265,7 @@ export const FiltersMap = () => {
                                     selectedValues={selectedInterests}
                                     onChange={handleInterestChange}
                                 />
+                                <button className="clear-filters-hamburger" onClick={clearAllFilters}>{t('map.clear-filters')}</button>
                             </>
                         ) : (
                             <div>Loading...</div>

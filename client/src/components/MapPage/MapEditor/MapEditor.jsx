@@ -181,7 +181,7 @@ export const MapEditor = ({ filteredUsers }) => {
                                         <h3 className="ad-name-editor">{user.details.first_name} {user.details.last_name}</h3>
                                             <p className="ad-description-editor">Професия: {user.details.work_options ? user.details.work_options.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
                                             <p className="ad-description-editor">Интереси: {user.details.interest_options ? user.details.interest_options.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
-                                            <p className="ad-description-editor">Умения: {user.details.skills ? user.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
+                                            <p className="ad-description-editor">Умения: {user.details.skills ? user.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
                                             <Link to="#" id="read-more-editor" className="read-more" onClick={(e) => handleReadMoreClick(e, user)}>Прочети повече</Link>
                                         </div>
                                     </div>
@@ -204,7 +204,7 @@ export const MapEditor = ({ filteredUsers }) => {
                             <div className="map-desc-user">
                             <p>Професия: {selectedUser.details.work_options ? selectedUser.details.work_options.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
                                 <p>Интереси: {selectedUser.details.interest_options ? selectedUser.details.interest_options.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
-                                <p>Имения: {selectedUser.details.skills ? selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
+                                <p>Имения: {selectedUser.details.skills ? selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
                                 <p>Телефон: <Link to={`tel:${selectedUser.details.phone_number}`}>{selectedUser.details.phone_number}</Link></p>
                                 <p>Имейл: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
                             </div>

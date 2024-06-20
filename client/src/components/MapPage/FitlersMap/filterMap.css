@@ -163,6 +163,7 @@
 }
 
 .hamburger-menu {
+  position: relative;
   border-top-left-radius: calc(var( --radius-input) * 2) calc(var( --radius-input) * 2);
   border-bottom-left-radius: calc(var( --radius-input) * 2) calc(var( --radius-input) * 2);
   position: fixed;
@@ -240,6 +241,23 @@
 .filter-section label {
   font-size: var(--xs-font-size);
 }
+.clear-filters-hamburger {
+  padding: var(--s-space);
+  font-size: var(--xs-font-size);
+  border: 1px solid #ccc;
+  border-radius: var(--radius-input);
+  font-weight: 800;
+  box-shadow: var(--text-shadow);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: white;
+  width: 100%;
+  margin: 1rem 0;
+
+}
 
 @media (max-width: 849px) {
   .filters {
@@ -289,11 +307,42 @@
     justify-content: space-between; 
     cursor: pointer;
 }
-
+.clear-filters {
+  padding: calc(var(--s-space) + 1px) 0;
+  font-size: var(--xs-font-size);
+  border: 1px solid #ccc;
+  border-radius: var(--radius-input);
+  font-weight: 800;
+  box-shadow: var(--text-shadow);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: white;
+  width: 50%;
+  max-width: 350px;
+  margin: 1rem auto;
+  margin-top: 2.7em;
+ 
+}
+.clear-filters:hover{
+  color: var(--red);
+}
 .custom-select .selected-option-text {
     flex: 1; 
     text-align: center; 
 }
+}
+@media screen and (max-device-width: 1067px) and (orientation: landscape){
+  .selected-option{
+    font-size: var( --xxs-font-size);
+
+  }
+  .clear-filters {
+    font-size: var( --xxs-font-size);
+    margin-top: 3.3em;
+  }
 }
 .map{
     position: relative;
