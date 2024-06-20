@@ -10,7 +10,7 @@
 - [Contribution](#contribution)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
--
+
 ## Project Description
 Pensa Club is an innovative platform designed to help elderly people integrate more easily into the technological world. The primary feature of the platform is an interactive map, called Pensa Map, which marks every registered user. By clicking on a marker, brief information about the user appears along with a button leading to a detailed menu that includes the user's profile and their ads. The platform aims to facilitate communication and assistance among the elderly by allowing users to share help or services and find assistance through map filters based on interests, skills, and profession. The page with ads is referred to as "Community."
 
