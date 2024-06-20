@@ -75,18 +75,18 @@ The project is deployed at [Pensa Club](https://digital-literacy-wellbeing-60-pl
 ## Installation and Configuration
 To get started with the project, follow these steps:
 
-# Clone the repository from GitHub
+## Clone the repository from GitHub
 ```bash
 git clone https://github.com/yourusername/your-repository.git
 ```
-# Navigate to the client directory
+## Navigate to the client directory
 cd your-repository/client
 
-# Install the necessary packages
+## Install the necessary packages
 ```bash
 npm install   
 ```
-# Start the project
+## Start the project
 ```bash
 npm start
 ```
