@@ -50,16 +50,22 @@ export const UserProvider = ({ children }) => {
     const { rePassword, ...newData } = data;
     try {
       setIsLoading(true);
-
       const response = await userService.login(newData);
       const { password, ...newUser } = response;
       setIsAuth(newUser);
       setIsFinish(newUser.data.enabled);
       setIsLoading(false);
       if (newUser.data.enabled) {
-        const res = await getProfileData();
-        // console.log(res);
-        navigate('/profile');
+        getProfileData()
+          .then((res) => {
+            console.log(res);
+            setProfileData(res.user)
+            console.log(profileData);
+            if (profileData) {
+              navigate('/profile');
+            }
+          })
+          .catch((err) => console.log(err.message));
       } else {
         navigate('/profile/profile-form');
       }
@@ -95,16 +101,15 @@ export const UserProvider = ({ children }) => {
       setProfileData(response.user);
       setIsAuth({
         ...isAuth,
-        token: response.token, 
+        token: response.token,
         data: {
           ...isAuth.data,
           enabled: true,
-        }     
+        },
       });
       console.log(isAuth);
-      setIsFinish(true).then(navigate('/profile'))
+      setIsFinish(true).then(navigate('/profile'));
       setIsLoading(false);
-      
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
@@ -138,13 +143,16 @@ export const UserProvider = ({ children }) => {
       // debugger
       setIsLoading(true);
 
-      const response = await userService.getUserData();
-      setProfileData(response.user);
-      setIsFinish(response.user.enabled);
-      // console.log(profileData);
+      userService
+        .getUserData()
+        .then((response) => {
+          setProfileData(response.user);
+          setIsFinish(response.user.enabled);
+        })
+        .then(setIsLoading(false))
+        .catch((err) => console.log(err.message));
 
-      setIsLoading(false);
-      return response;
+      // return response;
     } catch (error) {
       showErrorAndSetTimeouts(`Error get profile data: ${error.message}`);
     }

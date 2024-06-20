@@ -36,7 +36,7 @@ export const Profile = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isFinish, profileData, userEmail } = useContext(UserContext);
+  const { isFinish, profileData, } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
