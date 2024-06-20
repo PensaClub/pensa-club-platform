@@ -80,8 +80,9 @@ To get started with the project, follow these steps:
 git clone https://github.com/yourusername/your-repository.git
 ```
 ## Navigate to the client directory
-cd your-repository/client
-
+```bash
+cd client
+```
 ## Install the necessary packages
 ```bash
 npm install   
