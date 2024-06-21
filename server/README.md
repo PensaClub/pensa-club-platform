@@ -132,7 +132,7 @@ When the server starts for the first time in a development environment, a demo u
   - **/auth/login** : Responsible for registering a new user. It requires user details like email, and password.
   - **/auth/logout** : Responsible for logging out the user from the system.
   - **/auth/request-reset-password** : Used to request a password reset. It expects an email address and sends a password reset link to that email.
-  - **/auth/reset-password** : Used to reset the password. It requires the new password, a repeated new password for confirmation, and the reset token received by email.
+  - **/auth/reset-password**: This endpoint is used to reset the user's password and supports two types of tokens: a reset token obtained via email and a JSON Web Token (JWT). It requires old password (mandatory only for JWT), new password, confirmation of new password, token type ('reset' or 'jwt'), and the token.
 
 - **_userDetailsController_** :
 
