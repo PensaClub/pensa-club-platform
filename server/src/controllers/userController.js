@@ -1,7 +1,7 @@
 const userController = require("express").Router();
 
 const bcrypt = require("bcrypt");
-const { tokenCreator } = require("../utils/jwt");
+const { tokenCreator, tokenVerification } = require("../utils/jwt");
 const CustomError = require("../utils/customError");
 
 const { where } = require("sequelize");
@@ -16,6 +16,7 @@ const emailRegex =
 //Example - john.doe@example.com
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+const secret = process.env.SECRET;
 
 userController.post("/register", async (req, res, next) => {
   let errors = {};
@@ -167,31 +168,62 @@ userController.post("/request-reset-password", async (req, res, next) => {
 });
 
 userController.post("/reset-password", async (req, res, next) => {
-  const { password, rePassword, resetToken } = req.body;
+  const { oldPassword, newPassword, reNewPassword, tokenType, token } = req.body;
   try {
-    if (password !== rePassword) {
+    if (tokenType !== 'jwt' && tokenType !== 'reset') {
+      return res.status(400).send("Invalid token type.");
+    }
+    if (!newPassword) {
+      return res.status(400).send("New password is required.");
+    }
+    if (!reNewPassword) {
+      return res.status(400).send("Repeat password is required.");
+    }
+    if (newPassword !== reNewPassword) {
       return res.status(400).send("Repeat password does not match.");
     }
-    if (!passwordRegex.test(password)) {
-      return res.status(400).send("Password must be at least 8 characters long, contain at least one letter and one number.");
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).send("New password must be at least 8 characters long, contain at least one letter and one number.");
     }
 
-    const user = await user_account.findOne({ where: { reset_token: resetToken } });
+    if (tokenType === 'reset') {
 
-    if (!user.token_expiration) {
-      return res.status(404).send("User with that token wasn't found.");
+      const user = await user_account.findOne({ where: { reset_token: token } });
+
+      if (!user.token_expiration) {
+        return res.status(404).send("User with that token wasn't found.");
+      }
+
+      if (user.token_expiration.getTime() < Date.now()) {
+        return res.status(400).send("Reset token has expired.");
+      }
+
+      const newHashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = newHashedPassword;
+      user.reset_token = null;
+      user.token_expiration = null;
+      await user.save();
+      res.status(200).send("Password reset was successful.");
     }
 
-    if (user.token_expiration.getTime() < Date.now()) {
-      return res.status(400).send("Reset token has expired.");
-    }
+    if (tokenType === 'jwt') {
 
-    const newHashedPassword = await bcrypt.hash(password, 10);
-    user.password = newHashedPassword;
-    user.reset_token = null;
-    user.token_expiration = null;
-    await user.save();
-    res.status(200).send("Password reset was successful.");
+      if (!oldPassword) {
+        return res.status(400).send("Old password is required.");
+      }
+      const decodedToken = tokenVerification(token, secret);
+      const user = await user_account.findOne({ where: { email: decodedToken.email } });
+
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+      if (!isPasswordValid) {
+        return res.status(400).send("Old password is not valid.");
+      }
+
+      const newHashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = newHashedPassword;
+      await user.save();
+      res.status(200).send("Password reset was successful.");
+    }
   } catch (err) {
     next(err);
   }
