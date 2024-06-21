@@ -149,43 +149,47 @@ const ProfileForm = () => {
         loadData();
     }, []);
 
-  
+
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-
+    
         const trimmedForm = trimObjectStrings(form);
         setForm(trimmedForm);
-
-
-        const isValid = Object.keys(trimmedForm).every((field) => {
+    
+        const validationErrors = {};
+        let isValid = true;
+    
+        Object.keys(trimmedForm).forEach((field) => {
             const value = trimmedForm[field];
-            const error = validateField(field, value);
-            setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
-            return !error;
+            const error = validateField(field, value, trimmedForm, t);
+            if (error) {
+                isValid = false;
+                validationErrors[field] = error;
+            }
         });
-
+    
+        setErrors(validationErrors);
+    
         if (isValid) {
-
             console.log('Form Submitted:', trimmedForm);
             resetFields(setForm, initialFormState);
             setSelectedDate('');
             setSelectedMonth('');
             setSelectedYear('');
             navigate('/profile');
-
-            onProfileDataSubmit(form);
-            console.log('Form Submitted:', form);
-
+    
+            onProfileDataSubmit(trimmedForm);
+            console.log('Form Submitted:', trimmedForm);
+        } else {
+            console.log('Form validation failed. Errors:', validationErrors);
         }
     };
-
-
+    
 
 
     const onBlurHandler = (e) => {
         const { name, value } = e.target;
-        const error = validateField(name, value);
+        const error = validateField(name, value, form, t);
         setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
 
     };
