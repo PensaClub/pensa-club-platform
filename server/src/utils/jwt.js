@@ -13,7 +13,9 @@ function tokenCreator(data) {
 }
 
 function tokenVerification(token) {
-  return jwt.verify(token, secret);
+  return jwt.verify(token, secret, (err) => {
+    throw new Error('Invalid JWT token.');
+  });
 }
 
 module.exports = { tokenCreator, tokenVerification };

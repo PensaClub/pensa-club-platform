@@ -212,6 +212,7 @@ userController.post("/reset-password", async (req, res, next) => {
         return res.status(400).send("Old password is required.");
       }
       const decodedToken = tokenVerification(token, secret);
+      console.log(decodedToken);
       const user = await user_account.findOne({ where: { email: decodedToken.email } });
 
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
