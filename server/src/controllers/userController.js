@@ -159,8 +159,7 @@ userController.post("/request-reset-password", async (req, res, next) => {
       await sendResetEmail(email, resetToken);
       res.status(200).send(`A reset password link has been sent to ${email}.`);
     } catch (emailError) {
-      console.error(`Error sending email: ${emailError}`);
-      res.status(500).send("An error occurred while sending the reset email.");
+      throw new Error(`Error sending email: ${emailError}`);
     }
   } catch (err) {
     next(err);
@@ -212,7 +211,6 @@ userController.post("/reset-password", async (req, res, next) => {
         return res.status(400).send("Old password is required.");
       }
       const decodedToken = tokenVerification(token, secret);
-      console.log(decodedToken);
       const user = await user_account.findOne({ where: { email: decodedToken.email } });
 
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
