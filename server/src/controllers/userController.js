@@ -168,61 +168,53 @@ userController.post("/request-reset-password", async (req, res, next) => {
 
 userController.post("/reset-password", async (req, res, next) => {
   const { oldPassword, newPassword, reNewPassword, tokenType, token } = req.body;
+  let user;
   try {
     if (tokenType !== 'jwt' && tokenType !== 'reset') {
-      return res.status(400).send("Invalid token type.");
+      return res.status(400).send({ message: "Invalid token type." });
     }
     if (!newPassword) {
-      return res.status(400).send("New password is required.");
+      return res.status(400).send({ message: "New password is required." });
     }
     if (!reNewPassword) {
-      return res.status(400).send("Repeat password is required.");
+      return res.status(400).send({ message: "Repeat password is required." });
     }
     if (newPassword !== reNewPassword) {
-      return res.status(400).send("Repeat password does not match.");
+      return res.status(400).send({ message: "Repeat password does not match." });
     }
     if (!passwordRegex.test(newPassword)) {
-      return res.status(400).send("New password must be at least 8 characters long, contain at least one letter and one number.");
+      return res.status(400).send({ message: "New password must be at least 8 characters long, contain at least one letter and one number." });
     }
 
     if (tokenType === 'reset') {
-
-      const user = await user_account.findOne({ where: { reset_token: token } });
-
-      if (!user.token_expiration) {
-        return res.status(404).send("User with that token wasn't found.");
+      user = await user_account.findOne({ where: { reset_token: token } });
+      if (!user || !user.token_expiration) {
+        return res.status(404).send({ message: "User with that token wasn't found." });
       }
-
       if (user.token_expiration.getTime() < Date.now()) {
-        return res.status(400).send("Reset token has expired.");
+        return res.status(400).send({ message: "Reset token has expired." });
       }
-
-      const newHashedPassword = await bcrypt.hash(newPassword, 10);
-      user.password = newHashedPassword;
       user.reset_token = null;
       user.token_expiration = null;
-      await user.save();
-      res.status(200).send("Password reset was successful.");
     }
 
     if (tokenType === 'jwt') {
-
       if (!oldPassword) {
-        return res.status(400).send("Old password is required.");
+        return res.status(400).send({ message: "Old password is required." });
       }
       const decodedToken = tokenVerification(token, secret);
-      const user = await user_account.findOne({ where: { email: decodedToken.email } });
+      user = await user_account.findOne({ where: { email: decodedToken.email } });
 
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
       if (!isPasswordValid) {
-        return res.status(400).send("Old password is not valid.");
+        return res.status(400).send({ message: "Old password is not valid." });
       }
-
-      const newHashedPassword = await bcrypt.hash(newPassword, 10);
-      user.password = newHashedPassword;
-      await user.save();
-      res.status(200).send("Password reset was successful.");
     }
+    const newHashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = newHashedPassword;
+    await user.save();
+    res.status(200).send({ message: "Password reset was successful." });
+
   } catch (err) {
     next(err);
   }
