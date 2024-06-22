@@ -204,7 +204,7 @@ export const MapEditor = ({ filteredUsers }) => {
                             <div className="map-desc-user">
                             <p>Професия: {selectedUser.details.work_options ? selectedUser.details.work_options.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
                                 <p>Интереси: {selectedUser.details.interest_options ? selectedUser.details.interest_options.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
-                                <p>Имения: {selectedUser.details.skills ? selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
+                                <p>Умения: {selectedUser.details.skills ? selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
                                 <p>Телефон: <Link to={`tel:${selectedUser.details.phone_number}`}>{selectedUser.details.phone_number}</Link></p>
                                 <p>Имейл: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
                             </div>

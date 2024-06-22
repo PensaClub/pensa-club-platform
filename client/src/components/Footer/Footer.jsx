@@ -2,11 +2,12 @@ import './footer.css'
 
 import { useTranslation } from "react-i18next";
 
-export const Footer = () => {
+export const Footer = ({additionalClasses}) => {
     const {t} = useTranslation();
 
     return (
-        <footer>
+        <footer className={additionalClasses}>
+            
             <section className="footer">
                 <img src="/images/homePage/logo.png" alt="logo" />
                 <div className="footer-links">

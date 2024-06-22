@@ -301,6 +301,8 @@ header a:nth-child(1) {
   text-align: center;
 }
 
+
+
 /* desktop */
 @media (min-width: 850px) {
 
@@ -447,5 +449,10 @@ header a:nth-child(1) {
   }
   .warning-icon-image {
     color: var(--red);
+  }
+}
+@media only screen and (max-width: 850px) {
+  .header.hide-on-mobile {
+    display: none;
   }
 }
