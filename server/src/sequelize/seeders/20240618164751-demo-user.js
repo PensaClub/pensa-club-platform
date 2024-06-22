@@ -11,7 +11,7 @@ module.exports = {
         {
           email: "test@test.com",
           password: hashedPassword,
-          finished: false,
+          finished: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

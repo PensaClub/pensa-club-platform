@@ -193,6 +193,14 @@ module.exports = {
           },
         },
       },
+      imageURL: {
+        type: DataTypes.STRING(2048),
+        allowNull: true,
+        defaultValue: null,
+        validate: {
+          isUrl: true,
+        },
+      },
       user_accounts_id: {
         type: DataTypes.INTEGER,
         allowNull: false,

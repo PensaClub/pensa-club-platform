@@ -19,6 +19,7 @@ function fieldSwap(details, mappingType) {
     lastName: "last_name",
     gender: "gender",
     birthDate: "birth_date",
+    imageURL: "imageURL",
   };
 
   const mapFromDb = {
@@ -39,6 +40,7 @@ function fieldSwap(details, mappingType) {
     last_name: "lastName",
     gender: "gender",
     birth_date: "birthDate",
+    imageURL: "imageURL",
   };
 
   const fieldMapping = mappingType === "mapToDb" ? mapToDb : mapFromDb;

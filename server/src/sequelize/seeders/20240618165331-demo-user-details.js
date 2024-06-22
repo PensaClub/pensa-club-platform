@@ -31,6 +31,8 @@ module.exports = {
           user_accounts_id: userId,
           createdAt: new Date(),
           updatedAt: new Date(),
+          imageURL:
+            "https://firebasestorage.googleapis.com/v0/b/testing-a6f07.appspot.com/o/profile-image%2Faaa1dc23-b62c-43ed-ad97-ebf1c0c9b862?alt=media&token=2244630b-9533-4fa4-9232-f6da3013b233",
         },
       ],
       {}
