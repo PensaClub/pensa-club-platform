@@ -67,28 +67,37 @@ export const ProfileData = () => {
         const trimmedForm = trimObjectStrings(form);
         setForm(trimmedForm);
 
+        const validationErrors = {};
+        let isValid = true;
 
-        const isValid = Object.keys(trimmedForm).every((field) => {
+        Object.keys(trimmedForm).forEach((field) => {
             const value = trimmedForm[field];
-            const error = validateField(field, value);
-            setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
-            return !error;
+            const error = validateField(field, value, trimmedForm, t);
+            if (error) {
+                isValid = false;
+                validationErrors[field] = error;
+            }
         });
+
+        setErrors(validationErrors);
 
         if (isValid) {
             console.log('Form Submitted:', trimmedForm);
             resetFields(setForm, initialFormState);
-            setSelectedDate('');
-            setSelectedMonth('');
-            setSelectedYear('');
+                setSelectedDate('');
+                setSelectedMonth('');
+                setSelectedYear('');
+
             navigate('/profile');
         }
+
+       
     };
 
 
     const onBlurHandler = (e) => {
         const { name, value } = e.target;
-        const error = validateField(name, value);
+        const error = validateField(name, value, form , t);
         setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
 
     };

@@ -26,40 +26,42 @@ export const validateField = (name, value, form = {}, t) => {
             if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
             break;
         case 'phoneNumber':
-            if (value && !phoneNumberRegex.test(value)) error = t('profile_phone_number');
+            if (value && !phoneNumberRegex.test(value)) error = t('profile.phone_number_invalid');
             break;
         case 'region':
-            if (!value) error = t('profile_region_required');
+            if (!value) error = t('profile.region_required');
+            console.log(error)
             break;
         case 'municipality':
-            if (!value) error = t('profile_municipality_required');
+            if (!value) error = t('profile.municipality_required');
             break;
         case 'settlement':
-            if (!value) error = t('profile_settlement_required');
+            if (!value) error = t('profile.settlement_required');
             break;
         case 'street':
-            if (!value) error = t('profile_street_required');
+            if (!value) error = t('profile.street_required');
             break;
         case 'password':
             if (!passwordRegex.test(value)) {
-                error = t('profile_password_error');
+                error = t('profile.password_error');
             }
             break;
         case 'newPassword':
             if (!passwordRegex.test(value)) {
-                error = t('profile_new_password_error');
+                error = t('profile.new_password_error');
             }
             break;
         case 'rePassword':
             if (value !== form.newPassword) {
-                error = t('profile_password_match');
+                error = t('profile.password_match');
             }
            
             break;
         default:
             break;
     }
-    return error;
+    return error ;
+    // return error ? t(error) : '';
 };
 
 export const generateNumberOptions = (start, end) => {

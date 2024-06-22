@@ -44,8 +44,9 @@ export const ProfilePassword = () => {
         const { name, value } = e.target;
         setErrors((prevErrors) => ({
             ...prevErrors,
-            [name]: validateField(name, value, form),
+            [name]: validateField(name, value, form, t),
         }));
+
     };
 
     const handleSubmit = (e) => {
@@ -57,7 +58,7 @@ export const ProfilePassword = () => {
         let isValid = true;
 
         Object.keys(trimmedForm).forEach((field) => {
-            const error = validateField(field, trimmedForm[field], trimmedForm);
+            const error = validateField(field, trimmedForm[field], trimmedForm, t);
             newErrors[field] = error;
             if (error) {
                 isValid = false;
@@ -71,6 +72,8 @@ export const ProfilePassword = () => {
             resetFields(setForm, initialFormState);
             navigate('/profile');
         }
+
+        
     };
 
     return (
