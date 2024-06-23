@@ -32,7 +32,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
           imageURL:
-            "https://firebasestorage.googleapis.com/v0/b/testing-a6f07.appspot.com/o/profile-image%2Faaa1dc23-b62c-43ed-ad97-ebf1c0c9b862?alt=media&token=2244630b-9533-4fa4-9232-f6da3013b233",
+            "https://firebasestorage.googleapis.com/v0/b/testing-a6f07.appspot.com/o/profile-image%2F9ed05551-1d97-426f-8ee4-8ba6807b4bdc?alt=media&token=769b71bb-f176-4844-b56b-81ff9cf2fbc9",
         },
       ],
       {}

@@ -1,5 +1,4 @@
 import "./profile.css";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useContext, useState } from "react";
 import { useImagePreview } from "../hooks/useImagePreview";
@@ -9,39 +8,50 @@ import { UserContext } from "../contexts/UserContext";
 export const ProfileImage = () => {
   const { t } = useTranslation();
 
-  const { onEditProfileDataSubmit } = useContext(UserContext);
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+  const { onEditProfileDataSubmit, profileData } = useContext(UserContext);
   const { previewImage, handleImage } = useImagePreview();
 
   const [imageUpload, setImageUpload] = useState(null);
 
   const handleUpload = async () => {
     if (!imageUpload) return;
+    if (!allowedTypes.includes(imageUpload.type)) {
+      throw new Error(`Type ${imageUpload.type} is not allowed! Allowed types are png/jpeg/jpg`);
+    }
     try {
-      const url = await uploadImage(imageUpload);
-      await onEditProfileDataSubmit({ imageURL: url });
+      const data = await uploadImage(imageUpload, profileData.details.firebaseImagePath);
+      await onEditProfileDataSubmit({ imageURL: data.url, firebaseImagePath: data.filePath });
     } catch (error) {
-      console.error("Error uploading image: ", error);
+      throw new Error("Error uploading image: ", error);
     }
   };
 
   return (
     <>
       <section className="profile-data">
-        <div className="avatar">
-          <img src={previewImage || "/images/sign-up/avatar.jpg"} alt="User avatar" />
-        </div>
-        <div className="user-data">
-          <input
-            type="file"
-            onChange={(e) => {
-              setImageUpload(e.target.files[0]);
-              handleImage(e);
-            }}
-          />
-          <button onClick={handleUpload}>Upload image</button>
-          <Link to="#">
-            <h3>{t("profile.change_photo")}</h3>
-          </Link>
+        <div className="profile-data__inner">
+          <div className="avatar">
+            <img src={previewImage || "/images/sign-up/avatar.jpg"} alt="User avatar" />
+          </div>
+          <div className="user-data">
+            <input
+              type="file"
+              class="image"
+              id="imageUrl"
+              onChange={(e) => {
+                setImageUpload(e.target.files[0]);
+                handleImage(e);
+              }}
+            />
+            <label for="imageUrl" class="label">
+              {t("profile.change_photo")}
+            </label>
+          </div>
+          <button onClick={handleUpload} className="label">
+            Upload Photo
+          </button>
         </div>
       </section>
     </>

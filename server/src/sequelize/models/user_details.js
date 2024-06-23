@@ -210,6 +210,11 @@ module.exports = (sequelize, DataTypes) => {
           isUrl: true,
         },
       },
+      firebase_image_path: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
       user_accounts_id: DataTypes.INTEGER,
     },
     {
