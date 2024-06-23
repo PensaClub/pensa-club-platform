@@ -11,6 +11,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
+  // const [tempData, setTempData] = useLocalStorage('tempData', {});
   const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -92,12 +93,14 @@ export const UserProvider = ({ children }) => {
   const onProfileDataSubmit = async (details) => {
     try {
       setIsLoading(true);
+      // setTempData(details);
       const response = await userService.setUserData(details);
-      // console.log(response);
+      console.log(response);
       // if (response.message === 'No such address was found!') {
       //   navigate('/profile/profile-form');
+      //   notify("warn-address")
       //   setIsLoading(false);
-      //   return [response.message, filledData];
+      //   return tempData;
       // }
       setProfileData(response.user);
       setIsAuth({

@@ -25,7 +25,7 @@ function App() {
       <ErrorBoundary>
         <UserProvider>
           <MapProvider>
-          <ToastContainer role="alert" />
+          <ToastContainer role="alert" className={"notification"}/>
           <Header />
 
           <Routes>

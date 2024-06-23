@@ -203,5 +203,13 @@
 
 
 
+  },
+  
+  "notification": {
+    "success-data": "User Data successfully submitted!",
+    "success-register": "Your account is successfully created!",
+    "success-login": "Your successfully logged in!",
+    "success-logout": "You logged out successfully!",
+    "error": "An error occured. Please try submitting data again!"
   }
 }

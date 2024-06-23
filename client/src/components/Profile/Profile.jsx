@@ -40,7 +40,7 @@ export const Profile = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
-    console.log(isFinish);
+    // console.log(isFinish);
     if (!isFinish) {
       navigate('/profile/profile-form');
     }

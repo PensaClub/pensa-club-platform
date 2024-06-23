@@ -165,3 +165,8 @@ button, input {
 	border-radius: var(--radius-input);
 	
 }
+
+
+.notification {
+  margin-top: 10%;
+}

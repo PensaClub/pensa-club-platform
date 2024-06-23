@@ -18,8 +18,7 @@ const ProfileForm = () => {
   const currentLanguage = i18n.language;
 
   const navigate = useNavigate();
-  const { onProfileDataSubmit, userId, userEmail, getProfileData } =
-    useContext(UserContext);
+  const { onProfileDataSubmit, tempData } = useContext(UserContext);
   const initialFormState = {
     username: '',
     // email: userEmail,
@@ -193,25 +192,7 @@ const ProfileForm = () => {
       // setSelectedMonth('');
       // setSelectedYear('');
 
-      onProfileDataSubmit(form)
-        .then(() => {
-          // if (data[0] === 'No such address was found!') {
-          //   // console.log(data[1]);
-          //   // setFilledData(data[1])
-          //   // setForm(filledData);
-          //   // console.log(form);
-          //   // TODO: preserved data that is already filled and show a message to the user!
-          //   navigate('/profile/profile-form');
-          //   return;
-          // }
-
-          console.log('Form Submitted:', form);
-          // navigate('/profile');
-        })
-        .then(notify())
-        .catch((err) =>
-          console.log(`Error on profile form submit: ${err.message}`)
-        );
+      await onProfileDataSubmit(form)
     }
   };
 

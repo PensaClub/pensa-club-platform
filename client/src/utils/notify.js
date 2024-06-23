@@ -1,40 +1,33 @@
 import { toast } from 'react-toastify';
+import { Trans } from 'react-i18next';
 
 export const notify = (key) => {
   switch (key) {
     case 'success-data':
-      toast.success('User Data successfully submitted!', {
+      toast.success(<Trans i18nKey="notification.success-data" />, {
         role: 'alert',
       });
       break;
     case 'success-register':
-      toast.success('Your account is successfully created!', {
+      toast.success(<Trans i18nKey="notification.success-register" />, {
         role: 'alert',
       });
       break;
     case 'success-login':
-      toast.success('Your successfully logged in!', {
+      toast.success(<Trans i18nKey="notification.success-login" />, {
         role: 'alert',
       });
       break;
     case 'success-logout':
-      toast.success('You logged out successfully!', {
+      toast.success(<Trans i18nKey="notification.success-logout" />, {
         role: 'alert',
       });
       break;
+
     case 'error':
-      toast.error('An error occured. Please try submitting data again!', {
+      toast.error(<Trans i18nKey="notification.error" />, {
         role: 'alert',
       });
       break;
   }
-
-  // toast.promise(
-  //   func,
-  //   {
-  //     success: "User Data successfully submitted!",
-  //     error: "An error occured. Please try submitting data again!",
-  //     role: "alert",
-  //   }
-  // )
 };
