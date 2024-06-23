@@ -4,6 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
 import './error.css';
 import { Loader } from '../Loader/Loader';
+import { notify } from '../../utils/notify';
 
 export const UserContext = createContext();
 
@@ -41,7 +42,9 @@ export const UserProvider = ({ children }) => {
       setIsFinish(newUser.data.enabled);
       setIsLoading(false);
       navigate('/profile/profile-form');
+      notify('success-register');
     } catch (error) {
+      notify('error');
       showErrorAndSetTimeouts(error.message);
     }
   };
@@ -55,21 +58,17 @@ export const UserProvider = ({ children }) => {
       setIsAuth(newUser);
       setIsFinish(newUser.data.enabled);
       setIsLoading(false);
+      notify('success-login');
       if (newUser.data.enabled) {
-        getProfileData()
-          .then((res) => {
-            console.log(res);
-            setProfileData(res.user)
-            console.log(profileData);
-            if (profileData) {
-              navigate('/profile');
-            }
-          })
-          .catch((err) => console.log(err.message));
+        await getProfileData();
+        if (profileData) {
+          navigate('/profile');
+        }
       } else {
         navigate('/profile/profile-form');
       }
     } catch (error) {
+      notify('error');
       showErrorAndSetTimeouts(error.message);
     }
   };
@@ -82,7 +81,9 @@ export const UserProvider = ({ children }) => {
       localStorage.removeItem('auth');
       localStorage.removeItem('userDetails');
       setIsLoading(false);
+      notify('success-logout');
     } catch (error) {
+      notify('error');
       setIsAuth({});
       showErrorAndSetTimeouts(error.message);
     }
@@ -110,47 +111,53 @@ export const UserProvider = ({ children }) => {
       console.log(isAuth);
       setIsFinish(true).then(navigate('/profile'));
       setIsLoading(false);
+      notify('success-data');
     } catch (error) {
+      notify('error');
+      console.log(error.message);
       showErrorAndSetTimeouts(error.message);
     }
   };
 
   const onEditProfileDataSubmit = async (data) => {
-    // console.log(data);
     try {
       setIsLoading(true);
       const response = await userService.editUserData(data);
+      notify('success-data');
       console.log(response);
       const updatedData = response.details;
       console.log(updatedData);
+      console.log(profileData);
       if (updatedData) {
-        setProfileData({ ...profileData, details: updatedData });
-        setIsAuth({
-          ...isAuth,
-          token: response.token,
-          enabled: response.user.enabled,
-        });
+        setProfileData({ ...profileData, details: { ...updatedData } });
+        // setIsAuth({
+        //   ...isAuth,
+        //   token: response?.token,
+        //   data: {
+        //     ...isAuth.data,
+        //     enabled: true,
+        //   },
+        // });
       }
       setIsLoading(false);
       return updatedData;
     } catch (error) {
+      notify('error');
+      console.log(error.message);
       showErrorAndSetTimeouts(`Error edit profile data: ${error.message}`);
     }
   };
 
   const getProfileData = async () => {
     try {
-      // debugger
       setIsLoading(true);
-
-      userService
-        .getUserData()
-        .then((response) => {
-          setProfileData(response.user);
-          setIsFinish(response.user.enabled);
-        })
-        .then(setIsLoading(false))
-        .catch((err) => console.log(err.message));
+      const response = await userService.getUserData();
+      if (response) {
+        // console.log(response);
+        setProfileData(response.user);
+        // setIsFinish(response.user.enabled);
+      }
+      setIsLoading(false);
 
       // return response;
     } catch (error) {

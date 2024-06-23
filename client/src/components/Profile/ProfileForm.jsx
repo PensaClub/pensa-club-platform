@@ -11,6 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { loadData } from '../../utils/loadData';
+import { notify } from '../../utils/notify';
 
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
@@ -203,9 +204,11 @@ const ProfileForm = () => {
           //   navigate('/profile/profile-form');
           //   return;
           // }
+
           console.log('Form Submitted:', form);
           // navigate('/profile');
         })
+        .then(notify())
         .catch((err) =>
           console.log(`Error on profile form submit: ${err.message}`)
         );

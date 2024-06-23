@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
+import { notify } from '../../utils/notify';
 
 export const ProfileData = () => {
     const { t } = useTranslation();
@@ -98,7 +99,7 @@ export const ProfileData = () => {
             try {
                 const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
                 const updatedData = Object.fromEntries(updatedDataArr);        
-                await onEditProfileDataSubmit(updatedData);
+                const res = await onEditProfileDataSubmit(updatedData);
                 console.log('Data Submitted:', updatedData);
                 // resetFields(setForm, initialFormState);
                 // setSelectedDate('');
