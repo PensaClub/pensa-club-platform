@@ -1,0 +1,24 @@
+
+.header-community{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-white);
+    padding: calc(var(--s-space) + 8px) 0;
+}
+
+.header-community-logo{
+    text-align: center;
+}
+.header-community-logo img{
+    width: 2em;
+    height: auto;
+}
+
+@media (min-width: 1200px) {
+    .header-community{
+        display: none;
+    }
+    
+}

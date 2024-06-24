@@ -5,5 +5,6 @@
         "Вход",
         "имаш",
         "Регистрация"
-    ]
+    ],
+    "notebook.experimental.generate": false
 }

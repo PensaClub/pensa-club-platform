@@ -451,7 +451,7 @@ header a:nth-child(1) {
     color: var(--red);
   }
 }
-@media only screen and (max-width: 850px) {
+@media only screen and (max-width: 1200px) {
   .header.hide-on-mobile {
     display: none;
   }
