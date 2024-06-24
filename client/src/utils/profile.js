@@ -54,8 +54,7 @@ export const validateField = (name, value, form = {}, t) => {
         case 'rePassword':
             if (value !== form.newPassword) {
                 error = t('profile.password_match');
-            }
-           
+            }  
             break;
         default:
             break;

@@ -1,29 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import { Link } from 'react-router-dom';
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
+import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 
 export const ProfileData = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const initialFormState = {
-        username: '',
-        email: '',
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        gender: '',
-        birthDate: '',
-    }
-    const [form, setForm] = useState(initialFormState);
+    const {userEmail, onEditProfileDataSubmit, profileData} = useContext(UserContext);      
 
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
     const [errors, setErrors] = useState({});
+    // const [profileData, setProfileData] = useState('')
+
+    //TODO: change keys when changed on server!!!
+
+    const initialFormState = {
+        username: profileData.details.username || '',
+        email: profileData.email,
+        firstName: profileData.details.firstName || '',
+        lastName: profileData.details.lastName || '',
+        phoneNumber: profileData.details.phoneNumber || '',
+        gender: profileData.details.gender || null,
+        birthDate: profileData.details.birthDate || null, 
+    }
+    const [form, setForm] = useState(initialFormState);
+
+    // useEffect(() => {
+    //     // debugger
+    //     const serializedData = localStorage.getItem("userDetails");
+    //     const userData = JSON.parse(serializedData);
+    //     if (userData) {
+    //         const userDetails = userData.details;
+    //         console.log(userDetails);
+    //       setProfileData (userDetails);
+    //       setForm({...form, userDetails})
+    //       console.log(form);
+    //     } 
+    //   }, []);
 
 
     const handleInputChange = (e) => {
@@ -61,7 +80,7 @@ export const ProfileData = () => {
         setSelectedYear(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const trimmedForm = trimObjectStrings(form);
@@ -82,13 +101,22 @@ export const ProfileData = () => {
         setErrors(validationErrors);
 
         if (isValid) {
-            console.log('Form Submitted:', trimmedForm);
-            resetFields(setForm, initialFormState);
-                setSelectedDate('');
-                setSelectedMonth('');
-                setSelectedYear('');
 
-            navigate('/profile');
+            try {
+                const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
+                const updatedData = Object.fromEntries(updatedDataArr);        
+                await onEditProfileDataSubmit(updatedData);
+                console.log('Data Submitted:', updatedData);
+                // resetFields(setForm, initialFormState);
+                // setSelectedDate('');
+                // setSelectedMonth('');
+                // setSelectedYear('');
+                navigate('/profile');
+            } catch (error) {
+                console.log(`Error Profile Data Submit Component: ${error.message}`);
+                
+            }
+
         }
 
        
@@ -157,15 +185,17 @@ export const ProfileData = () => {
                     </div>
                     <div>
                     </div>
-                    <div>
+                    {/* <div>
                         <label htmlFor="email">{t('profile.email')}: <span>*</span></label>
                         <input type="email" id="email" name="email" value={form.email} onChange={handleInputChange} onBlur={onBlurHandler} required
                             style={{ borderColor: errors.email ? '#BB1D3D' : '' }}
                         />
                         {errors.email && <span className="error">{errors.email}</span>}
-                    </div>
+                    </div> */}
                     <div>
-                        <label htmlFor="phoneNumber">{t('profile.phone_number')}: </label>
+
+                        <label htmlFor="phoneNumber">{t('profile.phone_number')}:</label>
+
                         <input type="text" id="phoneNumber" name="phoneNumber" value={form.phoneNumber} onChange={handleInputChange} onBlur={onBlurHandler}
                             style={{ borderColor: errors.phoneNumber ? '#BB1D3D' : '' }}
                         />

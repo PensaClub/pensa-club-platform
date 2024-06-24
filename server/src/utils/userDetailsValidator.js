@@ -2,7 +2,7 @@ const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
 const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
 const nameRegex = /^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-const notRequiredFields = ["block", "streetNumber", "firstName", "lastName", "district", "workOptions", "gender", "birthDate"];
+const notRequiredFields = ["block", "streetNumber", "firstName", "lastName", "district", "workOptions", "gender", "birthDate", "phoneNumber"];
 const CustomError = require("./customError");
 
 function userDetailsValidator(body, path) {
@@ -48,7 +48,7 @@ function userDetailsValidator(body, path) {
     errors.gender = "Gender must be 'male', 'female', or 'other'.";
   }
 
-  if (birthDate && (!dateRegex.test(birthDate) || new Date(birthDate) > new Date() || isNaN(new Date(birthDate).getTime()))) {
+  if (birthDate && (!dateRegex.test(birthDate) && new Date(birthDate) > new Date() && isNaN(new Date(birthDate).getTime()))) {
     errors.birthDate = "Date format must be YYYY-MM-DD and cannot be in the future.";
   }
 

@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile';
+import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 
 
 export const ProfilePassword = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const {onPasswordReset} = useContext(UserContext);
 
     const initialFormState = {
+        currPassword: '',
         password: '',
-        newPassword: '',
         rePassword: '',
     };
 
@@ -20,8 +22,8 @@ export const ProfilePassword = () => {
     const [form, setForm] = useState(initialFormState);
     const [errors, setErrors] = useState({});
     const [showPasswords, setShowPasswords] = useState({
+        currPassword: false,
         password: false,
-        newPassword: false,
         rePassword: false,
     });
 
@@ -68,6 +70,7 @@ export const ProfilePassword = () => {
         setErrors(newErrors);
 
         if (isValid) {
+            onPasswordReset(trimmedForm);
             console.log('Form Submitted:', trimmedForm);
             resetFields(setForm, initialFormState);
             navigate('/profile');
@@ -78,9 +81,26 @@ export const ProfilePassword = () => {
 
     return (
         <form className="profile-form" onSubmit={handleSubmit}>
-            <h3>{t('profile.change_password')}:</h3>
-            <label htmlFor="password">
+            <h3>{t('profile.change_password')}</h3>
+            <label htmlFor="currPassword">
             {t('profile.old_password')}: <span>*</span>
+                <div className="password-input-container">
+                    <input
+                        type={showPasswords.currPassword ? 'text' : 'password'}
+                        name="currPassword"
+                        value={form.currPassword}
+                        onChange={handleInputChange}
+                        onBlur={onBlurHandler}
+                        required
+                    />
+                    <span className="toggle-password" onClick={() => toggleShowPassword('currPassword')}>
+                        {showPasswords.currPassword ? '👁️' : '👁️‍🗨️'}
+                    </span>
+                </div>
+                {errors.currPassword && <div className="error">{errors.currPassword}</div>}
+            </label>
+            <label>
+            {t('profile.new_password')}: <span>*</span>
                 <div className="password-input-container">
                     <input
                         type={showPasswords.password ? 'text' : 'password'}
@@ -95,23 +115,6 @@ export const ProfilePassword = () => {
                     </span>
                 </div>
                 {errors.password && <div className="error">{errors.password}</div>}
-            </label>
-            <label>
-            {t('profile.new_password')}: <span>*</span>
-                <div className="password-input-container">
-                    <input
-                        type={showPasswords.newPassword ? 'text' : 'password'}
-                        name="newPassword"
-                        value={form.newPassword}
-                        onChange={handleInputChange}
-                        onBlur={onBlurHandler}
-                        required
-                    />
-                    <span className="toggle-password" onClick={() => toggleShowPassword('newPassword')}>
-                        {showPasswords.newPassword ? '👁️' : '👁️‍🗨️'}
-                    </span>
-                </div>
-                {errors.newPassword && <div className="error">{errors.newPassword}</div>}
             </label>
             <label>
             {t('profile.repeat_password')}: <span>*</span>

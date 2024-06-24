@@ -60,13 +60,13 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
 
     const details = await user_details.create(data);
 
-    const { birth_date, id, user_accounts_id, ...restOfDetails } = details.dataValues;
+    const { id, user_accounts_id, ...restOfDetails } = details.dataValues;
 
     const user = await user_account.update({ finished: true }, { where: { id: req.user.userId }, returning: true, plain: true });
 
     const token = tokenCreator(user[1].dataValues);
 
-    const updatedDetails = { ...fieldSwap(restOfDetails, "mapFromDb"), age: ageCalculate(birth_date) };
+    const updatedDetails = { ...fieldSwap(restOfDetails, "mapFromDb"), age: ageCalculate(restOfDetails.birth_date) };
 
     res.status(200).send({ message: "Details successfully updated!", user: { email: req.user.email, enabled: true, details: updatedDetails }, token });
   } catch (err) {
@@ -106,14 +106,29 @@ userDetailsController.patch("/update-details", isAuth, async (req, res, next) =>
   try {
     userDetailsValidator(req.body, req.path);
 
+    const addressUpdate = ["region", "municipality", "settlement", "district", "block", "street", "streetNumber"];
+
+    const addressData = {};
+
+    Object.entries(req.body).forEach(([fieldName, value]) => {
+      if (addressUpdate.includes(fieldName) && value !== undefined) {
+        addressData[fieldName] = value;
+      }
+    });
+
     const data = fieldSwap(req.body, "mapToDb");
+
+    let location;
+    if (Object.keys(addressData).length > 0) {
+      location = await geoCoder(addressData);
+      data.location = location;
+    }
 
     const [_, details] = await user_details.update(data, { where: { user_accounts_id: req.user.userId }, returning: true, plain: true });
 
     const updatedDetails = fieldSwap(details.dataValues, "mapFromDb");
 
     updatedDetails.age = ageCalculate(updatedDetails.birthDate);
-    delete updatedDetails.birthDate;
 
     res.status(200).json({ message: "Details edited successfully!", details: updatedDetails });
   } catch (err) {
@@ -122,6 +137,10 @@ userDetailsController.patch("/update-details", isAuth, async (req, res, next) =>
 });
 
 userDetailsController.get("/single-user", isAuth, async (req, res, next) => {
+  if (!req.user.userId) {
+    return res.status(401).json({ message: "Authentication failed. User not found." });
+  }
+
   try {
     const user = await user_account.findOne({
       where: { id: req.user.userId },
@@ -135,10 +154,13 @@ userDetailsController.get("/single-user", isAuth, async (req, res, next) => {
       ],
     });
 
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
     const details = fieldSwap(user.dataValues.details.dataValues, "mapFromDb");
 
     details.age = ageCalculate(details.birthDate);
-    delete details.birthDate;
 
     res.status(200).json({ message: "User data retrieved successfully.", user: { email: user.dataValues.email, enabled: user.dataValues.enabled, details } });
   } catch (err) {

@@ -1,54 +1,108 @@
+import {
+  validateField,
+  generateNumberOptions,
+  trimObjectStrings,
+  resetFields,
+  handleReset,
+} from '../../utils/profile';
+import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
-import CustomSelect from './CustomSelect'; 
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
+import { loadData } from '../../utils/loadData';
 
 const ProfileForm = () => {
-    const { t, i18n } = useTranslation();
-    const currentLanguage = i18n.language;
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { onProfileDataSubmit, userId, userEmail, getProfileData } =
+    useContext(UserContext);
+  const initialFormState = {
+    username: '',
+    // email: userEmail,
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    gender: null,
+    region: '',
+    regionId: '',
+    municipality: '',
+    municipalityId: '',
+    settlement: '',
+    settlementId: '',
+    district: '',
+    block: '',
+    street: '',
+    streetNumber: '',
+    birthDate: null,
+    skills: [],
+    interestOptions: [],
+    workOptions: [],
+  };
+  const [form, setForm] = useState(initialFormState);
+  const [filledData, setFilledData] = useState(initialFormState);
 
-    const initialFormState = {
-        username: '',
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        gender: '',
-        region: '',
-        municipality: '',
-        settlement: '',
-        district: '',
-        block: '',
-        street: '',
-        streetNumber: '',
-        birthDate: '',
-        skills: [],
-        interestOptions: [],
-        workOptions: [],
+  const [regions, setRegions] = useState([]);
+  const [municipalities, setMunicipalities] = useState([]);
+  const [settlements, setSettlements] = useState([]);
+
+  const [skillsOptions, setSkillsOptions] = useState([]);
+  const [workOptions, setWorkOptions] = useState([]);
+  const [interestOptions, setInterestOptions] = useState([]);
+
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    loadData('/regions.json')
+      .then((data) => setRegions(data))
+      .catch((err) => console.log(err.message));
+
+    loadData('/options.json')
+      .then((data) => {
+        setInterestOptions(data.interestOptions);
+        setSkillsOptions(data.skills);
+        setWorkOptions(data.workOptions);
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
+
+  const handleRegionChange = async (e) => {
+    const regionId = e.target.value;
+    const currRegion = regions.filter((region) => region.id == regionId);
+    const regionName = currRegion[0].bg;
+
+    // console.log('regionsId', regionId); // връща номера на Областта
+
+    setForm({
+      ...form,
+      regionId: regionId,
+      region: regionName,
+      municipality: '',
+      settlement: '',
+    });
+    setMunicipalities([]);
+    setSettlements([]);
+
+    try {
+      const response = await fetch(
+        `/regions-data/region-${regionId}/subregions-${regionId}.json`
+      );
+
+      const data = await response.json();
+
+      setMunicipalities(data);
+    } catch (error) {
+      console.error('Failed to load municipalities data', error);
     }
+  };
+
+
     
-    const {onProfileDataSubmit} = useContext(UserContext);
-    const [form, setForm] = useState(initialFormState);
-
-    const [regions, setRegions] = useState([]);
-    const [municipalities, setMunicipalities] = useState([]);
-    const [settlements, setSettlements] = useState([]);
-
-    const [skillsOptions, setSkillsOptions] = useState([]);
-    const [workOptions, setWorkOptions] = useState([]);
-    const [interestOptions, setInterestOptions] = useState([]);
-
-
-    const [selectedDate, setSelectedDate] = useState('');
-    const [selectedMonth, setSelectedMonth] = useState('');
-    const [selectedYear, setSelectedYear] = useState('');
-    const [errors, setErrors] = useState({});
-
-
     useEffect(() => {
         const loadRegions = async () => {
             try {
@@ -81,19 +135,59 @@ const ProfileForm = () => {
         }
     };
 
-    const handleMunicipalityChange = async (e) => {
-        const municipalityId = e.target.value;
-        setForm({ ...form, municipality: municipalityId, settlement: '' });
-        setSettlements([]);
+//     const handleMunicipalityChange = async (e) => {
+//         const municipalityId = e.target.value;
+//         setForm({ ...form, municipality: municipalityId, settlement: '' });
+//         setSettlements([]);
 
-        try {
-            const response = await fetch(`/regions-data/region-${form.region}/towns/towns-${municipalityId}.json`);
-            const data = await response.json();
-            setSettlements(data);
-        } catch (error) {
-            console.error('Failed to load settlements data', error);
-        }
-    };
+//         try {
+//             const response = await fetch(`/regions-data/region-${form.region}/towns/towns-${municipalityId}.json`);
+//             const data = await response.json();
+//             setSettlements(data);
+//         } catch (error) {
+//             console.error('Failed to load settlements data', error);
+//         }
+//     };
+  
+   const handleMunicipalityChange = async (e) => {
+    const municipalityId = e.target.value;
+    const currMunicipality = municipalities.filter(
+      (municipality) => municipality.id == municipalityId
+    );
+    const municipalityName = currMunicipality[0].bg;
+
+    setForm({
+      ...form,
+      municipalityId: municipalityId,
+      municipality: municipalityName,
+      settlement: '',
+    });
+    setSettlements([]);
+
+    try {
+      const response = await fetch(
+        `/regions-data/region-${form.regionId}/towns/towns-${municipalityId}.json`
+      );
+      const data = await response.json();
+      setSettlements(data);
+    } catch (error) {
+      console.error('Failed to load settlements data', error);
+    }
+  };
+
+  const handleSettlementChange = async (e) => {
+    const settlementId = e.target.value;
+    const currSettlement = settlements.filter(
+      (settlement) => settlement.id == settlementId
+    );
+    const settlementName = currSettlement[0].bg;
+
+    setForm({
+      ...form,
+      settlementId: settlementId,
+      settlement: settlementName,
+    });
+  };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -101,6 +195,7 @@ const ProfileForm = () => {
 
 
     };
+ 
 
     const handleGenderChange = (e) => {
         setForm({ ...form, gender: e.target.value });
@@ -178,8 +273,26 @@ const ProfileForm = () => {
             setSelectedYear('');
             navigate('/profile');
     
-            onProfileDataSubmit(trimmedForm);
-            console.log('Form Submitted:', trimmedForm);
+//             onProfileDataSubmit(trimmedForm);
+//             console.log('Form Submitted:', trimmedForm);
+          onProfileDataSubmit(trimmedForm)
+        .then(() => {
+          // if (data[0] === 'No such address was found!') {
+          //   // console.log(data[1]);
+          //   // setFilledData(data[1])
+          //   // setForm(filledData);
+          //   // console.log(form);
+          //   // TODO: preserved data that is already filled and show a message to the user!
+          //   navigate('/profile/profile-form');
+          //   return;
+          // }
+          console.log('Form Submitted:', trimmedForm);
+          // navigate('/profile');
+        })
+        .catch((err) =>
+          console.log(`Error on profile form submit: ${err.message}`)
+        );
+    }
         } else {
             console.log('Form validation failed. Errors:', validationErrors);
         }
@@ -202,7 +315,7 @@ const ProfileForm = () => {
     };
 
 
-    return (
+   return (
         <form onSubmit={handleSubmit} className="profile-form">
             <h3>{t('profile.profile_form_title')}</h3>
 
