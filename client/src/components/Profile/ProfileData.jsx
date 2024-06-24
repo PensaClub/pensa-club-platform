@@ -86,15 +86,22 @@ export const ProfileData = () => {
         const trimmedForm = trimObjectStrings(form);
         setForm(trimmedForm);
 
+        const validationErrors = {};
+        let isValid = true;
 
-        const isValid = Object.keys(trimmedForm).every((field) => {
+        Object.keys(trimmedForm).forEach((field) => {
             const value = trimmedForm[field];
-            const error = validateField(field, value);
-            setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
-            return !error;
+            const error = validateField(field, value, trimmedForm, t);
+            if (error) {
+                isValid = false;
+                validationErrors[field] = error;
+            }
         });
 
+        setErrors(validationErrors);
+
         if (isValid) {
+
             try {
                 const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
                 const updatedData = Object.fromEntries(updatedDataArr);        
@@ -109,13 +116,16 @@ export const ProfileData = () => {
                 console.log(`Error Profile Data Submit Component: ${error.message}`);
                 
             }
+
         }
+
+       
     };
 
 
     const onBlurHandler = (e) => {
         const { name, value } = e.target;
-        const error = validateField(name, value);
+        const error = validateField(name, value, form , t);
         setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
 
     };
@@ -183,7 +193,9 @@ export const ProfileData = () => {
                         {errors.email && <span className="error">{errors.email}</span>}
                     </div> */}
                     <div>
+
                         <label htmlFor="phoneNumber">{t('profile.phone_number')}:</label>
+
                         <input type="text" id="phoneNumber" name="phoneNumber" value={form.phoneNumber} onChange={handleInputChange} onBlur={onBlurHandler}
                             style={{ borderColor: errors.phoneNumber ? '#BB1D3D' : '' }}
                         />

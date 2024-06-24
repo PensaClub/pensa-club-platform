@@ -1,61 +1,66 @@
+import { useTranslation } from 'react-i18next';
+
 export const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
 export const nameRegex = /^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
 export const emailRegex = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 export const phoneNumberRegex = /^(?:\+\d{7,15}|\d{10})$/;
 export const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-export const validateField = (name, value, form = {}) => {
+
+export const validateField = (name, value, form = {}, t) => {
+
     let error = '';
     switch (name) {
         case 'username':
-            if (!value) error = 'Потребителското име е задължително';
-            else if (!usernameRegex.test(value)) error = 'Потребителското име трябва да бъде между 7 и 16 символа. Може да съдържа главни букви, малки букви, цифри и _';
+            if (!value) error = t('profile.username_required');
+            else if (!usernameRegex.test(value)) error = t('profile.username_error');
             break;
         case 'email':
-            if (!value) error = 'Имейлът е задължителен';
-            else if (!emailRegex.test(value)) error = 'Имейлът не е валиден';
+            if (!value) error = t('profile.email_required');
+            else if (!emailRegex.test(value)) error =  t('profile.email_error');
             break;
         case 'firstName':
-            if (value && !nameRegex.test(value)) error = 'Невалидно име';
+            if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
             break;
         case 'lastName':
-            if (value && !nameRegex.test(value)) error = 'Невалидно име';
+            if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
             break;
         case 'phoneNumber':
-            if (!phoneNumberRegex.test(value)) error = 'Телефонният номер не е валиден';
+            if (value && !phoneNumberRegex.test(value)) error = t('profile.phone_number_invalid');
             break;
         case 'region':
-            if (!value) error = 'Регионът е задължителен';
+            if (!value) error = t('profile.region_required');
+            console.log(error)
             break;
         case 'municipality':
-            if (!value) error = 'Общината е задължителна';
+            if (!value) error = t('profile.municipality_required');
             break;
         case 'settlement':
-            if (!value) error = 'Населеното място е задължително';
+            if (!value) error = t('profile.settlement_required');
             break;
         case 'street':
-            if (!value) error = 'Улицата е задължителна';
-            break;
-        case 'currPassword':
-            if (!passwordRegex.test(value)) {
-                error = 'Паролата трябва да е поне 8 символа и да съдържа поне една буква и една цифра';
-            }
+            if (!value) error = t('profile.street_required');
             break;
         case 'password':
             if (!passwordRegex.test(value)) {
-                error = 'Новата парола трябва да е поне 8 символа и да съдържа поне една буква и една цифра';
+                error = t('profile.password_error');
+            }
+            break;
+        case 'newPassword':
+            if (!passwordRegex.test(value)) {
+                error = t('profile.new_password_error');
             }
             break;
         case 'rePassword':
-            if (value !== form.password) {
-                error = 'Паролите не съвпадат';
-            }
-           
+            if (value !== form.newPassword) {
+                error = t('profile.password_match');
+            }  
             break;
         default:
             break;
     }
-    return error;
+    return error ;
+    // return error ? t(error) : '';
 };
 
 export const generateNumberOptions = (start, end) => {
