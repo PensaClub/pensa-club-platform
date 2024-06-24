@@ -61,10 +61,15 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
       notify('success-login');
       if (newUser.data.enabled) {
-        await getProfileData();
-        if (profileData) {
-          navigate('/profile');
-        }
+        getProfileData()
+          .then(() => {
+            if (profileData) {
+              navigate('/profile');
+            }
+          })
+          .catch((error) =>
+            console.log(`Get data after login error: ${error.message}`)
+          );
       } else {
         navigate('/profile/profile-form');
       }
@@ -170,13 +175,13 @@ export const UserProvider = ({ children }) => {
 
   const onPasswordReset = async (data) => {
     try {
-      if (data.tokenType === "jwt") {
+      if (data.tokenType === 'jwt') {
         data.token = isAuth.token;
       }
       setIsLoading(true);
       // console.log({ ...data });
       const response = await userService.resetPassword({ ...data });
-      console.log("Password changed");
+      console.log('Password changed');
       setIsLoading(false);
       return response;
     } catch (error) {

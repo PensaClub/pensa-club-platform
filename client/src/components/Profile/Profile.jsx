@@ -22,7 +22,6 @@ import {
   faImage,
   faBars,
   faEnvelope,
-  faPhone,
   faBriefcase,
   faUniversalAccess,
   faUsersGear,
@@ -40,7 +39,9 @@ export const Profile = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
-    // console.log(isFinish);
+    if(!profileData) {
+      navigate('/profile/profile-form');
+    }
     if (!isFinish) {
       navigate('/profile/profile-form');
     }
@@ -106,15 +107,15 @@ export const Profile = () => {
               <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
             </div>
             <div className="user-data">
-              <h2>{profileData.details.username}</h2>
-              {profileData.details.firstName || profileData.details.lastName ? (
+              <h2>{profileData?.details.username}</h2>
+              {profileData?.details.firstName || profileData?.details.lastName ? (
                 <p>
                   <FontAwesomeIcon icon={faUser} className="icon" />
-                  {profileData.details.firstName
-                    ? profileData.details.firstName
+                  {profileData?.details.firstName
+                    ? profileData?.details.firstName
                     : ''}{' '}
-                  {profileData.details.lastName
-                    ? profileData.details.lastName
+                  {profileData?.details.lastName
+                    ? profileData?.details.lastName
                     : ''}
                 </p>
               ) : (
@@ -123,13 +124,13 @@ export const Profile = () => {
 
               <p>
                 <FontAwesomeIcon icon={faEnvelope} className="icon" />{' '}
-                {profileData.email}
+                {profileData?.email}
               </p>
 
               <p>
                 <FontAwesomeIcon icon={faLocationDot} className="icon" />{' '}
-                {profileData.details.settlement},{' '}
-                {profileData.details.municipality}, {profileData.details.region}
+                {profileData?.details.settlement},{' '}
+                {profileData?.details.municipality}, {profileData?.details.region}
               </p>
             </div>
           </section>
