@@ -77,7 +77,7 @@ To get started with the project, follow these steps:
 
 ## Clone the repository from GitHub
 ```bash
-git clone https://github.com/yourusername/your-repository.git
+git clone https://github.com/KristiyanK/Digital-Literacy-Wellbeing-60-plus/tree/main
 ```
 ## Navigate to the client directory
 ```bash

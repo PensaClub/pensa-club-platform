@@ -152,13 +152,17 @@ export const UserProvider = ({ children }) => {
 
   const onPasswordReset = async (data) => {
     try {
-      const resetToken = isAuth.token;
+      if (data.tokenType === "jwt") {
+        data.token = isAuth.token;
+      }
       setIsLoading(true);
-      console.log({ ...data, resetToken });
-      const response = await userService.resetPassword({ ...data, resetToken });
-      console.log('Password changed');
+      // console.log({ ...data });
+      const response = await userService.resetPassword({ ...data });
+      console.log("Password changed");
       setIsLoading(false);
+      return response;
     } catch (error) {
+      console.log(error.message);
       showErrorAndSetTimeouts(error.message);
     }
   };
