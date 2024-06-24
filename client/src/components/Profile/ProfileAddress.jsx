@@ -246,7 +246,10 @@ const ProfileAddress = () => {
         const error = validateField(name, value, form, t);
         setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
 
-
+    }
+    const handleResetForm = () => {
+        handleReset(setForm, initialFormState);
+    };
         return (
             <form onSubmit={handleSubmit} className="profile-form">
                 <h3>{t('profile.address_form')}</h3>
@@ -329,5 +332,4 @@ const ProfileAddress = () => {
         )
     };
 
-}
 export default ProfileAddress;
