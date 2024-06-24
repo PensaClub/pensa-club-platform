@@ -106,7 +106,7 @@ export const Profile = () => {
               <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
             </div>
             <div className="user-data">
-              <h2>{profileData.details.username}</h2>
+              <h2>{profileData?.details.username}</h2>
               {profileData.details.firstName || profileData.details.lastName ? (
                 <p>
                   <FontAwesomeIcon icon={faUser} className="icon" />
@@ -123,13 +123,13 @@ export const Profile = () => {
 
               <p>
                 <FontAwesomeIcon icon={faEnvelope} className="icon" />{' '}
-                {profileData.email}
+                {profileData?.email}
               </p>
 
               <p>
                 <FontAwesomeIcon icon={faLocationDot} className="icon" />{' '}
-                {profileData.details.settlement},{' '}
-                {profileData.details.municipality}, {profileData.details.region}
+                {profileData?.details.settlement},{' '}
+                {profileData?.details.municipality}, {profileData?.details.region}
               </p>
             </div>
           </section>

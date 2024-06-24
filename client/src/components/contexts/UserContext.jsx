@@ -4,12 +4,14 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
 import './error.css';
 import { Loader } from '../Loader/Loader';
+import { loadAddressData } from '../../utils/loadAddressData';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
+  const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -58,6 +60,16 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
       if (newUser.data.enabled) {
         const res = await getProfileData();
+
+        if (res) {
+          const data = await loadAddressData(
+            res.user.details.region,
+            res.user.details.municipality,
+            res.user.details.settlement
+          );
+          console.log(data);
+          setAddressId({ ...data });
+        }
         // console.log(res);
         navigate('/profile');
       } else {
@@ -75,6 +87,7 @@ export const UserProvider = ({ children }) => {
       setIsAuth({});
       localStorage.removeItem('auth');
       localStorage.removeItem('userDetails');
+      localStorage.removeItem('addressId');
       setIsLoading(false);
     } catch (error) {
       setIsAuth({});
@@ -95,16 +108,15 @@ export const UserProvider = ({ children }) => {
       setProfileData(response.user);
       setIsAuth({
         ...isAuth,
-        token: response.token, 
+        token: response.token,
         data: {
           ...isAuth.data,
           enabled: true,
-        }     
+        },
       });
       console.log(isAuth);
-      setIsFinish(true).then(navigate('/profile'))
+      setIsFinish(true).then(navigate('/profile'));
       setIsLoading(false);
-      
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
@@ -120,6 +132,15 @@ export const UserProvider = ({ children }) => {
       console.log(updatedData);
       if (updatedData) {
         setProfileData({ ...profileData, details: updatedData });
+
+        const data = await loadAddressData(
+          updatedData.region,
+          updatedData.municipality,
+          updatedData.settlement
+        );
+        console.log(data);
+        setAddressId({ ...data });
+
         setIsAuth({
           ...isAuth,
           token: response.token,
@@ -152,13 +173,13 @@ export const UserProvider = ({ children }) => {
 
   const onPasswordReset = async (data) => {
     try {
-      if (data.tokenType === "jwt") {
+      if (data.tokenType === 'jwt') {
         data.token = isAuth.token;
       }
       setIsLoading(true);
       // console.log({ ...data });
       const response = await userService.resetPassword({ ...data });
-      console.log("Password changed");
+      console.log('Password changed');
       setIsLoading(false);
       return response;
     } catch (error) {
@@ -182,6 +203,7 @@ export const UserProvider = ({ children }) => {
     onEditProfileDataSubmit,
     getProfileData,
     profileData,
+    addressId,
   };
 
   return (

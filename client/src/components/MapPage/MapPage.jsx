@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 
 import './mapPage.css'
-import { useMappingContext } from '../contexts/mapContext';
+import { useMappingContext } from '../contexts/MapContext';
 
 
 
