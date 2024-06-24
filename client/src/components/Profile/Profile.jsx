@@ -57,10 +57,10 @@ export const Profile = () => {
 
       <section className={`account-menu ${menuOpen ? "open" : ""} ${!isFinish ? "disabled" : ""}`}>
         <h3>{t("profile.account")}</h3>
-        <Link to="image" onClick={toggleMenu}>
+        {/* <Link to="image" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faImage} className="icon" />
           {t("profile.photo")}
-        </Link>
+        </Link> */}
         <Link to="data" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faUser} className="icon" />
           {t("profile.personal_data")}
@@ -128,7 +128,7 @@ export const Profile = () => {
         <Routes>
           {!isFinish && <Route path="profile-form" element={<ProfileForm />} />}
 
-          <Route path="image" element={<ProfileImage />} />
+          {/* <Route path="image" element={<ProfileImage />} /> */}
           <Route path="data" element={<ProfileData />} />
           <Route path="address" element={<ProfileAddress />} />
           <Route path="password" element={<ProfilePassword />} />

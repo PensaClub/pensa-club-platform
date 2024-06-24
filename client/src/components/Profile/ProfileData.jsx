@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./profile.css";
-import { Link } from "react-router-dom";
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from "../../utils/profile";
 import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
+import { useImagePreview } from "../hooks/useImagePreview";
+import { uploadImage } from "../../utils/uploadImage";
 
 export const ProfileData = () => {
   const { t } = useTranslation();
@@ -20,6 +21,10 @@ export const ProfileData = () => {
 
   //TODO: change keys when changed on server!!!
 
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+  const { previewImage, handleImage } = useImagePreview();
+  const [imageUpload, setImageUpload] = useState(null);
+
   const initialFormState = {
     username: profileData.details.username || "",
     email: profileData.email,
@@ -28,7 +33,6 @@ export const ProfileData = () => {
     phoneNumber: profileData.details.phoneNumber || "",
     gender: profileData.details.gender || null,
     birthDate: profileData.details.birthDate || null,
-    imageURL: profileData.details.imageURL || null,
   };
   const [form, setForm] = useState(initialFormState);
 
@@ -93,12 +97,28 @@ export const ProfileData = () => {
       try {
         const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
         const updatedData = Object.fromEntries(updatedDataArr);
+        let data;
+        if (imageUpload) {
+          if (!allowedTypes.includes(imageUpload.type)) {
+            throw new Error(`Type ${imageUpload.type} is not allowed! Allowed types are png/jpeg/jpg`);
+          }
+          try {
+            data = await uploadImage(imageUpload, profileData.details.firebaseImagePath);
+          } catch (error) {
+            throw new Error("Error uploading image: ", error);
+          }
+        }
+        if (data) {
+          updatedData.imageURL = data.url;
+          updatedData.firebaseImagePath = data.filePath;
+        }
         await onEditProfileDataSubmit(updatedData);
         console.log("Data Submitted:", updatedData);
         // resetFields(setForm, initialFormState);
         // setSelectedDate('');
         // setSelectedMonth('');
         // setSelectedYear('');
+        window.scrollTo(0, 0);
         navigate("/profile");
       } catch (error) {
         console.log(`Error Profile Data Submit Component: ${error.message}`);
@@ -124,10 +144,21 @@ export const ProfileData = () => {
       <form onSubmit={handleSubmit} className="profile-form">
         <h3>{t("profile.personal_data")}</h3>
         <div className="avatar">
-          <img src={form.imageURL || "/images/sign-up/avatar.jpg"} alt="User avatar" />
-          <Link to="#" className="change-avatar-link">
-            {t("profile.change_photo")}
-          </Link>
+          <img src={previewImage || "/images/sign-up/avatar.jpg"} alt="User avatar" />
+          <div className="user-data">
+            <input
+              type="file"
+              class="input-image"
+              id="imageUrl"
+              onChange={(e) => {
+                setImageUpload(e.target.files[0]);
+                handleImage(e);
+              }}
+            />
+            <label for="imageUrl" class="label-image">
+              {t("profile.change_photo")}
+            </label>
+          </div>
         </div>
         <div className="user-data">
           <div>

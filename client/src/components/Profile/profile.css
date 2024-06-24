@@ -385,7 +385,7 @@
   padding-left: 0.5rem;
 }
 
-.image {
+.input-image {
   width: 0.1px;
   height: 0.1px;
   opacity: 0;
@@ -394,14 +394,12 @@
   z-index: -1;
 }
 
-.label {
-  font-family: inherit;
-  text-align: center;
-  font-size: 1.8rem;
-  background-color: #fff;
+.label-image {
+  letter-spacing: 0.05rem;
+  font-size: var(--s-font-size);
   padding: 0.3rem 0.8rem;
+  margin-top: 1rem;
   border-radius: 10px;
-  text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
@@ -409,11 +407,4 @@
     background-color: var(--orange);
     color: var(--bg-white);
   }
-}
-
-.profile-data__inner {
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  align-items: center;
 }
