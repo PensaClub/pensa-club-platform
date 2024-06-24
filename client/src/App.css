@@ -49,6 +49,9 @@
   --container-height: 600px;
   --container-min-height: 400px;
 
+  /* Toast Notifications */
+  --toastify-color-success: #1B6D4D !important;
+  --toastify-color-error: #BB1D3D !important;
 }
 
 /* Default Font Sizes of Basic Elements */

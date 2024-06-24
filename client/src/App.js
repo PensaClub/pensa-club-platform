@@ -25,7 +25,7 @@ function App() {
       <ErrorBoundary>
         <UserProvider>
           <MapProvider>
-          <ToastContainer role="alert" className={"notification"}/>
+          <ToastContainer role="alert" className={"notification"} limit={3}/>
           <Header />
 
           <Routes>
