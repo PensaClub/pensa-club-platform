@@ -117,23 +117,23 @@ const ProfileForm = () => {
         loadRegions();
     }, []);
 
-    const handleRegionChange = async (e) => {
-        const regionId = e.target.value;
+    // const handleRegionChange = async (e) => {
+    //     const regionId = e.target.value;
 
-        setForm({ ...form, region: regionId, municipality: '', settlement: '' });
-        setMunicipalities([]);
-        setSettlements([]);
+    //     setForm({ ...form, region: regionId, municipality: '', settlement: '' });
+    //     setMunicipalities([]);
+    //     setSettlements([]);
 
-        try {
-            const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`);
+    //     try {
+    //         const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`);
 
-            const data = await response.json();
+    //         const data = await response.json();
 
-            setMunicipalities(data);
-        } catch (error) {
-            console.error('Failed to load municipalities data', error);
-        }
-    };
+    //         setMunicipalities(data);
+    //     } catch (error) {
+    //         console.error('Failed to load municipalities data', error);
+    //     }
+    // };
 
 //     const handleMunicipalityChange = async (e) => {
 //         const municipalityId = e.target.value;
@@ -292,7 +292,7 @@ const ProfileForm = () => {
         .catch((err) =>
           console.log(`Error on profile form submit: ${err.message}`)
         );
-    }
+    
         } else {
             console.log('Form validation failed. Errors:', validationErrors);
         }
