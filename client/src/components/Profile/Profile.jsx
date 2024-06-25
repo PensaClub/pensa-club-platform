@@ -31,6 +31,7 @@ import { ProfileSkills } from './ProfileSkills';
 import { ProfileWorks } from './ProfileWorks';
 import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
+import { Logout } from '../Logout/Logout';
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -50,6 +51,10 @@ export const Profile = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const handleLogout = () => {
+    navigate('/logout');
+  };
+
   return (
     <section className="profile-section">
       <button className="menu-toggle" onClick={toggleMenu}>
@@ -57,9 +62,8 @@ export const Profile = () => {
       </button>
 
       <section
-        className={`account-menu ${menuOpen ? 'open' : ''} ${
-          !isFinish ? 'disabled' : ''
-        }`}
+        className={`account-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''
+          }`}
       >
         <h3>{t('profile.account')}</h3>
         <Link to="image" onClick={toggleMenu}>
@@ -102,6 +106,12 @@ export const Profile = () => {
       <div className="main-profile">
         {isFinish === true && (
           <section className="profile-data">
+            <Link to="/logout" onClick={handleLogout}><button
+              type="button"
+              className="top-right-button">
+              {t('profile.logout')}
+            </button>
+            </Link>
             <div className="avatar">
               <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
             </div>
@@ -138,7 +148,7 @@ export const Profile = () => {
         <Outlet />
         <Routes>
           {!isFinish && <Route path="profile-form" element={<ProfileForm />} />}
-          
+
 
           <Route path="image" element={<ProfileImage />} />
           <Route path="data" element={<ProfileData />} />
