@@ -9,12 +9,12 @@ import { notify } from '../../utils/notify';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useLocalStorage('auth', {});
-  const [profileData, setProfileData] = useLocalStorage('userDetails', {});
-  // const [tempData, setTempData] = useLocalStorage('tempData', {});
+  const [isAuth, setIsAuth] = useLocalStorage("auth", {});
+  const [profileData, setProfileData] = useLocalStorage("userDetails", {});
+
   const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const userService = userServiceFactory(isAuth.token);
@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
     setErrorMessage(error);
     setIsLoading(false);
     setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage("");
       setIsLoading(false);
     }, 3000);
   };
@@ -71,7 +71,7 @@ export const UserProvider = ({ children }) => {
             console.log(`Get data after login error: ${error.message}`)
           );
       } else {
-        navigate('/profile/profile-form');
+        navigate("/profile/profile-form");
       }
     } catch (error) {
       notify('error');
@@ -84,8 +84,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       userService.logout();
       setIsAuth({});
-      localStorage.removeItem('auth');
-      localStorage.removeItem('userDetails');
+      setProfileData({});
       setIsLoading(false);
       notify('success-logout');
     } catch (error) {

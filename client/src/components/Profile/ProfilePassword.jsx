@@ -46,8 +46,9 @@ export const ProfilePassword = () => {
         const { name, value } = e.target;
         setErrors((prevErrors) => ({
             ...prevErrors,
-            [name]: validateField(name, value, form),
+            [name]: validateField(name, value, form, t),
         }));
+
     };
 
   const handleSubmit = async (e) => {
@@ -59,7 +60,7 @@ export const ProfilePassword = () => {
         let isValid = true;
 
         Object.keys(trimmedForm).forEach((field) => {
-            const error = validateField(field, trimmedForm[field], trimmedForm);
+            const error = validateField(field, trimmedForm[field], trimmedForm, t);
             newErrors[field] = error;
             if (error) {
                 isValid = false;
@@ -67,6 +68,7 @@ export const ProfilePassword = () => {
         });
 
         setErrors(newErrors);
+
 
     if (isValid) {
       const res = await onPasswordReset({ ...trimmedForm, tokenType: "jwt" });
@@ -78,6 +80,7 @@ export const ProfilePassword = () => {
       }
     }
   };
+
 
   return (
     <form className="profile-form" onSubmit={handleSubmit}>
