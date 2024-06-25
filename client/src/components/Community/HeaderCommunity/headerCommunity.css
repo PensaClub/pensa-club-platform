@@ -1,4 +1,6 @@
-
+header{
+    position: initial;
+}
 .header-community{
     display: flex;
     width: 100%;

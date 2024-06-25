@@ -5,12 +5,27 @@
     width: 100%;
     background-color: var( --green-cm-light);
     padding: 1em;
+    position: fixed;
+    bottom: 0;
 }
 .commun-menu-icons{
     font-size: var(--s-font-size);
     color: var(--green-cm)!important;
 }
-
+@media (min-width: 768px) and (max-width: 1199px) {
+    .after-header{
+        display: none;
+    }
+    .menu-community{
+        position: fixed;
+        top: 25%;
+        bottom:15%;
+        left: 0;
+        flex-direction:column-reverse;
+        /* gap: 2em; */
+        width: 6%;
+    }
+}
 @media (min-width: 1200px) {
     .menu-community{
         display: none;

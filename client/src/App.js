@@ -30,7 +30,7 @@ function App() {
       <ErrorBoundary>
         <UserProvider>
           <MapProvider>
-            <Header additionalClasses={isCommunityPage ? 'hide-on-mobile' : ''} />
+            <Header additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''} />
 
             <Routes>
               <Route path="/" element={<Home />} />
@@ -53,7 +53,7 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
 
-            <Footer additionalClasses={isCommunityPage ? 'hide-on-mobile' : ''} />
+            <Footer additionalClasses={isCommunityPage ? 'hide-on-mobile position-fix' : ''} />
           </MapProvider>
         </UserProvider>
       </ErrorBoundary>
