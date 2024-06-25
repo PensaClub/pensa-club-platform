@@ -17,26 +17,27 @@ const ProfileForm = () => {
   const currentLanguage = i18n.language;
   const { onProfileDataSubmit } = useContext(UserContext);
   const initialFormState = {
-    username: '',
+    username: "",
     // email: userEmail,
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
+    firstName: "",
+    lastName: "",
+    phoneNumber: null,
     gender: null,
-    region: '',
-    regionId: '',
-    municipality: '',
-    municipalityId: '',
-    settlement: '',
-    settlementId: '',
-    district: '',
-    block: '',
-    street: '',
-    streetNumber: '',
+    region: "",
+    regionId: "",
+    municipality: "",
+    municipalityId: "",
+    settlement: "",
+    settlementId: "",
+    district: "",
+    block: "",
+    street: "",
+    streetNumber: "",
     birthDate: null,
     skills: [],
     interestOptions: [],
     workOptions: [],
+    imageURL: null,
   };
   const [form, setForm] = useState(initialFormState);
 
@@ -48,17 +49,17 @@ const ProfileForm = () => {
   const [workOptions, setWorkOptions] = useState([]);
   const [interestOptions, setInterestOptions] = useState([]);
 
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    loadData('/regions.json')
+    loadData("/regions.json")
       .then((data) => setRegions(data))
       .catch((err) => console.log(err.message));
 
-    loadData('/options.json')
+    loadData("/options.json")
       .then((data) => {
         setInterestOptions(data.interestOptions);
         setSkillsOptions(data.skills);
@@ -76,56 +77,48 @@ const ProfileForm = () => {
       ...form,
       regionId: regionId,
       region: regionName,
-      municipality: '',
-      settlement: '',
+      municipality: "",
+      settlement: "",
     });
     setMunicipalities([]);
     setSettlements([]);
 
     try {
-      const response = await fetch(
-        `/regions-data/region-${regionId}/subregions-${regionId}.json`
-      );
+      const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`);
 
       const data = await response.json();
 
       setMunicipalities(data);
     } catch (error) {
-      console.error('Failed to load municipalities data', error);
+      console.error("Failed to load municipalities data", error);
     }
   };
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
-    const currMunicipality = municipalities.filter(
-      (municipality) => municipality.id == municipalityId
-    );
+    const currMunicipality = municipalities.filter((municipality) => municipality.id == municipalityId);
     const municipalityName = currMunicipality[0].bg;
 
     setForm({
       ...form,
       municipalityId: municipalityId,
       municipality: municipalityName,
-      settlement: '',
+      settlement: "",
     });
     setSettlements([]);
 
     try {
-      const response = await fetch(
-        `/regions-data/region-${form.regionId}/towns/towns-${municipalityId}.json`
-      );
+      const response = await fetch(`/regions-data/region-${form.regionId}/towns/towns-${municipalityId}.json`);
       const data = await response.json();
       setSettlements(data);
     } catch (error) {
-      console.error('Failed to load settlements data', error);
+      console.error("Failed to load settlements data", error);
     }
   };
 
   const handleSettlementChange = async (e) => {
     const settlementId = e.target.value;
-    const currSettlement = settlements.filter(
-      (settlement) => settlement.id == settlementId
-    );
+    const currSettlement = settlements.filter((settlement) => settlement.id == settlementId);
     const settlementName = currSettlement[0].bg;
 
     setForm({

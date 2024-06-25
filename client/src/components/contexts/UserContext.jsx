@@ -6,15 +6,18 @@ import './error.css';
 import { Loader } from '../Loader/Loader';
 import { loadAddressData } from '../../utils/loadAddressData';
 
+
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
+
   const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const userService = userServiceFactory(isAuth.token);
@@ -29,7 +32,7 @@ export const UserProvider = ({ children }) => {
     setErrorMessage(error);
     setIsLoading(false);
     setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage("");
       setIsLoading(false);
     }, 3000);
   };
@@ -42,7 +45,7 @@ export const UserProvider = ({ children }) => {
       setIsAuth(newUser);
       setIsFinish(newUser.data.enabled);
       setIsLoading(false);
-      navigate('/profile/profile-form');
+      navigate("/profile/profile-form");
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
@@ -71,9 +74,9 @@ export const UserProvider = ({ children }) => {
           setAddressId({ ...data });
         }
         // console.log(res);
-        navigate('/profile');
+        navigate("/profile");
       } else {
-        navigate('/profile/profile-form');
+        navigate("/profile/profile-form");
       }
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
@@ -85,9 +88,8 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       userService.logout();
       setIsAuth({});
-      localStorage.removeItem('auth');
-      localStorage.removeItem('userDetails');
-      localStorage.removeItem('addressId');
+      setProfileData({});
+      setAddressId({});
       setIsLoading(false);
     } catch (error) {
       setIsAuth({});
