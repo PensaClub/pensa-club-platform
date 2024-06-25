@@ -1,17 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
-import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
-import { ProfileData } from './ProfileData';
-import ProfileForm from './ProfileForm';
-import ProfileAddress from './ProfileAddress';
-import { ProfilePassword } from './ProfilePassword';
-import { ProfileImage } from './ProfileImage';
-import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
+import { ProfileData } from "./ProfileData";
+import ProfileForm from "./ProfileForm";
+import ProfileAddress from "./ProfileAddress";
+import { ProfilePassword } from "./ProfilePassword";
+import { ProfileImage } from "./ProfileImage";
+import { useTranslation } from "react-i18next";
 
-import './profile.css';
-import { UserContext } from '../contexts/UserContext';
+import "./profile.css";
+import { UserContext } from "../contexts/UserContext";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationDot,
   faUser,
@@ -33,6 +33,7 @@ import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
 import { Logout } from '../Logout/Logout';
 
+
 export const Profile = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ export const Profile = () => {
     window.scrollTo({ top: 0 });
     console.log(isFinish);
     if (!isFinish) {
-      navigate('/profile/profile-form');
+      navigate("/profile/profile-form");
     }
   }, []);
 
@@ -54,7 +55,7 @@ export const Profile = () => {
   const handleLogout = () => {
     navigate('/logout');
   };
-
+  
   return (
     <section className="profile-section">
       <button className="menu-toggle" onClick={toggleMenu}>
@@ -68,39 +69,39 @@ export const Profile = () => {
         <h3>{t('profile.account')}</h3>
         <Link to="image" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faImage} className="icon" />
-          {t('profile.photo')}
-        </Link>
+          {t("profile.photo")}
+        </Link> */}
         <Link to="data" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faUser} className="icon" />
-          {t('profile.personal_data')}
+          {t("profile.personal_data")}
         </Link>
         <Link to="address" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faLocationDot} className="icon" />
-          {t('profile.address')}
+          {t("profile.address")}
         </Link>
         <Link to="password" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faLock} className="icon" />
-          {t('profile.password')}
+          {t("profile.password")}
         </Link>
         <Link to="announced" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faScroll} className="icon" />
-          {t('profile.announced')}
+          {t("profile.announced")}
         </Link>
         <Link to="skills" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faUniversalAccess} className="icon" />
-          {t('map.skills')}
+          {t("map.skills")}
         </Link>
         <Link to="workOptions" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faBriefcase} className="icon" />
-          {t('map.job')}
+          {t("map.job")}
         </Link>
         <Link to="interestOptions" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faUsersGear} className="icon" />
-          {t('map.interests')}
+          {t("map.interests")}
         </Link>
         <Link to="anothers" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faMountainSun} className="icon" />
-          {t('profile.anothers')}
+          {t("profile.anothers")}
         </Link>
       </section>
       <div className="main-profile">
@@ -113,33 +114,27 @@ export const Profile = () => {
             </button>
             </Link>
             <div className="avatar">
-              <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
+              <img src={profileData?.details?.imageURL || "/images/sign-up/avatar.jpg"} alt="User avatar" />
             </div>
             <div className="user-data">
-              <h2>{profileData.details.username}</h2>
-              {profileData.details.firstName || profileData.details.lastName ? (
+              <h2>{profileData?.details?.username}</h2>
+              {profileData?.details?.firstName || profileData?.details?.lastName ? (
                 <p>
                   <FontAwesomeIcon icon={faUser} className="icon" />
-                  {profileData.details.firstName
-                    ? profileData.details.firstName
-                    : ''}{' '}
-                  {profileData.details.lastName
-                    ? profileData.details.lastName
-                    : ''}
+                  {profileData?.details?.firstName ? profileData?.details?.firstName : ""}{" "}
+                  {profileData?.details?.lastName ? profileData?.details?.lastName : ""}
                 </p>
               ) : (
-                ''
+                ""
               )}
 
               <p>
-                <FontAwesomeIcon icon={faEnvelope} className="icon" />{' '}
-                {profileData.email}
+                <FontAwesomeIcon icon={faEnvelope} className="icon" /> {profileData?.email}
               </p>
 
               <p>
-                <FontAwesomeIcon icon={faLocationDot} className="icon" />{' '}
-                {profileData.details.settlement},{' '}
-                {profileData.details.municipality}, {profileData.details.region}
+                <FontAwesomeIcon icon={faLocationDot} className="icon" /> {profileData?.details?.settlement}, {profileData?.details?.municipality},{" "}
+                {profileData?.details?.region}
               </p>
             </div>
           </section>
@@ -149,8 +144,7 @@ export const Profile = () => {
         <Routes>
           {!isFinish && <Route path="profile-form" element={<ProfileForm />} />}
 
-
-          <Route path="image" element={<ProfileImage />} />
+          {/* <Route path="image" element={<ProfileImage />} /> */}
           <Route path="data" element={<ProfileData />} />
           <Route path="address" element={<ProfileAddress />} />
           <Route path="password" element={<ProfilePassword />} />
