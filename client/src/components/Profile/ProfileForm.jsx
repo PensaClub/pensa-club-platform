@@ -7,7 +7,7 @@ import {
 } from '../../utils/profile';
 import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { loadData } from '../../utils/loadData';
@@ -15,10 +15,7 @@ import { loadData } from '../../utils/loadData';
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
-
-  const navigate = useNavigate();
-  const { onProfileDataSubmit, userId, userEmail, getProfileData } =
-    useContext(UserContext);
+  const { onProfileDataSubmit } = useContext(UserContext);
   const initialFormState = {
     username: '',
     // email: userEmail,
@@ -76,8 +73,6 @@ const ProfileForm = () => {
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
 
-    // console.log('regionsId', regionId); // връща номера на Областта
-
     setForm({
       ...form,
       regionId: regionId,
@@ -103,52 +98,6 @@ const ProfileForm = () => {
 
 
     
-    useEffect(() => {
-        const loadRegions = async () => {
-            try {
-                const response = await fetch('/regions.json');
-                const data = await response.json();
-
-                setRegions(data);
-            } catch (error) {
-                console.error('Failed to load regions data', error);
-            }
-        };
-        loadRegions();
-    }, []);
-
-    // const handleRegionChange = async (e) => {
-    //     const regionId = e.target.value;
-
-    //     setForm({ ...form, region: regionId, municipality: '', settlement: '' });
-    //     setMunicipalities([]);
-    //     setSettlements([]);
-
-    //     try {
-    //         const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`);
-
-    //         const data = await response.json();
-
-    //         setMunicipalities(data);
-    //     } catch (error) {
-    //         console.error('Failed to load municipalities data', error);
-    //     }
-    // };
-
-//     const handleMunicipalityChange = async (e) => {
-//         const municipalityId = e.target.value;
-//         setForm({ ...form, municipality: municipalityId, settlement: '' });
-//         setSettlements([]);
-
-//         try {
-//             const response = await fetch(`/regions-data/region-${form.region}/towns/towns-${municipalityId}.json`);
-//             const data = await response.json();
-//             setSettlements(data);
-//         } catch (error) {
-//             console.error('Failed to load settlements data', error);
-//         }
-//     };
-  
    const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
     const currMunicipality = municipalities.filter(
@@ -223,35 +172,35 @@ const ProfileForm = () => {
     };
 
     const handleSelectedYearChange = (e) => {
-        setSelectedYear(e.target.value);
-    };
+      setSelectedYear(e.target.value);
+  };
 
 
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const response = await fetch('/options.json');
-                const data = await response.json();
+  useEffect(() => {
+      const loadData = async () => {
+          try {
+              const response = await fetch('/options.json');
+              const data = await response.json();
 
-                setSkillsOptions(data.skills);
-                setWorkOptions(data.workOptions);
-                setInterestOptions(data.interestOptions);
-            } catch (error) {
-                console.error('Failed to load data', error);
-            }
-        };
-        loadData();
-    }, []);
+              setSkillsOptions(data.skills);
+              setWorkOptions(data.workOptions);
+              setInterestOptions(data.interestOptions);
+          } catch (error) {
+              console.error('Failed to load data', error);
+          }
+      };
+      loadData();
+  }, []);
 
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        const trimmedForm = trimObjectStrings(form);
-        setForm(trimmedForm);
-    
-        const validationErrors = {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const trimmedForm = trimObjectStrings(form);
+    setForm(trimmedForm);
+
+    const validationErrors = {};
         let isValid = true;
     
         Object.keys(trimmedForm).forEach((field) => {
@@ -264,30 +213,17 @@ const ProfileForm = () => {
         });
     
         setErrors(validationErrors);
-    
-        if (isValid) {
-            console.log('Form Submitted:', trimmedForm);
-            resetFields(setForm, initialFormState);
-            setSelectedDate('');
-            setSelectedMonth('');
-            setSelectedYear('');
-            navigate('/profile');
-    
-//             onProfileDataSubmit(trimmedForm);
-//             console.log('Form Submitted:', trimmedForm);
-          onProfileDataSubmit(trimmedForm)
+
+    if (isValid) {
+      // console.log('Form Submitted:', trimmedForm);
+      // resetFields(setForm, initialFormState);
+      // setSelectedDate('');
+      // setSelectedMonth('');
+      // setSelectedYear('');
+
+      onProfileDataSubmit(form)
         .then(() => {
-          // if (data[0] === 'No such address was found!') {
-          //   // console.log(data[1]);
-          //   // setFilledData(data[1])
-          //   // setForm(filledData);
-          //   // console.log(form);
-          //   // TODO: preserved data that is already filled and show a message to the user!
-          //   navigate('/profile/profile-form');
-          //   return;
-          // }
-          console.log('Form Submitted:', trimmedForm);
-          // navigate('/profile');
+          console.log('Form Submitted:', form);
         })
         .catch((err) =>
           console.log(`Error on profile form submit: ${err.message}`)
@@ -314,10 +250,10 @@ const ProfileForm = () => {
         setSelectedYear('');
     };
 
-
-   return (
-        <form onSubmit={handleSubmit} className="profile-form">
-            <h3>{t('profile.profile_form_title')}</h3>
+  return (
+    
+      <form onSubmit={handleSubmit} className="profile-form">
+        <h3>{t('profile.profile_form_title')}</h3>
 
             <div className="avatar">
                 <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
@@ -330,78 +266,132 @@ const ProfileForm = () => {
                         style={{ borderColor: errors.username ? '#BB1D3D' : '' }}
                     />
 
-                    {errors.username && <span className="error">{errors.username}</span>}
-                </div>
-                <div className="gender">
-                    <label>{t('profile.gender')}:</label>
-                    <div className="gender-options">
-                        <div>
-                            <label>{t('profile.male')}
-                                <input type="radio" value="male" checked={form.gender === 'male'} onChange={handleGenderChange} />
-                            </label>
-                        </div>
-                        <div>
-                            <label>{t('profile.female')}
-                                <input type="radio" value="female" checked={form.gender === 'female'} onChange={handleGenderChange} />
-                            </label>
-                        </div>
-                        <div>
-                            <label> {t('profile.other')}
-                                <input type="radio" value="other" checked={form.gender === 'other'} onChange={handleGenderChange} />
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div>
-
-                    <label htmlFor="firstName">{t('profile.first_name')}:</label>
-                    <input type="text" id="firstName" name="firstName" value={form.firstName} onChange={handleInputChange} onBlur={onBlurHandler} />
-                    {errors.firstName && <span className="error">{errors.firstName}</span>}
-                </div>
-                <div>
-                    <label htmlFor="lastName">{t('profile.last_name')}:</label>
-                    <input type="text" id="lastName" name="lastName" value={form.lastName} onChange={handleInputChange} onBlur={onBlurHandler} />
-                    {errors.lastName && <span className="error">{errors.lastName}</span>}
-                </div>
-                <div className="date">
-                    <label>{t('profile.age')}</label>
-                    <div>
-                        <label>
-
-                            <select value={selectedDate} onChange={handleSelectedDateChange} onBlur={onBlurHandler}>
-                                <option value="">{t('profile.day')}</option>
-                                {generateNumberOptions(1, 31)}
-                            </select>
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-
-                            <select value={selectedMonth} onChange={handleSelectedMonthChange} onBlur={onBlurHandler}>
-                                <option value="">{t('profile.month')}</option>
-                                {generateNumberOptions(1, 12)}
-                            </select>
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-
-                            <select value={selectedYear} onChange={handleSelectedYearChange} onBlur={onBlurHandler}>
-                                <option value="">{t('profile.year')}</option>
-                                {generateNumberOptions(1900, new Date().getFullYear())}
-                            </select>
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label htmlFor="phoneNumber">{t('profile.phone_number')}: </label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" value={form.phoneNumber} onChange={handleInputChange} onBlur={onBlurHandler}
-                        style={{ borderColor: errors.phoneNumber ? '#BB1D3D' : '' }}
-                    />
-                    {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
-                </div>
-
+            {errors.username && (
+              <span className="error">{errors.username}</span>
+            )}
+          </div>
+          <div className="gender">
+            <label>{t('profile.gender')}:</label>
+            <div className="gender-options">
+              <div>
+                <label>
+                  {t('profile.male')}
+                  <input
+                    type="radio"
+                    value="male"
+                    checked={form.gender === 'male'}
+                    onChange={handleGenderChange}
+                  />
+                </label>
+              </div>
+              <div>
+                <label>
+                  {t('profile.female')}
+                  <input
+                    type="radio"
+                    value="female"
+                    checked={form.gender === 'female'}
+                    onChange={handleGenderChange}
+                  />
+                </label>
+              </div>
+              <div>
+                <label>
+                  {' '}
+                  {t('profile.other')}
+                  <input
+                    type="radio"
+                    value="other"
+                    checked={form.gender === 'other'}
+                    onChange={handleGenderChange}
+                  />
+                </label>
+              </div>
             </div>
+          </div>
+          <div>
+            <label htmlFor="firstName">{t('profile.first_name')}:</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={form.firstName}
+              onChange={handleInputChange}
+              onBlur={onBlurHandler}
+            />
+            {errors.firstName && (
+              <span className="error">{errors.firstName}</span>
+            )}
+          </div>
+          <div>
+            <label htmlFor="lastName">{t('profile.last_name')}:</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={form.lastName}
+              onChange={handleInputChange}
+              onBlur={onBlurHandler}
+            />
+            {errors.lastName && (
+              <span className="error">{errors.lastName}</span>
+            )}
+          </div>
+          <div className="date">
+            <label>{t('profile.age')}</label>
+            <div>
+              <label>
+                <select
+                  value={selectedDate}
+                  onChange={handleSelectedDateChange}
+                  onBlur={onBlurHandler}
+                >
+                  <option value="">{t('profile.day')}</option>
+                  {generateNumberOptions(1, 31)}
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>
+                <select
+                  value={selectedMonth}
+                  onChange={handleSelectedMonthChange}
+                  onBlur={onBlurHandler}
+                >
+                  <option value="">{t('profile.month')}</option>
+                  {generateNumberOptions(1, 12)}
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>
+                <select
+                  value={selectedYear}
+                  onChange={handleSelectedYearChange}
+                  onBlur={onBlurHandler}
+                >
+                  <option value="">{t('profile.year')}</option>
+                  {generateNumberOptions(1900, new Date().getFullYear())}
+                </select>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label htmlFor="phoneNumber">{t('profile.phone_number')}:</label>
+            <input
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              value={form.phoneNumber}
+              onChange={handleInputChange}
+              onBlur={onBlurHandler}
+              style={{ borderColor: errors.phoneNumber ? '#BB1D3D' : '' }}
+            />
+            {errors.phoneNumber && (
+              <span className="error">{errors.phoneNumber}</span>
+            )}
+          </div>
+        </div>
 
             <label>
             {t('profile.region')}: <span>*</span>
