@@ -107,14 +107,14 @@ export const Profile = () => {
             </div>
             <div className="user-data">
               <h2>{profileData?.details.username}</h2>
-              {profileData.details.firstName || profileData.details.lastName ? (
+              {profileData?.details.firstName || profileData?.details.lastName ? (
                 <p>
                   <FontAwesomeIcon icon={faUser} className="icon" />
-                  {profileData.details.firstName
-                    ? profileData.details.firstName
+                  {profileData?.details.firstName
+                    ? profileData?.details.firstName
                     : ''}{' '}
-                  {profileData.details.lastName
-                    ? profileData.details.lastName
+                  {profileData?.details.lastName
+                    ? profileData?.details.lastName
                     : ''}
                 </p>
               ) : (

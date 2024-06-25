@@ -286,14 +286,13 @@ const ProfileAddress = () => {
         {errors.street && <span className="error">{errors.street}</span>}
       </label>
       <label>
-        {t('profile.street_number')}: <span>*</span>
+        {t('profile.street_number')}:
         <input
           type="text"
           name="streetNumber"
           value={form.streetNumber}
           onChange={handleInputChange}
           onBlur={onBlurHandler}
-          required
           style={{ borderColor: errors.streetNumber ? '#BB1D3D' : '' }}
         />
         {errors.streetNumber && (
