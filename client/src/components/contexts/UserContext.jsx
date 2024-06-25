@@ -1,18 +1,18 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { userServiceFactory } from '../Services/userService';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useNavigate } from 'react-router-dom';
-import './error.css';
-import { Loader } from '../Loader/Loader';
+import { createContext, useContext, useState, useEffect } from "react";
+import { userServiceFactory } from "../Services/userService";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
+import "./error.css";
+import { Loader } from "../Loader/Loader";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useLocalStorage('auth', {});
-  const [profileData, setProfileData] = useLocalStorage('userDetails', {});
+  const [isAuth, setIsAuth] = useLocalStorage("auth", {});
+  const [profileData, setProfileData] = useLocalStorage("userDetails", {});
   const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const userService = userServiceFactory(isAuth.token);
@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
     setErrorMessage(error);
     setIsLoading(false);
     setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage("");
       setIsLoading(false);
     }, 3000);
   };
@@ -40,7 +40,7 @@ export const UserProvider = ({ children }) => {
       setIsAuth(newUser);
       setIsFinish(newUser.data.enabled);
       setIsLoading(false);
-      navigate('/profile/profile-form');
+      navigate("/profile/profile-form");
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
@@ -59,9 +59,9 @@ export const UserProvider = ({ children }) => {
       if (newUser.data.enabled) {
         const res = await getProfileData();
         // console.log(res);
-        navigate('/profile');
+        navigate("/profile");
       } else {
-        navigate('/profile/profile-form');
+        navigate("/profile/profile-form");
       }
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
@@ -73,8 +73,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       userService.logout();
       setIsAuth({});
-      localStorage.removeItem('auth');
-      localStorage.removeItem('userDetails');
+      setProfileData({});
       setIsLoading(false);
     } catch (error) {
       setIsAuth({});
@@ -95,16 +94,15 @@ export const UserProvider = ({ children }) => {
       setProfileData(response.user);
       setIsAuth({
         ...isAuth,
-        token: response.token, 
+        token: response.token,
         data: {
           ...isAuth.data,
           enabled: true,
-        }     
+        },
       });
       console.log(isAuth);
-      setIsFinish(true).then(navigate('/profile'))
+      setIsFinish(true).then(navigate("/profile"));
       setIsLoading(false);
-      
     } catch (error) {
       showErrorAndSetTimeouts(error.message);
     }
