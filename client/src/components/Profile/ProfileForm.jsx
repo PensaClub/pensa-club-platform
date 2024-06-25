@@ -22,7 +22,7 @@ const ProfileForm = () => {
         // email: userEmail,
         firstName: '',
         lastName: '',
-        phoneNumber: '',
+        phoneNumber: null,
         gender: null,
         region: '',
         regionId: '',
