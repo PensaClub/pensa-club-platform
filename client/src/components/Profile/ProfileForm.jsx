@@ -38,6 +38,7 @@ const ProfileForm = () => {
         skills: [],
         interestOptions: [],
         workOptions: [],
+        imageURL: null
     };
     const [form, setForm] = useState(initialFormState);
 
@@ -53,6 +54,7 @@ const ProfileForm = () => {
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
     const [errors, setErrors] = useState({});
+
 
     useEffect(() => {
         loadData('/regions.json')
@@ -219,8 +221,6 @@ const ProfileForm = () => {
             console.log('Form validation failed. Errors:', validationErrors);
         }
     };
-
-
 
     const onBlurHandler = (e) => {
         const { name, value } = e.target;
