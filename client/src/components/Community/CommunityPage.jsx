@@ -3,6 +3,7 @@ import './communityPage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass,faLocationDot,faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { FiltersCommunity } from "./FiltersCommunity/FiltersCommunity";
+import { CommunityFooter } from "./CommunityFooter/CommunityFooter";
 
 export const CommunityPage = () => {
     return (
@@ -23,7 +24,10 @@ export const CommunityPage = () => {
                     </div>
                 </section>
                 <FiltersCommunity/>
+            <CommunityFooter/>
+
             </section>
+
         </>
     )
 }

@@ -4,9 +4,11 @@
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
-    /* min-height: 100vh; */
 }
+.main-community{
+    min-height: 100vh;
 
+}
 .hero-section-commun {
     
     display: flex;
