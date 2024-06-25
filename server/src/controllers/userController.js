@@ -1,7 +1,7 @@
 const userController = require("express").Router();
 
 const bcrypt = require("bcrypt");
-const { tokenCreator } = require("../utils/jwt");
+const { tokenCreator, tokenVerification } = require("../utils/jwt");
 const CustomError = require("../utils/customError");
 
 const { where } = require("sequelize");
@@ -16,6 +16,7 @@ const emailRegex =
 //Example - john.doe@example.com
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+const secret = process.env.SECRET;
 
 userController.post("/register", async (req, res, next) => {
   let errors = {};
@@ -158,8 +159,7 @@ userController.post("/request-reset-password", async (req, res, next) => {
       await sendResetEmail(email, resetToken);
       res.status(200).send(`A reset password link has been sent to ${email}.`);
     } catch (emailError) {
-      console.error(`Error sending email: ${emailError}`);
-      res.status(500).send("An error occurred while sending the reset email.");
+      throw new Error(`Error sending email: ${emailError}`);
     }
   } catch (err) {
     next(err);
@@ -167,31 +167,54 @@ userController.post("/request-reset-password", async (req, res, next) => {
 });
 
 userController.post("/reset-password", async (req, res, next) => {
-  const { password, rePassword, resetToken } = req.body;
+  const { oldPassword, newPassword, reNewPassword, tokenType, token } = req.body;
+  let user;
   try {
-    if (password !== rePassword) {
-      return res.status(400).send("Repeat password does not match.");
+    if (tokenType !== 'jwt' && tokenType !== 'reset') {
+      return res.status(400).send({ message: "Invalid token type." });
     }
-    if (!passwordRegex.test(password)) {
-      return res.status(400).send("Password must be at least 8 characters long, contain at least one letter and one number.");
+    if (!newPassword) {
+      return res.status(400).send({ message: "New password is required." });
+    }
+    if (!reNewPassword) {
+      return res.status(400).send({ message: "Repeat password is required." });
+    }
+    if (newPassword !== reNewPassword) {
+      return res.status(400).send({ message: "Repeat password does not match." });
+    }
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).send({ message: "New password must be at least 8 characters long, contain at least one letter and one number." });
     }
 
-    const user = await user_account.findOne({ where: { reset_token: resetToken } });
-
-    if (!user.token_expiration) {
-      return res.status(404).send("User with that token wasn't found.");
+    if (tokenType === 'reset') {
+      user = await user_account.findOne({ where: { reset_token: token } });
+      if (!user || !user.token_expiration) {
+        return res.status(404).send({ message: "User with that token wasn't found." });
+      }
+      if (user.token_expiration.getTime() < Date.now()) {
+        return res.status(400).send({ message: "Reset token has expired." });
+      }
+      user.reset_token = null;
+      user.token_expiration = null;
     }
 
-    if (user.token_expiration.getTime() < Date.now()) {
-      return res.status(400).send("Reset token has expired.");
-    }
+    if (tokenType === 'jwt') {
+      if (!oldPassword) {
+        return res.status(400).send({ message: "Old password is required." });
+      }
+      const decodedToken = tokenVerification(token, secret);
+      user = await user_account.findOne({ where: { email: decodedToken.email } });
 
-    const newHashedPassword = await bcrypt.hash(password, 10);
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+      if (!isPasswordValid) {
+        return res.status(400).send({ message: "Old password is not valid." });
+      }
+    }
+    const newHashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = newHashedPassword;
-    user.reset_token = null;
-    user.token_expiration = null;
     await user.save();
-    res.status(200).send("Password reset was successful.");
+    res.status(200).send({ message: "Password reset was successful." });
+
   } catch (err) {
     next(err);
   }
