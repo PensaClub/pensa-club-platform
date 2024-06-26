@@ -16,8 +16,7 @@ import { MapPage } from './components/MapPage/MapPage';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 import { MapProvider } from './components/contexts/MapContext.jsx';
-import{ToastContainer} from 'react-toastify';
-
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
