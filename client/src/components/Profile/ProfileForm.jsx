@@ -300,7 +300,7 @@ const ProfileForm = () => {
         setSelectedYear('');
     }; 
 
-   return (
+    return (
         <form onSubmit={handleSubmit} className="profile-form">
             <h3>{t('profile.profile_form_title')}</h3>
 
