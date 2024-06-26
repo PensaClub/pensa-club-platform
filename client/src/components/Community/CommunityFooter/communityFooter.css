@@ -1,14 +1,14 @@
 .footer-privacy-commun {
     display: none;
 }
-
-footer{
+/* за преправка , пречи на останалите футъри */
+footer{ 
     position:sticky;
     bottom: 0;
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
-    footer{
+    .footer-privacy-commun {
         position: sticky;
         bottom: 0;
     }
@@ -33,7 +33,7 @@ footer{
 }
 @media (min-width: 1200px) {
     footer{
-        position:initial;
+        position:relative;
        
     }
 }

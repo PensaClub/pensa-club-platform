@@ -5,12 +5,19 @@
     max-width: 80%;
 }
 
-.unique-filters-community {
+
+.my-masonry-grid {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-    width: 80%;
+    width: 100%;
+    gap: 1em;
+}
+
+.my-masonry-grid_column {
+    background-clip: padding-box;
+}
+
+.my-masonry-grid_column > .unique-region-filter {
+    margin-bottom: 1rem;
 }
 
 .unique-region-filter {
@@ -27,8 +34,6 @@
 .unique-region-filter.open {
     max-height: 800px;
     padding: 1rem;
-
-
 }
 
 .unique-select-container {
@@ -56,20 +61,17 @@
     transition: transform 0.2s ease;
     color: #000;
     cursor: pointer;
-    /* z-index: 2; */
     padding-right: 1rem;
 }
 
 .unique-select-arrow.open {
-    transform: rotate(360deg);
-
+    transform: rotate(180deg);
 }
 
 .unique-options-container {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-
 }
 
 .unique-options-container.open {
@@ -77,7 +79,6 @@
     background-color: var(--green-cm-light);
     border-radius: 25px;
     padding: 0.5em;
-
 }
 
 .unique-option {
@@ -87,23 +88,38 @@
     cursor: pointer;
 }
 
-/* .unique-option:hover {
+.unique-option:hover {
     background-color: var(--green-cm);
     color: var(--text-white);
-    border-radius: 25px;
-
-} */
+}
 
 .unique-option.selected {
     background-color: var(--orange);
     color: var(--text-white);
+}
+
+.unique-skeleton {
+    margin-bottom: 1rem;
     border-radius: 25px;
 }
+
+.unique-skeleton-option {
+    margin-bottom: 0.5rem;
+    border-radius: 15px;
+}
+
 
 @media (min-width: 768px) and (max-width: 1199px) {
     .unique-filters-community {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
+        grid-auto-rows: masonry;
+    }
+
+    .unique-region-filter {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 1rem;
     }
 }
