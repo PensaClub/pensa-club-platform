@@ -1,17 +1,24 @@
-import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from "../../utils/profile";
-import CustomSelect from "./CustomSelect";
-import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
-import { useTranslation } from "react-i18next";
-import { loadData } from "../../utils/loadData";
+import {
+  validateField,
+  generateNumberOptions,
+  trimObjectStrings,
+  resetFields,
+  handleReset,
+} from '../../utils/profile';
+import CustomSelect from './CustomSelect';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
+import { useTranslation } from 'react-i18next';
+import { loadData } from '../../utils/loadData';
+import { notify } from '../../utils/notify';
 
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
   const navigate = useNavigate();
-  const { onProfileDataSubmit, userId, userEmail, getProfileData } = useContext(UserContext);
+  const { onProfileDataSubmit } = useContext(UserContext);
   const initialFormState = {
     username: "",
     // email: userEmail,
@@ -207,14 +214,11 @@ const ProfileForm = () => {
     const handleSelectedMonthChange = (e) => {
         setSelectedMonth(e.target.value);
     };
-
-    const handleSelectedYearChange = (e) => {
+  const handleSelectedYearChange = (e) => {
         setSelectedYear(e.target.value);
     };
-
-
-
-    useEffect(() => {
+  
+   useEffect(() => {
         const loadData = async () => {
             try {
                 const response = await fetch('/options.json');
@@ -258,22 +262,10 @@ const ProfileForm = () => {
             setSelectedMonth('');
             setSelectedYear('');
             navigate('/profile');
-    
-//             onProfileDataSubmit(trimmedForm);
-//             console.log('Form Submitted:', trimmedForm);
           onProfileDataSubmit(trimmedForm)
         .then(() => {
-          // if (data[0] === 'No such address was found!') {
-          //   // console.log(data[1]);
-          //   // setFilledData(data[1])
-          //   // setForm(filledData);
-          //   // console.log(form);
-          //   // TODO: preserved data that is already filled and show a message to the user!
-          //   navigate('/profile/profile-form');
-          //   return;
-          // }
+         
           console.log('Form Submitted:', trimmedForm);
-          // navigate('/profile');
         })
         .catch((err) =>
           console.log(`Error on profile form submit: ${err.message}`)
@@ -298,6 +290,8 @@ const ProfileForm = () => {
         setSelectedYear('');
     };
 
+
+ 
 
    return (
         <form onSubmit={handleSubmit} className="profile-form">
@@ -384,12 +378,11 @@ const ProfileForm = () => {
                     />
                     {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
                 </div>
-
             </div>
 
             <label>
             {t('profile.region')}: <span>*</span>
-                <select name="region" value={form.region} onChange={handleRegionChange} onBlur={onBlurHandler} required
+                <select name="region" value={form.regionId} onChange={handleRegionChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.region ? '#BB1D3D' : '' }}
                 >
                     <option value="">{t('profile.select_region')}</option>
@@ -404,7 +397,7 @@ const ProfileForm = () => {
             </label>
             <label>
             {t('profile.municipality')}: <span>*</span>
-                <select name="municipality" value={form.municipality} onChange={handleMunicipalityChange} onBlur={onBlurHandler} required
+                <select name="municipality" value={form.municipalityId} onChange={handleMunicipalityChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.municipality ? '#BB1D3D' : '' }}
                 >
                     <option value="">{t('profile.select_municipality')}</option>
@@ -419,7 +412,7 @@ const ProfileForm = () => {
             </label>
             <label>
             {t('profile.settlement')}: <span>*</span>
-                <select name="settlement" value={form.settlement} onChange={handleInputChange} onBlur={onBlurHandler} required
+                <select name="settlement" value={form.settlementId} onChange={handleSettlementChange} onBlur={onBlurHandler} required
                     style={{ borderColor: errors.settlement ? '#BB1D3D' : '' }}
                 >
                     <option value="">{t('profile.select_settlement')}</option>
