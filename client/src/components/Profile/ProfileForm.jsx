@@ -16,7 +16,6 @@ import { notify } from '../../utils/notify';
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
-
   const navigate = useNavigate();
   const { onProfileDataSubmit } = useContext(UserContext);
   const initialFormState = {
@@ -24,7 +23,7 @@ const ProfileForm = () => {
     // email: userEmail,
     firstName: "",
     lastName: "",
-    phoneNumber: "",
+    phoneNumber: null,
     gender: null,
     region: "",
     regionId: "",
@@ -40,10 +39,9 @@ const ProfileForm = () => {
     skills: [],
     interestOptions: [],
     workOptions: [],
-    imageURL: "",
+    imageURL: null,
   };
   const [form, setForm] = useState(initialFormState);
-  const [filledData, setFilledData] = useState(initialFormState);
 
   const [regions, setRegions] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
@@ -76,8 +74,6 @@ const ProfileForm = () => {
     const regionId = e.target.value;
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
-
-    // console.log('regionsId', regionId); // връща номера на Областта
 
     setForm({
       ...form,
@@ -198,72 +194,66 @@ const ProfileForm = () => {
         });
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setForm({ ...form, [name]: value });
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
-    const handleGenderChange = (e) => {
-        setForm({ ...form, gender: e.target.value });
-    };
+  const handleGenderChange = (e) => {
+    setForm({ ...form, gender: e.target.value });
+  };
 
+  useEffect(() => {
+    if (selectedDate && selectedMonth && selectedYear) {
+      const formattedDate = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+      setForm((prevForm) => ({
+        ...prevForm,
+        birthDate: formattedDate,
+      }));
+    }
+  }, [selectedDate, selectedMonth, selectedYear]);
 
-    useEffect(() => {
-        if (selectedDate && selectedMonth && selectedYear) {
-            const formattedDate = `${selectedYear}-${selectedMonth}-${selectedDate}`;
-            setForm((prevForm) => ({
-                ...prevForm,
-                birthDate: formattedDate,
-            }));
-        }
-    }, [selectedDate, selectedMonth, selectedYear]);
+  const handleSelectedDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
 
-    const handleSelectedDateChange = (e) => {
-        setSelectedDate(e.target.value);
-    };
-
-    const handleSelectedMonthChange = (e) => {
-        setSelectedMonth(e.target.value);
-    };
+  const handleSelectedMonthChange = (e) => {
+    setSelectedMonth(e.target.value);
+  };
   const handleSelectedYearChange = (e) => {
-        setSelectedYear(e.target.value);
+    setSelectedYear(e.target.value);
+  };
+
+
+        setSkillsOptions(data.skills);
+        setWorkOptions(data.workOptions);
+        setInterestOptions(data.interestOptions);
+      } catch (error) {
+        console.error('Failed to load data', error);
+      }
     };
-  
-   useEffect(() => {
-        const loadData = async () => {
-            try {
-                const response = await fetch('/options.json');
-                const data = await response.json();
+    loadData();
+  }, []);
 
-                setSkillsOptions(data.skills);
-                setWorkOptions(data.workOptions);
-                setInterestOptions(data.interestOptions);
-            } catch (error) {
-                console.error('Failed to load data', error);
-            }
-        };
-        loadData();
-    }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const trimmedForm = trimObjectStrings(form);
+    setForm(trimmedForm);
 
-        const trimmedForm = trimObjectStrings(form);
-        setForm(trimmedForm);
+    const validationErrors = {};
+    let isValid = true;
 
-        const validationErrors = {};
-        let isValid = true;
+    Object.keys(trimmedForm).forEach((field) => {
+      const value = trimmedForm[field];
+      const error = validateField(field, value, trimmedForm, t);
+      if (error) {
+        isValid = false;
+        validationErrors[field] = error;
+      }
+    });
 
-        Object.keys(trimmedForm).forEach((field) => {
-            const value = trimmedForm[field];
-            const error = validateField(field, value, trimmedForm, t);
-            if (error) {
-                isValid = false;
-                validationErrors[field] = error;
-            }
-        });
-
-        setErrors(validationErrors);
+    setErrors(validationErrors);
 
         if (isValid) {
             console.log('Form Submitted:', trimmedForm);
@@ -279,8 +269,7 @@ const ProfileForm = () => {
         .catch((err) =>
           console.log(`Error on profile form submit: ${err.message}`)
         );
-            
-           
+   
         } else {
             console.log('Form validation failed. Errors:', validationErrors);
         }

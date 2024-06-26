@@ -118,6 +118,7 @@ export const Profile = () => {
               <img src={profileData?.details?.imageURL || "/images/sign-up/avatar.jpg"} alt="User avatar" />
             </div>
             <div className="user-data">
+
               <h2>{profileData?.details?.username}</h2>
               {profileData?.details?.firstName || profileData?.details?.lastName ? (
                 <p>
@@ -130,12 +131,14 @@ export const Profile = () => {
               )}
 
               <p>
-                <FontAwesomeIcon icon={faEnvelope} className="icon" /> {profileData?.email}
+                <FontAwesomeIcon icon={faEnvelope} className="icon" />{' '}
+                {profileData?.email}
               </p>
 
               <p>
-                <FontAwesomeIcon icon={faLocationDot} className="icon" /> {profileData?.details?.settlement}, {profileData?.details?.municipality},{" "}
-                {profileData?.details?.region}
+                <FontAwesomeIcon icon={faLocationDot} className="icon" />{' '}
+                {profileData?.details?.settlement},{' '}
+                {profileData?.details?.municipality}, {profileData?.details?.region}
               </p>
             </div>
           </section>

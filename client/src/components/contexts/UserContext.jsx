@@ -4,14 +4,16 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
 import './error.css';
 import { Loader } from '../Loader/Loader';
+import { loadAddressData } from '../../utils/loadAddressData';
 import { notify } from '../../utils/notify';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useLocalStorage("auth", {});
-  const [profileData, setProfileData] = useLocalStorage("userDetails", {});
 
+  const [isAuth, setIsAuth] = useLocalStorage('auth', {});
+  const [profileData, setProfileData] = useLocalStorage('userDetails', {});
+  const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -61,15 +63,19 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
       notify('success-login');
       if (newUser.data.enabled) {
-        getProfileData()
-          .then(() => {
-            if (profileData) {
-              navigate('/profile');
-            }
-          })
-          .catch((error) =>
-            console.log(`Get data after login error: ${error.message}`)
+        const res = await getProfileData();
+
+        if (res) {
+          const data = await loadAddressData(
+            res.user.details.region,
+            res.user.details.municipality,
+            res.user.details.settlement
           );
+          console.log(data);
+          setAddressId({ ...data });
+        }
+        // console.log(res);
+        navigate("/profile");p
       } else {
         navigate("/profile/profile-form");
       }
@@ -85,6 +91,7 @@ export const UserProvider = ({ children }) => {
       userService.logout();
       setIsAuth({});
       setProfileData({});
+      setAddressId({});
       setIsLoading(false);
       notify('success-logout');
     } catch (error) {
@@ -136,15 +143,21 @@ export const UserProvider = ({ children }) => {
       console.log(updatedData);
       console.log(profileData);
       if (updatedData) {
-        setProfileData({ ...profileData, details: { ...updatedData } });
-        // setIsAuth({
-        //   ...isAuth,
-        //   token: response?.token,
-        //   data: {
-        //     ...isAuth.data,
-        //     enabled: true,
-        //   },
-        // });
+        setProfileData({ ...profileData, details: updatedData });
+
+        const data = await loadAddressData(
+          updatedData.region,
+          updatedData.municipality,
+          updatedData.settlement
+        );
+        console.log(data);
+        setAddressId({ ...data });
+
+        setIsAuth({
+          ...isAuth,
+          token: response.token,
+          enabled: response.user.enabled,
+        });
       }
       setIsLoading(false);
       return updatedData;
@@ -204,6 +217,7 @@ export const UserProvider = ({ children }) => {
     onEditProfileDataSubmit,
     getProfileData,
     profileData,
+    addressId,
   };
 
   return (
