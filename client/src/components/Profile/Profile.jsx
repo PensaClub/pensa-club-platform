@@ -22,7 +22,6 @@ import {
   faImage,
   faBars,
   faEnvelope,
-  faPhone,
   faBriefcase,
   faUniversalAccess,
   faUsersGear,
@@ -38,11 +37,13 @@ export const Profile = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isFinish, profileData, userEmail } = useContext(UserContext);
+  const { isFinish, profileData, } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
-    console.log(isFinish);
+    if(!profileData) {
+      navigate('/profile/profile-form');
+    }
     if (!isFinish) {
       navigate("/profile/profile-form");
     }

@@ -15,9 +15,8 @@ import { FiltersMap } from './components/MapPage/FitlersMap/FiltersMap';
 import { MapPage } from './components/MapPage/MapPage';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
-
-import { MapProvider } from './components/contexts/mapContext.jsx';
-
+import { MapProvider } from './components/contexts/MapContext.jsx';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -25,6 +24,7 @@ function App() {
       <ErrorBoundary>
         <UserProvider>
           <MapProvider>
+          <ToastContainer role="alert" className={"notification"} limit={3}/>
           <Header />
 
           <Routes>
