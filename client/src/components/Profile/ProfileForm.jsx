@@ -1,8 +1,9 @@
 import {
-    validateField,
-    generateNumberOptions,
-    trimObjectStrings,
-    handleReset,
+  validateField,
+  generateNumberOptions,
+  trimObjectStrings,
+  resetFields,
+  handleReset,
 } from '../../utils/profile';
 import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
@@ -10,51 +11,94 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { loadData } from '../../utils/loadData';
+import { notify } from '../../utils/notify';
 
 const ProfileForm = () => {
-    const { t, i18n } = useTranslation();
-    const currentLanguage = i18n.language;
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
 
-    const navigate = useNavigate();
-    const { onProfileDataSubmit } = useContext(UserContext);
-    const initialFormState = {
-        username: '',
-        // email: userEmail,
-        firstName: '',
-        lastName: '',
-        phoneNumber: null,
-        gender: null,
-        region: '',
-        regionId: '',
-        municipality: '',
-        municipalityId: '',
-        settlement: '',
-        settlementId: '',
-        district: '',
-        block: '',
-        street: '',
-        streetNumber: '',
-        birthDate: null,
-        skills: [],
-        interestOptions: [],
-        workOptions: [],
-        imageURL: null
-    };
-    const [form, setForm] = useState(initialFormState);
+  const navigate = useNavigate();
+  const { onProfileDataSubmit } = useContext(UserContext);
+  const initialFormState = {
+    username: "",
+    // email: userEmail,
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    gender: null,
+    region: "",
+    regionId: "",
+    municipality: "",
+    municipalityId: "",
+    settlement: "",
+    settlementId: "",
+    district: "",
+    block: "",
+    street: "",
+    streetNumber: "",
+    birthDate: null,
+    skills: [],
+    interestOptions: [],
+    workOptions: [],
+    imageURL: "",
+  };
+  const [form, setForm] = useState(initialFormState);
+  const [filledData, setFilledData] = useState(initialFormState);
 
-    const [regions, setRegions] = useState([]);
-    const [municipalities, setMunicipalities] = useState([]);
-    const [settlements, setSettlements] = useState([]);
+  const [regions, setRegions] = useState([]);
+  const [municipalities, setMunicipalities] = useState([]);
+  const [settlements, setSettlements] = useState([]);
 
-    const [skillsOptions, setSkillsOptions] = useState([]);
-    const [workOptions, setWorkOptions] = useState([]);
-    const [interestOptions, setInterestOptions] = useState([]);
+  const [skillsOptions, setSkillsOptions] = useState([]);
+  const [workOptions, setWorkOptions] = useState([]);
+  const [interestOptions, setInterestOptions] = useState([]);
 
-    const [selectedDate, setSelectedDate] = useState('');
-    const [selectedMonth, setSelectedMonth] = useState('');
-    const [selectedYear, setSelectedYear] = useState('');
-    const [errors, setErrors] = useState({});
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    loadData("/regions.json")
+      .then((data) => setRegions(data))
+      .catch((err) => console.log(err.message));
+
+    loadData("/options.json")
+      .then((data) => {
+        setInterestOptions(data.interestOptions);
+        setSkillsOptions(data.skills);
+        setWorkOptions(data.workOptions);
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
+
+  const handleRegionChange = async (e) => {
+    const regionId = e.target.value;
+    const currRegion = regions.filter((region) => region.id == regionId);
+    const regionName = currRegion[0].bg;
+
+    // console.log('regionsId', regionId); // връща номера на Областта
+
+    setForm({
+      ...form,
+      regionId: regionId,
+      region: regionName,
+      municipality: "",
+      settlement: "",
+    });
+    setMunicipalities([]);
+    setSettlements([]);
+
+    try {
+      const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`);
+
+      const data = await response.json();
+
+      setMunicipalities(data);
+    } catch (error) {
+      console.error("Failed to load municipalities data", error);
+    }
+  };
 
     useEffect(() => {
         loadData('/regions.json')
@@ -181,11 +225,25 @@ const ProfileForm = () => {
     const handleSelectedMonthChange = (e) => {
         setSelectedMonth(e.target.value);
     };
-
-    const handleSelectedYearChange = (e) => {
+  const handleSelectedYearChange = (e) => {
         setSelectedYear(e.target.value);
     };
+  
+   useEffect(() => {
+        const loadData = async () => {
+            try {
+                const response = await fetch('/options.json');
+                const data = await response.json();
 
+                setSkillsOptions(data.skills);
+                setWorkOptions(data.workOptions);
+                setInterestOptions(data.interestOptions);
+            } catch (error) {
+                console.error('Failed to load data', error);
+            }
+        };
+        loadData();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -208,9 +266,15 @@ const ProfileForm = () => {
         setErrors(validationErrors);
 
         if (isValid) {
-            onProfileDataSubmit(form)
+            console.log('Form Submitted:', trimmedForm);
+            resetFields(setForm, initialFormState);
+            setSelectedDate('');
+            setSelectedMonth('');
+            setSelectedYear('');
+            navigate('/profile');
+          onProfileDataSubmit(trimmedForm)
         .then(() => {
-          console.log('Form Submitted:', form);
+          console.log('Form Submitted:', trimmedForm);
         })
         .catch((err) =>
           console.log(`Error on profile form submit: ${err.message}`)
@@ -234,10 +298,9 @@ const ProfileForm = () => {
         setSelectedDate('');
         setSelectedMonth('');
         setSelectedYear('');
-    };
+    }; 
 
-
-    return (
+   return (
         <form onSubmit={handleSubmit} className="profile-form">
             <h3>{t('profile.profile_form_title')}</h3>
 
@@ -381,7 +444,6 @@ const ProfileForm = () => {
                     />
                     {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
                 </div>
-
             </div>
 
             <label>
