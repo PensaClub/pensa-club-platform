@@ -18,12 +18,12 @@
     }
     .menu-community{
         position: fixed;
-        top: 25%;
-        bottom:15%;
+        top: 8%;
+        bottom:10.2%;
         left: 0;
         flex-direction:column-reverse;
         /* gap: 2em; */
-        width: 6%;
+        width: 7%;
     }
 }
 @media (min-width: 1200px) {
