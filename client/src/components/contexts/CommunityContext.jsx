@@ -1,6 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Loader } from "../Loader/Loader";
 import './error.css';
+import { communityServiceFactory } from "../Services/communityService";
 
 
 export const CommunityContext = createContext();
@@ -8,6 +9,10 @@ export const CommunityContext = createContext();
 export const CommunityProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [regions , setRegions] = useState([])
+    const [subregions , setSubregions] = useState({})
+
+    const communityService= communityServiceFactory()
 
     const showErrorAndSetTimeouts = (error) => {
 
@@ -19,8 +24,43 @@ export const CommunityProvider = ({ children }) => {
         }, 3000);
     }
 
-    const contextService = {
+    const fetchRegions  = async () => {
 
+        try {
+            setIsLoading(true);
+            const response = await communityService.getRegions()
+            setRegions(response)
+            setIsLoading(false);
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message)
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const fetchSubregions  = async (regionId) => {
+
+        try {
+            setIsLoading(true);
+            const response = await communityService.getSubregions(regionId)
+            setSubregions(prev => ({ ...prev, [regionId]: response }));
+            setIsLoading(false);
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message)
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchRegions();
+    }, []);
+
+    const contextService = {
+        fetchRegions ,
+        fetchSubregions ,
+        regions,
+        subregions
     }
     
     return (
@@ -39,3 +79,7 @@ export const CommunityProvider = ({ children }) => {
     )
 }
 
+export const useCommunityContext = () => {
+    const context =useContext(CommunityContext)
+    return context
+}

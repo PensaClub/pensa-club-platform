@@ -18,6 +18,7 @@ import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 
 import { MapProvider } from './components/contexts/mapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
+import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
       <ErrorBoundary>
         <UserProvider>
           <MapProvider>
+            <CommunityProvider>
             <Header additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''} />
 
             <Routes>
@@ -54,6 +56,7 @@ function App() {
             </Routes>
 
             <Footer additionalClasses={isCommunityPage ? 'hide-on-mobile position-fix' : ''} />
+            </CommunityProvider>
           </MapProvider>
         </UserProvider>
       </ErrorBoundary>

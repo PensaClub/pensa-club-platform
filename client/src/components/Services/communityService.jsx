@@ -13,6 +13,14 @@ export const communityServiceFactory = (token) => {
                 throw new Error('Failed to fetch regions');
             }
             return response.json();
+        },
+
+        getSubregions: async (regionId) => {
+            const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`)
+            if (!response.ok) {
+                throw new Error('Failed to fetch subregions for region ');
+            }
+            return response.json();
         }
     }
 }

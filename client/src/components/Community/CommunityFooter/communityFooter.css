@@ -2,11 +2,14 @@
     display: none;
 }
 
-
+footer{
+    position:sticky;
+    bottom: 0;
+}
 
 @media (min-width: 768px) and (max-width: 1199px) {
     footer{
-        position: fixed;
+        position: sticky;
         bottom: 0;
     }
     .footer-privacy-commun {
@@ -16,13 +19,21 @@
         background-color: var(--bg-black);
         color: var(--text-white);
         align-items: center;
+        filter: contrast(50%);
 
-        opacity: 0.8;
+        opacity: 1;
+
     }
 
     .footer-privacy-commun p {
         font-size: var(--xs-font-size);
         padding: var(--s-space) 0;
         color: var(--text-white);
+    }
+}
+@media (min-width: 1200px) {
+    footer{
+        position:initial;
+       
     }
 }

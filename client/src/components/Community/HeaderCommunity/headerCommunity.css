@@ -8,6 +8,7 @@ header{
     justify-content: center;
     background-color: var(--bg-white);
     padding: calc(var(--s-space) + 8px) 0;
+    position: fixed;
 }
 
 .header-community-logo{
