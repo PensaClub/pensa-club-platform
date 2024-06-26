@@ -30,7 +30,6 @@ export const validateField = (name, value, form = {}, t) => {
             break;
         case 'region':
             if (!value) error = t('profile.region_required');
-            console.log(error)
             break;
         case 'municipality':
             if (!value) error = t('profile.municipality_required');

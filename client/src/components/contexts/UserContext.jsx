@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import './error.css';
 import { Loader } from '../Loader/Loader';
 import { loadAddressData } from '../../utils/loadAddressData';
-
+import { notify } from '../../utils/notify';
 
 export const UserContext = createContext();
 
@@ -14,7 +14,6 @@ export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
-
   const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -45,8 +44,10 @@ export const UserProvider = ({ children }) => {
       setIsAuth(newUser);
       setIsFinish(newUser.data.enabled);
       setIsLoading(false);
-      navigate("/profile/profile-form");
+      navigate('/profile/profile-form');
+      notify('success-register');
     } catch (error) {
+      notify('error');
       showErrorAndSetTimeouts(error.message);
     }
   };
@@ -55,12 +56,12 @@ export const UserProvider = ({ children }) => {
     const { rePassword, ...newData } = data;
     try {
       setIsLoading(true);
-
       const response = await userService.login(newData);
       const { password, ...newUser } = response;
       setIsAuth(newUser);
       setIsFinish(newUser.data.enabled);
       setIsLoading(false);
+      notify('success-login');
       if (newUser.data.enabled) {
         const res = await getProfileData();
 
@@ -74,11 +75,12 @@ export const UserProvider = ({ children }) => {
           setAddressId({ ...data });
         }
         // console.log(res);
-        navigate("/profile");
+        navigate("/profile");p
       } else {
         navigate("/profile/profile-form");
       }
     } catch (error) {
+      notify('error');
       showErrorAndSetTimeouts(error.message);
     }
   };
@@ -91,7 +93,9 @@ export const UserProvider = ({ children }) => {
       setProfileData({});
       setAddressId({});
       setIsLoading(false);
+      notify('success-logout');
     } catch (error) {
+      notify('error');
       setIsAuth({});
       showErrorAndSetTimeouts(error.message);
     }
@@ -100,12 +104,14 @@ export const UserProvider = ({ children }) => {
   const onProfileDataSubmit = async (details) => {
     try {
       setIsLoading(true);
+      // setTempData(details);
       const response = await userService.setUserData(details);
-      // console.log(response);
+      console.log(response);
       // if (response.message === 'No such address was found!') {
       //   navigate('/profile/profile-form');
+      //   notify("warn-address")
       //   setIsLoading(false);
-      //   return [response.message, filledData];
+      //   return tempData;
       // }
       setProfileData(response.user);
       setIsAuth({
@@ -119,19 +125,23 @@ export const UserProvider = ({ children }) => {
       console.log(isAuth);
       setIsFinish(true).then(navigate('/profile'));
       setIsLoading(false);
+      notify('success-data');
     } catch (error) {
+      notify('error');
+      console.log(error.message);
       showErrorAndSetTimeouts(error.message);
     }
   };
 
   const onEditProfileDataSubmit = async (data) => {
-    // console.log(data);
     try {
       setIsLoading(true);
       const response = await userService.editUserData(data);
+      notify('success-data');
       console.log(response);
       const updatedData = response.details;
       console.log(updatedData);
+      console.log(profileData);
       if (updatedData) {
         setProfileData({ ...profileData, details: updatedData });
 
@@ -152,22 +162,24 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
       return updatedData;
     } catch (error) {
+      notify('error');
+      console.log(error.message);
       showErrorAndSetTimeouts(`Error edit profile data: ${error.message}`);
     }
   };
 
   const getProfileData = async () => {
     try {
-      // debugger
       setIsLoading(true);
-
       const response = await userService.getUserData();
-      setProfileData(response.user);
-      setIsFinish(response.user.enabled);
-      // console.log(profileData);
-
+      if (response) {
+        // console.log(response);
+        setProfileData(response.user);
+        // setIsFinish(response.user.enabled);
+      }
       setIsLoading(false);
-      return response;
+
+      // return response;
     } catch (error) {
       showErrorAndSetTimeouts(`Error get profile data: ${error.message}`);
     }
