@@ -11,21 +11,21 @@ export const ProfilePassword = () => {
     const navigate = useNavigate();
     const {onPasswordReset} = useContext(UserContext);
 
-    const initialFormState = {
-        currPassword: '',
-        password: '',
-        rePassword: '',
-    };
+  const initialFormState = {
+    oldPassword: "",
+    newPassword: "",
+    reNewPassword: "",
+  };
 
     // Проверка за паролата на бекенда!!!
 
-    const [form, setForm] = useState(initialFormState);
-    const [errors, setErrors] = useState({});
-    const [showPasswords, setShowPasswords] = useState({
-        currPassword: false,
-        password: false,
-        rePassword: false,
-    });
+  const [form, setForm] = useState(initialFormState);
+  const [errors, setErrors] = useState({});
+  const [showPasswords, setShowPasswords] = useState({
+    oldPassword: false,
+    newPassword: false,
+    reNewPassword: false,
+  });
 
     const toggleShowPassword = (field) => {
         setShowPasswords((prevState) => ({
@@ -46,20 +46,21 @@ export const ProfilePassword = () => {
         const { name, value } = e.target;
         setErrors((prevErrors) => ({
             ...prevErrors,
-            [name]: validateField(name, value, form),
+            [name]: validateField(name, value, form, t),
         }));
+
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const trimmedForm = trimObjectStrings(form);
-        setForm(trimmedForm);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const trimmedForm = trimObjectStrings(form);
+    setForm(trimmedForm);
 
         const newErrors = {};
         let isValid = true;
 
         Object.keys(trimmedForm).forEach((field) => {
-            const error = validateField(field, trimmedForm[field], trimmedForm);
+            const error = validateField(field, trimmedForm[field], trimmedForm, t);
             newErrors[field] = error;
             if (error) {
                 isValid = false;
@@ -68,75 +69,101 @@ export const ProfilePassword = () => {
 
         setErrors(newErrors);
 
-        if (isValid) {
-            onPasswordReset(trimmedForm);
-            console.log('Form Submitted:', trimmedForm);
-            resetFields(setForm, initialFormState);
-            navigate('/profile');
-        }
-    };
 
-    return (
-        <form className="profile-form" onSubmit={handleSubmit}>
-            <h3>{t('profile.change_password')}</h3>
-            <label htmlFor="currPassword">
-            {t('profile.old_password')}: <span>*</span>
-                <div className="password-input-container">
-                    <input
-                        type={showPasswords.currPassword ? 'text' : 'password'}
-                        name="currPassword"
-                        value={form.currPassword}
-                        onChange={handleInputChange}
-                        onBlur={onBlurHandler}
-                        required
-                    />
-                    <span className="toggle-password" onClick={() => toggleShowPassword('currPassword')}>
-                        {showPasswords.currPassword ? '👁️' : '👁️‍🗨️'}
-                    </span>
-                </div>
-                {errors.currPassword && <div className="error">{errors.currPassword}</div>}
-            </label>
-            <label>
-            {t('profile.new_password')}: <span>*</span>
-                <div className="password-input-container">
-                    <input
-                        type={showPasswords.password ? 'text' : 'password'}
-                        name="password"
-                        value={form.password}
-                        onChange={handleInputChange}
-                        onBlur={onBlurHandler}
-                        required
-                    />
-                    <span className="toggle-password" onClick={() => toggleShowPassword('password')}>
-                        {showPasswords.password ? '👁️' : '👁️‍🗨️'}
-                    </span>
-                </div>
-                {errors.password && <div className="error">{errors.password}</div>}
-            </label>
-            <label>
-            {t('profile.repeat_password')}: <span>*</span>
-                <div className="password-input-container">
-                    <input
-                        type={showPasswords.rePassword ? 'text' : 'password'}
-                        name="rePassword"
-                        value={form.rePassword}
-                        onChange={handleInputChange}
-                        onBlur={onBlurHandler}
-                        required
-                    />
-                    <span className="toggle-password" onClick={() => toggleShowPassword('rePassword')}>
-                        {showPasswords.rePassword ? '👁️' : '👁️‍🗨️'}
-                    </span>
-                </div>
-                {errors.rePassword && <div className="error">{errors.rePassword}</div>}
-            </label>
-            <span className="required-fields">{t('profile.required_fields')}</span>
-            <div className="btn-inline">
-                <button type="submit" className="btn-general btn-green">{t('profile.save_btn')}</button>
-                <button type="button" className="btn-general btn-red" onClick={() => handleReset(setForm, initialFormState)}>
-                {t('profile.close_btn')}
-                </button>
-            </div>
-        </form>
-    );
+    if (isValid) {
+      const res = await onPasswordReset({ ...trimmedForm, tokenType: "jwt" });
+      //   console.log(res);
+      //   console.log("Form Submitted:", trimmedForm);
+      resetFields(setForm, initialFormState);
+      if (res?.message === "Password reset was successful.") {
+        navigate("/profile");
+      }
+    }
+  };
+
+
+  return (
+    <form className="profile-form" onSubmit={handleSubmit}>
+      <h3>{t("profile.change_password")}</h3>
+      <label htmlFor="oldPassword">
+        {t("profile.old_password")}: <span>*</span>
+        <div className="password-input-container">
+          <input
+            type={showPasswords.oldPassword ? "text" : "password"}
+            name="oldPassword"
+            value={form.oldPassword}
+            onChange={handleInputChange}
+            onBlur={onBlurHandler}
+            required
+          />
+          <span
+            className="toggle-password"
+            onClick={() => toggleShowPassword("oldPassword")}
+          >
+            {showPasswords.oldPassword ? "👁️" : "👁️‍🗨️"}
+          </span>
+        </div>
+        {errors.oldPassword && (
+          <div className="error">{errors.oldPassword}</div>
+        )}
+      </label>
+      <label>
+        {t("profile.new_password")}: <span>*</span>
+        <div className="password-input-container">
+          <input
+            type={showPasswords.newPassword ? "text" : "password"}
+            name="newPassword"
+            value={form.newPassword}
+            onChange={handleInputChange}
+            onBlur={onBlurHandler}
+            required
+          />
+          <span
+            className="toggle-password"
+            onClick={() => toggleShowPassword("newPassword")}
+          >
+            {showPasswords.newPassword ? "👁️" : "👁️‍🗨️"}
+          </span>
+        </div>
+        {errors.newPassword && (
+          <div className="error">{errors.newPassword}</div>
+        )}
+      </label>
+      <label>
+        {t("profile.repeat_password")}: <span>*</span>
+        <div className="password-input-container">
+          <input
+            type={showPasswords.reNewPassword ? "text" : "password"}
+            name="reNewPassword"
+            value={form.reNewPassword}
+            onChange={handleInputChange}
+            onBlur={onBlurHandler}
+            required
+          />
+          <span
+            className="toggle-password"
+            onClick={() => toggleShowPassword("reNewPassword")}
+          >
+            {showPasswords.reNewPassword ? "👁️" : "👁️‍🗨️"}
+          </span>
+        </div>
+        {errors.reNewPassword && (
+          <div className="error">{errors.reNewPassword}</div>
+        )}
+      </label>
+      <span className="required-fields">{t("profile.required_fields")}</span>
+      <div className="btn-inline">
+        <button type="submit" className="btn-general btn-green">
+          {t("profile.save_btn")}
+        </button>
+        <button
+          type="button"
+          className="btn-general btn-red"
+          onClick={() => handleReset(setForm, initialFormState)}
+        >
+          {t("profile.close_btn")}
+        </button>
+      </div>
+    </form>
+  );
 };
