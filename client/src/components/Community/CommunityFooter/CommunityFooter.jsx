@@ -14,9 +14,10 @@ export const CommunityFooter = () => {
                 <p>{t('footer.privacy')}</p>
                 <p>&copy; {t('footer.copyright')}</p>
             </section>
-                <MenuCommunity/>
             </div>
         </footer>
+        <MenuCommunity/>
+
         </>
     )
 }

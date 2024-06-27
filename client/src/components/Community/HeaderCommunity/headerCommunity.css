@@ -2,7 +2,7 @@ header{
     position: initial;
 }
 .header-community{
-   
+    /* position: relative; */
     display: flex;
     width: 100%;
     align-items: center;

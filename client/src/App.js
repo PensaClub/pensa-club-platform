@@ -19,6 +19,7 @@ import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 import { MapProvider } from './components/contexts/mapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
+import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';
 
 function App() {
 
@@ -47,7 +48,7 @@ function App() {
                 <Route path="/sign-up" element={<LoginRegister />} />
               </Route>
               <Route path="/craigslist" element={<CommunityPage />} />
-
+              <Route path="/ads" element={<AdsCard />} />
               <Route path="/filter" element={<FiltersMap />} />
               <Route path="/map" element={<MapPage />} />
               <Route path="/errors/*" element={<ErrorPageBoundary />} />
