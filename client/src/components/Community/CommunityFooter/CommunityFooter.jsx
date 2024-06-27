@@ -8,7 +8,7 @@ export const CommunityFooter = () => {
 
     return (
         <>
-        <footer>
+        <footer className="footer-com-fix">
             <div className="footer-menu">
             <section className='footer-privacy-commun'>
                 <p>{t('footer.privacy')}</p>

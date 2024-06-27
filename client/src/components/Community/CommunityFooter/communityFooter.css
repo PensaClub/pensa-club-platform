@@ -2,7 +2,7 @@
     display: none;
 }
 /* за преправка , пречи на останалите футъри */
-footer{ 
+.footer-com-fix{ 
     position:sticky;
     bottom: 0;
 }

@@ -123,3 +123,25 @@
         margin-bottom: 1rem;
     }
 }
+@media (min-width: 1200px) {
+    .unique-main-filters{
+        margin-top: 6em;
+        padding-bottom: 2em;
+    }
+    .unique-options-container.open{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+  
+    .unique-select-display {
+    font-size: calc(var(--m-font-size) );
+
+    }
+    .unique-region-filter{
+        padding-bottom:4em;
+    }
+    .unique-option {
+        font-size: var(--s-font-size);
+    }
+}

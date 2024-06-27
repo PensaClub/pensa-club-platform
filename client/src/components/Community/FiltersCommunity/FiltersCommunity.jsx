@@ -38,6 +38,7 @@ export const FiltersCommunity = () => {
     return (
         <>
             <section className="unique-main-filters">
+                {/* <div className="community-main-section"> */}
                 <Masonry
                     breakpointCols={breakpointColumnsObj}
                     className="my-masonry-grid"
@@ -84,6 +85,7 @@ export const FiltersCommunity = () => {
                         ))
                     )}
                 </Masonry>
+                {/* </div> */}
             </section>
         </>
     );

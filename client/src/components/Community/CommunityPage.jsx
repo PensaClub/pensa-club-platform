@@ -8,26 +8,39 @@ import { CommunityFooter } from "./CommunityFooter/CommunityFooter";
 export const CommunityPage = () => {
     return (
         <>
+        <section className="background-community">
             <section className="community-page">
                 <HeaderCommunity />
                 <section className="main-community">
+                    <div className="hero-bg">
+                        {/* <img src="/community/community-bg.jpg" alt="" /> */}
+                    </div>
                     <div className="hero-section-commun">
                         <h1>Общност</h1>
                         <div className="search-bar-commun">
-                            <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" />
+                            <div className="icons-com">
+                                <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" /><p>Какво търсиш?</p>
+                            </div>
+
                             <div className="divider"></div>
-                            <FontAwesomeIcon icon={faLocationDot} className="commun-icon" />
+                            <div className="icons-com">
+                                <FontAwesomeIcon icon={faLocationDot} className="commun-icon" /><p>Къде?</p>
+                            </div>
                             <div className="divider"></div>
-                            <FontAwesomeIcon icon={faCalendar} className="commun-icon" />
-                            <button className="search-button">Търси</button>
+                            <div className="icons-com">
+                                <FontAwesomeIcon icon={faCalendar} className="commun-icon" /><p>Кога?</p>
+                                <button className="search-button">Търси</button>
+                            </div>
+
                         </div>
                     </div>
+                    <FiltersCommunity />
+
                 </section>
-                <FiltersCommunity />
                 <CommunityFooter />
 
             </section>
-
+            </section>
         </>
     )
 }
