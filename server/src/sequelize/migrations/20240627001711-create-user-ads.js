@@ -10,22 +10,27 @@ module.exports = {
         type: DataTypes.INTEGER
       },
       user_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       summary: {
         type: DataTypes.STRING(32),
         allowNull: false,
         validate: {
-          len: [8, 32],
-          msg: "Summary must be between 8 and 32 characters in length."
+          len: {
+            args: [8, 32],
+            msg: "Summary must be between 8 and 32 characters in length."
+          }
         }
       },
       description: {
         type: DataTypes.STRING(1000),
         allowNull: true,
         validate: {
-          len: [0, 1000],
-          msg: "Maximum description length limit of 1000 characters is reached."
+          len: {
+            args: [0, 1000],
+            msg: "Maximum description length limit of 1000 characters is reached."
+          }
         }
       },
       creation_date: {
@@ -35,7 +40,8 @@ module.exports = {
       },
       expiration_date: {
         type: DataTypes.DATE,
-        allowNull: true
+        allowNull: true,
+        defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
       },
       approved: {
         type: DataTypes.BOOLEAN,
