@@ -127,11 +127,22 @@ header a:nth-child(1) {
   width: 2em;
 }
 
-.profile-img {
+.img-container {
   border-radius: 50%;
+  display: inline-block; 
+  position: relative;
+  width: 40px;
   height: 40px;
   margin-left: 20px;
+  overflow: hidden;
   box-shadow: var( --container-shadow);
+}
+
+.profile-img {
+  object-fit: cover;
+  margin-left: -5px;
+  height: 100%;
+  width: 100%;
 }
 
 .dropdown {
@@ -170,7 +181,7 @@ header a:nth-child(1) {
 .dropdown-menu .dropdown-item {
   display: flex;
   justify-content: center;
-  max-width: 80px;
+  max-width: 150px;
   font-size: var( --xs-font-size);
   padding: 0.5rem 1.5rem;
   clear: both;
@@ -398,7 +409,7 @@ header a:nth-child(1) {
     top: 100%;
     right: 0;
     left: auto;
-    min-width: 13rem;
+    min-width: 15rem;
     padding: 0.5rem 0;
     margin: var(--s-space) 0 0;
     font-size: 1rem;

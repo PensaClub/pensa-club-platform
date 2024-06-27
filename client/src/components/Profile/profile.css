@@ -1,10 +1,11 @@
 .profile-section {
-  background-image: url("../../../public/images/sign-up/background.jpg");
-  padding: var(--l-space);
-  padding-top: 8em;
-  display: flex;
-  flex-direction: column;
-  background-size: auto;
+    background-image: url('../../../public/images/sign-up/background.jpg');
+    padding: var(--l-space);
+    padding-top: 8em;
+    display: flex;
+    flex-direction: column;
+    background-size: auto;
+    position: relative;
 }
 
 .profile-form span {
@@ -70,16 +71,33 @@
 }
 
 .profile-data {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  border-radius: var(--m-space);
-  box-shadow: var(--container-shadow);
-  padding: var(--l-space);
-  margin: 2rem 0;
-  width: 100%;
-  background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    border-radius: var(--m-space);
+    box-shadow: var(--container-shadow);
+    padding: var(--l-space);
+    margin: 2rem 0;
+    width: 100%;
+    background-color: #fff;
+    position: relative;
+}
+
+.top-right-button {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    z-index: 10;
+    padding: var(--s-space);
+    border-radius: var(--s-space);
+    color: var(--orange);
+    box-shadow: var(--container-shadow);
+}
+
+.top-right-button:hover {
+    background-color: var(--orange);
+    color: #fff;
 }
 
 .password-input-container {
@@ -168,6 +186,10 @@
 .user-data div {
   margin-bottom: 10px;
   font-weight: bold;
+}
+
+.user-data {
+    margin-top: 1rem;
 }
 
 .user-data p,

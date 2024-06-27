@@ -6,6 +6,7 @@ import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
 import { useImagePreview } from "../hooks/useImagePreview";
 import { uploadImage } from "../../utils/uploadImage";
+import { notify } from '../../utils/notify';
 
 export const ProfileData = () => {
   const { t } = useTranslation();
@@ -108,6 +109,49 @@ export const ProfileData = () => {
             throw new Error("Error uploading image: ", error);
           }
         }
+    }, [selectedDate, selectedMonth, selectedYear]);
+
+    const handleSelectedDateChange = (e) => {
+        setSelectedDate(e.target.value);
+    };
+
+    const handleSelectedMonthChange = (e) => {
+        setSelectedMonth(e.target.value);
+    };
+
+    const handleSelectedYearChange = (e) => {
+        setSelectedYear(e.target.value);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const trimmedForm = trimObjectStrings(form);
+        setForm(trimmedForm);
+
+
+        const isValid = Object.keys(trimmedForm).every((field) => {
+            const value = trimmedForm[field];
+            const error = validateField(field, value);
+            setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+            return !error;
+        });
+
+        if (isValid) {
+            try {
+                const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
+                const updatedData = Object.fromEntries(updatedDataArr);        
+                const res = await onEditProfileDataSubmit(updatedData);
+                console.log('Data Submitted:', updatedData);
+                // resetFields(setForm, initialFormState);
+                // setSelectedDate('');
+                // setSelectedMonth('');
+                // setSelectedYear('');
+                navigate('/profile');
+            } catch (error) {
+                console.log(`Error Profile Data Submit Component: ${error.message}`);
+                
+            }
         if (data) {
           updatedData.imageURL = data.url;
           updatedData.firebaseImagePath = data.filePath;

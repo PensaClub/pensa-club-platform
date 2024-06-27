@@ -8,6 +8,7 @@ const isAuth = require("../middlewares/isAuth.js");
 const { where } = require("sequelize");
 const { tokenCreator } = require("../utils/jwt.js");
 const fieldSwap = require("../utils/fieldSwap.js");
+const memoryCache = require("../middlewares/caching.js");
 
 userDetailsController.post("/details", isAuth, async (req, res, next) => {
   if (req.user.enabled) {
@@ -74,7 +75,7 @@ userDetailsController.post("/details", isAuth, async (req, res, next) => {
   }
 });
 
-userDetailsController.get("/all-users", async (req, res, next) => {
+userDetailsController.get("/all-users", memoryCache, async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
       attributes: ["email", ["finished", "enabled"]],

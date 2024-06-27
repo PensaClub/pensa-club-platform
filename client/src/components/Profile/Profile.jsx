@@ -22,25 +22,28 @@ import {
   faImage,
   faBars,
   faEnvelope,
-  faPhone,
   faBriefcase,
   faUniversalAccess,
   faUsersGear,
-} from "@fortawesome/free-solid-svg-icons";
-import { ProfileSkills } from "./ProfileSkills";
-import { ProfileWorks } from "./ProfileWorks";
-import { ProfileInterests } from "./ProfileInterests";
-import { ProfileAnnounced } from "./ProfileAnnounced";
+} from '@fortawesome/free-solid-svg-icons';
+import { ProfileSkills } from './ProfileSkills';
+import { ProfileWorks } from './ProfileWorks';
+import { ProfileInterests } from './ProfileInterests';
+import { ProfileAnnounced } from './ProfileAnnounced';
+import { Logout } from '../Logout/Logout';
+
 
 export const Profile = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isFinish, profileData, userEmail } = useContext(UserContext);
+  const { isFinish, profileData, } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
-    console.log(isFinish);
+    if(!profileData) {
+      navigate('/profile/profile-form');
+    }
     if (!isFinish) {
       navigate("/profile/profile-form");
     }
@@ -49,15 +52,23 @@ export const Profile = () => {
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  const handleLogout = () => {
+    navigate('/logout');
+  };
+  
   return (
     <section className="profile-section">
       <button className="menu-toggle" onClick={toggleMenu}>
         <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
       </button>
 
-      <section className={`account-menu ${menuOpen ? "open" : ""} ${!isFinish ? "disabled" : ""}`}>
-        <h3>{t("profile.account")}</h3>
-        {/* <Link to="image" onClick={toggleMenu}>
+      <section
+        className={`account-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''
+          }`}
+      >
+        <h3>{t('profile.account')}</h3>
+        <Link to="image" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faImage} className="icon" />
           {t("profile.photo")}
         </Link> */}
@@ -97,10 +108,17 @@ export const Profile = () => {
       <div className="main-profile">
         {isFinish === true && (
           <section className="profile-data">
+            <Link to="/logout" onClick={handleLogout}><button
+              type="button"
+              className="top-right-button">
+              {t('profile.logout')}
+            </button>
+            </Link>
             <div className="avatar">
               <img src={profileData?.details?.imageURL || "/images/sign-up/avatar.jpg"} alt="User avatar" />
             </div>
             <div className="user-data">
+
               <h2>{profileData?.details?.username}</h2>
               {profileData?.details?.firstName || profileData?.details?.lastName ? (
                 <p>
@@ -113,12 +131,14 @@ export const Profile = () => {
               )}
 
               <p>
-                <FontAwesomeIcon icon={faEnvelope} className="icon" /> {profileData?.email}
+                <FontAwesomeIcon icon={faEnvelope} className="icon" />{' '}
+                {profileData?.email}
               </p>
 
               <p>
-                <FontAwesomeIcon icon={faLocationDot} className="icon" /> {profileData?.details?.settlement}, {profileData?.details?.municipality},{" "}
-                {profileData?.details?.region}
+                <FontAwesomeIcon icon={faLocationDot} className="icon" />{' '}
+                {profileData?.details?.settlement},{' '}
+                {profileData?.details?.municipality}, {profileData?.details?.region}
               </p>
             </div>
           </section>
