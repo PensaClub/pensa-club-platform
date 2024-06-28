@@ -25,7 +25,7 @@ module.exports = function expressConfig(app) {
   app.use(cors(corsOptions));
   app.use(cookieParser());
   app.listen(port, async () => {
-    await testDatabaseConnection();
+    // await testDatabaseConnection();
     console.log(`Server is listening on port: ${port}`);
   });
 };
