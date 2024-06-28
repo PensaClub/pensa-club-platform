@@ -44,11 +44,8 @@ function App() {
           <Header />
 
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/server-error" element={<ServerError />} />
-
-
-            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/server-error" element={<ServerError />} />
               <Route path="/" element={<Home />} />
               <Route path="/server-error" element={<ServerError />} />
 
