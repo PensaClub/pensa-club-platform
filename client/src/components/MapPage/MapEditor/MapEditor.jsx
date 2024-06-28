@@ -78,7 +78,7 @@ export const MapEditor = ({ filteredUsers }) => {
     const [showGeoJSON, setShowGeoJSON] = useState(true);
     const [selectedUser, setSelectedUser] = useState(null);
     const{profileData} = useAuthContext()
-    console.log("select Users", selectedUser)
+    
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef(null);
     const { t } = useTranslation(); 
