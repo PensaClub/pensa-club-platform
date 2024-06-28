@@ -4,6 +4,6 @@ export const loadData = async (path) => {
         const data = await response.json();
         return data;
       } catch (error) {
-        console.error('Failed to load data', error);
+        console.error('Failed to load data', error, error.message);
       }
 }

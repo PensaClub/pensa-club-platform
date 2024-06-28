@@ -16,10 +16,15 @@ import { MapPage } from './components/MapPage/MapPage';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 
+
 import { MapProvider } from './components/contexts/mapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
 import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';
+=======
+
+import { ToastContainer } from 'react-toastify';
+
 
 function App() {
 
@@ -35,7 +40,12 @@ function App() {
             <CommunityProvider>
             <Header additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''} />
 
-            <Routes>
+          <ToastContainer role="alert" className={"notification"} limit={3}/>
+          <Header />
+
+          <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/server-error" element={<ServerError />} />
               <Route path="/" element={<Home />} />
               <Route path="/server-error" element={<ServerError />} />
 
