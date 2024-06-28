@@ -1,0 +1,164 @@
+{
+  "skills": [
+    {
+      "value": "communication_skills",
+      "name": "options.skills.communication_skills"
+    },
+    {
+      "value": "technical_skills",
+      "name": "options.skills.technical_skills"
+    },
+    {
+      "value": "agricultural_skills",
+      "name": "options.skills.agricultural_skills"
+    },
+    {
+      "value": "cooking_skills",
+      "name": "options.skills.cooking_skills"
+    },
+    {
+      "value": "financial_skills",
+      "name": "options.skills.financial_skills"
+    },
+    {
+      "value": "language_skills",
+      "name": "options.skills.language_skills"
+    },
+    {
+      "value": "musical_skills",
+      "name": "options.skills.musical_skills"
+    },
+    {
+      "value": "first_aid_skills",
+      "name": "options.skills.first_aid_skills"
+    },
+    {
+      "value": "spiritual_practices",
+      "name": "options.skills.spiritual_practices"
+    },
+    {
+      "value": "meditation_skills",
+      "name": "options.skills.meditation_skills"
+    },
+    {
+      "value": "fashion_design",
+      "name": "options.skills.fashion_design"
+    },
+    {
+      "value": "interior_design",
+      "name": "options.skills.interior_design"
+    },
+    {
+      "value": "video_filming",
+      "name": "options.skills.video_filming"
+    }
+  ],
+  "workOptions": [
+    {
+      "value": "architecture_construction",
+      "name": "options.work-options.architecture_construction"
+    },
+    {
+      "value": "medicine_healthcare",
+      "name": "options.work-options.medicine_healthcare"
+    },
+    {
+      "value": "journalism",
+      "name": "options.work-options.journalism"
+    },
+    {
+      "value": "teaching",
+      "name": "options.work-options.teaching"
+    },
+    {
+      "value": "public_administration",
+      "name": "options.work-options.public_administration"
+    },
+    {
+      "value": "security",
+      "name": "options.work-options.security"
+    },
+    {
+      "value": "social_tourism",
+      "name": "options.work-options.social_tourism"
+    },
+    {
+      "value": "agriculture",
+      "name": "options.work-options.agriculture"
+    },
+    {
+      "value": "manufacturing_and_trade",
+      "name": "options.work-options.manufacturing_and_trade"
+    },
+    {
+      "value": "technology",
+      "name": "options.work-options.technology"
+    },
+    {
+      "value": "transport",
+      "name": "options.work-options.transport"
+    },
+    {
+      "value": "law_accounting",
+      "name": "options.work-options.law_accounting"
+    }
+  ],
+  "interestOptions": [
+    {
+      "value": "volunteering",
+      "name": "options.interestOptions.volunteering"
+    },
+    {
+      "value": "spiritual_practices",
+      "name": "options.interestOptions.spiritual_practices"
+    },
+    {
+      "value": "new_knowledge",
+      "name": "options.interestOptions.new_knowledge"
+    },
+    {
+      "value": "board_games",
+      "name": "options.interestOptions.board_games"
+    },
+    {
+      "value": "agriculture_gardening",
+      "name": "options.interestOptions.agriculture_gardening"
+    },
+    {
+      "value": "movies",
+      "name": "options.interestOptions.movies"
+    },
+    {
+      "value": "photography",
+      "name": "options.interestOptions.photography"
+    },
+    {
+      "value": "sports",
+      "name": "options.interestOptions.sports"
+    },
+    {
+      "value": "reading",
+      "name": "options.interestOptions.reading"
+    },
+    {
+      "value": "cooking",
+      "name": "options.interestOptions.cooking"
+    },
+    {
+      "value": "travel_tourism",
+      "name": "options.interestOptions.travel_tourism"
+    },
+    {
+      "value": "music",
+      "name": "options.interestOptions.music"
+    },
+    {
+      "value": "drawing_arts",
+      "name": "options.interestOptions.drawing_arts"
+    },
+    {
+      "value": "sewing",
+      "name": "options.interestOptions.sewing"
+    }
+  ]
+}

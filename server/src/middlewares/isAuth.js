@@ -14,7 +14,7 @@ module.exports = async function authentication(req, res, next) {
         throw new CustomError({ message: "Unauthorized", statusCode: 401 });
       }
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
   next();

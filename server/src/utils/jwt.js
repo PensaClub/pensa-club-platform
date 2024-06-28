@@ -5,6 +5,8 @@ function tokenCreator(data) {
   const payload = {
     userId: data.id.toString(),
     email: data.email,
+    role: data.role,
+    enabled: data.finished
   };
 
   return jwt.sign(payload, secret, { expiresIn: "24h" });

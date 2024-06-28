@@ -8,30 +8,47 @@ import { ServerError } from './components/ErrorPages/ServerError/ServerError';
 import { LoginRegister } from './components/LoginRegister/LoginRegister';
 import { UserProvider } from './components/contexts/UserContext';
 import { Logout } from './components/Logout/Logout';
-
+import { Profile } from './components/Profile/Profile';
 import ErrorBoundary from './tools/errorBoundary';
 import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary';
-import { Loader } from './components/Loader/Loader';
+import { FiltersMap } from './components/MapPage/FitlersMap/FiltersMap';
+import { MapPage } from './components/MapPage/MapPage';
+import { PublicGuard } from './components/Guards/PublicGuard.jsx';
+import { AuthGuard } from './components/Guards/AuthGuard.jsx';
+import { MapProvider } from './components/contexts/MapContext.jsx';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
-
   return (
     <>
       <ErrorBoundary>
         <UserProvider>
+          <MapProvider>
+          <ToastContainer role="alert" className={"notification"} limit={3}/>
           <Header />
 
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/sign-up" element={<LoginRegister />} />
             <Route path="/server-error" element={<ServerError />} />
-            <Route path="/logout" element={<Logout />} />
+
+            <Route element={<AuthGuard />}>
+              <Route path="/logout" element={<Logout />} />    
+              <Route path="/profile/*" element={<Profile />} />
+            </Route>
+
+            <Route element={<PublicGuard />}>
+              <Route path="/sign-up" element={<LoginRegister />} />
+            </Route>
+
+            <Route path="/filter" element={<FiltersMap />} />
+            <Route path="/map" element={<MapPage />} />
             <Route path="/errors/*" element={<ErrorPageBoundary />} />
             <Route path="404/*" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
 
           <Footer />
+          </MapProvider>
         </UserProvider>
       </ErrorBoundary>
     </>

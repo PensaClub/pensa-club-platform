@@ -1,0 +1,226 @@
+{
+  "header": {
+    "map": "Карта",
+    "craigslist": "Общност",
+    "login": "Вход",
+    "register": "Регистрация",
+    "profile": "Профил",
+    "logout": "Излез от профила"
+  },
+
+  "footer": {
+    "site-map": "Карта на сайта",
+    "communities": "Общества",
+    "map": "Карта",
+    "craigslist": "Общност",
+    "partners": "Партньори",
+    "softuni": "СофтУни Будител",
+    "country-city": "България, София",
+    "street": "бул. Скобелев, 13А",
+    "phone": "Тел.: (359) 2 881 95 53",
+    "email": "Имейл: info@pensa.club",
+    "privacy": "Политика за поверителност",
+    "copyright": "2024 Pensa club. Всички права запазени"
+  },
+
+  "hero": {
+    "title": "ДОСТОЕН ЖИВОТ ЗА ХОРАТА  ОТ ТРЕТАТА ВЪЗРАСТ",
+    "desc": "България е държавата в Европейския съюз (ЕС), в която <span> възрастните хора </span> са най-заплашени от бедност, социално изключване и материални затруднения, показват данни на европейската статистическа служба Евростат. <span>Българските пенсионери</span> са и най-изолираните от интернет в ЕС. Едва един от всеки десет души ползва мрежата, а от тези, които имат интернет, половината пишат имейли, четат новини и търсят информация за стоки. <span>Само 2 на сто </span>от тях пазаруват онлайн, а всеки трети влиза в социалните мрежи.",
+    "testimonials": {
+      "first-revolution-title": "First Industrial Revolution",
+      "first-revolution-desc": "It is distinguished by the introduction of the steam engine, which led to the mechanization of production and the development of the railway transport.",
+      "second-revolution-title": "Second Industrial Revolution",
+      "second-revolution-desc": "It was characterized by the widespread spread of electricity and power lines, which increased production efficiency and stimulated industrial growth.",
+      "third-revolution-title": "Third Industrial Revolution",
+      "third-revolution-desc": "Also called the Digital Revolution, this era was marked by the introduction of computers, the Internet and automation, which radically changed the way production processes were managed and controlled.",
+      "forth-revolution-title": "Revolution 4.0",
+      "forth-revolution-desc": "Focused on smart factories that use the Internet of Things (IoT), automated decision making and machine learning to further increase manufacturing efficiency.",
+      "fifth-revolution-title": "Revolution 5.0",
+      "fifth-revolution-desc": "This is the latest stage in the development, which involves the use of artificial intelligence not only for automation, but also for the integration of human creative and analytical potential"
+    }
+  },
+
+  "motto": {
+    "title1": "ДА ПРЕЧУПИМ ТАЗИ ТЕНДЕНЦИЯ",
+    "title2": "ДА СМЕНИМ ТОЗИ МОДЕЛ",
+    "title3": "ДА БЪДЕМ В КРАК С ВРЕМЕТО",
+    "desc": "Създаване на иновативна, дигитална и <span>интерактивна платформа</span>, насочена към подобряване на качеството на живот на възрастните хора, като ги включи активно в съвременното общество, подкрепи ги в развитието на нови умения и интереси и насърчи <span>здравословния и пълноценен</span>, достоен живот.",
+    "about-btn": "Прочетете за нас"
+  },
+
+  "news-subscribe": {
+    "title": "Бъдете в течение с",
+    "desc": "Регистрирайте се за последните новини, актуализации и съвети.",
+    "name-placeholder": "Име*",
+    "email-placeholder": "Имейл адрес*",
+    "subscribe-btn": "Абонирай се",
+    "errors": {
+      "required-field": "Полето е задължително!",
+      "invalid-email": "Невалиден имейл адрес!"
+    }
+  },
+
+  "form": {
+    "login": "Вход",
+    "register": "Регистрация",
+    "email-label": "Имейл адрес",
+    "email-placeholder": "ivan@abv.bg",
+    "password-label": "Парола",
+    "password-placeholder": "Парола",
+    "rePassword-label": "Повтори паролата",
+    "rePassword-placeholder": "Повтори паролата",
+    "register-redirect": "Вече имате регистрация?",
+    "login-redirect": "Все още нямате регистрация?",
+    "password-forgotten": "Забравена парола?",
+    "errors": {
+      "required-field": "Полето е задължително!",
+      "invalid-email": "Невалиден имейл адрес",
+      "password-format": "Паролата трябва да бъде поне 8 символа и да съдържа малка буква, главна буква и цифра!",
+      "passwords-not-match": "Паролите не съвпадат!"
+    }
+  },
+
+  "error-page": {
+    "error": "Грешка",
+    "home": "Начало",
+    "map": "Карта",
+    "craigslist": "Общност",
+    "404-desc": "Не съществува такава страница",
+    "500-desc": "Сървърът не може да изпълни заявката"
+  },
+
+  "map": {
+    "welcome": "Добре дошли в Pensa Club! Открийте местни обяви за взаимопомощ с помощта на нашата Карта - Публикувайте обяви или предложения - Разглеждайте и участвайте в локални инициативи",
+    "choose": "Избери...",
+    "skills-placeholder": "Намери умения...",
+    "skills": "Умения",
+    "job-placeholder": "Намери професия...",
+    "job": "Професия",
+    "interests-placeholder": "Намери интереси...",
+    "interests": "Интереси",
+    "clear-filters": "Изчисти филтрите"
+  },
+
+  "options": {
+    "skills": {
+      "communication_skills": "Комуникационни умения",
+      "technical_skills": "Технически умения",
+      "agricultural_skills": "Земеделски умения",
+      "cooking_skills": "Готварски умения",
+      "financial_skills": "Финансови умения",
+      "language_skills": "Езикови умения",
+      "musical_skills": "Музикални умения",
+      "first_aid_skills": "Умения за Първа Помощ",
+      "spiritual_practices": "Духовни Практики",
+      "meditation_skills": "Медитиране",
+      "fashion_design": "Мода и шев",
+      "interior_design": "Дизайн, интериор",
+      "video_filming": "Видео заснемане"
+    },
+    "work-options": {
+      "architecture_construction": "Архитектура и Строителство",
+      "medicine_healthcare": "Медицина и Здравеопазване",
+      "journalism": "Журналистика",
+      "teaching": "Преподавател, учител",
+      "public_administration": "Публична администрация",
+      "security": "Сигурност",
+      "social_tourism": "Социална дейност и туризъм",
+      "agriculture": "Селско стопанство, земеделие",
+      "manufacturing_and_trade": "Производство и Търговия",
+      "technology": "Техника и Технологии",
+      "transport": "Транспорт",
+      "law_accounting": "Юридически и Счетоводни дейности"
+    },
+    "interestOptions": {
+      "volunteering": "Доброволчество",
+      "spiritual_practices": "Духовни практики и Медитация",
+      "new_knowledge": "Нови Знания",
+      "board_games": "Настолни игри",
+      "agriculture_gardening": "Земеделие, Градинарство",
+      "movies": "Филми",
+      "photography": "Фотография",
+      "sports": "Спорт",
+      "reading": "Четене",
+      "cooking": "Готвене",
+      "travel_tourism": "Пътувания и Туризъм",
+      "music": "Музика",
+      "drawing_arts": "Рисуване и Изкуства",
+      "sewing": "Шев и кройка"
+    }
+  },
+  "profile": {
+    "select_all": "Изберете всички",
+    "clear": "Изчистете",
+    "selected": "избрани",
+    "select": "Изберете",
+    "profile_form_title": "Попълнете данните си",
+    "add_photo": "Добави снимка",
+    "username": "Потребителско име",
+    "gender": "Пол",
+    "male": "Мъж",
+    "female": "Жена",
+    "other": "Друго",
+    "first_name": "Собствено име",
+    "last_name": "Фамилия",
+    "age": "Възраст",
+    "day": "Ден",
+    "month": "Месец",
+    "year": "Година",
+    "phone_number": "Телефон",
+    "region": "Регион",
+    "municipality": "Община",
+    "settlement": "Населено място",
+    "district": "Квартал",
+    "block": "Блок",
+    "street": "Улица",
+    "street_number": "Номер на улица",
+    "required_fields": "Полетата с * са задължителни!",
+    "save_btn": "Запази",
+    "close_btn": "Затвори",
+    "select_region": "Изберете регион",
+    "select_municipality": "Изберете община",
+    "select_settlement": "Изберете населено място",
+    "account": "Акаунт",
+    "photo": "Снимка",
+    "personal_data": "Лични данни",
+    "address": "Адрес",
+    "password": "Парола",
+    "announced": "Обяви",
+    "anothers": "Други",
+    "work_options_error": "Изберете поне една професия",
+    "add_jobs": "Добавете своите професии",
+    "skills_options_error": "Изберете поне едно умение",
+    "add_skills": "Добавете своите умения",
+    "interests_options_error": "Изберете поне един интерес",
+    "add_interests": "Добавете своите интереси",
+    "change_password": "Смяна на парола",
+    "old_password": "Стара парола",
+    "new_password": "Нова парола",
+    "repeat_password": "Повтори парола",
+    "change_photo": "Смени снимка",
+    "email": "Имейл",
+    "address_form": "Адресна форма",
+    "region_required": "Регионът е задължителен",
+    "municipality_required": "Общината е задължителна",
+    "settlement_required": "Населеното място е задължително",
+    "street_required": "Улицата е задължителна",
+    "username_required": "Потребителското име е задължително",
+    "username_error": "Потребителското име трябва да бъде между 7 и 16 символа. Може да съдържа главни букви, малки букви, цифри и _",
+    "email_required": "Имейлът е задължителен",
+    "email_error": "Имейлът не е валиден",
+    "name_invalid": "Името не е валидно",
+    "phone_number_invalid": "Телефонният номер не е валиден",
+    "password_error": "Паролата трябва да е поне 8 символа и да съдържа поне една буква и една цифра",
+    "new_password_error": "Новата парола трябва да е поне 8 символа и да съдържа поне една буква и една цифра",
+    "logout": "Излез от профила",
+    "password_match": "Паролите не съвпадат"
+  },
+
+  "notification": {
+    "success-data": "Данните за потребителя са запазени успешно!",
+    "success-register": "Профилът е успешно създаден!",
+    "success-login": "Успешно влязохте в профила си.",
+    "success-logout": "Успешно излязохте от профила си.",
+    "error": "Грешка! Моля, опитайте отново!"
+  }
+}

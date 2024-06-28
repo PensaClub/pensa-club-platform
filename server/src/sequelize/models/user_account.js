@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class user_account extends Model {
@@ -10,42 +10,57 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       user_account.hasOne(models.user_details, {
-        foreignKey: 'user_accounts_id', // Foreign key in user_details table
-        sourceKey: 'id' // Primary key in user_accounts table
+        foreignKey: "user_accounts_id", // Foreign key in user_details table
+        sourceKey: "id", // Primary key in user_accounts table
+        as: "details",
+      });
+      user_account.hasMany(models.user_details, {
+        foreignKey: "user_id", // Foreign key in user_details table
+        sourceKey: "id", // Primary key in user_accounts table
+        as: "ads",
       });
       // define association here
     }
   }
 
-  user_account.init({
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: {
-          msg: 'Email format is incorrect.'
+  user_account.init(
+    {
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: {
+            msg: "Email format is incorrect.",
+          },
+          notEmpty: {
+            msg: "Email is required.",
+          },
         },
-        notEmpty: {
-          msg: 'Email is required.'
-        },
-      }
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Password is required.'
-        },
-      }
-    },
-    finished: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-  }, {
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'Password is required.'
+          },
+        }
+      },
+      finished: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      reset_token: DataTypes.STRING,
+      token_expiration: DataTypes.DATE,
+      role: {
+        type: DataTypes.STRING,
+        values: ['admin', 'user'],
+        allowNull: false,
+        defaultValue: 'user',
+      },
+    }, {
     sequelize,
     modelName: 'user_account',
   });

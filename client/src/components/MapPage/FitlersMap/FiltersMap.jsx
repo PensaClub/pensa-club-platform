@@ -1,0 +1,284 @@
+import React, { useState, useEffect, useRef } from 'react';
+import './filterMap.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBriefcase, faUniversalAccess, faUsersGear, faBars, faTimes, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
+import { MapEditor } from '../MapEditor/MapEditor';
+import { useMappingContext } from '../../contexts/MapContext';
+
+const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
+    const { t } = useTranslation();
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const selectRef = useRef();
+
+    const filteredOptions = options.filter(option =>
+        option.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleOptionChange = (value) => {
+        if (selectedValues.includes(value)) {
+            onChange(selectedValues.filter(selectedValue => selectedValue !== value));
+        } else {
+            onChange([...selectedValues, value]);
+        }
+    };
+
+    const handleClickOutside = (event) => {
+        if (selectRef.current && !selectRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const trimString = (str, num) => {
+        if (str.length <= num) return str;
+        return str.slice(0, num) + '...';
+    }
+
+    return (
+        <div className="custom-select" ref={selectRef}>
+            <div className="selected-option" onClick={() => setIsOpen(!isOpen)}>
+                <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
+                <div className="selected-option-text">
+                    {trimString(selectedValues.map(value => t(options.find(option => option.value === value)?.name)).join(' | '), 25) || t('map.choose')}
+                </div>
+                {selectedValues.length > 0 && <p className='number-filters'>({selectedValues.length})</p>}
+            </div>
+            {isOpen && (
+                <div className="options-container">
+                    <div className="social-input">
+                        <FontAwesomeIcon icon={faMagnifyingGlass} style={{ marginRight: '8px', color: "#e26020", paddingLeft: "10px" }} />
+                        <input
+                            type="text"
+                            className="search-input"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder={searchPlaceholder}
+                        />
+                    </div>
+                    <div className="options">
+                        {filteredOptions.map((option) => (
+                            <div key={option.value} className="option">
+                                <input
+                                    type="checkbox"
+                                    id={`checkbox-${option.value}`}
+                                    checked={selectedValues.includes(option.value)}
+                                    onChange={() => handleOptionChange(option.value)}
+                                />
+                                <label htmlFor={`checkbox-${option.value}`}>{t(`${option.name}`)}</label>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
+    const { t } = useTranslation();
+
+    return (
+        <div className="filter-section">
+            <h4>
+                <FontAwesomeIcon icon={icon} style={{ marginRight: '8px', color: "#e26020" }} />
+                {t(title)} {selectedValues.length > 0 && <>({selectedValues.length})</>}
+            </h4>
+            {options.map(option => (
+                <div key={option.value} className="option">
+                    <input
+                        type="checkbox"
+                        id={`checkbox-${option.value}`}
+                        checked={selectedValues.includes(option.value)}
+                        onChange={() => onChange(option.value)}
+                    />
+                    <label htmlFor={`checkbox-${option.value}`}>{t(option.name)}</label>
+                </div>
+            ))}
+        </div>
+    );
+};
+
+export const FiltersMap = () => {
+    const { t } = useTranslation();
+    const { allUsers } = useMappingContext();
+    const [optionData, setOptionData] = useState(null);
+    const [selectedSkills, setSelectedSkills] = useState([]);
+    const [selectedWorks, setSelectedWorks] = useState([]);
+    const [selectedInterests, setSelectedInterests] = useState([]);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+    const saveFiltersToLocalStorage = (skills, works, interests) => {
+        localStorage.setItem('selectedSkills', JSON.stringify(skills));
+        localStorage.setItem('selectedWorks', JSON.stringify(works));
+        localStorage.setItem('selectedInterests', JSON.stringify(interests));
+    };
+
+    const loadFiltersFromLocalStorage = () => {
+        const savedSkills = JSON.parse(localStorage.getItem('selectedSkills') || '[]');
+        const savedWorks = JSON.parse(localStorage.getItem('selectedWorks') || '[]');
+        const savedInterests = JSON.parse(localStorage.getItem('selectedInterests') || '[]');
+        setSelectedSkills(savedSkills);
+        setSelectedWorks(savedWorks);
+        setSelectedInterests(savedInterests);
+    };
+
+
+
+    useEffect(() => {
+        fetch('./options.json')
+            .then(response => response.json())
+            .then(data => setOptionData(data))
+            .catch(error => console.error('Failed to load JSON data', error));
+    }, []);
+
+    useEffect(() => {
+        loadFiltersFromLocalStorage();// изтегля,мм филтрите от local storage
+
+    }, [])
+
+    useEffect(() => {
+        saveFiltersToLocalStorage(selectedSkills, selectedWorks, selectedInterests); // запаметявам промените - to do: да се следят рендериранията 
+    }, [selectedSkills, selectedWorks, selectedInterests]);
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    const handleSkillChange = (value) => {
+        setSelectedSkills(selectedSkills.includes(value) ? selectedSkills.filter(item => item !== value) : [...selectedSkills, value]);
+    };
+
+    const handleWorkChange = (value) => {
+        setSelectedWorks(selectedWorks.includes(value) ? selectedWorks.filter(item => item !== value) : [...selectedWorks, value]);
+    };
+
+    const handleInterestChange = (value) => {
+        setSelectedInterests(selectedInterests.includes(value) ? selectedInterests.filter(item => item !== value) : [...selectedInterests, value]);
+    };
+    const clearAllFilters = () => {
+        setSelectedSkills([]);
+        setSelectedWorks([]);
+        setSelectedInterests([]);
+        saveFiltersToLocalStorage([], [], []); // за изчистване на localstorage
+    };
+    const filterUsers = () => {
+        if (!allUsers?.response?.accounts) return [];
+
+        return allUsers.response.accounts.filter(user => {
+            const details = user.details || {};
+
+            const { work_options = [], skills = [], interest_options = [] } = details;
+
+            const skillsMatch = selectedSkills.length === 0 || selectedSkills.some(skill => skills.includes(skill));
+            const worksMatch = selectedWorks.length === 0 || selectedWorks.some(workOption => work_options.includes(workOption));
+            const interestsMatch = selectedInterests.length === 0 || selectedInterests.some(interest => interest_options.includes(interest));
+
+            return skillsMatch && worksMatch && interestsMatch;
+        });
+    };
+
+    const filteredUsers = filterUsers();
+
+    return (
+        <>
+            <div className="filters-map">
+                <div className="logo-map">
+                    <img src="/images/map/pensamap2.png" alt="map-logo" />
+                </div>
+                <div className="filters">
+                    <div className="filter-main">
+                        <label>{t('map.skills')}</label>
+                        {optionData ? (
+                            <CustomSelect
+                                icon={faUniversalAccess}
+                                options={optionData.skills}
+                                selectedValues={selectedSkills}
+                                onChange={setSelectedSkills}
+                                searchPlaceholder={t('map.skills-placeholder')}
+                            />
+                        ) : (
+                            <div>Loading...</div>
+                        )}
+                    </div>
+                    <div className="filter-main">
+                        <label>{t('map.job')}</label>
+                        {optionData ? (
+                            <CustomSelect
+                                icon={faBriefcase}
+                                options={optionData.workOptions}
+                                selectedValues={selectedWorks}
+                                onChange={setSelectedWorks}
+                                searchPlaceholder={t('map.job-placeholder')}
+                            />
+                        ) : (
+                            <div>Loading...</div>
+                        )}
+                    </div>
+                    <div className="filter-main">
+                        <label>{t('map.interests')}</label>
+                        {optionData ? (
+                            <CustomSelect
+                                icon={faUsersGear}
+                                options={optionData.interestOptions}
+                                selectedValues={selectedInterests}
+                                onChange={setSelectedInterests}
+                                searchPlaceholder={t('map.interests-placeholder')}
+                            />
+                        ) : (
+                            <div>Loading...</div>
+                        )}
+                    </div>
+                    <button className="clear-filters" onClick={clearAllFilters}>{t('map.clear-filters')}</button>
+                </div>
+                <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} className="hamburger" onClick={toggleMenu} />
+                <div className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`}>
+                    <div className="filters">
+                        {optionData ? (
+                            <>
+                                <FilterSection
+                                    icon={faUniversalAccess}
+                                    title={'map.skills'}
+                                    options={optionData.skills}
+                                    selectedValues={selectedSkills}
+                                    onChange={handleSkillChange}
+                                />
+                                <FilterSection
+                                    icon={faBriefcase}
+                                    title={'map.job'}
+                                    options={optionData.workOptions}
+                                    selectedValues={selectedWorks}
+                                    onChange={handleWorkChange}
+                                />
+                                <FilterSection
+                                    icon={faUsersGear}
+                                    title={'map.interests'}
+                                    options={optionData.interestOptions}
+                                    selectedValues={selectedInterests}
+                                    onChange={handleInterestChange}
+                                />
+                                <button className="clear-filters-hamburger" onClick={clearAllFilters}>{t('map.clear-filters')}</button>
+                            </>
+                        ) : (
+                            <div>Loading...</div>
+                        )}
+                    </div>
+                </div>
+            </div>
+            <section className="map">
+                <MapEditor filteredUsers={filteredUsers} />
+                <div className="search-card-map-page">
+                    {/* <SearchCard /> */}
+                </div>
+            </section>
+        </>
+    );
+};

@@ -1,13 +1,23 @@
 const { ValidationError, UniqueConstraintError, ForeignKeyConstraintError, DatabaseError } = require("sequelize");
+const { TokenExpiredError } = require("jsonwebtoken");
 const CustomError = require("../utils/customError");
 
 function errorHandler(error, req, res, next) {
-  let message = "Something went wrong!";
+  let message = `Something went wrong! ${error}`;
   let statusCode = error.statusCode || 500;
   let details = error.details;
   if (error instanceof CustomError) {
     message = error.message;
-  } else if (error instanceof UniqueConstraintError || error instanceof ForeignKeyConstraintError || error instanceof DatabaseError) {
+  } else if (error instanceof UniqueConstraintError) {
+    const fieldErrors = error.errors.map((err) => ({
+      field: err.path,
+      value: err.value,
+      message: `${err.path.charAt(0).toUpperCase() + err.path.slice(1)} '${err.value}' is already taken.`,
+    }));
+    message = "Unique constraint violation.";
+    details = fieldErrors;
+    statusCode = 409;
+  } else if (error instanceof ForeignKeyConstraintError || error instanceof DatabaseError) {
     const dbError = dbErrors[error.original?.code];
     if (dbError) {
       message = dbError.message;
@@ -23,14 +33,18 @@ function errorHandler(error, req, res, next) {
     message = "Validation error(s)";
     details = validationErrors;
     statusCode = 400;
+  } else if (error instanceof TokenExpiredError) {
+    message = "Your session has expired. Please log in again.";
+    statusCode = 401;
   }
 
-  console.log(`Error: ${req.method} >> ${req.baseUrl}`, error.message);
+  error.details
+    ? console.log(`Error: ${req.method} >> ${req.baseUrl}`, message, error.details)
+    : console.log(`Error: ${req.method} >> ${req.baseUrl}`, message);
   res.status(statusCode).json({ message, statusCode, details });
 }
 
 const dbErrors = {
-  23505: { message: "Unique constraint violation", statusCode: 409 },
   23503: { message: "Foreign key violation", statusCode: 409 },
   23502: { message: "Not null violation", statusCode: 400 },
   23514: { message: "Check violation", statusCode: 400 },

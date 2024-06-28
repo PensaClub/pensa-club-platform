@@ -18,7 +18,7 @@
   --text-black: #000;
   --text-pink: #dc9ebd;
   --container-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
-
+  --cluster-red-shadow:0 0.3rem 1.2rem rgba(187, 29, 61, 1.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.72);
   /* Font Size */ 
   --xl-font-size: 72px; 
   --l-font-size: 48px;
@@ -49,6 +49,9 @@
   --container-height: 600px;
   --container-min-height: 400px;
 
+  /* Toast Notifications */
+  --toastify-color-success: #1B6D4D !important;
+  --toastify-color-error: #BB1D3D !important;
 }
 
 /* Default Font Sizes of Basic Elements */
@@ -164,4 +167,9 @@ button, input {
 	border: 0.3px solid #ccc;
 	border-radius: var(--radius-input);
 	
+}
+
+
+.notification {
+  margin-top: 10%;
 }

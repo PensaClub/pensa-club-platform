@@ -37,6 +37,14 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      reset_token: DataTypes.STRING,
+      token_expiration: DataTypes.DATE,
+      role: {
+        type: DataTypes.STRING,
+        values: ['admin', 'user'],
+        allowNull: false,
+        defaultValue: 'user',
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE
