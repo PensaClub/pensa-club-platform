@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { Loader } from "../Loader/Loader";
-import { mapServiceFactory } from "../Services/mapService";
+import { mapServiceFactory } from "../Services/MapService";
 import { useAuthContext } from "./UserContext";
 import './error.css';
 

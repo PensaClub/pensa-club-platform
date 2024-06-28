@@ -21,7 +21,7 @@ import { MapProvider } from './components/contexts/mapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
 import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';
-=======
+
 
 import { ToastContainer } from 'react-toastify';
 
@@ -41,9 +41,7 @@ function App() {
             <Header additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''} />
 
           <ToastContainer role="alert" className={"notification"} limit={3}/>
-          <Header />
-
-          <Routes>
+             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/server-error" element={<ServerError />} />
               <Route path="/" element={<Home />} />
