@@ -2,7 +2,7 @@ header{
     position: initial;
 }
 .header-community{
-    /* position: relative; */
+    position: relative;
     display: flex;
     width: 100%;
     align-items: center;
@@ -19,7 +19,27 @@ header{
     width: 2em;
     height: auto;
 }
+.plus-icon-container {
+    position: absolute;
+    right: 20px;
+    top: 30%;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    background-color: var(--green);
+    border-radius: 50%;
+    padding: 15px;
+    border: 1px solid  var(--green-text);
+}
+
+.plus-icon {
+    color: white !important;
+    font-size: 1.5rem;
+
+}
 @media (min-width: 1200px) {
     .header-community{
         display: none;

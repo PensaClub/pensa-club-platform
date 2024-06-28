@@ -1,0 +1,89 @@
+.when-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.when-modal-content {
+    background: var(--grey-bg);
+    padding: 2rem;
+    border-radius: 10px;
+    position: relative;
+    width: 90%;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.when-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.when-select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: var(--xxs-font-size);
+}
+
+.date-picker-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.when-date-picker {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+ 
+}
+
+.when-search-button {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: var(--yellow);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: var(--xs-font-size);
+    cursor: pointer;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .when-search-button {
+        font-size: var(--s-font-size);
+    }
+}
+@media (min-width: 1200px) {
+    .when-search-button {
+        font-size: var(--m-font-size);
+    }
+ 
+    .when-select {
+
+        font-size: var(--xs-font-size);
+
+
+    }
+    .when-select option {
+        padding: 0.5rem 0 !important; 
+    
+    }
+}
