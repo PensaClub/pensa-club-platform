@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { userServiceFactory } from '../Services/userService';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
@@ -10,28 +10,23 @@ import { notify } from '../../utils/notify';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.data?.enabled);
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const userService = userServiceFactory(isAuth.token);
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   getProfileData();
-  // }, [isAuth.data.token]);
-
   const showErrorAndSetTimeouts = (error) => {
     setErrorMessage(error);
     setIsLoading(false);
     setTimeout(() => {
-      setErrorMessage("");
+      setErrorMessage('');
       setIsLoading(false);
     }, 3000);
   };
@@ -57,27 +52,20 @@ export const UserProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await userService.login(newData);
-      const { password, ...newUser } = response;
-      setIsAuth(newUser);
-      setIsFinish(newUser.data.enabled);
+      setIsAuth(response);
+      setIsFinish(response.data.enabled);
+      setProfileData(response.data);
       setIsLoading(false);
       notify('success-login');
-      if (newUser.data.enabled) {
-        const res = await getProfileData();
-
-        if (res) {
-          const data = await loadAddressData(
-            res.user.details.region,
-            res.user.details.municipality,
-            res.user.details.settlement
-          );
-          console.log(data);
-          setAddressId({ ...data });
-        }
-        // console.log(res);
-        navigate("/profile");p
+      console.log('response', response);
+      if (response.data.enabled) {
+        console.log(response.data);
+        const data = await loadAddressData(response.data.details.region, response.data.details.municipality, response.data.details.settlement);
+        console.log(data);
+        setAddressId({ ...data });
+        navigate('/profile');
       } else {
-        navigate("/profile/profile-form");
+        navigate('/profile/profile-form');
       }
     } catch (error) {
       notify('error');
@@ -104,16 +92,17 @@ export const UserProvider = ({ children }) => {
   const onProfileDataSubmit = async (details) => {
     try {
       setIsLoading(true);
-      // setTempData(details);
       const response = await userService.setUserData(details);
       console.log(response);
-      // if (response.message === 'No such address was found!') {
-      //   navigate('/profile/profile-form');
-      //   notify("warn-address")
-      //   setIsLoading(false);
-      //   return tempData;
-      // }
+      if (response.message === 'No such address was found!') {
+        navigate('/profile/profile-form');
+        notify('warn-address');
+        setIsLoading(false);
+        return;
+      }
       setProfileData(response.user);
+      const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
+      setAddressId({ ...data });
       setIsAuth({
         ...isAuth,
         token: response.token,
@@ -122,7 +111,6 @@ export const UserProvider = ({ children }) => {
           enabled: true,
         },
       });
-      console.log(isAuth);
       setIsFinish(true).then(navigate('/profile'));
       setIsLoading(false);
       notify('success-data');
@@ -145,11 +133,7 @@ export const UserProvider = ({ children }) => {
       if (updatedData) {
         setProfileData({ ...profileData, details: updatedData });
 
-        const data = await loadAddressData(
-          updatedData.region,
-          updatedData.municipality,
-          updatedData.settlement
-        );
+        const data = await loadAddressData(updatedData.region, updatedData.municipality, updatedData.settlement);
         console.log(data);
         setAddressId({ ...data });
 

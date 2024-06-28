@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import "./profile.css";
-import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from "../../utils/profile";
-import { UserContext } from "../contexts/UserContext";
-import { useTranslation } from "react-i18next";
-import { useImagePreview } from "../hooks/useImagePreview";
-import { uploadImage } from "../../utils/uploadImage";
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './profile.css';
+import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
+import { UserContext } from '../contexts/UserContext';
+import { useTranslation } from 'react-i18next';
+import { useImagePreview } from '../hooks/useImagePreview';
+import { uploadImage } from '../../utils/uploadImage';
 import { notify } from '../../utils/notify';
 
 export const ProfileData = () => {
@@ -14,26 +14,28 @@ export const ProfileData = () => {
 
   const { userEmail, onEditProfileDataSubmit, profileData } = useContext(UserContext);
 
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
   // const [profileData, setProfileData] = useState('')
 
   //TODO: change keys when changed on server!!!
 
-  const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   const { previewImage, handleImage } = useImagePreview();
   const [imageUpload, setImageUpload] = useState(null);
 
   const initialFormState = {
-    username: profileData.details.username || "",
+    username: profileData.details.username || '',
     email: profileData.email,
-    firstName: profileData.details.firstName || "",
-    lastName: profileData.details.lastName || "",
-    phoneNumber: profileData.details.phoneNumber || "",
+    firstName: profileData.details.firstName || '',
+    lastName: profileData.details.lastName || '',
+    phoneNumber: profileData.details.phoneNumber || '',
     gender: profileData.details.gender || null,
     birthDate: profileData.details.birthDate || null,
+    imageURL: profileData.details.imageURL || null,
+    firebaseImagePath: profileData.details.firebaseImagePath || null,
   };
   const [form, setForm] = useState(initialFormState);
 
@@ -106,64 +108,21 @@ export const ProfileData = () => {
           try {
             data = await uploadImage(imageUpload, profileData.details.firebaseImagePath);
           } catch (error) {
-            throw new Error("Error uploading image: ", error);
+            throw new Error('Error uploading image: ', error);
           }
         }
-    }, [selectedDate, selectedMonth, selectedYear]);
-
-    const handleSelectedDateChange = (e) => {
-        setSelectedDate(e.target.value);
-    };
-
-    const handleSelectedMonthChange = (e) => {
-        setSelectedMonth(e.target.value);
-    };
-
-    const handleSelectedYearChange = (e) => {
-        setSelectedYear(e.target.value);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const trimmedForm = trimObjectStrings(form);
-        setForm(trimmedForm);
-
-
-        const isValid = Object.keys(trimmedForm).every((field) => {
-            const value = trimmedForm[field];
-            const error = validateField(field, value);
-            setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
-            return !error;
-        });
-
-        if (isValid) {
-            try {
-                const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
-                const updatedData = Object.fromEntries(updatedDataArr);        
-                const res = await onEditProfileDataSubmit(updatedData);
-                console.log('Data Submitted:', updatedData);
-                // resetFields(setForm, initialFormState);
-                // setSelectedDate('');
-                // setSelectedMonth('');
-                // setSelectedYear('');
-                navigate('/profile');
-            } catch (error) {
-                console.log(`Error Profile Data Submit Component: ${error.message}`);
-                
-            }
         if (data) {
           updatedData.imageURL = data.url;
           updatedData.firebaseImagePath = data.filePath;
         }
         await onEditProfileDataSubmit(updatedData);
-        console.log("Data Submitted:", updatedData);
+        console.log('Data Submitted:', updatedData);
         // resetFields(setForm, initialFormState);
         // setSelectedDate('');
         // setSelectedMonth('');
         // setSelectedYear('');
         window.scrollTo(0, 0);
-        navigate("/profile");
+        navigate('/profile');
       } catch (error) {
         console.log(`Error Profile Data Submit Component: ${error.message}`);
       }
@@ -178,79 +137,79 @@ export const ProfileData = () => {
 
   const handleResetForm = () => {
     handleReset(setForm, initialFormState);
-    setSelectedDate("");
-    setSelectedMonth("");
-    setSelectedYear("");
+    setSelectedDate('');
+    setSelectedMonth('');
+    setSelectedYear('');
   };
 
   return (
-    <section className="profile-section-edit">
-      <form onSubmit={handleSubmit} className="profile-form">
-        <h3>{t("profile.personal_data")}</h3>
-        <div className="avatar">
-          <img src={previewImage || "/images/sign-up/avatar.jpg"} alt="User avatar" />
-          <div className="user-data">
+    <section className='profile-section-edit'>
+      <form onSubmit={handleSubmit} className='profile-form'>
+        <h3>{t('profile.personal_data')}</h3>
+        <div className='avatar'>
+          <img src={previewImage || '/images/sign-up/avatar.jpg'} alt='User avatar' />
+          <div className='user-data'>
             <input
-              type="file"
-              class="input-image"
-              id="imageUrl"
+              type='file'
+              className='input-image'
+              id='imageUrl'
               onChange={(e) => {
                 setImageUpload(e.target.files[0]);
                 handleImage(e);
               }}
             />
-            <label for="imageUrl" class="label-image">
-              {t("profile.change_photo")}
+            <label htmlFor='imageUrl' className='label-image'>
+              {t('profile.change_photo')}
             </label>
           </div>
         </div>
-        <div className="user-data">
+        <div className='user-data'>
           <div>
-            <label htmlFor="username">
-              {t("profile.username")}: <span>*</span>
+            <label htmlFor='username'>
+              {t('profile.username')}: <span>*</span>
             </label>
             <input
-              type="text"
-              id="username"
-              name="username"
+              type='text'
+              id='username'
+              name='username'
               value={form.username}
               onChange={handleInputChange}
               onBlur={onBlurHandler}
               required
-              style={{ borderColor: errors.username ? "#BB1D3D" : "" }}
+              style={{ borderColor: errors.username ? '#BB1D3D' : '' }}
             />
-            {errors.username && <span className="error">{errors.username}</span>}
+            {errors.username && <span className='error'>{errors.username}</span>}
           </div>
           <div>
-            <label htmlFor="firstName">{t("profile.first_name")}:</label>
-            <input type="text" id="firstName" name="firstName" value={form.firstName} onChange={handleInputChange} onBlur={onBlurHandler} />
-            {errors.firstName && <span className="error">{errors.firstName}</span>}
+            <label htmlFor='firstName'>{t('profile.first_name')}:</label>
+            <input type='text' id='firstName' name='firstName' value={form.firstName} onChange={handleInputChange} onBlur={onBlurHandler} />
+            {errors.firstName && <span className='error'>{errors.firstName}</span>}
           </div>
           <div>
-            <label htmlFor="lastName">{t("profile.last_name")}:</label>
-            <input type="text" id="lastName" name="lastName" value={form.lastName} onChange={handleInputChange} onBlur={onBlurHandler} />
-            {errors.lastName && <span className="error">{errors.lastName}</span>}
+            <label htmlFor='lastName'>{t('profile.last_name')}:</label>
+            <input type='text' id='lastName' name='lastName' value={form.lastName} onChange={handleInputChange} onBlur={onBlurHandler} />
+            {errors.lastName && <span className='error'>{errors.lastName}</span>}
           </div>
-          <div className="gender">
-            <label>{t("profile.gender")}:</label>
-            <div className="gender-options">
+          <div className='gender'>
+            <label>{t('profile.gender')}:</label>
+            <div className='gender-options'>
               <div>
                 <label>
-                  {t("profile.male")}
-                  <input type="radio" value="male" checked={form.gender === "male"} onChange={handleGenderChange} />
+                  {t('profile.male')}
+                  <input type='radio' value='male' checked={form.gender === 'male'} onChange={handleGenderChange} />
                 </label>
               </div>
               <div>
                 <label>
-                  {t("profile.female")}
-                  <input type="radio" value="female" checked={form.gender === "female"} onChange={handleGenderChange} />
+                  {t('profile.female')}
+                  <input type='radio' value='female' checked={form.gender === 'female'} onChange={handleGenderChange} />
                 </label>
               </div>
               <div>
                 <label>
-                  {" "}
-                  {t("profile.other")}
-                  <input type="radio" value="other" checked={form.gender === "other"} onChange={handleGenderChange} />
+                  {' '}
+                  {t('profile.other')}
+                  <input type='radio' value='other' checked={form.gender === 'other'} onChange={handleGenderChange} />
                 </label>
               </div>
             </div>
@@ -264,24 +223,24 @@ export const ProfileData = () => {
                         {errors.email && <span className="error">{errors.email}</span>}
                     </div> */}
           <div>
-            <label htmlFor="phoneNumber">{t("profile.phone_number")}:</label>
+            <label htmlFor='phoneNumber'>{t('profile.phone_number')}:</label>
             <input
-              type="text"
-              id="phoneNumber"
-              name="phoneNumber"
+              type='text'
+              id='phoneNumber'
+              name='phoneNumber'
               value={form.phoneNumber}
               onChange={handleInputChange}
               onBlur={onBlurHandler}
-              style={{ borderColor: errors.phoneNumber ? "#BB1D3D" : "" }}
+              style={{ borderColor: errors.phoneNumber ? '#BB1D3D' : '' }}
             />
-            {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
+            {errors.phoneNumber && <span className='error'>{errors.phoneNumber}</span>}
           </div>
-          <div className="date">
-            <label>{t("profile.age")}</label>
+          <div className='date'>
+            <label>{t('profile.age')}</label>
             <div>
               <label>
                 <select value={selectedDate} onChange={handleSelectedDateChange} onBlur={onBlurHandler}>
-                  <option value="">{t("profile.day")}</option>
+                  <option value=''>{t('profile.day')}</option>
                   {generateNumberOptions(1, 31)}
                 </select>
               </label>
@@ -289,7 +248,7 @@ export const ProfileData = () => {
             <div>
               <label>
                 <select value={selectedMonth} onChange={handleSelectedMonthChange} onBlur={onBlurHandler}>
-                  <option value="">{t("profile.month")}</option>
+                  <option value=''>{t('profile.month')}</option>
                   {generateNumberOptions(1, 12)}
                 </select>
               </label>
@@ -297,20 +256,20 @@ export const ProfileData = () => {
             <div>
               <label>
                 <select value={selectedYear} onChange={handleSelectedYearChange} onBlur={onBlurHandler}>
-                  <option value="">{t("profile.year")}</option>
+                  <option value=''>{t('profile.year')}</option>
                   {generateNumberOptions(1900, new Date().getFullYear())}
                 </select>
               </label>
             </div>
           </div>
-          <span className="required-fields">{t("profile.required_fields")}</span>
+          <span className='required-fields'>{t('profile.required_fields')}</span>
         </div>
-        <div className="btn-inline">
-          <button type="submit" className="btn-general btn-green">
-            {t("profile.save_btn")}
+        <div className='btn-inline'>
+          <button type='submit' className='btn-general btn-green'>
+            {t('profile.save_btn')}
           </button>
-          <button type="submit" className="btn-general btn-red" onClick={handleResetForm}>
-            {t("profile.close_btn")}
+          <button type='submit' className='btn-general btn-red' onClick={handleResetForm}>
+            {t('profile.close_btn')}
           </button>
         </div>
       </form>
