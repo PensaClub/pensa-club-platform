@@ -17,13 +17,13 @@ async function testDatabaseConnection() {
     console.log("Models could not be synced.", error);
   }
 
-  const seedsExist = await checkForSeedData();
-  if (!seedsExist) {
-    console.log("Seeding data as it does not exist.");
-    seedDatabase();
-  } else {
-    console.log("Seed data already present. No need to seed.");
-  }
+  // const seedsExist = await checkForSeedData();
+  // if (!seedsExist) {
+  //   console.log("Seeding data as it does not exist.");
+  //   seedDatabase();
+  // } else {
+  //   console.log("Seed data already present. No need to seed.");
+  // }
 }
 
 async function checkForSeedData() {
