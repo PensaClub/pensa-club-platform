@@ -10,9 +10,11 @@ import { useState } from "react";
 import { What } from "./CommunityModals/What";
 import { SearchWhere } from "./CommunityModals/SearchWhere";
 import { SearchWhen } from "./CommunityModals/SearchWhen";
+import { useCommunityContext } from "../contexts/CommunityContext";
 
 
 export const CommunityPage = () => {
+    const { isLoading } = useCommunityContext();
     const [isSearchWhatOpen, setIsSearchWhatOpen] = useState(false);
     const [isSearchWhereOpen, setIsSearchWhereOpen] = useState(false);
     const [isSearchWhenOpen, setIsSearchWhenOpen] = useState(false);
@@ -78,7 +80,7 @@ export const CommunityPage = () => {
                                 </div>
                             </div>
                         </div>
-                        {ads.length > 0 ? <AdsCard ads={ads} /> : <FiltersCommunity />}
+                        {ads.length > 0 ? <AdsCard ads={ads} isLoading={isLoading} /> : <FiltersCommunity />}
                     </section>
                     <CommunityFooter />
                 </section>

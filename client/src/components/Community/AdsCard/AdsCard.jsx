@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './adsCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { AdsCardSkeleton } from '../AdsCardSkeleton/AdsCardSkeleton';
 
 
 const ImageModal = ({ src, alt, onClose }) => (
@@ -13,9 +14,17 @@ const ImageModal = ({ src, alt, onClose }) => (
     </div>
 );
 
-export const AdsCard = ({ ads }) => {
+export const AdsCard = ({ ads,isLoading }) => {
     const [modalImage, setModalImage] = useState(null);
-
+    if (isLoading) {
+        return (
+            <section className="ads-main">
+                {Array(3).fill().map((_, index) => (
+                    <AdsCardSkeleton key={index} />
+                ))}
+            </section>
+        );
+    }
     const handleImageClick = (image) => {
         setModalImage(image);
     };

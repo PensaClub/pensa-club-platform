@@ -39,6 +39,8 @@
 
 .where-select-container {
     position: relative;
+
+
 }
 
 .where-select {
@@ -48,12 +50,14 @@
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: var(--xs-font-size);
-}
-
-.where-select option {
-    max-height: 100px;
+   
     overflow-y: auto; 
 }
+
+/* .where-select option {
+    overflow-y: auto; 
+background-color: red;
+} */
 
 .where-search-button {
     padding: 0.5rem 1rem;
