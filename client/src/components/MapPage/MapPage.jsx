@@ -15,6 +15,7 @@ export const MapPage = () => {
     const {t} = useTranslation();
 
 const { onAllUsers, allUsers } = useMappingContext();
+console.log(allUsers)
 const isFetched = useRef(false); //  флаг за  да проверявам за заявка - пробно 
 
 useEffect(() => {

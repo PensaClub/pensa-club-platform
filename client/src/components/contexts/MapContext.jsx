@@ -35,6 +35,7 @@ export const MapProvider = ({ children }) => {
             showErrorAndSetTimeouts(e.message)
         }
     }
+    console.log("allUsers",allUsers)
 
     const contextService = {
         onAllUsers,

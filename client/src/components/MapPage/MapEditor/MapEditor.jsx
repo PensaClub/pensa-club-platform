@@ -179,7 +179,7 @@ export const MapEditor = ({ filteredUsers }) => {
                             <Marker key={user.email} position={[user.details.location.lat, user.details.location.lon]}>
                                 <Popup>
                                     <div className="ad-card-editor">
-                                        <img src={profileData?.details.imageURL || "/images/homePage/avatar2.png"} alt={user.details.first_name} className="ad-img-editor" />
+                                  <img src={user?.details?.imageURL || "/images/homePage/avatar2.png"} alt={user.details.first_name} className="ad-img-editor" /> {/* <-- Отметка тук */}
                                         <div className="ad-details-editor">
                                         <h3 className="ad-name-editor">{user.details.first_name} {user.details.last_name}</h3>
                                             <p className="ad-description-editor">Професия: {user.details.workOptions ? user.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
@@ -203,7 +203,7 @@ export const MapEditor = ({ filteredUsers }) => {
                     <div className="sidebar-content">
                         <h2>{selectedUser.details.first_name} {selectedUser.details.last_name}</h2>
                         <div className="user-map-info">
-                            <img className="user-map-img" src={profileData?.details.imageURL  || "/images/homePage/avatar2.png"} alt="user-img" />
+                        <img className="user-map-img" src={selectedUser?.details?.imageURL  || "/images/homePage/avatar2.png"} alt="user-img" />
                             <div className="map-desc-user">
                             <p>Професия: {selectedUser.details.workOptions ? selectedUser.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
                                 <p>Интереси: {selectedUser.details.interestOptions ? selectedUser.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
