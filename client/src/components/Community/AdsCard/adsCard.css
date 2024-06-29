@@ -19,8 +19,13 @@
     background-color: var(--green-second);
     /* padding: 1em ; */
     border-radius: var(--radius);
+    transition: transform 0.7s ease, box-shadow 0.6s ease; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
 }
-
+.ads-card:hover {
+    transform: translateY(-10px); 
+    box-shadow: 0 18px 16px rgba(0, 0, 0, 0.4); 
+}
 .img-ads {
     padding: 0 1em;
 }
