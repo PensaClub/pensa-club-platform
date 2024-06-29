@@ -92,6 +92,7 @@
 .unique-option:hover {
     background-color: var(--green-cm);
     color: var(--text-white);
+    border-radius: var(--radius);
 }
 
 .unique-option.selected {
