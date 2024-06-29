@@ -176,11 +176,11 @@ export const FiltersMap = () => {
         return allUsers.response.accounts.filter(user => {
             const details = user.details || {};
 
-            const { work_options = [], skills = [], interest_options = [] } = details;
+            const { workOptions = [], skills = [], interestOptions = [] } = details;
 
             const skillsMatch = selectedSkills.length === 0 || selectedSkills.some(skill => skills.includes(skill));
-            const worksMatch = selectedWorks.length === 0 || selectedWorks.some(workOption => work_options.includes(workOption));
-            const interestsMatch = selectedInterests.length === 0 || selectedInterests.some(interest => interest_options.includes(interest));
+            const worksMatch = selectedWorks.length === 0 || selectedWorks.some(workOption => workOptions.includes(workOption));
+            const interestsMatch = selectedInterests.length === 0 || selectedInterests.some(interest => interestOptions.includes(interest));
 
             return skillsMatch && worksMatch && interestsMatch;
         });
