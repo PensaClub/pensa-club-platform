@@ -22,9 +22,8 @@ export const SearchWhere = ({ isOpen, onClose }) => {
     }, [selectedRegion, fetchSubregions, subregions]);
 
     const handleSearch = () => {
-        //логика след заявките 
-        console.log(`Търсене в регион: ${selectedRegion}, Община: ${selectedSubregion}`);
-        onClose(); // da pomislq za zanulqvane na steita pri close , da pitam Kris 
+        // console.log(`Търсене в регион: ${selectedRegion}, Община: ${selectedSubregion}`);
+        onClose();
     };
 
     if (!isOpen) return null;
@@ -36,27 +35,31 @@ export const SearchWhere = ({ isOpen, onClose }) => {
                     <FontAwesomeIcon icon={faXmark} style={{ color: "#000000" }} />
                 </button>
                 <h2>Къде търсиш?</h2>
-                <select
-                    value={selectedRegion}
-                    onChange={(e) => setSelectedRegion(e.target.value)}
-                    className="where-select"
-                >
-                    <option value="">Избери регион</option>
-                    {regions.map(region => (
-                        <option key={region.id} value={region.id}>{region.bg}</option>
-                    ))}
-                </select>
-                <select
-                    value={selectedSubregion}
-                    onChange={(e) => setSelectedSubregion(e.target.value)}
-                    className="where-select"
-                    disabled={!selectedRegion}
-                >
-                    <option value="">Избери община</option>
-                    {selectedRegion && subregions[selectedRegion] && subregions[selectedRegion].map(subregion => (
-                        <option key={subregion.id} value={subregion.id}>{subregion.bg}</option>
-                    ))}
-                </select>
+                <div className="where-select-container">
+                    <select
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                        className="where-select"
+                    >
+                        <option value="">Избери регион</option>
+                        {regions.map(region => (
+                            <option key={region.id} value={region.id}>{region.bg}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="where-select-container">
+                    <select
+                        value={selectedSubregion}
+                        onChange={(e) => setSelectedSubregion(e.target.value)}
+                        className="where-select"
+                        disabled={!selectedRegion}
+                    >
+                        <option value="">Избери община</option>
+                        {selectedRegion && subregions[selectedRegion] && subregions[selectedRegion].map(subregion => (
+                            <option key={subregion.id} value={subregion.id}>{subregion.bg}</option>
+                        ))}
+                    </select>
+                </div>
                 <button onClick={handleSearch} className="where-search-button">Приложи</button>
             </div>
         </div>

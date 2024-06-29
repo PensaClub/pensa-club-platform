@@ -12,6 +12,7 @@
 }
 
 .when-modal-content {
+ 
     background: var(--grey-bg);
     padding: 2rem;
     border-radius: 10px;
@@ -37,7 +38,8 @@
     margin-bottom: 1rem;
     border-radius: 5px;
     border: 1px solid #ccc;
-    font-size: var(--xxs-font-size);
+    font-size: var(--xs-font-size);
+ 
 }
 
 .date-picker-container {

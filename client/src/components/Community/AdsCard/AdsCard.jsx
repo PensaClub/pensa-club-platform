@@ -1,13 +1,35 @@
+import React, { useState } from 'react';
 import './adsCard.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
+
+const ImageModal = ({ src, alt, onClose }) => (
+    <div className="image-modal-overlay" onClick={onClose}>
+        <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="image-modal-close" onClick={onClose}>  <FontAwesomeIcon icon={faXmark} style={{ color: "#000000" }} /></button>
+            <img src={src} alt={alt} className="image-modal-img" />
+        </div>
+    </div>
+);
 
 export const AdsCard = ({ ads }) => {
-   
-        return (
+    const [modalImage, setModalImage] = useState(null);
+
+    const handleImageClick = (image) => {
+        setModalImage(image);
+    };
+
+    const closeModal = () => {
+        setModalImage(null);
+    };
+
+    return (
+        <>
             <section className="ads-main">
                 {ads.map(ad => (
                     <div key={ad.id} className="ads-card">
-                        <div className="img-ads">
+                        <div className="img-ads" onClick={() => handleImageClick(ad.image)}>
                             <img src={ad.image} alt={ad.title} />
                             <p>{ad.type}</p>
                         </div>
@@ -27,5 +49,13 @@ export const AdsCard = ({ ads }) => {
                     </div>
                 ))}
             </section>
-        );
+            {modalImage && (
+                <ImageModal
+                    src={modalImage}
+                    alt="Ad Image"
+                    onClose={closeModal}
+                />
+            )}
+        </>
+    );
 }

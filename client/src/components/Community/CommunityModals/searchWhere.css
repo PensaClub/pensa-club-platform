@@ -12,10 +12,12 @@
 }
 
 .where-modal-content {
+    position: absolute;
+    top: 50px;
     background: var(--grey-bg);
     padding: 2rem;
     border-radius: 10px;
-    position: relative;
+    /* position: relative; */
     width: 400px;
     max-width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -35,14 +37,22 @@
     margin-top: 0;
 }
 
+.where-select-container {
+    position: relative;
+}
+
 .where-select {
     width: 100%;
     padding: 0.5rem;
     margin: 0.5rem 0;
     border-radius: 5px;
     border: 1px solid #ccc;
-    font-size: var(--xxs-font-size);
+    font-size: var(--xs-font-size);
+}
 
+.where-select option {
+    max-height: 100px;
+    overflow-y: auto; 
 }
 
 .where-search-button {
@@ -56,20 +66,23 @@
     display: block;
     width: 100%;
 }
+
 @media (min-width: 768px) and (max-width: 1199px) {
     .where-search-button {
         font-size: var(--s-font-size);
     }
 }
+
 @media (min-width: 1200px) {
     .where-search-button {
         font-size: var(--m-font-size);
     }
-
-
+    .where-modal-content {
+        position: relative;
+      
+   
+    }
     .where-select {
-
         font-size: var(--xs-font-size);
-
     }
 }

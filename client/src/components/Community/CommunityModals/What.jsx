@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import './what.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark} from '@fortawesome/free-solid-svg-icons';
+import { useCommunityContext } from '../../contexts/CommunityContext';
 export const What = ({ isOpen, onClose }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchType, setSearchType] = useState('всички');
-
+    const {searchCriteria } = useCommunityContext();
+    console.log('searchCriteria', searchCriteria)
     const handleSearch = () => {
         // Да се добави логика за търсене като пуснем заявките
         console.log(`Търсене на: ${searchQuery}, Тип: ${searchType}`);
@@ -28,10 +30,9 @@ export const What = ({ isOpen, onClose }) => {
                 />
                 <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="what-select">
                     <option value="всички">Всички</option>
-                    <option value="купувам">Купувам</option>
-                    <option value="продавам">Продавам</option>
-                    <option value="подарявам">Подарявам</option>
-                    <option value="услуги">Услуги</option>
+                   {searchCriteria?.map(criteria=>(
+                    <option key={criteria.id} value={criteria.name}>{criteria.name}</option>
+                   ))}
                 </select>
                 <button onClick={handleSearch} className="what-search-button">Приложи</button>
             </div>

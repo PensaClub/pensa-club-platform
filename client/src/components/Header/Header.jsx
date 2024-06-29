@@ -170,7 +170,7 @@ export const Header = ({additionalClasses }) => {
           </div>
         </section>
       </header>
-      <div className="after-header"></div>
+      {/* <div className="after-header"></div> */}
       <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>
         <p>Вашият профил е непълен. Моля, завършете го, за да продължите да използвате всички възможности на платформата.</p>
       </AlertModal>

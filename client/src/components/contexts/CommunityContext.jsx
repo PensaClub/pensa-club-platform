@@ -11,7 +11,7 @@ export const CommunityProvider = ({ children }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [regions , setRegions] = useState([])
     const [subregions , setSubregions] = useState({})
-
+    const [searchCriteria, setSearchCriteria] = useState([]);
     const communityService= communityServiceFactory()
 
     const showErrorAndSetTimeouts = (error) => {
@@ -51,16 +51,31 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     }
+    const fetchSearchCriteria = async () => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getSearchCriteria()
+            setSearchCriteria(response)
+            setIsLoading(false);
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message)
+        } finally {
+            setIsLoading(false);
+        }
+    
+    }
 
     useEffect(() => {
         fetchRegions();
+        fetchSearchCriteria();
     }, []);
 
     const contextService = {
         fetchRegions ,
         fetchSubregions ,
         regions,
-        subregions
+        subregions,
+        searchCriteria
     }
     
     return (

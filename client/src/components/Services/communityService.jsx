@@ -21,6 +21,14 @@ export const communityServiceFactory = (token) => {
                 throw new Error('Failed to fetch subregions for region ');
             }
             return response.json();
+        },
+        getSearchCriteria: async () => {
+            const response = await fetch('/search-criteria.json');
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch search criteria');
+            }
+            return response.json();
         }
     }
 }
