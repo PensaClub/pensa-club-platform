@@ -15,6 +15,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     max-width: 250px;
+   
 }
 
 .leaflet-popup-content-wrapper {
@@ -40,8 +41,23 @@
 
 .ad-details-editor {
     flex: 2;
-}
-
+    /* max-height: 900px;
+    overflow-y: auto; */
+  }
+  
+  /* .ad-details-editor::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .ad-details-editor::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .ad-details-editor::-webkit-scrollbar-thumb {
+    background-color: var(--orange);
+    border: 2px solid #f1f1f1;
+    border-radius: var(--radius-input);
+  } */
 .ad-name-editor {
     margin: 0;
     font-size: var(--xxs-font-size);

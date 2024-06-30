@@ -15,7 +15,7 @@ const ProfileForm = () => {
   const currentLanguage = i18n.language;
   const navigate = useNavigate();
   const { onProfileDataSubmit } = useContext(UserContext);
-  const { onAllUsers,  } = useMappingContext();
+  const { onAllUsers,allUsers, setAllUsers  } = useMappingContext();
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   const { previewImage, handleImage } = useImagePreview();
