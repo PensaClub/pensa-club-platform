@@ -109,6 +109,8 @@ const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
 export const FiltersMap = () => {
     const { t } = useTranslation();
     const { allUsers } = useMappingContext();
+
+
     const [optionData, setOptionData] = useState(null);
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedWorks, setSelectedWorks] = useState([]);

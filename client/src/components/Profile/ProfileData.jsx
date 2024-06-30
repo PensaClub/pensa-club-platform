@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useImagePreview } from '../hooks/useImagePreview';
 import { uploadImage } from '../../utils/uploadImage';
 import { notify } from '../../utils/notify';
+import { useMappingContext } from '../contexts/MapContext';
 
 export const ProfileData = () => {
   const { t } = useTranslation();
@@ -18,6 +19,8 @@ export const ProfileData = () => {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
+  const { onAllUsers,  } = useMappingContext();
+  
   // const [profileData, setProfileData] = useState('')
 
   //TODO: change keys when changed on server!!!
@@ -116,6 +119,7 @@ export const ProfileData = () => {
           updatedData.firebaseImagePath = data.filePath;
         }
         await onEditProfileDataSubmit(updatedData);
+        await onAllUsers();
         console.log('Data Submitted:', updatedData);
         // resetFields(setForm, initialFormState);
         // setSelectedDate('');

@@ -79,7 +79,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
   }
 });
 
-userDetailsController.get('/all-users', memoryCache, async (req, res, next) => {
+userDetailsController.get('/all-users', async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
       attributes: ['email', ['finished', 'enabled']],

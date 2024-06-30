@@ -4,6 +4,7 @@ import './profile.css';
 import CustomSelect from './CustomSelect';
 import { resetFields, handleReset } from '../../utils/profile';
 import { UserContext } from '../contexts/UserContext';import { useTranslation } from 'react-i18next';
+import { useMappingContext } from '../contexts/MapContext';
 
 export const ProfileSkills = () => {
     const { t } = useTranslation();  
@@ -16,6 +17,7 @@ export const ProfileSkills = () => {
   const [form, setForm] = useState(initialFormState);
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [errors, setErrors] = useState({});
+  const { onAllUsers,  } = useMappingContext();
 
   useEffect(() => {
     const loadData = async () => {
@@ -34,6 +36,7 @@ export const ProfileSkills = () => {
     e.preventDefault();
     if (validateForm()) {
       await onEditProfileDataSubmit(form);
+      await onAllUsers();
       console.log('Form Submitted:', form);
       resetFields(setForm, initialFormState);
       navigate('/profile');
