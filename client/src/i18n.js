@@ -18,9 +18,11 @@ i18n
   .init({
     debug: false,
     fallbackLng: 'bg',
+    supportedLngs: ['bg', 'en'],
+    lng: 'bg',
     react: {
       useSuspense: false, 
     },
   });
-
+console.log(i18n)
 export default i18n;
