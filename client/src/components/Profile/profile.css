@@ -8,6 +8,16 @@
     position: relative;
 }
 
+.profile-section-edit,
+.profile-section,
+.profile-form,
+.profile-data,
+.avatar img {
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box; 
+}
+
 .profile-form span {
   color: var(--red);
 }
