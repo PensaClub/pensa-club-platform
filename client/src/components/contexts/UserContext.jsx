@@ -180,22 +180,22 @@ export const UserProvider = ({ children }) => {
     addressId,
   };
 
-  return (
-    <UserContext.Provider value={contextService}>
-      {children}
-      {isLoading && <Loader />}
-      {/* {errorMessage && (
-        <div className={`error-message show-error custom-style`}>
-          <p>{errorMessage}</p>
-          {console.log('Rendering error message:', errorMessage)}
-        </div>
-      )} */}
-    </UserContext.Provider>
-  );
-};
+    return (
+      <UserContext.Provider value={contextService}>
+        {children}
+        {isLoading && <Loader />}
+        {/* {errorMessage && (
+          <div className={`error-message show-error custom-style`}>
+            <p>{errorMessage}</p>
+            {console.log('Rendering error message:', errorMessage)}
+          </div>
+        )} */}
+      </UserContext.Provider>
+    );
+  };
 
-export const useAuthContext = () => {
-  const context = useContext(UserContext);
+  export const useAuthContext = () => {
+    const context = useContext(UserContext);
 
-  return context;
-};
+    return context;
+  };

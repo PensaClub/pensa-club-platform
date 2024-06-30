@@ -13,6 +13,7 @@ const getSequelizeConfig = (env, config) => {
   const { database, username, password, database_uri } = config;
   const commonConfig = {
     logging: false,
+    dialect: 'postgres'
   };
 
   if (env === 'development') {
@@ -39,7 +40,24 @@ const getSequelizeConfig = (env, config) => {
 };
 
 const sequelizeConfig = getSequelizeConfig(process.env.NODE_ENV, config);
-const sequelize = new Sequelize(sequelizeConfig);
+let sequelize;
+if (env === 'development') {
+  sequelize = new Sequelize(
+    sequelizeConfig.database,
+    sequelizeConfig.username,
+    sequelizeConfig.password,
+    sequelizeConfig
+  );
+} else {
+  sequelize = new Sequelize(config.database_uri, {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    }
+  });
+}
 
 fs.readdirSync(__dirname)
   .filter((file) => {

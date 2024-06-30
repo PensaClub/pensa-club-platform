@@ -10,6 +10,7 @@ import './scrollModal.css';
 
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuthContext } from '../../contexts/UserContext';
 
 const DefaultIcon = L.icon({
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -76,6 +77,8 @@ export const MapEditor = ({ filteredUsers }) => {
     const [geoJsonData, setGeoJsonData] = useState(null);
     const [showGeoJSON, setShowGeoJSON] = useState(true);
     const [selectedUser, setSelectedUser] = useState(null);
+    const{profileData} = useAuthContext()
+    
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef(null);
     const { t } = useTranslation(); 
@@ -176,11 +179,11 @@ export const MapEditor = ({ filteredUsers }) => {
                             <Marker key={user.email} position={[user.details.location.lat, user.details.location.lon]}>
                                 <Popup>
                                     <div className="ad-card-editor">
-                                        <img src={user.details.img || "/images/homePage/avatar2.png"} alt={user.details.first_name} className="ad-img-editor" />
+                                  <img src={user?.details?.imageURL || "/images/homePage/avatar2.png"} alt={user.details.firstName} className="ad-img-editor" /> {/* <-- Отметка тук */}
                                         <div className="ad-details-editor">
-                                        <h3 className="ad-name-editor">{user.details.first_name} {user.details.last_name}</h3>
-                                            <p className="ad-description-editor">Професия: {user.details.work_options ? user.details.work_options.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
-                                            <p className="ad-description-editor">Интереси: {user.details.interest_options ? user.details.interest_options.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
+                                        <h3 className="ad-name-editor">{user.details.firstName} {user.details.lastName}</h3>
+                                            <p className="ad-description-editor">Професия: {user.details.workOptions ? user.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
+                                            <p className="ad-description-editor">Интереси: {user.details.interestOptions ? user.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
                                             <p className="ad-description-editor">Умения: {user.details.skills ? user.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
                                             <Link to="#" id="read-more-editor" className="read-more" onClick={(e) => handleReadMoreClick(e, user)}>Прочети повече</Link>
                                         </div>
@@ -198,19 +201,19 @@ export const MapEditor = ({ filteredUsers }) => {
                 <div className="sidebar-map" ref={sidebarRef}>
                     <button className="close-button" onClick={closeSidebar}>Close</button>
                     <div className="sidebar-content">
-                        <h2>{selectedUser.details.first_name} {selectedUser.details.last_name}</h2>
+                        <h2>{selectedUser.details.firstName} {selectedUser.details.lastName}</h2>
                         <div className="user-map-info">
-                            <img className="user-map-img" src={selectedUser.details.img || "/images/homePage/avatar2.png"} alt="user-img" />
+                        <img className="user-map-img" src={selectedUser?.details?.imageURL  || "/images/homePage/avatar2.png"} alt="user-img" />
                             <div className="map-desc-user">
-                            <p>Професия: {selectedUser.details.work_options ? selectedUser.details.work_options.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
-                                <p>Интереси: {selectedUser.details.interest_options ? selectedUser.details.interest_options.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
-                                <p>Имения: {selectedUser.details.skills ? selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
-                                <p>Телефон: <Link to={`tel:${selectedUser.details.phone_number}`}>{selectedUser.details.phone_number}</Link></p>
+                            <p>Професия: {selectedUser.details.workOptions ? selectedUser.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
+                                <p>Интереси: {selectedUser.details.interestOptions ? selectedUser.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
+                                <p>Умения: {selectedUser.details.skills ? selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
+                                <p>Телефон: <Link to={`tel:${selectedUser.details.phoneNumber}`}>{selectedUser.details.phoneNumber}</Link></p>
                                 <p>Имейл: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
                             </div>
                         </div>
                         <div className="color-lines-pipe"></div>
-                        <h3 className="ad-title">Обяви на {selectedUser.details.first_name}</h3>
+                        <h3 className="ad-title">Обяви на {selectedUser.details.firstName}</h3>
                         <div className="color-lines-pipe"></div>
 
                         <div className='ad-scroll'>
