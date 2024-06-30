@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class user_ads extends Model {
     /**
@@ -12,53 +10,107 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       user_ads.belongsTo(models.user_account, {
-        foreignKey: "user_id", // Foreign key in user_details table
-        targetKey: "id", // Primary key in user_accounts table
-        as: "account",
+        foreignKey: 'user_id', // Foreign key in user_details table
+        targetKey: 'id', // Primary key in user_accounts table
+        as: 'account',
       });
     }
   }
-  user_ads.init({
-    user_id: { type: DataTypes.INTEGER, allowNull: false },
-    summary: {
-      type: DataTypes.STRING(32),
-      allowNull: false,
-      validate: {
-        len: {
-          args: [8, 32],
-          msg: "Summary must be between 8 and 32 characters in length."
-        }
-      }
+  user_ads.init(
+    {
+      user_id: { type: DataTypes.INTEGER, allowNull: false },
+      summary: {
+        type: DataTypes.STRING(32),
+        allowNull: false,
+        validate: {
+          len: {
+            args: [4, 32],
+            msg: 'Summary must be between 4 and 32 characters in length.',
+          },
+        },
+      },
+      category: {
+        type: DataTypes.ENUM,
+        values: ['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event'],
+        allowNull: true,
+        defaultValue: null,
+        validate: {
+          isIn: {
+            args: [['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event']],
+            msg: 'Category must be one of the following: donation, sale, service, entertainment, training or event',
+          },
+        },
+      },
+      description: {
+        type: DataTypes.STRING(1000),
+        allowNull: true,
+        validate: {
+          len: {
+            args: [0, 1000],
+            msg: 'Maximum description length limit of 1000 characters is reached.',
+          },
+        },
+      },
+      ad_town: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      ad_address: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      images: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        validate: {
+          isValidArray(value) {
+            if (!Array.isArray(value)) {
+              throw new Error('Images must be an array.');
+            }
+            if (value.length > 5) {
+              throw new Error('Cannot have more than 5 images per ad.');
+            }
+            if (value.length <= 0) {
+              throw new Error('Each ad should contain at least 1 image.');
+            }
+            value.forEach((image) => {
+              if (!image.imageURL || !image.firebaseImagePath) {
+                throw new Error('Each image must have a url and a path.');
+              }
+            });
+          },
+        },
+      },
+      creation_date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      expiration_date: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+        defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
+      },
+      approved: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    description: {
-      type: DataTypes.STRING(1000),
-      allowNull: true,
-      validate: {
-        len: {
-          args: [0, 1000],
-          msg: "Maximum description length limit of 1000 characters is reached."
-        }
-      }
-    },
-    creation_date: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW
-    },
-    expiration_date: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
-
-    },
-    approved: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
+    {
+      sequelize,
+      modelName: 'user_ads',
     }
-  }, {
-    sequelize,
-    modelName: 'user_ads',
-  });
+  );
   return user_ads;
 };
