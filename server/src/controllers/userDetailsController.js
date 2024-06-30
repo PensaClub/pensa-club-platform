@@ -96,6 +96,8 @@ userDetailsController.get('/all-users', memoryCache, async (req, res, next) => {
             'skills',
             ['interest_options', 'interestOptions'],
             'location',
+            'imageURL',
+            ['firebase_image_path', 'firebaseImagePath'],
           ],
         },
       ],

@@ -76,7 +76,7 @@ userController.post('/register', async (req, res, next) => {
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.status(201).json({ message: 'User successfully created!', data, token });
+    res.status(201).json({ message: 'User successfully created!', user: data, token });
   } catch (err) {
     next(err);
   }
@@ -139,7 +139,7 @@ userController.post('/login', async (req, res, next) => {
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.status(200).json({ message: 'User successfully logged in!', data, token });
+    res.status(200).json({ message: 'User successfully logged in!', user: data, token });
   } catch (err) {
     next(err);
   }
