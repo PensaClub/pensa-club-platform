@@ -17,6 +17,7 @@ import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 import { MapProvider } from './components/contexts/MapContext.jsx';
 import { ToastContainer } from 'react-toastify';
+import { ForgetPassword } from './components/ForgetPassword/ForgetPassword.jsx';
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/server-error" element={<ServerError />} />
-
+            <Route path="/forget-password" element={<ForgetPassword/>} />
             <Route element={<AuthGuard />}>
               <Route path="/logout" element={<Logout />} />    
               <Route path="/profile/*" element={<Profile />} />

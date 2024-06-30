@@ -187,6 +187,20 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const onForgetPasswordSubmit =async(data)=>{
+  console.log("data email",data);
+    try {
+      setIsLoading(true);
+      const response = await userService.forgetPassword(data);
+   
+      setIsLoading(false);
+      notify('success-send');
+      return response;
+    } catch (error) {
+      console.log(error);
+      showErrorAndSetTimeouts(error.message);
+    }
+  }
   const contextService = {
     onRegisterSubmit,
     onLoginSubmit,
@@ -203,6 +217,7 @@ export const UserProvider = ({ children }) => {
     getProfileData,
     profileData,
     addressId,
+    onForgetPasswordSubmit,
   };
 
   return (
