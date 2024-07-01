@@ -29,7 +29,7 @@ export const ReSendEmail = () => {
                 </div>
                 <div className="logo-forget-pass">
                     <Link to="/">
-                        <img src="/images/homePage/logo.png" alt="logo" className='logo-reset-pass' />Penca club
+                        <img src="/images/homePage/logo.png" alt="logo" className='logo-reset-pass' />Penca Club
                     </Link>
                 </div>
             </section>
