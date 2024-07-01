@@ -192,9 +192,10 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       const response = await userService.forgetPassword(data);
       setIsLoading(false);
-      notify('success-send');
+      notify('email-send');
       return response;
     } catch (error) {
+      notify('error');
       console.log(error);
       showErrorAndSetTimeouts(error.message);
     }
