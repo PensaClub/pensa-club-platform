@@ -18,6 +18,7 @@ import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 import { MapProvider } from './components/contexts/MapContext.jsx';
 import { ToastContainer } from 'react-toastify';
 import { ForgetPassword } from './components/ForgetPassword/ForgetPassword.jsx';
+import { ReSendEmail } from './components/ForgetPassword/ReSendEmail.jsx';
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/server-error" element={<ServerError />} />
             <Route path="/forget-password" element={<ForgetPassword/>} />
+            <Route path="/resend-email" element={<ReSendEmail/>} />
+            
             <Route element={<AuthGuard />}>
               <Route path="/logout" element={<Logout />} />    
               <Route path="/profile/*" element={<Profile />} />

@@ -176,7 +176,6 @@ export const UserProvider = ({ children }) => {
         data.token = isAuth.token;
       }
       setIsLoading(true);
-      // console.log({ ...data });
       const response = await userService.resetPassword({ ...data });
       console.log('Password changed');
       setIsLoading(false);
@@ -188,11 +187,10 @@ export const UserProvider = ({ children }) => {
   };
 
   const onForgetPasswordSubmit =async(data)=>{
-  console.log("data email",data);
+
     try {
       setIsLoading(true);
       const response = await userService.forgetPassword(data);
-   
       setIsLoading(false);
       notify('success-send');
       return response;
