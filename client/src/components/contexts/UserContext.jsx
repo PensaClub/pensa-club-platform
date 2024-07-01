@@ -35,7 +35,7 @@ export const UserProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const response = await userService.register(data);
-      setIsAuth({ token: response.token, email: response.user.email });
+      setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
       navigate('/profile/profile-form');
       notify('success-register');
@@ -51,7 +51,7 @@ export const UserProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const response = await userService.login(data);
-      setIsAuth({ token: response.token, email: response.user.email });
+      setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
       setProfileData(response.user);
       notify('success-login');
@@ -99,7 +99,7 @@ export const UserProvider = ({ children }) => {
       setAddressId({ ...data });
       setProfileData(response.user);
       setIsFinish(response.user.enabled);
-      setIsAuth({ ...isAuth, token: response.token });
+      setIsAuth({ ...isAuth, token: response.token, enabled: response.user.enabled });
       navigate('/profile');
       notify('success-data');
     } catch (error) {
@@ -180,22 +180,22 @@ export const UserProvider = ({ children }) => {
     addressId,
   };
 
-    return (
-      <UserContext.Provider value={contextService}>
-        {children}
-        {isLoading && <Loader />}
-        {/* {errorMessage && (
+  return (
+    <UserContext.Provider value={contextService}>
+      {children}
+      {isLoading && <Loader />}
+      {/* {errorMessage && (
           <div className={`error-message show-error custom-style`}>
             <p>{errorMessage}</p>
             {console.log('Rendering error message:', errorMessage)}
           </div>
         )} */}
-      </UserContext.Provider>
-    );
-  };
+    </UserContext.Provider>
+  );
+};
 
-  export const useAuthContext = () => {
-    const context = useContext(UserContext);
+export const useAuthContext = () => {
+  const context = useContext(UserContext);
 
-    return context;
-  };
+  return context;
+};
