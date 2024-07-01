@@ -37,17 +37,20 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isIn: {
             args: [['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event']],
-            msg: 'Category must be one of the following: donation, sale, service, entertainment, training or event',
+            msg: 'Category must be one of the following: donation, sale, service, entertainment, training or event.',
           },
         },
       },
       description: {
         type: DataTypes.STRING(1000),
-        allowNull: true,
+        allowNull: false,
         validate: {
-          len: {
-            args: [0, 1000],
-            msg: 'Maximum description length limit of 1000 characters is reached.',
+          customValidator(value) {
+            if (value.length < 10) {
+              throw new Error('Description must be at least 10 characters long.');
+            } else if (value.length > 1000) {
+              throw new Error('Maximum description length limit of 1000 characters is reached.');
+            }
           },
         },
       },

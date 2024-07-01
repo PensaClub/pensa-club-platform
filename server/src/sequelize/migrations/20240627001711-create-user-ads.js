@@ -26,29 +26,29 @@ module.exports = {
       category: {
         type: DataTypes.ENUM,
         values: ['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event'],
-        allowNull: true,
-        defaultValue: null,
         validate: {
           isIn: {
             args: [['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event']],
-            msg: 'Category must be one of the following: donation, sale, service, entertainment, training or event',
+            msg: 'Category must be one of the following: donation, sale, service, entertainment, training or event.',
           },
         },
       },
       description: {
         type: DataTypes.STRING(1000),
-        allowNull: true,
+        allowNull: false,
         validate: {
-          len: {
-            args: [0, 1000],
-            msg: 'Maximum description length limit of 1000 characters is reached.',
+          customValidator(value) {
+            if (value.length < 10) {
+              throw new Error('Description must be at least 10 characters long.');
+            } else if (value.length > 1000) {
+              throw new Error('Maximum description length limit of 1000 characters is reached.');
+            }
           },
         },
       },
       ad_town: {
         type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
+        allowNull: false,
       },
       ad_address: {
         type: DataTypes.STRING,
@@ -70,7 +70,7 @@ module.exports = {
               throw new Error('Each ad should contain at least 1 image.');
             }
             value.forEach((image) => {
-              if (!image.url || !image.path) {
+              if (!image.imageURL || !image.firebaseImagePath) {
                 throw new Error('Each image must have a url and a path.');
               }
             });
@@ -84,7 +84,7 @@ module.exports = {
       },
       expiration_date: {
         type: DataTypes.DATEONLY,
-        allowNull: true,
+        allowNull: false,
         defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
       },
       approved: {
