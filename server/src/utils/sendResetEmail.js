@@ -1,7 +1,7 @@
 
 
 async function sendResetEmail(email, resetToken) {
-    const resetLink = `http://${process.env.FRONTEND_SERVER}/reset-password?token=${resetToken}`;
+    const resetLink = `${process.env.FRONTEND_SERVER}/reset-password?token=${resetToken}`;
     const subject = 'Password Reset Request';
     const body = `Click the following link to reset your password: ${resetLink}`;
 
