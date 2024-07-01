@@ -1,5 +1,5 @@
-"use strict";
-const { QueryTypes } = require("sequelize");
+'use strict';
+const { QueryTypes } = require('sequelize');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -8,31 +8,31 @@ module.exports = {
     const userId = users[0].id;
 
     await queryInterface.bulkInsert(
-      "user_details",
+      'user_details',
       [
         {
-          phone_number: "0888246700",
-          username: "TestUser",
-          first_name: "TestName",
-          last_name: "TestSurname",
-          region: "Търговище",
-          municipality: "Попово",
-          settlement: "Попово",
-          street: "Маджаров",
-          work_options: ["TestWork", "TestWork2"],
-          skills: ["TestSkill"],
-          interest_options: ["TestOption", "TestOption2"],
-          district: "",
+          phone_number: '0888246700',
+          username: 'TestUser',
+          first_name: 'TestName',
+          last_name: 'TestSurname',
+          region: 'Търговище',
+          municipality: 'Попово',
+          settlement: 'Попово',
+          street: 'Маджаров',
+          work_options: ['TestWork', 'TestWork2'],
+          skills: ['TestSkill'],
+          interest_options: ['TestOption', 'TestOption2'],
+          district: '',
           block: null,
-          street_number: "5",
+          street_number: '5',
           location: JSON.stringify({ lat: 43.34342, lon: 26.22919 }),
-          gender: "male",
-          birth_date: "1993-04-09",
+          gender: 'male',
+          birth_date: '1993-04-09',
           user_accounts_id: userId,
           createdAt: new Date(),
           updatedAt: new Date(),
           imageURL:
-            "https://firebasestorage.googleapis.com/v0/b/testing-a6f07.appspot.com/o/profile-image%2F9ed05551-1d97-426f-8ee4-8ba6807b4bdc?alt=media&token=769b71bb-f176-4844-b56b-81ff9cf2fbc9",
+            'https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/profile-image%2F680555ff-22d4-4fad-8cc7-2b51dfb545de?alt=media&token=ab616f26-8eda-49e5-b1c9-2694540ec972',
         },
       ],
       {}
@@ -40,6 +40,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("user_details", null, {});
+    await queryInterface.bulkDelete('user_details', null, {});
   },
 };
