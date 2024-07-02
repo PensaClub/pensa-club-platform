@@ -26,11 +26,11 @@ export const ForgetPassword = () => {
     <>
       <section className="forget-pass">
         <div className="forget-pass-container">
-          <h2>Забравена парола</h2>
-          <p>Нулирайте Вашата парола, като предоставите имейл адреса на Вашия акаунт по-долу.</p>
+          <h2>{t('form.forget-password')}</h2>
+          <p>{t('form.reset-forget-password')}</p>
           <form onSubmit={(e) => onSubmit(e, values)}>
             <div className="forget-pass-input">
-              <label htmlFor="Email">{t('Email')}</label>
+              <label htmlFor="Email">{t('form.email-label')}</label>
               <input
                 type="email"
                 id='Email'
@@ -43,15 +43,15 @@ export const ForgetPassword = () => {
               />
               {errors.email && <p className="error">{t(`${errors.email}`)}</p>}
             </div>
-            <button className='forget-submit-btn' type="submit">Напред</button>
+            <button className='forget-submit-btn' type="submit">{t('form.next-button')}</button>
           </form>
-          <Link to="/sign-up"> Обратно към Вход</Link>
+          <Link to="/sign-up"> {t('form.back-to-login')}</Link>
 
         </div>
         <div className="logo-forget-pass">
         <div className="logo-forget-pass">
                     <Link to="/">
-                        <img src="/images/homePage/logo.png" alt="logo" className='logo-reset-pass' /> Penca Club
+                        <img src="/images/homePage/logo.png" alt="logo" className='logo-reset-pass' /> Penca Club&copy; 
                     </Link>
                 </div>
         </div>

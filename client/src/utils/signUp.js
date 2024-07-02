@@ -6,7 +6,7 @@ export const trimFields = (fields) => {
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 export const resetFields = (setFieldFunctions) => {
-  setFieldFunctions.forEach((setField) => setField({ email: "", password: "", rePassword: "" }));
+  setFieldFunctions.forEach((setField) => setField({ email: "", password: "", rePassword: "",newPassword:"" }));
 };
 
 export const validateEmail = (email, setErrors) => {
@@ -28,15 +28,19 @@ export const validateEmail = (email, setErrors) => {
 };
 
 export const validatePassword = (password, setErrors) => {
+  console.log(password)
   if (!password) {
     setErrors((prevErrors) => ({
       ...prevErrors,
       password: "form.errors.required-field",
+      newPassword: "form.errors.required-field",
+
     }));
   } else if (!passwordRegex.test(password)) {
     setErrors((prevErrors) => ({
       ...prevErrors,
       password: "form.errors.password-format",
+      newPassword: "form.errors.password-format",
     }));
   // } else if (password.length < 3) {
   //   setErrors((prevErrors) => ({
@@ -47,6 +51,7 @@ export const validatePassword = (password, setErrors) => {
     setErrors((prevErrors) => ({
       ...prevErrors,
       password: "",
+      newPassword: "",
     }));
   }
 };
@@ -56,11 +61,13 @@ export const validateRePassword = (password, rePassword, setErrors) => {
     setErrors((prevErrors) => ({
       ...prevErrors,
       rePassword: "form.errors.passwords-not-match",
+      reNewPassword:"form.errors.passwords-not-match",
     }));
   } else {
     setErrors((prevErrors) => ({
       ...prevErrors,
       rePassword: "",
+      reNewPassword:"",
     }));
   }
 };

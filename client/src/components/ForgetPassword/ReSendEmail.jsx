@@ -2,9 +2,11 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../contexts/UserContext';
 import { useState, useEffect } from 'react';
 import './forgetPassword.css';
+import { useTranslation } from 'react-i18next';
 
 export const ReSendEmail = () => {
     const location = useLocation();
+    const { t } = useTranslation();
     const { email } = location.state || {};
     const { onForgetPasswordSubmit } = useAuthContext();
     const [attempts, setAttempts] = useState(() => Number(localStorage.getItem('attempts')) || 0);
@@ -59,19 +61,21 @@ export const ReSendEmail = () => {
         <>
             <section className="forget-pass">
                 <div className="forget-pass-container">
-                    <h2>Проверете електронната си поща</h2>
-                    <p>Ще получите връзка в предоставения от Вас имейл, която ще ви позволи да нулирате паролата на акаунта си.</p>
-                    {email && <p><span>{`Имейл: ${email}`}</span></p>}
-                    <p>Ако не виждате имейла в пощенската си кутия, моля проверете и в папките за нежелана поща, спам, социални мрежи или други папки, където може да е попаднал.</p>
+                    <h2>{t('form.check-email')}</h2>
+                    <p>{t('form.reset-password-link')}</p>
+                    {email && <p><span>{t("form.email-label")}: {email}</span></p>}
+                    <p>{t('form.resend-email-simple-text')}</p>
                     <button className='forget-resend-btn' type="submit" onClick={handleResendEmail} disabled={isLocked}>
-                        Повторно изпращане {isLocked && `(изчакайте ${Math.floor(timer / 60)}:${timer % 60 < 10 ? '0' : ''}${timer % 60} мин)`}
+                    {t('form.resend-button-text')} {isLocked && `(${t('form.wait')} ${Math.floor(timer / 60)}:${timer % 60 < 10 ? '0' : ''}${timer % 60} ${t('form.minutes')})`}
                     </button>
-                    {isLocked && attempts >= 3 && <p>Превишихте броя на опитите. Моля, опитайте отново след {Math.floor(timer / 60)} минути и {timer % 60} секунди.</p>}
-                    <Link to="/sign-up">Обратно към Вход</Link>
+                    {isLocked && attempts >= 3 && <p>{t('form.too-many-attempts')} {Math.floor(timer / 60)} {t('form.minutes')} {t('form.and')} {timer % 60} {t('form.seconds')}.</p>}
+                    
+
+                    <Link to="/sign-up">{t('form.back-to-login')}</Link>
                 </div>
                 <div className="logo-forget-pass">
                     <Link to="/">
-                        <img src="/images/homePage/logo.png" alt="logo" className='logo-reset-pass' />Penca Club
+                        <img src="/images/homePage/logo.png" alt="logo" className='logo-reset-pass' />Penca Club&copy; 
                     </Link>
                 </div>
             </section>

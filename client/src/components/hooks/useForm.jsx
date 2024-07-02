@@ -4,7 +4,7 @@ import { trimFields, validateEmail, validatePassword, validateRePassword, resetF
 export const useForm = (initialValues, onSubmitHandler) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
-
+console.log(errors);
   const onChangeHandler = (e) => {
     setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
   };
@@ -18,6 +18,12 @@ export const useForm = (initialValues, onSubmitHandler) => {
       case "password":
         validatePassword(value, setErrors);
         break;
+        case "newPassword":
+          validatePassword(value, setErrors);
+          break;
+          case "reNewPassword":
+            validateRePassword(values.newPassword, value, setErrors);
+            break;
       case "rePassword":
         validateRePassword(values.password, value, setErrors);
         break;
@@ -27,18 +33,25 @@ export const useForm = (initialValues, onSubmitHandler) => {
   };
 
   const handleTrimFields = () => {
-    const { email = "", password = "", rePassword = "" } = values;
-    const [trimmedEmail, trimmedPassword, trimmedRePassword] = trimFields([email, password, rePassword]);
+    const { email = "", password = "", rePassword = "", newPassword='',reNewPassword='' } = values;
+    const [trimmedEmail, trimmedPassword, trimmedRePassword] = trimFields([email, password, rePassword,newPassword,reNewPassword]);
     setValues({
       email: trimmedEmail,
       password: trimmedPassword,
       rePassword: trimmedRePassword,
+      newPassword: trimmedRePassword,
+      reNewPassword: trimmedRePassword,
+      
     });
   };
   const validate = () => {
     validateEmail(values.email, setErrors);
     validatePassword(values.password, setErrors);
+    validatePassword(values.newPassword, setErrors);
+
     validateRePassword(values.password, values.rePassword, setErrors);
+    validateRePassword(values.newPassword, values.reNewPassword, setErrors);
+
     return Object.keys(errors).every((key) => !errors[key]);
   };
 
