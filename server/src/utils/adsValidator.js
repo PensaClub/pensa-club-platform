@@ -1,6 +1,6 @@
 const CustomError = require('./customError');
 
-const notRequiredFields = ['adAddress'];
+const notRequiredFields = ['adAddress', 'images'];
 const categoryList = ['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event'];
 
 module.exports = function adsValidator(body) {
@@ -32,21 +32,21 @@ module.exports = function adsValidator(body) {
     errors.description = 'Maximum description length limit of 1000 characters is reached.';
   }
 
-  if (!Array.isArray(images)) {
-    errors.images = 'Images must be an array.';
-  } else {
-    if (images.length > 5) {
-      errors.images = 'Cannot have more than 5 images per ad.';
-    }
-    if (images.length <= 0) {
-      errors.images = 'Each ad should contain at least 1 image.';
-    }
-    images.forEach((image, index) => {
-      if (!image.imageURL || !image.firebaseImagePath) {
-        errors[`images[${index}]`] = 'Each image must have a URL and a path.';
-      }
-    });
-  }
+  // if (!Array.isArray(images)) {
+  //   errors.images = 'Images must be an array.';
+  // } else {
+  //   if (images.length > 5) {
+  //     errors.images = 'Cannot have more than 5 images per ad.';
+  //   }
+  //   if (images.length <= 0) {
+  //     errors.images = 'Each ad should contain at least 1 image.';
+  //   }
+  //   images.forEach((image, index) => {
+  //     if (!image.imageURL || !image.firebaseImagePath) {
+  //       errors[`images[${index}]`] = 'Each image must have a URL and a path.';
+  //     }
+  //   });
+  // }
 
   if (Object.keys(errors).length > 0) {
     throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });

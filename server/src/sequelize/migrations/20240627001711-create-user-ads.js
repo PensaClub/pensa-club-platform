@@ -55,28 +55,28 @@ module.exports = {
         allowNull: true,
         defaultValue: null,
       },
-      images: {
-        type: DataTypes.JSON,
-        allowNull: false,
-        validate: {
-          isValidArray(value) {
-            if (!Array.isArray(value)) {
-              throw new Error('Images must be an array.');
-            }
-            if (value.length > 5) {
-              throw new Error('Cannot have more than 5 images per ad.');
-            }
-            if (value.length <= 0) {
-              throw new Error('Each ad should contain at least 1 image.');
-            }
-            value.forEach((image) => {
-              if (!image.imageURL || !image.firebaseImagePath) {
-                throw new Error('Each image must have a url and a path.');
-              }
-            });
-          },
-        },
-      },
+      // images: {
+      //   type: DataTypes.JSON,
+      //   allowNull: false,
+      //   validate: {
+      //     isValidArray(value) {
+      //       if (!Array.isArray(value)) {
+      //         throw new Error('Images must be an array.');
+      //       }
+      //       if (value.length > 5) {
+      //         throw new Error('Cannot have more than 5 images per ad.');
+      //       }
+      //       if (value.length <= 0) {
+      //         throw new Error('Each ad should contain at least 1 image.');
+      //       }
+      //       value.forEach((image) => {
+      //         if (!image.imageURL || !image.firebaseImagePath) {
+      //           throw new Error('Each image must have a url and a path.');
+      //         }
+      //       });
+      //     },
+      //   },
+      // },
       creation_date: {
         type: DataTypes.DATEONLY,
         allowNull: false,
