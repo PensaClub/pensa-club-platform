@@ -17,8 +17,12 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     debug: false,
-    fallbackLng: 'en',
+    fallbackLng: 'bg',
+    supportedLngs: ['bg', 'en'],
+    lng: 'bg',
+    react: {
+      useSuspense: false, 
+    },
   });
-
+console.log(i18n)
 export default i18n;
-
