@@ -1,7 +1,7 @@
 const CustomError = require('./customError');
 
 const notRequiredFields = ['adAddress', 'images'];
-const categoryList = ['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event'];
+const categoryList = ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'];
 
 module.exports = function adsValidator(body) {
   let errors = {};
@@ -23,7 +23,8 @@ module.exports = function adsValidator(body) {
   }
 
   if (!categoryList.includes(category)) {
-    errors.category = 'Category must be one of the following: Donation, Sale, Service, Entertainment, Training, or Event.';
+    errors.category =
+      'Category must be one of the following: recommend, donate, sell, work, courses, health, initiatives_projects, tours, games or arbitration.';
   }
 
   if (description.length < 10) {
@@ -32,21 +33,21 @@ module.exports = function adsValidator(body) {
     errors.description = 'Maximum description length limit of 1000 characters is reached.';
   }
 
-  // if (!Array.isArray(images)) {
-  //   errors.images = 'Images must be an array.';
-  // } else {
-  //   if (images.length > 5) {
-  //     errors.images = 'Cannot have more than 5 images per ad.';
-  //   }
-  //   if (images.length <= 0) {
-  //     errors.images = 'Each ad should contain at least 1 image.';
-  //   }
-  //   images.forEach((image, index) => {
-  //     if (!image.imageURL || !image.firebaseImagePath) {
-  //       errors[`images[${index}]`] = 'Each image must have a URL and a path.';
-  //     }
-  //   });
-  // }
+  if (!Array.isArray(images)) {
+    errors.images = 'Images must be an array.';
+  } else {
+    if (images.length > 5) {
+      errors.images = 'Cannot have more than 5 images per ad.';
+    }
+    if (images.length <= 0) {
+      errors.images = 'Each ad should contain at least 1 image.';
+    }
+    images.forEach((image, index) => {
+      if (!image.imageURL || !image.firebaseImagePath) {
+        errors[`images[${index}]`] = 'Each image must have a URL and a path.';
+      }
+    });
+  }
 
   if (Object.keys(errors).length > 0) {
     throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });

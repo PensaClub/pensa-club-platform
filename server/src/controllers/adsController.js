@@ -8,19 +8,6 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   try {
     adsValidator(req.body);
 
-    // Example of successful ad creation via postman
-    // {
-    //     "summary": "Divan",
-    //     "category": "Sale",
-    //     "description": "very nice and comfy",
-    //     "adTown": "Popovo",
-    //     "adAddress" : "Madjarov 5",
-    //     "images" : [{
-    //         "imageURL" : "random url",
-    //         "firebaseImagePath" : "random path"
-    //     }]
-    //  }
-
     const data = fieldSwap(req.body, 'mapToDb');
 
     const ad = await user_ads.create({ user_id: req.user.userId, ...data });
