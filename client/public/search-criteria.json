@@ -1,45 +1,45 @@
-[
-    {
-        "id": 1,
-        "name": "Препоръчвам",
-        "email": "",
-        "phone": ""
-    },
-    {
-        "id": 2,
-        "name": "Дарявам"
-    },
-    {
-        "id": 3,
-        "name": "Продавам"
-    },
-    {
-        "id": 4,
-        "name": "Работа"
-      
-    },
-    {
-        "id": 5,
-        "name": "Обучения/ Курсове"
-    },
-    {
-        "id": 6,
-        "name": "Здраве"
-    },
-    {
-        "id": 7,
-        "name": "Инициативи / Проекти"
-    },
-    {
-        "id": 8,
-        "name": "Екскурзии/ Турове"
-    },
-    {
-        "id": 9,
-        "name": "Игри"
-    },
-    {
-        "id": 10,
-        "name": "Арбитраж"
-    }
-]
+{
+    "searchCriteria": [
+      {
+        "value": "recommend",
+        "name": "search-criteria.recommend"
+      },
+      {
+        "value": "donate",
+        "name": "search-criteria.donate"
+      },
+      {
+        "value": "sell",
+        "name": "search-criteria.sell"
+      },
+      {
+        "value": "work",
+        "name": "search-criteria.work"
+      },
+      {
+        "value": "courses",
+        "name": "search-criteria.courses"
+      },
+      {
+        "value": "health",
+        "name": "search-criteria.health"
+      },
+      {
+        "value": "initiatives_projects",
+        "name": "search-criteria.initiatives_projects"
+      },
+      {
+        "value": "tours",
+        "name": "search-criteria.tours"
+      },
+      {
+        "value": "games",
+        "name": "search-criteria.games"
+      },
+      {
+        "value": "arbitration",
+        "name": "search-criteria.arbitration"
+      }
+    ]
+  }
+  

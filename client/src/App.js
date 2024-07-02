@@ -24,12 +24,14 @@ import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';
 
 
 import { ToastContainer } from 'react-toastify';
+import { AdPage } from './components/Community/AdPage/AdPage.jsx';
+import { CreateAd } from './components/Community/AdPage/CreateAd/CreateAd.jsx';
 
 
 function App() {
 
   const location = useLocation()
-  const isCommunityPage = location.pathname === '/craigslist'
+  const isCommunityPage = location.pathname === '/craigslist' || location.pathname.startsWith('/ad');
 
 
   return (
@@ -48,6 +50,8 @@ function App() {
               <Route path="/server-error" element={<ServerError />} />
 
               <Route element={<AuthGuard />}>
+                <Route path="/ad" element={<AdPage />} />
+                <Route path='/ad/create' element={<CreateAd />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/profile/*" element={<Profile />} />
               </Route>

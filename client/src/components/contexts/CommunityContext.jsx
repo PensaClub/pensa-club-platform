@@ -76,7 +76,8 @@ export const CommunityProvider = ({ children }) => {
         regions,
         subregions,
         searchCriteria,
-        isLoading
+        isLoading,
+        fetchSearchCriteria
     }
     
     return (

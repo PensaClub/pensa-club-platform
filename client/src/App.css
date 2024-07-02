@@ -9,7 +9,7 @@
   /* --bg-gradient: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff); */
   /* --bg-line-gradient-hd: linear-gradient(359deg, rgb(239 128 152 / 40%), #efa560 57%, #fff);
   --bg-line-gradient-an: linear-gradient(359deg, rgb(239 128 152 / 40%), #efa560 57%, rgb(239 128 152 / 40%)); */
-
+  --button-bg:#B7582C;
   --orange: #E26020;
   --green: #1B6D4D;
   --green-cm-light:#2b5b3f;
@@ -23,6 +23,7 @@
   --text-black: #000;
   --text-pink: #dc9ebd;
   --green-text:#1F372A;
+  --brown:#933D24;
   --container-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
   --cluster-red-shadow:0 0.3rem 1.2rem rgba(187, 29, 61, 1.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.72);
   /* Font Size */ 
