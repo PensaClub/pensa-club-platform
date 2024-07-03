@@ -31,23 +31,26 @@ module.exports = (sequelize, DataTypes) => {
       },
       category: {
         type: DataTypes.ENUM,
-        values: ['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event'],
+        values: ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'],
         allowNull: true,
         defaultValue: null,
         validate: {
           isIn: {
-            args: [['Donation', 'Sale', 'Service', 'Entertainment', 'Training', 'Event']],
-            msg: 'Category must be one of the following: donation, sale, service, entertainment, training or event',
+            args: [['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration']],
+            msg: 'Category must be one of the following: recommend, donate, sell, work, courses, health, initiatives_projects, tours, games or arbitration.',
           },
         },
       },
       description: {
         type: DataTypes.STRING(1000),
-        allowNull: true,
+        allowNull: false,
         validate: {
-          len: {
-            args: [0, 1000],
-            msg: 'Maximum description length limit of 1000 characters is reached.',
+          customValidator(value) {
+            if (value.length < 10) {
+              throw new Error('Description must be at least 10 characters long.');
+            } else if (value.length > 1000) {
+              throw new Error('Maximum description length limit of 1000 characters is reached.');
+            }
           },
         },
       },
@@ -63,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       images: {
         type: DataTypes.JSON,
-        allowNull: true,
+        allowNull: false,
         validate: {
           isValidArray(value) {
             if (!Array.isArray(value)) {
