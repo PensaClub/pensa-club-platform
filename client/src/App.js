@@ -51,12 +51,7 @@ function App() {
                 <Route path="/forget-password" element={<ForgetPassword />} />
                 <Route path="/resend-email" element={<ReSendEmail />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
-                <Route element={<AuthGuard />}>
-                  <Route path="/logout" element={<Logout />} />
-                  <Route path="/profile/*" element={<Profile />} />
-                </Route>
-              </Routes>
-
+                
               <Route element={<AuthGuard />}>
                 <Route path="/ad" element={<AdPage />} />
                 <Route path='/ad/create' element={<CreateAd />} />
@@ -68,7 +63,7 @@ function App() {
                 <Route path="/sign-up" element={<LoginRegister />} />
               </Route>
               <Route path="/craigslist" element={<CommunityPage />} />
-             
+              <Route path="/ads" element={<AdsCard />} />
               <Route path="/filter" element={<FiltersMap />} />
               <Route path="/map" element={<MapPage />} />
               <Route path="/errors/*" element={<ErrorPageBoundary />} />
