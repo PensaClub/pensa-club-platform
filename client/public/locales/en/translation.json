@@ -7,7 +7,6 @@
     "profile": "Profile",
     "logout": "Logout"
   },
-
   "footer": {
     "site-map": "Site Map",
     "communities": "Communities",
@@ -22,7 +21,6 @@
     "privacy": "Privacy Policy",
     "copyright": "2024 Pensa club. All rights reserved"
   },
-
   "hero": {
     "title": "DECENT LIFE FOR PEOPLE IN THE THIRD AGE",
     "desc": "Bulgaria is the country in the European Union (EU) in which the <span>elderly</span> are most threatened by poverty, social exclusion and material difficulties, according to data from the European statistical service Eurostat. <span>Bulgarian pensioners</span> are also the most isolated from the Internet in the EU. Only one in ten people uses the web, and half of those who have internet access write e-mails, read news and search for information about goods. Only <span>2%</span> of them shop online, and every third uses on social networks.",
@@ -39,15 +37,13 @@
       "fifth-revolution-desc": "This is the latest stage in the development, which involves the use of artificial intelligence not only for automation, but also for the integration of human creative and analytical potential"
     }
   },
-
-  "motto": {    
-      "title1": "LET'S BREAK THIS TREND",
-      "title2": "LET'S CHANGE THIS MODEL",
-      "title3": "KEEPING UP WITH THE TIMES",
-      "desc": "Creation of an innovative, digital and <span>interactive platform</span> aimed at improving the quality of life of the elderly by actively including them in modern society, supporting them in the development of new skills and interests and promoting a <span>healthy and full, dignified life.</span>",
+  "motto": {
+    "title1": "LET'S BREAK THIS TREND",
+    "title2": "LET'S CHANGE THIS MODEL",
+    "title3": "KEEPING UP WITH THE TIMES",
+    "desc": "Creation of an innovative, digital and <span>interactive platform</span> aimed at improving the quality of life of the elderly by actively including them in modern society, supporting them in the development of new skills and interests and promoting a <span>healthy and full, dignified life.</span>",
     "about-btn": "Read More About Us"
   },
-
   "news-subscribe": {
     "title": "Stay up to date with",
     "desc": "Sign up for the latest news, updates and tips.",
@@ -59,7 +55,6 @@
       "invalid-email": "Email is invalid!"
     }
   },
-
   "form": {
     "login": "Login",
     "register": "Register",
@@ -77,9 +72,25 @@
       "invalid-email": "Email is invalid!",
       "password-format": "Password must be at least 8 characters long, containing at least one small letter, one capital letter and a number!",
       "passwords-not-match": "Passwords do not match!"
-    }
+    },
+    "new-password": "New password",
+    "confirm-new-password": "Confirm new password",
+    "reset-password": "Reset password",
+    "enter-new-password": "Enter your new password below.",
+    "next-button": "Next",
+    "back-to-login": "Back to login",
+    "forget-password": "Forget password",
+    "reset-forget-password": "Reset your password by providing your account email below.",
+    "check-email": "Check Your Email",
+    "reset-password-link": "You will receive a link at the email address you provided, which will allow you to reset your account password.",
+    "resend-email-simple-text": "If you don't see the email in your inbox, please check your spam, junk, social, or other folders where it might have ended up.",
+    "resend-button-text": "Resend Email",
+    "wait": "wait",
+    "minutes": "minutes",
+    "seconds": "seconds",
+    "and": "and",
+    "too-many-attempts":"You have exceeded the number of attempts. Please try again after"
   },
-
   "error-page": {
     "error": "Error",
     "home": "Home",
@@ -88,9 +99,8 @@
     "404-desc": "The page you are trying to reach does not excist",
     "500-desc": "Internal Server Error"
   },
-
   "map": {
-    "welcome":"Welcome to Pensa Club! Find local mutual aid announcements using our Map - Post an ad or offer - Browse and participate in local initiatives",
+    "welcome": "Welcome to Pensa Club! Find local mutual aid announcements using our Map - Post an ad or offer - Browse and participate in local initiatives",
     "choose": "Choose...",
     "skills": "Skills",
     "skills-placeholder": "Search for skills...",
@@ -100,7 +110,6 @@
     "interests-placeholder": "Search for interests...",
     "clear-filters": "Clear Filters"
   },
-
   "options": {
     "skills": {
       "communication_skills": "Communication Skills",
@@ -148,12 +157,11 @@
       "sewing": "Sewing"
     }
   },
-
   "profile": {
     "select_all": "Select all",
     "clear": "Clear",
-    "selected" : "selected",
-    "select" : "Select",
+    "selected": "selected",
+    "select": "Select",
     "profile_form_title": "Fill in your details",
     "add_photo": "Add photo",
     "username": "Username",
@@ -210,20 +218,18 @@
     "email_required": "Email is required",
     "email_error": "Email is invalid",
     "name_invalid": "Name is invalid",
-    "phone_number_invalid": "Phone number is invalid" ,
+    "phone_number_invalid": "Phone number is invalid",
     "password_error": "Password must be at least 8 characters long and contain at least one letter and one number",
     "new_password_error": "New password must be at least 8 characters long and contain at least one letter and one number",
     "password_match": "Passwords don't match",
     "logout": "Logout"
-    
-
   },
-  
   "notification": {
     "success-data": "User Data successfully submitted!",
     "success-register": "Your account is successfully created!",
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
-    "error": "An error occured. Please try submitting data again!"
+    "error": "An error occured. Please try submitting data again!",
+    "email-send": "Email sent successfully!"
   }
 }

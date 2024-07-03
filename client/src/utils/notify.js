@@ -2,9 +2,15 @@ import { toast } from 'react-toastify';
 import { Trans } from 'react-i18next';
 
 export const notify = (key) => {
+  // eslint-disable-next-line default-case
   switch (key) {
     case 'success-data':
       toast.success(<Trans i18nKey="notification.success-data" />, {
+        role: 'alert',
+      });
+      break;
+    case 'email-send':
+      toast.success(<Trans i18nKey="notification.email-send" />, {
         role: 'alert',
       });
       break;

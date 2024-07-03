@@ -27,7 +27,9 @@ export const userServiceFactory = (token) => {
     resetPassword: (data) => {
       return requester.post(`${apiUrl}/auth/reset-password`, data);
     },
-
+    forgetPassword: (data) => {
+      return requester.post(`${apiUrl}/auth/request-reset-password`, data);
+    },
     setUserData: (data) => {
       return requester.post(`${apiUrl}/user/details`, data);
     },
