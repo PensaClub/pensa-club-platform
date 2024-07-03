@@ -22,6 +22,16 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   }
 });
 
+adsController.get('/get-approved', isAuth, async (req, res, next) => {
+  try {
+    const ads = await user_ads.findAll({ where: { approved: true } });
+    res.status(200).json({ ...ads });
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
 adsController.get('/get-unapproved', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
   try {
     const ads = await user_ads.findAll({ where: { approved: false } });
@@ -31,6 +41,7 @@ adsController.get('/get-unapproved', rbac.checkPermission('approve_record'), isA
     next(err);
   }
 });
+
 
 adsController.post('/approve-ad', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
   try {
@@ -59,7 +70,7 @@ adsController.post('/delete-ad', isAuth, async (req, res, next) => {
       res.status(400).json({ message: 'ID doesn\'t match an existing ad.' });
     }
     if (req.user.role === 'admin' || req.user.userId == ad.user_id) {
-      await user.destroy();
+      await ad.destroy();
       res.status(200).json({ message: 'Ad successfully deleted' });
     }
     res.status(400).json({ message: 'Access denied.' });
