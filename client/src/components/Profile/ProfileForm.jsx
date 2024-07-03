@@ -8,12 +8,14 @@ import { loadData } from '../../utils/loadData';
 import { notify } from '../../utils/notify';
 import { useImagePreview } from '../hooks/useImagePreview';
 import { uploadImage } from '../../utils/uploadImage';
+import { useMappingContext } from '../contexts/MapContext';
 
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const navigate = useNavigate();
   const { onProfileDataSubmit } = useContext(UserContext);
+  const { onAllUsers,allUsers, setAllUsers  } = useMappingContext();
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   const { previewImage, handleImage } = useImagePreview();
@@ -57,7 +59,6 @@ const ProfileForm = () => {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
-
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))
@@ -222,6 +223,7 @@ const ProfileForm = () => {
           trimmedForm.firebaseImagePath = data.filePath;
         }
         await onProfileDataSubmit(trimmedForm);
+        await onAllUsers();
         window.scrollTo(0, 0);
         navigate('/profile');
       } catch (error) {

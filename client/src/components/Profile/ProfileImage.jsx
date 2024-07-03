@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { useImagePreview } from "../hooks/useImagePreview";
 import { uploadImage } from "../../utils/uploadImage";
 import { UserContext } from "../contexts/UserContext";
+import { useMappingContext } from "../contexts/MapContext";
 
 export const ProfileImage = () => {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ export const ProfileImage = () => {
   const { previewImage, handleImage } = useImagePreview();
 
   const [imageUpload, setImageUpload] = useState(null);
+  const { onAllUsers,  } = useMappingContext();
 
   const handleUpload = async () => {
     if (!imageUpload) return;
@@ -23,6 +25,7 @@ export const ProfileImage = () => {
     try {
       const data = await uploadImage(imageUpload, profileData.details.firebaseImagePath);
       await onEditProfileDataSubmit({ imageURL: data.url, firebaseImagePath: data.filePath });
+      await onAllUsers();
     } catch (error) {
       throw new Error("Error uploading image: ", error);
     }

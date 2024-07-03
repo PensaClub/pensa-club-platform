@@ -9,6 +9,7 @@ const { where } = require('sequelize');
 const { tokenCreator } = require('../utils/jwt.js');
 const fieldSwap = require('../utils/fieldSwap.js');
 const memoryCache = require('../middlewares/caching.js');
+const eventEmitter = require('../utils/eventEmitter.js');
 
 userDetailsController.post('/details', isAuth, async (req, res, next) => {
   if (req.user.enabled) {
@@ -73,13 +74,15 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 
     const updatedDetails = { ...fieldSwap(restOfDetails, 'mapFromDb'), age: ageCalculate(restOfDetails.birth_date) };
 
+    eventEmitter.emit('dbUpdated', { email: req.user.email, enabled: true, details: updatedDetails });
+
     res.status(200).send({ message: 'Details successfully updated!', user: { email: req.user.email, enabled: true, details: updatedDetails }, token });
   } catch (err) {
     next(err);
   }
 });
 
-userDetailsController.get('/all-users', memoryCache, async (req, res, next) => {
+userDetailsController.get('/all-users', async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
       attributes: ['email', ['finished', 'enabled']],
@@ -96,6 +99,8 @@ userDetailsController.get('/all-users', memoryCache, async (req, res, next) => {
             'skills',
             ['interest_options', 'interestOptions'],
             'location',
+            'imageURL',
+            ['firebase_image_path', 'firebaseImagePath'],
           ],
         },
       ],
@@ -134,6 +139,8 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
     const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
 
     updatedDetails.age = ageCalculate(updatedDetails.birthDate);
+
+    eventEmitter.emit('dbUpdated', { email: req.user.email, enabled: true, details: updatedDetails });
 
     res.status(200).json({ message: 'Details edited successfully!', details: updatedDetails });
   } catch (err) {

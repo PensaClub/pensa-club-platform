@@ -5,6 +5,7 @@ import { handleReset, validateField, trimObjectStrings } from '../../utils/profi
 import { UserContext } from '../contexts/UserContext';
 
 import { loadData } from '../../utils/loadData';
+import { useMappingContext } from '../contexts/MapContext';
 
 const ProfileAddress = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const ProfileAddress = () => {
   const [municipalities, setMunicipalities] = useState([]);
   const [settlements, setSettlements] = useState([]);
   const [errors, setErrors] = useState({});
+  const { onAllUsers,  } = useMappingContext();
 
   const initialFormState = {
     region: profileData.details.region || '',
@@ -148,6 +150,7 @@ const ProfileAddress = () => {
         // );
         // const updatedData = Object.fromEntries(updatedDataArr);
         onEditProfileDataSubmit(trimmedForm);
+        onAllUsers();
         console.log('Address Submitted:', trimmedForm);
         navigate('/profile');
       } catch (error) {

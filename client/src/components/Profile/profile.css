@@ -8,6 +8,16 @@
     position: relative;
 }
 
+.profile-section-edit,
+.profile-section,
+.profile-form,
+.profile-data,
+.avatar img {
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box; 
+}
+
 .profile-form span {
   color: var(--red);
 }
@@ -88,7 +98,7 @@
     position: absolute;
     top: 0.8rem;
     right: 0.8rem;
-    z-index: 10;
+    z-index: 2;
     padding: var(--s-space);
     border-radius: var(--s-space);
     color: var(--orange);
