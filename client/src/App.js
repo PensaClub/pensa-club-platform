@@ -16,7 +16,6 @@ import { MapPage } from './components/MapPage/MapPage';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 
-
 import { MapProvider } from './components/contexts/MapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
@@ -24,9 +23,12 @@ import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';
 
 
 import { ToastContainer } from 'react-toastify';
+
 import { AdPage } from './components/Community/AdPage/AdPage.jsx';
 import { CreateAd } from './components/Community/AdPage/CreateAd/CreateAd.jsx';
-
+import { ForgetPassword } from './components/ForgetPassword/ForgetPassword.jsx';
+import { ReSendEmail } from './components/ForgetPassword/ReSendEmail.jsx';
+import { ResetPasswordPage } from './components/ForgetPassword/ResetPasswordPage.jsx';
 
 function App() {
 
@@ -42,12 +44,18 @@ function App() {
             <CommunityProvider>
             <Header additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''} />
 
-          <ToastContainer role="alert" className={"notification"} limit={3}/>
-             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/server-error" element={<ServerError />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/server-error" element={<ServerError />} />
+              <ToastContainer role="alert" className={"notification"} limit={3} />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/server-error" element={<ServerError />} />
+                <Route path="/forget-password" element={<ForgetPassword />} />
+                <Route path="/resend-email" element={<ReSendEmail />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route element={<AuthGuard />}>
+                  <Route path="/logout" element={<Logout />} />
+                  <Route path="/profile/*" element={<Profile />} />
+                </Route>
+              </Routes>
 
               <Route element={<AuthGuard />}>
                 <Route path="/ad" element={<AdPage />} />
