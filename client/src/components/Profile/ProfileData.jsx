@@ -8,6 +8,7 @@ import { useImagePreview } from '../hooks/useImagePreview';
 import { notify } from '../../utils/notify';
 import { useMappingContext } from '../contexts/MapContext';
 import { useImageUpload } from '../hooks/useImageUpload';
+import { toast } from 'react-toastify';
 
 export const ProfileData = () => {
   const { t } = useTranslation();
@@ -134,15 +135,10 @@ export const ProfileData = () => {
 
         await onEditProfileDataSubmit(updatedForm);
 
-        console.log('Data Submitted:', updatedForm);
-        // resetFields(setForm, initialFormState);
-        // setSelectedDate('');
-        // setSelectedMonth('');
-        // setSelectedYear('');
         window.scrollTo(0, 0);
         navigate('/profile');
       } catch (error) {
-        console.log(`Error Profile Data Submit Component: ${error.message}`);
+        return toast.error(t('errors.profile_data_submit', { error: error.message }));
       }
     }
   };

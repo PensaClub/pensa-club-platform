@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { uploadImageToFirebase } from '../../utils/uploadImageToFirebase';
+import { t } from 'i18next';
+import { toast } from 'react-toastify';
 const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
 export function useImageUpload() {
@@ -17,7 +19,9 @@ export function useImageUpload() {
         setImages((prevImages) => [...prevImages, newImage]);
       }
     } else {
-      throw new Error(`Type ${newImage.type} is not allowed! Allowed types are png/jpeg/jpg`);
+      const type = newImage?.type ? newImage.type.split('/')[0] : t('errors.unknown');
+      const errorMessage = t('errors.image_type', { type });
+      return toast.error(errorMessage);
     }
   };
 
@@ -32,7 +36,7 @@ export function useImageUpload() {
         try {
           return await uploadImageToFirebase(image, oldPath);
         } catch (error) {
-          throw new Error('Error uploading image: ', error);
+          throw new Error(error);
         }
       })
     );
