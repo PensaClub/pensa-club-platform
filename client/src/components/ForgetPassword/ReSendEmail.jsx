@@ -44,7 +44,7 @@ export const ReSendEmail = () => {
             localStorage.setItem('timer', 60);
         } else if (attempts >= 3) {
             setIsLocked(true);
-            setTimer(15 * 60); // 15 минути след трети опит
+            setTimer(15 * 60); // 15 minutes after the third attempt
             localStorage.setItem('timer', 15 * 60);
         }
         localStorage.setItem('attempts', attempts);

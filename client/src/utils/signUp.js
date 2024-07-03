@@ -2,7 +2,6 @@ export const trimFields = (fields) => {
   return fields.map((field) => field.trim());
 };
 
-  // const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 export const resetFields = (setFieldFunctions) => {
@@ -28,7 +27,7 @@ export const validateEmail = (email, setErrors) => {
 };
 
 export const validatePassword = (password, setErrors) => {
-  console.log(password)
+
   if (!password) {
     setErrors((prevErrors) => ({
       ...prevErrors,
@@ -42,11 +41,7 @@ export const validatePassword = (password, setErrors) => {
       password: "form.errors.password-format",
       newPassword: "form.errors.password-format",
     }));
-  // } else if (password.length < 3) {
-  //   setErrors((prevErrors) => ({
-  //     ...prevErrors,
-  //     password: "Паролата трябва да бъде поне 3 символа!",
-  //   }));
+
   } else {
     setErrors((prevErrors) => ({
       ...prevErrors,

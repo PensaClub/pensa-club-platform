@@ -4,7 +4,7 @@ import { trimFields, validateEmail, validatePassword, validateRePassword, resetF
 export const useForm = (initialValues, onSubmitHandler) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
-console.log(errors);
+
   const onChangeHandler = (e) => {
     setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
   };

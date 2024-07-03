@@ -196,7 +196,6 @@ export const UserProvider = ({ children }) => {
       return response;
     } catch (error) {
       notify('error');
-      console.log(error);
       showErrorAndSetTimeouts(error.message);
     }
   }
