@@ -17,7 +17,7 @@
   width: 100%;
   max-width: 350px;
   height: auto;
-  /* z-index: 500; */
+
 }
 
 .logo-map img {
@@ -33,7 +33,7 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  /* flex: 0 0 100%; */
+
 
 }
 .filter-main label:first-child {
@@ -46,7 +46,7 @@
 }
 .filter-main label {
   display: block;
-  /* margin-bottom: var(--s-space); */
+
   font-size: calc(var(--xs-font-size) + 2px);
   font-weight: bold;
   text-align: center;
@@ -131,7 +131,7 @@
 .options {
   max-height: calc(var(--container-min-height) / 2);
   overflow-y: auto;
-  /* max-height: 300px; */
+
   overflow-y: auto; 
 }
 
@@ -151,7 +151,7 @@
 .option:hover {
   background-color: #f0f0f0;
 }
-/* hamburger */
+
 .hamburger {
   display: none;
   cursor: pointer;

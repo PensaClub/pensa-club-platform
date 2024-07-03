@@ -231,5 +231,19 @@
     "success-logout": "You logged out successfully!",
     "error": "An error occured. Please try submitting data again!",
     "email-send": "Email sent successfully!"
-  }
+  },
+    "search-criteria": {
+      "recommend": "Recommend",
+      "donate": "Donate",
+      "sell": "Sell",
+      "work": "Work",
+      "courses": "Training/Courses",
+      "health": "Health",
+      "initiatives_projects": "Initiatives / Projects",
+      "tours": "Tours",
+      "games": "Games",
+      "arbitration": "Arbitration"
+    }
+  
+
 }

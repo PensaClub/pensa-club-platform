@@ -19,7 +19,7 @@ import {
 import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";
 
-export const Header = () => {
+export const Header = ({additionalClasses }) => {
   const { t, i18n } = useTranslation();
 
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -69,7 +69,7 @@ export const Header = () => {
 
   return (
     <section className="site-header">
-      <header className={isMenuOpen ? "scrolled" : ""}>
+       <header className={`header ${additionalClasses} ${isMenuOpen ? 'scrolled' : ''}`}>
         <Link to="/">
           <img src="/images/homePage/logo.png" alt="logo" className="logo" /> Pensa Club
         </Link>
@@ -170,7 +170,7 @@ export const Header = () => {
           </div>
         </section>
       </header>
-      <div className="after-header"></div>
+      {/* <div className="after-header"></div> */}
       <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>
         <p>Вашият профил е непълен. Моля, завършете го, за да продължите да използвате всички възможности на платформата.</p>
       </AlertModal>
