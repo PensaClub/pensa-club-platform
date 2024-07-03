@@ -5,7 +5,7 @@ import { faMagnifyingGlass, faLocationDot, faCalendar } from '@fortawesome/free-
 import { FiltersCommunity } from "./FiltersCommunity/FiltersCommunity";
 import { CommunityFooter } from "./CommunityFooter/CommunityFooter";
 import { AdsCard } from "./AdsCard/AdsCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { What } from "./CommunityModals/What";
 import { SearchWhere } from "./CommunityModals/SearchWhere";
@@ -54,6 +54,10 @@ export const CommunityPage = () => {
                 "item": "Диван"
             }
         ]
+
+        useEffect(()=>{
+            window.scrollTo({top:0})
+        },[])
     return (
         <>
             <section className="background-community">

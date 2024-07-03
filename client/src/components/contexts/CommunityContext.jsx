@@ -69,7 +69,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(true);
             const response = await communityService.createAd(adData);
             setIsLoading(false);
-            //NOTIFICATIONS
+            //to implement NOTIFICATIONS
             return response;
         } catch (e) {
             showErrorAndSetTimeouts(e.message);

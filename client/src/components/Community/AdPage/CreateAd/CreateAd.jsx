@@ -8,28 +8,78 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useFormCreate } from '../../../hooks/useFormCreate';
 import { useTranslation } from 'react-i18next';
+import { useAuthContext } from '../../../contexts/UserContext';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateAd = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const [settlements, setSettlements] = useState([]);
     const { searchCriteria, createAd } = useCommunityContext();
+    const { profileData } = useAuthContext();
+ 
+    const currentLanguage = i18n.language;
+    const navigate=useNavigate()
+    const getEmailPrefix = (email) => {
+        return email.split('@')[0];
+    }
+
+    const emailPrefix = getEmailPrefix(profileData.email);
+
+    const getAdTownValue = (language, settlement) => {
+        if (!settlement) return '';
+        return language === 'bg' ? settlement.bg : settlement.en;
+    };
+
 
     const initialValues = {
         summary: '',
-        category: '',
+        category: 'recommend',
         description: '',
         adTown: '',
-        adAddress: '',
+        adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
         // useOtherCity: false
     };
+
+    const handleNavigate = () => {
+        navigate('/craigslist')
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const addressId = JSON.parse(localStorage.getItem('addressId'));
+            if (addressId) {
+                try {
+                    const response = await fetch(`/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`);
+                    const data = await response.json();
+                    // console.log(data, "blabla");
+                    setSettlements(data);
+                    const settlement = data.find(settlement => settlement.id === addressId.settlementId);
+
+                    if (settlement) {
+                        setValues((state) => ({
+                            ...state,
+                            adTown: getAdTownValue(currentLanguage, settlement)
+                        }));
+                    }
+                } catch (error) {
+                    console.error('Failed to load data', error);//to implement notification 
+                }
+            }
+        };
+
+        fetchData();
+    }, [currentLanguage]);
+
 
     const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
         try {
             await createAd(formData);
-            console.log('Ad created successfully');
+            console.log('Ad created successfully');//to implement notification 
         } catch (error) {
-            console.error('Error creating ad:', error);
+            console.error('Error creating ad:', error); //to implementnotification
         }
-    });
+    }, emailPrefix);
 
     return (
         <>
@@ -52,7 +102,7 @@ export const CreateAd = () => {
                                             onBlur={onBlurHandler}
                                             required
                                         />
-                                        {errors.adTitle && <p className="error">{errors.adTitle}</p>}
+                                        {errors.summary && <p className="error">{errors.summary}</p>}
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="category">Категория</label>
@@ -64,7 +114,7 @@ export const CreateAd = () => {
                                             onBlur={onBlurHandler}
                                         >
                                             {searchCriteria.searchCriteria?.map((criteria) => (
-                                                <option key={criteria.id} value={criteria.value}>
+                                                <option key={criteria.value} value={criteria.value}>
                                                     {t(criteria.name)}
                                                 </option>
                                             ))}
@@ -84,30 +134,32 @@ export const CreateAd = () => {
                                     />
                                     {errors.description && <p className="error">{errors.description}</p>}
                                 </div>
-                                <div className="ad-address">
-                                    <div className="form-group">
-                                        <label htmlFor="adTown">Град</label>
-                                        <input
-                                            type="text"
-                                            id="adTown"
-                                            name="adTown"
-                                            value={values.city}
-                                            onChange={onChangeHandler}
-                                            onBlur={onBlurHandler}
-                                            required
-                                            disabled={values.useOtherCity}
-                                        />
-                                        {errors.city && <p className="error">{errors.city}</p>}
-                                    </div>
-                                    <div className="checkbox-group useOtherCity">
-                                        <input
-                                            type="checkbox"
-                                            id="useOtherCity"
-                                            name="useOtherCity"
-                                            checked={values.useOtherCity}
-                                            onChange={(e) => setValues((state) => ({ ...state, useOtherCity: e.target.checked }))}
-                                        />
-                                        <label htmlFor="useOtherCity">Искам да избера друг град</label>
+                                <div className="address-check">
+                                    <div className="ad-address">
+                                        <div className="form-group">
+                                            <label htmlFor="adTown">Град</label>
+                                            {<input
+                                                type="text"
+                                                id="adTown"
+                                                name="adTown"
+                                                value={values.adTown}
+                                                onChange={onChangeHandler}
+                                                onBlur={onBlurHandler}
+                                                required
+                                                disabled={!values.useOtherCity}
+                                            />}
+                                            {errors.adTown && <p className="error">{errors.adTown}</p>}
+                                        </div>
+                                        <div className="checkbox-group useOtherCity">
+                                            <input
+                                                type="checkbox"
+                                                id="useOtherCity"
+                                                name="useOtherCity"
+                                                checked={values.useOtherCity}
+                                                onChange={(e) => setValues((state) => ({ ...state, useOtherCity: e.target.checked }))}
+                                            />
+                                            <label htmlFor="useOtherCity">Искам да избера друг град</label>
+                                        </div>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="adAddress">Адрес</label>
@@ -115,12 +167,12 @@ export const CreateAd = () => {
                                             type="text"
                                             id="adAddress"
                                             name="adAddress"
-                                            value={values.address}
+                                            value={values.adAddress}
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
                                             required
                                         />
-                                        {errors.address && <p className="error">{errors.address}</p>}
+                                        {errors.adAddress && <p className="error">{errors.adAddress}</p>}
                                     </div>
                                 </div>
                                 <div className="form-group">
@@ -145,7 +197,7 @@ export const CreateAd = () => {
                                 </div>
                                 <div className="button-group">
                                     <button type="submit" className="publish-button">Публикувай</button>
-                                    <button type="button" className="cancel-button" onClick={() => { /* Logic for cancel */ }}>Откажи</button>
+                                    <button type="button" className="cancel-button" onClick={handleNavigate}>Откажи</button>
                                 </div>
                             </form>
                         </div>
