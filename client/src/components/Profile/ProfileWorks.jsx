@@ -5,6 +5,7 @@ import CustomSelect from './CustomSelect';
 import { resetFields, handleReset } from '../../utils/profile';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
+import { useMappingContext } from '../contexts/MapContext';
 
 
 export const ProfileWorks = () => {
@@ -18,6 +19,7 @@ export const ProfileWorks = () => {
     const [form, setForm] = useState(initialFormState);
     const [workOptions, setWorkOptions] = useState([]);
     const [errors, setErrors] = useState({});
+    const { setAllUsers, allUsers } = useMappingContext();
 
     useEffect(() => {
         const loadData = async () => {
@@ -31,11 +33,40 @@ export const ProfileWorks = () => {
         };
         loadData();
     }, []);
+    useEffect(() => {
+        if (profileData) {
+            setAllUsers(prevUsers => {
+                if (!prevUsers || !prevUsers.response || !Array.isArray(prevUsers.response.accounts)) {
+                    return {
+                        response: {
+                            accounts: [profileData],
+                        },
+                    };
+                }
 
+                const updatedAccounts = prevUsers.response.accounts.map(user =>
+                    user.email === profileData.email ? { ...user, ...profileData } : user
+                );
+
+                if (!updatedAccounts.some(user => user.email === profileData.email)) {
+                    updatedAccounts.push(profileData);
+                }
+
+                return {
+                    ...prevUsers,
+                    response: {
+                        ...prevUsers.response,
+                        accounts: updatedAccounts,
+                    },
+                };
+            });
+        }
+    }, [profileData, setAllUsers])
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
             await onEditProfileDataSubmit(form);
+        
             console.log('Form Submitted:', form);
             resetFields(setForm, initialFormState);
             navigate('/profile');

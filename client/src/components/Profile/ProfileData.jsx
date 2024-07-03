@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useImagePreview } from '../hooks/useImagePreview';
 import { uploadImage } from '../../utils/uploadImage';
 import { notify } from '../../utils/notify';
+import { useMappingContext } from '../contexts/MapContext';
 
 export const ProfileData = () => {
   const { t } = useTranslation();
@@ -18,6 +19,8 @@ export const ProfileData = () => {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
+  const { setAllUsers, allUsers } = useMappingContext();
+  
   // const [profileData, setProfileData] = useState('')
 
   //TODO: change keys when changed on server!!!
@@ -70,7 +73,35 @@ export const ProfileData = () => {
       }));
     }
   }, [selectedDate, selectedMonth, selectedYear]);
+  useEffect(() => {
+    if (profileData) {
+      setAllUsers(prevUsers => {
+        if (!prevUsers || !prevUsers.response || !Array.isArray(prevUsers.response.accounts)) {
+          return {
+            response: {
+              accounts: [profileData],
+            },
+          };
+        }
 
+        const updatedAccounts = prevUsers.response.accounts.map(user =>
+          user.email === profileData.email ? { ...user, ...profileData } : user
+        );
+
+        if (!updatedAccounts.some(user => user.email === profileData.email)) {
+          updatedAccounts.push(profileData);
+        }
+
+        return {
+          ...prevUsers,
+          response: {
+            ...prevUsers.response,
+            accounts: updatedAccounts,
+          },
+        };
+      });
+    }
+  }, [profileData, setAllUsers]);
   const handleSelectedDateChange = (e) => {
     setSelectedDate(e.target.value);
   };
@@ -116,6 +147,7 @@ export const ProfileData = () => {
           updatedData.firebaseImagePath = data.filePath;
         }
         await onEditProfileDataSubmit(updatedData);
+ 
         console.log('Data Submitted:', updatedData);
         // resetFields(setForm, initialFormState);
         // setSelectedDate('');
