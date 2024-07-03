@@ -22,7 +22,7 @@ export const SearchWhere = ({ isOpen, onClose }) => {
     }, [selectedRegion, fetchSubregions, subregions]);
 
     const handleSearch = () => {
-        // console.log(`Търсене в регион: ${selectedRegion}, Община: ${selectedSubregion}`);
+        
         onClose();
     };
 

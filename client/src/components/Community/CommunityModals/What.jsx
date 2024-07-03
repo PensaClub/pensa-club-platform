@@ -9,8 +9,6 @@ export const What = ({ isOpen, onClose }) => {
     const {searchCriteria } = useCommunityContext();
     console.log('searchCriteria', searchCriteria)
     const handleSearch = () => {
-        // Да се добави логика за търсене като пуснем заявките
-        console.log(`Търсене на: ${searchQuery}, Тип: ${searchType}`);
         onClose();
     };
 

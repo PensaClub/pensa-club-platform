@@ -29,6 +29,10 @@ export const communityServiceFactory = (token) => {
                 throw new Error('Failed to fetch search criteria');
             }
             return response.json();
+        }, 
+        createAd: async (adData) => {
+            return requester.post(`${apiUrl}/ads/ad-create`,adData);
+
         }
     }
 }

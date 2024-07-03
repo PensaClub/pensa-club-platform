@@ -1,7 +1,7 @@
 .footer-privacy-commun {
     display: none;
 }
-/* за преправка , пречи на останалите футъри */
+
 .footer-com-fix{ 
     position:sticky;
     bottom: 0;

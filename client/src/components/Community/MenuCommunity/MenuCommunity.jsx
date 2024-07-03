@@ -9,13 +9,9 @@ export const MenuCommunity = () => {
     const {isAuthentication} = useAuthContext();
 
     const navigate = useNavigate();
-    const handleHomeClick=()=>{
-        navigate('/')
+    const handleNavigation = (path) => {
+        navigate(path);
     };
-
-    const handleMapClick=()=>{
-        navigate('/map')
-    }
     const handleUserClick=()=>{
     if(!isAuthentication){
 
@@ -26,8 +22,8 @@ export const MenuCommunity = () => {
     return(
         <>
             <nav className="menu-community">
-            <FontAwesomeIcon icon={faHouseUser} className="commun-menu-icons" onClick={handleHomeClick} />
-            <FontAwesomeIcon icon={faMapLocation} className="commun-menu-icons" onClick={handleMapClick} />
+            <FontAwesomeIcon icon={faHouseUser} className="commun-menu-icons" onClick={()=>handleNavigation('/')} />
+            <FontAwesomeIcon icon={faMapLocation} className="commun-menu-icons" onClick={()=>handleNavigation('/map')} />
             <FontAwesomeIcon icon={faBars} className="commun-menu-icons" />
             <FontAwesomeIcon icon={faUser} className="commun-menu-icons" onClick={handleUserClick}/>
             </nav>

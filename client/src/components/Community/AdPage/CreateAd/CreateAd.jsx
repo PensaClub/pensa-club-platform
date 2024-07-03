@@ -9,35 +9,35 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useFormCreate } from '../../../hooks/useFormCreate';
 import { useTranslation } from 'react-i18next';
 
-
 export const CreateAd = () => {
     const { t } = useTranslation();
-    const { searchCriteria } = useCommunityContext();
+    const { searchCriteria, createAd } = useCommunityContext();
 
     const initialValues = {
         summary: '',
-        category: 'Дарявам',
+        category: '',
         description: '',
         adTown: '',
         adAddress: '',
-        useOtherCity: false
+        // useOtherCity: false
     };
 
-    const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, (formData, images) => {
-
-        console.log('Form Data:', formData);
-        console.log('Images:', images);
+    const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
+        try {
+            await createAd(formData);
+            console.log('Ad created successfully');
+        } catch (error) {
+            console.error('Error creating ad:', error);
+        }
     });
 
     return (
         <>
             <section className="ad-community-background">
                 <HeaderCommunity />
-
                 <section className="create-ad-main">
                     <div className="ad-card-create">
                         <h2 className="ad--card-title">Публикувай обява</h2>
-
                         <div className="ad-create-form">
                             <form onSubmit={onSubmit}>
                                 <div className="ad-info-desc">
@@ -131,10 +131,11 @@ export const CreateAd = () => {
                                                 <input
                                                     type="file"
                                                     accept="image/*"
-                                                    onChange={(e) => handleImageChange(index, e)}
+                                                    onChange={handleImageChange}
+                                                    multiple
                                                 />
                                                 {image ? (
-                                                    <img src={image.url} alt={`Upload ${index + 1}`} />
+                                                    <img src={image} alt={`Upload ${index + 1}`} />
                                                 ) : (
                                                     <FontAwesomeIcon icon={faPlus} className="plus-icon-ad" />
                                                 )}

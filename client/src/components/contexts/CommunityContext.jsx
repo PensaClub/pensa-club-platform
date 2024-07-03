@@ -64,7 +64,20 @@ export const CommunityProvider = ({ children }) => {
         }
     
     }
-
+    const createAd = async (adData) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.createAd(adData);
+            setIsLoading(false);
+            //NOTIFICATIONS
+            return response;
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    }
     useEffect(() => {
         fetchRegions();
         fetchSearchCriteria();
@@ -77,7 +90,8 @@ export const CommunityProvider = ({ children }) => {
         subregions,
         searchCriteria,
         isLoading,
-        fetchSearchCriteria
+        fetchSearchCriteria,
+        createAd
     }
     
     return (

@@ -31,7 +31,7 @@ export const FiltersCommunity = () => {
     };
 
     const breakpointColumnsObj = {
-        default: 2, //когато ширината на екрана е 768 пиксела или по-голяма , ще се използва 2 колони.
+        default: 2, //when the screen width is 768 pixels or larger, 2 columns will be used.
         768: 1 // когато ширината на екрана е 768 пиксела или по-малка, ще се използва 1 колона.
     };
 

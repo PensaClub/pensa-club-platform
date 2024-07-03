@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseStorage } from "../../firebase"; 
 import imageCompression from "browser-image-compression";
-
 import { v4 } from "uuid";
+
 export const useFormCreate = (initialValues, onSubmitHandler) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [images, setImages] = useState([null, null, null, null]);
-console.log(values)
+  const [imageFiles, setImageFiles] = useState([null, null, null, null]);
 
-console.log(images)
+  console.log(images);
+
   const onChangeHandler = (e) => {
     setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
   };
@@ -24,59 +25,69 @@ console.log(images)
     }
   };
 
-  const handleImageChange = async (index, event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  const handleImageChange = (event) => {
+    const files = event.target.files;
+    const newImages = [...images];
+    const newImageFiles = [...imageFiles];
 
-    const options = {
-      maxSizeMB: 5,
-      maxWidthOrHeight: 350,
-    };
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!file) continue;
 
-    try {
-      const compressedFile = await imageCompression(file, options);
-      const imageRef = ref(firebaseStorage, `ads/${v4()}`);
-      const snapshot = await uploadBytes(imageRef, compressedFile);
-      const url = await getDownloadURL(snapshot.ref);
-
-      const newImages = [...images];
-      newImages[index] = { url, path: imageRef.fullPath };
-      setImages(newImages);
-    } catch (error) {
-      console.error('Error uploading image: ', error);
+      const emptyIndex = newImages.findIndex(image => image === null);
+      if (emptyIndex !== -1) {
+        newImages[emptyIndex] = URL.createObjectURL(file);
+        newImageFiles[emptyIndex] = file;
+      }
     }
+
+    setImages(newImages);
+    setImageFiles(newImageFiles);
   };
+
   const handleTrimFields = () => {
     const trimmedValues = Object.keys(values).reduce((acc, key) => {
-      acc[key] = values[key].trim();
+      const value = values[key];
+      acc[key] = typeof value === 'string' ? value.trim() : value;
       return acc;
     }, {});
     setValues(trimmedValues);
   };
 
-  const validate = () => {
-    const newErrors = {};
-    Object.keys(values).forEach((key) => {
-      if (!values[key].trim()) {
-        newErrors[key] = 'This field is required!';
-      }
-    });
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     handleTrimFields();
 
-    if (validate()) {
-      if (onSubmitHandler) onSubmitHandler(values, images);
-      setValues(initialValues);
-      setErrors({});
-      setImages([null, null, null, null]);
-    } else {
-      console.log("Invalid form");
-    }
+      try {
+        const uploadTasks = imageFiles.map(async (file) => {
+          if (!file) return null;
+
+          const options = {
+            maxSizeMB: 5,
+            maxWidthOrHeight: 350,
+          };
+
+          const compressedFile = await imageCompression(file, options);
+          const imageRef = ref(firebaseStorage, `ads/${v4()}`);
+          const snapshot = await uploadBytes(imageRef, compressedFile);
+          const url = await getDownloadURL(snapshot.ref);
+
+          return { url, path: imageRef.fullPath };
+        });
+
+        const imageUrls = await Promise.all(uploadTasks);
+    
+        if (onSubmitHandler) onSubmitHandler({ ...values, images: imageUrls });
+        
+        setValues(initialValues);
+        setErrors({});
+        setImages([null, null, null, null]);
+        setImageFiles([null, null, null, null]);
+      } catch (error) {
+        console.error('Error uploading images: ', error); //NOTIFICATIONS
+      }
+ 
   };
 
   return {

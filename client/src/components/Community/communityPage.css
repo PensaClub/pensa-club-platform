@@ -7,10 +7,6 @@
 }
 
 .community-page {
-    /* background-image: url('../../../public/images/community/community-bg.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover; */
     width: 100%;
     min-height: 100vh;
 
@@ -20,17 +16,13 @@
     display: none;
 }
 
-/* .main-community{
-    min-height: 100vh;
-
-} */
 .hero-section-commun {
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* margin: 5em auto;  */
+
 }
 
 .hero-section-commun h1 {
@@ -57,7 +49,6 @@
     padding: 0.4em 1em;
     width: 100%;
     max-width: 310px;
-    /* height: 10vh; */
     border: 2px var(--green-cm-light) solid;
     border-radius: var(--radius-input);
 
@@ -102,8 +93,6 @@
 @media (min-width: 768px) and (max-width: 1199px) {
     .search-bar-commun {
         max-width: 75%;
-        /* margin: 2em auto; */
-        /* margin-left: 60px ; */
 
     }
 
@@ -114,7 +103,6 @@
     }
 
     .hero-section-commun p {
-        /* justify-self: flex-start; */
         display: block;
         color: var(--green-text);
         font-size: var(--xs-font-size);
@@ -128,7 +116,6 @@
         margin: 0 auto;
         background-color: var(--yellow);
         border-radius: 15px;
-        /* margin-bottom: 2em; */
     }
 
     .community-page {
@@ -189,7 +176,6 @@
     }
 
     .hero-section-commun p {
-        /* justify-self: flex-start; */
         display: block;
         color: var(--green-text);
         font-size: var(--s-font-size);
