@@ -162,8 +162,8 @@ export const Header = () => {
               <div className="social-icons-header">
                 <FontAwesomeIcon icon={faGlobe} />
                 <div className="dropdown-item">
-                  {currentLanguage !== "en" && <button onClick={() => changeLanguage("en")}>English</button>}
-                  {currentLanguage !== "bg" && <button onClick={() => changeLanguage("bg")}>български</button>}
+                {currentLanguage !== "bg" && <button onClick={() => changeLanguage("bg")}>български</button>}
+                {currentLanguage !== "en" && <button onClick={() => changeLanguage("en")}>English</button>}
                 </div>
               </div>
             </div>
