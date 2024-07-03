@@ -17,7 +17,7 @@ import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 
 
-import { MapProvider } from './components/contexts/mapContext.jsx';
+import { MapProvider } from './components/contexts/MapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
 import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';

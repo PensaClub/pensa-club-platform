@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faUniversalAccess, faUsersGear, faBars, faTimes, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { MapEditor } from '../MapEditor/MapEditor';
-import { useMappingContext } from '../../contexts/mapContext';
+import { useMappingContext } from '../../contexts/MapContext';
 
 const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
     const { t } = useTranslation();
