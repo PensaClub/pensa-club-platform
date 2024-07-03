@@ -25,6 +25,7 @@ export const AdsCard = ({ ads,isLoading }) => {
             </section>
         );
     }
+
     const handleImageClick = (image) => {
         setModalImage(image);
     };

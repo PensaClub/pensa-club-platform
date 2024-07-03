@@ -60,7 +60,7 @@ function App() {
                 <Route path="/sign-up" element={<LoginRegister />} />
               </Route>
               <Route path="/craigslist" element={<CommunityPage />} />
-              <Route path="/ads" element={<AdsCard />} />
+             
               <Route path="/filter" element={<FiltersMap />} />
               <Route path="/map" element={<MapPage />} />
               <Route path="/errors/*" element={<ErrorPageBoundary />} />

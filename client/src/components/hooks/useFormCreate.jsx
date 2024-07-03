@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useState, useEffect } from "react";
+import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
 import { firebaseStorage } from "../../firebase"; 
 import imageCompression from "browser-image-compression";
 import { v4 } from "uuid";
 
-export const useFormCreate = (initialValues, onSubmitHandler) => {
+export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [images, setImages] = useState([null, null, null, null]);
-  const [imageFiles, setImageFiles] = useState([null, null, null, null]);
+  const [imageFiles, setImageFiles] = useState([null, null, null, null]); 
 
-  console.log(images);
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
   const onChangeHandler = (e) => {
     setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
@@ -34,6 +34,11 @@ export const useFormCreate = (initialValues, onSubmitHandler) => {
       const file = files[i];
       if (!file) continue;
 
+      if (!allowedTypes.includes(file.type)) {
+        console.error(`Type ${file.type} is not allowed! Allowed types are png/jpeg/jpg`);
+        continue;
+      }
+
       const emptyIndex = newImages.findIndex(image => image === null);
       if (emptyIndex !== -1) {
         newImages[emptyIndex] = URL.createObjectURL(file);
@@ -47,18 +52,28 @@ export const useFormCreate = (initialValues, onSubmitHandler) => {
 
   const handleTrimFields = () => {
     const trimmedValues = Object.keys(values).reduce((acc, key) => {
-      const value = values[key];
-      acc[key] = typeof value === 'string' ? value.trim() : value;
+      acc[key] = typeof values[key] === 'string' ? values[key].trim() : values[key];
       return acc;
     }, {});
     setValues(trimmedValues);
   };
 
+  const validate = () => {
+    const newErrors = {};
+    Object.keys(values).forEach((key) => {
+      if (!values[key].trim()) {
+        newErrors[key] = 'This field is required!';
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     handleTrimFields();
 
+    if (validate()) {
       try {
         const uploadTasks = imageFiles.map(async (file) => {
           if (!file) return null;
@@ -69,25 +84,27 @@ export const useFormCreate = (initialValues, onSubmitHandler) => {
           };
 
           const compressedFile = await imageCompression(file, options);
-          const imageRef = ref(firebaseStorage, `ads/${v4()}`);
+          const imageRef = ref(firebaseStorage, `ads/${emailPrefix}/${v4()}`);
           const snapshot = await uploadBytes(imageRef, compressedFile);
-          const url = await getDownloadURL(snapshot.ref);
+          const imageURL = await getDownloadURL(snapshot.ref);
 
-          return { url, path: imageRef.fullPath };
+          return { imageURL, firebaseImagePath: imageRef.fullPath };
         });
 
         const imageUrls = await Promise.all(uploadTasks);
-    
-        if (onSubmitHandler) onSubmitHandler({ ...values, images: imageUrls });
+        const newImage = imageUrls.filter(x => x !== null)
+        if (onSubmitHandler) onSubmitHandler({ ...values, images: newImage });
         
         setValues(initialValues);
         setErrors({});
         setImages([null, null, null, null]);
         setImageFiles([null, null, null, null]);
       } catch (error) {
-        console.error('Error uploading images: ', error); //NOTIFICATIONS
+        console.error('Error uploading images: ', error);
       }
- 
+    } else {
+      console.log("Invalid form");
+    }
   };
 
   return {
