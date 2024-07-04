@@ -174,7 +174,60 @@
     padding: 1em 1.8em;
     border: 4px solid var(--button-bg);
 }
+@media (min-width: 768px) and (max-width: 1199px) {
+    .ad-card-create {
+        max-width: 980px;
+        margin: 6em auto 2em 8em;
+        padding: 0.5em 2em
+    }
+    .form-group label {
+        font-size: calc(var(--xxs-font-size) + 1px);
+        padding-top: 1.5em;
+    }
+    .ad-info-desc {
+        flex-direction: row;
+        gap: 1em;
+    }
+    .form-group textarea {
+        height: 136px;
+        font-size: calc(var(--xxs-font-size) + 1px);
 
+    }
+    .address-check {
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+        flex: 1;
+    }
+    .image-upload-container {
+        display: flex;
+        justify-content: space-around;
+    }
+    .image-upload-container {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .ad-address {
+        flex: 0 0 50%;
+        display: flex;
+        flex-direction: column;
+    }
+    .ad-card-create h2 {
+        padding-top: 1em;
+        font-size: calc(var(--m-font-size) + 8px);
+    }
+    .form-group select,
+    .form-group input {
+        font-size: calc(var(--xxs-font-size));
+        height: 64px;
+    }
+    .checkbox-group label {
+        font-size: calc(var(--xs-font-size));
+    }
+    
+
+}
 
 @media (min-width: 1200px) {
     .form-group label {

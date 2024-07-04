@@ -19,7 +19,7 @@ import {
 import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";
 
-export const Header = ({additionalClasses }) => {
+export const Header = ({ additionalClasses }) => {
   const { t, i18n } = useTranslation();
 
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -67,9 +67,21 @@ export const Header = ({additionalClasses }) => {
 
   const currentLanguage = i18n.language;
 
+  const getProfileImage = (gender) => {
+    
+    switch (gender) {
+      case 'male':
+        return "/images/homePage/user-male.png";
+      case 'female':
+          return "/images/homePage/user-female.png";
+      case 'other':
+            return "/images/homePage/user-it.png";
+      default: return "/images/homePage/user-female.png";
+    }
+  }
   return (
     <section className="site-header">
-       <header className={`header ${additionalClasses} ${isMenuOpen ? 'scrolled' : ''}`}>
+      <header className={`header ${additionalClasses} ${isMenuOpen ? 'scrolled' : ''}`}>
         <Link to="/">
           <img src="/images/homePage/logo.png" alt="logo" className="logo" /> Pensa Club
         </Link>
@@ -96,7 +108,7 @@ export const Header = ({additionalClasses }) => {
               </span>
             )}
             <label htmlFor="dropdown-toggle" className="dropdown-toggle">
-              <img src={profileData?.details?.imageURL || "/images/homePage/avatar2.png"} alt="Profile" className="profile-img" />
+              <img src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender )} alt="Profile" className="profile-img" />
             </label>
 
             <div className={`dropdown-menu dropdown-menu-right rounded-0 ${isDropdownOpen ? "active" : ""}`}>
@@ -162,8 +174,8 @@ export const Header = ({additionalClasses }) => {
               <div className="social-icons-header">
                 <FontAwesomeIcon icon={faGlobe} />
                 <div className="dropdown-item">
-                {currentLanguage !== "bg" && <button onClick={() => changeLanguage("bg")}>български</button>}
-                {currentLanguage !== "en" && <button onClick={() => changeLanguage("en")}>English</button>}
+                  {currentLanguage !== "bg" && <button onClick={() => changeLanguage("bg")}>български</button>}
+                  {currentLanguage !== "en" && <button onClick={() => changeLanguage("en")}>English</button>}
                 </div>
               </div>
             </div>
