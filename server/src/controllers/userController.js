@@ -162,7 +162,7 @@ userController.post('/request-reset-password', async (req, res, next) => {
   try {
     const user = await user_account.findOne({ where: { email } });
     if (!user) {
-      return res.status(404).send('There is no user registered with that email address');
+      return res.status(404).json({ message: 'There is no user registered with that email address' });
     }
 
     const resetToken = uuid.v4();
@@ -174,14 +174,15 @@ userController.post('/request-reset-password', async (req, res, next) => {
 
     try {
       await sendResetEmail(email, resetToken);
-      res.status(200).send(`A reset password link has been sent to ${email}.`);
+      res.status(200).json({ message: `A reset password link has been sent to ${email}.` });
     } catch (emailError) {
-      throw new Error(`Error sending email: ${emailError}`);
+      next(new Error(`Error sending email: ${emailError}`));
     }
   } catch (err) {
     next(err);
   }
 });
+
 
 userController.post('/reset-password', async (req, res, next) => {
   const { oldPassword, newPassword, reNewPassword, tokenType, token } = req.body;

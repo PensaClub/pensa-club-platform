@@ -16,7 +16,6 @@ import { MapPage } from './components/MapPage/MapPage';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 
-
 import { MapProvider } from './components/contexts/MapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
@@ -24,9 +23,12 @@ import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';
 
 
 import { ToastContainer } from 'react-toastify';
+
 import { AdPage } from './components/Community/AdPage/AdPage.jsx';
 import { CreateAd } from './components/Community/AdPage/CreateAd/CreateAd.jsx';
-
+import { ForgetPassword } from './components/ForgetPassword/ForgetPassword.jsx';
+import { ReSendEmail } from './components/ForgetPassword/ReSendEmail.jsx';
+import { ResetPasswordPage } from './components/ForgetPassword/ResetPasswordPage.jsx';
 
 function App() {
 
@@ -60,7 +62,7 @@ function App() {
                 <Route path="/sign-up" element={<LoginRegister />} />
               </Route>
               <Route path="/craigslist" element={<CommunityPage />} />
-             
+              <Route path="/ads" element={<AdsCard />} />
               <Route path="/filter" element={<FiltersMap />} />
               <Route path="/map" element={<MapPage />} />
               <Route path="/errors/*" element={<ErrorPageBoundary />} />
