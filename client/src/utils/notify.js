@@ -9,6 +9,11 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
+    case 'email-send':
+      toast.success(<Trans i18nKey="notification.email-send" />, {
+        role: 'alert',
+      });
+      break;
     case 'success-register':
       toast.success(<Trans i18nKey="notification.success-register" />, {
         role: 'alert',

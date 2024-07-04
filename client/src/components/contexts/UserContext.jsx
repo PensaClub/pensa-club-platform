@@ -150,10 +150,10 @@ export const UserProvider = ({ children }) => {
       if (data.tokenType === 'jwt') {
         data.token = isAuth.token;
       }
-      await userService.resetPassword({ ...data });
-      // Better Message to be added for notify !!
-      notify('success-data');
-      navigate('/profile');
+      setIsLoading(true);
+      const response = await userService.resetPassword({ ...data });
+      setIsLoading(false);
+      return response;
     } catch (error) {
       notify('error');
       showErrorAndSetTimeouts(error.message);
@@ -162,6 +162,19 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const onForgetPasswordSubmit =async(data)=>{
+
+    try {
+      setIsLoading(true);
+      const response = await userService.forgetPassword(data);
+      setIsLoading(false);
+      notify('email-send');
+      return response;
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    }
+  }
   const contextService = {
     onRegisterSubmit,
     onLoginSubmit,
@@ -178,6 +191,7 @@ export const UserProvider = ({ children }) => {
     getProfileData,
     profileData,
     addressId,
+    onForgetPasswordSubmit,
   };
 
   return (
