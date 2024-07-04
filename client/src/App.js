@@ -44,14 +44,13 @@ function App() {
             <CommunityProvider>
             <Header additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''} />
 
-              <ToastContainer role="alert" className={"notification"} limit={3} />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/server-error" element={<ServerError />} />
-                <Route path="/forget-password" element={<ForgetPassword />} />
-                <Route path="/resend-email" element={<ReSendEmail />} />
-                <Route path="/reset-password" element={<ResetPasswordPage />} />
-                
+          <ToastContainer role="alert" className={"notification"} limit={3} position="bottom-right"/>
+             <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/server-error" element={<ServerError />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/server-error" element={<ServerError />} />
+
               <Route element={<AuthGuard />}>
                 <Route path="/ad" element={<AdPage />} />
                 <Route path='/ad/create' element={<CreateAd />} />

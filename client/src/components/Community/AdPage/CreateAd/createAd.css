@@ -11,7 +11,11 @@
     min-height: 100vh;
     font-family: "Inter", sans-serif;
 }
-
+.error {
+	color: var(--red);
+	/* visibility: hidden; */
+    padding-top: 0.5em;
+}
 .ad-card-create {
     margin-top: 6em;
     display: flex;
@@ -56,11 +60,38 @@
     color: var(--brown);
 }
 
+.additional-fields {
+    display: flex;
+    flex-direction: column;
+}
+
+.additional-fields .email-create {
+    display: flex;
+    width: 100%;
+}
+
+.additional-fields .email-create input {
+
+    width: 100% !important;
+}
+
+.additional-fields-names {
+    display: flex;
+    flex-direction: column;
+}
+
+.additional-fields-price {
+    display: flex;
+  flex-direction: column;
+  text-align: justify;
+}
 .form-group input,
 .form-group textarea,
 .form-group select {
     border-radius: var(--radius);
     border: 1px solid var(--brown);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+
 }
 
 .form-group input,
@@ -69,6 +100,16 @@
     padding: 0 1em;
     font-size: calc(var(--xxs-font-size) + 1px);
 
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* remove arrows in  Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 .form-group textarea {
@@ -95,6 +136,8 @@
     border-radius: 3px;
     position: relative;
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+
 }
 
 .checkbox-group label {
@@ -107,6 +150,7 @@
     gap: 10px;
     justify-content: center;
     justify-items: center;
+    
 }
 
 .image-upload {
@@ -122,6 +166,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+
 }
 
 .image-upload input {
@@ -132,6 +178,7 @@
     height: 100%;
     opacity: 0;
     cursor: pointer;
+
 }
 
 .image-upload img {
@@ -139,6 +186,7 @@
     height: 98px;
     object-fit: cover;
     border-radius: calc(var(--radius-input) + 6px);
+    
 }
 
 .plus-icon-ad {
@@ -161,6 +209,9 @@
     font-size: calc(var(--xxs-font-size) + 1px);
     font-weight: 600;
     border-radius: var(--radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+
 }
 
 .button-group button[type="submit"] {
@@ -175,11 +226,106 @@
     border: 4px solid var(--button-bg);
 }
 
+@media (min-width: 768px) and (max-width: 1199px) {
+    .ad-card-create {
+        max-width: 980px;
+        margin: 6em auto 2em 8em;
+        padding: 0.5em 2em
+    }
+    .additional-fields-price {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        text-align: justify;
+    }
+    .additional-fields .email-create input {
+
+        width: 100% !important;
+    }
+
+    .form-group label {
+        font-size: calc(var(--xxs-font-size) + 1px);
+        padding-top: 1.5em;
+    }
+
+    .ad-info-desc {
+        flex-direction: row;
+        gap: 1em;
+    }
+
+    .additional-fields-names {
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+    }
+
+    .form-group textarea {
+        height: 136px;
+        font-size: calc(var(--xxs-font-size) + 1px);
+
+    }
+
+    .address-check {
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+        flex: 1;
+    }
+
+    .image-upload-container {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .image-upload-container {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .ad-address {
+        flex: 0 0 50%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ad-card-create h2 {
+        padding-top: 1em;
+        font-size: calc(var(--m-font-size) + 8px);
+    }
+
+    .form-group select,
+    .form-group input {
+        font-size: calc(var(--xxs-font-size));
+        height: 64px;
+    }
+
+    .checkbox-group label {
+        font-size: calc(var(--xs-font-size));
+    }
+
+
+}
 
 @media (min-width: 1200px) {
     .form-group label {
         font-size: calc(var(--s-font-size) + 1px);
         padding-top: 1.5em;
+    }
+    .additional-fields-price {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        text-align: justify;
+    }
+    .additional-fields-names {
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+    }
+
+    .additional-fields .email-create input {
+
+        width: 100% !important;
     }
 
     .ad-card-create {
@@ -265,11 +411,13 @@
         font-weight: 600;
         border-radius: var(--radius);
     }
+
     .button-group button[type="submit"] {
         color: var(--bg-white);
         padding: 1em 1.8em;
         background-color: var(--button-bg);
     }
+
     .button-group button[type="button"] {
         color: var(--button-bg);
         padding: 1em 2.8em;

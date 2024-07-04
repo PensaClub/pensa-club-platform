@@ -61,8 +61,12 @@ export const useForm = (initialValues, onSubmitHandler) => {
 
     if (validate()) {
       if (onSubmitHandler) onSubmitHandler(values);
-      resetFields([setValues, setErrors]);
+      setValues(initialValues);
+      setErrors({});
+     
     } else {
+      setValues(initialValues);
+   
       console.log("Invalid form");
     }
   };

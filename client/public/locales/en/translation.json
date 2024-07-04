@@ -224,13 +224,22 @@
     "password_match": "Passwords don't match",
     "logout": "Logout"
   },
+
+  "ads": {
+    "required_create_ad": "This field is required!",
+    "summary_min_summary":"Ad title must be at least 2 characters long",
+    "summary_max_summary":"Ad title must be less than 32 characters long",
+    "description_min_summary":"Ad description must be at least 10 characters long"
+  },
+
   "notification": {
     "success-data": "User Data successfully submitted!",
     "success-register": "Your account is successfully created!",
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
-    "error": "An error occured. Please try submitting data again!",
-    "email-send": "Email sent successfully!"
+
+    "success-created":"You have successfully created an ad!",
+    "error": "An error occured. Please try submitting data again!"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
