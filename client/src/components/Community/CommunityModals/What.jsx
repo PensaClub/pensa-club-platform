@@ -3,11 +3,13 @@ import './what.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark} from '@fortawesome/free-solid-svg-icons';
 import { useCommunityContext } from '../../contexts/CommunityContext';
+import { useTranslation } from 'react-i18next';
 export const What = ({ isOpen, onClose }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchType, setSearchType] = useState('всички');
     const {searchCriteria } = useCommunityContext();
-    console.log('searchCriteria', searchCriteria)
+    const { t } = useTranslation();
+  
     const handleSearch = () => {
         onClose();
     };
@@ -28,8 +30,8 @@ export const What = ({ isOpen, onClose }) => {
                 />
                 <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="what-select">
                     <option value="всички">Всички</option>
-                   {searchCriteria?.map(criteria=>(
-                    <option key={criteria.id} value={criteria.name}>{criteria.name}</option>
+                   {searchCriteria.searchCriteria?.map(criteria=>(
+                    <option key={criteria.value} value={criteria.value}> {t(criteria.name)}</option>
                    ))}
                 </select>
                 <button onClick={handleSearch} className="what-search-button">Приложи</button>

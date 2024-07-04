@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Loader } from "../Loader/Loader";
 import './error.css';
 import { communityServiceFactory } from "../Services/communityService";
+import { notify } from '../../utils/notify';
 
 
 export const CommunityContext = createContext();
@@ -69,9 +70,11 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(true);
             const response = await communityService.createAd(adData);
             setIsLoading(false);
-            //to implement NOTIFICATIONS
+            notify('success-created')
             return response;
         } catch (e) {
+            notify('error')
+
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -100,12 +103,12 @@ export const CommunityProvider = ({ children }) => {
             {children}
             {isLoading && <Loader />}
 
-            {errorMessage && (
+            {/* {errorMessage && (
                 <div className={`error-message show-error custom-style`}>
                     <p>{errorMessage}</p>
                     {console.log("Rendering error message:", errorMessage)}
                 </div>
-            )}
+            )} */}
         </CommunityContext.Provider>
     )
 }

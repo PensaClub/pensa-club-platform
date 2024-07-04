@@ -13,7 +13,7 @@ export const HeaderCommunity = () => {
                     </Link>
                 </div>
                 <div className="plus-icon-container">
-                    <FontAwesomeIcon icon={faPlus} className="plus-icon" />
+                  <Link to="/ad/create">  <FontAwesomeIcon icon={faPlus} className="plus-icon" /></Link>
                 </div>
             </header>
         </>

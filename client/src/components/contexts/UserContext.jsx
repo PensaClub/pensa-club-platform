@@ -63,6 +63,7 @@ export const UserProvider = ({ children }) => {
         navigate('/profile/profile-form');
       }
     } catch (error) {
+      
       notify('error');
       showErrorAndSetTimeouts(error.message);
     } finally {
