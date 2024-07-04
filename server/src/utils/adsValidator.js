@@ -1,14 +1,14 @@
 const CustomError = require('./customError');
 
-const notRequiredFields = ['adAddress', 'images'];
+const notRequiredFields = ['adAddress'];
 const categoryList = ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'];
 
 module.exports = function adsValidator(body) {
   let errors = {};
-  const { summary, category, description, adTown, adAddress, images } = body;
+  const { summary, category, description, adTown, adAddress, images, ad_id } = body;
 
   Object.entries(body).forEach(([fieldName, value]) => {
-    if (value === '' && !notRequiredFields.includes(fieldName)) {
+    if ((value === '' || value === null) && !notRequiredFields.includes(fieldName)) {
       let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
       errors[fieldName] = `${error} is required.`;
     }
