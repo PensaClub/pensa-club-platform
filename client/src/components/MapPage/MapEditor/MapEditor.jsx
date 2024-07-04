@@ -77,11 +77,11 @@ export const MapEditor = ({ filteredUsers }) => {
     const [geoJsonData, setGeoJsonData] = useState(null);
     const [showGeoJSON, setShowGeoJSON] = useState(true);
     const [selectedUser, setSelectedUser] = useState(null);
-    const{profileData} = useAuthContext()
-    
+    const { profileData } = useAuthContext()
+
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef(null);
-    const { t } = useTranslation(); 
+    const { t } = useTranslation();
     useEffect(() => {
         fetch('/Bulgaria_admin_level_6.geojson')
             .then(response => response.json())
@@ -179,12 +179,24 @@ export const MapEditor = ({ filteredUsers }) => {
                             <Marker key={user.email} position={[user.details.location.lat, user.details.location.lon]}>
                                 <Popup>
                                     <div className="ad-card-editor">
-                                  <img src={user?.details?.imageURL || "/images/homePage/avatar2.png"} alt={user.details.firstName} className="ad-img-editor" /> {/* <-- Отметка тук */}
+                                        <img src={user?.details?.imageURL || "/images/homePage/avatar2.png"} alt={user.details.firstName} className="ad-img-editor" /> {/* <-- Отметка тук */}
                                         <div className="ad-details-editor">
-                                        <h3 className="ad-name-editor">{user.details.firstName} {user.details.lastName}</h3>
-                                            <p className="ad-description-editor">Професия: {user.details.workOptions ? user.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
-                                            <p className="ad-description-editor">Интереси: {user.details.interestOptions ? user.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
-                                            <p className="ad-description-editor">Умения: {user.details.skills ? user.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
+                                            <h3 className="ad-name-editor">{user.details.firstName} {user.details.lastName}</h3>
+                                            {user.details.workOptions && user.details.workOptions.length > 0 && (
+                                                <p className="ad-description-editor">
+                                                    Професия: {user.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ')}
+                                                </p>
+                                            )}
+                                            {user.details.interestOptions && user.details.interestOptions.length > 0 && (
+                                                <p className="ad-description-editor">
+                                                    Интереси: {user.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ')}
+                                                </p>
+                                            )}
+                                            {user.details.skills && user.details.skills.length > 0 && (
+                                                <p className="ad-description-editor">
+                                                    Умения: {user.details.skills.map(option => t(`options.skills.${option}`)).join(', ')}
+                                                </p>
+                                            )}
                                             <Link to="#" id="read-more-editor" className="read-more" onClick={(e) => handleReadMoreClick(e, user)}>Прочети повече</Link>
                                         </div>
                                     </div>
@@ -203,11 +215,23 @@ export const MapEditor = ({ filteredUsers }) => {
                     <div className="sidebar-content">
                         <h2>{selectedUser.details.firstName} {selectedUser.details.lastName}</h2>
                         <div className="user-map-info">
-                        <img className="user-map-img" src={selectedUser?.details?.imageURL  || "/images/homePage/avatar2.png"} alt="user-img" />
+                            <img className="user-map-img" src={selectedUser?.details?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
                             <div className="map-desc-user">
-                            <p>Професия: {selectedUser.details.workOptions ? selectedUser.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за work_options */}
-                                <p>Интереси: {selectedUser.details.interestOptions ? selectedUser.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за interest_options */}
-                                <p>Умения: {selectedUser.details.skills ? selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ') : 'Няма информация'}</p> {/* Проверка за skillss */}
+                                {selectedUser.details.workOptions && selectedUser.details.workOptions.length > 0 && (
+                                    <p className="ad-description-editor">
+                                        Професия: {selectedUser.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ')}
+                                    </p>
+                                )}
+                                {selectedUser.details.interestOptions && selectedUser.details.interestOptions.length > 0 && (
+                                    <p className="ad-description-editor">
+                                        Интереси: {selectedUser.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ')}
+                                    </p>
+                                )}
+                                {selectedUser.details.skills && selectedUser.details.skills.length > 0 && (
+                                    <p className="ad-description-editor">
+                                        Умения: {selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ')}
+                                    </p>
+                                )}
                                 <p>Телефон: <Link to={`tel:${selectedUser.details.phoneNumber}`}>{selectedUser.details.phoneNumber}</Link></p>
                                 <p>Имейл: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
                             </div>
