@@ -83,7 +83,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
 
       const imageUrls = await Promise.all(uploadTasks);
       const newImage = imageUrls.filter(x => x !== null)
-      if (onSubmitHandler) onSubmitHandler({ ...values, images: newImage });
+      if (onSubmitHandler) onSubmitHandler({ ...values, images: newImage, 'ad_id': v4(), });
 
       setValues(initialValues);
       setErrors({});

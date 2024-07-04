@@ -2,7 +2,7 @@
 import { useTranslation } from 'react-i18next';
 
 export const validateFieldCreateAd = (name, value, t) => {
-    console.log(`validateField`, name, value)
+   
     let error = '';
   
     if (!value.trim()) { 
