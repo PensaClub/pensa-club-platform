@@ -1,0 +1,45 @@
+{
+    "searchCriteria": [
+      {
+        "value": "recommend",
+        "name": "search-criteria.recommend"
+      },
+      {
+        "value": "donate",
+        "name": "search-criteria.donate"
+      },
+      {
+        "value": "sell",
+        "name": "search-criteria.sell"
+      },
+      {
+        "value": "work",
+        "name": "search-criteria.work"
+      },
+      {
+        "value": "courses",
+        "name": "search-criteria.courses"
+      },
+      {
+        "value": "health",
+        "name": "search-criteria.health"
+      },
+      {
+        "value": "initiatives_projects",
+        "name": "search-criteria.initiatives_projects"
+      },
+      {
+        "value": "tours",
+        "name": "search-criteria.tours"
+      },
+      {
+        "value": "games",
+        "name": "search-criteria.games"
+      },
+      {
+        "value": "arbitration",
+        "name": "search-criteria.arbitration"
+      }
+    ]
+  }
+  

@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import { Loader } from "../Loader/Loader";
+
 import { useAuthContext } from "./UserContext";
 import { mapServiceFactory } from "../Services/MapService";
-
+import './error.css';
 
 export const MapContext = createContext()
 

@@ -1,5 +1,6 @@
 footer {
   width: 100%;
+
 }
 
 .footer {
@@ -102,8 +103,17 @@ footer {
   padding: var(--s-space) 0;
   color: var(--text-white);
 }
+@media only screen and (max-width: 1200px) {
+ .hide-on-mobile {
+    display: none;
+  }
 
+}
 @media (min-width: 850px) {
+  /* .position-fix{
+    position: fixed;
+    bottom: 0;
+  } */
   .footer {
     flex-direction: row-reverse;
     justify-content: center;
@@ -113,6 +123,7 @@ footer {
 
   .info-desc {
     align-items: start;
+    
   }
 
   .footer-info {
