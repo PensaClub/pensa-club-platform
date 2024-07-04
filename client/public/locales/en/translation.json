@@ -40,11 +40,11 @@
     }
   },
 
-  "motto": {    
-      "title1": "LET'S BREAK THIS TREND",
-      "title2": "LET'S CHANGE THIS MODEL",
-      "title3": "KEEPING UP WITH THE TIMES",
-      "desc": "Creation of an innovative, digital and <span>interactive platform</span> aimed at improving the quality of life of the elderly by actively including them in modern society, supporting them in the development of new skills and interests and promoting a <span>healthy and full, dignified life.</span>",
+  "motto": {
+    "title1": "LET'S BREAK THIS TREND",
+    "title2": "LET'S CHANGE THIS MODEL",
+    "title3": "KEEPING UP WITH THE TIMES",
+    "desc": "Creation of an innovative, digital and <span>interactive platform</span> aimed at improving the quality of life of the elderly by actively including them in modern society, supporting them in the development of new skills and interests and promoting a <span>healthy and full, dignified life.</span>",
     "about-btn": "Read More About Us"
   },
 
@@ -90,7 +90,7 @@
   },
 
   "map": {
-    "welcome":"Welcome to Pensa Club! Find local mutual aid announcements using our Map - Post an ad or offer - Browse and participate in local initiatives",
+    "welcome": "Welcome to Pensa Club! Find local mutual aid announcements using our Map - Post an ad or offer - Browse and participate in local initiatives",
     "choose": "Choose...",
     "skills": "Skills",
     "skills-placeholder": "Search for skills...",
@@ -152,8 +152,8 @@
   "profile": {
     "select_all": "Select all",
     "clear": "Clear",
-    "selected" : "selected",
-    "select" : "Select",
+    "selected": "selected",
+    "select": "Select",
     "profile_form_title": "Fill in your details",
     "add_photo": "Add photo",
     "username": "Username",
@@ -210,20 +210,24 @@
     "email_required": "Email is required",
     "email_error": "Email is invalid",
     "name_invalid": "Name is invalid",
-    "phone_number_invalid": "Phone number is invalid" ,
+    "phone_number_invalid": "Phone number is invalid",
     "password_error": "Password must be at least 8 characters long and contain at least one letter and one number",
     "new_password_error": "New password must be at least 8 characters long and contain at least one letter and one number",
     "password_match": "Passwords don't match",
     "logout": "Logout"
-    
-
   },
-  
+
   "notification": {
     "success-data": "User Data successfully submitted!",
     "success-register": "Your account is successfully created!",
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
     "error": "An error occured. Please try submitting data again!"
+  },
+
+  "errors": {
+    "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
+    "profile_data_submit": "Error while updating profile data: {{error}}",
+    "unknown": "unknown"
   }
 }

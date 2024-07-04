@@ -1,9 +1,9 @@
-import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
-import { firebaseStorage } from "../firebase";
-import { v4 } from "uuid";
-import imageCompression from "browser-image-compression";
+import { getDownloadURL, ref, uploadBytes, deleteObject } from 'firebase/storage';
+import { firebaseStorage } from '../firebase';
+import { v4 } from 'uuid';
+import imageCompression from 'browser-image-compression';
 
-export async function uploadImage(file, oldFilePath) {
+export async function uploadImageToFirebase(file, oldFilePath) {
   const options = {
     maxSizeMB: 5,
     maxWidthOrHeight: 350,
@@ -19,7 +19,6 @@ export async function uploadImage(file, oldFilePath) {
       const oldFileRef = ref(firebaseStorage, oldFilePath);
       await deleteObject(oldFileRef);
     }
-
     return { url, filePath: imageRef.fullPath };
   } catch (err) {
     console.log(err);

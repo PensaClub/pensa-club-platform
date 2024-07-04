@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
+const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
 export const useImagePreview = () => {
   const [previewImage, setPreviewImage] = useState(null);
@@ -6,19 +7,23 @@ export const useImagePreview = () => {
   const handleImage = useCallback((input) => {
     if (!input) return;
 
-    if (typeof input === "string") {
+    if (typeof input === 'string') {
       setPreviewImage(input);
       return;
     }
 
     if (input.target && input.target.files) {
+      const file = input.target.files[0];
+
+      if (!allowedTypes.includes(file.type)) return;
+
       const reader = new FileReader();
 
       reader.onloadend = () => {
         setPreviewImage(reader.result);
       };
 
-      reader.readAsDataURL(input.target.files[0]);
+      reader.readAsDataURL(file);
     }
   }, []);
 
