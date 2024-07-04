@@ -218,12 +218,18 @@
     
 
   },
-  
+  "ads": {
+    "required_create_ad": "This field is required!",
+    "summary_min_summary":"Ad title must be at least 2 characters long",
+    "summary_max_summary":"Ad title must be less than 32 characters long",
+    "description_min_summary":"Ad description must be at least 10 characters long"
+  },
   "notification": {
     "success-data": "User Data successfully submitted!",
     "success-register": "Your account is successfully created!",
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
+    "success-created":"You have successfully created an ad!",
     "error": "An error occured. Please try submitting data again!"
   },
  

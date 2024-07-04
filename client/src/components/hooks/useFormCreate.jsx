@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
-import { firebaseStorage } from "../../firebase"; 
+import { firebaseStorage } from "../../firebase";
 import imageCompression from "browser-image-compression";
 import { v4 } from "uuid";
+
+import { validateFieldCreateAd } from "../../utils/ad";
+import { useTranslation } from "react-i18next";
 
 export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [images, setImages] = useState([null, null, null, null]);
-  const [imageFiles, setImageFiles] = useState([null, null, null, null]); 
+  const [imageFiles, setImageFiles] = useState([null, null, null, null]);
+  const { t } = useTranslation();
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
@@ -18,11 +22,8 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
 
   const onBlurHandler = (e) => {
     const { name, value } = e.target;
-    if (!value.trim()) {
-      setErrors((state) => ({ ...state, [name]: 'This field is required!' }));
-    } else {
-      setErrors((state) => ({ ...state, [name]: '' }));
-    }
+    const error = validateFieldCreateAd(name, value, t);
+    setErrors(prevState => ({ ...prevState, [name]: error }));
   };
 
   const handleImageChange = (event) => {
@@ -58,53 +59,40 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
     setValues(trimmedValues);
   };
 
-  const validate = () => {
-    const newErrors = {};
-    Object.keys(values).forEach((key) => {
-      if (!values[key].trim()) {
-        newErrors[key] = 'This field is required!';
-      }
-    });
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const onSubmit = async (e) => {
     e.preventDefault();
     handleTrimFields();
 
-    if (validate()) {
-      try {
-        const uploadTasks = imageFiles.map(async (file) => {
-          if (!file) return null;
 
-          const options = {
-            maxSizeMB: 5,
-            maxWidthOrHeight: 350,
-          };
+    try {
+      const uploadTasks = imageFiles.map(async (file) => {
+        if (!file) return null;
 
-          const compressedFile = await imageCompression(file, options);
-          const imageRef = ref(firebaseStorage, `ads/${emailPrefix}/${v4()}`);
-          const snapshot = await uploadBytes(imageRef, compressedFile);
-          const imageURL = await getDownloadURL(snapshot.ref);
+        const options = {
+          maxSizeMB: 5,
+          maxWidthOrHeight: 350,
+        };
 
-          return { imageURL, firebaseImagePath: imageRef.fullPath };
-        });
+        const compressedFile = await imageCompression(file, options);
+        const imageRef = ref(firebaseStorage, `ads/${emailPrefix}/${v4()}`);
+        const snapshot = await uploadBytes(imageRef, compressedFile);
+        const imageURL = await getDownloadURL(snapshot.ref);
 
-        const imageUrls = await Promise.all(uploadTasks);
-        const newImage = imageUrls.filter(x => x !== null)
-        if (onSubmitHandler) onSubmitHandler({ ...values, images: newImage });
-        
-        setValues(initialValues);
-        setErrors({});
-        setImages([null, null, null, null]);
-        setImageFiles([null, null, null, null]);
-      } catch (error) {
-        console.error('Error uploading images: ', error);
-      }
-    } else {
-      console.log("Invalid form");
+        return { imageURL, firebaseImagePath: imageRef.fullPath };
+      });
+
+      const imageUrls = await Promise.all(uploadTasks);
+      const newImage = imageUrls.filter(x => x !== null)
+      if (onSubmitHandler) onSubmitHandler({ ...values, images: newImage });
+
+      setValues(initialValues);
+      setErrors({});
+      setImages([null, null, null, null]);
+      setImageFiles([null, null, null, null]);
+    } catch (error) {
+      console.error('Error uploading images: ', error);
     }
+
   };
 
   return {

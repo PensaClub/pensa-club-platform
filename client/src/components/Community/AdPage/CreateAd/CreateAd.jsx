@@ -63,7 +63,7 @@ export const CreateAd = () => {
                         }));
                     }
                 } catch (error) {
-                    console.error('Failed to load data', error);//to implement notification 
+                    console.error('Failed to load data', error);
                 }
             }
         };
@@ -75,9 +75,9 @@ export const CreateAd = () => {
     const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
         try {
             await createAd(formData);
-            console.log('Ad created successfully');//to implement notification 
+         
         } catch (error) {
-            console.error('Error creating ad:', error); //to implementnotification
+            console.error('Error creating ad:', error); 
         }
     }, emailPrefix);
 
