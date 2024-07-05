@@ -28,7 +28,7 @@ export const ResetPasswordPage = () => {
           };
           onPasswordReset(resetData)
             .then(() => navigate('/sign-up'))
-            .catch((error) => console.log(error));
+            .catch((error) => console.error(error));
         }
       );
 

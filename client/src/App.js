@@ -21,7 +21,6 @@ import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
 import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';
 
-
 import { ToastContainer } from 'react-toastify';
 
 import { AdPage } from './components/Community/AdPage/AdPage.jsx';
@@ -34,7 +33,6 @@ function App() {
 
   const location = useLocation()
   const isCommunityPage = location.pathname === '/craigslist' || location.pathname.startsWith('/ad');
-
 
   return (
     <>
@@ -50,7 +48,9 @@ function App() {
               <Route path="/server-error" element={<ServerError />} />
               <Route path="/" element={<Home />} />
               <Route path="/server-error" element={<ServerError />} />
-
+              <Route path="/forget-password" element={<ForgetPassword />} />
+              <Route path="/resend-email" element={<ReSendEmail />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route element={<AuthGuard />}>
                 <Route path="/ad" element={<AdPage />} />
                 <Route path='/ad/create' element={<CreateAd />} />

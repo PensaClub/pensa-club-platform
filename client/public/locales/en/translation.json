@@ -5,7 +5,8 @@
     "login": "Login",
     "register": "Register",
     "profile": "Profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "ad-create": "Create ad"
   },
   "footer": {
     "site-map": "Site Map",
@@ -89,7 +90,7 @@
     "minutes": "minutes",
     "seconds": "seconds",
     "and": "and",
-    "too-many-attempts":"You have exceeded the number of attempts. Please try again after"
+    "too-many-attempts": "You have exceeded the number of attempts. Please try again after"
   },
   "error-page": {
     "error": "Error",
@@ -224,35 +225,60 @@
     "password_match": "Passwords don't match",
     "logout": "Logout"
   },
-
   "ads": {
     "required_create_ad": "This field is required!",
-    "summary_min_summary":"Ad title must be at least 2 characters long",
-    "summary_max_summary":"Ad title must be less than 32 characters long",
-    "description_min_summary":"Ad description must be at least 10 characters long"
+    "summary_min_summary": "Ad title must be at least 2 characters long",
+    "summary_max_summary": "Ad title must be less than 32 characters long",
+    "description_min_summary": "Ad description must be at least 10 characters long",
+    "last_name_min": "Last name must be at least 2 characters long",
+    "last_name_max": "Last name must be no more than 32 characters long",
+    "first_name_min": "First name must be at least 2 characters long",
+    "first_name_max": "First name must be no more than 32 characters long",
+    "email": "Invalid email address",
+    "negative_price": "Price cannot be a negative number",
+    "address_min": "Address must be at least 6 characters long",
+    "address_max": "Address must be no more than 50 characters long",
+    "publish_ad": "Publish Ad",
+    "summary": "Name Ad",
+    "category_ad": "Category",
+    "description": "Description",
+    "ad_town": "City",
+    "ad_address": "Address",
+    "use_other_city": "Use Other City",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email_ad": "Email",
+    "price": "Price - in BGN",
+    "start_course": "Course Start Date",
+    "end_course": "Course End Date",
+    "price_course": "Course Price - in BGN",
+    "start_tours": "Tour Start Date",
+    "end_tours": "Tour End Date",
+    "price_tours": "Tour Price - in BGN",
+    "add_photos": "Add Photos",
+    "publish_btn": "Publish",
+    "cancel_btn": "Cancel"
   },
-
   "notification": {
     "success-data": "User Data successfully submitted!",
     "success-register": "Your account is successfully created!",
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
-
-    "success-created":"You have successfully created an ad!",
-    "error": "An error occured. Please try submitting data again!"
+    "success-created": "You have successfully created an ad!",
+    "error": "An error occured. Please try submitting data again!",
+    "email-send": "The email has been sent successfully!",
+    "error-images": "You can only upload up to 4 images."
   },
-    "search-criteria": {
-      "recommend": "Recommend",
-      "donate": "Donate",
-      "sell": "Sell",
-      "work": "Work",
-      "courses": "Training/Courses",
-      "health": "Health",
-      "initiatives_projects": "Initiatives / Projects",
-      "tours": "Tours",
-      "games": "Games",
-      "arbitration": "Arbitration"
-    }
-  
-
+  "search-criteria": {
+    "recommend": "Recommend",
+    "donate": "Donate",
+    "sell": "Sell",
+    "work": "Work",
+    "courses": "Training/Courses",
+    "health": "Health",
+    "initiatives_projects": "Initiatives / Projects",
+    "tours": "Tours",
+    "games": "Games",
+    "arbitration": "Arbitration"
+  }
 }

@@ -14,6 +14,7 @@
 .error {
 	color: var(--red);
 	/* visibility: hidden; */
+    text-indent: initial;
     padding-top: 0.5em;
 }
 .ad-card-create {
@@ -101,7 +102,18 @@
     font-size: calc(var(--xxs-font-size) + 1px);
 
 }
+.react-datepicker__input-container {
+    display: flex;
+    width: 100%;
+}
 
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+}
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
@@ -232,11 +244,17 @@ input[type="number"] {
         margin: 6em auto 2em 8em;
         padding: 0.5em 2em
     }
+    .react-datepicker__input-container {
+        display: flex;
+        width: 100%;
+        gap: 1em;
+    }
     .additional-fields-price {
         display: flex;
         flex-direction: row;
         justify-content: center;
         text-align: justify;
+        gap: 1em;
     }
     .additional-fields .email-create input {
 
@@ -316,6 +334,12 @@ input[type="number"] {
         flex-direction: row;
         justify-content: center;
         text-align: justify;
+        gap: 1em;
+    }
+    .react-datepicker__input-container {
+        display: flex;
+        width: 100%;
+       
     }
     .additional-fields-names {
         display: flex;
@@ -395,7 +419,10 @@ input[type="number"] {
         font-size: calc(var(--xs-font-size));
         height: 64px;
     }
+    .image-upload input{
+        height: 175px;
 
+    }
     .image-upload img {
         max-width: 173px;
         height: 173px;

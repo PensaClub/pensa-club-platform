@@ -5,8 +5,6 @@ import '../CommunityFooter/communityFooter.css'
 import { HeaderCommunity } from '../HeaderCommunity/HeaderCommunity'
 import { CommunityFooter } from '../CommunityFooter/CommunityFooter'
 
-
-
 export const AdPage = () => {
     return (
         <>  
@@ -14,8 +12,6 @@ export const AdPage = () => {
             <section className='ad-page'>
 
             <HeaderCommunity />
-
-          
 
             </section>
  

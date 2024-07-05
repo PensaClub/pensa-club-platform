@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { MenuCommunity } from "../MenuCommunity/MenuCommunity";
 import "./communityFooter.css";
 
-
 export const CommunityFooter = () => {
     const {t} = useTranslation();
 

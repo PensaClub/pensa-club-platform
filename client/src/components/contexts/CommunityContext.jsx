@@ -4,7 +4,6 @@ import './error.css';
 import { communityServiceFactory } from "../Services/communityService";
 import { notify } from '../../utils/notify';
 
-
 export const CommunityContext = createContext();
 
 export const CommunityProvider = ({ children }) => {

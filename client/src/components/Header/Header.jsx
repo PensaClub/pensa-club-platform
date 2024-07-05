@@ -93,6 +93,9 @@ export const Header = ({ additionalClasses }) => {
             <Link to="/craigslist" className="nav-item" style={{ "--i": 1 }}>
               {t("header.craigslist")}
             </Link>
+            <Link to="/ad/create" className="nav-item" style={{ "--i": 2 }}>
+              {t("header.ad-create")}
+            </Link>
           </nav>
           <div className="dropdown" ref={dropdownRef}>
             <input type="checkbox" id="dropdown-toggle" className="dropdown-checkbox" checked={isDropdownOpen} onChange={handleDropdownToggle} />

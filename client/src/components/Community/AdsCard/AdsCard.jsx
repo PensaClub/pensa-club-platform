@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { AdsCardSkeleton } from '../AdsCardSkeleton/AdsCardSkeleton';
 
-
 const ImageModal = ({ src, alt, onClose }) => (
     <div className="image-modal-overlay" onClick={onClose}>
         <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>

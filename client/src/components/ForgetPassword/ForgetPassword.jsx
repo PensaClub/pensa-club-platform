@@ -16,9 +16,8 @@ export const ForgetPassword = () => {
     (data) => {
       onForgetPasswordSubmit(data)
         .then(() => navigate('/resend-email', { state: { email: data.email } }))
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     }
-
 
   );
 

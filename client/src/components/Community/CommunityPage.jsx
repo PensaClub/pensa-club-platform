@@ -12,7 +12,6 @@ import { SearchWhere } from "./CommunityModals/SearchWhere";
 import { SearchWhen } from "./CommunityModals/SearchWhen";
 import { useCommunityContext } from "../contexts/CommunityContext";
 
-
 export const CommunityPage = () => {
     const { isLoading } = useCommunityContext();
     const [isSearchWhatOpen, setIsSearchWhatOpen] = useState(false);
