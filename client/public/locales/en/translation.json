@@ -295,16 +295,22 @@
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images."
   },
-  "search-criteria": {
-    "recommend": "Recommend",
-    "donate": "Donate",
-    "sell": "Sell",
-    "work": "Work",
-    "courses": "Training/Courses",
-    "health": "Health",
-    "initiatives_projects": "Initiatives / Projects",
-    "tours": "Tours",
-    "games": "Games",
-    "arbitration": "Arbitration"
-  }
+  "errors": {
+    "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
+    "profile_data_submit": "Error while updating profile data: {{error}}",
+    "unknown": "unknown"
+  },
+    "search-criteria": {
+      "recommend": "Recommend",
+      "donate": "Donate",
+      "sell": "Sell",
+      "work": "Work",
+      "courses": "Training/Courses",
+      "health": "Health",
+      "initiatives_projects": "Initiatives / Projects",
+      "tours": "Tours",
+      "games": "Games",
+      "arbitration": "Arbitration"
+    }
 }
+

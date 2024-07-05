@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
       user_id: {
         type: DataTypes.INTEGER,
@@ -18,47 +18,93 @@ module.exports = {
         allowNull: false,
         validate: {
           len: {
-            args: [8, 32],
-            msg: "Summary must be between 8 and 32 characters in length."
-          }
-        }
+            args: [4, 32],
+            msg: 'Summary must be between 4 and 32 characters in length.',
+          },
+        },
+      },
+      category: {
+        type: DataTypes.ENUM,
+        values: ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'],
+        allowNull: true,
+        defaultValue: null,
+        validate: {
+          isIn: {
+            args: [['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration']],
+            msg: 'Category must be one of the following: recommend, donate, sell, work, courses, health, initiatives_projects, tours, games or arbitration.',
+          },
+        },
       },
       description: {
         type: DataTypes.STRING(1000),
-        allowNull: true,
+        allowNull: false,
         validate: {
-          len: {
-            args: [0, 1000],
-            msg: "Maximum description length limit of 1000 characters is reached."
-          }
-        }
+          customValidator(value) {
+            if (value.length < 10) {
+              throw new Error('Description must be at least 10 characters long.');
+            } else if (value.length > 1000) {
+              throw new Error('Maximum description length limit of 1000 characters is reached.');
+            }
+          },
+        },
+      },
+      ad_town: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      ad_address: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      images: {
+        type: DataTypes.JSON,
+        allowNull: false,
+        validate: {
+          isValidArray(value) {
+            if (!Array.isArray(value)) {
+              throw new Error('Images must be an array.');
+            }
+            if (value.length > 5) {
+              throw new Error('Cannot have more than 5 images per ad.');
+            }
+            if (value.length <= 0) {
+              throw new Error('Each ad should contain at least 1 image.');
+            }
+            value.forEach((image) => {
+              if (!image.imageURL || !image.firebaseImagePath) {
+                throw new Error('Each image must have a url and a path.');
+              }
+            });
+          },
+        },
       },
       creation_date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
       },
       expiration_date: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
       },
       approved: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: DataTypes.DATE
-      }
+        type: DataTypes.DATE,
+      },
     });
   },
   async down(queryInterface, DataTypes) {
     await queryInterface.dropTable('user_ads');
-  }
+  },
 };
