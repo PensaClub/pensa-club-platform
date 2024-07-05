@@ -11,6 +11,7 @@
     min-height: 100vh;
     font-family: "Inter", sans-serif;
 }
+
 .error {
 	color: var(--red);
 	/* visibility: hidden; */
@@ -20,6 +21,7 @@
 .ad-card-create {
     margin-top: 6em;
     display: flex;
+    background-color: var(--create-form-bg);
     border: 4px solid var(--brown);
     border-radius: calc(var(--radius) + 28px);
     flex-direction: column;
@@ -45,6 +47,13 @@
 .ad-info-desc {
     display: flex;
     flex-direction: column;
+}
+.desc-sub-text {
+    font-size: 8px !important;
+    padding-top:0.6em ;
+    line-height: 8.5px;
+    color: var(--brown);
+    font-weight: 600;
 }
 
 .form-group {
@@ -92,7 +101,7 @@
     border-radius: var(--radius);
     border: 1px solid var(--brown);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-
+    background-color: var(--form-input-bg);
 }
 
 .form-group input,
@@ -260,7 +269,13 @@ input[type="number"] {
 
         width: 100% !important;
     }
-
+    .desc-sub-text {
+        font-size: 14px !important;
+        padding-top:0.6em ;
+        line-height: 8.5px;
+        color: var(--brown);
+        font-weight: 600;
+    }
     .form-group label {
         font-size: calc(var(--xxs-font-size) + 1px);
         padding-top: 1.5em;
@@ -328,6 +343,13 @@ input[type="number"] {
     .form-group label {
         font-size: calc(var(--s-font-size) + 1px);
         padding-top: 1.5em;
+    }
+    .desc-sub-text {
+        font-size: 18px !important;
+        padding-top:0.6em ;
+        line-height: 8.5px;
+        color: var(--brown);
+        font-weight: 600;
     }
     .additional-fields-price {
         display: flex;

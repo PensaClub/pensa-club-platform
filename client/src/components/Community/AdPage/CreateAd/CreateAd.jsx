@@ -36,7 +36,7 @@ export const CreateAd = () => {
     const initialValues = {
         adId: v4(),
         summary: '',
-        category: 'recommend',
+        category: 'sell',
         description: '',
         adTown: getAdTownValue(currentLanguage, profileData.details.settlement),
         adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
@@ -112,6 +112,8 @@ export const CreateAd = () => {
                                             onBlur={onBlurHandler}
                                             required
                                         />
+                                        <p className='desc-sub-text'>{t('ads.sub_text-one')}</p>
+
                                         {errors.summary && <p className="error">{errors.summary}</p>}
                                     </div>
                                     <div className="form-group">
@@ -132,50 +134,6 @@ export const CreateAd = () => {
                                         {errors.category && <p className="error">{errors.category}</p>}
                                     </div>
                                 </div>
-                                {values.category === 'recommend' && (
-                                    <div className="additional-fields">
-                                        <div className="additional-fields-names">
-
-                                            <div className="form-group">
-                                                <label htmlFor="firstName">{t('ads.first_name')}</label>
-                                                <input
-                                                    type="text"
-                                                    id="firstName"
-                                                    name="firstName"
-                                                    value={values.firstName}
-                                                    onChange={onChangeHandler}
-                                                    onBlur={onBlurHandler}
-                                                />
-                                                {errors.firstName && <p className="error">{errors.firstName}</p>}
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="lastName">{t('ads.last_name')}</label>
-                                                <input
-                                                    type="text"
-                                                    id="lastName"
-                                                    name="lastName"
-                                                    value={values.lastName}
-                                                    onChange={onChangeHandler}
-                                                    onBlur={onBlurHandler}
-                                                />
-                                                {errors.lastName && <p className="error">{errors.lastName}</p>}
-                                            </div>
-                                        </div>
-                                        <div className="form-group email-create">
-                                            <label htmlFor="email">{t('ads.email_ad')}</label>
-                                            <input
-                                                type="email"
-                                                id="email"
-                                                name="email"
-                                                value={values.email}
-                                                onChange={onChangeHandler}
-                                                onBlur={onBlurHandler}
-                                            />
-                                            {errors.email && <p className="error">{errors.email}</p>}
-                                        </div>
-                                    </div>
-
-                                )}
                                 {values.category === 'sell' && (
                                     <div className="form-group">
                                         <label htmlFor="price">{t('ads.price')}</label>
@@ -286,6 +244,8 @@ export const CreateAd = () => {
                                         onBlur={onBlurHandler}
                                         required
                                     />
+                                    <p className='desc-sub-text'>{t('ads.sub_text-two')}</p>
+
                                     {errors.description && <p className="error">{errors.description}</p>}
                                 </div>
                                 <div className="address-check">

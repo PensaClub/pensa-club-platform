@@ -29,14 +29,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
 
   const handleImageChange = (event) => {
     const files = event.target.files;
-    // const currentImageCount = images.filter(image => image !== null).length;
-    // const newImageCount = files.length;
-
-    // if (currentImageCount + newImageCount > 4) {
-    //   notify('error-images')
-    //   return;
-    // }
-
+  
     const newImages = [...images];
     const newImageFiles = [...imageFiles];
 

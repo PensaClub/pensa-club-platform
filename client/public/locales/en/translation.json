@@ -280,7 +280,10 @@
     "price_tours": "Tour Price - in BGN",
     "add_photos": "Add Photos",
     "publish_btn": "Publish",
-    "cancel_btn": "Cancel"
+    "cancel_btn": "Cancel",
+    "sub_text-one":"to 32 characters",
+    "sub_text-two":"to 1000 characters"
+
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
