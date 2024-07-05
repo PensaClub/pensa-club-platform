@@ -1,9 +1,6 @@
 {
     "searchCriteria": [
-      {
-        "value": "recommend",
-        "name": "search-criteria.recommend"
-      },
+   
       {
         "value": "donate",
         "name": "search-criteria.donate"

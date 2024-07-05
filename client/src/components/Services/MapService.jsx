@@ -1,6 +1,5 @@
 import { requestFactory } from "./requester"
 
-
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const mapServiceFactory = (token) => {

@@ -10,7 +10,6 @@ import './scrollModal.css';
 
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuthContext } from '../../contexts/UserContext';
 
 const DefaultIcon = L.icon({
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -77,7 +76,6 @@ export const MapEditor = ({ filteredUsers }) => {
     const [geoJsonData, setGeoJsonData] = useState(null);
     const [showGeoJSON, setShowGeoJSON] = useState(true);
     const [selectedUser, setSelectedUser] = useState(null);
-    const { profileData } = useAuthContext()
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef(null);

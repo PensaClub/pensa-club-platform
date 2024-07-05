@@ -18,6 +18,5 @@ root.render(
     </I18nextProvider>
   // </React.StrictMode> 
 );
-
   
 reportWebVitals();

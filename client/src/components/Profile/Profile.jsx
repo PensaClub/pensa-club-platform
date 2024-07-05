@@ -18,7 +18,6 @@ import {
   faScroll,
   faMountainSun,
   faTimes,
-  // faImage,
   faBars,
   faEnvelope,
   faBriefcase,
@@ -29,7 +28,6 @@ import { ProfileSkills } from './ProfileSkills';
 import { ProfileWorks } from './ProfileWorks';
 import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
-// import { Logout } from "../Logout/Logout";
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -142,7 +140,6 @@ export const Profile = () => {
           <Route path='workOptions' element={<ProfileWorks />} />
           <Route path='announced' element={<ProfileAnnounced />} />
           <Route path='interestOptions' element={<ProfileInterests />} />
-          {/* <Route path="anothers" element={<ProfileOthers />} /> */}
         </Routes>
       </div>
     </section>

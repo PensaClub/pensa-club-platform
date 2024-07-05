@@ -16,6 +16,7 @@ import { v4 } from 'uuid';
 
 export const CreateAd = () => {
     const { t, i18n } = useTranslation();
+    // eslint-disable-next-line no-unused-vars
     const [settlements, setSettlements] = useState([]);
     const { searchCriteria, createAd } = useCommunityContext();
     const { profileData } = useAuthContext();
@@ -36,14 +37,11 @@ export const CreateAd = () => {
     const initialValues = {
         adId: v4(),
         summary: '',
-        category: 'sell',
+        category: '',
         description: '',
         adTown: getAdTownValue(currentLanguage, profileData.details.settlement),
         adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
         useOtherCity: false,
-        firstName: '',
-        lastName: '',
-        email: '',
         price: '',
         startCourse: null,
         endCourse: null,
@@ -80,6 +78,7 @@ export const CreateAd = () => {
         };
 
         fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLanguage]);
 
     const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
@@ -107,7 +106,7 @@ export const CreateAd = () => {
                                             type="text"
                                             id="summary"
                                             name="summary"
-                                            value={values.adTitle}
+                                            value={values.summary}
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
                                             required

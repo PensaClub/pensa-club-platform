@@ -36,15 +36,15 @@ const ProfileAddress = () => {
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err.message));
 
     loadData(`/regions-data/region-${form.regionId}/subregions-${form.regionId}.json`)
       .then((data) => setMunicipalities(data))
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err.message));
 
     loadData(`/regions-data/region-${form.regionId}/towns/towns-${form.municipalityId}.json`)
       .then((data) => setSettlements(data))
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err.message));
   }, [form.municipalityId, form.regionId]);
 
   const handleRegionChange = async (e) => {
@@ -145,16 +145,12 @@ const ProfileAddress = () => {
 
     if (isValid) {
       try {
-        // const updatedDataArr = Object.entries(form).filter(
-        //   ([key, value]) => initialFormState[key] !== value
-        // );
-        // const updatedData = Object.fromEntries(updatedDataArr);
         onEditProfileDataSubmit(trimmedForm);
         onAllUsers();
-        console.log('Address Submitted:', trimmedForm);
+        console.error('Address Submitted:', trimmedForm);
         navigate('/profile');
       } catch (error) {
-        console.log(`Error Profile Address Submit Component: ${error.message}`);
+        console.error(`Error Profile Address Submit Component: ${error.message}`);
       }
     }
   };
