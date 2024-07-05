@@ -20,21 +20,21 @@ export const What = ({ isOpen, onClose }) => {
         <div className="what-modal-overlay">
             <div className="what-modal-content">
                 <button className="what-close-button" onClick={onClose}><FontAwesomeIcon icon={faXmark} style={{color: "#000000",}} /></button>
-                <h2>Какво търсиш?</h2>
+                <h2>{t('community.what_search')}?</h2>
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Въведи търсенето си"
+                    placeholder={t('community.enter_search')}
                     className="what-input"
                 />
                 <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="what-select">
-                    <option value="всички">Всички</option>
+                    <option value="всички">{t('community.all_menu')}</option>
                    {searchCriteria.searchCriteria?.map(criteria=>(
                     <option key={criteria.value} value={criteria.value}> {t(criteria.name)}</option>
                    ))}
                 </select>
-                <button onClick={handleSearch} className="what-search-button">Приложи</button>
+                <button onClick={handleSearch} className="what-search-button">{t('community.apply_btn')}</button>
             </div>
         </div>
     );

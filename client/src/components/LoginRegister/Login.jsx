@@ -2,7 +2,6 @@ import './loginRegister.css';
 
 import { Link } from 'react-router-dom';
 
-
 import './loginRegister.css';
 import { useAuthContext } from '../contexts/UserContext';
 import { useForm } from '../hooks/useForm';

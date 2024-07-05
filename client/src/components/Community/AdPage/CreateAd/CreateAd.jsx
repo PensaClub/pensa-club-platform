@@ -33,17 +33,16 @@ export const CreateAd = () => {
         return language === 'bg' ? settlement.bg : settlement.en;
     };
 
-
     const initialValues = {
-        adID: v4(),
+        adId: v4(),
         summary: '',
-        category: 'recommend',
+        category: 'sell',
         description: '',
-        adTown: '',
+        adTown: getAdTownValue(currentLanguage, profileData.details.settlement),
         adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
-        // useOtherCity: false
+        useOtherCity: false,
         firstName: '',
-        LastName: '',
+        lastName: '',
         email: '',
         price: '',
         startCourse: null,
@@ -65,7 +64,6 @@ export const CreateAd = () => {
                 try {
                     const response = await fetch(`/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`);
                     const data = await response.json();
-                    // console.log(data, "blabla");
                     setSettlements(data);
                     const settlement = data.find(settlement => settlement.id === addressId.settlementId);
 
@@ -84,7 +82,6 @@ export const CreateAd = () => {
         fetchData();
     }, [currentLanguage]);
 
-
     const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
         try {
             await createAd(formData);
@@ -100,12 +97,12 @@ export const CreateAd = () => {
                 <HeaderCommunity />
                 <section className="create-ad-main">
                     <div className="ad-card-create">
-                        <h2 className="ad--card-title">Публикувай обява</h2>
+                        <h2 className="ad--card-title">{t('ads.publish_ad')}</h2>
                         <div className="ad-create-form">
                             <form onSubmit={onSubmit}>
                                 <div className="ad-info-desc">
                                     <div className="form-group">
-                                        <label htmlFor="summary">Име на обявата</label>
+                                        <label htmlFor="summary">{t('ads.summary')}</label>
                                         <input
                                             type="text"
                                             id="summary"
@@ -115,10 +112,12 @@ export const CreateAd = () => {
                                             onBlur={onBlurHandler}
                                             required
                                         />
+                                        <p className='desc-sub-text'>{t('ads.sub_text-one')}</p>
+
                                         {errors.summary && <p className="error">{errors.summary}</p>}
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="category">Категория</label>
+                                        <label htmlFor="category">{t('ads.category_ad')}</label>
                                         <select
                                             id="category"
                                             name="category"
@@ -135,53 +134,9 @@ export const CreateAd = () => {
                                         {errors.category && <p className="error">{errors.category}</p>}
                                     </div>
                                 </div>
-                                {values.category === 'recommend' && (
-                                    <div className="additional-fields">
-                                        <div className="additional-fields-names">
-
-                                            <div className="form-group">
-                                                <label htmlFor="firstName">Собствено име</label>
-                                                <input
-                                                    type="text"
-                                                    id="firstName"
-                                                    name="firstName"
-                                                    value={values.firstName}
-                                                    onChange={onChangeHandler}
-                                                    onBlur={onBlurHandler}
-                                                />
-                                                {errors.firstName && <p className="error">{errors.firstName}</p>}
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="lastName">Фамилно име</label>
-                                                <input
-                                                    type="text"
-                                                    id="lastName"
-                                                    name="lastName"
-                                                    value={values.lastName}
-                                                    onChange={onChangeHandler}
-                                                    onBlur={onBlurHandler}
-                                                />
-                                                {errors.lastName && <p className="error">{errors.lastName}</p>}
-                                            </div>
-                                        </div>
-                                        <div className="form-group email-create">
-                                            <label htmlFor="email">Имейл</label>
-                                            <input
-                                                type="email"
-                                                id="email"
-                                                name="email"
-                                                value={values.email}
-                                                onChange={onChangeHandler}
-                                                onBlur={onBlurHandler}
-                                            />
-                                            {errors.email && <p className="error">{errors.email}</p>}
-                                        </div>
-                                    </div>
-
-                                )}
                                 {values.category === 'sell' && (
                                     <div className="form-group">
-                                        <label htmlFor="price">Цена - в лв.</label>
+                                        <label htmlFor="price">{t('ads.price')}</label>
                                         <input
                                             type="number"
                                             id="price"
@@ -198,7 +153,7 @@ export const CreateAd = () => {
                                 {values.category === 'courses' && (
                                     <div className="additional-fields-price">
                                         <div className="form-group">
-                                            <label htmlFor="startCourse">Начална дата на курса</label>
+                                            <label htmlFor="startCourse">{t('ads.start_course')}</label>
                                             <DatePicker
                                                 selected={values.startCourse}
                                                 onChange={(date) => setValues((state) => ({ ...state, startCourse: date }))}
@@ -210,7 +165,7 @@ export const CreateAd = () => {
                                             {errors.startCourse && <p className="error">{errors.startCourse}</p>}
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="endCourse">Крайна дата на курса</label>
+                                            <label htmlFor="endCourse">{t('ads.end_course')}</label>
                                             <DatePicker
                                                 selected={values.endCourse}
                                                 onChange={(date) => setValues((state) => ({ ...state, endCourse: date }))}
@@ -222,7 +177,7 @@ export const CreateAd = () => {
                                             {errors.endCourse && <p className="error">{errors.endCourse}</p>}
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="priceCourse">Цена - в лв.</label>
+                                            <label htmlFor="priceCourse">{t('ads.price_course')}</label>
                                             <input
                                                 type="number"
                                                 id="priceCourse"
@@ -240,7 +195,7 @@ export const CreateAd = () => {
                                 {values.category === 'tours' && (
                                     <div className="additional-fields-price">
                                         <div className="form-group">
-                                            <label htmlFor="startTours">Начална дата на тура</label>
+                                            <label htmlFor="startTours">{t('ads.start_tours')}</label>
                                             <DatePicker
                                                 selected={values.startTours}
                                                 onChange={(date) => setValues((state) => ({ ...state, startTours: date }))}
@@ -252,7 +207,7 @@ export const CreateAd = () => {
                                             {errors.startTours && <p className="error">{errors.startTours}</p>}
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="endTours">Крайна дата на тура</label>
+                                            <label htmlFor="endTours">{t('ads.end_tours')}</label>
                                             <DatePicker
                                                 selected={values.endTours}
                                                 onChange={(date) => setValues((state) => ({ ...state, endTours: date }))}
@@ -264,7 +219,7 @@ export const CreateAd = () => {
                                             {errors.endTours && <p className="error">{errors.endTours}</p>}
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="priceTours">Цена - в лв.</label>
+                                            <label htmlFor="priceTours">{t('ads.price_tours')}</label>
                                             <input
                                                 type="number"
                                                 id="priceTours"
@@ -280,7 +235,7 @@ export const CreateAd = () => {
                                     </div>
                                 )}
                                 <div className="form-group">
-                                    <label htmlFor="description">Описание</label>
+                                    <label htmlFor="description">{t('ads.description')}</label>
                                     <textarea
                                         id="description"
                                         name="description"
@@ -289,12 +244,14 @@ export const CreateAd = () => {
                                         onBlur={onBlurHandler}
                                         required
                                     />
+                                    <p className='desc-sub-text'>{t('ads.sub_text-two')}</p>
+
                                     {errors.description && <p className="error">{errors.description}</p>}
                                 </div>
                                 <div className="address-check">
                                     <div className="ad-address">
                                         <div className="form-group">
-                                            <label htmlFor="adTown">Град</label>
+                                            <label htmlFor="adTown">{t('ads.ad_town')}</label>
                                             {<input
                                                 type="text"
                                                 id="adTown"
@@ -315,11 +272,11 @@ export const CreateAd = () => {
                                                 checked={values.useOtherCity}
                                                 onChange={(e) => setValues((state) => ({ ...state, useOtherCity: e.target.checked }))}
                                             />
-                                            <label htmlFor="useOtherCity">Искам да избера друг град</label>
+                                            <label htmlFor="useOtherCity">{t('ads.use_other_city')}</label>
                                         </div>
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="adAddress">Адрес</label>
+                                        <label htmlFor="adAddress">{t('ads.ad_address')}</label>
                                         <input
                                             type="text"
                                             id="adAddress"
@@ -334,7 +291,7 @@ export const CreateAd = () => {
 
                                 </div>
                                 <div className="form-group">
-                                    <label>Добави снимки</label>
+                                    <label>{t('ads.add_photos')}</label>
                                     <div className="image-upload-container">
                                         {images.map((image, index) => (
                                             <div key={index} className="image-upload">
@@ -354,8 +311,8 @@ export const CreateAd = () => {
                                     </div>
                                 </div>
                                 <div className="button-group">
-                                    <button type="submit" className="publish-button">Публикувай</button>
-                                    <button type="button" className="cancel-button" onClick={handleNavigate}>Откажи</button>
+                                    <button type="submit" className="publish-button">{t('ads.publish_btn')}</button>
+                                    <button type="button" className="cancel-button" onClick={handleNavigate}>{t('ads.cancel_btn')}</button>
                                 </div>
                             </form>
                         </div>

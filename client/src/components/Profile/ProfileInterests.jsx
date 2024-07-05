@@ -80,6 +80,7 @@ export const ProfileInterests = () => {
             }, 2000);
         }
     };
+    
 
 
     const validateForm = () => {

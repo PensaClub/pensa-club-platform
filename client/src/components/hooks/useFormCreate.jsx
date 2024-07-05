@@ -6,6 +6,7 @@ import { v4 } from "uuid";
 
 import { validateFieldCreateAd } from "../../utils/ad";
 import { useTranslation } from "react-i18next";
+import { notify } from "../../utils/notify";
 
 export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const [values, setValues] = useState(initialValues);
@@ -28,6 +29,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
 
   const handleImageChange = (event) => {
     const files = event.target.files;
+  
     const newImages = [...images];
     const newImageFiles = [...imageFiles];
 
@@ -63,7 +65,6 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
     e.preventDefault();
     handleTrimFields();
 
-
     try {
       const uploadTasks = imageFiles.map(async (file) => {
         if (!file) return null;
@@ -83,7 +84,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
 
       const imageUrls = await Promise.all(uploadTasks);
       const newImage = imageUrls.filter(x => x !== null)
-      if (onSubmitHandler) onSubmitHandler({ ...values, images: newImage, 'ad_id': v4(), });
+      if (onSubmitHandler) onSubmitHandler({ ...values, images: newImage });
 
       setValues(initialValues);
       setErrors({});

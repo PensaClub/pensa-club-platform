@@ -17,14 +17,12 @@ export const useForm = (initialForm, initialValues, onSubmitHandler) => {
 
 };
 
-
   const handleTrimFields = () => {
     const trimmedForm = trimObjectStrings(initialForm);
     setValues({
       ...trimmedForm
     });
   };
-  
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -41,7 +39,7 @@ export const useForm = (initialForm, initialValues, onSubmitHandler) => {
         if (onSubmitHandler) onSubmitHandler(values);
         resetFields(setValues, initialValues);
       } else {
-        console.log("Invalid form");
+        console.error("Invalid form");
       }
 
   };

@@ -11,13 +11,15 @@ import { What } from "./CommunityModals/What";
 import { SearchWhere } from "./CommunityModals/SearchWhere";
 import { SearchWhen } from "./CommunityModals/SearchWhen";
 import { useCommunityContext } from "../contexts/CommunityContext";
-
+import { useTranslation } from "react-i18next";
 
 export const CommunityPage = () => {
     const { isLoading } = useCommunityContext();
     const [isSearchWhatOpen, setIsSearchWhatOpen] = useState(false);
     const [isSearchWhereOpen, setIsSearchWhereOpen] = useState(false);
     const [isSearchWhenOpen, setIsSearchWhenOpen] = useState(false);
+    const { t } = useTranslation();
+
     const ads =
         [
             {
@@ -68,19 +70,19 @@ export const CommunityPage = () => {
                             {/* <img src="/community/community-bg.jpg" alt="" /> */}
                         </div>
                         <div className="hero-section-commun">
-                            <h1>Общност</h1>
+                            <h1>{t('community.community')}</h1>
                             <div className="search-bar-commun">
                                 <div className="icons-com" onClick={() => setIsSearchWhatOpen(true)}>
-                                    <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" /><p>Какво търсиш?</p>
+                                    <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" /><p>{t('community.what_search')} ?</p>
                                 </div>
                                 <div className="divider"></div>
                                 <div className="icons-com" onClick={() => setIsSearchWhereOpen(true)}>
-                                    <FontAwesomeIcon icon={faLocationDot} className="commun-icon" /><p>Къде?</p>
+                                    <FontAwesomeIcon icon={faLocationDot} className="commun-icon" /><p>{t('community.where_search')} ?</p>
                                 </div>
                                 <div className="divider"></div>
                                 <div className="icons-com" onClick={() => setIsSearchWhenOpen(true)}>
-                                    <FontAwesomeIcon icon={faCalendar} className="commun-icon" /><p>Кога?</p>
-                                    <button className="search-button">Търси</button>
+                                    <FontAwesomeIcon icon={faCalendar} className="commun-icon" /><p>{t('community.when_search')} ?</p>
+                                    <button className="search-button">{t('community.search_btn')}</button>
                                 </div>
                             </div>
                         </div>

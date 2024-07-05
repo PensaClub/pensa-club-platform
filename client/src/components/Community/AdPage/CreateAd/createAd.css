@@ -11,14 +11,17 @@
     min-height: 100vh;
     font-family: "Inter", sans-serif;
 }
+
 .error {
 	color: var(--red);
 	/* visibility: hidden; */
+    text-indent: initial;
     padding-top: 0.5em;
 }
 .ad-card-create {
     margin-top: 6em;
     display: flex;
+    background-color: var(--create-form-bg);
     border: 4px solid var(--brown);
     border-radius: calc(var(--radius) + 28px);
     flex-direction: column;
@@ -44,6 +47,13 @@
 .ad-info-desc {
     display: flex;
     flex-direction: column;
+}
+.desc-sub-text {
+    font-size: 8px !important;
+    padding-top:0.6em ;
+    line-height: 8.5px;
+    color: var(--brown);
+    font-weight: 600;
 }
 
 .form-group {
@@ -91,7 +101,7 @@
     border-radius: var(--radius);
     border: 1px solid var(--brown);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-
+    background-color: var(--form-input-bg);
 }
 
 .form-group input,
@@ -101,7 +111,18 @@
     font-size: calc(var(--xxs-font-size) + 1px);
 
 }
+.react-datepicker__input-container {
+    display: flex;
+    width: 100%;
+}
 
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+}
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
@@ -232,17 +253,29 @@ input[type="number"] {
         margin: 6em auto 2em 8em;
         padding: 0.5em 2em
     }
+    .react-datepicker__input-container {
+        display: flex;
+        width: 100%;
+        gap: 1em;
+    }
     .additional-fields-price {
         display: flex;
         flex-direction: row;
         justify-content: center;
         text-align: justify;
+        gap: 1em;
     }
     .additional-fields .email-create input {
 
         width: 100% !important;
     }
-
+    .desc-sub-text {
+        font-size: 14px !important;
+        padding-top:0.6em ;
+        line-height: 8.5px;
+        color: var(--brown);
+        font-weight: 600;
+    }
     .form-group label {
         font-size: calc(var(--xxs-font-size) + 1px);
         padding-top: 1.5em;
@@ -311,11 +344,24 @@ input[type="number"] {
         font-size: calc(var(--s-font-size) + 1px);
         padding-top: 1.5em;
     }
+    .desc-sub-text {
+        font-size: 18px !important;
+        padding-top:0.6em ;
+        line-height: 8.5px;
+        color: var(--brown);
+        font-weight: 600;
+    }
     .additional-fields-price {
         display: flex;
         flex-direction: row;
         justify-content: center;
         text-align: justify;
+        gap: 1em;
+    }
+    .react-datepicker__input-container {
+        display: flex;
+        width: 100%;
+       
     }
     .additional-fields-names {
         display: flex;
@@ -395,7 +441,10 @@ input[type="number"] {
         font-size: calc(var(--xs-font-size));
         height: 64px;
     }
+    .image-upload input{
+        height: 175px;
 
+    }
     .image-upload img {
         max-width: 173px;
         height: 173px;
