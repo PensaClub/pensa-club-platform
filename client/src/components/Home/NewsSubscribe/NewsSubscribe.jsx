@@ -83,7 +83,7 @@ export const NewsSubscribe = () => {
                 </div>
                 <form ref={form} onSubmit={sendEmail} className="news-form mb-lg-0">
                     <div className="form-row">
-                        <div className="col-subscribe form-group">
+                        <div className="col-subscribe ">
                             <div className="error-username">
                                 <input type="text" name="user_name" className="input" id="name" placeholder={t('news-subscribe.name-placeholder')} value={userName} onChange={handleNameChange} />
                                 {errors.userName && <div className="error-message">{t(`${errors.userName}`)}</div>}
