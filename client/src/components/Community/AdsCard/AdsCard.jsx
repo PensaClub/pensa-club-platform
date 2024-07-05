@@ -3,6 +3,7 @@ import './adsCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { AdsCardSkeleton } from '../AdsCardSkeleton/AdsCardSkeleton';
+import { useTranslation } from 'react-i18next';
 
 const ImageModal = ({ src, alt, onClose }) => (
     <div className="image-modal-overlay" onClick={onClose}>
@@ -15,6 +16,8 @@ const ImageModal = ({ src, alt, onClose }) => (
 
 export const AdsCard = ({ ads,isLoading }) => {
     const [modalImage, setModalImage] = useState(null);
+    const { t } = useTranslation();
+
     if (isLoading) {
         return (
             <section className="ads-main">
@@ -49,7 +52,7 @@ export const AdsCard = ({ ads,isLoading }) => {
                                 <p>{ad.city}</p>
                                 <p className='ads-exp'>{new Date(ad.created_date).toLocaleDateString('bg-BG', { month: 'long' })}</p>
                             </div>
-                            <p className="ads-data">Валидна до: {new Date(ad.expiry_date).toLocaleDateString('bg-BG')}</p>
+                            <p className="ads-data">{t('community.validate_until')} : {new Date(ad.expiry_date).toLocaleDateString('bg-BG')}</p>
                             <div className="ads-user-info">
                                 <img src="/images/homePage/avatar2.png" alt={ad.user_name} />
                                 <p>{ad.user_name}</p>
