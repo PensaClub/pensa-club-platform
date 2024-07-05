@@ -11,6 +11,7 @@
     min-height: 100vh;
     font-family: "Inter", sans-serif;
 }
+
 .error {
 	color: var(--red);
 	/* visibility: hidden; */
@@ -45,6 +46,13 @@
 .ad-info-desc {
     display: flex;
     flex-direction: column;
+}
+.desc-sub-text {
+    font-size: 8px !important;
+    padding-top:0.6em ;
+    line-height: 8.5px;
+    color: var(--brown);
+    font-weight: 600;
 }
 
 .form-group {
@@ -260,7 +268,13 @@ input[type="number"] {
 
         width: 100% !important;
     }
-
+    .desc-sub-text {
+        font-size: 14px !important;
+        padding-top:0.6em ;
+        line-height: 8.5px;
+        color: var(--brown);
+        font-weight: 600;
+    }
     .form-group label {
         font-size: calc(var(--xxs-font-size) + 1px);
         padding-top: 1.5em;
@@ -328,6 +342,13 @@ input[type="number"] {
     .form-group label {
         font-size: calc(var(--s-font-size) + 1px);
         padding-top: 1.5em;
+    }
+    .desc-sub-text {
+        font-size: 18px !important;
+        padding-top:0.6em ;
+        line-height: 8.5px;
+        color: var(--brown);
+        font-weight: 600;
     }
     .additional-fields-price {
         display: flex;

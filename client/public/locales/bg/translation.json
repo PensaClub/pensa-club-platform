@@ -280,7 +280,9 @@
     "price_tours": "Цена на тура - в лв.",
     "add_photos": "Добави снимки",
     "publish_btn": "Публикувай",
-    "cancel_btn": "Откажи"
+    "cancel_btn": "Откажи",
+    "sub_text-one": "до 32 символа",
+    "sub_text-two": "до 1000 символа"
   },
   "notification": {
     "success-data": "Данните за потребителя са запазени успешно!",

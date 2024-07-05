@@ -112,6 +112,8 @@ export const CreateAd = () => {
                                             onBlur={onBlurHandler}
                                             required
                                         />
+                                        <p className='desc-sub-text'>{t('ads.sub_text-one')}</p>
+
                                         {errors.summary && <p className="error">{errors.summary}</p>}
                                     </div>
                                     <div className="form-group">
@@ -286,6 +288,8 @@ export const CreateAd = () => {
                                         onBlur={onBlurHandler}
                                         required
                                     />
+                                    <p className='desc-sub-text'>{t('ads.sub_text-two')}</p>
+
                                     {errors.description && <p className="error">{errors.description}</p>}
                                 </div>
                                 <div className="address-check">
