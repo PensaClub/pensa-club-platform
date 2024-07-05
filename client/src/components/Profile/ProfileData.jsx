@@ -5,9 +5,10 @@ import { validateField, generateNumberOptions, trimObjectStrings, resetFields, h
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useImagePreview } from '../hooks/useImagePreview';
-import { uploadImage } from '../../utils/uploadImage';
 import { notify } from '../../utils/notify';
 import { useMappingContext } from '../contexts/MapContext';
+import { useImageUpload } from '../hooks/useImageUpload';
+import { toast } from 'react-toastify';
 
 export const ProfileData = () => {
   const { t } = useTranslation();
@@ -20,14 +21,14 @@ export const ProfileData = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
   const { setAllUsers, allUsers } = useMappingContext();
-  
+
   // const [profileData, setProfileData] = useState('')
 
   //TODO: change keys when changed on server!!!
 
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  // const { setImageUpload, uploadImage } = useImageUpload();
+  const { handleImageChange, uploadImages } = useImageUpload();
   const { previewImage, handleImage } = useImagePreview();
-  const [imageUpload, setImageUpload] = useState(null);
 
   const initialFormState = {
     username: profileData.details.username || '',
@@ -75,7 +76,7 @@ export const ProfileData = () => {
   }, [selectedDate, selectedMonth, selectedYear]);
   useEffect(() => {
     if (profileData) {
-      setAllUsers(prevUsers => {
+      setAllUsers((prevUsers) => {
         if (!prevUsers || !prevUsers.response || !Array.isArray(prevUsers.response.accounts)) {
           return {
             response: {
@@ -84,11 +85,9 @@ export const ProfileData = () => {
           };
         }
 
-        const updatedAccounts = prevUsers.response.accounts.map(user =>
-          user.email === profileData.email ? { ...user, ...profileData } : user
-        );
+        const updatedAccounts = prevUsers.response.accounts.map((user) => (user.email === profileData.email ? { ...user, ...profileData } : user));
 
-        if (!updatedAccounts.some(user => user.email === profileData.email)) {
+        if (!updatedAccounts.some((user) => user.email === profileData.email)) {
           updatedAccounts.push(profileData);
         }
 
@@ -131,32 +130,15 @@ export const ProfileData = () => {
       try {
         const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
         const updatedData = Object.fromEntries(updatedDataArr);
-        let data;
-        if (imageUpload) {
-          if (!allowedTypes.includes(imageUpload.type)) {
-            throw new Error(`Type ${imageUpload.type} is not allowed! Allowed types are png/jpeg/jpg`);
-          }
-          try {
-            data = await uploadImage(imageUpload, profileData.details.firebaseImagePath);
-          } catch (error) {
-            throw new Error('Error uploading image: ', error);
-          }
-        }
-        if (data) {
-          updatedData.imageURL = data.url;
-          updatedData.firebaseImagePath = data.filePath;
-        }
-        await onEditProfileDataSubmit(updatedData);
- 
-        console.log('Data Submitted:', updatedData);
-        // resetFields(setForm, initialFormState);
-        // setSelectedDate('');
-        // setSelectedMonth('');
-        // setSelectedYear('');
+
+        const updatedForm = await uploadImages(updatedData, profileData.details.firebaseImagePath);
+
+        await onEditProfileDataSubmit(updatedForm);
+
         window.scrollTo(0, 0);
         navigate('/profile');
       } catch (error) {
-        console.log(`Error Profile Data Submit Component: ${error.message}`);
+        return toast.error(t('errors.profile_data_submit', { error: error.message }));
       }
     }
   };
@@ -186,7 +168,7 @@ export const ProfileData = () => {
               className='input-image'
               id='imageUrl'
               onChange={(e) => {
-                setImageUpload(e.target.files[0]);
+                handleImageChange(e);
                 handleImage(e);
               }}
             />

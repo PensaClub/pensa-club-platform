@@ -17,6 +17,7 @@ async function testDatabaseConnection() {
     console.log('Models could not be synced.', error);
   }
 
+
   if (process.env.NODE_ENV === 'development') {
     const seedsExist = await checkForSeedData();
     if (!seedsExist) {

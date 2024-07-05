@@ -7,19 +7,18 @@ import { useTranslation } from 'react-i18next';
 import { loadData } from '../../utils/loadData';
 import { notify } from '../../utils/notify';
 import { useImagePreview } from '../hooks/useImagePreview';
-import { uploadImage } from '../../utils/uploadImage';
 import { useMappingContext } from '../contexts/MapContext';
+import { useImageUpload } from '../hooks/useImageUpload';
 
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const navigate = useNavigate();
   const { onProfileDataSubmit } = useContext(UserContext);
-  const { onAllUsers,allUsers, setAllUsers  } = useMappingContext();
+  const { onAllUsers, allUsers, setAllUsers } = useMappingContext();
 
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  const { handleImageChange, uploadImages } = useImageUpload();
   const { previewImage, handleImage } = useImagePreview();
-  const [imageUpload, setImageUpload] = useState(null);
 
   const initialFormState = {
     username: '',
@@ -207,22 +206,10 @@ const ProfileForm = () => {
         setSelectedDate('');
         setSelectedMonth('');
         setSelectedYear('');
-        let data;
-        if (imageUpload) {
-          if (!allowedTypes.includes(imageUpload.type)) {
-            throw new Error(`Type ${imageUpload.type} is not allowed! Allowed types are png/jpeg/jpg`);
-          }
-          try {
-            data = await uploadImage(imageUpload);
-          } catch (error) {
-            throw new Error('Error uploading image: ', error);
-          }
-        }
-        if (data) {
-          trimmedForm.imageURL = data.url;
-          trimmedForm.firebaseImagePath = data.filePath;
-        }
-        await onProfileDataSubmit(trimmedForm);
+
+        const updatedForm = await uploadImages(trimmedForm);
+
+        await onProfileDataSubmit(updatedForm);
         await onAllUsers();
         window.scrollTo(0, 0);
         navigate('/profile');
@@ -258,7 +245,7 @@ const ProfileForm = () => {
             className='input-image'
             id='imageUrl'
             onChange={(e) => {
-              setImageUpload(e.target.files[0]);
+              handleImageChange(e);
               handleImage(e);
             }}
           />

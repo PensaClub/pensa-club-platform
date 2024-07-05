@@ -141,6 +141,32 @@ When the server starts for the first time in a development environment, a demo u
   - **/user/update-details** : This endpoint updates an existing user's profile. It requires the specific field to be updated, for example, `"workOptions": ["Doctor", "Lawyer"]` to update the work options of the user.
   - **/user/single-user** : This endpoint fetches a single registered user in the system.
 
+- **_userDetailsController_** :
+
+  - **/ads/ad-create** : This endpoint is used to create an advertisement with all the necessary details. It allows users to input comprehensive information about the ad, such as the title, description, category, town, address and images.
+
+    Example of successful ad creation via postman:
+
+    ```json
+    {
+      "summary": "Sofa",
+      "category": "sell",
+      "description": "Very nice and comfy",
+      "adTown": "Varna",
+      "adAddress": "Botev 49",
+      "images": [
+        {
+          "imageURL": "http://example.com/path/to/image.jpg",
+          "firebaseImagePath": "path/in/firebase/storage"
+        },
+        {
+          "imageURL": "http://example.com/path/to/image2.jpg",
+          "firebaseImagePath": "path/in/firebase/storage"
+        }
+      ]
+    }
+    ```
+
 ## Testing
 
 Testing is planned and will be documented in the future.
