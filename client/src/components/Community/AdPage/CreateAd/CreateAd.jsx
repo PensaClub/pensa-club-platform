@@ -18,10 +18,12 @@ export const CreateAd = () => {
     const { t, i18n } = useTranslation();
     const [settlements, setSettlements] = useState([]);
     const [fieldDefinitions, setFieldDefinitions] = useState({});
+    const [fieldDefinitions, setFieldDefinitions] = useState({});
     const { searchCriteria, createAd } = useCommunityContext();
     const { profileData } = useAuthContext();
 
     const currentLanguage = i18n.language;
+    const navigate = useNavigate();
     const navigate = useNavigate();
     const getEmailPrefix = (email) => {
         return email.split('@')[0];
@@ -38,6 +40,7 @@ export const CreateAd = () => {
          adId: v4(),
         summary: '',
         category: 'donate',
+        category: 'donate',
         description: '',
         adTown: profileData.details.settlement ? getAdTownValue(currentLanguage, profileData.details.settlement) : '',
         adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
@@ -52,6 +55,7 @@ export const CreateAd = () => {
     };
 
     const handleNavigate = () => {
+        navigate('/craigslist');
         navigate('/craigslist');
     }
 
@@ -80,6 +84,20 @@ export const CreateAd = () => {
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLanguage]);
+
+    useEffect(() => {
+        const loadFieldDefinitions = async () => {
+            try {
+                const response = await fetch('/fieldDefinitions.json');
+                const data = await response.json();
+                setFieldDefinitions(data);
+            } catch (error) {
+                console.error('Failed to load field definitions', error);
+            }
+        };
+
+        loadFieldDefinitions();
+    }, []);
 
     useEffect(() => {
         const loadFieldDefinitions = async () => {
@@ -140,6 +158,42 @@ export const CreateAd = () => {
         ) : null;
     };
 
+    const renderFields = () => {
+        const fields = fieldDefinitions.fields?.[values.category] || [];
+        return fields.length > 0 ? (
+            <div className="additional-fields-price">
+                {fields.map((field, index) => (
+                    <div key={index} className="form-group">
+                        <label htmlFor={field.name}>{t(`ads.${field.subname}`)}</label>
+                        {field.type === 'date' ? (
+                            <DatePicker
+                                selected={values[field.name]}
+                                onChange={(date) => setValues((state) => ({ ...state, [field.name]: date }))}
+                                onBlur={onBlurHandler}
+                                dateFormat="dd/MM/yyyy"
+                                id={field.name}
+                                name={field.name}
+                                required={field.required}
+                            />
+                        ) : (
+                            <input
+                                type={field.type}
+                                id={field.name}
+                                name={field.name}
+                                value={values[field.name] || ''}
+                                onChange={onChangeHandler}
+                                onBlur={onBlurHandler}
+                                placeholder={field.placeholder}
+                                required={field.required}
+                            />
+                        )}
+                        {errors[field.name] && <p className="error">{errors[field.name]}</p>}
+                    </div>
+                ))}
+            </div>
+        ) : null;
+    };
+
     return (
         <>
             <section className="ad-community-background">
@@ -156,6 +210,7 @@ export const CreateAd = () => {
                                             type="text"
                                             id="summary"
                                             name="summary"
+                                            value={values.summary}
                                             value={values.summary}
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
@@ -183,6 +238,7 @@ export const CreateAd = () => {
                                     </div>
                                 </div>
                                 {renderFields()}
+                                {renderFields()}
                                 <div className="form-group">
                                     <label htmlFor="description">{t('ads.description')}</label>
                                     <textarea
@@ -201,6 +257,7 @@ export const CreateAd = () => {
                                         <div className="form-group">
                                             <label htmlFor="adTown">{t('ads.ad_town')}</label>
                                             <input
+                                            <input
                                                 type="text"
                                                 id="adTown"
                                                 name="adTown"
@@ -209,6 +266,7 @@ export const CreateAd = () => {
                                                 onBlur={onBlurHandler}
                                                 required
                                                 disabled={!values.useOtherCity}
+                                            />
                                             />
                                             {errors.adTown && <p className="error">{errors.adTown}</p>}
                                         </div>
