@@ -4,6 +4,7 @@ const isAuth = require('../middlewares/isAuth.js');
 const rbac = require("../middlewares/rbac");
 const fieldSwap = require('../utils/fieldSwap.js');
 const adsValidator = require('../utils/adsValidator.js');
+const memoryCache = require('../middlewares/caching.js');
 
 adsController.post('/ad-create', isAuth, async (req, res, next) => {
   try {
@@ -22,24 +23,33 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   }
 });
 
-adsController.get('/own-ads', isAuth, async (req, res, next) => {
-
-});
-
-adsController.get('/approved-ads', isAuth, async (req, res, next) => {
+adsController.get('/own-ads', isAuth, memoryCache, async (req, res, next) => {
   try {
-    const ads = await user_ads.findAll({ where: { approved: true } });
-    res.status(200).json([...ads]);
+    if (req.user.userId) {
+      res.status(400).json({ message: "User is not authorized. Try again later" });
+    }
+    const ads = await user_ads.findAll({ where: { user_id: req.user.userId } });
+    res.status(200).json({ ads });
   }
   catch (err) {
     next(err);
   }
 });
 
-adsController.get('/unapproved-ads', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
+adsController.get('/approved-ads', isAuth, memoryCache, async (req, res, next) => {
+  try {
+    const ads = await user_ads.findAll({ where: { approved: true } });
+    res.status(200).json(ads);
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
+adsController.get('/unapproved-ads', rbac.checkPermission('approve_record'), isAuth, memoryCache, async (req, res, next) => {
   try {
     const ads = await user_ads.findAll({ where: { approved: false } });
-    res.status(200).json([...ads]);
+    res.status(200).json(ads);
   }
   catch (err) {
     next(err);
@@ -80,7 +90,7 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
       approved = ad.approved;
       await ad.destroy();
 
-      eventEmitter.on('adsDeleted', [...ads], approved ? 'approved' : 'unapproved');
+      eventEmitter.on('adsDeleted', ad, approved ? 'approved' : 'unapproved');
 
       res.status(200).json({ message: 'Ad successfully deleted' });
     }
