@@ -22,20 +22,24 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   }
 });
 
-adsController.get('/get-approved', isAuth, async (req, res, next) => {
+adsController.get('/own-ads', isAuth, async (req, res, next) => {
+
+});
+
+adsController.get('/approved-ads', isAuth, async (req, res, next) => {
   try {
     const ads = await user_ads.findAll({ where: { approved: true } });
-    res.status(200).json({ ...ads });
+    res.status(200).json([...ads]);
   }
   catch (err) {
     next(err);
   }
 });
 
-adsController.get('/get-unapproved', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
+adsController.get('/unapproved-ads', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
   try {
     const ads = await user_ads.findAll({ where: { approved: false } });
-    res.status(200).json({ ...ads });
+    res.status(200).json([...ads]);
   }
   catch (err) {
     next(err);
@@ -43,7 +47,7 @@ adsController.get('/get-unapproved', rbac.checkPermission('approve_record'), isA
 });
 
 
-adsController.post('/approve-ad', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
+adsController.post('/ad-approve', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
   try {
     const { id } = req.body;
     const ad = await user_ads.findOne({ where: { id } });
@@ -55,6 +59,9 @@ adsController.post('/approve-ad', rbac.checkPermission('approve_record'), isAuth
     }
     ad.approved = true;
     ad.save();
+
+    eventEmitter.on('adsApproved', ad);
+
     res.status(200).json({ message: "Ad has been approved successfully.", ad });
   }
   catch (err) {
@@ -62,7 +69,7 @@ adsController.post('/approve-ad', rbac.checkPermission('approve_record'), isAuth
   }
 });
 
-adsController.post('/delete-ad', isAuth, async (req, res, next) => {
+adsController.post('/ad-delete', isAuth, async (req, res, next) => {
   try {
     const { id } = req.body;
     const ad = await user_ads.findOne({ where: { id } });
@@ -70,7 +77,11 @@ adsController.post('/delete-ad', isAuth, async (req, res, next) => {
       res.status(400).json({ message: 'ID doesn\'t match an existing ad.' });
     }
     if (req.user.role === 'admin' || req.user.userId == ad.user_id) {
+      approved = ad.approved;
       await ad.destroy();
+
+      eventEmitter.on('adsDeleted', [...ads], approved ? 'approved' : 'unapproved');
+
       res.status(200).json({ message: 'Ad successfully deleted' });
     }
     res.status(400).json({ message: 'Access denied.' });
