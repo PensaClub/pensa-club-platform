@@ -1,9 +1,8 @@
-import { useState,} from "react";
+import { useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseStorage } from "../../firebase";
 import imageCompression from "browser-image-compression";
 import { v4 } from "uuid";
-
 import { validateFieldCreateAd } from "../../utils/ad";
 import { useTranslation } from "react-i18next";
 
@@ -28,7 +27,6 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
 
   const handleImageChange = (event) => {
     const files = event.target.files;
-  
     const newImages = [...images];
     const newImageFiles = [...imageFiles];
 
@@ -60,6 +58,16 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
     setValues(trimmedValues);
   };
 
+  const filterEmptyFields = (formData) => {
+    const filteredData = {};
+    Object.keys(formData).forEach((key) => {
+      if (formData[key] !== '' && formData[key] !== null && formData[key] !== undefined) {
+        filteredData[key] = formData[key];
+      }
+    });
+    return filteredData;
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     handleTrimFields();
@@ -82,8 +90,9 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
       });
 
       const imageUrls = await Promise.all(uploadTasks);
-      const newImage = imageUrls.filter(x => x !== null)
-      if (onSubmitHandler) onSubmitHandler({ ...values, images: newImage });
+      const newImage = imageUrls.filter(x => x !== null);
+      const filteredValues = filterEmptyFields({ ...values, images: newImage });
+      if (onSubmitHandler) onSubmitHandler(filteredValues);
 
       setValues(initialValues);
       setErrors({});

@@ -18,11 +18,12 @@ export const CreateAd = () => {
     const { t, i18n } = useTranslation();
     // eslint-disable-next-line no-unused-vars
     const [settlements, setSettlements] = useState([]);
+    const [fieldDefinitions, setFieldDefinitions] = useState({});
     const { searchCriteria, createAd } = useCommunityContext();
     const { profileData } = useAuthContext();
 
     const currentLanguage = i18n.language;
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const getEmailPrefix = (email) => {
         return email.split('@')[0];
     }
@@ -30,16 +31,16 @@ export const CreateAd = () => {
     const emailPrefix = getEmailPrefix(profileData.email);
 
     const getAdTownValue = (language, settlement) => {
-        if (!settlement) return '';
+        if (!settlement || !settlement.bg || !settlement.en) return '';
         return language === 'bg' ? settlement.bg : settlement.en;
     };
 
     const initialValues = {
         adId: v4(),
         summary: '',
-        category: '',
+        category: 'donate',
         description: '',
-        adTown: getAdTownValue(currentLanguage, profileData.details.settlement),
+        adTown: profileData.details.settlement ? getAdTownValue(currentLanguage, profileData.details.settlement) : '',
         adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
         useOtherCity: false,
         price: '',
@@ -52,8 +53,8 @@ export const CreateAd = () => {
     };
 
     const handleNavigate = () => {
-        navigate('/craigslist')
-    }
+        navigate('/craigslist');
+     }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -78,8 +79,22 @@ export const CreateAd = () => {
         };
 
         fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLanguage]);
+
+    useEffect(() => {
+        const loadFieldDefinitions = async () => {
+            try {
+                const response = await fetch('/fieldDefinitions.json');
+                const data = await response.json();
+                setFieldDefinitions(data);
+            } catch (error) {
+                console.error('Failed to load field definitions', error);
+            }
+        };
+
+        loadFieldDefinitions();
+    }, []);
 
     const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
         try {
@@ -89,6 +104,42 @@ export const CreateAd = () => {
             console.error('Error creating ad:', error);
         }
     }, emailPrefix);
+
+    const renderFields = () => {
+        const fields = fieldDefinitions.fields?.[values.category] || [];
+        return fields.length > 0 ? (
+            <div className="additional-fields-price">
+                {fields.map((field, index) => (
+                    <div key={index} className="form-group">
+                        <label htmlFor={field.name}>{t(`ads.${field.subname}`)}</label>
+                        {field.type === 'date' ? (
+                            <DatePicker
+                                selected={values[field.name]}
+                                onChange={(date) => setValues((state) => ({ ...state, [field.name]: date }))}
+                                onBlur={onBlurHandler}
+                                dateFormat="dd/MM/yyyy"
+                                id={field.name}
+                                name={field.name}
+                                required={field.required}
+                            />
+                        ) : (
+                            <input
+                                type={field.type}
+                                id={field.name}
+                                name={field.name}
+                                value={values[field.name] || ''}
+                                onChange={onChangeHandler}
+                                onBlur={onBlurHandler}
+                                placeholder={field.placeholder}
+                                required={field.required}
+                            />
+                        )}
+                        {errors[field.name] && <p className="error">{errors[field.name]}</p>}
+                    </div>
+                ))}
+            </div>
+        ) : null;
+    };
 
     return (
         <>
@@ -112,7 +163,6 @@ export const CreateAd = () => {
                                             required
                                         />
                                         <p className='desc-sub-text'>{t('ads.sub_text-one')}</p>
-
                                         {errors.summary && <p className="error">{errors.summary}</p>}
                                     </div>
                                     <div className="form-group">
@@ -133,106 +183,7 @@ export const CreateAd = () => {
                                         {errors.category && <p className="error">{errors.category}</p>}
                                     </div>
                                 </div>
-                                {values.category === 'sell' && (
-                                    <div className="form-group">
-                                        <label htmlFor="price">{t('ads.price')}</label>
-                                        <input
-                                            type="number"
-                                            id="price"
-                                            name="price"
-                                            value={values.price}
-                                            onChange={onChangeHandler}
-                                            onBlur={onBlurHandler}
-                                            placeholder='0'
-                                            required
-                                        />
-                                        {errors.price && <p className="error">{errors.price}</p>}
-                                    </div>
-                                )}
-                                {values.category === 'courses' && (
-                                    <div className="additional-fields-price">
-                                        <div className="form-group">
-                                            <label htmlFor="startCourse">{t('ads.start_course')}</label>
-                                            <DatePicker
-                                                selected={values.startCourse}
-                                                onChange={(date) => setValues((state) => ({ ...state, startCourse: date }))}
-                                                onBlur={onBlurHandler}
-                                                dateFormat="dd/MM/yyyy"
-                                                id="startCourse"
-                                                name="startCourse"
-                                            />
-                                            {errors.startCourse && <p className="error">{errors.startCourse}</p>}
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="endCourse">{t('ads.end_course')}</label>
-                                            <DatePicker
-                                                selected={values.endCourse}
-                                                onChange={(date) => setValues((state) => ({ ...state, endCourse: date }))}
-                                                onBlur={onBlurHandler}
-                                                dateFormat="dd/MM/yyyy"
-                                                id="endCourse"
-                                                name="endCourse"
-                                            />
-                                            {errors.endCourse && <p className="error">{errors.endCourse}</p>}
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="priceCourse">{t('ads.price_course')}</label>
-                                            <input
-                                                type="number"
-                                                id="priceCourse"
-                                                name="priceCourse"
-                                                value={values.priceCourse}
-                                                onChange={onChangeHandler}
-                                                onBlur={onBlurHandler}
-                                                placeholder='0'
-                                                required
-                                            />
-                                            {errors.priceCourse && <p className="error">{errors.priceCourse}</p>}
-                                        </div>
-                                    </div>
-                                )}
-                                {values.category === 'tours' && (
-                                    <div className="additional-fields-price">
-                                        <div className="form-group">
-                                            <label htmlFor="startTours">{t('ads.start_tours')}</label>
-                                            <DatePicker
-                                                selected={values.startTours}
-                                                onChange={(date) => setValues((state) => ({ ...state, startTours: date }))}
-                                                onBlur={onBlurHandler}
-                                                dateFormat="dd/MM/yyyy"
-                                                id="startTours"
-                                                name="startTours"
-                                            />
-                                            {errors.startTours && <p className="error">{errors.startTours}</p>}
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="endTours">{t('ads.end_tours')}</label>
-                                            <DatePicker
-                                                selected={values.endTours}
-                                                onChange={(date) => setValues((state) => ({ ...state, endTours: date }))}
-                                                onBlur={onBlurHandler}
-                                                dateFormat="dd/MM/yyyy"
-                                                id="endTours"
-                                                name="endTours"
-                                            />
-                                            {errors.endTours && <p className="error">{errors.endTours}</p>}
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="priceTours">{t('ads.price_tours')}</label>
-                                            <input
-                                                type="number"
-                                                id="priceTours"
-                                                name="priceTours"
-                                                value={values.priceTours}
-                                                onChange={onChangeHandler}
-                                                onBlur={onBlurHandler}
-                                                placeholder='0'
-                                                required
-                                            />
-                                            {errors.priceTours && <p className="error">{errors.priceTours}</p>}
-                                        </div>
-                                    </div>
-                                )}
+                                {renderFields()}
                                 <div className="form-group">
                                     <label htmlFor="description">{t('ads.description')}</label>
                                     <textarea
@@ -244,14 +195,13 @@ export const CreateAd = () => {
                                         required
                                     />
                                     <p className='desc-sub-text'>{t('ads.sub_text-two')}</p>
-
                                     {errors.description && <p className="error">{errors.description}</p>}
                                 </div>
                                 <div className="address-check">
                                     <div className="ad-address">
                                         <div className="form-group">
                                             <label htmlFor="adTown">{t('ads.ad_town')}</label>
-                                            {<input
+                                            <input
                                                 type="text"
                                                 id="adTown"
                                                 name="adTown"
@@ -260,7 +210,7 @@ export const CreateAd = () => {
                                                 onBlur={onBlurHandler}
                                                 required
                                                 disabled={!values.useOtherCity}
-                                            />}
+                                            />
                                             {errors.adTown && <p className="error">{errors.adTown}</p>}
                                         </div>
                                         <div className="checkbox-group useOtherCity">
@@ -287,7 +237,6 @@ export const CreateAd = () => {
                                         />
                                         {errors.adAddress && <p className="error">{errors.adAddress}</p>}
                                     </div>
-
                                 </div>
                                 <div className="form-group">
                                     <label>{t('ads.add_photos')}</label>
