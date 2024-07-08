@@ -78,7 +78,7 @@ adsController.post('/delete-ad', isAuth, async (req, res, next) => {
 
 adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   try {
-    adsValidator(req.body);
+    adsValidator(req.body, req.path);
 
     const data = fieldSwap(req.body, 'mapToDb');
 
