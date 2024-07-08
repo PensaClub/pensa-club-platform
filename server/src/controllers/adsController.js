@@ -5,41 +5,29 @@ const rbac = require("../middlewares/rbac");
 const fieldSwap = require('../utils/fieldSwap.js');
 const adsValidator = require('../utils/adsValidator.js');
 const memoryCache = require('../middlewares/caching.js');
+const eventEmitter = require('../utils/eventEmitter.js');
+const emailRegex =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 adsController.post('/ad-create', isAuth, async (req, res, next) => {
   try {
     adsValidator(req.body);
 
     const data = fieldSwap(req.body, 'mapToDb');
-
     const ad = await user_ads.create({ user_id: req.user.userId, ...data });
+    const mappedAd = fieldSwap(ad.dataValues, 'mapFromDb');
 
-    // if we switch from pure adId to details use the line below (doesn`t include id!)
-    // const newAd = fieldSwap(ad.dataValues, 'mapFromDb');
-
-    res.status(200).json({ message: 'Ad successfully created.', adId: ad.dataValues.id });
+    res.status(200).json({ message: 'Ad successfully created.', mappedAd });
   } catch (err) {
     next(err);
   }
 });
 
-adsController.get('/own-ads', isAuth, memoryCache, async (req, res, next) => {
-  try {
-    if (req.user.userId) {
-      res.status(400).json({ message: "User is not authorized. Try again later" });
-    }
-    const ads = await user_ads.findAll({ where: { user_id: req.user.userId } });
-    res.status(200).json({ ads });
-  }
-  catch (err) {
-    next(err);
-  }
-});
-
-adsController.get('/approved-ads', isAuth, memoryCache, async (req, res, next) => {
+adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
   try {
     const ads = await user_ads.findAll({ where: { approved: true } });
-    res.status(200).json(ads);
+    const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
+    res.status(200).json(mappedAds);
   }
   catch (err) {
     next(err);
@@ -49,7 +37,34 @@ adsController.get('/approved-ads', isAuth, memoryCache, async (req, res, next) =
 adsController.get('/unapproved-ads', rbac.checkPermission('approve_record'), isAuth, memoryCache, async (req, res, next) => {
   try {
     const ads = await user_ads.findAll({ where: { approved: false } });
-    res.status(200).json(ads);
+    const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
+    res.status(200).json(mappedAds);
+  }
+  catch (err) {
+    next(err);
+  }
+});
+
+adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      res.status(400).json({ message: "Email is required." });
+    }
+    if (!emailRegex.test(email)) {
+      res.status(400).json({ message: "Email is invalid." });
+    }
+    const ads = await user_ads.findAll({
+      include: [{
+        model: user_account,
+        as: "account",
+        where: { email },
+        attributes: []
+      }]
+    });
+
+    const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
+    res.status(200).json({ mappedAds });
   }
   catch (err) {
     next(err);
@@ -70,9 +85,9 @@ adsController.post('/ad-approve', rbac.checkPermission('approve_record'), isAuth
     ad.approved = true;
     ad.save();
 
-    eventEmitter.on('adsApproved', ad);
+    eventEmitter.emit('adsApproved', ad);
 
-    res.status(200).json({ message: "Ad has been approved successfully.", ad });
+    res.status(200).json({ message: "Ad has been approved successfully." });
   }
   catch (err) {
     next(err);
@@ -86,13 +101,13 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
     if (!ad) {
       res.status(400).json({ message: 'ID doesn\'t match an existing ad.' });
     }
-    if (req.user.role === 'admin' || req.user.userId == ad.user_id) {
+    if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
       approved = ad.approved;
       await ad.destroy();
 
-      eventEmitter.on('adsDeleted', ad, approved ? 'approved' : 'unapproved');
+      eventEmitter.emit('adsDeleted', ad, approved ? 'approved' : 'unapproved');
 
-      res.status(200).json({ message: 'Ad successfully deleted' });
+      res.status(200).json({ message: 'Ad has been deleted successfully.' });
     }
     res.status(400).json({ message: 'Access denied.' });
   }

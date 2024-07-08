@@ -2,10 +2,10 @@ const NodeCache = require('node-cache');
 const eventEmitter = require('../utils/eventEmitter');
 
 const stdTTL = 1800;
-const checkperiod = 600;
+const checkPeriod = 600;
 
 // Creating the cache with a standard TTL of 30 minutes and a check period of 10 minutes
-const cache = new NodeCache({ stdTTL, checkperiod });
+const cache = new NodeCache({ stdTTL, checkPeriod });
 
 module.exports = function memoryCache(req, res, next) {
   if (req.method !== 'GET') {
