@@ -1,12 +1,8 @@
-import { useTranslation } from 'react-i18next';
-
 export const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
 export const nameRegex = /^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
 export const emailRegex = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 export const phoneNumberRegex = /^(?:\+\d{7,15}|\d{10})$/;
 export const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-
 export const validateField = (name, value, form = {}, t) => {
 
     let error = '';
@@ -59,8 +55,7 @@ export const validateField = (name, value, form = {}, t) => {
             break;
     }
     return error ;
-    // return error ? t(error) : '';
-};
+ };
 
 export const generateNumberOptions = (start, end) => {
     const options = [];
@@ -83,8 +78,6 @@ export const trimObjectStrings = (obj) => {
 export const resetFields = (setForm, initialFormState) => {
     setForm(initialFormState);
 };
-
-
 export const handleReset = (setForm, initialFormState) => {
     resetFields(setForm, initialFormState);
 };

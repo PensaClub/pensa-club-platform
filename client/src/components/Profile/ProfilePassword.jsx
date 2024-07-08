@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile';
 import { UserContext } from '../contexts/UserContext';
@@ -7,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 export const ProfilePassword = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { onPasswordReset } = useContext(UserContext);
 
   const initialFormState = {
@@ -15,8 +13,6 @@ export const ProfilePassword = () => {
     newPassword: '',
     reNewPassword: '',
   };
-
-  // Проверка за паролата на бекенда!!!
 
   const [form, setForm] = useState(initialFormState);
   const [errors, setErrors] = useState({});
@@ -70,10 +66,7 @@ export const ProfilePassword = () => {
     if (isValid) {
       await onPasswordReset({ ...trimmedForm, tokenType: 'jwt' });
       resetFields(setForm, initialFormState);
-      // if (res?.message === "Password reset was successful.") {
-      //   navigate("/profile");
-      // }
-    }
+     }
   };
 
   return (

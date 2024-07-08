@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { trimFields, validateEmail, validatePassword, validateRePassword, resetFields } from "../../utils/signUp";
+import { trimFields, validateEmail, validatePassword, validateRePassword} from "../../utils/signUp";
 
 export const useForm = (initialValues, onSubmitHandler) => {
   const [values, setValues] = useState(initialValues);
