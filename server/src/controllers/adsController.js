@@ -17,7 +17,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
     // if we switch from pure adId to details use the line below (doesn`t include id!)
     // const newAd = fieldSwap(ad.dataValues, 'mapFromDb');
 
-    res.status(200).json({ message: 'Ad successfully created.', adId: ad.dataValues.id });
+    res.status(200).json({ message: 'Ad successfully created.', adId: ad.dataValues.ad_id });
   } catch (err) {
     next(err);
   }
@@ -82,9 +82,13 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
 
     const data = fieldSwap(req.body, 'mapToDb');
 
-    const [_, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true, plain: true });
+    const [affectedRows, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true });
 
-    const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
+    if (affectedRows === 0) {
+      return res.status(404).json({ message: 'Ad not found or no changes made.' });
+    }
+
+    const updatedDetails = fieldSwap(details[0].dataValues, 'mapFromDb');
 
     res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
   } catch (err) {
