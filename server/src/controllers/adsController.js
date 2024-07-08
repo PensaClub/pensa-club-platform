@@ -96,4 +96,20 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   }
 });
 
+adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
+  try {
+    adsValidator(req.body);
+
+    const data = fieldSwap(req.body, 'mapToDb');
+
+    const [_, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true, plain: true });
+
+    const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
+
+    res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = adsController;
