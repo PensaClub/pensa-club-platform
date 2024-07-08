@@ -231,7 +231,7 @@ export const MapEditor = ({ filteredUsers }) => {
                                         Умения: {selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ')}
                                     </p>
                                 )}
-                                <p>Телефон: <Link to={`tel:${selectedUser.details.phoneNumber}`}>{selectedUser.details.phoneNumber}</Link></p>
+                                 {selectedUser.details.phoneNumber && selectedUser.details.phoneNumber.length > 0 && (<p>Телефон: <Link to={`tel:${selectedUser.details.phoneNumber}`}>{selectedUser.details.phoneNumber}</Link></p>)}
                                 <p>Имейл: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
                             </div>
                         </div>
