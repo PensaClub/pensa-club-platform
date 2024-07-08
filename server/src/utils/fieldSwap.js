@@ -21,6 +21,7 @@ function fieldSwap(details, mappingType) {
     birthDate: 'birth_date',
     imageURL: 'imageURL',
     firebaseImagePath: 'firebase_image_path',
+    adId: 'ad_id',
     adTown: 'ad_town',
     adAddress: 'ad_address',
     creationDate: 'creation_date',
@@ -29,6 +30,7 @@ function fieldSwap(details, mappingType) {
     category: 'category',
     description: 'description',
     images: 'images',
+    approved: 'approved',
   };
 
   const mapFromDb = {
@@ -51,6 +53,7 @@ function fieldSwap(details, mappingType) {
     birth_date: 'birthDate',
     imageURL: 'imageURL',
     firebase_image_path: 'firebaseImagePath',
+    ad_id: 'adId',
     ad_town: 'adTown',
     ad_address: 'adAddress',
     creation_date: 'creationDate',
@@ -59,6 +62,7 @@ function fieldSwap(details, mappingType) {
     category: 'category',
     description: 'description',
     images: 'images',
+    approved: 'approved',
   };
 
   const fieldMapping = mappingType === 'mapToDb' ? mapToDb : mapFromDb;
