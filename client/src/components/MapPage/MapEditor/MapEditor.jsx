@@ -181,7 +181,7 @@ export const MapEditor = ({ filteredUsers }) => {
                                     <div className="ad-card-editor">
                                         <img src={user?.details?.imageURL || "/images/homePage/avatar2.png"} alt={user.details.firstName} className="ad-img-editor" /> {/* <-- Отметка тук */}
                                         <div className="ad-details-editor">
-                                            <h3 className="ad-name-editor">{user.details.firstName} {user.details.lastName}</h3>
+                                            <h3 className="ad-name-editor">{user.details.username}</h3>
                                             {user.details.workOptions && user.details.workOptions.length > 0 && (
                                                 <p className="ad-description-editor">
                                                     Професия: {user.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ')}
@@ -212,8 +212,7 @@ export const MapEditor = ({ filteredUsers }) => {
             {selectedUser && (
                 <div className="sidebar-map" ref={sidebarRef}>
                     <button className="close-button" onClick={closeSidebar}>Close</button>
-                    <div className="sidebar-content">
-                        <h2>{selectedUser.details.firstName} {selectedUser.details.lastName}</h2>
+                    <div className="sidebar-content"><h2>{selectedUser.details.username}</h2>
                         <div className="user-map-info">
                             <img className="user-map-img" src={selectedUser?.details?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
                             <div className="map-desc-user">
@@ -237,7 +236,7 @@ export const MapEditor = ({ filteredUsers }) => {
                             </div>
                         </div>
                         <div className="color-lines-pipe"></div>
-                        <h3 className="ad-title">Обяви на {selectedUser.details.firstName}</h3>
+                        <h3 className="ad-title">Обяви на {selectedUser.details.username}</h3>
                         <div className="color-lines-pipe"></div>
 
                         <div className='ad-scroll'>
