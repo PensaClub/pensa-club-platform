@@ -59,9 +59,9 @@ export const UserProvider = ({ children }) => {
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
         setAddressId({ ...data });
-        navigate('/profile');
+        navigate('/');
       } else {
-        navigate('/profile/profile-form');
+        navigate('/');
       }
     } catch (error) {
 
