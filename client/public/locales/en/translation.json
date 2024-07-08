@@ -182,7 +182,7 @@
     "settlement": "Settlement",
     "district": "District",
     "block": "Block",
-    "street": "Street",
+    "street": "Street/Boulevard",
     "street_number": "Street number",
     "required_fields": "Fields marked with * are required!",
     "save_btn": "Save",
