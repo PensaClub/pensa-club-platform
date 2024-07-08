@@ -268,12 +268,14 @@ const ProfileAddress = () => {
         {errors.streetNumber && <span className='error'>{errors.streetNumber}</span>}
       </label>
       <span className='required-fields'>{t('profile.required_fields')}</span>
-      <button className='btn-general btn-green btn-profile' type='submit'>
+      <div className="btn-inline">
+      <button className='btn-general btn-green' type='submit'>
         {t('profile.save_btn')}
       </button>
       <button type='submit' className='btn-general btn-red' onClick={handleResetForm}>
         {t('profile.close_btn')}
       </button>
+      </div>
     </form>
   );
 };
