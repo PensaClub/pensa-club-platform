@@ -12,7 +12,7 @@ export const CommunityProvider = ({ children }) => {
     const [regions , setRegions] = useState([])
     const [subregions , setSubregions] = useState({})
     const [searchCriteria, setSearchCriteria] = useState([]);
-    const communityService= communityServiceFactory()
+    const communityService= communityServiceFactory();
 
     const showErrorAndSetTimeouts = (error) => {
 
@@ -80,6 +80,24 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     }
+
+    const getMyAds = async (email) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getMyAds(email);
+            setIsLoading(false);
+            notify('success-created')
+            return response;
+        } catch (e) {
+            notify('error')
+
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
     useEffect(() => {
         fetchRegions();
         fetchSearchCriteria();
@@ -93,7 +111,8 @@ export const CommunityProvider = ({ children }) => {
         searchCriteria,
         isLoading,
         fetchSearchCriteria,
-        createAd
+        createAd,
+        getMyAds
     }
     
     return (

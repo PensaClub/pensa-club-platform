@@ -282,8 +282,11 @@
     "publish_btn": "Publish",
     "cancel_btn": "Cancel",
     "sub_text-one":"to 32 characters",
-    "sub_text-two":"to 1000 characters"
-
+    "sub_text-two":"to 1000 characters",
+    "view_more": "view more",
+    "edit": "Edit",
+    "delete": "Delete",
+    "no_ads": "You have no published ads"
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
