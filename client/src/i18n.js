@@ -24,5 +24,4 @@ i18n
       useSuspense: false, 
     },
   });
-console.log(i18n)
 export default i18n;

@@ -424,9 +424,6 @@ input[type="number"] {
     }
 
     .checkbox-group input {
-        /* appearance:initial;
-        -webkit-appearance: none;
-        -moz-appearance: none; */
         width: 20px;
         height: 20px;
         background-color: #fff;

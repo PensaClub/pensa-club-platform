@@ -1,7 +1,6 @@
 
 import { Component } from "react";
 import { Navigate } from "react-router-dom";
-
 export default class ErrorBoundary extends Component {
 
     constructor(props) {
@@ -14,12 +13,6 @@ export default class ErrorBoundary extends Component {
         }
     }
 
-    // static getDerivedStateFromError(error) {
-
-    //     return { hasError: true }
-    // }
-
-
     componentDidCatch(error, errorInfo) {
 
         this.setState({
@@ -28,7 +21,6 @@ export default class ErrorBoundary extends Component {
             errorInfo: errorInfo
         });
     }
-
  
     render() {
         if (this.state.hasError) {
@@ -45,8 +37,6 @@ export default class ErrorBoundary extends Component {
             );
         }
         return this.props.children
-  
-
     }
 
 }

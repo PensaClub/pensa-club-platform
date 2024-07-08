@@ -1,11 +1,11 @@
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { loadData } from '../../utils/loadData';
-import { notify } from '../../utils/notify';
+
 import { useImagePreview } from '../hooks/useImagePreview';
 import { useMappingContext } from '../contexts/MapContext';
 import { useImageUpload } from '../hooks/useImageUpload';
@@ -15,6 +15,7 @@ const ProfileForm = () => {
   const currentLanguage = i18n.language;
   const navigate = useNavigate();
   const { onProfileDataSubmit } = useContext(UserContext);
+  // eslint-disable-next-line no-unused-vars
   const { onAllUsers, allUsers, setAllUsers } = useMappingContext();
 
   const { handleImageChange, uploadImages } = useImageUpload();
@@ -61,7 +62,7 @@ const ProfileForm = () => {
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err.message));
 
     loadData('/options.json')
       .then((data) => {
@@ -69,11 +70,12 @@ const ProfileForm = () => {
         setSkillsOptions(data.skills);
         setWorkOptions(data.workOptions);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err.message));
   }, []);
 
   const handleRegionChange = async (e) => {
     const regionId = e.target.value;
+    // eslint-disable-next-line eqeqeq
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
 
@@ -113,10 +115,12 @@ const ProfileForm = () => {
     };
 
     updateErrorsTranslation();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLanguage]);
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
+    // eslint-disable-next-line eqeqeq
     const currMunicipality = municipalities.filter((municipality) => municipality.id == municipalityId);
     const municipalityName = currMunicipality[0].bg;
 
@@ -139,6 +143,7 @@ const ProfileForm = () => {
 
   const handleSettlementChange = async (e) => {
     const settlementId = e.target.value;
+    // eslint-disable-next-line eqeqeq
     const currSettlement = settlements.filter((settlement) => settlement.id == settlementId);
     const settlementName = currSettlement[0].bg;
 
@@ -214,10 +219,10 @@ const ProfileForm = () => {
         window.scrollTo(0, 0);
         navigate('/profile');
       } catch (error) {
-        console.log(`Error on profile form submit: ${error.message}`);
+        console.error(`Error on profile form submit: ${error.message}`);
       }
     } else {
-      console.log('Form validation failed. Errors:', validationErrors);
+      console.error('Form validation failed. Errors:', validationErrors);
     }
   };
 

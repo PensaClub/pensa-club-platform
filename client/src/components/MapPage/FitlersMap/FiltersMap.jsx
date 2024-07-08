@@ -110,13 +110,11 @@ export const FiltersMap = () => {
     const { t } = useTranslation();
     const { allUsers } = useMappingContext();
 
-
     const [optionData, setOptionData] = useState(null);
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedWorks, setSelectedWorks] = useState([]);
     const [selectedInterests, setSelectedInterests] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
 
     const saveFiltersToLocalStorage = (skills, works, interests) => {
         localStorage.setItem('selectedSkills', JSON.stringify(skills));
@@ -132,8 +130,6 @@ export const FiltersMap = () => {
         setSelectedWorks(savedWorks);
         setSelectedInterests(savedInterests);
     };
-
-
 
     useEffect(() => {
         fetch('./options.json')
@@ -278,7 +274,6 @@ export const FiltersMap = () => {
             <section className="map">
                 <MapEditor filteredUsers={filteredUsers} />
                 <div className="search-card-map-page">
-                    {/* <SearchCard /> */}
                 </div>
             </section>
         </>

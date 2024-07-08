@@ -16,6 +16,7 @@ import { v4 } from 'uuid';
 
 export const CreateAd = () => {
     const { t, i18n } = useTranslation();
+    // eslint-disable-next-line no-unused-vars
     const [settlements, setSettlements] = useState([]);
     const [fieldDefinitions, setFieldDefinitions] = useState({});
     const { searchCriteria, createAd } = useCommunityContext();
@@ -38,7 +39,6 @@ export const CreateAd = () => {
         adId: v4(),
         summary: '',
         category: 'donate',
-       
         description: '',
         adTown: profileData.details.settlement ? getAdTownValue(currentLanguage, profileData.details.settlement) : '',
         adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
