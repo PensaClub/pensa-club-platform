@@ -7,7 +7,6 @@ import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useMappingContext } from '../contexts/MapContext';
 
-
 export const ProfileWorks = () => {
     const { onEditProfileDataSubmit, profileData } = useContext(UserContext);    
     const { t } = useTranslation();
@@ -19,6 +18,7 @@ export const ProfileWorks = () => {
     const [form, setForm] = useState(initialFormState);
     const [workOptions, setWorkOptions] = useState([]);
     const [errors, setErrors] = useState({});
+    // eslint-disable-next-line no-unused-vars
     const { setAllUsers, allUsers } = useMappingContext();
 
     useEffect(() => {
@@ -67,20 +67,19 @@ export const ProfileWorks = () => {
         if (validateForm()) {
             await onEditProfileDataSubmit(form);
         
-            console.log('Form Submitted:', form);
+            console.error('Form Submitted:', form);
             resetFields(setForm, initialFormState);
             navigate('/profile');
         } else {
 
             setTimeout(() => {
                 if (form && form.workOptions && form.workOptions.length > 0) {
-                    console.log('Form Submitted:', form);
+                    console.error('Form Submitted:', form);
                     resetFields(setForm, initialFormState);
                 }
             }, 2000);
         }
     };
-
 
     const validateForm = () => {
         const errors = {};
@@ -91,12 +90,10 @@ export const ProfileWorks = () => {
         return Object.keys(errors).length === 0;
     };
 
-
     const handleResetForm = () => {
         handleReset(setForm, initialFormState);
         navigate('/profile');
         
-
     };
     return (
         <form className="profile-form" onSubmit={handleSubmit}>

@@ -11,7 +11,6 @@ import {
   faArrowRightFromBracket,
   faMap,
   faBars,
-  faCircleQuestion,
   faCircleExclamation,
   faGlobe,
 } from "@fortawesome/free-solid-svg-icons";
@@ -27,8 +26,7 @@ export const Header = ({ additionalClasses }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const { isAuthentication, isFinish, profileData } = useContext(UserContext);
   const [finishProfile, setFinishProfile] = useState(false);
-  const [currLang, setCurrLang] = useState("en");
-
+  
   const dropdownRef = useRef(null);
 
   const handleClickOutside = (event) => {
@@ -60,6 +58,7 @@ export const Header = ({ additionalClasses }) => {
       document.removeEventListener("mousedown", handleClickOutside);
       setMenuOpen(!isMenuOpen);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish]);
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -185,7 +184,7 @@ export const Header = ({ additionalClasses }) => {
           </div>
         </section>
       </header>
-      {/* <div className="after-header"></div> */}
+    
       <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>
         <p>Вашият профил е непълен. Моля, завършете го, за да продължите да използвате всички възможности на платформата.</p>
       </AlertModal>

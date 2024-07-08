@@ -6,7 +6,6 @@
     width: 100%;
     background-color: var( --green-cm-light);
     padding: 1em;
-    /* position: fixed; */
     bottom: 0;
 }
 .commun-menu-icons{
@@ -23,7 +22,6 @@
         bottom:0;
         left: 0;
         flex-direction:column-reverse;
-        /* gap: 2em; */
         width: 7%;
         z-index: 1005;
     }

@@ -32,13 +32,13 @@ export const FiltersCommunity = () => {
 
     const breakpointColumnsObj = {
         default: 2, //when the screen width is 768 pixels or larger, 2 columns will be used.
-        768: 1 // когато ширината на екрана е 768 пиксела или по-малка, ще се използва 1 колона.
+        768: 1 // When the screen width is 768 pixels or less, one column will be used.
     };
 
     return (
         <>
             <section className="unique-main-filters">
-                {/* <div className="community-main-section"> */}
+      
                 <Masonry
                     breakpointCols={breakpointColumnsObj}
                     className="my-masonry-grid"

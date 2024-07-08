@@ -1,11 +1,7 @@
-/* .search-carts-container {
-    display: none;
-} */
 .search-carts-container {
     position: relative;
     width: 100%;
     min-width: 150px;
-    /* max-width: 700px; */
     margin: 0 auto;
 }
 
@@ -24,13 +20,12 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
-  
+
     box-shadow: var(--text-shadow);
     overflow: hidden;
     color: white;
     background: var(--orange);
     margin-bottom: 1em;
-    /* opacity: 0.9; */
 }
 
 .selected-option-search .arrow {
@@ -48,7 +43,7 @@
 }
 
 .options-container-search {
-   
+
     top: 100%;
     left: 0;
     right: 0;
@@ -70,17 +65,13 @@
 }
 
 .options-container-search::-webkit-scrollbar-track {
-
     background: transparent;
-
 }
 
 .options-container-search::-webkit-scrollbar-thumb {
     background-color: var(--orange);
-
     border: 2px solid #f1f1f1;
     border-radius: var(--radius-input);
-
 }
 
 .search-input-container {
@@ -110,8 +101,8 @@
     padding: 1em 2em 3em 2em;
     flex-direction: row-reverse;
     border-bottom: 1px solid #ccc;
-    width: 100%; 
-    box-sizing: border-box; 
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .ad-img {
@@ -143,6 +134,7 @@
     color: var(--text-white);
     text-decoration: none;
 }
+
 @media (min-width: 850px) {
     .search-carts-container {
         display: block;
@@ -150,15 +142,12 @@
         min-width: 350px;
         max-width: 700px;
     }
-    svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
-        /* color: rgb(226, 96, 32) */
-    }
+
     .selected-option-search {
-            background-color: var(--bg-white);
+        background-color: var(--bg-white);
         border-radius: var(--radius-input);
-         background-color: var(--bg-white);
+        background-color: var(--bg-white);
         color: var(--text-black);
-        /* opacity: 0.9; */
     }
 
     .options-container-search {
@@ -177,20 +166,14 @@
         border-radius: var(--radius-input);
     }
 
-    
-    /* .ads-container {
-        padding: 10px;
-    } */
-
     .ad-card {
         display: flex;
         align-items: center;
         gap: 1em;
         padding: initial;
         flex-direction: row-reverse;
-         padding: 1.5em 0.8em 2em 0.8em;
-       
+        padding: 1.5em 0.8em 2em 0.8em;
+
     }
 
 }
-

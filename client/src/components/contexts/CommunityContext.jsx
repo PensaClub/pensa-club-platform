@@ -8,6 +8,7 @@ export const CommunityContext = createContext();
 
 export const CommunityProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [errorMessage, setErrorMessage] = useState('');
     const [regions , setRegions] = useState([])
     const [subregions , setSubregions] = useState({})
@@ -83,6 +84,7 @@ export const CommunityProvider = ({ children }) => {
     useEffect(() => {
         fetchRegions();
         fetchSearchCriteria();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const contextService = {

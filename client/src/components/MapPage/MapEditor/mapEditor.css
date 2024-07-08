@@ -1,6 +1,6 @@
 @import "~leaflet-fullscreen/dist/leaflet.fullscreen.css";
 
-.map-container{
+.map-container {
     position: relative;
 }
 
@@ -15,7 +15,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     max-width: 250px;
-   
+
 }
 
 .leaflet-popup-content-wrapper {
@@ -30,9 +30,11 @@
     font-weight: 500;
 
 }
-.city-label{
+
+.city-label {
     font-size: 40em;
 }
+
 .leaflet-container a.leaflet-popup-close-button {
     top: 4px;
     right: 4px;
@@ -41,23 +43,9 @@
 
 .ad-details-editor {
     flex: 2;
-    /* max-height: 900px;
-    overflow-y: auto; */
-  }
-  
-  /* .ad-details-editor::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  .ad-details-editor::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .ad-details-editor::-webkit-scrollbar-thumb {
-    background-color: var(--orange);
-    border: 2px solid #f1f1f1;
-    border-radius: var(--radius-input);
-  } */
+
+}
+
 .ad-name-editor {
     margin: 0;
     font-size: var(--xxs-font-size);
@@ -70,7 +58,6 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    /* margin-right: 10px; */
     object-fit: fill;
 }
 
@@ -81,7 +68,6 @@
 }
 
 .ad-description-editor {
-    /* margin: 15px 0; */
     font-size: var(--xxs-font-size);
 }
 
@@ -95,8 +81,8 @@
 }
 
 .custom-marker-cluster {
-    height: 3em!important;
-    width: 3em!important;
+    height: 3em !important;
+    width: 3em !important;
     border-radius: 50%;
     background-color: var(--red);
 
@@ -106,32 +92,24 @@
     justify-content: center;
     font-weight: 900;
     border: 2px outset var(--orange);
-    box-shadow: var(  --cluster-red-shadow);
- 
+    box-shadow: var(--cluster-red-shadow);
+
     opacity: 0.9 !important;
 }
 
 @media (min-width: 850px) {
     .ad-card-editor {
-        /* flex-direction: row-reverse; */
         max-width: calc(550px / (340px / var(--container-min-width)));
-        /* 450px*/
-
     }
 
     .ad-img-editor {
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        /* margin-right: 10px; */
     }
 
     .ad-name-editor {
         font-size: var(--s-font-size);
 
     }
-
-    /* .ad-description-editor {
-        margin: calc(var(--s-space) * (15 / 10)) 0;
-    } */
 }

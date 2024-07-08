@@ -1,4 +1,3 @@
-import { useState } from 'react';
 
 export const loadAddressData = async (
   regionName,
@@ -12,6 +11,7 @@ export const loadAddressData = async (
   try {
     const response = await fetch('/regions.json');
     const data = await response.json();
+    // eslint-disable-next-line eqeqeq
     const region = data.filter((region) => region.bg == regionName).shift();
     if (region) {
         regionId = region.id;
@@ -27,11 +27,12 @@ export const loadAddressData = async (
       );
       const data = await response.json();
       const municipality = await data
+        // eslint-disable-next-line eqeqeq
         .filter((municipality) => municipality.bg == municipalityName)
         .shift();
         municipalityId = municipality.id;
     } else {
-      console.log('No regionId');
+      console.error('No regionId');
     }
   } catch (error) {
     console.error('Failed to load municipalities data', error);
@@ -44,11 +45,12 @@ export const loadAddressData = async (
       );
       const data = await response.json();
       const settlement = await data
+        // eslint-disable-next-line eqeqeq
         .filter((settlement) => settlement.bg == settlementName)
         .shift();
         settlementId = settlement.id;
     } else {
-      console.log('No municipalityId');
+      console.error('No municipalityId');
     }
   } catch (error) {
     console.error('Failed to load settlements data', error);

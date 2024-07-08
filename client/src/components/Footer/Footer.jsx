@@ -1,5 +1,4 @@
 import './footer.css'
-
 import { useTranslation } from "react-i18next";
 
 export const Footer = ({additionalClasses}) => {
@@ -27,12 +26,10 @@ export const Footer = ({additionalClasses}) => {
                     </div>
                     <div className="info-desc">
                     <p>{t('footer.country-city')}</p>
-                    {/* TODO: make clickable */}
+                
                     <p>{t('footer.street')}</p> 
-                    {/* TODO: make clickable */}
+                 
                     <p>{t('footer.phone')}</p> 
-                    {/* <p>Факс: (359) 2 881 95 55</p> */}
-                    {/* TODO: make clickable */}
                     <p>{t('footer.email')}</p> 
                     </div>
                 </div>

@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
-import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
+import { useState,} from "react";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseStorage } from "../../firebase";
 import imageCompression from "browser-image-compression";
 import { v4 } from "uuid";
 
 import { validateFieldCreateAd } from "../../utils/ad";
 import { useTranslation } from "react-i18next";
-import { notify } from "../../utils/notify";
 
 export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const [values, setValues] = useState(initialValues);

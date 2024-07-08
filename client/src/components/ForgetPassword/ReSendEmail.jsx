@@ -70,7 +70,6 @@ export const ReSendEmail = () => {
                     </button>
                     {isLocked && attempts >= 3 && <p>{t('form.too-many-attempts')} {Math.floor(timer / 60)} {t('form.minutes')} {t('form.and')} {timer % 60} {t('form.seconds')}.</p>}
                     
-
                     <Link to="/sign-up">{t('form.back-to-login')}</Link>
                 </div>
                 <div className="logo-forget-pass">
