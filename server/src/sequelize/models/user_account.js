@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: "id", // Primary key in user_accounts table
         as: "details",
       });
-      user_account.hasMany(models.user_details, {
+      user_account.hasMany(models.user_ads, {
         foreignKey: "user_id", // Foreign key in user_details table
         sourceKey: "id", // Primary key in user_accounts table
         as: "ads",

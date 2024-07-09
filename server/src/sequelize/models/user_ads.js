@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   user_ads.init(
     {
+      ad_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       user_id: { type: DataTypes.INTEGER, allowNull: false },
       summary: {
         type: DataTypes.STRING(32),
