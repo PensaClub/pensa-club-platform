@@ -24,8 +24,7 @@ export const MottoSection = () => {
           <Link to="/#" className="btn-general btn-orange" id="btn-join">
             {t('motto.about-btn')}
           </Link>{' '}
-          {/*трябва да води към about page*/}
-        </div>
+          </div>
       </section>
     </>
   );

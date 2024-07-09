@@ -28,12 +28,47 @@ module.exports = function memoryCache(req, res, next) {
   }
 };
 
-eventEmitter.on('dbUpdated', (data) => {
+eventEmitter.on('accountsUpdated', (data) => {
   const oldValue = cache.get('/user/all-users');
   if (oldValue) {
     const object = JSON.parse(oldValue);
     const index = object.accounts.findIndex((obj) => obj.email === data.email);
     index !== -1 ? (object.accounts[index] = data) : object.accounts.push(data);
     cache.set('/user/all-users', JSON.stringify(object), stdTTL);
+  }
+});
+
+eventEmitter.on('adsApproved', (data) => {
+  const oldValueApproved = cache.get('ads/approved-ads');
+  const oldValueUnapproved = cache.get('ads/unapproved-ads');
+  if (oldValueUnapproved) {
+    const approvedObj = JSON.parse(oldValueApproved);
+    const unapprovedObj = JSON.parse(oldValueUnapproved);
+    approvedAd = unapprovedObj.filter((obj) => obj.id == data.id);
+    if (approvedAd) {
+      approvedObj ? approvedObj.ads.push(approvedAd) : approvedObj.ads = [approvedAd];
+      unapprovedObj = unapprovedObj.filter((obj) => obj.id != data.id);
+      cache.set('ads/approved-ads', JSON.stringify(approvedObj), stdTTL);
+      cache.set('ads/unapproved-ads', JSON.stringify(unapprovedObj), stdTTL);
+    }
+  }
+});
+
+eventEmitter.on('adsUpdated', (data, identifier = 'approved') => {
+  const oldValue = cache.get(`ads/${identifier}-ads`);
+  if (oldValue) {
+    const object = JSON.parse(oldValue);
+    const index = object.ads.findIndex((obj) => obj.id == data.id);
+    index !== -1 ? (object.ads[index] = data) : object.ads.push(data);
+    cache.set(`ads/${identifier}-ads`, JSON.stringify(object), stdTTL);
+  }
+});
+
+eventEmitter.on('adsDeleted', (data, identifier = 'approved') => {
+  const oldValue = cache.get(`ads/${identifier}-ads`);
+  if (oldValue) {
+    const object = JSON.parse(oldValue);
+    object = object.filter(obj => obj.id !== data.id);
+    cache.set(`ads/${identifier}-ads`, JSON.stringify(object), stdTTL);
   }
 });

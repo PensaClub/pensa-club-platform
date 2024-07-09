@@ -28,6 +28,8 @@ import { CreateAd } from './components/Community/AdPage/CreateAd/CreateAd.jsx';
 import { ForgetPassword } from './components/ForgetPassword/ForgetPassword.jsx';
 import { ReSendEmail } from './components/ForgetPassword/ReSendEmail.jsx';
 import { ResetPasswordPage } from './components/ForgetPassword/ResetPasswordPage.jsx';
+import { MenuCommunity } from './components/Community/MenuCommunity/MenuCommunity.jsx';
+import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCommunity.jsx';
 
 function App() {
 
@@ -41,7 +43,7 @@ function App() {
           <MapProvider>
             <CommunityProvider>
             <Header additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''} />
-
+            <HeaderCommunity/>
           <ToastContainer role="alert" className={"notification"} limit={3} position="bottom-right"/>
              <Routes>
               <Route path="/" element={<Home />} />
@@ -69,8 +71,9 @@ function App() {
               <Route path="404/*" element={<NotFound />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-
             <Footer additionalClasses={isCommunityPage ? 'hide-on-mobile position-fix' : ''} />
+            <MenuCommunity/>
+
             </CommunityProvider>
           </MapProvider>
         </UserProvider>

@@ -24,8 +24,6 @@ const requester = async (method, url, data) => {
       };
     }
 
-    // console.log(`Body: ${options.body}`);
-
   }
 
   const response = await fetch(url, options);

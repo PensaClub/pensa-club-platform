@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import './searchCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faSquarePollHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-
 
 const adsData = [
     {
@@ -12,8 +11,6 @@ const adsData = [
         description: "Looking for help with gardening.",
         img: "https://toppng.com/uploads/preview/stock-person-png-stock-photo-man-11563049686zqeb9zmqjd.png",
     },
-
-
 
     {
         id: 22,
@@ -64,21 +61,6 @@ const SearchCard = ({ ads = adsData }) => {
     const handleToggle = () => {
         setIsOpen(!isOpen);
     };
-
-    // const handleClickOutside = (event) => {
-    //     if (containerRef.current && !containerRef.current.contains(event.target)) {
-    //         setIsOpen(false);
-    //     }
-    // };
-
-    // Изключил съм го пробно 
-
-    // useEffect(() => {
-    //     document.addEventListener('mousedown', handleClickOutside);
-    //     return () => {
-    //         document.removeEventListener('mousedown', handleClickOutside);
-    //     };
-    // }, []); 
 
     return (
         <div className="search-carts-container" ref={containerRef}>

@@ -21,6 +21,6 @@ export async function uploadImageToFirebase(file, oldFilePath) {
     }
     return { url, filePath: imageRef.fullPath };
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 }

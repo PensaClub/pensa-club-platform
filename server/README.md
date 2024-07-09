@@ -143,7 +143,13 @@ When the server starts for the first time in a development environment, a demo u
 
 - **_userDetailsController_** :
 
-  - **/ads/ad-create** : This endpoint is used to create an advertisement with all the necessary details. It allows users to input comprehensive information about the ad, such as the title, description, category, town, address and images.
+  - **/ads/approved-ads** : Used to retrieve all approved ads. It can be accessed by any authenticated user.
+  - **/ads/unapproved-ads** : Used to retrieve all unapproved ads. It can be accessed by admins only.
+  - **/ads/user-ads** : Used to retrieve all ads of an user by providing its email address in the request body.
+  - **/ads/ad-approve** : Used to approve an ad by providing its id in the request body. It can be accessed by admins only.
+  - **/ads/ad-delete** : Used to delete an ad by providing its id in the request body. It can be accessed by admins and the ad's creator only.
+  - **/ads/ad-edit** : Used to...
+  - **/ads/ad-create** : Used to create an advertisement with all the necessary details. It allows users to input comprehensive information about the ad, such as the title, description, category, town, address and images.
 
     Example of successful ad creation via postman:
 

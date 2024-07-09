@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './profile.css';
-import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
+import { validateField, generateNumberOptions, trimObjectStrings, handleReset } from '../../utils/profile';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useImagePreview } from '../hooks/useImagePreview';
-import { notify } from '../../utils/notify';
 import { useMappingContext } from '../contexts/MapContext';
 import { useImageUpload } from '../hooks/useImageUpload';
 import { toast } from 'react-toastify';
@@ -14,19 +13,15 @@ export const ProfileData = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { userEmail, onEditProfileDataSubmit, profileData } = useContext(UserContext);
+  const { onEditProfileDataSubmit, profileData } = useContext(UserContext);
 
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const { setAllUsers, allUsers } = useMappingContext();
 
-  // const [profileData, setProfileData] = useState('')
-
-  //TODO: change keys when changed on server!!!
-
-  // const { setImageUpload, uploadImage } = useImageUpload();
   const { handleImageChange, uploadImages } = useImageUpload();
   const { previewImage, handleImage } = useImagePreview();
 
@@ -42,19 +37,6 @@ export const ProfileData = () => {
     firebaseImagePath: profileData.details.firebaseImagePath || null,
   };
   const [form, setForm] = useState(initialFormState);
-
-  // useEffect(() => {
-  //     // debugger
-  //     const serializedData = localStorage.getItem("userDetails");
-  //     const userData = JSON.parse(serializedData);
-  //     if (userData) {
-  //         const userDetails = userData.details;
-  //         console.log(userDetails);
-  //       setProfileData (userDetails);
-  //       setForm({...form, userDetails})
-  //       console.log(form);
-  //     }
-  //   }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -228,14 +210,8 @@ export const ProfileData = () => {
               </div>
             </div>
           </div>
-          <div></div>
-          {/* <div>
-                        <label htmlFor="email">{t('profile.email')}: <span>*</span></label>
-                        <input type="email" id="email" name="email" value={form.email} onChange={handleInputChange} onBlur={onBlurHandler} required
-                            style={{ borderColor: errors.email ? '#BB1D3D' : '' }}
-                        />
-                        {errors.email && <span className="error">{errors.email}</span>}
-                    </div> */}
+          <div>
+          </div>
           <div>
             <label htmlFor='phoneNumber'>{t('profile.phone_number')}:</label>
             <input

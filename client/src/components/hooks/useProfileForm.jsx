@@ -28,7 +28,9 @@ export const useForm = (initialForm, initialValues, onSubmitHandler) => {
     e.preventDefault();
     handleTrimFields();
 
+    // eslint-disable-next-line no-undef
     const isValid = Object.keys(trimmedForm).every((field) => {
+        // eslint-disable-next-line no-undef
         const value = trimmedForm[field];
         const error = validateField(field, value);
         setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
