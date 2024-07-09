@@ -218,7 +218,9 @@
     "username_error": "Username must be between 7 and 16 characters. May contain uppercase letters, lowercase letters, numbers and _",
     "email_required": "Email is required",
     "email_error": "Email is invalid",
+    "name_required": "Name is required",
     "name_invalid": "Name is invalid",
+    "phone_number_required": "Phone number is required",
     "phone_number_invalid": "Phone number is invalid",
     "password_error": "Password must be at least 8 characters long and contain at least one letter and one number",
     "new_password_error": "New password must be at least 8 characters long and contain at least one letter and one number",
@@ -291,6 +293,7 @@
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
     "success-created": "You have successfully created an ad!",
+    "success-suggested": "You have successfully suggested a friend!",
     "error": "An error occured. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images."
@@ -311,6 +314,15 @@
       "tours": "Tours",
       "games": "Games",
       "arbitration": "Arbitration"
-    }
+    },
+    "user-suggestion": {
+    "title": "Suggest a Friend",
+    "desc": "Leave here information about a friend of yours who would like to be part of PensaClub but needs assisstance with the registration",
+    "name": "Name",
+    "name-placeholder": "John Doe",
+    "phone": "Phone",
+    "message": "Message",
+    "message-placeholder": "Leave a short message here"
+  }
 }
 

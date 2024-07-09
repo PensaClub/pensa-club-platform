@@ -13,6 +13,7 @@ import ErrorBoundary from './tools/errorBoundary';
 import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary';
 import { FiltersMap } from './components/MapPage/FitlersMap/FiltersMap';
 import { MapPage } from './components/MapPage/MapPage';
+import { UserSuggestion } from './components/UserSuggestion/UserSuggestion.jsx'
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 
@@ -67,6 +68,7 @@ function App() {
               <Route path="/ads" element={<AdsCard />} />
               <Route path="/filter" element={<FiltersMap />} />
               <Route path="/map" element={<MapPage />} />
+              <Route path="/suggest-user" element={<UserSuggestion />}/>
               <Route path="/errors/*" element={<ErrorPageBoundary />} />
               <Route path="404/*" element={<NotFound />} />
               <Route path="*" element={<NotFound />} />
