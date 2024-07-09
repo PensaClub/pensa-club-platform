@@ -65,6 +65,7 @@ export const CommunityPage = () => {
             <section className="background-community">
                 <section className="community-page">
                     <HeaderCommunity />
+                  
                     <section className="main-community">
                         <div className="hero-bg">
                             {/* <img src="/community/community-bg.jpg" alt="" /> */}
@@ -88,7 +89,7 @@ export const CommunityPage = () => {
                         </div>
                         {ads.length > 0 ? <AdsCard ads={ads} isLoading={isLoading} /> : <FiltersCommunity />}
                     </section>
-                    <CommunityFooter />
+                    {/* <CommunityFooter /> */}
                 </section>
             </section>
             <What isOpen={isSearchWhatOpen} onClose={() => setIsSearchWhatOpen(false)} />
