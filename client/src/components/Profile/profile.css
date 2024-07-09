@@ -6,6 +6,7 @@
     flex-direction: column;
     background-size: auto;
     position: relative;
+    min-height: 100vh;
 }
 
 .profile-section-edit,

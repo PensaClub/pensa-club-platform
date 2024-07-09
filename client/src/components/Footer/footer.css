@@ -101,7 +101,9 @@ footer {
 }
 @media only screen and (max-width: 1200px) {
  .hide-on-mobile {
-    display: none;
+    display: block;
+    /* position: sticky;
+    bottom: 0; */
   }
 
 }
