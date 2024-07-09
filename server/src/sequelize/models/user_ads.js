@@ -25,6 +25,19 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       user_id: { type: DataTypes.INTEGER, allowNull: false },
+      ad_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          notNull: {
+            msg: 'Ad id is required.',
+          },
+          notEmpty: {
+            msg: 'Ad id cannot be empty.',
+          },
+        },
+      },
       summary: {
         type: DataTypes.STRING(32),
         allowNull: false,

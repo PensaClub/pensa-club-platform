@@ -1,9 +1,10 @@
 const adsController = require('express').Router();
 const { user_account, user_details, user_ads } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth.js');
-const rbac = require("../middlewares/rbac");
+const rbac = require('../middlewares/rbac');
 const fieldSwap = require('../utils/fieldSwap.js');
 const adsValidator = require('../utils/adsValidator.js');
+const { where } = require('sequelize');
 const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
 const emailRegex =
@@ -15,9 +16,8 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 
     const data = fieldSwap(req.body, 'mapToDb');
     const ad = await user_ads.create({ user_id: req.user.userId, ...data });
-    const mappedAd = fieldSwap(ad.dataValues, 'mapFromDb');
 
-    res.status(200).json({ message: 'Ad successfully created.', mappedAd });
+    res.status(200).json({ message: 'Ad successfully created.' });
   } catch (err) {
     next(err);
   }
@@ -28,8 +28,7 @@ adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
     const ads = await user_ads.findAll({ where: { approved: true } });
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
-  }
-  catch (err) {
+  } catch (err) {
     next(err);
   }
 });
@@ -39,8 +38,7 @@ adsController.get('/unapproved-ads', rbac.checkPermission('approve_record'), isA
     const ads = await user_ads.findAll({ where: { approved: false } });
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
-  }
-  catch (err) {
+  } catch (err) {
     next(err);
   }
 });
@@ -65,31 +63,28 @@ adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
 
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json({ mappedAds });
-  }
-  catch (err) {
+  } catch (err) {
     next(err);
   }
 });
-
 
 adsController.post('/ad-approve', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
   try {
     const { id } = req.body;
     const ad = await user_ads.findOne({ where: { id } });
     if (!ad) {
-      res.status(400).json({ message: 'ID doesn\'t match an existing ad.' });
+      res.status(400).json({ message: "ID doesn't match an existing ad." });
     }
     if (ad.approved) {
-      res.status(400).json({ message: "Ad has already been approved." });
+      res.status(400).json({ message: 'Ad has already been approved.' });
     }
     ad.approved = true;
     ad.save();
-
+    
     eventEmitter.emit('adsApproved', ad);
 
     res.status(200).json({ message: "Ad has been approved successfully." });
-  }
-  catch (err) {
+  } catch (err) {
     next(err);
   }
 });
@@ -99,7 +94,7 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
     const { id } = req.body;
     const ad = await user_ads.findOne({ where: { id } });
     if (!ad) {
-      res.status(400).json({ message: 'ID doesn\'t match an existing ad.' });
+      res.status(400).json({ message: "ID doesn't match an existing ad." });
     }
     if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
       approved = ad.approved;
@@ -110,8 +105,23 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
       res.status(200).json({ message: 'Ad has been deleted successfully.' });
     }
     res.status(400).json({ message: 'Access denied.' });
+  } catch (err) {
+    next(err);
   }
-  catch (err) {
+});
+
+adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
+  try {
+    adsValidator(req.body);
+
+    const data = fieldSwap(req.body, 'mapToDb');
+
+    const [_, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true, plain: true });
+
+    const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
+
+    res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
+  } catch (err) {
     next(err);
   }
 });

@@ -30,6 +30,7 @@ function fieldSwap(details, mappingType) {
     category: 'category',
     description: 'description',
     images: 'images',
+    adId: 'ad_id',
     approved: 'approved',
   };
 
@@ -62,6 +63,7 @@ function fieldSwap(details, mappingType) {
     category: 'category',
     description: 'description',
     images: 'images',
+    ad_id: 'adId',
     approved: 'approved',
   };
 

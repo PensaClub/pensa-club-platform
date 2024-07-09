@@ -169,9 +169,12 @@ When the server starts for the first time in a development environment, a demo u
           "imageURL": "http://example.com/path/to/image2.jpg",
           "firebaseImagePath": "path/in/firebase/storage"
         }
-      ]
+      ],
+      "adId": "random uuid number"
     }
     ```
+
+  - **/ads/ad-edit**: This endpoint updates an existing advertisement. It allows for updating one or many fields of the ad, and requires the ad's ID to be provided.
 
 ## Testing
 
