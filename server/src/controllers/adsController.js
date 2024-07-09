@@ -78,26 +78,6 @@ adsController.post('/delete-ad', isAuth, async (req, res, next) => {
 
 adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   try {
-    adsValidator(req.body, req.path);
-
-    const data = fieldSwap(req.body, 'mapToDb');
-
-    const [affectedRows, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true });
-
-    if (affectedRows === 0) {
-      return res.status(404).json({ message: 'Ad not found or no changes made.' });
-    }
-
-    const updatedDetails = fieldSwap(details[0].dataValues, 'mapFromDb');
-
-    res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
-  } catch (err) {
-    next(err);
-  }
-});
-
-adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
-  try {
     adsValidator(req.body);
 
     const data = fieldSwap(req.body, 'mapToDb');
