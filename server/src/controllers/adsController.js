@@ -15,7 +15,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
     adsValidator(req.body);
 
     const data = fieldSwap(req.body, 'mapToDb');
-    const ad = await user_ads.create({ user_id: req.user.userId, ...data });
+    await user_ads.create({ user_id: req.user.userId, ...data });
 
     res.status(200).json({ message: 'Ad successfully created.' });
   } catch (err) {
@@ -33,7 +33,7 @@ adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
   }
 });
 
-adsController.get('/unapproved-ads', rbac.checkPermission('approve_record'), isAuth, memoryCache, async (req, res, next) => {
+adsController.get('/unapproved-ads', isAuth, rbac.checkPermission('approve_record'), memoryCache, async (req, res, next) => {
   try {
     const ads = await user_ads.findAll({ where: { approved: false } });
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
@@ -68,10 +68,10 @@ adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
   }
 });
 
-adsController.post('/ad-approve', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
+adsController.post('/ad-approve', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
   try {
-    const { id } = req.body;
-    const ad = await user_ads.findOne({ where: { id } });
+    const { adId } = req.body;
+    const ad = await user_ads.findOne({ where: { ad_id: adId }, });
     if (!ad) {
       res.status(400).json({ message: "ID doesn't match an existing ad." });
     }
@@ -80,7 +80,7 @@ adsController.post('/ad-approve', rbac.checkPermission('approve_record'), isAuth
     }
     ad.approved = true;
     ad.save();
-    
+
     eventEmitter.emit('adsApproved', ad);
 
     res.status(200).json({ message: "Ad has been approved successfully." });
@@ -91,8 +91,8 @@ adsController.post('/ad-approve', rbac.checkPermission('approve_record'), isAuth
 
 adsController.post('/ad-delete', isAuth, async (req, res, next) => {
   try {
-    const { id } = req.body;
-    const ad = await user_ads.findOne({ where: { id } });
+    const { adId } = req.body;
+    const ad = await user_ads.findOne({ where: { ad_id: adId } });
     if (!ad) {
       res.status(400).json({ message: "ID doesn't match an existing ad." });
     }
