@@ -169,6 +169,37 @@ When the server starts for the first time in a development environment, a demo u
     ```
 
   - **/ads/ad-edit**: This endpoint updates an existing advertisement. It allows for updating one or many fields of the ad, and requires the ad's ID to be provided.
+  - **/ads/ads-search**: This endpoint provides search functionality.
+
+    Example of successful query via postman - http://localhost:8080/ads/ads-search?summary=divA&creationDate=2024-05-09&expirationDate=2024-08-07 and the return data:
+
+    ```json
+    [
+      {
+        "summary": "Divan1133112",
+        "category": "sell",
+        "adTown": "Popovo",
+        "adId": "123",
+        "images": [
+          {
+            "imageURL": "random url",
+            "firebaseImagePath": "random path"
+          }
+        ],
+        "approved": false,
+        "creationDate": "2024-07-08",
+        "expirationDate": "2024-08-07",
+        "account": {
+          "email": "test@test.com",
+          "details": {
+            "username": "TestUser",
+            "firstName": "TestName",
+            "lastName": "TestSurname"
+          }
+        }
+      }
+    ]
+    ```
 
 ## Testing
 

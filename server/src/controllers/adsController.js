@@ -4,7 +4,7 @@ const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac');
 const fieldSwap = require('../utils/fieldSwap.js');
 const adsValidator = require('../utils/adsValidator.js');
-const { where } = require('sequelize');
+const { where, Op } = require('sequelize');
 
 adsController.post('/ad-create', isAuth, async (req, res, next) => {
   try {
@@ -96,17 +96,60 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   }
 });
 
-adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
+adsController.get('/ads-search', async (req, res, next) => {
   try {
-    adsValidator(req.body);
+    const query = req.query;
 
-    const data = fieldSwap(req.body, 'mapToDb');
+    let whereCondition = { approved: true };
 
-    const [_, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true, plain: true });
+    for (let key in query) {
+      if (key === 'creationDate') {
+        whereCondition.creation_date = {
+          [Op.gte]: query[key],
+        };
+      } else if (key === 'expirationDate') {
+        whereCondition.expiration_date = {
+          [Op.lte]: query[key],
+        };
+      } else {
+        whereCondition[key] = {
+          [Op.iLike]: `%${query[key]}%`,
+        };
+      }
+    }
 
-    const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
+    // Tag to be added !
 
-    res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
+    const result = await user_ads.findAll({
+      where: whereCondition,
+      attributes: [
+        'summary',
+        'category',
+        ['ad_town', 'adTown'],
+        ['ad_id', 'adId'],
+        'images',
+        'approved',
+        ['creation_date', 'creationDate'],
+        ['expiration_date', 'expirationDate'],
+      ],
+      include: [
+        {
+          model: user_account,
+          as: 'account',
+          required: true,
+          attributes: ['email'],
+          include: [
+            {
+              model: user_details,
+              as: 'details',
+              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName']],
+            },
+          ],
+        },
+      ],
+    });
+
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }
