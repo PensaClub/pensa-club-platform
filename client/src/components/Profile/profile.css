@@ -1,12 +1,11 @@
 .profile-section {
-    background-image: url('../../../public/images/sign-up/background.jpg');
-    padding: var(--l-space);
-    padding-top: 8em;
-    display: flex;
-    flex-direction: column;
-    background-size: auto;
-    position: relative;
-    min-height: 100vh;
+  background-image: url('../../../public/images/sign-up/background.jpg');
+  padding: var(--l-space);
+  padding-top: 8em;
+  display: flex;
+  flex-direction: column;
+  background-size: auto;
+  position: relative;
 }
 
 .profile-section-edit,
