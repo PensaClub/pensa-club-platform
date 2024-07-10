@@ -29,12 +29,17 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-      
+
     case 'success-created':
-        toast.success(<Trans i18nKey="notification.success-created" />, {
-          role: 'alert',
-        });
-        break;
+      toast.success(<Trans i18nKey="notification.success-created" />, {
+        role: 'alert',
+      });
+      break;
+    case 'success-get-ads':
+      toast.success(<Trans i18nKey="notification.success-get-ads" />, {
+        role: 'alert',
+      });
+      break;
     case 'error':
       toast.error(<Trans i18nKey="notification.error" />, {
         role: 'alert',

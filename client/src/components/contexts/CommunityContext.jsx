@@ -87,7 +87,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(true);
             const response = await communityService.getMyAds(email);
             setIsLoading(false);
-            notify('success-created')
+            // notify('success-get-ads')
             return response;
         } catch (e) {
             notify('error')
