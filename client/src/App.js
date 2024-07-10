@@ -29,12 +29,9 @@ import { CreateAd } from './components/Community/AdPage/CreateAd/CreateAd.jsx';
 import { ForgetPassword } from './components/ForgetPassword/ForgetPassword.jsx';
 import { ReSendEmail } from './components/ForgetPassword/ReSendEmail.jsx';
 import { ResetPasswordPage } from './components/ForgetPassword/ResetPasswordPage.jsx';
-<<<<<<< HEAD
 import { MenuCommunity } from './components/Community/MenuCommunity/MenuCommunity.jsx';
 import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCommunity.jsx';
-=======
 import { SuggestUserProvider } from './components/contexts/SuggestUserContext.jsx';
->>>>>>> 5f4aab9 (merge with BE)
 
 function App() {
   const location = useLocation();
@@ -47,46 +44,11 @@ function App() {
         <UserProvider>
           <MapProvider>
             <CommunityProvider>
-<<<<<<< HEAD
-            <Header additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''} />
-            <HeaderCommunity/>
-          <ToastContainer role="alert" className={"notification"} limit={3} position="bottom-right"/>
-             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/server-error" element={<ServerError />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/server-error" element={<ServerError />} />
-              <Route path="/forget-password" element={<ForgetPassword />} />
-              <Route path="/resend-email" element={<ReSendEmail />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
-              <Route element={<AuthGuard />}>
-                <Route path="/ad" element={<AdPage />} />
-                <Route path='/ad/create' element={<CreateAd />} />
-                <Route path="/logout" element={<Logout />} />
-                <Route path="/profile/*" element={<Profile />} />
-              </Route>
-
-              <Route element={<PublicGuard />}>
-                <Route path="/sign-up" element={<LoginRegister />} />
-              </Route>
-              <Route path="/craigslist" element={<CommunityPage />} />
-              <Route path="/ads" element={<AdsCard />} />
-              <Route path="/filter" element={<FiltersMap />} />
-              <Route path="/map" element={<MapPage />} />
-              <Route path="/suggest-user" element={<UserSuggestion />}/>
-              <Route path="/errors/*" element={<ErrorPageBoundary />} />
-              <Route path="404/*" element={<NotFound />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Footer additionalClasses={isCommunityPage ? 'hide-on-mobile position-fix' : ''} />
-            <MenuCommunity/>
-
-=======
               <SuggestUserProvider>
                 <Header
                   additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
                 />
-
+                <HeaderCommunity />
                 <ToastContainer
                   role="alert"
                   className={'notification'}
@@ -123,14 +85,13 @@ function App() {
                   <Route path="404/*" element={<NotFound />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-
                 <Footer
                   additionalClasses={
                     isCommunityPage ? 'hide-on-mobile position-fix' : ''
                   }
                 />
+                <MenuCommunity />
               </SuggestUserProvider>
->>>>>>> 5f4aab9 (merge with BE)
             </CommunityProvider>
           </MapProvider>
         </UserProvider>
