@@ -3,14 +3,12 @@ import './userSuggestion.css';
 import {
   trimObjectStrings,
   resetFields,
-  handleReset,
 } from '../../utils/profile';
 
-import { UserContext } from '../contexts/UserContext';
 import { useContext, useEffect, useState } from 'react';
-import { useForm } from '../hooks/useForm';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { SuggestUserContext } from '../contexts/SuggestUserContext';
 
 const phoneNumberRegex = /^(?:\+\d{7,15}|\d{10})$/;
 const nameRegex = /^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
@@ -19,7 +17,7 @@ export const UserSuggestion = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { onSuggestSubmit } = useContext(UserContext);
+  // const { onSuggestSubmit } = useContext(SuggestUserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
