@@ -17,7 +17,7 @@ export const UserSuggestion = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // const { onSuggestSubmit } = useContext(SuggestUserContext);
+  const { onSuggestSubmit } = useContext(SuggestUserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -79,7 +79,7 @@ export const UserSuggestion = () => {
       try {
         resetFields(setForm, initialFormState);
 
-        // await onSuggestSubmit(trimmedForm);
+        await onSuggestSubmit(trimmedForm);
         window.scrollTo(0, 0);
         navigate('/');
       } catch (error) {

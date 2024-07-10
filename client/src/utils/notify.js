@@ -35,7 +35,7 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-    case 'success-suggested':
+    case 'success-suggest':
       toast.success(<Trans i18nKey="notification.success-suggested" />, {
         role: 'alert',
       });
