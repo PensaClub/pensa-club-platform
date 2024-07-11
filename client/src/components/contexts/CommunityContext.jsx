@@ -126,7 +126,7 @@ export const CommunityProvider = ({ children }) => {
         searchCriteria,
         isLoading,
         createAd,
-        setTowns
+        setTowns,
         fetchSearchCriteria,
         getMyAds
     }
