@@ -364,7 +364,8 @@
   border-radius: 50%;
 }
 
-.announced .view-more {
+.announced .view-more,
+.announced .pending-approval {
   position: absolute;
   text-align: center;
   text-transform: uppercase;
@@ -380,6 +381,23 @@
   background-color: var(--bg-white);
   z-index: 15;
   font-weight: bold;
+}
+
+.announced .view-more {
+  cursor: pointer;
+}
+
+.announced .pending-approval {
+  cursor: not-allowed;
+  color: #1F372A;
+  opacity: 1;
+}
+
+.announced.pending {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
 }
 
 @media (min-width: 850px) and (orientation: landscape) {
@@ -437,7 +455,7 @@
   margin: 0;
 }
 
- .no-ads{
+.no-ads {
   text-align: center;
   font-size: 2rem;
   color: var(--orange);
@@ -499,9 +517,11 @@
     height: 150px;
   }
 
-  .announced .view-more {
+  .announced .view-more,
+  .announced .pending-approval {
     top: -18px;
   }
+
 }
 
 @media (min-width: 850px) and (orientation: landscape) {

@@ -55,8 +55,10 @@ export const ProfileAnnounced = () => {
         <>
             {ads.length > 0 ? (
                 ads.map(ad => (
-                    <div className='announced' key={ad.adId}>
-                        <p className='view-more'>{t('ads.view_more')}</p>
+                    <div className={`announced ${ad.approved ? '' : 'pending'}`} key={ad.adId}>
+                        <p className={ad.approved ? 'view-more' : 'pending-approval'}>
+                            {ad.approved ? t('ads.view_more') : t('ads.pending_approval')}
+                        </p>
                         <section className='profile-data ads'>
                             <div className='avatar-announced'>
                                 <img src={ad.images[0]?.imageURL || "/images/sign-up/avatar.jpg"} alt="User avatar" />
@@ -71,8 +73,8 @@ export const ProfileAnnounced = () => {
                                 </div>
                                 <p>{t('ads.valid_until')}: {formatDate(ad.expirationDate, currentLanguage, t)}</p>
                                 <div className='ads-btns'>
-                                    <button className='ads-btn red'>{t('ads.edit')}</button>
-                                    <button className='ads-btn green'>{t('ads.delete')}</button>
+                                <button className={`ads-btn red ${ad.approved ? '' : 'disabled'}`} disabled={!ad.approved}>{t('ads.edit')}</button>
+                                    <button className={`ads-btn green ${ad.approved ? '' : 'disabled'}`} disabled={!ad.approved}>{t('ads.delete')}</button>
                                 </div>
                             </div>
                         </section>

@@ -287,7 +287,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "no_ads": "You have no published ads",
-    "valid_until": "Valid until"
+    "valid_until": "Valid until",
+    "pending_approval": "Pending approval"
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
