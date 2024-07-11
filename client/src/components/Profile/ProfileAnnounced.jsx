@@ -61,7 +61,7 @@ export const ProfileAnnounced = () => {
                         </p>
                         <section className='profile-data ads'>
                             <div className='avatar-announced'>
-                                <img src={ad.images[0]?.imageURL || "/images/sign-up/avatar.jpg"} alt="User avatar" />
+                                <img src={ad.images[0]?.imageURL || "/images/sign-up/avatar.jpg"} alt="Ad photo" />
                                 <p>{getCategoryTranslation(ad.category, t)}</p>
                             </div>
                             <div className='user-data user-data-ads'>
