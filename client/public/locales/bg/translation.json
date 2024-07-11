@@ -282,7 +282,16 @@
     "publish_btn": "Публикувай",
     "cancel_btn": "Откажи",
     "sub_text-one": "до 32 символа",
-    "sub_text-two": "до 1000 символа"
+    "sub_text-two": "до 1000 символа",
+    "select_town" : "Избери град",
+    "ad_region":  "Регион",
+    "ad_municipality":  "Община",
+    "tags_ad":"Таговете се добавят чрез натискане на Enter или Space.",
+    "tags": "Тагове",
+    "max_tags": "Максимума за тагове е 5 ",
+    "enter_tag":"Въведи Tаг"
+
+
   },
   "notification": {
     "success-data": "Данните за потребителя са запазени успешно!",

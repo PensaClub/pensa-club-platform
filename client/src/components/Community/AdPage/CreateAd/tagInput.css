@@ -1,0 +1,125 @@
+/* TagInput.css */
+.tag-input-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1em 0;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px;
+    margin-top: 0.4em;
+    border-radius: var(--radius);
+    border: 1px solid var(--brown);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    background-color: var(--form-input-bg);
+}
+
+.tag-input-container label {
+    padding-bottom: 0.5em;
+    font-size: calc(var(--xxs-font-size) + 1px);
+    font-weight: 600;
+    color: var(--brown);
+}
+
+.tag button {
+    background: none;
+    border: none;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #666;
+}
+
+.tag input {
+    border: none;
+    outline: none;
+
+    padding: 0;
+    margin: 0;
+    background: none;
+    /* font-size: 1rem; */
+}
+
+.tag span {
+    font-size: calc(var(--xxs-font-size) - 2px);
+
+}
+
+.desc-sub-text span {
+    display: flex;
+    margin-bottom: 0.7em;
+    font-style: italic;
+    font-size: calc(var(--xxs-font-size) - 3px);
+    line-height: 1.2em;
+
+}
+
+.tag-input-container input {
+    padding: 10px;
+    font-size: 1rem;
+    outline: none;
+    border-radius: var(--radius);
+    border: 1px solid var(--brown);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    background-color: var(--form-input-bg);
+    font-size: calc(var(--xxs-font-size) + 1px);
+    height: 55px;
+}
+.desc-sub-text.alert-tags {
+    color: red;
+
+
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+    .tag-input-container input {
+        height: 64px;
+        font-size: calc(var(--xxs-font-size));
+    }
+
+    .tag span {
+        font-size: calc(var(--xxs-font-size));
+
+    }
+
+    .tag-input-container label {
+        font-size: calc(var(--xs-font-size) + 1px);
+        padding-top: 1em;
+    }
+
+    .desc-sub-text span {
+        font-size: calc(var(--xxs-font-size)-2px);
+
+    }
+}
+
+@media (min-width: 1200px) {
+    .tag-input-container input {
+        font-size: calc(var(--xs-font-size));
+
+    }
+
+    .tag span {
+        font-size: calc(var(--xxs-font-size) + 3px);
+
+    }
+
+    .tag-input-container label {
+        font-size: calc(var(--s-font-size) + 1px);
+
+    }
+    .desc-sub-text span {
+        font-size: calc(var(--xxs-font-size));
+
+    }
+}
