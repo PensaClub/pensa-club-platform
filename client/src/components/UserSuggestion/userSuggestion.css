@@ -38,6 +38,10 @@
   color: var(--red);
 }
 
+.form h2 {
+  margin-top: 0;
+}
+
 .input {
   background-color: var(--bg-white);
   padding: 0.9rem 0.9rem;
@@ -49,7 +53,10 @@
 
 .desc {
   font-size: var(--xs-font-size);
-  margin: var(--m-space) 0;
+  text-align: left;
+  text-indent: 0%;
+  margin: var(--s-space) 0;
+  width: 100%;
 }
 
 @keyframes show {

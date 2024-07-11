@@ -1,14 +1,12 @@
 import './userSuggestion.css';
 
-import {
-  trimObjectStrings,
-  resetFields,
-} from '../../utils/profile';
+import { trimObjectStrings, resetFields } from '../../utils/profile';
 
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { SuggestUserContext } from '../contexts/SuggestUserContext';
+import { UserContext } from '../contexts/UserContext';
 
 const phoneNumberRegex = /^(?:\+\d{7,15}|\d{10})$/;
 const nameRegex = /^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
@@ -18,12 +16,14 @@ export const UserSuggestion = () => {
   const navigate = useNavigate();
 
   const { onSuggestSubmit } = useContext(SuggestUserContext);
+  const { profileData } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
 
   const initialFormState = {
+    reffererName: profileData.details?.firstName || profileData.details?.username || '',
     name: '',
     phoneNumber: '',
     message: '',
@@ -36,6 +36,10 @@ export const UserSuggestion = () => {
     let error = '';
     switch (name) {
       case 'name':
+        if (!value) error = t('profile.name_required');
+        if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
+        break;
+      case 'reffererName':
         if (!value) error = t('profile.name_required');
         if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
         break;
@@ -102,7 +106,30 @@ export const UserSuggestion = () => {
         <div className="container">
           <form className="form" id="user-suggest" onSubmit={handleSubmit}>
             <h2 className="form__title">{t('user-suggestion.title')}</h2>
-            <div className="desc">{t('user-suggestion.desc')}</div>
+            <p className="desc">
+              <strong>{t('user-suggestion.desc')}</strong>
+            </p>
+
+            <label className="label" htmlFor="reffererName">
+              {t('user-suggestion.refferer-name')} <span>*</span>
+            </label>
+            <input
+              type="text"
+              placeholder={t('user-suggestion.name-placeholder')}
+              className="input"
+              name="reffererName"
+              value={form.reffererName}
+              onChange={handleInputChange}
+              onBlur={onBlurHandler}
+              required
+            />
+            {errors.reffererName && (
+              <p className="error">{t(`${errors.reffererName}`)}</p>
+            )}
+
+            <p className="desc">
+              <strong>{t('user-suggestion.who-is-suggested')}</strong>
+            </p>
 
             <label className="label" htmlFor="name">
               {t('user-suggestion.name')} <span>*</span>

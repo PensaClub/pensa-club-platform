@@ -322,6 +322,8 @@
     "name-placeholder": "Иван Иванов",
     "phone": "Телефон",
     "message": "Съобщение",
-    "message-placeholder": "Оставете кратко съобщение тук"
+    "message-placeholder": "Оставете кратко съобщение тук",
+    "refferer-name": "Вашето име",
+    "who-is-suggested": "Кого препоръчвате?"
   }
 }

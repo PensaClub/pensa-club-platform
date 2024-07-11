@@ -4,7 +4,6 @@ const { user_suggest } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac');
 const { where } = require('sequelize');
-const fieldSwap = require('../utils/fieldSwap.js');
 const eventEmitter = require('../utils/eventEmitter.js');
 
 suggestUserController.post('/', async (req, res, next) => {

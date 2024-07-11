@@ -47,6 +47,24 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
 
+      refferer_name: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+        defaultValue: null,
+        validate: {
+          customValidator(value) {
+            if (value && value.length > 0) {
+              if (value.length < 3 || value.length > 20) {
+                throw new Error("Name must be between 3 and 20 characters in length.");
+              }
+              if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
+                throw new Error("Name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.");
+              }
+            }
+          },
+        },
+      },
+
       message: {
         type: DataTypes.STRING,
         allowNull: true,

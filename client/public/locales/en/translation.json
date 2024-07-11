@@ -322,7 +322,9 @@
     "name-placeholder": "John Doe",
     "phone": "Phone",
     "message": "Message",
-    "message-placeholder": "Leave a short message here"
+    "message-placeholder": "Leave a short message here",
+    "refferer-name": "Your name",
+    "who-is-suggested": "Who are you suggesting?"
   }
 }
 
