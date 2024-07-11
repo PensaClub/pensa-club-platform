@@ -286,7 +286,8 @@
     "view_more": "view more",
     "edit": "Edit",
     "delete": "Delete",
-    "no_ads": "You have no published ads"
+    "no_ads": "You have no published ads",
+    "valid_until": "Valid until"
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
@@ -315,6 +316,21 @@
       "tours": "Tours",
       "games": "Games",
       "arbitration": "Arbitration"
+    },
+      "months": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
     }
+    
 }
 
