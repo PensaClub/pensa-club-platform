@@ -90,6 +90,24 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
+
+    };
+
+    const getMyAds = async (email) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getMyAds(email);
+            setIsLoading(false);
+            notify('success-created')
+            return response;
+        } catch (e) {
+            notify('error')
+
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -109,8 +127,10 @@ export const CommunityProvider = ({ children }) => {
         isLoading,
         createAd,
         setTowns
-    };
-
+        fetchSearchCriteria,
+        getMyAds
+    }
+    
     return (
         <CommunityContext.Provider value={contextService}>
             {children}

@@ -1,36 +1,59 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './profile.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faPhone, faEnvelope, faSheetPlastic } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
+import { useAuthContext } from '../contexts/UserContext';
+import { useCommunityContext } from '../contexts/CommunityContext';
 
 export const ProfileAnnounced = () => {
-    return (
-        <div className="announced">
-            <section className="profile-data">
-                <div className="avatar-announced">
-                    <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
-                </div>
-                <div className="user-data">
-                    <h2>Обява 1</h2>
-                    <p><FontAwesomeIcon icon={faSheetPlastic} className="icon" /> Име на обява</p>
-                    <p><FontAwesomeIcon icon={faPhone} className="icon" /> +35659599589</p>
-                    <p><FontAwesomeIcon icon={faLocationDot} className="icon" /> гр.София</p>
-                    <p><FontAwesomeIcon icon={faEnvelope} className="icon" /> example@gmail.com</p>
-                </div>
-            </section>
+    const { t } = useTranslation();
+    const { getMyAds } = useCommunityContext();
+    const { profileData } = useAuthContext();
+    const [ads, setAds] = useState([]);
 
-            <section className="profile-data">
-                <div className="avatar-announced">
-                    <img src="/images/sign-up/avatar.jpg" alt="User avatar" />
-                </div>
-                <div className="user-data">
-                    <h2>Обява 2</h2>
-                    <p><FontAwesomeIcon icon={faSheetPlastic} className="icon" /> Име на обява</p>
-                    <p><FontAwesomeIcon icon={faPhone} className="icon" /> +35659599589</p>
-                    <p><FontAwesomeIcon icon={faLocationDot} className="icon" /> гр.София</p>
-                    <p><FontAwesomeIcon icon={faEnvelope} className="icon" /> example@gmail.com</p>
-                </div>
-            </section>
-        </div>
+    useEffect(() => {
+        const fetchAds = async () => {
+            try {
+                const result = await getMyAds(profileData.email);
+                setAds(result);
+                console.log(result)
+            } catch (error) {
+                console.error('Failed to fetch ads', error);
+            }
+        };
+
+        fetchAds();
+    }, []);
+
+    return (
+        <>
+            {ads.length > 0 ? (
+                ads.map(ad => (
+                    <div className='announced' key={ad.id}>
+                        <p className='view-more'>{t('ads.view_more')}</p>
+                        <section className='profile-data ads'>
+                            <div className='avatar-announced'>
+                                <img src={ad.imageUrl || "/images/sign-up/avatar.jpg"} alt="User avatar" />
+                                <p>продавам</p>
+                            </div>
+                            <div className='user-data user-data-ads'>
+                                <h3>{ad.title}</h3>
+                                <div className='ads-elipse'>
+                                    <p className='elipse'>{ad.category}</p>
+                                    <p className='elipse'>{ad.location}</p>
+                                    <p className='elipse'>{ad.date}</p>
+                                </div>
+                                <p>Валидна до: </p>
+                                <div className='ads-btns'>
+                                    <button className='ads-btn red'>{t('ads.edit')}</button>
+                                    <button className='ads-btn green'>{t('ads.delete')}</button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                ))
+            ) : (
+                <h4 className='no-ads'>{t('ads.no_ads')}</h4>
+            )}
+        </>
     );
 }

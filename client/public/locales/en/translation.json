@@ -290,6 +290,10 @@
     "tags": "Tags",
     "max_tags": "Max Tags is 5",
     "enter_tag":"Enter a Tag"
+    "view_more": "view more",
+    "edit": "Edit",
+    "delete": "Delete",
+    "no_ads": "You have no published ads"
 
   },
   "notification": {

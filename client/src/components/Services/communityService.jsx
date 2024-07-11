@@ -40,6 +40,10 @@ export const communityServiceFactory = (token) => {
         createAd: async (adData) => {
             return requester.post(`${apiUrl}/ads/ad-create`,adData);
 
-        }
+        },
+        getMyAds: async (email) => {
+
+            return requester.get(`${apiUrl}/ads/user-ads`, { email });
+        },
     }
 }
