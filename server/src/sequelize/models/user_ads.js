@@ -67,15 +67,61 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      ad_town: {
+      region: {
         type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'Region is required.',
+          },
+        },
       },
-      ad_address: {
+      municipality: {
         type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'Municipality is required.',
+          },
+        },
+      },
+      settlement: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'Settlement is required.',
+          },
+        },
+      },
+      street: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'Street is required.',
+          },
+        },
+      },
+      tags: {
+        type: DataTypes.ARRAY(DataTypes.STRING(16)),
+        allowNull: false,
+        defaultValue: [],
+        validate: {
+          customValidator(value) {
+            if (!Array.isArray(value)) {
+              throw new Error('Tags must be an array.');
+            }
+            if (value.length > 5) {
+              throw new Error('Tags array must contain between 0 to 5 elements.');
+            }
+            value.forEach((tag) => {
+              if (typeof tag !== 'string' || tag.length > 16) {
+                throw new Error('Each tag must be a string of max length 16.');
+              }
+            });
+          },
+        },
       },
       images: {
         type: DataTypes.JSON,

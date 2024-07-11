@@ -4,7 +4,7 @@ const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac');
 const fieldSwap = require('../utils/fieldSwap.js');
 const adsValidator = require('../utils/adsValidator.js');
-const { where, Op } = require('sequelize');
+const { where, Op, literal } = require('sequelize');
 
 adsController.post('/ad-create', isAuth, async (req, res, next) => {
   try {
@@ -12,12 +12,9 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 
     const data = fieldSwap(req.body, 'mapToDb');
 
-    const ad = await user_ads.create({ user_id: req.user.userId, ...data });
+    await user_ads.create({ user_id: req.user.userId, ...data });
 
-    // if we switch from pure adId to details use the line below (doesn`t include id!)
-    // const newAd = fieldSwap(ad.dataValues, 'mapFromDb');
-
-    res.status(200).json({ message: 'Ad successfully created.', adId: ad.dataValues.ad_id });
+    res.status(200).json({ message: 'Ad successfully created.' });
   } catch (err) {
     next(err);
   }
@@ -97,20 +94,43 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
 });
 
 adsController.get('/ads-search', async (req, res, next) => {
-  try {
-    const query = req.query;
+  const whereCondition = {};
+  const errors = {};
 
-    let whereCondition = { approved: true };
+  const validCategories = ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'];
+  const allowedQueryKeys = ['creationDate', 'expirationDate', 'tags', 'category', 'summary', 'region', 'municipality', 'settlement'];
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+  try {
+    const query = Object.fromEntries(Object.entries(req.query).filter(([key]) => allowedQueryKeys.includes(key)));
 
     for (let key in query) {
       if (key === 'creationDate') {
-        whereCondition.creation_date = {
-          [Op.gte]: query[key],
-        };
+        if (!dateRegex.test(query[key])) {
+          errors.creationDate = 'Date format must be YYYY-MM-DD';
+        } else {
+          whereCondition.creation_date = {
+            [Op.gte]: query[key],
+          };
+        }
       } else if (key === 'expirationDate') {
-        whereCondition.expiration_date = {
-          [Op.lte]: query[key],
-        };
+        if (!dateRegex.test(query[key])) {
+          errors.expirationDate = 'Date format must be YYYY-MM-DD';
+        } else {
+          whereCondition.expiration_date = {
+            [Op.lte]: query[key],
+          };
+        }
+      } else if (key === 'category') {
+        if (validCategories.includes(query[key])) {
+          whereCondition.category = query[key];
+        } else {
+          errors.category = `Invalid category: ${query[key]}. Valid categories are ${validCategories.join(', ')}. Excluding this filter from search.`;
+        }
+      } else if (key === 'tags') {
+        const tagsArray = query[key].split(',').map((tag) => tag.trim().toLowerCase());
+        const tagConditions = tagsArray.map((tag) => literal(`LOWER(array_to_string(tags, ',')) LIKE '%${tag.replace(/'/g, "''")}%'`));
+        whereCondition[Op.or] = tagConditions;
       } else {
         whereCondition[key] = {
           [Op.iLike]: `%${query[key]}%`,
@@ -118,19 +138,22 @@ adsController.get('/ads-search', async (req, res, next) => {
       }
     }
 
-    // Tag to be added !
+    whereCondition.approved = true;
 
     const result = await user_ads.findAll({
       where: whereCondition,
       attributes: [
         'summary',
         'category',
-        ['ad_town', 'adTown'],
+        'region',
+        'municipality',
+        'settlement',
         ['ad_id', 'adId'],
         'images',
         'approved',
         ['creation_date', 'creationDate'],
         ['expiration_date', 'expirationDate'],
+        'tags',
       ],
       include: [
         {
@@ -149,7 +172,7 @@ adsController.get('/ads-search', async (req, res, next) => {
       ],
     });
 
-    res.status(200).json(result);
+    res.status(200).json({ result, errors });
   } catch (err) {
     next(err);
   }
