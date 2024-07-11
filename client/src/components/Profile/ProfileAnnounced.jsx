@@ -15,13 +15,14 @@ export const ProfileAnnounced = () => {
             try {
                 const result = await getMyAds(profileData.email);
                 setAds(result);
-                console.log(result)
+          
             } catch (error) {
                 console.error('Failed to fetch ads', error);
             }
         };
 
         fetchAds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
