@@ -35,8 +35,8 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-    case 'success-get-ads':
-      toast.success(<Trans i18nKey="notification.success-get-ads" />, {
+    case 'success-delete-ads':
+      toast.success(<Trans i18nKey="notification.success-delete-ads" />, {
         role: 'alert',
       });
       break;

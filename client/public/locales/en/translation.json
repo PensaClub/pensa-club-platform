@@ -288,7 +288,8 @@
     "delete": "Delete",
     "no_ads": "You have no published ads",
     "valid_until": "Valid until",
-    "pending_approval": "Pending approval"
+    "pending_approval": "Pending approval",
+    "delete_ad": "Would you like to delete"
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
@@ -296,7 +297,7 @@
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
     "success-created": "You have successfully created an ad!",
-    "success-get-ads": "Successfully loading ads!",
+    "success-delete-ads": "Successfully delete ad!",
     "error": "An error occured. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images."

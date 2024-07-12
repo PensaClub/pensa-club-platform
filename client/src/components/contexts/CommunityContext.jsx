@@ -87,7 +87,6 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(true);
             const response = await communityService.getMyAds(email);
             setIsLoading(false);
-            // notify('success-get-ads')
             return response;
         } catch (e) {
             notify('error')
@@ -98,6 +97,22 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
+    const deleteAd = async (id) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.deleteAd(id);
+            setIsLoading(false);
+            notify('success-delete-ads')
+            return response;
+        } catch (e) {
+            notify('error')
+
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    }
     
     useEffect(() => {
         fetchRegions();
@@ -114,7 +129,8 @@ export const CommunityProvider = ({ children }) => {
         isLoading,
         fetchSearchCriteria,
         createAd,
-        getMyAds
+        getMyAds,
+        deleteAd
     }
     
     return (

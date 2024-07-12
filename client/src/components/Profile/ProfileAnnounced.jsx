@@ -3,6 +3,7 @@ import './profile.css';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../contexts/UserContext';
 import { useCommunityContext } from '../contexts/CommunityContext';
+import { DeleteAd } from '../Community/AdPage/DeleteAd/DeleteAd';
 
 const getMonthFromDate = (dateString, language) => {
     const date = new Date(dateString);
@@ -29,9 +30,11 @@ const formatDate = (dateString, language, t) => {
 export const ProfileAnnounced = () => {
     const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
-    const { getMyAds } = useCommunityContext();
+    const { getMyAds, deleteAd } = useCommunityContext();
     const { profileData } = useAuthContext();
     const [ads, setAds] = useState([]);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedAd, setSelectedAd] = useState(null);
 
     useEffect(() => {
         const fetchAds = async () => {
@@ -50,6 +53,30 @@ export const ProfileAnnounced = () => {
 
         fetchAds();
     }, [profileData.email]);
+
+    const handleDeleteClick = (ad) => {
+        setSelectedAd(ad);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDeleteAd = async () => {
+        if (selectedAd) {
+            try {
+                await deleteAd(selectedAd.adId);
+                setAds(ads.filter(ad => ad.adId !== selectedAd.adId));
+            } catch (error) {
+                console.error('Failed to delete ad', error);
+            }
+            setIsDeleteModalOpen(false);
+           setSelectedAd(null);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsDeleteModalOpen(false);
+        setSelectedAd(null);
+      
+    };
 
     return (
         <>
@@ -73,8 +100,16 @@ export const ProfileAnnounced = () => {
                                 </div>
                                 <p>{t('ads.valid_until')}: {formatDate(ad.expirationDate, currentLanguage, t)}</p>
                                 <div className='ads-btns'>
-                                <button className={`ads-btn red ${ad.approved ? '' : 'disabled'}`} disabled={!ad.approved}>{t('ads.edit')}</button>
-                                    <button className={`ads-btn green ${ad.approved ? '' : 'disabled'}`} disabled={!ad.approved}>{t('ads.delete')}</button>
+                                <button 
+                                className={`ads-btn red ${ad.approved ? '' : 'disabled'}`} 
+                                disabled={!ad.approved}>{t('ads.edit')}
+                                </button>
+                                    <button
+                                     className={`ads-btn green ${ad.approved ? '' : 'disabled'}`}
+                                      disabled={!ad.approved} 
+                                      onClick={() => handleDeleteClick(ad)}>
+                                        {t('ads.delete')}
+                                        </button>
                                 </div>
                             </div>
                         </section>
@@ -83,6 +118,13 @@ export const ProfileAnnounced = () => {
             ) : (
                 <h4 className='no-ads'>{t('ads.no_ads')}</h4>
             )}
+            <DeleteAd
+                isOpen={isDeleteModalOpen}
+                onClose={handleCloseModal}
+                onDelete={handleDeleteAd}
+                adName={selectedAd?.summary}
+                adImage={selectedAd?.images[0]?.imageURL || "/images/sign-up/avatar.jpg"}
+            />
         </>
     );
 }
