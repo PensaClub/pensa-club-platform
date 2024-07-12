@@ -61,7 +61,7 @@ module.exports = {
           },
         },
       },
-      region: {
+      ad_region: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -70,7 +70,7 @@ module.exports = {
           },
         },
       },
-      municipality: {
+      ad_subregion: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -79,7 +79,7 @@ module.exports = {
           },
         },
       },
-      settlement: {
+      ad_town: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {

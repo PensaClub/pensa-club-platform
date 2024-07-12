@@ -12,6 +12,8 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 
     const data = fieldSwap(req.body, 'mapToDb');
 
+    data.approved = false;
+
     await user_ads.create({ user_id: req.user.userId, ...data });
 
     res.status(200).json({ message: 'Ad successfully created.' });
@@ -79,6 +81,8 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
 
     const data = fieldSwap(req.body, 'mapToDb');
 
+    data.approved = false;
+
     const [affectedRows, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true });
 
     if (affectedRows === 0) {
@@ -98,39 +102,45 @@ adsController.get('/ads-search', async (req, res, next) => {
   const errors = {};
 
   const validCategories = ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'];
-  const allowedQueryKeys = ['creationDate', 'expirationDate', 'tags', 'category', 'summary', 'region', 'municipality', 'settlement'];
+  const allowedQueryKeys = ['creationDate', 'expirationDate', 'tags', 'category', 'summary', 'adRegion', 'adMunicipality', 'adTown', 'startDate', 'endDate'];
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
   try {
     const query = Object.fromEntries(Object.entries(req.query).filter(([key]) => allowedQueryKeys.includes(key)));
 
+    const dateFields = ['startDate', 'endDate', 'creationDate', 'expirationDate'];
+
     for (let key in query) {
-      if (key === 'creationDate') {
+      if (dateFields.includes(key)) {
         if (!dateRegex.test(query[key])) {
-          errors.creationDate = 'Date format must be YYYY-MM-DD';
+          errors[key] = 'Date format must be YYYY-MM-DD';
         } else {
-          whereCondition.creation_date = {
-            [Op.gte]: query[key],
-          };
-        }
-      } else if (key === 'expirationDate') {
-        if (!dateRegex.test(query[key])) {
-          errors.expirationDate = 'Date format must be YYYY-MM-DD';
-        } else {
-          whereCondition.expiration_date = {
-            [Op.lte]: query[key],
-          };
+          if (key === 'startDate') startDate = query[key];
+          if (key === 'endDate') endDate = query[key];
+          if (key === 'creationDate') {
+            whereCondition.creation_date = { [Op.gte]: query[key] };
+          }
+          if (key === 'expirationDate') {
+            whereCondition.expiration_date = { [Op.lte]: query[key] };
+          }
         }
       } else if (key === 'category') {
-        if (validCategories.includes(query[key])) {
-          whereCondition.category = query[key];
-        } else {
-          errors.category = `Invalid category: ${query[key]}. Valid categories are ${validCategories.join(', ')}. Excluding this filter from search.`;
+        if (query[key] !== 'all') {
+          if (validCategories.includes(query[key])) {
+            whereCondition.category = query[key];
+          } else {
+            errors.category = `Invalid category: ${query[key]}. Valid categories are ${validCategories.join(', ')}. Excluding this filter from search.`;
+          }
         }
       } else if (key === 'tags') {
         const tagsArray = query[key].split(',').map((tag) => tag.trim().toLowerCase());
         const tagConditions = tagsArray.map((tag) => literal(`LOWER(array_to_string(tags, ',')) LIKE '%${tag.replace(/'/g, "''")}%'`));
         whereCondition[Op.or] = tagConditions;
+      } else if (key === 'adTown' || key === 'adRegion' || key === 'adSubregion') {
+        let newKey = `${key.toLowerCase().replace('ad', 'ad_')}`;
+        whereCondition[newKey] = {
+          [Op.iLike]: `%${query[key]}%`,
+        };
       } else {
         whereCondition[key] = {
           [Op.iLike]: `%${query[key]}%`,
@@ -138,6 +148,21 @@ adsController.get('/ads-search', async (req, res, next) => {
       }
     }
 
+    if (startDate && endDate) {
+      whereCondition.creation_date = {
+        [Op.between]: [startDate, endDate],
+      };
+    } else if (startDate) {
+      whereCondition.creation_date = {
+        [Op.gte]: startDate,
+      };
+    } else if (endDate) {
+      whereCondition.creation_date = {
+        [Op.lte]: endDate,
+      };
+    }
+
+    //Change to false for testing !!!
     whereCondition.approved = true;
 
     const result = await user_ads.findAll({
@@ -145,9 +170,9 @@ adsController.get('/ads-search', async (req, res, next) => {
       attributes: [
         'summary',
         'category',
-        'region',
-        'municipality',
-        'settlement',
+        ['ad_region', 'adRegion'],
+        ['ad_subregion', 'adSubregion'],
+        ['ad_town', 'adTown'],
         ['ad_id', 'adId'],
         'images',
         'approved',

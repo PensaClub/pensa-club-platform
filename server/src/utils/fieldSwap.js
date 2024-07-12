@@ -31,6 +31,9 @@ function fieldSwap(details, mappingType) {
     approved: 'approved',
     tags: 'tags',
     address: 'address',
+    adRegion: 'ad_region',
+    adSubregion: 'ad_subregion',
+    adTown: 'ad_town',
   };
 
   const mapFromDb = {
@@ -63,6 +66,9 @@ function fieldSwap(details, mappingType) {
     approved: 'approved',
     tags: 'tags',
     address: 'address',
+    ad_region: 'adRegion',
+    ad_subregion: 'adSubregion',
+    ad_town: 'adTown',
   };
 
   const fieldMapping = mappingType === 'mapToDb' ? mapToDb : mapFromDb;

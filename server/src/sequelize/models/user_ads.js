@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      region: {
+      ad_region: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -76,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      municipality: {
+      ad_subregion: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -85,7 +85,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      settlement: {
+      ad_town: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
