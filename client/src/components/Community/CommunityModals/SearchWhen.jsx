@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './searchWhen.css';
 import { useTranslation } from 'react-i18next';
 
-export const SearchWhen = ({ isOpen, onClose }) => {
+export const SearchWhen = ({ isOpen, onClose, setFilters, filters }) => {
     const [searchPeriod, setSearchPeriod] = useState('');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -18,6 +18,40 @@ export const SearchWhen = ({ isOpen, onClose }) => {
             return;
         }
 
+        let calculatedFilters = { ...filters };
+
+        const today = new Date();
+        let start;
+
+        switch (searchPeriod) {
+            case 'today':
+                start = new Date(today.setHours(0, 0, 0, 0)).toISOString().split('T')[0];
+                calculatedFilters.creationDate = start;
+                break;
+            case 'thisWeek':
+                start = new Date(today.setDate(today.getDate() - 7)).toISOString().split('T')[0];
+                calculatedFilters.creationDate = start;
+                break;
+            case 'thisMonth':
+                start = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split('T')[0];
+                calculatedFilters.creationDate = start;
+                break;
+            case 'lastYear':
+                start = new Date(today.setFullYear(today.getFullYear() - 1)).toISOString().split('T')[0];
+                calculatedFilters.creationDate = start;
+                break;
+            case 'custom':
+                if (startDate && endDate) {
+                    calculatedFilters.creationDate = startDate.toISOString().split('T')[0];
+                    calculatedFilters.expirationDate = endDate.toISOString().split('T')[0];
+                }
+                break;
+            default:
+                delete calculatedFilters.creationDate;
+                delete calculatedFilters.expirationDate;
+        }
+
+        setFilters(calculatedFilters);
         onClose();
     };
 
