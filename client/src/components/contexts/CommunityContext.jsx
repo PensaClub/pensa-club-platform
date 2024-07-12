@@ -11,7 +11,6 @@ export const CommunityProvider = ({ children }) => {
     // eslint-disable-next-line no-unused-vars
     const [errorMessage, setErrorMessage] = useState('');
     const [regions, setRegions] = useState([]);
-    console.error(regions)
     const [subregions, setSubregions] = useState({});
     const [towns, setTowns] = useState({});
     const [searchCriteria, setSearchCriteria] = useState([]);
