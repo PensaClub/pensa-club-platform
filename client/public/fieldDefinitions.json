@@ -1,0 +1,67 @@
+{
+    "fields": {
+      "sell": [
+        {
+          "type": "number",
+          "name": "price",
+          "subname": "price",
+          "label": "Price",
+          "placeholder": "0",
+          "required": true
+        }
+      ],
+      "courses": [
+        {
+          "type": "date",
+          "name": "startCourse",
+          "subname": "start_course",
+          "label": "Course Start Date",
+          "placeholder": "dd/MM/yyyy",
+          "required": true
+        },
+        {
+          "type": "date",
+          "name": "endCourse",
+          "subname": "end_course",
+          "label": "Course End Date",
+          "placeholder": "dd/MM/yyyy",
+          "required": true
+        },
+        {
+          "type": "number",
+          "name": "priceCourse",
+          "subname": "price_course",
+          "label": "Course Price",
+          "placeholder": "0",
+          "required": true
+        }
+      ],
+      "tours": [
+        {
+          "type": "date",
+          "name": "startTours",
+          "subname": "start_tours",
+          "label": "Tour Start Date",
+          "placeholder": "dd/MM/yyyy",
+          "required": true
+        },
+        {
+          "type": "date",
+          "name": "endTours",
+          "subname": "end_tours",
+          "label": "Tour End Date",
+          "placeholder": "dd/MM/yyyy",
+          "required": true
+        },
+        {
+          "type": "number",
+          "name": "priceTours",
+          "subname": "price_tours",
+          "label": "Tour Price",
+          "placeholder": "0",
+          "required": true
+        }
+      ]
+    }
+  }
+  

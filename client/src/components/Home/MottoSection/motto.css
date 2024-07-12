@@ -6,14 +6,12 @@
     padding-bottom: calc(var(--xxl-space) + 1em);
 
 }
-
 .motto-desc {
 
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 .motto-desc img {
 
     display: block;
@@ -65,8 +63,6 @@
     width: auto;
 }
 
-
-
 @media (min-width: 850px) {
     .motto-desc {
         max-width: 50%;
@@ -86,8 +82,6 @@
 
     .motto-info span {
         font-size: var(--s-font-size);
-
-
     }
 
 }

@@ -12,8 +12,7 @@ export const ErrorPageBase = ({ errorCode, errorDesc }) => {
         <h1>{t('error-page.error')} {errorCode}</h1>
 
         <h2>{errorDesc}</h2>
-        {/* <h3>Върнете се към</h3> */}
-
+        
         <div className="menu-list">
           <NavLink to="/" className="btn-general btn-green">
           {t('error-page.home')}

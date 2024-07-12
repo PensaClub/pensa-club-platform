@@ -17,7 +17,6 @@
     background: var(--grey-bg);
     padding: 2rem;
     border-radius: 10px;
-    /* position: relative; */
     width: 400px;
     max-width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -50,14 +49,9 @@
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: var(--xs-font-size);
-   
-    overflow-y: auto; 
-}
 
-/* .where-select option {
-    overflow-y: auto; 
-background-color: red;
-} */
+    overflow-y: auto;
+}
 
 .where-search-button {
     padding: 0.5rem 1rem;
@@ -81,11 +75,13 @@ background-color: red;
     .where-search-button {
         font-size: var(--m-font-size);
     }
+
     .where-modal-content {
         position: relative;
-      
-   
+
+
     }
+
     .where-select {
         font-size: var(--xs-font-size);
     }

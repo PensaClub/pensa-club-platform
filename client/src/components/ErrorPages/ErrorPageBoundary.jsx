@@ -12,5 +12,4 @@ const ErrorPageBoundary = () => {
         />
     );
 };
-
 export default ErrorPageBoundary;
