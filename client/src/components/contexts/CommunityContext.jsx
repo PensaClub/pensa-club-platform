@@ -11,6 +11,7 @@ export const CommunityProvider = ({ children }) => {
     // eslint-disable-next-line no-unused-vars
     const [errorMessage, setErrorMessage] = useState('');
     const [regions, setRegions] = useState([]);
+    console.error(regions)
     const [subregions, setSubregions] = useState({});
     const [towns, setTowns] = useState({});
     const [searchCriteria, setSearchCriteria] = useState([]);
@@ -54,7 +55,7 @@ export const CommunityProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await communityService.getTowns(regionId, subregionId);
-            setTowns(prev => ({ ...prev, [subregionId]: response }));
+            // setTowns(prev => ({ ...prev, [subregionId]: response }));
             setIsLoading(false);
             return response;
         } catch (e) {

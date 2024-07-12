@@ -126,9 +126,9 @@ export const CreateAd = () => {
                     const town = townList.find(settlement => settlement.id === addressId.settlementId);
 
                     if (region && subregion && town) {
-                        setSelectedRegion(addressId.regionId);
-                        setSelectedSubregion(addressId.municipalityId);
-                        setSelectedTown(town.id);
+                        setSelectedRegion(prev => prev || addressId.regionId);
+                        setSelectedSubregion(prev => prev || addressId.municipalityId);
+                        setSelectedTown(prev => prev || town.id);
                         setValues((state) => ({
                             ...state,
                             adRegion: addressId.regionId ? getAdRegionValue(currentLanguage, addressId.regionId) : state.adRegion,
@@ -144,7 +144,14 @@ export const CreateAd = () => {
 
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentLanguage, regions, subregions, settlements]);
+    }, [currentLanguage, regions, subregions]);
+
+    useEffect(() => {
+        if (selectedRegion && selectedSubregion) {
+            fetchTowns(selectedRegion, selectedSubregion).then(setSettlements);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedSubregion, selectedRegion]);
 
     const handleNavigate = () => navigate('/craigslist');
 
@@ -344,7 +351,6 @@ export const CreateAd = () => {
                                                 name="useOtherCity"
                                                 checked={values.useOtherCity}
                                                 onChange={(e) => setValues((state) => ({ ...state, useOtherCity: e.target.checked }))}
-                                                
                                             />
                                             <label htmlFor="useOtherCity">{t('ads.use_other_city')}</label>
                                         </div>
@@ -359,7 +365,6 @@ export const CreateAd = () => {
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
                                             disabled={!values.useOtherCity}
-
                                             required
                                         />
                                         {errors.adAddress && <p className="error">{errors.adAddress}</p>}
