@@ -72,18 +72,32 @@ adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
   }
 });
 
-adsController.post('/ad-approve', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
+adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
   try {
-    const { adId } = req.body;
-    const ad = await user_ads.findOne({ where: { ad_id: adId }, });
-    if (!ad) {
-      return res.status(400).json({ message: "ID doesn't match an existing ad." });
+    const { adId, newStatus } = req.body;
+    if (newStatus !== 'pending' && newStatus !== 'approved' && newStatus !== 'denied') {
+      return res.status(400).json({ message: "Invalid status type. Status must be approved, denied or pending." });
     }
-    if (ad.status === 'approved') {
-      return res.status(400).json({ message: 'Ad has already been approved.' });
+
+    const [updatedRowsCount, [updatedAd]] = await user_ads.update(
+      { status: newStatus },
+      {
+        where: {
+          ad_id: adId,
+          status: { [Sequelize.Op.ne]: newStatus } // Only update if current status is different
+        }
+      }
+    );
+
+    if (updatedRowsCount === 0) {
+      return res.status(400).json({ message: `Ad status is already ${newStatus}.` });
     }
-    ad.status = 'approved';
-    ad.save();
+    if (updatedAd && updatedAd.status === newStatus) {
+      return res.status(400).json({ message: `Ad status is already ${newStatus}.` });
+    }
+
+
+    res.status(200).json({ message: "Ad status updated successfully." });
 
     eventEmitter.emit('adsApproved', ad);
 
@@ -118,25 +132,25 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   try {
     adsValidator(req.body, req.path);
     const data = fieldSwap(req.body, 'mapToDb');
-    const [affectedRows, details] = await user_ads.update(data, { where: { ad_id: data.ad_id, user_id: req.user.userId }, returning: true });
+    const [affectedRows, [details]] = await user_ads.update(data, { where: { ad_id: data.ad_id, user_id: req.user.userId }, returning: true });
 
-    if (details.length === 0) {
+    if (!details) {
       return res.status(404).json({ message: 'Ad not found or wrong user credentials.' });
     }
-
-    if (affectedRows === 0) {
+    if (affectedRows <= 1) {
       return res.status(404).json({ message: 'No changes were made.' });
     }
     else {
-      if (details[0].dataValues?.status !== 'pending') {
-        const ad = details[0];
+      if (details.dataValues?.status !== 'pending') {
+        const ad = details;
         ad.status = 'pending';
         await ad.save();
       }
-      eventEmitter.emit('adsUpdated', { ...details[0].dataValues, approved }); // TODO CHANGE BASED ON CACHING IF NEEDED
+      eventEmitter.emit('adsUpdated', details.dataValues); // TODO CHANGE BASED ON CACHING IF NEEDED
     }
 
-    const updatedDetails = fieldSwap(details[0].dataValues, 'mapFromDb');
+    const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
+
     res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
   } catch (err) {
     next(err);
