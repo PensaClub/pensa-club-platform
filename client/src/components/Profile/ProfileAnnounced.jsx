@@ -101,12 +101,11 @@ export const ProfileAnnounced = () => {
                                 <p>{t('ads.valid_until')}: {formatDate(ad.expirationDate, currentLanguage, t)}</p>
                                 <div className='ads-btns'>
                                 <button 
-                                className={`ads-btn red ${ad.approved ? '' : 'disabled'}`} 
-                                disabled={!ad.approved}>{t('ads.edit')}
+                                className={'ads-btn red'}  
+                                >{t('ads.edit')}
                                 </button>
                                     <button
-                                     className={`ads-btn green ${ad.approved ? '' : 'disabled'}`}
-                                      disabled={!ad.approved} 
+                                     className={'ads-btn green'} 
                                       onClick={() => handleDeleteClick(ad)}>
                                         {t('ads.delete')}
                                         </button>
