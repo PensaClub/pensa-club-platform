@@ -64,12 +64,8 @@ export const CreateAd = () => {
         adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
         useOtherCity: false,
         price: '',
-        startCourse: null,
-        endCourse: null,
-        priceCourse: '',
-        startTours: null,
-        endTours: null,
-        priceTours: '',
+        eventStartDate: null,
+        eventEndDate: null,
     };
 
     // useEffect(() => {
