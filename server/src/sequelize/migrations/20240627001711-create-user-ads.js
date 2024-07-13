@@ -161,7 +161,7 @@ module.exports = {
           },
         },
       },
-      admin_comment: {
+      adminComment: {
         type: DataTypes.STRING,
         allowNull: true,
       },
