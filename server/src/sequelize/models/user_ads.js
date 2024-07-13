@@ -156,10 +156,20 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
       },
-      approved: {
-        type: DataTypes.BOOLEAN,
+      status: {
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 'pending',
+        validate: {
+          isIn: {
+            args: [['pending', 'approved', 'denied']],
+            message: 'Invalid status type. Status must be approved, denied or pending.'
+          },
+        },
+      },
+      adminComment: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
