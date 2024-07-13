@@ -279,6 +279,16 @@
   }
 }
 
+.announced .ads,
+.pending .ads,
+.view-more{
+  transition: transform 2s ease;
+}
+
+.ads:hover{
+  transform: scale(1.05); 
+}
+
 .announced .ads {
   background-color: #385A41;
 }
@@ -317,6 +327,11 @@
   flex-wrap: wrap;
   justify-content: center;
 
+}
+.ads-btn:hover,
+.view-more:hover{
+  box-shadow: var(--container-shadow);
+  transform: scale(1.05);
 }
 
 .ads-btn {
@@ -390,14 +405,14 @@
 }
 
 .announced .pending-approval {
-  cursor: not-allowed;
+  /* cursor: not-allowed; */
   color: #1F372A;
   opacity: 1;
 }
 
 .announced.pending {
   opacity: 0.6;
-  pointer-events: none;
+  /* pointer-events: none; */
   position: relative;
   z-index: 1;
 }
