@@ -167,7 +167,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      adminComment: {
+      admin_comment: {
         type: DataTypes.STRING,
         allowNull: true,
       },
