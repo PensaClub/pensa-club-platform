@@ -40,6 +40,9 @@ export const communityServiceFactory = (token) => {
         },
         deleteAd: async (id) => {
             return requester.post(`${apiUrl}/ads/ad-delete`, { id });
+        },
+        editAd: async (id) => {
+            return requester.patch(`${apiUrl}/ads/ad-edit`, { id });
         }
     }
 }

@@ -298,6 +298,7 @@
     "success-logout": "You logged out successfully!",
     "success-created": "You have successfully created an ad!",
     "success-delete-ads": "Successfully delete ad!",
+    "success-edit-ads": "Successfully edit ad!",
     "error": "An error occured. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images."

@@ -112,7 +112,23 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
+    const editAd = async (id) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.editAd(id);
+            setIsLoading(false);
+            notify('success-edit-ads')
+            return response;
+        } catch (e) {
+            notify('error')
+
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
     
     useEffect(() => {
         fetchRegions();
@@ -130,7 +146,8 @@ export const CommunityProvider = ({ children }) => {
         fetchSearchCriteria,
         createAd,
         getMyAds,
-        deleteAd
+        deleteAd,
+        editAd
     }
     
     return (
