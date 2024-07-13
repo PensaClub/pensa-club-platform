@@ -131,8 +131,8 @@ module.exports = (sequelize, DataTypes) => {
             if (!Array.isArray(value)) {
               throw new Error('Images must be an array.');
             }
-            if (value.length > 5) {
-              throw new Error('Cannot have more than 5 images per ad.');
+            if (value.length > 4) {
+              throw new Error('Cannot have more than 4 images per ad.');
             }
             if (value.length <= 0) {
               throw new Error('Each ad should contain at least 1 image.');

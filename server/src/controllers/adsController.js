@@ -115,8 +115,6 @@ adsController.get('/ads-search', async (req, res, next) => {
         if (!dateRegex.test(query[key])) {
           errors[key] = 'Date format must be YYYY-MM-DD';
         } else {
-          if (key === 'startDate') startDate = query[key];
-          if (key === 'endDate') endDate = query[key];
           if (key === 'creationDate') {
             whereCondition.creation_date = { [Op.gte]: query[key] };
           }
@@ -148,17 +146,17 @@ adsController.get('/ads-search', async (req, res, next) => {
       }
     }
 
-    if (startDate && endDate) {
+    if (query.startDate && query.endDate) {
       whereCondition.creation_date = {
-        [Op.between]: [startDate, endDate],
+        [Op.between]: [query.startDate, query.endDate],
       };
-    } else if (startDate) {
+    } else if (query.startDate) {
       whereCondition.creation_date = {
-        [Op.gte]: startDate,
+        [Op.gte]: query.startDate,
       };
-    } else if (endDate) {
+    } else if (query.endDate) {
       whereCondition.creation_date = {
-        [Op.lte]: endDate,
+        [Op.lte]: query.endDate,
       };
     }
 
