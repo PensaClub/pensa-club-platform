@@ -17,6 +17,7 @@ export const ProfileSkills = () => {
   const [form, setForm] = useState(initialFormState);
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [errors, setErrors] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const { setAllUsers, allUsers } = useMappingContext();
 
   useEffect(() => {
@@ -66,13 +67,13 @@ export const ProfileSkills = () => {
     if (validateForm()) {
       await onEditProfileDataSubmit(form);
       // await onAllUsers();
-      console.log('Form Submitted:', form);
+      console.error('Form Submitted:', form);
       resetFields(setForm, initialFormState);
       navigate('/profile');
     } else {
       setTimeout(() => {
         if (form && form.skills && form.skills.length > 0) {
-          console.log('Form Submitted:', form);
+          console.error('Form Submitted:', form);
           resetFields(setForm, initialFormState);
         }
       }, 2000);
@@ -87,7 +88,6 @@ export const ProfileSkills = () => {
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
-
 
     const handleResetForm = () => {
         handleReset(setForm, initialFormState);

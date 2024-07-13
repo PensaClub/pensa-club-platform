@@ -33,7 +33,6 @@
         position: absolute;
     }
     .map-line {
-        /* padding-top: 4em; */
         position: absolute;
         top: 4em;
   z-index: 100;

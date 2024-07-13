@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.enabled);
 
+  // eslint-disable-next-line no-unused-vars
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,12 +59,12 @@ export const UserProvider = ({ children }) => {
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
         setAddressId({ ...data });
-        navigate('/profile');
+        navigate('/');
       } else {
-        navigate('/profile/profile-form');
+        navigate('/');
       }
     } catch (error) {
-      
+
       notify('error');
       showErrorAndSetTimeouts(error.message);
     } finally {
@@ -163,7 +164,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const onForgetPasswordSubmit =async(data)=>{
+  const onForgetPasswordSubmit = async (data) => {
 
     try {
       setIsLoading(true);

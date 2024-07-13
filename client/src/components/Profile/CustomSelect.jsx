@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import './CustomSelect.css';
@@ -32,8 +32,6 @@ const CustomSelect = ({ options, selectedOptions, onSelect}) => {
         }
     };
     
-
-
     const handleSelectAll = (e) => {
         e.preventDefault()
         const allOptions = options.map(option => option.value);
@@ -45,14 +43,6 @@ const CustomSelect = ({ options, selectedOptions, onSelect}) => {
         onSelect([]);
     };
 
-
-
-    // useEffect(() => {
-    //     document.addEventListener('mousedown', handleClickOutside);
-    //     return () => {
-    //         document.removeEventListener('mousedown', handleClickOutside);
-    //     };
-    // }, []);
     document.addEventListener('click', handleClickOutside);
 
     return (

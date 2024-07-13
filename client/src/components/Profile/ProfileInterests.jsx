@@ -18,6 +18,7 @@ export const ProfileInterests = () => {
     const [form, setForm] = useState(initialFormState);
     const [interestOptions, setInterestOptions] = useState([]);
     const [errors, setErrors] = useState({});
+    // eslint-disable-next-line no-unused-vars
     const { onAllUsers,setAllUsers } = useMappingContext();
 
     useEffect(() => {
@@ -67,22 +68,20 @@ export const ProfileInterests = () => {
         if (validateForm()) {
             await onEditProfileDataSubmit(form);
             // await onAllUsers();
-            console.log('Form Submitted:', form);
+            console.error('Form Submitted:', form);
             resetFields(setForm, initialFormState);
             navigate('/profile');
         } else {
 
             setTimeout(() => {
                 if (form && form.interestOptions && form.interestOptions.length > 0) {
-                    console.log('Form Submitted:', form);
+                    console.error('Form Submitted:', form);
                     resetFields(setForm, initialFormState);
                 }
             }, 2000);
         }
     };
     
-
-
     const validateForm = () => {
         const errors = {};
         if (form?.interestOptions?.length === 0) {
@@ -92,12 +91,9 @@ export const ProfileInterests = () => {
         return Object.keys(errors).length === 0;
     };
 
-
     const handleResetForm = () => {
         handleReset(setForm, initialFormState);
         navigate('/profile');
-        
-
     };
     return (
         <form className="profile-form" onSubmit={handleSubmit}>

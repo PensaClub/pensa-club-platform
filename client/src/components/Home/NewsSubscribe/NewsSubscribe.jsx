@@ -5,7 +5,7 @@ import emailjs from '@emailjs/browser'
 import { useTranslation } from "react-i18next";
 
 export const NewsSubscribe = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
     const [errors, setErrors] = useState({ userEmail: '', userName: '' })
@@ -36,10 +36,8 @@ export const NewsSubscribe = () => {
             newErrors.userName = "news-subscribe.errors.required-field";
             hasError = true;
         }
-
-
         if (!userEmail) {
-            newErrors.userEmail = "news-subscribe.errors.required-field"; 
+            newErrors.userEmail = "news-subscribe.errors.required-field";
             hasError = true;
         } else if (!validateEmail(userEmail)) {
             newErrors.userEmail = "news-subscribe.errors.invalid-email";
@@ -50,7 +48,6 @@ export const NewsSubscribe = () => {
             setErrors(newErrors);
             return;
         }
-
 
         emailjs
             .sendForm(
@@ -63,7 +60,7 @@ export const NewsSubscribe = () => {
 
             }).then(
                 (result) => {
-                    console.log("Email sent successfully:", result);
+                    console.error("Email sent successfully:", result);
                     setUserName("");
                     setUserEmail("");
                     setErrors({ userName: '', userEmail: '' });
@@ -73,7 +70,7 @@ export const NewsSubscribe = () => {
                     throw new Error(err)
                 }
             )
-        console.log(form.current)
+        console.error(form.current)
 
     }
     return (
@@ -86,7 +83,7 @@ export const NewsSubscribe = () => {
                 </div>
                 <form ref={form} onSubmit={sendEmail} className="news-form mb-lg-0">
                     <div className="form-row">
-                        <div className="col-subscribe form-group">
+                        <div className="col-subscribe ">
                             <div className="error-username">
                                 <input type="text" name="user_name" className="input" id="name" placeholder={t('news-subscribe.name-placeholder')} value={userName} onChange={handleNameChange} />
                                 {errors.userName && <div className="error-message">{t(`${errors.userName}`)}</div>}
@@ -103,8 +100,6 @@ export const NewsSubscribe = () => {
                 </form>
 
             </section>
-            {/* <div className="after-news"></div> */}
-
         </>
     )
 

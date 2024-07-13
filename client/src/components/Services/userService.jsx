@@ -1,8 +1,4 @@
 import { requestFactory } from './requester';
-// const baseUrl = `http://localhost:3005/users`
-// const api =`http://localhost:8080`;
-
-// console.log("app",api)
 
 const apiUrl = process.env.REACT_APP_API_URL;
 

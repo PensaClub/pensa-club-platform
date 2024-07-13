@@ -18,9 +18,7 @@ footer {
   overflow: hidden;
   opacity: 0.6;
 }
-
 .footer p {
-  /* font-size: 1em; */
   font-weight: 300;
   line-height: 1.4;
   color: var(--text-white);
@@ -28,9 +26,7 @@ footer {
 
 .footer h3 {
   padding-bottom: var(--s-space);
-  /* font-size: 1.5em; */
 }
-
 #root > footer > section > img {
   position: absolute;
   left: 2px;
@@ -105,27 +101,23 @@ footer {
 }
 @media only screen and (max-width: 1200px) {
  .hide-on-mobile {
-    display: none;
+    display: block;
+    /* position: sticky;
+    bottom: 0; */
   }
 
 }
 @media (min-width: 850px) {
-  /* .position-fix{
-    position: fixed;
-    bottom: 0;
-  } */
   .footer {
     flex-direction: row-reverse;
     justify-content: center;
     align-items: flex-start;
     gap: 3em;
   }
-
   .info-desc {
     align-items: start;
     
   }
-
   .footer-info {
     flex: 0 0 20%;
   }

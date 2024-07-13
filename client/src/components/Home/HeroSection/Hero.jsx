@@ -1,14 +1,10 @@
 import './hero.css';
 
-import Testimonials from './Testimonials/Testimonials';
-import { Fade, Slide, } from "react-awesome-reveal";
+import {  Slide, } from "react-awesome-reveal";
 
 import './hero.css';
 
-import {Link} from 'react-router-dom'
 import { useTranslation, Trans } from "react-i18next";
-
-
 
 export const Hero = () => {
     const {t} = useTranslation();
@@ -22,11 +18,7 @@ export const Hero = () => {
                             <p><Trans i18nKey="hero.desc" components={{ span: <strong />}} /></p>
                         </div>
                     </Slide>
-                    {/* <Fade direction='right' duration="2000" triggerOnce='true'>
-
-                        <Testimonials />
-                    </Fade> */}
-
+            
                 </div>
             </section>
 

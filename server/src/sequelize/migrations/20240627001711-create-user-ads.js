@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, DataTypes) {
     await queryInterface.createTable('user_ads', {
-      id: {
+      ad_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
