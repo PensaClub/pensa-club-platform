@@ -25,7 +25,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 
 adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
   try {
-    const ads = await user_ads.findAll({ where: { approved: true } });
+    const ads = await user_ads.findAll({ where: { status: 'approved' } });
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
   } catch (err) {
@@ -35,7 +35,11 @@ adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
 
 adsController.get('/unapproved-ads', isAuth, rbac.checkPermission('approve_record'), memoryCache, async (req, res, next) => {
   try {
-    const ads = await user_ads.findAll({ where: { approved: false } });
+    const ads = await user_ads.findAll({
+      where: {
+        status: { [Op.ne]: 'approved' }
+      }
+    });
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
   } catch (err) {
@@ -45,12 +49,12 @@ adsController.get('/unapproved-ads', isAuth, rbac.checkPermission('approve_recor
 
 adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { email } = req.user;
     if (!email) {
-      res.status(400).json({ message: "Email is required." });
+      return res.status(400).json({ message: "Email is required." });
     }
     if (!emailRegex.test(email)) {
-      res.status(400).json({ message: "Email is invalid." });
+      return res.status(400).json({ message: "Email is invalid." });
     }
     const ads = await user_ads.findAll({
       include: [{
@@ -73,12 +77,12 @@ adsController.post('/ad-approve', isAuth, rbac.checkPermission('approve_record')
     const { adId } = req.body;
     const ad = await user_ads.findOne({ where: { ad_id: adId }, });
     if (!ad) {
-      res.status(400).json({ message: "ID doesn't match an existing ad." });
+      return res.status(400).json({ message: "ID doesn't match an existing ad." });
     }
-    if (ad.approved) {
-      res.status(400).json({ message: 'Ad has already been approved.' });
+    if (ad.status === 'approved') {
+      return res.status(400).json({ message: 'Ad has already been approved.' });
     }
-    ad.approved = true;
+    ad.status = 'approved';
     ad.save();
 
     eventEmitter.emit('adsApproved', ad);
@@ -94,15 +98,15 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
     const { adId } = req.body;
     const ad = await user_ads.findOne({ where: { ad_id: adId } });
     if (!ad) {
-      res.status(400).json({ message: "ID doesn't match an existing ad." });
+      return res.status(400).json({ message: "ID doesn't match an existing ad." });
     }
     if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
-      approved = ad.approved;
+      approved = ad.status;
       await ad.destroy();
 
-      eventEmitter.emit('adsDeleted', ad, approved ? 'approved' : 'unapproved');
+      eventEmitter.emit('adsDeleted', ad, approved); // TODO CHANGE BASED ON CACHING IF NEEDED
 
-      res.status(200).json({ message: 'Ad has been deleted successfully.' });
+      return res.status(200).json({ message: 'Ad has been deleted successfully.' });
     }
     res.status(400).json({ message: 'Access denied.' });
   } catch (err) {
@@ -112,14 +116,27 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
 
 adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   try {
-    adsValidator(req.body);
-
+    adsValidator(req.body, req.path);
     const data = fieldSwap(req.body, 'mapToDb');
+    const [affectedRows, details] = await user_ads.update(data, { where: { ad_id: data.ad_id, user_id: req.user.userId }, returning: true });
 
-    const [_, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true, plain: true });
+    if (details.length === 0) {
+      return res.status(404).json({ message: 'Ad not found or wrong user credentials.' });
+    }
 
-    const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
+    if (affectedRows === 0) {
+      return res.status(404).json({ message: 'No changes were made.' });
+    }
+    else {
+      if (details[0].dataValues?.status !== 'pending') {
+        const ad = details[0];
+        ad.status = 'pending';
+        await ad.save();
+      }
+      eventEmitter.emit('adsUpdated', { ...details[0].dataValues, approved }); // TODO CHANGE BASED ON CACHING IF NEEDED
+    }
 
+    const updatedDetails = fieldSwap(details[0].dataValues, 'mapFromDb');
     res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
   } catch (err) {
     next(err);
