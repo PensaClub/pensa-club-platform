@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false
+        allowNull: false,
       },
       user_id: { type: DataTypes.INTEGER, allowNull: false },
       ad_id: {
@@ -165,6 +165,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      extra_fields: {
+        type: DataTypes.JSONB,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

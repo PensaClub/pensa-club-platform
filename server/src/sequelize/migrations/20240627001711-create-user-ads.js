@@ -154,6 +154,10 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      extra_fields: {
+        type: DataTypes.JSONB,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
