@@ -8,20 +8,14 @@ module.exports = function validateExtraFields(fields) {
 
   let { price, eventStartDate, eventEndDate } = fields;
 
-  for (let key in fields) {
-    if (!allowedExtraFields.includes(key)) {
-      errors.allowedExtraFields = 'Field must be one of the following: price, eventStartDate or eventEndDate.';
-      throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });
-    }
-  }
-
   Object.entries(fields).forEach(([fieldName, value]) => {
     if (!allowedExtraFields.includes(fieldName)) {
-      throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });
+      errors.allowedExtraFields = 'Field must be one of the following: price, eventStartDate or eventEndDate.';
+      return;
     }
     if (value === '' || value === null) {
       let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-      errors[fieldName] = `${error} is required.`;
+      errors[fieldName] = `${error} can not be empty or null.`;
     }
   });
 
