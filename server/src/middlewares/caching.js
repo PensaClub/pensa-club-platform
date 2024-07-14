@@ -41,27 +41,25 @@ eventEmitter.on('accountsUpdated', (data) => {
 eventEmitter.on('adsApproved', (data) => {
   const oldValueApproved = cache.get('ads/approved-ads');
   const oldValueUnapproved = cache.get('ads/unapproved-ads');
-  if (oldValueUnapproved) {
-    const approvedObj = JSON.parse(oldValueApproved);
-    const unapprovedObj = JSON.parse(oldValueUnapproved);
-    approvedAd = unapprovedObj.filter((obj) => obj.id == data.id);
-    if (approvedAd) {
-      approvedObj ? approvedObj.ads.push(approvedAd) : approvedObj.ads = [approvedAd];
-      unapprovedObj = unapprovedObj.filter((obj) => obj.id != data.id);
-      cache.set('ads/approved-ads', JSON.stringify(approvedObj), stdTTL);
-      cache.set('ads/unapproved-ads', JSON.stringify(unapprovedObj), stdTTL);
-    }
+
+  let approvedObj = oldValueApproved ? JSON.parse(oldValueApproved) : { ads: [] };
+  let unapprovedObj = oldValueUnapproved ? JSON.parse(oldValueUnapproved) : { ads: [] };
+
+  approvedAd = unapprovedObj.ads.filter((obj) => obj.id == data.id);
+  if (approvedAd.length !== 0) {
+    unapprovedObj = unapprovedObj.ads.filter((obj) => obj.id != data.id);
+    approvedObj.ads.push(approvedAd);
+    cache.set('ads/approved-ads', JSON.stringify(approvedObj), stdTTL);
+    cache.set('ads/unapproved-ads', JSON.stringify(unapprovedObj), stdTTL);
   }
 });
 
 eventEmitter.on('adsUpdated', (data, identifier = 'approved') => {
   const oldValue = cache.get(`ads/${identifier}-ads`);
-  if (oldValue) {
-    const object = JSON.parse(oldValue);
-    const index = object.ads.findIndex((obj) => obj.id == data.id);
-    index !== -1 ? (object.ads[index] = data) : object.ads.push(data);
-    cache.set(`ads/${identifier}-ads`, JSON.stringify(object), stdTTL);
-  }
+  const object = oldValue ? JSON.parse(oldValue) : { ads: [] };
+  const index = object.ads.findIndex((obj) => obj.id == data.id);
+  index !== -1 ? (object.ads[index] = data) : object.ads.push(data);
+  cache.set(`ads/${identifier}-ads`, JSON.stringify(object), stdTTL);
 });
 
 eventEmitter.on('adsDeleted', (data, identifier = 'approved') => {

@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, DataTypes) {
     await queryInterface.createTable('user_ads', {
-      ad_id: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -61,7 +61,7 @@ module.exports = {
           },
         },
       },
-      ad_region: {
+       ad_region: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -149,10 +149,20 @@ module.exports = {
         allowNull: false,
         defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
       },
-      approved: {
-        type: DataTypes.BOOLEAN,
+      status: {
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 'pending',
+        validate: {
+          isIn: {
+            args: [['pending', 'approved', 'denied']],
+            message: 'Invalid status type. Status must be approved, denied or pending.'
+          },
+        },
+      },
+      admin_comment: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
