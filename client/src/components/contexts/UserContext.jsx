@@ -177,6 +177,20 @@ export const UserProvider = ({ children }) => {
       showErrorAndSetTimeouts(error.message);
     }
   }
+
+  const onSuggestSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const response = await userService.suggestUser(data);
+      navigate('/');
+      notify('success-register');
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const contextService = {
     onRegisterSubmit,
     onLoginSubmit,
@@ -194,6 +208,7 @@ export const UserProvider = ({ children }) => {
     profileData,
     addressId,
     onForgetPasswordSubmit,
+    onSuggestSubmit,
   };
 
   return (

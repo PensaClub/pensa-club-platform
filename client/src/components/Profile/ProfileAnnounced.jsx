@@ -15,7 +15,7 @@ export const ProfileAnnounced = () => {
             try {
                 const result = await getMyAds(profileData.email);
                 setAds(result);
-          
+
             } catch (error) {
                 console.error('Failed to fetch ads', error);
             }

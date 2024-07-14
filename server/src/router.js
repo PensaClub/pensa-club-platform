@@ -4,10 +4,12 @@ const errorHandler = require('./middlewares/errorHandler');
 const userController = require('./controllers/userController');
 const userDetailsController = require('./controllers/userDetailsController');
 const adsController = require('./controllers/adsController');
+const suggestUserController = require('./controllers/suggestUserController');
 
 router.use('/auth', userController);
 router.use('/user', userDetailsController);
 router.use('/ads', adsController);
+router.use('/suggest', suggestUserController)
 
 router.use((err, req, res, next) => {
   errorHandler(err, req, res, err.statusCode || 500);

@@ -31,7 +31,9 @@ function fieldSwap(details, mappingType) {
     description: 'description',
     images: 'images',
     adId: 'ad_id',
-    approved: 'approved',
+    tags: 'tags',
+    status: 'status',
+    adminComment: 'admin_comment',
   };
 
   const mapFromDb = {
@@ -64,7 +66,9 @@ function fieldSwap(details, mappingType) {
     description: 'description',
     images: 'images',
     ad_id: 'adId',
-    approved: 'approved',
+    tags: 'tags',
+    status: 'status',
+    admin_comment: 'adminComment',
   };
 
   const fieldMapping = mappingType === 'mapToDb' ? mapToDb : mapFromDb;

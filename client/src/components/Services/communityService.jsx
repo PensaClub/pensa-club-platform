@@ -45,5 +45,9 @@ export const communityServiceFactory = (token) => {
 
             return requester.get(`${apiUrl}/ads/user-ads`, { email });
         },
+        searchAds: async (filters) => {
+            const query = new URLSearchParams(filters).toString();
+            return requester.get(`${apiUrl}/ads/ads-search?${query}`);
+        }
     }
 }

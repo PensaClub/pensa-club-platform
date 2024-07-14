@@ -55,6 +55,7 @@
   --container-min-width: 340px;
   --container-width: 80%;
 
+  --container-larger-height: 800px;
   --container-height: 600px;
   --container-min-height: 400px;
 
@@ -111,12 +112,13 @@ a{
     text-decoration: none;
 }
 
-button, input {
+button, input, textarea {
   border: none;
   font-family: inherit;
   font-weight: 500;
   letter-spacing: inherit;
   text-indent: inherit;
+  font-size: inherit;
 }
 
 /* Genral Button Styles */

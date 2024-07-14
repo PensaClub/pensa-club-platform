@@ -15,7 +15,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
     adsValidator(req.body);
 
     const data = fieldSwap(req.body, 'mapToDb');
-    const ad = await user_ads.create({ user_id: req.user.userId, ...data });
+    await user_ads.create({ user_id: req.user.userId, ...data });
 
     res.status(200).json({ message: 'Ad successfully created.' });
   } catch (err) {
@@ -25,7 +25,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 
 adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
   try {
-    const ads = await user_ads.findAll({ where: { approved: true } });
+    const ads = await user_ads.findAll({ where: { status: 'approved' } });
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
   } catch (err) {
@@ -33,9 +33,13 @@ adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
   }
 });
 
-adsController.get('/unapproved-ads', rbac.checkPermission('approve_record'), isAuth, memoryCache, async (req, res, next) => {
+adsController.get('/unapproved-ads', isAuth, rbac.checkPermission('approve_record'), memoryCache, async (req, res, next) => {
   try {
-    const ads = await user_ads.findAll({ where: { approved: false } });
+    const ads = await user_ads.findAll({
+      where: {
+        status: { [Op.ne]: 'approved' }
+      }
+    });
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
   } catch (err) {
@@ -45,12 +49,12 @@ adsController.get('/unapproved-ads', rbac.checkPermission('approve_record'), isA
 
 adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { email } = req.user;
     if (!email) {
-      res.status(400).json({ message: "Email is required." });
+      return res.status(400).json({ message: "Email is required." });
     }
     if (!emailRegex.test(email)) {
-      res.status(400).json({ message: "Email is invalid." });
+      return res.status(400).json({ message: "Email is invalid." });
     }
     const ads = await user_ads.findAll({
       include: [{
@@ -68,19 +72,33 @@ adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
   }
 });
 
-adsController.post('/ad-approve', rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
+adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
   try {
-    const { id } = req.body;
-    const ad = await user_ads.findOne({ where: { id } });
-    if (!ad) {
-      res.status(400).json({ message: "ID doesn't match an existing ad." });
+    const { adId, newStatus } = req.body;
+    if (newStatus !== 'pending' && newStatus !== 'approved' && newStatus !== 'denied') {
+      return res.status(400).json({ message: "Invalid status type. Status must be approved, denied or pending." });
     }
-    if (ad.approved) {
-      res.status(400).json({ message: 'Ad has already been approved.' });
+
+    const [updatedRowsCount, [updatedAd]] = await user_ads.update(
+      { status: newStatus },
+      {
+        where: {
+          ad_id: adId,
+          status: { [Sequelize.Op.ne]: newStatus } // Only update if current status is different
+        }
+      }
+    );
+
+    if (updatedRowsCount === 0) {
+      return res.status(400).json({ message: `Ad status is already ${newStatus}.` });
     }
-    ad.approved = true;
-    ad.save();
-    
+    if (updatedAd && updatedAd.status === newStatus) {
+      return res.status(400).json({ message: `Ad status is already ${newStatus}.` });
+    }
+
+
+    res.status(200).json({ message: "Ad status updated successfully." });
+
     eventEmitter.emit('adsApproved', ad);
 
     res.status(200).json({ message: "Ad has been approved successfully." });
@@ -91,18 +109,18 @@ adsController.post('/ad-approve', rbac.checkPermission('approve_record'), isAuth
 
 adsController.post('/ad-delete', isAuth, async (req, res, next) => {
   try {
-    const { id } = req.body;
-    const ad = await user_ads.findOne({ where: { id } });
+    const { adId } = req.body;
+    const ad = await user_ads.findOne({ where: { ad_id: adId } });
     if (!ad) {
-      res.status(400).json({ message: "ID doesn't match an existing ad." });
+      return res.status(400).json({ message: "ID doesn't match an existing ad." });
     }
     if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
-      approved = ad.approved;
+      approved = ad.status;
       await ad.destroy();
 
-      eventEmitter.emit('adsDeleted', ad, approved ? 'approved' : 'unapproved');
+      eventEmitter.emit('adsDeleted', ad, approved); // TODO CHANGE BASED ON CACHING IF NEEDED
 
-      res.status(200).json({ message: 'Ad has been deleted successfully.' });
+      return res.status(200).json({ message: 'Ad has been deleted successfully.' });
     }
     res.status(400).json({ message: 'Access denied.' });
   } catch (err) {
@@ -112,11 +130,24 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
 
 adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   try {
-    adsValidator(req.body);
-
+    adsValidator(req.body, req.path);
     const data = fieldSwap(req.body, 'mapToDb');
+    const [affectedRows, [details]] = await user_ads.update(data, { where: { ad_id: data.ad_id, user_id: req.user.userId }, returning: true });
 
-    const [_, details] = await user_ads.update(data, { where: { ad_id: data.ad_id }, returning: true, plain: true });
+    if (!details) {
+      return res.status(404).json({ message: 'Ad not found or wrong user credentials.' });
+    }
+    if (affectedRows <= 1) {
+      return res.status(404).json({ message: 'No changes were made.' });
+    }
+    else {
+      if (details.dataValues?.status !== 'pending') {
+        const ad = details;
+        ad.status = 'pending';
+        await ad.save();
+      }
+      eventEmitter.emit('adsUpdated', details.dataValues); // TODO CHANGE BASED ON CACHING IF NEEDED
+    }
 
     const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
 
