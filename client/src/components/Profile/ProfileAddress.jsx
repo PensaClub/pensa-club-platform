@@ -32,7 +32,7 @@ const ProfileAddress = () => {
     streetNumber: profileData.details.streetNumber || '',
   };
   const [form, setForm] = useState(initialFormState);
-
+console.error(form)
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))
@@ -49,7 +49,7 @@ const ProfileAddress = () => {
 
   const handleRegionChange = async (e) => {
     const regionId = e.target.value;
-    const currRegion = regions.filter((region) => region.id === regionId);
+    const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
 
     setForm({
@@ -77,7 +77,7 @@ const ProfileAddress = () => {
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
-    const currMunicipality = municipalities.filter((municipality) => municipality.id === municipalityId);
+    const currMunicipality = municipalities.filter((municipality) => municipality.id == municipalityId);
     const municipalityName = currMunicipality[0].bg;
 
     setForm({
@@ -100,7 +100,7 @@ const ProfileAddress = () => {
 
   const handleSettlementChange = async (e) => {
     const settlementId = e.target.value;
-    const currSettlement = settlements.filter((settlement) => settlement.id === settlementId);
+    const currSettlement = settlements.filter((settlement) => settlement.id == settlementId);
     const settlementName = currSettlement[0].bg;
 
     setForm({
@@ -219,7 +219,7 @@ const ProfileAddress = () => {
           style={{ borderColor: errors.settlement ? '#BB1D3D' : '' }}
         >
           <option value=''>{t('profile.select_settlement')}</option>
-          {settlements.map((settlement, index) => (
+          {settlements?.map((settlement, index) => (
             <option key={index} value={settlement.id}>
               {currentLanguage === 'bg' && `${settlement.bg}`}
               {currentLanguage === 'en' && `${settlement.en}`}

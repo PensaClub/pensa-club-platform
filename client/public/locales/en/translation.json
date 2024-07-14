@@ -138,7 +138,7 @@
       "agriculture": "Agriculture",
       "manufacturing_and_trade": "Manufacturing and Trade",
       "technology": "Technology",
-      "transport": "Транспорт",
+      "transport": "Transport",
       "law_accounting": "Law and Accounting"
     },
     "interestOptions": {
@@ -313,7 +313,8 @@
       "initiatives_projects": "Initiatives / Projects",
       "tours": "Tours",
       "games": "Games",
-      "arbitration": "Arbitration"
+      "arbitration": "Arbitration",
+      "all_menu":"All"
     }
 }
 

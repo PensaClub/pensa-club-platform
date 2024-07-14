@@ -4,14 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark} from '@fortawesome/free-solid-svg-icons';
 import { useCommunityContext } from '../../contexts/CommunityContext';
 import { useTranslation } from 'react-i18next';
+
 export const What = ({ isOpen, onClose ,setFilters, filters}) => {
-    const [searchQuery, setSearchQuery] = useState(filters.what);
+    const [searchQuery, setSearchQuery] = useState(filters.tags);
     const [searchType, setSearchType] = useState(filters.category);
-    const {searchCriteria } = useCommunityContext();
+    const { searchCriteria } = useCommunityContext();
     const { t } = useTranslation();
   
     const handleSearch = () => {
-        setFilters(prev => ({ ...prev, what: searchQuery, category: searchType }));
+        setFilters(prev => ({ ...prev, tags: searchQuery, category: searchType }));
         onClose();
     };
 
@@ -30,7 +31,7 @@ export const What = ({ isOpen, onClose ,setFilters, filters}) => {
                     className="what-input"
                 />
                 <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="what-select">
-                    <option value="всички">{t('community.all_menu')}</option>
+                    <option value="all">{t('search-criteria.all_menu')}</option>
                     {searchCriteria.searchCriteria?.map(criteria => (
                         <option key={criteria.value} value={criteria.value}> {t(criteria.name)}</option>
                     ))}

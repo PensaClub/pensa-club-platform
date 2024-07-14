@@ -12,6 +12,7 @@ export const CommunityProvider = ({ children }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [regions , setRegions] = useState([])
     const [subregions , setSubregions] = useState({})
+    const [townsSearch, setTownsSearch] = useState({});
     const [searchCriteria, setSearchCriteria] = useState([]);
     const communityService= communityServiceFactory();
 
@@ -52,6 +53,19 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     }
+    const TownSearch = async (subregionId) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getTowns(subregionId);
+            setTownsSearch(prev => ({ ...prev, [subregionId]: response }));
+            setIsLoading(false);
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const fetchSearchCriteria = async () => {
         try {
             setIsLoading(true);
@@ -119,7 +133,7 @@ export const CommunityProvider = ({ children }) => {
     }, []);
 
     const contextService = {
-        fetchRegions ,
+     fetchRegions ,
         fetchSubregions ,
         regions,
         subregions,
@@ -128,7 +142,9 @@ export const CommunityProvider = ({ children }) => {
         fetchSearchCriteria,
         createAd,
         getMyAds,
-        searchAds
+        searchAds,
+        TownSearch,
+        townsSearch
     }
     
     return (

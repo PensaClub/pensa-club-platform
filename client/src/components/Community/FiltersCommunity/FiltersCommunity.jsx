@@ -6,9 +6,12 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import './filtersCommunity.css';
+import { useTranslation } from 'react-i18next';
 
-export const FiltersCommunity = () => {
+export const FiltersCommunity = ({ handleSearch }) => {
     const { fetchSubregions, regions, subregions, isLoading } = useCommunityContext();
+    const { t, i18n } = useTranslation();
+    const currentLanguage = i18n.language;
     const [openSelects, setOpenSelects] = useState({});
     const [selectedSubregions, setSelectedSubregions] = useState({});
 
@@ -28,17 +31,21 @@ export const FiltersCommunity = () => {
 
     const handleOptionClick = (regionId, subregionId) => {
         setSelectedSubregions(prev => ({ ...prev, [regionId]: subregionId }));
+        handleSearch({ adRegion: regionId, adSubregion: subregionId });
+    };
+
+    const handleRegionClick = (regionId) => {
+         handleSearch({ adRegion: regionId });
     };
 
     const breakpointColumnsObj = {
-        default: 2, //when the screen width is 768 pixels or larger, 2 columns will be used.
+        default: 2, // when the screen width is 768 pixels or larger, 2 columns will be used.
         768: 1 // When the screen width is 768 pixels or less, one column will be used.
     };
 
     return (
         <>
             <section className="unique-main-filters">
-      
                 <Masonry
                     breakpointCols={breakpointColumnsObj}
                     className="my-masonry-grid"
@@ -55,9 +62,9 @@ export const FiltersCommunity = () => {
                                         <div
                                             id={`select-${region.id}`}
                                             className={`unique-select-display ${openSelects[region.id] ? 'open' : ''}`}
-                                            onClick={() => toggleSelect(region.id)}
+                                            onClick={() => handleRegionClick(region.id)}
                                         >
-                                            {region.bg}
+                                            {currentLanguage === 'bg' ? region.bg : region.en}
                                         </div>
                                         <FontAwesomeIcon
                                             icon={openSelects[region.id] ? faChevronUp : faChevronDown}
@@ -73,7 +80,7 @@ export const FiltersCommunity = () => {
                                                     className={`unique-option ${selectedSubregions[region.id] === subregion.id ? 'selected' : ''}`}
                                                     onClick={() => handleOptionClick(region.id, subregion.id)}
                                                 >
-                                                    {subregion.bg}
+                                                    {currentLanguage === 'bg' ? subregion.bg : subregion.en}
                                                 </div>
                                             ))
                                         ) : (
@@ -85,8 +92,7 @@ export const FiltersCommunity = () => {
                         ))
                     )}
                 </Masonry>
-                {/* </div> */}
             </section>
         </>
     );
-}
+};

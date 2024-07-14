@@ -5,7 +5,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import './searchWhere.css';
 import { useTranslation } from 'react-i18next';
 
-export const SearchWhere = ({ isOpen, onClose }) => {
+export const SearchWhere = ({ isOpen, onClose, setFilters, filters}) => {
     const { fetchRegions, fetchSubregions, regions, subregions } = useCommunityContext();
     const [selectedRegion, setSelectedRegion] = useState('');
     const [selectedSubregion, setSelectedSubregion] = useState('');
@@ -24,7 +24,8 @@ export const SearchWhere = ({ isOpen, onClose }) => {
     }, [selectedRegion, fetchSubregions, subregions]);
 
     const handleSearch = () => {
-
+        const updateFilters = {...filters, adRegion:selectedRegion, adSubregion:selectedSubregion,};
+        setFilters(updateFilters);
         onClose();
     };
 
