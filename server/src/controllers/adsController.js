@@ -156,7 +156,7 @@ adsController.get('/ads-search', async (req, res, next) => {
     'category',
     'summary',
     'adRegion',
-    'adMunicipality',
+    'adSubregion',
     'adTown',
     'startDate',
     'endDate',
@@ -167,6 +167,16 @@ adsController.get('/ads-search', async (req, res, next) => {
 
   try {
     const query = Object.fromEntries(Object.entries(req.query).filter(([key]) => allowedQueryKeys.includes(key)));
+
+    const { adRegion, adSubregion, adTown } = query;
+    const adLocationConditions = [];
+
+    if (adSubregion && !adRegion) {
+      errors.adSubregion = 'adSubregion filter requires adRegion to be specified.';
+    }
+    if (adTown && (!adRegion || !adSubregion)) {
+      errors.adTown = 'adTown filter requires both adRegion and adSubregion to be specified.';
+    }
 
     const processDateFields = (key, value) => {
       if (!dateRegex.test(value)) {
@@ -198,9 +208,9 @@ adsController.get('/ads-search', async (req, res, next) => {
 
     const processAdField = (key, value) => {
       const newKey = `${key.toLowerCase().replace('ad', 'ad_')}`;
-      whereCondition[newKey] = {
-        [Op.iLike]: `%${value}%`,
-      };
+      adLocationConditions.push({
+        [newKey]: value,
+      });
     };
 
     for (let key in query) {
@@ -212,6 +222,8 @@ adsController.get('/ads-search', async (req, res, next) => {
       } else if (key === 'tags') {
         processTagsField(value);
       } else if (['adTown', 'adRegion', 'adSubregion'].includes(key)) {
+        if (key === 'adSubregion' && !adRegion) continue;
+        if (key === 'adTown' && (!adRegion || !adSubregion)) continue;
         processAdField(key, value);
       } else {
         whereCondition[key] = {
@@ -248,9 +260,12 @@ adsController.get('/ads-search', async (req, res, next) => {
     processDateRangeFields('eventStartDate', 'eventEndDate', 'extra_fields');
     processDateRangeFields('startDate', 'endDate', 'creation_date');
 
+    if (adLocationConditions.length > 0) {
+      whereCondition[Op.and] = adLocationConditions;
+    }
+
     //Change to false for testing !!!
-    whereCondition.approved = false;
-    console.log(whereCondition);
+    whereCondition.approved = true;
 
     const result = await user_ads.findAll({
       where: whereCondition,
