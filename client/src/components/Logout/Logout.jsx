@@ -9,6 +9,5 @@ export const Logout = ()=>{
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[onLogout])
 
-
     return <Navigate to="/"/>
 }

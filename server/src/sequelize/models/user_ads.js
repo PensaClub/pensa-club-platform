@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       user_ads.belongsTo(models.user_account, {
-        foreignKey: 'user_id', // Foreign key in user_details table
+        foreignKey: 'user_id', // Foreign key in user_ads table
         targetKey: 'id', // Primary key in user_accounts table
         as: 'account',
       });
@@ -18,12 +18,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   user_ads.init(
     {
-      ad_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       user_id: { type: DataTypes.INTEGER, allowNull: false },
       ad_id: {
         type: DataTypes.STRING,
@@ -73,15 +67,62 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      ad_town: {
+      region: {
         type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Region is required.",
+          },
+        },
       },
-      ad_address: {
+      municipality: {
         type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Municipality is required.",
+          },
+        },
+      },
+      settlement: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Settlement is required.",
+          },
+        },
+      },
+      street: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Street is required.",
+          },
+        },
+      },
+      tags: {
+        type: DataTypes.ARRAY(DataTypes.STRING(16)),
+        allowNull: false,
+        defaultValue: [],
+        validate: {
+          len: {
+            args: [0, 5],
+            msg: 'Tags array must contain between 0 to 5 elements.'
+          },
+          isArrayOfShortStrings(value) {
+            if (!Array.isArray(value)) {
+              throw new Error('Tags must be an array.');
+            }
+            value.forEach(tag => {
+              if (typeof tag !== 'string' || tag.length > 16) {
+                throw new Error('Each tag must be a string of max length 16.');
+              }
+            });
+          }
+        }
       },
       images: {
         type: DataTypes.JSON,
@@ -115,10 +156,20 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
       },
-      approved: {
-        type: DataTypes.BOOLEAN,
+      status: {
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 'pending',
+        validate: {
+          isIn: {
+            args: [['pending', 'approved', 'denied']],
+            message: 'Invalid status type. Status must be approved, denied or pending.'
+          },
+        },
+      },
+      admin_comment: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
