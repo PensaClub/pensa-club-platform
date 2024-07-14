@@ -98,6 +98,19 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
+    const searchAds = async (filters) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.searchAds(filters);
+            setIsLoading(false);
+            return response;
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    }
     
     useEffect(() => {
         fetchRegions();
@@ -114,7 +127,8 @@ export const CommunityProvider = ({ children }) => {
         isLoading,
         fetchSearchCriteria,
         createAd,
-        getMyAds
+        getMyAds,
+        searchAds
     }
     
     return (
