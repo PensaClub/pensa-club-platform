@@ -294,7 +294,7 @@ adsController.get('/ads-search', async (req, res, next) => {
             {
               model: user_details,
               as: 'details',
-              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName']],
+              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName'], 'imageURL'],
             },
           ],
         },

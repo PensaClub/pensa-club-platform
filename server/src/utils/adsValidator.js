@@ -5,7 +5,7 @@ const categoryList = ['recommend', 'donate', 'sell', 'work', 'courses', 'health'
 
 module.exports = function adsValidator(body, path) {
   let errors = {};
-  const { summary, category, description, images, adId } = body;
+  const { summary, category, description, images, adId, tags } = body;
 
   if (path === '/ad-create') {
     Object.entries(body).forEach(([fieldName, value]) => {
@@ -54,6 +54,20 @@ module.exports = function adsValidator(body, path) {
           }
         });
       }
+    }
+  }
+
+  if (tags) {
+    if (!Array.isArray(tags)) {
+      errors.tags = 'Tags must be an array.';
+    } else if (tags.length > 5) {
+      errors.tags = 'Tags array must contain between 0 to 5 elements.';
+    } else {
+      tags.forEach((tag, index) => {
+        if (typeof tag !== 'string' || tag.length > 16) {
+          errors[`tags[${index}]`] = 'Each tag must be a string of max length 16.';
+        }
+      });
     }
   }
 

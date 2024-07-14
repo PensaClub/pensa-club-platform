@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   user_ads.init(
     {
-      ad_id: {
+      id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -87,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Municipality is required.',
+            msg: 'Subregion is required.',
           },
         },
       },
@@ -96,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Settlement is required.',
+            msg: 'Town is required.',
           },
         },
       },

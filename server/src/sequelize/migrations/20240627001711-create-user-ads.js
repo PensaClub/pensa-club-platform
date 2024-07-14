@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, DataTypes) {
     await queryInterface.createTable('user_ads', {
-      ad_id: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -75,7 +75,7 @@ module.exports = {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Municipality is required.',
+            msg: 'Subregion is required.',
           },
         },
       },
@@ -84,7 +84,7 @@ module.exports = {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Settlement is required.',
+            msg: 'Town is required.',
           },
         },
       },
