@@ -19,7 +19,6 @@ export const userServiceFactory = (token) => {
     logout: () => {
       return requester.post(`${apiUrl}/auth/logout`);
     },
-
     resetPassword: (data) => {
       return requester.post(`${apiUrl}/auth/reset-password`, data);
     },
@@ -37,5 +36,8 @@ export const userServiceFactory = (token) => {
     getUserData: () => {
       return requester.get(`${apiUrl}/user/single-user`);
     },
+    suggestUser: (data) => {
+      return requester.post(`${apiUrl}/user/suggest`, data);
+    }
   };
 };
