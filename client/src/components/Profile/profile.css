@@ -326,8 +326,9 @@
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
-
+  margin-top: -4rem;
 }
+
 .ads-btn:hover,
 .view-more:hover{
   box-shadow: var(--container-shadow);
@@ -340,6 +341,10 @@
   color: #fff;
   font-size: var(--xs-font-size);
   cursor: pointer;
+  opacity: 1.0;
+  position: relative;
+  z-index: 8;
+  pointer-events: auto;
 }
 
 .ads-btns .red {
@@ -382,7 +387,8 @@
 }
 
 .announced .view-more,
-.announced .pending-approval {
+.announced .pending-approval,
+.announced .denied {
   position: absolute;
   text-align: center;
   text-transform: uppercase;
@@ -396,7 +402,7 @@
   top: 10px;
   right: 5%;
   background-color: var(--bg-white);
-  z-index: 15;
+  z-index: 6;
   font-weight: bold;
 }
 
@@ -412,7 +418,45 @@
 .announced.pending .profile-data{
   opacity: 0.6;
   position: relative;
+}
 
+.announced.denied .profile-data{
+  opacity: 0.6;
+  filter: grayscale(60%); 
+}
+
+.announced .denied {
+  opacity: 0.6;
+}
+
+.announced .admin-comment{
+    text-align: left;
+    color: #1F372A;
+    font-size: calc(var(--xs-font-size) + 2px);
+    border: 2px solid #1F372A;
+    border-radius: 16px;
+    padding: 0.3em 0.5em;
+    margin-top: 1rem;
+    background-color: var(--bg-white);
+    font-weight: bold;
+    width: 100%;
+}
+
+.announced .refresh {
+  text-align: left;
+  color: var(--orange);
+  font-size: calc(var(--xs-font-size) + 2px);
+  border: 2px solid #1F372A;
+  border-radius: 16px;
+  padding: 0.3em 0.5em;
+  margin-top: 1rem;
+  background-color: var(--bg-white);
+  width: 100%;
+}
+
+.announced .refresh span {
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 @media (min-width: 850px) and (orientation: landscape) {
@@ -536,7 +580,6 @@
   .announced .pending-approval {
     top: -18px;
   }
-
 }
 
 @media (min-width: 850px) and (orientation: landscape) {

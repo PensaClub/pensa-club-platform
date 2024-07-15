@@ -286,10 +286,14 @@
     "view_more": "view more",
     "edit": "Edit",
     "delete": "Delete",
+    "refresh": "The ad expires, if you want to renew the period, click",
+    "refresh_here": "here",
     "no_ads": "You have no published ads",
     "valid_until": "Valid until",
     "pending_approval": "Pending approval",
-    "delete_ad": "Would you like to delete"
+    "denied": "Denied",
+    "delete_ad": "Would you like to delete",
+    "admin_comment": "Note"
   },
   "notification": {
     "success-data": "User Data successfully submitted!",

@@ -68,23 +68,28 @@ export const ProfileAnnounced = () => {
                 console.error('Failed to delete ad', error);
             }
             setIsDeleteModalOpen(false);
-           setSelectedAd(null);
+            setSelectedAd(null);
         }
     };
 
     const handleCloseModal = () => {
         setIsDeleteModalOpen(false);
         setSelectedAd(null);
-      
     };
 
     return (
         <>
             {ads.length > 0 ? (
                 ads.map(ad => (
-                    <div className={`announced ${ad.approved ? '' : 'pending'}`} key={ad.adId}>
-                        <p className={ad.approved ? 'view-more' : 'pending-approval'}>
-                            {ad.approved ? t('ads.view_more') : t('ads.pending_approval')}
+                    <div className={`announced ${ad.status}`} key={ad.adId}>
+                        <p className={
+                            ad.status === 'approved' ? 'view-more' :
+                                ad.status === 'pending' ? 'pending-approval' :
+                                    ad.status === 'denied' ? 'pending-approval' : ''
+                        }>
+                            {ad.status === 'approved' ? t('ads.view_more') :
+                                ad.status === 'pending' ? t('ads.pending_approval') :
+                                    ad.status === 'denied' ? t('ads.denied') : ''}
                         </p>
                         <section className='profile-data ads'>
                             <div className='avatar-announced'>
@@ -99,19 +104,26 @@ export const ProfileAnnounced = () => {
                                     <p className='elipse'>{getMonthFromDate(ad.creationDate, currentLanguage)}</p>
                                 </div>
                                 <p>{t('ads.valid_until')}: {formatDate(ad.expirationDate, currentLanguage, t)}</p>
-                                <div className='ads-btns'>
-                                <button 
-                                className={'ads-btn red'}  
-                                >{t('ads.edit')}
-                                </button>
-                                    <button
-                                     className={'ads-btn green'} 
-                                      onClick={() => handleDeleteClick(ad)}>
-                                        {t('ads.delete')}
-                                        </button>
-                                </div>
                             </div>
                         </section>
+                        <div className='ads-btns'>
+                            <button
+                                className={'ads-btn red'}
+                                onClick={() => handleEditClick(ad)}>
+                                {t('ads.edit')}
+                            </button>
+                            <button
+                                className={'ads-btn green'}
+                                onClick={() => handleDeleteClick(ad)}>
+                                {t('ads.delete')}
+                            </button>
+                        </div>
+                        {ad.status === 'denied' && (
+                            <p className='admin-comment'>{t('ads.admin_comment')}: {ad.adminComment}</p>
+                        )}
+                        <p className='refresh'>{t('ads.refresh')}
+                            <span> {t('ads.refresh_here')}</span>
+                        </p>
                     </div>
                 ))
             ) : (
