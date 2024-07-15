@@ -135,14 +135,30 @@ export const CreateAd = () => {
     }, [selectedSubregion, selectedRegion]);
 
     const handleNavigate = () => navigate('/craigslist');
+    const formatDateToYYYYMMDD = (date) => {
+        if (!date) return null;
+        const d = new Date(date);
+        let month = '' + (d.getMonth() + 1);
+        let day = '' + d.getDate();
+        const year = d.getFullYear();
 
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    };
     const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
         const updatedFormData = {
             ...formData,
             adRegion: selectedRegion || profileData.details.region,
             adSubregion: selectedSubregion || profileData.details.subregion,
             adTown: selectedTown || profileData.details.settlement,
-            tags
+            tags,
+            extraFields: {
+                ...formData.extraFields,
+                eventStartDate: formatDateToYYYYMMDD(formData.extraFields.eventStartDate),
+                eventEndDate: formatDateToYYYYMMDD(formData.extraFields.eventEndDate),
+            }
         };
 
         try {
@@ -167,7 +183,7 @@ export const CreateAd = () => {
                       extraFields: { ...state.extraFields, [field.name]: date },
                     }))}
                     onBlur={onBlurHandler}
-                    dateFormat="yyyy-MM-dd"
+                    dateFormat="YYYY-MM-DD"
                     id={field.name}
                     name={field.name}
                     required={field.required}
