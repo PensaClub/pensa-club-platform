@@ -181,17 +181,26 @@ When the server starts for the first time in a development environment, a demo u
     How does tags work ? It looks for any record that contains the tag word. For example if the tags are furniture and sofa it will look for every record that contains either of those.
     Errors returns a message which filter didn`t work and why.
 
-    Example of successful query via postman - http://localhost:8080/ads/ads-search?tags=DivA&settlement=poPovO and the return data:
+    You can perform searches using the following criteria: Creation Date, Expiration Date, Tags, Category, Summary, Region: adRegion, adSubregion (Note: adSubregion can only be searched if adRegion is specified), adTown (Note: adTown can only be searched if both adRegion and adSubregion are specified), startDate/endDate for all ads, eventStartDate/eventEndDate for specific events with custom dates.
+
+    <p style="color:red;"><strong>Important:</strong></p> 
+    To test the function with unapproved ads, set the following in the adsController/ads-search to <strong>false</strong>:
+
+    ```json
+    whereCondition.approved = true;
+    ```
+
+    Example of successful query via postman - http://localhost:8080/ads/ads-search?category=work&adRegion=3&adTown=10&adSubregion=5 and the return data:
 
     ```json
     "result": [
         {
             "summary": "Divan4",
-            "category": "sell",
-            "region": "Turgovishte",
-            "municipality": "Popovo",
-            "settlement": "Popovo",
-            "adId": "13",
+            "category": "work",
+            "adRegion": "3",
+            "adSubregion": "5",
+            "adTown": "10",
+            "adId": "1",
             "images": [
                 {
                     "imageURL": "random url",
@@ -199,21 +208,29 @@ When the server starts for the first time in a development environment, a demo u
                 }
             ],
             "approved": false,
-            "creationDate": "2024-07-11",
-            "expirationDate": "2024-08-10",
+            "street": "Madjarov",
+            "extraFields": {
+                "price": 50.5,
+                "eventEndDate": "2025-11-12",
+                "eventStartDate": "2025-10-10"
+            },
+            "creationDate": "2024-07-14",
+            "expirationDate": "2024-08-13",
             "tags": [
-                "divanchi",
-                "asd"
+                "mebel",
+                "random",
+                "random2"
             ],
             "account": {
                 "email": "test@test.com",
                 "details": {
                     "username": "TestUser",
                     "firstName": "TestName",
-                    "lastName": "TestSurname"
+                    "lastName": "TestSurname",
+                    "imageURL": "https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/profile-image%2F680555ff-22d4-4fad-8cc7-2b51dfb545de?alt=media&token=ab616f26-8eda-49e5-b1c9-2694540ec972"
                 }
             }
-        },
+        }
     ],
     "errors": {}
     ```

@@ -7,15 +7,18 @@ const adsValidator = require('../utils/adsValidator.js');
 const { where, Op, literal } = require('sequelize');
 const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
+const extraFieldsValidator = require('../utils/extraFieldsValidator.js');
 const emailRegex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-
 adsController.post('/ad-create', isAuth, async (req, res, next) => {
   try {
-    adsValidator(req.body);
+    const { extraFields, ...regularFields } = req.body;
 
-    const data = fieldSwap(req.body, 'mapToDb');
+    adsValidator(regularFields);
+    if (extraFields) extraFieldsValidator(extraFields);
+
+    const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
 
     data.approved = false;
 
@@ -61,15 +64,17 @@ adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
       return res.status(400).json({ message: "Email is invalid." });
     }
     const ads = await user_ads.findAll({
-      include: [{
-        model: user_account,
-        as: "account",
-        where: { email },
-        attributes: []
-      }]
+      include: [
+        {
+          model: user_account,
+          as: 'account',
+          where: { email },
+          attributes: [],
+        },
+      ],
     });
 
-    const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
+    const mappedAds = ads.map((ad) => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json({ mappedAds });
   } catch (err) {
     next(err);
@@ -100,12 +105,9 @@ adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_re
       return res.status(400).json({ message: `Ad status is already ${newStatus}.` });
     }
 
-
-    res.status(200).json({ message: "Ad status updated successfully." });
-
     eventEmitter.emit('adsApproved', ad);
 
-    res.status(200).json({ message: "Ad has been approved successfully." });
+    res.status(200).json({ message: 'Ad has been approved successfully.' });
   } catch (err) {
     next(err);
   }
@@ -134,13 +136,17 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
 
 adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   try {
-    adsValidator(req.body, req.path);
+    const { extraFields, ...regularFields } = req.body;
 
-    const data = fieldSwap(req.body, 'mapToDb');
-    const [affectedRows, [details]] = await user_ads.update(data, { where: { ad_id: data.ad_id, user_id: req.user.userId }, returning: true });
+    adsValidator(regularFields);
+    if (extraFields) extraFieldsValidator(extraFields);
 
+    const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
+    
     data.approved = false;
 
+    const [affectedRows, [details]] = await user_ads.update(data, { where: { ad_id: data.ad_id, user_id: req.user.userId }, returning: true });
+    
     if (!details) {
       return res.status(404).json({ message: 'Ad not found or wrong user credentials.' });
     }
@@ -169,62 +175,120 @@ adsController.get('/ads-search', async (req, res, next) => {
   const errors = {};
 
   const validCategories = ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'];
-  const allowedQueryKeys = ['creationDate', 'expirationDate', 'tags', 'category', 'summary', 'adRegion', 'adMunicipality', 'adTown', 'startDate', 'endDate'];
+  const dateFields = ['startDate', 'endDate', 'creationDate', 'expirationDate', 'eventStartDate', 'eventEndDate'];
+  const allowedQueryKeys = [
+    'creationDate',
+    'expirationDate',
+    'tags',
+    'category',
+    'summary',
+    'adRegion',
+    'adSubregion',
+    'adTown',
+    'startDate',
+    'endDate',
+    'eventStartDate',
+    'eventEndDate',
+  ];
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
   try {
     const query = Object.fromEntries(Object.entries(req.query).filter(([key]) => allowedQueryKeys.includes(key)));
 
-    const dateFields = ['startDate', 'endDate', 'creationDate', 'expirationDate'];
+    const { adRegion, adSubregion, adTown } = query;
+    const adLocationConditions = [];
+
+    if (adSubregion && !adRegion) {
+      errors.adSubregion = 'adSubregion filter requires adRegion to be specified.';
+    }
+    if (adTown && (!adRegion || !adSubregion)) {
+      errors.adTown = 'adTown filter requires both adRegion and adSubregion to be specified.';
+    }
+
+    const processDateFields = (key, value) => {
+      if (!dateRegex.test(value)) {
+        errors[key] = 'Date format must be YYYY-MM-DD';
+        return;
+      }
+      if (key === 'creationDate') {
+        whereCondition.creation_date = { [Op.gte]: value };
+      } else if (key === 'expirationDate') {
+        whereCondition.expiration_date = { [Op.lte]: value };
+      }
+    };
+
+    const processCategoryField = (value) => {
+      if (value !== 'all') {
+        if (validCategories.includes(value)) {
+          whereCondition.category = value;
+        } else {
+          errors.category = `Invalid category: ${value}. Valid categories are ${validCategories.join(', ')}. Excluding this filter from search.`;
+        }
+      }
+    };
+
+    const processTagsField = (value) => {
+      const tagsArray = value.split(',').map((tag) => tag.trim().toLowerCase());
+      const tagConditions = tagsArray.map((tag) => literal(`LOWER(array_to_string(tags, ',')) LIKE '%${tag.replace(/'/g, "''")}%'`));
+      whereCondition[Op.or] = tagConditions;
+    };
+
+    const processAdField = (key, value) => {
+      const newKey = `${key.toLowerCase().replace('ad', 'ad_')}`;
+      adLocationConditions.push({
+        [newKey]: value,
+      });
+    };
 
     for (let key in query) {
+      const value = query[key];
       if (dateFields.includes(key)) {
-        if (!dateRegex.test(query[key])) {
-          errors[key] = 'Date format must be YYYY-MM-DD';
-        } else {
-          if (key === 'creationDate') {
-            whereCondition.creation_date = { [Op.gte]: query[key] };
-          }
-          if (key === 'expirationDate') {
-            whereCondition.expiration_date = { [Op.lte]: query[key] };
-          }
-        }
+        processDateFields(key, value);
       } else if (key === 'category') {
-        if (query[key] !== 'all') {
-          if (validCategories.includes(query[key])) {
-            whereCondition.category = query[key];
-          } else {
-            errors.category = `Invalid category: ${query[key]}. Valid categories are ${validCategories.join(', ')}. Excluding this filter from search.`;
-          }
-        }
+        processCategoryField(value);
       } else if (key === 'tags') {
-        const tagsArray = query[key].split(',').map((tag) => tag.trim().toLowerCase());
-        const tagConditions = tagsArray.map((tag) => literal(`LOWER(array_to_string(tags, ',')) LIKE '%${tag.replace(/'/g, "''")}%'`));
-        whereCondition[Op.or] = tagConditions;
-      } else if (key === 'adTown' || key === 'adRegion' || key === 'adSubregion') {
-        let newKey = `${key.toLowerCase().replace('ad', 'ad_')}`;
-        whereCondition[newKey] = {
-          [Op.iLike]: `%${query[key]}%`,
-        };
+        processTagsField(value);
+      } else if (['adTown', 'adRegion', 'adSubregion'].includes(key)) {
+        if (key === 'adSubregion' && !adRegion) continue;
+        if (key === 'adTown' && (!adRegion || !adSubregion)) continue;
+        processAdField(key, value);
       } else {
         whereCondition[key] = {
-          [Op.iLike]: `%${query[key]}%`,
+          [Op.iLike]: `%${value}%`,
         };
       }
     }
 
-    if (query.startDate && query.endDate) {
-      whereCondition.creation_date = {
-        [Op.between]: [query.startDate, query.endDate],
-      };
-    } else if (query.startDate) {
-      whereCondition.creation_date = {
-        [Op.gte]: query.startDate,
-      };
-    } else if (query.endDate) {
-      whereCondition.creation_date = {
-        [Op.lte]: query.endDate,
-      };
+    const processDateRangeFields = (startKey, endKey, fieldKey) => {
+      const start = query[startKey];
+      const end = query[endKey];
+      if (start && dateRegex.test(start) && end && dateRegex.test(end)) {
+        if (fieldKey === 'extra_fields') {
+          whereCondition[fieldKey] = {
+            eventStartDate: { [Op.gte]: query[startKey] },
+            eventEndDate: { [Op.lte]: query[endKey] },
+          };
+        } else {
+          whereCondition[fieldKey] = {
+            [Op.between]: [start, end],
+          };
+        }
+      } else if (start && dateRegex.test(start)) {
+        whereCondition[fieldKey] = {
+          [Op.gte]: query[startKey],
+        };
+      } else if (end && dateRegex.test(end)) {
+        whereCondition[fieldKey] = {
+          [Op.lte]: query[endKey],
+        };
+      }
+    };
+
+    processDateRangeFields('eventStartDate', 'eventEndDate', 'extra_fields');
+    processDateRangeFields('startDate', 'endDate', 'creation_date');
+
+    if (adLocationConditions.length > 0) {
+      whereCondition[Op.and] = adLocationConditions;
     }
 
     //Change to false for testing !!!
@@ -241,6 +305,8 @@ adsController.get('/ads-search', async (req, res, next) => {
         ['ad_id', 'adId'],
         'images',
         'approved',
+        'street',
+        ['extra_fields', 'extraFields'],
         ['creation_date', 'creationDate'],
         ['expiration_date', 'expirationDate'],
         'tags',
@@ -255,7 +321,7 @@ adsController.get('/ads-search', async (req, res, next) => {
             {
               model: user_details,
               as: 'details',
-              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName']],
+              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName'], 'imageURL'],
             },
           ],
         },

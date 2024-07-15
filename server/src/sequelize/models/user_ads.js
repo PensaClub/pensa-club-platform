@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   user_ads.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
       user_id: { type: DataTypes.INTEGER, allowNull: false },
       ad_id: {
         type: DataTypes.STRING,
@@ -81,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Municipality is required.',
+            msg: 'Subregion is required.',
           },
         },
       },
@@ -90,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Settlement is required.',
+            msg: 'Town is required.',
           },
         },
       },
@@ -168,6 +174,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       admin_comment: {
         type: DataTypes.STRING,
+        allowNull: true,
+      },
+      extra_fields: {
+        type: DataTypes.JSONB,
         allowNull: true,
       },
       createdAt: {

@@ -34,6 +34,7 @@ function fieldSwap(details, mappingType) {
     adRegion: 'ad_region',
     adSubregion: 'ad_subregion',
     adTown: 'ad_town',
+    extraFields: 'extra_fields',
     status: 'status',
     adminComment: 'admin_comment',
   };
@@ -71,6 +72,7 @@ function fieldSwap(details, mappingType) {
     ad_region: 'adRegion',
     ad_subregion: 'adSubregion',
     ad_town: 'adTown',
+    extra_fields: 'extraFields',
     status: 'status',
     admin_comment: 'adminComment',
   };
