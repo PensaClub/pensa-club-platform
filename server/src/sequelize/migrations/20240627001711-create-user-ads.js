@@ -61,30 +61,30 @@ module.exports = {
           },
         },
       },
-      region: {
+       ad_region: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Region is required.",
+            msg: 'Region is required.',
           },
         },
       },
-      municipality: {
+      ad_subregion: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Municipality is required.",
+            msg: 'Municipality is required.',
           },
         },
       },
-      settlement: {
+      ad_town: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Settlement is required.",
+            msg: 'Settlement is required.',
           },
         },
       },
@@ -93,7 +93,7 @@ module.exports = {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Street is required.",
+            msg: 'Street is required.',
           },
         },
       },
@@ -102,21 +102,20 @@ module.exports = {
         allowNull: false,
         defaultValue: [],
         validate: {
-          len: {
-            args: [0, 5],
-            msg: 'Tags array must contain between 0 to 5 elements.'
-          },
-          isArrayOfShortStrings(value) {
+          customValidator(value) {
             if (!Array.isArray(value)) {
               throw new Error('Tags must be an array.');
             }
-            value.forEach(tag => {
+            if (value.length > 5) {
+              throw new Error('Tags array must contain between 0 to 5 elements.');
+            }
+            value.forEach((tag) => {
               if (typeof tag !== 'string' || tag.length > 16) {
                 throw new Error('Each tag must be a string of max length 16.');
               }
             });
-          }
-        }
+          },
+        },
       },
       images: {
         type: DataTypes.JSON,
@@ -126,8 +125,8 @@ module.exports = {
             if (!Array.isArray(value)) {
               throw new Error('Images must be an array.');
             }
-            if (value.length > 5) {
-              throw new Error('Cannot have more than 5 images per ad.');
+            if (value.length > 4) {
+              throw new Error('Cannot have more than 4 images per ad.');
             }
             if (value.length <= 0) {
               throw new Error('Each ad should contain at least 1 image.');

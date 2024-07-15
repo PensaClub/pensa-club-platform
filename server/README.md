@@ -175,6 +175,48 @@ When the server starts for the first time in a development environment, a demo u
     ```
 
   - **/ads/ad-edit**: This endpoint updates an existing advertisement. It allows for updating one or many fields of the ad, and requires the ad's ID to be provided.
+  - **/ads/ads-search**: This endpoint provides search functionality.
+
+    Date must be in YYYY-MM-DD format, category must be one of the following - `'recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'`.
+    How does tags work ? It looks for any record that contains the tag word. For example if the tags are furniture and sofa it will look for every record that contains either of those.
+    Errors returns a message which filter didn`t work and why.
+
+    Example of successful query via postman - http://localhost:8080/ads/ads-search?tags=DivA&settlement=poPovO and the return data:
+
+    ```json
+    "result": [
+        {
+            "summary": "Divan4",
+            "category": "sell",
+            "region": "Turgovishte",
+            "municipality": "Popovo",
+            "settlement": "Popovo",
+            "adId": "13",
+            "images": [
+                {
+                    "imageURL": "random url",
+                    "firebaseImagePath": "random path"
+                }
+            ],
+            "approved": false,
+            "creationDate": "2024-07-11",
+            "expirationDate": "2024-08-10",
+            "tags": [
+                "divanchi",
+                "asd"
+            ],
+            "account": {
+                "email": "test@test.com",
+                "details": {
+                    "username": "TestUser",
+                    "firstName": "TestName",
+                    "lastName": "TestSurname"
+                }
+            }
+        },
+    ],
+    "errors": {}
+    ```
 
 ## Testing
 
