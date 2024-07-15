@@ -61,11 +61,14 @@ export const CreateAd = () => {
         adRegion: profileData.details.region || '',
         adSubregion: profileData.details.subregion || '',
         adTown: profileData.details.settlement ? getAdTownValue(currentLanguage, profileData.details.settlement) : '',
-        adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
+        street: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
         useOtherCity: false,
-        price: '',
-        eventStartDate: null,
-        eventEndDate: null,
+
+        extraFields: {
+            price: '',
+            eventStartDate: null,
+            eventEndDate: null,
+        },
     };
 
     // useEffect(() => {
@@ -177,39 +180,44 @@ export const CreateAd = () => {
     const renderFields = () => {
         const fields = fieldDefinitions.fields?.[values.category] || [];
         return fields.length > 0 ? (
-            <div className="additional-fields-price">
-                {fields.map((field, index) => (
-                    <div key={index} className="form-group">
-                        <label htmlFor={field.name}>{t(`ads.${field.subname}`)}</label>
-                        {field.type === 'date' ? (
-                            <DatePicker
-                                selected={values[field.name]}
-                                onChange={(date) => setValues((state) => ({ ...state, [field.name]: date }))}
-                                onBlur={onBlurHandler}
-                                dateFormat="dd/MM/yyyy"
-                                id={field.name}
-                                name={field.name}
-                                required={field.required}
-                            />
-                        ) : (
-                            <input
-                                type={field.type}
-                                id={field.name}
-                                name={field.name}
-                                value={values[field.name] || ''}
-                                onChange={onChangeHandler}
-                                onBlur={onBlurHandler}
-                                placeholder={field.placeholder}
-                                required={field.required}
-                            />
-                        )}
-                        {errors[field.name] && <p className="error">{errors[field.name]}</p>}
-                    </div>
-                ))}
-            </div>
+          <div className="additional-fields-price">
+            {fields.map((field, index) => (
+              <div key={index} className="form-group">
+                <label htmlFor={field.name}>{t(`ads.${field.subname}`)}</label>
+                {field.type === 'date' ? (
+                  <DatePicker
+                    selected={values.extraFields[field.name]}
+                    onChange={(date) => setValues((state) => ({
+                      ...state,
+                      extraFields: { ...state.extraFields, [field.name]: date },
+                    }))}
+                    onBlur={onBlurHandler}
+                    dateFormat="yyyy-MM-dd"
+                    id={field.name}
+                    name={field.name}
+                    required={field.required}
+                  />
+                ) : (
+                  <input
+                    type={field.type}
+                    id={field.name}
+                    name={field.name}
+                    value={values.extraFields[field.name] || ''}
+                    onChange={onChangeHandler}
+                    onBlur={onBlurHandler}
+                    placeholder={field.placeholder}
+                    required={field.required}
+                  />
+                )}
+                {errors.extraFields && errors.extraFields[field.name] && (
+                  <p className="error">{errors.extraFields[field.name]}</p>
+                )}
+              </div>
+            ))}
+          </div>
         ) : null;
-    };
-
+      };
+      
     return (
         <>
             <section className="ad-community-background">
@@ -352,18 +360,18 @@ export const CreateAd = () => {
                                         </div>
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="adAddress">{t('ads.ad_address')}</label>
+                                        <label htmlFor="street">{t('ads.ad_address')}</label>
                                         <input
                                             type="text"
-                                            id="adAddress"
-                                            name="adAddress"
-                                            value={values.adAddress}
+                                            id="street"
+                                            name="street"
+                                            value={values.street}
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
                                             disabled={!values.useOtherCity}
                                             required
                                         />
-                                        {errors.adAddress && <p className="error">{errors.adAddress}</p>}
+                                        {errors.street && <p className="error">{errors.street}</p>}
                                     </div>
                                 </div>
                                 <div className="form-group">

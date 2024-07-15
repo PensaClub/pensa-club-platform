@@ -14,42 +14,88 @@ import { useCommunityContext } from "../contexts/CommunityContext";
 import { useTranslation } from "react-i18next";
 
 export const CommunityPage = () => {
-    const { isLoading, searchAds } = useCommunityContext();
+    const { isLoading, searchAds, regions, subregions } = useCommunityContext();
     const [isSearchWhatOpen, setIsSearchWhatOpen] = useState(false);
     const [isSearchWhereOpen, setIsSearchWhereOpen] = useState(false);
     const [isSearchWhenOpen, setIsSearchWhenOpen] = useState(false);
     const [creationDateLabel, setCreationDateLabel] = useState('');
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const currentLanguage = i18n.language;
 
     const [filters, setFilters] = useState({
-        what: '',
+        tags: '',
         category: '',
         where: '',
         creationDate: '',
         expirationDate: '',
         startDate: '',
-        endDate: ''
+        endDate: '',
+        adRegion: '',
+        adSubregion: '',
+        adTown: '',
+        adRegionName: '',
+        adSubregionName: '',
+        adTownName: ''
     });
 
-    const [ads, setAds] = useState([
+    const [ads, setAds] = useState({ result: [] });
 
-    ]);
+    const handleSearch = async (customFilters = null) => {
+        const searchFilters = customFilters ? customFilters : filters; // Useе customFilters if provided, 
 
-    const handleSearch = async () => {
-        const queryFilters = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value));
-        const result = await searchAds(queryFilters);
-        setAds(result);
+        try {
+            const queryFilters = Object.fromEntries(
+                Object.entries(searchFilters).filter(([key, value]) => key !== 'adRegionName' && key !== 'adSubregionName' && key !== 'adTownName' && value && value !== 'all')
+            );
+            const result = await searchAds(queryFilters);
 
-        setFilters({
-            what: '',
-            category: '',
-            where: '',
-            creationDate: '',
-            expirationDate: '',
-            startDate: '',
-            endDate: ''
-        });
+            if (result.result && result.result.length > 0) {
+                // Parse id to name
+                const adsWithNames = result.result.map(ad => ({
+                    ...ad,
+                    adRegion: regions.find(region => region.id === Number(ad.adRegion))?.[currentLanguage] || ad.adRegion,
+                    adSubregion: subregions[Number(ad.adRegion)]?.find(subregion => subregion.id === Number(ad.adSubregion))?.[currentLanguage] || ad.adSubregion,
+                    adTown: subregions[Number(ad.adSubregion)]?.find(town => town.id === Number(ad.adTown))?.[currentLanguage] || ad.adTown
+                }));
+                setAds({ result: adsWithNames });
+            } else {
+                setAds({ result: [] });
+            }
+        } finally {
+            if (!customFilters) {
+                setFilters(prevFilters => ({
+                    ...prevFilters,
+                    tags: '',
+                    category: '',
+                    where: '',
+                    creationDate: '',
+                    expirationDate: '',
+                    startDate: '',
+                    endDate: '',
+                    adRegion: '',
+                    adSubregion: '',
+                    adTown: '',
+                    adRegionName: '',
+                    adSubregionName: '',
+                    adTownName: ''
+                }));
+                setCreationDateLabel('');
+            }
+        }
+    };
+
+    const getWhereLabel = () => {
+        if (filters.adTownName) {
+            return filters.adTownName;
+        }
+        if (filters.adSubregionName) {
+            return filters.adSubregionName;
+        }
+        if (filters.adRegionName) {
+            return filters.adRegionName;
+        }
+        return t('community.where_search');
     };
 
     useEffect(() => {
@@ -71,8 +117,8 @@ export const CommunityPage = () => {
                                 <div className="icons-com" onClick={() => setIsSearchWhatOpen(true)}>
                                     <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" />
                                     <p>
-                                        {(filters.what || filters.category !== '') ? (
-                                            `${filters.what} ${filters.category !== '' ? `${t(`search-criteria.${filters.category}`)}` : ''}`
+                                        {(filters.tags || filters.category !== '') ? (
+                                            `${filters.tags} ${filters.category !== 'all' ? `${t(`search-criteria.${filters.category}`)}` : `${t('search-criteria.all_menu')}`}`
                                         ) : (
                                             t('community.what_search') + '?'
                                         )}
@@ -81,15 +127,15 @@ export const CommunityPage = () => {
                                 <div className="divider"></div>
                                 <div className="icons-com" onClick={() => setIsSearchWhereOpen(true)}>
                                     <FontAwesomeIcon icon={faLocationDot} className="commun-icon" />
-                                    <p>{t('community.where_search')} ? {filters.where && `: ${filters.where}`}</p>
+                                    <p>{getWhereLabel()}</p>
                                 </div>
                                 <div className="divider"></div>
                                 <div className="icons-com" onClick={() => setIsSearchWhenOpen(true)}>
                                     <FontAwesomeIcon icon={faCalendar} className="commun-icon" />
                                     <p>
                                         {creationDateLabel ? (
-                                            creationDateLabel === t('community.specific_period') && filters.creationDate && filters.expirationDate ? (
-                                                `от ${new Date(filters.creationDate).toLocaleDateString('bg-BG')} до ${new Date(filters.expirationDate).toLocaleDateString('bg-BG')}`
+                                            creationDateLabel === t('community.specific_period') && filters.startDate && filters.endDate ? (
+                                                `от ${new Date(filters.startDate).toLocaleDateString('bg-BG')} до ${new Date(filters.endDate).toLocaleDateString('bg-BG')}`
                                             ) : (
                                                 `${creationDateLabel}`
                                             )
@@ -97,12 +143,11 @@ export const CommunityPage = () => {
                                             t('community.when_search') + '?'
                                         )}
                                     </p>
-
                                 </div>
-                                <button className="search-button" onClick={handleSearch}>{t('community.search_btn')}</button>
+                                <button className="search-button" onClick={() => handleSearch()}>{t('community.search_btn')}</button>
                             </div>
                         </div>
-                        {ads.length > 0 ? <AdsCard ads={ads} isLoading={isLoading} /> : <FiltersCommunity />}
+                        {ads.result.length > 0 ? <AdsCard ads={ads} isLoading={isLoading} /> : <FiltersCommunity handleSearch={handleSearch} />}
                     </section>
                     {/* <CommunityFooter /> */}
                 </section>

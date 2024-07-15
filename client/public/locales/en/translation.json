@@ -138,7 +138,7 @@
       "agriculture": "Agriculture",
       "manufacturing_and_trade": "Manufacturing and Trade",
       "technology": "Technology",
-      "transport": "Транспорт",
+      "transport": "Transport",
       "law_accounting": "Law and Accounting"
     },
     "interestOptions": {
@@ -324,8 +324,9 @@
       "initiatives_projects": "Initiatives / Projects",
       "tours": "Tours",
       "games": "Games",
-      "arbitration": "Arbitration"
-    },
+      "arbitration": "Arbitration",
+      "all_menu":"All"
+       },
     "user-suggestion": {
     "title": "Suggest a Friend",
     "desc": "Leave here information about a friend of yours who would like to be part of PensaClub but needs assisstance with the registration",
@@ -337,5 +338,6 @@
     "refferer-name": "Your name",
     "who-is-suggested": "Who are you suggesting?"
   }
+
 }
 

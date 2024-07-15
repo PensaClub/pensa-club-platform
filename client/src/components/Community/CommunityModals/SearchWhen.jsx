@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 export const SearchWhen = ({ isOpen, onClose, setFilters, filters, setCreationDateLabel }) => {
     const [searchPeriod, setSearchPeriod] = useState('');
-    const [startDate, setStartDate] = useState(null);
+    const [startDate, setStartDate] = useState(null);  
     const [endDate, setEndDate] = useState(null);
     const { t } = useTranslation();
 
@@ -46,14 +46,16 @@ export const SearchWhen = ({ isOpen, onClose, setFilters, filters, setCreationDa
                 break;
             case 'custom':
                 if (startDate && endDate) {
-                    calculatedFilters.creationDate = startDate.toISOString().split('T')[0];
-                    calculatedFilters.expirationDate = endDate.toISOString().split('T')[0];
+                    calculatedFilters.startDate = startDate.toISOString().split('T')[0];
+                    calculatedFilters.endDate = endDate.toISOString().split('T')[0];
                     setCreationDateLabel(t('community.specific_period'));
                 }
                 break;
             default:
                 delete calculatedFilters.creationDate;
                 delete calculatedFilters.expirationDate;
+                delete calculatedFilters.startDate;
+                delete calculatedFilters.endDate;
                 setCreationDateLabel('');
         }
     

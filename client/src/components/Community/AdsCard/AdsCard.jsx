@@ -14,10 +14,9 @@ const ImageModal = ({ src, alt, onClose }) => (
     </div>
 );
 
-export const AdsCard = ({ ads,isLoading }) => {
+export const AdsCard = ({ ads, isLoading }) => {
     const [modalImage, setModalImage] = useState(null);
     const { t } = useTranslation();
-
     if (isLoading) {
         return (
             <section className="ads-main">
@@ -39,7 +38,7 @@ export const AdsCard = ({ ads,isLoading }) => {
     return (
         <>
             <section className="ads-main">
-                {ads.map(ad => (
+                {ads.result.map(ad => (
                     <div key={ad.adId} className="ads-card">
                         <div className="img-ads" onClick={() => handleImageClick(ad.images[0].imageURL)}>
                             <img src={ad.images[0].imageURL} alt={ad.summary} />
@@ -48,13 +47,13 @@ export const AdsCard = ({ ads,isLoading }) => {
                         <div className="ads-info">
                             <h3 className="title-card">{ad.summary}</h3>
                             <div className="subinfo-ads">
-                                <p>{ad.item}</p>
+                                {ad.tags.length > 0 && ad.tags.map(tag => (<p key={(tag)+1}>{"#"}{tag}</p>))}
                                 <p>{ad.adTown}</p> {/* here is*/}
                                 {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
                             </div>
                             <p className="ads-data">{t('community.validate_until')} : {new Date(ad.expirationDate).toLocaleDateString('bg-BG')}</p>
                             <div className="ads-user-info">
-                                <img src="/images/homePage/avatar2.png" alt={ad.account.details.username} />
+                                <img src={ad.account.details.imageURL || 'images/homePage/avatar2.png'} alt={ad.account.details.username} />
                                 <p>{ad.account.details.username}</p>
                             </div>
                         </div>

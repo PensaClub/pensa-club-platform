@@ -324,8 +324,8 @@
     "initiatives_projects": "Инициативи / Проекти",
     "tours": "Екскурзии/ Турове",
     "games": "Игри",
-    "arbitration": "Арбитраж"
-
+    "arbitration": "Арбитраж",
+    "all_menu":"Всички"
   },
   "user-suggestion": {
     "title": "Препоръчай приятел",
@@ -337,5 +337,6 @@
     "message-placeholder": "Оставете кратко съобщение тук",
     "refferer-name": "Вашето име",
     "who-is-suggested": "Кого препоръчвате?"
+
   }
 }

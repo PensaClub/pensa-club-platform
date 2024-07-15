@@ -10,8 +10,10 @@ export const CommunityProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     // eslint-disable-next-line no-unused-vars
     const [errorMessage, setErrorMessage] = useState('');
-    const [regions, setRegions] = useState([]);
-    const [subregions, setSubregions] = useState({});
+
+    const [regions , setRegions] = useState([])
+    const [subregions , setSubregions] = useState({})
+    const [townsSearch, setTownsSearch] = useState({});
     const [towns, setTowns] = useState({});
     const [searchCriteria, setSearchCriteria] = useState([]);
     const communityService = communityServiceFactory();
@@ -48,7 +50,21 @@ export const CommunityProvider = ({ children }) => {
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
+    }
+    const TownSearch = async (subregionId) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getTowns(subregionId);
+            setTownsSearch(prev => ({ ...prev, [subregionId]: response }));
+            setIsLoading(false);
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message);
+        } finally {
+            setIsLoading(false);
         }
+    };
+
+
     };
     const fetchTowns = async (regionId, subregionId) => {
         try {
@@ -63,6 +79,7 @@ export const CommunityProvider = ({ children }) => {
             return [];
         }
     };
+
     const fetchSearchCriteria = async () => {
         try {
             setIsLoading(true);
@@ -143,9 +160,10 @@ export const CommunityProvider = ({ children }) => {
         setTowns,
         fetchSearchCriteria,
         getMyAds,
-        searchAds
-
-    }
+        searchAds,
+        TownSearch,
+        townsSearch,
+      }
     
     return (
         <CommunityContext.Provider value={contextService}>
