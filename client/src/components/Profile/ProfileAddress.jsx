@@ -49,6 +49,9 @@ console.error(form)
 
   const handleRegionChange = async (e) => {
     const regionId = e.target.value;
+
+    // eslint-disable-next-line eqeqeq
+
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
 
@@ -77,6 +80,8 @@ console.error(form)
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
+
+    // eslint-disable-next-line eqeqeq
     const currMunicipality = municipalities.filter((municipality) => municipality.id == municipalityId);
     const municipalityName = currMunicipality[0].bg;
 
@@ -100,6 +105,8 @@ console.error(form)
 
   const handleSettlementChange = async (e) => {
     const settlementId = e.target.value;
+
+    // eslint-disable-next-line eqeqeq
     const currSettlement = settlements.filter((settlement) => settlement.id == settlementId);
     const settlementName = currSettlement[0].bg;
 

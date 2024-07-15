@@ -106,10 +106,10 @@ export const CommunityPage = () => {
         <>
             <section className="background-community">
                 <section className="community-page">
+
                     <HeaderCommunity />
                     <section className="main-community">
                         <div className="hero-bg">
-                            {/* <img src="/community/community-bg.jpg" alt="" /> */}
                         </div>
                         <div className="hero-section-commun">
                             <h1>{t('community.community')}</h1>
