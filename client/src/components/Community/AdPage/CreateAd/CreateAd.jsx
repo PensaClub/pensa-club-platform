@@ -38,21 +38,6 @@ export const CreateAd = () => {
         return language === 'bg' ? settlement.bg : settlement.en;
     };
 
-    const getAdRegionValue = (language, regionId) => {
-        const region = regions.find(region => region.id === regionId);
-        if (!region) return '';
-        return language === 'bg' ? region.bg : region.en;
-    };
-
-    const getAdSubregionValue = (language, regionId, subregionId) => {
-        const subregionList = subregions[regionId];
-        if (!subregionList) return '';
-        const subregion = subregionList.find(subregion => subregion.id === subregionId);
-
-        if (!subregion) return '';
-        return language === 'bg' ? subregion.bg : subregion.en;
-    };
-
     const initialValues = {
         adId: v4(),
         summary: '',
@@ -70,10 +55,6 @@ export const CreateAd = () => {
             eventEndDate: null,
         },
     };
-
-    // useEffect(() => {
-    //     fetchRegions();
-    // }, []);
 
     useEffect(() => {
         if (selectedRegion) {
@@ -102,6 +83,7 @@ export const CreateAd = () => {
 
         loadFieldDefinitions();
     }, []);
+
     useEffect(() => {
         const fetchData = async () => {
             const addressId = JSON.parse(localStorage.getItem('addressId'));
@@ -130,9 +112,9 @@ export const CreateAd = () => {
                         setSelectedTown(prev => prev || town.id);
                         setValues((state) => ({
                             ...state,
-                            adRegion: addressId.regionId ? getAdRegionValue(currentLanguage, addressId.regionId) : state.adRegion,
-                            adSubregion: addressId.municipalityId ? getAdSubregionValue(currentLanguage, addressId.regionId, addressId.municipalityId) : state.adSubregion,
-                            adTown: town ? getAdTownValue(currentLanguage, town) : state.adTown,
+                            adRegion: addressId.regionId,
+                            adSubregion: addressId.municipalityId,
+                            adTown: addressId.settlementId,
                         }));
                     }
                 } catch (error) {
@@ -155,18 +137,11 @@ export const CreateAd = () => {
     const handleNavigate = () => navigate('/craigslist');
 
     const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
-        const region = regions.find(region => region.id === Number(formData.adRegion));
-        const subregion = subregions[selectedRegion]?.find(subregion => subregion.id === Number(formData.adSubregion));
-        const town = towns.find(town => town.id === Number(formData.adTown));
-
-        const regionName = region ? region[currentLanguage] : profileData.details.region;
-        const subregionName = subregion ? subregion[currentLanguage] : getAdSubregionValue(currentLanguage, selectedRegion, selectedSubregion)
-        const townName = town ? town[currentLanguage] : profileData.details.settlement;
         const updatedFormData = {
             ...formData,
-            adRegion: regionName,
-            adSubregion: subregionName,
-            adTown: townName,
+            adRegion: selectedRegion || profileData.details.region,
+            adSubregion: selectedSubregion || profileData.details.subregion,
+            adTown: selectedTown || profileData.details.settlement,
             tags
         };
 
@@ -217,7 +192,7 @@ export const CreateAd = () => {
           </div>
         ) : null;
       };
-      
+
     return (
         <>
             <section className="ad-community-background">

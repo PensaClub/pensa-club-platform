@@ -3,6 +3,7 @@ import { Loader } from "../Loader/Loader";
 import './error.css';
 import { communityServiceFactory } from "../Services/communityService";
 import { notify } from '../../utils/notify';
+import { useNavigate } from "react-router-dom";
 
 export const CommunityContext = createContext();
 
@@ -18,6 +19,8 @@ export const CommunityProvider = ({ children }) => {
     const [searchCriteria, setSearchCriteria] = useState([]);
     const communityService = communityServiceFactory();
 
+    const navigate=useNavigate()
+    
     const showErrorAndSetTimeouts = (error) => {
         setErrorMessage(error);
         setIsLoading(false);
@@ -51,6 +54,8 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
     }
+
+    };
     const TownSearch = async (subregionId) => {
         try {
             setIsLoading(true);
@@ -62,9 +67,6 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-    };
-
-
     };
     const fetchTowns = async (regionId, subregionId) => {
         try {
@@ -99,6 +101,7 @@ export const CommunityProvider = ({ children }) => {
             const response = await communityService.createAd(adData);
             setIsLoading(false);
             notify('success-created');
+            navigate('/craigslist');
             return response;
         } catch (e) {
             notify('error');
