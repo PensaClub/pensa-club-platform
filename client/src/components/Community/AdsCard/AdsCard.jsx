@@ -53,7 +53,7 @@ export const AdsCard = ({ ads, isLoading }) => {
                             </div>
                             <p className="ads-data">{t('community.validate_until')} : {new Date(ad.expirationDate).toLocaleDateString('bg-BG')}</p>
                             <div className="ads-user-info">
-                                <img src={ad.account.details.imageURL} alt={ad.account.details.username} />
+                                <img src={ad.account.details.imageURL || 'images/homePage/avatar2.png'} alt={ad.account.details.username} />
                                 <p>{ad.account.details.username}</p>
                             </div>
                         </div>

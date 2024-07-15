@@ -22,8 +22,9 @@ export const CommunityPage = () => {
 
     const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
+
     const [filters, setFilters] = useState({
-        tags: '', 
+        tags: '',
         category: '',
         where: '',
         creationDate: '',
@@ -32,16 +33,20 @@ export const CommunityPage = () => {
         endDate: '',
         adRegion: '',
         adSubregion: '',
-        adTown: ''
+        adTown: '',
+        adRegionName: '',
+        adSubregionName: '',
+        adTownName: ''
     });
 
     const [ads, setAds] = useState({ result: [] });
 
     const handleSearch = async (customFilters = null) => {
-        const searchFilters = customFilters ? customFilters : filters; // Useе customFilters if provide, otherwise use the current filters from the stateе
+        const searchFilters = customFilters ? customFilters : filters; // Useе customFilters if provided, 
+
         try {
             const queryFilters = Object.fromEntries(
-                Object.entries(searchFilters).filter(([key, value]) => value && value !== 'all')
+                Object.entries(searchFilters).filter(([key, value]) => key !== 'adRegionName' && key !== 'adSubregionName' && key !== 'adTownName' && value && value !== 'all')
             );
             const result = await searchAds(queryFilters);
 
@@ -51,26 +56,46 @@ export const CommunityPage = () => {
                     ...ad,
                     adRegion: regions.find(region => region.id === Number(ad.adRegion))?.[currentLanguage] || ad.adRegion,
                     adSubregion: subregions[Number(ad.adRegion)]?.find(subregion => subregion.id === Number(ad.adSubregion))?.[currentLanguage] || ad.adSubregion,
+                    adTown: subregions[Number(ad.adSubregion)]?.find(town => town.id === Number(ad.adTown))?.[currentLanguage] || ad.adTown
                 }));
                 setAds({ result: adsWithNames });
             } else {
                 setAds({ result: [] });
             }
         } finally {
-            setFilters({
-                tags: '', 
-                category: '',
-                where: '',
-                creationDate: '',
-                expirationDate: '',
-                startDate: '',
-                endDate: '',
-                adRegion: '',
-                adSubregion: '',
-                adTown: ''
-            });
-            setCreationDateLabel('');
+            if (!customFilters) {
+                setFilters(prevFilters => ({
+                    ...prevFilters,
+                    tags: '',
+                    category: '',
+                    where: '',
+                    creationDate: '',
+                    expirationDate: '',
+                    startDate: '',
+                    endDate: '',
+                    adRegion: '',
+                    adSubregion: '',
+                    adTown: '',
+                    adRegionName: '',
+                    adSubregionName: '',
+                    adTownName: ''
+                }));
+                setCreationDateLabel('');
+            }
         }
+    };
+
+    const getWhereLabel = () => {
+        if (filters.adTownName) {
+            return filters.adTownName;
+        }
+        if (filters.adSubregionName) {
+            return filters.adSubregionName;
+        }
+        if (filters.adRegionName) {
+            return filters.adRegionName;
+        }
+        return t('community.where_search');
     };
 
     useEffect(() => {
@@ -102,15 +127,15 @@ export const CommunityPage = () => {
                                 <div className="divider"></div>
                                 <div className="icons-com" onClick={() => setIsSearchWhereOpen(true)}>
                                     <FontAwesomeIcon icon={faLocationDot} className="commun-icon" />
-                                    <p>{t('community.where_search')} ? {filters.where && `: ${filters.where}`}</p>
+                                    <p>{getWhereLabel()}</p>
                                 </div>
                                 <div className="divider"></div>
                                 <div className="icons-com" onClick={() => setIsSearchWhenOpen(true)}>
                                     <FontAwesomeIcon icon={faCalendar} className="commun-icon" />
                                     <p>
                                         {creationDateLabel ? (
-                                            creationDateLabel === t('community.specific_period') && filters.creationDate && filters.expirationDate ? (
-                                                `от ${new Date(filters.creationDate).toLocaleDateString('bg-BG')} до ${new Date(filters.expirationDate).toLocaleDateString('bg-BG')}`
+                                            creationDateLabel === t('community.specific_period') && filters.startDate && filters.endDate ? (
+                                                `от ${new Date(filters.startDate).toLocaleDateString('bg-BG')} до ${new Date(filters.endDate).toLocaleDateString('bg-BG')}`
                                             ) : (
                                                 `${creationDateLabel}`
                                             )
@@ -118,7 +143,6 @@ export const CommunityPage = () => {
                                             t('community.when_search') + '?'
                                         )}
                                     </p>
-
                                 </div>
                                 <button className="search-button" onClick={() => handleSearch()}>{t('community.search_btn')}</button>
                             </div>
