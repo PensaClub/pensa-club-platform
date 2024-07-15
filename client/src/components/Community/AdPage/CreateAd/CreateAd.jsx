@@ -13,20 +13,23 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { v4 } from 'uuid';
+import { TagInput } from './TagInput';
 
 export const CreateAd = () => {
     const { t, i18n } = useTranslation();
-    // eslint-disable-next-line no-unused-vars
-    const [settlements, setSettlements] = useState([]);
     const [fieldDefinitions, setFieldDefinitions] = useState({});
-    const { searchCriteria, createAd } = useCommunityContext();
+    const [towns, setTowns] = useState([]);
+    const [settlements, setSettlements] = useState([]);
+    const [tags, setTags] = useState([]);
+    const [selectedTown, setSelectedTown] = useState('');
+    const [selectedRegion, setSelectedRegion] = useState('');
+    const [selectedSubregion, setSelectedSubregion] = useState('');
+    const { regions, subregions, fetchSubregions, fetchTowns, searchCriteria, createAd } = useCommunityContext();
     const { profileData } = useAuthContext();
 
     const currentLanguage = i18n.language;
     const navigate = useNavigate();
-    const getEmailPrefix = (email) => {
-        return email.split('@')[0];
-    }
+    const getEmailPrefix = (email) => email.split('@')[0];
 
     const emailPrefix = getEmailPrefix(profileData.email);
 
@@ -35,52 +38,53 @@ export const CreateAd = () => {
         return language === 'bg' ? settlement.bg : settlement.en;
     };
 
+    const getAdRegionValue = (language, regionId) => {
+        const region = regions.find(region => region.id === regionId);
+        if (!region) return '';
+        return language === 'bg' ? region.bg : region.en;
+    };
+
+    const getAdSubregionValue = (language, regionId, subregionId) => {
+        const subregionList = subregions[regionId];
+        if (!subregionList) return '';
+        const subregion = subregionList.find(subregion => subregion.id === subregionId);
+
+        if (!subregion) return '';
+        return language === 'bg' ? subregion.bg : subregion.en;
+    };
+
     const initialValues = {
         adId: v4(),
         summary: '',
         category: 'donate',
         description: '',
+        adRegion: profileData.details.region || '',
+        adSubregion: profileData.details.subregion || '',
         adTown: profileData.details.settlement ? getAdTownValue(currentLanguage, profileData.details.settlement) : '',
         adAddress: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
         useOtherCity: false,
         price: '',
-        startCourse: null,
-        endCourse: null,
-        priceCourse: '',
-        startTours: null,
-        endTours: null,
-        priceTours: '',
+        eventStartDate: null,
+        eventEndDate: null,
     };
 
-    const handleNavigate = () => {
-        navigate('/craigslist');
-     }
+    // useEffect(() => {
+    //     fetchRegions();
+    // }, []);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const addressId = JSON.parse(localStorage.getItem('addressId'));
-            if (addressId) {
-                try {
-                    const response = await fetch(`/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`);
-                    const data = await response.json();
-                    setSettlements(data);
-                    const settlement = data.find(settlement => settlement.id === addressId.settlementId);
-
-                    if (settlement) {
-                        setValues((state) => ({
-                            ...state,
-                            adTown: getAdTownValue(currentLanguage, settlement)
-                        }));
-                    }
-                } catch (error) {
-                    console.error('Failed to load data', error);
-                }
-            }
-        };
-
-        fetchData();
+        if (selectedRegion) {
+            fetchSubregions(selectedRegion);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentLanguage]);
+    }, [selectedRegion]);
+
+    useEffect(() => {
+        if (selectedRegion && selectedSubregion) {
+            fetchTowns(selectedRegion, selectedSubregion).then(setTowns);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedRegion, selectedSubregion]);
 
     useEffect(() => {
         const loadFieldDefinitions = async () => {
@@ -95,11 +99,76 @@ export const CreateAd = () => {
 
         loadFieldDefinitions();
     }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const addressId = JSON.parse(localStorage.getItem('addressId'));
+            if (addressId) {
+                try {
+                    const region = regions.find(region => region.id === addressId.regionId);
+
+                    if (!subregions[addressId.regionId] || subregions[addressId.regionId].length === 0) {
+                        await fetchSubregions(addressId.regionId);
+                    }
+
+                    const subregion = (subregions[addressId.regionId] || []).find(subregion => subregion.id === addressId.municipalityId);
+
+                    let townList = settlements;
+                    if (!townList.length) {
+                        const townResponse = await fetch(`/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`);
+                        townList = await townResponse.json();
+                        setSettlements(townList);
+                    }
+
+                    const town = townList.find(settlement => settlement.id === addressId.settlementId);
+
+                    if (region && subregion && town) {
+                        setSelectedRegion(prev => prev || addressId.regionId);
+                        setSelectedSubregion(prev => prev || addressId.municipalityId);
+                        setSelectedTown(prev => prev || town.id);
+                        setValues((state) => ({
+                            ...state,
+                            adRegion: addressId.regionId ? getAdRegionValue(currentLanguage, addressId.regionId) : state.adRegion,
+                            adSubregion: addressId.municipalityId ? getAdSubregionValue(currentLanguage, addressId.regionId, addressId.municipalityId) : state.adSubregion,
+                            adTown: town ? getAdTownValue(currentLanguage, town) : state.adTown,
+                        }));
+                    }
+                } catch (error) {
+                    console.error('Failed to load data', error);
+                }
+            }
+        };
+
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentLanguage, regions, subregions]);
+
+    useEffect(() => {
+        if (selectedRegion && selectedSubregion) {
+            fetchTowns(selectedRegion, selectedSubregion).then(setSettlements);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedSubregion, selectedRegion]);
+
+    const handleNavigate = () => navigate('/craigslist');
 
     const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
-        try {
-            await createAd(formData);
+        const region = regions.find(region => region.id === Number(formData.adRegion));
+        const subregion = subregions[selectedRegion]?.find(subregion => subregion.id === Number(formData.adSubregion));
+        const town = towns.find(town => town.id === Number(formData.adTown));
 
+        const regionName = region ? region[currentLanguage] : profileData.details.region;
+        const subregionName = subregion ? subregion[currentLanguage] : getAdSubregionValue(currentLanguage, selectedRegion, selectedSubregion)
+        const townName = town ? town[currentLanguage] : profileData.details.settlement;
+        const updatedFormData = {
+            ...formData,
+            adRegion: regionName,
+            adSubregion: subregionName,
+            adTown: townName,
+            tags
+        };
+
+        try {
+            await createAd(updatedFormData);
         } catch (error) {
             console.error('Error creating ad:', error);
         }
@@ -197,21 +266,79 @@ export const CreateAd = () => {
                                     <p className='desc-sub-text'>{t('ads.sub_text-two')}</p>
                                     {errors.description && <p className="error">{errors.description}</p>}
                                 </div>
+                                <TagInput tags={tags} setTags={setTags} t={t}/>
                                 <div className="address-check">
                                     <div className="ad-address">
-                                        <div className="form-group">
-                                            <label htmlFor="adTown">{t('ads.ad_town')}</label>
-                                            <input
-                                                type="text"
-                                                id="adTown"
-                                                name="adTown"
-                                                value={values.adTown}
-                                                onChange={onChangeHandler}
-                                                onBlur={onBlurHandler}
-                                                required
-                                                disabled={!values.useOtherCity}
-                                            />
-                                            {errors.adTown && <p className="error">{errors.adTown}</p>}
+                                        <div className="ad-regions">
+                                            <div className="form-group">
+                                                <label htmlFor="adRegion">{t('ads.ad_region')}</label>
+                                                <select
+                                                    id="adRegion"
+                                                    name="adRegion"
+                                                    value={selectedRegion}
+                                                    onChange={(e) => {
+                                                        setSelectedRegion(e.target.value);
+                                                        setValues((state) => ({ ...state, adRegion: e.target.value, adSubregion: '', adTown: '' }));
+                                                    }}
+                                                    onBlur={onBlurHandler}
+                                                    required
+                                                    disabled={!values.useOtherCity}
+                                                >
+                                                    <option value="">{t('community.select_region')}</option>
+                                                    {regions.map((region) => (
+                                                        <option key={region.id} value={region.id}>
+                                                            {currentLanguage === 'bg' ? region.bg : region.en}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.adRegion && <p className="error">{errors.adRegion}</p>}
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="adSubregion">{t('ads.ad_municipality')}</label>
+                                                <select
+                                                    id="adSubregion"
+                                                    name="adSubregion"
+                                                    value={selectedSubregion}
+                                                    onChange={(e) => {
+                                                        setSelectedSubregion(e.target.value);
+                                                        setValues((state) => ({ ...state, adSubregion: e.target.value, adTown: '' }));
+                                                    }}
+                                                    onBlur={onBlurHandler}
+                                                    required
+                                                    disabled={!values.useOtherCity || !selectedRegion}
+                                                >
+                                                    <option value="">{t('community.select_municipality')}</option>
+                                                    {selectedRegion && subregions[selectedRegion]?.map((subregion) => (
+                                                        <option key={subregion.id} value={subregion.id}>
+                                                            {currentLanguage === 'bg' ? subregion.bg : subregion.en}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.adSubregion && <p className="error">{errors.adSubregion}</p>}
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="adTown">{t('ads.ad_town')}</label>
+                                                <select
+                                                    id="adTown"
+                                                    name="adTown"
+                                                    value={selectedTown}
+                                                    onChange={(e) => {
+                                                        setSelectedTown(e.target.value);
+                                                        setValues((state) => ({ ...state, adTown: e.target.value }));
+                                                    }}
+                                                    onBlur={onBlurHandler}
+                                                    required
+                                                    disabled={!values.useOtherCity || !selectedSubregion}
+                                                >
+                                                    <option value="">{t('ads.select_town')}</option>
+                                                    {selectedSubregion && settlements.map((town) => (
+                                                        <option key={town.id} value={town.id}>
+                                                            {currentLanguage === 'bg' ? town.bg : town.en}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.adTown && <p className="error">{errors.adTown}</p>}
+                                            </div>
                                         </div>
                                         <div className="checkbox-group useOtherCity">
                                             <input
@@ -233,6 +360,7 @@ export const CreateAd = () => {
                                             value={values.adAddress}
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
+                                            disabled={!values.useOtherCity}
                                             required
                                         />
                                         {errors.adAddress && <p className="error">{errors.adAddress}</p>}

@@ -285,10 +285,18 @@
     "cancel_btn": "Cancel",
     "sub_text-one":"to 32 characters",
     "sub_text-two":"to 1000 characters",
+    "select_town" : "Select town",
+    "ad_region": "Region",
+    "ad_municipality":  "Municipality",
+    "tags_ad":"Tags can be added by pressing Enter or Space.",
+    "tags": "Tags",
+    "max_tags": "Max Tags is 5",
+    "enter_tag":"Enter a Tag",
     "view_more": "view more",
     "edit": "Edit",
     "delete": "Delete",
     "no_ads": "You have no published ads"
+
   },
   "notification": {
     "success-data": "User Data successfully submitted!",

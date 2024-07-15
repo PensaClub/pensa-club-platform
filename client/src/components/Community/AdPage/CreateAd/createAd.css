@@ -253,6 +253,11 @@ input[type="number"] {
         margin: 6em auto 2em 8em;
         padding: 0.5em 2em
     }
+    .ad-regions{
+        display: flex;
+        flex-direction: row;
+        gap: 0.8em
+    }
     .react-datepicker__input-container {
         display: flex;
         width: 100%;
@@ -277,7 +282,7 @@ input[type="number"] {
         font-weight: 600;
     }
     .form-group label {
-        font-size: calc(var(--xxs-font-size) + 1px);
+        font-size: calc(var(--xs-font-size) + 1px);
         padding-top: 1.5em;
     }
 
@@ -300,7 +305,7 @@ input[type="number"] {
 
     .address-check {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         gap: 1em;
         flex: 1;
     }
@@ -390,10 +395,14 @@ input[type="number"] {
         font-size: calc(var(--xs-font-size) + 1px);
 
     }
-
-    .address-check {
+    .ad-regions{
         display: flex;
         flex-direction: row;
+        gap: 1em;
+    }
+    .address-check {
+        display: flex;
+        flex-direction: column;;
         gap: 1em;
         flex: 1;
     }
