@@ -101,7 +101,7 @@ export const CommunityProvider = ({ children }) => {
             const response = await communityService.createAd(adData);
             setIsLoading(false);
             notify('success-created');
-            navigate('/craigslist');
+            navigate('/');
             return response;
         } catch (e) {
             notify('error');
