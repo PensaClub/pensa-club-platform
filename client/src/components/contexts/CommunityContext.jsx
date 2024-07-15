@@ -51,6 +51,8 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
     }
+  
+    };
     const TownSearch = async (subregionId) => {
         try {
             setIsLoading(true);
@@ -62,9 +64,6 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-    };
-
-
     };
     const fetchTowns = async (regionId, subregionId) => {
         try {
