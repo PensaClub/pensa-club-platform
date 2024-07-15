@@ -6,9 +6,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './searchWhen.css';
 import { useTranslation } from 'react-i18next';
 
-export const SearchWhen = ({ isOpen, onClose }) => {
+export const SearchWhen = ({ isOpen, onClose, setFilters, filters, setCreationDateLabel }) => {
     const [searchPeriod, setSearchPeriod] = useState('');
-    const [startDate, setStartDate] = useState(null);
+    const [startDate, setStartDate] = useState(null);  
     const [endDate, setEndDate] = useState(null);
     const { t } = useTranslation();
 
@@ -17,10 +17,52 @@ export const SearchWhen = ({ isOpen, onClose }) => {
             alert('Моля, изберете начален и краен период.');
             return;
         }
-
+    
+        let calculatedFilters = { ...filters };
+    
+        const today = new Date();
+        let start;
+    
+        switch (searchPeriod) {
+            case 'today':
+                start = new Date(today.setHours(0, 0, 0, 0)).toISOString().split('T')[0];
+                calculatedFilters.creationDate = start;
+                setCreationDateLabel(t('community.today'));
+                break;
+            case 'thisWeek':
+                start = new Date(today.setDate(today.getDate() - 7)).toISOString().split('T')[0];
+                calculatedFilters.creationDate = start;
+                setCreationDateLabel(t('community.this_week'));
+                break;
+            case 'thisMonth':
+                start = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split('T')[0];
+                calculatedFilters.creationDate = start;
+                setCreationDateLabel(t('community.this_month'));
+                break;
+            case 'lastYear':
+                start = new Date(today.setFullYear(today.getFullYear() - 1)).toISOString().split('T')[0];
+                calculatedFilters.creationDate = start;
+                setCreationDateLabel(t('community.last_year'));
+                break;
+            case 'custom':
+                if (startDate && endDate) {
+                    calculatedFilters.startDate = startDate.toISOString().split('T')[0];
+                    calculatedFilters.endDate = endDate.toISOString().split('T')[0];
+                    setCreationDateLabel(t('community.specific_period'));
+                }
+                break;
+            default:
+                delete calculatedFilters.creationDate;
+                delete calculatedFilters.expirationDate;
+                delete calculatedFilters.startDate;
+                delete calculatedFilters.endDate;
+                setCreationDateLabel('');
+        }
+    
+        setFilters(calculatedFilters);
         onClose();
     };
-
+    
     if (!isOpen) return null;
 
     return (

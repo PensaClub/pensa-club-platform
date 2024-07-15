@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const [values, setValues] = useState(initialValues);
+ 
   const [errors, setErrors] = useState({});
   const [images, setImages] = useState([null, null, null, null]);
   const [imageFiles, setImageFiles] = useState([null, null, null, null]);
@@ -16,14 +17,38 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
   const onChangeHandler = (e) => {
-    setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
-  };
-
-  const onBlurHandler = (e) => {
     const { name, value } = e.target;
-    const error = validateFieldCreateAd(name, value, t);
-    setErrors(prevState => ({ ...prevState, [name]: error }));
-  };
+
+    if (name in values.extraFields) {
+     
+        setValues((state) => ({
+            ...state,
+            extraFields: { ...state.extraFields, [name]: value },
+        }));
+    } else {
+        setValues((state) => ({ ...state, [name]: value }));
+    }
+};
+
+const onBlurHandler = (e) => {
+  const { name, value } = e.target;
+  let error = validateFieldCreateAd(name, value, t);
+
+  if (name in values.extraFields) {
+    setErrors((prevState) => ({
+      ...prevState,
+      extraFields: {
+        ...prevState.extraFields,
+        [name]: error,
+      },
+    }));
+  } else {
+    setErrors((prevState) => ({
+      ...prevState,
+      [name]: error,
+    }));
+  }
+};
 
   const handleImageChange = (event) => {
     const files = event.target.files;
@@ -52,11 +77,20 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
 
   const handleTrimFields = () => {
     const trimmedValues = Object.keys(values).reduce((acc, key) => {
-      acc[key] = typeof values[key] === 'string' ? values[key].trim() : values[key];
-      return acc;
+        if (key === 'extraFields') {
+       
+            acc[key] = Object.keys(values[key]).reduce((innerAcc, innerKey) => {
+                innerAcc[innerKey] = typeof values[key][innerKey] === 'string' ? values[key][innerKey].trim() : values[key][innerKey];
+                return innerAcc;
+            }, {});
+        } else {
+
+            acc[key] = typeof values[key] === 'string' ? values[key].trim() : values[key];
+        }
+        return acc;
     }, {});
     setValues(trimmedValues);
-  };
+};
 
   const filterEmptyFields = (formData) => {
     const filteredData = {};

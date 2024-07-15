@@ -35,6 +35,8 @@ function fieldSwap(details, mappingType) {
     adSubregion: 'ad_subregion',
     adTown: 'ad_town',
     extraFields: 'extra_fields',
+    status: 'status',
+    adminComment: 'admin_comment',
   };
 
   const mapFromDb = {
@@ -71,6 +73,8 @@ function fieldSwap(details, mappingType) {
     ad_subregion: 'adSubregion',
     ad_town: 'adTown',
     extra_fields: 'extraFields',
+    status: 'status',
+    admin_comment: 'adminComment',
   };
 
   const fieldMapping = mappingType === 'mapToDb' ? mapToDb : mapFromDb;
