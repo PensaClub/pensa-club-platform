@@ -61,7 +61,7 @@ module.exports = {
           },
         },
       },
-       ad_region: {
+      ad_region: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -147,7 +147,7 @@ module.exports = {
       expiration_date: {
         type: DataTypes.DATEONLY,
         allowNull: false,
-        defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
+        defaultValue: new Date(new Date().setDate(new Date().getDate() + 30)).toISOString().split('T')[0],
       },
       status: {
         type: DataTypes.STRING,
@@ -156,7 +156,7 @@ module.exports = {
         validate: {
           isIn: {
             args: [['pending', 'approved', 'denied']],
-            message: 'Invalid status type. Status must be approved, denied or pending.'
+            message: 'Invalid status type. Status must be approved, denied or pending.',
           },
         },
       },

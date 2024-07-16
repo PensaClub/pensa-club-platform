@@ -20,9 +20,13 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 
     const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
 
-    data.approved = false;
+    if (data.status) {
+      return res.status(400).json({ message: 'Status cannot be updated through this endpoint.' });
+    }
 
-    await user_ads.create({ user_id: req.user.userId, ...data });
+    const ad = await user_ads.create({ user_id: req.user.userId, ...data });
+
+    eventEmitter.emit('adsCreated', ad.dataValues);
 
     res.status(200).json({ message: 'Ad successfully created.' });
   } catch (err) {
@@ -30,10 +34,21 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   }
 });
 
-adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
+adsController.get('/approved-ads', isAuth, memoryCache, async (req, res, next) => {
   try {
-    const ads = await user_ads.findAll({ where: { status: 'approved' } });
-    const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
+    const userId = req.user.userId;
+
+    const whereCondition = {
+      status: 'approved',
+      user_id: userId,
+    };
+
+    const ads = await user_ads.findAll({ where: whereCondition });
+
+    if (ads.length === 0) return res.status(200).json({ message: 'This user does not have approved ads at the moment.' });
+
+    const mappedAds = ads.map((ad) => fieldSwap(ad.dataValues, 'mapFromDb'));
+
     res.status(200).json(mappedAds);
   } catch (err) {
     next(err);
@@ -44,10 +59,10 @@ adsController.get('/unapproved-ads', isAuth, rbac.checkPermission('approve_recor
   try {
     const ads = await user_ads.findAll({
       where: {
-        status: { [Op.ne]: 'approved' }
-      }
+        status: { [Op.ne]: 'approved' },
+      },
     });
-    const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
+    const mappedAds = ads.map((ad) => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
   } catch (err) {
     next(err);
@@ -56,12 +71,12 @@ adsController.get('/unapproved-ads', isAuth, rbac.checkPermission('approve_recor
 
 adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
   try {
-    const { email } = req.user;
+    const email = req.user.email;
     if (!email) {
-      return res.status(400).json({ message: "Email is required." });
+      return res.status(400).json({ message: 'Email is required.' });
     }
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: "Email is invalid." });
+      return res.status(400).json({ message: 'Email is invalid.' });
     }
     const ads = await user_ads.findAll({
       include: [
@@ -83,31 +98,38 @@ adsController.get('/user-ads', isAuth, memoryCache, async (req, res, next) => {
 
 adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
   try {
-    const { adId, newStatus } = req.body;
+    let { adId, newStatus, adminComment } = req.body;
     if (newStatus !== 'pending' && newStatus !== 'approved' && newStatus !== 'denied') {
-      return res.status(400).json({ message: "Invalid status type. Status must be approved, denied or pending." });
+      return res.status(400).json({ message: 'Invalid status type. Status must be approved, denied or pending.' });
+    }
+    if (newStatus === 'denied' && !adminComment) {
+      return res.status(400).json({ message: 'Denying an ad requires admin comment explanation.' });
+    }
+    if (!adminComment) {
+      adminComment = null;
     }
 
-    const [updatedRowsCount, [updatedAd]] = await user_ads.update(
-      { status: newStatus },
+    const [updatedRowsCount, updatedAd] = await user_ads.update(
+      {
+        status: newStatus,
+        admin_comment: adminComment,
+      },
       {
         where: {
           ad_id: adId,
-          status: { [Sequelize.Op.ne]: newStatus } // Only update if current status is different
-        }
+          status: { [Sequelize.Op.ne]: newStatus }, // Only update if current status is different
+        },
+        returning: true,
       }
     );
 
     if (updatedRowsCount === 0) {
-      return res.status(400).json({ message: `Ad status is already ${newStatus}.` });
-    }
-    if (updatedAd && updatedAd.status === newStatus) {
-      return res.status(400).json({ message: `Ad status is already ${newStatus}.` });
+      return res.status(404).json({ message: `Ad could not be found or status is already ${newStatus}` });
     }
 
-    eventEmitter.emit('adsApproved', ad);
+    eventEmitter.emit('adsStatusUpdate', updatedAd[0].dataValues, newStatus);
 
-    res.status(200).json({ message: 'Ad has been approved successfully.' });
+    res.status(200).json({ message: 'Ad status has been updated successfully.' });
   } catch (err) {
     next(err);
   }
@@ -121,10 +143,10 @@ adsController.post('/ad-delete', isAuth, async (req, res, next) => {
       return res.status(400).json({ message: "ID doesn't match an existing ad." });
     }
     if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
-      approved = ad.status;
+      let approvedStr = ad.status === 'approved' ? 'approved' : 'unapproved';
       await ad.destroy();
 
-      eventEmitter.emit('adsDeleted', ad, approved); // TODO CHANGE BASED ON CACHING IF NEEDED
+      eventEmitter.emit('adsDeleted', ad.dataValues, approvedStr);
 
       return res.status(200).json({ message: 'Ad has been deleted successfully.' });
     }
@@ -142,27 +164,32 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
     if (extraFields) extraFieldsValidator(extraFields);
 
     const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
-    
-    data.approved = false;
 
-    const [affectedRows, [details]] = await user_ads.update(data, { where: { ad_id: data.ad_id, user_id: req.user.userId }, returning: true });
-    
+    if (data.status) {
+      return res.status(400).json({ message: 'Status cannot be updated through this endpoint.' });
+    }
+
+    const where = {
+      ad_id: data.ad_id,
+      user_id: req.user.userId,
+    };
+
+    const [affectedRows, [details]] = await user_ads.update(data, { where, returning: true });
+
     if (!details) {
       return res.status(404).json({ message: 'Ad not found or wrong user credentials.' });
     }
-    if (affectedRows <= 1) {
-      return res.status(404).json({ message: 'No changes were made.' });
+
+    let approvedStr = 'unapproved';
+    if (details.dataValues?.status !== 'pending') {
+      const ad = details;
+      if (ad.status === 'approved') approvedStr = 'approved';
+      ad.status = 'pending';
+      await ad.save();
     }
-    else {
-      if (details.dataValues?.status !== 'pending') {
-        const ad = details;
-        ad.status = 'pending';
-        await ad.save();
-      }
-      eventEmitter.emit('adsUpdated', details.dataValues); // TODO CHANGE BASED ON CACHING IF NEEDED
-    }
-    
-    const updatedDetails = fieldSwap(details[0].dataValues, 'mapFromDb');
+    eventEmitter.emit('adsUpdated', details.dataValues, approvedStr);
+
+    const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
 
     res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
   } catch (err) {
@@ -291,8 +318,8 @@ adsController.get('/ads-search', async (req, res, next) => {
       whereCondition[Op.and] = adLocationConditions;
     }
 
-    //Change to false for testing !!!
-    whereCondition.approved = true;
+    // Status to be changed to pending FOR TESTING !!!
+    whereCondition.status = 'approved';
 
     const result = await user_ads.findAll({
       where: whereCondition,
@@ -304,7 +331,7 @@ adsController.get('/ads-search', async (req, res, next) => {
         ['ad_town', 'adTown'],
         ['ad_id', 'adId'],
         'images',
-        'approved',
+        'status',
         'street',
         ['extra_fields', 'extraFields'],
         ['creation_date', 'creationDate'],
@@ -329,6 +356,28 @@ adsController.get('/ads-search', async (req, res, next) => {
     });
 
     res.status(200).json({ result, errors });
+  } catch (err) {
+    next(err);
+  }
+});
+
+adsController.patch('/update-expiration-date/:adId', isAuth, async (req, res, next) => {
+  try {
+    const { adId } = req.params;
+
+    if (!adId) {
+      return res.status(400).json({ message: 'adId is required.' });
+    }
+
+    const expirationDate = new Date(new Date().setDate(new Date().getDate() + 30)).toISOString().split('T')[0];
+
+    const [affectedRows, _] = await user_ads.update({ expiration_date: expirationDate }, { where: { user_id: req.user.userId, ad_id: adId }, returning: true });
+
+    if (affectedRows === 0) {
+      return res.status(404).json({ message: 'No such ad was found.' });
+    }
+
+    res.status(200).json({ message: `Expiration date successfully changed to ${expirationDate}` });
   } catch (err) {
     next(err);
   }

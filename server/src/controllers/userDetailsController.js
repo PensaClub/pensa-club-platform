@@ -1,6 +1,6 @@
 const userDetailsController = require('express').Router();
 
-const { user_details, user_account } = require('../sequelize/models/index');
+const { user_details, user_account, user_ads } = require('../sequelize/models/index');
 const geoCoder = require('../utils/geoCoder');
 const ageCalculate = require('../utils/ageCalculate');
 const userDetailsValidator = require('../utils/userDetailsValidator');
@@ -103,6 +103,29 @@ userDetailsController.get('/all-users', memoryCache, async (req, res, next) => {
             ['firebase_image_path', 'firebaseImagePath'],
           ],
         },
+        {
+          model: user_ads,
+          where: { status: 'approved' },
+          required: false,
+          as: 'ads',
+          attributes: [
+            'summary',
+            'description',
+            'category',
+            ['ad_region', 'adRegion'],
+            ['ad_subregion', 'adSubregion'],
+            ['ad_town', 'adTown'],
+            ['ad_id', 'adId'],
+            'images',
+            'status',
+            'street',
+            ['extra_fields', 'extraFields'],
+            ['creation_date', 'creationDate'],
+            ['expiration_date', 'expirationDate'],
+            'tags',
+            ['admin_comment', 'adminComment'],
+          ],
+        },
       ],
     });
 
@@ -163,6 +186,29 @@ userDetailsController.get('/single-user', isAuth, async (req, res, next) => {
           as: 'details',
           attributes: { exclude: ['user_accounts_id', 'id'] },
         },
+        {
+          model: user_ads,
+          as: 'ads',
+          where: { status: 'approved' },
+          required: false,
+          attributes: [
+            'summary',
+            'description',
+            'category',
+            ['ad_region', 'adRegion'],
+            ['ad_subregion', 'adSubregion'],
+            ['ad_town', 'adTown'],
+            ['ad_id', 'adId'],
+            'images',
+            'status',
+            'street',
+            ['extra_fields', 'extraFields'],
+            ['creation_date', 'creationDate'],
+            ['expiration_date', 'expirationDate'],
+            'tags',
+            ['admin_comment', 'adminComment'],
+          ],
+        },
       ],
     });
 
@@ -174,7 +220,10 @@ userDetailsController.get('/single-user', isAuth, async (req, res, next) => {
 
     details.age = ageCalculate(details.birthDate);
 
-    res.status(200).json({ message: 'User data retrieved successfully.', user: { email: user.dataValues.email, enabled: user.dataValues.enabled, details } });
+    res.status(200).json({
+      message: 'User data retrieved successfully.',
+      user: { email: user.dataValues.email, enabled: user.dataValues.enabled, details, ads: user.dataValues.ads },
+    });
   } catch (err) {
     next(err);
   }

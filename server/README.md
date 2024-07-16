@@ -235,6 +235,8 @@ When the server starts for the first time in a development environment, a demo u
     "errors": {}
     ```
 
+  - **/ads/update-expiration-date/:adId**: This endpoint sets the expiration date of an AD to 30 days from the current date. It requires the user to be logged in and the AD's ID to be provided in the URL path. Example: http://localhost:8080/ads/update-expiration-date/123 - sets the expiration date to 30 days from the current date on ad with id 123.
+
 ## Testing
 
 Testing is planned and will be documented in the future.

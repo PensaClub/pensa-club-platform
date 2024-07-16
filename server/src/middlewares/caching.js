@@ -27,6 +27,7 @@ module.exports = function memoryCache(req, res, next) {
     next();
   }
 };
+// ACCOUNTS -------------------------------------------------------------------------------------------
 
 eventEmitter.on('accountsUpdated', (data) => {
   const oldValue = cache.get('/user/all-users');
@@ -38,35 +39,64 @@ eventEmitter.on('accountsUpdated', (data) => {
   }
 });
 
-eventEmitter.on('adsApproved', (data) => {
-  const oldValueApproved = cache.get('ads/approved-ads');
-  const oldValueUnapproved = cache.get('ads/unapproved-ads');
+// ADS ------------------------------------------------------------------------------------------------
 
-  let approvedObj = oldValueApproved ? JSON.parse(oldValueApproved) : { ads: [] };
-  let unapprovedObj = oldValueUnapproved ? JSON.parse(oldValueUnapproved) : { ads: [] };
+eventEmitter.on('adsCreated', (data) => {
+  const oldValue = cache.get(`ads/unapproved-ads`);
+  const object = oldValue ? JSON.parse(oldValue) : { ads: [] };
+  object.ads.push(data);
+  cache.set(`ads/unapproved-ads`, JSON.stringify(object), stdTTL);
+});
 
-  approvedAd = unapprovedObj.ads.filter((obj) => obj.id == data.id);
-  if (approvedAd.length !== 0) {
-    unapprovedObj = unapprovedObj.ads.filter((obj) => obj.id != data.id);
-    approvedObj.ads.push(approvedAd);
-    cache.set('ads/approved-ads', JSON.stringify(approvedObj), stdTTL);
-    cache.set('ads/unapproved-ads', JSON.stringify(unapprovedObj), stdTTL);
+eventEmitter.on('adsUpdated', (data, identifier) => {
+  const oldValue = cache.get(`ads/${identifier}-ads`);
+  if (oldValue) {
+    if (identifier === 'unapproved') {
+      const object = JSON.parse(oldValue);
+      const index = object.ads.findIndex((obj) => obj.id == data.id);
+      index !== -1 ? (object.ads[index] = data) : object.ads.push(data);
+      cache.set(`ads/${identifier}-ads`, JSON.stringify(object), stdTTL);
+    } else {
+      const unapprovedValue = cache.get(`ads/unapproved-ads`);
+      let unapprovedObj = unapprovedValue ? JSON.parse(unapprovedValue) : { ads: [] };
+      let approvedObj = JSON.parse(oldValue);
+
+      approvedObj.ads = approvedObj.ads.filter((obj) => obj.id != data.id);
+      unapprovedObj.ads.push(data);
+      cache.set('ads/approved-ads', JSON.stringify(approvedObj), stdTTL);
+      cache.set('ads/unapproved-ads', JSON.stringify(unapprovedObj), stdTTL);
+    }
   }
 });
 
-eventEmitter.on('adsUpdated', (data, identifier = 'approved') => {
-  const oldValue = cache.get(`ads/${identifier}-ads`);
-  const object = oldValue ? JSON.parse(oldValue) : { ads: [] };
-  const index = object.ads.findIndex((obj) => obj.id == data.id);
-  index !== -1 ? (object.ads[index] = data) : object.ads.push(data);
-  cache.set(`ads/${identifier}-ads`, JSON.stringify(object), stdTTL);
-});
-
-eventEmitter.on('adsDeleted', (data, identifier = 'approved') => {
+eventEmitter.on('adsDeleted', (data, identifier) => {
   const oldValue = cache.get(`ads/${identifier}-ads`);
   if (oldValue) {
     const object = JSON.parse(oldValue);
-    object = object.filter(obj => obj.id !== data.id);
+    object.ads = object.ads.filter((obj) => obj.id != data.id);
     cache.set(`ads/${identifier}-ads`, JSON.stringify(object), stdTTL);
+  }
+});
+
+eventEmitter.on('adsStatusUpdate', (data, newStatus) => {
+  const oldValueApproved = cache.get('ads/approved-ads');
+  const oldValueUnapproved = cache.get('ads/unapproved-ads');
+  let approvedObj = oldValueApproved ? JSON.parse(oldValueApproved) : { ads: [] };
+  let unapprovedObj = oldValueUnapproved ? JSON.parse(oldValueUnapproved) : { ads: [] };
+
+  const updateCache = (approvedObj, unapprovedObj) => {
+    cache.set('ads/approved-ads', JSON.stringify(approvedObj), stdTTL);
+    cache.set('ads/unapproved-ads', JSON.stringify(unapprovedObj), stdTTL);
+  };
+
+  if (newStatus === 'approved') {
+    unapprovedObj.ads = unapprovedObj.ads.filter((obj) => obj.id != data.id);
+    approvedObj.ads.push(data);
+    updateCache(approvedObj, unapprovedObj);
+  } else if (newStatus === 'pending' || newStatus === 'denied') {
+    approvedObj.ads = approvedObj.ads.filter((obj) => obj.id != data.id);
+    unapprovedObj.ads = unapprovedObj.ads.filter((obj) => obj.id != data.id);
+    unapprovedObj.ads.push(data);
+    updateCache(approvedObj, unapprovedObj);
   }
 });
