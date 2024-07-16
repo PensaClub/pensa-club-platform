@@ -246,7 +246,27 @@ input[type="number"] {
     padding: 1em 1.8em;
     border: 4px solid var(--button-bg);
 }
+.remove-image{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+}
 
+.remove-image:hover {
+    border: 2px solid var(--brown);
+    background-color: rgba(255, 0, 0, 0.8);
+}
 @media (min-width: 768px) and (max-width: 1199px) {
     .ad-card-create {
         max-width: 980px;
