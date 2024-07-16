@@ -239,10 +239,10 @@ export const MapEditor = ({ filteredUsers }) => {
 
                         <div className='ad-scroll'>
                             {selectedUser.details.ads && selectedUser.details.ads.length > 0 ? selectedUser.details.ads.map(ad => (
-                                <div key={ad.id} className="ad-map">
-                                    <img src={ad.img} alt="ad-img" />
+                                <div key={ad.adId} className="ad-map">
+                                    <img src={ad.imageUrl} alt="ad-img" />
                                     <div className="ad-desc">
-                                        <h3>{ad.title}</h3>
+                                        <h3>{ad.summery}</h3>
                                         <p>{ad.description}</p>
                                     </div>
                                     <div className="color-lines"></div>
