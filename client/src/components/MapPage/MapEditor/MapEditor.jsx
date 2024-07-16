@@ -242,7 +242,7 @@ export const MapEditor = ({ filteredUsers }) => {
                                 <div key={ad.adId} className="ad-map">
                                     <img src={ad.imageUrl} alt="ad-img" />
                                     <div className="ad-desc">
-                                        <h3>{ad.summery}</h3>
+                                        <h3>{ad.summary}</h3>
                                         <p>{ad.description}</p>
                                     </div>
                                     <div className="color-lines"></div>
