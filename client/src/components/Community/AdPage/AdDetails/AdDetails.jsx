@@ -47,8 +47,10 @@ export const AdDetails = () => {
                 </p>{' '}
               </div>
               <h2 className="ads-details-back">
+                <Link to="/craigslist">
                 <FontAwesomeIcon icon={faChevronLeft} />{' '}
                 <strong>Всички обяви</strong>
+                </Link>
               </h2>
               <section className="ads-details-main">
                 <div className="ads-details-container">
