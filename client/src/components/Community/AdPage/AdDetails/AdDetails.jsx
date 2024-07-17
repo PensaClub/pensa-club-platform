@@ -36,8 +36,8 @@ export const AdDetails = () => {
       <section className="background-ads-details">
         <section className="ads-details-page">
           <HeaderCommunity />
-          <section className="main-community">
-            <div className="hero-bg"></div>
+          <section className="main-details">
+            <div className="hero-bg-details"></div>
             <div className="hero-section-details">
               <h1>{t('community.community')}</h1>
               {/* <SearchBar /> */}
@@ -78,13 +78,13 @@ export const AdDetails = () => {
                       <p>Дарявам</p>
                     </div>
                     <div className="ads-details-info">
-                      <h3 className="title-card">Фотоапарат</h3>
+                      <h3 className="title-details">Фотоапарат</h3>
 
                       <p className="ads-details-data">
                         {t('community.validate_until')}:{''}
                         <span> 12 август 2024</span>
                       </p>
-                      <section className="user-info-container">
+                      <section className="user-info-details">
                         <div className="ads-details-user-info">
                           <div className="ads-details-username">
                             <img src={'/images/homePage/avatar2.png'} />
