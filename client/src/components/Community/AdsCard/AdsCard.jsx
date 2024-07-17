@@ -38,7 +38,7 @@ export const AdsCard = ({ ads, isLoading }) => {
     return (
         <>
             <section className="ads-main">
-                {ads.result.map(ad => (
+                {ads?.result.map(ad => (
                     <div key={ad.adId} className="ads-card">
                         <div className="img-ads" onClick={() => handleImageClick(ad.images[0].imageURL)}>
                             <img src={ad.images[0].imageURL} alt={ad.summary} />
