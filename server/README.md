@@ -141,15 +141,12 @@ When the server starts for the first time in a development environment, a demo u
   - **/user/update-details** : This endpoint updates an existing user's profile. It requires the specific field to be updated, for example, `"workOptions": ["Doctor", "Lawyer"]` to update the work options of the user.
   - **/user/single-user** : This endpoint fetches a single registered user in the system.
 
-- **_userDetailsController_** :
+- **_adsController_** :
 
-  - **/ads/approved-ads** : Used to retrieve all approved ads. It can be accessed by any authenticated user.
-  - **/ads/unapproved-ads** : Used to retrieve all unapproved ads. It can be accessed by admins only.
-  - **/ads/user-ads** : Used to retrieve all ads of an user by providing its email address in the request body.
-  - **/ads/ad-approve** : Used to approve an ad by providing its id in the request body. It can be accessed by admins only.
-  - **/ads/ad-delete** : Used to delete an ad by providing its id in the request body. It can be accessed by admins and the ad's creator only.
-  - **/ads/ad-edit** : Used to...
-  - **/ads/ad-create** : Used to create an advertisement with all the necessary details. It allows users to input comprehensive information about the ad, such as the title, description, category, town, address and images.
+  - **/ads/approved-ads/:userId?** : Used to retrieve all approved ads of a single user by providing user id in the params. If there is no id provided it retrieves the approved ads of all users. This endpoint can be accessed by any authenticated user.
+  - **/ads/unapproved-ads** : : Used to retrieve all unapproved ads of a single user by providing user id in the params. If there is no id provided it retrieves the unapproved ads of all users. This endpoint can be accessed by admins only.
+  - **/ads/user-ads** : Used to retrieve all ads of an user by providing its email address in the request body. This endpoint can be accessed by any authenticated user.
+  - **/ads/ad-create** : Used to create an advertisement with all the necessary details. It allows users to input comprehensive information about the ad, such as the title, description, category, region, subregion, town, and images.
 
     Example of successful ad creation via postman:
 
@@ -174,7 +171,10 @@ When the server starts for the first time in a development environment, a demo u
     }
     ```
 
-  - **/ads/ad-edit**: This endpoint updates an existing advertisement. It allows for updating one or many fields of the ad, and requires the ad's ID to be provided.
+  - **/ads/ad-delete** : Used to delete an ad by providing its id in the request body. This endpoint can be accessed by admins and the ad's creator only.
+  - **/ads/ad-edit** : Used to edit an ad by providing its id and the fields to be edited with their new values in the request body. Status cannot be changed through this endpoint and after every successful edit the ad status is updated to pending (for review). This endpoint can be accessed by any authenticated users.
+  - **/ads/ad-update-status** : Used to update the status of ad by providing its id in the request body and the new status as 'newStatus'.
+    If the new status is denied, it also requires an admin comment as 'adminComment' (text explanation why the ad is denied). This endpoint can be accessed by admins only.
   - **/ads/ads-search**: This endpoint provides search functionality.
 
     Date must be in YYYY-MM-DD format, category must be one of the following - `'recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'`.
