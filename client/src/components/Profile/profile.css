@@ -305,7 +305,8 @@
   text-shadow: var(--text-shadow);
 }
 
-.announced .user-data-ads .ads-elipse {
+.announced .user-data-ads .ads-elipse,
+.announced .user-data-ads .ads-data-elipse {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -319,6 +320,12 @@
   border-radius: 80px;
   color: #1F372A;
   margin-bottom: 0.5rem;
+}
+
+.announced .user-data-ads .elipse.price {
+  background-color: #1F372A;
+  color: #fff;
+  font-size:x-large;
 }
 
 .ads-btns {
