@@ -79,6 +79,11 @@ export const AdDetails = () => {
                     </div>
                     <div className="ads-details-info">
                       <h3 className="title-details">Фотоапарат</h3>
+                      <div className="subinfo-ads">
+                                <p>#фотография</p>
+                                <p>София</p> {/* here is*/}
+                                {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
+                            </div>
 
                       <p className="ads-details-data">
                         {t('community.validate_until')}:{''}
