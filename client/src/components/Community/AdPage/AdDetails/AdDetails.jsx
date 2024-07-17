@@ -40,7 +40,7 @@ export const AdDetails = () => {
             <div className="hero-bg-details"></div>
             <div className="hero-section-details">
               <h1>{t('community.community')}</h1>
-              {/* <SearchBar /> */}
+                <SearchBar />
               <div className="ad-details-back-phone">
                 <p>
                   <FontAwesomeIcon icon={faCaretLeft} />
@@ -80,10 +80,10 @@ export const AdDetails = () => {
                     <div className="ads-details-info">
                       <h3 className="title-details">Фотоапарат</h3>
                       <div className="subinfo-ads">
-                                <p>#фотография</p>
-                                <p>София</p> {/* here is*/}
-                                {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
-                            </div>
+                        <p>#фотография</p>
+                        <p>София</p> {/* here is*/}
+                        {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
+                      </div>
 
                       <p className="ads-details-data">
                         {t('community.validate_until')}:{''}

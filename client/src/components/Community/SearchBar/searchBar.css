@@ -40,6 +40,7 @@
 }
 
 .search-bar-commun {
+    top: 34vh;
     margin: 2em auto;
     display: flex;
     align-items: center;
@@ -50,7 +51,13 @@
     max-width: 310px;
     border: 2px var(--green-cm-light) solid;
     border-radius: var(--radius-input);
+    z-index: 100;
 
+}
+
+.search-bar-commun p {
+    display: none;
+    color: var(--green-cm);
 }
 
 .divider {
@@ -91,7 +98,7 @@
 
 @media (min-width: 768px) and (max-width: 1199px) {
     .search-bar-commun {
-        max-width: 75%;
+        max-width: 60%;
 
     }
 
@@ -187,6 +194,10 @@
 
     .after-header {
         display: none;
+    }
+
+    .search-bar-commun p {
+        display: block;
     }
 
 }

@@ -123,7 +123,7 @@ export const SearchBar = () => {
     <>
       <div className="search-bar-commun">
         <div className="icons-com" onClick={() => setIsSearchWhatOpen(true)}>
-          {/* <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" /> */}
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" />
           <p>
             {filters.tags || filters.category !== ''
               ? `${filters.tags} ${
