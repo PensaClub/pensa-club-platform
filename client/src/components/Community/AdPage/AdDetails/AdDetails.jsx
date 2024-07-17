@@ -43,7 +43,7 @@ export const AdDetails = () => {
                 <SearchBar />
               <div className="ad-details-back-phone">
                 <p>
-                  <FontAwesomeIcon icon={faCaretLeft} />
+                <Link to="/craigslist"><FontAwesomeIcon icon={faCaretLeft} /> </Link>
                 </p>{' '}
               </div>
               <h2 className="ads-details-back">
