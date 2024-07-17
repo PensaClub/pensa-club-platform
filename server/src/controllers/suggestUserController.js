@@ -31,7 +31,7 @@ suggestUserController.post('/', async (req, res, next) => {
   }
 });
 
-suggestUserController.get('/resolved',rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
+suggestUserController.get('/resolved', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
   try {
     const userData = await user_suggest.findAll({
       where: { resolved: true },
@@ -46,12 +46,12 @@ suggestUserController.get('/resolved',rbac.checkPermission('approve_record'), is
     next(err);
   }
 });
-suggestUserController.get('/unresolved',rbac.checkPermission('approve_record'), isAuth, async (req, res, next) => {
+suggestUserController.get('/unresolved', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
   try {
     const userData = await user_suggest.findAll({
       where: { resolved: false },
     });
-    
+
     if (userData.length === 0) {
       return res.status(404).json({ message: 'No unresolved suggestions found' });
     }
@@ -62,19 +62,20 @@ suggestUserController.get('/unresolved',rbac.checkPermission('approve_record'), 
   }
 });
 
-suggestUserController.post('/delete', rbac.checkPermission('delete_record'), isAuth, async (req, res, next) => {
+suggestUserController.post('/delete', isAuth, rbac.checkPermission('delete_record'), async (req, res, next) => {
   try {
     const { id } = req.body;
     const entry = await user_suggest.findOne({ where: { id } });
     if (!entry) {
-      res.status(400).json({ message: "ID doesn't match an existing entry." });    }
-    
-      await entry.destroy();
+      res.status(400).json({ message: "ID doesn't match an existing entry." });
+    }
 
-      eventEmitter.emit('entryDeleted', entry);
+    await entry.destroy();
 
-      res.status(200).json({ message: 'Suggestion has been deleted successfully.' });
-    
+    eventEmitter.emit('entryDeleted', entry);
+
+    res.status(200).json({ message: 'Suggestion has been deleted successfully.' });
+
   } catch (err) {
     next(err);
   }
