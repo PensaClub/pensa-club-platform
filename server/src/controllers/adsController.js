@@ -34,14 +34,16 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   }
 });
 
-adsController.get('/approved-ads', isAuth, memoryCache, async (req, res, next) => {
+adsController.get('/approved-ads/:userId?', isAuth, memoryCache, async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.params.userId;
 
     const whereCondition = {
       status: 'approved',
-      user_id: userId,
     };
+    if (userId) {
+      whereCondition.user_id = Number(userId);
+    }
 
     const ads = await user_ads.findAll({ where: whereCondition });
 
@@ -55,13 +57,22 @@ adsController.get('/approved-ads', isAuth, memoryCache, async (req, res, next) =
   }
 });
 
-adsController.get('/unapproved-ads', isAuth, rbac.checkPermission('approve_record'), memoryCache, async (req, res, next) => {
+adsController.get('/unapproved-ads/:userId?', isAuth, rbac.checkPermission('approve_record'), memoryCache, async (req, res, next) => {
   try {
+    const userId = req.params.userId;
+
+    const whereCondition = {
+      status: { [Op.ne]: 'approved' },
+    };
+
+    if (userId) {
+      whereCondition.user_id = Number(userId);
+    }
+
     const ads = await user_ads.findAll({
-      where: {
-        status: { [Op.ne]: 'approved' },
-      },
+      whereCondition
     });
+
     const mappedAds = ads.map((ad) => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
   } catch (err) {
