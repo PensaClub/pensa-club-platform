@@ -144,7 +144,7 @@ When the server starts for the first time in a development environment, a demo u
 - **_adsController_** :
 
   - **/ads/approved-ads/:userId?** : Used to retrieve all approved ads of a single user by providing user id in the params. If there is no id provided it retrieves the approved ads of all users. This endpoint can be accessed by any authenticated user.
-  - **/ads/unapproved-ads** : : Used to retrieve all unapproved ads of a single user by providing user id in the params. If there is no id provided it retrieves the unapproved ads of all users. This endpoint can be accessed by admins only.
+  - **/ads/unapproved-ads/:userId?** : : Used to retrieve all unapproved ads of a single user by providing user id in the params. If there is no id provided it retrieves the unapproved ads of all users. This endpoint can be accessed by admins only.
   - **/ads/user-ads** : Used to retrieve all ads of an user by providing its email address in the request body. This endpoint can be accessed by any authenticated user.
   - **/ads/ad-create** : Used to create an advertisement with all the necessary details. It allows users to input comprehensive information about the ad, such as the title, description, category, region, subregion, town, and images.
 
