@@ -128,7 +128,7 @@ export const CommunityPage = () => {
                         <div className="hero-bg"></div>
                         <div className="hero-section-commun">
                             <h1>{t('community.community')}</h1>
-                            <div className="search-bar-commun">
+                            <div className="search-bar-commun-s">
                                 <div className="icons-com" onClick={() => setIsSearchWhatOpen(true)}>
                                     <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" />
                                     <p>

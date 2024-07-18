@@ -39,7 +39,7 @@
     display: none;
 }
 
-.search-bar-commun {
+.search-bar-commun-s {
     margin: 2em auto;
     display: flex;
     align-items: center;
@@ -89,8 +89,8 @@
     margin-left: 1.5em;
 }
 .reset-icon {
-    margin-left: 4px;
-    font-size:calc(var(--xs-font-size) + 4px);
+    margin-left: 2px;
+    font-size:calc(var(--xs-font-size) + 3px);
     cursor: pointer;
 
     color: var(--green-text)!important;
@@ -135,7 +135,7 @@
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
-    .search-bar-commun {
+    .search-bar-commun-s {
         max-width: 75%;
 
     }
@@ -201,7 +201,7 @@
         padding: initial;
     }
 
-    .search-bar-commun {
+    .search-bar-commun-s {
         position: absolute;
         width: 1200px;
         max-width: initial;
