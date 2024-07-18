@@ -121,6 +121,37 @@ export const CommunityProvider = ({ children }) => {
             return response;
         } catch (e) {
             notify('error')
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const deleteAd = async (id) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.deleteAd(id);
+            setIsLoading(false);
+            notify('success-delete-ads')
+            return response;
+        } catch (e) {
+            notify('error')
+
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const editAd = async (id) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.editAd(id);
+            setIsLoading(false);
+            notify('success-edit-ads')
+            return response;
+        } catch (e) {
+            notify('error')
 
             showErrorAndSetTimeouts(e.message);
             throw e;
@@ -174,6 +205,9 @@ export const CommunityProvider = ({ children }) => {
         searchCriteria,
         isLoading,
         createAd,
+        getMyAds,
+        deleteAd,
+        editAd,
         setTowns,
         fetchSearchCriteria,
         getMyAds,
