@@ -238,7 +238,9 @@
     "password_error": "Password must be at least 8 characters long and contain at least one letter and one number",
     "new_password_error": "New password must be at least 8 characters long and contain at least one letter and one number",
     "password_match": "Passwords don't match",
-    "logout": "Logout"
+    "logout": "Logout",
+    "admin_dashboard": "Admin Dashboard",
+    "pending_announcements":"Pending Announcements"
   },
   "community": {
     "community": "Community",

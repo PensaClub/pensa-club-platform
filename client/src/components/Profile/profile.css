@@ -129,7 +129,10 @@
   cursor: pointer;
   pointer-events: auto;
 }
-
+.admin-dashboard h3{
+  margin-top: 1em;
+  margin-bottom: 1rem;
+}
 @media (max-width: 800px) {
   .menu-toggle {
     display: block;
