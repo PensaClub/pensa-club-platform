@@ -5,7 +5,7 @@ import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
 import '../../CommunityFooter/communityFooter.css';
 import { useCommunityContext } from '../../../contexts/CommunityContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus,faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useFormCreate } from '../../../hooks/useFormCreate';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../contexts/UserContext';
@@ -18,6 +18,7 @@ import { TagInput } from './TagInput';
 export const CreateAd = () => {
     const { t, i18n } = useTranslation();
     const [fieldDefinitions, setFieldDefinitions] = useState({});
+    // eslint-disable-next-line no-unused-vars
     const [towns, setTowns] = useState([]);
     const [settlements, setSettlements] = useState([]);
     const [tags, setTags] = useState([]);
@@ -131,7 +132,7 @@ export const CreateAd = () => {
         if (selectedRegion && selectedSubregion) {
             fetchTowns(selectedRegion, selectedSubregion).then(setSettlements);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSubregion, selectedRegion]);
 
     const handleNavigate = () => navigate('/craigslist');
@@ -147,7 +148,7 @@ export const CreateAd = () => {
 
         return [year, month, day].join('-');
     };
-    const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
+    const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange, handleRemoveImage } = useFormCreate(initialValues, async (formData) => {
         const updatedFormData = {
             ...formData,
             adRegion: selectedRegion || profileData.details.region,
@@ -171,43 +172,43 @@ export const CreateAd = () => {
     const renderFields = () => {
         const fields = fieldDefinitions.fields?.[values.category] || [];
         return fields.length > 0 ? (
-          <div className="additional-fields-price">
-            {fields.map((field, index) => (
-              <div key={index} className="form-group">
-                <label htmlFor={field.name}>{t(`ads.${field.subname}`)}</label>
-                {field.type === 'date' ? (
-                  <DatePicker
-                    selected={values.extraFields[field.name]}
-                    onChange={(date) => setValues((state) => ({
-                      ...state,
-                      extraFields: { ...state.extraFields, [field.name]: date },
-                    }))}
-                    onBlur={onBlurHandler}
-                    dateFormat="YYYY-MM-DD"
-                    id={field.name}
-                    name={field.name}
-                    required={field.required}
-                  />
-                ) : (
-                  <input
-                    type={field.type}
-                    id={field.name}
-                    name={field.name}
-                    value={values.extraFields[field.name] || ''}
-                    onChange={onChangeHandler}
-                    onBlur={onBlurHandler}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                  />
-                )}
-                {errors.extraFields && errors.extraFields[field.name] && (
-                  <p className="error">{errors.extraFields[field.name]}</p>
-                )}
-              </div>
-            ))}
-          </div>
+            <div className="additional-fields-price">
+                {fields.map((field, index) => (
+                    <div key={index} className="form-group">
+                        <label htmlFor={field.name}>{t(`ads.${field.subname}`)}</label>
+                        {field.type === 'date' ? (
+                            <DatePicker
+                                selected={values.extraFields[field.name]}
+                                onChange={(date) => setValues((state) => ({
+                                    ...state,
+                                    extraFields: { ...state.extraFields, [field.name]: date },
+                                }))}
+                                onBlur={onBlurHandler}
+                                dateFormat="yyyy-MM-dd"
+                                id={field.name}
+                                name={field.name}
+                                required={field.required}
+                            />
+                        ) : (
+                            <input
+                                type={field.type}
+                                id={field.name}
+                                name={field.name}
+                                value={values.extraFields[field.name] || ''}
+                                onChange={onChangeHandler}
+                                onBlur={onBlurHandler}
+                                placeholder={field.placeholder}
+                                required={field.required}
+                            />
+                        )}
+                        {errors.extraFields && errors.extraFields[field.name] && (
+                            <p className="error">{errors.extraFields[field.name]}</p>
+                        )}
+                    </div>
+                ))}
+            </div>
         ) : null;
-      };
+    };
 
     return (
         <>
@@ -265,7 +266,7 @@ export const CreateAd = () => {
                                     <p className='desc-sub-text'>{t('ads.sub_text-two')}</p>
                                     {errors.description && <p className="error">{errors.description}</p>}
                                 </div>
-                                <TagInput tags={tags} setTags={setTags} t={t}/>
+                                <TagInput tags={tags} setTags={setTags} t={t} />
                                 <div className="address-check">
                                     <div className="ad-address">
                                         <div className="ad-regions">
@@ -374,10 +375,16 @@ export const CreateAd = () => {
                                                     type="file"
                                                     accept="image/*"
                                                     onChange={handleImageChange}
+                                                    data-index={index}
                                                     multiple
                                                 />
                                                 {image ? (
-                                                    <img src={image} alt={`Upload ${index + 1}`} />
+                                                    <>
+                                                        <img src={image} alt={`Upload ${index + 1}`} />
+                                                        <button type="button" className="remove-image" onClick={() => handleRemoveImage(index)}>
+                                                        <FontAwesomeIcon icon={faTimes} />
+                                                        </button>
+                                                    </>
                                                 ) : (
                                                     <FontAwesomeIcon icon={faPlus} className="plus-icon-ad" />
                                                 )}

@@ -32,6 +32,7 @@ import { ResetPasswordPage } from './components/ForgetPassword/ResetPasswordPage
 import { MenuCommunity } from './components/Community/MenuCommunity/MenuCommunity.jsx';
 import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCommunity.jsx';
 import { SuggestUserProvider } from './components/contexts/SuggestUserContext.jsx';
+import { AdDetails } from './components/Community/AdPage/AdDetails/AdDetails.jsx';
 
 function App() {
   const location = useLocation();
@@ -56,6 +57,8 @@ function App() {
                   position="bottom-right"
                 />
                 <Routes>
+                  <Route path="/ad/details" element={<AdDetails />} />
+
                   <Route path="/" element={<Home />} />
                   <Route path="/server-error" element={<ServerError />} />
                   <Route path="/" element={<Home />} />

@@ -49,32 +49,47 @@ const onBlurHandler = (e) => {
     }));
   }
 };
+const handleImageChange = (event) => {
+  const files = event.target.files;
+  const newImages = [...images];
+  const newImageFiles = [...imageFiles];
+  const targetIndex = parseInt(event.target.dataset.index, 10); 
 
-  const handleImageChange = (event) => {
-    const files = event.target.files;
-    const newImages = [...images];
-    const newImageFiles = [...imageFiles];
-
-    for (let i = 0; i < files.length; i++) {
+  for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (!file) continue;
 
       if (!allowedTypes.includes(file.type)) {
-        console.error(`Type ${file.type} is not allowed! Allowed types are png/jpeg/jpg`);
-        continue;
+          console.error(`Type ${file.type} is not allowed! Allowed types are png/jpeg/jpg`);
+          continue;
       }
 
-      const emptyIndex = newImages.findIndex(image => image === null);
-      if (emptyIndex !== -1) {
-        newImages[emptyIndex] = URL.createObjectURL(file);
-        newImageFiles[emptyIndex] = file;
+      if (!isNaN(targetIndex) && i === 0) { 
+          newImages[targetIndex] = URL.createObjectURL(file);
+          newImageFiles[targetIndex] = file;
+      } else {
+          const emptyIndex = newImages.findIndex(image => image === null);
+          if (emptyIndex !== -1) {
+              newImages[emptyIndex] = URL.createObjectURL(file);
+              newImageFiles[emptyIndex] = file;
+          }
       }
-    }
+  }
 
-    setImages(newImages);
-    setImageFiles(newImageFiles);
-  };
+  setImages(newImages);
+  setImageFiles(newImageFiles);
+};
 
+const handleRemoveImage = (index) => {
+  const newImages = [...images];
+  const newImageFiles = [...imageFiles];
+
+  newImages[index] = null;
+  newImageFiles[index] = null;
+
+  setImages(newImages);
+  setImageFiles(newImageFiles);
+};
   const handleTrimFields = () => {
     const trimmedValues = Object.keys(values).reduce((acc, key) => {
         if (key === 'extraFields') {
@@ -147,5 +162,6 @@ const onBlurHandler = (e) => {
     errors,
     images,
     handleImageChange,
+    handleRemoveImage
   };
 };

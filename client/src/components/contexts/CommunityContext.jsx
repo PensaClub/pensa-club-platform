@@ -116,9 +116,39 @@ export const CommunityProvider = ({ children }) => {
     const getMyAds = async (email) => {
         try {
             setIsLoading(true);
-            const response = await communityService.getMyAds(email);
+            const response = await communityService.getMyAds();
             setIsLoading(false);
-            notify('success-created')
+            return response;
+        } catch (e) {
+            notify('error')
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const deleteAd = async (id) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.deleteAd(id);
+            setIsLoading(false);
+            notify('success-delete-ads')
+            return response;
+        } catch (e) {
+            notify('error')
+
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const editAd = async (id) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.editAd(id);
+            setIsLoading(false);
+            notify('success-edit-ads')
             return response;
         } catch (e) {
             notify('error')
@@ -142,7 +172,22 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
+
+    const updateExpirationDate = async (adId) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.updateExpirationDate(adId);
+            setIsLoading(false);
+            return response;
+        } catch (e) {
+            notify('error')
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
     
     useEffect(() => {
         fetchRegions();
@@ -160,12 +205,16 @@ export const CommunityProvider = ({ children }) => {
         searchCriteria,
         isLoading,
         createAd,
+        getMyAds,
+        deleteAd,
+        editAd,
         setTowns,
         fetchSearchCriteria,
         getMyAds,
         searchAds,
         TownSearch,
         townsSearch,
+        updateExpirationDate
       }
     
     return (

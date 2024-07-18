@@ -6,7 +6,7 @@ body.active-sidebar .leaflet-container {
 
 body.active-sidebar .sidebar-map {
     transform: translateX(0);
-    z-index: 1050;
+    z-index: 1006;
     transition: transform 1.2s ease-in-out;
 }
 
@@ -19,7 +19,7 @@ body.active-sidebar .sidebar-map {
     height: 100vh;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
-    z-index: 9999;
+    z-index: 999;
     transform: translateY(100%);
     display: flex;
     flex-direction: column;
@@ -121,10 +121,14 @@ body.active-sidebar .sidebar-map {
 
 .ad-map {
     display: flex;
-    align-items: center;
-    gap: 2em;
+    align-items: flex-start;
+    /* gap: 2em; */
     flex-direction: row;
     margin: 20px;
+    border-radius: var(--radius);
+    background-color: var(--gravel);
+    position: relative;
+    box-shadow: var(--container-shadow);  
 }
 
 .ad-title {
@@ -159,9 +163,10 @@ body.active-sidebar .sidebar-map {
     text-align: center;
     display: flex;
     flex-direction: column;
+    margin: 1.5em auto;   
+    cursor: pointer;
+
 }
-
-
 
 .ad-scroll::-webkit-scrollbar {
     width: 10px;
@@ -178,22 +183,54 @@ body.active-sidebar .sidebar-map {
 }
 
 .ad-map img {
-    width: 100px;
-    height: auto;
-    object-fit: fill;
+    width: 160px;
+    height: 160px;
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+    object-fit: cover;
     overflow: hidden;
+    flex: 0 0 35%;
+    cursor: pointer;
+
 }
 
 .ad-map h3 {
     margin: 0;
-    font-size: 1.2em;
+    font-size: var(--s-font-size);
+    padding-bottom: 0.2em;
 }
-
+.ad-map h4 {
+    font-size:  var(--xs-font-size);
+    border-bottom: 2px solid var(--text-black);
+}
+.ad-map-valid{
+    padding-bottom: 0.4em;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-shadow: var(--text-shadow);
+    font-weight: 200;
+}
 .ad-map p {
     margin: 5px 0 0;
     font-size: 1em;
 }
-
+.ad-desc-map{
+   
+}
+.ad-category{
+    position: absolute;
+    border-radius: var(--radius-input);
+    right: 10px;
+    top: -10%;
+    background-color: var(--orange);
+    padding: 0.5em;
+    text-indent: initial;
+    color: white;
+    width: 70px;
+    text-align: center;
+    box-shadow: var(--container-shadow);
+}
 
 .active-sidebar .sidebar-map {
     width: 100%;
@@ -224,8 +261,6 @@ body.active-sidebar .sidebar-map {
     }
 }
 
-
-
 @media (min-width: 850px) {
     .sidebar-map {
         position: absolute;
@@ -255,7 +290,7 @@ body.active-sidebar .sidebar-map {
     }
 
     .user-map-img {
-        max-width: 220px;
+        max-width: 180px;
         width: 100%;
         height: auto;
         object-fit: fill;
