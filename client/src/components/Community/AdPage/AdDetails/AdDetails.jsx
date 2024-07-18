@@ -8,16 +8,14 @@ import {
   faChevronLeft,
   faCaretLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import { AdsCard } from '../../AdsCard/AdsCard';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ImageEnlarger } from '../../../ImageEnlarger/ImageEnlarger';
 import { SearchBar } from '../../SearchBar/SearchBar';
 
 export const AdDetails = () => {
-  const { t, i18n } = useTranslation();
-  const currentLanguage = i18n.language;
+  const { t } = useTranslation();
 
   const images = [
     '/images/homePage/avatar3.jpg',
@@ -49,7 +47,7 @@ export const AdDetails = () => {
               <h2 className="ads-details-back">
                 <Link to="/craigslist">
                 <FontAwesomeIcon icon={faChevronLeft} />{' '}
-                <strong>Всички обяви</strong>
+                <strong>{t('ads.all-ads')}</strong>
                 </Link>
               </h2>
               <section className="ads-details-main">
@@ -58,19 +56,19 @@ export const AdDetails = () => {
                     <Link>
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faPhone} className="icon" />
-                        <p>Обади се</p>
+                        <p>{t('ads.call')}</p>
                       </div>
                     </Link>
                     <Link>
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faEnvelope} className="icon" />
-                        <p>Изпрати съобщение</p>
+                        <p>{t('ads.send-message')}</p>
                       </div>
                     </Link>
                     <Link>
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faShareNodes} className="icon" />
-                        <p>Сподели</p>
+                        <p>{t('ads.share')}</p>
                       </div>
                     </Link>
                   </div>
@@ -103,14 +101,14 @@ export const AdDetails = () => {
                           <p>Интереси:</p>
                           <p>Умения:</p>
                           <Link>
-                            <span>Виж всички обяви на потребителя</span>
+                            <span>{t('ads.all-user-ads')}</span>
                           </Link>
                         </div>
                       </section>
                     </div>
                   </div>
                   <div className="ads-details-desc">
-                    <h3>Описание</h3>
+                    <h3>{t('ads.description')}</h3>
                     <hr />
                     <p>
                       Lorem ipsum dolor, sit amet consectetur adipisicing elit.

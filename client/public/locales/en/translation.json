@@ -295,7 +295,12 @@
     "view_more": "view more",
     "edit": "Edit",
     "delete": "Delete",
-    "no_ads": "You have no published ads"
+    "no_ads": "You have no published ads",
+    "all-ads": "All ads",
+    "call": "Call",
+    "send-message": "Message",
+    "share": "Share",
+    "all-user-ads": "See all ads from this user"
 
   },
   "notification": {
