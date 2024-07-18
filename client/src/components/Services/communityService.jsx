@@ -45,6 +45,12 @@ export const communityServiceFactory = (token) => {
 
             return requester.get(`${apiUrl}/ads/user-ads`, { email });
         },
+        deleteAd: async (id) => {
+            return requester.post(`${apiUrl}/ads/ad-delete`, { id });
+        },
+        editAd: async (id) => {
+            return requester.patch(`${apiUrl}/ads/ad-edit`, { id });
+        },
         searchAds: async (filters) => {
             const query = new URLSearchParams(filters).toString();
             return requester.get(`${apiUrl}/ads/ads-search?${query}`);

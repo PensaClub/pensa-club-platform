@@ -138,7 +138,7 @@ export const Profile = () => {
           <Route path='password' element={<ProfilePassword />} />
           <Route path='skills' element={<ProfileSkills />} />
           <Route path='workOptions' element={<ProfileWorks />} />
-          <Route path='announced' element={<ProfileAnnounced />} />
+          <Route path='announced' element={<ProfileAnnounced />} profileData={profileData}/>
           <Route path='interestOptions' element={<ProfileInterests />} />
         </Routes>
       </div>
