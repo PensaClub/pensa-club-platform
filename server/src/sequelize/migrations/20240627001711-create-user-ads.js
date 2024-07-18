@@ -75,7 +75,7 @@ module.exports = {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Municipality is required.',
+            msg: 'Subregion is required.',
           },
         },
       },
@@ -84,7 +84,7 @@ module.exports = {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Settlement is required.',
+            msg: 'Town is required.',
           },
         },
       },
@@ -162,6 +162,10 @@ module.exports = {
       },
       admin_comment: {
         type: DataTypes.STRING,
+        allowNull: true,
+      },
+      extra_fields: {
+        type: DataTypes.JSONB,
         allowNull: true,
       },
       createdAt: {

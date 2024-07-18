@@ -109,7 +109,20 @@
     "job-placeholder": "Search for jobs...",
     "interests": "Interests",
     "interests-placeholder": "Search for interests...",
-    "clear-filters": "Clear Filters"
+    "clear-filters": "Clear Filters",
+    "profession": "Profession",
+    "phone": "Phone",
+    "email": "Email",
+    "ads_by":"Ads by",
+    "no_ads": "No ads available",
+    "read_more": "Read more",
+    "close": "Close"
+
+  },
+  "notify_modal": {
+    "part1": "Please,",
+    "part2": "log in",
+    "part3": "to see the details."
   },
   "options": {
     "skills": {
@@ -283,25 +296,32 @@
     "add_photos": "Add Photos",
     "publish_btn": "Publish",
     "cancel_btn": "Cancel",
-    "sub_text-one":"to 32 characters",
-    "sub_text-two":"to 1000 characters",
-    "select_town" : "Select town",
+    "sub_text-one": "to 32 characters",
+    "sub_text-two": "to 1000 characters",
+    "select_town": "Select town",
     "ad_region": "Region",
-    "ad_municipality":  "Municipality",
-    "tags_ad":"Tags can be added by pressing Enter or Space.",
+    "ad_municipality": "Municipality",
+    "tags_ad": "Tags can be added by pressing Enter or Space.",
     "tags": "Tags",
     "max_tags": "Max Tags is 5",
-    "enter_tag":"Enter a Tag",
+    "enter_tag": "Enter a Tag",
     "view_more": "view more",
     "edit": "Edit",
     "delete": "Delete",
-    "no_ads": "You have no published ads",
     "all-ads": "All ads",
     "call": "Call",
     "send-message": "Message",
     "share": "Share",
-    "all-user-ads": "See all ads from this user"
-
+    "all-user-ads": "See all ads from this user",
+    "price_lv": "lv.",
+    "refresh": "The ad expires, if you want to renew the period, click ",
+    "refresh_here": "here",
+    "valid_until": "Valid until",
+    "pending_approval": "Pending approval",
+    "denied": "Denied",
+    "delete_ad": "Would you like to delete",
+    "admin_comment": "Note",
+    "no_ads": "You have no published ads"
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
@@ -309,6 +329,8 @@
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
     "success-created": "You have successfully created an ad!",
+    "success-delete-ads": "Successfully delete ad!",
+    "success-edit-ads": "Successfully edit ad!",
     "success-suggested": "You have successfully suggested a friend!",
     "error": "An error occured. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
@@ -331,18 +353,31 @@
       "games": "Games",
       "arbitration": "Arbitration",
       "all_menu":"All"
+    },
+      "months": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
        },
     "user-suggestion": {
-    "title": "Suggest a Friend",
-    "desc": "Leave here information about a friend of yours who would like to be part of PensaClub but needs assisstance with the registration",
-    "name": "Name",
-    "name-placeholder": "John Doe",
-    "phone": "Phone",
-    "message": "Message",
-    "message-placeholder": "Leave a short message here",
-    "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?"
-  }
-
+      "title": "Suggest a Friend",
+      "desc": "Leave here information about a friend of yours who would like to be part of PensaClub but needs assisstance with the registration",
+      "name": "Name",
+      "name-placeholder": "John Doe",
+      "phone": "Phone",
+      "message": "Message",
+      "message-placeholder": "Leave a short message here",
+      "refferer-name": "Your name",
+      "who-is-suggested": "Who are you suggesting?"
+    }
 }
 

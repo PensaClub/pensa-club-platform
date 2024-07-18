@@ -5,7 +5,7 @@ import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
 import '../../CommunityFooter/communityFooter.css';
 import { useCommunityContext } from '../../../contexts/CommunityContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus,faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useFormCreate } from '../../../hooks/useFormCreate';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../contexts/UserContext';
@@ -18,6 +18,7 @@ import { TagInput } from './TagInput';
 export const CreateAd = () => {
     const { t, i18n } = useTranslation();
     const [fieldDefinitions, setFieldDefinitions] = useState({});
+    // eslint-disable-next-line no-unused-vars
     const [towns, setTowns] = useState([]);
     const [settlements, setSettlements] = useState([]);
     const [tags, setTags] = useState([]);
@@ -38,21 +39,6 @@ export const CreateAd = () => {
         return language === 'bg' ? settlement.bg : settlement.en;
     };
 
-    const getAdRegionValue = (language, regionId) => {
-        const region = regions.find(region => region.id === regionId);
-        if (!region) return '';
-        return language === 'bg' ? region.bg : region.en;
-    };
-
-    const getAdSubregionValue = (language, regionId, subregionId) => {
-        const subregionList = subregions[regionId];
-        if (!subregionList) return '';
-        const subregion = subregionList.find(subregion => subregion.id === subregionId);
-
-        if (!subregion) return '';
-        return language === 'bg' ? subregion.bg : subregion.en;
-    };
-
     const initialValues = {
         adId: v4(),
         summary: '',
@@ -70,10 +56,6 @@ export const CreateAd = () => {
             eventEndDate: null,
         },
     };
-
-    // useEffect(() => {
-    //     fetchRegions();
-    // }, []);
 
     useEffect(() => {
         if (selectedRegion) {
@@ -102,6 +84,7 @@ export const CreateAd = () => {
 
         loadFieldDefinitions();
     }, []);
+
     useEffect(() => {
         const fetchData = async () => {
             const addressId = JSON.parse(localStorage.getItem('addressId'));
@@ -130,9 +113,9 @@ export const CreateAd = () => {
                         setSelectedTown(prev => prev || town.id);
                         setValues((state) => ({
                             ...state,
-                            adRegion: addressId.regionId ? getAdRegionValue(currentLanguage, addressId.regionId) : state.adRegion,
-                            adSubregion: addressId.municipalityId ? getAdSubregionValue(currentLanguage, addressId.regionId, addressId.municipalityId) : state.adSubregion,
-                            adTown: town ? getAdTownValue(currentLanguage, town) : state.adTown,
+                            adRegion: addressId.regionId,
+                            adSubregion: addressId.municipalityId,
+                            adTown: addressId.settlementId,
                         }));
                     }
                 } catch (error) {
@@ -149,25 +132,34 @@ export const CreateAd = () => {
         if (selectedRegion && selectedSubregion) {
             fetchTowns(selectedRegion, selectedSubregion).then(setSettlements);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSubregion, selectedRegion]);
 
     const handleNavigate = () => navigate('/craigslist');
+    const formatDateToYYYYMMDD = (date) => {
+        if (!date) return null;
+        const d = new Date(date);
+        let month = '' + (d.getMonth() + 1);
+        let day = '' + d.getDate();
+        const year = d.getFullYear();
 
-    const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange } = useFormCreate(initialValues, async (formData) => {
-        const region = regions.find(region => region.id === Number(formData.adRegion));
-        const subregion = subregions[selectedRegion]?.find(subregion => subregion.id === Number(formData.adSubregion));
-        const town = towns.find(town => town.id === Number(formData.adTown));
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
 
-        const regionName = region ? region[currentLanguage] : profileData.details.region;
-        const subregionName = subregion ? subregion[currentLanguage] : getAdSubregionValue(currentLanguage, selectedRegion, selectedSubregion)
-        const townName = town ? town[currentLanguage] : profileData.details.settlement;
+        return [year, month, day].join('-');
+    };
+    const { onChangeHandler, onBlurHandler, values, onSubmit, setValues, errors, images, handleImageChange, handleRemoveImage } = useFormCreate(initialValues, async (formData) => {
         const updatedFormData = {
             ...formData,
-            adRegion: regionName,
-            adSubregion: subregionName,
-            adTown: townName,
-            tags
+            adRegion: selectedRegion || profileData.details.region,
+            adSubregion: selectedSubregion || profileData.details.subregion,
+            adTown: selectedTown || profileData.details.settlement,
+            tags,
+            extraFields: {
+                ...formData.extraFields,
+                eventStartDate: formatDateToYYYYMMDD(formData.extraFields.eventStartDate),
+                eventEndDate: formatDateToYYYYMMDD(formData.extraFields.eventEndDate),
+            }
         };
 
         try {
@@ -180,44 +172,44 @@ export const CreateAd = () => {
     const renderFields = () => {
         const fields = fieldDefinitions.fields?.[values.category] || [];
         return fields.length > 0 ? (
-          <div className="additional-fields-price">
-            {fields.map((field, index) => (
-              <div key={index} className="form-group">
-                <label htmlFor={field.name}>{t(`ads.${field.subname}`)}</label>
-                {field.type === 'date' ? (
-                  <DatePicker
-                    selected={values.extraFields[field.name]}
-                    onChange={(date) => setValues((state) => ({
-                      ...state,
-                      extraFields: { ...state.extraFields, [field.name]: date },
-                    }))}
-                    onBlur={onBlurHandler}
-                    dateFormat="yyyy-MM-dd"
-                    id={field.name}
-                    name={field.name}
-                    required={field.required}
-                  />
-                ) : (
-                  <input
-                    type={field.type}
-                    id={field.name}
-                    name={field.name}
-                    value={values.extraFields[field.name] || ''}
-                    onChange={onChangeHandler}
-                    onBlur={onBlurHandler}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                  />
-                )}
-                {errors.extraFields && errors.extraFields[field.name] && (
-                  <p className="error">{errors.extraFields[field.name]}</p>
-                )}
-              </div>
-            ))}
-          </div>
+            <div className="additional-fields-price">
+                {fields.map((field, index) => (
+                    <div key={index} className="form-group">
+                        <label htmlFor={field.name}>{t(`ads.${field.subname}`)}</label>
+                        {field.type === 'date' ? (
+                            <DatePicker
+                                selected={values.extraFields[field.name]}
+                                onChange={(date) => setValues((state) => ({
+                                    ...state,
+                                    extraFields: { ...state.extraFields, [field.name]: date },
+                                }))}
+                                onBlur={onBlurHandler}
+                                dateFormat="yyyy-MM-dd"
+                                id={field.name}
+                                name={field.name}
+                                required={field.required}
+                            />
+                        ) : (
+                            <input
+                                type={field.type}
+                                id={field.name}
+                                name={field.name}
+                                value={values.extraFields[field.name] || ''}
+                                onChange={onChangeHandler}
+                                onBlur={onBlurHandler}
+                                placeholder={field.placeholder}
+                                required={field.required}
+                            />
+                        )}
+                        {errors.extraFields && errors.extraFields[field.name] && (
+                            <p className="error">{errors.extraFields[field.name]}</p>
+                        )}
+                    </div>
+                ))}
+            </div>
         ) : null;
-      };
-      
+    };
+
     return (
         <>
             <section className="ad-community-background">
@@ -274,7 +266,7 @@ export const CreateAd = () => {
                                     <p className='desc-sub-text'>{t('ads.sub_text-two')}</p>
                                     {errors.description && <p className="error">{errors.description}</p>}
                                 </div>
-                                <TagInput tags={tags} setTags={setTags} t={t}/>
+                                <TagInput tags={tags} setTags={setTags} t={t} />
                                 <div className="address-check">
                                     <div className="ad-address">
                                         <div className="ad-regions">
@@ -383,10 +375,16 @@ export const CreateAd = () => {
                                                     type="file"
                                                     accept="image/*"
                                                     onChange={handleImageChange}
+                                                    data-index={index}
                                                     multiple
                                                 />
                                                 {image ? (
-                                                    <img src={image} alt={`Upload ${index + 1}`} />
+                                                    <>
+                                                        <img src={image} alt={`Upload ${index + 1}`} />
+                                                        <button type="button" className="remove-image" onClick={() => handleRemoveImage(index)}>
+                                                        <FontAwesomeIcon icon={faTimes} />
+                                                        </button>
+                                                    </>
                                                 ) : (
                                                     <FontAwesomeIcon icon={faPlus} className="plus-icon-ad" />
                                                 )}
