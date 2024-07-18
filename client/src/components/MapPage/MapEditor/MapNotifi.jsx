@@ -1,10 +1,10 @@
-import './mapNotifyModal.css';
+import './mapNotifi.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { t } from 'i18next';
 
-export const MapNotifyModal = ({ onClose }) => {
+export const MapNotify = ({ onClose }) => {
 
     return (
         <div className="image-modal-overlay" onClick={onClose}>

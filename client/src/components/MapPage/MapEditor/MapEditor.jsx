@@ -7,12 +7,13 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import './mapEditor.css';
 import './sidebar.css';
 import './scrollModal.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MapNotifyModal } from './MapNotifyModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useAuthContext } from '../../contexts/UserContext';
+import { MapNotify } from './MapNotifi';
 
 const DefaultIcon = L.icon({
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -291,7 +292,7 @@ export const MapEditor = ({ filteredUsers }) => {
                 </div>
             )}
              {open && !isAuthentication && (
-                <MapNotifyModal
+                <MapNotify
                     onClose={closeNotify}
                 />
             )}

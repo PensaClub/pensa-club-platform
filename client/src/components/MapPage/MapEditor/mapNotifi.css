@@ -55,7 +55,7 @@
     text-decoration: underline;
 }
 
-@keyframes fadeIn {
+/* @keyframes fadeIn {
     from {
         opacity: 0;
     }
@@ -71,7 +71,7 @@
     to {
         transform: translateY(0);
     }
-}
+} */
 @media (min-width: 1200px) {
     .login-prompt p {
         font-size: var(--m-font-size);  
