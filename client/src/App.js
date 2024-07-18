@@ -57,8 +57,6 @@ function App() {
                   position="bottom-right"
                 />
                 <Routes>
-                  <Route path="/ad/details" element={<AdDetails />} />
-
                   <Route path="/" element={<Home />} />
                   <Route path="/server-error" element={<ServerError />} />
                   <Route path="/" element={<Home />} />
@@ -72,6 +70,7 @@ function App() {
                   <Route element={<AuthGuard />}>
                     <Route path="/ad" element={<AdPage />} />
                     <Route path="/ad/create" element={<CreateAd />} />
+                    <Route path="/ad/:adId" element={<AdDetails />} />
                     <Route path="/logout" element={<Logout />} />
                     <Route path="/profile/*" element={<Profile />} />
                   </Route>

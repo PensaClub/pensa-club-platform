@@ -45,6 +45,9 @@ export const communityServiceFactory = (token) => {
 
             return requester.get(`${apiUrl}/ads/user-ads`, { email });
         },
+        getAdById: async (id) => {
+            return requester.get(`${apiUrl}/ads/ad-details`, { id }); //TODO: replace with actual endpoint
+        },
         deleteAd: async (id) => {
             return requester.post(`${apiUrl}/ads/ad-delete`, { id });
         },

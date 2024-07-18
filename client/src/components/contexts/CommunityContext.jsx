@@ -127,6 +127,22 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
+
+    const getAdById = async (id) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getAdById(id);
+            setIsLoading(false);
+            return response;
+        } catch (e) {
+            notify('error')
+
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    }
     const deleteAd = async (id) => {
         try {
             setIsLoading(true);
