@@ -261,7 +261,11 @@
     "last_year": "Last Year",
     "specific_period": "Specific Period",
     "start_date": "Start Date",
-    "end_date": "End Date"
+    "end_date": "End Date",
+    "no_ads_found": "No ads found",
+    "no_ads_message": "It looks like there are no ads that match your criteria.",
+    "clear_filters": "Clear Filters",
+    "tag_search":"Enter Tag"
   },
   "ads": {
     "required_create_ad": "This field is required!",
@@ -380,4 +384,3 @@
       "who-is-suggested": "Who are you suggesting?"
     }
 }
-
