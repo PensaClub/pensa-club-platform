@@ -122,9 +122,9 @@ export const CommunityPage = () => {
     return (
         <>
             <section className="background-community">
-                <section className={`community-page ${ads.result.length === 0 && searchPerformed ? 'no-ads-bg' : ''}`}>
+                <section className="community-page">
 
-                    <section className={`main-community ${ads.result.length === 0 && searchPerformed ? 'no-ads-bg' : ''}`}>
+                    <section className="main-community">
                         <div className="hero-bg"></div>
                         <div className="hero-section-commun">
                             <h1>{t('community.community')}</h1>
