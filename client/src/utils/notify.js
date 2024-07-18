@@ -29,7 +29,6 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-
     case 'success-created':
       toast.success(<Trans i18nKey="notification.success-created" />, {
         role: 'alert',
@@ -37,6 +36,11 @@ export const notify = (key) => {
       break;
     case 'success-delete-ads':
       toast.success(<Trans i18nKey="notification.success-delete-ads" />, {
+     role: 'alert',
+      });
+      break;
+    case 'success-suggest':
+      toast.success(<Trans i18nKey="notification.success-suggested" />, {
         role: 'alert',
       });
       break;

@@ -118,7 +118,8 @@ export const ProfileAnnounced = () => {
             console.error('Failed to update expiration date', error);
         }
     };
- 
+    }, []);
+
     return (
         <>
             {ads.length > 0 ? (

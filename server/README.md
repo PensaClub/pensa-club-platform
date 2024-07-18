@@ -175,6 +175,65 @@ When the server starts for the first time in a development environment, a demo u
     ```
 
   - **/ads/ad-edit**: This endpoint updates an existing advertisement. It allows for updating one or many fields of the ad, and requires the ad's ID to be provided.
+  - **/ads/ads-search**: This endpoint provides search functionality.
+
+    Date must be in YYYY-MM-DD format, category must be one of the following - `'recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'`.
+    How does tags work ? It looks for any record that contains the tag word. For example if the tags are furniture and sofa it will look for every record that contains either of those.
+    Errors returns a message which filter didn`t work and why.
+
+    You can perform searches using the following criteria: Creation Date, Expiration Date, Tags, Category, Summary, Region: adRegion, adSubregion (Note: adSubregion can only be searched if adRegion is specified), adTown (Note: adTown can only be searched if both adRegion and adSubregion are specified), startDate/endDate for all ads, eventStartDate/eventEndDate for specific events with custom dates.
+
+    <p style="color:red;"><strong>Important:</strong></p> 
+    To test the function with unapproved ads, set the following in the adsController/ads-search to <strong>false</strong>:
+
+    ```json
+    whereCondition.approved = true;
+    ```
+
+    Example of successful query via postman - http://localhost:8080/ads/ads-search?category=work&adRegion=3&adTown=10&adSubregion=5 and the return data:
+
+    ```json
+    "result": [
+        {
+            "summary": "Divan4",
+            "category": "work",
+            "adRegion": "3",
+            "adSubregion": "5",
+            "adTown": "10",
+            "adId": "1",
+            "images": [
+                {
+                    "imageURL": "random url",
+                    "firebaseImagePath": "random path"
+                }
+            ],
+            "approved": false,
+            "street": "Madjarov",
+            "extraFields": {
+                "price": 50.5,
+                "eventEndDate": "2025-11-12",
+                "eventStartDate": "2025-10-10"
+            },
+            "creationDate": "2024-07-14",
+            "expirationDate": "2024-08-13",
+            "tags": [
+                "mebel",
+                "random",
+                "random2"
+            ],
+            "account": {
+                "email": "test@test.com",
+                "details": {
+                    "username": "TestUser",
+                    "firstName": "TestName",
+                    "lastName": "TestSurname",
+                    "imageURL": "https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/profile-image%2F680555ff-22d4-4fad-8cc7-2b51dfb545de?alt=media&token=ab616f26-8eda-49e5-b1c9-2694540ec972"
+                }
+            }
+        }
+    ],
+    "errors": {}
+    ```
 
 ## Testing
 

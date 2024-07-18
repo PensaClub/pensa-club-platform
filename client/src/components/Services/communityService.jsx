@@ -22,6 +22,13 @@ export const communityServiceFactory = (token) => {
             }
             return response.json();
         },
+        getTowns: async (regionId, subregionId) => {
+            const response = await fetch(`/regions-data/region-${regionId}/towns/towns-${subregionId}.json`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch towns');
+            }
+            return response.json();
+        },
         getSearchCriteria: async () => {
             const response = await fetch('/search-criteria.json');
 
@@ -43,6 +50,10 @@ export const communityServiceFactory = (token) => {
         },
         editAd: async (id) => {
             return requester.patch(`${apiUrl}/ads/ad-edit`, { id });
+        },
+        searchAds: async (filters) => {
+            const query = new URLSearchParams(filters).toString();
+            return requester.get(`${apiUrl}/ads/ads-search?${query}`);
         }
     }
 }

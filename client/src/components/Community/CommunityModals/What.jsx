@@ -4,13 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark} from '@fortawesome/free-solid-svg-icons';
 import { useCommunityContext } from '../../contexts/CommunityContext';
 import { useTranslation } from 'react-i18next';
-export const What = ({ isOpen, onClose }) => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchType, setSearchType] = useState('всички');
-    const {searchCriteria } = useCommunityContext();
+
+export const What = ({ isOpen, onClose ,setFilters, filters}) => {
+    const [searchQuery, setSearchQuery] = useState(filters.tags);
+    const [searchType, setSearchType] = useState(filters.category);
+    const { searchCriteria } = useCommunityContext();
     const { t } = useTranslation();
   
     const handleSearch = () => {
+        setFilters(prev => ({ ...prev, tags: searchQuery, category: searchType }));
         onClose();
     };
 
@@ -19,7 +21,7 @@ export const What = ({ isOpen, onClose }) => {
     return (
         <div className="what-modal-overlay">
             <div className="what-modal-content">
-                <button className="what-close-button" onClick={onClose}><FontAwesomeIcon icon={faXmark} style={{color: "#000000",}} /></button>
+                <button className="what-close-button" onClick={onClose}><FontAwesomeIcon icon={faXmark} style={{ color: "#000000", }} /></button>
                 <h2>{t('community.what_search')}?</h2>
                 <input
                     type="text"
@@ -29,10 +31,10 @@ export const What = ({ isOpen, onClose }) => {
                     className="what-input"
                 />
                 <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="what-select">
-                    <option value="всички">{t('community.all_menu')}</option>
-                   {searchCriteria.searchCriteria?.map(criteria=>(
-                    <option key={criteria.value} value={criteria.value}> {t(criteria.name)}</option>
-                   ))}
+                    <option value="all">{t('search-criteria.all_menu')}</option>
+                    {searchCriteria.searchCriteria?.map(criteria => (
+                        <option key={criteria.value} value={criteria.value}> {t(criteria.name)}</option>
+                    ))}
                 </select>
                 <button onClick={handleSearch} className="what-search-button">{t('community.apply_btn')}</button>
             </div>
