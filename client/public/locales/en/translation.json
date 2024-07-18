@@ -248,7 +248,11 @@
     "last_year": "Last Year",
     "specific_period": "Specific Period",
     "start_date": "Start Date",
-    "end_date": "End Date"
+    "end_date": "End Date",
+    "no_ads_found": "No ads found",
+    "no_ads_message": "It looks like there are no ads that match your criteria.",
+    "clear_filters": "Clear Filters",
+    "tag_search":"Enter Tag"
   },
   "ads": {
     "required_create_ad": "This field is required!",
@@ -283,20 +287,19 @@
     "add_photos": "Add Photos",
     "publish_btn": "Publish",
     "cancel_btn": "Cancel",
-    "sub_text-one":"to 32 characters",
-    "sub_text-two":"to 1000 characters",
-    "select_town" : "Select town",
+    "sub_text-one": "to 32 characters",
+    "sub_text-two": "to 1000 characters",
+    "select_town": "Select town",
     "ad_region": "Region",
-    "ad_municipality":  "Municipality",
-    "tags_ad":"Tags can be added by pressing Enter or Space.",
+    "ad_municipality": "Municipality",
+    "tags_ad": "Tags can be added by pressing Enter or Space.",
     "tags": "Tags",
     "max_tags": "Max Tags is 5",
-    "enter_tag":"Enter a Tag",
+    "enter_tag": "Enter a Tag",
     "view_more": "view more",
     "edit": "Edit",
     "delete": "Delete",
     "no_ads": "You have no published ads"
-
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
@@ -314,20 +317,20 @@
     "profile_data_submit": "Error while updating profile data: {{error}}",
     "unknown": "unknown"
   },
-    "search-criteria": {
-      "recommend": "Recommend",
-      "donate": "Donate",
-      "sell": "Sell",
-      "work": "Work",
-      "courses": "Training/Courses",
-      "health": "Health",
-      "initiatives_projects": "Initiatives / Projects",
-      "tours": "Tours",
-      "games": "Games",
-      "arbitration": "Arbitration",
-      "all_menu":"All"
-       },
-    "user-suggestion": {
+  "search-criteria": {
+    "recommend": "Recommend",
+    "donate": "Donate",
+    "sell": "Sell",
+    "work": "Work",
+    "courses": "Training/Courses",
+    "health": "Health",
+    "initiatives_projects": "Initiatives / Projects",
+    "tours": "Tours",
+    "games": "Games",
+    "arbitration": "Arbitration",
+    "all_menu": "All"
+  },
+  "user-suggestion": {
     "title": "Suggest a Friend",
     "desc": "Leave here information about a friend of yours who would like to be part of PensaClub but needs assisstance with the registration",
     "name": "Name",
@@ -338,6 +341,4 @@
     "refferer-name": "Your name",
     "who-is-suggested": "Who are you suggesting?"
   }
-
 }
-

@@ -18,12 +18,12 @@ const ImageModal = ({ src, alt, onClose }) => (
 );
 
 export const AdsCard = ({ ads, isLoading }) => {
-    const{isAuthentication}=useAuthContext();
-    console.error(isAuthentication)
+    const { isAuthentication } = useAuthContext();
     const [modalImage, setModalImage] = useState(null);
-    const [open,setOpen] =useState(false)
+    const [open, setOpen] = useState(false);
     const { t } = useTranslation();
-    const navigate=useNavigate()
+    const navigate = useNavigate();
+
     if (isLoading) {
         return (
             <section className="ads-main">
@@ -37,17 +37,17 @@ export const AdsCard = ({ ads, isLoading }) => {
     const handleImageClick = (image) => {
         setModalImage(image);
     };
-    const handleAdClick= (ad) => {
-        if(isAuthentication) {
-            navigate(`/ads/${ad.adId}`)
-        }else{
+    const handleAdClick = (ad) => {
+        if (isAuthentication) {
+            navigate(`/ad/details`)
+        } else {
             setOpen(true);
         }
     }
     const closeModal = () => {
         setModalImage(null);
     };
-    const closeNotify=()=>{
+    const closeNotify = () => {
         setOpen(false)
     }
 
@@ -60,12 +60,17 @@ export const AdsCard = ({ ads, isLoading }) => {
                             <img src={ad.images[0].imageURL} alt={ad.summary} />
                             <p>{t(`search-criteria.${ad.category}`)}</p>
                         </div>
-                        <div className="ads-info" onClick={()=>handleAdClick(ad)}>
+                        <div className="ads-info" onClick={() => handleAdClick(ad)}>
                             <h3 className="title-card">{ad.summary}</h3>
+                            <div className='ads-data-elipse'>
+                                <p className='elipse price'>{ad.adTown}</p>
+                                {ad.extraFields.price && (
+                                    <p className='elipse price'> {ad.extraFields.price} {t('ads.price_lv')} </p>
+                                )}
+                            </div>
                             <div className="subinfo-ads">
-                                {ad.tags.length > 0 && ad.tags.map(tag => (<p key={(tag)+1}>{"#"}{tag}</p>))}
-                                <p>{ad.adTown}</p> {/* here is*/}
-                                {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
+                                {ad.tags.length > 0 && ad.tags.map(tag => (<p key={(tag) + 1}>{"#"}{tag}</p>))}
+                                {/* </p>  */}
                             </div>
                             <p className="ads-data">{t('community.validate_until')} : {new Date(ad.expirationDate).toLocaleDateString('bg-BG')}</p>
                             <div className="ads-user-info">

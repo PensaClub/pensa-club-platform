@@ -27,7 +27,7 @@ export const What = ({ isOpen, onClose ,setFilters, filters}) => {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={t('community.enter_search')}
+                    placeholder={t('community.tag_search')}
                     className="what-input"
                 />
                 <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="what-select">

@@ -52,7 +52,7 @@
     padding: 0.1em 0.5em;
     padding-bottom: 0.3em;
     top: 10px;
-    left: 12%;
+    left: 20%;
     background-color: var(--green-text);
 
 }
@@ -164,6 +164,25 @@
     margin-bottom: 0.5rem;
     border-radius: 15px;
 }
+
+ .ads-data-elipse {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .elipse {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8px 28px;
+    border-radius: 32px;
+    margin-bottom: 0.5rem;
+  }
+  .elipse.price {
+    background-color: #1F372A;
+    color: #fff;
+    font-size:calc(var(--m-font-size) - 2px);
+  }
+
 @media (min-width: 768px) and (max-width: 1199px) {
     .ads-main {
         margin: 0 auto;
@@ -190,7 +209,7 @@
     }
 
     .img-ads p {
-        top: 10px;
+        top: 37px;
         left: 6%;
         font-size: calc(var(--xs-font-size) + 2px);
         padding: 0.3em 1em;
@@ -253,7 +272,11 @@
     }
     .img-ads p {
     font-size:calc(var(--m-font-size) + 5px);;
-    top: 23px;
+    top: 55px;
     left: 5%;
     }
+    .elipse.price {
+      
+        font-size:var(--l-font-size);
+      }
 }

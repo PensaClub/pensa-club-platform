@@ -248,7 +248,11 @@
     "last_year": "Последната година",
     "specific_period": "Определен период",
     "start_date": "Начална дата",
-    "end_date": "Крайна дата"
+    "end_date": "Крайна дата",
+    "no_ads_found": "Няма намерени обяви",
+    "no_ads_message": "Изглежда, че няма обяви, които отговарят на зададените от вас критерии.",
+    "clear_filters": "Изчисти филтрите",
+    "tag_search": "Въведи таг"
   },
   "ads": {
     "required_create_ad": "Това поле е задължително!",
@@ -285,18 +289,17 @@
     "cancel_btn": "Откажи",
     "sub_text-one": "до 32 символа",
     "sub_text-two": "до 1000 символа",
-    "select_town" : "Избери град",
-    "ad_region":  "Регион",
-    "ad_municipality":  "Община",
-    "tags_ad":"Таговете се добавят чрез натискане на Enter или Space.",
+    "select_town": "Избери град",
+    "ad_region": "Регион",
+    "ad_municipality": "Община",
+    "tags_ad": "Таговете се добавят чрез натискане на Enter или Space.",
     "tags": "Тагове",
     "max_tags": "Максимума за тагове е 5 ",
-    "enter_tag":"Въведи Tаг",
+    "enter_tag": "Въведи Tаг",
     "view_more": "виж повече",
     "edit": "Редактирай",
     "delete": "Изтрий",
     "no_ads": "Нямате публикувани обяви"
-
   },
   "notification": {
     "success-data": "Данните за потребителя са запазени успешно!",
@@ -325,7 +328,7 @@
     "tours": "Екскурзии/ Турове",
     "games": "Игри",
     "arbitration": "Арбитраж",
-    "all_menu":"Всички"
+    "all_menu": "Всички"
   },
   "user-suggestion": {
     "title": "Препоръчай приятел",
@@ -337,6 +340,5 @@
     "message-placeholder": "Оставете кратко съобщение тук",
     "refferer-name": "Вашето име",
     "who-is-suggested": "Кого препоръчвате?"
-
   }
 }
