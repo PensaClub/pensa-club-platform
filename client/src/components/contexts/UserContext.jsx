@@ -12,6 +12,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
+  // console.error('profileData:', profileData);
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.enabled);
 
@@ -38,6 +39,7 @@ export const UserProvider = ({ children }) => {
       const response = await userService.register(data);
       setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
+      setProfileData(response.user);
       navigate('/profile/profile-form');
       notify('success-register');
     } catch (error) {
