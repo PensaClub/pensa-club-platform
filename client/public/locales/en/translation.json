@@ -109,7 +109,20 @@
     "job-placeholder": "Search for jobs...",
     "interests": "Interests",
     "interests-placeholder": "Search for interests...",
-    "clear-filters": "Clear Filters"
+    "clear-filters": "Clear Filters",
+    "profession": "Profession",
+    "phone": "Phone",
+    "email": "Email",
+    "ads_by":"Ads by",
+    "no_ads": "No ads available",
+    "read_more": "Read more",
+    "close": "Close"
+
+  },
+  "notify_modal": {
+    "part1": "Please,",
+    "part2": "log in",
+    "part3": "to see the details."
   },
   "options": {
     "skills": {
