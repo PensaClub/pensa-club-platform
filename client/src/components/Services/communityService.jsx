@@ -54,6 +54,9 @@ export const communityServiceFactory = (token) => {
         searchAds: async (filters) => {
             const query = new URLSearchParams(filters).toString();
             return requester.get(`${apiUrl}/ads/ads-search?${query}`);
+        },
+        updateExpirationDate: async(adId) => {
+            return requester.patch(`${apiUrl}/ads/update-expiration-date/${adId}`, { adId })
         }
     }
 }

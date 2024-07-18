@@ -172,7 +172,22 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
+
+    const updateExpirationDate = async (adId) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.updateExpirationDate(adId);
+            setIsLoading(false);
+            return response;
+        } catch (e) {
+            notify('error')
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
     
     useEffect(() => {
         fetchRegions();
@@ -199,6 +214,7 @@ export const CommunityProvider = ({ children }) => {
         searchAds,
         TownSearch,
         townsSearch,
+        updateExpirationDate
       }
     
     return (
