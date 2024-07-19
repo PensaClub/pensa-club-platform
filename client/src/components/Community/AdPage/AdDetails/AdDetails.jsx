@@ -101,7 +101,7 @@ export const AdDetails = () => {
                           <p>Интереси:</p>
                           <p>Умения:</p>
                           <Link>
-                            <span>{t('ads.all-user-ads')}</span>
+                            <span className='all-ads-user'>{t('ads.all-user-ads')}</span>
                           </Link>
                         </div>
                       </section>

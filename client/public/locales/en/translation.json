@@ -240,7 +240,8 @@
     "password_match": "Passwords don't match",
     "logout": "Logout",
     "admin_dashboard": "Admin Dashboard",
-    "pending_announcements":"Pending Announcements"
+    "pending_announcements":"Pending Announcements",
+    "ads":"Ads"
   },
   "community": {
     "community": "Community",

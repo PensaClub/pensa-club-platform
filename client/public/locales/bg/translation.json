@@ -239,7 +239,9 @@
     "logout": "Излез от профила",
     "password_match": "Паролите не съвпадат",
     "admin_dashboard": "Админ панел",
-    "pending_announcements":"Неодобрени обяви"
+    "pending_announcements":"Неодобрени обяви",
+    "ads":"Обяви"
+
   },
   "community": {
     "community": "Общност",

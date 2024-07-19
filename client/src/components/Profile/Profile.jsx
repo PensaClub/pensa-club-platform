@@ -37,7 +37,7 @@ export const Profile = () => {
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isFinish, profileData, isAdmin } = useContext(UserContext);
-
+  const[adsCount,setAdsCount] = useState('');
   useEffect(() => {
     window.scrollTo({ top: 0 });
     if (!profileData) {
@@ -101,7 +101,7 @@ const isAdminPanel =location.pathname.startsWith('/profile/pending-announcements
             <h3>{t('profile.admin_dashboard')}</h3>
             <Link to='pending-announcements' onClick={toggleMenu}>
               <FontAwesomeIcon icon={faScroll} className='icon' />
-              {t('profile.pending_announcements')}
+              {t('profile.pending_announcements') } {adsCount > 0 && (<>- {adsCount} {t('profile.ads')}</>)}
             </Link>
           </div>
         )}
@@ -153,7 +153,7 @@ const isAdminPanel =location.pathname.startsWith('/profile/pending-announcements
           <Route path='workOptions' element={<ProfileWorks />} />
           <Route path='announced' element={<ProfileAnnounced />} profileData={profileData} />
           <Route path='interestOptions' element={<ProfileInterests />} />
-          <Route path='pending-announcements' element={<AdminGuard><PendingAnnouncements /></AdminGuard>} />
+          <Route path='pending-announcements' element={<AdminGuard><PendingAnnouncements setAdsCount={setAdsCount} /></AdminGuard>} />
         </Routes>
       </div>
     </section>

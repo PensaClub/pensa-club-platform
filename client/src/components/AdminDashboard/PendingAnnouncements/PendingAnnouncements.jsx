@@ -1,79 +1,58 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './pendingAnnouncements.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { CommentModal } from './CommentModal';
+import { useAdminContext } from '../../contexts/AdminContext';
+import { Flyout } from '../Flyout';
 
 const initialAnnouncements = [
-  {
-    id: 1,
-    email: 'user1@example.com',
-    title: 'Announcement 1',
-    date: '2023-07-01',
-  },
-  {
-    id: 2,
-    email: 'user2@example.com',
-    title: 'Announcement 2',
-    date: '2023-07-02',
-  },
-  {
-    id: 3,
-    email: 'user3@example.com',
-    title: 'Announcement 3',
-    date: '2023-07-03',
-  },
-  {
-    id: 4,
-    email: 'user4@example.com',
-    title: 'Announcement 4',
-    date: '2023-07-04',
-  },
-  {
-    id: 5,
-    email: 'user5@example.com',
-    title: 'Announcement 5',
-    date: '2023-07-05',
-  },
-  {
-    id: 6,
-    email: 'user6@example.com',
-    title: 'Announcement 6',
-    date: '2023-07-06',
-  },
-  {
-    id: 7,
-    email: 'user7@example.com',
-    title: 'Announcement 7',
-    date: '2023-07-07',
-  },
+  // ... (your initialAnnouncements data)
 ];
 
-export const PendingAnnouncements = () => {
+export const PendingAnnouncements = ({setAdsCount}) => {
   const [announcements, setAnnouncements] = useState(initialAnnouncements);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [comment, setComment] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
+  const [selectedAd, setSelectedAd] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchCriteria, setSearchCriteria] = useState('summary');
+  const [searchResults, setSearchResults] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [isSearching, setIsSearching] = useState(false);
 
-  const sortedAnnouncements = [...announcements].sort((a, b) => {
+  const { fetchPendingAds, updateAdStatus,deleteAd } = useAdminContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadPendingAds = async () => {
+      try {
+        const pendingAds = await fetchPendingAds();
+        setAnnouncements(pendingAds);
+        setSearchResults(pendingAds);
+    setAdsCount(pendingAds.length)
+
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    loadPendingAds();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setAnnouncements]);
+
+  const sortedAnnouncements = [...searchResults].sort((a, b) => {
     if (sortConfig.key === 'email') {
       const emailA = a.email.split('@')[0];
       const emailB = b.email.split('@')[0];
-      if (emailA < emailB) {
-        return sortConfig.direction === 'ascending' ? -1 : 1;
-      }
-      if (emailA > emailB) {
-        return sortConfig.direction === 'ascending' ? 1 : -1;
-      }
-      return 0;
+      return sortConfig.direction === 'ascending' ? emailA.localeCompare(emailB) : emailB.localeCompare(emailA);
     } else if (sortConfig.key === 'date') {
-      if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === 'ascending' ? -1 : 1;
-      }
-      if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === 'ascending' ? 1 : -1;
-      }
-      return 0;
+      return sortConfig.direction === 'ascending' ? new Date(a[sortConfig.key]) - new Date(b[sortConfig.key]) : new Date(b[sortConfig.key]) - new Date(a[sortConfig.key]);
     } else {
       return sortConfig.direction === 'ascending' ? a[sortConfig.key] - b[sortConfig.key] : b[sortConfig.key] - a[sortConfig.key];
     }
@@ -94,17 +73,96 @@ export const PendingAnnouncements = () => {
 
   const handleSubmitComment = () => {
     setIsModalOpen(false);
+  };
+
+  const handleApprove = async (id) => {
+    try {
+      await updateAdStatus(id, 'approved', comment);
+      setComment('');
+      navigate(0);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleReject = async (id) => {
+    try {
+      await updateAdStatus(id, 'denied', comment);
+      setComment('');
+      navigate(0);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  const handleDelete=async(id) => {
+   try {
+    await deleteAd(id);
     setComment('');
+    navigate(0);
+   } catch (error) {
+    console.error(error);
+    
+   } 
+  }
+  const handleAdClick = (ad) => {
+    setSelectedAd(ad);
+    setIsFlyoutOpen(true);
+  };
+
+  const handleSearch = () => {
+    setIsSearching(true);
+    const results = announcements.filter((announcement) => {
+      if (searchCriteria === 'summary') {
+        return announcement.summary.toLowerCase().includes(searchTerm.toLowerCase());
+      } else if (searchCriteria === 'email') {
+        return announcement.email.toLowerCase().includes(searchTerm.toLowerCase());
+      } else if (searchCriteria === 'date') {
+        return announcement.creationDate.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+    setSearchResults(results);
+    setIsSearching(false);
+  };
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setSearchCriteria('summary');
+    setSearchResults(announcements);
   };
 
   return (
     <div className="pending-announcements-container">
       <h2>Pending Announcements</h2>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Търси..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select
+          value={searchCriteria}
+          onChange={(e) => setSearchCriteria(e.target.value)}
+        >
+          <option value="summary">Име</option>
+          <option value="email">Имейл</option>
+          <option value="date">Дата</option>
+        </select>
+        <button onClick={handleSearch}>Търси</button>
+        {searchTerm && (
+          <FontAwesomeIcon
+            icon={faArrowRotateLeft}
+            className="reset-icon"
+            onClick={resetFilters}
+          />
+        )}
+      </div>
       <hr />
       <div className="pending-announcements-table-container">
         <table className="pending-announcements-table">
-          <thead >
-            <tr >
+          <thead>
+            <tr>
               <th className="number-cell" onClick={() => requestSort('id')}>
                 No.
                 {sortConfig.key === 'id' ? (
@@ -130,25 +188,47 @@ export const PendingAnnouncements = () => {
           <tbody>
             {sortedAnnouncements.map((announcement, index) => (
               <tr key={announcement.id}>
-                <td className="number-cell id-table-admin">{index + 1}</td> 
+                <td className="number-cell id-table-admin">{index + 1}</td>
                 <td>
                   <Link to={`#`}>{announcement.email}</Link>
                 </td>
                 <td>
-                  <Link to={`#`}>{announcement.title}</Link>
+                  <Link to={`#`} onClick={() => handleAdClick(announcement)}>{announcement.summary}</Link>
                 </td>
-                <td>{announcement.date}</td>
+                <td>{announcement.creationDate}</td>
                 <td className="actions-admin">
-                  <button className="btn-unapproved green-second" onClick={() => handleComment(announcement)}>
-                    Comment
-                  </button>
-                  <button className="btn-unapproved orange">Approve</button>
-                  <button className="btn-unapproved red">Reject</button>
+                  <img
+                    src={'/icons/comment.svg'}
+                    alt="Comment"
+                    className="comment-icon"
+                    onClick={() => handleComment(announcement)}
+                  />
+                  <img
+                    src={'/icons/approve-invoice.svg'}
+                    alt="approved"
+                    className="comment-icon"
+                    onClick={() => handleApprove(announcement.adId)}
+                  />
+                    <img
+                    src={'/icons/denied.svg'}
+                    alt="reject"
+                    className="comment-icon"
+                    onClick={() =>  handleReject(announcement.adId)}
+                  />
+                  <img
+                    src={'/icons/delete-button.svg'}
+                    alt="delete"
+                    className="comment-icon"
+                    onClick={() => handleDelete(announcement.adId)}
+                  />
+                  {/* <button className="btn-unapproved orange" onClick={() => handleApprove(announcement.adId)}>Approve</button> */}
+                  {/* <button className="btn-unapproved red" onClick={() => handleReject(announcement.adId)}>Reject</button> */}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {sortedAnnouncements.length === 0 && <p className='no-result-fly'>No results found...</p>}
       </div>
       <CommentModal
         isOpen={isModalOpen}
@@ -163,6 +243,15 @@ export const PendingAnnouncements = () => {
           cols="50"
         />
       </CommentModal>
+      {selectedAd && (
+        <Flyout
+          isOpen={isFlyoutOpen}
+          onClose={() => setIsFlyoutOpen(false)}
+          ad={selectedAd}
+          handleApprove={handleApprove}
+          handleReject={handleReject}
+        />
+      )}
     </div>
   );
 };
