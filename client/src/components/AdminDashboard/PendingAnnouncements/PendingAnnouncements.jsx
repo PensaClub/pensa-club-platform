@@ -6,12 +6,14 @@ import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { CommentModal } from './CommentModal';
 import { useAdminContext } from '../../contexts/AdminContext';
 import { Flyout } from '../Flyout';
+import { useTranslation } from 'react-i18next';
+import { notify } from '../../../utils/notify';
 
 const initialAnnouncements = [
   // ... (your initialAnnouncements data)
 ];
 
-export const PendingAnnouncements = ({setAdsCount}) => {
+export const PendingAnnouncements = ({ setAdsCount }) => {
   const [announcements, setAnnouncements] = useState(initialAnnouncements);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,8 +27,9 @@ export const PendingAnnouncements = ({setAdsCount}) => {
   const [searchResults, setSearchResults] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [isSearching, setIsSearching] = useState(false);
+  const { t } = useTranslation();
 
-  const { fetchPendingAds, updateAdStatus,deleteAd } = useAdminContext();
+  const { fetchPendingAds, updateAdStatus, deleteAd } = useAdminContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +38,7 @@ export const PendingAnnouncements = ({setAdsCount}) => {
         const pendingAds = await fetchPendingAds();
         setAnnouncements(pendingAds);
         setSearchResults(pendingAds);
-    setAdsCount(pendingAds.length)
+        setAdsCount(pendingAds.length)
 
       } catch (e) {
         console.error(e);
@@ -79,7 +82,11 @@ export const PendingAnnouncements = ({setAdsCount}) => {
     try {
       await updateAdStatus(id, 'approved', comment);
       setComment('');
-      navigate(0);
+   
+      const updatedAds = await fetchPendingAds();
+      setAnnouncements(updatedAds);
+      setAdsCount(updatedAds.length)
+      setSearchResults(updatedAds);
     } catch (e) {
       console.error(e);
     }
@@ -87,22 +94,32 @@ export const PendingAnnouncements = ({setAdsCount}) => {
 
   const handleReject = async (id) => {
     try {
+      if (!comment) {
+        notify('enter-comment');
+        return;
+      }
+  
       await updateAdStatus(id, 'denied', comment);
       setComment('');
-      navigate(0);
+  
+      const updatedAds = await fetchPendingAds();
+      setAnnouncements(updatedAds);
+      setAdsCount(updatedAds.length)
+      setSearchResults(updatedAds);
     } catch (e) {
       console.error(e);
     }
   };
-  const handleDelete=async(id) => {
-   try {
-    await deleteAd(id);
-    setComment('');
-    navigate(0);
-   } catch (error) {
-    console.error(error);
-    
-   } 
+  
+  const handleDelete = async (id) => {
+    try {
+      await deleteAd(id);
+      setComment('');
+      navigate(0);
+    } catch (error) {
+      console.error(error);
+
+    }
   }
   const handleAdClick = (ad) => {
     setSelectedAd(ad);
@@ -133,11 +150,11 @@ export const PendingAnnouncements = ({setAdsCount}) => {
 
   return (
     <div className="pending-announcements-container">
-      <h2>Pending Announcements</h2>
+      <h2>{t('admin.pending_announcements')}</h2>
       <div className="search-container">
         <input
           type="text"
-          placeholder="Търси..."
+          placeholder={t('admin.search')+'...'}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -145,11 +162,11 @@ export const PendingAnnouncements = ({setAdsCount}) => {
           value={searchCriteria}
           onChange={(e) => setSearchCriteria(e.target.value)}
         >
-          <option value="summary">Име</option>
-          <option value="email">Имейл</option>
-          <option value="date">Дата</option>
+          <option value="summary">{t('admin.name')}</option>
+          <option value="email">{t('admin.email')}</option>
+          <option value="date">{t('admin.date')}</option>
         </select>
-        <button onClick={handleSearch}>Търси</button>
+        <button onClick={handleSearch}>{t('admin.search')}</button>
         {searchTerm && (
           <FontAwesomeIcon
             icon={faArrowRotateLeft}
@@ -164,25 +181,25 @@ export const PendingAnnouncements = ({setAdsCount}) => {
           <thead>
             <tr>
               <th className="number-cell" onClick={() => requestSort('id')}>
-                No.
+                {t('admin.number')}
                 {sortConfig.key === 'id' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
               <th onClick={() => requestSort('email')}>
-                User Email
+                {t('admin.user_email')}
                 {sortConfig.key === 'email' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th>Announcement Title</th>
+              <th>{t('admin.announcement_title')}</th>
               <th onClick={() => requestSort('date')}>
-                Creation Date
+                {t('admin.creation_date')}
                 {sortConfig.key === 'date' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th>Actions</th>
+              <th>{t('admin.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -209,11 +226,11 @@ export const PendingAnnouncements = ({setAdsCount}) => {
                     className="comment-icon"
                     onClick={() => handleApprove(announcement.adId)}
                   />
-                    <img
+                  <img
                     src={'/icons/denied.svg'}
                     alt="reject"
                     className="comment-icon"
-                    onClick={() =>  handleReject(announcement.adId)}
+                    onClick={() => handleReject(announcement.adId)}
                   />
                   <img
                     src={'/icons/delete-button.svg'}
@@ -221,8 +238,6 @@ export const PendingAnnouncements = ({setAdsCount}) => {
                     className="comment-icon"
                     onClick={() => handleDelete(announcement.adId)}
                   />
-                  {/* <button className="btn-unapproved orange" onClick={() => handleApprove(announcement.adId)}>Approve</button> */}
-                  {/* <button className="btn-unapproved red" onClick={() => handleReject(announcement.adId)}>Reject</button> */}
                 </td>
               </tr>
             ))}

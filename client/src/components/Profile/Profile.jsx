@@ -101,7 +101,8 @@ const isAdminPanel =location.pathname.startsWith('/profile/pending-announcements
             <h3>{t('profile.admin_dashboard')}</h3>
             <Link to='pending-announcements' onClick={toggleMenu}>
               <FontAwesomeIcon icon={faScroll} className='icon' />
-              {t('profile.pending_announcements') } {adsCount > 0 && (<>- {adsCount} {t('profile.ads')}</>)}
+              {t('profile.pending_announcements') } {adsCount && adsCount > 0 && (<>- {adsCount} {adsCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
+
             </Link>
           </div>
         )}

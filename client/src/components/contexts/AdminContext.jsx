@@ -6,12 +6,12 @@ import { notify } from '../../utils/notify';
 
 export const AdminContext = createContext()
 
-export const AdminProvider = ({children })=>{
+export const AdminProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const adminService = adminServiceFactory()
     const navigate = useNavigate();
-    const [pendingAds,setPendingAds] = useState([])
+    const [pendingAds, setPendingAds] = useState([])
 
     const showErrorAndSetTimeouts = (error) => {
         setErrorMessage(error);
@@ -39,14 +39,21 @@ export const AdminProvider = ({children })=>{
         try {
             setIsLoading(true);
             await adminService.updateAdStatus(adId, newStatus, adminComment);
-            await fetchPendingAds(); 
+            await fetchPendingAds();
             setIsLoading(false);
+    
+            if (newStatus === 'approved') {
+                notify('success-approved');
+            } else if (newStatus === 'denied') {
+                notify('success-reject');
+            }
         } catch (e) {
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;
         }
     };
+    
     const deleteAd = async (id) => {
         try {
             setIsLoading(true);
@@ -62,19 +69,19 @@ export const AdminProvider = ({children })=>{
             setIsLoading(false);
         }
     };
-    const contextService={
+    const contextService = {
         fetchPendingAds,
         pendingAds,
         updateAdStatus,
         deleteAd
     }
 
-    return(
-            <AdminContext.Provider value={contextService}>
-                {children}
-                {isLoading && <Loader />}
+    return (
+        <AdminContext.Provider value={contextService}>
+            {children}
+            {isLoading && <Loader />}
 
-            </AdminContext.Provider>
+        </AdminContext.Provider>
     )
 }
 export const useAdminContext = () => {

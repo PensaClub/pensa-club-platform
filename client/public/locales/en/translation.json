@@ -113,11 +113,10 @@
     "profession": "Profession",
     "phone": "Phone",
     "email": "Email",
-    "ads_by":"Ads by",
+    "ads_by": "Ads by",
     "no_ads": "No ads available",
     "read_more": "Read more",
     "close": "Close"
-
   },
   "notify_modal": {
     "part1": "Please,",
@@ -240,8 +239,33 @@
     "password_match": "Passwords don't match",
     "logout": "Logout",
     "admin_dashboard": "Admin Dashboard",
-    "pending_announcements":"Pending Announcements",
-    "ads":"Ads"
+    "pending_announcements": "Pending Announcements",
+    "ads": "Ads",
+    "ads-one": "Ad"
+  },
+  "admin": {
+    "pending_announcements": "Pending Announcements",
+    "search": "Search",
+    "name": "Name",
+    "email": "Email",
+    "date": "Date",
+    "number": "No.",
+    "user_email": "User Email",
+    "announcement_title": "Announcement Title",
+    "creation_date": "Creation Date",
+    "actions": "Actions",
+    "category": "Category",
+    "description": "Description",
+    "region":"Region",
+    "subregion": "Municipality",
+    "town": "Town",
+    "address": "Address",
+    "tags": "Tags",
+    "price": "Price",
+    "event_start_date": "Start Date",
+    "event_end_date": "End Date",
+    "approve": "Approve",
+    "reject": "Reject"
   },
   "community": {
     "community": "Community",
@@ -268,7 +292,7 @@
     "no_ads_found": "No ads found",
     "no_ads_message": "It looks like there are no ads that match your criteria.",
     "clear_filters": "Clear Filters",
-    "tag_search":"Enter Tag"
+    "tag_search": "Enter Tag"
   },
   "ads": {
     "required_create_ad": "This field is required!",
@@ -339,6 +363,9 @@
     "success-delete-ads": "Successfully delete ad!",
     "success-edit-ads": "Successfully edit ad!",
     "success-suggested": "You have successfully suggested a friend!",
+    "enter-comment": "Enter a comment",
+    "success-approved": "The Ad has been approved!",
+    "success-reject": "The Ad has been reject!",
     "error": "An error occured. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images."
@@ -348,42 +375,42 @@
     "profile_data_submit": "Error while updating profile data: {{error}}",
     "unknown": "unknown"
   },
-    "search-criteria": {
-      "recommend": "Recommend",
-      "donate": "Donate",
-      "sell": "Sell",
-      "work": "Work",
-      "courses": "Training/Courses",
-      "health": "Health",
-      "initiatives_projects": "Initiatives / Projects",
-      "tours": "Tours",
-      "games": "Games",
-      "arbitration": "Arbitration",
-      "all_menu":"All"
-    },
-      "months": {
-        "january": "January",
-        "february": "February",
-        "march": "March",
-        "april": "April",
-        "may": "May",
-        "june": "June",
-        "july": "July",
-        "august": "August",
-        "september": "September",
-        "october": "October",
-        "november": "November",
-        "december": "December"
-       },
-    "user-suggestion": {
-      "title": "Suggest a Friend",
-      "desc": "Leave here information about a friend of yours who would like to be part of PensaClub but needs assisstance with the registration",
-      "name": "Name",
-      "name-placeholder": "John Doe",
-      "phone": "Phone",
-      "message": "Message",
-      "message-placeholder": "Leave a short message here",
-      "refferer-name": "Your name",
-      "who-is-suggested": "Who are you suggesting?"
-    }
+  "search-criteria": {
+    "recommend": "Recommend",
+    "donate": "Donate",
+    "sell": "Sell",
+    "work": "Work",
+    "courses": "Training/Courses",
+    "health": "Health",
+    "initiatives_projects": "Initiatives / Projects",
+    "tours": "Tours",
+    "games": "Games",
+    "arbitration": "Arbitration",
+    "all_menu": "All"
+  },
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+  "user-suggestion": {
+    "title": "Suggest a Friend",
+    "desc": "Leave here information about a friend of yours who would like to be part of PensaClub but needs assisstance with the registration",
+    "name": "Name",
+    "name-placeholder": "John Doe",
+    "phone": "Phone",
+    "message": "Message",
+    "message-placeholder": "Leave a short message here",
+    "refferer-name": "Your name",
+    "who-is-suggested": "Who are you suggesting?"
+  }
 }

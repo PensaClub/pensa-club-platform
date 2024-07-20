@@ -48,9 +48,10 @@ function App() {
           <MapProvider>
             <CommunityProvider>
               <SuggestUserProvider>
-                <AdminProvider>                <Header
-                  additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
-                />
+                <AdminProvider>
+                  <Header
+                    additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
+                  />
                   <HeaderCommunity />
                   <ToastContainer
                     role="alert"

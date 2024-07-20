@@ -8,6 +8,7 @@ export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => 
     const [regionName, setRegionName] = useState('');
     const [subregionName, setSubregionName] = useState('');
     const [townName, setTownName] = useState('');
+    const { t } = useTranslation();
 
     const { regions, fetchSubregions, subregions, fetchTowns } = useCommunityContext();
     const { i18n } = useTranslation();
@@ -53,51 +54,51 @@ export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => 
                 <div className="flyout-desc">
                     <h4>{ad.summary}</h4>
                     <div className="category-flyout">
-                        <p><strong>Категория:</strong> {ad.category}</p>
+                        <p><strong>{t('admin.category')}:</strong> {t(`search-criteria.${ad.category}`)}</p>
                     </div>
                     <div className="desc-flyout-ad">
-                        <p><strong>Описание:</strong> {ad.description}</p>
+                        <p><strong>{t('admin.description')}:</strong> {ad.description}</p>
                     </div>
                     <div className="regions-flyout">
                         <div className="region-flyout">
-                            <p><strong>Регион:</strong></p>
+                            <p><strong>{t('admin.region')}:</strong></p>
                             <h5>{regionName}</h5>
                         </div>
                         <div className="subregion-flyout">
-                            <p><strong>Община :</strong> </p>
+                            <p><strong>{t('admin.subregion')} :</strong> </p>
                             <h5>{subregionName}</h5>
                         </div>
                         <div className="town-flyout">
-                            <p><strong>Град:</strong> </p>
+                            <p><strong>{t('admin.town')}:</strong> </p>
                             <h5>{townName}</h5>
                         </div>
                     </div>
                     <div className="address-flyout">
-                        <p><strong>Адрес:</strong> {ad.street}</p>
+                        <p><strong>{t('admin.address')}:</strong> {ad.street}</p>
 
                     </div>
                     <div className="tags-flyout">
-                    {ad.tags.length > 0 && <p><strong>Tags:</strong> {ad.tags.join(', ')}</p>}
+                    {ad.tags.length > 0 && <p><strong>{t('admin.tags')}:</strong> {ad.tags.join(', ')}</p>}
                     </div>
 
                     {ad.extraFields.price && (
                     <div className="price-flyout">
                         
-                        <p><strong>Price:</strong> {ad.extraFields.price} лв.</p>
+                        <p><strong>{t('admin.price')}:</strong> {ad.extraFields.price} лв.</p>
                     </div>
 
                     )}
                     {ad.extraFields.eventStartDate && (
                     <div className="start-date-flyout">
 
-                        <p><strong>Event Start Date:</strong> {ad.extraFields.eventStartDate}</p>
+                        <p><strong>{t('admin.event_start_date')}:</strong> {ad.extraFields.eventStartDate}</p>
                     </div>
 
                     )}
                     {ad.extraFields.eventEndDate && (
                     <div className="end-date-flyout">
 
-                        <p><strong>Event End Date:</strong> {ad.extraFields.eventEndDate}</p>
+                        <p><strong>{t('admin.event_end_date')}:</strong> {ad.extraFields.eventEndDate}</p>
                     </div>
 
                     )}
@@ -119,10 +120,11 @@ export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => 
                 </div>
                 <div className="flyout-buttons">
                     <button className="flyout-approve" onClick={() => handleApprove(ad.adId)}>
-                        Approve
+                        {t('admin.approve')}
                     </button>
                     <button className="flyout-reject" onClick={() => handleReject(ad.adId)}>
-                        Reject
+                    {t('admin.reject')}
+
                     </button>
                 </div>
             </div>
