@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import './flyout.css';
-import { useCommunityContext } from '../contexts/CommunityContext';
+import './flyoutReject.css';
 import { useTranslation } from 'react-i18next';
+import { useCommunityContext } from '../../contexts/CommunityContext';
 
-export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => {
+export const FlyoutReject = ({ isOpen, onClose, ad, handleApprove, handleDelete }) => {
     const [selectedImage, setSelectedImage] = useState(ad.images[0].imageURL);
     const [regionName, setRegionName] = useState('');
     const [subregionName, setSubregionName] = useState('');
@@ -18,6 +18,7 @@ export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => 
             setSelectedImage(ad.images[0].imageURL);
         }
     }, [ad]);
+
     useEffect(() => {
         fetchSubregions(Number(ad.adRegion))
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,7 +46,7 @@ export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => 
         };
 
         fetchNames();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ad.adRegion, ad.adSubregion, ad.adTown, currentLanguage, subregions]);
 
     return (
@@ -82,28 +83,28 @@ export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => 
 
                     </div>
                     <div className="tags-flyout">
-                    {ad.tags.length > 0 && <p><strong>{t('admin.tags')}:</strong> {ad.tags.join(', ')}</p>}
+                        {ad.tags.length > 0 && <p><strong>{t('admin.tags')}:</strong> {ad.tags.join(', ')}</p>}
                     </div>
 
                     {ad.extraFields.price && (
-                    <div className="price-flyout">
-                        
-                        <p><strong>{t('admin.price')}:</strong> {ad.extraFields.price} лв.</p>
-                    </div>
+                        <div className="price-flyout">
+
+                            <p><strong>{t('admin.price')}:</strong> {ad.extraFields.price} лв.</p>
+                        </div>
 
                     )}
                     {ad.extraFields.eventStartDate && (
-                    <div className="start-date-flyout">
+                        <div className="start-date-flyout">
 
-                        <p><strong>{t('admin.event_start_date')}:</strong> {ad.extraFields.eventStartDate}</p>
-                    </div>
+                            <p><strong>{t('admin.event_start_date')}:</strong> {ad.extraFields.eventStartDate}</p>
+                        </div>
 
                     )}
                     {ad.extraFields.eventEndDate && (
-                    <div className="end-date-flyout">
+                        <div className="end-date-flyout">
 
-                        <p><strong>{t('admin.event_end_date')}:</strong> {ad.extraFields.eventEndDate}</p>
-                    </div>
+                            <p><strong>{t('admin.event_end_date')}:</strong> {ad.extraFields.eventEndDate}</p>
+                        </div>
 
                     )}
                 </div>
@@ -126,8 +127,8 @@ export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => 
                     <button className="flyout-approve" onClick={() => handleApprove(ad.adId)}>
                         {t('admin.approve')}
                     </button>
-                    <button className="flyout-reject" onClick={() => handleReject(ad.adId)}>
-                    {t('admin.reject')}
+                    <button className="flyout-reject" onClick={() => handleDelete(ad.adId)}>
+                        {t('admin.delete')}
 
                     </button>
                 </div>

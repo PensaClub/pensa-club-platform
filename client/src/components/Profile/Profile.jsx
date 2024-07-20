@@ -1,15 +1,13 @@
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useContext, Fragment } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import { ProfileData } from './ProfileData';
 import ProfileForm from './ProfileForm';
 import ProfileAddress from './ProfileAddress';
 import { ProfilePassword } from './ProfilePassword';
 import { useTranslation } from 'react-i18next';
-
 import './profile.css';
 import { UserContext } from '../contexts/UserContext';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faLocationDot,
@@ -23,6 +21,8 @@ import {
   faBriefcase,
   faUniversalAccess,
   faUsersGear,
+  faCircleCheck,
+  faBan,
 } from '@fortawesome/free-solid-svg-icons';
 import { ProfileSkills } from './ProfileSkills';
 import { ProfileWorks } from './ProfileWorks';
@@ -30,14 +30,22 @@ import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
 import { AdminGuard } from '../Guards/AdminGuard';
 import { PendingAnnouncements } from '../AdminDashboard/PendingAnnouncements/PendingAnnouncements';
+import { ApprovedAnnouncements } from '../AdminDashboard/ApprovedAnnouncements/ApprovedAnnouncements';
+import { AllAnnouncements } from '../AdminDashboard/AllAnnouncements/AllAnnouncements';
+import { RejectAnnouncements } from '../AdminDashboard/RejectAnnouncements/RejectAnnouncements';
 
 export const Profile = () => {
-  const location = useLocation()
+  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isFinish, profileData, isAdmin } = useContext(UserContext);
-  const[adsCount,setAdsCount] = useState('');
+  const [adsCount, setAdsCount] = useState('');
+  const [approvedCount, setApprovedCount] = useState('');
+  const [rejectCount,setRejectCount] = useState('');
+  const [showAdsSubMenu, setShowAdsSubMenu] = useState(false);
+  const [showUsersSubMenu, setShowUsersSubMenu] = useState(false);
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
     if (!profileData) {
@@ -55,7 +63,18 @@ export const Profile = () => {
   const handleLogout = () => {
     navigate('/logout');
   };
-const isAdminPanel =location.pathname.startsWith('/profile/pending-announcements')
+
+  const toggleAdsSubMenu = () => {
+    setShowAdsSubMenu(!showAdsSubMenu);
+  };
+  const toggleUsersSubMenu = () => {
+    setShowUsersSubMenu(!showUsersSubMenu);
+  };
+  const isAdminPanel = location.pathname.startsWith('/profile/pending-announcements')
+    || location.pathname.startsWith('/profile/approved-announcements')
+    || location.pathname.startsWith('/profile/reject-announcements')
+    || location.pathname.startsWith('/profile/ads-admin');
+
   return (
     <section className='profile-section'>
       <button className='menu-toggle' onClick={toggleMenu}>
@@ -96,19 +115,37 @@ const isAdminPanel =location.pathname.startsWith('/profile/pending-announcements
           <FontAwesomeIcon icon={faMountainSun} className='icon' />
           {t('profile.anothers')}
         </Link>
-        {isAdmin && ( 
-          <div className="admin-dashboard">
-            <h3>{t('profile.admin_dashboard')}</h3>
-            <Link to='pending-announcements' onClick={toggleMenu}>
-              <FontAwesomeIcon icon={faScroll} className='icon' />
-              {t('profile.pending_announcements') } {adsCount && adsCount > 0 && (<>- {adsCount} {adsCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
-
-            </Link>
-          </div>
-        )}
+        {isAdmin && (
+  <div className="admin-dashboard">
+    <h3>{t('profile.admin_dashboard')}</h3>
+    <Link to='ads-admin' onClick={toggleAdsSubMenu}>
+      <FontAwesomeIcon icon={faScroll} className='icon' />
+      {t('profile.ads')}
+    </Link>
+    <div className={`ads-submenu ${showAdsSubMenu ? 'show' : ''}`}>
+      <Link to='pending-announcements' onClick={toggleMenu}>
+        <FontAwesomeIcon icon={faScroll} className='icon' />
+        {t('profile.pending_announcements')} {adsCount && adsCount > 0 && (<>- {adsCount} {adsCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
+      </Link>
+      <Link to='approved-announcements' onClick={toggleMenu}>
+        <FontAwesomeIcon icon={faCircleCheck} className='icon' />
+        {t('profile.approved_announcements')} {approvedCount && approvedCount > 0 && (<>- {approvedCount} {approvedCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
+      </Link>
+      <Link to='reject-announcements' onClick={toggleMenu}>
+        <FontAwesomeIcon icon={faBan} className='icon' />
+        {t('profile.reject_announcements')} {rejectCount && rejectCount > 0 && (<>- {rejectCount} {rejectCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
+      </Link>
+    </div>
+    <Link to='ads-admin' onClick={toggleUsersSubMenu}>
+      <FontAwesomeIcon icon={faScroll} className='icon' />
+      {t('admin.users')}
+    </Link>
+  
+  </div>
+)}
       </section>
       <div className='main-profile'>
-        {isFinish === true && !isAdminPanel &&(
+        {isFinish === true && !isAdminPanel && (
           <section className='profile-data'>
             <Link to='/logout' onClick={handleLogout}>
               <button type='button' className='top-right-button'>
@@ -154,7 +191,10 @@ const isAdminPanel =location.pathname.startsWith('/profile/pending-announcements
           <Route path='workOptions' element={<ProfileWorks />} />
           <Route path='announced' element={<ProfileAnnounced />} profileData={profileData} />
           <Route path='interestOptions' element={<ProfileInterests />} />
+          <Route path='ads-admin' element={<AdminGuard><AllAnnouncements setAdsCount={setAdsCount} /></AdminGuard>}/>
           <Route path='pending-announcements' element={<AdminGuard><PendingAnnouncements setAdsCount={setAdsCount} /></AdminGuard>} />
+          <Route path='approved-announcements' element={<AdminGuard><ApprovedAnnouncements setApprovedCount={setApprovedCount} /></AdminGuard>} />
+          <Route path='reject-announcements' element={<AdminGuard><RejectAnnouncements setRejectCount={setRejectCount} /></AdminGuard>} />
         </Routes>
       </div>
     </section>

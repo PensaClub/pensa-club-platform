@@ -1,15 +1,15 @@
-import{ useEffect, useState } from 'react';
-import {Link } from 'react-router-dom';
-import './pendingAnnouncements.css';
+import './approvedAnnouncements.css';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
-import { CommentModal } from './CommentModal';
 import { useAdminContext } from '../../contexts/AdminContext';
-import { Flyout } from '../Flyout';
 import { useTranslation } from 'react-i18next';
 import { notify } from '../../../utils/notify';
+import { CommentModal } from '../PendingAnnouncements/CommentModal';
+import { FlyoutApproved } from './FlyoutApproved';
 
-export const PendingAnnouncements = ({ setAdsCount }) => {
+export const ApprovedAnnouncements = ({ setApprovedCount }) => {
   const [announcements, setAnnouncements] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,34 +25,34 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
   const [isSearching, setIsSearching] = useState(false);
   const { t } = useTranslation();
 
-  const { fetchPendingAds, updateAdStatus, deleteAd } = useAdminContext();
+  const { fetchApprovedAds, updateAdStatus, deleteAd } = useAdminContext();
 
   useEffect(() => {
     const loadPendingAds = async () => {
       try {
-        const pendingAds = await fetchPendingAds();
-        setAnnouncements(pendingAds);
-        setSearchResults(pendingAds);
-        setAdsCount(pendingAds.length);
-
+        const approvedAds = await fetchApprovedAds();
+        setAnnouncements(approvedAds);
+        setSearchResults(approvedAds);
+        setApprovedCount(approvedAds.length);
       } catch (e) {
         console.error(e);
       }
     };
     loadPendingAds();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setAnnouncements]);
 
   const sortedAnnouncements = [...searchResults].sort((a, b) => {
-    if (sortConfig.key === 'email') {
+    if (sortConfig.key === 'id') {
+      const idA = a.adId;
+      const idB = b.adId;
+      return sortConfig.direction === 'ascending' ? idA.localeCompare(idB) : idB.localeCompare(idA);
+    } else if (sortConfig.key === 'email') {
       const emailA = a.email.split('@')[0];
       const emailB = b.email.split('@')[0];
       return sortConfig.direction === 'ascending' ? emailA.localeCompare(emailB) : emailB.localeCompare(emailA);
     } else if (sortConfig.key === 'date') {
       return sortConfig.direction === 'ascending' ? new Date(a.creationDate) - new Date(b.creationDate) : new Date(b.creationDate) - new Date(a.creationDate);
-    } else if (sortConfig.key === 'id') {
-      return sortConfig.direction === 'ascending' ? a.adId.localeCompare(b.adId) : b.adId.localeCompare(a.adId);
     } else {
       return sortConfig.direction === 'ascending' ? a[sortConfig.key].localeCompare(b[sortConfig.key]) : b[sortConfig.key].localeCompare(a[sortConfig.key]);
     }
@@ -75,47 +75,30 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
     setIsModalOpen(false);
   };
 
-  const handleApprove = async (id) => {
-    try {
-      await updateAdStatus(id, 'approved', comment);
-      setComment('');
-   
-      const updatedAds = await fetchPendingAds();
-      setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
-      setSearchResults(updatedAds);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const handleReject = async (id) => {
     try {
       if (!comment) {
         notify('enter-comment');
         return;
       }
-  
       await updateAdStatus(id, 'denied', comment);
       setComment('');
-  
-      const updatedAds = await fetchPendingAds();
+      const updatedAds = await fetchApprovedAds();
       setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
+      setApprovedCount(updatedAds.length);
       setSearchResults(updatedAds);
     } catch (e) {
       console.error(e);
     }
   };
-  
+
   const handleDelete = async (id) => {
     try {
       await deleteAd(id);
       setComment('');
-    
-      const updatedAds = await fetchPendingAds();
+      const updatedAds = await fetchApprovedAds();
       setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
+      setApprovedCount(updatedAds.length);
       setSearchResults(updatedAds);
     } catch (error) {
       console.error(error);
@@ -151,7 +134,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
 
   return (
     <div className="pending-announcements-container">
-      <h2>{t('admin.pending_announcements')}</h2>
+      <h2>{t('profile.approved_announcements')}</h2>
       <div className="search-container">
         <input
           type="text"
@@ -177,13 +160,13 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
         )}
       </div>
       <hr />
-      <div className="pending-announcements-table-container">
-        <table className="pending-announcements-table">
+      <div className="approved-announcements-table-container">
+        <table className="approved-announcements-table">
           <thead>
             <tr>
-              <th className="number-cell" onClick={() => requestSort('adId')}>
+              <th className="number-cell" onClick={() => requestSort('id')}>
                 {t('admin.number')}
-                {sortConfig.key === 'adId' ? (
+                {sortConfig.key === 'id' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
@@ -222,12 +205,6 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
                     onClick={() => handleComment(announcement)}
                   />
                   <img
-                    src={'/icons/approve-invoice.svg'}
-                    alt="approved"
-                    className="comment-icon"
-                    onClick={() => handleApprove(announcement.adId)}
-                  />
-                  <img
                     src={'/icons/denied.svg'}
                     alt="reject"
                     className="comment-icon"
@@ -260,11 +237,11 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
         />
       </CommentModal>
       {selectedAd && (
-        <Flyout
+        <FlyoutApproved
           isOpen={isFlyoutOpen}
           onClose={() => setIsFlyoutOpen(false)}
           ad={selectedAd}
-          handleApprove={handleApprove}
+          handleDelete={handleDelete}
           handleReject={handleReject}
         />
       )}

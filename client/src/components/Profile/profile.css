@@ -7,7 +7,10 @@
   background-size: auto;
   position: relative;
 }
-
+.ads-submenu.show {
+  max-height: 500px;
+  opacity: 1;
+}
 .profile-section-edit,
 .profile-section,
 .profile-form,
@@ -130,8 +133,9 @@
   pointer-events: auto;
 }
 .admin-dashboard h3{
+  margin: initial;
   margin-top: 1em;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem !important;
 }
 @media (max-width: 800px) {
   .menu-toggle {
@@ -625,6 +629,10 @@
   .avatar-announced p {
     top: 28px;
   }
+  .ads-submenu.show {
+    max-height: 500px;
+    opacity: 1;
+  }
 }
 
 .error {
@@ -655,4 +663,47 @@
     background-color: var(--orange);
     color: var(--bg-white);
   }
+}
+.admin-dashboard {
+  position: relative;
+}
+
+.ads-submenu {
+  margin-left: 20px;
+  border-left: 2px solid #ddd;
+  padding-left: 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1.1s ease-out, opacity 1.1s ease-out;
+  opacity: 0;
+}
+
+.ads-submenu.show {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.ads-submenu a {
+  display: block;
+  position: relative;
+}
+
+.ads-submenu a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 4px;
+  height: 100%;
+  background-color: #aaa;
+}
+
+.ads-submenu a::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  width: 12px;
+  height: 2px;
+  background-color: #aaa;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { createContext, useContext, useState } from "react";
 import { adminServiceFactory } from "../Services/adminService";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +13,8 @@ export const AdminProvider = ({ children }) => {
     const adminService = adminServiceFactory()
     const navigate = useNavigate();
     const [pendingAds, setPendingAds] = useState([])
-
+    const [approvedAds, setApprovedAds] = useState([])
+    const [rejectAds,setRejectAds] = useState([])
     const showErrorAndSetTimeouts = (error) => {
         setErrorMessage(error);
         setIsLoading(false);
@@ -35,16 +37,44 @@ export const AdminProvider = ({ children }) => {
             throw e;
         }
     };
+    const fetchApprovedAds = async () => {
+        try {
+            setIsLoading(true);
+            const response = await adminService.approvedAds();
+            setApprovedAds(response);
+            setIsLoading(false);
+            return response;
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message);
+            setIsLoading(false);
+            throw e;
+        }
+    };
+    const fetchRejectAds = async () => {
+        try {
+            setIsLoading(true);
+            const response = await adminService.rejectAds();
+            setRejectAds(response);
+            setIsLoading(false);
+            return response;
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message);
+            setIsLoading(false);
+            throw e;
+        }
+    };
     const updateAdStatus = async (adId, newStatus, adminComment) => {
         try {
             setIsLoading(true);
             await adminService.updateAdStatus(adId, newStatus, adminComment);
-            await fetchPendingAds();
             setIsLoading(false);
-    
+
             if (newStatus === 'approved') {
+                fetchApprovedAds()
                 notify('success-approved');
             } else if (newStatus === 'denied') {
+                await fetchPendingAds();
+
                 notify('success-reject');
             }
         } catch (e) {
@@ -53,7 +83,7 @@ export const AdminProvider = ({ children }) => {
             throw e;
         }
     };
-    
+
     const deleteAd = async (id) => {
         try {
             setIsLoading(true);
@@ -73,7 +103,10 @@ export const AdminProvider = ({ children }) => {
         fetchPendingAds,
         pendingAds,
         updateAdStatus,
-        deleteAd
+        deleteAd,
+        fetchApprovedAds,
+        approvedAds,
+        fetchRejectAds
     }
 
     return (

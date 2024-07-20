@@ -240,8 +240,10 @@
     "logout": "Logout",
     "admin_dashboard": "Admin Dashboard",
     "pending_announcements": "Pending Announcements",
+    "approved_announcements": "Approved Announcements",
     "ads": "Ads",
-    "ads-one": "Ad"
+    "ads-one": "Ad",
+    "reject_announcements": "Rejected Announcements"
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -256,7 +258,7 @@
     "actions": "Actions",
     "category": "Category",
     "description": "Description",
-    "region":"Region",
+    "region": "Region",
     "subregion": "Municipality",
     "town": "Town",
     "address": "Address",
@@ -265,7 +267,10 @@
     "event_start_date": "Start Date",
     "event_end_date": "End Date",
     "approve": "Approve",
-    "reject": "Reject"
+    "reject": "Reject",
+    "delete": "Delete",
+    "reject_announcements": "Rejected Announcements",
+    "users": "Users"
   },
   "community": {
     "community": "Community",

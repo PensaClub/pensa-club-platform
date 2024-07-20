@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import './flyout.css';
-import { useCommunityContext } from '../contexts/CommunityContext';
-import { useTranslation } from 'react-i18next';
+import './flyoutApproved.css';
 
-export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => {
+import { useTranslation } from 'react-i18next';
+import { useCommunityContext } from '../../contexts/CommunityContext';
+
+export const FlyoutApproved = ({ isOpen, onClose, ad, handleDelete, handleReject }) => {
     const [selectedImage, setSelectedImage] = useState(ad.images[0].imageURL);
     const [regionName, setRegionName] = useState('');
     const [subregionName, setSubregionName] = useState('');
@@ -123,8 +124,8 @@ export const Flyout = ({ isOpen, onClose, ad, handleApprove, handleReject }) => 
                     ))}
                 </div>
                 <div className="flyout-buttons">
-                    <button className="flyout-approve" onClick={() => handleApprove(ad.adId)}>
-                        {t('admin.approve')}
+                    <button className="flyout-approve" onClick={() => handleDelete(ad.adId)}>
+                        {t('admin.delete')}
                     </button>
                     <button className="flyout-reject" onClick={() => handleReject(ad.adId)}>
                     {t('admin.reject')}

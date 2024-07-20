@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from 'react';
 import './profile.css';
 import { useTranslation } from 'react-i18next';
@@ -60,6 +61,7 @@ export const ProfileAnnounced = () => {
         };
  
         fetchAds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [profileData.email]);
  
     const getAdTownValue = (language, town) => {
@@ -84,6 +86,7 @@ export const ProfileAnnounced = () => {
         if (ads.length > 0) {
             loadTownNames();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ads, currentLanguage, regions]);
  
     const handleDeleteClick = (ad) => {

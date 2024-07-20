@@ -240,8 +240,11 @@
     "password_match": "Паролите не съвпадат",
     "admin_dashboard": "Админ панел",
     "pending_announcements": "Неодобрени обяви",
+    "approved_announcements": "Одобрени обяви",    
     "ads": "Обяви",
-    "ads-one": "Обява"
+    "ads-one": "Обява",
+    "reject_announcements": "Отхвърлени обяви"
+
   },
   "admin": {
     "pending_announcements": "Неодобрени обяви",
@@ -265,7 +268,9 @@
     "event_start_date": "Начална дата",
     "event_end_date": "Крайна дата",
     "approve": "Одобри",
-    "reject": "Отказ"
+    "reject": "Отказ",
+    "delete":"Изтрии",
+    "users": "Потребители"
   },
   "community": {
     "community": "Общност",

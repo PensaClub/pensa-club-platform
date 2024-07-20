@@ -14,6 +14,9 @@ export const adminServiceFactory = (token) => {
         approvedAds: async() => {
             return requester.get(`${apiUrl}/ads/approved-ads`)
         },
+        rejectAds: async() => {
+            return requester.get(`${apiUrl}/ads/denied-ads`)
+        },
         updateAdStatus: async (adId, newStatus, adminComment) => {
             return requester.post(`${apiUrl}/ads/ad-update-status`, { adId, newStatus, adminComment });
           },
