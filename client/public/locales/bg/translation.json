@@ -113,7 +113,7 @@
     "profession": "Професия",
     "phone": "Телефон",
     "email": "Имейл",
-    "ads_by":"Обяви на",
+    "ads_by": "Обяви на",
     "no_ads": "В момента няма обяви",
     "read_more": "Прочети повече",
     "close": "Затвори"
@@ -237,7 +237,40 @@
     "password_error": "Паролата трябва да е поне 8 символа и да съдържа поне една буква и една цифра",
     "new_password_error": "Новата парола трябва да е поне 8 символа и да съдържа поне една буква и една цифра",
     "logout": "Излез от профила",
-    "password_match": "Паролите не съвпадат"
+    "password_match": "Паролите не съвпадат",
+    "admin_dashboard": "Админ панел",
+    "pending_announcements": "Неодобрени обяви",
+    "approved_announcements": "Одобрени обяви",    
+    "ads": "Обяви",
+    "ads-one": "Обява",
+    "reject_announcements": "Отхвърлени обяви"
+
+  },
+  "admin": {
+    "pending_announcements": "Неодобрени обяви",
+    "search": "Търси",
+    "name": "Име",
+    "email": "Имейл",
+    "date": "Дата",
+    "number": "№",
+    "user_email": "Имейл адрес",
+    "announcement_title": "Име на обявата",
+    "creation_date": "Дата на създаване",
+    "actions": "Действия",
+    "category": "Kateгория",
+    "description": "Описание",
+    "region": "Регион",
+    "subregion": "Община",
+    "town": "Град",
+    "address": "Адрес",
+    "tags": "Тагове",
+    "price": "Цена",
+    "event_start_date": "Начална дата",
+    "event_end_date": "Крайна дата",
+    "approve": "Одобри",
+    "reject": "Отказ",
+    "delete":"Изтрии",
+    "users": "Потребители"
   },
   "community": {
     "community": "Общност",
@@ -335,6 +368,9 @@
     "success-delete-ads": "Успешно изтрихте обява!",
     "success-edit-ads": "Успешно редактирахте обява!",
     "success-suggested": "Успешно препоръчахте приятел!",
+    "enter-comment": "Въведете коментар",
+    "success-approved": "Обявата беше одобрена!",
+    "success-reject": "Обявата беше отказана!",
     "error": "Грешка! Моля, опитайте отново!",
     "email-send": "Имейлът е изпратен успешно!",
     "error-images": "Може да изберете само 4 снимки"
@@ -356,7 +392,6 @@
     "games": "Игри",
     "arbitration": "Арбитраж",
     "all_menu": "Всички"
-
   },
   "months": {
     "january": "януари",
