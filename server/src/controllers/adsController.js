@@ -31,8 +31,11 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 });
 
 adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
+  const limit = req.query.limit;
+  const options = { where: { status: 'approved' }, order: [['createdAt', 'DESC']] }
+  if (limit) options.limit = Number(limit);
   try {
-    const ads = await user_ads.findAll({ where: { status: 'approved' } });
+    const ads = await user_ads.findAll(options);
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
   } catch (err) {
@@ -42,11 +45,10 @@ adsController.get('/approved-ads', memoryCache, async (req, res, next) => {
 
 adsController.get('/unapproved-ads', isAuth, rbac.checkPermission('approve_record'), memoryCache, async (req, res, next) => {
   try {
-    const ads = await user_ads.findAll({
-      where: {
-        status: { [Op.ne]: 'approved' }
-      }
-    });
+    const limit = req.query.limit;
+    const options = { where: { [Op.ne]: 'approved' }, order: [['createdAt', 'DESC']] }
+    if (limit) options.limit = Number(limit);
+    const ads = await user_ads.findAll(options);
     const mappedAds = ads.map(ad => fieldSwap(ad.dataValues, 'mapFromDb'));
     res.status(200).json(mappedAds);
   } catch (err) {
@@ -93,7 +95,7 @@ adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_re
       {
         where: {
           ad_id: adId,
-          status: { [Sequelize.Op.ne]: newStatus } // Only update if current status is different
+          status: { [Op.ne]: newStatus } // Only update if current status is different
         }
       }
     );
@@ -142,11 +144,11 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
     if (extraFields) extraFieldsValidator(extraFields);
 
     const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
-    
+
     data.approved = false;
 
     const [affectedRows, [details]] = await user_ads.update(data, { where: { ad_id: data.ad_id, user_id: req.user.userId }, returning: true });
-    
+
     if (!details) {
       return res.status(404).json({ message: 'Ad not found or wrong user credentials.' });
     }
@@ -161,7 +163,7 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
       }
       eventEmitter.emit('adsUpdated', details.dataValues); // TODO CHANGE BASED ON CACHING IF NEEDED
     }
-    
+
     const updatedDetails = fieldSwap(details[0].dataValues, 'mapFromDb');
 
     res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
