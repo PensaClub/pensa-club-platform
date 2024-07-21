@@ -74,7 +74,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 
     const updatedDetails = { ...fieldSwap(restOfDetails, 'mapFromDb'), age: ageCalculate(restOfDetails.birth_date) };
 
-    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails });
+    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails, ads: [] });
 
     res.status(200).send({ message: 'Details successfully updated!', user: { email: req.user.email, enabled: true, details: updatedDetails }, token });
   } catch (err) {
@@ -82,10 +82,10 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
   }
 });
 
-userDetailsController.get('/all-users', memoryCache, async (req, res, next) => {
+userDetailsController.get('/all-users', memoryCache('users'), async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
-      attributes: ['email', ['finished', 'enabled']],
+      attributes: ['id', 'email', ['finished', 'enabled']],
       include: [
         {
           model: user_details,
@@ -129,6 +129,8 @@ userDetailsController.get('/all-users', memoryCache, async (req, res, next) => {
       ],
     });
 
+    if (accounts.length === 0) return res.status(404).json({ message: 'No user accounts found.' });
+
     res.status(200).json({ message: 'Users data retrieved successfully.', accounts });
   } catch (err) {
     next(err);
@@ -163,7 +165,7 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
 
     updatedDetails.age = ageCalculate(updatedDetails.birthDate);
 
-    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails });
+    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails, ads: [] });
 
     res.status(200).json({ message: 'Details edited successfully!', details: updatedDetails });
   } catch (err) {
@@ -171,26 +173,33 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
   }
 });
 
-userDetailsController.get('/single-user', isAuth, async (req, res, next) => {
-  if (!req.user.userId) {
-    return res.status(401).json({ message: 'Authentication failed. User not found.' });
-  }
-
+userDetailsController.get('/single-user', isAuth, memoryCache('users'), async (req, res, next) => {
   try {
     const user = await user_account.findOne({
       where: { id: req.user.userId },
-      attributes: ['email', ['finished', 'enabled']],
+      attributes: ['id', 'email', ['finished', 'enabled']],
       include: [
         {
           model: user_details,
           as: 'details',
-          attributes: { exclude: ['user_accounts_id', 'id'] },
+          attributes: [
+            ['phone_number', 'phoneNumber'],
+            'username',
+            ['first_name', 'firstName'],
+            ['last_name', 'lastName'],
+            ['work_options', 'workOptions'],
+            'skills',
+            ['interest_options', 'interestOptions'],
+            'location',
+            'imageURL',
+            ['firebase_image_path', 'firebaseImagePath'],
+          ],
         },
         {
           model: user_ads,
-          as: 'ads',
           where: { status: 'approved' },
           required: false,
+          as: 'ads',
           attributes: [
             'summary',
             'description',
@@ -212,9 +221,7 @@ userDetailsController.get('/single-user', isAuth, async (req, res, next) => {
       ],
     });
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
+    if (!user) return res.status(404).json({ message: 'User not found.' });
 
     const details = fieldSwap(user.dataValues.details.dataValues, 'mapFromDb');
 
@@ -222,7 +229,7 @@ userDetailsController.get('/single-user', isAuth, async (req, res, next) => {
 
     res.status(200).json({
       message: 'User data retrieved successfully.',
-      user: { email: user.dataValues.email, enabled: user.dataValues.enabled, details, ads: user.dataValues.ads },
+      user,
     });
   } catch (err) {
     next(err);
