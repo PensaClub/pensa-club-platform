@@ -74,7 +74,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 
     const updatedDetails = { ...fieldSwap(restOfDetails, 'mapFromDb'), age: ageCalculate(restOfDetails.birth_date) };
 
-    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails, ads: [] });
+    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails });
 
     res.status(200).send({ message: 'Details successfully updated!', user: { email: req.user.email, enabled: true, details: updatedDetails }, token });
   } catch (err) {
@@ -99,31 +99,32 @@ userDetailsController.get('/all-users', memoryCache('users'), async (req, res, n
             'skills',
             ['interest_options', 'interestOptions'],
             'location',
+            'gender',
             'imageURL',
             ['firebase_image_path', 'firebaseImagePath'],
           ],
         },
         {
           model: user_ads,
-          where: { status: 'approved' },
           required: false,
           as: 'ads',
           attributes: [
+            ['ad_id', 'adId'],
             'summary',
-            'description',
             'category',
+            'description',
             ['ad_region', 'adRegion'],
             ['ad_subregion', 'adSubregion'],
             ['ad_town', 'adTown'],
-            ['ad_id', 'adId'],
+            'street',
+            'tags',
             'images',
             'status',
-            'street',
+            ['admin_comment', 'adminComment'],
             ['extra_fields', 'extraFields'],
             ['creation_date', 'creationDate'],
             ['expiration_date', 'expirationDate'],
-            'tags',
-            ['admin_comment', 'adminComment'],
+            ['user_id', 'userId'],
           ],
         },
       ],
@@ -165,7 +166,7 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
 
     updatedDetails.age = ageCalculate(updatedDetails.birthDate);
 
-    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails, ads: [] });
+    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails });
 
     res.status(200).json({ message: 'Details edited successfully!', details: updatedDetails });
   } catch (err) {
@@ -191,31 +192,32 @@ userDetailsController.get('/single-user', isAuth, memoryCache('users'), async (r
             'skills',
             ['interest_options', 'interestOptions'],
             'location',
+            'gender',
             'imageURL',
             ['firebase_image_path', 'firebaseImagePath'],
           ],
         },
         {
           model: user_ads,
-          where: { status: 'approved' },
           required: false,
           as: 'ads',
           attributes: [
+            ['ad_id', 'adId'],
             'summary',
-            'description',
             'category',
+            'description',
             ['ad_region', 'adRegion'],
             ['ad_subregion', 'adSubregion'],
             ['ad_town', 'adTown'],
-            ['ad_id', 'adId'],
+            'street',
+            'tags',
             'images',
             'status',
-            'street',
+            ['admin_comment', 'adminComment'],
             ['extra_fields', 'extraFields'],
             ['creation_date', 'creationDate'],
             ['expiration_date', 'expirationDate'],
-            'tags',
-            ['admin_comment', 'adminComment'],
+            ['user_id', 'userId'],
           ],
         },
       ],

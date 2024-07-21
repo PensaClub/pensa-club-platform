@@ -35,12 +35,8 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 });
 
 adsController.get(`/:adStatus-ads/:adId?`, isAuth, memoryCache('ads'), rbac.checkPermission('approve_record'), async (req, res, next) => {
-  const adsType = ['approved', 'pending', 'denied'];
-
   try {
     const { adStatus, adId } = req.params;
-
-    if (!adsType.includes(adStatus)) return res.status(400).json({ message: 'Invalid status type. Status must be approved, pending or denied.' });
 
     const whereCondition = {
       status: adStatus,
@@ -59,17 +55,13 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, memoryCache('ads'), rbac.chec
       ],
     });
 
-    if (adId && ads.length === 0) return res.status(404).json({ message: `There is no ad with such ID at the moment.` });
-
-    if (ads.length === 0) return res.status(200).json({ message: `There are no ads with status ${adStatus} at the moment.` });
-
     const mappedAds = ads.map((ad) => {
       const newAd = fieldSwap(ad.dataValues, 'mapFromDb');
       newAd.email = ad.dataValues.account.dataValues.email;
       return newAd;
     });
 
-    res.status(200).json({ message: `${adStatus.charAt(0).toUpperCase() + adStatus.slice(1)} ads successfully retrieved.`, ads: mappedAds });
+    res.status(200).json(mappedAds);
   } catch (err) {
     next(err);
   }
@@ -86,7 +78,7 @@ adsController.get('/adById/:adId', memoryCache('ads'), async (req, res, next) =>
 
     const mappedAds = fieldSwap(ad.dataValues, 'mapFromDb');
 
-    res.status(200).json({ message: 'Ad successfully retrieved.', ads: mappedAds });
+    res.status(200).json(mappedAds);
   } catch (err) {
     next(err);
   }
@@ -109,9 +101,11 @@ adsController.get('/ads-user', isAuth, memoryCache('ads'), async (req, res, next
       ],
     });
 
+    if (ads.length === 0) return res.status(404).json({ message: 'No ads found for the specified user.' });
+
     const mappedAds = ads.map((ad) => fieldSwap(ad.dataValues, 'mapFromDb'));
 
-    res.status(200).json({ message: 'User ads successfully retrieved', ads: mappedAds });
+    res.status(200).json(mappedAds);
   } catch (err) {
     next(err);
   }
