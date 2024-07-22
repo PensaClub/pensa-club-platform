@@ -43,13 +43,13 @@ export const communityServiceFactory = (token) => {
         },
         getMyAds: async (email) => {
 
-            return requester.get(`${apiUrl}/ads/user-ads`, { email });
+            return requester.get(`${apiUrl}/ads/ads-user`, { email });
         },
-        deleteAd: async (id) => {
-            return requester.post(`${apiUrl}/ads/ad-delete`, { id });
+        deleteAd: async (adId) => {
+            return requester.del(`${apiUrl}/ads/ad-delete/${adId}`);
         },
-        editAd: async (id) => {
-            return requester.patch(`${apiUrl}/ads/ad-edit`, { id });
+        editAd: async (adData) => {
+            return requester.patch(`${apiUrl}/ads/ad-edit`, adData);
         },
         searchAds: async (filters) => {
             const query = new URLSearchParams(filters).toString();
@@ -57,6 +57,9 @@ export const communityServiceFactory = (token) => {
         },
         updateExpirationDate: async(adId) => {
             return requester.patch(`${apiUrl}/ads/update-expiration-date/${adId}`, { adId })
+        },
+        getAdById: async(adId) => {
+            return requester.get(`${apiUrl}/ads/adById/${adId}`)
         }
     }
 }

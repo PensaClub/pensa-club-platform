@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './profile.css';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/UserContext';
 import { useCommunityContext } from '../contexts/CommunityContext';
 import { DeleteAd } from '../Community/AdPage/DeleteAd/DeleteAd';
 import { differenceInDays } from 'date-fns';
- 
+
 const getMonthFromDate = (dateString, language) => {
     const date = new Date(dateString);
     return date.toLocaleString(language, { month: 'long' });
@@ -37,6 +38,7 @@ const cutToFirstWord = (text) => {
 export const ProfileAnnounced = () => {
     const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
+    const navigate = useNavigate();
     const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions } = useCommunityContext();
     const { profileData } = useAuthContext();
     const [ads, setAds] = useState([]);
@@ -53,7 +55,7 @@ export const ProfileAnnounced = () => {
  
             try {
                 const result = await getMyAds(profileData.email);
-                setAds(result.mappedAds);
+                setAds(result.ads);
             } catch (error) {
                 console.error('Failed to fetch ads', error);
             }
@@ -104,6 +106,11 @@ export const ProfileAnnounced = () => {
         }
     };
  
+    const handleEditClick = (ad) => {
+        setSelectedAd(ad);
+        navigate(`/ad/edit/${ad.adId}`)
+    }
+
     const handleCloseModal = () => {
         setIsDeleteModalOpen(false);
         setSelectedAd(null);
@@ -118,8 +125,7 @@ export const ProfileAnnounced = () => {
             console.error('Failed to update expiration date', error);
         }
     };
-    }, []);
-
+ 
     return (
         <>
             {ads.length > 0 ? (
@@ -159,7 +165,8 @@ export const ProfileAnnounced = () => {
                                 </div>
                             </section>
                             <div className='ads-btns'>
-                                <button className={'ads-btn red'}>
+                                <button className={'ads-btn red'} onClick={() => handleEditClick(ad)}
+                                    >
                                     {t('ads.edit')}
                                 </button>
                                 <button
@@ -195,6 +202,7 @@ export const ProfileAnnounced = () => {
                 adName={selectedAd?.summary}
                 adImage={selectedAd?.images[0]?.imageURL || "/images/sign-up/avatar.jpg"}
             />
+           
         </>
     );
 }

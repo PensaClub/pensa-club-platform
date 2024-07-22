@@ -464,6 +464,7 @@
 .announced .refresh span {
   font-weight: bold;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 @media (min-width: 850px) and (orientation: landscape) {

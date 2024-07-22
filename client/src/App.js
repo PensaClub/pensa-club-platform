@@ -33,6 +33,7 @@ import { MenuCommunity } from './components/Community/MenuCommunity/MenuCommunit
 import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCommunity.jsx';
 import { SuggestUserProvider } from './components/contexts/SuggestUserContext.jsx';
 import { AdDetails } from './components/Community/AdPage/AdDetails/AdDetails.jsx';
+import { EditAd } from './components/Community/AdPage/EditAd/EditAd.jsx';
 
 function App() {
   const location = useLocation();
@@ -72,6 +73,7 @@ function App() {
                   <Route element={<AuthGuard />}>
                     <Route path="/ad" element={<AdPage />} />
                     <Route path="/ad/create" element={<CreateAd />} />
+                    <Route path="/ad/edit/:adId" element={<EditAd />} />
                     <Route path="/logout" element={<Logout />} />
                     <Route path="/profile/*" element={<Profile />} />
                   </Route>

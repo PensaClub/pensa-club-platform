@@ -143,10 +143,10 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
-    const editAd = async (id) => {
+    const editAd = async (adId, adData) => {
         try {
             setIsLoading(true);
-            const response = await communityService.editAd(id);
+            const response = await communityService.editAd(adId, adData);
             setIsLoading(false);
             notify('success-edit-ads')
             return response;
@@ -188,6 +188,21 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
+
+    const getAdById = async (adId) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getAdById(adId);
+            setIsLoading(false);
+            return response;
+        } catch (e) {
+            notify('error')
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
     
     useEffect(() => {
         fetchRegions();
@@ -214,7 +229,8 @@ export const CommunityProvider = ({ children }) => {
         searchAds,
         TownSearch,
         townsSearch,
-        updateExpirationDate
+        updateExpirationDate,
+        getAdById
       }
     
     return (
