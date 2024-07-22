@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
 import './adDetails.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -101,7 +102,7 @@ export const AdDetails = () => {
                           <p>Интереси:</p>
                           <p>Умения:</p>
                           <Link>
-                            <span>{t('ads.all-user-ads')}</span>
+                            <span className='all-ads-user'>{t('ads.all-user-ads')}</span>
                           </Link>
                         </div>
                       </section>

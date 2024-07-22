@@ -34,6 +34,7 @@ import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCo
 import { SuggestUserProvider } from './components/contexts/SuggestUserContext.jsx';
 import { AdDetails } from './components/Community/AdPage/AdDetails/AdDetails.jsx';
 import { EditAd } from './components/Community/AdPage/EditAd/EditAd.jsx';
+import { AdminProvider } from './components/contexts/AdminContext.jsx';
 
 function App() {
   const location = useLocation();
@@ -43,33 +44,23 @@ function App() {
   return (
     <>
       <ErrorBoundary>
+
         <UserProvider>
           <MapProvider>
             <CommunityProvider>
               <SuggestUserProvider>
-                <Header
-                  additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
-                />
-                <HeaderCommunity />
-                <ToastContainer
-                  role="alert"
-                  className={'notification'}
-                  limit={3}
-                  position="bottom-right"
-                />
-                <Routes>
-                  <Route path="/ad/details" element={<AdDetails />} />
-
-                  <Route path="/" element={<Home />} />
-                  <Route path="/server-error" element={<ServerError />} />
-                  <Route path="/" element={<Home />} />
-                  <Route path="/server-error" element={<ServerError />} />
-                  <Route path="/forget-password" element={<ForgetPassword />} />
-                  <Route path="/resend-email" element={<ReSendEmail />} />
-                  <Route
-                    path="/reset-password"
-                    element={<ResetPasswordPage />}
+                <AdminProvider>
+                  <Header
+                    additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
                   />
+                  <HeaderCommunity />
+                  <ToastContainer
+                    role="alert"
+                    className={'notification'}
+                    limit={3}
+                    position="bottom-right"
+                  />
+
                   <Route element={<AuthGuard />}>
                     <Route path="/ad" element={<AdPage />} />
                     <Route path="/ad/create" element={<CreateAd />} />
@@ -78,24 +69,44 @@ function App() {
                     <Route path="/profile/*" element={<Profile />} />
                   </Route>
 
-                  <Route element={<PublicGuard />}>
-                    <Route path="/sign-up" element={<LoginRegister />} />
-                  </Route>
-                  <Route path="/craigslist" element={<CommunityPage />} />
-                  <Route path="/ads" element={<AdsCard />} />
-                  <Route path="/filter" element={<FiltersMap />} />
-                  <Route path="/map" element={<MapPage />} />
-                  <Route path="/suggest-user" element={<UserSuggestion />} />
-                  <Route path="/errors/*" element={<ErrorPageBoundary />} />
-                  <Route path="404/*" element={<NotFound />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-                <Footer
-                  additionalClasses={
-                    isCommunityPage ? 'hide-on-mobile position-fix' : ''
-                  }
-                />
-                <MenuCommunity />
+                  <Routes>
+                    <Route path="/ad/details" element={<AdDetails />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="/server-error" element={<ServerError />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="/server-error" element={<ServerError />} />
+                    <Route path="/forget-password" element={<ForgetPassword />} />
+                    <Route path="/resend-email" element={<ReSendEmail />} />
+                    <Route
+                      path="/reset-password"
+                      element={<ResetPasswordPage />}
+                    />
+                    <Route element={<AuthGuard />}>
+                      <Route path="/ad" element={<AdPage />} />
+                      <Route path="/ad/create" element={<CreateAd />} />
+                      <Route path="/logout" element={<Logout />} />
+                      <Route path="/profile/*" element={<Profile />} />
+                    </Route>
+
+                    <Route element={<PublicGuard />}>
+                      <Route path="/sign-up" element={<LoginRegister />} />
+                    </Route>
+                    <Route path="/craigslist" element={<CommunityPage />} />
+                    <Route path="/ads" element={<AdsCard />} />
+                    <Route path="/filter" element={<FiltersMap />} />
+                    <Route path="/map" element={<MapPage />} />
+                    <Route path="/suggest-user" element={<UserSuggestion />} />
+                    <Route path="/errors/*" element={<ErrorPageBoundary />} />
+                    <Route path="404/*" element={<NotFound />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                  <Footer
+                    additionalClasses={
+                      isCommunityPage ? 'hide-on-mobile position-fix' : ''
+                    }
+                  />
+                  <MenuCommunity />
+                </AdminProvider>
               </SuggestUserProvider>
             </CommunityProvider>
           </MapProvider>
