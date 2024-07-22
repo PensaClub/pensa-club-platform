@@ -329,7 +329,7 @@ header a:nth-child(1) {
   }
 
   .social-icons-header:hover {
-    background-color: var(--bg-in-gray);
+    background-color: var(--gravel);
     border-radius: var(--radius);
   }
   .navy {

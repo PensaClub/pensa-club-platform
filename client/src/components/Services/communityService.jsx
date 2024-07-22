@@ -59,4 +59,6 @@ export const communityServiceFactory = (token) => {
             return requester.patch(`${apiUrl}/ads/update-expiration-date/${adId}`, { adId })
         }
     }
-}
+}    getApprovedAds: async (limit) => {
+      return requester.get(`${apiUrl}/ads/approved-ads?limit=${limit}`);
+    },

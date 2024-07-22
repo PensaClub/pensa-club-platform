@@ -222,6 +222,20 @@ export const CommunityProvider = ({ children }) => {
             {children}
             {isLoading && <Loader />}
             {/* {errorMessage && (
+  const getLatestAds = async (email) => {
+    try {
+      setIsLoading(true);
+      const response = await communityService.getApprovedAds(3);
+      setIsLoading(false);
+      return response;
+    } catch (e) {
+      notify("error");
+      showErrorAndSetTimeouts(e.message);
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
+  };
                 <div className={`error-message show-error custom-style`}>
                     <p>{errorMessage}</p>
                     {console.log("Rendering error message:", errorMessage)}
