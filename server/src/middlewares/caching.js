@@ -226,7 +226,7 @@ const fetchAllAds = async () =>
 
 const fetchAllAccounts = async () =>
   await user_account.findAll({
-    attributes: ['id', 'email', ['finished', 'enabled']],
+    attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role'],
     include: [
       {
         model: user_details,
@@ -236,9 +236,16 @@ const fetchAllAccounts = async () =>
           'username',
           ['first_name', 'firstName'],
           ['last_name', 'lastName'],
+          'region',
+          'municipality',
+          'settlement',
           ['work_options', 'workOptions'],
           'skills',
           ['interest_options', 'interestOptions'],
+          'district',
+          'block',
+          'street',
+          ['street_Number', 'street'],
           'location',
           'gender',
           'imageURL',
@@ -265,6 +272,7 @@ const fetchAllAccounts = async () =>
           ['extra_fields', 'extraFields'],
           ['creation_date', 'creationDate'],
           ['expiration_date', 'expirationDate'],
+          ['user_id', 'userId'],
         ],
       },
     ],

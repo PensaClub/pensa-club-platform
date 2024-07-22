@@ -85,7 +85,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 userDetailsController.get('/all-users', memoryCache('users'), async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
-      attributes: ['id', 'email', ['finished', 'enabled']],
+      attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role'],
       include: [
         {
           model: user_details,
@@ -95,9 +95,16 @@ userDetailsController.get('/all-users', memoryCache('users'), async (req, res, n
             'username',
             ['first_name', 'firstName'],
             ['last_name', 'lastName'],
+            'region',
+            'municipality',
+            'settlement',
             ['work_options', 'workOptions'],
             'skills',
             ['interest_options', 'interestOptions'],
+            'district',
+            'block',
+            'street',
+            ['street_number', 'street'],
             'location',
             'gender',
             'imageURL',
@@ -178,7 +185,7 @@ userDetailsController.get('/single-user', isAuth, memoryCache('users'), async (r
   try {
     const user = await user_account.findOne({
       where: { id: req.user.userId },
-      attributes: ['id', 'email', ['finished', 'enabled']],
+      attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role'],
       include: [
         {
           model: user_details,
@@ -188,9 +195,16 @@ userDetailsController.get('/single-user', isAuth, memoryCache('users'), async (r
             'username',
             ['first_name', 'firstName'],
             ['last_name', 'lastName'],
+            'region',
+            'municipality',
+            'settlement',
             ['work_options', 'workOptions'],
             'skills',
             ['interest_options', 'interestOptions'],
+            'district',
+            'block',
+            'street',
+            ['street_number', 'street'],
             'location',
             'gender',
             'imageURL',
