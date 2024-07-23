@@ -13,10 +13,6 @@ module.exports = function validateExtraFields(fields) {
       errors.allowedExtraFields = 'Field must be one of the following: price, eventStartDate or eventEndDate.';
       return;
     }
-    if (value === '' || value === null) {
-      let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-      errors[fieldName] = `${error} can not be empty or null.`;
-    }
   });
 
   if (Object.keys(errors).length > 0) {
