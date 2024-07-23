@@ -31,6 +31,7 @@ export const MapProvider = ({ children }) => {
             const response = await mapService.allUsers()
             setAllUsers(prev => ({ ...prev, response }))
             setIsLoading(false);
+            return response;
         } catch (e) {
             showErrorAndSetTimeouts(e.message)
         }

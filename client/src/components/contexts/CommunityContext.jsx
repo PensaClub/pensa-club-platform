@@ -210,6 +210,7 @@ export const CommunityProvider = ({ children }) => {
         editAd,
         setTowns,
         fetchSearchCriteria,
+        // eslint-disable-next-line no-dupe-keys
         getMyAds,
         searchAds,
         TownSearch,

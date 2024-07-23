@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 export const FiltersCommunity = ({ handleSearch }) => {
     const { fetchSubregions, regions, subregions, isLoading } = useCommunityContext();
-    const { t, i18n } = useTranslation();
+    const {i18n } = useTranslation();
     const currentLanguage = i18n.language;
     const [openSelects, setOpenSelects] = useState({});
     const [selectedSubregions, setSelectedSubregions] = useState({});
