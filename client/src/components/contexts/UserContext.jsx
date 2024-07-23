@@ -132,6 +132,8 @@ export const UserProvider = ({ children }) => {
         const data = await loadAddressData(responseDetails.region, responseDetails.municipality, responseDetails.settlement);
         setAddressId({ ...data });
       }
+      setIsAdmin(response.user.role === 'admin');
+
       notify('success-data');
     } catch (error) {
       notify('error');
@@ -166,6 +168,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       const response = await userService.resetPassword({ ...data });
       setIsLoading(false);
+      setIsAdmin(response.user.role === 'admin');
       return response;
     } catch (error) {
       notify('error');
@@ -191,6 +194,7 @@ export const UserProvider = ({ children }) => {
   const onSuggestSubmit = async (data) => {
     setIsLoading(true);
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await userService.suggestUser(data);
       navigate('/');
       notify('success-register');

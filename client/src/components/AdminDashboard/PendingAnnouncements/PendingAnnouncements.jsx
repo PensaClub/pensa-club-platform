@@ -46,8 +46,8 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
 
   const sortedAnnouncements = [...searchResults].sort((a, b) => {
     if (sortConfig.key === 'email') {
-      const emailA = a.email.split('@')[0];
-      const emailB = b.email.split('@')[0];
+      const emailA = a.account.email.split('@')[0];
+      const emailB = b.account.email.split('@')[0];
       return sortConfig.direction === 'ascending' ? emailA.localeCompare(emailB) : emailB.localeCompare(emailA);
     } else if (sortConfig.key === 'date') {
       return sortConfig.direction === 'ascending' ? new Date(a.creationDate) - new Date(b.creationDate) : new Date(b.creationDate) - new Date(a.creationDate);
@@ -133,7 +133,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
       if (searchCriteria === 'summary') {
         return announcement.summary.toLowerCase().includes(searchTerm.toLowerCase());
       } else if (searchCriteria === 'email') {
-        return announcement.email.toLowerCase().includes(searchTerm.toLowerCase());
+        return announcement.account.email.toLowerCase().includes(searchTerm.toLowerCase());
       } else if (searchCriteria === 'date') {
         return announcement.creationDate.toLowerCase().includes(searchTerm.toLowerCase());
       }
@@ -176,6 +176,26 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
           />
         )}
       </div>
+   
+      <hr />
+      <div className="legend-container">
+        <div className="legend-item">
+          <img src={'/icons/comment.svg'} alt="Comment" className="legend-icon" />
+          <span>{t('admin.comment')}</span>
+        </div>
+        <div className="legend-item">
+          <img  src={'/icons/approve-invoice.svg'} alt="approved" className="legend-icon" />
+          <span>{t('admin.approve')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/denied.svg'} alt="reject" className="legend-icon" />
+          <span>{t('admin.reject')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
+          <span>{t('admin.delete')}</span>
+        </div>
+      </div>
       <hr />
       <div className="pending-announcements-table-container">
         <table className="pending-announcements-table">
@@ -208,7 +228,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
               <tr key={announcement.adId}>
                 <td className="number-cell id-table-admin">{index + 1}</td>
                 <td>
-                  <Link to={`#`}>{announcement.email}</Link>
+                  <Link to={`#`}>{announcement.account.email}</Link>
                 </td>
                 <td>
                   <Link to={`#`} onClick={() => handleAdClick(announcement)}>{announcement.summary}</Link>

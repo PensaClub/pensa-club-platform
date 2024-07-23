@@ -1,3 +1,4 @@
+
 .pending-announcements-container {
     width: 90%;
     margin: 0 auto;
@@ -13,13 +14,13 @@
     border: 1px solid #ccc;
     margin-bottom: 20px;
   }
-  
-  .approved-announcements-table-container {
+
+  .pending-announcements-table-container {
     max-height: 700px;
     overflow-y: auto;
   }
   
-  .approved-announcements-table {
+  .pending-announcements-table {
     width: 100%;
     border-collapse: collapse;
     box-shadow: var(--container-shadow);
@@ -27,23 +28,22 @@
     table-layout: fixed;
   }
   
-  .approved-announcements-table a {
+  .pending-announcements-table a {
     text-decoration: none;
     color: black;
     text-shadow: var(--text-shadow);
   }
   
-  .approved-announcements-table th,
-  .approved-announcements-table td {
+  .pending-announcements-table th,
+  .pending-announcements-table td {
     padding: 8px;
     border: 1px solid #ddd;
     white-space: nowrap;
-    /* text-align: left; */
-    text-align: center;
+    text-align: left;
   }
 
 
-  .approved-announcements-table th {
+  .pending-announcements-table th {
     cursor: pointer;
     background-color: #f4f4f4;
     position: sticky;
@@ -51,16 +51,16 @@
     z-index: 1;
   }
   
-  .approved-announcements-table th:hover,
-  .approved-announcements-table td:hover {
+  .pending-announcements-table th:hover,
+  .pending-announcements-table td:hover {
     background-color: #f1f1f1;
   }
   
-  .approved-announcements-table .number-cell {
+  .pending-announcements-table .number-cell {
     width: 70px;
   }
   
-  .approved-announcements-table tbody tr {
+  .pending-announcements-table tbody tr {
     border-bottom: 1px solid #ccc;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
@@ -100,15 +100,15 @@
   }
   
 
-  .approved-announcements-table-container::-webkit-scrollbar {
+  .pending-announcements-table-container::-webkit-scrollbar {
     width: 10px;
   }
   
-  .approved-announcements-table-container::-webkit-scrollbar-track {
+  .pending-announcements-table-container::-webkit-scrollbar-track {
     background: transparent;
   }
   
-  .approved-announcements-table-container::-webkit-scrollbar-thumb {
+  .pending-announcements-table-container::-webkit-scrollbar-thumb {
     background-color: var(--orange);
     border: 2px solid #f1f1f1;
     border-radius: var(--radius-input);
@@ -178,28 +178,28 @@
     .pending-announcements-container h2 {
       font-size: var(--s-font-size);
     }
-    .approved-announcements-table .number-cell {
+    .pending-announcements-table .number-cell {
         width: 100%;
     }
   .id-table-admin{
     background-color: var(--gravel);
   }
-    .approved-announcements-table {
+    .pending-announcements-table {
       font-size: var(--xs-font-size);
     }
   
-    .approved-announcements-table th,
-    .approved-announcements-table td {
+    .pending-announcements-table th,
+    .pending-announcements-table td {
       padding: 6px;
     }
   
-    .approved-announcements-table th {
+    .pending-announcements-table th {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
     }
   
-    .approved-announcements-table td {
+    .pending-announcements-table td {
       display: block;
       width: 100%;
       box-sizing: border-box;
@@ -216,13 +216,13 @@
       gap: 5px;
     }
   
-    .approved-announcements-table tr {
+    .pending-announcements-table tr {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
     }
   
-    .approved-announcements-table tr td.actions-admin {
+    .pending-announcements-table tr td.actions-admin {
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -233,15 +233,19 @@
     .pending-announcements-container h2 {
       font-size: var(--s-font-size);
     }
-  
-    .approved-announcements-table {
+    .ads-cell{
+        width: 55px;
+    }
+    .registration-date-admin{
+      width: 155px;
+    }
+    .pending-announcements-table {
       font-size: var(--xs-font-size);
     }
   
-    .approved-announcements-table th,
-    .approved-announcements-table td {
+    .pending-announcements-table th,
+    .pending-announcements-table td {
       padding: 10px;
-      
     }
   
     .btn-unapproved {
@@ -253,8 +257,8 @@
       gap: 10px;
     }
     .comment-icon {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
     }
   }
   
@@ -262,17 +266,20 @@
     .pending-announcements-container h2 {
       font-size: var(--l-font-size);
     }
-  
-    .approved-announcements-table {
+    .ads-cell{
+        width: 100px;
+    }
+    .pending-announcements-table {
       font-size: var(--s-font-size);
     }
   
-    .approved-announcements-table th,
-    .approved-announcements-table td {
+    .pending-announcements-table th,
+    .pending-announcements-table td {
       padding: 12px 15px;
+      text-align: center;
     }
   
-    .approved-announcements-table th {
+    .pending-announcements-table th {
       font-size: var(--m-font-size);
     }
   
@@ -294,6 +301,7 @@
     .search-container {
         flex-direction: column;
         align-items: stretch;
+        
     }
 
     .search-container input[type="text"], 
@@ -322,50 +330,51 @@
 }
 
 .legend-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.legend-item span {
-  font-size: var(--xxs-font-size);
-  color: var(--orange);
-  text-decoration: none;
-  align-items: center;
-}
-.legend-icon {
-  width: 20px;
-  height: 20px;
-}
-
-@media (min-width: 1200px) {
-  .legend-container {
-    gap: 30px;
-    
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 10px;
   }
-}
-
-@media (min-width: 800px) {
-  .legend-container {
-    gap: 25px;
-    
-  }
-}
-
-@media (max-width: 767px) {
-  .legend-container {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-
-  }
-
   
-}
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .legend-item span {
+    font-size: var(--xxs-font-size);
+    color: var(--orange);
+    text-decoration: none;
+    align-items: center;
+  }
+  .legend-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  @media (min-width: 1200px) {
+    .legend-container {
+      gap: 30px;
+      
+    }
+  }
+  
+  @media (min-width: 800px) {
+    .legend-container {
+      gap: 25px;
+      
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .legend-container {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+  
+    }
+
+    
+  }
+  

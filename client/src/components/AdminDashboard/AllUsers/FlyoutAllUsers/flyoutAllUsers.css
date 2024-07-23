@@ -1,0 +1,157 @@
+.flyout-container {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: var(--container-shadow);
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+    border-left: 1px solid #ddd;
+    text-indent: initial;
+}
+  
+.leaflet-container {
+    width: 400px;
+}
+  
+.flyout-container.open {
+    right: 0;
+}
+  
+.flyout-header {
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+}
+  
+.flyout-body {
+    padding: 10px;
+}
+  
+.flyout-desc {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 10px;
+}
+  
+.flyout-body h4 {
+    align-self: center;
+    font-size: var(--m-font-size);
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+  
+.info-flyout p {
+    text-align: left;
+    margin: 5px 0;
+}
+  
+.role-flyout {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+  
+.role-flyout label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+  
+.reset-password-flyout {
+    margin-top: 10px;
+    display: flex;
+    gap: 0.3em;
+    padding-bottom: 20px;
+}
+  
+.reset-password-flyout button {
+    background-color: var(--red);
+    color: var(--text-white);
+    padding: 0.5em;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+  
+.location-flyout .leaflet-container {
+    width: 400px !important;
+    max-width: 400px !important;
+    height: 300px !important;
+}
+  
+.location-flyout {
+    margin-top: 10px;
+}
+  
+.flyout-close {
+    background: none;
+    border: none;
+    font-size: var(--l-font-size);
+    cursor: pointer;
+}
+  
+.flyout-preview img {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+  
+.flyout-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+  
+.flyout-save {
+    background-color: var(--green);
+    color: var(--text-white);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    disabled: opacity 0.5;
+}
+
+.flyout-save:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+  
+.flyout-back {
+    background-color: var(--rs-filters-btn);
+    color: var(--text-white);
+    padding: 10px 15px;
+    gap: 0.5em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+@media (max-width: 450px) {
+    .flyout-container {
+        width: 100%;
+        right: -100%;
+    }
+  
+    .flyout-container.open {
+        right: 0;
+    }
+}
