@@ -95,7 +95,7 @@ adsController.get('/adById/:adId', memoryCache('ads'), async (req, res, next) =>
             {
               model: user_details,
               as: 'details',
-              attributes: ['username', 'imageURL', ['work_options', 'workOptions'], ['interest_options', 'interestOptions'], 'skills'],
+              attributes: ['username', 'imageURL', 'work_options', 'interest_options', 'skills'],
             },
           ],
         },
