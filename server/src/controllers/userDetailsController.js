@@ -74,7 +74,13 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 
     const updatedDetails = { ...fieldSwap(restOfDetails, 'mapFromDb'), age: ageCalculate(restOfDetails.birth_date) };
 
-    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails });
+    eventEmitter.emit('accountUpdated', {
+      updates: {
+        details: updatedDetails,
+        enabled: true,
+      },
+      userId: req.user.userId,
+    });
 
     res.status(200).send({ message: 'Details successfully updated!', user: { email: req.user.email, enabled: true, details: updatedDetails }, token });
   } catch (err) {
@@ -104,7 +110,7 @@ userDetailsController.get('/all-users', memoryCache('users'), async (req, res, n
             'district',
             'block',
             'street',
-            ['street_number', 'street'],
+            ['street_number', 'streetNumber'],
             'location',
             'gender',
             'imageURL',
@@ -173,7 +179,13 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
 
     updatedDetails.age = ageCalculate(updatedDetails.birthDate);
 
-    eventEmitter.emit('accountsUpdated', { email: req.user.email, enabled: true, details: updatedDetails });
+    eventEmitter.emit('accountUpdated', {
+      updates: {
+        details: updatedDetails,
+        enabled: true,
+      },
+      userId: req.user.userId,
+    });
 
     res.status(200).json({ message: 'Details edited successfully!', details: updatedDetails });
   } catch (err) {
@@ -204,7 +216,7 @@ userDetailsController.get('/single-user', isAuth, memoryCache('users'), async (r
             'district',
             'block',
             'street',
-            ['street_number', 'street'],
+            ['street_number', 'streetNumber'],
             'location',
             'gender',
             'imageURL',
