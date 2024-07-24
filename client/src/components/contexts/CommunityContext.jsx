@@ -226,7 +226,6 @@ export const CommunityProvider = ({ children }) => {
         editAd,
         setTowns,
         fetchSearchCriteria,
-        getMyAds,
         searchAds,
         TownSearch,
         townsSearch,
@@ -238,6 +237,7 @@ export const CommunityProvider = ({ children }) => {
             {children}
             {isLoading && <Loader />}
             {/* {errorMessage && (
+    getAdById,
                 <div className={`error-message show-error custom-style`}>
                     <p>{errorMessage}</p>
                     {console.log("Rendering error message:", errorMessage)}

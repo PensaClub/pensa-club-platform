@@ -19,15 +19,24 @@ export const AdDetails = () => {
   const { t } = useTranslation();
 
   const [ad, setAd] = useState({});
+  const [userDetails, setUserDetails] = useState({});
 
   const { getAdById } = useContext(CommunityContext);
 
-  const adId = useParams();
+  const { adId } = useParams();
 
   useEffect(() => {
-    getAdById
-      .then((adData) => setAd(adData))
-      .catch((error) => console.error('Failed to fetch ad', error));
+    async function fetchAd() {
+      getAdById(adId)
+        .then((response) => {
+          setAd(response.ads);
+          setUserDetails(response.details);
+        })
+        .catch((error) => console.error("Failed to fetch ad", error));
+    }
+    fetchAd();
+    // eslint-disable-next-line no-console
+    console.log(ad);
   }, []);
 
   // const images = [
@@ -43,117 +52,117 @@ export const AdDetails = () => {
   }, []);
 
   return (
-    <>
-      <section className="background-ads-details">
-        <section className="ads-details-page">
-          <HeaderCommunity />
-          <section className="main-details">
-            <div className="hero-bg-details"></div>
-            <div className="hero-section-details">
-              <h1>{t('community.community')}</h1>
-              <SearchBar />
-              <div className="ad-details-back-phone">
-                <p>
-                  <Link to="/craigslist">
-                    <FontAwesomeIcon icon={faCaretLeft} />{' '}
-                  </Link>
-                </p>{' '}
-              </div>
-              <h2 className="ads-details-back">
+    <section className="background-ads-details">
+      <section className="ads-details-page">
+        <HeaderCommunity />
+        <section className="main-details">
+          <div className="hero-bg-details"></div>
+          <div className="hero-section-details">
+            <h1>{t("community.community")}</h1>
+            <SearchBar />
+            <div className="ad-details-back-phone">
+              <p>
                 <Link to="/craigslist">
-                  <FontAwesomeIcon icon={faChevronLeft} />{' '}
-                  <strong>{t('ads.all-ads')}</strong>
+                  <FontAwesomeIcon icon={faCaretLeft} />{" "}
                 </Link>
-              </h2>
-              <section className="ads-details-main">
-                <div className="ads-details-container">
-                  <div className="ads-details-icons">
-                    <Link>
-                      <div className="group-icon">
-                        <FontAwesomeIcon icon={faPhone} className="icon" />
-                        <p>{t('ads.call')}</p>
-                      </div>
-                    </Link>
-                    <Link>
-                      <div className="group-icon">
-                        <FontAwesomeIcon icon={faEnvelope} className="icon" />
-                        <p>{t('ads.send-message')}</p>
-                      </div>
-                    </Link>
-                    <Link>
-                      <div className="group-icon">
-                        <FontAwesomeIcon icon={faShareNodes} className="icon" />
-                        <p>{t('ads.share')}</p>
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="ads-details-card">
-                    <div className="img-ads-details">
-                      <ImageEnlarger images={ad.images} />
-                      <p>{t(`search-criteria.${ad.category}`)}</p>
+              </p>{" "}
+            </div>
+            <h2 className="ads-details-back">
+              <Link to="/craigslist">
+                <FontAwesomeIcon icon={faChevronLeft} />{" "}
+                <strong>{t("ads.all-ads")}</strong>
+              </Link>
+            </h2>
+            <section className="ads-details-main">
+              <div className="ads-details-container">
+                <div className="ads-details-icons">
+                  <Link>
+                    <div className="group-icon">
+                      <FontAwesomeIcon icon={faPhone} className="icon" />
+                      <p>{t("ads.call")}</p>
                     </div>
-                    <div className="ads-details-info">
-                      <h3 className="title-details">{ad.summary}</h3>
-                      <div className="subinfo-ads">
-                        {ad.tags?.map((tag) => {
-                          <p>{tag}</p>; // TODO: как ще се превеждат таговете??
-                        })}
-                        <p>{ad.adTown}</p> {/* here is*/}
-                        {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
-                      </div>
+                  </Link>
+                  <Link>
+                    <div className="group-icon">
+                      <FontAwesomeIcon icon={faEnvelope} className="icon" />
+                      <p>{t("ads.send-message")}</p>
+                    </div>
+                  </Link>
+                  <Link>
+                    <div className="group-icon">
+                      <FontAwesomeIcon icon={faShareNodes} className="icon" />
+                      <p>{t("ads.share")}</p>
+                    </div>
+                  </Link>
+                </div>
+                <div className="ads-details-card">
+                  <div className="img-ads-details">
+                    {ad?.images && <ImageEnlarger images={ad.images} />}
+                    <p>{t(`search-criteria.${ad.category}`)}</p>
+                  </div>
+                  <div className="ads-details-info">
+                    <h3 className="title-details">{ad.summary}</h3>
+                    <div className="subinfo-ads">
+                      {ad.tags?.map((tag) => {
+                        <p>{tag}</p>; // TODO: как ще се превеждат таговете??
+                      })}
+                      <p>{ad.adTown}</p> {/* here is*/}
+                      {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
+                    </div>
 
-                      <p className="ads-details-data">
-                        {t('community.validate_until')}:{''}
-                        <span> {ad.expirationDate}</span>
-                      </p>
-                      <section className="user-info-details">
-                        <div className="ads-details-user-info">
-                          <div className="ads-details-username">
-                            <img
-                              src={
-                                ad.account.details?.imageURL ||
-                                'images/homePage/avatar2.png'
-                              }
-                              alt={ad.account.details?.username}
-                            />
-                            <Link>
-                              <span className="details-underlined">
-                                {ad.account.details?.username}
-                              </span>
-                            </Link>
-                          </div>
-                          <p>
-                            {t('map.job')}:{' '}
-                            {ad.account.details?.workOptions.split(', ')}
-                          </p>
-                          <p>
-                            {t('map.interests')}:{' '}
-                            {ad.account.details?.interestOptions.split(', ')}
-                          </p>
-                          <p>
-                            {t('map.skills')}:{' '}
-                            {ad.account.details?.skills.split(', ')}
-                          </p>
+                    <p className="ads-details-data">
+                      {t("community.validate_until")}:{""}
+                      <span> {ad.expirationDate}</span>
+                    </p>
+                    <section className="user-info-details">
+                      <div className="ads-details-user-info">
+                        <div className="ads-details-username">
+                          <img
+                            src={
+                              userDetails?.imageURL ||
+                              "images/homePage/avatar2.png"
+                            }
+                            alt={userDetails?.username}
+                          />
                           <Link>
                             <span className="details-underlined">
-                              {t('ads.all-user-ads')}
+                              {userDetails?.username}
                             </span>
                           </Link>
                         </div>
-                      </section>
-                    </div>
-                  </div>
-                  <div className="ads-details-desc">
-                    <h3>{t('ads.description')}</h3>
-                    <hr />
-                    <p>{ad.description}</p>
+                        {userDetails?.workOptions && (
+                          <p>{userDetails?.workOptions.join(", ")}</p>
+                        )}
+                        {userDetails.interestOptions && (
+                          <p>
+                            {t("map.interests")}:{" "}
+                            {userDetails.interestOptions.join(", ")}
+                          </p>
+                        )}
+                        {userDetails?.skills && (
+                          <p>
+                            {t("map.skills")}: {userDetails?.skills.join(", ")}
+                          </p>
+                        )}
+                        <Link>
+                          <span className="details-underlined">
+                            {t("ads.all-user-ads")}
+                          </span>
+                        </Link>
+                      </div>
+                    </section>
                   </div>
                 </div>
-              </section>
-            </div>
-          </section>
+                <div className="ads-details-desc">
+                  <h3>{t("ads.description")}</h3>
+                  <hr />
+                  <p>{ad.description}</p>
+                </div>
+              </div>
+            </section>
+          </div>
         </section>
       </section>
-    </>
+    </section>
   );
 };
