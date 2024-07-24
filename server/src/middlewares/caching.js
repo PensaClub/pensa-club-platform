@@ -191,7 +191,7 @@ eventEmitter.on('ads', async (data, action) => {
     const index = objectAds.ads.findIndex((obj) => obj.adId === data.adId);
     index !== -1 ? (objectAds.ads[index] = data) : objectAds.ads.push(data);
   }
-  cache.set('ads', JSON.stringify(object), stdTTL);
+  cache.set('ads', JSON.stringify(objectAds), stdTTL);
 
   let usersValue = cache.get('users');
 

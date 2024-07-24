@@ -13,7 +13,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   try {
     const { extraFields, ...regularFields } = req.body;
 
-    adsValidator(regularFields);
+    adsValidator(regularFields, req.path);
     if (extraFields) extraFieldsValidator(extraFields);
 
     const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
@@ -86,13 +86,29 @@ adsController.get('/adById/:adId', memoryCache('ads'), async (req, res, next) =>
     const adId = req.params.adId;
     const ad = await user_ads.findOne({
       where: { ad_id: adId },
+      include: [
+        {
+          model: user_account,
+          as: 'account',
+          attributes: ['email'],
+          include: [
+            {
+              model: user_details,
+              as: 'details',
+              attributes: ['username', 'imageURL', ['work_options', 'workOptions'], ['interest_options', 'interestOptions'], 'skills'],
+            },
+          ],
+        },
+      ],
     });
 
     if (!ad) return res.status(404).json({ message: `Ad with ID ${adId} does not exist.` });
 
-    const mappedAds = fieldSwap(ad.dataValues, 'mapFromDb');
+    const mappedAd = fieldSwap(ad.dataValues, 'mapFromDb');
 
-    res.status(200).json({ message: 'Ad successfully retrieved.', ads: mappedAds });
+    const mappedDetails = fieldSwap(ad.dataValues.account.dataValues.details.dataValues, 'mapFromDb');
+
+    res.status(200).json({ message: 'Ad successfully retrieved.', ads: mappedAd, details: mappedDetails });
   } catch (err) {
     next(err);
   }

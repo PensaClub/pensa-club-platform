@@ -1,15 +1,15 @@
 const CustomError = require('./customError');
 
-const notRequiredFields = ['adAddress'];
 const categoryList = ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'];
+const requiredFields = ['adRegion', 'adSubregion', 'adTown', 'street', 'adId'];
 
 module.exports = function adsValidator(body, path) {
   let errors = {};
-  const { summary, category, description, images, adId, tags } = body;
+  const { summary, category, description, images, tags } = body;
 
   if (path === '/ad-create') {
-    Object.entries(body).forEach(([fieldName, value]) => {
-      if ((value === '' || value === null) && !notRequiredFields.includes(fieldName)) {
+    requiredFields.forEach((fieldName) => {
+      if (!body.hasOwnProperty(fieldName) || body[fieldName] === '' || body[fieldName] === null || body[fieldName] === undefined) {
         let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
         errors[fieldName] = `${error} is required.`;
       }
@@ -18,10 +18,6 @@ module.exports = function adsValidator(body, path) {
 
   if (Object.keys(errors).length > 0) {
     throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });
-  }
-
-  if (!adId) {
-    errors.adId = 'Ad id is required!';
   }
 
   if (summary && (summary.length < 4 || summary.length > 32)) {
