@@ -40,6 +40,11 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
+      case 'success-delete-suggest':
+        toast.success(<Trans i18nKey="notification.success-delete-suggest" />, {
+          role: 'alert',
+        });
+        break;
     case 'success-suggest':
       toast.success(<Trans i18nKey="notification.success-suggested" />, {
         role: 'alert',

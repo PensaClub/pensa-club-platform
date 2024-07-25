@@ -32,7 +32,7 @@ const ProfileAddress = () => {
     streetNumber: profileData.details.streetNumber || '',
   };
   const [form, setForm] = useState(initialFormState);
-console.error(form)
+
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))

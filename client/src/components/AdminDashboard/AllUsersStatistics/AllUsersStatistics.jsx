@@ -14,7 +14,6 @@ export const AllUsersStatistics = () => {
   const [hiddenLine, setHiddenLine] = useState([]);
   const [hiddenPie, setHiddenPie] = useState([]);
   const [registrationFilter, setRegistrationFilter] = useState('last_week');
-  const [monthlyGrowthFilter, setMonthlyGrowthFilter] = useState('all');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +22,6 @@ export const AllUsersStatistics = () => {
     fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
   const handleLegendClickBar = (dataKey) => {
     setHiddenBar(hiddenBar.includes(dataKey)
       ? hiddenBar.filter(key => key !== dataKey)
@@ -311,7 +309,7 @@ export const AllUsersStatistics = () => {
               cx="50%"
               cy="50%"
               outerRadius={80}
-              label={(entry) => `${entry.name}: ${entry.value}`}
+              label={(entry) => `${entry.name}: ${entry.value.toFixed(2)}`} //dobawen po kusno 
               labelLine={true}
             >
               {adsPerUserData.map((entry, index) => (

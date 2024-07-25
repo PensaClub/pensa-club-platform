@@ -27,6 +27,7 @@ import {
   faUsers,
   faChartPie,
   faAddressCard,
+  faPeopleArrows,
 } from '@fortawesome/free-solid-svg-icons';
 import { ProfileSkills } from './ProfileSkills';
 import { ProfileWorks } from './ProfileWorks';
@@ -41,6 +42,8 @@ import { AllUsers } from '../AdminDashboard/AllUsers/AllUsers';
 
 import { UnfinishedProfiles } from '../AdminDashboard/UnfinishedProfiles/UnfinishedProfiles';
 import { AllUsersStatistics } from '../AdminDashboard/AllUsersStatistics/AllUsersStatistics';
+import { AdminSuggestUsers } from '../AdminDashboard/AdminSuggestUser/AdminSuggestUsers';
+import { SuggestResolvedUsers } from '../AdminDashboard/AdminSuggestUser/SuggesResolvedtUsers/SuggestResolvedUsers';
 
 export const Profile = () => {
   const location = useLocation();
@@ -53,8 +56,11 @@ export const Profile = () => {
   const [rejectCount, setRejectCount] = useState('');
   const [showAdsSubMenu, setShowAdsSubMenu] = useState(false);
   const [showUsersSubMenu, setShowUsersSubMenu] = useState(false);
-  const [allUsers,setAllUsers] = useState(''); 
-  const [ unfinishedUsers, setUnfinishedUsers] = useState('');
+  const [showSuggestSubMenu, setShowSuggestSubMenu] = useState(false);
+  const [allUsers, setAllUsers] = useState('');
+  const [unfinishedUsers, setUnfinishedUsers] = useState('');
+  const [allSuggestedUsers, setAllSuggestedUsers] = useState('');
+  const [resolvedUsers, setResolvedUsers] = useState('');
   useEffect(() => {
     window.scrollTo({ top: 0 });
     if (!profileData) {
@@ -79,6 +85,9 @@ export const Profile = () => {
   const toggleUsersSubMenu = () => {
     setShowUsersSubMenu(!showUsersSubMenu);
   };
+  const toggleSuggestSubMenu = () => {
+    setShowSuggestSubMenu(!showSuggestSubMenu);
+  };
   const isAdminPanel = location.pathname.startsWith('/profile/pending-announcements')
     || location.pathname.startsWith('/profile/approved-announcements')
     || location.pathname.startsWith('/profile/reject-announcements')
@@ -86,6 +95,8 @@ export const Profile = () => {
     || location.pathname.startsWith('/profile/users-admin')
     || location.pathname.startsWith('/profile/users-statistic')
     || location.pathname.startsWith('/profile/users-unfinished')
+    || location.pathname.startsWith('/profile/admin-suggest-users')
+    || location.pathname.startsWith('/profile/suggest-resolved-users')
 
   return (
     <section className='profile-section'>
@@ -164,6 +175,16 @@ export const Profile = () => {
                 {t('admin.unfinished_users')} {unfinishedUsers >= 1 && (<>- {unfinishedUsers}</>)}
               </Link>
             </div>
+            <Link to='admin-suggest-users' onClick={toggleSuggestSubMenu}>
+              <FontAwesomeIcon icon={faPeopleArrows} className='icon' />
+              {t('admin.admin-suggest-users')} {allSuggestedUsers >= 1 && (<>- {allSuggestedUsers}</>)}
+            </Link>
+            <div className={`ads-submenu ${showSuggestSubMenu ? 'show' : ''}`}>
+              <Link to='suggest-resolved-users' onClick={toggleMenu}>
+                <FontAwesomeIcon icon={faAddressCard} className='icon' />
+                {t('admin.suggest_resolved_users')} {resolvedUsers >= 1 && (<>- {resolvedUsers}</>)}
+              </Link>
+            </div>
           </div>
         )}
       </section>
@@ -216,11 +237,14 @@ export const Profile = () => {
           <Route path='interestOptions' element={<ProfileInterests />} />
           <Route path='ads-admin' element={<AdminGuard><AllAnnouncements /></AdminGuard>} />
           <Route path='users-statistic' element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
-          <Route path='users-admin' element={<AdminGuard><AllUsers setAllUsers={setAllUsers}/></AdminGuard>} />
-          <Route path='users-unfinished' element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers}/></AdminGuard>} />
+          <Route path='users-admin' element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
+          <Route path='users-unfinished' element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
           <Route path='pending-announcements' element={<AdminGuard><PendingAnnouncements setAdsCount={setAdsCount} /></AdminGuard>} />
           <Route path='approved-announcements' element={<AdminGuard><ApprovedAnnouncements setApprovedCount={setApprovedCount} /></AdminGuard>} />
           <Route path='reject-announcements' element={<AdminGuard><RejectAnnouncements setRejectCount={setRejectCount} /></AdminGuard>} />
+          <Route path='admin-suggest-users' element={<AdminGuard><AdminSuggestUsers setAllSuggestedUsers={setAllSuggestedUsers} /></AdminGuard>} />
+          <Route path='suggest-resolved-users' element={<AdminGuard><SuggestResolvedUsers setResolvedUsers={setResolvedUsers} /></AdminGuard>} />
+
         </Routes>
       </div>
     </section>

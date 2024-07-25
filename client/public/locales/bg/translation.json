@@ -310,8 +310,18 @@
     "last_week": "Последната седмица",
     "last_month": "Последния месец",
     "last_year": "Последната година",
-        "users_by_work_options": "Потребители според работа",
-    "users_by_skills": "Потребители по умения"
+    "users_by_work_options": "Потребители според работа",
+    "users_by_skills": "Потребители по умения",
+    "admin-suggest-users": "Препоръчани потребители",
+    "full_name": "Име",
+    "recommended_by": "Препоръчал",
+    "recommended_person": "Препоръчан",
+    "phone": "Телефон",
+    "resolved": "Разрешаване",
+    "message": "Съобщение",
+    "all_suggested_users": "Всички препоръчани потребители",
+    "suggest_resolved_users": "Разрешени препоръки"
+
   },
   "community": {
     "community": "Общност",
@@ -414,7 +424,8 @@
     "success-reject": "Обявата беше отказана!",
     "error": "Грешка! Моля, опитайте отново!",
     "email-send": "Имейлът е изпратен успешно!",
-    "error-images": "Може да изберете само 4 снимки"
+    "error-images": "Може да изберете само 4 снимки",
+    "success-delete-suggest": "Успешно изтрихте препоръчан потребител!"
   },
   "errors": {
     "image_type": "Файл от тип {{type}} не е позволен! Позволените типове снимки са PNG/JPG/JPEG.",
