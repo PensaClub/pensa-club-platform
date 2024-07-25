@@ -320,8 +320,10 @@
     "resolved": "Разрешаване",
     "message": "Съобщение",
     "all_suggested_users": "Всички препоръчани потребители",
-    "suggest_resolved_users": "Разрешени препоръки"
-
+    "suggest_resolved_users": "Разрешени препоръки",
+    "ads_by_category": "Обяви по категория",
+    "ads_by_date": "Обяви по дата",
+    "ads_distribution": "Разпределение на обявите"
   },
   "community": {
     "community": "Общност",

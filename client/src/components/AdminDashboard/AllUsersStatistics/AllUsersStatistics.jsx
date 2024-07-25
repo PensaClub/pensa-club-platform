@@ -14,7 +14,7 @@ export const AllUsersStatistics = () => {
   const [hiddenLine, setHiddenLine] = useState([]);
   const [hiddenPie, setHiddenPie] = useState([]);
   const [registrationFilter, setRegistrationFilter] = useState('last_week');
-
+  const [optionData, setOptionData] = useState({ skills: [], workOptions: [], interestOptions: [] });
   useEffect(() => {
     const fetchData = async () => {
       await onAllUsers();
@@ -22,6 +22,14 @@ export const AllUsersStatistics = () => {
     fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    fetch('/options.json')
+        .then(response => response.json())
+        .then(data => setOptionData(data))
+        .catch(error => console.error('Failed to load JSON data', error));
+}, []);
+
   const handleLegendClickBar = (dataKey) => {
     setHiddenBar(hiddenBar.includes(dataKey)
       ? hiddenBar.filter(key => key !== dataKey)
@@ -49,7 +57,12 @@ export const AllUsersStatistics = () => {
     const today = new Date();
     const pastDate = new Date(today);
     pastDate.setDate(today.getDate() - days);
-    return pastDate.toISOString().split('T')[0];
+    return pastDate;
+  };
+
+  const translateValue = (category, value) => {
+    const found = optionData[category].find(item => item.value === value);
+      return found ? t(found.name) : value;
   };
 
   const generateRolesData = () => {
@@ -84,30 +97,31 @@ export const AllUsersStatistics = () => {
     const users = allUsers.response.accounts;
     let startDate;
     if (registrationFilter === 'last_week') {
-      startDate = new Date(getLastNDays(7));
+      startDate = getLastNDays(7);
     } else if (registrationFilter === 'last_month') {
-      startDate = new Date(getLastNDays(30));
+      startDate = getLastNDays(30);
     } else {
       startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
     }
+
     // eslint-disable-next-line no-unused-vars
-    const startDateISO = startDate.toISOString().split('T')[0];
-    const dateSet = new Set();
+    const dateSet = new Set(users.map(user => formatDate(user.createdAt)).filter(date => new Date(date) >= startDate));
+    
+    const dates = [];
+    const currentDate = new Date(startDate);
+    const today = new Date();
 
-    users.forEach(user => {
-      if (user.createdAt && new Date(user.createdAt) >= startDate) {
-        dateSet.add(user.createdAt);
-      }
-    });
+    while (currentDate <= today) {
+      dates.push(formatDate(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
 
-    const sortedDates = Array.from(dateSet).sort();
-    return sortedDates.map(date => {
-      const formattedDate = formatDate(date);
-      return {
-        date: formattedDate,
-        count: users.filter(user => formatDate(user.createdAt) === formattedDate).length
-      };
-    });
+    const registrationData = dates.map(date => ({
+      date,
+      count: users.filter(user => formatDate(user.createdAt) === date).length,
+    }));
+
+    return registrationData;
   };
 
   const generateRegionData = () => {
@@ -159,7 +173,7 @@ export const AllUsersStatistics = () => {
       .flatMap(user => user.details.interestOptions)
     ));
     return interests.map(interest => ({
-      interest,
+      interest: translateValue('interestOptions', interest),
       count: users.filter(user => user.details && user.details.interestOptions.includes(interest)).length
     }));
   };
@@ -172,7 +186,7 @@ export const AllUsersStatistics = () => {
       .flatMap(user => user.details.skills)
     ));
     return skills.map(skill => ({
-      skill,
+      skill: translateValue('skills', skill),
       count: users.filter(user => user.details && user.details.skills.includes(skill)).length
     }));
   };
@@ -185,7 +199,7 @@ export const AllUsersStatistics = () => {
       .flatMap(user => user.details.workOptions)
     ));
     return workOptions.map(workOption => ({
-      workOption,
+      workOption: translateValue('workOptions', workOption),
       count: users.filter(user => user.details && user.details.workOptions.includes(workOption)).length
     }));
   };
@@ -329,10 +343,6 @@ export const AllUsersStatistics = () => {
 
       <div className="chart-container">
         <h3>{t('admin.monthly_user_growth')}</h3>
-        {/* <div className="monthly-filter-buttons">
-          <button className={`monthly-filter-btn ${monthlyGrowthFilter === 'all' ? 'active' : ''}`} onClick={() => setMonthlyGrowthFilter('all')}>{t('admin.all')}</button>
-          <button className={`monthly-filter-btn ${monthlyGrowthFilter === 'monthly' ? 'active' : ''}`} onClick={() => setMonthlyGrowthFilter('monthly')}>{t('admin.monthly')}</button>
-        </div> */}
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={monthlyUserGrowthData}>
             <CartesianGrid strokeDasharray="3 3" />

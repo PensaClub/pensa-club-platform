@@ -315,13 +315,16 @@
     "users_by_skills": "Users by Skills",
     "admin-suggest-users": "Suggest Users",
     "full_name": "Full Name",
-    "recommended_by": "Recommended By",
-    "recommended_person": "Recommended Person",
+    "recommended_by": "Suggested By",
+    "recommended_person": "Nominee ",
     "phone": "Phone",
     "resolved": "Resolving",
     "message": "Message",
     "all_suggested_users": "All Suggested Users",
-    "suggest_resolved_users": "Resolved Suggested"
+    "suggest_resolved_users": "Resolved Suggested",
+    "ads_by_category": "Ads by Category",
+    "ads_by_date": "Ads by Date",
+    "ads_distribution": "Ads Distribution"
   },
   "community": {
     "community": "Community",
