@@ -380,6 +380,10 @@
     "message": "Message",
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?"
+    "who-is-suggested": "Who are you suggesting?",
+    "home": {
+      "our_latest_ads": "Our Latest Posts",
+      "see_more_ads": "View More Posts"
+    }
   }
 }
