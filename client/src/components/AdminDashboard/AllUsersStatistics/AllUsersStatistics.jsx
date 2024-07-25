@@ -4,7 +4,9 @@ import { useMappingContext } from '../../contexts/MapContext';
 import './allUsersStatistics.css';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line,
-  PieChart, Pie, Cell, ResponsiveContainer
+  PieChart, Pie, Cell, ResponsiveContainer,
+  Area,
+  AreaChart
 } from 'recharts';
 
 export const AllUsersStatistics = () => {
@@ -287,14 +289,14 @@ export const AllUsersStatistics = () => {
           <button className={`filter-btn ${registrationFilter === 'last_year' ? 'active' : ''}`} onClick={() => setRegistrationFilter('last_year')}>{t('admin.last_year')}</button>
         </div>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={registrationData}>
+          <AreaChart data={registrationData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
             <YAxis />
             <Tooltip content={renderCustomTooltip} />
             <Legend onClick={(e) => handleLegendClickLine(e.dataKey)} />
-            <Line type="monotone" dataKey="count" stroke="#82ca9d" strokeOpacity={hiddenLine.includes('count') ? 0.2 : 1} />
-          </LineChart>
+            <Area type="monotone" dataKey="count" stroke="#82ca9d" strokeOpacity={hiddenLine.includes('count') ? 0.2 : 1} />
+          </AreaChart>
         </ResponsiveContainer>
       </div>
 
