@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faLocationDot, faCalendar, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FiltersCommunity } from "./FiltersCommunity/FiltersCommunity";
 import { AdsCard } from "./AdsCard/AdsCard";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import debounce from 'lodash.debounce';
 
 import { What } from "./CommunityModals/What";
@@ -22,6 +22,7 @@ export const CommunityPage = () => {
     const [showResetIcon, setShowResetIcon] = useState(false);
     const [searchPerformed, setSearchPerformed] = useState(false);
     const [lastPage, setLastPage] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false); // Нов флаг за предотвратяване на множество заявки
 
     const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
@@ -44,6 +45,7 @@ export const CommunityPage = () => {
 
     const [ads, setAds] = useState({ result: [] });
     const [page, setPage] = useState(1);
+    const loaderRef = useRef(null);
 
     const getAdTownValue = (language, town) => {
         return language === 'bg' ? town.bg : town.en;
@@ -78,11 +80,10 @@ export const CommunityPage = () => {
                 setAds({ result: [] });
                 setSearchPerformed(true);
                 setLastPage(true); 
-                setPage(prevPage => prevPage - 1);
             }
             setShowResetIcon(true);
         } finally {
-
+            setLoadingMore(false); 
         }
     };
 
@@ -124,35 +125,37 @@ export const CommunityPage = () => {
 
     const loadMoreAds = useCallback(
         debounce(() => {
-            if (!isLoading && !lastPage && searchPerformed) {
+            if (!isLoading && !lastPage && searchPerformed && !loadingMore) {
+                setLoadingMore(true); 
                 const nextPage = page + 1;
                 setPage(nextPage);
                 handleSearch(filters, nextPage);
             }
         }, 400),
-        [filters, page, isLoading, lastPage, searchPerformed] 
+        [filters, page, isLoading, lastPage, searchPerformed, loadingMore] 
     );
 
     useEffect(() => {
-        const handleScroll = () => {
-            const isBottom = () => {
-           
-                const orientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
-                if (orientation === 'portrait') {
-                    return (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500;
-                } else {
-                    return (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100; 
-                }
-            };
-    
-            if (isBottom() && !isLoading && searchPerformed) {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !isLoading && searchPerformed && !lastPage) {
                 loadMoreAds();
             }
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 1.0
+        });
+
+        if (loaderRef.current) {
+            observer.observe(loaderRef.current);
+        }
+
+        return () => {
+            if (loaderRef.current) {
+                observer.unobserve(loaderRef.current);
+            }
         };
-    
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [isLoading, loadMoreAds, searchPerformed]);
+    }, [isLoading, loadMoreAds, searchPerformed, lastPage]);
 
     return (
         <>
@@ -219,7 +222,7 @@ export const CommunityPage = () => {
                         ) : (
                             <FiltersCommunity handleSearch={handleSearch} />
                         )}
-
+                        <div ref={loaderRef} /> {/* Елемент за наблюдение */}
                     </section>
                 </section>
             </section>

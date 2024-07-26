@@ -36,9 +36,9 @@ export const communityServiceFactory = (token) => {
                 throw new Error('Failed to fetch search criteria');
             }
             return response.json();
-        }, 
+        },
         createAd: async (adData) => {
-            return requester.post(`${apiUrl}/ads/ad-create`,adData);
+            return requester.post(`${apiUrl}/ads/ad-create`, adData);
 
         },
         getMyAds: async (email) => {
@@ -51,13 +51,14 @@ export const communityServiceFactory = (token) => {
         editAd: async (id) => {
             return requester.patch(`${apiUrl}/ads/ad-edit`, { id });
         },
-        searchAds: async (filters, page, limit = 25) => {
-            const query = new URLSearchParams({ ...filters, page, limit }).toString();
+        searchAds: async (filters, page, limit = 25, order = "desc") => {
+            const query = new URLSearchParams({ ...filters, page, limit, order }).toString();
             return requester.get(`${apiUrl}/ads/ads-search?${query}`);
         },
-        
-        updateExpirationDate: async(adId) => {
+
+        updateExpirationDate: async (adId) => {
             return requester.patch(`${apiUrl}/ads/update-expiration-date/${adId}`, { adId })
         }
     }
 }
+
