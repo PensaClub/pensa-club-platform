@@ -275,7 +275,7 @@ adsController.get('/ads-search', async (req, res, next) => {
 
     const { adRegion, adSubregion, adTown } = query;
     const adLocationConditions = [];
-    const paginationConditions = {};
+    const paginationConditions = { lastPage: false };
     const orderConditions = [];
 
     if (adSubregion && !adRegion) {
@@ -286,7 +286,7 @@ adsController.get('/ads-search', async (req, res, next) => {
     }
 
     const processPaginationFields = (key, value) => {
-      const number = key === 'limit' ? 25 : 1;
+      const number = key === 'limit' ? 10 : 1;
       return value < 1 || isNaN(Number(value)) ? (value = number) : parseInt(value);
     };
 
@@ -388,30 +388,30 @@ adsController.get('/ads-search', async (req, res, next) => {
     whereCondition.status = 'approved';
 
     if (paginationConditions.page) {
-      paginationConditions.limit = paginationConditions.limit || 25;
+      paginationConditions.limit = paginationConditions.limit || 10;
 
       const totalRecordsInDb = await user_ads.count({ where: whereCondition });
 
-      if (totalRecordsInDb !== 0) {
-        const totalNumberOfPages = Math.ceil(totalRecordsInDb / paginationConditions.limit);
+      if (totalRecordsInDb === 0) return res.status(200).json({ result: [], errors });
 
-        paginationConditions.page > totalNumberOfPages ? (paginationConditions.page = totalNumberOfPages) : paginationConditions.page;
+      const totalNumberOfPages = Math.ceil(totalRecordsInDb / paginationConditions.limit);
 
-        paginationConditions.offset = (paginationConditions.page - 1) * paginationConditions.limit;
+      paginationConditions.page > totalNumberOfPages
+        ? ((paginationConditions.page = totalNumberOfPages), (paginationConditions.lastPage = true))
+        : paginationConditions.page;
 
-        if (paginationConditions.offset > totalRecordsInDb) {
-          paginationConditions.offset = totalRecordsInDb;
-        }
-      } else {
-        return res.status(200).json({ result: [], errors });
+      paginationConditions.offset = (paginationConditions.page - 1) * paginationConditions.limit;
+
+      if (paginationConditions.offset > totalRecordsInDb) {
+        paginationConditions.offset = totalRecordsInDb;
       }
     }
 
     const result = await user_ads.findAll({
+      where: whereCondition,
+      order: orderConditions,
       limit: paginationConditions.limit,
       offset: paginationConditions.offset,
-      order: orderConditions,
-      where: whereCondition,
       attributes: [
         ['ad_id', 'adId'],
         'summary',
@@ -444,7 +444,7 @@ adsController.get('/ads-search', async (req, res, next) => {
       ],
     });
 
-    res.status(200).json({ result, errors });
+    res.status(200).json({ result, errors, lastPage: paginationConditions.lastPage });
   } catch (err) {
     next(err);
   }
