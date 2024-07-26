@@ -15,7 +15,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 
     adsValidator(regularFields, req.path);
     if (extraFields) extraFieldsValidator(extraFields);
-    
+
     const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
 
     if (data.status) {
@@ -77,8 +77,6 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, memoryCache('ads'), rbac.chec
     });
 
     res.status(200).json({ message: `${adStatus.charAt(0).toUpperCase() + adStatus.slice(1)} ads successfully retrieved.`, ads: mappedAds });
-
-    > develop
   } catch (err) {
     next(err);
   }
