@@ -343,7 +343,7 @@ adsController.get('/ads-search', async (req, res, next) => {
         if (!orderValues.includes(value.toUpperCase())) {
           errors.order = `Invalid order value: ${value}. Valid values are ${orderValues.join(', ')}. Defaulting to ASC.`;
         } else {
-          orderConditions.push(['id', `${value.toUpperCase()}`]);
+          orderConditions.push(['updatedAt', `${value.toUpperCase()}`]);
         }
       } else {
         whereCondition[key] = {
