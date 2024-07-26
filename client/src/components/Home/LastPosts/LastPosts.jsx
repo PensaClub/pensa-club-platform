@@ -13,8 +13,8 @@ export const LastPosts = () => {
     window.scrollTo({ top: 0 });
 
     const fetchLatestAds = async () => {
-      const { result } = await getLatestAds();
-      setLatestAds(result);
+      const ads = await getLatestAds();
+      setLatestAds(ads);
     };
 
     const fetchCategories = async () => {

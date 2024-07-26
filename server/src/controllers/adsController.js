@@ -178,7 +178,6 @@ adsController.get('/ads-search', async (req, res, next) => {
 
   const validCategories = ['recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'];
   const dateFields = ['startDate', 'endDate', 'creationDate', 'expirationDate', 'eventStartDate', 'eventEndDate'];
-  const orderValues = ['ASC', 'DESC'];
   const allowedQueryKeys = [
     'creationDate',
     'expirationDate',
@@ -192,9 +191,6 @@ adsController.get('/ads-search', async (req, res, next) => {
     'endDate',
     'eventStartDate',
     'eventEndDate',
-    'limit',
-    'page',
-    'order',
   ];
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -203,8 +199,6 @@ adsController.get('/ads-search', async (req, res, next) => {
 
     const { adRegion, adSubregion, adTown } = query;
     const adLocationConditions = [];
-    const paginationConditions = {};
-    const orderConditions = [];
 
     if (adSubregion && !adRegion) {
       errors.adSubregion = 'adSubregion filter requires adRegion to be specified.';
@@ -212,11 +206,6 @@ adsController.get('/ads-search', async (req, res, next) => {
     if (adTown && (!adRegion || !adSubregion)) {
       errors.adTown = 'adTown filter requires both adRegion and adSubregion to be specified.';
     }
-
-    const processPaginationFields = (key, value) => {
-      const number = key === 'limit' ? 25 : 1;
-      return value < 1 || isNaN(Number(value)) ? (value = number) : parseInt(value);
-    };
 
     const processDateFields = (key, value) => {
       if (!dateRegex.test(value)) {
@@ -265,14 +254,6 @@ adsController.get('/ads-search', async (req, res, next) => {
         if (key === 'adSubregion' && !adRegion) continue;
         if (key === 'adTown' && (!adRegion || !adSubregion)) continue;
         processAdField(key, value);
-      } else if (key === 'limit' || key === 'page') {
-        paginationConditions[key] = processPaginationFields(key, value);
-      } else if (key === 'order') {
-        if (!orderValues.includes(value.toUpperCase())) {
-          errors.order = `Invalid order value: ${value}. Valid values are ${orderValues.join(', ')}. Defaulting to ASC.`;
-        } else {
-          orderConditions.push(['id', `${value.toUpperCase()}`]);
-        }
       } else {
         whereCondition[key] = {
           [Op.iLike]: `%${value}%`,
@@ -312,48 +293,25 @@ adsController.get('/ads-search', async (req, res, next) => {
       whereCondition[Op.and] = adLocationConditions;
     }
 
-    // Status to be changed to pending FOR TESTING !!!
-    whereCondition.status = 'approved';
-
-    if (paginationConditions.page) {
-      paginationConditions.limit = paginationConditions.limit || 25;
-
-      const totalRecordsInDb = await user_ads.count({ where: whereCondition });
-
-      if (totalRecordsInDb !== 0) {
-        const totalNumberOfPages = Math.ceil(totalRecordsInDb / paginationConditions.limit);
-
-        paginationConditions.page > totalNumberOfPages ? (paginationConditions.page = totalNumberOfPages) : paginationConditions.page;
-
-        paginationConditions.offset = (paginationConditions.page - 1) * paginationConditions.limit;
-
-        if (paginationConditions.offset > totalRecordsInDb) {
-          paginationConditions.offset = totalRecordsInDb;
-        }
-      } else {
-        return res.status(200).json({ result: [], errors });
-      }
-    }
+    //Change to false for testing !!!
+    whereCondition.approved = true;
 
     const result = await user_ads.findAll({
-      limit: paginationConditions.limit,
-      offset: paginationConditions.offset,
-      order: orderConditions,
       where: whereCondition,
       attributes: [
-        ['ad_id', 'adId'],
         'summary',
         'category',
         ['ad_region', 'adRegion'],
         ['ad_subregion', 'adSubregion'],
         ['ad_town', 'adTown'],
-        'street',
-        'tags',
+        ['ad_id', 'adId'],
         'images',
-        'status',
+        'approved',
+        'street',
         ['extra_fields', 'extraFields'],
         ['creation_date', 'creationDate'],
         ['expiration_date', 'expirationDate'],
+        'tags',
       ],
       include: [
         {
