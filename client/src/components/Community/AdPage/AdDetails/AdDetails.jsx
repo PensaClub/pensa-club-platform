@@ -1,22 +1,22 @@
-import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
-import './adDetails.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { HeaderCommunity } from "../../HeaderCommunity/HeaderCommunity";
+import "./adDetails.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhone,
   faEnvelope,
   faShareNodes,
   faChevronLeft,
   faCaretLeft,
-} from '@fortawesome/free-solid-svg-icons';
-import { useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
-import { ImageEnlarger } from '../../../ImageEnlarger/ImageEnlarger';
-import { SearchBar } from '../../SearchBar/SearchBar';
-import { CommunityContext } from '../../../contexts/CommunityContext';
+} from "@fortawesome/free-solid-svg-icons";
+import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link, useParams } from "react-router-dom";
+import { ImageEnlarger } from "../../../ImageEnlarger/ImageEnlarger";
+import { SearchBar } from "../../SearchBar/SearchBar";
+import { CommunityContext } from "../../../contexts/CommunityContext";
 
 export const AdDetails = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [ad, setAd] = useState({});
   const [userDetails, setUserDetails] = useState({});
@@ -31,6 +31,8 @@ export const AdDetails = () => {
         .then((response) => {
           setAd(response.ads);
           setUserDetails(response.details);
+          /* eslint-disable no-console */
+          console.log(response);
         })
         .catch((error) => console.error("Failed to fetch ad", error));
     }
@@ -131,17 +133,75 @@ export const AdDetails = () => {
                           </Link>
                         </div>
                         {userDetails?.workOptions && (
-                          <p>{userDetails?.workOptions.join(", ")}</p>
+                          <p>
+                            {t("map.job")}:{" "}
+                            {userDetails.workOptions.map((opt, index) => {
+                              if (index < 2) {
+                                return (
+                                  <p key={index}>
+                                    {t(`options.work-options.${opt}`)}
+                                  </p>
+                                );
+                              }
+                              if (index === 2) {
+                                return (
+                                  <p>
+                                    {t("map.and")}{" "}
+                                    {userDetails.workOptions.length - 1}{" "}
+                                    {t("map.more")}...
+                                  </p>
+                                );
+                              }
+                              return null;
+                            })}
+                          </p>
                         )}
-                        {userDetails.interestOptions && (
+                        {userDetails?.interestOptions && (
                           <p>
                             {t("map.interests")}:{" "}
-                            {userDetails.interestOptions.join(", ")}
+                            {userDetails.interestOptions.map((opt, index) => {
+                              if (index < 2) {
+                                return (
+                                  <p key={index}>
+                                    {t(`options.interestOptions.${opt}`)}
+                                  </p>
+                                );
+                              }
+                              if (index === 2) {
+                                return (
+                                  <p>
+                                    {t("map.and")}{" "}
+                                    {userDetails.interestOptions.length - 1}{" "}
+                                    {t("map.more")}...
+                                  </p>
+                                );
+                              }
+                              return null;
+                            })}
                           </p>
                         )}
                         {userDetails?.skills && (
                           <p>
-                            {t("map.skills")}: {userDetails?.skills.join(", ")}
+                            <p>{t("map.skills")}: </p>
+                            {userDetails.skills.map((opt, index) => {
+                              if (index < 2) {
+                                return (
+                                  <p key={index}>
+                                    {t(`options.skills.${opt}`)}
+                                  </p>
+                                );
+                              }
+                              if (index === 2) {
+                                return (
+                                  <p>
+                                    {t("map.and")}{" "}
+                                    {userDetails.skills.length - 1}{" "}
+                                    {t("map.more")}...
+                                  </p>
+                                );
+                              }
+                              return null;
+                            })}
                           </p>
                         )}
                         <Link>
