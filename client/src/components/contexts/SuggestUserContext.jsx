@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from 'react';
-import { userServiceFactory } from '../Services/userService';
 import { useNavigate } from 'react-router-dom';
 import './error.css';
 import { Loader } from '../Loader/Loader';
@@ -30,6 +29,7 @@ export const SuggestUserProvider = ({ children }) => {
   const onSuggestSubmit = async (data) => {
     setIsLoading(true);
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await suggestUserService.suggestUser(data);
       navigate('/');
       notify('success-suggest');

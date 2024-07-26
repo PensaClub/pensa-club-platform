@@ -1,0 +1,148 @@
+.all-users-statistics {
+    display: flex;
+    flex-direction: column;
+    gap: 6em;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    height: 1600px;
+    overflow: hidden;
+    padding-bottom: 2em;
+    overflow: scroll;
+
+  }
+  
+  .all-users-statistics h2 {
+    font-size: var(--l-font-size);
+    text-align: center;
+    margin-top: 1rem;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--orange);
+    text-decoration: none;
+    text-shadow: var(--container-shadow);
+  }
+  
+  .chart-container {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+  
+  .chart-container h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .recharts-legend-item-text {
+    cursor: pointer;
+  }
+  
+  .recharts-responsive-container {
+    width: 100%;
+    height: 400px;
+  }
+  
+  .custom-tooltip {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+  
+  .tooltip-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .tooltip-item {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+  }
+  .filter-buttons {
+    gap: 1em;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .filter-buttons .filter-btn {
+    background-color: #82ca9d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filter-buttons .filter-btn:hover {
+    background-color: #6db687;
+  }
+  
+  .filter-buttons .filter-btn.active {
+    background-color: #5a9e76;
+  }
+  
+  .monthly-filter-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .monthly-filter-buttons .monthly-filter-btn {
+    background-color: #8884d8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .monthly-filter-buttons .monthly-filter-btn:hover {
+    background-color: #706bb8;
+  }
+  
+  .monthly-filter-buttons .monthly-filter-btn.active {
+    background-color: #5a55a8;
+  }
+  @media (min-width: 1200px) {
+    .all-users-statistics {
+      height: 100%;
+      gap: 3em;
+    }
+    .all-users-statistics {
+      overflow: hidden;
+      width: 90%;
+    }
+    .filter-buttons {
+      flex-direction: row;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .chart-container {
+      margin-bottom: 20px;
+    }
+  
+    .recharts-responsive-container {
+      height: 300px;
+    }
+  }
+
+  

@@ -52,6 +52,7 @@ console.error(form)
 
     // eslint-disable-next-line eqeqeq
 
+    // eslint-disable-next-line eqeqeq
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
 
