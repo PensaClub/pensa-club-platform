@@ -15,7 +15,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
 
     adsValidator(regularFields, req.path);
     if (extraFields) extraFieldsValidator(extraFields);
-
+    
     const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
 
     if (data.status) {
@@ -37,6 +37,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
     next(err);
   }
 });
+
 
 adsController.get(`/:adStatus-ads/:adId?`, isAuth, memoryCache('ads'), rbac.checkPermission('approve_record'), async (req, res, next) => {
   const adsType = ['approved', 'pending', 'denied'];
@@ -76,6 +77,8 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, memoryCache('ads'), rbac.chec
     });
 
     res.status(200).json({ message: `${adStatus.charAt(0).toUpperCase() + adStatus.slice(1)} ads successfully retrieved.`, ads: mappedAds });
+
+    > develop
   } catch (err) {
     next(err);
   }

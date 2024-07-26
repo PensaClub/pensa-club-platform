@@ -42,8 +42,8 @@
     "title1": "LET'S BREAK THIS TREND",
     "title2": "LET'S CHANGE THIS MODEL",
     "title3": "KEEPING UP WITH THE TIMES",
-    "desc": "Creation of an innovative, digital and <span>interactive platform</span> aimed at improving the quality of life of the elderly by actively including them in modern society, supporting them in the development of new skills and interests and promoting a <span>healthy and full, dignified life.</span>",
-    "about-btn": "Read More About Us"
+    "desc": "This is an innovative platform, a <span>tool</span> for creating a community. A community of people of the same age, with similar interests, new ideas, and new knowledge. A community for interaction and mutual support. The expected outcome is an improvement in <span>quality of life</span>, through <span>active engagement</span> in contemporary life, support for <span>new skills</span> and interests, and encouragement towards a <span>healthy and fulfilling, dignified life</span>!",
+    "about-btn": "Recommend a friend"
   },
   "news-subscribe": {
     "title": "Stay up to date with",
@@ -458,6 +458,11 @@
     "message": "Message",
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?"
+    "who-is-suggested": "Who are you suggesting?",
+    "home": {
+      "our_latest_ads": "Our Latest Posts",
+      "see_more_ads": "View More Posts"
+    }
   }
 }
+
