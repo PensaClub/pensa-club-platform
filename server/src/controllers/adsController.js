@@ -396,7 +396,7 @@ adsController.get('/ads-search', async (req, res, next) => {
 
       const totalNumberOfPages = Math.ceil(totalRecordsInDb / paginationConditions.limit);
 
-      paginationConditions.page > totalNumberOfPages
+      paginationConditions.page >= totalNumberOfPages
         ? ((paginationConditions.page = totalNumberOfPages), (paginationConditions.lastPage = true))
         : paginationConditions.page;
 
