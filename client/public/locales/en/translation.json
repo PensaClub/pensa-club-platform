@@ -116,7 +116,10 @@
     "ads_by": "Ads by",
     "no_ads": "No ads available",
     "read_more": "Read more",
-    "close": "Close"
+    "close": "Close",
+    "and": "and",
+    "more": "more"
+
   },
   "notify_modal": {
     "part1": "Please,",
@@ -479,4 +482,3 @@
     }
   }
 }
-

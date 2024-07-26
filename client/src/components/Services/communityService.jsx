@@ -46,6 +46,9 @@ export const communityServiceFactory = (token) => {
     getMyAds: async (email) => {
       return requester.get(`${apiUrl}/ads/user-ads`, { email });
     },
+    getAdById: async (id) => {
+      return requester.get(`${apiUrl}/ads/adById/${id}`);
+    },
     getLatestAds: async (count) => {
       return requester.get(
         `${apiUrl}/ads/ads-search?status=approved&order=DESC&limit=${count}`

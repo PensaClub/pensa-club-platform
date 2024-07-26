@@ -6,33 +6,33 @@ import { useAuthContext } from '../contexts/UserContext';
 import { useCommunityContext } from '../contexts/CommunityContext';
 import { DeleteAd } from '../Community/AdPage/DeleteAd/DeleteAd';
 import { differenceInDays } from 'date-fns';
- 
+
 const getMonthFromDate = (dateString, language) => {
-    const date = new Date(dateString);
-    return date.toLocaleString(language, { month: 'long' });
+  const date = new Date(dateString);
+  return date.toLocaleString(language, { month: 'long' });
 };
- 
+
 const getCategoryTranslation = (category, t) => {
-    return t(`search-criteria.${category}`);
+  return t(`search-criteria.${category}`);
 };
- 
+
 const formatDate = (dateString, language, t) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = getMonthFromDate(dateString, language);
-    const year = date.getFullYear();
- 
-    if (language === 'bg-BG') {
-        return `${day} ${t(`months.${month.toLowerCase()}`)} ${year}`;
-    } else {
-        return `${day} ${month} ${year}`;
-    }
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = getMonthFromDate(dateString, language);
+  const year = date.getFullYear();
+
+  if (language === 'bg-BG') {
+    return `${day} ${t(`months.${month.toLowerCase()}`)} ${year}`;
+  } else {
+    return `${day} ${month} ${year}`;
+  }
 };
- 
+
 const cutToFirstWord = (text) => {
-    if (!text) return '';
-    const firstSpaceIndex = text.indexOf(' ');
-    return firstSpaceIndex !== -1 ? text.substring(0, firstSpaceIndex) : text;
+  if (!text) return '';
+  const firstSpaceIndex = text.indexOf(' ');
+  return firstSpaceIndex !== -1 ? text.substring(0, firstSpaceIndex) : text;
 };
 
 export const ProfileAnnounced = () => {
@@ -106,22 +106,70 @@ export const ProfileAnnounced = () => {
             setSelectedAd(null);
         }
     };
- 
-    const handleCloseModal = () => {
-        setIsDeleteModalOpen(false);
-        setSelectedAd(null);
+
+    fetchAds();
+  }, [profileData.email]);
+
+  const getAdTownValue = (language, town) => {
+    return language === 'bg' ? town.bg : town.en;
+  };
+
+  useEffect(() => {
+    const loadTownNames = async () => {
+      const newTownNames = {};
+      await Promise.all(
+        ads.map(async (ad) => {
+          const townsData = await fetchTowns(
+            Number(ad.adRegion),
+            Number(ad.adSubregion)
+          );
+          const town = townsData.find((town) => town.id === Number(ad.adTown));
+          if (town) {
+            newTownNames[ad.adId] = getAdTownValue(currentLanguage, town);
+          }
+        })
+      );
+      setTownNames(newTownNames);
     };
- 
-    const handleRefreshClick = async (adId) => {
-        try {
-            await updateExpirationDate(adId);
-            const updatedAds = await getMyAds(profileData.email);
-            setAds(updatedAds.mappedAds);
-        } catch (error) {
-            console.error('Failed to update expiration date', error);
-        }
-    };
-  
+
+    if (ads.length > 0) {
+      loadTownNames();
+    }
+  }, [ads, currentLanguage, regions]);
+
+  const handleDeleteClick = (ad) => {
+    setSelectedAd(ad);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteAd = async () => {
+    if (selectedAd) {
+      try {
+        await deleteAd(selectedAd.adId);
+        setAds(ads.filter((ad) => ad.adId !== selectedAd.adId));
+      } catch (error) {
+        console.error('Failed to delete ad', error);
+      }
+      setIsDeleteModalOpen(false);
+      setSelectedAd(null);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedAd(null);
+  };
+
+  const handleRefreshClick = async (adId) => {
+    try {
+      await updateExpirationDate(adId);
+      const updatedAds = await getMyAds(profileData.email);
+      setAds(updatedAds.mappedAds);
+    } catch (error) {
+      console.error('Failed to update expiration date', error);
+    }
+  };
+
     return (
         <>
             {ads.length > 0 ? (
