@@ -8,7 +8,7 @@ export const HeaderCommunity = () => {
             <header className="header-community">
                 <div className="header-community-logo">
                     <Link to="/">
-                        <img src="/images/homePage/logo.png" alt="logo" className="logo" />{' '}
+                        <img src="/images/homePage/logo-2.png" alt="logo" className="logo" />{' '}
                         Pensa Club
                     </Link>
                 </div>

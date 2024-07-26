@@ -61,7 +61,7 @@ header a:nth-child(1) {
   font-weight: 600;
   line-height: 25px;
   text-decoration: none;
-  color: var(--gray);
+  color: var(--green);
 }
 
 #check {

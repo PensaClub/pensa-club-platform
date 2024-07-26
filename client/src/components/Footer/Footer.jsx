@@ -8,7 +8,7 @@ export const Footer = ({additionalClasses}) => {
         <footer className={additionalClasses}>
             
             <section className="footer">
-                <img src="/images/homePage/logo.png" alt="logo" />
+                <img src="/images/homePage/logo-2.png" alt="logo" />
                 <div className="footer-links">
                     <h3>{t('footer.site-map')}</h3>
                     <p>{t('footer.communities')}</p>
@@ -21,7 +21,7 @@ export const Footer = ({additionalClasses}) => {
                 </div>
                 <div className="footer-info">
                     <div className="second-info">
-                        <img src="/images/homePage/logo.png" alt="logo" />
+                        <img src="/images/homePage/logo-2.png" alt="logo" />
                         <h3>Pensa club &copy;</h3>
                     </div>
                     <div className="info-desc">

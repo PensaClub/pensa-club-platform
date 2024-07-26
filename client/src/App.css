@@ -86,12 +86,24 @@ label, span, p, input {
 }
 
 
-
+/* 
 @font-face {
   font-family: Phenomena;
   src: url("../../client/public/Phenomena-Regular.woff");
+} */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../../client/public/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../../client/public/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -99,7 +111,7 @@ label, span, p, input {
 }
 
 body {
-  font-family: "Phenomena", "Poppins", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   letter-spacing: 0.05rem;
   text-indent: 0.3rem;
 
