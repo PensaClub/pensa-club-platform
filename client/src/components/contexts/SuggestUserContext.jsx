@@ -40,9 +40,63 @@ export const SuggestUserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
+  const onSuggestResolve = async (id) => {
+    setIsLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await suggestUserService.suggestResolve(id);
 
+      notify('success-suggest');
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getAllSuggested = async () => {
+    setIsLoading(true);
+    try {
+      const response = await suggestUserService.getAllSuggested();
+      return response.userData;
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getAllResolve= async () => {
+    setIsLoading(true);
+    try {
+      const response = await suggestUserService.getAllResolve();
+      return response.userData;
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getDeleteSuggest = async (id) => {
+    setIsLoading(true);
+    try {
+      const response = await suggestUserService.suggestDelete(id);
+      notify('success-delete-suggest')
+      return response.userData;
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const contextService = {    
     onSuggestSubmit,
+    getAllSuggested,
+    getDeleteSuggest,
+    onSuggestResolve,
+    getAllResolve
   };
 
   return (

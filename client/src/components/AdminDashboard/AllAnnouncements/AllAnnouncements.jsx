@@ -14,12 +14,18 @@ export const AllAnnouncements = () => {
     const [hiddenLine, setHiddenLine] = useState([]);
     const [hiddenPie, setHiddenPie] = useState([]);
     const [isYearly, setIsYearly] = useState(false);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             await fetchPendingAds();
             await fetchApprovedAds();
             await fetchRejectAds();
+
+            // Fetch categories data from search-criteria.json
+            const response = await fetch('/search-criteria.json');
+            const data = await response.json();
+            setCategories(data.searchCriteria);
         };
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,10 +61,15 @@ export const AllAnnouncements = () => {
         return pastDate.toISOString().split('T')[0];
     };
 
+    const translateCategory = (value) => {
+        const category = categories.find(cat => cat.value === value);
+        return category ? t(category.name) : value;
+    };
+
     const generateCategoriesData = () => {
-        const categories = ["donate", "sell", "work", "courses", "health", "tours", "games", "arbitration"];
-        return categories.map(category => ({
-            category,
+        const categoryValues = categories.map(cat => cat.value);
+        return categoryValues.map(category => ({
+            category: translateCategory(category),
             pending: pendingAds.filter(ad => ad.category === category).length,
             approved: approvedAds.filter(ad => ad.category === category).length,
             rejected: rejectAds.filter(ad => ad.category === category).length,
@@ -67,8 +78,6 @@ export const AllAnnouncements = () => {
 
     const generateDateData = () => {
         const startDate = isYearly ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : new Date(getLastNDays(10));
-        // eslint-disable-next-line no-unused-vars
-        const startDateISO = startDate.toISOString().split('T')[0];
         const dateSet = new Set();
 
         [...pendingAds, ...approvedAds, ...rejectAds].forEach(ad => {
@@ -125,7 +134,7 @@ export const AllAnnouncements = () => {
             <h2>{t('admin.all_announcements_statistic')}</h2>
 
             <div className="bar-chart">
-                <h3>Обяви по категории</h3>
+                <h3>{t('admin.ads_by_category')}</h3>
                 <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={categoriesData}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -141,7 +150,7 @@ export const AllAnnouncements = () => {
             </div>
             <div className="chart-row">
                 <div className="line-chart">
-                    <h3>Обяви по дати</h3>
+                    <h3>{t('admin.ads_by_date')}</h3>
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={dateData}>
                             <CartesianGrid strokeDasharray="3 3" />
@@ -164,39 +173,34 @@ export const AllAnnouncements = () => {
                     </ResponsiveContainer>
                 </div>
                 <div className="pie-chart">
-
-                <h3>Разпределение на обявите</h3>
-
-                <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                        <Pie
-                            data={pieData}
-                            dataKey="value"
-                            nameKey="name"
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={80}
-                            label={(entry) => `${entry.name}: ${entry.value}`}
-                            labelLine={true}
-                        >
-                            {pieData.map((entry, index) => (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={entry.color}
-                                    fillOpacity={hiddenPie.includes(entry.name) ? 0.2 : 1}
-                                    onClick={() => handleLegendClickPie(entry.name)}
-                                />
-                            ))}
-                        </Pie>
-                        <Tooltip content={renderCustomTooltip} />
-                        <Legend onClick={(e) => handleLegendClickPie(e.value)} />
-                    </PieChart>
-                </ResponsiveContainer>
+                    <h3>{t('admin.ads_distribution')}</h3>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <PieChart>
+                            <Pie
+                                data={pieData}
+                                dataKey="value"
+                                nameKey="name"
+                                cx="50%"
+                                cy="50%"
+                                outerRadius={80}
+                                label={(entry) => `${entry.name}: ${entry.value}`}
+                                labelLine={true}
+                            >
+                                {pieData.map((entry, index) => (
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={entry.color}
+                                        fillOpacity={hiddenPie.includes(entry.name) ? 0.2 : 1}
+                                        onClick={() => handleLegendClickPie(entry.name)}
+                                    />
+                                ))}
+                            </Pie>
+                            <Tooltip content={renderCustomTooltip} />
+                            <Legend onClick={(e) => handleLegendClickPie(e.value)} />
+                        </PieChart>
+                    </ResponsiveContainer>
                 </div>
-
             </div>
-
         </div>
     );
 };
-
