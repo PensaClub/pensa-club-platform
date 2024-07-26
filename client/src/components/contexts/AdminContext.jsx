@@ -15,6 +15,7 @@ export const AdminProvider = ({ children }) => {
     const [pendingAds, setPendingAds] = useState([])
     const [approvedAds, setApprovedAds] = useState([])
     const [rejectAds,setRejectAds] = useState([])
+    
     const showErrorAndSetTimeouts = (error) => {
         setErrorMessage(error);
         setIsLoading(false);
@@ -28,9 +29,9 @@ export const AdminProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await adminService.pendingAds();
-            setPendingAds(response);
+            setPendingAds(response.ads  );
             setIsLoading(false);
-            return response;
+            return response.ads;
         } catch (e) {
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
@@ -41,9 +42,9 @@ export const AdminProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await adminService.approvedAds();
-            setApprovedAds(response);
+            setApprovedAds(response.ads);
             setIsLoading(false);
-            return response;
+            return response.ads;
         } catch (e) {
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
@@ -54,9 +55,9 @@ export const AdminProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await adminService.rejectAds();
-            setRejectAds(response);
+            setRejectAds(response.ads);
             setIsLoading(false);
-            return response;
+            return response.ads;
         } catch (e) {
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
@@ -106,7 +107,8 @@ export const AdminProvider = ({ children }) => {
         deleteAd,
         fetchApprovedAds,
         approvedAds,
-        fetchRejectAds
+        fetchRejectAds,
+        rejectAds
     }
 
     return (

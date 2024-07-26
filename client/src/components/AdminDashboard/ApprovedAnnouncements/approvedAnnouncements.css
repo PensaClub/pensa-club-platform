@@ -38,7 +38,8 @@
     padding: 8px;
     border: 1px solid #ddd;
     white-space: nowrap;
-    text-align: left;
+    /* text-align: left; */
+    text-align: center;
   }
 
 
@@ -240,6 +241,7 @@
     .approved-announcements-table th,
     .approved-announcements-table td {
       padding: 10px;
+      
     }
   
     .btn-unapproved {
@@ -317,4 +319,53 @@
     width: 40px;
     height: 40px;
   }
+}
+
+.legend-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.legend-item span {
+  font-size: var(--xxs-font-size);
+  color: var(--orange);
+  text-decoration: none;
+  align-items: center;
+}
+.legend-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@media (min-width: 1200px) {
+  .legend-container {
+    gap: 30px;
+    
+  }
+}
+
+@media (min-width: 800px) {
+  .legend-container {
+    gap: 25px;
+    
+  }
+}
+
+@media (max-width: 767px) {
+  .legend-container {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+
+  }
+
+  
 }

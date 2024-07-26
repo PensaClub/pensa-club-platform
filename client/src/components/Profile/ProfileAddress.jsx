@@ -32,7 +32,7 @@ const ProfileAddress = () => {
     streetNumber: profileData.details.streetNumber || '',
   };
   const [form, setForm] = useState(initialFormState);
-console.error(form)
+
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))
@@ -52,6 +52,7 @@ console.error(form)
 
     // eslint-disable-next-line eqeqeq
 
+    // eslint-disable-next-line eqeqeq
     const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
 

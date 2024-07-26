@@ -141,20 +141,15 @@ When the server starts for the first time in a development environment, a demo u
   - **/user/update-details** : This endpoint updates an existing user's profile. It requires the specific field to be updated, for example, `"workOptions": ["Doctor", "Lawyer"]` to update the work options of the user.
   - **/user/single-user** : This endpoint fetches a single registered user in the system.
 
-- **_userDetailsController_** :
+- **_adsController_** :
 
-  - **/ads/approved-ads** : Used to retrieve all approved ads. It can be accessed by any authenticated user.
-  - **/ads/unapproved-ads** : Used to retrieve all unapproved ads. It can be accessed by admins only.
-  - **/ads/user-ads** : Used to retrieve all ads of an user by providing its email address in the request body.
-  - **/ads/ad-approve** : Used to approve an ad by providing its id in the request body. It can be accessed by admins only.
-  - **/ads/ad-delete** : Used to delete an ad by providing its id in the request body. It can be accessed by admins and the ad's creator only.
-  - **/ads/ad-edit** : Used to...
-  - **/ads/ad-create** : Used to create an advertisement with all the necessary details. It allows users to input comprehensive information about the ad, such as the title, description, category, town, address and images.
+  - **/ads/ad-create** : Used to create an advertisement with all the necessary details. It allows users to input comprehensive information about the ad, such as the title, description, category, region, subregion, town, and images.
 
     Example of successful ad creation via postman:
 
     ```json
     {
+      "adId": "random uuid number",
       "summary": "Sofa",
       "category": "sell",
       "description": "Very nice and comfy",
@@ -170,11 +165,20 @@ When the server starts for the first time in a development environment, a demo u
           "firebaseImagePath": "path/in/firebase/storage"
         }
       ],
-      "adId": "random uuid number"
+      "extraFields": {
+          "price": number,
+          "eventStartDate": "YYYY-MM-DD",
+          "eventEndDate": "YYYY-MM-DD"
+        }
     }
     ```
 
-  - **/ads/ad-edit**: This endpoint updates an existing advertisement. It allows for updating one or many fields of the ad, and requires the ad's ID to be provided.
+  - **/ads/:adStatus-ads/:adId?** : Used to retrieve ads based on their status ('approved', 'pending', 'denied'). If adId is provided, it fetches the specific ad. Requires user to be authenticated and to have Admin permissions.
+  - **/ads/adById/:adId** : Used to retrieve a single ad by its ID.
+  - **/ads/ads-user** : Retrieves all ads created by the authenticated user.
+  - **/ads/ad-update-status :** : Used to update the status of ad by providing its id in the request body and the new status as 'newStatus'. Requires admin permissions.
+  - **/ads/ad-delete** : Used to delete an ad by providing its id in the request body. This endpoint can be accessed by admins and the ad's creator only.
+  - **/ads/ad-edit** : Used to edit an ad by providing its id and the fields to be edited with their new values in the request body. Status cannot be changed through this endpoint and after every successful edit the ad status is updated to pending (for review). This endpoint can be accessed by any authenticated users. If the new status is denied, it also requires an admin comment as 'adminComment' (text explanation why the ad is denied). This endpoint can be accessed by admins only.
   - **/ads/ads-search**: This endpoint provides search functionality.
 
     Date must be in YYYY-MM-DD format, category must be one of the following - `'recommend', 'donate', 'sell', 'work', 'courses', 'health', 'initiatives_projects', 'tours', 'games', 'arbitration'`.
@@ -184,10 +188,10 @@ When the server starts for the first time in a development environment, a demo u
     You can perform searches using the following criteria: Creation Date, Expiration Date, Tags, Category, Summary, Region: adRegion, adSubregion (Note: adSubregion can only be searched if adRegion is specified), adTown (Note: adTown can only be searched if both adRegion and adSubregion are specified), startDate/endDate for all ads, eventStartDate/eventEndDate for specific events with custom dates.
 
     <p style="color:red;"><strong>Important:</strong></p> 
-    To test the function with unapproved ads, set the following in the adsController/ads-search to <strong>false</strong>:
+    To test the function with unapproved ads, set the following in the adsController/ads-search to <strong>pending</strong>:
 
     ```json
-    whereCondition.approved = true;
+    whereCondition.status = approved;
     ```
 
     Example of successful query via postman - http://localhost:8080/ads/ads-search?category=work&adRegion=3&adTown=10&adSubregion=5 and the return data:
@@ -234,6 +238,8 @@ When the server starts for the first time in a development environment, a demo u
     ],
     "errors": {}
     ```
+
+  - **/ads/update-expiration-date/:adId**: This endpoint sets the expiration date of an AD to 30 days from the current date. It requires the user to be logged in and the AD's ID to be provided in the URL path. Example: http://localhost:8080/ads/update-expiration-date/123 - sets the expiration date to 30 days from the current date on ad with id 123.
 
 ## Testing
 

@@ -1,116 +1,111 @@
 .subscribe-news {
-    width: 100%;
-    background-image: var(--bg-image-rotated);
-    background-size: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2em 1em;
-
-    
+  width: 100%;
+  background-image: var(--bg-image-rotated);
+  background-size: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2em 1em;
 }
 .news-form {
-    width: 100%;
+  width: 100%;
 }
 .single-subscribe-info {
-    padding: var(--l-space) 0;
-   
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 80%;
+  padding: var(--l-space) 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 80%;
 }
 
 .news-form {
-    max-width: 80%;
+  max-width: 80%;
 }
 
 .single-subscribe-info h3 {
-    font-size: var(--l-font-size);
-    font-weight: 700;
-    text-align: center;
-
+  font-size: var(--l-font-size);
+  font-weight: 700;
+  text-align: center;
 }
 
-.single-subscribe-info h3>span {
-    font-size: inherit;
-    font-weight: 500;
+.single-subscribe-info h3 > span {
+  font-size: inherit;
+  font-weight: 700;
+  color: var(--green);
 }
 
 .single-subscribe-info p {
-    font-size: var(--s-font-size);
-    font-weight: 500;
-    padding-top: var(--l-space);
-    text-align: center;
-
+  font-size: var(--s-font-size);
+  font-weight: 500;
+  padding-top: var(--l-space);
+  text-align: center;
 }
 .form-row {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    padding: 0.7em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 0.7em;
 }
 
 .form-row {
-    display: flex;
-    padding-bottom: 1em;
-
+  display: flex;
+  padding-bottom: 1em;
 }
 .col-subscribe {
-    display: flex;
-    flex-direction: column;
-    gap: 0.7em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
 }
 
 #btn-subscribe {
-    margin-top: 0;
-
+  margin-top: 0;
 }
 .news-btn {
-display: flex;
-flex-direction: column;
-align-items: center;
-margin: 0.7em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.7em;
 }
 .error-message {
-    color: red;
-    font-size: 0.875rem;
-    margin-top: 5px;
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 5px;
 }
 .after-news {
-    width: 100%;
-    height: 7px;
-  
+  width: 100%;
+  height: 7px;
 }
-@media (min-width: 850px)and (orientation: landscape){
-    .col-subscribe {
-        flex-direction: row;
-    }
-    .news-form {
-        display: flex;
-        justify-content: center;
-    }
-    .news-btn button:hover {
-        opacity: 0.7;
-    }
-    .error-email{
-        display: flex;
-        flex-direction: column;
-    }
-    .error-username{
-        display: flex;
-        flex-direction: column;
-    }
+@media (min-width: 850px) and (orientation: landscape) {
+  .col-subscribe {
+    flex-direction: row;
+  }
+  .news-form {
+    display: flex;
+    justify-content: center;
+  }
+  .news-btn button:hover {
+    opacity: 0.7;
+  }
+  .error-email {
+    display: flex;
+    flex-direction: column;
+  }
+  .error-username {
+    display: flex;
+    flex-direction: column;
+  }
 
-    #email, #name {
-        width: calc(var(--container-min-width) - 80px);
-        padding: calc(var(--m-space) - 6px) 0.2em;
-        font-size: var( --m-space);
-    }
+  #email,
+  #name {
+    width: calc(var(--container-min-width) - 80px);
+    padding: calc(var(--m-space) - 6px) 0.2em;
+    font-size: var(--m-space);
+  }
 
-    #btn-subscribe {
-        margin-top: 5px;
-        min-width: calc(var(--container-min-width) - 140px);
-    }
+  #btn-subscribe {
+    margin-top: 5px;
+    min-width: calc(var(--container-min-width) - 140px);
+  }
 }

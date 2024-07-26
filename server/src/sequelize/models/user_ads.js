@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-            ad_region: {
+      ad_region: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -158,8 +158,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       expiration_date: {
         type: DataTypes.DATEONLY,
-        allowNull: true,
-        defaultValue: () => new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
+        allowNull: false,
+        defaultValue: new Date(new Date().setDate(new Date().getDate() + 30)).toISOString().split('T')[0],
       },
       status: {
         type: DataTypes.STRING,
@@ -168,7 +168,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isIn: {
             args: [['pending', 'approved', 'denied']],
-            message: 'Invalid status type. Status must be approved, denied or pending.'
+            message: 'Invalid status type. Status must be approved, denied or pending.',
           },
         },
       },
