@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { userServiceFactory } from '../Services/userService';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
@@ -12,17 +12,21 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
-  // console.error('profileData:', profileData);
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.enabled);
-
+  const [isAdmin, setIsAdmin] = useLocalStorage('isAdmin', false);
   // eslint-disable-next-line no-unused-vars
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const userService = userServiceFactory(isAuth.token);
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (profileData?.role) {
+      setIsAdmin(profileData.role === 'admin');
+    }
+  }, [profileData, setIsAdmin]);
 
   const showErrorAndSetTimeouts = (error) => {
     setErrorMessage(error);
@@ -40,6 +44,7 @@ export const UserProvider = ({ children }) => {
       setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
       setProfileData(response.user);
+      setIsAdmin(response.user.role === 'admin');
       navigate('/profile/profile-form');
       notify('success-register');
     } catch (error) {
@@ -54,9 +59,11 @@ export const UserProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const response = await userService.login(data);
+      const userRole = response.user.role;
       setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
       setProfileData(response.user);
+      setIsAdmin(userRole === 'admin');
       notify('success-login');
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
@@ -66,7 +73,6 @@ export const UserProvider = ({ children }) => {
         navigate('/');
       }
     } catch (error) {
-
       notify('error');
       showErrorAndSetTimeouts(error.message);
     } finally {
@@ -81,6 +87,7 @@ export const UserProvider = ({ children }) => {
       setIsAuth({});
       setProfileData({});
       setAddressId({});
+      setIsAdmin(false);
       notify('success-logout');
     } catch (error) {
       notify('error');
@@ -104,6 +111,7 @@ export const UserProvider = ({ children }) => {
       setProfileData(response.user);
       setIsFinish(response.user.enabled);
       setIsAuth({ ...isAuth, token: response.token, enabled: response.user.enabled });
+      setIsAdmin(response.user.role === 'admin');
       navigate('/profile');
       notify('success-data');
     } catch (error) {
@@ -124,6 +132,8 @@ export const UserProvider = ({ children }) => {
         const data = await loadAddressData(responseDetails.region, responseDetails.municipality, responseDetails.settlement);
         setAddressId({ ...data });
       }
+      setIsAdmin(response.user.role === 'admin');
+
       notify('success-data');
     } catch (error) {
       notify('error');
@@ -139,6 +149,7 @@ export const UserProvider = ({ children }) => {
       const response = await userService.getUserData();
       if (response) {
         setProfileData(response.user);
+        setIsAdmin(response.user.role === 'admin');
       }
     } catch (error) {
       notify('error');
@@ -157,6 +168,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(true);
       const response = await userService.resetPassword({ ...data });
       setIsLoading(false);
+      setIsAdmin(response.user.role === 'admin');
       return response;
     } catch (error) {
       notify('error');
@@ -167,7 +179,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const onForgetPasswordSubmit = async (data) => {
-
     try {
       setIsLoading(true);
       const response = await userService.forgetPassword(data);
@@ -178,11 +189,12 @@ export const UserProvider = ({ children }) => {
       notify('error');
       showErrorAndSetTimeouts(error.message);
     }
-  }
+  };
 
   const onSuggestSubmit = async (data) => {
     setIsLoading(true);
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await userService.suggestUser(data);
       navigate('/');
       notify('success-register');
@@ -193,11 +205,12 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
+
+  const isUserAdmin = () => isAdmin;
+
   const contextService = {
     onRegisterSubmit,
     onLoginSubmit,
-    // Server doesn`t send userId for now !
-    // userId: isAuth.data?.userId,
     userEmail: isAuth.email,
     token: isAuth.token,
     isAuthentication: !!isAuth.token,
@@ -211,24 +224,19 @@ export const UserProvider = ({ children }) => {
     addressId,
     onForgetPasswordSubmit,
     onSuggestSubmit,
+    isUserAdmin,
+    isAdmin,
   };
 
   return (
     <UserContext.Provider value={contextService}>
       {children}
       {isLoading && <Loader />}
-      {/* {errorMessage && (
-          <div className={`error-message show-error custom-style`}>
-            <p>{errorMessage}</p>
-            {console.log('Rendering error message:', errorMessage)}
-          </div>
-        )} */}
     </UserContext.Provider>
   );
 };
 
 export const useAuthContext = () => {
   const context = useContext(UserContext);
-
   return context;
 };

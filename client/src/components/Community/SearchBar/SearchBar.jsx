@@ -15,7 +15,7 @@ import { useCommunityContext } from '../../contexts/CommunityContext';
 import { useTranslation } from 'react-i18next';
 
 export const SearchBar = () => {
-  const { isLoading, searchAds, regions, subregions } = useCommunityContext();
+  const { searchAds, regions, subregions } = useCommunityContext();
   const [isSearchWhatOpen, setIsSearchWhatOpen] = useState(false);
   const [isSearchWhereOpen, setIsSearchWhereOpen] = useState(false);
   const [isSearchWhenOpen, setIsSearchWhenOpen] = useState(false);
@@ -40,6 +40,7 @@ export const SearchBar = () => {
     adTownName: '',
   });
 
+  // eslint-disable-next-line no-unused-vars
   const [ads, setAds] = useState({ result: [] });
 
   const handleSearch = async (customFilters = null) => {

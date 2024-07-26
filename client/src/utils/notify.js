@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 import { toast } from 'react-toastify';
 import { Trans } from 'react-i18next';
 
@@ -36,11 +37,26 @@ export const notify = (key) => {
       break;
     case 'success-delete-ads':
       toast.success(<Trans i18nKey="notification.success-delete-ads" />, {
-     role: 'alert',
+        role: 'alert',
       });
       break;
     case 'success-suggest':
       toast.success(<Trans i18nKey="notification.success-suggested" />, {
+        role: 'alert',
+      });
+      break;
+    case 'success-approved':
+      toast.success(<Trans i18nKey="notification.success-approved" />, {
+        role: 'alert',
+      });
+      break;
+      case 'success-reject':
+        toast.success(<Trans i18nKey="notification.success-reject" />, {
+          role: 'alert',
+        });
+        break;
+    case 'enter-comment':
+      toast.error(<Trans i18nKey="notification.enter-comment" />, {
         role: 'alert',
       });
       break;

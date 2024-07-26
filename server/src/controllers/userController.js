@@ -5,7 +5,7 @@ const { tokenCreator, tokenVerification } = require('../utils/jwt');
 const CustomError = require('../utils/customError');
 
 const { where } = require('sequelize');
-const { user_account, sequelize, user_details } = require('../sequelize/models/index');
+const { user_account, user_details, user_ads } = require('../sequelize/models/index');
 const uuid = require('uuid');
 
 const isAuth = require('../middlewares/isAuth');
@@ -106,6 +106,28 @@ userController.post('/login', async (req, res, next) => {
           as: 'details',
           attributes: { exclude: ['user_accounts_id', 'id'] },
         },
+        {
+          model: user_ads,
+          as: 'ads',
+          required: false,
+          attributes: [
+            ['ad_id', 'adId'],
+            'summary',
+            'category',
+            'description',
+            ['ad_region', 'adRegion'],
+            ['ad_subregion', 'adSubregion'],
+            ['ad_town', 'adTown'],
+            'street',
+            'tags',
+            'images',
+            'status',
+            ['admin_comment', 'adminComment'],
+            ['extra_fields', 'extraFields'],
+            ['creation_date', 'creationDate'],
+            ['expiration_date', 'expirationDate'],
+          ],
+        },
       ],
     });
 
@@ -123,6 +145,7 @@ userController.post('/login', async (req, res, next) => {
       email: user.email,
       role: user.role,
       enabled: user.finished,
+      ads: user.ads,
     };
 
     if (user.dataValues.details) {
@@ -182,7 +205,6 @@ userController.post('/request-reset-password', async (req, res, next) => {
     next(err);
   }
 });
-
 
 userController.post('/reset-password', async (req, res, next) => {
   const { oldPassword, newPassword, reNewPassword, tokenType, token } = req.body;

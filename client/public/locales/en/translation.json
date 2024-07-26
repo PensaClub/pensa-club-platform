@@ -42,8 +42,8 @@
     "title1": "LET'S BREAK THIS TREND",
     "title2": "LET'S CHANGE THIS MODEL",
     "title3": "KEEPING UP WITH THE TIMES",
-    "desc": "Creation of an innovative, digital and <span>interactive platform</span> aimed at improving the quality of life of the elderly by actively including them in modern society, supporting them in the development of new skills and interests and promoting a <span>healthy and full, dignified life.</span>",
-    "about-btn": "Read More About Us"
+    "desc": "This is an innovative platform, a <span>tool</span> for creating a community. A community of people of the same age, with similar interests, new ideas, and new knowledge. A community for interaction and mutual support. The expected outcome is an improvement in <span>quality of life</span>, through <span>active engagement</span> in contemporary life, support for <span>new skills</span> and interests, and encouragement towards a <span>healthy and fulfilling, dignified life</span>!",
+    "about-btn": "Recommend a friend"
   },
   "news-subscribe": {
     "title": "Stay up to date with",
@@ -119,6 +119,7 @@
     "close": "Close",
     "and": "and",
     "more": "more"
+
   },
   "notify_modal": {
     "part1": "Please,",
@@ -239,7 +240,82 @@
     "password_error": "Password must be at least 8 characters long and contain at least one letter and one number",
     "new_password_error": "New password must be at least 8 characters long and contain at least one letter and one number",
     "password_match": "Passwords don't match",
-    "logout": "Logout"
+    "logout": "Logout",
+    "admin_dashboard": "Admin Dashboard",
+    "pending_announcements": "Pending Announcements",
+    "approved_announcements": "Approved Announcements",
+    "ads": "ads",
+    "ads-one": "ad",
+    "ads-statistic": "Ads",
+    "reject_announcements": "Rejected Announcements",
+    "all_users": "All Users"
+  },
+  "admin": {
+    "pending_announcements": "Pending Announcements",
+    "search": "Search",
+    "name": "Name",
+    "email": "Email",
+    "date": "Date",
+    "number": "No.",
+    "user_email": "User Email",
+    "announcement_title": "Announcement Title",
+    "creation_date": "Creation Date",
+    "actions": "Actions",
+    "category": "Category",
+    "description": "Description",
+    "region": "Region",
+    "subregion": "Municipality",
+    "town": "Town",
+    "address": "Address",
+    "tags": "Tags",
+    "price": "Price",
+    "event_start_date": "Start Date",
+    "event_end_date": "End Date",
+    "approve": "Approve",
+    "reject": "Reject",
+    "delete": "Delete",
+    "reject_announcements": "Rejected Announcements",
+    "users": "Users",
+    "all_announcements_statistic": "Ad Statistics",
+    "user_registration_date": "Registration Date",
+    "role_user": "User",
+    "role_admin": "Admin",
+    "reset_password": "Reset Password",
+    "phone_number": "Phone Number",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "municipality": "Municipality",
+    "settlement": "Settlement",
+    "password": "Password",
+    "no_user_details": "No user details",
+    "save": "Save",
+    "back": "Back",
+    "finish": "Finish",
+    "unfinish": "Unfinished",
+    "status": "Status",
+    "role": "Role",
+    "ban": "Ban",
+    "settings": "Settings",
+    "comment": "Comment",
+    "send_message": "Send message",
+    "all_users": "All Users",
+    "unfinished_users": "Unfinished Profile's",
+    "all_users_statistics": "All Users Statistics",
+    "users_by_role": "Users by Role",
+    "users_by_status": "Users by Status",
+    "users_by_registration_date": "Users by Registration Date",
+    "users_by_region": "Users by Region",
+    "average_ads_per_user": "Average Ads per User",
+    "monthly_user_growth": "Monthly User Growth",
+    "users_by_interests": "Users by Interests",
+    "role_banned": "Banned",
+    "active": "Active",
+    "inactive": "Inactive",
+    "last_week": "Last Week",
+    "last_month": "Last Month",
+    "last_year": "Last Year",
+    "users_by_work_options": "Users by Work ",
+    "users_by_skills": "Users by Skills"
   },
   "community": {
     "community": "Community",
@@ -262,7 +338,11 @@
     "last_year": "Last Year",
     "specific_period": "Specific Period",
     "start_date": "Start Date",
-    "end_date": "End Date"
+    "end_date": "End Date",
+    "no_ads_found": "No ads found",
+    "no_ads_message": "It looks like there are no ads that match your criteria.",
+    "clear_filters": "Clear Filters",
+    "tag_search": "Enter Tag"
   },
   "ads": {
     "required_create_ad": "This field is required!",
@@ -333,6 +413,9 @@
     "success-delete-ads": "Successfully delete ad!",
     "success-edit-ads": "Successfully edit ad!",
     "success-suggested": "You have successfully suggested a friend!",
+    "enter-comment": "Enter a comment",
+    "success-approved": "The Ad has been approved!",
+    "success-reject": "The Ad has been reject!",
     "error": "An error occured. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images."
@@ -378,6 +461,10 @@
     "message": "Message",
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?"
+    "who-is-suggested": "Who are you suggesting?",
+    "home": {
+      "our_latest_ads": "Our Latest Posts",
+      "see_more_ads": "View More Posts"
+    }
   }
 }

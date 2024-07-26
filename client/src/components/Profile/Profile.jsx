@@ -1,15 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import { ProfileData } from './ProfileData';
 import ProfileForm from './ProfileForm';
 import ProfileAddress from './ProfileAddress';
 import { ProfilePassword } from './ProfilePassword';
 import { useTranslation } from 'react-i18next';
-
 import './profile.css';
 import { UserContext } from '../contexts/UserContext';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faLocationDot,
@@ -23,18 +21,40 @@ import {
   faBriefcase,
   faUniversalAccess,
   faUsersGear,
+  faCircleCheck,
+  faBan,
+  faBookOpenReader,
+  faUsers,
+  faChartPie,
+  faAddressCard,
 } from '@fortawesome/free-solid-svg-icons';
 import { ProfileSkills } from './ProfileSkills';
 import { ProfileWorks } from './ProfileWorks';
 import { ProfileInterests } from './ProfileInterests';
 import { ProfileAnnounced } from './ProfileAnnounced';
+import { AdminGuard } from '../Guards/AdminGuard';
+import { PendingAnnouncements } from '../AdminDashboard/PendingAnnouncements/PendingAnnouncements';
+import { ApprovedAnnouncements } from '../AdminDashboard/ApprovedAnnouncements/ApprovedAnnouncements';
+import { AllAnnouncements } from '../AdminDashboard/AllAnnouncements/AllAnnouncements';
+import { RejectAnnouncements } from '../AdminDashboard/RejectAnnouncements/RejectAnnouncements';
+import { AllUsers } from '../AdminDashboard/AllUsers/AllUsers';
+
+import { UnfinishedProfiles } from '../AdminDashboard/UnfinishedProfiles/UnfinishedProfiles';
+import { AllUsersStatistics } from '../AdminDashboard/AllUsersStatistics/AllUsersStatistics';
 
 export const Profile = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isFinish, profileData } = useContext(UserContext);
-
+  const { isFinish, profileData, isAdmin } = useContext(UserContext);
+  const [adsCount, setAdsCount] = useState('');
+  const [approvedCount, setApprovedCount] = useState('');
+  const [rejectCount, setRejectCount] = useState('');
+  const [showAdsSubMenu, setShowAdsSubMenu] = useState(false);
+  const [showUsersSubMenu, setShowUsersSubMenu] = useState(false);
+  const [allUsers,setAllUsers] = useState(''); 
+  const [ unfinishedUsers, setUnfinishedUsers] = useState('');
   useEffect(() => {
     window.scrollTo({ top: 0 });
     if (!profileData) {
@@ -52,6 +72,20 @@ export const Profile = () => {
   const handleLogout = () => {
     navigate('/logout');
   };
+
+  const toggleAdsSubMenu = () => {
+    setShowAdsSubMenu(!showAdsSubMenu);
+  };
+  const toggleUsersSubMenu = () => {
+    setShowUsersSubMenu(!showUsersSubMenu);
+  };
+  const isAdminPanel = location.pathname.startsWith('/profile/pending-announcements')
+    || location.pathname.startsWith('/profile/approved-announcements')
+    || location.pathname.startsWith('/profile/reject-announcements')
+    || location.pathname.startsWith('/profile/ads-admin')
+    || location.pathname.startsWith('/profile/users-admin')
+    || location.pathname.startsWith('/profile/users-statistic')
+    || location.pathname.startsWith('/profile/users-unfinished')
 
   return (
     <section className='profile-section'>
@@ -93,9 +127,48 @@ export const Profile = () => {
           <FontAwesomeIcon icon={faMountainSun} className='icon' />
           {t('profile.anothers')}
         </Link>
+        {isAdmin && (
+          <div className="admin-dashboard">
+            <h3>{t('profile.admin_dashboard')}</h3>
+            <Link to='ads-admin' onClick={toggleAdsSubMenu}>
+              <FontAwesomeIcon icon={faBookOpenReader} className='icon' />
+              {t('profile.ads-statistic')}
+            </Link>
+            <div className={`ads-submenu ${showAdsSubMenu ? 'show' : ''}`}>
+              <Link to='pending-announcements' onClick={toggleMenu}>
+                <FontAwesomeIcon icon={faScroll} className='icon' />
+                {t('profile.pending_announcements')} {adsCount > 0 && (<>- {adsCount} {adsCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
+              </Link>
+              <Link to='approved-announcements' onClick={toggleMenu}>
+                <FontAwesomeIcon icon={faCircleCheck} className='icon' />
+                {t('profile.approved_announcements')} {approvedCount > 0 && (<>- {approvedCount} {approvedCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
+              </Link>
+              <Link to='reject-announcements' onClick={toggleMenu}>
+                <FontAwesomeIcon icon={faBan} className='icon' />
+                {t('profile.reject_announcements')} {rejectCount > 0 && (<>- {rejectCount} {rejectCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
+              </Link>
+            </div>
+            <Link to='users-statistic' onClick={toggleUsersSubMenu}>
+              <FontAwesomeIcon icon={faChartPie} className='icon' />
+              {t('admin.users')}
+            </Link>
+            <div className={`ads-submenu ${showUsersSubMenu ? 'show' : ''}`}>
+              <Link to='users-admin' onClick={toggleMenu}>
+                <FontAwesomeIcon icon={faUsers} className='icon' />
+                {t('profile.all_users')} {allUsers >= 1 && (<>- {allUsers}</>)}
+              </Link>
+            </div>
+            <div className={`ads-submenu ${showUsersSubMenu ? 'show' : ''}`}>
+              <Link to='users-unfinished' onClick={toggleMenu}>
+                <FontAwesomeIcon icon={faAddressCard} className='icon' />
+                {t('admin.unfinished_users')} {unfinishedUsers >= 1 && (<>- {unfinishedUsers}</>)}
+              </Link>
+            </div>
+          </div>
+        )}
       </section>
       <div className='main-profile'>
-        {isFinish === true && (
+        {isFinish === true && !isAdminPanel && (
           <section className='profile-data'>
             <Link to='/logout' onClick={handleLogout}>
               <button type='button' className='top-right-button'>
@@ -126,6 +199,7 @@ export const Profile = () => {
                 {profileData?.details?.region}
               </p>
             </div>
+
           </section>
         )}
 
@@ -138,8 +212,15 @@ export const Profile = () => {
           <Route path='password' element={<ProfilePassword />} />
           <Route path='skills' element={<ProfileSkills />} />
           <Route path='workOptions' element={<ProfileWorks />} />
-          <Route path='announced' element={<ProfileAnnounced />} profileData={profileData}/>
+          <Route path='announced' element={<ProfileAnnounced />} profileData={profileData} />
           <Route path='interestOptions' element={<ProfileInterests />} />
+          <Route path='ads-admin' element={<AdminGuard><AllAnnouncements /></AdminGuard>} />
+          <Route path='users-statistic' element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
+          <Route path='users-admin' element={<AdminGuard><AllUsers setAllUsers={setAllUsers}/></AdminGuard>} />
+          <Route path='users-unfinished' element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers}/></AdminGuard>} />
+          <Route path='pending-announcements' element={<AdminGuard><PendingAnnouncements setAdsCount={setAdsCount} /></AdminGuard>} />
+          <Route path='approved-announcements' element={<AdminGuard><ApprovedAnnouncements setApprovedCount={setApprovedCount} /></AdminGuard>} />
+          <Route path='reject-announcements' element={<AdminGuard><RejectAnnouncements setRejectCount={setRejectCount} /></AdminGuard>} />
         </Routes>
       </div>
     </section>

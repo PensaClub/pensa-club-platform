@@ -3,6 +3,7 @@ import { MenuCommunity } from "../MenuCommunity/MenuCommunity";
 import "./communityFooter.css";
 
 export const CommunityFooter = () => {
+    // eslint-disable-next-line no-unused-vars
     const {t} = useTranslation();
 
     return (

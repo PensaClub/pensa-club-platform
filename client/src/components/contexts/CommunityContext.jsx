@@ -134,13 +134,28 @@ export const CommunityProvider = ({ children }) => {
       return response;
     } catch (e) {
       notify("error");
-
       showErrorAndSetTimeouts(e.message);
       throw e;
     } finally {
       setIsLoading(false);
     }
   };
+  
+  const getLatestAds = async () => {
+    try {
+      setIsLoading(true);
+      const response = await communityService.getLatestAds(3);
+      setIsLoading(false);
+      return response;
+    } catch (e) {
+      notify("error");
+      showErrorAndSetTimeouts(e.message);
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const deleteAd = async (id) => {
     try {
       setIsLoading(true);
@@ -225,6 +240,7 @@ export const CommunityProvider = ({ children }) => {
     editAd,
     setTowns,
     fetchSearchCriteria,
+    getLatestAds,
     searchAds,
     TownSearch,
     townsSearch,

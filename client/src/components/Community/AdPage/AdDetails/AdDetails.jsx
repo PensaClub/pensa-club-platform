@@ -1,6 +1,7 @@
-import { HeaderCommunity } from "../../HeaderCommunity/HeaderCommunity";
-import "./adDetails.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+/* eslint-disable jsx-a11y/alt-text */
+import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
+import './adDetails.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPhone,
   faEnvelope,

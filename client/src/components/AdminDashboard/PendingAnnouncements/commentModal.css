@@ -1,0 +1,96 @@
+.modal-overlay-admin {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+  }
+  
+  .modal-content-admin {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: var(--container-shadow);
+    position: relative;
+    width: 100%;
+    max-width: 600px; 
+  }
+  
+  .modal-close-admin {
+    position: absolute;
+    top: 2px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: var(--m-font-size); 
+
+    cursor: pointer;
+  }
+  
+  .modal-submit-admin {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: var(--green-second);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: var(--xs-font-size);
+  }
+  
+  .modal-content-admin textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: var(--container-shadow);
+    resize: none;
+  }
+  
+
+  @media (max-width: 1199px) {
+    .modal-content-admin {
+      max-width: 500px;
+    }
+  
+    .modal-submit-admin {
+      font-size: 14px;
+    }
+  
+    .modal-content-admin h2 {
+      font-size: var(--xs-font-size); 
+    }
+    .modal-content-admin textarea {
+        font-size: var(--xs-font-size); 
+
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .modal-submit-admin {
+        font-size: var(--m-font-size); 
+
+    }
+  
+    .modal-content-admin h2 {
+        font-size: var(--m-font-size); 
+
+    }
+    .modal-content-admin textarea {
+        font-size: var(--m-font-size); 
+
+    }
+    .modal-close-admin {
+        font-size: var(--l-font-size); 
+ 
+      }
+  }
+  
