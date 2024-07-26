@@ -135,14 +135,24 @@ export const CommunityPage = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500 && !isLoading && searchPerformed) {
+            const isBottom = () => {
+           
+                const orientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+                if (orientation === 'portrait') {
+                    return (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500;
+                } else {
+                    return (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100; 
+                }
+            };
+    
+            if (isBottom() && !isLoading && searchPerformed) {
                 loadMoreAds();
             }
         };
-
+    
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isLoading, loadMoreAds, searchPerformed]); 
+    }, [isLoading, loadMoreAds, searchPerformed]);
 
     return (
         <>

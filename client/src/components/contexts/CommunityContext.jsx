@@ -157,7 +157,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
-    const searchAds = async (filters, page = 1, limit = 25) => {
+    const searchAds = async (filters, page = 1, limit = 10) => {
         try {
             setIsLoading(true);
             const response = await communityService.searchAds(filters, page, limit);
