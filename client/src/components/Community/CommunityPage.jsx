@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './communityPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faLocationDot, faCalendar, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FiltersCommunity } from "./FiltersCommunity/FiltersCommunity";
 import { AdsCard } from "./AdsCard/AdsCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import debounce from 'lodash.debounce';
 
 import { What } from "./CommunityModals/What";
 import { SearchWhere } from "./CommunityModals/SearchWhere";
@@ -19,6 +21,8 @@ export const CommunityPage = () => {
     const [creationDateLabel, setCreationDateLabel] = useState('');
     const [showResetIcon, setShowResetIcon] = useState(false);
     const [searchPerformed, setSearchPerformed] = useState(false);
+    const [lastPage, setLastPage] = useState(false);
+
     const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
 
@@ -39,19 +43,20 @@ export const CommunityPage = () => {
     });
 
     const [ads, setAds] = useState({ result: [] });
+    const [page, setPage] = useState(1);
 
     const getAdTownValue = (language, town) => {
         return language === 'bg' ? town.bg : town.en;
     };
 
-    const handleSearch = async (customFilters = null) => {
+    const handleSearch = async (customFilters = null, pageNum = 1) => {
         const searchFilters = customFilters ? customFilters : filters;
 
         try {
             const queryFilters = Object.fromEntries(
                 Object.entries(searchFilters).filter(([key, value]) => key !== 'adRegionName' && key !== 'adSubregionName' && key !== 'adTownName' && value && value !== 'all')
             );
-            const result = await searchAds(queryFilters);
+            const result = await searchAds(queryFilters, pageNum);
 
             if (result.result && result.result.length > 0) {
                 const adsWithNames = await Promise.all(result.result.map(async (ad) => {
@@ -64,11 +69,16 @@ export const CommunityPage = () => {
                         adTown: town ? getAdTownValue(currentLanguage, town) : ad.adTown
                     };
                 }));
-                setAds({ result: adsWithNames });
+                setAds(prevAds => ({
+                    result: pageNum === 1 ? adsWithNames : [...prevAds.result, ...adsWithNames]
+                }));
                 setSearchPerformed(true);
-            } else {
+                setLastPage(result.lastPage);
+            } else if (pageNum === 1) {
                 setAds({ result: [] });
                 setSearchPerformed(true);
+                setLastPage(true); 
+                setPage(prevPage => prevPage - 1);
             }
             setShowResetIcon(true);
         } finally {
@@ -96,6 +106,7 @@ export const CommunityPage = () => {
         setCreationDateLabel('');
         setShowResetIcon(false);
         setSearchPerformed(false);
+        setPage(1);
     };
 
     const getWhereLabel = () => {
@@ -111,13 +122,27 @@ export const CommunityPage = () => {
         return t('community.where_search');
     };
 
+    const loadMoreAds = useCallback(
+        debounce(() => {
+            if (!isLoading && !lastPage && searchPerformed) {
+                const nextPage = page + 1;
+                setPage(nextPage);
+                handleSearch(filters, nextPage);
+            }
+        }, 400),
+        [filters, page, isLoading, lastPage, searchPerformed] 
+    );
+
     useEffect(() => {
-        window.scrollTo({ top: 0 });
-        if (searchPerformed) {
-            handleSearch();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentLanguage]);
+        const handleScroll = () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500 && !isLoading && searchPerformed) {
+                loadMoreAds();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isLoading, loadMoreAds, searchPerformed]); 
 
     return (
         <>

@@ -51,10 +51,11 @@ export const communityServiceFactory = (token) => {
         editAd: async (id) => {
             return requester.patch(`${apiUrl}/ads/ad-edit`, { id });
         },
-        searchAds: async (filters) => {
-            const query = new URLSearchParams(filters).toString();
+        searchAds: async (filters, page, limit = 25) => {
+            const query = new URLSearchParams({ ...filters, page, limit }).toString();
             return requester.get(`${apiUrl}/ads/ads-search?${query}`);
         },
+        
         updateExpirationDate: async(adId) => {
             return requester.patch(`${apiUrl}/ads/update-expiration-date/${adId}`, { adId })
         }

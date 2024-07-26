@@ -11,16 +11,15 @@ export const CommunityProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     // eslint-disable-next-line no-unused-vars
     const [errorMessage, setErrorMessage] = useState('');
-
-    const [regions , setRegions] = useState([])
-    const [subregions , setSubregions] = useState({})
+    const [regions, setRegions] = useState([]);
+    const [subregions, setSubregions] = useState({});
     const [townsSearch, setTownsSearch] = useState({});
     const [towns, setTowns] = useState({});
     const [searchCriteria, setSearchCriteria] = useState([]);
+    const [ads, setAds] = useState({ result: [], page: 1, hasMore: true });
     const communityService = communityServiceFactory();
+    const navigate = useNavigate();
 
-    const navigate=useNavigate()
-    
     const showErrorAndSetTimeouts = (error) => {
         setErrorMessage(error);
         setIsLoading(false);
@@ -53,9 +52,9 @@ export const CommunityProvider = ({ children }) => {
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
-    }
-
+        }
     };
+
     const TownSearch = async (subregionId) => {
         try {
             setIsLoading(true);
@@ -68,11 +67,11 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
+
     const fetchTowns = async (regionId, subregionId) => {
         try {
             setIsLoading(true);
             const response = await communityService.getTowns(regionId, subregionId);
-            // setTowns(prev => ({ ...prev, [subregionId]: response }));
             setIsLoading(false);
             return response;
         } catch (e) {
@@ -110,7 +109,6 @@ export const CommunityProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-
     };
 
     const getMyAds = async (email) => {
@@ -120,50 +118,49 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
-            notify('error')
+            notify('error');
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
             setIsLoading(false);
         }
     };
+
     const deleteAd = async (id) => {
         try {
             setIsLoading(true);
             const response = await communityService.deleteAd(id);
             setIsLoading(false);
-            notify('success-delete-ads')
+            notify('success-delete-ads');
             return response;
         } catch (e) {
-            notify('error')
-
+            notify('error');
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
             setIsLoading(false);
         }
     };
+
     const editAd = async (id) => {
         try {
             setIsLoading(true);
             const response = await communityService.editAd(id);
             setIsLoading(false);
-            notify('success-edit-ads')
+            notify('success-edit-ads');
             return response;
         } catch (e) {
-            notify('error')
-
+            notify('error');
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
             setIsLoading(false);
         }
     };
-
-    const searchAds = async (filters) => {
+    const searchAds = async (filters, page = 1, limit = 25) => {
         try {
             setIsLoading(true);
-            const response = await communityService.searchAds(filters);
+            const response = await communityService.searchAds(filters, page, limit);
             setIsLoading(false);
             return response;
         } catch (e) {
@@ -173,6 +170,29 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
+
+    const loadMoreAds = async (filters, page) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.searchAds(filters, page);
+            setIsLoading(false);
+    
+            if (response.result.length > 0) {
+                setAds(prev => ({
+                    result: [...prev.result, ...response.result],
+                    page: page,
+                    hasMore: response.result.length > 0
+                }));
+            } else {
+                setAds(prev => ({ ...prev, hasMore: false }));
+            }
+        } catch (e) {
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };    
 
     const updateExpirationDate = async (adId) => {
         try {
@@ -181,18 +201,17 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
-            notify('error')
+            notify('error');
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
             setIsLoading(false);
         }
     };
-    
+
     useEffect(() => {
         fetchRegions();
         fetchSearchCriteria();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const contextService = {
@@ -210,24 +229,19 @@ export const CommunityProvider = ({ children }) => {
         editAd,
         setTowns,
         fetchSearchCriteria,
-        // eslint-disable-next-line no-dupe-keys
-        getMyAds,
         searchAds,
         TownSearch,
         townsSearch,
-        updateExpirationDate
-      }
-    
+        updateExpirationDate,
+        ads,
+        loadMoreAds,
+        setAds
+    };
+
     return (
         <CommunityContext.Provider value={contextService}>
             {children}
             {isLoading && <Loader />}
-            {/* {errorMessage && (
-                <div className={`error-message show-error custom-style`}>
-                    <p>{errorMessage}</p>
-                    {console.log("Rendering error message:", errorMessage)}
-                </div>
-            )} */}
         </CommunityContext.Provider>
     );
 };
