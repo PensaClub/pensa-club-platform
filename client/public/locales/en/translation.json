@@ -42,8 +42,8 @@
     "title1": "LET'S BREAK THIS TREND",
     "title2": "LET'S CHANGE THIS MODEL",
     "title3": "KEEPING UP WITH THE TIMES",
-    "desc": "Creation of an innovative, digital and <span>interactive platform</span> aimed at improving the quality of life of the elderly by actively including them in modern society, supporting them in the development of new skills and interests and promoting a <span>healthy and full, dignified life.</span>",
-    "about-btn": "Read More About Us"
+    "desc": "This is an innovative platform, a <span>tool</span> for creating a community. A community of people of the same age, with similar interests, new ideas, and new knowledge. A community for interaction and mutual support. The expected outcome is an improvement in <span>quality of life</span>, through <span>active engagement</span> in contemporary life, support for <span>new skills</span> and interests, and encouragement towards a <span>healthy and fulfilling, dignified life</span>!",
+    "about-btn": "Recommend a friend"
   },
   "news-subscribe": {
     "title": "Stay up to date with",
@@ -116,7 +116,10 @@
     "ads_by": "Ads by",
     "no_ads": "No ads available",
     "read_more": "Read more",
-    "close": "Close"
+    "close": "Close",
+    "and": "and",
+    "more": "more"
+
   },
   "notify_modal": {
     "part1": "Please,",
@@ -312,7 +315,19 @@
     "last_month": "Last Month",
     "last_year": "Last Year",
     "users_by_work_options": "Users by Work ",
-    "users_by_skills": "Users by Skills"
+    "users_by_skills": "Users by Skills",
+    "admin-suggest-users": "Suggest Users",
+    "full_name": "Full Name",
+    "recommended_by": "Suggested By",
+    "recommended_person": "Nominee ",
+    "phone": "Phone",
+    "resolved": "Resolving",
+    "message": "Message",
+    "all_suggested_users": "All Suggested Users",
+    "suggest_resolved_users": "Resolved Suggested",
+    "ads_by_category": "Ads by Category",
+    "ads_by_date": "Ads by Date",
+    "ads_distribution": "Ads Distribution"
   },
   "community": {
     "community": "Community",
@@ -415,7 +430,9 @@
     "success-reject": "The Ad has been reject!",
     "error": "An error occured. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
-    "error-images": "You can only upload up to 4 images."
+    "error-images": "You can only upload up to 4 images.",
+    "success-delete-suggest": "Successfully delete suggested user!",
+    "all_suggested_users": "All suggested users"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
@@ -458,6 +475,10 @@
     "message": "Message",
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?"
+    "who-is-suggested": "Who are you suggesting?",
+    "home": {
+      "our_latest_ads": "Our Latest Posts",
+      "see_more_ads": "View More Posts"
+    }
   }
 }

@@ -12,6 +12,7 @@
     font-size: var(--s-font-size);
     color: var(--green-cm)!important;
     transition: color 0.3s ease;
+    cursor: pointer;
 }
 .commun-menu-icons.active {
     color: white!important;

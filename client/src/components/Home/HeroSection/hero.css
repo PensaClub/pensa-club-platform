@@ -1,135 +1,202 @@
 .hero-section {
-    background-image: var(--bg-image);
-    background-size: 100%;
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 6em;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3em;
 }
 
 .parent-hero {
-    display: flex;
-
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    gap: 2em;
+  padding-top: 4em;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
 }
 
 .left-side {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: #5c5d61;
-    max-width: 100%;
-    align-items: center;
-
-    padding-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 100%;
+  align-items: center;
+  padding-top: 5em;
 }
 
 .left-side h1 {
-    font-size: var(--l-font-size);
-    color: var(--green);
-    padding-bottom: var(--m-space);
-    text-align: center;
-    text-shadow: var(--text-shadow);
+  font-size: var(--l-font-size);
+  color: var(--green);
+  padding-bottom: var(--m-space);
+  text-align: center;
+  text-shadow: var(--text-shadow);
 }
 
 .left-side p {
-    text-align: center;
-    padding: 0 var(--m-space);
-    font-size: var(--s-font-size);
+  max-width: 75ch;
+  text-align: center;
+  padding: 0 var(--m-space);
+  font-size: var(--s-font-size);
 }
 .left-side p span {
-    font-weight: 900;
-    font-size: var(--s-font-size);
-    text-shadow: var(--text-shadow);
-
+  font-weight: 900;
+  font-size: var(--s-font-size);
+  text-shadow: var(--text-shadow);
 }
 .btn-hero {
-    display: flex;
-    margin-top: var(--s-space);
+  display: flex;
+  margin-top: var(--s-space);
 
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .btn-hero :nth-child(1) {
-    background-color: var(--green);
+  background-color: var(--green);
 }
 
 .btn-hero :nth-child(1):hover {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
 .btn-hero :nth-child(2) {
-    background-color: var(--orange);
+  background-color: var(--orange);
 }
 
 .btn-hero :nth-child(2):hover {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
-/* desktop */
-@media (min-width: 850px) and (orientation: landscape) {
-    .hero-section {
-        
-        padding: 0 10em;
-    }
-    .left-side h1 {
-    font-size: var(--xl-font-size);
-
-    }
-    .parent-hero {
-        flex-direction: row;
-        gap: 8em;
-    }
-
-    .left-side {
-        flex: 0 0 30%;
-    }
-    .left-side p {
-        text-align: center;
-        width: 70%;
-
-    }
-
-    .btn-hero {
-        flex-direction: row;
-        gap: 2em;
-        padding-top: 1em;
-    }
+.hero-section .logo {
+  margin-top: 3rem;
+  display: block;
+  width: 10em;
+  height: auto;
+  overflow: hidden;
 }
 
-@media screen and (orientation:landscape) and (min-device-width: 319px) and (max-device-width: 480px) {
-    .parent-hero {
-        flex-direction: column;
-        gap: 8em;
-    }
-
-    .btn-hero {           
-        flex-direction: row;
-        gap: 2em;
-    }
+.parent-motto {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15em;
+}
+.motto-img {
+  display: flex;
+  justify-content: end;
+  align-items: start;
 }
 
-@media (min-width: 768px) and (max-width: 1280px) and (orientation: landscape) {
-    
+.motto-img img {
+  width: 45%;
+  height: auto;
+  object-fit: contain;
+}
 
-    .parent-hero {
-        display: flex;
+.motto-desc {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  align-items: start;
+  padding-bottom: 4rem;
+}
 
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        gap: 6em;
-    }
+.motto-info {
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  line-height: 1.2;
+  gap: 1.5em;
+}
 
-    .btn-hero {           
-        flex-direction: row;
-        gap: 2em;
-    }
+.motto-info h3 {
+  font-size: calc(var(--l-font-size) - 10px);
+  text-align: center;
+  text-shadow: var(--text-shadow);
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--green);
+}
 
+.motto-info p {
+  max-width: 500px;
+  text-align: left;
+  font-weight: 500;
+  padding: 0.25em 0.5em;
+  font-weight: 10;
+  letter-spacing: 1px;
+  font-size: var(--s-font-size);
+}
+
+.motto-info span {
+  font-weight: 900;
+  font-size: var(--s-font-size);
+}
+
+#btn-join {
+  width: auto;
+  margin-top: 0;
+  padding: 8px;
+  width: 100%;
+  max-width: 500px;
+
+  text-align: center;
+}
+
+.hero-img-mobile {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .hero-section h3 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 960px) {
+  .hero-section h1 {
+    font-size: 2.4rem;
+  }
+}
+
+@media (max-width: 1400px) {
+  .parent-hero {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 6em;
+  }
+
+  .hero-section .logo {
+    display: none;
+  }
+
+  .parent-motto {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-hero {
+    flex-direction: row;
+    gap: 2em;
+  }
+
+  .motto-img {
+    display: none;
+  }
+  .hero-img-mobile {
+    display: block;
+    width: 66%;
+  }
+
+  .motto-info > * {
+    margin: 0 auto;
+  }
 }

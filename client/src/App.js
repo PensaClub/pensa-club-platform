@@ -61,7 +61,6 @@ function App() {
                   />
                   <Routes>
                     <Route path="/ad/details" element={<AdDetails />} />
-
                     <Route path="/" element={<Home />} />
                     <Route path="/server-error" element={<ServerError />} />
                     <Route path="/" element={<Home />} />

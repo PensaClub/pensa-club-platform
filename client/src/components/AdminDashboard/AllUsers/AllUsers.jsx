@@ -10,9 +10,10 @@ import { useMappingContext } from '../../contexts/MapContext';
 import { FlyoutAllUsers } from './FlyoutAllUsers/FlyoutAllUsers';
 import { useAuthContext } from '../../contexts/UserContext';
 
-export const AllUsers = ({setAllUsers}) => {
+export const AllUsers = ({ setAllUsers }) => {
   const [users, setUsers] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'email', direction: 'ascending' });
+  const [rowOrder, setRowOrder] = useState('ascending');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [comment, setComment] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
@@ -21,16 +22,15 @@ export const AllUsers = ({setAllUsers}) => {
   const [searchResults, setSearchResults] = useState([]);
   const { t } = useTranslation();
   const { onAllUsers } = useMappingContext();
-  const{onForgetPasswordSubmit}=useAuthContext();
+  const { onForgetPasswordSubmit } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
+
   useEffect(() => {
     const loadUsers = async () => {
       try {
         const allUsers = await onAllUsers();
         setUsers(allUsers.accounts);
-    
-            setAllUsers(allUsers?.accounts?.length);
-        
+        setAllUsers(allUsers?.accounts?.length);
         setSearchResults(allUsers.accounts);
       } catch (e) {
         console.error(e);
@@ -43,8 +43,8 @@ export const AllUsers = ({setAllUsers}) => {
   const sortedUsers = Array.isArray(searchResults) ? [...searchResults].sort((a, b) => {
     if (sortConfig.key === 'email') {
       return sortConfig.direction === 'ascending' 
-        ? a.email.localeCompare(b.email)
-        : b.email.localeCompare(a.email);
+        ? (a.email || '').localeCompare(b.email || '')
+        : (b.email || '').localeCompare(a.email || '');
     } else if (sortConfig.key === 'date') {
       return sortConfig.direction === 'ascending'
         ? new Date(a.createdAt || 0) - new Date(b.createdAt || 0)
@@ -55,14 +55,16 @@ export const AllUsers = ({setAllUsers}) => {
         : b.enabled - a.enabled;
     } else if (sortConfig.key === 'ads') {
       return sortConfig.direction === 'ascending'
-        ? a.ads?.length - b.ads?.length
-        : b.ads?.length - a.ads?.length;
+        ? (a.ads?.length || 0) - (b.ads?.length || 0)
+        : (b.ads?.length || 0) - (a.ads?.length || 0);
     } else {
       return sortConfig.direction === 'ascending'
-        ? a[sortConfig.key].localeCompare(b[sortConfig.key])
-        : b[sortConfig.key].localeCompare(a[sortConfig.key]);
+        ? (a[sortConfig.key] || '').localeCompare(b[sortConfig.key] || '')
+        : (b[sortConfig.key] || '').localeCompare(a[sortConfig.key] || '');
     }
-  }):[];
+  }) : [];
+
+  const sortedByRowOrder = rowOrder === 'ascending' ? sortedUsers : [...sortedUsers].reverse();
 
   const requestSort = (key) => {
     let direction = 'ascending';
@@ -70,6 +72,10 @@ export const AllUsers = ({setAllUsers}) => {
       direction = 'descending';
     }
     setSortConfig({ key, direction });
+  };
+
+  const toggleRowOrder = () => {
+    setRowOrder(rowOrder === 'ascending' ? 'descending' : 'ascending');
   };
 
   const handleComment = (user) => {
@@ -81,7 +87,7 @@ export const AllUsers = ({setAllUsers}) => {
     setIsModalOpen(false);
   };
 
-   const handleReject = async (id) => {
+  const handleReject = async (id) => {
     try {
       if (!comment) {
         notify('enter-comment');
@@ -127,12 +133,14 @@ export const AllUsers = ({setAllUsers}) => {
 
   const getStatus = (enabled) => {
     return enabled ? t('admin.finish') : t('admin.unfinish');
-};
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
+
   const handleFlyoutOpen = (user) => {
     setSelectedUser(user);
     setIsFlyoutOpen(true);
@@ -144,13 +152,13 @@ export const AllUsers = ({setAllUsers}) => {
   };
 
   const handleRoleChange = (email, role) => {
-    // Логика за промяна на ролята на потребителя
+    // Логикааа за промяна на ролята на потребителя
   };
 
-  const handlePasswordReset =(email) => {
-onForgetPasswordSubmit({email})
- 
+  const handlePasswordReset = (email) => {
+    onForgetPasswordSubmit({ email });
   };
+
   return (
     <div className="pending-announcements-container">
       <h2>{t('admin.all_users')}</h2>
@@ -201,11 +209,9 @@ onForgetPasswordSubmit({email})
         <table className="pending-announcements-table">
           <thead>
             <tr>
-              <th className="number-cell" onClick={() => requestSort('id')}>
+              <th className="number-cell" onClick={toggleRowOrder}>
                 {t('admin.number')}
-                {sortConfig.key === 'id' ? (
-                  sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
-                ) : null}
+                {rowOrder === 'ascending' ? ' ↑' : ' ↓'}
               </th>
               <th onClick={() => requestSort('email')}>
                 {t('admin.user_email')}
@@ -235,7 +241,7 @@ onForgetPasswordSubmit({email})
             </tr>
           </thead>
           <tbody>
-            {sortedUsers.map((user, index) => (
+            {sortedByRowOrder.map((user, index) => (
               <tr key={user.email}>
                 <td className="number-cell">{index + 1}</td>
                 <td>

@@ -1,19 +1,40 @@
-import { requestFactory } from "./requester"
+import { requestFactory } from "./requester";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const communityServiceFactory = (token) => {
+  const requester = requestFactory(token);
 
-    const requester = requestFactory(token);
+  return {
+    getRegions: async () => {
+      const response = await fetch("/regions.json");
+      if (!response.ok) {
+        throw new Error("Failed to fetch regions");
+      }
+      return response.json();
+    },
 
-    return {
-        getRegions: async () => {
-            const response = await fetch('/regions.json');
-            if (!response.ok) {
-                throw new Error('Failed to fetch regions');
-            }
-            return response.json();
-        },
+    getSubregions: async (regionId) => {
+      const response = await fetch(
+        `/regions-data/region-${regionId}/subregions-${regionId}.json`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch subregions for region ");
+      }
+      return response.json();
+    },
+    getTowns: async (regionId, subregionId) => {
+      const response = await fetch(
+        `/regions-data/region-${regionId}/towns/towns-${subregionId}.json`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch towns");
+      }
+      return response.json();
+    },
+    getSearchCriteria: async () => {
+      const response = await fetch("/search-criteria.json");
+    },
 
         getSubregions: async (regionId) => {
             const response = await fetch(`/regions-data/region-${regionId}/subregions-${regionId}.json`)
@@ -58,7 +79,13 @@ export const communityServiceFactory = (token) => {
 
         updateExpirationDate: async (adId) => {
             return requester.patch(`${apiUrl}/ads/update-expiration-date/${adId}`, { adId })
-        }
+        },
+          getLatestAds: async (count) => {
+      return requester.get(
+        `${apiUrl}/ads/ads-search?status=approved&order=DESC&limit=${count}`
+      );
+    },
     }
 }
+
 

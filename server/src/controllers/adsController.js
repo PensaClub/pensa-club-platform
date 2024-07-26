@@ -38,6 +38,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   }
 });
 
+
 adsController.get(`/:adStatus-ads/:adId?`, isAuth, memoryCache('ads'), rbac.checkPermission('approve_record'), async (req, res, next) => {
   const adsType = ['approved', 'pending', 'denied'];
 

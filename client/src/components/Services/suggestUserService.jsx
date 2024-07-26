@@ -7,11 +7,20 @@ export const suggestUserServiceFactory = () => {
 
   return {
     getAllSuggested: () => {
-      return requester.get(`${apiUrl}/suggest`);
+      return requester.get(`${apiUrl}/suggest/unresolved`);
     },
-
+    getAllResolve: () => {
+      return requester.get(`${apiUrl}/suggest/resolved`);
+    },
     suggestUser: (data) => {
       return requester.post(`${apiUrl}/suggest`, data);
+    },
+    suggestResolve: (id) => {
+      return requester.post(`${apiUrl}/suggest/resolve`, {id: id});
+    },
+    suggestDelete: (id) => {
+      return requester.post(`${apiUrl}/suggest/delete`, {id: id});  
     }
+
   };
-};
+}

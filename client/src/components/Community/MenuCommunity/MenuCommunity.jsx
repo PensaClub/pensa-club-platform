@@ -29,7 +29,7 @@ export const MenuCommunity = () => {
             <nav className="menu-community">
                 <FontAwesomeIcon icon={faHouseUser} className={getLocation('/')} onClick={() => handleNavigation('/')} />
                 <FontAwesomeIcon icon={faMapLocation} className={getLocation('/map')} onClick={() => handleNavigation('/map')} />
-                <FontAwesomeIcon icon={faBars} className="commun-menu-icons" />
+                <FontAwesomeIcon icon={faBars} className="commun-menu-icons"onClick={() => handleNavigation('/craigslist')} />
                 <FontAwesomeIcon icon={faUser} className={getLocation('/profile')} onClick={handleUserClick} />
             </nav>
         </>

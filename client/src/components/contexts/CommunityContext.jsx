@@ -1,13 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Loader } from "../Loader/Loader";
-import './error.css';
+import "./error.css";
 import { communityServiceFactory } from "../Services/communityService";
-import { notify } from '../../utils/notify';
+import { notify } from "../../utils/notify";
 import { useNavigate } from "react-router-dom";
 
 export const CommunityContext = createContext();
 
 export const CommunityProvider = ({ children }) => {
+
     const [isLoading, setIsLoading] = useState(false);
     // eslint-disable-next-line no-unused-vars
     const [errorMessage, setErrorMessage] = useState('');
@@ -125,7 +126,34 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
-
+  const getLatestAds = async () => {
+    try {
+      setIsLoading(true);
+      const response = await communityService.getLatestAds(3);
+      setIsLoading(false);
+      return response;
+    } catch (e) {
+      notify("error");
+      showErrorAndSetTimeouts(e.message);
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getAdById = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await communityService.getAdById(id);
+      setIsLoading(false);
+      return response;
+    } catch (e) {
+      notify("error");
+      showErrorAndSetTimeouts(e.message);
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
+  };
     const deleteAd = async (id) => {
         try {
             setIsLoading(true);
@@ -142,21 +170,22 @@ export const CommunityProvider = ({ children }) => {
         }
     };
 
-    const editAd = async (id) => {
-        try {
-            setIsLoading(true);
-            const response = await communityService.editAd(id);
-            setIsLoading(false);
-            notify('success-edit-ads');
-            return response;
-        } catch (e) {
-            notify('error');
-            showErrorAndSetTimeouts(e.message);
-            throw e;
-        } finally {
-            setIsLoading(false);
-        }
-    };
+   const editAd = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await communityService.editAd(id);
+      setIsLoading(false);
+      notify("success-edit-ads");
+      return response;
+    } catch (e) {
+      notify("error");
+
+      showErrorAndSetTimeouts(e.message);
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
+  };
     const searchAds = async (filters, page = 1, limit = 10) => {
         try {
             setIsLoading(true);
@@ -235,8 +264,10 @@ export const CommunityProvider = ({ children }) => {
         updateExpirationDate,
         ads,
         loadMoreAds,
-        setAds
-    };
+        setAds,
+       getLatestAds,
+      getAdById
+           };
 
     return (
         <CommunityContext.Provider value={contextService}>
@@ -244,9 +275,9 @@ export const CommunityProvider = ({ children }) => {
             {isLoading && <Loader />}
         </CommunityContext.Provider>
     );
-};
+
 
 export const useCommunityContext = () => {
-    const context = useContext(CommunityContext);
-    return context;
+  const context = useContext(CommunityContext);
+  return context;
 };

@@ -265,7 +265,7 @@
   padding: 20px;
 }
 
-span {
+.details-underlined {
   font-size: calc(var(--s-font-size));
   text-decoration: underline;
   color: var(--text-white);
