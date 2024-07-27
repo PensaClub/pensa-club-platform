@@ -1,6 +1,6 @@
-/* eslint-disable jsx-a11y/alt-text */
-import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
-import './adDetails.css';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState, useRef, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPhone,
@@ -8,47 +8,39 @@ import {
   faShareNodes,
   faChevronLeft,
   faCaretLeft,
-} from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
-import { ImageEnlarger } from "../../../ImageEnlarger/ImageEnlarger";
-import { SearchBar } from "../../SearchBar/SearchBar";
-import { CommunityContext } from "../../../contexts/CommunityContext";
+} from '@fortawesome/free-solid-svg-icons';
+import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
+import { ImageEnlarger } from '../../../ImageEnlarger/ImageEnlarger';
+import './adDetails.css';
+import './sidebar-details.css';
+import './../../../MapPage/MapEditor/scrollModal.css';
+import { Link, useParams } from 'react-router-dom';
+import { SearchBar } from '../../SearchBar/SearchBar';
+import { CommunityContext } from '../../../contexts/CommunityContext';
 
 export const AdDetails = () => {
   const { t, i18n } = useTranslation();
-
   const [ad, setAd] = useState({});
   const [userDetails, setUserDetails] = useState({});
-
-  const { getAdById } = useContext(CommunityContext);
-
+  const [adTownName, setAdTownName] = useState('');
+  const { getAdById, fetchTowns} = useContext(CommunityContext);
   const { adId } = useParams();
 
   useEffect(() => {
     async function fetchAd() {
       getAdById(adId)
-        .then((response) => {
-          setAd(response.ads);
+        .then(async (response) => {
+          setAd(response.ads)
           setUserDetails(response.details);
-          /* eslint-disable no-console */
-          console.log(response);
+          const townsData = await fetchTowns(Number(response.ads.adRegion), Number(response.ads.adSubregion));
+          const town = townsData.find(t => t.id === Number(response.ads.adTown));
+          const townName = i18n.language === 'bg' ? town.bg : town.en;
+          setAdTownName(townName);
         })
-        .catch((error) => console.error("Failed to fetch ad", error));
+        .catch((error) => console.error('Failed to fetch ad', error));
     }
     fetchAd();
-    // eslint-disable-next-line no-console
-    console.log(ad);
-  }, []);
-
-  // const images = [
-  //   '/images/homePage/avatar3.jpg',
-  //   '/images/homePage/avatar2.png',
-  //   '/images/homePage/avatar3.jpg',
-  //   '/images/homePage/avatar3.jpg',
-  //   '/images/homePage/avatar3.jpg',
-  // ];
+  }, [adId, i18n.language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -61,19 +53,19 @@ export const AdDetails = () => {
         <section className="main-details">
           <div className="hero-bg-details"></div>
           <div className="hero-section-details">
-            <h1>{t("community.community")}</h1>
+            <h1>{t('community.community')}</h1>
             <SearchBar />
             <div className="ad-details-back-phone">
               <p>
                 <Link to="/craigslist">
-                  <FontAwesomeIcon icon={faCaretLeft} />{" "}
+                  <FontAwesomeIcon icon={faCaretLeft} />{' '}
                 </Link>
-              </p>{" "}
+              </p>{' '}
             </div>
             <h2 className="ads-details-back">
               <Link to="/craigslist">
-                <FontAwesomeIcon icon={faChevronLeft} />{" "}
-                <strong>{t("ads.all-ads")}</strong>
+                <FontAwesomeIcon icon={faChevronLeft} />{' '}
+                <strong>{t('ads.all-ads')}</strong>
               </Link>
             </h2>
             <section className="ads-details-main">
@@ -82,123 +74,118 @@ export const AdDetails = () => {
                   <Link>
                     <div className="group-icon">
                       <FontAwesomeIcon icon={faPhone} className="icon" />
-                      <p>{t("ads.call")}</p>
+                      <p>{t('ads.call')}</p>
                     </div>
                   </Link>
                   <Link>
                     <div className="group-icon">
                       <FontAwesomeIcon icon={faEnvelope} className="icon" />
-                      <p>{t("ads.send-message")}</p>
+                      <p>{t('ads.send-message')}</p>
                     </div>
                   </Link>
                   <Link>
                     <div className="group-icon">
                       <FontAwesomeIcon icon={faShareNodes} className="icon" />
-                      <p>{t("ads.share")}</p>
+                      <p>{t('ads.share')}</p>
                     </div>
                   </Link>
                 </div>
                 <div className="ads-details-card">
                   <div className="img-ads-details">
-                    {ad?.images && <ImageEnlarger images={ad.images} />}
+                    {ad?.images && ad.images.length > 0 && (
+                      <ImageEnlarger images={ad.images.map(img => img.imageURL)} />
+                    )}
                     <p>{t(`search-criteria.${ad.category}`)}</p>
                   </div>
                   <div className="ads-details-info">
                     <h3 className="title-details">{ad.summary}</h3>
-                    <div className="subinfo-ads">
-                      {ad.tags?.map((tag) => {
-                        <p>{tag}</p>; // TODO: как ще се превеждат таговете??
-                      })}
-                      <p>{ad.adTown}</p> {/* here is*/}
-                      {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
+                    <div className='ads-data-elipse'>
+                      <p className='elipse price'>{adTownName}</p>
+                      {ad.extraFields?.price && (
+                        <p className='elipse price'> {ad.extraFields.price} {t('ads.price_lv')} </p>
+                      )}
                     </div>
-
+                    <div className="subinfo-ads">
+                      {ad.tags && ad.tags.length > 0 && ad.tags.map((tag, index) => (
+                        <p key={index}>{tag}</p>
+                      ))}
+                      <p>{ad.street}</p>
+                    </div>
                     <p className="ads-details-data">
-                      {t("community.validate_until")}:{""}
-                      <span> {ad.expirationDate}</span>
+                      {t('community.validate_until')}: {''}
+                      <span>{new Date(ad.expirationDate).toLocaleDateString(i18n.language)}</span>
                     </p>
                     <section className="user-info-details">
                       <div className="ads-details-user-info">
                         <div className="ads-details-username">
                           <img
-                            src={
-                              userDetails?.imageURL ||
-                              "images/homePage/avatar2.png"
-                            }
-                            alt={userDetails?.username}
+                            src={userDetails?.imageURL || 'images/homePage/avatar2.png'}
+                            alt={userDetails?.email}
                           />
                           <Link>
-                            <span className="details-underlined">
-                              {userDetails?.username}
-                            </span>
+                            <span className="details-underlined">{userDetails?.username ? (userDetails?.username):(userDetails?.account?.email)}</span>
                           </Link>
                         </div>
-                        {userDetails?.workOptions && (
+                        {userDetails?.workOptions && userDetails.workOptions.length > 0 && (
                           <p>
-                            {t("map.job")}:{" "}
+                            {t('map.job')}:{' '}
                             {userDetails.workOptions.map((opt, index) => {
                               if (index < 2) {
                                 return (
-                                  <p key={index}>
-                                    {t(`options.work-options.${opt}`)}
-                                  </p>
+                                  <span key={index}>{t(`options.work-options.${opt}`)}, </span>
                                 );
                               }
                               if (index === 2) {
                                 return (
-                                  <p>
-                                    {t("map.and")}{" "}
-                                    {userDetails.workOptions.length - 1}{" "}
-                                    {t("map.more")}...
-                                  </p>
+                                  <span key={index}>
+                                    {t('map.and')} {userDetails.workOptions.length - 2}{' '}
+                                    {t('map.more')}...
+                                  </span>
                                 );
                               }
                               return null;
                             })}
                           </p>
                         )}
-                        {userDetails?.interestOptions && (
+                        {userDetails?.interestOptions &&
+                          userDetails.interestOptions.length > 0 && (
+                            <p>
+                              {t('map.interests')}:{' '}
+                              {userDetails.interestOptions.map((opt, index) => {
+                                if (index < 2) {
+                                  return (
+                                    <span key={index}>
+                                      {t(`options.interestOptions.${opt}`)},{' '}
+                                    </span>
+                                  );
+                                }
+                                if (index === 2) {
+                                  return (
+                                    <span key={index}>
+                                      {t('map.and')} {userDetails.interestOptions.length - 2}{' '}
+                                      {t('map.more')}...
+                                    </span>
+                                  );
+                                }
+                                return null;
+                              })}
+                            </p>
+                          )}
+                        {userDetails?.skills && userDetails.skills.length > 0 && (
                           <p>
-                            {t("map.interests")}:{" "}
-                            {userDetails.interestOptions.map((opt, index) => {
-                              if (index < 2) {
-                                return (
-                                  <p key={index}>
-                                    {t(`options.interestOptions.${opt}`)}
-                                  </p>
-                                );
-                              }
-                              if (index === 2) {
-                                return (
-                                  <p>
-                                    {t("map.and")}{" "}
-                                    {userDetails.interestOptions.length - 1}{" "}
-                                    {t("map.more")}...
-                                  </p>
-                                );
-                              }
-                              return null;
-                            })}
-                          </p>
-                        )}
-                        {userDetails?.skills && (
-                          <p>
-                            <p>{t("map.skills")}: </p>
+                            {t('map.skills')}:{' '}
                             {userDetails.skills.map((opt, index) => {
                               if (index < 2) {
                                 return (
-                                  <p key={index}>
-                                    {t(`options.skills.${opt}`)}
-                                  </p>
+                                  <span key={index}>{t(`options.skills.${opt}`)}, </span>
                                 );
                               }
                               if (index === 2) {
                                 return (
-                                  <p>
-                                    {t("map.and")}{" "}
-                                    {userDetails.skills.length - 1}{" "}
-                                    {t("map.more")}...
-                                  </p>
+                                  <span key={index}>
+                                    {t('map.and')} {userDetails.skills.length - 2}{' '}
+                                    {t('map.more')}...
+                                  </span>
                                 );
                               }
                               return null;
@@ -206,16 +193,14 @@ export const AdDetails = () => {
                           </p>
                         )}
                         <Link>
-                          <span className="details-underlined">
-                            {t("ads.all-user-ads")}
-                          </span>
+                          <span className="details-underlined">{t('ads.all-user-ads')}</span>
                         </Link>
                       </div>
                     </section>
                   </div>
                 </div>
                 <div className="ads-details-desc">
-                  <h3>{t("ads.description")}</h3>
+                  <h3>{t('ads.description')}</h3>
                   <hr />
                   <p>{ad.description}</p>
                 </div>

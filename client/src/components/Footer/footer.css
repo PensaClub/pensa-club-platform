@@ -23,7 +23,11 @@ footer {
   line-height: 1.4;
   color: var(--text-white);
 }
-
+.footer p a{
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--text-white);
+}
 .footer h3 {
   padding-bottom: var(--s-space);
 }

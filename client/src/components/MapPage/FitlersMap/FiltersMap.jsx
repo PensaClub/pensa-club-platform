@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
 import './filterMap.css';
+import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faUniversalAccess, faUsersGear, faBars, faTimes, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -115,7 +115,7 @@ export const FiltersMap = () => {
     const [selectedWorks, setSelectedWorks] = useState([]);
     const [selectedInterests, setSelectedInterests] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+// console.log(isMenuOpen)
     const saveFiltersToLocalStorage = (skills, works, interests) => {
         localStorage.setItem('selectedSkills', JSON.stringify(skills));
         localStorage.setItem('selectedWorks', JSON.stringify(works));

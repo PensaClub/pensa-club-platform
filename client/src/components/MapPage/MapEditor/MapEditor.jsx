@@ -151,7 +151,7 @@
         };
         const handleAdClick= (ad) => {
             if(isAuthentication) {
-                navigate(`/ads/${ad.adId}`)
+                navigate(`/ad/details/${ad.adId}`)
             }else{
                 setOpen(true);
             }
@@ -245,6 +245,7 @@
                     <div className="sidebar-map" ref={sidebarRef}>
                         <button className="close-button" onClick={closeSidebar}>{t('map.close')}</button>
                         <div className="sidebar-content"><h2>{selectedUser.details.username}</h2>
+                        <div className="scroll-side-content">
                             <div className="user-map-info">
                                 <img className="user-map-img" src={selectedUser?.details?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
                                 <div className="map-desc-user">
@@ -287,6 +288,7 @@
                                     <div className="color-lines"></div>
                                 </Fragment>
                                 )) : <h3>{t('map.no_ads')}</h3>}
+                            </div>
                             </div>
                         </div>
                     </div>

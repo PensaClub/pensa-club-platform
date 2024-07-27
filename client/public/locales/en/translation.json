@@ -20,7 +20,9 @@
     "phone": "Tel. (359) 2 881 95 53",
     "email": "Email: info@pensa.club",
     "privacy": "Privacy Policy",
-    "copyright": "2024 Pensa club. All rights reserved"
+    "copyright": "2024 Pensa club. All rights reserved",
+    "add-ad": "Create ad"
+
   },
   "hero": {
     "title": "DECENT LIFE FOR PEOPLE IN THE THIRD AGE",
@@ -433,8 +435,9 @@
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",
     "success-delete-suggest": "Successfully delete suggested user!",
-    "all_suggested_users": "All suggested users"
-  },
+    "all_suggested_users": "All suggested users",
+    "warn-address": "Please fill in the address fields!"
+    },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
     "profile_data_submit": "Error while updating profile data: {{error}}",

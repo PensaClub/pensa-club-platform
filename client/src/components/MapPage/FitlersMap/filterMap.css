@@ -6,25 +6,24 @@
   flex-direction: column;
   padding: 1em 0;
 }
-.map{
+
+.map {
   position: relative;
   display: flex;
   flex-direction: column;
-     
 }
+
 .filter-main {
   margin: 1rem;
   width: 100%;
   max-width: 350px;
   height: auto;
-
 }
 
 .logo-map img {
   width: 100%;
   max-width: calc(var(--container-min-width) - 90px);
   height: auto;
-
 }
 
 .filters {
@@ -33,9 +32,8 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-
-
 }
+
 .filter-main label:first-child {
   display: block;
   margin-bottom: var(--s-space);
@@ -44,9 +42,9 @@
   text-align: center;
   text-shadow: var(--text-shadow);
 }
+
 .filter-main label {
   display: block;
-
   font-size: calc(var(--xs-font-size) + 2px);
   font-weight: bold;
   text-align: center;
@@ -56,7 +54,6 @@
 .custom-select {
   position: relative;
   width: 100%;
-  
 }
 
 .selected-option {
@@ -71,10 +68,9 @@
   justify-content: space-between;
   align-items: center;
   text-align: center;
-
 }
 
-.arrow {
+/* .arrow {
   margin-left: var(--m-space);
   border: solid var(--bg-black);
   border-width: 0 2px 2px 0;
@@ -86,7 +82,7 @@
 
 .arrow.open {
   transform: rotate(-135deg);
-}
+} */
 
 .options-container {
   position: absolute;
@@ -99,6 +95,7 @@
   background-color: var(--bg-white);
   z-index: 500;
 }
+
 .options::-webkit-scrollbar {
   width: 10px;
 }
@@ -112,6 +109,7 @@
   border: 2px solid #f1f1f1;
   border-radius: var(--radius-input);
 }
+
 .social-input {
   display: flex;
   align-items: center;
@@ -131,8 +129,6 @@
 .options {
   max-height: calc(var(--container-min-height) / 2);
   overflow-y: auto;
-
-  overflow-y: auto; 
 }
 
 .option {
@@ -140,14 +136,15 @@
   align-items: center;
   padding: var(--s-space);
   cursor: pointer;
-  font-size: calc(var( --xs-font-size) + 2px );
-
+  font-size: calc(var(--xs-font-size) + 2px);
 }
+
 .option input[type="checkbox"] {
   margin-right: 8px;
   width: 20px;
   height: 20px;
 }
+
 .option:hover {
   background-color: #f0f0f0;
 }
@@ -156,7 +153,7 @@
   display: none;
   cursor: pointer;
   font-size: var(--m-font-size);
-   position: fixed;
+  position: fixed;
   top: 92px;
   right: 20px;
   z-index: 1005;
@@ -164,8 +161,8 @@
 
 .hamburger-menu {
   position: relative;
-  border-top-left-radius: calc(var( --radius-input) * 2) calc(var( --radius-input) * 2);
-  border-bottom-left-radius: calc(var( --radius-input) * 2) calc(var( --radius-input) * 2);
+  border-top-left-radius: calc(var(--radius-input) * 2);
+  border-bottom-left-radius: calc(var(--radius-input) * 2);
   position: fixed;
   top: 74px;
   right: -100%;
@@ -173,7 +170,7 @@
   max-width: 400px;
   height: 91%;
   background: #fff;
-  box-shadow:var( --container-shadow);
+  box-shadow: var(--container-shadow);
   transition: right 0.7s ease;
   z-index: 1001;
   display: flex;
@@ -184,29 +181,7 @@
 }
 
 .hamburger-menu.open {
-  animation: slideIn 0.9s forwards;
-}
-
-.hamburger-menu.close {
-  animation: slideOut 10.5s forwards;
-}
-
-@keyframes slideIn {
-  from {
-    right: -100%;
-  }
-  to {
-    right: 0;
-  }
-}
-
-@keyframes slideOut {
-  from {
-    right: 0;
-  }
-  to {
-    right: -100%;
-  }
+  right: 0;
 }
 
 .hamburger-menu .filters {
@@ -241,6 +216,7 @@
 .filter-section label {
   font-size: var(--xs-font-size);
 }
+
 .clear-filters-hamburger {
   padding: var(--s-space);
   font-size: var(--xs-font-size);
@@ -256,12 +232,11 @@
   background-color: white;
   width: 100%;
   margin: 1rem 0;
-
 }
 
 @media (max-width: 849px) {
   .filters {
-    display: none; 
+    display: none;
   }
   .hamburger {
     display: block;
@@ -271,82 +246,75 @@
   }
 }
 
-
 @media (min-width: 850px) {
   .hamburger-menu {
-    display: none; 
+    display: none;
   }
   .filter-main {
     max-width: 50%;
-
   }
-  .selected-option{
-    font-size: calc(var( --xs-font-size) + 2px );
-
+  .selected-option {
+    font-size: calc(var(--xs-font-size) + 2px);
   }
   .filters-map {
     align-items: start;
     flex-direction: row;
     gap: 7em;
   }
-
   .filters {
     flex-direction: row;
     flex: 0 0 65%;
-
   }
-
   .logo-map img {
     width: 100%;
     max-width: calc(var(--container-min-width) - 40px);
     margin-top: 3em;
   }
   .custom-select .selected-option {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     cursor: pointer;
-}
-.clear-filters {
-  padding: calc(var(--s-space) + 1px) 0;
-  font-size: var(--xs-font-size);
-  border: 1px solid #ccc;
-  border-radius: var(--radius-input);
-  font-weight: 800;
-  box-shadow: var(--text-shadow);
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background-color: white;
-  width: 50%;
-  max-width: 350px;
-  margin: 1rem auto;
-  margin-top: 2.7em;
- 
-}
-.clear-filters:hover{
-  color: var(--red);
-}
-.custom-select .selected-option-text {
-    flex: 1; 
-    text-align: center; 
-}
-}
-@media screen and (max-device-width: 1067px) and (orientation: landscape){
-  .selected-option{
-    font-size: var( --xxs-font-size);
-
   }
   .clear-filters {
-    font-size: var( --xxs-font-size);
+    padding: calc(var(--s-space) + 1px) 0;
+    font-size: var(--xs-font-size);
+    border: 1px solid #ccc;
+    border-radius: var(--radius-input);
+    font-weight: 800;
+    box-shadow: var(--text-shadow);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+    width: 50%;
+    max-width: 350px;
+    margin: 1rem auto;
+    margin-top: 2.7em;
+  }
+  .clear-filters:hover {
+    color: var(--red);
+  }
+  .custom-select .selected-option-text {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+@media screen and (max-device-width: 1067px) and (orientation: landscape) {
+  .selected-option {
+    font-size: var(--xxs-font-size);
+  }
+  .clear-filters {
+    font-size: var(--xxs-font-size);
     margin-top: 3.3em;
   }
 }
-.map{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-       
+
+.map {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }

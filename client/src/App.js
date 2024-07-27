@@ -16,7 +16,7 @@ import { MapPage } from './components/MapPage/MapPage';
 import { UserSuggestion } from './components/UserSuggestion/UserSuggestion.jsx';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
-
+import 'react-toastify/dist/ReactToastify.css';
 import { MapProvider } from './components/contexts/MapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
@@ -62,7 +62,7 @@ function App() {
                   />
 
                   <Routes>
-                    <Route path="/ad/details" element={<AdDetails />} />
+                    <Route path="/ad/details/:adId" element={<AdDetails />} />
                     <Route path="/" element={<Home />} />
                     <Route path="/server-error" element={<ServerError />} />
                     <Route path="/" element={<Home />} />
