@@ -84,8 +84,7 @@ export const Header = ({ additionalClasses }) => {
         className={`header ${additionalClasses} ${isMenuOpen ? "scrolled" : ""}`}
       >
         <Link to="/">
-          <img src="/images/homePage/logo.png" alt="logo" className="logo" />{" "}
-          Pensa Club
+          <img src="/images/homePage/logo-2.png" alt="logo" className="logo" /> Pensa Club
         </Link>
         <section className="navy">
           <nav className="navbar">
