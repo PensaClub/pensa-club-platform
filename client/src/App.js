@@ -16,7 +16,7 @@ import { MapPage } from './components/MapPage/MapPage';
 import { UserSuggestion } from './components/UserSuggestion/UserSuggestion.jsx';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
-
+import 'react-toastify/dist/ReactToastify.css';
 import { MapProvider } from './components/contexts/MapContext.jsx';
 import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
@@ -33,6 +33,7 @@ import { MenuCommunity } from './components/Community/MenuCommunity/MenuCommunit
 import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCommunity.jsx';
 import { SuggestUserProvider } from './components/contexts/SuggestUserContext.jsx';
 import { AdDetails } from './components/Community/AdPage/AdDetails/AdDetails.jsx';
+import { EditAd } from './components/Community/AdPage/EditAd/EditAd.jsx';
 import { AdminProvider } from './components/contexts/AdminContext.jsx';
 
 function App() {
@@ -59,8 +60,9 @@ function App() {
                     limit={3}
                     position="bottom-right"
                   />
+
                   <Routes>
-                    <Route path="/ad/details" element={<AdDetails />} />
+                    <Route path="/ad/details/:adId" element={<AdDetails />} />
                     <Route path="/" element={<Home />} />
                     <Route path="/server-error" element={<ServerError />} />
                     <Route path="/" element={<Home />} />
