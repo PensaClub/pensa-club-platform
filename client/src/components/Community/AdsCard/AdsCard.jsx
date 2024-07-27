@@ -24,7 +24,7 @@ export const AdsCard = ({ ads, isLoading }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    if (isLoading) {
+    if (isLoading && ads.result.length === 0) {
         return (
             <section className="ads-main">
                 {Array(3).fill().map((_, index) => (

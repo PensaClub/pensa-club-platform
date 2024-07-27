@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/alt-text */
-import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
-import './adDetails.css';
+import { useEffect, useState, useRef, Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPhone,
@@ -8,20 +7,23 @@ import {
   faShareNodes,
   faChevronLeft,
   faCaretLeft,
-} from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@fortawesome/free-solid-svg-icons';
+import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
+import { ImageEnlarger } from '../../../ImageEnlarger/ImageEnlarger';
+import './adDetails.css';
+import './sidebar-details.css';
+import './../../../MapPage/MapEditor/scrollModal.css';
 import { Link, useParams } from "react-router-dom";
 import { ImageEnlarger } from "../../../ImageEnlarger/ImageEnlarger";
 import { SearchBar } from "../../SearchBar/SearchBar";
 import { CommunityContext } from "../../../contexts/CommunityContext";
-
 export const AdDetails = () => {
-  const { t, i18n } = useTranslation();
-
+  const { t } = useTranslation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [ad, setAd] = useState({});
   const [userDetails, setUserDetails] = useState({});
-
   const { getAdById } = useContext(CommunityContext);
 
   const { adId } = useParams();
@@ -54,26 +56,67 @@ export const AdDetails = () => {
     window.scrollTo({ top: 0 });
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    if (isSidebarOpen) {
+      document.body.classList.add('active-sidebar');
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.body.classList.remove('active-sidebar');
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSidebarOpen]);
+
+  const handleReadMoreClick = (e, user) => {
+    e.preventDefault();
+    setSelectedUser(user);
+    setIsSidebarOpen(true);
+  };
+
+  const closeSidebar = () => {
+    setSelectedUser(null);
+    setIsSidebarOpen(false);
+  };
+
+  const trimString = (str, num) => {
+    if (str.length <= num) return str;
+    return str.slice(0, num) + '...';
+  };
+
+  const position = [42.72991533257769, 24.674647996012656];
+
   return (
-    <section className="background-ads-details">
-      <section className="ads-details-page">
-        <HeaderCommunity />
-        <section className="main-details">
-          <div className="hero-bg-details"></div>
-          <div className="hero-section-details">
-            <h1>{t("community.community")}</h1>
-            <SearchBar />
-            <div className="ad-details-back-phone">
-              <p>
+
+    <>
+      <section className="background-ads-details">
+        <section className="ads-details-page">
+          <HeaderCommunity />
+          <section className="main-details">
+            <div className="hero-bg-details"></div>
+            <div className="hero-section-details">
+              <h1>{t('community.community')}</h1>
+              <SearchBar />
+              <div className="ad-details-back-phone">
+                <p>
+                  <Link to="/craigslist">
+                    <FontAwesomeIcon icon={faCaretLeft} />{' '}
+                  </Link>
+                </p>{' '}
+              </div>
+              <h2 className="ads-details-back">
                 <Link to="/craigslist">
-                  <FontAwesomeIcon icon={faCaretLeft} />{" "}
-                </Link>
-              </p>{" "}
-            </div>
-            <h2 className="ads-details-back">
-              <Link to="/craigslist">
-                <FontAwesomeIcon icon={faChevronLeft} />{" "}
-                <strong>{t("ads.all-ads")}</strong>
+                  <FontAwesomeIcon icon={faChevronLeft} />{' '}
+                  <strong>{t('ads.all-ads')}</strong>
+
               </Link>
             </h2>
             <section className="ads-details-main">
@@ -112,6 +155,7 @@ export const AdDetails = () => {
                       <p>{ad.adTown}</p> {/* here is*/}
                       {/* <p className='ads-exp'>{new Date(ad.creationDate).toLocaleDateString('bg-BG', { month: 'long' })}</p> */}
                     </div>
+
 
                     <p className="ads-details-data">
                       {t("community.validate_until")}:{""}
@@ -224,6 +268,63 @@ export const AdDetails = () => {
           </div>
         </section>
       </section>
+
+      {selectedUser && (
+        <div className="sidebar-map" ref={sidebarRef}>
+          <button className="close-button" onClick={closeSidebar}>{t('map.close')}</button>
+          <div className="sidebar-content">
+            <h2>{selectedUser.details.username}</h2>
+            <div className="scroll-side-content">
+              <div className="user-map-info">
+                <img className="user-map-img" src={selectedUser.details.imageURL} alt="user-img" />
+                <div className="map-desc-user">
+                  {selectedUser.details.workOptions && selectedUser.details.workOptions.length > 0 && (
+                    <p className="ad-description-editor">
+                      {t('map.profession')}: {selectedUser.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ')}
+                    </p>
+                  )}
+                  {selectedUser.details.interestOptions && selectedUser.details.interestOptions.length > 0 && (
+                    <p className="ad-description-editor">
+                      {t('map.interests')}: {selectedUser.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ')}
+                    </p>
+                  )}
+                  {selectedUser.details.skills && selectedUser.details.skills.length > 0 && (
+                    <p className="ad-description-editor">
+                      {t('map.skills')}: {selectedUser.details.skills.map(option => t(`options.skills.${option}`)).join(', ')}
+                    </p>
+                  )}
+                  {selectedUser.details.phoneNumber && selectedUser.details.phoneNumber.length > 0 && 
+                  (<p>{t('map.phone')}: <Link to={`tel:${selectedUser.details.phoneNumber}`}>{selectedUser.details.phoneNumber}</Link></p>)}
+                  <p>{t('map.email')}: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
+                </div>
+              </div>
+              <div className="color-lines-pipe"></div>
+              <h3 className="ad-title">{t('map.ads_by')} {selectedUser.details.username}</h3>
+              <div className="color-lines-pipe"></div>
+              <div className='ad-scroll'>
+                {selectedUser.ads && selectedUser.ads.length > 0 ? selectedUser.ads.map(ad => (
+                  <Fragment key={ad.adId}>
+                    <div className="ad-map">
+                      <img src={ad.images[0].imageURL} alt="ad-img" />
+                      <div className="ad-desc">
+                        <h3>{ad.summary}</h3>
+                        <p className='ad-desc-map'>{trimString(ad.description, 50)}</p>
+                      </div>
+                      <p className='ad-map-valid'>{t('community.validate_until')} : {new Date(ad.expirationDate).toLocaleDateString('bg-BG')}</p>
+                      <p className='ad-category'>{t(`search-criteria.${ad.category}`)}</p>
+                    </div>
+                    <div className="color-lines"></div>
+                  </Fragment>
+                )) : <h3>{t('map.no_ads')}</h3>}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+
     </section>
+
   );
 };
+
