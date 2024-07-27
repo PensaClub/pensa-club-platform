@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import './profile.css';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/UserContext';
 import { useCommunityContext } from '../contexts/CommunityContext';
 import { DeleteAd } from '../Community/AdPage/DeleteAd/DeleteAd';
@@ -110,6 +111,11 @@ export const ProfileAnnounced = () => {
     setSelectedAd(null);
   };
 
+    const handleEditClick = (ad) => {
+        setSelectedAd(ad);
+        navigate(`/ad/edit/${ad.adId}`)
+    }
+
   const handleRefreshClick = async (adId) => {
     try {
       await updateExpirationDate(adId);
@@ -119,7 +125,7 @@ export const ProfileAnnounced = () => {
       console.error('Failed to update expiration date', error);
     }
   };
-
+  
   return (
     <>
       {ads.length > 0 ? (
