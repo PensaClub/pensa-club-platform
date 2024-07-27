@@ -276,7 +276,7 @@ export const CommunityProvider = ({ children }) => {
         </CommunityContext.Provider>
     );
 
-
+}
 export const useCommunityContext = () => {
   const context = useContext(CommunityContext);
   return context;
