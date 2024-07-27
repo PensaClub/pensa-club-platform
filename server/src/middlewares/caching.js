@@ -23,8 +23,8 @@ module.exports = function memoryCache(key) {
     let cachedResponse = cache.get(key);
 
     if (cachedResponse) {
-      if (key === 'ads') handleAdRequest(cachedResponse, res, adId, adStatus);
-      if (key === 'users') handleUserRequest(cachedResponse, res, userId);
+      if (key === 'ads') await handleAdRequest(cachedResponse, res, adId, adStatus);
+      if (key === 'users') await handleUserRequest(cachedResponse, res, userId);
     } else {
       res.originalSend = res.send;
       res.send = (body) => {
@@ -76,9 +76,9 @@ function sanitizeData(newData) {
 // REQUEST HANDLERS ----------------------------------------------------------------------------------
 
 const handleAdRequest = async (cachedResponse, res, adId, adStatus) => {
-  if (adId && JSON.parse(cachedResponse).details) {
-    const parsedData = JSON.parse(cachedResponse).details;
-    cache.set(`ad-${adId}`, JSON.stringify({ details: parsedData }), stdTTL);
+  if (adId && !cache.get('users')) {
+    const accounts = await fetchAllAccounts();
+    cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts }), stdTTL);
   }
 
   if (!Array.isArray(cachedResponse.ads)) {
@@ -118,9 +118,16 @@ const handleUserRequest = async (cachedResponse, res, userId) => {
 const filterCachedAdsById = (ads, adId) => {
   const cachedAds = JSON.parse(ads);
   let filteredAd = cachedAds.ads.find((ad) => ad.adId === adId) || null;
-  const userDetailsData = JSON.parse(cache.get(`ad-${adId}`)).details || null;
+  let userDetails = null;
 
-  return filteredAd ? { message: 'Ad successfully retrieved.', ads: filteredAd, details: userDetailsData } : null;
+  if (filteredAd !== null) {
+    const { username, imageURL, workOptions, interestOptions, skills } = JSON.parse(cache.get('users')).accounts.find((user) =>
+      user.ads.find((ad) => ad.adId === adId)
+    ).details;
+    userDetails = { username, imageURL, workOptions, interestOptions, skills };
+  }
+
+  return filteredAd ? { message: 'Ad successfully retrieved.', ads: filteredAd, details: userDetails } : null;
 };
 
 const filterCachedAdsByStatus = (ads, status) => {
