@@ -76,10 +76,9 @@ function sanitizeData(newData) {
 // REQUEST HANDLERS ----------------------------------------------------------------------------------
 
 const handleAdRequest = async (cachedResponse, res, adId, adStatus) => {
-  let userDetailsData;
-  if (adId) {
-    const parsedData = JSON.parse(cachedResponse);
-    userDetailsData = parsedData.details;
+  if (adId && JSON.parse(cachedResponse).details) {
+    const parsedData = JSON.parse(cachedResponse).details;
+    cache.set(`ad-${adId}`, JSON.stringify({ details: parsedData }), stdTTL);
   }
 
   if (!Array.isArray(cachedResponse.ads)) {
@@ -89,7 +88,7 @@ const handleAdRequest = async (cachedResponse, res, adId, adStatus) => {
   }
 
   if (adId) {
-    const filter = filterCachedAdsById(cachedResponse, adId, userDetailsData);
+    const filter = filterCachedAdsById(cachedResponse, adId);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: `Ad with ID ${adId} does not exist.` });
   } else if (adStatus) {
     const filter = filterCachedAdsByStatus(cachedResponse, adStatus);
@@ -116,9 +115,10 @@ const handleUserRequest = async (cachedResponse, res, userId) => {
 
 // FILTERS -------------------------------------------------------------------------------------------
 
-const filterCachedAdsById = (ads, adId, userDetailsData) => {
+const filterCachedAdsById = (ads, adId) => {
   const cachedAds = JSON.parse(ads);
   let filteredAd = cachedAds.ads.find((ad) => ad.adId === adId) || null;
+  const userDetailsData = JSON.parse(cache.get(`ad-${adId}`)).details || null;
 
   return filteredAd ? { message: 'Ad successfully retrieved.', ads: filteredAd, details: userDetailsData } : null;
 };
