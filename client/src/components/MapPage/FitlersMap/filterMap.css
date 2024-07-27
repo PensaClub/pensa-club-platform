@@ -70,7 +70,7 @@
   text-align: center;
 }
 
-.arrow {
+/* .arrow {
   margin-left: var(--m-space);
   border: solid var(--bg-black);
   border-width: 0 2px 2px 0;
@@ -82,7 +82,7 @@
 
 .arrow.open {
   transform: rotate(-135deg);
-}
+} */
 
 .options-container {
   position: absolute;
