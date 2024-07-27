@@ -151,7 +151,7 @@
         };
         const handleAdClick= (ad) => {
             if(isAuthentication) {
-                navigate(`/ads/${ad.adId}`)
+                navigate(`/ad/details/${ad.adId}`)
             }else{
                 setOpen(true);
             }

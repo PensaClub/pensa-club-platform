@@ -434,8 +434,9 @@
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",
     "success-delete-suggest": "Successfully delete suggested user!",
-    "all_suggested_users": "All suggested users"
-  },
+    "all_suggested_users": "All suggested users",
+    "warn-address": "Please fill in the address fields!"
+    },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
     "profile_data_submit": "Error while updating profile data: {{error}}",

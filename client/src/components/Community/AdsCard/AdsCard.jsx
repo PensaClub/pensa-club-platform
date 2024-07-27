@@ -39,7 +39,7 @@ export const AdsCard = ({ ads, isLoading }) => {
     };
     const handleAdClick = (ad) => {
         if (isAuthentication) {
-            navigate(`/ad/details`)
+            navigate(`/ad/details/${ad.adId}`)
         } else {
             setOpen(true);
         }

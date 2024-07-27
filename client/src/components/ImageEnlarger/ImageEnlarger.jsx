@@ -8,53 +8,53 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const EnlargedImage = ({ src, onClose, onNext, onPrev }) => {
-    const handlers = useSwipeable({
-        onSwipedLeft: onNext,
-        onSwipedRight: onPrev,
-      });
-    
-      useEffect(() => {
-        const handleKeyDown = (e) => {
-          if (e.key === 'ArrowRight') {
-            onNext();
-          } else if (e.key === 'ArrowLeft') {
+  const handlers = useSwipeable({
+    onSwipedLeft: onNext,
+    onSwipedRight: onPrev,
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        onNext();
+      } else if (e.key === 'ArrowLeft') {
+        onPrev();
+      } else if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose, onNext, onPrev]);
+
+  return (
+    <div className="overlay visible" onClick={onClose} {...handlers}>
+      <div className="enlarged-wrapper">
+        <span
+          className="arrow left"
+          onClick={(e) => {
+            e.stopPropagation();
             onPrev();
-          } else if (e.key === 'Escape') {
-            onClose();
-          }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-          window.removeEventListener('keydown', handleKeyDown);
-        };
-      }, [onClose, onNext, onPrev]);
-    
-    return (
-        <div className="overlay visible" onClick={onClose} {...handlers}>
-          <div className="enlarged-wrapper">
-            <span
-              className="arrow left"
-              onClick={(e) => {
-                e.stopPropagation();
-                onPrev();
-              }}
-            >
-              <FontAwesomeIcon icon={faChevronLeft}/>
-            </span>
-            <img src={src} className="main-image enlarged" alt="Enlarged" />
-            <span
-              className="arrow right"
-              onClick={(e) => {
-                e.stopPropagation();
-                onNext();
-              }}
-            >
-              <FontAwesomeIcon icon={faChevronRight}/>
-            </span>
-          </div>
-        </div>
-      );
-}
+          }}
+        >
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </span>
+        <img src={src} className="main-image enlarged" alt="Enlarged" />
+        <span
+          className="arrow right"
+          onClick={(e) => {
+            e.stopPropagation();
+            onNext();
+          }}
+        >
+          <FontAwesomeIcon icon={faChevronRight} />
+        </span>
+      </div>
+    </div>
+  );
+};
 
 export const ImageEnlarger = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -88,7 +88,7 @@ export const ImageEnlarger = ({ images }) => {
         />
       </div>
       <div className="small-img">
-        {images.slice(1).map((src, index) => (
+        {images.map((src, index) => (
           <img
             key={index}
             src={src}
