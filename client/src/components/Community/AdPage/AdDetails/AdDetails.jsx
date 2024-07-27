@@ -30,10 +30,10 @@ export const AdDetails = () => {
     async function fetchAd() {
       getAdById(adId)
         .then(async (response) => {
-          setAd(response);
-          setUserDetails(response);
-          const townsData = await fetchTowns(Number(response.adRegion), Number(response.adSubregion));
-          const town = townsData.find(t => t.id === Number(response.adTown));
+          setAd(response.ads)
+          setUserDetails(response.details);
+          const townsData = await fetchTowns(Number(response.ads.adRegion), Number(response.ads.adSubregion));
+          const town = townsData.find(t => t.id === Number(response.ads.adTown));
           const townName = i18n.language === 'bg' ? town.bg : town.en;
           setAdTownName(townName);
         })
@@ -120,10 +120,10 @@ export const AdDetails = () => {
                         <div className="ads-details-username">
                           <img
                             src={userDetails?.imageURL || 'images/homePage/avatar2.png'}
-                            alt={userDetails?.username}
+                            alt={userDetails?.email}
                           />
                           <Link>
-                            <span className="details-underlined">{userDetails?.username}</span>
+                            <span className="details-underlined">{userDetails?.username ? (userDetails?.username):(userDetails?.account?.email)}</span>
                           </Link>
                         </div>
                         {userDetails?.workOptions && userDetails.workOptions.length > 0 && (

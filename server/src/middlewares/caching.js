@@ -1,27 +1,27 @@
 const NodeCache = require('node-cache');
 const eventEmitter = require('../utils/eventEmitter');
-
+ 
 const stdTTL = 1800;
 const checkperiod = 600;
-
+ 
 const { user_ads, user_account, user_details } = require('../sequelize/models/index');
-
+ 
 // Creating the cache with a standard TTL of 30 minutes and a check period of 10 minutes
 const cache = new NodeCache({ stdTTL, checkperiod });
-
+ 
 module.exports = function memoryCache(key) {
   return async function (req, res, next) {
     if (req.method !== 'GET') {
       console.log('Cannot cache non-GET methods!');
       return next();
     }
-
+ 
     const adId = req.params.adId;
     const adStatus = req.params.adStatus;
     const userId = req?.user?.userId;
-
+ 
     let cachedResponse = cache.get(key);
-
+ 
     if (cachedResponse) {
       if (key === 'ads') handleAdRequest(cachedResponse, res, adId, adStatus);
       if (key === 'users') handleUserRequest(cachedResponse, res, userId);
@@ -35,24 +35,24 @@ module.exports = function memoryCache(key) {
     }
   };
 };
-
+ 
 // Sanitization --------------------------------------------------------------------------------------
-
+ 
 function sanitizeData(newData) {
   let data;
-
+ 
   try {
     data = JSON.parse(newData);
   } catch (error) {
     data = newData;
   }
-
+ 
   if (typeof data !== 'object' || data === null) {
     return JSON.stringify({ message: 'Invalid data format' });
   }
-
+ 
   const { message, ...rest } = data;
-
+ 
   function deepSanitize(obj) {
     if (Array.isArray(obj)) {
       return obj.map(deepSanitize);
@@ -67,29 +67,28 @@ function sanitizeData(newData) {
     }
     return obj;
   }
-
+ 
   const sanitizedData = deepSanitize(rest);
   const result = { message, ...sanitizedData };
   return JSON.stringify(result);
 }
-
+ 
 // REQUEST HANDLERS ----------------------------------------------------------------------------------
-
+ 
 const handleAdRequest = async (cachedResponse, res, adId, adStatus) => {
-  let userDetailsData;
-  if (adId) {
-    const parsedData = JSON.parse(cachedResponse);
-    userDetailsData = parsedData.details;
+  if (adId && JSON.parse(cachedResponse).details) {
+    const parsedData = JSON.parse(cachedResponse).details;
+    cache.set(`ad-${adId}`, JSON.stringify({ details: parsedData }), stdTTL);
   }
-
+ 
   if (!Array.isArray(cachedResponse.ads)) {
     const ads = await fetchAllAds();
     cache.set('ads', JSON.stringify({ message: 'Ads successfully retrieved', ads }), stdTTL);
     cachedResponse = cache.get('ads');
   }
-
+ 
   if (adId) {
-    const filter = filterCachedAdsById(cachedResponse, adId, userDetailsData);
+    const filter = filterCachedAdsById(cachedResponse, adId);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: `Ad with ID ${adId} does not exist.` });
   } else if (adStatus) {
     const filter = filterCachedAdsByStatus(cachedResponse, adStatus);
@@ -98,14 +97,14 @@ const handleAdRequest = async (cachedResponse, res, adId, adStatus) => {
     return res.send(sanitizeData(cachedResponse));
   }
 };
-
+ 
 const handleUserRequest = async (cachedResponse, res, userId) => {
   if (!Array.isArray(cachedResponse.accounts)) {
     const accounts = await fetchAllAccounts();
     cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts }), stdTTL);
     cachedResponse = cache.get('users');
   }
-
+ 
   if (userId) {
     const filter = filterCachedUserById(cachedResponse, userId);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: `User with ID ${userId} does not exist.` });
@@ -113,47 +112,48 @@ const handleUserRequest = async (cachedResponse, res, userId) => {
     return res.send(sanitizeData(cachedResponse));
   }
 };
-
+ 
 // FILTERS -------------------------------------------------------------------------------------------
-
-const filterCachedAdsById = (ads, adId, userDetailsData) => {
+ 
+const filterCachedAdsById = (ads, adId) => {
   const cachedAds = JSON.parse(ads);
   let filteredAd = cachedAds.ads.find((ad) => ad.adId === adId) || null;
-
+  const userDetailsData = JSON.parse(cache.get(`ad-${adId}`)).details || null;
+ 
   return filteredAd ? { message: 'Ad successfully retrieved.', ads: filteredAd, details: userDetailsData } : null;
 };
-
+ 
 const filterCachedAdsByStatus = (ads, status) => {
   const cachedAds = JSON.parse(ads);
   let filteredAds = cachedAds.ads.filter((ad) => ad.status === status);
-
+ 
   if (filteredAds.length === 0) {
     return null;
   }
-
+ 
   return filteredAds ? JSON.stringify({ message: `${status.charAt(0).toUpperCase() + status.slice(1)} ads successfully retrieved.`, ads: filteredAds }) : null;
 };
-
+ 
 const filterCachedUserById = (users, userId) => {
   const cachedUsers = JSON.parse(users);
   let filteredUser = cachedUsers.accounts.find((user) => user.id === Number(userId)) || null;
-
+ 
   return filteredUser ? { message: 'User data retrieved successfully.', user: filteredUser } : null;
 };
-
+ 
 // ACCOUNTS -------------------------------------------------------------------------------------------
-
+ 
 eventEmitter.on('accountUpdated', async (data) => {
   let usersValue = cache.get('users');
-
+ 
   if (!usersValue || !Array.isArray(JSON.parse(usersValue).accounts)) {
     const accounts = await fetchAllAccounts();
     cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts }), stdTTL);
     usersValue = cache.get('users');
   }
-
+ 
   const objectUsers = JSON.parse(usersValue);
-
+ 
   const index = objectUsers.accounts.findIndex((obj) => obj.id === Number(data.userId));
   if (index !== -1) {
     Object.keys(data.updates).forEach((key) => {
@@ -177,20 +177,20 @@ eventEmitter.on('accountUpdated', async (data) => {
   }
   cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts: objectUsers.accounts }), stdTTL);
 });
-
+ 
 // ADS --------------------------------------------------------------------------------------------------------
-
+ 
 eventEmitter.on('ads', async (data, action) => {
   let adsValue = cache.get('ads');
-
+ 
   if (!adsValue || !Array.isArray(JSON.parse(adsValue).ads)) {
     const ads = await fetchAllAds();
     cache.set('ads', JSON.stringify({ message: 'Ads successfully retrieved', ads }), stdTTL);
     adsValue = cache.get('ads');
   }
-
+ 
   const objectAds = JSON.parse(adsValue);
-
+ 
   if (action === 'delete') {
     objectAds.ads = objectAds.ads.filter((ad) => ad.adId !== data.adId);
   } else {
@@ -198,15 +198,15 @@ eventEmitter.on('ads', async (data, action) => {
     index !== -1 ? (objectAds.ads[index] = data) : objectAds.ads.push(data);
   }
   cache.set('ads', JSON.stringify(objectAds), stdTTL);
-
+ 
   let usersValue = cache.get('users');
-
+ 
   if (!usersValue || !Array.isArray(JSON.parse(usersValue).accounts)) {
     const accounts = await fetchAllAccounts();
     cache.set('users', JSON.stringify({ message: 'Users successfully retrieved.', accounts }), stdTTL);
     usersValue = cache.get('users');
   }
-
+ 
   const objectUsers = JSON.parse(usersValue);
   objectUsers.accounts.forEach((account) => {
     if (account.id === Number(data.userId)) {
@@ -220,9 +220,9 @@ eventEmitter.on('ads', async (data, action) => {
   });
   cache.set('users', JSON.stringify({ message: 'Users successfully retrieved.', accounts: objectUsers.accounts }), stdTTL);
 });
-
+ 
 // FETCH ALL ADS ----------------------------------------------------------------------------------------------
-
+ 
 const fetchAllAds = async () =>
   await user_ads.findAll({
     attributes: [
@@ -250,9 +250,9 @@ const fetchAllAds = async () =>
       },
     ],
   });
-
+ 
 // FETCH ALL USERS ----------------------------------------------------------------------------------------------
-
+ 
 const fetchAllAccounts = async () =>
   await user_account.findAll({
     attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role'],

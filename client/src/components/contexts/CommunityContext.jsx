@@ -145,7 +145,7 @@ export const CommunityProvider = ({ children }) => {
       setIsLoading(true);
       const response = await communityService.getAdById(id);
       setIsLoading(false);
-      return response.ads;
+      return response;
     } catch (e) {
       notify("error");
       showErrorAndSetTimeouts(e.message);
