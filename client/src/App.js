@@ -33,6 +33,7 @@ import { MenuCommunity } from './components/Community/MenuCommunity/MenuCommunit
 import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCommunity.jsx';
 import { SuggestUserProvider } from './components/contexts/SuggestUserContext.jsx';
 import { AdDetails } from './components/Community/AdPage/AdDetails/AdDetails.jsx';
+import { EditAd } from './components/Community/AdPage/EditAd/EditAd.jsx';
 import { AdminProvider } from './components/contexts/AdminContext.jsx';
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
                     limit={3}
                     position="bottom-right"
                   />
+
                   <Routes>
                     <Route path="/ad/details/:adId" element={<AdDetails />} />
                     <Route path="/" element={<Home />} />

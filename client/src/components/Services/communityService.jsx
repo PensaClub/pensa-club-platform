@@ -32,7 +32,6 @@ export const communityServiceFactory = (token) => {
     },
     getSearchCriteria: async () => {
       const response = await fetch('/search-criteria.json');
-
       if (!response.ok) {
         throw new Error('Failed to fetch search criteria');
       }
