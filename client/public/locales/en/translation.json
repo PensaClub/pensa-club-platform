@@ -441,7 +441,8 @@
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
     "profile_data_submit": "Error while updating profile data: {{error}}",
-    "unknown": "unknown"
+    "unknown": "unknown",
+    "share": "An error occurred while trying to share the content."
   },
   "search-criteria": {
     "recommend": "Recommend",
