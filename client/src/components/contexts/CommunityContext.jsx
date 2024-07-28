@@ -242,7 +242,6 @@ export const CommunityProvider = ({ children }) => {
         fetchRegions();
         fetchSearchCriteria();
     }, []);
-
     const contextService = {
         fetchRegions,
         fetchSubregions,

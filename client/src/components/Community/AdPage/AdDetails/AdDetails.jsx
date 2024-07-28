@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef, useContext, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast } from 'react-toastify';
+
 import {
   faPhone,
   faEnvelope,
@@ -36,6 +38,7 @@ export const AdDetails = () => {
   const [userAds, setUserAds] = useState([]);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const { getAdById, fetchTowns, getMyAds } = useContext(CommunityContext);
+
   const { adId } = useParams();
 
   useEffect(() => {
@@ -134,6 +137,7 @@ export const AdDetails = () => {
                           </div>
                         )}
                       </div>
+
                     </div>
 
                   </div>
@@ -151,12 +155,14 @@ export const AdDetails = () => {
                         <h5>{ad?.description}</h5>
                       </div>
                     </div>
+
                     <div className="ads-details-info">
                       <h3 className="title-details">{ad?.summary}</h3>
                       <div className='ads-data-elipse'>
                         <p className='elipse price'>{adTownName}</p>
                         {ad?.extraFields?.price && (
                           <p className='elipse price'> {ad?.extraFields?.price} {t('ads.price_lv')} </p>
+
                         )}
                         {ad?.extraFields?.eventStartDate && ad?.extraFields?.eventEndDate && (
                           <>

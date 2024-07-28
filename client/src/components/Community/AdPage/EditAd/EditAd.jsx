@@ -1,4 +1,4 @@
-import "./createAd.css";
+import "../CreateAd/createAd.css";
 import "../../communityPage.css";
 import { CommunityFooter } from "../../CommunityFooter/CommunityFooter";
 import { HeaderCommunity } from "../../HeaderCommunity/HeaderCommunity";
@@ -10,15 +10,13 @@ import { useFormCreate } from "../../../hooks/useFormCreate";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../../contexts/UserContext";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import { v4 } from "uuid";
-import { TagInput } from "./TagInput";
+import { TagInput } from "../CreateAd/TagInput";
 
-export const CreateAd = () => {
+export const EditAd = () => {
   const { t, i18n } = useTranslation();
   const [fieldDefinitions, setFieldDefinitions] = useState({});
-  // eslint-disable-next-line no-unused-vars
   const [towns, setTowns] = useState([]);
   const [settlements, setSettlements] = useState([]);
   const [tags, setTags] = useState([]);
@@ -31,9 +29,11 @@ export const CreateAd = () => {
     fetchSubregions,
     fetchTowns,
     searchCriteria,
-    createAd,
+    getAdById,
+    editAd,
   } = useCommunityContext();
   const { profileData } = useAuthContext();
+  const { adId } = useParams();
 
   const currentLanguage = i18n.language;
   const navigate = useNavigate();
@@ -47,37 +47,89 @@ export const CreateAd = () => {
   };
 
   const initialValues = {
-    adId: v4(),
+    adId: "",
     summary: "",
-    category: "donate",
+    category: "",
     description: "",
-    adRegion: profileData.details.region || "",
-    adSubregion: profileData.details.subregion || "",
-    adTown: profileData.details.settlement
-      ? getAdTownValue(currentLanguage, profileData.details.settlement)
-      : "",
-    street: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
+    adRegion: "",
+    adSubregion: "",
+    adTown: "",
+    street: "",
     useOtherCity: false,
-
     extraFields: {
       price: "",
       eventStartDate: null,
       eventEndDate: null,
     },
+    images: [],
+    tags: [],
   };
+
+  useEffect(() => {
+    const loadAdDetails = async () => {
+      try {
+        const response = await getAdById(adId);
+
+        if (!response || !response.ads) {
+          throw new Error("No ad details returned");
+        }
+
+        const adDetails = response.ads;
+
+        setValues({
+          ...initialValues,
+          adId: adDetails.adId || "",
+          summary: adDetails.summary || "",
+          category: adDetails.category || "",
+          description: adDetails.description || "",
+          adRegion: adDetails.adRegion || "",
+          adSubregion: adDetails.adSubregion || "",
+          adTown: adDetails.adTown || "",
+          street: adDetails.street || "",
+          useOtherCity: adDetails.useOtherCity || false,
+          extraFields: {
+            price: adDetails.extraFields?.price || undefined,
+            eventStartDate: adDetails.extraFields?.eventStartDate
+              ? new Date(adDetails.extraFields.eventStartDate)
+              : null,
+            eventEndDate: adDetails.extraFields?.eventEndDate
+              ? new Date(adDetails.extraFields.eventEndDate)
+              : null,
+          },
+          images: adDetails.images || [],
+          tags: adDetails.tags || [],
+        });
+
+        let imageUrls = adDetails.images.map((obj) => obj.imageURL);
+        while (imageUrls.length < 4) {
+          imageUrls.push(null);
+        }
+        setImages(imageUrls);
+
+        setSelectedRegion(adDetails.adRegion || "");
+        setSelectedSubregion(adDetails.adSubregion || "");
+        setSelectedTown(adDetails.adTown || "");
+        setTags(adDetails.tags || []);
+      } catch (error) {
+        console.error("Failed to load ad details", error);
+      }
+    };
+
+    if (adId) {
+      loadAdDetails();
+    }
+  }, [adId]);
 
   useEffect(() => {
     if (selectedRegion) {
       fetchSubregions(selectedRegion);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRegion]);
 
   useEffect(() => {
     if (selectedRegion && selectedSubregion) {
       fetchTowns(selectedRegion, selectedSubregion).then(setTowns);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRegion, selectedSubregion]);
 
   useEffect(() => {
@@ -94,68 +146,7 @@ export const CreateAd = () => {
     loadFieldDefinitions();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const addressId = JSON.parse(localStorage.getItem("addressId"));
-      if (addressId) {
-        try {
-          const region = regions.find(
-            (region) => region.id === addressId.regionId
-          );
-
-          if (
-            !subregions[addressId.regionId] ||
-            subregions[addressId.regionId].length === 0
-          ) {
-            await fetchSubregions(addressId.regionId);
-          }
-
-          const subregion = (subregions[addressId.regionId] || []).find(
-            (subregion) => subregion.id === addressId.municipalityId
-          );
-
-          let townList = settlements;
-          if (!townList.length) {
-            const townResponse = await fetch(
-              `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
-            );
-            townList = await townResponse.json();
-            setSettlements(townList);
-          }
-
-          const town = townList.find(
-            (settlement) => settlement.id === addressId.settlementId
-          );
-
-          if (region && subregion && town) {
-            setSelectedRegion((prev) => prev || addressId.regionId);
-            setSelectedSubregion((prev) => prev || addressId.municipalityId);
-            setSelectedTown((prev) => prev || town.id);
-            setValues((state) => ({
-              ...state,
-              adRegion: addressId.regionId,
-              adSubregion: addressId.municipalityId,
-              adTown: addressId.settlementId,
-            }));
-          }
-        } catch (error) {
-          console.error("Failed to load data", error);
-        }
-      }
-    };
-
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentLanguage, regions, subregions]);
-
-  useEffect(() => {
-    if (selectedRegion && selectedSubregion) {
-      fetchTowns(selectedRegion, selectedSubregion).then(setSettlements);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSubregion, selectedRegion]);
-
-  const handleNavigate = () => navigate("/craigslist");
+  const handleNavigate = () => navigate("/profile/announced");
 
   const formatDateToYYYYMMDD = (date) => {
     if (!date) {
@@ -191,6 +182,7 @@ export const CreateAd = () => {
     setValues,
     errors,
     images,
+    setImages,
     handleImageChange,
     handleRemoveImage,
   } = useFormCreate(
@@ -205,7 +197,6 @@ export const CreateAd = () => {
         extraFields: {
           ...formData.extraFields,
           price: formatPrice(formData.extraFields.price),
-
           eventStartDate: formatDateToYYYYMMDD(
             formData.extraFields.eventStartDate
           ),
@@ -214,9 +205,10 @@ export const CreateAd = () => {
       };
 
       try {
-        await createAd(updatedFormData);
+        await editAd(updatedFormData);
+        navigate("/profile/announced");
       } catch (error) {
-        console.error("Error creating ad:", error);
+        console.error("Error updating ad:", error);
       }
     },
     emailPrefix
@@ -271,7 +263,7 @@ export const CreateAd = () => {
         <HeaderCommunity />
         <section className="create-ad-main">
           <div className="ad-card-create">
-            <h2 className="ad--card-title">{t("ads.publish_ad")}</h2>
+            <h2 className="ad--card-title">{t("ads.edit_ad")}</h2>
             <div className="ad-create-form">
               <form onSubmit={onSubmit}>
                 <div className="ad-info-desc">
@@ -497,7 +489,7 @@ export const CreateAd = () => {
                 </div>
                 <div className="button-group">
                   <button type="submit" className="publish-button">
-                    {t("ads.publish_btn")}
+                    {t("ads.edit")}
                   </button>
                   <button
                     type="button"

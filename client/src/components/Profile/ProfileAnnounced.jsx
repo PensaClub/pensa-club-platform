@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import './profile.css';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/UserContext';
 import { useCommunityContext } from '../contexts/CommunityContext';
 import { DeleteAd } from '../Community/AdPage/DeleteAd/DeleteAd';
@@ -36,6 +37,7 @@ const cutToFirstWord = (text) => {
 };
 
 export const ProfileAnnounced = () => {
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions } = useCommunityContext();
@@ -110,6 +112,11 @@ export const ProfileAnnounced = () => {
     setSelectedAd(null);
   };
 
+  const handleEditClick = (ad) => {
+    setSelectedAd(ad);
+    navigate(`/ad/edit/${ad.adId}`);
+  }
+
   const handleRefreshClick = async (adId) => {
     try {
       await updateExpirationDate(adId);
@@ -130,12 +137,12 @@ export const ProfileAnnounced = () => {
             <div className={`announced ${ad.status}`} key={ad.adId}>
               <p className={
                 ad.status === 'approved' ? 'view-more' :
-                ad.status === 'pending' ? 'pending-approval' :
-                ad.status === 'denied' ? 'pending-approval' : ''
+                  ad.status === 'pending' ? 'pending-approval' :
+                    ad.status === 'denied' ? 'pending-approval' : ''
               }>
                 {ad.status === 'approved' ? t('ads.view_more') :
-                ad.status === 'pending' ? t('ads.pending_approval') :
-                ad.status === 'denied' ? t('ads.denied') : ''}
+                  ad.status === 'pending' ? t('ads.pending_approval') :
+                    ad.status === 'denied' ? t('ads.denied') : ''}
               </p>
               <section className='profile-data ads'>
                 <div className='avatar-announced'>
