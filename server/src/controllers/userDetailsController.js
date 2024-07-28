@@ -12,7 +12,7 @@ const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
 const rbac = require('../middlewares/rbac');
 
-userDetailsController.post('/details', isAuth, rbac.checkPermission('update_record'), async (req, res, next) => {
+userDetailsController.post('/details', isAuth, async (req, res, next) => {
   if (req.user.enabled) {
     return res.status(403).send({ message: 'User details have already been submitted once.' });
   }
