@@ -1,7 +1,7 @@
 .gallery-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   gap: 2em;
   width: 90%;

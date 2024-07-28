@@ -166,7 +166,7 @@ export const ProfileAnnounced = () => {
                 </div>
               </section>
               <div className='ads-btns'>
-                <button className={'ads-btn red'}>
+                <button className={'ads-btn red'} onClick={()=>handleEditClick(ad)}>
                   {t('ads.edit')}
                 </button>
                 <button

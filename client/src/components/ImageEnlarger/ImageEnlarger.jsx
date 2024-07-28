@@ -98,6 +98,7 @@ export const ImageEnlarger = ({ images }) => {
           />
         ))}
       </div>
+      
       {isEnlarged && (
         <EnlargedImage
           src={images[currentIndex]}

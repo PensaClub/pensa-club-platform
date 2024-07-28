@@ -42,7 +42,9 @@ export const CommunityPage = () => {
         adSubregionName: '',
         adTownName: ''
     });
-
+useEffect(() => {
+    window.scrollTo({ top: 0 });
+},[])
     const [ads, setAds] = useState({ result: [] });
     const [page, setPage] = useState(1);
     const loaderRef = useRef(null);

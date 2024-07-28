@@ -22,7 +22,7 @@ export const Hero = () => {
             </div>
           </Slide>
         </div>
-        <img src="/images/homePage/logo.png" alt="logo" className="logo" />
+        <img src="/images/homePage/logo-2.png" alt="logo" className="logo" />
         <Fade delay="30" duration="3000" fraction="0.1" triggerOnce="true">
           <div className="parent-motto">
             <div className="motto-img">
