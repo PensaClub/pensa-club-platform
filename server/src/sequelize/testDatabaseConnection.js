@@ -25,7 +25,23 @@ async function testDatabaseConnection() {
     } else {
       console.log('Seed data already present. No need to seed.');
     }
+  } else {
+    seedAdminAccount();
   }
+}
+
+function seedAdminAccount() {
+  exec('npx sequelize-cli db:seed --seed 20240728095402-admin.js', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error seeding the admin account: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`Error during admin seeding: ${stderr}`);
+      return;
+    }
+    console.log(stdout);
+  });
 }
 
 async function checkForSeedData() {
@@ -38,6 +54,7 @@ async function checkForSeedData() {
     return false;
   }
 }
+
 function seedDatabase() {
   exec('npx sequelize-cli db:seed:all', (error, stdout, stderr) => {
     if (error) {

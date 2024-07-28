@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { trimFields, validateEmail, validatePassword, validateRePassword, resetFields } from "../../utils/signUp";
+import { trimFields, validateEmail, validatePassword, validateRePassword} from "../../utils/signUp";
 
 export const useForm = (initialValues, onSubmitHandler) => {
   const [values, setValues] = useState(initialValues);
@@ -18,6 +18,12 @@ export const useForm = (initialValues, onSubmitHandler) => {
       case "password":
         validatePassword(value, setErrors);
         break;
+        case "newPassword":
+          validatePassword(value, setErrors);
+          break;
+          case "reNewPassword":
+            validateRePassword(values.newPassword, value, setErrors);
+            break;
       case "rePassword":
         validateRePassword(values.password, value, setErrors);
         break;
@@ -27,18 +33,25 @@ export const useForm = (initialValues, onSubmitHandler) => {
   };
 
   const handleTrimFields = () => {
-    const { email = "", password = "", rePassword = "" } = values;
-    const [trimmedEmail, trimmedPassword, trimmedRePassword] = trimFields([email, password, rePassword]);
+    const { email = "", password = "", rePassword = "", newPassword='',reNewPassword='' } = values;
+    const [trimmedEmail, trimmedPassword, trimmedRePassword] = trimFields([email, password, rePassword,newPassword,reNewPassword]);
     setValues({
       email: trimmedEmail,
       password: trimmedPassword,
       rePassword: trimmedRePassword,
+      newPassword: trimmedRePassword,
+      reNewPassword: trimmedRePassword,
+      
     });
   };
   const validate = () => {
     validateEmail(values.email, setErrors);
     validatePassword(values.password, setErrors);
+    validatePassword(values.newPassword, setErrors);
+
     validateRePassword(values.password, values.rePassword, setErrors);
+    validateRePassword(values.newPassword, values.reNewPassword, setErrors);
+
     return Object.keys(errors).every((key) => !errors[key]);
   };
 
@@ -48,9 +61,12 @@ export const useForm = (initialValues, onSubmitHandler) => {
 
     if (validate()) {
       if (onSubmitHandler) onSubmitHandler(values);
-      resetFields([setValues, setErrors]);
+      setValues(initialValues);
+
+      setErrors({});
     } else {
-      console.log("Invalid form");
+      setValues(initialValues);
+      console.error("Invalid form");
     }
   };
 

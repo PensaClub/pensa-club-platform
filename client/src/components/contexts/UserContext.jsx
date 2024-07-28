@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { userServiceFactory } from '../Services/userService';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
@@ -14,13 +14,19 @@ export const UserProvider = ({ children }) => {
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.enabled);
-
+  const [isAdmin, setIsAdmin] = useLocalStorage('isAdmin', false);
+  // eslint-disable-next-line no-unused-vars
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const userService = userServiceFactory(isAuth.token);
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (profileData?.role) {
+      setIsAdmin(profileData.role === 'admin');
+    }
+  }, [profileData, setIsAdmin]);
 
   const showErrorAndSetTimeouts = (error) => {
     setErrorMessage(error);
@@ -37,6 +43,8 @@ export const UserProvider = ({ children }) => {
       const response = await userService.register(data);
       setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
+      setProfileData(response.user);
+      setIsAdmin(response.user.role === 'admin');
       navigate('/profile/profile-form');
       notify('success-register');
     } catch (error) {
@@ -51,16 +59,18 @@ export const UserProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const response = await userService.login(data);
+      const userRole = response.user.role;
       setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
       setProfileData(response.user);
+      setIsAdmin(userRole === 'admin');
       notify('success-login');
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
         setAddressId({ ...data });
-        navigate('/profile');
+        navigate('/');
       } else {
-        navigate('/profile/profile-form');
+        navigate('/');
       }
     } catch (error) {
       notify('error');
@@ -77,6 +87,7 @@ export const UserProvider = ({ children }) => {
       setIsAuth({});
       setProfileData({});
       setAddressId({});
+      setIsAdmin(false);
       notify('success-logout');
     } catch (error) {
       notify('error');
@@ -100,6 +111,7 @@ export const UserProvider = ({ children }) => {
       setProfileData(response.user);
       setIsFinish(response.user.enabled);
       setIsAuth({ ...isAuth, token: response.token, enabled: response.user.enabled });
+      // setIsAdmin(response.user.role === 'admin');
       navigate('/profile');
       notify('success-data');
     } catch (error) {
@@ -120,6 +132,8 @@ export const UserProvider = ({ children }) => {
         const data = await loadAddressData(responseDetails.region, responseDetails.municipality, responseDetails.settlement);
         setAddressId({ ...data });
       }
+      // setIsAdmin(response.user.role === 'admin');
+
       notify('success-data');
     } catch (error) {
       notify('error');
@@ -135,6 +149,7 @@ export const UserProvider = ({ children }) => {
       const response = await userService.getUserData();
       if (response) {
         setProfileData(response.user);
+        // setIsAdmin(response.user.role === 'admin');
       }
     } catch (error) {
       notify('error');
@@ -150,10 +165,11 @@ export const UserProvider = ({ children }) => {
       if (data.tokenType === 'jwt') {
         data.token = isAuth.token;
       }
-      await userService.resetPassword({ ...data });
-      // Better Message to be added for notify !!
-      notify('success-data');
-      navigate('/profile');
+      setIsLoading(true);
+      const response = await userService.resetPassword({ ...data });
+      setIsLoading(false);
+      // setIsAdmin(response.user.role === 'admin');
+      return response;
     } catch (error) {
       notify('error');
       showErrorAndSetTimeouts(error.message);
@@ -162,11 +178,39 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const onForgetPasswordSubmit = async (data) => {
+    try {
+      setIsLoading(true);
+      const response = await userService.forgetPassword(data);
+      setIsLoading(false);
+      notify('email-send');
+      return response;
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    }
+  };
+
+  const onSuggestSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await userService.suggestUser(data);
+      navigate('/');
+      notify('success-register');
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const isUserAdmin = () => isAdmin;
+
   const contextService = {
     onRegisterSubmit,
     onLoginSubmit,
-    // Server doesn`t send userId for now !
-    // userId: isAuth.data?.userId,
     userEmail: isAuth.email,
     token: isAuth.token,
     isAuthentication: !!isAuth.token,
@@ -178,24 +222,21 @@ export const UserProvider = ({ children }) => {
     getProfileData,
     profileData,
     addressId,
+    onForgetPasswordSubmit,
+    onSuggestSubmit,
+    isUserAdmin,
+    isAdmin,
   };
 
   return (
     <UserContext.Provider value={contextService}>
       {children}
       {isLoading && <Loader />}
-      {/* {errorMessage && (
-          <div className={`error-message show-error custom-style`}>
-            <p>{errorMessage}</p>
-            {console.log('Rendering error message:', errorMessage)}
-          </div>
-        )} */}
     </UserContext.Provider>
   );
 };
 
 export const useAuthContext = () => {
   const context = useContext(UserContext);
-
   return context;
 };

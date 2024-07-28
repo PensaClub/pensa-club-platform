@@ -7,11 +7,9 @@ import { Overlay } from './Overlay';
 import { NewsSubscribe } from '../Home/NewsSubscribe/NewsSubscribe';
 import { useLocation } from 'react-router-dom';
 
-
 export const LoginRegister = () => {
   const location = useLocation();
   const [activeView, setActiveView] = useState('');
-
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);

@@ -1,17 +1,11 @@
-/* body.no-scroll {
-    overflow: hidden;
-} */
-
 body.active-sidebar .leaflet-container {
-    pointer-events: none; /* Забраних движенията  с картата докато менюто е отворено */
-
+    pointer-events: none;
+    /* Забраних движенията  с картата докато менюто е отворено */
 }
-
-
 
 body.active-sidebar .sidebar-map {
     transform: translateX(0);
-    z-index: 1050;
+    z-index: 1006;
     transition: transform 1.2s ease-in-out;
 }
 
@@ -24,7 +18,7 @@ body.active-sidebar .sidebar-map {
     height: 100vh;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
-    z-index: 9999;
+    z-index: 999;
     transform: translateY(100%);
     display: flex;
     flex-direction: column;
@@ -32,7 +26,6 @@ body.active-sidebar .sidebar-map {
     border-top: 1.2px solid rgba(0, 0, 0, 0.2);
     transition: transform 1.2s ease-in-out, height 1.2s ease-in-out;
 }
-
 
 .close-button {
     background: none;
@@ -44,14 +37,14 @@ body.active-sidebar .sidebar-map {
     right: 10px;
     transition: opacity 1s ease-in-out;
 }
+
 .close-button {
     cursor: pointer;
     position: absolute;
-     padding: 5px;
+    padding: 5px;
     margin: 0;
     padding: 0;
     border-radius: 3px;
- 
     opacity: 0;
     pointer-events: all;
 }
@@ -59,22 +52,22 @@ body.active-sidebar .sidebar-map {
 .active-sidebar .close-button {
     pointer-events: all;
     opacity: 1;
-    transition: opacity 1s ease-in-out; 
+    transition: opacity 1s ease-in-out;
 }
 
 .sidebar-content {
     width: 100%;
     opacity: 0;
-    pointer-events:all;
+    pointer-events: all;
     margin-bottom: 15px;
-    transition: opacity 2s; 
+    transition: opacity 2s;
     overflow: hidden;
 }
 
 .active-sidebar .sidebar-content {
     opacity: 1;
     pointer-events: visible;
-    transition: opacity 2s; 
+    transition: opacity 2s;
 }
 
 .sidebar-content h2 {
@@ -93,101 +86,127 @@ body.active-sidebar .sidebar-map {
     overflow: hidden;
 }
 
-
-.user-map-info{
-
-   display: flex;
+.user-map-info {
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .user-map-info p {
     font-size: 14px;
 }
-.user-map-img{
+
+.user-map-img {
     max-width: 120px;
     width: 100%;
     height: auto;
     object-fit: fill;
-
 }
-.map-desc-user{
+
+.map-desc-user {
     text-indent: initial;
     gap: 0.5em;
     text-align: left;
-    /* align-items: center; */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding: 16px 10px;
-
 }
 
 .ad-map {
     display: flex;
-    align-items: center;
-    gap: 2em;
+    align-items: flex-start;
     flex-direction: row;
     margin: 20px;
+    border-radius: var(--radius);
+    background-color: var(--gravel);
+    position: relative;
+    box-shadow: var(--container-shadow);  
 }
-.ad-title{
+
+.ad-title {
     padding: 2px 0;
     text-align: center;
     text-shadow: var(--text-shadow);
-    color: var( --grey);
+    color: var(--grey);
     font-weight: 300;
 }
-.ad-scroll {
 
-    overflow: scroll;
+.ad-scroll {
     flex-direction: column;
     height: 60%;
     min-height: 200px;
     z-index: 99999;
     transition: height 2s ease;
 }
-.ad-scroll h3{
+
+.ad-scroll h3 {
     text-align: center;
-    margin:35% auto;
+    margin: 35% auto;
     text-shadow: var(--text-shadow);
-    color: var( --gray);
+    color: var(--gray);
     font-weight: 300;
 }
-.ad-desc{
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
+
+.scroll-side-content {
+    overflow-y: scroll;
+    height: calc(100vh - 100px); 
 }
 
-
-
-.ad-scroll::-webkit-scrollbar {
+.scroll-side-content::-webkit-scrollbar {
     width: 10px;
+
 }
 
-.ad-scroll::-webkit-scrollbar-track {
+.scroll-side-content::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.ad-scroll::-webkit-scrollbar-thumb {
+.scroll-side-content::-webkit-scrollbar-thumb {
     background-color: var(--orange);
     border: 2px solid #f1f1f1;
     border-radius: var(--radius-input);
 }
 
+.ad-desc {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin: 1.5em auto;   
+    cursor: pointer;
+}
 
-
-.ad-map img{
-    width: 100px;
-    height: auto;
-    object-fit: fill;
+.ad-map img {
+    width: 160px;
+    height: 160px;
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+    object-fit: cover;
     overflow: hidden;
+    flex: 0 0 35%;
+    cursor: pointer;
 }
 
 .ad-map h3 {
     margin: 0;
-    font-size: 1.2em;
+    font-size: var(--s-font-size);
+    padding-bottom: 0.2em;
+}
+
+.ad-map h4 {
+    font-size: var(--xs-font-size);
+    border-bottom: 2px solid var(--text-black);
+}
+
+.ad-map-valid {
+    padding-bottom: 0.4em;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-shadow: var(--text-shadow);
+    font-weight: 200;
 }
 
 .ad-map p {
@@ -195,9 +214,24 @@ body.active-sidebar .sidebar-map {
     font-size: 1em;
 }
 
+.ad-desc-map {
+}
+
+.ad-category {
+    position: absolute;
+    border-radius: var(--radius-input);
+    right: 10px;
+    top: -10%;
+    background-color: var(--orange);
+    padding: 0.5em;
+    text-indent: initial;
+    color: white;
+    width: 70px;
+    text-align: center;
+    box-shadow: var(--container-shadow);
+}
 
 .active-sidebar .sidebar-map {
-    /* max-width: 660px; */
     width: 100%;
     transition: width 4s, max-width 4s;
 }
@@ -207,34 +241,33 @@ body.active-sidebar .sidebar-map {
     height: 5px;
     background: linear-gradient(304deg, #1B6D4D, #E26020 22%, #BB1D3D 93%);
 }
-.color-lines-pipe{
+
+.color-lines-pipe {
     width: 100%;
     height: 4px;
     background: linear-gradient(325deg, #ffffff 0%, #777777 50%, #ffffff 100%);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.32);
 }
+
 @media (min-width: 600px) {
     .ad-scroll {
-        height: 70%; 
+        height: 70%;
     }
+
     .user-map-info {
         flex-direction: row;
         justify-content: center;
     }
 }
 
-
-
 @media (min-width: 850px) {
     .sidebar-map {
         position: absolute;
         background-image: url('../../../../public/images/sign-up/background.jpg');
-       
         left: 0;
         top: 0;
         width: 300px;
         height: 100%;
-        /* background-color: white; */
         box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
         overflow-y: auto;
         z-index: 9999;
@@ -245,27 +278,21 @@ body.active-sidebar .sidebar-map {
         border-right: 1.2px solid rgba(0, 0, 0, 0.2);
         transition: transform 1.2s ease-in-out;
     }
-    
-    .user-map-info{
+
+    .user-map-info {
         flex-direction: row;
     }
-    .user-map-info p{
-    font-size: 16px;
+
+    .user-map-info p {
+        font-size: 16px;
     }
-    .user-map-img{
-        max-width: 220px;
+
+    .user-map-img {
+        max-width: 180px;
         width: 100%;
         height: auto;
         object-fit: fill;
-    
     }
-    /* .sidebar-map {
-        top: 0px;
-        left: 0px;
-        height: 100%;
-        border: 2px solid rgba(0, 0, 0, 0.2);
-        transition: width 1s; 
-    } */
 
     .color-line {
         width: 100%;
@@ -276,17 +303,19 @@ body.active-sidebar .sidebar-map {
     .active-sidebar .sidebar-map {
         max-width: 480px;
         width: 100%;
-        transition: width 4s; 
+        transition: width 4s;
     }
+
     .ad-scroll {
-     height: 35vh;
+        height: 35vh;
     }
-    .ad-desc-user{
+
+    .ad-desc-user {
         flex: 0 0 65%;
         padding: initial;
     }
-    .map-desc-user{
+
+    .map-desc-user {
         margin: auto;
     }
 }
-

@@ -1,8 +1,4 @@
 import { requestFactory } from './requester';
-// const baseUrl = `http://localhost:3005/users`
-// const api =`http://localhost:8080`;
-
-// console.log("app",api)
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -23,11 +19,12 @@ export const userServiceFactory = (token) => {
     logout: () => {
       return requester.post(`${apiUrl}/auth/logout`);
     },
-
     resetPassword: (data) => {
       return requester.post(`${apiUrl}/auth/reset-password`, data);
     },
-
+    forgetPassword: (data) => {
+      return requester.post(`${apiUrl}/auth/request-reset-password`, data);
+    },
     setUserData: (data) => {
       return requester.post(`${apiUrl}/user/details`, data);
     },
@@ -39,5 +36,8 @@ export const userServiceFactory = (token) => {
     getUserData: () => {
       return requester.get(`${apiUrl}/user/single-user`);
     },
+    suggestUser: (data) => {
+      return requester.post(`${apiUrl}/user/suggest`, data);
+    }
   };
 };

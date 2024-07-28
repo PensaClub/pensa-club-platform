@@ -36,20 +36,24 @@ const ProfileAddress = () => {
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err.message));
 
     loadData(`/regions-data/region-${form.regionId}/subregions-${form.regionId}.json`)
       .then((data) => setMunicipalities(data))
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err.message));
 
     loadData(`/regions-data/region-${form.regionId}/towns/towns-${form.municipalityId}.json`)
       .then((data) => setSettlements(data))
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err.message));
   }, [form.municipalityId, form.regionId]);
 
   const handleRegionChange = async (e) => {
     const regionId = e.target.value;
-    const currRegion = regions.filter((region) => region.id === regionId);
+
+    // eslint-disable-next-line eqeqeq
+
+    // eslint-disable-next-line eqeqeq
+    const currRegion = regions.filter((region) => region.id == regionId);
     const regionName = currRegion[0].bg;
 
     setForm({
@@ -77,7 +81,9 @@ const ProfileAddress = () => {
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
-    const currMunicipality = municipalities.filter((municipality) => municipality.id === municipalityId);
+
+    // eslint-disable-next-line eqeqeq
+    const currMunicipality = municipalities.filter((municipality) => municipality.id == municipalityId);
     const municipalityName = currMunicipality[0].bg;
 
     setForm({
@@ -100,7 +106,9 @@ const ProfileAddress = () => {
 
   const handleSettlementChange = async (e) => {
     const settlementId = e.target.value;
-    const currSettlement = settlements.filter((settlement) => settlement.id === settlementId);
+
+    // eslint-disable-next-line eqeqeq
+    const currSettlement = settlements.filter((settlement) => settlement.id == settlementId);
     const settlementName = currSettlement[0].bg;
 
     setForm({
@@ -145,16 +153,12 @@ const ProfileAddress = () => {
 
     if (isValid) {
       try {
-        // const updatedDataArr = Object.entries(form).filter(
-        //   ([key, value]) => initialFormState[key] !== value
-        // );
-        // const updatedData = Object.fromEntries(updatedDataArr);
         onEditProfileDataSubmit(trimmedForm);
         onAllUsers();
-        console.log('Address Submitted:', trimmedForm);
+        console.error('Address Submitted:', trimmedForm);
         navigate('/profile');
       } catch (error) {
-        console.log(`Error Profile Address Submit Component: ${error.message}`);
+        console.error(`Error Profile Address Submit Component: ${error.message}`);
       }
     }
   };
@@ -223,7 +227,7 @@ const ProfileAddress = () => {
           style={{ borderColor: errors.settlement ? '#BB1D3D' : '' }}
         >
           <option value=''>{t('profile.select_settlement')}</option>
-          {settlements.map((settlement, index) => (
+          {settlements?.map((settlement, index) => (
             <option key={index} value={settlement.id}>
               {currentLanguage === 'bg' && `${settlement.bg}`}
               {currentLanguage === 'en' && `${settlement.en}`}
@@ -268,12 +272,14 @@ const ProfileAddress = () => {
         {errors.streetNumber && <span className='error'>{errors.streetNumber}</span>}
       </label>
       <span className='required-fields'>{t('profile.required_fields')}</span>
-      <button className='btn-general btn-green btn-profile' type='submit'>
+      <div className="btn-inline">
+      <button className='btn-general btn-green' type='submit'>
         {t('profile.save_btn')}
       </button>
       <button type='submit' className='btn-general btn-red' onClick={handleResetForm}>
         {t('profile.close_btn')}
       </button>
+      </div>
     </form>
   );
 };

@@ -6,19 +6,32 @@
   --bg-in-gray: #dad7d7;
   --bg-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url('../public/images/homePage/orange-pattern.jpg');
   --bg-image-rotated: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url('../public/images/homePage/orange-pattern.jpg');
-  /* --bg-gradient: linear-gradient(179deg, rgba(250, 163, 182, .8), #fde1c7 67%, #fff); */
-  /* --bg-line-gradient-hd: linear-gradient(359deg, rgb(239 128 152 / 40%), #efa560 57%, #fff);
-  --bg-line-gradient-an: linear-gradient(359deg, rgb(239 128 152 / 40%), #efa560 57%, rgb(239 128 152 / 40%)); */
-
+  --button-bg:#B7582C;
+  --create-form-bg:#FFF5E8;
+  --form-input-bg:#FFFBF5;
+  --subtle:#efeff5;
   --orange: #E26020;
   --green: #1B6D4D;
+  --green-cm-light:#2b5b3f;
+  --green-cm:#143829;
+  --green-second:#385a41;
   --red: #BB1D3D;
   --gray: #333;
+  --grey-bg: #D9D9D9;
+  --yellow: #E9972D;
   --text-white: #fff;
   --text-black: #000;
   --text-pink: #dc9ebd;
+  --green-text:#1F372A;
+  --brown:#933D24;
+  --slate:#6b6d7c;
+  --red-bg-button:#e72725;
+
+  --gravel:#e3e3e3;
+  --rs-filters-btn:#DE9A45;
   --container-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
   --cluster-red-shadow:0 0.3rem 1.2rem rgba(187, 29, 61, 1.25), 0 0.7rem 0.7rem rgba(0, 0, 0, 0.72);
+  --red-bg-button:#e72725;
   /* Font Size */ 
   --xl-font-size: 72px; 
   --l-font-size: 48px;
@@ -46,6 +59,7 @@
   --container-min-width: 340px;
   --container-width: 80%;
 
+  --container-larger-height: 800px;
   --container-height: 600px;
   --container-min-height: 400px;
 
@@ -72,12 +86,24 @@ label, span, p, input {
 }
 
 
-
+/* 
 @font-face {
   font-family: Phenomena;
   src: url("../../client/public/Phenomena-Regular.woff");
+} */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../../client/public/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../../client/public/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -85,7 +111,7 @@ label, span, p, input {
 }
 
 body {
-  font-family: "Phenomena", "Poppins", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   letter-spacing: 0.05rem;
   text-indent: 0.3rem;
 
@@ -102,12 +128,13 @@ a{
     text-decoration: none;
 }
 
-button, input {
+button, input, textarea {
   border: none;
   font-family: inherit;
   font-weight: 500;
   letter-spacing: inherit;
   text-indent: inherit;
+  font-size: inherit;
 }
 
 /* Genral Button Styles */

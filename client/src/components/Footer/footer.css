@@ -1,5 +1,6 @@
 footer {
   width: 100%;
+
 }
 
 .footer {
@@ -17,19 +18,19 @@ footer {
   overflow: hidden;
   opacity: 0.6;
 }
-
 .footer p {
-  /* font-size: 1em; */
   font-weight: 300;
   line-height: 1.4;
   color: var(--text-white);
 }
-
+.footer p a{
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--text-white);
+}
 .footer h3 {
   padding-bottom: var(--s-space);
-  /* font-size: 1.5em; */
 }
-
 #root > footer > section > img {
   position: absolute;
   left: 2px;
@@ -102,7 +103,14 @@ footer {
   padding: var(--s-space) 0;
   color: var(--text-white);
 }
+@media only screen and (max-width: 1200px) {
+ .hide-on-mobile {
+    display: block;
+    /* position: sticky;
+    bottom: 0; */
+  }
 
+}
 @media (min-width: 850px) {
   .footer {
     flex-direction: row-reverse;
@@ -110,11 +118,10 @@ footer {
     align-items: flex-start;
     gap: 3em;
   }
-
   .info-desc {
     align-items: start;
+    
   }
-
   .footer-info {
     flex: 0 0 20%;
   }

@@ -9,6 +9,6 @@ export const AuthGuard = () => {
         return <Navigate to="/sign-up" />
     }
   return (
-    <Outlet />
+    <Outlet /> 
   )
 };

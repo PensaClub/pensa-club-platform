@@ -2,7 +2,6 @@ import './loginRegister.css';
 
 import { Link } from 'react-router-dom';
 
-
 import './loginRegister.css';
 import { useAuthContext } from '../contexts/UserContext';
 import { useForm } from '../hooks/useForm';
@@ -67,7 +66,7 @@ export const Login = ({ navToRegister }) => {
         </div>
         {errors.password && <p className="error">{t(`${errors.password}`)}</p>}
 
-        <Link to="#" className="link">
+        <Link to="/forget-password" className="link">
           {t('form.password-forgotten')}
         </Link>
         <button className="btn-general btn-orange">{t('form.login')}</button>

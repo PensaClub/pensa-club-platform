@@ -1,0 +1,26 @@
+import { requestFactory } from './requester';
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
+export const suggestUserServiceFactory = () => {
+  const requester = requestFactory();
+
+  return {
+    getAllSuggested: () => {
+      return requester.get(`${apiUrl}/suggest/unresolved`);
+    },
+    getAllResolve: () => {
+      return requester.get(`${apiUrl}/suggest/resolved`);
+    },
+    suggestUser: (data) => {
+      return requester.post(`${apiUrl}/suggest`, data);
+    },
+    suggestResolve: (id) => {
+      return requester.post(`${apiUrl}/suggest/resolve`, {id: id});
+    },
+    suggestDelete: (id) => {
+      return requester.post(`${apiUrl}/suggest/delete`, {id: id});  
+    }
+
+  };
+}

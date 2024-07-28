@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import { Loader } from "../Loader/Loader";
+
 import { useAuthContext } from "./UserContext";
 import { mapServiceFactory } from "../Services/MapService";
-
+import './error.css';
 
 export const MapContext = createContext()
 
@@ -10,7 +11,6 @@ export const MapProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [allUsers, setAllUsers] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
-console.log(allUsers);
     const { token } = useAuthContext()
     const mapService = mapServiceFactory(token)
 
@@ -31,11 +31,11 @@ console.log(allUsers);
             const response = await mapService.allUsers()
             setAllUsers(prev => ({ ...prev, response }))
             setIsLoading(false);
+            return response;
         } catch (e) {
             showErrorAndSetTimeouts(e.message)
         }
     }
-
 
     const contextService = {
         onAllUsers,
@@ -50,7 +50,7 @@ console.log(allUsers);
             {errorMessage && (
                 <div className={`error-message show-error custom-style`}>
                     <p>{errorMessage}</p>
-                    {console.log("Rendering error message:", errorMessage)}
+                    {console.error("Rendering error message:", errorMessage)}
                 </div>
             )}
         </MapContext.Provider>

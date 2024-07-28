@@ -1,5 +1,5 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class user_account extends Model {
@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       user_account.hasOne(models.user_details, {
-        foreignKey: "user_accounts_id", // Foreign key in user_details table
-        sourceKey: "id", // Primary key in user_accounts table
-        as: "details",
+        foreignKey: 'user_accounts_id', // Foreign key in user_details table
+        sourceKey: 'id', // Primary key in user_accounts table
+        as: 'details',
       });
-      user_account.hasMany(models.user_details, {
-        foreignKey: "user_id", // Foreign key in user_details table
-        sourceKey: "id", // Primary key in user_accounts table
-        as: "ads",
+      user_account.hasMany(models.user_ads, {
+        foreignKey: 'user_id', // Foreign key in user_details table
+        sourceKey: 'id', // Primary key in user_accounts table
+        as: 'ads',
       });
       // define association here
     }
@@ -31,10 +31,10 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         validate: {
           isEmail: {
-            msg: "Email format is incorrect.",
+            msg: 'Email format is incorrect.',
           },
           notEmpty: {
-            msg: "Email is required.",
+            msg: 'Email is required.',
           },
         },
       },
@@ -43,9 +43,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Password is required.'
+            msg: 'Password is required.',
           },
-        }
+        },
       },
       finished: {
         type: DataTypes.BOOLEAN,
@@ -56,14 +56,22 @@ module.exports = (sequelize, DataTypes) => {
       token_expiration: DataTypes.DATE,
       role: {
         type: DataTypes.STRING,
-        values: ['admin', 'user'],
+        values: ['admin', 'user', 'guest '],
         allowNull: false,
         defaultValue: 'user',
+        validate: {
+          isIn: {
+            args: [['admin', 'user', 'guest']],
+            msg: 'Role must be one of the following: admin, user or guest.',
+          },
+        },
       },
-    }, {
-    sequelize,
-    modelName: 'user_account',
-  });
+    },
+    {
+      sequelize,
+      modelName: 'user_account',
+    }
+  );
 
   return user_account;
 };
