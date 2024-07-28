@@ -9,7 +9,7 @@ const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
 const extraFieldsValidator = require('../utils/extraFieldsValidator.js');
 
-adsController.post('/ad-create', isAuth, async (req, res, next) => {
+adsController.post('/ad-create', isAuth, rbac.checkPermission('create_record'), async (req, res, next) => {
   try {
     const { extraFields, ...regularFields } = req.body;
 
@@ -38,8 +38,7 @@ adsController.post('/ad-create', isAuth, async (req, res, next) => {
   }
 });
 
-
-adsController.get(`/:adStatus-ads/:adId?`, isAuth, memoryCache('ads'), rbac.checkPermission('approve_record'), async (req, res, next) => {
+adsController.get(`/:adStatus-ads/:adId?`, isAuth, rbac.checkPermission('approve_record'), memoryCache('ads'), async (req, res, next) => {
   const adsType = ['approved', 'pending', 'denied'];
 
   try {
@@ -82,7 +81,7 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, memoryCache('ads'), rbac.chec
   }
 });
 
-adsController.get('/adById/:adId', memoryCache('ads'), async (req, res, next) => {
+adsController.get('/adById/:adId', rbac.checkPermission('read_record'), memoryCache('ads'), async (req, res, next) => {
   try {
     const adId = req.params.adId;
     const ad = await user_ads.findOne({
@@ -96,7 +95,7 @@ adsController.get('/adById/:adId', memoryCache('ads'), async (req, res, next) =>
             {
               model: user_details,
               as: 'details',
-              attributes: ['username', 'imageURL', 'work_options', 'interest_options', 'skills'],
+              attributes: ['username', 'imageURL', 'work_options', 'interest_options', 'skills', 'phone_number'],
             },
           ],
         },
@@ -115,7 +114,7 @@ adsController.get('/adById/:adId', memoryCache('ads'), async (req, res, next) =>
   }
 });
 
-adsController.get('/ads-user', isAuth, memoryCache('ads'), async (req, res, next) => {
+adsController.get('/ads-user', isAuth, rbac.checkPermission('read_record'), memoryCache('ads'), async (req, res, next) => {
   try {
     const email = req.user.email;
 
@@ -187,7 +186,7 @@ adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_re
   }
 });
 
-adsController.delete('/ad-delete/:adId', isAuth, async (req, res, next) => {
+adsController.delete('/ad-delete/:adId', isAuth, rbac.checkPermission('delete_record'), async (req, res, next) => {
   try {
     const adId = req.params.adId;
 
@@ -207,7 +206,7 @@ adsController.delete('/ad-delete/:adId', isAuth, async (req, res, next) => {
   }
 });
 
-adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
+adsController.patch('/ad-edit', isAuth, rbac.checkPermission('update_record'), async (req, res, next) => {
   try {
     const { extraFields, ...regularFields } = req.body;
 
@@ -245,7 +244,7 @@ adsController.patch('/ad-edit', isAuth, async (req, res, next) => {
   }
 });
 
-adsController.get('/ads-search', async (req, res, next) => {
+adsController.get('/ads-search', rbac.checkPermission('read_record'), async (req, res, next) => {
   const whereCondition = {};
   const errors = {};
 
@@ -451,7 +450,7 @@ adsController.get('/ads-search', async (req, res, next) => {
   }
 });
 
-adsController.patch('/update-expiration-date/:adId', isAuth, async (req, res, next) => {
+adsController.patch('/update-expiration-date/:adId', isAuth, rbac.checkPermission('update_record'), async (req, res, next) => {
   try {
     const adId = req.params.adId;
 

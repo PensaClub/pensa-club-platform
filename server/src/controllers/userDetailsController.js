@@ -10,6 +10,7 @@ const { tokenCreator } = require('../utils/jwt.js');
 const fieldSwap = require('../utils/fieldSwap.js');
 const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
+const rbac = require('../middlewares/rbac');
 
 userDetailsController.post('/details', isAuth, async (req, res, next) => {
   if (req.user.enabled) {
@@ -193,7 +194,7 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
   }
 });
 
-userDetailsController.get('/single-user', isAuth, memoryCache('users'), async (req, res, next) => {
+userDetailsController.get('/single-user', isAuth, rbac.checkPermission('read_record'), memoryCache('users'), async (req, res, next) => {
   try {
     const user = await user_account.findOne({
       where: { id: req.user.userId },

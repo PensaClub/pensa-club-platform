@@ -1,6 +1,6 @@
 const jwt = require('../utils/jwt');
-const CustomError = require('../utils/customError');
 const secret = process.env.SECRET;
+const { user_account } = require('../sequelize/models/index');
 
 module.exports = async function authentication(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -9,8 +9,18 @@ module.exports = async function authentication(req, res, next) {
     try {
       const decodedToken = jwt.tokenVerification(token, secret);
       if (decodedToken) {
-        req.user = decodedToken;
-        return next();
+        if (decodedToken.role === 'admin') {
+          const user = await user_account.findOne({ where: { email: decodedToken.email } });
+          if (user && user.role === 'admin') {
+            req.user = decodedToken;
+            return next();
+          } else {
+            return res.status(401).json({ message: 'Unauthorized' });
+          }
+        } else {
+          req.user = decodedToken;
+          return next();
+        }
       } else {
         return res.status(401).json({ message: 'Unauthorized' });
       }
