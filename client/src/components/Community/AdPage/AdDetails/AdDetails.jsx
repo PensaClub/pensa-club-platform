@@ -63,7 +63,7 @@ export const AdDetails = () => {
   const handleReadMoreClick = async (e) => {
     e.preventDefault();
     try {
-      const userAdsResponse = await getMyAds(ad.account.email);
+      const userAdsResponse = await getMyAds(ad?.account?.email);
       setUserAds(userAdsResponse);
       setSelectedUser(userDetails);
       setIsSidebarOpen(true);
