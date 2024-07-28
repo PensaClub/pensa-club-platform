@@ -126,6 +126,17 @@ When the server starts for the first time in a development environment, a demo u
 
 ## Api Endpoints
 
+    Permissions:
+      `create_record`: Can create new records.
+      `read_record`: Can read/view records.
+      `update_record`: Can update existing records.
+      `delete_record`: Can delete records.
+      `approve_record`: Can approve records.
+
+    Admin : Create, Read, Delete, Approve;
+    User: Create, Read, Delete, Update;
+    Guest: Read;
+
 - **_userController_** :
 
   - **/auth/register** : Responsible for registering a new user. It requires user details like email, password and rePassword.
@@ -185,7 +196,7 @@ When the server starts for the first time in a development environment, a demo u
     How does tags work ? It looks for any record that contains the tag word. For example if the tags are furniture and sofa it will look for every record that contains either of those.
     Errors returns a message which filter didn`t work and why.
 
-    You can perform searches using the following criteria: Creation Date, Expiration Date, Tags, Category, Summary, Region: adRegion, adSubregion (Note: adSubregion can only be searched if adRegion is specified), adTown (Note: adTown can only be searched if both adRegion and adSubregion are specified), startDate/endDate for all ads, eventStartDate/eventEndDate for specific events with custom dates.
+    You can perform searches using the following criteria: Creation Date, Expiration Date, Tags, Category, Summary, Region: adRegion, adSubregion (Note: adSubregion can only be searched if adRegion is specified), adTown (Note: adTown can only be searched if both adRegion and adSubregion are specified), startDate/endDate for all ads, eventStartDate/eventEndDate for specific events with custom dates, limit (limit of records, default 10), page(pulls specific range of records based on provided limit - default is 10), order (ASC or DESC - ordered by updatedAt)
 
     <p style="color:red;"><strong>Important:</strong></p> 
     To test the function with unapproved ads, set the following in the adsController/ads-search to <strong>pending</strong>:
@@ -240,6 +251,10 @@ When the server starts for the first time in a development environment, a demo u
     ```
 
   - **/ads/update-expiration-date/:adId**: This endpoint sets the expiration date of an AD to 30 days from the current date. It requires the user to be logged in and the AD's ID to be provided in the URL path. Example: http://localhost:8080/ads/update-expiration-date/123 - sets the expiration date to 30 days from the current date on ad with id 123.
+
+- **_adminController_** :
+
+  - **/admin/change-role** : Responsible for changing account's role. This endpoint can be accessed by admins only.
 
 ## Testing
 

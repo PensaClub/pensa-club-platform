@@ -121,10 +121,10 @@ const filterCachedAdsById = (ads, adId) => {
   let userDetails = null;
 
   if (filteredAd !== null) {
-    const { username, imageURL, workOptions, interestOptions, skills } = JSON.parse(cache.get('users')).accounts.find((user) =>
+    const { username, imageURL, workOptions, interestOptions, skills, phoneNumber } = JSON.parse(cache.get('users')).accounts.find((user) =>
       user.ads.find((ad) => ad.adId === adId)
     ).details;
-    userDetails = { username, imageURL, workOptions, interestOptions, skills };
+    userDetails = { username, imageURL, workOptions, interestOptions, skills, phoneNumber };
   }
 
   return filteredAd ? { message: 'Ad successfully retrieved.', ads: filteredAd, details: userDetails } : null;
