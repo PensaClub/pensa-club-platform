@@ -215,16 +215,15 @@ adsController.patch('/ad-edit', isAuth, rbac.checkPermission('update_record'), a
 
     const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
 
-    if (data.status) {
+    if (regularFields.status) {
       return res.status(400).json({ message: 'Status cannot be updated through this endpoint.' });
     }
-
-    if (data.adminComment) {
+    if (regularFields.adminComment) {
       return res.status(400).json({ message: 'Admin comment cannot be updated through this endpoint.' });
     }
 
     const where = {
-      ad_id: data.ad_id,
+      ad_id: regularFields.adId,
       user_id: req.user.userId,
     };
 
