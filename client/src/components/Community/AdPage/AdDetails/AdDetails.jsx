@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useRef, useContext, Fragment } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -18,14 +18,7 @@ import { Link, useParams } from 'react-router-dom';
 import { SearchBar } from '../../SearchBar/SearchBar';
 import { CommunityContext } from '../../../contexts/CommunityContext';
 import { UserSidebar } from './UserSidebar';
-import {
-  FacebookShareButton,
-  TelegramShareButton,
-  LinkedinShareButton,
-  FacebookIcon,
-  TelegramIcon,
-  LinkedinIcon,
-} from 'react-share';
+import { toast } from 'react-toastify';
 
 export const AdDetails = () => {
   const { t, i18n } = useTranslation();
@@ -35,7 +28,6 @@ export const AdDetails = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [userAds, setUserAds] = useState([]);
-  const [showShareOptions, setShowShareOptions] = useState(false);
   const { getAdById, fetchTowns, getMyAds } = useContext(CommunityContext);
   const { adId } = useParams();
 
@@ -77,7 +69,38 @@ export const AdDetails = () => {
     setIsSidebarOpen(false);
   };
 
-  const currentUrl = window.location.href;
+  const shareAd = async () => {
+    const shareData = {
+      title: ad.summary,
+      text: ad.description,
+      url: window.location.href
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        toast.error(t('errors.share'));
+      }
+    } else {
+      toast.error(t('errors.share'));
+    }
+  }
+
+  const handlePhoneClick = (e) => {
+    console.log(userDetails.phoneNumber)
+    if (!userDetails?.phoneNumber) {
+      e.preventDefault();
+      toast.error(t('missing_phone'));
+    }
+  };
+
+  const handleEmailClick = (e) => {
+    console.log(userDetails.email)
+    if (!userDetails?.email) {
+      e.preventDefault(); 
+      toast.error(t('missing_email'));
+    }
+  };
 
   return (
     <>
@@ -105,38 +128,32 @@ export const AdDetails = () => {
               <section className="ads-details-main">
                 <div className="ads-details-container">
                   <div className="ads-details-icons">
-                    <Link>
+                    <Link
+                      to={userDetails?.phoneNumber ? `tel:${userDetails.phoneNumber}` : '#'}
+                      onClick={handlePhoneClick}
+                    >
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faPhone} className="icon" />
-                        <p>{userDetails?.phoneNumber ? (userDetails?.phoneNumber) : (t('ads.call'))}</p>
+                        <p>{t('ads.call')}</p>
+                      </div>
+                    </Link>
+                    <Link
+                      to={userDetails?.email ? `mailto:${userDetails.email}` : '#'}
+                      onClick={handleEmailClick}
+                    >
+                      <div className="group-icon">
+                        <FontAwesomeIcon icon={faEnvelope} className="icon" />
+                        <p>{t('ads.send-message')}</p>
                       </div>
                     </Link>
                     <Link>
                       <div className="group-icon">
-                        <FontAwesomeIcon icon={faEnvelope} className="icon" />
-                        <p>{ad?.account?.email}</p>
+                        <button onClick={shareAd} style={{ background: "none", cursor: "pointer" }}>
+                          <FontAwesomeIcon icon={faShareNodes} className="icon" />
+                          <p>{t('ads.share')}</p>
+                        </button>
                       </div>
                     </Link>
-                    <div onClick={() => setShowShareOptions(!showShareOptions)}>
-                      <div className="group-icon share-button-ad" onClick={() => setShowShareOptions(!showShareOptions)}>
-                        <FontAwesomeIcon icon={faShareNodes} className="icon" />
-                        <p>{t('ads.share')}</p>
-                        {showShareOptions && (
-                          <div className="share-options">
-                            <FacebookShareButton url={currentUrl}>
-                              <FacebookIcon size={32} round />
-                            </FacebookShareButton>
-                            <TelegramShareButton url={currentUrl}>
-                              <TelegramIcon size={32} round />
-                            </TelegramShareButton>
-                            <LinkedinShareButton url={currentUrl}>
-                              <LinkedinIcon size={32} round />
-                            </LinkedinShareButton>
-                          </div>
-                        )}
-                      </div>
-
-                    </div>
 
                   </div>
                   <div className="ads-details-card">
