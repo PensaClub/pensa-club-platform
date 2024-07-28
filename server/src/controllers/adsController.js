@@ -108,7 +108,7 @@ adsController.get('/adById/:adId', rbac.checkPermission('read_record'), memoryCa
 
     const mappedDetails = fieldSwap(ad.dataValues.account.dataValues.details.dataValues, 'mapFromDb');
 
-    res.status(200).json({ message: 'Ad successfully retrieved.', ads: mappedAd, details: mappedDetails });
+    res.status(200).json({ message: 'Ad successfully retrieved.', ads: mappedAd, details: { ...mappedDetails, email: ad.account.dataValues.email } });
   } catch (err) {
     next(err);
   }

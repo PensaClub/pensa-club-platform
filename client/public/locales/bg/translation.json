@@ -416,7 +416,8 @@
     "admin_comment": "Забележка",
     "no_ads": "Нямате публикувани обяви",
      "event_start_date": "Начало",
-    "event_end_date": "Край"
+    "event_end_date": "Край",
+    "missing_phone": "Не е подадеден телефонен номер"
   },
   "notification": {
     "success-data": "Данните за потребителя са запазени успешно!",
