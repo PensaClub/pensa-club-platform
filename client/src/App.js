@@ -74,7 +74,6 @@ function App() {
                     />
                     <Route element={<AuthGuard />}>
                     <Route path="/ad/details/:adId" element={<AdDetails />} />
-
                       <Route path="/ad" element={<AdPage />} />
                       <Route path="/ad/create" element={<CreateAd />} />
                       <Route path="/logout" element={<Logout />} />
