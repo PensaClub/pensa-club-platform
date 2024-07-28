@@ -2,6 +2,8 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast } from 'react-toastify';
+
 import {
   faPhone,
   faEnvelope,
@@ -23,7 +25,7 @@ export const AdDetails = () => {
   const [ad, setAd] = useState({});
   const [userDetails, setUserDetails] = useState({});
   const [adTownName, setAdTownName] = useState('');
-  const { getAdById, fetchTowns} = useContext(CommunityContext);
+  const { getAdById, fetchTowns } = useContext(CommunityContext);
   const { adId } = useParams();
 
   useEffect(() => {
@@ -45,6 +47,23 @@ export const AdDetails = () => {
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
+
+  const shareAd = async () => {
+    const shareData = {
+      title: ad.summary,
+      text: ad.description,
+      url: window.location.href
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        toast.error(t('errors.share'));
+      }
+    } else {
+      toast.error(t('errors.share'));
+    }
+  }
 
   return (
     <section className="background-ads-details">
@@ -85,8 +104,10 @@ export const AdDetails = () => {
                   </Link>
                   <Link>
                     <div className="group-icon">
-                      <FontAwesomeIcon icon={faShareNodes} className="icon" />
-                      <p>{t('ads.share')}</p>
+                      <button onClick={shareAd} style={{ background: "none", cursor: "pointer" }}>
+                        <FontAwesomeIcon icon={faShareNodes} className="icon" />
+                        <p>{t('ads.share')}</p>
+                      </button>
                     </div>
                   </Link>
                 </div>
@@ -123,7 +144,7 @@ export const AdDetails = () => {
                             alt={userDetails?.email}
                           />
                           <Link>
-                            <span className="details-underlined">{userDetails?.username ? (userDetails?.username):(userDetails?.account?.email)}</span>
+                            <span className="details-underlined">{userDetails?.username ? (userDetails?.username) : (userDetails?.account?.email)}</span>
                           </Link>
                         </div>
                         {userDetails?.workOptions && userDetails.workOptions.length > 0 && (
