@@ -1,12 +1,16 @@
-import React, { useEffect, useRef, Fragment } from 'react';
+import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import './sidebar-details.css';
-import '../../../MapPage/MapEditor/sidebar.css'
+import '../../../MapPage/MapEditor/sidebar.css';
 
 export const UserSidebar = ({ selectedUser, userAds, closeSidebar }) => {
   const { t } = useTranslation();
   const sidebarRef = useRef(null);
+  const scrollContentRef = useRef(null);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -19,22 +23,43 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar }) => {
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-              document.body.classList.remove('active-sidebar');
-        document.removeEventListener('mousedown', handleClickOutside);
+      document.body.classList.remove('active-sidebar');
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-    
   }, [closeSidebar]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContentRef.current) {
+        const scrollTop = scrollContentRef.current.scrollTop;
+        const itemHeight = 100;
+        const itemsToScroll = 10; 
+        setShowScrollToTop(scrollTop > itemHeight * itemsToScroll);
+      }
+    };
+
+    const scrollContent = scrollContentRef.current;
+    scrollContent.addEventListener('scroll', handleScroll);
+
+    return () => {
+      scrollContent.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const trimString = (str, num) => {
     if (str.length <= num) return str;
     return str.slice(0, num) + '...';
   };
 
+  const handleScrollToTop = () => {
+    scrollContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="ad-sidebar-map" ref={sidebarRef}>
       <button className="ad-close-button" onClick={closeSidebar}>{t('map.close')}</button>
       <div className="ad-sidebar-content"><h2>{selectedUser?.username}</h2>
-        <div className="ad-scroll-side-content">
+        <div className="ad-scroll-side-content" ref={scrollContentRef}>
           <div className="ad-user-map-info">
             <img className="ad-user-map-img" src={selectedUser?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
             <div className="ad-map-desc-user">
@@ -77,6 +102,11 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar }) => {
               </Fragment>
             )) : <h3>{t('map.no_ads')}</h3>}
           </div>
+          {showScrollToTop && (
+            <button className="scroll-to-top-button" onClick={handleScrollToTop}>
+              <FontAwesomeIcon icon={faArrowUp} className='arrow-up-side-bar' />
+            </button>
+          )}
         </div>
       </div>
     </div>

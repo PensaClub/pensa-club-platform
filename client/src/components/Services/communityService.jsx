@@ -48,8 +48,8 @@ export const communityServiceFactory = (token) => {
     deleteAd: async (id) => {
       return requester.post(`${apiUrl}/ads/ad-delete`, { id });
     },
-    editAd: async (id) => {
-      return requester.patch(`${apiUrl}/ads/ad-edit`, { id });
+    editAd: async (adData) => {
+      return requester.patch(`${apiUrl}/ads/ad-edit`, adData);
     },
     searchAds: async (filters, page, limit = 25, order = "desc") => {
       const query = new URLSearchParams({ ...filters, page, limit, order }).toString();

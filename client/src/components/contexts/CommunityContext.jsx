@@ -4,6 +4,7 @@ import "./error.css";
 import { communityServiceFactory } from "../Services/communityService";
 import { notify } from "../../utils/notify";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const CommunityContext = createContext();
 
@@ -104,9 +105,9 @@ export const CommunityProvider = ({ children }) => {
             navigate('/');
             return response;
         } catch (e) {
-            notify('error');
-            showErrorAndSetTimeouts(e.message);
-            throw e;
+           showErrorAndSetTimeouts(e.message);
+            return toast.error(e.error);
+
         } finally {
             setIsLoading(false);
         }

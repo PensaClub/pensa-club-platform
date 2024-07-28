@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useRef, useContext, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -107,7 +108,7 @@ export const AdDetails = () => {
                     <Link>
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faPhone} className="icon" />
-                        <p>{userDetails?.phoneNumber ? (userDetails?.phoneNumber):(t('ads.call'))}</p>
+                        <p>{userDetails?.phoneNumber ? (userDetails?.phoneNumber) : (t('ads.call'))}</p>
                       </div>
                     </Link>
                     <Link>
@@ -117,7 +118,7 @@ export const AdDetails = () => {
                       </div>
                     </Link>
                     <div onClick={() => setShowShareOptions(!showShareOptions)}>
-                      <div className="group-icon share-button-ad">
+                      <div className="group-icon share-button-ad" onClick={() => setShowShareOptions(!showShareOptions)}>
                         <FontAwesomeIcon icon={faShareNodes} className="icon" />
                         <p>{t('ads.share')}</p>
                         {showShareOptions && (
@@ -134,6 +135,7 @@ export const AdDetails = () => {
                           </div>
                         )}
                       </div>
+
                     </div>
 
                   </div>
