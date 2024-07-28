@@ -1,32 +1,29 @@
-body.active-sidebar .leaflet-container {
-    pointer-events: none;
+.ad-description-editor {
+    font-size: var(--xxs-font-size);
 }
 
-body.active-sidebar .sidebar-map {
-    transform: translateX(0);
-    z-index: 1006;
-    transition: transform 1.2s ease-in-out;
-}
-
-.sidebar-map {
-    position: relative;
+.ad-sidebar-map {
+    position: fixed;
     background-image: url('../../../../../public/images/sign-up/background.jpg');
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100vh;
+    left: 0; 
+    top: 50%;
+    width: 300px;
+    max-width: 100%;
+    height: 80vh; 
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
-    z-index: 999;
-    transform: translateX(-100%);
+    overflow-x: hidden; 
+    z-index: 9999;
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    border-top: 1.2px solid rgba(0, 0, 0, 0.2);
-    transition: transform 1.2s ease-in-out, height 1.2s ease-in-out;
+    border: 1.2px solid rgba(0, 0, 0, 0.2);
+    transition: transform 1.2s ease-in-out;
+    box-sizing: border-box; 
 }
 
-.close-button {
+.ad-close-button {
     background: none;
     border: none;
     font-size: 1.5em;
@@ -37,7 +34,7 @@ body.active-sidebar .sidebar-map {
     transition: opacity 1s ease-in-out;
 }
 
-.close-button {
+.ad-close-button {
     cursor: pointer;
     position: absolute;
     padding: 5px;
@@ -48,13 +45,13 @@ body.active-sidebar .sidebar-map {
     pointer-events: all;
 }
 
-.active-sidebar .close-button {
+.active-sidebar .ad-close-button {
     pointer-events: all;
     opacity: 1;
     transition: opacity 1s ease-in-out;
 }
 
-.sidebar-content {
+.ad-sidebar-content {
     width: 100%;
     opacity: 0;
     pointer-events: all;
@@ -63,13 +60,13 @@ body.active-sidebar .sidebar-map {
     overflow: hidden;
 }
 
-.active-sidebar .sidebar-content {
+.active-sidebar .ad-sidebar-content {
     opacity: 1;
     pointer-events: visible;
     transition: opacity 2s;
 }
 
-.sidebar-content h2 {
+.ad-sidebar-content h2 {
     display: flex;
     align-items: center;
     font-size: 1.2rem;
@@ -85,24 +82,25 @@ body.active-sidebar .sidebar-map {
     overflow: hidden;
 }
 
-.user-map-info {
+.ad-user-map-info {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
-.user-map-info p {
+.ad-user-map-info p {
     font-size: 14px;
 }
 
-.user-map-img {
-    max-width: 120px;
+.ad-user-map-img {
+    max-width: 100%;
     width: 100%;
     height: auto;
-    object-fit: fill;
+    object-fit: cover;
 }
 
-.map-desc-user {
+.ad-map-desc-user {
     text-indent: initial;
     gap: 0.5em;
     text-align: left;
@@ -110,6 +108,8 @@ body.active-sidebar .sidebar-map {
     flex-direction: column;
     justify-content: flex-start;
     padding: 16px 10px;
+    width: 100%;
+    box-sizing: border-box; 
 }
 
 .ad-map {
@@ -120,7 +120,9 @@ body.active-sidebar .sidebar-map {
     border-radius: var(--radius);
     background-color: var(--gravel);
     position: relative;
-    box-shadow: var(--container-shadow);  
+    box-shadow: var(--container-shadow);
+    width: 95%;
+    box-sizing: border-box; 
 }
 
 .ad-title {
@@ -129,6 +131,8 @@ body.active-sidebar .sidebar-map {
     text-shadow: var(--text-shadow);
     color: var(--grey);
     font-weight: 300;
+    width: 100%;
+    box-sizing: border-box; 
 }
 
 .ad-scroll {
@@ -145,25 +149,29 @@ body.active-sidebar .sidebar-map {
     text-shadow: var(--text-shadow);
     color: var(--gray);
     font-weight: 300;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.scroll-side-content {
-    overflow-y: scroll;
-    height: calc(100vh - 100px); /* Регулиране на височината, така че да се съберат всички обяви */
+.ad-scroll-side-content {
+    width: 100%;
+    overflow-y: auto;
+    height: calc(100vh - 100px); 
+    box-sizing: border-box; 
 }
 
-.scroll-side-content::-webkit-scrollbar {
+.ad-scroll-side-content::-webkit-scrollbar {
     width: 10px;
 }
 
-.scroll-side-content::-webkit-scrollbar-track {
+.ad-scroll-side-content::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.scroll-side-content::-webkit-scrollbar-thumb {
+.ad-scroll-side-content::-webkit-scrollbar-thumb {
     background-color: var(--orange);
-    border: 2px solid #f1f1f1;
     border-radius: var(--radius-input);
+    border: none; 
 }
 
 .ad-desc {
@@ -172,8 +180,10 @@ body.active-sidebar .sidebar-map {
     text-align: center;
     display: flex;
     flex-direction: column;
-    margin: 1.5em auto;   
+    margin: 1.5em auto;
     cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .ad-map img {
@@ -191,11 +201,8 @@ body.active-sidebar .sidebar-map {
     margin: 0;
     font-size: var(--s-font-size);
     padding-bottom: 0.2em;
-}
-
-.ad-map h4 {
-    font-size: var(--xs-font-size);
-    border-bottom: 2px solid var(--text-black);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .ad-map-valid {
@@ -227,20 +234,22 @@ body.active-sidebar .sidebar-map {
     width: 70px;
     text-align: center;
     box-shadow: var(--container-shadow);
+    box-sizing: border-box; 
 }
 
-.active-sidebar .sidebar-map {
+.active-sidebar .ad-sidebar-map {
+    max-width: 680px;
     width: 100%;
-    transition: width 4s, max-width 4s;
+    transition: width 4s;
 }
 
-.color-lines {
+.ad-color-lines {
     width: 100%;
     height: 5px;
     background: linear-gradient(304deg, #1B6D4D, #E26020 22%, #BB1D3D 93%);
 }
 
-.color-lines-pipe {
+.ad-color-lines-pipe {
     width: 100%;
     height: 4px;
     background: linear-gradient(325deg, #ffffff 0%, #777777 50%, #ffffff 100%);
@@ -252,54 +261,36 @@ body.active-sidebar .sidebar-map {
         height: 70%;
     }
 
-    .user-map-info {
+    .ad-user-map-info {
         flex-direction: row;
         justify-content: center;
     }
 }
 
 @media (min-width: 850px) {
-    .sidebar-map {
-        position: absolute;
-        background-image: url('../../../../../public/images/sign-up/background.jpg');
-        left: 0;
-        top: 0;
-        width: 300px;
-        height: 100%;
-        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-        overflow-y: auto;
-        z-index: 9999;
-        transform: translateX(-100%);
-        display: flex;
-        gap: 3rem;
-        overflow: hidden;
-        border-right: 1.2px solid rgba(0, 0, 0, 0.2);
-        transition: transform 1.2s ease-in-out;
-    }
-
-    .user-map-info {
+    .ad-user-map-info {
         flex-direction: row;
     }
 
-    .user-map-info p {
+    .ad-user-map-info p {
         font-size: 16px;
     }
 
-    .user-map-img {
+    .ad-user-map-img {
         max-width: 180px;
         width: 100%;
         height: auto;
-        object-fit: fill;
+        object-fit: cover;
     }
 
-    .color-line {
+    .color-lines {
         width: 100%;
         height: 8px;
         background: linear-gradient(304deg, #1B6D4D, #E26020 22%, #BB1D3D 93%);
     }
 
-    .active-sidebar .sidebar-map {
-        max-width: 480px;
+    .active-sidebar .ad-sidebar-map {
+        max-width: 680px;
         width: 100%;
         transition: width 4s;
     }
@@ -313,7 +304,7 @@ body.active-sidebar .sidebar-map {
         padding: initial;
     }
 
-    .map-desc-user {
+    .ad-map-desc-user {
         margin: auto;
     }
 }

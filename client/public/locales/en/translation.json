@@ -416,7 +416,9 @@
     "denied": "Denied",
     "delete_ad": "Would you like to delete",
     "admin_comment": "Note",
-    "no_ads": "You have no published ads"
+    "no_ads": "You have no published ads",
+    "event_start_date": "Start Date",
+    "event_end_date": "End Date"
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
