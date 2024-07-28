@@ -89,6 +89,7 @@
   display: flex;
   justify-content: space-between;
   margin: var(--l-space) 0;
+  margin-bottom: 4em;
 }
 
 .ads-details-container .ads-details-icons .group-icon {
@@ -185,7 +186,7 @@
   border-radius: var(--radius);
   padding: 0.1em 1.5em;
   padding-bottom: 0.3em;
-  top: 118px;
+  top: 183px;
   left: 12%;
   background-color: var(--green-text);
 }
@@ -332,7 +333,7 @@
   }
 
   .img-ads-details p {
-    top: 140px;
+    top: 183px;
     left: 6%;
     font-size: calc(var(--xs-font-size) + 2px);
     padding: 0.3em 1em;
@@ -487,7 +488,7 @@
 
   .img-ads-details p {
     font-size: calc(var(--m-font-size));
-    top: 148px;
+    top: 183px;
     left: 10%;
     padding: var(--s-space) var(--xxl-space);
   }

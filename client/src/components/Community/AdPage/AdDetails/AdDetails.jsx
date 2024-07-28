@@ -107,13 +107,13 @@ export const AdDetails = () => {
                     <Link>
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faPhone} className="icon" />
-                        <p>{t('ads.call')}</p>
+                        <p>{userDetails?.phoneNumber ? (userDetails?.phoneNumber):(t('ads.call'))}</p>
                       </div>
                     </Link>
                     <Link>
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faEnvelope} className="icon" />
-                        <p>{t('ads.send-message')}</p>
+                        <p>{ad?.account?.email}</p>
                       </div>
                     </Link>
                     <div onClick={() => setShowShareOptions(!showShareOptions)}>
