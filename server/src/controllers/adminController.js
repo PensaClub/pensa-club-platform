@@ -9,6 +9,7 @@ adminController.post('/change-role', isAuth, rbac.checkPermission('approve_recor
   const allowedRoles = ['admin', 'user', 'guest'];
   try {
     if (!allowedRoles.includes(role)) return res.status(400).json({ message: 'Invalid role.' });
+    if (email === process.env.ADMIN_EMAIL) return res.status(400).json({ message: 'Cannot change role of the admin account.' });
 
     const emailExists = await user_account.findOne({ where: { email } });
 

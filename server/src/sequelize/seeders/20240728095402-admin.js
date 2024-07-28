@@ -4,13 +4,18 @@ const bcrypt = require('bcrypt');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const hashedPassword = bcrypt.hash(process.env.admin_password, 10);
+    const adminPassword = process.env.admin_password;
+    const adminEmail = process.env.admin_email;
+
+    if (!adminPassword || !adminEmail) throw new Error('Environment variables admin_password and admin_email must be set');
+
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     await queryInterface.bulkInsert(
       'user_accounts',
       [
         {
-          email: process.env.admin_email,
+          email: adminEmail,
           password: hashedPassword,
           finished: true,
           role: 'admin',
