@@ -22,7 +22,7 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   const [searchResults, setSearchResults] = useState([]);
   const { t } = useTranslation();
   const { onAllUsers } = useMappingContext();
-  const { onForgetPasswordSubmit } = useAuthContext();
+  const { onForgetPasswordSubmit,onChangeAdminRole } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
 
   useEffect(() => {
@@ -151,8 +151,18 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
     setSelectedUser(null);
   };
 
-  const handleRoleChange = (email, role) => {
-    // Логика за промяна на ролята на потребителя
+  const handleRoleChange = async(email, role) => {
+    await onChangeAdminRole(email, role, comment)
+      .then(() => {
+        const updatedUsers = onAllUsers();
+        setUsers(updatedUsers.accounts);
+        setSearchResults(updatedUsers.accounts.filter((user) => !user.enabled));
+        setIsFlyoutOpen(false);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
   };
 
   const handlePasswordReset = (email) => {

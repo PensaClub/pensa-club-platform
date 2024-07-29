@@ -21,11 +21,11 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-      case 'warn-address':
-        toast.success(<Trans i18nKey="notification.warn-address" />, {
-          role: 'alert',
-        });
-        break;
+    case 'warn-address':
+      toast.success(<Trans i18nKey="notification.warn-address" />, {
+        role: 'alert',
+      });
+      break;
     case 'success-login':
       toast.success(<Trans i18nKey="notification.success-login" />, {
         role: 'alert',
@@ -63,6 +63,11 @@ export const notify = (key) => {
       break;
     case 'success-approved':
       toast.success(<Trans i18nKey="notification.success-approved" />, {
+        role: 'alert',
+      });
+      break;
+    case 'success-role-change to':
+      toast.success(<Trans i18nKey="notification.success-role-change to" />, {
         role: 'alert',
       });
       break;

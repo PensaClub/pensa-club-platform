@@ -22,7 +22,7 @@ export const AllUsers = ({ setAllUsers }) => {
   const [searchResults, setSearchResults] = useState([]);
   const { t } = useTranslation();
   const { onAllUsers } = useMappingContext();
-  const { onForgetPasswordSubmit } = useAuthContext();
+  const { onForgetPasswordSubmit, onChangeAdminRole } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
 
   useEffect(() => {
@@ -37,12 +37,12 @@ export const AllUsers = ({ setAllUsers }) => {
       }
     };
     loadUsers();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sortedUsers = Array.isArray(searchResults) ? [...searchResults].sort((a, b) => {
     if (sortConfig.key === 'email') {
-      return sortConfig.direction === 'ascending' 
+      return sortConfig.direction === 'ascending'
         ? (a.email || '').localeCompare(b.email || '')
         : (b.email || '').localeCompare(a.email || '');
     } else if (sortConfig.key === 'date') {
@@ -151,8 +151,18 @@ export const AllUsers = ({ setAllUsers }) => {
     setSelectedUser(null);
   };
 
-  const handleRoleChange = (email, role) => {
-    // Логикааа за промяна на ролята на потребителя
+  const handleRoleChange = async(email, role) => {
+    await onChangeAdminRole(email, role, comment)
+      .then(() => {
+        const updatedUsers = onAllUsers();
+        setUsers(updatedUsers.accounts);
+        setSearchResults(updatedUsers.accounts);
+        setIsFlyoutOpen(false);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
   };
 
   const handlePasswordReset = (email) => {
@@ -302,7 +312,7 @@ export const AllUsers = ({ setAllUsers }) => {
         handleRoleChange={handleRoleChange}
         handlePasswordReset={handlePasswordReset}
       />
-    
+
     </div>
   );
 };

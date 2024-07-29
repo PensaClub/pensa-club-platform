@@ -4,7 +4,7 @@ const { user_account } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
 
-adminController.post('/change-role', isAuth, rbac.checkPermission('approve_record'), async (req, res) => {
+adminController.post('/change-role', isAuth, rbac.checkPermission('approve_record'), async (req, res,next) => {
   const { email, role } = req.body;
   const allowedRoles = ['admin', 'user', 'guest'];
   try {

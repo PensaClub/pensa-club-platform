@@ -6,6 +6,7 @@ import './error.css';
 import { Loader } from '../Loader/Loader';
 import { loadAddressData } from '../../utils/loadAddressData';
 import { notify } from '../../utils/notify';
+import { toast } from 'react-toastify';
 
 export const UserContext = createContext();
 
@@ -177,7 +178,31 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-
+  const onChangeAdminRole = async (mail, role, comment) => {
+    setIsLoading(true);
+    try {
+      const response = await userService.changeRole(mail, role, comment);
+      
+      // Ако променяме текущияя потребител, обновяваме localStorage
+      if (mail === isAuth.email) {
+        const updatedProfileData = { ...profileData, role };
+        setProfileData(updatedProfileData);
+        setIsAdmin(role === 'admin');
+      
+        localStorage.setItem('userDetails', JSON.stringify(updatedProfileData));
+        localStorage.setItem('isAdmin', JSON.stringify(role === 'admin'));
+      }
+  
+      notify('success-role-change to'+ role);
+      return response;
+    } catch (e) {
+      showErrorAndSetTimeouts(`Error changing role: ${e.message}`);
+      return toast.error(e.error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
   const onForgetPasswordSubmit = async (data) => {
     try {
       setIsLoading(true);
@@ -226,6 +251,7 @@ export const UserProvider = ({ children }) => {
     onSuggestSubmit,
     isUserAdmin,
     isAdmin,
+    onChangeAdminRole
   };
 
   return (
