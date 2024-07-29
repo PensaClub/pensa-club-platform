@@ -55,8 +55,7 @@
         {
           "allow": [
             "warn",
-            "error",
-            "log"
+            "error"
           ]
         }
       ],

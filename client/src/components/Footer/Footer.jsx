@@ -5,17 +5,17 @@ import { useAuthContext } from '../contexts/UserContext';
 
 export const Footer = ({ additionalClasses }) => {
     const { t } = useTranslation();
-    const {isAuthentication} =useAuthContext();
+    const { isAuthentication } = useAuthContext();
     return (
         <footer className={additionalClasses}>
 
             <section className="footer">
                 <img src="/images/homePage/logo-2.png" alt="logo" />
                 <div className="footer-links">
-                <h3>{t('footer.site-map')}</h3>
-                <p><Link to="/map">{t('footer.map')}</Link></p>
-                <p><Link to="/craigslist">{t('footer.craigslist')}</Link></p>
-                {isAuthentication &&(<p><Link to="/ad/create">{t('footer.add-ad')}</Link></p>)}
+                    <h3>{t('footer.site-map')}</h3>
+                    <p><Link to="/map">{t('footer.map')}</Link></p>
+                    <p><Link to="/craigslist">{t('footer.craigslist')}</Link></p>
+                    {isAuthentication && (<p><Link to="/ad/create">{t('footer.add-ad')}</Link></p>)}
 
                 </div>
                 <div className="footer-links">
@@ -25,7 +25,7 @@ export const Footer = ({ additionalClasses }) => {
                 <div className="footer-info">
                     <div className="second-info">
                         <img src="/images/homePage/logo-2.png" alt="logo" />
-                        <h3>Pensa club &copy;</h3>
+                        <h3 onClick={()=>window.scrollTo({ top: 0 })}>Pensa club &copy;</h3>
                     </div>
                     <div className="info-desc">
                         <p>{t('footer.country-city')}</p>
