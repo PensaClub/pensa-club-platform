@@ -51,19 +51,6 @@ module.exports = {
           },
         },
       },
-      role_change_comment: {
-        type: DataTypes.STRING(1000),
-        allowNull: true,
-        validate: {
-          customValidator(value) {
-            if (value.length < 10) {
-              throw new Error('Comment must be at least 10 characters long.');
-            } else if (value.length > 1000) {
-              throw new Error('Maximum comment length limit of 1000 characters is reached.');
-            }
-          },
-        },
-      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
