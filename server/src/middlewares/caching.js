@@ -77,12 +77,14 @@ function sanitizeData(newData) {
 // REQUEST HANDLERS ----------------------------------------------------------------------------------
 
 const handleAdRequest = async (cachedResponse, res, adId, adStatus, email) => {
+  const ads = JSON.parse(cachedResponse);
+
   if (adId && !cache.get('users')) {
     const accounts = await fetchAllAccounts();
     cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts }), stdTTL);
   }
 
-  if (!Array.isArray(cachedResponse.ads)) {
+  if (!Array.isArray(ads.ads)) {
     const ads = await fetchAllAds();
     cache.set('ads', JSON.stringify({ message: 'Ads successfully retrieved', ads }), stdTTL);
     cachedResponse = cache.get('ads');
@@ -101,7 +103,9 @@ const handleAdRequest = async (cachedResponse, res, adId, adStatus, email) => {
 };
 
 const handleUserRequest = async (cachedResponse, res, userId) => {
-  if (!Array.isArray(cachedResponse.accounts)) {
+  const users = JSON.parse(cachedResponse);
+
+  if (!Array.isArray(users.accounts)) {
     const accounts = await fetchAllAccounts();
     cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts }), stdTTL);
     cachedResponse = cache.get('users');
@@ -192,6 +196,9 @@ eventEmitter.on('accountUpdated', async (data) => {
       }
       if (key === 'enabled') {
         objectUsers.accounts[index].enabled = data.updates.enabled;
+      }
+      if (key === 'account-delete') {
+        objectUsers.accounts = objectUsers.accounts.filter((account) => account.id !== data.userId);
       }
     });
   }

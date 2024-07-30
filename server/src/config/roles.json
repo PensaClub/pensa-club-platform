@@ -2,7 +2,7 @@
   "roles": [
     {
       "name": "admin",
-      "permissions": ["create_record", "read_record", "update_record", "approve_record", "delete_record"]
+      "permissions": ["create_record", "read_record", "update_record", "approve_record", "delete_record", "delete_account"]
     },
     {
       "name": "user",
