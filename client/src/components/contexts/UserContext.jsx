@@ -152,6 +152,7 @@ export const UserProvider = ({ children }) => {
         setProfileData(response.user);
         // setIsAdmin(response.user.role === 'admin');
       }
+      return response.user
     } catch (error) {
       notify('error');
       showErrorAndSetTimeouts(`Error get profile data: ${error.message}`);

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { notify } from '../../../utils/notify';
 import { CommentModal } from '../PendingAnnouncements/CommentModal';
 import { useMappingContext } from '../../contexts/MapContext';
 import { FlyoutAllUsers } from './FlyoutAllUsers/FlyoutAllUsers';
@@ -20,18 +19,25 @@ export const AllUsers = ({ setAllUsers }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCriteria, setSearchCriteria] = useState('email');
   const [searchResults, setSearchResults] = useState([]);
+  const [adminEmail, setAdminEmail] = useState('')
   const { t } = useTranslation();
   const { onAllUsers } = useMappingContext();
-  const { onForgetPasswordSubmit, onChangeAdminRole } = useAuthContext();
+  const { onForgetPasswordSubmit, onChangeAdminRole,profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
 
   useEffect(() => {
     const loadUsers = async () => {
       try {
         const allUsers = await onAllUsers();
-        setUsers(allUsers.accounts);
-        setAllUsers(allUsers?.accounts?.length);
-        setSearchResults(allUsers.accounts);
+        if (allUsers && allUsers.accounts) {
+          setUsers(allUsers.accounts);
+          setAllUsers(allUsers.accounts.length);
+        setAdminEmail(profileData.email);
+
+          setSearchResults(allUsers.accounts);
+        } else {
+          console.error("Failed to load users.");
+        }
       } catch (e) {
         console.error(e);
       }
@@ -39,7 +45,7 @@ export const AllUsers = ({ setAllUsers }) => {
     loadUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+ 
   const sortedUsers = Array.isArray(searchResults) ? [...searchResults].sort((a, b) => {
     if (sortConfig.key === 'email') {
       return sortConfig.direction === 'ascending'
@@ -87,20 +93,20 @@ export const AllUsers = ({ setAllUsers }) => {
     setIsModalOpen(false);
   };
 
-  const handleReject = async (id) => {
-    try {
-      if (!comment) {
-        notify('enter-comment');
-        return;
-      }
-      setComment('');
-      const updatedUsers = await onAllUsers();
-      setUsers(updatedUsers.accounts);
-      setSearchResults(updatedUsers.accounts);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const handleReject = async (id) => {
+  //   try {
+  //     if (!comment) {
+  //       notify('enter-comment');
+  //       return;
+  //     }
+  //     setComment('');
+  //     const updatedUsers = await onAllUsers();
+  //     setUsers(updatedUsers.accounts);
+  //     setSearchResults(updatedUsers.accounts);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const handleDelete = async (id) => {
     try {
@@ -151,20 +157,28 @@ export const AllUsers = ({ setAllUsers }) => {
     setSelectedUser(null);
   };
 
-  const handleRoleChange = async(email, role) => {
-    await onChangeAdminRole(email, role, comment)
-      .then(() => {
-        const updatedUsers = onAllUsers();
-        setUsers(updatedUsers.accounts);
-        setSearchResults(updatedUsers.accounts);
-        setIsFlyoutOpen(false);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
+  const handleRoleChange = async (email, role) => {
+    let defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment',)} ${ role }`;
+    if(role === "guest") {
+      defaultComment=`${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment_banned')}`
+    }
+    const finalComment = comment || defaultComment;
+  
+    try {
+      await onChangeAdminRole(email, role, finalComment);
+      const updatedUsers = await onAllUsers(); 
+      if (updatedUsers && updatedUsers.accounts) {
+        setUsers(updatedUsers.accounts); 
+        setSearchResults(updatedUsers.accounts); 
+      } else {
+        console.error("Failed to fetch updated users.");
+      }
+      setIsFlyoutOpen(false); 
+    } catch (e) {
+      console.error(e);
+    }
   };
-
+  
   const handlePasswordReset = (email) => {
     onForgetPasswordSubmit({ email });
   };
@@ -277,7 +291,7 @@ export const AllUsers = ({ setAllUsers }) => {
                     src={'/icons/denied.svg'}
                     alt="reject"
                     className="comment-icon"
-                    onClick={() => handleReject(user.id)}
+                    onClick={() => handleRoleChange(user.email, "guest")}
                   />
                   <img
                     src={'/icons/delete-button.svg'}
