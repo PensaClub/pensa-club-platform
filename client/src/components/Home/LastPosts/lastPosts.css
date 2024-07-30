@@ -26,7 +26,7 @@
   flex-direction: column;
   padding: 0;
   min-height: 200px;
-
+cursor: pointer;
   border-radius: var(--radius);
 }
 
@@ -49,24 +49,46 @@
   padding-top: var(--s-space);
 }
 
-.color-line {
+.color-line-last-post {
   width: 100%;
   height: 14px;
   background: linear-gradient(304deg, #1b6d4d, #e26020 22%, #bb1d3d 93%);
 }
+
 #more-btn {
   width: auto;
   color: white;
   text-align: center;
 }
 
+.second-row-section-first {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2em;
+}
+
+.second-row-section-second {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2em;
+}
+.last-posts p,
+.last-posts h3,
+.last-posts h4 {
+  text-shadow: var(--text-shadow);
+}
+.post-author{
+  padding-bottom: 0.7em;
+}
 @media (max-width: 550px) {
   .last-posts h2 {
     font-size: 2.2em;
   }
 }
 
-@media (min-width: 550px) {
+@media (min-width: 768px) and (max-width: 1200px) {
   .single-card {
     flex-direction: row;
   }
@@ -76,7 +98,7 @@
     height: auto;
   }
 
-  .color-line {
+  .color-line-last-post {
     display: none;
   }
 
@@ -93,15 +115,13 @@
     height: 10px;
     background: linear-gradient(304deg, #1b6d4d, #e26020 22%, #bb1d3d 93%);
   }
-}
-
-@media (min-width: 850px) and (orientation: landscape) {
   .home-posts {
     flex-direction: row;
     flex-wrap: wrap;
     padding: 2em 0;
-    width: 1100px;
+    width: 95%;
     justify-content: center;
+    align-items: flex-end;
   }
 
   .single-card {
@@ -112,6 +132,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
     cursor: pointer;
     overflow: hidden;
+
   }
 
   .single-card:hover {
@@ -121,7 +142,7 @@
     border-radius: 15px;
   }
 
-  .single-card.card-1 {
+  /* .single-card.card-1 {
     width: 98%;
     justify-content: center;
     height: 170px;
@@ -129,18 +150,19 @@
     overflow: hidden;
 
     transition: transform 0.3s box-shadow 0.3s ease;
+  } */
+  .card-info {
+    width: 36%;
   }
-  .single-card.card-1 .card-info {
-    width: 46%;
-  }
-  .single-card.card-1:hover {
+
+  .single-card:hover {
     border-radius: 15px;
     overflow: hidden;
   }
 
-  .single-card.card-2 {
+  .single-card {
     flex: 0 0 48%;
-    justify-content: center;
+    justify-content: end;
     height: 170px;
     overflow: hidden;
     border-radius: 15px;
@@ -150,27 +172,74 @@
     width: 55%;
     object-fit: cover;
   }
-}
 
-@media (min-width: 768px) and (max-width: 1280px) and (orientation: landscape) {
-  .home-posts {
-    width: 100%;
-    flex-direction: column;
-    padding: var(--m-space);
+  .post-summary{
+    text-align: center;
   }
-  .single-card.card-1 .card-info {
-    width: initial;
+  .post-author{
+    text-align: center;
+    padding-bottom: 0.7em;
   }
   .single-card.card-1 {
     width: 100%;
-    justify-content: center;
-    height: 170px;
-    overflow: hidden;
-    border-radius: var(--radius);
+    flex: initial;
   }
-
   .single-card.card-2 {
     width: 100%;
     flex: initial;
   }
 }
+@media (min-width: 1200px) {
+  .home-posts {
+    width: 80%;
+  }
+  .single-card {
+    flex-direction: row;
+    align-self: center;
+    width: 100%;
+    border-radius: var(--radius);
+    transition: box-shadow 0.3s ease, transform 0.7s ease; 
+  }
+  .single-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+    transform: scale(1.05);
+  }
+  .single-card img {
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+    overflow: hidden;
+  }
+  .card-info {
+    display: flex;
+    flex-direction: column;
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+  }
+  .color-line-last-post {
+    align-self: end;
+  }
+  .card-info {
+    justify-content: space-evenly;
+    flex: 0 0 50%;
+  }
+  .second-row-section-second {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  .post-summary{
+    text-align: center;
+  }
+  .post-author{
+    text-align: center;
+    padding-bottom: 0.7em;
+  }
+  .latest-description{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    /* align-items: center;
+    gap: 1em; */
+  }
+}
+

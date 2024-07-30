@@ -24,6 +24,11 @@
     "add-ad": "Create ad"
 
   },
+  "home":{
+    "town":"Twn",
+    "our_latest_ads": "Latest ads ",
+    "see_more_ads": "See more ads"
+  },
   "hero": {
     "title": "DECENT LIFE FOR PEOPLE IN THE THIRD AGE",
     "desc": "Bulgaria is the country in the European Union (EU) in which the <span>elderly</span> are most threatened by poverty, social exclusion and material difficulties, according to data from the European statistical service Eurostat. <span>Bulgarian pensioners</span> are also the most isolated from the Internet in the EU. Only one in ten people uses the web, and half of those who have internet access write e-mails, read news and search for information about goods. Only <span>2%</span> of them shop online, and every third uses on social networks.",
@@ -483,10 +488,6 @@
     "message": "Message",
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?",
-    "home": {
-      "our_latest_ads": "Our Latest Posts",
-      "see_more_ads": "View More Posts"
-    }
+    "who-is-suggested": "Who are you suggesting?"
   }
 }
