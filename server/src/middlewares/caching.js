@@ -275,7 +275,7 @@ const fetchAllAds = async () =>
 
 const fetchAllAccounts = async () =>
   await user_account.findAll({
-    attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role'],
+    attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', ['role_change_comment', 'roleChangeComment']],
     include: [
       {
         model: user_details,

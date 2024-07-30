@@ -145,6 +145,9 @@ userController.post('/login', async (req, res, next) => {
       email: user.email,
       role: user.role,
       enabled: user.finished,
+      roleChangeComment: user.role_change_comment,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
       ads: user.ads,
     };
 
