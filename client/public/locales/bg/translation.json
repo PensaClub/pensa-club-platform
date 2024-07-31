@@ -250,7 +250,8 @@
     "reject_announcements": "Отхвърлени обяви",
     "all_users": "Всички потребители",
     "messages": "Съобщения",
-    "in_box": "Входящa кутия"
+    "in_box": "Входящa кутия",
+    "rejected_ads": "Вашата обява не е одобрена"
   },
   "admin": {
     "pending_announcements": "Неодобрени обяви",
@@ -331,7 +332,9 @@
     "ads_distribution": "Разпределение на обявите",
     "default_comment": "Вашата роля е сменена на ",
     "default_comment_banned": "Вашите права бяха ограничени",
-    "from_admin": "Oт администратор"
+    "from_admin": "Oт администратор",
+    "approved_ad": "Вашата обява е одобрена",
+    "deleted_ad": "Вашата обява е изтрита"
   },
   "community": {
     "community": "Общност",

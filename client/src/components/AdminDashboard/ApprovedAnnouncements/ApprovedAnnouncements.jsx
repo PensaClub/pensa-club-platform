@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { notify } from '../../../utils/notify';
 import { CommentModal } from '../PendingAnnouncements/CommentModal';
 import { FlyoutApproved } from './FlyoutApproved';
+import { useAuthContext } from '../../contexts/UserContext';
 
 export const ApprovedAnnouncements = ({ setApprovedCount }) => {
   const [announcements, setAnnouncements] = useState([]);
@@ -21,9 +22,12 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCriteria, setSearchCriteria] = useState('summary');
   const [searchResults, setSearchResults] = useState([]);
+  const [adminEmail, setAdminEmail] = useState('')
+
   // eslint-disable-next-line no-unused-vars
   const [isSearching, setIsSearching] = useState(false);
   const { t } = useTranslation();
+  const { profileData } = useAuthContext();
 
   const { fetchApprovedAds, updateAdStatus, deleteAd } = useAdminContext();
 
@@ -33,6 +37,8 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
         const approvedAds = await fetchApprovedAds();
         setAnnouncements(approvedAds);
         setSearchResults(approvedAds);
+        setAdminEmail(profileData.email);
+
         setApprovedCount(approvedAds.length);
       } catch (e) {
         console.error(e);
@@ -77,11 +83,13 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
 
   const handleReject = async (id) => {
     try {
-      if (!comment) {
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('profile.rejected_ad')}`;
+      const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
+      if (!finalComment) {
         notify('enter-comment');
         return;
       }
-      await updateAdStatus(id, 'denied', comment);
+      await updateAdStatus(id, 'denied', finalComment);
       setComment('');
       const updatedAds = await fetchApprovedAds();
       setAnnouncements(updatedAds);
@@ -94,7 +102,9 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
 
   const handleDelete = async (id) => {
     try {
-      await deleteAd(id,comment);
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.deleted_ad')}`;
+      const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
+      await deleteAd(id,finalComment);
       setComment('');
       const updatedAds = await fetchApprovedAds();
       setAnnouncements(updatedAds);
