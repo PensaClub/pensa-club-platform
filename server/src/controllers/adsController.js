@@ -131,11 +131,11 @@ adsController.get('/ads-user', isAuth, rbac.checkPermission('read_record'), memo
       ],
     });
 
-    if (ads.length === 0) return res.status(404).json({ message: 'No ads found for the specified user.' });
+    if (ads.length === 0) return res.status(404).json({ message: 'No ads found for the specified user.', ads: [] });
 
     const mappedAds = ads.map((ad) => fieldSwap(ad.dataValues, 'mapFromDb'));
 
-    res.status(200).json({ message: 'User ads successfully retrieved', ads: mappedAds });
+    res.status(200).json({ message: 'User ads successfully retrieved.', ads: mappedAds });
   } catch (err) {
     next(err);
   }
@@ -215,16 +215,15 @@ adsController.patch('/ad-edit', isAuth, rbac.checkPermission('update_record'), a
 
     const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
 
-    if (data.status) {
+    if (regularFields.status) {
       return res.status(400).json({ message: 'Status cannot be updated through this endpoint.' });
     }
-
-    if (data.adminComment) {
+    if (regularFields.adminComment) {
       return res.status(400).json({ message: 'Admin comment cannot be updated through this endpoint.' });
     }
 
     const where = {
-      ad_id: data.ad_id,
+      ad_id: regularFields.adId,
       user_id: req.user.userId,
     };
 
