@@ -166,7 +166,16 @@ export const AdDetails = () => {
                         <h3>{t('ads.description')}</h3>
                         <hr />
                         <h5>{ad?.description}</h5>
+                        <div className="subinfo-ads-details">
+                        <h4>{ad?.street}</h4>
+                        <div className="tags-details-mapping">
+                        {ad?.tags && ad?.tags?.length > 0 && ad?.tags?.map((tag, index) => (
+                          <h5 key={index}>{tag}</h5>
+                        ))}
+                        </div>
                       </div>
+                      </div>
+                      
                     </div>
                     <div className="ads-details-info">
                       <h3 className="title-details">{ad?.summary}</h3>
@@ -182,12 +191,7 @@ export const AdDetails = () => {
                           </>
                         )}
                       </div>
-                      <div className="subinfo-ads">
-                        {ad?.tags && ad?.tags?.length > 0 && ad?.tags?.map((tag, index) => (
-                          <p key={index}>{tag}</p>
-                        ))}
-                        <p>{ad?.street}</p>
-                      </div>
+                    
                       <p className="ads-details-data">
                         {t('community.validate_until')}: {''}
                         <span>{ad?.expirationDate ? new Date(ad?.expirationDate).toLocaleDateString(i18n.language) : ''}</span>

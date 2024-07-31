@@ -247,7 +247,7 @@ export const ProfileData = () => {
               <label>
                 <select value={selectedYear} onChange={handleSelectedYearChange} onBlur={onBlurHandler}>
                   <option value=''>{t('profile.year')}</option>
-                  {generateNumberOptions(1900, new Date().getFullYear())}
+                  {generateNumberOptions(new Date().getFullYear(), 1915)}
                 </select>
               </label>
             </div>

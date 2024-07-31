@@ -123,7 +123,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   gap: var(--s-space);
   margin: var(--l-space) 0;
   align-self: center;
@@ -207,23 +207,33 @@
   font-size: var(--l-font-size);
   padding-top: 0.6em;
   text-shadow: var(--text-shadow);
-}
 
+}
+.ads-details-desc h4{
+  font-size: var(--xs-font-size);;
+  color: var(--text-white);
+  font-style: italic;
+}
 .ads-details-desc h3 {
   color: var(--text-white);
   font-size: var(--m-font-size);
   padding-top: 0.6em;
   text-shadow: var(--text-shadow);
+  align-self: center;
 }
 
 .subinfo-ads-details {
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   gap: 0.8em;
   flex-wrap: wrap;
 }
-
-.subinfo-ads-details p {
+.tags-details-mapping{
+  display: flex;
+  gap: 0.5em;
+}
+.subinfo-ads-details h5 {
   color: var(--green-text);
   background-color: var(--grey-bg);
   padding: 0.3em 1.2em;
