@@ -87,7 +87,6 @@ export const AdDetails = () => {
   }
 
   const handlePhoneClick = (e) => {
-
     if (!userDetails?.phoneNumber) {
       e.preventDefault();
       toast.error(t('missing_phone'));
@@ -95,7 +94,6 @@ export const AdDetails = () => {
   };
 
   const handleEmailClick = (e) => {
- 
     if (!userDetails?.email) {
       e.preventDefault(); 
       toast.error(t('missing_email'));

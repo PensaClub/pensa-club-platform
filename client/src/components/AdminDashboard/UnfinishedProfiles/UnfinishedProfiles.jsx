@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { notify } from '../../../utils/notify';
 import { useMappingContext } from '../../contexts/MapContext';
 import { useAuthContext } from '../../contexts/UserContext';
 import { CommentModal } from '../PendingAnnouncements/CommentModal';
@@ -20,9 +19,10 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCriteria, setSearchCriteria] = useState('email');
   const [searchResults, setSearchResults] = useState([]);
+  const [adminEmail, setAdminEmail] = useState('')
   const { t } = useTranslation();
   const { onAllUsers } = useMappingContext();
-  const { onForgetPasswordSubmit } = useAuthContext();
+  const { onForgetPasswordSubmit,onChangeAdminRole,profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
         setUsers(filteredUsers);
 
         setUnfinishedUsers(filteredUsers?.length);
-
+        setAdminEmail(profileData.email);
         setSearchResults(filteredUsers);
 
       } catch (e) {
@@ -89,21 +89,6 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
     setIsModalOpen(false);
   };
 
-  const handleReject = async (id) => {
-    try {
-      if (!comment) {
-        notify('enter-comment');
-        return;
-      }
-      setComment('');
-      const updatedUsers = await onAllUsers();
-      setUsers(updatedUsers.accounts);
-      setSearchResults(updatedUsers.accounts.filter((user) => !user.enabled));
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const handleDelete = async (id) => {
     try {
       setComment('');
@@ -151,8 +136,27 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
     setSelectedUser(null);
   };
 
-  const handleRoleChange = (email, role) => {
-    // Логика за промяна на ролята на потребителя
+  const handleRoleChange = async (email, role) => {
+    let defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment',)} ${ role }`;
+    if(role === "guest") {
+      defaultComment=`${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment_banned')}`
+    }
+    const finalComment = comment || defaultComment;
+  
+    try {
+      await onChangeAdminRole(email, role, finalComment);
+      const updatedUsers = await onAllUsers(); 
+      if (updatedUsers && updatedUsers.accounts) {
+        setUsers(updatedUsers.accounts); 
+        setSearchResults(updatedUsers.accounts.filter((user) => !user.enabled));
+
+      } else {
+        console.error("Failed to fetch updated users.");
+      }
+      setIsFlyoutOpen(false); 
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const handlePasswordReset = (email) => {
@@ -269,7 +273,7 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
                     src={'/icons/denied.svg'}
                     alt="reject"
                     className="comment-icon"
-                    onClick={() => handleReject(user.id)}
+                    onClick={() => handleRoleChange(user.email, "guest")}
                   />
                   <img
                     src={'/icons/delete-button.svg'}

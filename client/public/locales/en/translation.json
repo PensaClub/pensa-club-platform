@@ -22,7 +22,6 @@
     "privacy": "Privacy Policy",
     "copyright": "2024 Pensa club. All rights reserved",
     "add-ad": "Create ad"
-
   },
   "hero": {
     "title": "DECENT LIFE FOR PEOPLE IN THE THIRD AGE",
@@ -121,7 +120,6 @@
     "close": "Close",
     "and": "and",
     "more": "more"
-
   },
   "notify_modal": {
     "part1": "Please,",
@@ -250,7 +248,9 @@
     "ads-one": "ad",
     "ads-statistic": "Ads",
     "reject_announcements": "Rejected Announcements",
-    "all_users": "All Users"
+    "all_users": "All Users",
+    "messages": "Messages",
+    "in_box": "Inbox"
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -329,7 +329,10 @@
     "suggest_resolved_users": "Resolved Suggested",
     "ads_by_category": "Ads by Category",
     "ads_by_date": "Ads by Date",
-    "ads_distribution": "Ads Distribution"
+    "ads_distribution": "Ads Distribution",
+    "default_comment": "Your role has been changed to",
+    "default_comment_banned": "Your privileges have been restricted",
+    "from_admin": "From admin"
   },
   "community": {
     "community": "Community",
@@ -439,8 +442,9 @@
     "error-images": "You can only upload up to 4 images.",
     "success-delete-suggest": "Successfully delete suggested user!",
     "all_suggested_users": "All suggested users",
-    "warn-address": "Please fill in the address fields!"
-    },
+    "warn-address": "Please fill in the address fields!",
+    "success-role-change to": "Successfully change role to"
+  },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
     "profile_data_submit": "Error while updating profile data: {{error}}",
