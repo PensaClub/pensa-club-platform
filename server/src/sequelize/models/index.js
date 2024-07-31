@@ -1,65 +1,19 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const path = require("path");
-const Sequelize = require("sequelize");
-const process = require("process");
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const process = require('process');
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.js")[env];
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
-const getSequelizeConfig = (env, config) => {
-  const { database, username, password, host, database_uri } = config;
-  const commonConfig = {
-    logging: false,
-    dialect: 'postgres',
-  };
-
-  if (env === 'development') {
-    return {
-      ...commonConfig,
-      database,
-      username,
-      password,
-      host,
-    };
-  } else {
-    return {
-      ...commonConfig,
-      url: database_uri,
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-        },
-      },
-    };
-  }
-};
-
-const sequelizeConfig = getSequelizeConfig(env, config);
-let sequelize;
-
-if (env === 'development') {
-  sequelize = new Sequelize(
-    sequelizeConfig.database,
-    sequelizeConfig.username,
-    sequelizeConfig.password,
-    sequelizeConfig
-  );
-} else {
-  sequelize = new Sequelize(sequelizeConfig.url, sequelizeConfig);
-}
+const sequelize = new Sequelize(config);
 
 fs.readdirSync(__dirname)
   .filter((file) => {
-    return (
-      file.indexOf(".") !== 0 &&
-      file !== basename &&
-      file.slice(-3) === ".js" &&
-      file.indexOf(".test.js") === -1
-    );
+    return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js' && file.indexOf('.test.js') === -1;
   })
   .forEach((file) => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
