@@ -20,9 +20,10 @@ export const ProfileData = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
   const [isYearSelectOpen, setIsYearSelectOpen] = useState(false);
+  const [isFormChanged, setIsFormChanged] = useState(false); 
 
   const { setAllUsers } = useMappingContext();
-  const { handleImageChange, uploadImages } = useImageUpload();
+  const { handleImageChange, uploadImages, images } = useImageUpload();
   const { previewImage, handleImage } = useImagePreview();
 
   const initialFormState = {
@@ -42,10 +43,12 @@ export const ProfileData = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
+    setIsFormChanged(true); 
   };
 
   const handleGenderChange = (e) => {
     setForm({ ...form, gender: e.target.value });
+    setIsFormChanged(true); 
   };
 
   useEffect(() => {
@@ -55,6 +58,7 @@ export const ProfileData = () => {
         ...prevForm,
         birthDate: formattedDate,
       }));
+      setIsFormChanged(true); 
     } else if (!selectedDate && !selectedMonth && !selectedYear) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -96,6 +100,7 @@ export const ProfileData = () => {
     if (e.target.value === '') {
       setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
     }
+    setIsFormChanged(true); 
   };
 
   const handleSelectedMonthChange = (e) => {
@@ -103,6 +108,7 @@ export const ProfileData = () => {
     if (e.target.value === '') {
       setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
     }
+    setIsFormChanged(true); 
   };
 
   const handleSelectedYearChange = (e) => {
@@ -110,6 +116,7 @@ export const ProfileData = () => {
     if (e.target.value === '') {
       setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
     }
+    setIsFormChanged(true); 
   };
 
   const handleSubmit = async (e) => {
@@ -132,12 +139,21 @@ export const ProfileData = () => {
 
     if (isValid) {
       try {
-        const updatedDataArr = Object.entries(trimmedForm).filter(([key, value]) => initialFormState[key] !== value);
-        const updatedData = Object.fromEntries(updatedDataArr);
+        let updatedForm;
+        if (images.length > 0) {
+          updatedForm = await uploadImages(trimmedForm, profileData.details.firebaseImagePath);
+        } else {
+          updatedForm = trimmedForm;
+        }
 
-        const updatedForm = await uploadImages(updatedData, profileData.details.firebaseImagePath);
+        const changedData = {};
+        Object.keys(updatedForm).forEach((key) => {
+          if (updatedForm[key] !== initialFormState[key]) {
+            changedData[key] = updatedForm[key];
+          }
+        });
 
-        await onEditProfileDataSubmit(updatedForm);
+        await onEditProfileDataSubmit(changedData);
 
         window.scrollTo(0, 0);
         navigate('/profile');
@@ -148,7 +164,7 @@ export const ProfileData = () => {
   };
 
   const onBlurHandler = (e) => {
-    setIsYearSelectOpen(false); // Затваряне на селекта за година
+    setIsYearSelectOpen(false); 
     const { name, value } = e.target;
     const error = validateField(name, value);
     setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
@@ -159,6 +175,7 @@ export const ProfileData = () => {
     setSelectedDate('');
     setSelectedMonth('');
     setSelectedYear('');
+    setIsFormChanged(false); 
   };
 
   return (
@@ -175,6 +192,7 @@ export const ProfileData = () => {
               onChange={(e) => {
                 handleImageChange(e);
                 handleImage(e);
+                setIsFormChanged(true); 
               }}
             />
             <label htmlFor='imageUrl' className='label-image'>
@@ -284,7 +302,7 @@ export const ProfileData = () => {
           <span className='required-fields'>{t('profile.required_fields')}</span>
         </div>
         <div className='btn-inline'>
-          <button type='submit' className='btn-general btn-green'>
+          <button type='submit' className='btn-general btn-green' disabled={!isFormChanged}>
             {t('profile.save_btn')}
           </button>
           <button type='button' className='btn-general btn-red' onClick={handleResetForm}>
