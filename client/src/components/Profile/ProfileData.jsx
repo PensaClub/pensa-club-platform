@@ -19,9 +19,9 @@ export const ProfileData = () => {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
-  // eslint-disable-next-line no-unused-vars
-  const { setAllUsers, allUsers } = useMappingContext();
+  const [isYearSelectOpen, setIsYearSelectOpen] = useState(false);
 
+  const { setAllUsers } = useMappingContext();
   const { handleImageChange, uploadImages } = useImageUpload();
   const { previewImage, handleImage } = useImagePreview();
 
@@ -36,6 +36,7 @@ export const ProfileData = () => {
     imageURL: profileData.details.imageURL || null,
     firebaseImagePath: profileData.details.firebaseImagePath || null,
   };
+
   const [form, setForm] = useState(initialFormState);
 
   const handleInputChange = (e) => {
@@ -54,8 +55,14 @@ export const ProfileData = () => {
         ...prevForm,
         birthDate: formattedDate,
       }));
+    } else if (!selectedDate && !selectedMonth && !selectedYear) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        birthDate: '',
+      }));
     }
   }, [selectedDate, selectedMonth, selectedYear]);
+
   useEffect(() => {
     if (profileData) {
       setAllUsers((prevUsers) => {
@@ -83,22 +90,37 @@ export const ProfileData = () => {
       });
     }
   }, [profileData, setAllUsers]);
+
   const handleSelectedDateChange = (e) => {
     setSelectedDate(e.target.value);
+    if (e.target.value === '') {
+      setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
+    }
   };
 
   const handleSelectedMonthChange = (e) => {
     setSelectedMonth(e.target.value);
+    if (e.target.value === '') {
+      setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
+    }
   };
 
   const handleSelectedYearChange = (e) => {
     setSelectedYear(e.target.value);
+    if (e.target.value === '') {
+      setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const trimmedForm = trimObjectStrings(form);
+    const adjustedForm = { ...form };
+    if (!selectedDate) adjustedForm.birthDate = null;
+    if (!selectedMonth) adjustedForm.birthDate = null;
+    if (!selectedYear) adjustedForm.birthDate = null;
+
+    const trimmedForm = trimObjectStrings(adjustedForm);
     setForm(trimmedForm);
 
     const isValid = Object.keys(trimmedForm).every((field) => {
@@ -110,7 +132,7 @@ export const ProfileData = () => {
 
     if (isValid) {
       try {
-        const updatedDataArr = Object.entries(form).filter(([key, value]) => initialFormState[key] !== value);
+        const updatedDataArr = Object.entries(trimmedForm).filter(([key, value]) => initialFormState[key] !== value);
         const updatedData = Object.fromEntries(updatedDataArr);
 
         const updatedForm = await uploadImages(updatedData, profileData.details.firebaseImagePath);
@@ -126,6 +148,7 @@ export const ProfileData = () => {
   };
 
   const onBlurHandler = (e) => {
+    setIsYearSelectOpen(false); // Затваряне на селекта за година
     const { name, value } = e.target;
     const error = validateField(name, value);
     setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
@@ -211,8 +234,6 @@ export const ProfileData = () => {
             </div>
           </div>
           <div>
-          </div>
-          <div>
             <label htmlFor='phoneNumber'>{t('profile.phone_number')}:</label>
             <input
               type='text'
@@ -229,7 +250,7 @@ export const ProfileData = () => {
             <label>{t('profile.age')}</label>
             <div>
               <label>
-                <select value={selectedDate} onChange={handleSelectedDateChange} onBlur={onBlurHandler}>
+                <select value={selectedDate} onChange={handleSelectedDateChange}>
                   <option value=''>{t('profile.day')}</option>
                   {generateNumberOptions(1, 31)}
                 </select>
@@ -237,7 +258,7 @@ export const ProfileData = () => {
             </div>
             <div>
               <label>
-                <select value={selectedMonth} onChange={handleSelectedMonthChange} onBlur={onBlurHandler}>
+                <select value={selectedMonth} onChange={handleSelectedMonthChange}>
                   <option value=''>{t('profile.month')}</option>
                   {generateNumberOptions(1, 12)}
                 </select>
@@ -245,8 +266,16 @@ export const ProfileData = () => {
             </div>
             <div>
               <label>
-                <select value={selectedYear} onChange={handleSelectedYearChange} onBlur={onBlurHandler}>
-                  <option value=''>{t('profile.year')}</option>
+                <select
+                  value={selectedYear}
+                  onChange={handleSelectedYearChange}
+                  onFocus={() => {
+                    setIsYearSelectOpen(true);
+                    if (!selectedYear) setSelectedYear(2000)
+                  }}
+                  onBlur={onBlurHandler}
+                >
+                  <option value=''>{isYearSelectOpen ? t('profile.year') : t('profile.year')}</option>
                   {generateNumberOptions(new Date().getFullYear(), 1915)}
                 </select>
               </label>
@@ -258,7 +287,7 @@ export const ProfileData = () => {
           <button type='submit' className='btn-general btn-green'>
             {t('profile.save_btn')}
           </button>
-          <button type='submit' className='btn-general btn-red' onClick={handleResetForm}>
+          <button type='button' className='btn-general btn-red' onClick={handleResetForm}>
             {t('profile.close_btn')}
           </button>
         </div>
