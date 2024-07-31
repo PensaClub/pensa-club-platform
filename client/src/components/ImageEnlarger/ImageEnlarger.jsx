@@ -81,8 +81,8 @@ export const ImageEnlarger = ({ images }) => {
     <div className="gallery-container">
       <div className="main-image-wrapper">
         <img
-          src={images[0]}
-          onClick={() => handleImageClick(0)}
+          src={images[currentIndex]}
+          onClick={() => handleImageClick(currentIndex)}
           className="main-image"
           alt="Main"
         />
@@ -92,13 +92,12 @@ export const ImageEnlarger = ({ images }) => {
           <img
             key={index}
             src={src}
-            onClick={() => handleImageClick(index + 1)}
+            onClick={() => handleImageClick(index)}
             className="thumbnail"
             alt={`Thumbnail ${index + 1}`}
           />
         ))}
       </div>
-      
       {isEnlarged && (
         <EnlargedImage
           src={images[currentIndex]}
