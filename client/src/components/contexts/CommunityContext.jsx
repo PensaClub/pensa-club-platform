@@ -120,7 +120,6 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
-            notify('error');
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
