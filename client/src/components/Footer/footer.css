@@ -30,6 +30,12 @@ footer {
 }
 .footer h3 {
   padding-bottom: var(--s-space);
+  cursor: pointer;
+}
+.footer-links a:hover {
+  color: #ff6600;
+  border-bottom: 2px solid #ff6600; 
+  opacity: 1;
 }
 #root > footer > section > img {
   position: absolute;
