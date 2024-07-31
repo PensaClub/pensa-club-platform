@@ -1,17 +1,19 @@
 import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import './sidebar-details.css';
 import '../../../MapPage/MapEditor/sidebar.css';
+import { useAuthContext } from '../../../contexts/UserContext';
 
 export const UserSidebar = ({ selectedUser, userAds, closeSidebar }) => {
   const { t } = useTranslation();
   const sidebarRef = useRef(null);
   const scrollContentRef = useRef(null);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
-
+  const {isAuthentication} = useAuthContext();
+  const navigate=useNavigate();
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -33,19 +35,29 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar }) => {
       if (scrollContentRef.current) {
         const scrollTop = scrollContentRef.current.scrollTop;
         const itemHeight = 100;
-        const itemsToScroll = 10; 
+        const itemsToScroll = 10;
         setShowScrollToTop(scrollTop > itemHeight * itemsToScroll);
       }
     };
-
+  
     const scrollContent = scrollContentRef.current;
-    scrollContent.addEventListener('scroll', handleScroll);
-
+    if (scrollContent) {
+      scrollContent.addEventListener('scroll', handleScroll);
+    }
+  
     return () => {
-      scrollContent.removeEventListener('scroll', handleScroll);
+      if (scrollContent) {
+        scrollContent.removeEventListener('scroll', handleScroll);
+      }
     };
   }, []);
-
+  
+  const handleAdClick= (ad) => {
+    if(isAuthentication) {
+        navigate(`/ad/details/${ad.adId}`)
+ 
+}
+  }
   const trimString = (str, num) => {
     if (str.length <= num) return str;
     return str.slice(0, num) + '...';
@@ -91,7 +103,7 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar }) => {
               <Fragment key={ad?.adId}>
                 <div className="ad-map">
                   <img src={ad?.images[0]?.imageURL} alt="ad-img" />
-                  <div className="ad-desc">
+                  <div className="ad-desc"  onClick={()=>handleAdClick(ad)}>
                     <h3>{ad?.summary}</h3>
                     <p className='ad-desc-map'>{trimString(ad?.description, 50)}</p>
                   </div>

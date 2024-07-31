@@ -44,6 +44,7 @@ import { UnfinishedProfiles } from '../AdminDashboard/UnfinishedProfiles/Unfinis
 import { AllUsersStatistics } from '../AdminDashboard/AllUsersStatistics/AllUsersStatistics';
 import { AdminSuggestUsers } from '../AdminDashboard/AdminSuggestUser/AdminSuggestUsers';
 import { SuggestResolvedUsers } from '../AdminDashboard/AdminSuggestUser/SuggesResolvedtUsers/SuggestResolvedUsers';
+import { ProfileMessages } from './ProfileMessages';
 
 export const Profile = () => {
   const location = useLocation();
@@ -97,6 +98,7 @@ export const Profile = () => {
     || location.pathname.startsWith('/profile/users-unfinished')
     || location.pathname.startsWith('/profile/admin-suggest-users')
     || location.pathname.startsWith('/profile/suggest-resolved-users')
+    || location.pathname.startsWith('/profile/messages')
 
   return (
     <section className='profile-section'>
@@ -134,9 +136,10 @@ export const Profile = () => {
           <FontAwesomeIcon icon={faUsersGear} className='icon' />
           {t('map.interests')}
         </Link>
-        <Link to='anothers' onClick={toggleMenu}>
+        
+        <Link to='messages' onClick={toggleMenu}>
           <FontAwesomeIcon icon={faMountainSun} className='icon' />
-          {t('profile.anothers')}
+          {t('profile.messages')}
         </Link>
         {isAdmin && (
           <div className="admin-dashboard">
@@ -235,6 +238,7 @@ export const Profile = () => {
           <Route path='workOptions' element={<ProfileWorks />} />
           <Route path='announced' element={<ProfileAnnounced />} profileData={profileData} />
           <Route path='interestOptions' element={<ProfileInterests />} />
+          <Route path='messages' element={<ProfileMessages />} />
           <Route path='ads-admin' element={<AdminGuard><AllAnnouncements /></AdminGuard>} />
           <Route path='users-statistic' element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
           <Route path='users-admin' element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />

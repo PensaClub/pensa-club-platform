@@ -32,7 +32,9 @@ export const userServiceFactory = (token) => {
     editUserData: (data) => {
       return requester.patch(`${apiUrl}/user/update-details`, data);
     },
-
+    changeRole: (email,role,roleChangeComment) => {
+      return requester.post(`${apiUrl}/admin/change-role`, {email,role,roleChangeComment});
+    },
     getUserData: () => {
       return requester.get(`${apiUrl}/user/single-user`);
     },

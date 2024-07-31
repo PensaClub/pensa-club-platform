@@ -248,7 +248,9 @@
     "ads-one": "обява",
     "ads-statistic": "Обяви",
     "reject_announcements": "Отхвърлени обяви",
-    "all_users": "Всички потребители"
+    "all_users": "Всички потребители",
+    "messages": "Съобщения",
+    "in_box": "Входящa кутия"
   },
   "admin": {
     "pending_announcements": "Неодобрени обяви",
@@ -326,7 +328,10 @@
     "suggest_resolved_users": "Разрешени препоръки",
     "ads_by_category": "Обяви по категория",
     "ads_by_date": "Обяви по дата",
-    "ads_distribution": "Разпределение на обявите"
+    "ads_distribution": "Разпределение на обявите",
+    "default_comment": "Вашата роля е сменена на ",
+    "default_comment_banned": "Вашите права бяха ограничени",
+    "from_admin": "Oт администратор"
   },
   "community": {
     "community": "Общност",
@@ -415,7 +420,7 @@
     "delete_ad": "Желаете ли да изтриете",
     "admin_comment": "Забележка",
     "no_ads": "Нямате публикувани обяви",
-     "event_start_date": "Начало",
+    "event_start_date": "Начало",
     "event_end_date": "Край",
     "missing_phone": "Не е подадеден телефонен номер"
   },
@@ -435,8 +440,8 @@
     "email-send": "Имейлът е изпратен успешно!",
     "error-images": "Може да изберете само 4 снимки",
     "success-delete-suggest": "Успешно изтрихте препоръчан потребител!",
-    "warn-address": "Моля, въведете адрес"
-
+    "warn-address": "Моля, въведете адрес",
+    "success-role-change to": "Успешно променихте ролята на потребител на"
   },
   "errors": {
     "image_type": "Файл от тип {{type}} не е позволен! Позволените типове снимки са PNG/JPG/JPEG.",
@@ -488,5 +493,5 @@
     "town":"гр."
 
   }
-
 }
+

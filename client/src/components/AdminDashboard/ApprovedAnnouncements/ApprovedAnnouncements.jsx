@@ -94,7 +94,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
 
   const handleDelete = async (id) => {
     try {
-      await deleteAd(id);
+      await deleteAd(id,comment);
       setComment('');
       const updatedAds = await fetchApprovedAds();
       setAnnouncements(updatedAds);
