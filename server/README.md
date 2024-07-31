@@ -133,8 +133,8 @@ When the server starts for the first time in a development environment, a demo u
       `delete_record`: Can delete records.
       `approve_record`: Can approve records.
 
-    Admin : Create, Read, Delete, Approve;
-    User: Create, Read, Delete, Update;
+    Admin : Create, Read, Update, Delete, Approve;
+    User: Create, Read, Update, Delete;
     Guest: Read;
 
 - **_userController_** :
