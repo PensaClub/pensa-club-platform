@@ -198,7 +198,7 @@
 		transform: translateX(-100%);
 	}
 	
-	.overlay {
+	.container__overlay .overlay1 {
 		background-image: var(--bg-gradient);
 		height: 100%;
 		left: -100%;
@@ -208,7 +208,7 @@
 		width: 200%;
 	}
 	
-	.container.right-panel-active .overlay {
+	.container.right-panel-active .overlay1 {
 		transform: translateX(50%);
 	}
 	
