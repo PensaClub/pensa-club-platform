@@ -66,6 +66,25 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      role_change_comment: {
+        type: DataTypes.STRING(1000),
+        allowNull: true,
+        defaultValue: null,
+        set(value) {
+          this.setDataValue('role_change_comment', value === '' ? null : value);
+        },
+        validate: {
+          customValidator(value) {
+            if (value !== null && value !== undefined && value !== '') {
+              if (value.length < 10) {
+                throw new Error('Comment must be at least 10 characters long.');
+              } else if (value.length > 1000) {
+                throw new Error('Maximum comment length limit of 1000 characters is reached.');
+              }
+            }
+          },
+        },
+      },
     },
     {
       sequelize,

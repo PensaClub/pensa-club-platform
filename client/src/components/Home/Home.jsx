@@ -3,8 +3,12 @@ import { Fade, Slide } from "react-awesome-reveal";
 import { Hero } from "./HeroSection/Hero";
 import { LastPosts } from "./LastPosts/LastPosts";
 import { NewsSubscribe } from "./NewsSubscribe/NewsSubscribe";
+import { useEffect } from "react";
 
 export const Home = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+},[])
   return (
     <>
       <div className="home-container">

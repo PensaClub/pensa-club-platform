@@ -92,7 +92,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 userDetailsController.get('/all-users', memoryCache('users'), async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
-      attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role'],
+      attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', ['role_change_comment', 'roleChangeComment']],
       include: [
         {
           model: user_details,
@@ -198,7 +198,7 @@ userDetailsController.get('/single-user', isAuth, rbac.checkPermission('read_rec
   try {
     const user = await user_account.findOne({
       where: { id: req.user.userId },
-      attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role'],
+      attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', ['role_change_comment', 'roleChangeComment']],
       include: [
         {
           model: user_details,
