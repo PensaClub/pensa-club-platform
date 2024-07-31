@@ -26,7 +26,8 @@
   "home":{
     "town":"Twn",
     "our_latest_ads": "Latest ads ",
-    "see_more_ads": "See more ads"
+    "see_more_ads": "See more ads",
+    "no_results": "No results found"
   },
   "hero": {
     "title": "DECENT LIFE FOR PEOPLE IN THE THIRD AGE",
