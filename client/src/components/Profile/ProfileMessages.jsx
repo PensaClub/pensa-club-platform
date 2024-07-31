@@ -2,10 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileMessages.css';
 import { useCommunityContext } from '../contexts/CommunityContext';
+import { useAuthContext } from '../contexts/UserContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const ProfileMessages = () => {
   const { getMyAds } = useCommunityContext();
+  const { getProfileData } = useAuthContext();
   const [messages, setMessages] = useState([]);
+  const [allMessages, setAllMessages] = useState([]);
   const [expandedMessage, setExpandedMessage] = useState(null);
   const [selectedMessages, setSelectedMessages] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,39 +20,54 @@ export const ProfileMessages = () => {
   const totalPages = Math.ceil(messages.length / messagesPerPage);
 
   useEffect(() => {
-    const fetchAds = async () => {
+    const fetchMessages = async () => {
       try {
         const adsResponse = await getMyAds();
         const ads = adsResponse.ads || [];
-        const newMessages = ads
+        const adMessages = ads
           .filter(ad => ad.adminComment)
           .map(ad => ({
             id: ad.adId,
-            summary: ad.adminComment.slice(0, 10),
-            description: ad.adminComment,
+            summary: ad.adminComment.split(': ')[0]+ ':',
+            description: ad.adminComment.split(': ')[1],
             creationDate: new Date(ad.creationDate),
             type: 'admin'
           }));
-        setMessages(newMessages.sort((a, b) => b.creationDate - a.creationDate));
+
+        const profileResponse = await getProfileData();
+        const profile = profileResponse || {};
+        const profileMessages = profile.roleChangeComment ? [{
+          id: profile.email,
+          summary: profile.roleChangeComment.split(': ')[0] + ':',
+          description: profile.roleChangeComment.split(': ')[1],
+          creationDate: new Date(profile.updatedAt),
+          type: 'admin'
+        }] : [];
+
+        const combinedMessages = [...adMessages, ...profileMessages].sort((a, b) => b.creationDate - a.creationDate);
+        setMessages(combinedMessages);
+        setAllMessages(combinedMessages);
       } catch (error) {
-        console.error('Error fetching ads:', error);
+        console.error('Error fetching messages:', error);
       }
     };
 
-    fetchAds();
+    fetchMessages();
   }, []);
 
   const handleToggleMessage = (id) => {
     setExpandedMessage(expandedMessage === id ? null : id);
   };
 
-  const handleSearch = (event) => {
-    const searchTerm = event.target.value.toLowerCase();
-    setSearchTerm(searchTerm);
-    const filteredMessages = messages.filter(message =>
-      message.summary.toLowerCase().includes(searchTerm)
-    );
-    setMessages(filteredMessages);
+  const handleSearch = () => {
+    if (searchTerm === '') {
+      setMessages(allMessages);
+    } else {
+      const filteredMessages = allMessages.filter(message =>
+        message.summary.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setMessages(filteredMessages);
+    }
     setCurrentPage(1);
   };
 
@@ -85,17 +105,35 @@ export const ProfileMessages = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
+  const resetFilters = () => {
+    setSearchTerm('');
+    setMessages(allMessages);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="profile-messages">
-      <div className="search-container">
+      <div className="search-container-message">
         <input
           type="text"
           placeholder="Search by description..."
-          onChange={handleSearch}
+          onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
-          className="search-input"
+          className="search-input-message"
         />
-        <button className="search-button-message">Search</button>
+        <div className="search-actions-messages">
+          <button className="search-button-message" onClick={handleSearch}>Search</button>
+          {searchTerm && (
+            <div className="reset-icon-container">
+              <FontAwesomeIcon
+                icon={faArrowRotateLeft}
+                className="reset-icon"
+                onClick={resetFilters}
+              />
+              <span className="reset-text" onClick={resetFilters}>Изчисти търсенето</span>
+            </div>
+          )}
+        </div>
       </div>
       <div className="messages-container">
         <div className="messages-header">

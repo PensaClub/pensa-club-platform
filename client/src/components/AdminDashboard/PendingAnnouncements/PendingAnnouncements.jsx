@@ -8,6 +8,7 @@ import { useAdminContext } from '../../contexts/AdminContext';
 import { Flyout } from '../Flyout';
 import { useTranslation } from 'react-i18next';
 import { notify } from '../../../utils/notify';
+import { useAuthContext } from '../../contexts/UserContext';
 
 export const PendingAnnouncements = ({ setAdsCount }) => {
   const [announcements, setAnnouncements] = useState([]);
@@ -21,10 +22,12 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCriteria, setSearchCriteria] = useState('summary');
   const [searchResults, setSearchResults] = useState([]);
+  const [adminEmail, setAdminEmail] = useState('')
+  
   // eslint-disable-next-line no-unused-vars
   const [isSearching, setIsSearching] = useState(false);
   const { t } = useTranslation();
-
+  const { profileData } = useAuthContext();
   const { fetchPendingAds, updateAdStatus, deleteAd } = useAdminContext();
 
   useEffect(() => {
@@ -33,6 +36,8 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
         const pendingAds = await fetchPendingAds();
         setAnnouncements(pendingAds);
         setSearchResults(pendingAds);
+        setAdminEmail(profileData.email);
+
         setAdsCount(pendingAds.length);
 
       } catch (e) {
@@ -77,7 +82,9 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
 
   const handleApprove = async (id) => {
     try {
-      await updateAdStatus(id, 'approved', comment);
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.approved_ad')}`;
+      const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
+      await updateAdStatus(id, 'approved', finalComment);
       setComment('');
    
       const updatedAds = await fetchPendingAds();
@@ -91,12 +98,14 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
 
   const handleReject = async (id) => {
     try {
-      if (!comment) {
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('profile.rejected_ad')}`;
+      const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
+      if (!finalComment) {
         notify('enter-comment');
         return;
       }
   
-      await updateAdStatus(id, 'denied', comment);
+      await updateAdStatus(id, 'denied', finalComment);
       setComment('');
   
       const updatedAds = await fetchPendingAds();
@@ -110,7 +119,9 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
   
   const handleDelete = async (id) => {
     try {
-      await deleteAd(id);
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.deleted_ad')}`;
+      const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
+      await deleteAd(id,finalComment);
       setComment('');
     
       const updatedAds = await fetchPendingAds();

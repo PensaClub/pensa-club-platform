@@ -255,7 +255,8 @@
     "reject_announcements": "Rejected Announcements",
     "all_users": "All Users",
     "messages": "Messages",
-    "in_box": "Inbox"
+    "in_box": "Inbox",
+    "rejected_ads": "Your ad was not approved"
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -337,7 +338,9 @@
     "ads_distribution": "Ads Distribution",
     "default_comment": "Your role has been changed to",
     "default_comment_banned": "Your privileges have been restricted",
-    "from_admin": "From admin"
+    "from_admin": "From admin",
+    "approved_ad":"Your ad was approved",
+    "deleted_ad":"Your ad was deleted"
   },
   "community": {
     "community": "Community",
