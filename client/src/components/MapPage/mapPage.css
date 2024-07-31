@@ -55,3 +55,13 @@
         padding: 7em 0 0 0 ;
     }
 }
+@media (min-width: 768px) and (max-width: 1200px) {
+    .map-line h4 {
+        padding: 1em 2em;
+        padding-left: 8em;
+        font-size: 14px;
+        color: white;
+        font-weight: 200;
+     
+    }
+}
