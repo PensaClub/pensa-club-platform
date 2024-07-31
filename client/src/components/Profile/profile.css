@@ -154,7 +154,15 @@
   margin-top: 1em;
   margin-bottom: 1rem !important;
 }
+<<<<<<< HEAD
 @media (max-width: 1000px) {
+=======
+
+.btn-center {
+  text-align: center;
+}
+@media (max-width: 900px) {
+>>>>>>> d415d56 (Fix minor details throughout app)
   .menu-toggle {
     display: block;
     top: 6rem;
