@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node src/index.js",
+    "start": "npx sequelize-cli db:migrate && -env NODE_ENV=production node src/index.js",
     "start:dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
