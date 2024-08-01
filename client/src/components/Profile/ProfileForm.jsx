@@ -54,7 +54,7 @@ const ProfileForm = () => {
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [workOptions, setWorkOptions] = useState([]);
   const [interestOptions, setInterestOptions] = useState([]);
-
+  const [isYearSelectOpen, setIsYearSelectOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
@@ -115,7 +115,7 @@ const ProfileForm = () => {
     };
 
     updateErrorsTranslation();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLanguage]);
 
   const handleMunicipalityChange = async (e) => {
@@ -331,9 +331,16 @@ const ProfileForm = () => {
           </div>
           <div>
             <label>
-              <select value={selectedYear} onChange={handleSelectedYearChange} onBlur={onBlurHandler}>
-                <option value=''>{t('profile.year')}</option>
-                {generateNumberOptions(1900, new Date().getFullYear())}
+              <select
+                value={selectedYear}
+                onChange={handleSelectedYearChange}
+                onFocus={() => {
+                  setIsYearSelectOpen(true);
+                  if (!selectedYear) setSelectedYear(2000)
+                }}
+                onBlur={onBlurHandler}>
+                <option value=''>{isYearSelectOpen ? t('profile.year') : t('profile.year')}</option>
+                {generateNumberOptions(new Date().getFullYear(), 1915)}
               </select>
             </label>
           </div>
