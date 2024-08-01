@@ -57,7 +57,8 @@ export const ProfileAnnounced = () => {
 
       try {
         const result = await getMyAds(profileData.email);
-        setAds(result.ads);
+        const sortedAds = result.ads.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+        setAds(sortedAds);
       } catch (error) {
         console.error('Failed to fetch ads', error);
       }
@@ -122,7 +123,8 @@ export const ProfileAnnounced = () => {
     try {
       await updateExpirationDate(adId);
       const updatedAds = await getMyAds(profileData.email);
-      setAds(updatedAds.mappedAds);
+      const sortedAds = updatedAds.ads.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+      setAds(sortedAds);
     } catch (error) {
       console.error('Failed to update expiration date', error);
     }
@@ -169,7 +171,7 @@ export const ProfileAnnounced = () => {
                 </div>
               </section>
               <div className='ads-btns'>
-                <button className={'ads-btn red'} onClick={()=>handleEditClick(ad)}>
+                <button className={'ads-btn red'} onClick={() => handleEditClick(ad)}>
                   {t('ads.edit')}
                 </button>
                 <button
