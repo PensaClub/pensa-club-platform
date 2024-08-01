@@ -70,7 +70,7 @@ export const AllUsersStatistics = () => {
   const generateRolesData = () => {
     if (!allUsers || !allUsers.response || !allUsers.response.accounts) return [];
     const users = allUsers.response.accounts;
-    const roles = ["user", "admin", "banned"];
+    const roles = ["user", "admin", "guest"];
     return roles.map(role => ({
       role,
       total: users.filter(user => user.role === role).length,
