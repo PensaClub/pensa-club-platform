@@ -167,7 +167,7 @@ const filterCachedUserById = (users, userId) => {
 
 // ACCOUNTS -------------------------------------------------------------------------------------------
 
-eventEmitter.on('accountUpdated', async (data) => {
+eventEmitter.on('accountUpdated', async (data, userId) => {
   let usersValue = cache.get('users');
 
   if (!usersValue || !Array.isArray(JSON.parse(usersValue).accounts)) {
@@ -178,7 +178,7 @@ eventEmitter.on('accountUpdated', async (data) => {
 
   const objectUsers = JSON.parse(usersValue);
 
-  const index = objectUsers.accounts.findIndex((obj) => obj.id === Number(data.userId));
+  const index = objectUsers.accounts.findIndex((obj) => obj.id === Number(userId));
   if (index !== -1) {
     Object.keys(data.updates).forEach((key) => {
       if (key === 'ads') {
@@ -190,6 +190,8 @@ eventEmitter.on('accountUpdated', async (data) => {
         });
       }
       if (key === 'details') {
+        if (!objectUsers.accounts[index].details) objectUsers.accounts[index].details = {};
+
         Object.keys(data.updates.details).forEach((detailKey) => {
           objectUsers.accounts[index].details[detailKey] = data.updates.details[detailKey];
         });
@@ -198,7 +200,13 @@ eventEmitter.on('accountUpdated', async (data) => {
         objectUsers.accounts[index].enabled = data.updates.enabled;
       }
       if (key === 'account-delete') {
-        objectUsers.accounts = objectUsers.accounts.filter((account) => account.id !== data.userId);
+        objectUsers.accounts = objectUsers.accounts.filter((account) => account.id !== userId);
+      }
+      if (key === 'account') {
+        Object.keys(data.updates.account).forEach((accountKey) => {
+          console.log(accountKey);
+          objectUsers.accounts[index][accountKey] = data.updates.account[accountKey];
+        });
       }
     });
   }
@@ -207,7 +215,7 @@ eventEmitter.on('accountUpdated', async (data) => {
 
 // ADS --------------------------------------------------------------------------------------------------------
 
-eventEmitter.on('ads', async (data, action) => {
+eventEmitter.on('ads', async (data, adId, userId, action) => {
   let adsValue = cache.get('ads');
 
   if (!adsValue || !Array.isArray(JSON.parse(adsValue).ads)) {
@@ -219,11 +227,18 @@ eventEmitter.on('ads', async (data, action) => {
   const objectAds = JSON.parse(adsValue);
 
   if (action === 'delete') {
-    objectAds.ads = objectAds.ads.filter((ad) => ad.adId !== data.adId);
+    objectAds.ads = objectAds.ads.filter((ad) => ad.adId !== adId);
   } else {
-    const index = objectAds.ads.findIndex((obj) => obj.adId === data.adId);
-    index !== -1 ? (objectAds.ads[index] = data) : objectAds.ads.push(data);
+    const index = objectAds.ads.findIndex((obj) => obj.adId === adId);
+    if (index !== -1) {
+      Object.keys(data).forEach((adKey) => {
+        objectAds.ads[index][adKey] = data[adKey];
+      });
+    } else {
+      objectAds.ads.push(data);
+    }
   }
+
   cache.set('ads', JSON.stringify(objectAds), stdTTL);
 
   let usersValue = cache.get('users');
@@ -236,12 +251,18 @@ eventEmitter.on('ads', async (data, action) => {
 
   const objectUsers = JSON.parse(usersValue);
   objectUsers.accounts.forEach((account) => {
-    if (account.id === Number(data.userId)) {
+    if (account.id === Number(userId)) {
       if (action === 'delete') {
-        account.ads = account.ads.filter((ad) => ad.adId !== data.adId);
+        account.ads = account.ads.filter((ad) => ad.adId !== adId);
       } else {
-        const index = account.ads.findIndex((ad) => ad.adId === data.adId);
-        index !== -1 ? (account.ads[index] = data) : account.ads.push(data);
+        const index = account.ads.findIndex((ad) => ad.adId === adId);
+        if (index !== -1) {
+          Object.keys(data).forEach((adKey) => {
+            account.ads[index][adKey] = data[adKey];
+          });
+        } else {
+          account.ads.push(data);
+        }
       }
     }
   });
@@ -268,6 +289,7 @@ const fetchAllAds = async () =>
       ['extra_fields', 'extraFields'],
       ['creation_date', 'creationDate'],
       ['expiration_date', 'expirationDate'],
+      'updatedAt',
     ],
     include: [
       {
@@ -329,6 +351,7 @@ const fetchAllAccounts = async () =>
           ['creation_date', 'creationDate'],
           ['expiration_date', 'expirationDate'],
           ['user_id', 'userId'],
+          'updatedAt',
         ],
       },
     ],

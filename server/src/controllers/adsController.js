@@ -30,7 +30,7 @@ adsController.post('/ad-create', isAuth, rbac.checkPermission('create_record'), 
 
     const formatted = fieldSwap(ad.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('ads', { ...formatted, userId: req.user.userId });
+    eventEmitter.emit('ads', { ...formatted }, ad.ad_id, req.user.userId);
 
     res.status(200).json({ message: 'Ad successfully created.' });
   } catch (err) {
@@ -173,12 +173,7 @@ adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_re
 
     const mappedAd = fieldSwap(updatedAd.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('accountUpdated', {
-      updates: {
-        ads: mappedAd,
-      },
-      userId: req.user.userId,
-    });
+    eventEmitter.emit('accountUpdated', { updates: { ads: mappedAd } }, req.user.userId);
 
     res.status(200).json({ message: 'Ad status has been updated successfully.' });
   } catch (err) {
@@ -196,7 +191,7 @@ adsController.delete('/ad-delete/:adId', isAuth, rbac.checkPermission('delete_re
 
     if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
       await ad.destroy();
-      eventEmitter.emit('ads', { adId, userId: req.user.userId }, 'delete');
+      eventEmitter.emit('ads', adId, req.user.userId, 'delete');
 
       return res.status(200).json({ message: 'Ad has been deleted successfully.' });
     }
@@ -235,7 +230,7 @@ adsController.patch('/ad-edit', isAuth, rbac.checkPermission('update_record'), a
 
     const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('ads', { ...updatedDetails, userId: req.user.userId });
+    eventEmitter.emit('ads', { ...updatedDetails }, regularFields.adId, req.user.userId);
 
     res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
   } catch (err) {
@@ -425,6 +420,7 @@ adsController.get('/ads-search', rbac.checkPermission('read_record'), async (req
         ['extra_fields', 'extraFields'],
         ['creation_date', 'creationDate'],
         ['expiration_date', 'expirationDate'],
+        'updatedAt',
       ],
       include: [
         {
@@ -466,7 +462,7 @@ adsController.patch('/update-expiration-date/:adId', isAuth, rbac.checkPermissio
 
     const mappedAds = fieldSwap(details.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('ads', { ...mappedAds, userId: req.user.userId });
+    eventEmitter.emit('ads', { ...mappedAds }, adId, req.user.userId);
 
     res.status(200).json({ message: `Expiration date successfully changed to ${expirationDate}` });
   } catch (err) {

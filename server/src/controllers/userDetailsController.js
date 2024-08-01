@@ -75,13 +75,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 
     const updatedDetails = { ...fieldSwap(restOfDetails, 'mapFromDb'), age: ageCalculate(restOfDetails.birth_date) };
 
-    eventEmitter.emit('accountUpdated', {
-      updates: {
-        details: updatedDetails,
-        enabled: true,
-      },
-      userId: req.user.userId,
-    });
+    eventEmitter.emit('accountUpdated', { updates: { details: updatedDetails, enabled: true } }, req.user.userId);
 
     res.status(200).send({ message: 'Details successfully updated!', user: { email: req.user.email, enabled: true, details: updatedDetails }, token });
   } catch (err) {
@@ -180,13 +174,7 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
 
     updatedDetails.age = ageCalculate(updatedDetails.birthDate);
 
-    eventEmitter.emit('accountUpdated', {
-      updates: {
-        details: updatedDetails,
-        enabled: true,
-      },
-      userId: req.user.userId,
-    });
+    eventEmitter.emit('accountUpdated', { updates: { details: updatedDetails, enabled: true } }, req.user.userId);
 
     res.status(200).json({ message: 'Details edited successfully!', details: updatedDetails });
   } catch (err) {

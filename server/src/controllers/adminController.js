@@ -1,5 +1,5 @@
 const adminController = require('express').Router();
-const { user_account } = require('../sequelize/models/index');
+const { user_account, user_ads } = require('../sequelize/models/index');
 const eventEmitter = require('../utils/eventEmitter.js');
 
 const isAuth = require('../middlewares/isAuth');
@@ -41,12 +41,7 @@ adminController.delete('/delete-account/:userEmail', isAuth, rbac.checkPermissio
 
     await user_account.destroy({ where: { email: userEmail } });
 
-    eventEmitter.emit('accountUpdated', {
-      updates: {
-        'account-delete': null,
-      },
-      userId: user.id,
-    });
+    eventEmitter.emit('accountUpdated', { updates: { 'account-delete': null } }, user.id);
 
     res.status(200).json({ message: 'Account deleted successfully.' });
   } catch (err) {
@@ -54,8 +49,31 @@ adminController.delete('/delete-account/:userEmail', isAuth, rbac.checkPermissio
   }
 });
 
-adminController.delete('/delete-comment/', isAuth, rbac.checkPermission('delete_record'), async (req, res, next) => {
+adminController.patch('/delete-comment/', isAuth, rbac.checkPermission('delete_record'), async (req, res, next) => {
   try {
+    const { email, adId } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email is required.' });
+
+    if (email !== req.user.email && req.user.role !== 'admin') return res.status(403).json({ message: 'You are not authorized to delete this comment.' });
+
+    const user = await user_account.findOne({ where: { email } });
+
+    if (!user) return res.status(404).json({ message: 'User not found.' });
+
+    if (!adId && adId !== '') {
+      user.role_change_comment = null;
+      await user.save();
+
+      eventEmitter.emit('accountUpdated', { updates: { account: { roleChangeComment: null } } }, user.id);
+
+      return res.status(200).json({ message: 'Comment deleted successfully.' });
+    }
+
+    await user_ads.update({ admin_comment: null }, { where: { ad_id: adId } });
+
+    eventEmitter.emit('ads', { adminComment: null }, adId, user.id);
+
+    res.status(200).json({ message: 'Comment deleted successfully.' });
   } catch (err) {
     next(err);
   }
