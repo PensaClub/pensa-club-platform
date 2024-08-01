@@ -81,6 +81,11 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
+      case 'finish-profile':
+      toast.error(<Trans i18nKey="notification.finish-profile" />, {
+        role: 'alert',
+      });
+      break;
     case 'error':
       toast.error(<Trans i18nKey="notification.error" />, {
         role: 'alert',
