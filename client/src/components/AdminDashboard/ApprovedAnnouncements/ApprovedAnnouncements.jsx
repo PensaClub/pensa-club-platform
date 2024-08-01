@@ -81,9 +81,9 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
     setIsModalOpen(false);
   };
 
-  const handleReject = async (id) => {
+  const handleReject = async (id,summary) => {
     try {
-      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('profile.rejected_ad')}`;
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('profile.your_ad')} "${summary}" ${t('profile.rejected_ads')}`;
       const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
       if (!finalComment) {
         notify('enter-comment');
@@ -204,7 +204,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
                 ) : null}
               </th>
               <th>{t('admin.announcement_title')}</th>
-              <th onClick={() => requestSort('date')}>
+              <th className='th-date-approved' onClick={() => requestSort('date')}>
                 {t('admin.creation_date')}
                 {sortConfig.key === 'date' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
@@ -235,7 +235,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
                     src={'/icons/denied.svg'}
                     alt="reject"
                     className="comment-icon"
-                    onClick={() => handleReject(announcement.adId)}
+                    onClick={() => handleReject(announcement.adId, announcement.summary)}
                   />
                   <img
                     src={'/icons/delete-button.svg'}

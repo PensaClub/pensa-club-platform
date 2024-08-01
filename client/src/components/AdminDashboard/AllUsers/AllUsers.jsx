@@ -184,7 +184,7 @@ export const AllUsers = ({ setAllUsers }) => {
   };
 
   return (
-    <div className="pending-announcements-container">
+    <div className="all-users-container">
       <h2>{t('admin.all_users')}</h2>
       <div className="search-container">
         <input
@@ -229,15 +229,15 @@ export const AllUsers = ({ setAllUsers }) => {
         </div>
       </div>
       <hr />
-      <div className="pending-announcements-table-container">
-        <table className="pending-announcements-table">
+      <div className="all-users-table-container">
+        <table className="all-users-table">
           <thead>
             <tr>
               <th className="number-cell" onClick={toggleRowOrder}>
                 {t('admin.number')}
                 {rowOrder === 'ascending' ? ' ↑' : ' ↓'}
               </th>
-              <th onClick={() => requestSort('email')}>
+              <th className='th-email-all-users' Click={() => requestSort('email')}>
                 {t('admin.user_email')}
                 {sortConfig.key === 'email' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
@@ -266,7 +266,7 @@ export const AllUsers = ({ setAllUsers }) => {
           </thead>
           <tbody>
             {sortedByRowOrder.map((user, index) => (
-              <tr key={user.email}>
+              <tr  key={user.email}>
                 <td className="number-cell">{index + 1}</td>
                 <td>
                   <Link to={`#`}>{user.email}</Link>

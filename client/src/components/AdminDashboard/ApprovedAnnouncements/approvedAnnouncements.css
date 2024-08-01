@@ -233,7 +233,9 @@
     .pending-announcements-container h2 {
       font-size: var(--s-font-size);
     }
-  
+  .th-date-approved{
+    width: 200px;
+  }
     .approved-announcements-table {
       font-size: var(--xs-font-size);
     }
@@ -264,7 +266,7 @@
     }
   
     .approved-announcements-table {
-      font-size: var(--s-font-size);
+      font-size: var(--xs-font-size);
     }
   
     .approved-announcements-table th,
@@ -273,7 +275,7 @@
     }
   
     .approved-announcements-table th {
-      font-size: var(--m-font-size);
+      font-size: var(--xs-font-size);
     }
   
     .btn-unapproved {

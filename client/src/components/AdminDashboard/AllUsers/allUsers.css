@@ -1,26 +1,26 @@
 
-.pending-announcements-container {
+.all-users-container {
     width: 90%;
     margin: 0 auto;
     text-align: center;
   }
   
-  .pending-announcements-container h2 {
+  .all-users-container h2 {
     margin-bottom: 10px;
     font-size: var(--xs-font-size);
   }
   
-  .pending-announcements-container hr {
+  .all-users-container hr {
     border: 1px solid #ccc;
     margin-bottom: 20px;
   }
 
-  .pending-announcements-table-container {
+  .all-users-table-container {
     max-height: 700px;
     overflow-y: auto;
   }
   
-  .pending-announcements-table {
+  .all-users-table {
     width: 100%;
     border-collapse: collapse;
     box-shadow: var(--container-shadow);
@@ -28,14 +28,14 @@
     table-layout: fixed;
   }
   
-  .pending-announcements-table a {
+  .all-users-table a {
     text-decoration: none;
     color: black;
     text-shadow: var(--text-shadow);
   }
   
-  .pending-announcements-table th,
-  .pending-announcements-table td {
+  .all-users-table th,
+  .all-users-table td {
     padding: 8px;
     border: 1px solid #ddd;
     white-space: nowrap;
@@ -43,7 +43,7 @@
   }
 
 
-  .pending-announcements-table th {
+  .all-users-table th {
     cursor: pointer;
     background-color: #f4f4f4;
     position: sticky;
@@ -51,16 +51,16 @@
     z-index: 1;
   }
   
-  .pending-announcements-table th:hover,
-  .pending-announcements-table td:hover {
+  .all-users-table th:hover,
+  .all-users-table td:hover {
     background-color: #f1f1f1;
   }
   
-  .pending-announcements-table .number-cell {
+  .all-users-table .number-cell {
     width: 70px;
   }
   
-  .pending-announcements-table tbody tr {
+  .all-users-table tbody tr {
     border-bottom: 1px solid #ccc;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
@@ -100,15 +100,15 @@
   }
   
 
-  .pending-announcements-table-container::-webkit-scrollbar {
+  .all-users-table-container::-webkit-scrollbar {
     width: 10px;
   }
   
-  .pending-announcements-table-container::-webkit-scrollbar-track {
+  .all-users-table-container::-webkit-scrollbar-track {
     background: transparent;
   }
   
-  .pending-announcements-table-container::-webkit-scrollbar-thumb {
+  .all-users-table-container::-webkit-scrollbar-thumb {
     background-color: var(--orange);
     border: 2px solid #f1f1f1;
     border-radius: var(--radius-input);
@@ -175,31 +175,31 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
   @media (max-width: 767px) {
-    .pending-announcements-container h2 {
+    .all-users-container h2 {
       font-size: var(--s-font-size);
     }
-    .pending-announcements-table .number-cell {
+    .all-users-table .number-cell {
         width: 100%;
     }
   .id-table-admin{
     background-color: var(--gravel);
   }
-    .pending-announcements-table {
+    .all-users-table {
       font-size: var(--xs-font-size);
     }
   
-    .pending-announcements-table th,
-    .pending-announcements-table td {
+    .all-users-table th,
+    .all-users-table td {
       padding: 6px;
     }
   
-    .pending-announcements-table th {
+    .all-users-table th {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
     }
   
-    .pending-announcements-table td {
+    .all-users-table td {
       display: block;
       width: 100%;
       box-sizing: border-box;
@@ -216,13 +216,13 @@
       gap: 5px;
     }
   
-    .pending-announcements-table tr {
+    .all-users-table tr {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
     }
   
-    .pending-announcements-table tr td.actions-admin {
+    .all-users-table tr td.actions-admin {
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -230,24 +230,31 @@
   }
   
   @media (min-width: 768px) and (max-width: 1200px) {
-    .pending-announcements-container h2 {
+    .all-users-container h2 {
       font-size: var(--s-font-size);
     }
     .ads-cell{
-        width: 55px;
+        width: 95px;
     }
+    
     .registration-date-admin{
-      width: 155px;
+      width: 185px;
     }
-    .pending-announcements-table {
-      font-size: var(--xs-font-size);
+    .th-email-all-users{
+      width: 185px;
+    }
+    .all-users-table {
+      font-size: var(--xxs-font-size);
     }
   
-    .pending-announcements-table th,
-    .pending-announcements-table td {
+    .all-users-table th,
+    .all-users-table td {
       padding: 10px;
     }
-  
+    .all-users-table th{
+      font-size: var(--xxs-font-size);
+
+    }
     .btn-unapproved {
       padding: 8px 12px;
       margin: 5px;
@@ -263,24 +270,26 @@
   }
   
   @media (min-width: 1200px) {
-    .pending-announcements-container h2 {
+    .all-users-container h2 {
       font-size: var(--l-font-size);
     }
     .ads-cell{
         width: 100px;
     }
-    .pending-announcements-table {
-      font-size: var(--s-font-size);
+    .all-users-table {
+      font-size: var(--xs-font-size);
     }
-  
-    .pending-announcements-table th,
-    .pending-announcements-table td {
+  .phone-number-all-suggest{
+    width: 100px;
+  }
+    .all-users-table th,
+    .all-users-table td {
       padding: 12px 15px;
       text-align: center;
     }
   
-    .pending-announcements-table th {
-      font-size: var(--m-font-size);
+    .all-users-table th {
+      font-size: var(--xs-font-size);
     }
   
     .btn-unapproved {
