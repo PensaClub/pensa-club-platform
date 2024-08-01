@@ -49,7 +49,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
     }
   };
   const handleImageChange = (event) => {
-    const files = Array.from(event.target.files).reverse();
+    const files = Array.from(event.target.files);
     const newImages = [...images];
     const newImageFiles = [...imageFiles];
     const targetIndex = parseInt(event.target.dataset.index, 10);
