@@ -6,7 +6,7 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useAuthContext } from '../../contexts/UserContext';
 import './sidebar.css';
 
-export const MapSidebar = ({ selectedUser, userAds, closeSidebar }) => {
+export const MapSidebar = ({ selectedUser, userAds, closeSidebar,setModalImage }) => {
     const { t } = useTranslation();
     const sidebarRef = useRef(null);
     const scrollContentRef = useRef(null);
@@ -56,7 +56,9 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar }) => {
             navigate(`/ad/details/${ad.adId}`);
         }
     };
-
+    const handleImageClick = (image) => {
+        setModalImage(image);
+    };
     const trimString = (str, num) => {
         if (str.length <= num) return str;
         return str.slice(0, num) + '...';
@@ -101,7 +103,7 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar }) => {
                         {userAds.length > 0 ? userAds.map(ad => (
                             <Fragment key={ad?.adId}>
                                 <div className="ad-map">
-                                    <img src={ad?.images[0]?.imageURL} alt="ad-img" onClick={() => handleAdClick(ad)} />
+                                    <img src={ad?.images[0]?.imageURL} alt="ad-img" onClick={() => handleImageClick(ad?.images[0]?.imageURL)} />
                                     <div className="ad-desc" onClick={() => handleAdClick(ad)}>
                                         <h3>{ad?.summary}</h3>
                                         <p className='ad-desc-map'>{trimString(ad?.description, 50)}</p>

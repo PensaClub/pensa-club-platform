@@ -41,7 +41,7 @@ export const ProfileAnnounced = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
-  const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions, editAd } = useCommunityContext();
+  const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions} = useCommunityContext();
   const { profileData } = useAuthContext();
   const [ads, setAds] = useState([]);
   const [townNames, setTownNames] = useState({});
