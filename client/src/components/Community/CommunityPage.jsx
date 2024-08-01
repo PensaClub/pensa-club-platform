@@ -6,6 +6,7 @@ import { FiltersCommunity } from "./FiltersCommunity/FiltersCommunity";
 import { AdsCard } from "./AdsCard/AdsCard";
 import { useEffect, useState, useCallback, useRef } from "react";
 import debounce from 'lodash.debounce';
+import { useLocation } from 'react-router-dom';
 
 import { What } from "./CommunityModals/What";
 import { SearchWhere } from "./CommunityModals/SearchWhere";
@@ -22,7 +23,8 @@ export const CommunityPage = () => {
     const [showResetIcon, setShowResetIcon] = useState(false);
     const [searchPerformed, setSearchPerformed] = useState(false);
     const [lastPage, setLastPage] = useState(false);
-    const [loadingMore, setLoadingMore] = useState(false); // Нов флаг за предотвратяване на множество заявки
+    const [loadingMore, setLoadingMore] = useState(false); 
+    const { search } = useLocation();
 
     const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
@@ -50,6 +52,19 @@ export const CommunityPage = () => {
     const getAdTownValue = (language, town) => {
         return language === 'bg' ? town.bg : town.en;
     };
+
+    useEffect(() => {
+        window.scrollTo({ top: 0 });
+    }, []);
+
+    useEffect(() => {
+        const query = new URLSearchParams(search);
+        const filtersFromQuery = Object.fromEntries(query.entries());
+        setFilters(filtersFromQuery);
+        if (Object.keys(filtersFromQuery).length > 0) {
+            handleSearch(filtersFromQuery, 1);
+        }
+    }, [search]);
 
     const handleSearch = async (customFilters = null, pageNum = 1) => {
         const searchFilters = customFilters ? customFilters : filters;
@@ -161,7 +176,6 @@ export const CommunityPage = () => {
         <>
             <section className="background-community">
                 <section className="community-page">
-
                     <section className="main-community">
                         <div className="hero-bg"></div>
                         <div className="hero-section-commun">
@@ -222,7 +236,7 @@ export const CommunityPage = () => {
                         ) : (
                             <FiltersCommunity handleSearch={handleSearch} />
                         )}
-                        <div ref={loaderRef} /> {/* Елемент за наблюдение */}
+                        <div ref={loaderRef} /> 
                     </section>
                 </section>
             </section>

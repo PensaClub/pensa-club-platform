@@ -248,7 +248,29 @@ body.active-sidebar .sidebar-map {
     background: linear-gradient(325deg, #ffffff 0%, #777777 50%, #ffffff 100%);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.32);
 }
-
+.scroll-to-top-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-size: 24px;
+  }
+  .arrow-up-side-bar{
+    color: var(--text-white)!important;
+  }
+  .scroll-to-top-button:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  }
 @media (min-width: 600px) {
     .ad-scroll {
         height: 70%;

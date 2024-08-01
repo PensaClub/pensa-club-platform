@@ -4,6 +4,7 @@ import "./error.css";
 import { communityServiceFactory } from "../Services/communityService";
 import { notify } from "../../utils/notify";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const CommunityContext = createContext();
 
@@ -104,9 +105,9 @@ export const CommunityProvider = ({ children }) => {
             navigate('/');
             return response;
         } catch (e) {
-            notify('error');
-            showErrorAndSetTimeouts(e.message);
-            throw e;
+           showErrorAndSetTimeouts(e.message);
+            return toast.error(e.error);
+
         } finally {
             setIsLoading(false);
         }
@@ -119,7 +120,6 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
-            notify('error');
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -154,10 +154,10 @@ export const CommunityProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-    const deleteAd = async (id) => {
+    const deleteAd = async (ad) => {
         try {
             setIsLoading(true);
-            const response = await communityService.deleteAd(id);
+            const response = await communityService.deleteAd(ad);
             setIsLoading(false);
             notify('success-delete-ads');
             return response;
@@ -170,10 +170,10 @@ export const CommunityProvider = ({ children }) => {
         }
     };
 
-   const editAd = async (id) => {
+   const editAd = async (adData) => {
     try {
       setIsLoading(true);
-      const response = await communityService.editAd(id);
+      const response = await communityService.editAd(adData);
       setIsLoading(false);
       notify("success-edit-ads");
       return response;

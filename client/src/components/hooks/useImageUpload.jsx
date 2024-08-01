@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { uploadImageToFirebase } from '../../utils/uploadImageToFirebase';
 import { t } from 'i18next';
 import { toast } from 'react-toastify';
+
 const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
 export function useImageUpload() {
@@ -9,7 +10,7 @@ export function useImageUpload() {
 
   const addImage = (newImage, index) => {
     if (newImage && allowedTypes.includes(newImage.type)) {
-      if (index) {
+      if (index !== undefined) {
         setImages((prevImages) => {
           const updatedImages = [...prevImages];
           updatedImages[index] = newImage;
@@ -30,6 +31,11 @@ export function useImageUpload() {
   };
 
   const uploadImages = async (form, path) => {
+    if (images.length === 0) {
+  
+      return form;
+    }
+
     const response = await Promise.all(
       images.map(async (image, index) => {
         const oldPath = Array.isArray(path) ? path[index]?.path : path;
@@ -41,20 +47,18 @@ export function useImageUpload() {
       })
     );
 
-    if (response) {
-      if (response.length === 1) {
-        form.imageURL = response[0].url;
-        form.firebaseImagePath = response[0].filePath;
-      } else {
-        form.images = response.map((image) => ({
-          imageURL: image.url,
-          firebaseImagePath: image.filePath,
-        }));
-      }
+    if (response.length === 1) {
+      form.imageURL = response[0].url;
+      form.firebaseImagePath = response[0].filePath;
+    } else {
+      form.images = response.map((image) => ({
+        imageURL: image.url,
+        firebaseImagePath: image.filePath,
+      }));
     }
 
     return form;
   };
 
-  return { handleImageChange, uploadImages };
+  return { handleImageChange, uploadImages, images };
 }

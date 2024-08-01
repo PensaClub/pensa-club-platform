@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { CommentModal } from '../PendingAnnouncements/CommentModal';
 import { FlyoutReject } from './FlyoutReject';
 import { useAdminContext } from '../../contexts/AdminContext';
+import { useAuthContext } from '../../contexts/UserContext';
 
 export const RejectAnnouncements = ({ setRejectCount }) => {
     const [announcements, setAnnouncements] = useState([]);
@@ -21,10 +22,12 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchCriteria, setSearchCriteria] = useState('summary');
     const [searchResults, setSearchResults] = useState([]);
+    const [adminEmail, setAdminEmail] = useState('')
+
     // eslint-disable-next-line no-unused-vars
     const [isSearching, setIsSearching] = useState(false);
     const { t } = useTranslation();
-
+    const { profileData } = useAuthContext();
     const { fetchRejectAds, updateAdStatus, deleteAd } = useAdminContext();
 
     useEffect(() => {
@@ -33,6 +36,8 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                 const pendingAds = await fetchRejectAds();
                 setAnnouncements(pendingAds);
                 setSearchResults(pendingAds);
+                setAdminEmail(profileData.email);
+
                 setRejectCount(pendingAds.length);
 
             } catch (e) {
@@ -77,7 +82,9 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
 
     const handleApprove = async (id) => {
         try {
-            await updateAdStatus(id, 'approved', comment);
+            const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.approved_ad')}`;
+            const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
+            await updateAdStatus(id, 'approved', finalComment);
             setComment('');
 
             const updatedAds = await fetchRejectAds();
@@ -91,7 +98,9 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
 
     const handleDelete = async (id) => {
         try {
-            await deleteAd(id);
+            const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.deleted_ad')}`;
+            const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
+            await deleteAd(id,finalComment);
             setComment('');
 
             const updatedAds = await fetchRejectAds();
@@ -159,20 +168,20 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
             </div>
             <hr />
             <div className="legend-container">
-        <div className="legend-item">
-          <img src={'/icons/comment.svg'} alt="Comment" className="legend-icon" />
-          <span>{t('admin.comment')}</span>
-        </div>
-        <div className="legend-item">
-          <img  src={'/icons/approve-invoice.svg'} alt="approved" className="legend-icon" />
-          <span>{t('admin.approve')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
-          <span>{t('admin.delete')}</span>
-        </div>
-      </div>
-      <hr />
+                <div className="legend-item">
+                    <img src={'/icons/comment.svg'} alt="Comment" className="legend-icon" />
+                    <span>{t('admin.comment')}</span>
+                </div>
+                <div className="legend-item">
+                    <img src={'/icons/approve-invoice.svg'} alt="approved" className="legend-icon" />
+                    <span>{t('admin.approve')}</span>
+                </div>
+                <div className="legend-item">
+                    <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
+                    <span>{t('admin.delete')}</span>
+                </div>
+            </div>
+            <hr />
             <div className="reject-announcements-table-container">
                 <table className="reject-announcements-table">
                     <thead>
@@ -250,14 +259,14 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                 />
             </CommentModal>
             {selectedAd && (
-          <FlyoutReject
-            isOpen={isFlyoutOpen}
-            onClose={() => setIsFlyoutOpen(false)}
-            ad={selectedAd}
-            handleApprove={handleApprove}
-            handleDelete={handleDelete}
-          />
-        )}
+                <FlyoutReject
+                    isOpen={isFlyoutOpen}
+                    onClose={() => setIsFlyoutOpen(false)}
+                    ad={selectedAd}
+                    handleApprove={handleApprove}
+                    handleDelete={handleDelete}
+                />
+            )}
         </div>
     );
 };

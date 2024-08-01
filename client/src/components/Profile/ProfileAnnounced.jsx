@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import './profile.css';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuthContext } from '../contexts/UserContext';
 import { useCommunityContext } from '../contexts/CommunityContext';
 import { DeleteAd } from '../Community/AdPage/DeleteAd/DeleteAd';
@@ -40,7 +41,7 @@ export const ProfileAnnounced = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
-  const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions } = useCommunityContext();
+  const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions, editAd } = useCommunityContext();
   const { profileData } = useAuthContext();
   const [ads, setAds] = useState([]);
   const [townNames, setTownNames] = useState({});
@@ -56,7 +57,8 @@ export const ProfileAnnounced = () => {
 
       try {
         const result = await getMyAds(profileData.email);
-        setAds(result.ads);
+        const sortedAds = result.ads.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+        setAds(sortedAds);
       } catch (error) {
         console.error('Failed to fetch ads', error);
       }
@@ -115,13 +117,14 @@ export const ProfileAnnounced = () => {
   const handleEditClick = (ad) => {
     setSelectedAd(ad);
     navigate(`/ad/edit/${ad.adId}`);
-  }
+  };
 
   const handleRefreshClick = async (adId) => {
     try {
       await updateExpirationDate(adId);
       const updatedAds = await getMyAds(profileData.email);
-      setAds(updatedAds.mappedAds);
+      const sortedAds = updatedAds.ads.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+      setAds(sortedAds);
     } catch (error) {
       console.error('Failed to update expiration date', error);
     }
@@ -135,15 +138,17 @@ export const ProfileAnnounced = () => {
 
           return (
             <div className={`announced ${ad.status}`} key={ad.adId}>
-              <p className={
-                ad.status === 'approved' ? 'view-more' :
-                  ad.status === 'pending' ? 'pending-approval' :
-                    ad.status === 'denied' ? 'pending-approval' : ''
-              }>
-                {ad.status === 'approved' ? t('ads.view_more') :
-                  ad.status === 'pending' ? t('ads.pending_approval') :
-                    ad.status === 'denied' ? t('ads.denied') : ''}
-              </p>
+              <Link to={ad.status === 'approved' ? `/ad/details/${ad.adId}` : '#'}>
+                <p className={
+                  ad.status === 'approved' ? 'view-more' :
+                    ad.status === 'pending' ? 'pending-approval' :
+                      ad.status === 'denied' ? 'pending-approval' : ''
+                }>
+                  {ad.status === 'approved' ? t('ads.view_more') :
+                    ad.status === 'pending' ? t('ads.pending_approval') :
+                      ad.status === 'denied' ? t('ads.denied') : ''}
+                </p>
+              </Link>
               <section className='profile-data ads'>
                 <div className='avatar-announced'>
                   <img src={ad.images[0]?.imageURL || "/images/sign-up/avatar.jpg"} alt="Ad photo" />
@@ -166,7 +171,7 @@ export const ProfileAnnounced = () => {
                 </div>
               </section>
               <div className='ads-btns'>
-                <button className={'ads-btn red'}>
+                <button className={'ads-btn red'} onClick={() => handleEditClick(ad)}>
                   {t('ads.edit')}
                 </button>
                 <button
@@ -190,7 +195,7 @@ export const ProfileAnnounced = () => {
                 </p>
               )}
             </div>
-          )
+          );
         })
       ) : (
         <h4 className='no-ads'>{t('ads.no_ads')}</h4>

@@ -234,7 +234,7 @@
   margin: 1rem 0;
 }
 
-@media (max-width: 849px) {
+@media (max-width: 850px) {
   .filters {
     display: none;
   }

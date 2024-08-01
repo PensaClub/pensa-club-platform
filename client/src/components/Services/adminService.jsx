@@ -21,7 +21,7 @@ export const adminServiceFactory = (token) => {
             return requester.post(`${apiUrl}/ads/ad-update-status`, { adId, newStatus, adminComment });
           },
           deleteAd: async (adId) => {
-            return requester.post(`${apiUrl}/ads/ad-delete`, { adId });
+            return requester.del(`${apiUrl}/ads/ad-delete/${ adId }`);
         },
     }
 }
