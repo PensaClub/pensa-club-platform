@@ -7,7 +7,7 @@ export const Overlay = ({ handleSignInClick, handleSignUpClick }) => {
 
   return (
     <div className="container__overlay">
-      <div className="overlay">
+      <div className="overlay1">
         <div className="overlay__panel overlay--left">
           <button
             className="btn-general btn-orange"

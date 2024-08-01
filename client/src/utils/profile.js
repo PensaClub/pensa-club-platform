@@ -57,10 +57,16 @@ export const validateField = (name, value, form = {}, t) => {
     return error ;
  };
 
-export const generateNumberOptions = (start, end) => {
+ export const generateNumberOptions = (start, end) => {
     const options = [];
-    for (let i = start; i <= end; i++) {
-        options.push(<option key={i} value={i}>{i}</option>);
+    if (start >= end) {
+        for (let i = start; i >= end; i--) {
+            options.push(<option key={i} value={i}>{i}</option>);
+        }
+    } else {
+        for (let i = start; i <= end; i++) {
+            options.push(<option key={i} value={i}>{i}</option>);
+        }
     }
     return options;
 };

@@ -1,5 +1,5 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class user_suggest extends Model {
@@ -12,20 +12,26 @@ module.exports = (sequelize, DataTypes) => {
 
   user_suggest.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
       phone_number: {
         type: DataTypes.STRING(16),
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Phone number is required.",
+            msg: 'Phone number is required.',
           },
           len: {
             args: [8, 16],
-            msg: "Phone number has invalid number of characters.",
+            msg: 'Phone number has invalid number of characters.',
           },
           is: {
             args: /^(?:\+\d{7,15}|\d{10})$/,
-            msg: "Phone number must be a valid format.",
+            msg: 'Phone number must be a valid format.',
           },
         },
       },
@@ -37,10 +43,10 @@ module.exports = (sequelize, DataTypes) => {
           customValidator(value) {
             if (value && value.length > 0) {
               if (value.length < 3 || value.length > 20) {
-                throw new Error("Name must be between 3 and 20 characters in length.");
+                throw new Error('Name must be between 3 and 20 characters in length.');
               }
               if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
-                throw new Error("Name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.");
+                throw new Error('Name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
               }
             }
           },
@@ -55,10 +61,10 @@ module.exports = (sequelize, DataTypes) => {
           customValidator(value) {
             if (value && value.length > 0) {
               if (value.length < 3 || value.length > 20) {
-                throw new Error("Name must be between 3 and 20 characters in length.");
+                throw new Error('Name must be between 3 and 20 characters in length.');
               }
               if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
-                throw new Error("Name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.");
+                throw new Error('Name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
               }
             }
           },
@@ -70,17 +76,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
       },
-     
+
       resolved: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
       },
-      
-    }, {
-    sequelize,
-    modelName: 'user_suggest',
-  });
+    },
+    {
+      sequelize,
+      modelName: 'user_suggest',
+    }
+  );
 
   return user_suggest;
 };
