@@ -7,22 +7,20 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
-
 import { What } from "../CommunityModals/What";
 import { SearchWhere } from "../CommunityModals/SearchWhere";
 import { SearchWhen } from "../CommunityModals/SearchWhen";
-import { useCommunityContext } from '../../contexts/CommunityContext';
+
 import { useTranslation } from 'react-i18next';
 
-export const SearchBar = () => {
-  const { searchAds, regions, subregions } = useCommunityContext();
+export const SearchBar = ({ handleSearch }) => {
+  
   const [isSearchWhatOpen, setIsSearchWhatOpen] = useState(false);
   const [isSearchWhereOpen, setIsSearchWhereOpen] = useState(false);
   const [isSearchWhenOpen, setIsSearchWhenOpen] = useState(false);
   const [creationDateLabel, setCreationDateLabel] = useState('');
 
-  const { t, i18n } = useTranslation();
-  const currentLanguage = i18n.language;
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState({
     tags: '',
@@ -39,68 +37,9 @@ export const SearchBar = () => {
     adSubregionName: '',
     adTownName: '',
   });
-
   // eslint-disable-next-line no-unused-vars
-  const [ads, setAds] = useState({ result: [] });
-
-  const handleSearch = async (customFilters = null) => {
-    const searchFilters = customFilters ? customFilters : filters; // Useе customFilters if provided,
-
-    try {
-      const queryFilters = Object.fromEntries(
-        Object.entries(searchFilters).filter(
-          ([key, value]) =>
-            key !== 'adRegionName' &&
-            key !== 'adSubregionName' &&
-            key !== 'adTownName' &&
-            value &&
-            value !== 'all'
-        )
-      );
-      const result = await searchAds(queryFilters);
-
-      if (result.result && result.result.length > 0) {
-        // Parse id to name
-        const adsWithNames = result.result.map((ad) => ({
-          ...ad,
-          adRegion:
-            regions.find((region) => region.id === Number(ad.adRegion))?.[
-              currentLanguage
-            ] || ad.adRegion,
-          adSubregion:
-            subregions[Number(ad.adRegion)]?.find(
-              (subregion) => subregion.id === Number(ad.adSubregion)
-            )?.[currentLanguage] || ad.adSubregion,
-          adTown:
-            subregions[Number(ad.adSubregion)]?.find(
-              (town) => town.id === Number(ad.adTown)
-            )?.[currentLanguage] || ad.adTown,
-        }));
-        setAds({ result: adsWithNames });
-      } else {
-        setAds({ result: [] });
-      }
-    } finally {
-      if (!customFilters) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          tags: '',
-          category: '',
-          where: '',
-          creationDate: '',
-          expirationDate: '',
-          startDate: '',
-          endDate: '',
-          adRegion: '',
-          adSubregion: '',
-          adTown: '',
-          adRegionName: '',
-          adSubregionName: '',
-          adTownName: '',
-        }));
-        setCreationDateLabel('');
-      }
-    }
+  const handleSearchClick = () => {
+    handleSearch(filters);
   };
 
   const getWhereLabel = () => {
@@ -157,7 +96,7 @@ export const SearchBar = () => {
               : t('community.when_search') + '?'}
           </p>
         </div>
-        <button className="search-button" onClick={() => handleSearch()}>
+        <button className="search-button" onClick={handleSearchClick}>
           {t('community.search_btn')}
         </button>
       </div>
