@@ -49,7 +49,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
     }
   };
   const handleImageChange = (event) => {
-    const files = event.target.files;
+    const files = Array.from(event.target.files);
     const newImages = [...images];
     const newImageFiles = [...imageFiles];
     const targetIndex = parseInt(event.target.dataset.index, 10);
@@ -66,8 +66,11 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
       }
 
       if (!isNaN(targetIndex)) {
-        newImages[targetIndex] = URL.createObjectURL(file);
-        newImageFiles[targetIndex] = file;
+        const newIndex = targetIndex + i;
+        if (newIndex < images.length) {
+          newImages[targetIndex + i] = URL.createObjectURL(file);
+          newImageFiles[targetIndex + i] = file;
+        }
       } else {
         const emptyIndex = newImages.findIndex((image) => image === null);
         if (emptyIndex !== -1) {
@@ -79,6 +82,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
 
     setImages(newImages);
     setImageFiles(newImageFiles);
+    event.target.value = "";
   };
 
   const handleRemoveImage = (index) => {
