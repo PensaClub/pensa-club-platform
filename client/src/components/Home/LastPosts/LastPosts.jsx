@@ -13,7 +13,6 @@ export const LastPosts = () => {
   const { t, i18n } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [townNames, setTownNames] = useState({});
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {

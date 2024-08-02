@@ -80,9 +80,9 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
         setIsModalOpen(false);
     };
 
-    const handleApprove = async (id) => {
+    const handleApprove = async (id,summary) => {
         try {
-            const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.approved_ad')}`;
+            const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.your_ad')} "${summary}" ${t('admin.approved_ad')}`;
             const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
             await updateAdStatus(id, 'approved', finalComment);
             setComment('');
@@ -192,14 +192,14 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th onClick={() => requestSort('email')}>
+                            <th class="th-email-reject" onClick={() => requestSort('email')}>
                                 {t('admin.user_email')}
                                 {sortConfig.key === 'email' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th>{t('admin.announcement_title')}</th>
-                            <th onClick={() => requestSort('date')}>
+                            <th class="th-title-reject">{t('admin.announcement_title')}</th>
+                            <th class="th-date-reject" onClick={() => requestSort('date')}>
                                 {t('admin.creation_date')}
                                 {sortConfig.key === 'date' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
@@ -230,7 +230,7 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                                         src={'/icons/approve-invoice.svg'}
                                         alt="approved"
                                         className="comment-icon"
-                                        onClick={() => handleApprove(announcement.adId)}
+                                        onClick={() => handleApprove(announcement.adId, announcement.summary)}
                                     />
                                     <img
                                         src={'/icons/delete-button.svg'}

@@ -245,7 +245,7 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1200px) {
   .admin-suggestUsers-container h2 {
     font-size: var(--s-font-size);
   }
@@ -259,10 +259,10 @@
   }
 
   .suggestUsers-container-table {
-    font-size: var(--xs-font-size)!important;
+    font-size: var(--xxs-font-size)!important;
   }
   .suggestUsers-container-table  span{
-    font-size: var(--xs-font-size)!important;
+    font-size: var(--xxs-font-size)!important;
   }
 
   .suggestUsers-container-table th,
@@ -270,6 +270,10 @@
     padding: 10px;
   }
 
+  .suggestUsers-container-table th{
+    font-size: var(--xxs-font-size)!important;
+
+  }
   .btn-unapproved {
     padding: 8px 12px;
     margin: 5px;
@@ -290,14 +294,17 @@
     font-size: var(--l-font-size);
   }
   .clickable-text {
-    font-size: var(--s-font-size)!important;
+    font-size: var(--xs-font-size)!important;
   }
   .ads-cell {
     width: 100px;
   }
-
+  .recommended-name,
+  .recommended-by {
+    width: 280px;
+  }
   .suggestUsers-container-table {
-    font-size: var(--s-font-size)!important;
+    font-size: var(--xs-font-size)!important;
   }
 
   .suggestUsers-container-table th,
@@ -386,6 +393,12 @@
 @media (min-width: 1200px) {
   .legend-container {
     gap: 30px;
+  }
+  .recommended-phone{
+    width: 160px;
+  }
+  .message-suggest-all{
+    width: 160px;
   }
 }
 

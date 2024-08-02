@@ -164,7 +164,7 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   };
 
   return (
-    <div className="pending-announcements-container">
+    <div className="unfinished-container">
       <h2>{t('admin.all_users')}</h2>
       <div className="search-container">
         <input
@@ -209,8 +209,8 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
         </div>
       </div>
       <hr />
-      <div className="pending-announcements-table-container">
-        <table className="pending-announcements-table">
+      <div className="unfinished-table-container">
+        <table className="unfinished-table">
           <thead>
             <tr>
               <th className="number-cell" onClick={() => requestSort('id')}>
