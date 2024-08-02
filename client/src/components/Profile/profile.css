@@ -113,6 +113,23 @@
   color: #fff;
 }
 
+  .top-right-button-profile-form {
+    position: absolute;
+    top: 5.3rem;
+    right: 6.8rem;
+    z-index: 2;
+    padding: var(--s-space);
+    border-radius: var(--s-space);
+    color: var(--orange);
+    box-shadow: var(--container-shadow);
+}
+
+
+.top-right-button-profile-form:hover {
+  background-color: var(--orange);
+  color: #fff;
+}
+
 .password-input-container {
   position: relative;
   width: 100%;
@@ -186,6 +203,7 @@
   .main-profile {
     flex-direction: column;
     width: 75%;
+    /* position: relative; */
   }
 }
 
@@ -197,6 +215,7 @@
   box-shadow: var(--container-shadow);
   padding: var(--l-space);
   margin: 0 auto;
+  /* position: relative; */
 }
 
 .profile-form label,
@@ -708,4 +727,29 @@
   width: 12px;
   height: 2px;
   background-color: #aaa;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .top-right-button-profile-form {
+    position: absolute;
+    top: 5.3rem;
+    right: 11.8rem;
+    z-index: 2;
+    padding: var(--s-space);
+    border-radius: var(--s-space);
+    color: var(--orange);
+    box-shadow: var(--container-shadow);
+}
+}
+@media (min-width: 1200px) {
+  .top-right-button-profile-form {
+    position: absolute;
+    top: 5.3rem;
+    right: 20.8rem;
+    z-index: 2;
+    padding: var(--s-space);
+    border-radius: var(--s-space);
+    color: var(--orange);
+    box-shadow: var(--container-shadow);
+}
 }

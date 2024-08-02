@@ -1,7 +1,7 @@
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { loadData } from '../../utils/loadData';
@@ -238,9 +238,18 @@ const ProfileForm = () => {
     setSelectedMonth('');
     setSelectedYear('');
   };
-
+  const handleLogout = () => {
+    navigate('/logout');
+  };
   return (
+    <>
+  
     <form onSubmit={handleSubmit} className='profile-form'>
+    <Link to='/logout' onClick={handleLogout}>
+              <button type='button' className='top-right-button-profile-form'>
+                {t('profile.logout')}
+              </button>
+            </Link>
       <h3>{t('profile.profile_form_title')}</h3>
       <div className='avatar'>
         <img src={previewImage || '/images/sign-up/avatar.jpg'} alt='User avatar' />
@@ -485,7 +494,9 @@ const ProfileForm = () => {
         </button>
       </div>
     </form>
+    </>
   );
+  
 };
 
 export default ProfileForm;
