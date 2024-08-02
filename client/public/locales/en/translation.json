@@ -503,5 +503,16 @@
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
     "who-is-suggested": "Who are you suggesting?"
+  },
+  "admin_messages":{
+    "search_desc": "Search by description...", 
+    "search": "Search",
+    "search_clear": "Clear search",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "select_all": "Select all",
+    "admin": "Admin"
   }
 }
