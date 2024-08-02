@@ -338,7 +338,6 @@
     "your_ad": "Вашата обява",
     "deleted_ad": "Вашата обява е изтрита",
     "approved-suggested_users": "Одобрени препоръчани потребители"
-
   },
   "community": {
     "community": "Общност",
@@ -448,7 +447,9 @@
     "error-images": "Може да изберете само 4 снимки",
     "success-delete-suggest": "Успешно изтрихте препоръчан потребител!",
     "warn-address": "Моля, въведете адрес",
-    "success-role-change to": "Успешно променихте ролята на потребител на"
+    "success-role-change to": "Успешно променихте ролята на потребител на",
+    "success-delete-user": "Успешно изтрихте потребител!",
+    "success_delete_message": "Успешно изтрихте съобщение!"
   },
   "errors": {
     "image_type": "Файл от тип {{type}} не е позволен! Позволените типове снимки са PNG/JPG/JPEG.",

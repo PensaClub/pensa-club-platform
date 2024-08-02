@@ -25,6 +25,16 @@ export const notify = (key) => {
       toast.success(<Trans i18nKey="notification.warn-address" />, {
         role: 'alert',
       });
+      break; 
+    case 'success-delete-user':
+      toast.success(<Trans i18nKey="notification.success-delete-user" />, {
+        role: 'alert',
+      });
+      break;
+    case 'success_delete_message':
+      toast.success(<Trans i18nKey="notification.success_delete_message" />, {
+        role: 'alert',
+      });
       break;
     case 'success-login':
       toast.success(<Trans i18nKey="notification.success-login" />, {

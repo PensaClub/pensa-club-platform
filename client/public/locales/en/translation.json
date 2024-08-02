@@ -455,7 +455,9 @@
     "success-delete-suggest": "Successfully delete suggested user!",
     "all_suggested_users": "All suggested users",
     "warn-address": "Please fill in the address fields!",
-    "success-role-change to": "Successfully change role to"
+    "success-role-change to": "Successfully change role to",
+    "success-delete-user": "Successfully delete user!",
+    "success_delete_message": "Successfully delete message!"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",

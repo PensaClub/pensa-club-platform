@@ -8,6 +8,7 @@ import { CommentModal } from '../PendingAnnouncements/CommentModal';
 import { useMappingContext } from '../../contexts/MapContext';
 import { FlyoutAllUsers } from './FlyoutAllUsers/FlyoutAllUsers';
 import { useAuthContext } from '../../contexts/UserContext';
+import { useAdminContext } from '../../contexts/AdminContext';
 
 export const AllUsers = ({ setAllUsers }) => {
   const [users, setUsers] = useState([]);
@@ -22,9 +23,9 @@ export const AllUsers = ({ setAllUsers }) => {
   const [adminEmail, setAdminEmail] = useState('')
   const { t } = useTranslation();
   const { onAllUsers } = useMappingContext();
-  const { onForgetPasswordSubmit, onChangeAdminRole,profileData } = useAuthContext();
+  const { onForgetPasswordSubmit, onChangeAdminRole, profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
-
+  const { deleteUserData } = useAdminContext()
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -32,7 +33,7 @@ export const AllUsers = ({ setAllUsers }) => {
         if (allUsers && allUsers.accounts) {
           setUsers(allUsers.accounts);
           setAllUsers(allUsers.accounts.length);
-        setAdminEmail(profileData.email);
+          setAdminEmail(profileData.email);
 
           setSearchResults(allUsers.accounts);
         } else {
@@ -45,7 +46,7 @@ export const AllUsers = ({ setAllUsers }) => {
     loadUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
- 
+
   const sortedUsers = Array.isArray(searchResults) ? [...searchResults].sort((a, b) => {
     if (sortConfig.key === 'email') {
       return sortConfig.direction === 'ascending'
@@ -108,9 +109,10 @@ export const AllUsers = ({ setAllUsers }) => {
   //   }
   // };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (email) => {
     try {
       setComment('');
+     await deleteUserData(email);
       const updatedUsers = await onAllUsers();
       setUsers(updatedUsers.accounts);
       setSearchResults(updatedUsers.accounts);
@@ -158,27 +160,27 @@ export const AllUsers = ({ setAllUsers }) => {
   };
 
   const handleRoleChange = async (email, role) => {
-    let defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment',)} ${ role }`;
-    if(role === "guest") {
-      defaultComment=`${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment_banned')}`
+    let defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment',)} ${role}`;
+    if (role === "guest") {
+      defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment_banned')}`
     }
     const finalComment = comment || defaultComment;
-  
+
     try {
       await onChangeAdminRole(email, role, finalComment);
-      const updatedUsers = await onAllUsers(); 
+      const updatedUsers = await onAllUsers();
       if (updatedUsers && updatedUsers.accounts) {
-        setUsers(updatedUsers.accounts); 
-        setSearchResults(updatedUsers.accounts); 
+        setUsers(updatedUsers.accounts);
+        setSearchResults(updatedUsers.accounts);
       } else {
         console.error("Failed to fetch updated users.");
       }
-      setIsFlyoutOpen(false); 
+      setIsFlyoutOpen(false);
     } catch (e) {
       console.error(e);
     }
   };
-  
+
   const handlePasswordReset = (email) => {
     onForgetPasswordSubmit({ email });
   };
@@ -266,7 +268,7 @@ export const AllUsers = ({ setAllUsers }) => {
           </thead>
           <tbody>
             {sortedByRowOrder.map((user, index) => (
-              <tr  key={user.email}>
+              <tr key={user.email}>
                 <td className="number-cell">{index + 1}</td>
                 <td>
                   <Link to={`#`}>{user.email}</Link>
@@ -297,7 +299,7 @@ export const AllUsers = ({ setAllUsers }) => {
                     src={'/icons/delete-button.svg'}
                     alt="delete"
                     className="comment-icon"
-                    onClick={() => handleDelete(user.id)}
+                    onClick={() => handleDelete(user.email)}
                   />
                 </td>
               </tr>

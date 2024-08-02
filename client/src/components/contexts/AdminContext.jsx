@@ -100,6 +100,37 @@ export const AdminProvider = ({ children }) => {
             setIsLoading(false);
         }
     };
+    const deleteUserData = async (email) => {
+        console.log("email", email);
+        try {
+            setIsLoading(true);
+            const response = await adminService.deleteUserData(email);
+            setIsLoading(false);
+            notify('success-delete-user');
+            return response;
+        } catch (e) {
+            notify('error');
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const deleteMessage = async (email,id) => {
+        try {
+            setIsLoading(true);
+            const response = await adminService.deleteMessage(email,id);
+            setIsLoading(false);
+            notify('success-delete-message');
+            return response;
+        } catch (e) {
+            notify('error');
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    };
     const contextService = {
         fetchPendingAds,
         pendingAds,
@@ -108,7 +139,9 @@ export const AdminProvider = ({ children }) => {
         fetchApprovedAds,
         approvedAds,
         fetchRejectAds,
-        rejectAds
+        rejectAds,
+        deleteUserData,
+        deleteMessage
     }
 
     return (
