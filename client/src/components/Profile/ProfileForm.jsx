@@ -1,7 +1,7 @@
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { loadData } from '../../utils/loadData';
@@ -54,7 +54,7 @@ const ProfileForm = () => {
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [workOptions, setWorkOptions] = useState([]);
   const [interestOptions, setInterestOptions] = useState([]);
-
+  const [isYearSelectOpen, setIsYearSelectOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
@@ -115,7 +115,7 @@ const ProfileForm = () => {
     };
 
     updateErrorsTranslation();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLanguage]);
 
   const handleMunicipalityChange = async (e) => {
@@ -238,9 +238,18 @@ const ProfileForm = () => {
     setSelectedMonth('');
     setSelectedYear('');
   };
-
+  const handleLogout = () => {
+    navigate('/logout');
+  };
   return (
+    <>
+  
     <form onSubmit={handleSubmit} className='profile-form'>
+    <Link to='/logout' onClick={handleLogout}>
+              <button type='button' className='top-right-button-profile-form'>
+                {t('profile.logout')}
+              </button>
+            </Link>
       <h3>{t('profile.profile_form_title')}</h3>
       <div className='avatar'>
         <img src={previewImage || '/images/sign-up/avatar.jpg'} alt='User avatar' />
@@ -331,9 +340,16 @@ const ProfileForm = () => {
           </div>
           <div>
             <label>
-              <select value={selectedYear} onChange={handleSelectedYearChange} onBlur={onBlurHandler}>
-                <option value=''>{t('profile.year')}</option>
-                {generateNumberOptions(1900, new Date().getFullYear())}
+              <select
+                value={selectedYear}
+                onChange={handleSelectedYearChange}
+                onFocus={() => {
+                  setIsYearSelectOpen(true);
+                  if (!selectedYear) setSelectedYear(2000)
+                }}
+                onBlur={onBlurHandler}>
+                <option value=''>{isYearSelectOpen ? t('profile.year') : t('profile.year')}</option>
+                {generateNumberOptions(new Date().getFullYear(), 1915)}
               </select>
             </label>
           </div>
@@ -478,7 +494,9 @@ const ProfileForm = () => {
         </button>
       </div>
     </form>
+    </>
   );
+  
 };
 
 export default ProfileForm;

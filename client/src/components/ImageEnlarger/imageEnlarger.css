@@ -31,11 +31,12 @@
 
 .main-image.enlarged {
     position: fixed;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
   width: 80vw;
   height: auto;
+  object-fit: cover;
 }
 
 .thumbnail-wrapper {
@@ -101,4 +102,13 @@
         position: relative;
         width: 90%;
       }
+      .main-image.enlarged {
+        position: fixed;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      width: 80vw;
+      height: 90vh;
+      object-fit: cover;
+    }
 }

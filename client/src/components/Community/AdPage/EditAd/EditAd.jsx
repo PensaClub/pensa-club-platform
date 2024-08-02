@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import "../CreateAd/createAd.css";
 import "../../communityPage.css";
 import { CommunityFooter } from "../../CommunityFooter/CommunityFooter";
@@ -18,6 +20,7 @@ export const EditAd = () => {
   const { t, i18n } = useTranslation();
   const [fieldDefinitions, setFieldDefinitions] = useState({});
   const [towns, setTowns] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [settlements, setSettlements] = useState([]);
   const [tags, setTags] = useState([]);
   const [selectedTown, setSelectedTown] = useState("");

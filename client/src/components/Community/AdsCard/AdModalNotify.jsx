@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 export const AdModalNotify = ({onClose }) => {
 
     return (
-        <div className="image-modal-overlay" onClick={onClose}>
-            <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="image-modal-overlay-ads" onClick={onClose}>
+            <div className="image-modal-content-ads" onClick={(e) => e.stopPropagation()}>
                 <button className="image-modal-close" onClick={onClose}>
                     <FontAwesomeIcon icon={faXmark} style={{ color: "#000000" }} />
                 </button>

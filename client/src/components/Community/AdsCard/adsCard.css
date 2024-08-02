@@ -117,7 +117,7 @@
     border-radius: 50%;
     box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.image-modal-overlay {
+.image-modal-overlay-ads {
     position: fixed;
     top: 0;
     left: 0;

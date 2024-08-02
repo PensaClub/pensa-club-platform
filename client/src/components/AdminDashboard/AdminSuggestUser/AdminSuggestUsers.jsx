@@ -208,7 +208,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th>{t('admin.message')}</th>
+              <th className='message-suggest-all'>{t('admin.message')}</th>
               <th>{t('admin.actions')}</th>
             </tr>
           </thead>

@@ -8,6 +8,7 @@ import { CommentModal } from '../PendingAnnouncements/CommentModal';
 import { useMappingContext } from '../../contexts/MapContext';
 import { FlyoutAllUsers } from './FlyoutAllUsers/FlyoutAllUsers';
 import { useAuthContext } from '../../contexts/UserContext';
+import { useAdminContext } from '../../contexts/AdminContext';
 
 export const AllUsers = ({ setAllUsers }) => {
   const [users, setUsers] = useState([]);
@@ -22,9 +23,9 @@ export const AllUsers = ({ setAllUsers }) => {
   const [adminEmail, setAdminEmail] = useState('')
   const { t } = useTranslation();
   const { onAllUsers } = useMappingContext();
-  const { onForgetPasswordSubmit, onChangeAdminRole,profileData } = useAuthContext();
+  const { onForgetPasswordSubmit, onChangeAdminRole, profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
-
+  const { deleteUserData } = useAdminContext()
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -32,7 +33,7 @@ export const AllUsers = ({ setAllUsers }) => {
         if (allUsers && allUsers.accounts) {
           setUsers(allUsers.accounts);
           setAllUsers(allUsers.accounts.length);
-        setAdminEmail(profileData.email);
+          setAdminEmail(profileData.email);
 
           setSearchResults(allUsers.accounts);
         } else {
@@ -45,7 +46,7 @@ export const AllUsers = ({ setAllUsers }) => {
     loadUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
- 
+
   const sortedUsers = Array.isArray(searchResults) ? [...searchResults].sort((a, b) => {
     if (sortConfig.key === 'email') {
       return sortConfig.direction === 'ascending'
@@ -108,9 +109,10 @@ export const AllUsers = ({ setAllUsers }) => {
   //   }
   // };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (email) => {
     try {
       setComment('');
+     await deleteUserData(email);
       const updatedUsers = await onAllUsers();
       setUsers(updatedUsers.accounts);
       setSearchResults(updatedUsers.accounts);
@@ -158,33 +160,33 @@ export const AllUsers = ({ setAllUsers }) => {
   };
 
   const handleRoleChange = async (email, role) => {
-    let defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment',)} ${ role }`;
-    if(role === "guest") {
-      defaultComment=`${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment_banned')}`
+    let defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment',)} ${role}`;
+    if (role === "guest") {
+      defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment_banned')}`
     }
     const finalComment = comment || defaultComment;
-  
+
     try {
       await onChangeAdminRole(email, role, finalComment);
-      const updatedUsers = await onAllUsers(); 
+      const updatedUsers = await onAllUsers();
       if (updatedUsers && updatedUsers.accounts) {
-        setUsers(updatedUsers.accounts); 
-        setSearchResults(updatedUsers.accounts); 
+        setUsers(updatedUsers.accounts);
+        setSearchResults(updatedUsers.accounts);
       } else {
         console.error("Failed to fetch updated users.");
       }
-      setIsFlyoutOpen(false); 
+      setIsFlyoutOpen(false);
     } catch (e) {
       console.error(e);
     }
   };
-  
+
   const handlePasswordReset = (email) => {
     onForgetPasswordSubmit({ email });
   };
 
   return (
-    <div className="pending-announcements-container">
+    <div className="all-users-container">
       <h2>{t('admin.all_users')}</h2>
       <div className="search-container">
         <input
@@ -229,15 +231,15 @@ export const AllUsers = ({ setAllUsers }) => {
         </div>
       </div>
       <hr />
-      <div className="pending-announcements-table-container">
-        <table className="pending-announcements-table">
+      <div className="all-users-table-container">
+        <table className="all-users-table">
           <thead>
             <tr>
               <th className="number-cell" onClick={toggleRowOrder}>
                 {t('admin.number')}
                 {rowOrder === 'ascending' ? ' ↑' : ' ↓'}
               </th>
-              <th onClick={() => requestSort('email')}>
+              <th className='th-email-all-users' Click={() => requestSort('email')}>
                 {t('admin.user_email')}
                 {sortConfig.key === 'email' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
@@ -297,7 +299,7 @@ export const AllUsers = ({ setAllUsers }) => {
                     src={'/icons/delete-button.svg'}
                     alt="delete"
                     className="comment-icon"
-                    onClick={() => handleDelete(user.id)}
+                    onClick={() => handleDelete(user.email)}
                   />
                 </td>
               </tr>
