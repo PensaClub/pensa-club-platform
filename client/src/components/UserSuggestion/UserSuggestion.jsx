@@ -101,11 +101,11 @@ export const UserSuggestion = () => {
   };
 
   return (
-    <section className="banner-section">
+    <section className="banner-section-suggest">
       <div className="container-wrapper">
-        <div className="container">
-          <form className="form" id="user-suggest" onSubmit={handleSubmit}>
-            <h2 className="form__title">{t('user-suggestion.title')}</h2>
+        <div className="container-suggest">
+          <form className="form-suggest" id="user-suggest" onSubmit={handleSubmit}>
+            <h2 className="form-suggest__title">{t('user-suggestion.title')}</h2>
             <p className="desc">
               <strong>{t('user-suggestion.desc')}</strong>
             </p>
