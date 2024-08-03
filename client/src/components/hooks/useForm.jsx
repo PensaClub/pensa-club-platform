@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { trimFields, validateEmail, validatePassword, validateRePassword} from "../../utils/signUp";
 
-export const useForm = (initialValues, onSubmitHandler) => {
+export const useForm = (initialValues, onSubmitHandler, fieldsToRetain = []) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
 
@@ -41,9 +41,9 @@ export const useForm = (initialValues, onSubmitHandler) => {
       rePassword: trimmedRePassword,
       newPassword: trimmedRePassword,
       reNewPassword: trimmedRePassword,
-      
     });
   };
+
   const validate = () => {
     validateEmail(values.email, setErrors);
     validatePassword(values.password, setErrors);
@@ -59,14 +59,20 @@ export const useForm = (initialValues, onSubmitHandler) => {
     e.preventDefault();
     handleTrimFields();
 
+    const entriesToRetain = {};
+    if (fieldsToRetain.length > 0) {
+      Object.entries(values).forEach(function ([key, value]) {
+        if (fieldsToRetain.includes(key)) entriesToRetain[key] = value;
+      });
+
     if (validate()) {
       if (onSubmitHandler) onSubmitHandler(values);
-      setValues(initialValues);
-
+      setValues({...initialValues, ...entriesToRetain});
       setErrors({});
     } else {
-      setValues(initialValues);
+      setValues({...initialValues, ...entriesToRetain});
       console.error("Invalid form");
+      }
     }
   };
 
