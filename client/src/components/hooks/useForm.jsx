@@ -64,6 +64,7 @@ export const useForm = (initialValues, onSubmitHandler, fieldsToRetain = []) => 
       Object.entries(values).forEach(function ([key, value]) {
         if (fieldsToRetain.includes(key)) entriesToRetain[key] = value;
       });
+    }
 
     if (validate()) {
       if (onSubmitHandler) onSubmitHandler(values);
@@ -73,7 +74,6 @@ export const useForm = (initialValues, onSubmitHandler, fieldsToRetain = []) => 
       setValues({...initialValues, ...entriesToRetain});
       setErrors(errors); // persists errors with rerender
       console.error("Invalid form");
-      }
     }
   };
 
