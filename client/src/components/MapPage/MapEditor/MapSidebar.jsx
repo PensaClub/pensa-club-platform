@@ -91,9 +91,9 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar,setModalImage }
                                     {t('map.skills')}: {selectedUser?.details?.skills.map(option => t(`options.skills.${option}`)).join(', ')}
                                 </p>
                             )}
-                            {selectedUser?.details?.phoneNumber && selectedUser?.details?.phoneNumber.length > 0 &&
+                            {selectedUser?.details?.phoneNumber && selectedUser?.details?.phoneNumber?.length > 0 &&
                                 (<p>{t('map.phone')}: <Link to={`tel:${selectedUser?.details?.phoneNumber}`}>{selectedUser?.details?.phoneNumber}</Link></p>)}
-                            <p>{t('map.email')}: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
+                            <p>{t('map.email')}: <Link to={`mailto:${selectedUser?.email}`}>{selectedUser?.email}</Link></p>
                         </div>
                     </div>
                     <div className="ad-color-lines-pipe"></div>
@@ -109,7 +109,7 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar,setModalImage }
                                         <p className='ad-desc-map'>{trimString(ad?.description, 50)}</p>
                                     </div>
                                     <p className='ad-map-valid'>{t('community.validate_until')} : {new Date(ad?.expirationDate).toLocaleDateString('bg-BG')}</p>
-                                    <p className='ad-category'>{t(`search-criteria.${ad.category}`)}</p>
+                                    <p className='ad-category'>{t(`search-criteria.${ad?.category}`)}</p>
                                 </div>
                                 <div className="color-lines"></div>
                             </Fragment>

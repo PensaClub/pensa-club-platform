@@ -190,7 +190,6 @@ export const CommunityPage = () => {
                                             t('community.what_search') + '?'
                                         )}
                                     </p>
-
                                 </div>
                                 <div className="divider"></div>
                                 <div className="icons-com" onClick={() => setIsSearchWhereOpen(true)}>
