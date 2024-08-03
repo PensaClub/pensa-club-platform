@@ -71,6 +71,7 @@ export const useForm = (initialValues, onSubmitHandler, fieldsToRetain = []) => 
       setErrors({});
     } else {
       setValues({...initialValues, ...entriesToRetain});
+      setErrors(errors); // persists errors with rerender
       console.error("Invalid form");
       }
     }
