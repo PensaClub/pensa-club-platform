@@ -49,7 +49,7 @@ module.exports = {
         'https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/profile-image%2F680555ff-22d4-4fad-8cc7-2b51dfb545de?alt=media&token=ab616f26-8eda-49e5-b1c9-2694540ec972',
     };
 
-    await user_details.update(data, { where: { id: userAccount.id } });
+    await user_details.create(data, { where: { id: userAccount.id } });
   },
 
   async down(queryInterface, Sequelize) {

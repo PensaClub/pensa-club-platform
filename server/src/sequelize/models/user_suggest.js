@@ -82,6 +82,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
+      comments: {
+        type: DataTypes.JSONB,
+        allowNull: false,
+        defaultValue: [],
+        // validate: {
+        //   isArray(value){
+        //     if (!Array.isArray(value)) {
+        //       throw new Error('Comments must be an array.');
+        //     }
+        //   }
+        // }
+      },
     },
     {
       sequelize,

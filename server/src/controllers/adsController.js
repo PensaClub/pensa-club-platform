@@ -64,7 +64,7 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, rbac.checkPermission('approve
     });
 
     if (adId && ads.length === 0) {
-      return res.status(404).json({ message: `There is no ad with such ID at the moment.` });
+      return res.status(404).json({ message: `There is no ad with such ID at the moment.`, ads: [] });
     } else if (!adId && ads.length === 0) {
       return res.status(400).json({ message: `There are no ads at the moment.`, ads: [] });
     }
