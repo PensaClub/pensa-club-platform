@@ -25,6 +25,16 @@ export const notify = (key) => {
       toast.success(<Trans i18nKey="notification.warn-address" />, {
         role: 'alert',
       });
+      break; 
+    case 'success-delete-user':
+      toast.success(<Trans i18nKey="notification.success-delete-user" />, {
+        role: 'alert',
+      });
+      break;
+    case 'success_delete_message':
+      toast.success(<Trans i18nKey="notification.success_delete_message" />, {
+        role: 'alert',
+      });
       break;
     case 'success-login':
       toast.success(<Trans i18nKey="notification.success-login" />, {
@@ -78,6 +88,11 @@ export const notify = (key) => {
       break;
     case 'enter-comment':
       toast.error(<Trans i18nKey="notification.enter-comment" />, {
+        role: 'alert',
+      });
+      break;
+      case 'finish-profile':
+      toast.error(<Trans i18nKey="notification.finish-profile" />, {
         role: 'alert',
       });
       break;

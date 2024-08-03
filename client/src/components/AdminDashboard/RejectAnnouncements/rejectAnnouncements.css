@@ -228,8 +228,26 @@
       width: 100%;
     }
   }
-  
-  @media (min-width: 768px) and (max-width: 1200px) {
+  @media (min-width: 768px) and (max-width: 950px) {
+    .reject-announcements-table th {
+      font-size: var(--xxs-font-size);
+    }
+    .reject-announcements-table th,
+    .reject-announcements-table td {
+      font-size: var(--xxs-font-size);
+
+    }
+    .th-title-reject{
+      width: 160px;
+    }
+    .th-date-reject{
+      width: 160px;
+    }
+    .th-email-reject{
+      width: 120px;
+    }
+  }
+  @media (min-width: 950px) and (max-width: 1200px) {
     .pending-announcements-container h2 {
       font-size: var(--s-font-size);
     }
@@ -237,12 +255,22 @@
     .reject-announcements-table {
       font-size: var(--xs-font-size);
     }
-  
+    .th-title-reject{
+      width: 180px;
+    }
+    .th-date-reject{
+      width: 200px;
+    }
+    .th-email-reject{
+      width: 160px;
+    }
     .reject-announcements-table th,
     .reject-announcements-table td {
       padding: 10px;
     }
-  
+    .reject-announcements-table th {
+      font-size: var(--xs-font-size);
+    }
     .btn-unapproved {
       padding: 8px 12px;
       margin: 5px;
@@ -263,7 +291,7 @@
     }
   
     .reject-announcements-table {
-      font-size: var(--s-font-size);
+      font-size: var(--xs-font-size);
     }
   
     .reject-announcements-table th,
@@ -272,7 +300,7 @@
     }
   
     .reject-announcements-table th {
-      font-size: var(--m-font-size);
+      font-size: var(--xs-font-size);
     }
   
     .btn-unapproved {

@@ -257,6 +257,7 @@ export const MapEditor = ({ filteredUsers }) => {
                     selectedUser={selectedUser}
                     userAds={filteredUsers.find(user => user.email === selectedUser.email)?.ads || []}
                     closeSidebar={closeSidebar}
+                    setModalImage={setModalImage}
                 />
             )}
             {open && !isAuthentication && (

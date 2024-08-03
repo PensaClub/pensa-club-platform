@@ -129,7 +129,7 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
     }
     return (
         <div className="admin-suggestUsers-container">
-            <h2>{t('admin.all_suggested_users')}</h2>
+            <h2>{t('admin.approved-suggested_users')}</h2>
             <div className="search-container">
                 <input
                     type="text"

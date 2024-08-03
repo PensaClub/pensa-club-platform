@@ -100,7 +100,7 @@ export const AdDetails = () => {
   };
 
   const handleEmailClick = (e) => {
-    if (!userDetails?.email) {
+    if (!ad?.account?.email) {
       e.preventDefault(); 
       toast.error(t('missing_email'));
     }
@@ -133,7 +133,7 @@ export const AdDetails = () => {
                 <div className="ads-details-container">
                   <div className="ads-details-icons">
                     <Link
-                      to={userDetails?.phoneNumber ? `tel:${userDetails.phoneNumber}` : '#'}
+                      to={userDetails?.phoneNumber ? `tel:${userDetails?.phoneNumber}` : '#'}
                       onClick={handlePhoneClick}
                     >
                       <div className="group-icon">
@@ -142,7 +142,7 @@ export const AdDetails = () => {
                       </div>
                     </Link>
                     <Link
-                      to={userDetails?.email ? `mailto:${userDetails.email}` : '#'}
+                      to={ad?.account?.email ? `mailto:${ad?.account?.email}` : '#'}                    
                       onClick={handleEmailClick}
                     >
                       <div className="group-icon">

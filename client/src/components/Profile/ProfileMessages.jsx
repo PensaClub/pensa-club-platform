@@ -3,19 +3,21 @@ import React, { useState, useEffect } from 'react';
 import './ProfileMessages.css';
 import { useCommunityContext } from '../contexts/CommunityContext';
 import { useAuthContext } from '../contexts/UserContext';
+import { useAdminContext } from '../contexts/AdminContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const ProfileMessages = () => {
   const { getMyAds } = useCommunityContext();
-  const { getProfileData } = useAuthContext();
+  const { getProfileData, profileData } = useAuthContext();
+  const { deleteMessage } = useAdminContext(); 
   const [messages, setMessages] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
   const [expandedMessage, setExpandedMessage] = useState(null);
   const [selectedMessages, setSelectedMessages] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [userEmail, setUserEmail] = useState('');
   const messagesPerPage = 15;
   const totalPages = Math.ceil(messages.length / messagesPerPage);
 
@@ -28,9 +30,10 @@ export const ProfileMessages = () => {
           .filter(ad => ad.adminComment)
           .map(ad => ({
             id: ad.adId,
-            summary: ad.adminComment.split(': ')[0]+ ':',
+            summary: ad.adminComment.split(': ')[0] + ':',
             description: ad.adminComment.split(': ')[1],
-            creationDate: new Date(ad.creationDate),
+            creationDate: new Date(ad.updatedAt),
+            flag: ad.adId,
             type: 'admin'
           }));
 
@@ -41,12 +44,14 @@ export const ProfileMessages = () => {
           summary: profile.roleChangeComment.split(': ')[0] + ':',
           description: profile.roleChangeComment.split(': ')[1],
           creationDate: new Date(profile.updatedAt),
+          flag: '',
           type: 'admin'
         }] : [];
 
         const combinedMessages = [...adMessages, ...profileMessages].sort((a, b) => b.creationDate - a.creationDate);
         setMessages(combinedMessages);
         setAllMessages(combinedMessages);
+        setUserEmail(profile.email);
       } catch (error) {
         console.error('Error fetching messages:', error);
       }
@@ -88,8 +93,28 @@ export const ProfileMessages = () => {
     );
   };
 
-  const handleDeleteMessage = (id) => {
+  const handleDeleteMessage = async (id,flag) => {
+    try {
+      await deleteMessage(userEmail,flag);
+      setMessages(messages.filter(message => message.id !== id));
+      setAllMessages(allMessages.filter(message => message.id !== id));
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
 
+  const handleDeleteSelectedMessages = async () => {
+    try {
+      await Promise.all(selectedMessages.map(id => {
+        const message = messages.find(message => message.id === id);
+        return deleteMessage(userEmail, message.flag);
+      }));
+      setMessages(messages.filter(message => !selectedMessages.includes(message.id)));
+      setAllMessages(allMessages.filter(message => !selectedMessages.includes(message.id)));
+      setSelectedMessages([]);
+    } catch (error) {
+      console.error('Error deleting selected messages:', error);
+    }
   };
 
   const getCurrentMessages = () => {
@@ -144,7 +169,7 @@ export const ProfileMessages = () => {
             checked={selectedMessages.length === getCurrentMessages().length && getCurrentMessages().length > 0}
           />
           <span>Select All</span>
-          <span className="delete-icon">🗑️</span>
+          <span className="delete-icon" onClick={handleDeleteSelectedMessages}>🗑️</span>
         </div>
         {getCurrentMessages().map(message => (
           <div key={message.id} className="message-wrapper">
@@ -162,7 +187,7 @@ export const ProfileMessages = () => {
               {selectedMessages.includes(message.id) && (
                 <span
                   className="delete-icon-row"
-                  onClick={() => handleDeleteMessage(message.id)}
+                  onClick={() => handleDeleteMessage(message.id,message.flag)}
                 >
                   🗑️
                 </span>

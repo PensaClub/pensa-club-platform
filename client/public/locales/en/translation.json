@@ -23,8 +23,8 @@
     "copyright": "2024 Pensa club. All rights reserved",
     "add-ad": "Create ad"
   },
-  "home":{
-    "town":"Twn",
+  "home": {
+    "town": "Twn",
     "our_latest_ads": "Latest ads ",
     "see_more_ads": "See more ads",
     "no_results": "No results found"
@@ -257,7 +257,8 @@
     "all_users": "All Users",
     "messages": "Messages",
     "in_box": "Inbox",
-    "rejected_ads": "Your ad was not approved"
+    "rejected_ads": "was not approved",
+    "your_ad": "Your ad"
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -340,8 +341,10 @@
     "default_comment": "Your role has been changed to",
     "default_comment_banned": "Your privileges have been restricted",
     "from_admin": "From admin",
-    "approved_ad":"Your ad was approved",
-    "deleted_ad":"Your ad was deleted"
+    "approved_ad": "was approved",
+    "your_ad":"Your ad",
+    "deleted_ad": "Your ad was deleted",
+    "approved-suggested_users": "Approved suggested users"
   },
   "community": {
     "community": "Community",
@@ -452,7 +455,10 @@
     "success-delete-suggest": "Successfully delete suggested user!",
     "all_suggested_users": "All suggested users",
     "warn-address": "Please fill in the address fields!",
-    "success-role-change to": "Successfully change role to"
+    "success-role-change to": "Successfully change role to",
+    "finish-profile": "To create an ad, please finish your profile!",
+    "success-delete-user": "Successfully delete user!",
+    "success_delete_message": "Successfully delete message!"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",

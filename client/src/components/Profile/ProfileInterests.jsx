@@ -67,15 +67,14 @@ export const ProfileInterests = () => {
         e.preventDefault();
         if (validateForm()) {
             await onEditProfileDataSubmit(form);
-            // await onAllUsers();
-            console.error('Form Submitted:', form);
+    
             resetFields(setForm, initialFormState);
             navigate('/profile');
         } else {
 
             setTimeout(() => {
                 if (form && form.interestOptions && form.interestOptions.length > 0) {
-                    console.error('Form Submitted:', form);
+                  
                     resetFields(setForm, initialFormState);
                 }
             }, 2000);
