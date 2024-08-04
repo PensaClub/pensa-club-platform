@@ -238,6 +238,7 @@ export const UserProvider = ({ children }) => {
     onRegisterSubmit,
     onLoginSubmit,
     userEmail: isAuth.email,
+    username: profileData?.details?.username,
     token: isAuth.token,
     isAuthentication: !!isAuth.token,
     onLogout,

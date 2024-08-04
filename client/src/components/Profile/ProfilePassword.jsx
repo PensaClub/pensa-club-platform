@@ -72,7 +72,7 @@ export const ProfilePassword = () => {
   };
 
   const handleResetForm = () => {
-     setForm(initialFormState);
+     handleReset(setForm,initialFormState);
      navigate('/profile');
   };
 

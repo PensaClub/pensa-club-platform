@@ -66,6 +66,11 @@ export const communityServiceFactory = (token) => {
         `${apiUrl}/ads/ads-search?status=approved&order=DESC&limit=${count}`
       );
     },
+    subscribeNewUser: async (username,email) => {
+      return requester.post(
+        `${apiUrl}/subscribe/addSubscriber`, {username, email}
+      );
+    }
   }
 }
 
