@@ -3,9 +3,11 @@ import './profile.css';
 import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 export const ProfilePassword = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { onPasswordReset } = useContext(UserContext);
 
   const initialFormState = {
@@ -69,6 +71,11 @@ export const ProfilePassword = () => {
      }
   };
 
+  const handleResetForm = () => {
+     setForm(initialFormState);
+     navigate('/profile');
+  };
+
   return (
     <form className='profile-form' onSubmit={handleSubmit}>
       <h3>{t('profile.change_password')}</h3>
@@ -128,7 +135,7 @@ export const ProfilePassword = () => {
         <button type='submit' className='btn-general btn-green'>
           {t('profile.save_btn')}
         </button>
-        <button type='button' className='btn-general btn-red' onClick={() => handleReset(setForm, initialFormState)}>
+        <button type='button' className='btn-general btn-red' onClick={handleResetForm}>
           {t('profile.close_btn')}
         </button>
       </div>
