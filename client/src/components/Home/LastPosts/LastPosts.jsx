@@ -80,64 +80,26 @@ export const LastPosts = () => {
       <section className="home-posts">
         {latestAds && latestAds.length > 0 ? (
           <>
-            <div className="second-row-section-first">
-              <div className="single-card card-1" key={latestAds[0]?.adId} onClick={() => handleAdClick(latestAds[0])}>
-                <img src={latestAds[0]?.images[0]?.imageURL} alt="card-1" />
+            {latestAds.map((ad, index) => (
+              <div className={`single-card card-${index + 1}`} key={ad.adId} onClick={() => handleAdClick(ad)}>
+                <img src={ad.images[0]?.imageURL} alt={`card-${index + 1}`} />
                 <div className="card-info">
-                  <h3 className="post-summary">{latestAds[0]?.summary}</h3>
+                  <h3 className="post-summary">{ad.summary}</h3>
                   <p className="post-author" style={{ fontStyle: 'italic' }}>
-                    {getDisplayName(latestAds[0]?.account)}
+                    {getDisplayName(ad.account)}
                   </p>
                   <div className="latest-description">
                     <p className="post-desc">
-                      {t("home.town")}: {townNames[latestAds[0]?.adId]}
+                      {t("home.town")}: {townNames[ad.adId]}
                     </p>
                     <h4 className="post-category">
-                      {translateCategory(latestAds[0]?.category)} | {formatDate(latestAds[0]?.creationDate)}
+                      {translateCategory(ad.category)} | {formatDate(ad.creationDate)}
                     </h4>
                   </div>
                   <div className="color-line-second"></div>
                 </div>
               </div>
-            </div>
-            <div className="second-row-section-second">
-              <div className="single-card card-2" key={latestAds[1]?.adId} onClick={() => handleAdClick(latestAds[1])}>
-                <img src={latestAds[1]?.images[0]?.imageURL} alt="card-2" />
-                <div className="card-info">
-                  <h3 className="post-summary">{latestAds[1]?.summary}</h3>
-                  <p className="post-author" style={{ fontStyle: 'italic' }}>
-                    {getDisplayName(latestAds[1]?.account)}
-                  </p>
-                  <div className="latest-description">
-                    <p className="post-desc">
-                      {t("home.town")}: {townNames[latestAds[1]?.adId]}
-                    </p>
-                    <h4 className="post-category">
-                      {translateCategory(latestAds[1]?.category)} | {formatDate(latestAds[1]?.creationDate)}
-                    </h4>
-                  </div>
-                  <div className="color-line-second"></div>
-                </div>
-              </div>
-              <div className="single-card card-2" key={latestAds[2]?.adId} onClick={() => handleAdClick(latestAds[2])}>
-                <img src={latestAds[2]?.images[0]?.imageURL} alt="card-3" />
-                <div className="card-info">
-                  <h3 className="post-summary">{latestAds[2]?.summary}</h3>
-                  <p className="post-author" style={{ fontStyle: 'italic' }}>
-                    {getDisplayName(latestAds[2]?.account)}
-                  </p>
-                  <div className="latest-description">
-                    <p className="post-desc">
-                      {t("home.town")}: {townNames[latestAds[2]?.adId]}
-                    </p>
-                    <h4 className="post-category">
-                      {translateCategory(latestAds[2]?.category)} | {formatDate(latestAds[2]?.creationDate)}
-                    </h4>
-                  </div>
-                  <div className="color-line-second"></div>
-                </div>
-              </div>
-            </div>
+            ))}
           </>
         ) : (
           <h2>{t('home.no_results')}</h2>
