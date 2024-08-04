@@ -153,7 +153,11 @@ eventEmitter.on('userCacheUpdate', async ({ type, data, adId, userId, action }) 
 
   const parsedCache = JSON.parse(cache.get('users'));
 
-  const account = parsedCache.find((account) => account.id === Number(userId));
+  const accountId = userId !== null ? userId : parsedCache.find((account) => account.ads.find((ad) => ad.adId === adId))?.id || null;
+  if (!accountId) return;
+
+  const account = parsedCache.find((account) => account.id.toString() === accountId.toString());
+
   if (!account) return;
 
   if (type === 'ads') {
@@ -173,13 +177,13 @@ eventEmitter.on('userCacheUpdate', async ({ type, data, adId, userId, action }) 
     if (action === 'details') {
       Object.assign(account.details, data);
     }
-    if (key === 'enabled') {
+    if (action === 'enabled') {
       account.enabled = true;
     }
-    if (key === 'account-delete') {
+    if (action === 'account-delete') {
       parsedCache = parsedCache.filter((account) => account.id !== userId);
     }
-    if (key === 'account') {
+    if (action === 'account') {
       Object.assign(account, data);
     }
   }

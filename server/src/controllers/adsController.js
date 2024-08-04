@@ -175,7 +175,7 @@ adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_re
 
     const mappedAd = fieldSwap(updatedAd.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...mappedAd }, adId, userId: req.user.userId });
+    eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...mappedAd }, adId, userId: null });
 
     res.status(200).json({ message: 'Ad status has been updated successfully.' });
   } catch (err) {
@@ -194,7 +194,7 @@ adsController.delete('/ad-delete/:adId', isAuth, rbac.checkPermission('delete_re
     if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
       await ad.destroy();
 
-      eventEmitter.emit('userCacheUpdate', { type: 'ads', data: null, adId, userId: req.user.userId, action: 'delete' });
+      eventEmitter.emit('userCacheUpdate', { type: 'ads', data: null, adId, userId: null, action: 'delete' });
 
       return res.status(200).json({ message: 'Ad has been deleted successfully.' });
     }
