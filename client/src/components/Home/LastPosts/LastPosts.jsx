@@ -79,27 +79,53 @@ export const LastPosts = () => {
       <h2>{t('home.our_latest_ads')}</h2>
       <section className="home-posts">
         {latestAds && latestAds.length > 0 ? (
-          <>
-            {latestAds.map((ad, index) => (
-              <div className={`single-card card-${index + 1}`} key={ad.adId} onClick={() => handleAdClick(ad)}>
-                <img src={ad.images[0]?.imageURL} alt={`card-${index + 1}`} />
-                <div className="card-info">
-                  <h3 className="post-summary">{ad.summary}</h3>
-                  <p className="post-author" style={{ fontStyle: 'italic' }}>
-                    {getDisplayName(ad.account)}
-                  </p>
-                  <div className="latest-description">
-                    <p className="post-desc">
-                      {t("home.town")}: {townNames[ad.adId]}
+            <>
+            {latestAds.length > 0 && (
+              <div className="second-row-section-first">
+                <div className="single-card card-1" key={latestAds[0]?.adId} onClick={() => handleAdClick(latestAds[0])}>
+                  <img src={latestAds[0]?.images[0]?.imageURL} alt="card-1" />
+                  <div className="card-info">
+                    <h3 className="post-summary">{latestAds[0]?.summary}</h3>
+                    <p className="post-author" style={{ fontStyle: 'italic' }}>
+                      {getDisplayName(latestAds[0]?.account)}
                     </p>
-                    <h4 className="post-category">
-                      {translateCategory(ad.category)} | {formatDate(ad.creationDate)}
-                    </h4>
+                    <div className="latest-description">
+                      <p className="post-desc">
+                        {t("home.town")}: {townNames[latestAds[0]?.adId]}
+                      </p>
+                      <h4 className="post-category">
+                        {translateCategory(latestAds[0]?.category)} | {formatDate(latestAds[0]?.creationDate)}
+                      </h4>
+                    </div>
+                    <div className="color-line-second"></div>
                   </div>
-                  <div className="color-line-second"></div>
                 </div>
               </div>
-            ))}
+            )}
+            {latestAds.length > 1 && (
+              <div className="second-row-section-second">
+                {latestAds.slice(1).map((ad, index) => (
+                  <div className="single-card card-2" key={ad.adId} onClick={() => handleAdClick(ad)}>
+                    <img src={ad?.images[0]?.imageURL} alt={`card-${index + 2}`} />
+                    <div className="card-info">
+                      <h3 className="post-summary">{ad.summary}</h3>
+                      <p className="post-author" style={{ fontStyle: 'italic' }}>
+                        {getDisplayName(ad.account)}
+                      </p>
+                      <div className="latest-description">
+                        <p className="post-desc">
+                          {t("home.town")}: {townNames[ad.adId]}
+                        </p>
+                        <h4 className="post-category">
+                          {translateCategory(ad.category)} | {formatDate(ad.creationDate)}
+                        </h4>
+                      </div>
+                      <div className="color-line-second"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         ) : (
           <h2>{t('home.no_results')}</h2>
