@@ -13,7 +13,6 @@ adminController.post('/change-role', isAuth, rbac.checkPermission('approve_recor
     if (email === process.env.ADMIN_EMAIL) return res.status(400).json({ message: 'Cannot change role of the admin account.' });
 
     if (roleChangeComment) {
-      if (roleChangeComment.length < 10) return res.status(400).json({ message: 'Comment must be at least 10 characters long.' });
       if (roleChangeComment.length > 1000) return res.status(400).json({ message: 'Maximum comment length limit of 1000 characters is reached.' });
     }
 
@@ -22,6 +21,8 @@ adminController.post('/change-role', isAuth, rbac.checkPermission('approve_recor
     if (!emailExists) return res.status(404).json({ message: 'User not found.' });
 
     await user_account.update({ role, role_change_comment: roleChangeComment }, { where: { email } });
+
+    eventEmitter.emit('userCacheUpdate', { type: 'user', data: { role, roleChangeComment }, adId: null, userId: emailExists.id, action: 'account' });
 
     res.status(200).json({ message: 'Role changed successfully.' });
   } catch (err) {
@@ -41,7 +42,7 @@ adminController.delete('/delete-account/:userEmail', isAuth, rbac.checkPermissio
 
     await user_account.destroy({ where: { email: userEmail } });
 
-    eventEmitter.emit('accountUpdated', { updates: { 'account-delete': null } }, user.id);
+    eventEmitter.emit('userCacheUpdate', { type: 'user', data: null, adId: null, userId: user.id, action: 'account-delete' });
 
     res.status(200).json({ message: 'Account deleted successfully.' });
   } catch (err) {
@@ -64,14 +65,14 @@ adminController.patch('/delete-comment/', isAuth, rbac.checkPermission('delete_r
       user.role_change_comment = null;
       await user.save();
 
-      eventEmitter.emit('accountUpdated', { updates: { account: { roleChangeComment: null } } }, user.id);
+      eventEmitter.emit('userCacheUpdate', { type: 'user', data: { roleChangeComment: null }, adId: null, userId: user.id, action: 'account' });
 
       return res.status(200).json({ message: 'Comment deleted successfully.' });
     }
 
     await user_ads.update({ admin_comment: null }, { where: { ad_id: adId } });
 
-    eventEmitter.emit('ads', { adminComment: null }, adId, user.id);
+    eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { adminComment: null }, adId, userId: user.id });
 
     res.status(200).json({ message: 'Comment deleted successfully.' });
   } catch (err) {

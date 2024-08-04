@@ -252,9 +252,14 @@ When the server starts for the first time in a development environment, a demo u
 
   - **/ads/update-expiration-date/:adId**: This endpoint sets the expiration date of an AD to 30 days from the current date. It requires the user to be logged in and the AD's ID to be provided in the URL path. Example: http://localhost:8080/ads/update-expiration-date/123 - sets the expiration date to 30 days from the current date on ad with id 123.
 
-- **_adminController_** :
+- **_adminController_** (This controller can be accessed by admins only.) :
 
-  - **/admin/change-role** : Responsible for changing account's role. This endpoint can be accessed by admins only.
+  - **/admin/change-role** : Responsible for changing account's role.
+  - **/admin/delete-account/:userEmail** : Responsible for deleting a user record.
+  - **/admin/delete-comment** : Responsible for deleting role change comments in user's account and admin comments inside specific AD.
+
+- **_subscribersController_** :
+  - **/subscriber/addSubscriber** : Responsible for creating subscriber's record (username and email).
 
 ## Testing
 

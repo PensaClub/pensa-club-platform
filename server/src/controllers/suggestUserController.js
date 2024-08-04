@@ -34,7 +34,7 @@ suggestUserController.get('/resolved', isAuth, rbac.checkPermission('approve_rec
     });
 
     if (userData.length === 0) {
-      return res.status(404).json({ message: 'No resolved suggestions found', userData: [] });
+      return res.status(200).json({ message: 'No resolved suggestions found', userData: [] });
     }
 
     res.status(200).json({ message: 'Suggested Users data retrieved successfully.', userData });
@@ -49,7 +49,7 @@ suggestUserController.get('/unresolved', isAuth, rbac.checkPermission('approve_r
     });
 
     if (userData.length === 0) {
-      return res.status(404).json({ message: 'No unresolved suggestions found', userData: [] });
+      return res.status(200).json({ message: 'No unresolved suggestions found', userData: [] });
     }
 
     res.status(200).json({ message: 'Suggested Users data retrieved successfully.', userData });

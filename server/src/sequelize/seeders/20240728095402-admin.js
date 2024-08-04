@@ -39,7 +39,7 @@ module.exports = {
       district: '',
       block: null,
       street_number: '7',
-      location: JSON.stringify({ lat: 43.34658, lon: 26.23078 }),
+      location: { lat: 43.34658, lon: 26.23078 },
       gender: 'male',
       birth_date: '1990-01-01',
       user_accounts_id: userAccount.id,

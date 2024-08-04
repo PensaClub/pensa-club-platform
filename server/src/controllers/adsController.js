@@ -30,7 +30,7 @@ adsController.post('/ad-create', isAuth, rbac.checkPermission('create_record'), 
 
     const formatted = fieldSwap(ad.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('ads', { ...formatted }, ad.ad_id, req.user.userId);
+    eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...formatted }, adId: ad.ad_id, userId: req.user.userId });
 
     res.status(200).json({ message: 'Ad successfully created.' });
   } catch (err) {
@@ -44,7 +44,7 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, rbac.checkPermission('approve
   try {
     const { adStatus, adId } = req.params;
 
-    if (!adsType.includes(adStatus)) return res.status(404).json({ message: 'Invalid status type. Status must be approved, pending or denied.' });
+    if (!adsType.includes(adStatus)) return res.status(404).json({ message: 'Invalid status type. Status must be approved, pending or denied.', ads: [] });
 
     const whereCondition = {
       status: adStatus,
@@ -63,15 +63,17 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, rbac.checkPermission('approve
       ],
     });
 
-    if (adId && ads.length === 0) {
+    const adsArray = Array.isArray(ads) ? ads : [];
+
+    if (adId && adsArray.length === 0) {
       return res.status(404).json({ message: `There is no ad with such ID at the moment.`, ads: [] });
-    } else if (!adId && ads.length === 0) {
-      return res.status(400).json({ message: `There are no ads at the moment.`, ads: [] });
+    } else if (!adId && adsArray.length === 0) {
+      return res.status(200).json({ message: `There are no ads at the moment.`, ads: [] });
     }
 
     const mappedAds = ads.map((ad) => {
-      const newAd = fieldSwap(ad.dataValues, 'mapFromDb');
-      newAd.email = ad.dataValues.account.dataValues.email;
+      const newAd = fieldSwap(ad.get({ plain: true }), 'mapFromDb');
+      newAd.account = { email: ad.account.email };
       return newAd;
     });
 
@@ -173,7 +175,7 @@ adsController.post('/ad-update-status', isAuth, rbac.checkPermission('approve_re
 
     const mappedAd = fieldSwap(updatedAd.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('accountUpdated', { updates: { ads: mappedAd } }, req.user.userId);
+    eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...mappedAd }, adId, userId: req.user.userId });
 
     res.status(200).json({ message: 'Ad status has been updated successfully.' });
   } catch (err) {
@@ -191,7 +193,8 @@ adsController.delete('/ad-delete/:adId', isAuth, rbac.checkPermission('delete_re
 
     if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
       await ad.destroy();
-      eventEmitter.emit('ads', adId, req.user.userId, 'delete');
+
+      eventEmitter.emit('userCacheUpdate', { type: 'ads', data: null, adId, userId: req.user.userId, action: 'delete' });
 
       return res.status(200).json({ message: 'Ad has been deleted successfully.' });
     }
@@ -230,7 +233,7 @@ adsController.patch('/ad-edit', isAuth, rbac.checkPermission('update_record'), a
 
     const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('ads', { ...updatedDetails }, regularFields.adId, req.user.userId);
+    eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...updatedDetails }, adId: regularFields.adId, userId: req.user.userId });
 
     res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
   } catch (err) {
@@ -462,7 +465,7 @@ adsController.patch('/update-expiration-date/:adId', isAuth, rbac.checkPermissio
 
     const mappedAds = fieldSwap(details.dataValues, 'mapFromDb');
 
-    eventEmitter.emit('ads', { ...mappedAds }, adId, req.user.userId);
+    eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...mappedAds }, adId, userId: req.user.userId });
 
     res.status(200).json({ message: `Expiration date successfully changed to ${expirationDate}` });
   } catch (err) {
