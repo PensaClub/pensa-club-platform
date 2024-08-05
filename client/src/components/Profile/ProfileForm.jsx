@@ -341,7 +341,7 @@ const ProfileForm = () => {
           {errors.lastName && <span className='error'>{errors.lastName}</span>}
         </div>
         <div className='date'>
-          <label>{t('profile.age')}</label>
+          <label>{t('profile.age')}:</label>
           <div>
             <label>
               <select value={selectedDate} onChange={handleSelectedDateChange} onBlur={onBlurHandler}>

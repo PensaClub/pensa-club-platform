@@ -198,7 +198,14 @@ export const ProfileAnnounced = () => {
           );
         })
       ) : (
-        <h4 className='no-ads'>{t('ads.no_ads')}</h4>
+        <><h4 className='no-ads'>{t('ads.no_ads')}</h4>
+        <div className='btn-center'>
+        <Link to='/ad/create'>
+              <button type='button' className='btn-general btn-orange'>
+              {t("header.ad-create")}
+              </button>
+            </Link>
+        </div></>
       )}
       <DeleteAd
         isOpen={isDeleteModalOpen}
