@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import './communityPage.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faLocationDot, faCalendar, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FiltersCommunity } from "./FiltersCommunity/FiltersCommunity";
 import { AdsCard } from "./AdsCard/AdsCard";
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -13,6 +11,7 @@ import { SearchWhere } from "./CommunityModals/SearchWhere";
 import { SearchWhen } from "./CommunityModals/SearchWhen";
 import { useCommunityContext } from "../contexts/CommunityContext";
 import { useTranslation } from "react-i18next";
+import { SearchCommunityBar } from './SearchCommunityBar'; 
 
 export const CommunityPage = () => {
     const { isLoading, searchAds, regions, subregions, fetchTowns } = useCommunityContext();
@@ -180,46 +179,18 @@ export const CommunityPage = () => {
                         <div className="hero-bg"></div>
                         <div className="hero-section-commun">
                             <h1>{t('community.community')}</h1>
-                            <div className="search-bar-commun-s">
-                                <div className="icons-com" onClick={() => setIsSearchWhatOpen(true)}>
-                                    <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" />
-                                    <p>
-                                        {(filters?.tags || filters?.category !== '') ? (
-                                            `${filters?.tags} ${filters?.category !== 'all' ? (t(`search-criteria.${filters?.category}`, { fallbackLng: currentLanguage }) !== `search-criteria.${filters?.category}` ? t(`search-criteria.${filters?.category}`) : filters?.category) : t('search-criteria.all_menu')}`
-                                        ) : (
-                                            t('community.what_search') + '?'
-                                        )}
-                                    </p>
-                                </div>
-                                <div className="divider"></div>
-                                <div className="icons-com" onClick={() => setIsSearchWhereOpen(true)}>
-                                    <FontAwesomeIcon icon={faLocationDot} className="commun-icon" />
-                                    <p>{getWhereLabel()}</p>
-                                </div>
-                                <div className="divider"></div>
-                                <div className="icons-com" onClick={() => setIsSearchWhenOpen(true)}>
-                                    <FontAwesomeIcon icon={faCalendar} className="commun-icon" />
-                                    <p>
-                                        {creationDateLabel ? (
-                                            creationDateLabel === t('community.specific_period') && filters.startDate && filters.endDate ? (
-                                                `от ${new Date(filters.startDate).toLocaleDateString('bg-BG')} до ${new Date(filters.endDate).toLocaleDateString('bg-BG')}`
-                                            ) : (
-                                                `${creationDateLabel}`
-                                            )
-                                        ) : (
-                                            t('community.when_search') + '?'
-                                        )}
-                                    </p>
-                                </div>
-                                <button className="search-button" onClick={() => handleSearch()}>{t('community.search_btn')}</button>
-                                {showResetIcon && (
-                                    <FontAwesomeIcon
-                                        icon={faArrowRotateLeft}
-                                        className="reset-icon"
-                                        onClick={resetFilters}
-                                    />
-                                )}
-                            </div>
+                            <SearchCommunityBar
+                                filters={filters}
+                                setFilters={setFilters}
+                                setIsSearchWhatOpen={setIsSearchWhatOpen}
+                                setIsSearchWhereOpen={setIsSearchWhereOpen}
+                                setIsSearchWhenOpen={setIsSearchWhenOpen}
+                                handleSearch={handleSearch}
+                                resetFilters={resetFilters}
+                                getWhereLabel={getWhereLabel}
+                                creationDateLabel={creationDateLabel}
+                                showResetIcon={showResetIcon}
+                            />
                         </div>
 
                         {ads.result.length > 0 ? (
