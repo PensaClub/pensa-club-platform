@@ -26,7 +26,7 @@ export const ProfileMessages = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const adsResponse = await getMyAds();
+        const adsResponse = await getMyAds(profileData?.email);
         const ads = adsResponse.ads || [];
         const adMessages = ads
           .filter(ad => ad.adminComment)

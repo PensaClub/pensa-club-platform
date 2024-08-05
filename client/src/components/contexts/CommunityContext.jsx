@@ -116,7 +116,7 @@ export const CommunityProvider = ({ children }) => {
     const getMyAds = async (email) => {
         try {
             setIsLoading(true);
-            const response = await communityService.getMyAds();
+            const response = await communityService.getMyAds(email);
             setIsLoading(false);
             return response;
         } catch (e) {
