@@ -23,7 +23,8 @@ export const Register = ({ navToLogin }) => {
       password: "",
       rePassword: "",
     },
-    onRegisterSubmit
+    onRegisterSubmit,
+    ["email"]
   );
 
   const toggleShowPassword = () => {
