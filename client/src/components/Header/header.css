@@ -55,7 +55,13 @@ header::after {
 header.scrolled {
   background-color: var(--orange);
 }
-
+.header-community-logo a{
+  font-size: var(--s-font-size);
+  font-weight: 600;
+  line-height: 25px;
+  text-decoration: none;
+  color: var(--green);
+}
 header > a:nth-child(1) {
   font-size: var(--s-font-size);
   font-weight: 600;

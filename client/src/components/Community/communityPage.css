@@ -92,7 +92,6 @@
     margin-left: 2px;
     font-size:calc(var(--xs-font-size) + 3px);
     cursor: pointer;
-
     color: var(--green-text)!important;
     font-weight: 100 !important;
 
