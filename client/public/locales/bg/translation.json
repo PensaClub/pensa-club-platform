@@ -499,7 +499,8 @@
     "date": "Дата",
     "add_new_comment": "Нов коментар",
     "comment": "Коментар",
-    "comments": "Коментари"
+    "comments": "Коментари",
+    "submit": "Изпрати"
   },
   "home": {
     "our_latest_ads": "Последните публикации",

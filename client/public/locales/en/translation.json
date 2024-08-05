@@ -507,6 +507,7 @@
     "date": "Date",
     "add_new_comment": "Add new comment",
     "comment": "Comment",
-    "comments": "Comments"
+    "comments": "Comments",
+    "submit": "Submit"
   }
 }

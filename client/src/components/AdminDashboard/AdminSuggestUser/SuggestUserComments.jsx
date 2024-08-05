@@ -42,7 +42,7 @@ export const SuggestUserComments = ({ isOpen, onClose, onSubmit, comments, comme
           />
         </div>
         <button className="modal-submit-admin" onClick={onSubmit}>
-          Submit
+        {t('user-suggestion.submit')}
         </button>
       </div>
     </div>
