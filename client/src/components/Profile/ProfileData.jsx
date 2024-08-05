@@ -265,7 +265,7 @@ export const ProfileData = () => {
             {errors.phoneNumber && <span className='error'>{errors.phoneNumber}</span>}
           </div>
           <div className='date'>
-            <label>{t('profile.age')}</label>
+            <label>{t('profile.age')}:</label>
             <div>
               <label>
                 <select value={selectedDate} onChange={handleSelectedDateChange}>

@@ -1,6 +1,6 @@
 .ad-community-background {
     background-image: var(--bg-image);
-    background-position: center;
+    background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -9,7 +9,7 @@
     margin: 0 auto;
     padding: 1em 1em;
     min-height: 100vh;
-    font-family: "Inter", sans-serif;
+    /* font-family: "Inter", sans-serif; */
 }
 
 .error {

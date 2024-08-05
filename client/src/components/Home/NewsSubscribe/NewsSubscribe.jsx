@@ -1,13 +1,16 @@
 import './newsSubscribe.css'
 
 import { useRef, useState } from 'react'
-import emailjs from '@emailjs/browser'
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from '../../contexts/UserContext';
+import { useCommunityContext } from '../../contexts/CommunityContext';
 
 export const NewsSubscribe = () => {
     const { t } = useTranslation();
-    const [userName, setUserName] = useState("");
-    const [userEmail, setUserEmail] = useState("");
+    const {username: lsUsername, userEmail: lsEmail} = useAuthContext();
+    const {subscribeNewUser} = useCommunityContext();
+    const [userName, setUserName] = useState(lsUsername ||"");
+    const [userEmail, setUserEmail] = useState(lsEmail || "");
     const [errors, setErrors] = useState({ userEmail: '', userName: '' })
 
     const validateEmail = (email) => {
@@ -49,29 +52,7 @@ export const NewsSubscribe = () => {
             return;
         }
 
-        emailjs
-            .sendForm(
-                "service_zxhuqbx",
-                "template_7tkpsx5",
-                form.current,
-                "iRYFR4BuAXZEBF1ld",
-            )
-            .then(result => {
-
-            }).then(
-                (result) => {
-                    console.error("Email sent successfully:", result);
-                    setUserName("");
-                    setUserEmail("");
-                    setErrors({ userName: '', userEmail: '' });
-                },
-
-                (err) => {
-                    throw new Error(err)
-                }
-            )
-        console.error(form.current)
-
+        subscribeNewUser(userName, userEmail);
     }
     return (
         <>

@@ -14,6 +14,7 @@
 .ads-details-page {
   width: 100%;
   min-height: 100vh;
+  
 }
 
 .share-button-ad {
@@ -31,6 +32,8 @@
 
 .hero-bg-details {
   display: none;
+  position: relative;
+
 }
 
 .hero-section-details {
@@ -40,15 +43,15 @@
   justify-content: center;
 }
 
-.hero-section-details h1 {
-  margin-top: 2em;
-  text-align: center;
-  color: var(--green);
+.ads-details-page h1 {
+  margin: 0;
+  position: absolute;
+  top: 5%;
+  left: 39%;
+  color: var(--text-white);
   font-size: var(--l-font-size);
-  line-height: 46.88px;
-  letter-spacing: 1rem;
-  padding-left: 1.2rem;
-  font-weight: 900;
+  letter-spacing: 1.7rem;
+  padding: initial;
 }
 
 .hero-section-details .group-icon p {
@@ -536,7 +539,7 @@
     font-size: var(--m-font-size);
     color: var(--brown);
     text-align: left;
-    margin-top: 5em;
+    margin-top: 3em;
   }
   .ads-details-back>* {
     color: var(--brown) !important;

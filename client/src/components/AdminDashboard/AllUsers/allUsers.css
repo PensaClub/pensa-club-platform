@@ -174,6 +174,74 @@
   filter: brightness(0.9);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+.trimmed-email-all-users a{
+  color: var(--orange);
+  cursor: pointer;
+}
+.text-modal-overlay-all-users {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.text-modal-content-all-users-ads {
+  position: relative;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 80%;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.text-modal-content-all-users-ads .close-button-all-users {
+  text-align: center;
+  position: absolute;
+  top: -80px;
+  right: -20px;
+  font-size: 40px;
+  cursor: pointer;
+  color: black !important;
+  opacity: 1;
+  background-color: var(--gravel);
+  padding: 0px 10px;
+  border-radius: 50%;
+  text-decoration: none;
+  text-indent: initial;
+  transition: transform 0.3s ease-in-out;
+}
+
+.text-modal-content-all-users-ads .close-button-all-users:hover {
+  transform: rotate(90deg);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
   @media (max-width: 767px) {
     .all-users-container h2 {
       font-size: var(--s-font-size);
@@ -268,11 +336,18 @@
       height: 30px;
     }
   }
-  
+  @media (min-width: 980px) and (max-width: 1200px) {
+    .all-users-container{
+      width: 100%;
+  }
+  }
   @media (min-width: 1200px) {
     .all-users-container h2 {
       font-size: var(--l-font-size);
     }
+    .all-users-container{
+      width: 100%;
+  }
     .ads-cell{
         width: 100px;
     }
@@ -287,7 +362,9 @@
       padding: 12px 15px;
       text-align: center;
     }
-  
+    .all-users-container {
+      width: 100%;
+    }
     .all-users-table th {
       font-size: var(--xs-font-size);
     }

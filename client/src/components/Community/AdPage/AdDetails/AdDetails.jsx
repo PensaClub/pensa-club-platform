@@ -113,8 +113,9 @@ export const AdDetails = () => {
           <HeaderCommunity />
           <section className="main-details">
             <div className="hero-bg-details"></div>
+            <h1>{t('community.community')}</h1>
+
             <div className="hero-section-details">
-              <h1>{t('community.community')}</h1>
               <SearchBar handleSearch={handleSearchRedirect} />
               <div className="ad-details-back-phone">
                 <p>

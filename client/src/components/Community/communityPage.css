@@ -92,7 +92,6 @@
     margin-left: 2px;
     font-size:calc(var(--xs-font-size) + 3px);
     cursor: pointer;
-
     color: var(--green-text)!important;
     font-weight: 100 !important;
 
@@ -124,6 +123,7 @@
 }
 .no-ads-message p{
     font-size: calc(var(--s-font-size) - 4px);
+    text-align: center;
 }
 .clear-filters-button{
     background-color: var(--brown);
@@ -132,6 +132,10 @@
     color: var(--text-white);
     font-size: calc(var(--s-font-size) - 4px);
 
+}
+
+.clear-filters-button:hover {
+    cursor: pointer;
 }
 
 @media (min-width: 768px) and (max-width: 1200px) {

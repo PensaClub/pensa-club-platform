@@ -74,7 +74,12 @@ export const UserProvider = ({ children }) => {
         navigate('/');
       }
     } catch (error) {
-      notify('error');
+      if (error.message == "Email or password are invalid.") {
+        notify('error-authorize')
+      } else {
+        notify('error');
+      }
+    
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -238,6 +243,7 @@ export const UserProvider = ({ children }) => {
     onRegisterSubmit,
     onLoginSubmit,
     userEmail: isAuth.email,
+    username: profileData?.details?.username,
     token: isAuth.token,
     isAuthentication: !!isAuth.token,
     onLogout,
