@@ -56,7 +56,7 @@ header.scrolled {
   background-color: var(--orange);
 }
 
-header a:nth-child(1) {
+header > a:nth-child(1) {
   font-size: var(--s-font-size);
   font-weight: 600;
   line-height: 25px;
