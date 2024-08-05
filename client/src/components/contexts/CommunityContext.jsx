@@ -238,6 +238,22 @@ export const CommunityProvider = ({ children }) => {
         }
     };
 
+    const subscribeNewUser = async (username, email) => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.subscribeNewUser(username, email);
+            setIsLoading(false);
+            console.log(response);
+            return response;
+        } catch (e) {
+            notify('error');
+            showErrorAndSetTimeouts(e.message);
+            throw e;
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchRegions();
         fetchSearchCriteria();
@@ -264,9 +280,10 @@ export const CommunityProvider = ({ children }) => {
         ads,
         loadMoreAds,
         setAds,
-       getLatestAds,
-      getAdById
-           };
+        getLatestAds,
+        getAdById,
+        subscribeNewUser
+    };
 
     return (
         <CommunityContext.Provider value={contextService}>

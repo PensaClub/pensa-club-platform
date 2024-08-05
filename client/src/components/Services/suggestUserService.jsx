@@ -20,7 +20,10 @@ export const suggestUserServiceFactory = () => {
     },
     suggestDelete: (id) => {
       return requester.post(`${apiUrl}/suggest/delete`, {id: id});  
-    }
+    }, 
+    createComment: async (comment,id) => {
+      return requester.post(`${apiUrl}/suggest/comments`,{comment: comment,id: id});
+  }
 
   };
 }

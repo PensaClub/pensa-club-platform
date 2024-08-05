@@ -23,7 +23,8 @@ export const Register = ({ navToLogin }) => {
       password: "",
       rePassword: "",
     },
-    onRegisterSubmit
+    onRegisterSubmit,
+    ["email"]
   );
 
   const toggleShowPassword = () => {
@@ -88,7 +89,7 @@ export const Register = ({ navToLogin }) => {
 
         {errors.rePassword && <p className="error">{t(`${errors.rePassword}`)}</p>}
 
-        <button className="btn-general btn-orange">{t('form.register')}</button>
+        <button className="btn-general btn-orange" disabled={!values.password || !values.email || !values.rePassword}>{t('form.register')}</button>
         <Link to="#" className="link link-hidden" onClick={navToLogin}>
         {t('form.register-redirect')} <span>{t('form.login')}</span>
         </Link>

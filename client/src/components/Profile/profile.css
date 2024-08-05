@@ -154,13 +154,15 @@
   margin-top: 1em;
   margin-bottom: 1rem !important;
 }
-@media (max-width: 1000px) {
+.btn-center {
+  text-align: center;
+}
+@media (max-width: 900px) {
   .menu-toggle {
     display: block;
     top: 6rem;
     right: calc(var(--s-space) + 2rem);
   }
-
   .account-menu {
     position: fixed;
     top: 0;

@@ -26,6 +26,8 @@ export const AllUsers = ({ setAllUsers }) => {
   const { onForgetPasswordSubmit, onChangeAdminRole, profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
   const { deleteUserData } = useAdminContext()
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -184,7 +186,18 @@ export const AllUsers = ({ setAllUsers }) => {
   const handlePasswordReset = (email) => {
     onForgetPasswordSubmit({ email });
   };
-
+  const trimString = (str, num) => {
+    if (str.length <= num) return str;
+    return str.slice(0, num) + '...';
+  }
+  const handleTextClick = (text) => {
+    setModalContent(text);
+    setIsTextModalOpen(true);
+  };
+  const closeTextModal = () => {
+    setIsTextModalOpen(false);
+    setModalContent('');
+  }
   return (
     <div className="all-users-container">
       <h2>{t('admin.all_users')}</h2>
@@ -270,12 +283,12 @@ export const AllUsers = ({ setAllUsers }) => {
             {sortedByRowOrder.map((user, index) => (
               <tr key={user.email}>
                 <td className="number-cell">{index + 1}</td>
-                <td>
-                  <Link to={`#`}>{user.email}</Link>
+                <td className='trimmed-email-all-users' onClick={() => handleTextClick(user?.email)}>
+                  <Link to={`#`}>{trimString(user?.email,12)}</Link>
                 </td>
-                <td>{formatDate(user.createdAt)}</td>
-                <td>{getStatus(user.enabled)}</td>
-                <td>{user.ads?.length}</td>
+                <td>{formatDate(user?.createdAt)}</td>
+                <td>{getStatus(user?.enabled)}</td>
+                <td>{user?.ads?.length}</td>
                 <td className="actions-admin">
                   <img
                     src={'/icons/comment.svg'}
@@ -328,7 +341,14 @@ export const AllUsers = ({ setAllUsers }) => {
         handleRoleChange={handleRoleChange}
         handlePasswordReset={handlePasswordReset}
       />
-
+   {isTextModalOpen && (
+        <div className="text-modal-overlay-all-users">
+          <div className="text-modal-content-all-users-ads ">
+            <span className="close-button-all-users" onClick={closeTextModal}>&times;</span>
+            <p>{modalContent}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

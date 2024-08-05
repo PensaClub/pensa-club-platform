@@ -9,6 +9,7 @@ import { loadData } from '../../utils/loadData';
 import { useImagePreview } from '../hooks/useImagePreview';
 import { useMappingContext } from '../contexts/MapContext';
 import { useImageUpload } from '../hooks/useImageUpload';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
@@ -21,29 +22,31 @@ const ProfileForm = () => {
   const { handleImageChange, uploadImages } = useImageUpload();
   const { previewImage, handleImage } = useImagePreview();
 
+  const [persistedData, setPersistedData] = useLocalStorage('persistedData', {});
+
   const initialFormState = {
-    username: '',
+    username: persistedData?.username || '',
     // email: userEmail,
-    firstName: '',
-    lastName: '',
-    phoneNumber: null,
-    gender: null,
-    region: '',
-    regionId: '',
-    municipality: '',
-    municipalityId: '',
-    settlement: '',
-    settlementId: '',
-    district: '',
-    block: '',
-    street: '',
-    streetNumber: '',
-    birthDate: null,
-    skills: [],
-    interestOptions: [],
-    workOptions: [],
-    imageURL: null,
-    firebaseImagePath: null,
+    firstName: persistedData?.firstName || '',
+    lastName: persistedData?.lastName || '',
+    phoneNumber: persistedData?.phoneNumber || null,
+    gender: persistedData?.gender || null,
+    region: persistedData?.region || '',
+    regionId: persistedData?.regionId || '',
+    municipality: persistedData?.municipality || '',
+    municipalityId: persistedData?.municipalityId || '',
+    settlement: persistedData?.settlement || '',
+    settlementId: persistedData?.settlementId || '',
+    district: persistedData?.district || '',
+    block: persistedData?.block || '',
+    street: persistedData?.street || '',
+    streetNumber: persistedData?.streetNumber || '',
+    birthDate: persistedData?.birthDate || null,
+    skills: persistedData?.skills || [],
+    interestOptions: persistedData?.interestOptions || [],
+    workOptions: persistedData?.workOptions || [],
+    imageURL: persistedData?.imageURL || null,
+    firebaseImagePath: persistedData?.firebaseImagePath || null,
   };
   const [form, setForm] = useState(initialFormState);
 
@@ -59,10 +62,23 @@ const ProfileForm = () => {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
+
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))
       .catch((err) => console.error(err.message));
+
+      if (persistedData?.municipality) {
+        loadData(`/regions-data/region-${form.regionId}/subregions-${form.regionId}.json`)
+      .then((data) => setMunicipalities(data))
+      .catch((err) => console.error(err.message));
+      }
+
+      if (persistedData?.settlement) {
+        loadData(`/regions-data/region-${form.regionId}/towns/towns-${form.municipalityId}.json`)
+      .then((data) => setSettlements(data))
+      .catch((err) => console.error(err.message));
+      }
 
     loadData('/options.json')
       .then((data) => {
@@ -189,6 +205,7 @@ const ProfileForm = () => {
 
     const trimmedForm = trimObjectStrings(form);
     setForm(trimmedForm);
+    setPersistedData(trimmedForm);
 
     const validationErrors = {};
     let isValid = true;
@@ -211,6 +228,7 @@ const ProfileForm = () => {
         setSelectedDate('');
         setSelectedMonth('');
         setSelectedYear('');
+        setPersistedData({});
 
         const updatedForm = await uploadImages(trimmedForm);
 
@@ -219,9 +237,11 @@ const ProfileForm = () => {
         window.scrollTo(0, 0);
         navigate('/profile');
       } catch (error) {
+        setForm(persistedData);
         console.error(`Error on profile form submit: ${error.message}`);
       }
     } else {
+      setForm(persistedData);
       console.error('Form validation failed. Errors:', validationErrors);
     }
   };
@@ -321,7 +341,7 @@ const ProfileForm = () => {
           {errors.lastName && <span className='error'>{errors.lastName}</span>}
         </div>
         <div className='date'>
-          <label>{t('profile.age')}</label>
+          <label>{t('profile.age')}:</label>
           <div>
             <label>
               <select value={selectedDate} onChange={handleSelectedDateChange} onBlur={onBlurHandler}>
