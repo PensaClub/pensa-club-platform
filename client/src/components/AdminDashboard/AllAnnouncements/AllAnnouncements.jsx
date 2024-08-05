@@ -22,7 +22,6 @@ export const AllAnnouncements = () => {
             await fetchApprovedAds();
             await fetchRejectAds();
 
-            // Fetch categories data from search-criteria.json
             const response = await fetch('/search-criteria.json');
             const data = await response.json();
             setCategories(data?.searchCriteria);
@@ -108,9 +107,9 @@ export const AllAnnouncements = () => {
     const dateData = generateDateData().length ? generateDateData() : mockData;
 
     const pieData = [
-        { name: 'Pending Ads', value: pendingAds.length, color: '#FFCE56' },
-        { name: 'Approved Ads', value: approvedAds.length, color: '#82ca9d' },
-        { name: 'Rejected Ads', value: rejectAds.length, color: '#FF6384' }
+        { name: t('admin.pending_ads'), value: pendingAds.length, color: '#FFCE56' },
+        { name: t('admin.approved_ads'), value: approvedAds.length, color: '#82ca9d' },
+        { name: t('admin.rejected_ads'), value: rejectAds.length, color: '#FF6384' }
     ];
 
     const renderCustomTooltip = ({ active, payload, label }) => {
@@ -142,9 +141,9 @@ export const AllAnnouncements = () => {
                         <YAxis />
                         <Tooltip content={renderCustomTooltip} />
                         <Legend onClick={(e) => handleLegendClickBar(e.dataKey)} />
-                        <Bar dataKey="pending" fill="#FFCE56" fillOpacity={hiddenBar.includes('pending') ? 0.2 : 1} />
-                        <Bar dataKey="approved" fill="#82ca9d" fillOpacity={hiddenBar.includes('approved') ? 0.2 : 1} />
-                        <Bar dataKey="rejected" fill="#FF6384" fillOpacity={hiddenBar.includes('rejected') ? 0.2 : 1} />
+                        <Bar dataKey="pending" fill="#FFCE56" name={t('admin.pending')} fillOpacity={hiddenBar.includes('pending') ? 0.2 : 1} />
+                        <Bar dataKey="approved" fill="#82ca9d" name={t('admin.approved')} fillOpacity={hiddenBar.includes('approved') ? 0.2 : 1} />
+                        <Bar dataKey="rejected" fill="#FF6384" name={t('admin.rejected')} fillOpacity={hiddenBar.includes('rejected') ? 0.2 : 1} />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -166,9 +165,9 @@ export const AllAnnouncements = () => {
                                     }
                                 }}
                             />
-                            <Line type="monotone" dataKey="pending" stroke="#FFCE56" strokeOpacity={hiddenLine.includes('pending') ? 0.2 : 1} />
-                            <Line type="monotone" dataKey="approved" stroke="#82ca9d" strokeOpacity={hiddenLine.includes('approved') ? 0.2 : 1} />
-                            <Line type="monotone" dataKey="rejected" stroke="#FF6384" strokeOpacity={hiddenLine.includes('rejected') ? 0.2 : 1} />
+                            <Line type="monotone" dataKey="pending" stroke="#FFCE56" name={t('admin.pending')} strokeOpacity={hiddenLine.includes('pending') ? 0.2 : 1} />
+                            <Line type="monotone" dataKey="approved" stroke="#82ca9d" name={t('admin.approved')} strokeOpacity={hiddenLine.includes('approved') ? 0.2 : 1} />
+                            <Line type="monotone" dataKey="rejected" stroke="#FF6384" name={t('admin.rejected')} strokeOpacity={hiddenLine.includes('rejected') ? 0.2 : 1} />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
