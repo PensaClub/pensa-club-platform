@@ -62,7 +62,8 @@ export const AdDetails = () => {
     e.preventDefault();
     try {
       const userAdsResponse = await getMyAds(ad?.account?.email);
-      setUserAds(userAdsResponse);
+      const sortedAds = userAdsResponse?.ads.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      setUserAds({ ...userAdsResponse, ads: sortedAds });
       setSelectedUser(userDetails);
       setIsSidebarOpen(true);
     } catch (error) {
