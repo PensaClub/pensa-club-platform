@@ -37,9 +37,9 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
         const pendingAds = await fetchPendingAds();
         setAnnouncements(pendingAds);
         setSearchResults(pendingAds);
-        setAdminEmail(profileData.email);
+        setAdminEmail(profileData?.email);
 
-        setAdsCount(pendingAds.length);
+        setAdsCount(pendingAds?.length);
 
       } catch (e) {
         console.error(e);
@@ -90,7 +90,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
    
       const updatedAds = await fetchPendingAds();
       setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
+      setAdsCount(updatedAds?.length);
       setSearchResults(updatedAds);
     } catch (e) {
       console.error(e);
@@ -111,7 +111,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
   
       const updatedAds = await fetchPendingAds();
       setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
+      setAdsCount(updatedAds?.length);
       setSearchResults(updatedAds);
     } catch (e) {
       console.error(e);
@@ -127,7 +127,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
     
       const updatedAds = await fetchPendingAds();
       setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
+      setAdsCount(updatedAds?.length);
       setSearchResults(updatedAds);
     } catch (error) {
       console.error(error);
@@ -161,8 +161,8 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
     setSearchResults(announcements);
   };
   const trimString = (str, num) => {
-    if (str.length <= num) return str;
-    return str.slice(0, num) + '...';
+    if (str?.length <= num) return str;
+    return str?.slice(0, num) + '...';
 }
   const handleTextClick = (text) => {
     setModalContent(text);
@@ -268,26 +268,26 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
                     src={'/icons/approve-invoice.svg'}
                     alt="approved"
                     className="comment-icon"
-                    onClick={() => handleApprove(announcement.adId,announcement.summary)}
+                    onClick={() => handleApprove(announcement?.adId,announcement?.summary)}
                   />
                   <img
                     src={'/icons/denied.svg'}
                     alt="reject"
                     className="comment-icon"
-                    onClick={() => handleReject(announcement.adId,announcement.summary)}
+                    onClick={() => handleReject(announcement?.adId,announcement?.summary)}
                   />
                   <img
                     src={'/icons/delete-button.svg'}
                     alt="delete"
                     className="comment-icon"
-                    onClick={() => handleDelete(announcement.adId)}
+                    onClick={() => handleDelete(announcement?.adId)}
                   />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {sortedAnnouncements.length === 0 && <p className='no-result-fly'>No results found...</p>}
+        {sortedAnnouncements?.length === 0 && <p className='no-result-fly'>No results found...</p>}
       </div>
       <CommentModal
         isOpen={isModalOpen}

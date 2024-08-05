@@ -204,14 +204,14 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th class="th-email-reject" onClick={() => requestSort('email')}>
+                            <th className="th-email-reject" onClick={() => requestSort('email')}>
                                 {t('admin.user_email')}
                                 {sortConfig.key === 'email' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th class="th-title-reject">{t('admin.announcement_title')}</th>
-                            <th class="th-date-reject" onClick={() => requestSort('date')}>
+                            <th className="th-title-reject">{t('admin.announcement_title')}</th>
+                            <th className="th-date-reject" onClick={() => requestSort('date')}>
                                 {t('admin.creation_date')}
                                 {sortConfig.key === 'date' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
