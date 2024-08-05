@@ -160,6 +160,10 @@ button, input, textarea {
   opacity: 0.7;
 }
 
+.btn-general:disabled {
+  opacity: 0.7;
+}
+
 /* Button Colors */
 .btn-orange {
   background-color: var(--orange);

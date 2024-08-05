@@ -60,11 +60,11 @@ export const CommunityPage = () => {
     useEffect(() => {
         const query = new URLSearchParams(search);
         const filtersFromQuery = Object.fromEntries(query.entries());
-        setFilters(filtersFromQuery);
+        setFilters(prevFilters => ({ ...prevFilters, ...filtersFromQuery }));
         if (Object.keys(filtersFromQuery).length > 0) {
             handleSearch(filtersFromQuery, 1);
         }
-    }, [search]);
+    }, [search]);    
 
     const handleSearch = async (customFilters = null, pageNum = 1) => {
         const searchFilters = customFilters ? customFilters : filters;
@@ -184,13 +184,12 @@ export const CommunityPage = () => {
                                 <div className="icons-com" onClick={() => setIsSearchWhatOpen(true)}>
                                     <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" />
                                     <p>
-                                        {(filters.tags || filters.category !== '') ? (
-                                            `${filters.tags} ${filters.category !== 'all' ? (t(`search-criteria.${filters.category}`, { fallbackLng: currentLanguage }) !== `search-criteria.${filters.category}` ? t(`search-criteria.${filters.category}`) : filters.category) : t('search-criteria.all_menu')}`
+                                        {(filters?.tags || filters?.category !== '') ? (
+                                            `${filters?.tags} ${filters?.category !== 'all' ? (t(`search-criteria.${filters?.category}`, { fallbackLng: currentLanguage }) !== `search-criteria.${filters?.category}` ? t(`search-criteria.${filters?.category}`) : filters?.category) : t('search-criteria.all_menu')}`
                                         ) : (
                                             t('community.what_search') + '?'
                                         )}
                                     </p>
-
                                 </div>
                                 <div className="divider"></div>
                                 <div className="icons-com" onClick={() => setIsSearchWhereOpen(true)}>

@@ -25,7 +25,7 @@ export const AllAnnouncements = () => {
             // Fetch categories data from search-criteria.json
             const response = await fetch('/search-criteria.json');
             const data = await response.json();
-            setCategories(data.searchCriteria);
+            setCategories(data?.searchCriteria);
         };
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

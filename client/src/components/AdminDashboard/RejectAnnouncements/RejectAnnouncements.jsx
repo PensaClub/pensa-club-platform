@@ -23,7 +23,8 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
     const [searchCriteria, setSearchCriteria] = useState('summary');
     const [searchResults, setSearchResults] = useState([]);
     const [adminEmail, setAdminEmail] = useState('')
-
+    const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
     // eslint-disable-next-line no-unused-vars
     const [isSearching, setIsSearching] = useState(false);
     const { t } = useTranslation();
@@ -138,9 +139,20 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
         setSearchCriteria('summary');
         setSearchResults(announcements);
     };
-
+    const trimString = (str, num) => {
+        if (str.length <= num) return str;
+        return str.slice(0, num) + '...';
+    }
+    const handleTextClick = (text) => {
+      setModalContent(text);
+      setIsTextModalOpen(true);
+    };
+    const closeTextModal = () => {
+      setIsTextModalOpen(false);
+      setModalContent('');
+    }
     return (
-        <div className="pending-announcements-container">
+        <div className="reject-announcements-container">
             <h2>{t('profile.reject_announcements')}</h2>
             <div className="search-container">
                 <input
@@ -192,14 +204,14 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th class="th-email-reject" onClick={() => requestSort('email')}>
+                            <th className="th-email-reject" onClick={() => requestSort('email')}>
                                 {t('admin.user_email')}
                                 {sortConfig.key === 'email' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th class="th-title-reject">{t('admin.announcement_title')}</th>
-                            <th class="th-date-reject" onClick={() => requestSort('date')}>
+                            <th className="th-title-reject">{t('admin.announcement_title')}</th>
+                            <th className="th-date-reject" onClick={() => requestSort('date')}>
                                 {t('admin.creation_date')}
                                 {sortConfig.key === 'date' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
@@ -212,13 +224,13 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                         {sortedAnnouncements.map((announcement, index) => (
                             <tr key={announcement.adId}>
                                 <td className="number-cell id-table-admin">{index + 1}</td>
-                                <td>
-                                    <Link to={`#`}>{announcement.account.email}</Link>
+                                <td className='trimmed-email-reject'  onClick={()=>handleTextClick(announcement?.account?.email)}>
+                                    <Link to={`#`}>{trimString(announcement?.account?.email,12)}</Link>
                                 </td>
-                                <td>
-                                    <Link to={`#`} onClick={() => handleAdClick(announcement)}>{announcement.summary}</Link>
+                                <td className='trimmed-tittle-reject'>
+                                    <Link to={`#`} onClick={() => handleAdClick(announcement)}>{trimString(announcement?.summary,10)}</Link>
                                 </td>
-                                <td>{announcement.creationDate}</td>
+                                <td>{announcement?.creationDate}</td>
                                 <td className="actions-admin">
                                     <img
                                         src={'/icons/comment.svg'}
@@ -267,6 +279,14 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                     handleDelete={handleDelete}
                 />
             )}
+               {isTextModalOpen && (
+        <div className="text-modal-overlay-reject">
+          <div className="text-modal-content-reject-ads ">
+            <span className="close-button-reject" onClick={closeTextModal}>&times;</span>
+            <p>{modalContent}</p>
+          </div>
+        </div>
+      )}
         </div>
     );
 };

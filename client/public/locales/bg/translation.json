@@ -265,7 +265,7 @@
     "announcement_title": "Име на обявата",
     "creation_date": "Дата на създаване",
     "actions": "Действия",
-    "category": "Kateгория",
+    "category": "Категория",
     "description": "Описание",
     "region": "Регион",
     "subregion": "Община",
@@ -450,7 +450,8 @@
     "success-role-change to": "Успешно променихте ролята на потребител на",
     "finish-profile": "За да съзададете обява, моля завършете своя профил!",
     "success-delete-user": "Успешно изтрихте потребител!",
-    "success_delete_message": "Успешно изтрихте съобщение!"
+    "success_delete_message": "Успешно изтрихте съобщение!",
+    "error-authorize": "Грешка! Невалиден имейл и/или грешна парола!"
   },
   "errors": {
     "image_type": "Файл от тип {{type}} не е позволен! Позволените типове снимки са PNG/JPG/JPEG.",
@@ -507,5 +508,16 @@
     "see_more_ads": "Вижте още публикации",
     "town": "гр.",
     "no_results": "Няма намерени резултати"
+  },
+  "admin_messages":{
+    "search_desc": "Търси по описание...",
+    "search": "Търси",
+    "search_clear": "Изчисти търсенето",
+    "previous": "Предишни",
+    "next": "Следващи",
+    "page": "Страница",
+    "of": "от",
+    "select_all": "Изберете всички",
+    "admin": "Админ"
   }
 }

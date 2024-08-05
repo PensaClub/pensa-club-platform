@@ -1,15 +1,15 @@
-.pending-announcements-container {
+.reject-announcements-container {
     width: 90%;
     margin: 0 auto;
     text-align: center;
   }
   
-  .pending-announcements-container h2 {
+  .reject-announcements-container h2 {
     margin-bottom: 10px;
     font-size: var(--xs-font-size);
   }
   
-  .pending-announcements-container hr {
+  .reject-announcements-container hr {
     border: 1px solid #ccc;
     margin-bottom: 20px;
   }
@@ -174,8 +174,79 @@
   filter: brightness(0.9);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+.trimmed-tittle-reject a{
+  color: var(--orange);
+  cursor: pointer;
+}
+.trimmed-email-reject a{
+  color: var(--orange);
+  cursor: pointer;
+}
+.text-modal-overlay-reject {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.text-modal-content-reject-ads {
+  position: relative;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 80%;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.text-modal-content-reject-ads .close-button-reject {
+  text-align: center;
+  position: absolute;
+  top: -80px;
+  right: -20px;
+  font-size: 40px;
+  cursor: pointer;
+  color: black !important;
+  opacity: 1;
+  background-color: var(--gravel);
+  padding: 0px 10px;
+  border-radius: 50%;
+  text-decoration: none;
+  text-indent: initial;
+  transition: transform 0.3s ease-in-out;
+}
+
+.text-modal-content-reject-ads .close-button-reject:hover {
+  transform: rotate(90deg);
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
   @media (max-width: 767px) {
-    .pending-announcements-container h2 {
+    .reject-announcements-container h2 {
       font-size: var(--s-font-size);
     }
     .reject-announcements-table .number-cell {
@@ -247,11 +318,12 @@
       width: 120px;
     }
   }
+
   @media (min-width: 950px) and (max-width: 1200px) {
-    .pending-announcements-container h2 {
+    .reject-announcements-container h2 {
       font-size: var(--s-font-size);
     }
-  
+   
     .reject-announcements-table {
       font-size: var(--xs-font-size);
     }
@@ -284,12 +356,18 @@
       height: 40px;
     }
   }
-  
+  @media (min-width: 980px) and (max-width: 1200px) {
+    .reject-announcements-container {
+      width: 100%;
+    }
+  }
   @media (min-width: 1200px) {
-    .pending-announcements-container h2 {
+    .reject-announcements-container h2 {
       font-size: var(--l-font-size);
     }
-  
+    .reject-announcements-container {
+      width: 100%;
+    }
     .reject-announcements-table {
       font-size: var(--xs-font-size);
     }
