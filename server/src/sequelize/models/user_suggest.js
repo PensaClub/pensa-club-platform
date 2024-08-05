@@ -36,23 +36,22 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       name: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(40),
         allowNull: true,
         defaultValue: null,
         validate: {
           customValidator(value) {
             if (value && value.length > 0) {
-              if (value.length < 3 || value.length > 20) {
-                throw new Error('Name must be between 3 and 20 characters in length.');
+              if (value.length < 3 || value.length > 40) {
+                throw new Error('Name must be between 3 and 40 characters in length.');
               }
               if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
-                throw new Error('Name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
+                throw new Error('Name must be 3-40 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
               }
             }
           },
         },
       },
-
       refferer_name: {
         type: DataTypes.STRING(20),
         allowNull: true,
@@ -60,23 +59,21 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           customValidator(value) {
             if (value && value.length > 0) {
-              if (value.length < 3 || value.length > 20) {
-                throw new Error('Name must be between 3 and 20 characters in length.');
+              if (value.length < 3 || value.length > 100) {
+                throw new Error('Name must be between 3 and 100 characters in length.');
               }
               if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
-                throw new Error('Name must be 3-20 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
+                throw new Error('Name must be 3-100 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
               }
             }
           },
         },
       },
-
       message: {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null,
       },
-
       resolved: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -86,13 +83,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.JSONB,
         allowNull: false,
         defaultValue: [],
-        // validate: {
-        //   isArray(value){
-        //     if (!Array.isArray(value)) {
-        //       throw new Error('Comments must be an array.');
-        //     }
-        //   }
-        // }
       },
     },
     {
