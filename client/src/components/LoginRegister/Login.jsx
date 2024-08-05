@@ -69,7 +69,7 @@ export const Login = ({ navToRegister }) => {
         <Link to="/forget-password" className="link">
           {t('form.password-forgotten')}
         </Link>
-        <button className="btn-general btn-orange">{t('form.login')}</button>
+        <button className="btn-general btn-orange" disabled={!values.password || !values.email}>{t('form.login')}</button>
         <Link
           to="/sign-up"
           className="link link-hidden"
