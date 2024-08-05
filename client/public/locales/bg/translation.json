@@ -337,8 +337,20 @@
     "approved_ad": " е одобрена",
     "your_ad": "Вашата обява",
     "deleted_ad": "Вашата обява е изтрита",
-    "approved-suggested_users": "Одобрени препоръчани потребители"
-  },
+    "approved-suggested_users": "Одобрени препоръчани потребители",
+    "admins": "Администратори",
+    "guests": "Гости",
+    "count": "брой",
+    "total": "oбщо",
+    "completed": "завършени",
+    "not_completed": "незавършени",
+    "pending_ads": "Обяви в очакване",
+    "approved_ads": "Одобрени обяви",
+    "rejected_ads": "Отхвърлени обяви",
+    "pending": "В очакване",
+    "approved": "Одобрени",
+    "rejected": "Отхвърлени"
+   },
   "community": {
     "community": "Общност",
     "what_search": "Какво търсиш",
@@ -510,7 +522,7 @@
     "town": "гр.",
     "no_results": "Няма намерени резултати"
   },
-  "admin_messages":{
+  "admin_messages": {
     "search_desc": "Търси по описание...",
     "search": "Търси",
     "search_clear": "Изчисти търсенето",

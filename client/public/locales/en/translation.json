@@ -288,7 +288,7 @@
     "users": "Users",
     "all_announcements_statistic": "Ad Statistics",
     "user_registration_date": "Registration Date",
-    "role_user": "User",
+    "role_user": "user",
     "role_admin": "Admin",
     "reset_password": "Reset Password",
     "phone_number": "Phone Number",
@@ -344,7 +344,19 @@
     "approved_ad": "was approved",
     "your_ad": "Your ad",
     "deleted_ad": "Your ad was deleted",
-    "approved-suggested_users": "Approved suggested users"
+    "approved-suggested_users": "Approved suggested users",
+    "admins": "admin",
+   "guests":"guest",
+   "count":"count",
+   "total":"total",
+   "completed":"completed",
+   "not_completed":"not completed",
+   "pending_ads": "Pending Ads",
+   "approved_ads": "Approved Ads",
+   "rejected_ads": "Rejected Ads",
+   "pending": "Pending",
+   "approved": "Approved",
+   "rejected": "Rejected"
   },
   "community": {
     "community": "Community",
@@ -511,5 +523,16 @@
     "comment": "Comment",
     "comments": "Comments",
     "submit": "Submit"
+  },
+  "admin_messages":{
+    "search_desc": "Search by description...", 
+    "search": "Search",
+    "search_clear": "Clear search",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "select_all": "Select all",
+    "admin": "Admin"
   }
 }
