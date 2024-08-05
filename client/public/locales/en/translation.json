@@ -459,7 +459,8 @@
     "finish-profile": "To create an ad, please finish your profile!",
     "success-delete-user": "Successfully delete user!",
     "success_delete_message": "Successfully delete message!",
-    "error-authorize": "Error! Invalid email and/or wrong password!"
+    "error-authorize": "Error! Invalid email and/or wrong password!",
+    "success-comment": "Successfully add comment!"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
