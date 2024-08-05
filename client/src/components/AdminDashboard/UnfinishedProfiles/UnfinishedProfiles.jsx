@@ -24,7 +24,8 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   const { onAllUsers } = useMappingContext();
   const { onForgetPasswordSubmit,onChangeAdminRole,profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
-
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -162,7 +163,18 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   const handlePasswordReset = (email) => {
     onForgetPasswordSubmit({ email })
   };
-
+  const trimString = (str, num) => {
+    if (str.length <= num) return str;
+    return str.slice(0, num) + '...';
+  }
+  const handleTextClick = (text) => {
+    setModalContent(text);
+    setIsTextModalOpen(true);
+  };
+  const closeTextModal = () => {
+    setIsTextModalOpen(false);
+    setModalContent('');
+  }
   return (
     <div className="unfinished-container">
       <h2>{t('admin.all_users')}</h2>
@@ -250,8 +262,8 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
             {sortedUsers.map((user, index) => (
               <tr key={user.email}>
                 <td className="number-cell">{sortConfig.key === 'id' && sortConfig.direction === 'descending' ? sortedUsers.length - index : index + 1}</td>
-                <td>
-                  <Link to={`#`}>{user.email}</Link>
+                <td className='trimmed-email-unfinished' onClick={() => handleTextClick(user?.email)}>
+                  <Link to={`#`}>{trimString(user?.email,12)}</Link>
                 </td>
                 <td>{formatDate(user.createdAt)}</td>
                 <td>{getStatus(user.enabled)}</td>
@@ -308,7 +320,14 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
         handleRoleChange={handleRoleChange}
         handlePasswordReset={handlePasswordReset}
       />
-
+  {isTextModalOpen && (
+        <div className="text-modal-overlay-all-users">
+          <div className="text-modal-content-all-users-ads ">
+            <span className="close-button-all-users" onClick={closeTextModal}>&times;</span>
+            <p>{modalContent}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
