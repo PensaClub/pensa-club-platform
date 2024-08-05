@@ -7,6 +7,9 @@ export const loadAddressData = async (
     let regionId;
     let municipalityId;
     let settlementId;
+    let regionEn;
+    let municipalityEn;
+    let settlementEn;
 
   try {
     const response = await fetch('/regions.json');
@@ -15,6 +18,8 @@ export const loadAddressData = async (
     const region = data.filter((region) => region.bg == regionName).shift();
     if (region) {
         regionId = region.id;
+        regionEn = region.en;
+
     }
   } catch (error) {
     console.error('Failed to load regions data', error);
@@ -31,6 +36,7 @@ export const loadAddressData = async (
         .filter((municipality) => municipality.bg == municipalityName)
         .shift();
         municipalityId = municipality.id;
+        municipalityEn = municipality.en;
     } else {
       console.error('No regionId');
     }
@@ -49,6 +55,7 @@ export const loadAddressData = async (
         .filter((settlement) => settlement.bg == settlementName)
         .shift();
         settlementId = settlement.id;
+        settlementEn = settlement.en;
     } else {
       console.error('No municipalityId');
     }
@@ -56,5 +63,5 @@ export const loadAddressData = async (
     console.error('Failed to load settlements data', error);
   }
 
-  return { regionId, municipalityId, settlementId };
+  return { regionId, municipalityId, settlementId, regionEn, municipalityEn, settlementEn };
 };
