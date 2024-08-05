@@ -342,7 +342,7 @@
     "default_comment_banned": "Your privileges have been restricted",
     "from_admin": "From admin",
     "approved_ad": "was approved",
-    "your_ad":"Your ad",
+    "your_ad": "Your ad",
     "deleted_ad": "Your ad was deleted",
     "approved-suggested_users": "Approved suggested users"
   },
@@ -459,7 +459,8 @@
     "finish-profile": "To create an ad, please finish your profile!",
     "success-delete-user": "Successfully delete user!",
     "success_delete_message": "Successfully delete message!",
-    "error-authorize": "Error! Invalid email and/or wrong password!"
+    "error-authorize": "Error! Invalid email and/or wrong password!",
+    "success-comment": "Successfully add comment!"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
@@ -503,17 +504,12 @@
     "message": "Message",
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?"
-  },
-  "admin_messages":{
-    "search_desc": "Search by description...", 
-    "search": "Search",
-    "search_clear": "Clear search",
-    "previous": "Previous",
-    "next": "Next",
-    "page": "Page",
-    "of": "of",
-    "select_all": "Select all",
-    "admin": "Admin"
+    "who-is-suggested": "Who are you suggesting?",
+    "no_comments_yet": "No comments yet.",
+    "date": "Date",
+    "add_new_comment": "Add new comment",
+    "comment": "Comment",
+    "comments": "Comments",
+    "submit": "Submit"
   }
 }
