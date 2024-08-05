@@ -16,8 +16,8 @@ module.exports = function memoryCache(key) {
       return next();
     }
 
-    const { adId, adStatus } = req.params;
-    const { userId, email } = req?.user || {};
+    const { adId, adStatus, email: paramEmail } = req.params;
+    const { userId, email: reqEmail } = req?.user || {};
 
     if (!cache.get('users')) {
       try {
@@ -30,7 +30,7 @@ module.exports = function memoryCache(key) {
 
     const cachedResponse = JSON.parse(cache.get('users'));
 
-    if (key === 'ads') await handleAdRequest(cachedResponse, res, adId, adStatus, email);
+    if (key === 'ads') await handleAdRequest(cachedResponse, res, adId, adStatus, paramEmail, reqEmail);
     if (key === 'users') await handleUserRequest(cachedResponse, res, userId);
   };
 };
@@ -74,7 +74,7 @@ function sanitizeData(newData) {
 
 // REQUEST HANDLERS ----------------------------------------------------------------------------------
 
-const handleAdRequest = async (cachedResponse, res, adId, adStatus, email) => {
+const handleAdRequest = async (cachedResponse, res, adId, adStatus, paramEmail, reqEmail) => {
   if (adId) {
     const filter = filterCachedAdsById(cachedResponse, adId);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: `Ad with ID ${adId} does not exist.` });
@@ -82,7 +82,7 @@ const handleAdRequest = async (cachedResponse, res, adId, adStatus, email) => {
     const filter = filterCachedAdsByStatus(cachedResponse, adStatus);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: `There are no ads with status ${adStatus} at the moment.`, ads: [] });
   } else {
-    const filter = filterCachedAdsByEmail(cachedResponse, email);
+    const filter = filterCachedAdsByEmail(cachedResponse, paramEmail, reqEmail);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: 'No ads found for the specified user.', ads: [] });
   }
 };
@@ -125,8 +125,12 @@ const filterCachedAdsByStatus = (cachedData, status) => {
   return { message: `${status.charAt(0).toUpperCase() + status.slice(1)} ads successfully retrieved.`, ads: filteredAds };
 };
 
-const filterCachedAdsByEmail = (cachedData, email) => {
-  const filteredAds = cachedData.find((user) => user.email === email).ads;
+const filterCachedAdsByEmail = (cachedData, paramEmail, reqEmail) => {
+  const account = cachedData.find((user) => user.email === paramEmail);
+  if (!account) return null;
+
+  const filteredAds = paramEmail === reqEmail ? account.ads : account.ads.filter((ad) => ad.status === 'approved');
+
   if (!filteredAds) return null;
 
   return { message: 'User ads successfully retrieved.', ads: filteredAds };

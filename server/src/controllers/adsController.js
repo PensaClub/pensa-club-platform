@@ -116,13 +116,19 @@ adsController.get('/adById/:adId', rbac.checkPermission('read_record'), memoryCa
   }
 });
 
-adsController.get('/ads-user', isAuth, rbac.checkPermission('read_record'), memoryCache('ads'), async (req, res, next) => {
+adsController.get('/ads-user/:email', isAuth, rbac.checkPermission('read_record'), memoryCache('ads'), async (req, res, next) => {
   try {
-    const email = req.user.email;
+    const email = req.params.email;
+    const whereCondition = {};
+
+    if (email !== req.user.email) {
+      whereCondition.status = 'approved';
+    }
 
     if (!email) return res.status(404).json({ message: 'Email is required.' });
 
     const ads = await user_ads.findAll({
+      whereCondition,
       include: [
         {
           model: user_account,

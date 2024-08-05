@@ -132,8 +132,9 @@ When the server starts for the first time in a development environment, a demo u
       `update_record`: Can update existing records.
       `delete_record`: Can delete records.
       `approve_record`: Can approve records.
+      `read_subscriptions`: Can read/view subscription records.
 
-    Admin : Create, Read, Update, Delete, Approve;
+    Admin : Create, Read, Update, Delete, Approve, Read Subscriptions;
     User: Create, Read, Update, Delete;
     Guest: Read;
 
@@ -260,6 +261,7 @@ When the server starts for the first time in a development environment, a demo u
 
 - **_subscribersController_** :
   - **/subscriber/addSubscriber** : Responsible for creating subscriber's record (username and email).
+  - **/subscriber/getSubscribers** : Returns all subscribers with the following data (username, email, createdAt and updatedAt). Only accessible by an admin.
 
 ## Testing
 
