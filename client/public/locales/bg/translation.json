@@ -494,7 +494,12 @@
     "message": "Съобщение",
     "message-placeholder": "Оставете кратко съобщение тук",
     "refferer-name": "Вашето име",
-    "who-is-suggested": "Кого препоръчвате?"
+    "who-is-suggested": "Кого препоръчвате?",
+    "no_comments_yet": "Няма коментари все още.",
+    "date": "Дата",
+    "add_new_comment": "Нов коментар",
+    "comment": "Коментар",
+    "comments": "Коментари"
   },
   "home": {
     "our_latest_ads": "Последните публикации",

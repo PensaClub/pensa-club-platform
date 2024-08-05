@@ -342,7 +342,7 @@
     "default_comment_banned": "Your privileges have been restricted",
     "from_admin": "From admin",
     "approved_ad": "was approved",
-    "your_ad":"Your ad",
+    "your_ad": "Your ad",
     "deleted_ad": "Your ad was deleted",
     "approved-suggested_users": "Approved suggested users"
   },
@@ -502,6 +502,11 @@
     "message": "Message",
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?"
+    "who-is-suggested": "Who are you suggesting?",
+    "no_comments_yet": "No comments yet.",
+    "date": "Date",
+    "add_new_comment": "Add new comment",
+    "comment": "Comment",
+    "comments": "Comments"
   }
 }

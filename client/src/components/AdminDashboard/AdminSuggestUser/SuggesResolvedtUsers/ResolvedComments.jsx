@@ -1,0 +1,50 @@
+
+import './resolvedComments.css';
+import { useTranslation } from 'react-i18next';
+
+export const ResolvedComments = ({ isOpen, onClose, onSubmit, comments, comment, setComment }) => {
+  const { t } = useTranslation();
+
+  if (!isOpen) return null;
+  return (
+    <div className="modal-overlay-admin">
+      <div className="modal-content-admin">
+        <button className="modal-close-admin" onClick={onClose}>
+          &times;
+        </button>
+        <h2>{t('user-suggestion.comments')}</h2>
+
+        <div className="comments-section">
+          {comments?.length > 0 ? (
+            <ul className="comments-list">
+              {comments.map((cmt, index) => (
+                <li key={index}>
+                  <div>
+                    <strong>{t('user-suggestion.date')}:</strong> {cmt?.date}
+                  </div>
+                  <div>
+                    <strong>{t('user-suggestion.comment')}:</strong> {cmt?.comment}  
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{t('user-suggestion.no_comments_yet')}</p>
+          )}
+        </div>
+        <div className="new-comment-section">
+          <h2>{t('user-suggestion.add_new_comment')}</h2>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            rows="5"
+            cols="50"
+          />
+        </div>
+        <button className="modal-submit-admin" onClick={onSubmit}>
+          Submit
+        </button>
+      </div>
+    </div>
+  );
+};
