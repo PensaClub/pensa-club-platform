@@ -4,7 +4,6 @@ const eventEmitter = require('../utils/eventEmitter.js');
 
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
-const { tokenCreator } = require('../utils/jwt.js');
 
 adminController.post('/change-role', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
   const { email, role, roleChangeComment } = req.body;
@@ -21,13 +20,11 @@ adminController.post('/change-role', isAuth, rbac.checkPermission('approve_recor
 
     if (!emailExists) return res.status(404).json({ message: 'User not found.' });
 
-    await user_account.update({ role, role_change_comment: roleChangeComment }, { where: { email }, returning: true });
-
-    const token = tokenCreator(emailExists.dataValues);
+    await user_account.update({ role, role_change_comment: roleChangeComment }, { where: { email } });
 
     eventEmitter.emit('userCacheUpdate', { type: 'users', data: { role, roleChangeComment }, adId: null, userId: emailExists.id, action: 'account' });
 
-    res.status(200).json({ message: 'Role changed successfully.', token });
+    res.status(200).json({ message: 'Role changed successfully.' });
   } catch (err) {
     next(err);
   }
