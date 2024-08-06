@@ -67,12 +67,12 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage
   const handleScrollToTop = () => {
     scrollContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
   const handleImageClick = (image, event) => {
     event.stopPropagation();
     setIsModalOpen(true);
     setModalImage(image);
   };
+  const approvedAds = userAds.ads.filter(ad => ad.status === 'approved');
 
   return (
     <div className="ad-sidebar-map-details" ref={sidebarRef}>
@@ -106,7 +106,7 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage
           <h3 className="ad-title">{t('map.ads_by')} {selectedUser?.username}</h3>
           <div className="ad-color-lines-pipe"></div>
           <div className='ad-scroll'>
-            {userAds.ads.length > 0 ? userAds.ads.map(ad => (
+            {approvedAds.length > 0 ? approvedAds.map(ad => (
               <Fragment key={ad?.adId}>
                 <div className="ad-map">
                   <img src={ad?.images[0]?.imageURL} alt="ad-img" onClick={(event) => handleImageClick(ad?.images[0]?.imageURL, event)} />
