@@ -224,8 +224,7 @@ const ProfileForm = () => {
     if (isValid) {
       try {
         const updatedForm = await uploadImages(trimmedForm);
-        
-        console.log(updatedForm);
+                
         resetFields(setForm, initialFormState);
         await onProfileDataSubmit(updatedForm);
         await onAllUsers();

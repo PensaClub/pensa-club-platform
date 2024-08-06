@@ -121,7 +121,21 @@ export const UserProvider = ({ children }) => {
       navigate('/profile');
       notify('success-data');
     } catch (error) {
-      notify('error');
+      const isUsernameTaken = 
+        error?.message === "Unique constraint violation." && error?.details.some(error => error.field === 'username');
+        
+      if(isUsernameTaken) {
+        const errorIndex = error?.details.findIndex(error => error.field === 'username');
+        if(error?.details[errorIndex]?.value) {
+          notify('username-is-taken', (error?.details[errorIndex]?.value + " "))
+        }
+        else {
+          notify('username-is-taken', "")
+        }
+      }
+      else {
+        notify('error');
+      }
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);

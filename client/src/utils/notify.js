@@ -3,7 +3,7 @@
 import { toast } from 'react-toastify';
 import { Trans } from 'react-i18next';
 
-export const notify = (key) => {
+export const notify = (key, additional) => {
   // eslint-disable-next-line default-case
   switch (key) {
     case 'success-data':
@@ -103,6 +103,11 @@ export const notify = (key) => {
       break;
     case 'user-already-exists':
       toast.error(<Trans i18nKey="notification.user-already-exists" />, {
+        role: 'alert',
+      });
+      break;
+    case 'username-is-taken':
+      toast.error(<Trans i18nKey="notification.username-is-taken" values={{ username: additional }} />, {
         role: 'alert',
       });
       break;

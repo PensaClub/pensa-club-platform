@@ -463,6 +463,7 @@
     "success-reject": "The Ad has been reject!",
     "error": "An error occured. Please try submitting data again!",
     "user-already-exists": "An error occurred. User with this email address already exists",
+    "username-is-taken": "The username {{username}}is already taken.",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",
     "success-delete-suggest": "Successfully delete suggested user!",
