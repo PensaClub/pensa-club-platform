@@ -2,11 +2,11 @@
     font-size: var(--xxs-font-size);
 }
 
-.ad-sidebar-map {
+.ad-sidebar-map-details {
     position: fixed;
     background-image: url('../../../../../public/images/sign-up/background.jpg');
     left: 0; 
-    top: 50%;
+    top: 60%;
     width: 300px;
     max-width: 100%;
     height: 80vh; 
@@ -156,7 +156,7 @@
 .ad-scroll-side-content {
     width: 100%;
     overflow-y: auto;
-    height: calc(100vh - 100px); 
+    height: calc(100vh - 300px); 
     box-sizing: border-box; 
 }
 
@@ -237,7 +237,7 @@
     box-sizing: border-box; 
 }
 
-.active-sidebar .ad-sidebar-map {
+.active-sidebar .ad-sidebar-map-details {
     max-width: 680px;
     width: 100%;
     transition: width 4s;
@@ -334,7 +334,7 @@
         background: linear-gradient(304deg, #1B6D4D, #E26020 22%, #BB1D3D 93%);
     }
 
-    .active-sidebar .ad-sidebar-map {
+    .active-sidebar .ad-sidebar-map-details {
         max-width: 680px;
         width: 100%;
         transition: width 4s;

@@ -14,6 +14,7 @@
 .ads-details-page {
   width: 100%;
   min-height: 100vh;
+  
 }
 
 .share-button-ad {
@@ -31,6 +32,8 @@
 
 .hero-bg-details {
   display: none;
+  position: relative;
+
 }
 
 .hero-section-details {
@@ -40,15 +43,16 @@
   justify-content: center;
 }
 
-.hero-section-details h1 {
-  margin-top: 2em;
-  text-align: center;
-  color: var(--green);
+.ads-details-page h1 {
+  display: none;
+  margin: 0;
+  position: absolute;
+  top: 5%;
+  left: 39%;
+  color: var(--text-white);
   font-size: var(--l-font-size);
-  line-height: 46.88px;
-  letter-spacing: 1rem;
-  padding-left: 1.2rem;
-  font-weight: 900;
+  letter-spacing: 1.7rem;
+  padding: initial;
 }
 
 .hero-section-details .group-icon p {
@@ -162,7 +166,9 @@
 .small-img {
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 1em;
+  margin-left: 3em;
 }
 
 .small-img img {
@@ -195,8 +201,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 50px;
+  /* justify-content: space-between; */
+  gap: 70px;
   width: 100%;
   color: var(--text-white);
   padding: 0 1em;
@@ -315,13 +321,14 @@
   display: none;
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1200px) {
   .ads-details-main {
     margin: 0 auto;
     width: 81%;
   }
 
   .ads-details-card {
+    align-items: flex-start;
     flex-direction: row;
     gap: 0;
   }
@@ -352,7 +359,8 @@
   .small-img {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1em;
   }
 
   .small-img img {
@@ -398,6 +406,9 @@
   .ads-details-main {
     margin: 3em auto;
     margin-top: 0;
+  }
+  .ads-details-page h1 {
+    display: block;
   }
   .ads-details-card {
     margin: 0 auto;
@@ -511,7 +522,8 @@
   .small-img {
     display: flex;
     width: 90%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1em;
   }
 
   .small-img img {
@@ -536,7 +548,7 @@
     font-size: var(--m-font-size);
     color: var(--brown);
     text-align: left;
-    margin-top: 5em;
+    margin-top: 3em;
   }
   .ads-details-back>* {
     color: var(--brown) !important;
@@ -544,5 +556,8 @@
 
   .ad-details-back-phone {
     display: none;
+  }
+  .small-img {
+    margin-left: initial;
   }
 }

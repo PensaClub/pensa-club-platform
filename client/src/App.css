@@ -48,6 +48,7 @@
   --radius-input: 10px;
 
   /* Spacing eg. Margin and Padding*/
+  --xxxl-space: 70px;
   --xxl-space: 60px;
   --xl-space: 50px;
   --l-space: 30px;
@@ -156,6 +157,10 @@ button, input, textarea {
 }
 
 .btn-general:hover {
+  opacity: 0.7;
+}
+
+.btn-general:disabled {
   opacity: 0.7;
 }
 

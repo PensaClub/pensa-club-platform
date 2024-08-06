@@ -17,6 +17,7 @@ export const AllUsersStatistics = () => {
   const [hiddenPie, setHiddenPie] = useState([]);
   const [registrationFilter, setRegistrationFilter] = useState('last_week');
   const [optionData, setOptionData] = useState({ skills: [], workOptions: [], interestOptions: [] });
+
   useEffect(() => {
     const fetchData = async () => {
       await onAllUsers();
@@ -30,7 +31,7 @@ export const AllUsersStatistics = () => {
         .then(response => response.json())
         .then(data => setOptionData(data))
         .catch(error => console.error('Failed to load JSON data', error));
-}, []);
+  }, []);
 
   const handleLegendClickBar = (dataKey) => {
     setHiddenBar(hiddenBar.includes(dataKey)
@@ -64,21 +65,29 @@ export const AllUsersStatistics = () => {
 
   const translateValue = (category, value) => {
     const found = optionData[category].find(item => item.value === value);
-      return found ? t(found.name) : value;
+    return found ? t(found.name) : value;
   };
 
   const generateRolesData = () => {
     if (!allUsers || !allUsers.response || !allUsers.response.accounts) return [];
     const users = allUsers.response.accounts;
-    const roles = ["user", "admin", "banned"];
-    return roles.map(role => ({
-      role,
+    
+    const availableRoles = Array.from(new Set(users.map(user => user.role)));
+     
+    const rolesMap = {
+      "user": t('admin.users'),
+      "admin": t('admin.admins'),
+      "guest": t('admin.guests')
+    };
+  
+    return availableRoles.map(role => ({
+      role: rolesMap[role] || role, 
       total: users.filter(user => user.role === role).length,
       completed: users.filter(user => user.role === role && user.enabled).length,
       notCompleted: users.filter(user => user.role === role && !user.enabled).length,
     }));
   };
-
+  
   const generateStatusData = () => {
     if (!allUsers || !allUsers.response || !allUsers.response.accounts) return [];
     const users = allUsers.response.accounts;
@@ -106,7 +115,6 @@ export const AllUsersStatistics = () => {
       startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
     }
 
-    // eslint-disable-next-line no-unused-vars
     const dateSet = new Set(users.map(user => formatDate(user.createdAt)).filter(date => new Date(date) >= startDate));
     
     const dates = [];
@@ -245,9 +253,9 @@ export const AllUsersStatistics = () => {
             <YAxis />
             <Tooltip content={renderCustomTooltip} />
             <Legend onClick={(e) => handleLegendClickBar(e.dataKey)} />
-            <Bar dataKey="total" fill="#FFCE56" fillOpacity={hiddenBar.includes('total') ? 0.2 : 1} />
-            <Bar dataKey="completed" fill="#82ca9d" fillOpacity={hiddenBar.includes('completed') ? 0.2 : 1} />
-            <Bar dataKey="notCompleted" fill="#FF6384" fillOpacity={hiddenBar.includes('notCompleted') ? 0.2 : 1} />
+            <Bar dataKey="total" name={t('admin.total')} fill="#FFCE56" fillOpacity={hiddenBar.includes('total') ? 0.2 : 1} />
+            <Bar dataKey="completed" name={t('admin.completed')} fill="#82ca9d" fillOpacity={hiddenBar.includes('completed') ? 0.2 : 1} />
+            <Bar dataKey="notCompleted" name={t('admin.not_completed')} fill="#FF6384" fillOpacity={hiddenBar.includes('notCompleted') ? 0.2 : 1} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -292,8 +300,8 @@ export const AllUsersStatistics = () => {
           <AreaChart data={registrationData}>
             <defs>
               <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3498db" stopOpacity={0.8} />
-        <stop offset="95%" stopColor="#3498db" stopOpacity={0.2} /> 
+                <stop offset="5%" stopColor="#3498db" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#3498db" stopOpacity={0.2} /> 
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" />
@@ -301,7 +309,7 @@ export const AllUsersStatistics = () => {
             <YAxis />
             <Tooltip content={renderCustomTooltip} />
             <Legend onClick={(e) => handleLegendClickLine(e.dataKey)} />
-            <Area type="monotone" dataKey="count" stroke="#82ca9d" fill="url(#colorCount)" fillOpacity={hiddenLine.includes('count') ? 0.2 : 1} />
+            <Area type="monotone" dataKey="count" name={t('admin.count')} stroke="#82ca9d" fill="url(#colorCount)" fillOpacity={hiddenLine.includes('count') ? 0.2 : 1} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -315,7 +323,7 @@ export const AllUsersStatistics = () => {
             <YAxis />
             <Tooltip content={renderCustomTooltip} />
             <Legend onClick={(e) => handleLegendClickBar(e.dataKey)} />
-            <Bar dataKey="count" fill="#FFCE56" fillOpacity={hiddenBar.includes('count') ? 0.2 : 1} />
+            <Bar dataKey="count" name={t('admin.count')} fill="#FFCE56" fillOpacity={hiddenBar.includes('count') ? 0.2 : 1} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -331,7 +339,7 @@ export const AllUsersStatistics = () => {
               cx="50%"
               cy="50%"
               outerRadius={80}
-              label={(entry) => `${entry.name}: ${entry.value.toFixed(2)}`} //dobawen po kusno 
+              label={(entry) => `${entry.name}: ${entry.value.toFixed(2)}`}
               labelLine={true}
             >
               {adsPerUserData.map((entry, index) => (
@@ -358,7 +366,7 @@ export const AllUsersStatistics = () => {
             <YAxis />
             <Tooltip content={renderCustomTooltip} />
             <Legend onClick={(e) => handleLegendClickLine(e.dataKey)} />
-            <Line type="monotone" dataKey="count" stroke="#82ca9d" strokeOpacity={hiddenLine.includes('count') ? 0.2 : 1} />
+            <Line type="monotone" dataKey="count" name={t('admin.count')} stroke="#82ca9d" strokeOpacity={hiddenLine.includes('count') ? 0.2 : 1} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -372,7 +380,7 @@ export const AllUsersStatistics = () => {
             <YAxis />
             <Tooltip content={renderCustomTooltip} />
             <Legend onClick={(e) => handleLegendClickBar(e.dataKey)} />
-            <Bar dataKey="count" fill="#FFCE56" fillOpacity={hiddenBar.includes('count') ? 0.2 : 1} />
+            <Bar dataKey="count" name={t('admin.count')} fill="#FFCE56" fillOpacity={hiddenBar.includes('count') ? 0.2 : 1} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -386,7 +394,7 @@ export const AllUsersStatistics = () => {
             <YAxis />
             <Tooltip content={renderCustomTooltip} />
             <Legend onClick={(e) => handleLegendClickBar(e.dataKey)} />
-            <Bar dataKey="count" fill="#8884d8" fillOpacity={hiddenBar.includes('count') ? 0.2 : 1} />
+            <Bar dataKey="count" name={t('admin.count')} fill="#8884d8" fillOpacity={hiddenBar.includes('count') ? 0.2 : 1} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -400,7 +408,7 @@ export const AllUsersStatistics = () => {
             <YAxis />
             <Tooltip content={renderCustomTooltip} />
             <Legend onClick={(e) => handleLegendClickBar(e.dataKey)} />
-            <Bar dataKey="count" fill="#8dd1e1" fillOpacity={hiddenBar.includes('count') ? 0.2 : 1} />
+            <Bar dataKey="count" name={t('admin.count')} fill="#8dd1e1" fillOpacity={hiddenBar.includes('count') ? 0.2 : 1} />
           </BarChart>
         </ResponsiveContainer>
       </div>

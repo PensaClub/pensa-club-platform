@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './adsCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { AdModalNotify } from './AdModalNotify';
 
 const ImageModal = ({ src, alt, onClose }) => (
-    <div className="image-modal-overlay" onClick={onClose}>
+    <div className="image-modal-overlay-ads" onClick={onClose}>
         <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="image-modal-close" onClick={onClose}>  <FontAwesomeIcon icon={faXmark} style={{ color: "#000000" }} /></button>
             <img src={src} alt={alt} className="image-modal-img" />
@@ -24,6 +24,19 @@ export const AdsCard = ({ ads, isLoading }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
+    const getProfileImage = (gender) => {
+        switch (gender) {
+            case "male":
+                return "/images/homePage/user-male.png";
+            case "female":
+                return "/images/homePage/user-female.png";
+            case "other":
+                return "/images/homePage/user-it.png";
+            default:
+                return "/images/homePage/user-female.png";
+        }
+    };
+
     if (isLoading && ads.result.length === 0) {
         return (
             <section className="ads-main">
@@ -37,6 +50,7 @@ export const AdsCard = ({ ads, isLoading }) => {
     const handleImageClick = (image) => {
         setModalImage(image);
     };
+
     const handleAdClick = (ad) => {
         if (isAuthentication) {
             navigate(`/ad/details/${ad.adId}`)
@@ -44,9 +58,11 @@ export const AdsCard = ({ ads, isLoading }) => {
             setOpen(true);
         }
     }
+
     const closeModal = () => {
         setModalImage(null);
     };
+
     const closeNotify = () => {
         setOpen(false)
     }
@@ -54,10 +70,8 @@ export const AdsCard = ({ ads, isLoading }) => {
     return (
         <>
             <section className="ads-main">
-
                 {ads.result.map(ad => (
                     <div key={ad.adId} className="ads-card" >
-
                         <div className="img-ads" onClick={() => handleImageClick(ad.images[0].imageURL)}>
                             <img src={ad.images[0].imageURL} alt={ad.summary} />
                             <p>{t(`search-criteria.${ad.category}`)}</p>
@@ -72,11 +86,10 @@ export const AdsCard = ({ ads, isLoading }) => {
                             </div>
                             <div className="subinfo-ads">
                                 {ad.tags.length > 0 && ad.tags.map(tag => (<p key={(tag) + 1}>{"#"}{tag}</p>))}
-                                {/* </p>  */}
                             </div>
                             <p className="ads-data">{t('community.validate_until')} : {new Date(ad.expirationDate).toLocaleDateString('bg-BG')}</p>
                             <div className="ads-user-info">
-                                <img src={ad.account.details.imageURL || 'images/homePage/avatar2.png'} alt={ad.account.details.username} />
+                                <img src={ad.account.details.imageURL || getProfileImage(ad.account.details.gender)} alt={ad.account.details.username} />
                                 <p>{ad.account.details.username}</p>
                             </div>
                         </div>

@@ -66,15 +66,14 @@ export const ProfileWorks = () => {
         e.preventDefault();
         if (validateForm()) {
             await onEditProfileDataSubmit(form);
-        
-            console.error('Form Submitted:', form);
+    
             resetFields(setForm, initialFormState);
             navigate('/profile');
         } else {
 
             setTimeout(() => {
                 if (form && form.workOptions && form.workOptions.length > 0) {
-                    console.error('Form Submitted:', form);
+         
                     resetFields(setForm, initialFormState);
                 }
             }, 2000);

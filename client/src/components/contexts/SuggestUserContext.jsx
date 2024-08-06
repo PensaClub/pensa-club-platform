@@ -78,6 +78,20 @@ export const SuggestUserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
+  const onCreateComment = async ({  comment,userId }) => {
+    setIsLoading(true);
+    try {
+      const response = await suggestUserService.createComment( comment,userId);
+      notify('success-comment');
+      return response.comment;
+    } catch (error) {
+      notify('error');
+      showErrorAndSetTimeouts(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
   const getDeleteSuggest = async (id) => {
     setIsLoading(true);
     try {
@@ -96,7 +110,8 @@ export const SuggestUserProvider = ({ children }) => {
     getAllSuggested,
     getDeleteSuggest,
     onSuggestResolve,
-    getAllResolve
+    getAllResolve,
+    onCreateComment
   };
 
   return (

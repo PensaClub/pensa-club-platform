@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import './adminSuggestUsers.css';
 import { useEffect, useState } from 'react';
@@ -7,7 +8,7 @@ import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { notify } from '../../../utils/notify';
 import { useSuggestUserContext } from '../../contexts/SuggestUserContext';
-import { CommentModal } from '../PendingAnnouncements/CommentModal';
+import { SuggestUserComments } from './SuggestUserComments';
 
 export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
   const [users, setUsers] = useState([]);
@@ -20,17 +21,26 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
   const [searchCriteria, setSearchCriteria] = useState('refferer_name');
   const [searchResults, setSearchResults] = useState([]);
   const { t } = useTranslation();
-  const { getAllSuggested, getDeleteSuggest, onSuggestResolve } = useSuggestUserContext();
-   const [modalContent, setModalContent] = useState('');
+  const { getAllSuggested, getDeleteSuggest, onSuggestResolve, onCreateComment } = useSuggestUserContext();
+  const [modalContent, setModalContent] = useState('');
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
-  
+  const [comments, setComments] = useState([]);
+
   useEffect(() => {
     const loadUsers = async () => {
       const allUsers = await getAllSuggested();
 
-      setUsers(allUsers);
-      setAllSuggestedUsers(allUsers?.length);
-      setSearchResults(allUsers);
+      const formattedUsers = allUsers.map(user => ({
+        ...user,
+        comments: user.comments.map(comment => ({
+          ...comment,
+          date: formatDate(comment.date),
+        })).sort((a, b) => new Date(b.date) - new Date(a.date)) 
+      }));
+
+      setUsers(formattedUsers);
+      setAllSuggestedUsers(formattedUsers?.length);
+      setSearchResults(formattedUsers);
     };
     loadUsers();
   }, []);
@@ -75,37 +85,71 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
 
   const handleComment = (user) => {
     setSelectedUser(user);
+    setComments(user.comments || []);
     setIsModalOpen(true);
   };
 
-  const handleSubmitComment = () => {
-    setIsModalOpen(false);
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
+
+  const handleSubmitComment = async () => {
+    try {
+      const newComment = await onCreateComment({ userId: selectedUser.id, comment });
+      const formattedDate = formatDate(new Date());
+      setComments([{ date: formattedDate, comment }, ...comments]);
+      setComment('');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleDelete = async (id) => {
     try {
-
       await getDeleteSuggest(id);
       setComment('');
       const updatedUsers = await getAllSuggested();
-      setUsers(updatedUsers);
-      setSearchResults(updatedUsers);
+
+      const formattedUsers = updatedUsers.map(user => ({
+        ...user,
+        comments: user.comments.map(comment => ({
+          ...comment,
+          date: formatDate(comment.date),
+        })).sort((a, b) => new Date(b.date) - new Date(a.date)) 
+      }));
+      setUsers(formattedUsers);
+      setSearchResults(formattedUsers);
     } catch (error) {
       console.error(error);
     }
   };
+
   const handleResolved = async (id) => {
     try {
-
       await onSuggestResolve(id);
       setComment('');
       const updatedUsers = await getAllSuggested();
-      setUsers(updatedUsers);
-      setSearchResults(updatedUsers);
+
+      const formattedUsers = updatedUsers.map(user => ({
+        ...user,
+        comments: user.comments.map(comment => ({
+          ...comment,
+          date: formatDate(comment.date),
+        })).sort((a, b) => new Date(b.date) - new Date(a.date)) 
+      }));
+      setUsers(formattedUsers);
+      setSearchResults(formattedUsers);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+
   const handleSearch = () => {
     const results = users.filter((user) => {
       if (searchCriteria === 'refferer_name') {
@@ -125,9 +169,10 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
     setSearchCriteria('refferer_name');
     setSearchResults(users);
   };
+
   const truncateText = (text) => {
     if (!text) return 'N/A';
-    return text.length > 15 ? text.substring(0, 10) + '...' : text;
+    return text.length > 10 ? text.substring(0, 10) + '...' : text;
   };
 
   const handleTextClick = (text) => {
@@ -138,7 +183,8 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
   const closeTextModal = () => {
     setIsTextModalOpen(false);
     setModalContent('');
-  }
+  };
+
   return (
     <div className="admin-suggestUsers-container">
       <h2>{t('admin.all_suggested_users')}</h2>
@@ -208,7 +254,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th>{t('admin.message')}</th>
+              <th className='message-suggest-all'>{t('admin.message')}</th>
               <th>{t('admin.actions')}</th>
             </tr>
           </thead>
@@ -230,7 +276,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
                   <img
                     src={'/icons/resolved.svg'}
                     alt="approved"
-                    className="comment-icon-suggestUsers "
+                    className="comment-icon-suggestUsers"
                     onClick={() => handleResolved(user.id)}
                   />
                   <img
@@ -239,11 +285,10 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
                     className="comment-icon-suggestUsers"
                     onClick={() => handleComment(user)}
                   />
-
                   <img
                     src={'/icons/delete-button.svg'}
                     alt="delete"
-                    className="comment-icon-suggestUsers "
+                    className="comment-icon-suggestUsers"
                     onClick={() => handleDelete(user.id)}
                   />
                 </td>
@@ -253,19 +298,16 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
         </table>
         {sortedUsers?.length === 0 && <p className='no-result-fly'>No results found...</p>}
       </div>
-      <CommentModal
+      <SuggestUserComments
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmitComment}
+        comments={comments}
+        comment={comment}
+        setComment={setComment}
       >
         <h2>Comment on User</h2>
-        <textarea
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          rows="5"
-          cols="50"
-        />
-      </CommentModal>
+      </SuggestUserComments>
       {isTextModalOpen && (
         <div className="text-modal-overlay">
           <div className="text-modal-content">

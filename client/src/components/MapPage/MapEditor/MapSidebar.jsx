@@ -6,17 +6,18 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useAuthContext } from '../../contexts/UserContext';
 import './sidebar.css';
 
-export const MapSidebar = ({ selectedUser, userAds, closeSidebar }) => {
+export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage }) => {
     const { t } = useTranslation();
     const sidebarRef = useRef(null);
     const scrollContentRef = useRef(null);
     const [showScrollToTop, setShowScrollToTop] = useState(false);
     const { isAuthentication } = useAuthContext();
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target) && !isModalOpen) {
                 closeSidebar();
             }
         };
@@ -27,7 +28,7 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar }) => {
             document.removeEventListener('mousedown', handleClickOutside);
             document.body.classList.remove('active-sidebar');
         };
-    }, [closeSidebar]);
+    }, [closeSidebar, isModalOpen]);
 
     useEffect(() => {
         if (userAds && userAds.length > 10) {
@@ -57,6 +58,11 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar }) => {
         }
     };
 
+    const handleImageClick = (image) => {
+        setIsModalOpen(true);
+        setModalImage(image);
+    };
+
     const trimString = (str, num) => {
         if (str.length <= num) return str;
         return str.slice(0, num) + '...';
@@ -70,44 +76,44 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar }) => {
         <div className="ad-sidebar-map" ref={sidebarRef}>
             <button className="ad-close-button" onClick={closeSidebar}>{t('map.close')}</button>
             <div className="ad-sidebar-content"><h2>{selectedUser?.details?.username}</h2>
-                <div className="ad-scroll-side-content" ref={scrollContentRef}>
+                <div className="ad-scroll-side-content-map" ref={scrollContentRef}>
                     <div className="ad-user-map-info">
-                        <img className="ad-user-map-img" src={selectedUser?.details?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
-                        <div className="ad-map-desc-user">
+                        <img className="user-map-img" src={selectedUser?.details?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
+                        <div className="map-desc-user">
                             {selectedUser?.details?.workOptions && selectedUser?.details?.workOptions?.length > 0 && (
-                                <p className="ad-description-editor">
+                                <p className="description-editor">
                                     {t('map.profession')}: {selectedUser?.details?.workOptions?.map(option => t(`options.work-options.${option}`)).join(', ')}
                                 </p>
                             )}
                             {selectedUser?.details?.interestOptions && selectedUser?.details?.interestOptions.length > 0 && (
-                                <p className="ad-description-editor">
+                                <p className="description-editor">
                                     {t('map.interests')}: {selectedUser?.details?.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ')}
                                 </p>
                             )}
                             {selectedUser?.details?.skills && selectedUser?.details?.skills?.length > 0 && (
-                                <p className="ad-description-editor">
+                                <p className="description-editor">
                                     {t('map.skills')}: {selectedUser?.details?.skills.map(option => t(`options.skills.${option}`)).join(', ')}
                                 </p>
                             )}
-                            {selectedUser?.details?.phoneNumber && selectedUser?.details?.phoneNumber.length > 0 &&
+                            {selectedUser?.details?.phoneNumber && selectedUser?.details?.phoneNumber?.length > 0 &&
                                 (<p>{t('map.phone')}: <Link to={`tel:${selectedUser?.details?.phoneNumber}`}>{selectedUser?.details?.phoneNumber}</Link></p>)}
-                            <p>{t('map.email')}: <Link to={`mailto:${selectedUser.email}`}>{selectedUser.email}</Link></p>
+                            <p>{t('map.email')}: <Link to={`mailto:${selectedUser?.email}`}>{selectedUser?.email}</Link></p>
                         </div>
                     </div>
-                    <div className="ad-color-lines-pipe"></div>
+                    <div className="color-lines-pipe"></div>
                     <h3 className="ad-title">{t('map.ads_by')} {selectedUser?.details?.username}</h3>
-                    <div className="ad-color-lines-pipe"></div>
+                    <div className="color-lines-pipe"></div>
                     <div className='ad-scroll'>
                         {userAds.length > 0 ? userAds.map(ad => (
                             <Fragment key={ad?.adId}>
                                 <div className="ad-map">
-                                    <img src={ad?.images[0]?.imageURL} alt="ad-img" onClick={() => handleAdClick(ad)} />
+                                    <img src={ad?.images[0]?.imageURL} alt="ad-img" onClick={() => handleImageClick(ad?.images[0]?.imageURL)} />
                                     <div className="ad-desc" onClick={() => handleAdClick(ad)}>
                                         <h3>{ad?.summary}</h3>
                                         <p className='ad-desc-map'>{trimString(ad?.description, 50)}</p>
                                     </div>
                                     <p className='ad-map-valid'>{t('community.validate_until')} : {new Date(ad?.expirationDate).toLocaleDateString('bg-BG')}</p>
-                                    <p className='ad-category'>{t(`search-criteria.${ad.category}`)}</p>
+                                    <p className='ad-category'>{t(`search-criteria.${ad?.category}`)}</p>
                                 </div>
                                 <div className="color-lines"></div>
                             </Fragment>

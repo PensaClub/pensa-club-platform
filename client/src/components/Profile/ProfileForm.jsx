@@ -1,7 +1,7 @@
 import { validateField, generateNumberOptions, trimObjectStrings, resetFields, handleReset } from '../../utils/profile';
 import CustomSelect from './CustomSelect';
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { loadData } from '../../utils/loadData';
@@ -9,6 +9,7 @@ import { loadData } from '../../utils/loadData';
 import { useImagePreview } from '../hooks/useImagePreview';
 import { useMappingContext } from '../contexts/MapContext';
 import { useImageUpload } from '../hooks/useImageUpload';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
@@ -21,29 +22,31 @@ const ProfileForm = () => {
   const { handleImageChange, uploadImages } = useImageUpload();
   const { previewImage, handleImage } = useImagePreview();
 
+  const [persistedData, setPersistedData] = useLocalStorage('persistedData', {});
+
   const initialFormState = {
-    username: '',
+    username: persistedData?.username || '',
     // email: userEmail,
-    firstName: '',
-    lastName: '',
-    phoneNumber: null,
-    gender: null,
-    region: '',
-    regionId: '',
-    municipality: '',
-    municipalityId: '',
-    settlement: '',
-    settlementId: '',
-    district: '',
-    block: '',
-    street: '',
-    streetNumber: '',
-    birthDate: null,
-    skills: [],
-    interestOptions: [],
-    workOptions: [],
-    imageURL: null,
-    firebaseImagePath: null,
+    firstName: persistedData?.firstName || '',
+    lastName: persistedData?.lastName || '',
+    phoneNumber: persistedData?.phoneNumber || null,
+    gender: persistedData?.gender || null,
+    region: persistedData?.region || '',
+    regionId: persistedData?.regionId || '',
+    municipality: persistedData?.municipality || '',
+    municipalityId: persistedData?.municipalityId || '',
+    settlement: persistedData?.settlement || '',
+    settlementId: persistedData?.settlementId || '',
+    district: persistedData?.district || '',
+    block: persistedData?.block || '',
+    street: persistedData?.street || '',
+    streetNumber: persistedData?.streetNumber || '',
+    birthDate: persistedData?.birthDate || null,
+    skills: persistedData?.skills || [],
+    interestOptions: persistedData?.interestOptions || [],
+    workOptions: persistedData?.workOptions || [],
+    imageURL: persistedData?.imageURL || null,
+    firebaseImagePath: persistedData?.firebaseImagePath || null,
   };
   const [form, setForm] = useState(initialFormState);
 
@@ -54,15 +57,28 @@ const ProfileForm = () => {
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [workOptions, setWorkOptions] = useState([]);
   const [interestOptions, setInterestOptions] = useState([]);
-
+  const [isYearSelectOpen, setIsYearSelectOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
+
   useEffect(() => {
     loadData('/regions.json')
       .then((data) => setRegions(data))
       .catch((err) => console.error(err.message));
+
+      if (persistedData?.municipality) {
+        loadData(`/regions-data/region-${form.regionId}/subregions-${form.regionId}.json`)
+      .then((data) => setMunicipalities(data))
+      .catch((err) => console.error(err.message));
+      }
+
+      if (persistedData?.settlement) {
+        loadData(`/regions-data/region-${form.regionId}/towns/towns-${form.municipalityId}.json`)
+      .then((data) => setSettlements(data))
+      .catch((err) => console.error(err.message));
+      }
 
     loadData('/options.json')
       .then((data) => {
@@ -115,7 +131,7 @@ const ProfileForm = () => {
     };
 
     updateErrorsTranslation();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLanguage]);
 
   const handleMunicipalityChange = async (e) => {
@@ -189,6 +205,7 @@ const ProfileForm = () => {
 
     const trimmedForm = trimObjectStrings(form);
     setForm(trimmedForm);
+    setPersistedData(trimmedForm);
 
     const validationErrors = {};
     let isValid = true;
@@ -211,6 +228,7 @@ const ProfileForm = () => {
         setSelectedDate('');
         setSelectedMonth('');
         setSelectedYear('');
+        setPersistedData({});
 
         const updatedForm = await uploadImages(trimmedForm);
 
@@ -219,9 +237,11 @@ const ProfileForm = () => {
         window.scrollTo(0, 0);
         navigate('/profile');
       } catch (error) {
+        setForm(persistedData);
         console.error(`Error on profile form submit: ${error.message}`);
       }
     } else {
+      setForm(persistedData);
       console.error('Form validation failed. Errors:', validationErrors);
     }
   };
@@ -238,9 +258,18 @@ const ProfileForm = () => {
     setSelectedMonth('');
     setSelectedYear('');
   };
-
+  const handleLogout = () => {
+    navigate('/logout');
+  };
   return (
+    <>
+  
     <form onSubmit={handleSubmit} className='profile-form'>
+    <Link to='/logout' onClick={handleLogout}>
+              <button type='button' className='top-right-button-profile-form'>
+                {t('profile.logout')}
+              </button>
+            </Link>
       <h3>{t('profile.profile_form_title')}</h3>
       <div className='avatar'>
         <img src={previewImage || '/images/sign-up/avatar.jpg'} alt='User avatar' />
@@ -312,7 +341,7 @@ const ProfileForm = () => {
           {errors.lastName && <span className='error'>{errors.lastName}</span>}
         </div>
         <div className='date'>
-          <label>{t('profile.age')}</label>
+          <label>{t('profile.age')}:</label>
           <div>
             <label>
               <select value={selectedDate} onChange={handleSelectedDateChange} onBlur={onBlurHandler}>
@@ -331,9 +360,16 @@ const ProfileForm = () => {
           </div>
           <div>
             <label>
-              <select value={selectedYear} onChange={handleSelectedYearChange} onBlur={onBlurHandler}>
-                <option value=''>{t('profile.year')}</option>
-                {generateNumberOptions(1900, new Date().getFullYear())}
+              <select
+                value={selectedYear}
+                onChange={handleSelectedYearChange}
+                onFocus={() => {
+                  setIsYearSelectOpen(true);
+                  if (!selectedYear) setSelectedYear(2000)
+                }}
+                onBlur={onBlurHandler}>
+                <option value=''>{isYearSelectOpen ? t('profile.year') : t('profile.year')}</option>
+                {generateNumberOptions(new Date().getFullYear(), 1915)}
               </select>
             </label>
           </div>
@@ -478,7 +514,9 @@ const ProfileForm = () => {
         </button>
       </div>
     </form>
+    </>
   );
+  
 };
 
 export default ProfileForm;

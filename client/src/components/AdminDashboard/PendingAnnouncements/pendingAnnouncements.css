@@ -174,6 +174,64 @@
   filter: brightness(0.9);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+.trimmed-tittle-pending a{
+  color: var(--orange);
+  cursor: pointer;
+}
+.trimmed-email-pending a{
+  color: var(--orange);
+  cursor: pointer;
+}
+.text-modal-content-approved-ads {
+  position: relative;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 80%;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.text-modal-content-approved-ads .close-button-approved {
+  text-align: center;
+  position: absolute;
+  top: -80px;
+  right: -20px;
+  font-size: 40px;
+  cursor: pointer;
+  color: black !important;
+  opacity: 1;
+  background-color: var(--gravel);
+  padding: 0px 10px;
+  border-radius: 50%;
+  text-decoration: none;
+  text-indent: initial;
+  transition: transform 0.3s ease-in-out;
+}
+
+.text-modal-content-approved-ads .close-button-approved:hover {
+  transform: rotate(90deg);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
   @media (max-width: 767px) {
     .pending-announcements-container h2 {
       font-size: var(--s-font-size);
@@ -242,7 +300,9 @@
     .pending-announcements-table td {
       padding: 10px;
     }
-  
+  .th-pending{
+    width: 200px;
+  }
     .btn-unapproved {
       padding: 8px 12px;
       margin: 5px;
@@ -256,14 +316,20 @@
       height: 40px;
     }
   }
-  
+  @media (min-width: 980px) and (max-width: 1200px) {
+    .pending-announcements-container {
+      width: 100%;
+    }
+  }
   @media (min-width: 1200px) {
     .pending-announcements-container h2 {
       font-size: var(--l-font-size);
     }
-  
+    .pending-announcements-container {
+      width: 100%;
+    }
     .pending-announcements-table {
-      font-size: var(--s-font-size);
+      font-size: var(--xs-font-size);
     }
   
     .pending-announcements-table th,
@@ -272,7 +338,7 @@
     }
   
     .pending-announcements-table th {
-      font-size: var(--m-font-size);
+      font-size: var(--xs-font-size);
     }
   
     .btn-unapproved {

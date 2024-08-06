@@ -23,8 +23,8 @@
     "copyright": "2024 Pensa club. All rights reserved",
     "add-ad": "Create ad"
   },
-  "home":{
-    "town":"Twn",
+  "home": {
+    "town": "Twn",
     "our_latest_ads": "Latest ads ",
     "see_more_ads": "See more ads",
     "no_results": "No results found"
@@ -193,7 +193,7 @@
     "other": "Other",
     "first_name": "First name",
     "last_name": "Last name",
-    "age": "Age",
+    "age": "Date of birth",
     "day": "Day",
     "month": "Month",
     "year": "Year",
@@ -236,7 +236,7 @@
     "settlement_required": "Settlement is required",
     "street_required": "Street is required",
     "username_required": "Username is required",
-    "username_error": "Username must be between 7 and 16 characters. May contain uppercase letters, lowercase letters, numbers and _",
+    "username_error": "Username must be between 7 and 16 characters. It should start with small or capital letter. May contain uppercase letters, lowercase letters, numbers and _",
     "email_required": "Email is required",
     "email_error": "Email is invalid",
     "name_required": "Name is required",
@@ -257,7 +257,8 @@
     "all_users": "All Users",
     "messages": "Messages",
     "in_box": "Inbox",
-    "rejected_ads": "Your ad was not approved"
+    "rejected_ads": "was not approved",
+    "your_ad": "Your ad"
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -287,7 +288,7 @@
     "users": "Users",
     "all_announcements_statistic": "Ad Statistics",
     "user_registration_date": "Registration Date",
-    "role_user": "User",
+    "role_user": "user",
     "role_admin": "Admin",
     "reset_password": "Reset Password",
     "phone_number": "Phone Number",
@@ -340,8 +341,22 @@
     "default_comment": "Your role has been changed to",
     "default_comment_banned": "Your privileges have been restricted",
     "from_admin": "From admin",
-    "approved_ad":"Your ad was approved",
-    "deleted_ad":"Your ad was deleted"
+    "approved_ad": "was approved",
+    "your_ad": "Your ad",
+    "deleted_ad": "Your ad was deleted",
+    "approved-suggested_users": "Approved suggested users",
+    "admins": "Admins",
+   "guests":"Guests",
+   "count":"count",
+   "total":"total",
+   "completed":"completed",
+   "not_completed":"not completed",
+   "pending_ads": "Pending Ads",
+   "approved_ads": "Approved Ads",
+   "rejected_ads": "Rejected Ads",
+   "pending": "Pending",
+   "approved": "Approved",
+   "rejected": "Rejected"
   },
   "community": {
     "community": "Community",
@@ -452,7 +467,12 @@
     "success-delete-suggest": "Successfully delete suggested user!",
     "all_suggested_users": "All suggested users",
     "warn-address": "Please fill in the address fields!",
-    "success-role-change to": "Successfully change role to"
+    "success-role-change to": "Successfully change role to",
+    "finish-profile": "To create an ad, please finish your profile!",
+    "success-delete-user": "Successfully delete user!",
+    "success_delete_message": "Successfully delete message!",
+    "error-authorize": "Error! Invalid email and/or wrong password!",
+    "success-comment": "Successfully add comment!"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
@@ -496,6 +516,23 @@
     "message": "Message",
     "message-placeholder": "Leave a short message here",
     "refferer-name": "Your name",
-    "who-is-suggested": "Who are you suggesting?"
+    "who-is-suggested": "Who are you suggesting?",
+    "no_comments_yet": "No comments yet.",
+    "date": "Date",
+    "add_new_comment": "Add new comment",
+    "comment": "Comment",
+    "comments": "Comments",
+    "submit": "Submit"
+  },
+  "admin_messages":{
+    "search_desc": "Search by description...", 
+    "search": "Search",
+    "search_clear": "Clear search",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "select_all": "Select all",
+    "admin": "Admin"
   }
 }

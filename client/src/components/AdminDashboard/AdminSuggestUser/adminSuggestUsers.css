@@ -46,7 +46,8 @@
   padding: 8px;
   border: 1px solid #ddd;
   white-space: nowrap;
-  text-align: left;
+  text-align: center;
+
 }
 
 .suggestUsers-container-table th {
@@ -63,7 +64,7 @@
 }
 
 .suggestUsers-container-table .number-cell {
-  width: 70px;
+  width: 50px;
 }
 
 .suggestUsers-container-table tbody tr {
@@ -245,11 +246,19 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1200px) {
   .admin-suggestUsers-container h2 {
     font-size: var(--s-font-size);
   }
- 
+  .admin-suggestUsers-container {
+    width: 90%;
+  }
+  .message-suggest-all{
+    width: 120px;
+  }
+  .recommended-phone{
+    width: 110px;
+  }
   .ads-cell {
     width: 55px;
   }
@@ -259,10 +268,10 @@
   }
 
   .suggestUsers-container-table {
-    font-size: var(--xs-font-size)!important;
+    font-size: var(--xxs-font-size)!important;
   }
   .suggestUsers-container-table  span{
-    font-size: var(--xs-font-size)!important;
+    font-size: var(--xxs-font-size)!important;
   }
 
   .suggestUsers-container-table th,
@@ -270,6 +279,10 @@
     padding: 10px;
   }
 
+  .suggestUsers-container-table th{
+    font-size: var(--xxs-font-size)!important;
+
+  }
   .btn-unapproved {
     padding: 8px 12px;
     margin: 5px;
@@ -278,26 +291,38 @@
   .actions-admin-suggestUsers {
     gap: 10px;
   }
-
+  .number-cell{
+    width: 80px;
+  }
   .comment-icon-suggestUsers {
     width: 30px;
     height: 30px;
   }
 }
-
+@media (min-width: 980px) and (max-width: 1200px) {
+  .admin-suggestUsers-container {
+    width: 100%;
+  }
+}
 @media (min-width: 1200px) {
   .admin-suggestUsers-container h2 {
     font-size: var(--l-font-size);
   }
+  .admin-suggestUsers-container{
+    width: 100%;
+  }
   .clickable-text {
-    font-size: var(--s-font-size)!important;
+    font-size: var(--xs-font-size)!important;
   }
   .ads-cell {
     width: 100px;
   }
-
+  .recommended-name,
+  .recommended-by {
+    width: 370px;
+  }
   .suggestUsers-container-table {
-    font-size: var(--s-font-size)!important;
+    font-size: var(--xs-font-size)!important;
   }
 
   .suggestUsers-container-table th,
@@ -387,6 +412,12 @@
   .legend-container {
     gap: 30px;
   }
+  .recommended-phone{
+    width: 160px;
+  }
+  .message-suggest-all{
+    width: 200px;
+  }
 }
 
 @media (min-width: 800px) {
@@ -420,6 +451,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .text-modal-content {
@@ -430,12 +462,14 @@
   max-width: 500px;
   width: 80%;
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-in-out;
 }
 
 .text-modal-content .close-button {
   text-align: center;
   position: absolute;
-  top: -100px;
+  top: -20px;
   right: -20px;
   font-size: 40px;
   cursor: pointer;
@@ -446,4 +480,28 @@
   border-radius: 80%;
   text-decoration: none;
   text-indent: initial;
+  transition: transform 0.3s ease-in-out;
 }
+
+.text-modal-content .close-button:hover {
+  transform: rotate(90deg);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+

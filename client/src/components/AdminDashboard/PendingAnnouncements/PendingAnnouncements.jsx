@@ -23,7 +23,8 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
   const [searchCriteria, setSearchCriteria] = useState('summary');
   const [searchResults, setSearchResults] = useState([]);
   const [adminEmail, setAdminEmail] = useState('')
-  
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
   // eslint-disable-next-line no-unused-vars
   const [isSearching, setIsSearching] = useState(false);
   const { t } = useTranslation();
@@ -36,9 +37,9 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
         const pendingAds = await fetchPendingAds();
         setAnnouncements(pendingAds);
         setSearchResults(pendingAds);
-        setAdminEmail(profileData.email);
+        setAdminEmail(profileData?.email);
 
-        setAdsCount(pendingAds.length);
+        setAdsCount(pendingAds?.length);
 
       } catch (e) {
         console.error(e);
@@ -80,25 +81,25 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
     setIsModalOpen(false);
   };
 
-  const handleApprove = async (id) => {
+  const handleApprove = async (id,summary) => {
     try {
-      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.approved_ad')}`;
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.your_ad')} "${summary}" ${t('admin.approved_ad')}`;
       const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
       await updateAdStatus(id, 'approved', finalComment);
       setComment('');
    
       const updatedAds = await fetchPendingAds();
       setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
+      setAdsCount(updatedAds?.length);
       setSearchResults(updatedAds);
     } catch (e) {
       console.error(e);
     }
   };
 
-  const handleReject = async (id) => {
+  const handleReject = async (id,summary) => {
     try {
-      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('profile.rejected_ad')}`;
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('profile.your_ad')} "${summary}" ${t('profile.rejected_ads')}`;
       const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
       if (!finalComment) {
         notify('enter-comment');
@@ -110,7 +111,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
   
       const updatedAds = await fetchPendingAds();
       setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
+      setAdsCount(updatedAds?.length);
       setSearchResults(updatedAds);
     } catch (e) {
       console.error(e);
@@ -126,7 +127,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
     
       const updatedAds = await fetchPendingAds();
       setAnnouncements(updatedAds);
-      setAdsCount(updatedAds.length);
+      setAdsCount(updatedAds?.length);
       setSearchResults(updatedAds);
     } catch (error) {
       console.error(error);
@@ -159,7 +160,18 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
     setSearchCriteria('summary');
     setSearchResults(announcements);
   };
-
+  const trimString = (str, num) => {
+    if (str?.length <= num) return str;
+    return str?.slice(0, num) + '...';
+}
+  const handleTextClick = (text) => {
+    setModalContent(text);
+    setIsTextModalOpen(true);
+  };
+  const closeTextModal = () => {
+    setIsTextModalOpen(false);
+    setModalContent('');
+  }
   return (
     <div className="pending-announcements-container">
       <h2>{t('admin.pending_announcements')}</h2>
@@ -225,7 +237,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
                 ) : null}
               </th>
               <th>{t('admin.announcement_title')}</th>
-              <th onClick={() => requestSort('date')}>
+              <th className='th-pending' onClick={() => requestSort('date')}>
                 {t('admin.creation_date')}
                 {sortConfig.key === 'date' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
@@ -238,13 +250,13 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
             {sortedAnnouncements.map((announcement, index) => (
               <tr key={announcement.adId}>
                 <td className="number-cell id-table-admin">{index + 1}</td>
-                <td>
-                  <Link to={`#`}>{announcement.account.email}</Link>
+                <td className='trimmed-email-pending' onClick={()=>handleTextClick(announcement?.account?.email)}>
+                  <Link to={`#`}>{trimString(announcement?.account?.email,12)}</Link>
                 </td>
-                <td>
-                  <Link to={`#`} onClick={() => handleAdClick(announcement)}>{announcement.summary}</Link>
+                <td className='trimmed-tittle-pending'>
+                  <Link to={`#`} onClick={() => handleAdClick(announcement)}>{trimString(announcement?.summary,10)}</Link>
                 </td>
-                <td>{announcement.creationDate}</td>
+                <td>{announcement?.creationDate}</td>
                 <td className="actions-admin">
                   <img
                     src={'/icons/comment.svg'}
@@ -256,26 +268,26 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
                     src={'/icons/approve-invoice.svg'}
                     alt="approved"
                     className="comment-icon"
-                    onClick={() => handleApprove(announcement.adId)}
+                    onClick={() => handleApprove(announcement?.adId,announcement?.summary)}
                   />
                   <img
                     src={'/icons/denied.svg'}
                     alt="reject"
                     className="comment-icon"
-                    onClick={() => handleReject(announcement.adId)}
+                    onClick={() => handleReject(announcement?.adId,announcement?.summary)}
                   />
                   <img
                     src={'/icons/delete-button.svg'}
                     alt="delete"
                     className="comment-icon"
-                    onClick={() => handleDelete(announcement.adId)}
+                    onClick={() => handleDelete(announcement?.adId)}
                   />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {sortedAnnouncements.length === 0 && <p className='no-result-fly'>No results found...</p>}
+        {sortedAnnouncements?.length === 0 && <p className='no-result-fly'>No results found...</p>}
       </div>
       <CommentModal
         isOpen={isModalOpen}
@@ -298,6 +310,14 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
           handleApprove={handleApprove}
           handleReject={handleReject}
         />
+      )}
+           {isTextModalOpen && (
+        <div className="text-modal-overlay-approved">
+          <div className="text-modal-content-approved-ads ">
+            <span className="close-button-approved" onClick={closeTextModal}>&times;</span>
+            <p>{modalContent}</p>
+          </div>
+        </div>
       )}
     </div>
   );

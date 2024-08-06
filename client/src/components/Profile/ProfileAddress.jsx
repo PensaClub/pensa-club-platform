@@ -81,7 +81,6 @@ const ProfileAddress = () => {
 
   const handleMunicipalityChange = async (e) => {
     const municipalityId = e.target.value;
-
     // eslint-disable-next-line eqeqeq
     const currMunicipality = municipalities.filter((municipality) => municipality.id == municipalityId);
     const municipalityName = currMunicipality[0].bg;

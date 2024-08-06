@@ -49,9 +49,10 @@ import { ProfileMessages } from './ProfileMessages';
 export const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isFinish, profileData, isAdmin } = useContext(UserContext);
+  const { isFinish, profileData, isAdmin, addressId } = useContext(UserContext);
   const [adsCount, setAdsCount] = useState('');
   const [approvedCount, setApprovedCount] = useState('');
   const [rejectCount, setRejectCount] = useState('');
@@ -218,10 +219,15 @@ export const Profile = () => {
                 <FontAwesomeIcon icon={faEnvelope} className='icon' /> {profileData?.email}
               </p>
 
-              <p>
-                <FontAwesomeIcon icon={faLocationDot} className='icon' /> {profileData?.details?.settlement}, {profileData?.details?.municipality},{' '}
-                {profileData?.details?.region}
-              </p>
+              {currentLanguage === 'bg'
+              ? <p>
+              <FontAwesomeIcon icon={faLocationDot} className='icon' /> {profileData?.details?.settlement}, {profileData?.details?.municipality},{' '}
+              {profileData?.details?.region}
+            </p>
+            : <p>
+            <FontAwesomeIcon icon={faLocationDot} className='icon' /> {addressId?.settlementEn}, {addressId?.municipalityEn},{' '}
+            {addressId?.regionEn}
+          </p>}
             </div>
 
           </section>

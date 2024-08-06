@@ -1,6 +1,6 @@
 .search-bar-commun {
     top: 30vh;
-    margin: 2em auto;
+    margin: 5em auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -17,6 +17,8 @@
 .search-bar-commun p {
     display: none;
     color: var(--green-cm);
+    font-weight: 800;
+    font-size: calc(var(--s-font-size));
 }
 
 .divider {

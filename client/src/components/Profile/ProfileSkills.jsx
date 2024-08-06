@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import CustomSelect from './CustomSelect';
@@ -66,14 +66,13 @@ export const ProfileSkills = () => {
     e.preventDefault();
     if (validateForm()) {
       await onEditProfileDataSubmit(form);
-      // await onAllUsers();
-      console.error('Form Submitted:', form);
+
       resetFields(setForm, initialFormState);
       navigate('/profile');
     } else {
       setTimeout(() => {
         if (form && form.skills && form.skills.length > 0) {
-          console.error('Form Submitted:', form);
+  
           resetFields(setForm, initialFormState);
         }
       }, 2000);

@@ -23,6 +23,8 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
   const [searchCriteria, setSearchCriteria] = useState('summary');
   const [searchResults, setSearchResults] = useState([]);
   const [adminEmail, setAdminEmail] = useState('')
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
 
   // eslint-disable-next-line no-unused-vars
   const [isSearching, setIsSearching] = useState(false);
@@ -81,9 +83,9 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
     setIsModalOpen(false);
   };
 
-  const handleReject = async (id) => {
+  const handleReject = async (id, summary) => {
     try {
-      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('profile.rejected_ad')}`;
+      const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('profile.your_ad')} "${summary}" ${t('profile.rejected_ads')}`;
       const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
       if (!finalComment) {
         notify('enter-comment');
@@ -104,7 +106,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
     try {
       const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.deleted_ad')}`;
       const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
-      await deleteAd(id,finalComment);
+      await deleteAd(id, finalComment);
       setComment('');
       const updatedAds = await fetchApprovedAds();
       setAnnouncements(updatedAds);
@@ -141,9 +143,20 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
     setSearchCriteria('summary');
     setSearchResults(announcements);
   };
-
+  const trimString = (str, num) => {
+    if (str.length <= num) return str;
+    return str.slice(0, num) + '...';
+  }
+  const handleTextClick = (text) => {
+    setModalContent(text);
+    setIsTextModalOpen(true);
+  };
+  const closeTextModal = () => {
+    setIsTextModalOpen(false);
+    setModalContent('');
+  }
   return (
-    <div className="pending-announcements-container">
+    <div className="approved-announcements-container">
       <h2>{t('profile.approved_announcements')}</h2>
       <div className="search-container">
         <input
@@ -169,7 +182,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
           />
         )}
       </div>
-      
+
       <hr />
       <div className="legend-container">
         <div className="legend-item">
@@ -190,7 +203,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
         <table className="approved-announcements-table">
           <thead>
             <tr>
-              
+
               <th className="number-cell" onClick={() => requestSort('id')}>
                 {t('admin.number')}
                 {sortConfig.key === 'id' ? (
@@ -204,7 +217,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
                 ) : null}
               </th>
               <th>{t('admin.announcement_title')}</th>
-              <th onClick={() => requestSort('date')}>
+              <th className='th-date-approved' onClick={() => requestSort('date')}>
                 {t('admin.creation_date')}
                 {sortConfig.key === 'date' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
@@ -217,11 +230,11 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
             {sortedAnnouncements.map((announcement, index) => (
               <tr key={announcement.adId}>
                 <td className="number-cell id-table-admin">{index + 1}</td>
-                <td>
-                  <Link to={`#`}>{announcement.account.email}</Link>
+                <td className='trimmed-email-approved' onClick={() => handleTextClick(announcement.account.email)}>
+                  <Link to={`#`}>{trimString(announcement.account.email, 12)}</Link>
                 </td>
-                <td>
-                  <Link to={`#`} onClick={() => handleAdClick(announcement)}>{announcement.summary}</Link>
+                <td className='trimmed-tittle-approved'>
+                  <Link to={`#`} onClick={() => handleAdClick(announcement)}>{trimString(announcement.summary, 10)}</Link>
                 </td>
                 <td>{announcement.creationDate}</td>
                 <td className="actions-admin">
@@ -235,7 +248,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
                     src={'/icons/denied.svg'}
                     alt="reject"
                     className="comment-icon"
-                    onClick={() => handleReject(announcement.adId)}
+                    onClick={() => handleReject(announcement.adId, announcement.summary)}
                   />
                   <img
                     src={'/icons/delete-button.svg'}
@@ -271,6 +284,14 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
           handleDelete={handleDelete}
           handleReject={handleReject}
         />
+      )}
+      {isTextModalOpen && (
+        <div className="text-modal-overlay-approved">
+          <div className="text-modal-content-approved-ads ">
+            <span className="close-button-approved" onClick={closeTextModal}>&times;</span>
+            <p>{modalContent}</p>
+          </div>
+        </div>
       )}
     </div>
   );

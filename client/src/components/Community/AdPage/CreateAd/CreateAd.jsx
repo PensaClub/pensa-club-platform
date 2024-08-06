@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { v4 } from "uuid";
 import { TagInput } from "./TagInput";
+import { notify } from "../../../../utils/notify";
 
 export const CreateAd = () => {
   const { t, i18n } = useTranslation();
@@ -33,8 +34,7 @@ export const CreateAd = () => {
     searchCriteria,
     createAd,
   } = useCommunityContext();
-  const { profileData } = useAuthContext();
-
+  const { isFinish, profileData } = useAuthContext();
   const currentLanguage = i18n.language;
   const navigate = useNavigate();
   const getEmailPrefix = (email) => email.split("@")[0];
@@ -51,12 +51,12 @@ export const CreateAd = () => {
     summary: "",
     category: "donate",
     description: "",
-    adRegion: profileData.details.region || "",
-    adSubregion: profileData.details.subregion || "",
-    adTown: profileData.details.settlement
+    adRegion: profileData.details?.region || "",
+    adSubregion: profileData.details?.subregion || "",
+    adTown: profileData.details?.settlement
       ? getAdTownValue(currentLanguage, profileData.details.settlement)
       : "",
-    street: `${profileData.details.settlement}, ул. ${profileData.details.street}, ${profileData.details.streetNumber}`,
+    street: `${profileData.details?.settlement}, ул. ${profileData.details?.street}, ${profileData.details?.streetNumber}`,
     useOtherCity: false,
 
     extraFields: {
@@ -67,6 +67,19 @@ export const CreateAd = () => {
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0 });
+
+}, []);
+  useEffect(() => {
+    if (!isFinish) {
+      navigate('/profile/profile-form');
+      notify('finish-profile');
+    }
+  }, [isFinish, navigate]);
+
+  useEffect(() => {
+    if (!isFinish) return;
+
     if (selectedRegion) {
       fetchSubregions(selectedRegion);
     }
@@ -74,6 +87,8 @@ export const CreateAd = () => {
   }, [selectedRegion]);
 
   useEffect(() => {
+    if (!isFinish) return;
+
     if (selectedRegion && selectedSubregion) {
       fetchTowns(selectedRegion, selectedSubregion).then(setTowns);
     }
@@ -81,6 +96,8 @@ export const CreateAd = () => {
   }, [selectedRegion, selectedSubregion]);
 
   useEffect(() => {
+    if (!isFinish) return;
+
     const loadFieldDefinitions = async () => {
       try {
         const response = await fetch("/fieldDefinitions.json");
@@ -92,9 +109,11 @@ export const CreateAd = () => {
     };
 
     loadFieldDefinitions();
-  }, []);
+  }, [isFinish]);
 
   useEffect(() => {
+    if (!isFinish) return;
+
     const fetchData = async () => {
       const addressId = JSON.parse(localStorage.getItem("addressId"));
       if (addressId) {
@@ -146,14 +165,16 @@ export const CreateAd = () => {
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentLanguage, regions, subregions]);
+  }, [isFinish, currentLanguage, regions, subregions]);
 
   useEffect(() => {
+    if (!isFinish) return;
+
     if (selectedRegion && selectedSubregion) {
       fetchTowns(selectedRegion, selectedSubregion).then(setSettlements);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSubregion, selectedRegion]);
+  }, [isFinish, selectedSubregion, selectedRegion]);
 
   const handleNavigate = () => navigate("/craigslist");
 
