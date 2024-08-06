@@ -72,10 +72,14 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage 
         scrollContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    // Филтриране на обявите само със статус "approved"
+    const approvedAds = userAds.filter(ad => ad.status === 'approved');
+
     return (
         <div className="ad-sidebar-map" ref={sidebarRef}>
             <button className="ad-close-button" onClick={closeSidebar}>{t('map.close')}</button>
-            <div className="ad-sidebar-content"><h2>{selectedUser?.details?.username}</h2>
+            <div className="ad-sidebar-content">
+                <h2>{selectedUser?.details?.username}</h2>
                 <div className="ad-scroll-side-content-map" ref={scrollContentRef}>
                     <div className="ad-user-map-info">
                         <img className="user-map-img" src={selectedUser?.details?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
@@ -104,7 +108,7 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage 
                     <h3 className="ad-title">{t('map.ads_by')} {selectedUser?.details?.username}</h3>
                     <div className="color-lines-pipe"></div>
                     <div className='ad-scroll'>
-                        {userAds.length > 0 ? userAds.map(ad => (
+                        {approvedAds.length > 0 ? approvedAds.map(ad => (
                             <Fragment key={ad?.adId}>
                                 <div className="ad-map">
                                     <img src={ad?.images[0]?.imageURL} alt="ad-img" onClick={() => handleImageClick(ad?.images[0]?.imageURL)} />

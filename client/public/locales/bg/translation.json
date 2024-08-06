@@ -349,8 +349,12 @@
     "rejected_ads": "Отхвърлени обяви",
     "pending": "В очакване",
     "approved": "Одобрени",
-    "rejected": "Отхвърлени"
-   },
+    "rejected": "Отхвърлени",
+    "username": "Потребителско име",
+   "ads_subscription": "Абонаменти",
+   "search_clear": "Изчисти търсенето"
+
+  },
   "community": {
     "community": "Общност",
     "what_search": "Какво търсиш",
