@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +7,7 @@ import {
   faShareNodes,
   faChevronLeft,
   faCaretLeft,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { HeaderCommunity } from '../../HeaderCommunity/HeaderCommunity';
 import { ImageEnlarger } from '../../../ImageEnlarger/ImageEnlarger';
@@ -20,6 +20,17 @@ import { CommunityContext } from '../../../contexts/CommunityContext';
 import { UserSidebar } from './UserSidebar';
 import { toast } from 'react-toastify';
 
+const ImageModal = ({ src, alt, onClose }) => (
+  <div className="image-modal-overlay" onClick={(e) => { e.stopPropagation(); onClose(e); }}>
+    <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+      <button className="image-modal-close" onClick={(e) => { e.stopPropagation(); onClose(e); }}>
+        <FontAwesomeIcon icon={faXmark} style={{ color: "#000000" }} />
+      </button>
+      <img src={src} alt={alt} className="image-modal-img" />
+    </div>
+  </div>
+);
+
 export const AdDetails = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -31,6 +42,7 @@ export const AdDetails = () => {
   const [userAds, setUserAds] = useState([]);
   const { getAdById, fetchTowns, getMyAds } = useContext(CommunityContext);
   const { adId } = useParams();
+  const [modalImage, setModalImage] = useState(null);
 
   useEffect(() => {
     async function fetchAd() {
@@ -102,8 +114,26 @@ export const AdDetails = () => {
 
   const handleEmailClick = (e) => {
     if (!ad?.account?.email) {
-      e.preventDefault(); 
+      e.preventDefault();
       toast.error(t('missing_email'));
+    }
+  };
+
+  const closeModal = (e) => {
+    e.stopPropagation();
+    setModalImage(null);
+  };
+
+  const getProfileImage = (gender) => {
+    switch (gender) {
+      case "male":
+        return "/images/homePage/user-male.png";
+      case "female":
+        return "/images/homePage/user-female.png";
+      case "other":
+        return "/images/homePage/user-it.png";
+      default:
+        return "/images/homePage/user-female.png";
     }
   };
 
@@ -144,7 +174,7 @@ export const AdDetails = () => {
                       </div>
                     </Link>
                     <Link
-                      to={ad?.account?.email ? `mailto:${ad?.account?.email}` : '#'}                    
+                      to={ad?.account?.email ? `mailto:${ad?.account?.email}` : '#'}
                       onClick={handleEmailClick}
                     >
                       <div className="group-icon">
@@ -160,7 +190,6 @@ export const AdDetails = () => {
                         </button>
                       </div>
                     </Link>
-
                   </div>
                   <div className="ads-details-card">
                     <div className="img-ads-details">
@@ -175,15 +204,14 @@ export const AdDetails = () => {
                         <hr />
                         <h5>{ad?.description}</h5>
                         <div className="subinfo-ads-details">
-                        <h4>{ad?.street}</h4>
-                        <div className="tags-details-mapping">
-                        {ad?.tags && ad?.tags?.length > 0 && ad?.tags?.map((tag, index) => (
-                          <h5 key={index}>{tag}</h5>
-                        ))}
+                          <h4>{ad?.street}</h4>
+                          <div className="tags-details-mapping">
+                            {ad?.tags && ad?.tags?.length > 0 && ad?.tags?.map((tag, index) => (
+                              <h5 key={index}>{tag}</h5>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                      </div>
-                      
                     </div>
                     <div className="ads-details-info">
                       <h3 className="title-details">{ad?.summary}</h3>
@@ -199,7 +227,6 @@ export const AdDetails = () => {
                           </>
                         )}
                       </div>
-                    
                       <p className="ads-details-data">
                         {t('community.validate_until')}: {''}
                         <span>{ad?.expirationDate ? new Date(ad?.expirationDate).toLocaleDateString(i18n.language) : ''}</span>
@@ -208,7 +235,7 @@ export const AdDetails = () => {
                         <div className="ads-details-user-info">
                           <div className="ads-details-username">
                             <img
-                              src={userDetails?.imageURL || 'images/homePage/avatar2.png'}
+                              src={userDetails?.imageURL || getProfileImage(userDetails?.gender)}
                               alt={userDetails?.username}
                             />
                             <Link to="#" onClick={handleReadMoreClick}>
@@ -299,6 +326,14 @@ export const AdDetails = () => {
           selectedUser={selectedUser}
           userAds={userAds}
           closeSidebar={closeSidebar}
+          setModalImage={setModalImage}
+        />
+      )}
+      {modalImage && (
+        <ImageModal
+          src={modalImage}
+          alt="Ad Image"
+          onClose={closeModal}
         />
       )}
     </>

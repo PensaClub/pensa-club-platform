@@ -57,7 +57,7 @@ export const ProfileAnnounced = () => {
 
       try {
         const result = await getMyAds(profileData?.email);
-        const sortedAds = result?.ads.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+        const sortedAds = result?.ads.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
         setAds(sortedAds);
       } catch (error) {
         console.error('Failed to fetch ads', error);

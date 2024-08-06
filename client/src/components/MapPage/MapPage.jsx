@@ -9,7 +9,7 @@ export const MapPage = () => {
     const { t } = useTranslation();
 
     const { onAllUsers, allUsers } = useMappingContext();
-    const isFetched = useRef(false); //  флаг за  да проверявам за заявка - пробно 
+    // const isFetched = useRef(false); //  флаг за  да проверявам за заявка - пробно 
 
     useEffect(() => {
         window.scrollTo({ top: 0 });
@@ -21,12 +21,12 @@ export const MapPage = () => {
                 console.error('Failed to fetch users:', error);
             }
         };
+             fetchAllUsers();
 
-        if (!allUsers && !isFetched.current) {
-            fetchAllUsers();
-            isFetched.current = true;
-        }
-    }, [onAllUsers, allUsers]);
+        // if (!allUsers && !isFetched.current) {
+        //     isFetched.current = true;
+        // }
+    }, []);
 
     return (
         <>
