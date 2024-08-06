@@ -67,6 +67,8 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar }) => {
     scrollContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const approvedAds = userAds.ads.filter(ad => ad.status === 'approved');
+
   return (
     <div className="ad-sidebar-map" ref={sidebarRef}>
       <button className="ad-close-button" onClick={closeSidebar}>{t('map.close')}</button>
@@ -99,7 +101,7 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar }) => {
           <h3 className="ad-title">{t('map.ads_by')} {selectedUser?.username}</h3>
           <div className="ad-color-lines-pipe"></div>
           <div className='ad-scroll'>
-            {userAds.ads.length > 0 ? userAds.ads.map(ad => (
+            {approvedAds.length > 0 ? approvedAds.map(ad => (
               <Fragment key={ad?.adId}>
                 <div className="ad-map">
                   <img src={ad?.images[0]?.imageURL} alt="ad-img" />
