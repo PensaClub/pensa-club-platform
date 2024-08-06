@@ -36,11 +36,11 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-      case 'success-comment':
-        toast.success(<Trans i18nKey="notification.success-comment" />, {
-          role: 'alert',
-        });
-        break;
+    case 'success-comment':
+      toast.success(<Trans i18nKey="notification.success-comment" />, {
+        role: 'alert',
+      });
+      break;
     case 'success-login':
       toast.success(<Trans i18nKey="notification.success-login" />, {
         role: 'alert',
@@ -98,6 +98,11 @@ export const notify = (key) => {
       break;
     case 'finish-profile':
       toast.error(<Trans i18nKey="notification.finish-profile" />, {
+        role: 'alert',
+      });
+      break;
+    case 'user-already-exists':
+      toast.error(<Trans i18nKey="notification.user-already-exists" />, {
         role: 'alert',
       });
       break;

@@ -49,7 +49,7 @@ export const UserProvider = ({ children }) => {
       navigate('/profile/profile-form');
       notify('success-register');
     } catch (error) {
-      notify('error');
+      notify(error.message === "User already exists with this email." ? 'user-already-exists' : 'error');
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
