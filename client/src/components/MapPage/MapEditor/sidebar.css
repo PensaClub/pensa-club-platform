@@ -3,13 +3,13 @@ body.active-sidebar .leaflet-container {
     /* Забраних движенията  с картата докато менюто е отворено */
 }
 
-body.active-sidebar .sidebar-map {
+body.active-sidebar .ad-sidebar-map {
     transform: translateX(0);
     z-index: 1006;
     transition: transform 1.2s ease-in-out;
 }
 
-.sidebar-map {
+.ad-sidebar-map {
     position: relative;
     background-image: url('../../../../public/images/sign-up/background.jpg');
     left: 0;
@@ -27,7 +27,7 @@ body.active-sidebar .sidebar-map {
     transition: transform 1.2s ease-in-out, height 1.2s ease-in-out;
 }
 
-.close-button {
+.ad-close-button {
     background: none;
     border: none;
     font-size: 1.5em;
@@ -38,7 +38,7 @@ body.active-sidebar .sidebar-map {
     transition: opacity 1s ease-in-out;
 }
 
-.close-button {
+.ad-close-button {
     cursor: pointer;
     position: absolute;
     padding: 5px;
@@ -49,13 +49,13 @@ body.active-sidebar .sidebar-map {
     pointer-events: all;
 }
 
-.active-sidebar .close-button {
+.active-sidebar .ad-close-button {
     pointer-events: all;
     opacity: 1;
     transition: opacity 1s ease-in-out;
 }
 
-.sidebar-content {
+.ad-sidebar-content {
     width: 100%;
     opacity: 0;
     pointer-events: all;
@@ -64,13 +64,13 @@ body.active-sidebar .sidebar-map {
     overflow: hidden;
 }
 
-.active-sidebar .sidebar-content {
+.active-sidebar .ad-sidebar-content {
     opacity: 1;
     pointer-events: visible;
     transition: opacity 2s;
 }
 
-.sidebar-content h2 {
+.ad-sidebar-content h2 {
     display: flex;
     align-items: center;
     font-size: 1.2rem;
@@ -86,13 +86,13 @@ body.active-sidebar .sidebar-map {
     overflow: hidden;
 }
 
-.user-map-info {
+.ad-user-map-info {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.user-map-info p {
+.ad-user-map-info p {
     font-size: 14px;
 }
 
@@ -133,9 +133,9 @@ body.active-sidebar .sidebar-map {
 }
 
 .ad-scroll {
+    display: flex;
     flex-direction: column;
-    height: 60%;
-    min-height: 200px;
+    height: auto;
     z-index: 99999;
     transition: height 2s ease;
 }
@@ -148,21 +148,20 @@ body.active-sidebar .sidebar-map {
     font-weight: 300;
 }
 
-.scroll-side-content {
-    overflow-y: scroll;
-    height: calc(100vh - 100px); 
+.ad-scroll-side-content-map {
+    overflow-y: auto;
+    height: calc(100% - 100px);
 }
 
-.scroll-side-content::-webkit-scrollbar {
+.ad-scroll-side-content-map::-webkit-scrollbar {
     width: 10px;
-
 }
 
-.scroll-side-content::-webkit-scrollbar-track {
+.ad-scroll-side-content-map::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.scroll-side-content::-webkit-scrollbar-thumb {
+.ad-scroll-side-content-map::-webkit-scrollbar-thumb {
     background-color: var(--orange);
     border: 2px solid #f1f1f1;
     border-radius: var(--radius-input);
@@ -231,7 +230,7 @@ body.active-sidebar .sidebar-map {
     box-shadow: var(--container-shadow);
 }
 
-.active-sidebar .sidebar-map {
+.active-sidebar .ad-sidebar-map {
     width: 100%;
     transition: width 4s, max-width 4s;
 }
@@ -248,6 +247,7 @@ body.active-sidebar .sidebar-map {
     background: linear-gradient(325deg, #ffffff 0%, #777777 50%, #ffffff 100%);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.32);
 }
+
 .scroll-to-top-button {
     position: fixed;
     bottom: 20px;
@@ -264,26 +264,29 @@ body.active-sidebar .sidebar-map {
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     font-size: 24px;
-  }
-  .arrow-up-side-bar{
-    color: var(--text-white)!important;
-  }
-  .scroll-to-top-button:hover {
+}
+
+.arrow-up-side-bar {
+    color: var(--text-white) !important;
+}
+
+.scroll-to-top-button:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-  }
+}
+
 @media (min-width: 600px) {
     .ad-scroll {
-        height: 70%;
+        height: auto;
     }
 
-    .user-map-info {
+    .ad-user-map-info {
         flex-direction: row;
         justify-content: center;
     }
 }
 
-@media (min-width: 850px) {
-    .sidebar-map {
+@media (min-width: 1200px) {
+    .ad-sidebar-map {
         position: absolute;
         background-image: url('../../../../public/images/sign-up/background.jpg');
         left: 0;
@@ -301,11 +304,11 @@ body.active-sidebar .sidebar-map {
         transition: transform 1.2s ease-in-out;
     }
 
-    .user-map-info {
+    .ad-user-map-info {
         flex-direction: row;
     }
 
-    .user-map-info p {
+    .ad-user-map-info p {
         font-size: 16px;
     }
 
@@ -322,14 +325,14 @@ body.active-sidebar .sidebar-map {
         background: linear-gradient(304deg, #1B6D4D, #E26020 22%, #BB1D3D 93%);
     }
 
-    .active-sidebar .sidebar-map {
-        max-width: 480px;
+    .active-sidebar .ad-sidebar-map {
+        max-width: 580px;
         width: 100%;
         transition: width 4s;
     }
 
     .ad-scroll {
-        height: 35vh;
+        height: auto;
     }
 
     .ad-desc-user {

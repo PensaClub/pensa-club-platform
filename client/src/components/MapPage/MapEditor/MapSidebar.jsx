@@ -6,17 +6,18 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useAuthContext } from '../../contexts/UserContext';
 import './sidebar.css';
 
-export const MapSidebar = ({ selectedUser, userAds, closeSidebar,setModalImage }) => {
+export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage }) => {
     const { t } = useTranslation();
     const sidebarRef = useRef(null);
     const scrollContentRef = useRef(null);
     const [showScrollToTop, setShowScrollToTop] = useState(false);
     const { isAuthentication } = useAuthContext();
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target) && !isModalOpen) {
                 closeSidebar();
             }
         };
@@ -27,7 +28,7 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar,setModalImage }
             document.removeEventListener('mousedown', handleClickOutside);
             document.body.classList.remove('active-sidebar');
         };
-    }, [closeSidebar]);
+    }, [closeSidebar, isModalOpen]);
 
     useEffect(() => {
         if (userAds && userAds.length > 10) {
@@ -56,9 +57,12 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar,setModalImage }
             navigate(`/ad/details/${ad.adId}`);
         }
     };
+
     const handleImageClick = (image) => {
+        setIsModalOpen(true);
         setModalImage(image);
     };
+
     const trimString = (str, num) => {
         if (str.length <= num) return str;
         return str.slice(0, num) + '...';
@@ -72,22 +76,22 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar,setModalImage }
         <div className="ad-sidebar-map" ref={sidebarRef}>
             <button className="ad-close-button" onClick={closeSidebar}>{t('map.close')}</button>
             <div className="ad-sidebar-content"><h2>{selectedUser?.details?.username}</h2>
-                <div className="ad-scroll-side-content" ref={scrollContentRef}>
+                <div className="ad-scroll-side-content-map" ref={scrollContentRef}>
                     <div className="ad-user-map-info">
-                        <img className="ad-user-map-img" src={selectedUser?.details?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
-                        <div className="ad-map-desc-user">
+                        <img className="user-map-img" src={selectedUser?.details?.imageURL || "/images/homePage/avatar2.png"} alt="user-img" />
+                        <div className="map-desc-user">
                             {selectedUser?.details?.workOptions && selectedUser?.details?.workOptions?.length > 0 && (
-                                <p className="ad-description-editor">
+                                <p className="description-editor">
                                     {t('map.profession')}: {selectedUser?.details?.workOptions?.map(option => t(`options.work-options.${option}`)).join(', ')}
                                 </p>
                             )}
                             {selectedUser?.details?.interestOptions && selectedUser?.details?.interestOptions.length > 0 && (
-                                <p className="ad-description-editor">
+                                <p className="description-editor">
                                     {t('map.interests')}: {selectedUser?.details?.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ')}
                                 </p>
                             )}
                             {selectedUser?.details?.skills && selectedUser?.details?.skills?.length > 0 && (
-                                <p className="ad-description-editor">
+                                <p className="description-editor">
                                     {t('map.skills')}: {selectedUser?.details?.skills.map(option => t(`options.skills.${option}`)).join(', ')}
                                 </p>
                             )}
@@ -96,9 +100,9 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar,setModalImage }
                             <p>{t('map.email')}: <Link to={`mailto:${selectedUser?.email}`}>{selectedUser?.email}</Link></p>
                         </div>
                     </div>
-                    <div className="ad-color-lines-pipe"></div>
+                    <div className="color-lines-pipe"></div>
                     <h3 className="ad-title">{t('map.ads_by')} {selectedUser?.details?.username}</h3>
-                    <div className="ad-color-lines-pipe"></div>
+                    <div className="color-lines-pipe"></div>
                     <div className='ad-scroll'>
                         {userAds.length > 0 ? userAds.map(ad => (
                             <Fragment key={ad?.adId}>
