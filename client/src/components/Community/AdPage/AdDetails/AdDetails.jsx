@@ -124,6 +124,19 @@ export const AdDetails = () => {
     setModalImage(null);
   };
 
+  const getProfileImage = (gender) => {
+    switch (gender) {
+      case "male":
+        return "/images/homePage/user-male.png";
+      case "female":
+        return "/images/homePage/user-female.png";
+      case "other":
+        return "/images/homePage/user-it.png";
+      default:
+        return "/images/homePage/user-female.png";
+    }
+  };
+
   return (
     <>
       <section className="background-ads-details">
@@ -222,7 +235,7 @@ export const AdDetails = () => {
                         <div className="ads-details-user-info">
                           <div className="ads-details-username">
                             <img
-                              src={userDetails?.imageURL || 'images/homePage/avatar2.png'}
+                              src={userDetails?.imageURL || getProfileImage(userDetails?.gender)}
                               alt={userDetails?.username}
                             />
                             <Link to="#" onClick={handleReadMoreClick}>

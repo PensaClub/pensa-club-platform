@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './ProfileMessages.css';
 import { useCommunityContext } from '../contexts/CommunityContext';
 import { useAuthContext } from '../contexts/UserContext';
