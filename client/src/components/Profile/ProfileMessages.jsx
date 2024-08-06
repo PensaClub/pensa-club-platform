@@ -205,7 +205,9 @@ export const ProfileMessages = () => {
       </div>
       <div className="pagination-container">
         <button className="pagination-button" onClick={handlePreviousPage} disabled={currentPage === 1}>{t('admin_messages.previous')}</button>
-        <span className="pagination-info">{t('admin_messages.page')} {currentPage} {t('admin_messages.of')} {totalPages}</span>
+        <span className="pagination-info">
+          {t('admin_messages.page')} {currentPage} {totalPages > 0 ? `${t('admin_messages.of')} ${totalPages}` : ''}
+        </span>
         <button className="pagination-button" onClick={handleNextPage} disabled={currentPage === totalPages}>{t('admin_messages.next')}</button>
       </div>
     </div>

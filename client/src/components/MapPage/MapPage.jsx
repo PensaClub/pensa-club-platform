@@ -26,7 +26,7 @@ export const MapPage = () => {
         // if (!allUsers && !isFetched.current) {
         //     isFetched.current = true;
         // }
-    }, [onAllUsers, allUsers]);
+    }, []);
 
     return (
         <>

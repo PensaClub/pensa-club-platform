@@ -67,6 +67,10 @@ export const CreateAd = () => {
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0 });
+
+}, []);
+  useEffect(() => {
     if (!isFinish) {
       navigate('/profile/profile-form');
       notify('finish-profile');
