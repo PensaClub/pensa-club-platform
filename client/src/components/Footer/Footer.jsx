@@ -20,7 +20,7 @@ export const Footer = ({ additionalClasses }) => {
                 </div>
                 <div className="footer-links">
                     <h3>{t('footer.partners')}</h3>
-                    <p>{t('footer.softuni')}</p>
+                    <p><Link to={"https://buditel.softuni.bg/"}>{t('footer.softuni')}</Link></p>
                 </div>
                 <div className="footer-info">
                     <div className="second-info">
@@ -38,7 +38,7 @@ export const Footer = ({ additionalClasses }) => {
                 </div>
             </section>
             <section className='footer-privacy'>
-                <p>{t('footer.privacy')}</p>
+                <p><Link to="/privacy-policy">{t('footer.privacy')}</Link></p>
                 <p>&copy; {t('footer.copyright')}</p>
             </section>
         </footer>
