@@ -189,7 +189,7 @@ header > a:nth-child(1) {
 .dropdown-menu .dropdown-item {
   display: flex;
   justify-content: center;
-  max-width: 150px;
+  max-width: 200px;
   font-size: var(--xs-font-size);
   padding: 0.5rem 1.5rem;
   clear: both;
