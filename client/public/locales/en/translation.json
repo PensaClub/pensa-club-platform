@@ -532,7 +532,9 @@
     "add_new_comment": "Add new comment",
     "comment": "Comment",
     "comments": "Comments",
-    "submit": "Submit"
+    "submit": "Submit",
+    "name-lenght": "Name should not be longer than 40 symbols.",
+    "message-lenght": "Message should not be longer than 100 symbols."
   },
   "admin_messages":{
     "search_desc": "Search by description...", 
