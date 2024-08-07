@@ -179,10 +179,19 @@ export const UserProvider = ({ children }) => {
       const response = await userService.resetPassword({ ...data });
       setIsLoading(false);
       // setIsAdmin(response.user.role === 'admin');
+      notify('success-password-change');
       return response;
     } catch (error) {
-      notify('error', error);
+      if(error?.message === "Old and new password are the same.")
+        notify('password-change-same-passwords');
+      else if(error?.message === "Old password is invalid.") 
+        notify('password-change-old-invalid');
+      else if(error?.message === "Repeat password does not match.") 
+        notify('password-change-repeat-invalid');
+      else notify('error', error);
+      
       showErrorAndSetTimeouts(error.message);
+      throw error;
     } finally {
       setIsLoading(false);
     }

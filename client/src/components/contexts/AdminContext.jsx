@@ -75,11 +75,11 @@ export const AdminProvider = ({ children }) => {
 
             if (newStatus === 'approved') {
                 fetchApprovedAds()
-                notify('success-approved');
+                notify('ad-approved');
             } else if (newStatus === 'denied') {
                 await fetchPendingAds();
 
-                notify('success-reject');
+                notify('ad-reject');
             }
         } catch (e) {
             notify('error', e)

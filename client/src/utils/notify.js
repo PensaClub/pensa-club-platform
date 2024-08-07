@@ -76,8 +76,13 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
-    case 'success-approved':
-      toast.success(<Trans i18nKey="notification.success-approved" />, {
+    case 'success-password-change':
+      toast.success(<Trans i18nKey="notification.success-password-change" />, {
+        role: 'alert',
+      });
+      break;
+    case 'ad-approved':
+      toast.success(<Trans i18nKey="notification.ad-approved" />, {
         role: 'alert',
       });
       break;
@@ -86,8 +91,8 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
-    case 'success-reject':
-      toast.success(<Trans i18nKey="notification.success-reject" />, {
+    case 'ad-reject':
+      toast.success(<Trans i18nKey="notification.ad-reject" />, {
         role: 'alert',
       });
       break;
@@ -116,6 +121,21 @@ export const notify = (key, error) => {
         username = ""
       }
       toast.error(<Trans i18nKey="notification.username-is-taken" values={{ username }} />, {
+        role: 'alert',
+      });
+      break;
+    case 'password-change-same-passwords':
+      toast.error(<Trans i18nKey="notification.password-change-same-passwords" />, {
+        role: 'alert',
+      });
+      break;
+    case 'password-change-old-invalid':
+      toast.error(<Trans i18nKey="notification.password-change-old-invalid" />, {
+        role: 'alert',
+      });
+      break;
+    case 'password-change-repeat-invalid':
+      toast.error(<Trans i18nKey="notification.password-change-repeat-invalid" />, {
         role: 'alert',
       });
       break;
