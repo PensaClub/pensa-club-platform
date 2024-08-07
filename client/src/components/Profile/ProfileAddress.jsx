@@ -154,7 +154,6 @@ const ProfileAddress = () => {
       try {
         onEditProfileDataSubmit(trimmedForm);
         onAllUsers();
-        console.error('Address Submitted:', trimmedForm);
         navigate('/profile');
       } catch (error) {
         console.error(`Error Profile Address Submit Component: ${error.message}`);
@@ -170,6 +169,7 @@ const ProfileAddress = () => {
   };
   const handleResetForm = () => {
     handleReset(setForm, initialFormState);
+    navigate('/profile');
   };
   return (
     <form onSubmit={handleSubmit} className='profile-form'>
@@ -275,7 +275,7 @@ const ProfileAddress = () => {
       <button className='btn-general btn-green' type='submit'>
         {t('profile.save_btn')}
       </button>
-      <button type='submit' className='btn-general btn-red' onClick={handleResetForm}>
+      <button type='button' className='btn-general btn-red' onClick={handleResetForm}>
         {t('profile.close_btn')}
       </button>
       </div>

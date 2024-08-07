@@ -98,7 +98,7 @@ export const Header = ({ additionalClasses }) => {
               {t("header.map")}
             </NavLink>
             <NavLink
-              to="/craigslist"
+              to="/craigslist?reset=true"
               className={({ isActive }) =>
                 `nav-item ${isActive ? "active" : ""}`
               }
@@ -162,7 +162,7 @@ export const Header = ({ additionalClasses }) => {
               <div className="social-icons-header">
                 <FontAwesomeIcon className="social-mobile" icon={faBars} />
                 <Link
-                  to="/craigslist"
+                  to="/craigslist?reset=true"
                   className="dropdown-item desktop-unactive"
                   onClick={handleDropdownItemClick}
                 >

@@ -70,7 +70,12 @@ export const communityServiceFactory = (token) => {
       return requester.post(
         `${apiUrl}/subscribe/addSubscriber`, {username, email}
       );
-    }
+    },
+    getSubscribeEmails: async () => {
+      return requester.get(
+        `${apiUrl}/subscribe/getSubscribers`
+      );
+    },
   }
 }
 

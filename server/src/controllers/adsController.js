@@ -97,7 +97,7 @@ adsController.get('/adById/:adId', rbac.checkPermission('read_record'), memoryCa
             {
               model: user_details,
               as: 'details',
-              attributes: ['username', 'imageURL', 'work_options', 'interest_options', 'skills', 'phone_number'],
+              attributes: ['username', 'imageURL', 'work_options', 'interest_options', 'skills', 'phone_number','gender'],
             },
           ],
         },
@@ -441,7 +441,7 @@ adsController.get('/ads-search', rbac.checkPermission('read_record'), async (req
             {
               model: user_details,
               as: 'details',
-              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName'], 'imageURL'],
+              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName'], 'imageURL','gender' ],
             },
           ],
         },
