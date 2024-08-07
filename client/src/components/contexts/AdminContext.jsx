@@ -33,6 +33,7 @@ export const AdminProvider = ({ children }) => {
             setIsLoading(false);
             return response.ads;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;
@@ -46,6 +47,7 @@ export const AdminProvider = ({ children }) => {
             setIsLoading(false);
             return response.ads;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;
@@ -59,6 +61,7 @@ export const AdminProvider = ({ children }) => {
             setIsLoading(false);
             return response.ads;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;
@@ -79,6 +82,7 @@ export const AdminProvider = ({ children }) => {
                 notify('success-reject');
             }
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;

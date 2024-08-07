@@ -9,7 +9,7 @@ function tokenCreator(data) {
     enabled: data.finished
   };
 
-  return jwt.sign(payload, secret, { expiresIn: "55m" });
+  return jwt.sign(payload, secret, { expiresIn: "24h" });
 }
 
 function tokenVerification(token) {

@@ -205,6 +205,7 @@ export const UserProvider = ({ children }) => {
       notify('success-role-change to'+ role);
       return response;
     } catch (e) {
+      notify('error', e)
       showErrorAndSetTimeouts(`Error changing role: ${e.message}`);
       return toast.error(e.error);
     } finally {
