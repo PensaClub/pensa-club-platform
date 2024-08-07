@@ -38,12 +38,12 @@ export const UserSuggestion = () => {
       case 'name':
         if (!value) error = t('profile.name_required');
         if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
-        if (value.length > 40) error = t('user-suggestion.name-lenght');
+        if (value.length < 3 && value.length > 40) error = t('user-suggestion.name-lenght');
         break;
       case 'reffererName':
         if (!value) error = t('profile.name_required');
         if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
-        if (value.length > 40) error = t('user-suggestion.name-lenght');
+        if (value.length < 3 && value.length > 40) error = t('user-suggestion.name-lenght');
         break;
       case 'phoneNumber':
         if (!value) error = t('profile.phone_number_required');
@@ -51,7 +51,7 @@ export const UserSuggestion = () => {
           error = t('profile.phone_number_invalid');
         break;
       case 'message':
-        if (value.length > 100) error = t('user-suggestion.message-lenght');
+        if (value.length < 5 && value.length > 100) error = t('user-suggestion.message-lenght');
       default:
         break;
     }
@@ -183,7 +183,7 @@ export const UserSuggestion = () => {
               <p className="error">{t(`${errors.message}`)}</p>
             )}
 
-            <button className="btn-general btn-orange"  disabled={!form.name || !form.reffererName || !form.phoneNumber || errors > 0}>
+            <button className="btn-general btn-orange"  disabled={errors > 0 || !form.name || !form.reffererName || !form.phoneNumber }>
               {t('user-suggestion.title')}
             </button>
           </form>
