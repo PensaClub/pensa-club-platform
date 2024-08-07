@@ -4,7 +4,7 @@ import { FiltersCommunity } from "./FiltersCommunity/FiltersCommunity";
 import { AdsCard } from "./AdsCard/AdsCard";
 import { useEffect, useState, useCallback, useRef } from "react";
 import debounce from 'lodash.debounce';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { What } from "./CommunityModals/What";
 import { SearchWhere } from "./CommunityModals/SearchWhere";
@@ -23,8 +23,9 @@ export const CommunityPage = () => {
     const [searchPerformed, setSearchPerformed] = useState(false);
     const [lastPage, setLastPage] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false); 
-    const { search } = useLocation();
 
+    const location = useLocation();
+    const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
 
@@ -55,15 +56,18 @@ export const CommunityPage = () => {
     useEffect(() => {
         window.scrollTo({ top: 0 });
     }, []);
-
     useEffect(() => {
-        const query = new URLSearchParams(search);
+        const query = new URLSearchParams(location.search);
         const filtersFromQuery = Object.fromEntries(query.entries());
         setFilters(prevFilters => ({ ...prevFilters, ...filtersFromQuery }));
-        if (Object.keys(filtersFromQuery).length > 0) {
+            //бутона от менюто за навигация слага кеури ресет=true ао го има ресетва филтрите
+        if (query.get('reset') === 'true') {
+            resetFilters();
+            navigate('/craigslist', { replace: true });
+        } else if (Object.keys(filtersFromQuery).length > 0) {
             handleSearch(filtersFromQuery, 1);
         }
-    }, [search]);    
+    }, [location.search, navigate])   
 
     const handleSearch = async (customFilters = null, pageNum = 1) => {
         const searchFilters = customFilters ? customFilters : filters;
