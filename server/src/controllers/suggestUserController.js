@@ -4,10 +4,22 @@ const { user_suggest } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac');
 const { where } = require('sequelize');
+const CustomError = require('../utils/customError.js');
+const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
 
 suggestUserController.post('/', async (req, res, next) => {
+  let errors = {};
   try {
     const { name, phoneNumber, message, reffererName } = req.body;
+
+    if (name.length < 3 || name.length > 40) errors.name = 'Name must be between 3 and 40 characters in length.';
+    if (reffererName.length < 3 || reffererName.length > 40) errors.reffererName = 'Refferer name must be between 3 and 40 characters in length.';
+    if (message.length < 5 || message.length > 100) errors.message = 'The length of the message must be between 5 and 100 characters.';
+    if (!phoneRegex.test(phoneNumber)) errors.phoneNumber = 'Invalid phone number.';
+
+    if (Object.keys(errors).length > 0) {
+      throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });
+    }
 
     const data = {
       name,
