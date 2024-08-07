@@ -244,7 +244,8 @@ export const CommunityProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await communityService.subscribeNewUser(username, email);
-            setIsLoading(false);      
+            setIsLoading(false);  
+            notify("email-send")    
              return response;
         } catch (e) {
             notify('error');
