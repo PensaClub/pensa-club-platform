@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id', // Primary key in user_accounts table
         as: 'ads',
       });
+      user_account.hasMany(models.refreshToken, {
+        foreignKey: 'userId', // Foreign key in refreshToken table
+        sourceKey: 'id', // Primary key in user_accounts table
+        as: 'refreshTokens',
+      });
       // define association here
     }
   }

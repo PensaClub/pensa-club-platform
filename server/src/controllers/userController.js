@@ -1,11 +1,11 @@
 const userController = require('express').Router();
 
 const bcrypt = require('bcrypt');
-const { tokenCreator, tokenVerification } = require('../utils/jwt');
+const { tokenCreator, tokenVerification, tokenGenerator } = require('../utils/jwt');
 const CustomError = require('../utils/customError');
 
 const { where } = require('sequelize');
-const { user_account, user_details, user_ads } = require('../sequelize/models/index');
+const { user_account, user_details, user_ads, refreshToken } = require('../sequelize/models/index');
 const uuid = require('uuid');
 
 const isAuth = require('../middlewares/isAuth');
@@ -63,7 +63,10 @@ userController.post('/register', async (req, res, next) => {
 
     const user = await user_account.create({ email, password: hashedPassword });
 
-    const token = tokenCreator(user);
+    const { token } = tokenGenerator('access', user);
+    const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
+
+    await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
 
     const data = {
       email: user.email,
@@ -71,11 +74,11 @@ userController.post('/register', async (req, res, next) => {
       enabled: user.finished,
     };
 
-    res.cookie('token', token, {
+    res.cookie('refreshJwtToken', refreshJwtToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: expiryDate - Date.now(),
     });
     res.status(201).json({ message: 'User successfully created!', user: data, token });
   } catch (err) {
@@ -105,7 +108,7 @@ userController.post('/login', async (req, res, next) => {
         {
           model: user_details,
           as: 'details',
-          attributes: { exclude: ['user_accounts_id', 'id'] },
+          attributes: { exclude: ['user_accounts_id'] },
         },
         {
           model: user_ads,
@@ -158,14 +161,18 @@ userController.post('/login', async (req, res, next) => {
       data.details = details;
     }
 
-    const token = tokenCreator(user);
+    const { token } = tokenGenerator('access', user);
+    const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
 
-    res.cookie('token', token, {
+    await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
+
+    res.cookie('refreshJwtToken', refreshJwtToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: expiryDate - Date.now(),
     });
+
     res.status(200).json({ message: 'User successfully logged in!', user: data, token });
   } catch (err) {
     next(err);
@@ -175,11 +182,22 @@ userController.post('/login', async (req, res, next) => {
 userController.post('/logout', isAuth, async (req, res, next) => {
   try {
     if (req.user) {
-      res.status(200).json({ message: 'Logout successful.' });
+      const refreshJwtToken = req.cookies.refreshJwtToken;
+      if (refreshJwtToken) {
+        try {
+          const decodedToken = tokenVerification('refresh', refreshJwtToken);
+          await refreshToken.destroy({ where: { token: decodedToken.refreshTokenId } });
+          res.clearCookie('refreshToken');
+          res.status(200).json({ message: 'Logout successful.' });
+        } catch (err) {
+          next(err);
+        }
+      }
     } else {
       throw new CustomError({ message: 'Invalid or missing token!', statusCode: 401 });
     }
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });

@@ -441,7 +441,7 @@ adsController.get('/ads-search', rbac.checkPermission('read_record'), async (req
             {
               model: user_details,
               as: 'details',
-              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName'], 'imageURL'],
+              attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName'], 'imageURL', 'gender'],
             },
           ],
         },

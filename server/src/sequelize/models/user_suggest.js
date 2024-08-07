@@ -57,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
         validate: {
+          // kakto drugoto ime 40 simvola
           customValidator(value) {
             if (value && value.length > 0) {
               if (value.length < 3 || value.length > 100) {
@@ -73,6 +74,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null,
+        // ako go ima da e 100 simvola
       },
       resolved: {
         type: DataTypes.BOOLEAN,
