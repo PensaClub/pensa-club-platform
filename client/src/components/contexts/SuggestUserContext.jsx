@@ -34,7 +34,7 @@ export const SuggestUserProvider = ({ children }) => {
       navigate('/');
       notify('success-suggest');
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -48,7 +48,7 @@ export const SuggestUserProvider = ({ children }) => {
 
       notify('success-suggest');
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -60,7 +60,7 @@ export const SuggestUserProvider = ({ children }) => {
       const response = await suggestUserService.getAllSuggested();
       return response.userData;
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -72,7 +72,7 @@ export const SuggestUserProvider = ({ children }) => {
       const response = await suggestUserService.getAllResolve();
       return response.userData;
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -85,7 +85,7 @@ export const SuggestUserProvider = ({ children }) => {
       notify('success-comment');
       return response.comment;
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -99,7 +99,7 @@ export const SuggestUserProvider = ({ children }) => {
       notify('success-delete-suggest')
       return response.userData;
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);

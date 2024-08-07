@@ -3,7 +3,7 @@
 import { toast } from 'react-toastify';
 import { Trans } from 'react-i18next';
 
-export const notify = (key, additional) => {
+export const notify = (key, error) => {
   // eslint-disable-next-line default-case
   switch (key) {
     case 'success-data':
@@ -107,7 +107,15 @@ export const notify = (key, additional) => {
       });
       break;
     case 'username-is-taken':
-      toast.error(<Trans i18nKey="notification.username-is-taken" values={{ username: additional }} />, {
+      let username;
+      const errorIndex = error?.details.findIndex(error => error.field === 'username');
+      if (error?.details[errorIndex]?.value) {
+        username = error?.details[errorIndex]?.value + " "
+      }
+      else {
+        username = ""
+      }
+      toast.error(<Trans i18nKey="notification.username-is-taken" values={{ username }} />, {
         role: 'alert',
       });
       break;

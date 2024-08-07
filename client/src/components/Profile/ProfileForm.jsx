@@ -225,10 +225,10 @@ const ProfileForm = () => {
       try {
         const updatedForm = await uploadImages(trimmedForm);
                 
-        resetFields(setForm, initialFormState);
         await onProfileDataSubmit(updatedForm);
         await onAllUsers();
-
+        
+        resetFields(setForm, initialFormState);
         setSelectedDate('');
         setSelectedMonth('');
         setSelectedYear('');
@@ -236,12 +236,10 @@ const ProfileForm = () => {
         window.scrollTo(0, 0);
         navigate('/profile');
       } catch (error) {
-        setForm(persistedData);
-        console.error(`Error on profile form submit: ${error.message}`);
+         console.error(`Error on profile form submit: ${error.message}`);
       }
     } else {
-      setForm(persistedData);
-      console.error('Form validation failed. Errors:', validationErrors);
+       console.error('Form validation failed. Errors:', validationErrors);
     }
   };
 

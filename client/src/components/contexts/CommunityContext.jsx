@@ -162,7 +162,7 @@ export const CommunityProvider = ({ children }) => {
             notify('success-delete-ads');
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -230,7 +230,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -246,7 +246,7 @@ export const CommunityProvider = ({ children }) => {
             console.log(response);
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {

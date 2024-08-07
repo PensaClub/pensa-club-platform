@@ -93,7 +93,7 @@ export const AdminProvider = ({ children }) => {
             notify('success-delete-ads')
             return response;
         } catch (e) {
-            notify('error')
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -109,7 +109,7 @@ export const AdminProvider = ({ children }) => {
             notify('success-delete-user');
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -124,7 +124,7 @@ export const AdminProvider = ({ children }) => {
             notify('success-delete-message');
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {

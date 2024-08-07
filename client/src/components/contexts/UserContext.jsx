@@ -77,7 +77,7 @@ export const UserProvider = ({ children }) => {
       if (error.message == "Email or password are invalid.") {
         notify('error-authorize')
       } else {
-        notify('error');
+        notify('error', error);
       }
     
       showErrorAndSetTimeouts(error.message);
@@ -96,7 +96,7 @@ export const UserProvider = ({ children }) => {
       setIsAdmin(false);
       notify('success-logout');
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -121,22 +121,11 @@ export const UserProvider = ({ children }) => {
       navigate('/profile');
       notify('success-data');
     } catch (error) {
-      const isUsernameTaken = 
+      const isUsernameTaken =
         error?.message === "Unique constraint violation." && error?.details.some(error => error.field === 'username');
-        
-      if(isUsernameTaken) {
-        const errorIndex = error?.details.findIndex(error => error.field === 'username');
-        if(error?.details[errorIndex]?.value) {
-          notify('username-is-taken', (error?.details[errorIndex]?.value + " "))
-        }
-        else {
-          notify('username-is-taken', "")
-        }
-      }
-      else {
-        notify('error');
-      }
-      showErrorAndSetTimeouts(error.message);
+        notify(isUsernameTaken ? 'username-is-taken' : 'error', error);
+        showErrorAndSetTimeouts(error.message);
+        throw error;
     } finally {
       setIsLoading(false);
     }
@@ -156,7 +145,7 @@ export const UserProvider = ({ children }) => {
 
       notify('success-data');
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(`Error edit profile data: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -173,7 +162,7 @@ export const UserProvider = ({ children }) => {
       }
       return response.user
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(`Error get profile data: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -192,7 +181,7 @@ export const UserProvider = ({ children }) => {
       // setIsAdmin(response.user.role === 'admin');
       return response;
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -231,7 +220,7 @@ export const UserProvider = ({ children }) => {
       notify('email-send');
       return response;
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     }
   };
@@ -244,7 +233,7 @@ export const UserProvider = ({ children }) => {
       navigate('/');
       notify('success-register');
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
