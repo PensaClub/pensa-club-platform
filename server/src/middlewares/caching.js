@@ -16,24 +16,22 @@ module.exports = function memoryCache(key) {
       return next();
     }
 
-    const adId = req.params.adId;
-    const adStatus = req.params.adStatus;
-    const userId = req?.user?.userId;
-    const email = req?.user?.email;
+    const { adId, adStatus, email: paramEmail } = req.params;
+    const { userId, email: reqEmail } = req?.user || {};
 
-    let cachedResponse = cache.get(key);
-
-    if (cachedResponse) {
-      if (key === 'ads') await handleAdRequest(cachedResponse, res, adId, adStatus, email);
-      if (key === 'users') await handleUserRequest(cachedResponse, res, userId);
-    } else {
-      res.originalSend = res.send;
-      res.send = (body) => {
-        res.originalSend(sanitizeData(body));
-        if (res.statusCode === 200 || res.statusCode === 404 || res.statusCode === 400) cache.set(key, body);
-      };
-      next();
+    if (!cache.get('users')) {
+      try {
+        const data = await fetchAllAccounts();
+        cache.set('users', JSON.stringify(data), stdTTL);
+      } catch (err) {
+        next(err);
+      }
     }
+
+    const cachedResponse = JSON.parse(cache.get('users'));
+
+    if (key === 'ads') await handleAdRequest(cachedResponse, res, adId, adStatus, paramEmail, reqEmail);
+    if (key === 'users') await handleUserRequest(cachedResponse, res, userId);
   };
 };
 
@@ -76,18 +74,7 @@ function sanitizeData(newData) {
 
 // REQUEST HANDLERS ----------------------------------------------------------------------------------
 
-const handleAdRequest = async (cachedResponse, res, adId, adStatus, email) => {
-  if (adId && !cache.get('users')) {
-    const accounts = await fetchAllAccounts();
-    cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts }), stdTTL);
-  }
-
-  if (!Array.isArray(cachedResponse.ads)) {
-    const ads = await fetchAllAds();
-    cache.set('ads', JSON.stringify({ message: 'Ads successfully retrieved', ads }), stdTTL);
-    cachedResponse = cache.get('ads');
-  }
-
+const handleAdRequest = async (cachedResponse, res, adId, adStatus, paramEmail, reqEmail) => {
   if (adId) {
     const filter = filterCachedAdsById(cachedResponse, adId);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: `Ad with ID ${adId} does not exist.` });
@@ -95,181 +82,118 @@ const handleAdRequest = async (cachedResponse, res, adId, adStatus, email) => {
     const filter = filterCachedAdsByStatus(cachedResponse, adStatus);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: `There are no ads with status ${adStatus} at the moment.`, ads: [] });
   } else {
-    const filter = filterCachedAdsByEmail(cachedResponse, email);
+    const filter = filterCachedAdsByEmail(cachedResponse, paramEmail, reqEmail);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: 'No ads found for the specified user.', ads: [] });
   }
 };
 
 const handleUserRequest = async (cachedResponse, res, userId) => {
-  if (!Array.isArray(cachedResponse.accounts)) {
-    const accounts = await fetchAllAccounts();
-    cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts }), stdTTL);
-    cachedResponse = cache.get('users');
-  }
-
   if (userId) {
     const filter = filterCachedUserById(cachedResponse, userId);
     return filter ? res.send(sanitizeData(filter)) : res.send({ message: `User with ID ${userId} does not exist.` });
   } else {
-    return res.send(sanitizeData(cachedResponse));
+    return res.send(sanitizeData({ message: 'Users retrieved successfully.', accounts: cachedResponse || [] }));
   }
 };
 
 // FILTERS -------------------------------------------------------------------------------------------
 
-const filterCachedAdsById = (ads, adId) => {
-  const cachedAds = JSON.parse(ads);
-  let filteredAd = cachedAds.ads.find((ad) => ad.adId === adId) || null;
-  let userDetails = null;
+const filterCachedAdsById = (cachedData, adId) => {
+  const userAccount = cachedData.find((user) => user.ads.find((ad) => ad.adId === adId));
+  if (!userAccount) return null;
 
-  if (filteredAd !== null) {
-    const { username, imageURL, workOptions, interestOptions, skills, phoneNumber } = JSON.parse(cache.get('users')).accounts.find((user) =>
-      user.ads.find((ad) => ad.adId === adId)
-    ).details;
-    userDetails = { username, imageURL, workOptions, interestOptions, skills, phoneNumber };
-  }
+  const filteredAd = userAccount.ads.find((ad) => ad.adId === adId);
+  if (!filteredAd) return null;
 
-  return filteredAd ? { message: 'Ad successfully retrieved.', ads: filteredAd, details: userDetails } : null;
+  const { username, imageURL, workOptions, interestOptions, skills, phoneNumber, gender } = userAccount.details;
+
+  return {
+    message: 'Ad successfully retrieved.',
+    ads: { ...filteredAd, account: { email: userAccount.email } },
+    details: { username, imageURL, workOptions, interestOptions, skills, phoneNumber, email: userAccount.email, gender },
+  };
 };
 
-const filterCachedAdsByStatus = (ads, status) => {
-  const cachedAds = JSON.parse(ads);
-  let filteredAds = cachedAds.ads.filter((ad) => ad.status === status);
+const filterCachedAdsByStatus = (cachedData, status) => {
+  const adsType = ['approved', 'pending', 'denied'];
+  if (!adsType.includes(status)) return res.status(404).json({ message: 'Invalid status type. Status must be approved, pending or denied.', ads: [] });
 
-  if (filteredAds.length === 0) {
-    return null;
-  }
+  const filteredAds = cachedData.map((user) => user.ads.filter((ad) => ad.status === status).map((ad) => ({ ...ad, account: { email: user.email } }))).flat();
 
-  return filteredAds ? JSON.stringify({ message: `${status.charAt(0).toUpperCase() + status.slice(1)} ads successfully retrieved.`, ads: filteredAds }) : null;
+  if (!filteredAds) return null;
+
+  return { message: `${status.charAt(0).toUpperCase() + status.slice(1)} ads successfully retrieved.`, ads: filteredAds };
 };
 
-const filterCachedAdsByEmail = (ads, email) => {
-  const cachedAds = JSON.parse(ads);
-  let filteredAds = cachedAds.ads.filter((ad) => ad.account.email === email);
+const filterCachedAdsByEmail = (cachedData, paramEmail, reqEmail) => {
+  const account = cachedData.find((user) => user.email === paramEmail);
+  if (!account) return null;
 
-  if (filteredAds.length === 0) {
-    return null;
-  }
+  const filteredAds = paramEmail === reqEmail ? account.ads : account.ads.filter((ad) => ad.status === 'approved');
 
-  return filteredAds ? JSON.stringify({ message: 'User ads successfully retrieved.', ads: filteredAds }) : null;
+  if (!filteredAds) return null;
+
+  return { message: 'User ads successfully retrieved.', ads: filteredAds };
 };
 
-const filterCachedUserById = (users, userId) => {
-  const cachedUsers = JSON.parse(users);
-  let filteredUser = cachedUsers.accounts.find((user) => user.id === Number(userId)) || null;
+const filterCachedUserById = (cachedData, userId) => {
+  let filteredUser = cachedData.find((user) => user.id === Number(userId));
+  if (!filteredUser) return null;
 
-  return filteredUser ? { message: 'User data retrieved successfully.', user: filteredUser } : null;
+  return { message: 'User data retrieved successfully.', user: filteredUser };
 };
 
 // ACCOUNTS -------------------------------------------------------------------------------------------
 
-eventEmitter.on('accountUpdated', async (data) => {
-  let usersValue = cache.get('users');
-
-  if (!usersValue || !Array.isArray(JSON.parse(usersValue).accounts)) {
-    const accounts = await fetchAllAccounts();
-    cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts }), stdTTL);
-    usersValue = cache.get('users');
+eventEmitter.on('userCacheUpdate', async ({ type, data, adId, userId, action }) => {
+  if (!cache.get('users')) {
+    try {
+      const data = await fetchAllAccounts();
+      cache.set('users', JSON.stringify(data), stdTTL);
+    } catch (err) {
+      next(err);
+    }
   }
 
-  const objectUsers = JSON.parse(usersValue);
+  const parsedCache = JSON.parse(cache.get('users'));
 
-  const index = objectUsers.accounts.findIndex((obj) => obj.id === Number(data.userId));
-  if (index !== -1) {
-    Object.keys(data.updates).forEach((key) => {
-      if (key === 'ads') {
-        const adIndex = objectUsers.accounts[index].ads.findIndex((ad) => ad.adId === data.updates.ads.adId);
-        Object.keys(data.updates.ads).forEach((adKey) => {
-          if (adIndex !== -1) {
-            objectUsers.accounts[index].ads[adIndex][adKey] = data.updates.ads[adKey];
-          }
-        });
-      }
-      if (key === 'details') {
-        Object.keys(data.updates.details).forEach((detailKey) => {
-          objectUsers.accounts[index].details[detailKey] = data.updates.details[detailKey];
-        });
-      }
-      if (key === 'enabled') {
-        objectUsers.accounts[index].enabled = data.updates.enabled;
-      }
-    });
-  }
-  cache.set('users', JSON.stringify({ message: 'Users data retrieved successfully.', accounts: objectUsers.accounts }), stdTTL);
-});
+  const accountId = userId !== null ? userId : parsedCache.find((account) => account.ads.find((ad) => ad.adId === adId))?.id || null;
+  if (!accountId) return;
 
-// ADS --------------------------------------------------------------------------------------------------------
+  const account = parsedCache.find((account) => account.id.toString() === accountId.toString());
 
-eventEmitter.on('ads', async (data, action) => {
-  let adsValue = cache.get('ads');
+  if (!account) return;
 
-  if (!adsValue || !Array.isArray(JSON.parse(adsValue).ads)) {
-    const ads = await fetchAllAds();
-    cache.set('ads', JSON.stringify({ message: 'Ads successfully retrieved', ads }), stdTTL);
-    adsValue = cache.get('ads');
-  }
-
-  const objectAds = JSON.parse(adsValue);
-
-  if (action === 'delete') {
-    objectAds.ads = objectAds.ads.filter((ad) => ad.adId !== data.adId);
-  } else {
-    const index = objectAds.ads.findIndex((obj) => obj.adId === data.adId);
-    index !== -1 ? (objectAds.ads[index] = data) : objectAds.ads.push(data);
-  }
-  cache.set('ads', JSON.stringify(objectAds), stdTTL);
-
-  let usersValue = cache.get('users');
-
-  if (!usersValue || !Array.isArray(JSON.parse(usersValue).accounts)) {
-    const accounts = await fetchAllAccounts();
-    cache.set('users', JSON.stringify({ message: 'Users successfully retrieved.', accounts }), stdTTL);
-    usersValue = cache.get('users');
-  }
-
-  const objectUsers = JSON.parse(usersValue);
-  objectUsers.accounts.forEach((account) => {
-    if (account.id === Number(data.userId)) {
-      if (action === 'delete') {
-        account.ads = account.ads.filter((ad) => ad.adId !== data.adId);
+  if (type === 'ads') {
+    if (action === 'delete') {
+      account.ads = account.ads.filter((ad) => ad.adId !== adId);
+    } else {
+      const index = account.ads.findIndex((ad) => ad.adId === adId);
+      if (index !== -1) {
+        Object.assign(account.ads[index], data);
       } else {
-        const index = account.ads.findIndex((ad) => ad.adId === data.adId);
-        index !== -1 ? (account.ads[index] = data) : account.ads.push(data);
+        account.ads.push(data);
       }
     }
-  });
-  cache.set('users', JSON.stringify({ message: 'Users successfully retrieved.', accounts: objectUsers.accounts }), stdTTL);
+  }
+
+  if (type === 'users') {
+    if (action === 'details') {
+      Object.assign(account.details, data);
+    }
+    if (action === 'enabled') {
+      account.enabled = true;
+    }
+    if (action === 'account-delete') {
+      parsedCache = parsedCache.filter((account) => account.id !== userId);
+    }
+    if (action === 'account') {
+      Object.assign(account, data);
+    }
+  }
+
+  cache.set('users', JSON.stringify(parsedCache), stdTTL);
 });
-
-// FETCH ALL ADS ----------------------------------------------------------------------------------------------
-
-const fetchAllAds = async () =>
-  await user_ads.findAll({
-    attributes: [
-      ['ad_id', 'adId'],
-      'summary',
-      'category',
-      'description',
-      ['ad_region', 'adRegion'],
-      ['ad_subregion', 'adSubregion'],
-      ['ad_town', 'adTown'],
-      'street',
-      'tags',
-      'images',
-      'status',
-      ['admin_comment', 'adminComment'],
-      ['extra_fields', 'extraFields'],
-      ['creation_date', 'creationDate'],
-      ['expiration_date', 'expirationDate'],
-    ],
-    include: [
-      {
-        model: user_account,
-        as: 'account',
-        attributes: ['email'],
-      },
-    ],
-  });
 
 // FETCH ALL USERS ----------------------------------------------------------------------------------------------
 
@@ -322,6 +246,7 @@ const fetchAllAccounts = async () =>
           ['creation_date', 'creationDate'],
           ['expiration_date', 'expirationDate'],
           ['user_id', 'userId'],
+          'updatedAt',
         ],
       },
     ],

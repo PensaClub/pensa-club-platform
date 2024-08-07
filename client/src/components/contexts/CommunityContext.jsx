@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from "react";
 import { Loader } from "../Loader/Loader";
 import "./error.css";
@@ -18,6 +19,7 @@ export const CommunityProvider = ({ children }) => {
     const [townsSearch, setTownsSearch] = useState({});
     const [towns, setTowns] = useState({});
     const [searchCriteria, setSearchCriteria] = useState([]);
+    const [subscribeEmails, setSubscribeEmails] = useState([]); 
     const [ads, setAds] = useState({ result: [], page: 1, hasMore: true });
     const communityService = communityServiceFactory();
     const navigate = useNavigate();
@@ -116,7 +118,7 @@ export const CommunityProvider = ({ children }) => {
     const getMyAds = async (email) => {
         try {
             setIsLoading(true);
-            const response = await communityService.getMyAds();
+            const response = await communityService.getMyAds(email);
             setIsLoading(false);
             return response;
         } catch (e) {
@@ -242,18 +244,32 @@ export const CommunityProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await communityService.subscribeNewUser(username, email);
-            setIsLoading(false);
-            console.log(response);
-            return response;
+            setIsLoading(false);  
+            notify("email-send")    
+             return response;
         } catch (e) {
             notify('error');
             showErrorAndSetTimeouts(e.message);
-            throw e;
+            // throw e;
         } finally {
             setIsLoading(false);
         }
     }
-
+    const getSubscribeEmails = async () => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getSubscribeEmails();
+            setIsLoading(false);
+            setSubscribeEmails(response.subscribers);
+            return response.subscribers;
+        } catch (e) {
+            notify('error');
+            showErrorAndSetTimeouts(e.message);
+    
+        } finally {
+            setIsLoading(false);
+        }
+    };
     useEffect(() => {
         fetchRegions();
         fetchSearchCriteria();
@@ -282,7 +298,9 @@ export const CommunityProvider = ({ children }) => {
         setAds,
         getLatestAds,
         getAdById,
-        subscribeNewUser
+        subscribeNewUser,
+        getSubscribeEmails,
+        subscribeEmails
     };
 
     return (

@@ -18,6 +18,7 @@ const emailRegex =
 //Example - john.doe@example.com
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
+
 const secret = process.env.SECRET;
 
 userController.post('/register', async (req, res, next) => {

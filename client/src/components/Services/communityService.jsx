@@ -43,7 +43,7 @@ export const communityServiceFactory = (token) => {
     },
     getMyAds: async (email) => {
 
-      return requester.get(`${apiUrl}/ads/ads-user`, { email });
+      return requester.get(`${apiUrl}/ads/ads-user/${ email }`);
     },
      deleteAd: async (id) => {
       return requester.del(`${apiUrl}/ads/ad-delete/${ id }`);
@@ -70,7 +70,12 @@ export const communityServiceFactory = (token) => {
       return requester.post(
         `${apiUrl}/subscribe/addSubscriber`, {username, email}
       );
-    }
+    },
+    getSubscribeEmails: async () => {
+      return requester.get(
+        `${apiUrl}/subscribe/getSubscribers`
+      );
+    },
   }
 }
 

@@ -1,40 +1,53 @@
-import './newsSubscribe.css'
-
-import { useRef, useState } from 'react'
+import './newsSubscribe.css';
+import { useRef, useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from '../../contexts/UserContext';
 import { useCommunityContext } from '../../contexts/CommunityContext';
+import ReCAPTCHA from "react-google-recaptcha";
 
 export const NewsSubscribe = () => {
     const { t } = useTranslation();
-    const {username: lsUsername, userEmail: lsEmail} = useAuthContext();
-    const {subscribeNewUser} = useCommunityContext();
-    const [userName, setUserName] = useState(lsUsername ||"");
+    const { username: lsUsername, userEmail: lsEmail } = useAuthContext();
+    const { subscribeNewUser } = useCommunityContext();
+    const [userName, setUserName] = useState(lsUsername || "");
     const [userEmail, setUserEmail] = useState(lsEmail || "");
-    const [errors, setErrors] = useState({ userEmail: '', userName: '' })
+    const [errors, setErrors] = useState({ userEmail: '', userName: '' });
+    const [showRecaptcha, setShowRecaptcha] = useState(false);
+    const [recaptchaToken, setRecaptchaToken] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem('recaptchaToken');
+        if (token) {
+            setRecaptchaToken(token);
+        }
+    }, []);
 
     const validateEmail = (email) => {
-        const ve = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const ve = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return ve.test(email);
     }
 
     const handleNameChange = (e) => {
-        setUserName(e.target.value)
+        setUserName(e.target.value);
         if (e.target.value) {
-            setErrors(prev => ({ ...prev, userName: "" }))
+            setErrors(prev => ({ ...prev, userName: "" }));
         }
     }
+
     const handleEmailChange = (e) => {
-        setUserEmail(e.target.value)
+        setUserEmail(e.target.value);
         if (validateEmail(e.target.value)) {
-            setErrors(prev => ({ ...prev, userEmail: "" }))
+            setErrors(prev => ({ ...prev, userEmail: "" }));
         }
     }
-    const form = useRef()
-    const sendEmail = (e) => {
-        e.preventDefault()
+
+    const form = useRef();
+
+    const sendEmail = async (e) => {
+        e.preventDefault();
+
         let hasError = false;
-        let newErrors = { userName: "", userEmail: "" }
+        let newErrors = { userName: "", userEmail: "" };
         if (!userName) {
             newErrors.userName = "news-subscribe.errors.required-field";
             hasError = true;
@@ -52,16 +65,41 @@ export const NewsSubscribe = () => {
             return;
         }
 
-        subscribeNewUser(userName, userEmail);
+        if (!recaptchaToken) {
+            setShowRecaptcha(true);
+            return;
+        }
+
+        const response = await subscribeNewUser(userName, userEmail);
+
+        if (response?.message === "Subscriber added successfully.") {
+            localStorage.setItem('recaptchaToken', recaptchaToken);
+            setShowRecaptcha(false);
+            setRecaptchaToken(null);
+        } else {
+            setShowRecaptcha(true);
+        }
     }
+
+    const onRecaptchaChange = (token) => {
+        setRecaptchaToken(token);
+    }
+
     return (
         <>
-
             <section className="subscribe-news">
                 <div className="single-subscribe-info">
                     <h3>{t('news-subscribe.title')} <span>Pensa club</span></h3>
                     <p>{t('news-subscribe.desc')}</p>
                 </div>
+                {showRecaptcha && (
+                    <div className="recaptcha-container">
+                        <ReCAPTCHA
+                            sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                            onChange={onRecaptchaChange}
+                        />
+                    </div>
+                )}
                 <form ref={form} onSubmit={sendEmail} className="news-form mb-lg-0">
                     <div className="form-row">
                         <div className="col-subscribe ">
@@ -79,9 +117,7 @@ export const NewsSubscribe = () => {
                         <button type="submit" className="btn-general btn-green" id="btn-subscribe">{t('news-subscribe.subscribe-btn')}</button>
                     </div>
                 </form>
-
             </section>
         </>
-    )
-
+    );
 }
