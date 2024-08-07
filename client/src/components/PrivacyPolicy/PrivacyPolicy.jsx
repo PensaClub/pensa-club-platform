@@ -69,7 +69,6 @@ export const PrivacyPolicy = () => {
                 <p>{t('privacyPolicy.cookiesText6')}</p>
                 <p>{t('privacyPolicy.cookiesText7')}</p>
                 <p>{t('privacyPolicy.cookiesText8')}</p>
-                <p>{t('privacyPolicy.cookiesText9')}</p>
             </section>
 
             <section>
