@@ -45,6 +45,7 @@ import { AllUsersStatistics } from '../AdminDashboard/AllUsersStatistics/AllUser
 import { AdminSuggestUsers } from '../AdminDashboard/AdminSuggestUser/AdminSuggestUsers';
 import { SuggestResolvedUsers } from '../AdminDashboard/AdminSuggestUser/SuggesResolvedtUsers/SuggestResolvedUsers';
 import { ProfileMessages } from './ProfileMessages';
+import { AdminSubscription } from '../AdminDashboard/AdminSubscription/AdminSubscription';
 
 export const Profile = () => {
   const location = useLocation();
@@ -63,6 +64,7 @@ export const Profile = () => {
   const [unfinishedUsers, setUnfinishedUsers] = useState('');
   const [allSuggestedUsers, setAllSuggestedUsers] = useState('');
   const [resolvedUsers, setResolvedUsers] = useState('');
+  const [allSubscriptionEmails, setAllSubscriptionEmails] = useState('');
   useEffect(() => {
     window.scrollTo({ top: 0 });
     if (!profileData) {
@@ -100,6 +102,7 @@ export const Profile = () => {
     || location.pathname.startsWith('/profile/admin-suggest-users')
     || location.pathname.startsWith('/profile/suggest-resolved-users')
     || location.pathname.startsWith('/profile/messages')
+    || location.pathname.startsWith('/profile/subscription-admin')
 
   return (
     <section className='profile-section'>
@@ -189,6 +192,10 @@ export const Profile = () => {
                 {t('admin.suggest_resolved_users')} {resolvedUsers >= 1 && (<>- {resolvedUsers}</>)}
               </Link>
             </div>
+            <Link to='subscription-admin'>
+              <FontAwesomeIcon icon={faEnvelope} className='icon' />
+              {t('admin.ads_subscription')} {allSubscriptionEmails >= 1 && (<>- {allSubscriptionEmails}</>)}
+            </Link>
           </div>
         )}
       </section>
@@ -253,6 +260,7 @@ export const Profile = () => {
           <Route path='approved-announcements' element={<AdminGuard><ApprovedAnnouncements setApprovedCount={setApprovedCount} /></AdminGuard>} />
           <Route path='reject-announcements' element={<AdminGuard><RejectAnnouncements setRejectCount={setRejectCount} /></AdminGuard>} />
           <Route path='admin-suggest-users' element={<AdminGuard><AdminSuggestUsers setAllSuggestedUsers={setAllSuggestedUsers} /></AdminGuard>} />
+          <Route path='subscription-admin' element={<AdminGuard><AdminSubscription setAllSubscriptionEmails ={setAllSubscriptionEmails} /></AdminGuard>} />
           <Route path='suggest-resolved-users' element={<AdminGuard><SuggestResolvedUsers setResolvedUsers={setResolvedUsers} /></AdminGuard>} />
 
         </Routes>

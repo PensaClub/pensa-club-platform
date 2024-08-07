@@ -105,12 +105,12 @@ const filterCachedAdsById = (cachedData, adId) => {
   const filteredAd = userAccount.ads.find((ad) => ad.adId === adId);
   if (!filteredAd) return null;
 
-  const { username, imageURL, workOptions, interestOptions, skills, phoneNumber } = userAccount.details;
+  const { username, imageURL, workOptions, interestOptions, skills, phoneNumber, gender } = userAccount.details;
 
   return {
     message: 'Ad successfully retrieved.',
     ads: { ...filteredAd, account: { email: userAccount.email } },
-    details: { username, imageURL, workOptions, interestOptions, skills, phoneNumber, email: userAccount.email },
+    details: { username, imageURL, workOptions, interestOptions, skills, phoneNumber, email: userAccount.email, gender },
   };
 };
 

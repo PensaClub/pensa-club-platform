@@ -356,7 +356,10 @@
    "rejected_ads": "Rejected Ads",
    "pending": "Pending",
    "approved": "Approved",
-   "rejected": "Rejected"
+   "rejected": "Rejected",
+   "username": "Username",
+   "ads_subscription": "Subscriptions",
+   "search_clear": "Clear search"
   },
   "community": {
     "community": "Community",
