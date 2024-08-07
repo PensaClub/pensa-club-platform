@@ -3,7 +3,7 @@
 import { toast } from 'react-toastify';
 import { Trans } from 'react-i18next';
 
-export const notify = (key) => {
+export const notify = (key, error) => {
   // eslint-disable-next-line default-case
   switch (key) {
     case 'success-data':
@@ -36,11 +36,11 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-      case 'success-comment':
-        toast.success(<Trans i18nKey="notification.success-comment" />, {
-          role: 'alert',
-        });
-        break;
+    case 'success-comment':
+      toast.success(<Trans i18nKey="notification.success-comment" />, {
+        role: 'alert',
+      });
+      break;
     case 'success-login':
       toast.success(<Trans i18nKey="notification.success-login" />, {
         role: 'alert',
@@ -76,8 +76,13 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-    case 'success-approved':
-      toast.success(<Trans i18nKey="notification.success-approved" />, {
+    case 'success-password-change':
+      toast.success(<Trans i18nKey="notification.success-password-change" />, {
+        role: 'alert',
+      });
+      break;
+    case 'ad-approved':
+      toast.success(<Trans i18nKey="notification.ad-approved" />, {
         role: 'alert',
       });
       break;
@@ -86,8 +91,8 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
-    case 'success-reject':
-      toast.success(<Trans i18nKey="notification.success-reject" />, {
+    case 'ad-reject':
+      toast.success(<Trans i18nKey="notification.ad-reject" />, {
         role: 'alert',
       });
       break;
@@ -101,7 +106,47 @@ export const notify = (key) => {
         role: 'alert',
       });
       break;
+    case 'user-already-exists':
+      toast.error(<Trans i18nKey="notification.user-already-exists" />, {
+        role: 'alert',
+      });
+      break;
+    case 'username-is-taken':
+      let username;
+      const errorIndex = error?.details.findIndex(error => error.field === 'username');
+      if (error?.details[errorIndex]?.value) {
+        username = error?.details[errorIndex]?.value + " "
+      }
+      else {
+        username = ""
+      }
+      toast.error(<Trans i18nKey="notification.username-is-taken" values={{ username }} />, {
+        role: 'alert',
+      });
+      break;
+    case 'password-change-same-passwords':
+      toast.error(<Trans i18nKey="notification.password-change-same-passwords" />, {
+        role: 'alert',
+      });
+      break;
+    case 'password-change-old-invalid':
+      toast.error(<Trans i18nKey="notification.password-change-old-invalid" />, {
+        role: 'alert',
+      });
+      break;
+    case 'password-change-repeat-invalid':
+      toast.error(<Trans i18nKey="notification.password-change-repeat-invalid" />, {
+        role: 'alert',
+      });
+      break;
     case 'error':
+      console.log(error);
+      if (error?.message === 'Your session has expired. Please log in again.') {
+        toast.error(<Trans i18nKey="notification.session-expired" />, {
+          role: 'alert',
+        });
+        break;
+      }
       toast.error(<Trans i18nKey="notification.error" />, {
         role: 'alert',
       });

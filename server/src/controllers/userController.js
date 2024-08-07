@@ -246,12 +246,15 @@ userController.post('/reset-password', async (req, res, next) => {
       if (!oldPassword) {
         return res.status(400).json({ message: 'Old password is required.' });
       }
+      if (oldPassword === newPassword) {
+        return res.status(400).json({ message: 'Old and new password are the same.' });
+      }
       const decodedToken = tokenVerification(token, secret);
       user = await user_account.findOne({ where: { email: decodedToken.email } });
 
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
       if (!isPasswordValid) {
-        return res.status(400).json({ message: 'Old password is not valid.' });
+        return res.status(400).json({ message: 'Old password is invalid.' });
       }
     }
     const newHashedPassword = await bcrypt.hash(newPassword, 10);

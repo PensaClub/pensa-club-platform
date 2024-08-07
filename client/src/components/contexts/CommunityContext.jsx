@@ -40,6 +40,7 @@ export const CommunityProvider = ({ children }) => {
             setRegions(response);
             setIsLoading(false);
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
@@ -53,6 +54,7 @@ export const CommunityProvider = ({ children }) => {
             setSubregions(prev => ({ ...prev, [regionId]: response }));
             setIsLoading(false);
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
@@ -66,6 +68,7 @@ export const CommunityProvider = ({ children }) => {
             setTownsSearch(prev => ({ ...prev, [subregionId]: response }));
             setIsLoading(false);
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
@@ -79,6 +82,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             return [];
@@ -92,6 +96,7 @@ export const CommunityProvider = ({ children }) => {
             setSearchCriteria(response);
             setIsLoading(false);
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
@@ -107,7 +112,8 @@ export const CommunityProvider = ({ children }) => {
             navigate('/');
             return response;
         } catch (e) {
-           showErrorAndSetTimeouts(e.message);
+            notify('error', e)
+            showErrorAndSetTimeouts(e.message);
             return toast.error(e.error);
 
         } finally {
@@ -122,6 +128,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -135,7 +142,7 @@ export const CommunityProvider = ({ children }) => {
       setIsLoading(false);
       return response;
     } catch (e) {
-      notify("error");
+      notify('error', e);
       showErrorAndSetTimeouts(e.message);
       throw e;
     } finally {
@@ -149,7 +156,7 @@ export const CommunityProvider = ({ children }) => {
       setIsLoading(false);
       return response;
     } catch (e) {
-      notify("error");
+      notify('error', e);
       showErrorAndSetTimeouts(e.message);
       throw e;
     } finally {
@@ -164,7 +171,7 @@ export const CommunityProvider = ({ children }) => {
             notify('success-delete-ads');
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -180,7 +187,7 @@ export const CommunityProvider = ({ children }) => {
       notify("success-edit-ads");
       return response;
     } catch (e) {
-      notify("error");
+      notify('error', e);
 
       showErrorAndSetTimeouts(e.message);
       throw e;
@@ -195,6 +202,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -218,6 +226,7 @@ export const CommunityProvider = ({ children }) => {
                 setAds(prev => ({ ...prev, hasMore: false }));
             }
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -232,7 +241,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -248,7 +257,7 @@ export const CommunityProvider = ({ children }) => {
             notify("email-send")    
              return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             // throw e;
         } finally {
