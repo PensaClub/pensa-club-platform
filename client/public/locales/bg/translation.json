@@ -465,6 +465,7 @@
     "password-change-same-passwords": "Старата и новата парола са еднакви!",
     "password-change-old-invalid": "Старата парола не е валидна!",
     "password-change-repeat-invalid": "Паролите не съвпадат!",
+    "subscriber-exists": "Този имейл вече е абониран!",
     "error": "Грешка! Моля, опитайте отново!",
     "email-send": "Имейлът е изпратен успешно!",
     "error-images": "Може да изберете само 4 снимки",

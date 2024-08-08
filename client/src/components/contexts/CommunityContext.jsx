@@ -257,7 +257,8 @@ export const CommunityProvider = ({ children }) => {
             notify("email-send")    
              return response;
         } catch (e) {
-            notify('error', e);
+            if(e?.message ==="Subscriber already exists.") notify('subscriber-exists');
+            else notify('error', e);
             showErrorAndSetTimeouts(e.message);
             // throw e;
         } finally {

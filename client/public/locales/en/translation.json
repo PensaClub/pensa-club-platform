@@ -471,6 +471,7 @@
     "password-change-same-passwords": "Old and new password are the same!",
     "password-change-old-invalid": "Old password is invalid!",
     "password-change-repeat-invalid": "Passwords do not match!",
+    "subscriber-exists": "This email is already subscribed!",
     "error": "An error occurred. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",

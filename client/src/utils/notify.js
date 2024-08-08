@@ -139,8 +139,12 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
+    case 'subscriber-exists':
+      toast.error(<Trans i18nKey="notification.subscriber-exists" />, {
+        role: 'alert',
+      });
+      break;
     case 'error':
-      console.log(error);
       if (error?.message === 'Your session has expired. Please log in again.') {
         toast.error(<Trans i18nKey="notification.session-expired" />, {
           role: 'alert',
