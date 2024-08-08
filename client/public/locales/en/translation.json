@@ -258,7 +258,8 @@
     "messages": "Messages",
     "in_box": "Inbox",
     "rejected_ads": "was not approved",
-    "your_ad": "Your ad"
+    "your_ad": "Your ad",
+    "alert_message": "Your profile is incomplete. Please complete it to continue using all features of the platform."
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
