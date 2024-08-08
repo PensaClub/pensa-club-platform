@@ -1,41 +1,74 @@
 import './loginRegister.css';
-
 import { Link } from 'react-router-dom';
-
-import './loginRegister.css';
 import { useAuthContext } from '../contexts/UserContext';
 import { useForm } from '../hooks/useForm';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import ReCAPTCHA from "react-google-recaptcha";
 
 export const Login = ({ navToRegister }) => {
   const { t } = useTranslation();
-
   const { onLoginSubmit } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [showRecaptcha, setShowRecaptcha] = useState(false);
+  const recaptchaRef = useRef();
 
   useEffect(() => {
-  window.scrollTo({top:0})
-},[])
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const { onSubmit, values, onChangeHandler, onBlurHandler, errors } = useForm(
     {
       email: "",
       password: "",
     },
-    onLoginSubmit,
+    async (formData) => {
+  
+      if (showRecaptcha && !recaptchaToken) {
+        alert("Please complete the reCAPTCHA");
+        return;
+      }
+
+      try {
+        const result = await onLoginSubmit(formData);
+
+        if (result === "Email or password are invalid.") {
+          setShowRecaptcha(true);
+          setRecaptchaToken(null); 
+          if (recaptchaRef.current) {
+            recaptchaRef.current.reset(); 
+          }
+        } else {
+            setShowRecaptcha(false);
+          setRecaptchaToken(null); 
+        }
+      } catch (error) {
+        setShowRecaptcha(true);
+        setRecaptchaToken(null);
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset(); 
+        }
+      }
+    },
     ["email"]
   );
 
   const toggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
   };
+
+  const onRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+  };
+
   return (
     <div className="container__form container--signin">
       <form action="#" className="form" id="form2" onSubmit={onSubmit}>
         <h2 className="form__title">{t('form.login')}</h2>
 
         <label className="label" htmlFor="email">
-        {t('form.email-label')}
+          {t('form.email-label')}
         </label>
 
         <input
@@ -67,10 +100,22 @@ export const Login = ({ navToRegister }) => {
         </div>
         {errors.password && <p className="error">{t(`${errors.password}`)}</p>}
 
+        {showRecaptcha && (
+          <div className="recaptcha-container">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+              onChange={onRecaptchaChange}
+            />
+          </div>
+        )}
+
         <Link to="/forget-password" className="link">
           {t('form.password-forgotten')}
         </Link>
-        <button className="btn-general btn-orange" disabled={!values.password || !values.email}>{t('form.login')}</button>
+        <button className="btn-general btn-orange" disabled={!values.password || !values.email || (showRecaptcha && !recaptchaToken)}>
+          {t('form.login')}
+        </button>
         <Link
           to="/sign-up"
           className="link link-hidden"
@@ -82,4 +127,3 @@ export const Login = ({ navToRegister }) => {
     </div>
   );
 };
-

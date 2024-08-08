@@ -259,3 +259,9 @@
 	text-indent: 0.3rem;
 }
 
+.recaptcha-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+  }

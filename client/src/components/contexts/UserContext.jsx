@@ -66,6 +66,7 @@ export const UserProvider = ({ children }) => {
       setProfileData(response.user);
       setIsAdmin(userRole === 'admin');
       notify('success-login');
+      
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
         setAddressId({ ...data });
@@ -73,14 +74,17 @@ export const UserProvider = ({ children }) => {
       } else {
         navigate('/');
       }
+
     } catch (error) {
       if (error.message == "Email or password are invalid.") {
         notify('error-authorize')
+      return error.message;
+
       } else {
         notify('error', error);
       }
     
-      showErrorAndSetTimeouts(error.message);
+      // showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
     }
