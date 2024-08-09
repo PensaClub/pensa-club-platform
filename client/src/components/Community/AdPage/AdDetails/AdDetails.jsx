@@ -48,8 +48,8 @@ export const AdDetails = () => {
     async function fetchAd() {
       try {
         const response = await getAdById(adId);
-        setAd(response.ads);
         if(!response.ads) navigate('/404');
+        setAd(response.ads);
         setUserDetails(response.details);
         const townsData = await fetchTowns(Number(response.ads.adRegion), Number(response.ads.adSubregion));
         const town = townsData?.find(t => t.id === Number(response.ads.adTown));
