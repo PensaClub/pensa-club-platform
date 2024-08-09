@@ -152,6 +152,12 @@
 		z-index: 5;
 	}
 }
+@media (max-width: 600px) {
+    .form .form__title {
+        font-size: var(--m-font-size);
+    }
+}
+
 @media (min-width: 850px) {
 	.container {
 		max-width: 1000px;
