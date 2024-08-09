@@ -56,7 +56,7 @@ userController.post('/register', async (req, res, next) => {
     const userExist = await user_account.findOne({ where: { email } });
 
     if (userExist) {
-      return res.status(401).json({ message: 'User already exists with this email.' });
+      return res.status(409).json({ message: 'User already exists with this email.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -136,13 +136,13 @@ userController.post('/login', async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(401).json({ message: 'Email or password are invalid.' });
+      return res.status(409).json({ message: 'Email or password are invalid.' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Email or password are invalid.' });
+      return res.status(409).json({ message: 'Email or password are invalid.' });
     }
 
     const data = {
@@ -187,17 +187,18 @@ userController.post('/logout', isAuth, async (req, res, next) => {
         try {
           const decodedToken = tokenVerification('refresh', refreshJwtToken);
           await refreshToken.destroy({ where: { token: decodedToken.refreshTokenId } });
-          res.clearCookie('refreshToken');
+          res.clearCookie('refreshJwtToken', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+          });
           res.status(200).json({ message: 'Logout successful.' });
         } catch (err) {
           next(err);
         }
       }
-    } else {
-      throw new CustomError({ message: 'Invalid or missing token!', statusCode: 401 });
     }
   } catch (err) {
-    console.log(err);
     next(err);
   }
 });
