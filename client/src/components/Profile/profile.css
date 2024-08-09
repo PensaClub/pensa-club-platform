@@ -298,6 +298,11 @@
   margin-bottom: 2rem;
 }
 
+@media (max-width: 600px) {
+  .profile-data .user-data h2 {
+      font-size: var(--m-font-size);
+  }
+}
 @media (min-width: 600px) and (orientation: landscape) {
   .profile-form {
     width: 80%;
@@ -601,6 +606,18 @@
 
 .profile-section-edit button {
   cursor: pointer;
+}
+
+@media (max-width: 440px){
+  .profile-form .btn-inline {
+    display: flex;
+    flex-direction: column;
+    gap:0;
+  }
+  .profile-section .gender,
+  .profile-section .date {
+    flex-direction: column;
+  }
 }
 
 @media (min-width: 650px) {
