@@ -784,6 +784,12 @@
   }
 }
 
+@media (min-width: 990px) and (max-width: 1200px) {
+  .profile-section {
+      left: 30px;
+  }
+}
+
 @media (min-width: 1200px) {
   .top-right-button-profile-form {
     position: absolute;
