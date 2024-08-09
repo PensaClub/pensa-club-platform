@@ -473,6 +473,8 @@
     "password-change-repeat-invalid": "Passwords do not match!",
     "password-change-email-invalid": "There isn't a registered user with this email!",
     "subscriber-exists": "This email is already subscribed!",
+    "subscribe-username-length": "Username must be between 3 and 16 characters long!",
+    "subscribe-username-content": "Username must start with a letter and can only contain letters, numbers, and underscores!" ,
     "error": "An error occurred. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",
