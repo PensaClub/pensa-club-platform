@@ -12,10 +12,26 @@ export const Login = ({ navToRegister }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const [showRecaptcha, setShowRecaptcha] = useState(false);
+  const [recaptchaSize, setRecaptchaSize] = useState("normal");
   const recaptchaRef = useRef();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
+
+    const updateRecaptchaSize = () => {
+      if (window.innerWidth <= 450) {
+        setRecaptchaSize("compact");
+      } else {
+        setRecaptchaSize("normal");
+      }
+    };
+
+    updateRecaptchaSize(); // Initial check
+    window.addEventListener("resize", updateRecaptchaSize);
+
+    return () => {
+      window.removeEventListener("resize", updateRecaptchaSize);
+    };
   }, []);
 
   const { onSubmit, values, onChangeHandler, onBlurHandler, errors } = useForm(
@@ -106,6 +122,9 @@ export const Login = ({ navToRegister }) => {
               ref={recaptchaRef}
               sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
               onChange={onRecaptchaChange}
+              theme="light"
+              size={recaptchaSize}
+             
             />
           </div>
         )}

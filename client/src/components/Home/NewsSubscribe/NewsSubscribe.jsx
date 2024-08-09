@@ -14,12 +14,27 @@ export const NewsSubscribe = () => {
     const [errors, setErrors] = useState({ userEmail: '', userName: '' });
     const [showRecaptcha, setShowRecaptcha] = useState(false);
     const [recaptchaToken, setRecaptchaToken] = useState(null);
+    const [recaptchaSize, setRecaptchaSize] = useState("normal");
 
     useEffect(() => {
         const token = localStorage.getItem('recaptchaToken');
         if (token) {
             setRecaptchaToken(token);
         }
+        const updateRecaptchaSize = () => {
+            if (window.innerWidth <= 450) {
+                setRecaptchaSize("compact");
+            } else {
+                setRecaptchaSize("normal");
+            }
+        };
+
+        updateRecaptchaSize(); // Initial check
+        window.addEventListener("resize", updateRecaptchaSize);
+
+        return () => {
+            window.removeEventListener("resize", updateRecaptchaSize);
+        };
     }, []);
 
     const validateEmail = (email) => {
@@ -97,6 +112,8 @@ export const NewsSubscribe = () => {
                         <ReCAPTCHA
                             sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                             onChange={onRecaptchaChange}
+                            size={recaptchaSize}
+
                         />
                     </div>
                 )}
