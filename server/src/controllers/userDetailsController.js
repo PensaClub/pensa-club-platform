@@ -72,10 +72,10 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
     const user = await user_account.update({ finished: true }, { where: { id: req.user.userId }, returning: true, plain: true });
 
     const { token } = tokenGenerator('access', user[1].dataValues);
-    const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
+    const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user[1].dataValues);
 
     await refreshToken.destroy({ where: { userId: req.user.userId } });
-    await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
+    await refreshToken.create({ userId: user[1].dataValues.id, token: refreshTokenId, expiryDate });
 
     res.cookie('refreshJwtToken', refreshJwtToken, {
       httpOnly: true,

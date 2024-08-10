@@ -57,7 +57,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
         validate: {
-          // kakto drugoto ime 40 simvola
           customValidator(value) {
             if (value && value.length > 0) {
               if (value.length < 3 || value.length > 40) {

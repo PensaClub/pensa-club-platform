@@ -19,8 +19,6 @@ const emailRegex =
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
 
-const secret = process.env.SECRET;
-
 userController.post('/register', async (req, res, next) => {
   let errors = {};
   try {
@@ -268,7 +266,7 @@ userController.post('/reset-password', async (req, res, next) => {
       if (oldPassword === newPassword) {
         return res.status(400).json({ message: 'Old and new password are the same.' });
       }
-      const decodedToken = tokenVerification(token, secret);
+      const decodedToken = tokenVerification('access', token);
       user = await user_account.findOne({ where: { email: decodedToken.email } });
 
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
