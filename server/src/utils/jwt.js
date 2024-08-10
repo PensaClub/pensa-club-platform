@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid');
-const { secret, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
 function tokenGenerator(type, data) {
   const payload = {
@@ -25,17 +25,6 @@ function tokenGenerator(type, data) {
   expiryDate.setSeconds(expiryDate.getSeconds() + jwt.decode(token).exp - Math.floor(Date.now() / 1000));
 
   return { token, refreshTokenId, expiryDate };
-}
-
-function tokenCreator(data) {
-  const payload = {
-    userId: data.id.toString(),
-    email: data.email,
-    role: data.role,
-    enabled: data.finished,
-  };
-
-  return jwt.sign(payload, secret, { expiresIn: '24h' });
 }
 
 function tokenVerification(type, token) {
