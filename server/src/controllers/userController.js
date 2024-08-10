@@ -1,7 +1,7 @@
 const userController = require('express').Router();
 
 const bcrypt = require('bcrypt');
-const { tokenCreator, tokenVerification, tokenGenerator } = require('../utils/jwt');
+const { tokenVerification, tokenGenerator } = require('../utils/jwt');
 const CustomError = require('../utils/customError');
 
 const { where } = require('sequelize');

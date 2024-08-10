@@ -1,12 +1,12 @@
 const userDetailsController = require('express').Router();
 
-const { user_details, user_account, user_ads } = require('../sequelize/models/index');
+const { user_details, user_account, user_ads, refreshToken } = require('../sequelize/models/index');
 const geoCoder = require('../utils/geoCoder');
 const ageCalculate = require('../utils/ageCalculate');
 const userDetailsValidator = require('../utils/userDetailsValidator');
 const isAuth = require('../middlewares/isAuth.js');
 const { where } = require('sequelize');
-const { tokenCreator } = require('../utils/jwt.js');
+const { tokenGenerator } = require('../utils/jwt.js');
 const fieldSwap = require('../utils/fieldSwap.js');
 const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
@@ -71,7 +71,18 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 
     const user = await user_account.update({ finished: true }, { where: { id: req.user.userId }, returning: true, plain: true });
 
-    const token = tokenCreator(user[1].dataValues);
+    const { token } = tokenGenerator('access', user[1].dataValues);
+    const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
+
+    await refreshToken.destroy({ where: { userId: req.user.userId } });
+    await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
+
+    res.cookie('refreshJwtToken', refreshJwtToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: expiryDate - Date.now(),
+    });
 
     const updatedDetails = { ...fieldSwap(restOfDetails, 'mapFromDb'), age: ageCalculate(restOfDetails.birth_date) };
 
