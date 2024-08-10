@@ -31,4 +31,4 @@ function tokenVerification(type, token) {
   return type === 'access' ? jwt.verify(token, ACCESS_TOKEN_SECRET) : jwt.verify(token, REFRESH_TOKEN_SECRET);
 }
 
-module.exports = { tokenCreator, tokenVerification, tokenGenerator };
+module.exports = { tokenVerification, tokenGenerator };
