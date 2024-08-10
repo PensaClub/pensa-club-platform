@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from "react";
 import { Loader } from "../Loader/Loader";
 import "./error.css";
@@ -18,6 +19,7 @@ export const CommunityProvider = ({ children }) => {
     const [townsSearch, setTownsSearch] = useState({});
     const [towns, setTowns] = useState({});
     const [searchCriteria, setSearchCriteria] = useState([]);
+    const [subscribeEmails, setSubscribeEmails] = useState([]); 
     const [ads, setAds] = useState({ result: [], page: 1, hasMore: true });
     const communityService = communityServiceFactory();
     const navigate = useNavigate();
@@ -38,6 +40,7 @@ export const CommunityProvider = ({ children }) => {
             setRegions(response);
             setIsLoading(false);
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
@@ -51,6 +54,7 @@ export const CommunityProvider = ({ children }) => {
             setSubregions(prev => ({ ...prev, [regionId]: response }));
             setIsLoading(false);
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
@@ -64,6 +68,7 @@ export const CommunityProvider = ({ children }) => {
             setTownsSearch(prev => ({ ...prev, [subregionId]: response }));
             setIsLoading(false);
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
@@ -77,6 +82,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             return [];
@@ -90,6 +96,7 @@ export const CommunityProvider = ({ children }) => {
             setSearchCriteria(response);
             setIsLoading(false);
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
         } finally {
             setIsLoading(false);
@@ -105,7 +112,8 @@ export const CommunityProvider = ({ children }) => {
             navigate('/');
             return response;
         } catch (e) {
-           showErrorAndSetTimeouts(e.message);
+            notify('error', e)
+            showErrorAndSetTimeouts(e.message);
             return toast.error(e.error);
 
         } finally {
@@ -116,10 +124,11 @@ export const CommunityProvider = ({ children }) => {
     const getMyAds = async (email) => {
         try {
             setIsLoading(true);
-            const response = await communityService.getMyAds();
+            const response = await communityService.getMyAds(email);
             setIsLoading(false);
             return response;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -133,7 +142,7 @@ export const CommunityProvider = ({ children }) => {
       setIsLoading(false);
       return response;
     } catch (e) {
-      notify("error");
+      notify('error', e);
       showErrorAndSetTimeouts(e.message);
       throw e;
     } finally {
@@ -147,7 +156,7 @@ export const CommunityProvider = ({ children }) => {
       setIsLoading(false);
       return response;
     } catch (e) {
-      notify("error");
+      notify('error', e);
       showErrorAndSetTimeouts(e.message);
       throw e;
     } finally {
@@ -162,7 +171,7 @@ export const CommunityProvider = ({ children }) => {
             notify('success-delete-ads');
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -178,7 +187,7 @@ export const CommunityProvider = ({ children }) => {
       notify("success-edit-ads");
       return response;
     } catch (e) {
-      notify("error");
+      notify('error', e);
 
       showErrorAndSetTimeouts(e.message);
       throw e;
@@ -193,6 +202,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -216,6 +226,7 @@ export const CommunityProvider = ({ children }) => {
                 setAds(prev => ({ ...prev, hasMore: false }));
             }
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -230,7 +241,7 @@ export const CommunityProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -242,18 +253,32 @@ export const CommunityProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await communityService.subscribeNewUser(username, email);
-            setIsLoading(false);
-            console.log(response);
-            return response;
+            setIsLoading(false);  
+            notify("email-send")    
+             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
-            throw e;
+            // throw e;
         } finally {
             setIsLoading(false);
         }
     }
-
+    const getSubscribeEmails = async () => {
+        try {
+            setIsLoading(true);
+            const response = await communityService.getSubscribeEmails();
+            setIsLoading(false);
+            setSubscribeEmails(response.subscribers);
+            return response.subscribers;
+        } catch (e) {
+            notify('error');
+            showErrorAndSetTimeouts(e.message);
+    
+        } finally {
+            setIsLoading(false);
+        }
+    };
     useEffect(() => {
         fetchRegions();
         fetchSearchCriteria();
@@ -282,7 +307,9 @@ export const CommunityProvider = ({ children }) => {
         setAds,
         getLatestAds,
         getAdById,
-        subscribeNewUser
+        subscribeNewUser,
+        getSubscribeEmails,
+        subscribeEmails
     };
 
     return (

@@ -49,7 +49,7 @@ export const UserProvider = ({ children }) => {
       navigate('/profile/profile-form');
       notify('success-register');
     } catch (error) {
-      notify('error');
+      notify(error.message === "User already exists with this email." ? 'user-already-exists' : 'error');
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -66,6 +66,7 @@ export const UserProvider = ({ children }) => {
       setProfileData(response.user);
       setIsAdmin(userRole === 'admin');
       notify('success-login');
+      
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
         setAddressId({ ...data });
@@ -73,14 +74,17 @@ export const UserProvider = ({ children }) => {
       } else {
         navigate('/');
       }
+
     } catch (error) {
       if (error.message == "Email or password are invalid.") {
         notify('error-authorize')
+      return error.message;
+
       } else {
-        notify('error');
+        notify('error', error);
       }
     
-      showErrorAndSetTimeouts(error.message);
+      // showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +100,7 @@ export const UserProvider = ({ children }) => {
       setIsAdmin(false);
       notify('success-logout');
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
@@ -121,8 +125,11 @@ export const UserProvider = ({ children }) => {
       navigate('/profile');
       notify('success-data');
     } catch (error) {
-      notify('error');
-      showErrorAndSetTimeouts(error.message);
+      const isUsernameTaken =
+        error?.message === "Unique constraint violation." && error?.details.some(error => error.field === 'username');
+        notify(isUsernameTaken ? 'username-is-taken' : 'error', error);
+        showErrorAndSetTimeouts(error.message);
+        throw error;
     } finally {
       setIsLoading(false);
     }
@@ -142,7 +149,7 @@ export const UserProvider = ({ children }) => {
 
       notify('success-data');
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(`Error edit profile data: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -159,7 +166,7 @@ export const UserProvider = ({ children }) => {
       }
       return response.user
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(`Error get profile data: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -176,10 +183,19 @@ export const UserProvider = ({ children }) => {
       const response = await userService.resetPassword({ ...data });
       setIsLoading(false);
       // setIsAdmin(response.user.role === 'admin');
+      notify('success-password-change');
       return response;
     } catch (error) {
-      notify('error');
+      if(error?.message === "Old and new password are the same.")
+        notify('password-change-same-passwords');
+      else if(error?.message === "Old password is invalid.") 
+        notify('password-change-old-invalid');
+      else if(error?.message === "Repeat password does not match.") 
+        notify('password-change-repeat-invalid');
+      else notify('error', error);
+      
       showErrorAndSetTimeouts(error.message);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -202,6 +218,7 @@ export const UserProvider = ({ children }) => {
       notify('success-role-change to'+ role);
       return response;
     } catch (e) {
+      notify('error', e)
       showErrorAndSetTimeouts(`Error changing role: ${e.message}`);
       return toast.error(e.error);
     } finally {
@@ -217,7 +234,7 @@ export const UserProvider = ({ children }) => {
       notify('email-send');
       return response;
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     }
   };
@@ -230,7 +247,7 @@ export const UserProvider = ({ children }) => {
       navigate('/');
       notify('success-register');
     } catch (error) {
-      notify('error');
+      notify('error', error);
       showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);

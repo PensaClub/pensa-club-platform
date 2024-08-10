@@ -7,10 +7,12 @@
   background-size: auto;
   position: relative;
 }
+
 .ads-submenu.show {
   max-height: 500px;
   opacity: 1;
 }
+
 .profile-section-edit,
 .profile-section,
 .profile-form,
@@ -113,15 +115,15 @@
   color: #fff;
 }
 
-  .top-right-button-profile-form {
-    position: absolute;
-    top: 5.3rem;
-    right: 6.8rem;
-    z-index: 2;
-    padding: var(--s-space);
-    border-radius: var(--s-space);
-    color: var(--orange);
-    box-shadow: var(--container-shadow);
+.top-right-button-profile-form {
+  position: absolute;
+  top: 5.3rem;
+  right: 6.8rem;
+  z-index: 2;
+  padding: var(--s-space);
+  border-radius: var(--s-space);
+  color: var(--orange);
+  box-shadow: var(--container-shadow);
 }
 
 
@@ -149,20 +151,24 @@
   cursor: pointer;
   pointer-events: auto;
 }
-.admin-dashboard h3{
+
+.admin-dashboard h3 {
   margin: initial;
   margin-top: 1em;
   margin-bottom: 1rem !important;
 }
+
 .btn-center {
   text-align: center;
 }
+
 @media (max-width: 900px) {
   .menu-toggle {
     display: block;
     top: 6rem;
     right: calc(var(--s-space) + 2rem);
   }
+
   .account-menu {
     position: fixed;
     top: 0;
@@ -182,7 +188,7 @@
   }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 900px) and (max-width: 1000px) {
   .profile-section {
     flex-direction: row;
     align-items: flex-start;
@@ -190,7 +196,7 @@
 
   .account-menu {
     height: 100vh;
-    position:sticky;
+    position: sticky;
     /* top: 8em; */
     width: 20%;
     margin-right: 2rem;
@@ -292,6 +298,11 @@
   margin-bottom: 2rem;
 }
 
+@media (max-width: 600px) {
+  .profile-data .user-data h2 {
+      font-size: var(--m-font-size);
+  }
+}
 @media (min-width: 600px) and (orientation: landscape) {
   .profile-form {
     width: 80%;
@@ -309,12 +320,12 @@
 
 .announced .ads,
 .pending .ads,
-.view-more{
+.view-more {
   transition: transform 2s ease;
 }
 
-.ads:hover{
-  transform: scale(1.05); 
+.ads:hover {
+  transform: scale(1.05);
 }
 
 .announced .ads {
@@ -353,7 +364,7 @@
 .announced .user-data-ads .elipse.price {
   background-color: #1F372A;
   color: #fff;
-  font-size:x-large;
+  font-size: x-large;
 }
 
 .ads-btns {
@@ -365,7 +376,7 @@
 }
 
 .ads-btn:hover,
-.view-more:hover{
+.view-more:hover {
   box-shadow: var(--container-shadow);
   transform: scale(1.05);
 }
@@ -450,31 +461,31 @@
   opacity: 1;
 }
 
-.announced.pending .profile-data{
+.announced.pending .profile-data {
   opacity: 0.6;
   position: relative;
 }
 
-.announced.denied .profile-data{
+.announced.denied .profile-data {
   opacity: 0.6;
-  filter: grayscale(60%); 
+  filter: grayscale(60%);
 }
 
 .announced .denied {
   opacity: 0.6;
 }
 
-.announced .admin-comment{
-    text-align: left;
-    color: #1F372A;
-    font-size: calc(var(--xs-font-size) + 2px);
-    border: 2px solid #1F372A;
-    border-radius: 16px;
-    padding: 0.3em 0.5em;
-    margin-top: 1rem;
-    background-color: var(--bg-white);
-    font-weight: bold;
-    width: 100%;
+.announced .admin-comment {
+  text-align: left;
+  color: #1F372A;
+  font-size: calc(var(--xs-font-size) + 2px);
+  border: 2px solid #1F372A;
+  border-radius: 16px;
+  padding: 0.3em 0.5em;
+  margin-top: 1rem;
+  background-color: var(--bg-white);
+  font-weight: bold;
+  width: 100%;
 }
 
 .announced .refresh {
@@ -499,6 +510,11 @@
   .profile-form {
     width: 60%;
     margin: auto;
+  }
+
+  .profile-section {
+    flex-direction: row;
+    align-items: flex-start;
   }
 
   .profile-form #email,
@@ -592,6 +608,18 @@
   cursor: pointer;
 }
 
+@media (max-width: 440px){
+  .profile-form .btn-inline {
+    display: flex;
+    flex-direction: column;
+    gap:0;
+  }
+  .profile-section .gender,
+  .profile-section .date {
+    flex-direction: column;
+  }
+}
+
 @media (min-width: 650px) {
   .profile-data {
     border-radius: var(--m-space);
@@ -651,6 +679,12 @@
   .avatar-announced p {
     top: 28px;
   }
+
+  .profile-section {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
   .ads-submenu.show {
     max-height: 500px;
     opacity: 1;
@@ -686,6 +720,7 @@
     color: var(--bg-white);
   }
 }
+
 .admin-dashboard {
   position: relative;
   padding-bottom: 3em;
@@ -741,8 +776,14 @@
     border-radius: var(--s-space);
     color: var(--orange);
     box-shadow: var(--container-shadow);
+  }
+
+  .profile-section {
+    flex-direction: row;
+    align-items: flex-start;
+  }
 }
-}
+
 @media (min-width: 1200px) {
   .top-right-button-profile-form {
     position: absolute;
@@ -753,5 +794,9 @@
     border-radius: var(--s-space);
     color: var(--orange);
     box-shadow: var(--container-shadow);
-}
+  }
+  .profile-section {
+    flex-direction: row;
+    align-items: flex-start;
+  }
 }

@@ -154,6 +154,8 @@ button, input, textarea {
   font-size: var(--s-font-size);
   text-decoration: none;
   font-weight: 500;    
+  
+  cursor: pointer;
 }
 
 .btn-general:hover {
@@ -162,6 +164,7 @@ button, input, textarea {
 
 .btn-general:disabled {
   opacity: 0.7;
+  cursor:not-allowed;
 }
 
 /* Button Colors */

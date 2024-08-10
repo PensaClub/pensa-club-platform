@@ -1,38 +1,93 @@
 import "./menuCommunity.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapLocation, faHouseUser, faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapLocation, faHouseUser, faUser, faBars, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../contexts/UserContext";
+import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import AlertModal from "../../Header/AlertModal/AlertModal";
 
 export const MenuCommunity = () => {
-
-    const { isAuthentication } = useAuthContext();
+    const { isAuthentication, isFinish, profileData } = useAuthContext();
+    const [finishProfile, setFinishProfile] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { t, i18n } = useTranslation();
     const location = useLocation();
     const navigate = useNavigate();
+    const dropdownRef = useRef(null);
+
     const handleNavigation = (path) => {
         navigate(path);
     };
+
     const handleUserClick = () => {
         if (!isAuthentication) {
-
-            navigate('/profile')
+            navigate('/profile');
+        } else {
+            navigate('/sign-up');
         }
-        navigate('/sign-up')
-    }
+    };
+
+    const handleReloadPage = () => {
+        navigate('/craigslist?reset=true');
+    };
 
     const getLocation = (path) => {
         return location.pathname === path ? 'commun-menu-icons active' : 'commun-menu-icons';
-    }
+    };
+
+    const handleModalToggle = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        setFinishProfile(isFinish);
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isFinish]);
+
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+      };
+      const currentLanguage = i18n.language;
 
     return (
         <>
             <nav className="menu-community">
                 <FontAwesomeIcon icon={faHouseUser} className={getLocation('/')} onClick={() => handleNavigation('/')} />
                 <FontAwesomeIcon icon={faMapLocation} className={getLocation('/map')} onClick={() => handleNavigation('/map')} />
-                <FontAwesomeIcon icon={faBars} className="commun-menu-icons"onClick={() => handleNavigation('/craigslist')} />
-                <FontAwesomeIcon icon={faUser} className={getLocation('/profile')} onClick={handleUserClick} />
+                <FontAwesomeIcon icon={faBars} className={getLocation('/craigslist')} onClick={handleReloadPage} />
+                <div className="profile-container" ref={dropdownRef}>
+                    <FontAwesomeIcon icon={faUser} className={getLocation('/profile')} onClick={handleUserClick} />
+                    {isAuthentication && !finishProfile && (
+                        <span
+                            className="warning-icon-image-community"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleModalToggle();
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faCircleExclamation} />
+                        </span>
+                    )}
+                </div>
             </nav>
-        </>
-    )
-}
 
+            <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>
+                <p>
+                {t("profile.alert_message")}
+                </p>
+            </AlertModal>
+        </>
+    );
+};

@@ -17,7 +17,7 @@ const emailRegex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 //Example - john.doe@example.com
 
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d].{8,}$/;
+const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
 
 const secret = process.env.SECRET;
 
@@ -265,12 +265,15 @@ userController.post('/reset-password', async (req, res, next) => {
       if (!oldPassword) {
         return res.status(400).json({ message: 'Old password is required.' });
       }
+      if (oldPassword === newPassword) {
+        return res.status(400).json({ message: 'Old and new password are the same.' });
+      }
       const decodedToken = tokenVerification(token, secret);
       user = await user_account.findOne({ where: { email: decodedToken.email } });
 
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
       if (!isPasswordValid) {
-        return res.status(400).json({ message: 'Old password is not valid.' });
+        return res.status(400).json({ message: 'Old password is invalid.' });
       }
     }
     const newHashedPassword = await bcrypt.hash(newPassword, 10);

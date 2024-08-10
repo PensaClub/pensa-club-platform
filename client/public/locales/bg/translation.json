@@ -252,7 +252,8 @@
     "messages": "Съобщения",
     "in_box": "Входящa кутия",
     "rejected_ads": " не е одобрена",
-    "your_ad": "Вашата обява"
+    "your_ad": "Вашата обява",
+    "alert_message": " Вашият профил е непълен. Моля, завършете го, за да продължите да използвате всички възможности на платформата."
   },
   "admin": {
     "pending_announcements": "Неодобрени обяви",
@@ -337,7 +338,23 @@
     "approved_ad": " е одобрена",
     "your_ad": "Вашата обява",
     "deleted_ad": "Вашата обява е изтрита",
-    "approved-suggested_users": "Одобрени препоръчани потребители"
+    "approved-suggested_users": "Одобрени препоръчани потребители",
+    "admins": "Администратори",
+    "guests": "Гости",
+    "count": "брой",
+    "total": "oбщо",
+    "completed": "завършени",
+    "not_completed": "незавършени",
+    "pending_ads": "Обяви в очакване",
+    "approved_ads": "Одобрени обяви",
+    "rejected_ads": "Отхвърлени обяви",
+    "pending": "В очакване",
+    "approved": "Одобрени",
+    "rejected": "Отхвърлени",
+    "username": "Потребителско име",
+   "ads_subscription": "Абонаменти",
+   "search_clear": "Изчисти търсенето"
+
   },
   "community": {
     "community": "Общност",
@@ -439,9 +456,16 @@
     "success-delete-ads": "Успешно изтрихте обява!",
     "success-edit-ads": "Успешно редактирахте обява!",
     "success-suggested": "Успешно препоръчахте приятел!",
+    "success-password-change": "Успешно променихте паролата си!",
     "enter-comment": "Въведете коментар",
-    "success-approved": "Обявата беше одобрена!",
-    "success-reject": "Обявата беше отказана!",
+    "ad-approved": "Обявата беше одобрена!",
+    "ad-reject": "Обявата беше отказана!",
+    "user-already-exists": "Грешка! Потребител с този имейл адрес вече съществува!",
+    "username-is-taken": "Потребителското име {{username}}вече е заето. Опитайте с друго!",
+    "session-expired": "Сесията Ви е изтекла. Моля излезте и влезте отново.",
+    "password-change-same-passwords": "Старата и новата парола са еднакви!",
+    "password-change-old-invalid": "Старата парола не е валидна!",
+    "password-change-repeat-invalid": "Паролите не съвпадат!",
     "error": "Грешка! Моля, опитайте отново!",
     "email-send": "Имейлът е изпратен успешно!",
     "error-images": "Може да изберете само 4 снимки",
@@ -502,7 +526,9 @@
     "add_new_comment": "Нов коментар",
     "comment": "Коментар",
     "comments": "Коментари",
-    "submit": "Изпрати"
+    "submit": "Изпрати",
+    "name-lenght": "Името не може да бъде по-дълго от 40 символа.",
+    "message-lenght": "Съобщението не може да бъде по-дълго от 100 символа."
   },
   "home": {
     "our_latest_ads": "Последните публикации",
@@ -510,7 +536,7 @@
     "town": "гр.",
     "no_results": "Няма намерени резултати"
   },
-  "admin_messages":{
+  "admin_messages": {
     "search_desc": "Търси по описание...",
     "search": "Търси",
     "search_clear": "Изчисти търсенето",

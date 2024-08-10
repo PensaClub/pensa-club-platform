@@ -53,18 +53,18 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       refferer_name: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(40),
         allowNull: true,
         defaultValue: null,
         validate: {
           // kakto drugoto ime 40 simvola
           customValidator(value) {
             if (value && value.length > 0) {
-              if (value.length < 3 || value.length > 100) {
-                throw new Error('Name must be between 3 and 100 characters in length.');
+              if (value.length < 3 || value.length > 40) {
+                throw new Error('Name must be between 3 and 40 characters in length.');
               }
               if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
-                throw new Error('Name must be 3-100 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
+                throw new Error('Name must be 3-40 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
               }
             }
           },
@@ -74,7 +74,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null,
-        // ako go ima da e 100 simvola
+        validate: {
+          isLength(value) {
+            if (value !== null && value !== '' && (value.length < 5 || value.length > 100)) {
+              throw new Error('The length of the message must be between 5 and 100 characters.');
+            }
+          },
+        },
       },
       resolved: {
         type: DataTypes.BOOLEAN,

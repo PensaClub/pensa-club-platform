@@ -44,6 +44,7 @@
 }
 
 .ads-details-page h1 {
+  display: none;
   margin: 0;
   position: absolute;
   top: 5%;
@@ -165,7 +166,9 @@
 .small-img {
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 1em;
+  margin-left: 3em;
 }
 
 .small-img img {
@@ -198,8 +201,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 50px;
+  /* justify-content: space-between; */
+  gap: 70px;
   width: 100%;
   color: var(--text-white);
   padding: 0 1em;
@@ -325,6 +328,7 @@
   }
 
   .ads-details-card {
+    align-items: flex-start;
     flex-direction: row;
     gap: 0;
   }
@@ -355,7 +359,8 @@
   .small-img {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1em;
   }
 
   .small-img img {
@@ -401,6 +406,9 @@
   .ads-details-main {
     margin: 3em auto;
     margin-top: 0;
+  }
+  .ads-details-page h1 {
+    display: block;
   }
   .ads-details-card {
     margin: 0 auto;
@@ -514,7 +522,8 @@
   .small-img {
     display: flex;
     width: 90%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1em;
   }
 
   .small-img img {
@@ -547,5 +556,8 @@
 
   .ad-details-back-phone {
     display: none;
+  }
+  .small-img {
+    margin-left: initial;
   }
 }

@@ -33,6 +33,7 @@ export const AdminProvider = ({ children }) => {
             setIsLoading(false);
             return response.ads;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;
@@ -46,6 +47,7 @@ export const AdminProvider = ({ children }) => {
             setIsLoading(false);
             return response.ads;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;
@@ -59,6 +61,7 @@ export const AdminProvider = ({ children }) => {
             setIsLoading(false);
             return response.ads;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;
@@ -72,13 +75,14 @@ export const AdminProvider = ({ children }) => {
 
             if (newStatus === 'approved') {
                 fetchApprovedAds()
-                notify('success-approved');
+                notify('ad-approved');
             } else if (newStatus === 'denied') {
                 await fetchPendingAds();
 
-                notify('success-reject');
+                notify('ad-reject');
             }
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             setIsLoading(false);
             throw e;
@@ -93,7 +97,7 @@ export const AdminProvider = ({ children }) => {
             notify('success-delete-ads')
             return response;
         } catch (e) {
-            notify('error')
+            notify('error', e)
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -109,7 +113,7 @@ export const AdminProvider = ({ children }) => {
             notify('success-delete-user');
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {
@@ -124,7 +128,7 @@ export const AdminProvider = ({ children }) => {
             notify('success-delete-message');
             return response;
         } catch (e) {
-            notify('error');
+            notify('error', e);
             showErrorAndSetTimeouts(e.message);
             throw e;
         } finally {

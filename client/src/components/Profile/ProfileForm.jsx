@@ -29,7 +29,7 @@ const ProfileForm = () => {
     // email: userEmail,
     firstName: persistedData?.firstName || '',
     lastName: persistedData?.lastName || '',
-    phoneNumber: persistedData?.phoneNumber || null,
+    phoneNumber: persistedData?.phoneNumber || '',
     gender: persistedData?.gender || null,
     region: persistedData?.region || '',
     regionId: persistedData?.regionId || '',
@@ -223,26 +223,23 @@ const ProfileForm = () => {
 
     if (isValid) {
       try {
-        // console.log("Form Submitted:", trimmedForm);
+        const updatedForm = await uploadImages(trimmedForm);
+                
+        await onProfileDataSubmit(updatedForm);
+        await onAllUsers();
+        
         resetFields(setForm, initialFormState);
         setSelectedDate('');
         setSelectedMonth('');
         setSelectedYear('');
         setPersistedData({});
-
-        const updatedForm = await uploadImages(trimmedForm);
-
-        await onProfileDataSubmit(updatedForm);
-        await onAllUsers();
         window.scrollTo(0, 0);
         navigate('/profile');
       } catch (error) {
-        setForm(persistedData);
-        console.error(`Error on profile form submit: ${error.message}`);
+         console.error(`Error on profile form submit: ${error.message}`);
       }
     } else {
-      setForm(persistedData);
-      console.error('Form validation failed. Errors:', validationErrors);
+       console.error('Form validation failed. Errors:', validationErrors);
     }
   };
 

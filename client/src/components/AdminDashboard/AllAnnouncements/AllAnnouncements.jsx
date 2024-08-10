@@ -21,7 +21,6 @@ export const AllAnnouncements = () => {
             await fetchPendingAds();
             await fetchApprovedAds();
             await fetchRejectAds();
- 
             const response = await fetch('/search-criteria.json');
             const data = await response.json();
             setCategories(data?.searchCriteria);
