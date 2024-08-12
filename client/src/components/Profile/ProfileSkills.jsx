@@ -64,29 +64,13 @@ export const ProfileSkills = () => {
 }, [profileData, setAllUsers]);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+   
       await onEditProfileDataSubmit(form);
 
       resetFields(setForm, initialFormState);
       navigate('/profile');
-    } else {
-      setTimeout(() => {
-        if (form && form.skills && form.skills.length > 0) {
-  
-          resetFields(setForm, initialFormState);
-        }
-      }, 2000);
-    }
-  };
 
-    const validateForm = () => {
-        const errors = {};
-        if (form?.skills?.length === 0) {
-            errors.skills = t('profile.skills_options_error');
-        }
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
+  };
 
     const handleResetForm = () => {
         handleReset(setForm, initialFormState);
