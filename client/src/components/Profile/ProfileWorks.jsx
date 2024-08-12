@@ -64,29 +64,12 @@ export const ProfileWorks = () => {
     }, [profileData, setAllUsers])
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validateForm()) {
+
             await onEditProfileDataSubmit(form);
     
             resetFields(setForm, initialFormState);
             navigate('/profile');
-        } else {
-
-            setTimeout(() => {
-                if (form && form.workOptions && form.workOptions.length > 0) {
-         
-                    resetFields(setForm, initialFormState);
-                }
-            }, 2000);
-        }
-    };
-
-    const validateForm = () => {
-        const errors = {};
-        if (form?.workOptions?.length === 0) {
-            errors.workOptions = t('profile.work_options_error');
-        }
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
+ 
     };
 
     const handleResetForm = () => {
