@@ -1,5 +1,4 @@
 import './unfinishedProfiles.css';
-
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -177,8 +176,8 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   }
   return (
     <div className="unfinished-container">
-      <h2>{t('admin.all_users')}</h2>
-      <div className="search-container">
+      <h2>{t('admin.unfinished_users_profile')}</h2>
+      <div className="search-container-unfinished-users">
         <input
           type="text"
           placeholder={t('admin.search') + '...'}
@@ -194,11 +193,14 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
         </select>
         <button onClick={handleSearch}>{t('admin.search')}</button>
         {searchTerm && (
-          <FontAwesomeIcon
-            icon={faArrowRotateLeft}
-            className="reset-icon"
-            onClick={resetFilters}
-          />
+          <div className="reset-icon-container">
+            <FontAwesomeIcon
+              icon={faArrowRotateLeft}
+              className="reset-icon-unfinished-users"
+              onClick={resetFilters}
+            />
+            <span className="reset-text-unfinished-users" onClick={resetFilters}>{t('admin_messages.search_clear')}</span>
+          </div>
         )}
       </div>
       <hr />
@@ -219,6 +221,30 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
           <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
           <span>{t('admin.delete')}</span>
         </div>
+        <div className="legend-item">
+          <img src={'/icons/number.svg'} alt="Number" className="legend-icon" />
+          <span>{t('admin.number')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/email.svg'} alt="Email" className="legend-icon" />
+          <span>{t('admin.user_email')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/registration.svg'} alt="Registration Date" className="legend-icon" />
+          <span>{t('admin.user_registration_date')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/status.svg'} alt="Status" className="legend-icon" />
+          <span>{t('admin.status')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/ads.svg'} alt="Ads" className="legend-icon" />
+          <span>{t('profile.ads-statistic')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/actions.svg'} alt="Actions" className="legend-icon" />
+          <span>{t('admin.actions')}</span>
+        </div>
       </div>
       <hr />
       <div className="unfinished-table-container">
@@ -226,36 +252,44 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
           <thead>
             <tr>
               <th className="number-cell" onClick={() => requestSort('id')}>
-                {t('admin.number')}
+                <img src="/icons/number.svg" alt="Number" className="table-icon" />
+                <span>{t('admin.number')}</span>
                 {sortConfig.key === 'id' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
               <th onClick={() => requestSort('email')}>
-                {t('admin.user_email')}
+                <img src="/icons/email.svg" alt="Email" className="table-icon" />
+                <span>{t('admin.user_email')}</span>
                 {sortConfig.key === 'email' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th onClick={() => requestSort('date')} className='registration-date-admin'>
-                {t('admin.user_registration_date')}
+              <th onClick={() => requestSort('date')} className='registration-date-admin-unfinished'>
+                <img src="/icons/registration.svg" alt="Registration Date" className="table-icon" />
+                <span>{t('admin.user_registration_date')}</span>
                 {sortConfig.key === 'date' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
               <th onClick={() => requestSort('status')}>
-                {t('admin.status')}
+                <img src="/icons/status.svg" alt="Status" className="table-icon" />
+                <span>{t('admin.status')}</span>
                 {sortConfig.key === 'status' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th onClick={() => requestSort('ads')} className='ads-cell'>
-                {t('profile.ads-statistic')}
+              <th onClick={() => requestSort('ads')} className='ads-cell-unfinished'>
+                <img src="/icons/ads.svg" alt="Ads" className="table-icon" />
+                <span>{t('profile.ads-statistic')}</span>
                 {sortConfig.key === 'ads' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th>{t('admin.actions')}</th>
+              <th>
+                <img src="/icons/actions.svg" alt="Actions" className="table-icon" />
+                <span>{t('admin.actions')}</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -321,9 +355,9 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
         handlePasswordReset={handlePasswordReset}
       />
   {isTextModalOpen && (
-        <div className="text-modal-overlay-all-users">
-          <div className="text-modal-content-all-users-ads ">
-            <span className="close-button-all-users" onClick={closeTextModal}>&times;</span>
+        <div className="text-modal-overlay-unfinished">
+          <div className="text-modal-content-unfinished-ads ">
+            <span className="close-button-unfinished" onClick={closeTextModal}>&times;</span>
             <p>{modalContent}</p>
           </div>
         </div>

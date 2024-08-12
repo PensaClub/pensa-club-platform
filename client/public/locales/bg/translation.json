@@ -353,7 +353,8 @@
     "rejected": "Отхвърлени",
     "username": "Потребителско име",
    "ads_subscription": "Абонаменти",
-   "search_clear": "Изчисти търсенето"
+   "search_clear": "Изчисти търсенето",
+   "unfinished_users_profile": "Потребители с незавършен профил"
 
   },
   "community": {

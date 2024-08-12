@@ -13,7 +13,9 @@
   border: 1px solid #ccc;
   margin-bottom: 20px;
 }
-
+.suggestUsers-container-table th img.table-icon {
+  display: none; 
+}
 .recommended-name,
 .recommended-by {
   width: 170px;
@@ -47,7 +49,6 @@
   border: 1px solid #ddd;
   white-space: nowrap;
   text-align: center;
-
 }
 
 .suggestUsers-container-table th {
@@ -119,14 +120,14 @@
   border-radius: var(--radius-input);
 }
 
-.search-container {
+.search-container-suggestUsers {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.search-container input[type="text"] {
+.search-container-suggestUsers input[type="text"] {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -134,14 +135,14 @@
   margin-right: 10px;
 }
 
-.search-container select {
+.search-container-suggestUsers select {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   margin-right: 10px;
 }
 
-.search-container button {
+.search-container-suggestUsers button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -151,7 +152,7 @@
   margin-right: 10px;
 }
 
-.search-container .reset-icon {
+.search-container-suggestUsers .reset-icon-suggestUsers {
   font-size: 1.5rem;
   color: #007bff;
   cursor: pointer;
@@ -185,6 +186,9 @@
   color: var(--orange);
   text-decoration: none;
   font-size: var(--xs-font-size)!important;
+}
+.reset-icon-suggestUsers{
+  display: none;
 }
 @media (max-width: 767px) {
   .admin-suggestUsers-container h2 {
@@ -298,6 +302,24 @@
     width: 30px;
     height: 30px;
   }
+
+  .suggestUsers-container-table th span {
+      display: none; 
+  }
+
+  .suggestUsers-container-table th img.table-icon {
+      display: inline-block;
+      width: 25px;
+  }
+  .reset-text-suggestUsers {
+    display: none;
+  }
+  .search-container-suggestUsers .reset-icon-suggestUsers {
+    font-size: 1.5rem;
+    color: var(--green) !important;
+    cursor: pointer;
+    display: inline-block;
+  }
 }
 @media (min-width: 980px) and (max-width: 1200px) {
   .admin-suggestUsers-container {
@@ -348,30 +370,55 @@
     width: 50px;
     height: 50px;
   }
+
+  .suggestUsers-container-table th span {
+      display: inline-block; 
+  }
+
+  .suggestUsers-container-table th img.table-icon {
+      display: none; 
+  }
+  .reset-text-suggestUsers {
+    display: none;
+  }
+  .search-container-suggestUsers .reset-icon-suggestUsers {
+    font-size: 1.5rem;
+    color: var(--green) !important;
+    cursor: pointer;
+    display: inline-block;
+  }
 }
 
 @media (max-width: 767px) {
-  .search-container {
+  .search-container-suggestUsers {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
 
-  .search-container input[type="text"],
-  .search-container select,
-  .search-container button {
+  .search-container-suggestUsers input[type="text"],
+  .search-container-suggestUsers select,
+  .search-container-suggestUsers button {
     width: 100%;
     margin-right: 0;
     margin-bottom: 10px;
   }
 
-  .search-container button,
-  .search-container .reset-icon {
+  .search-container-suggestUsers button,
+  .search-container-suggestUsers .reset-icon-suggestUsers {
     padding: 10px;
   }
 
-  .search-container .reset-icon {
+  .search-container-suggestUsers .reset-icon-suggestUsers {
     align-self: flex-end;
     font-size: 1.2rem;
+  }
+  .reset-text-suggestUsers {
+    display: block;
+    margin-left: 0;
+    background-color: var(--yellow);
+    text-align: center;
+    border-radius: var(--radius-input);
+    padding: 0.5em;
   }
 }
 
@@ -504,4 +551,3 @@
     transform: translateY(0);
   }
 }
-
