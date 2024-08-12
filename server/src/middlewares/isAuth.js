@@ -1,5 +1,4 @@
 const jwt = require('../utils/jwt');
-const secret = process.env.SECRET;
 const { user_account } = require('../sequelize/models/index');
 
 module.exports = async function authentication(req, res, next) {
@@ -7,7 +6,7 @@ module.exports = async function authentication(req, res, next) {
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.split(' ')[1];
     try {
-      const decodedToken = jwt.tokenVerification(token, secret);
+      const decodedToken = jwt.tokenVerification('access', token);
       if (decodedToken) {
         if (decodedToken.role === 'admin') {
           const user = await user_account.findOne({ where: { email: decodedToken.email } });

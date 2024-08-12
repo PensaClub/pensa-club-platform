@@ -1,29 +1,33 @@
-const requester = async (method, url, data) => {
-  const options = {};
+import { refreshToken } from '../../utils/refreshToken';
 
-  if (method !== "GET") {
+const requester = async (method, url, data) => {
+  const options = {
+    credentials: 'include',
+  };
+
+  if (method !== 'GET') {
     options.method = method;
 
     if (data) {
       options.headers = {
-        "content-type": "application/json",
+        'content-type': 'application/json',
       };
 
       options.body = JSON.stringify(data);
     }
   }
 
-  const serializedAuth = localStorage.getItem("auth");
+  const serializedAuth = localStorage.getItem('auth');
   if (serializedAuth) {
     const auth = JSON.parse(serializedAuth);
 
     if (auth.token) {
+      const accessToken = await refreshToken(auth);
       options.headers = {
         ...options.headers,
-        Authorization: `Bearer ${auth.token}`,
+        Authorization: `Bearer ${accessToken}`,
       };
     }
-
   }
 
   const response = await fetch(url, options);
@@ -39,10 +43,10 @@ const requester = async (method, url, data) => {
 
 export const requestFactory = () => {
   return {
-    get: requester.bind(null, "GET"),
-    post: requester.bind(null, "POST"),
-    put: requester.bind(null, "PUT"),
-    patch: requester.bind(null, "PATCH"),
-    del: requester.bind(null, "DELETE"),
+    get: requester.bind(null, 'GET'),
+    post: requester.bind(null, 'POST'),
+    put: requester.bind(null, 'PUT'),
+    patch: requester.bind(null, 'PATCH'),
+    del: requester.bind(null, 'DELETE'),
   };
 };
