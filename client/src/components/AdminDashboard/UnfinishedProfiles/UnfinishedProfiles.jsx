@@ -339,7 +339,7 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmitComment}
       >
-        <h2>Comment on User</h2>
+        <h2>{t('admin.user_comment')}</h2>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}

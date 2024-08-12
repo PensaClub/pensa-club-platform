@@ -313,7 +313,7 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
                 comment={comment}
                 setComment={setComment}
             >
-                <h2>Comment on User</h2>
+                <h2>{t('admin.user_comment')}</h2>
             </ResolvedComments>
             {isTextModalOpen && (
                 <div className="text-modal-overlay">

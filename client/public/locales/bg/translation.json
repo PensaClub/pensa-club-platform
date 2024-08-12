@@ -356,7 +356,8 @@
    "search_clear": "Изчисти търсенето",
    "unfinished_users_profile": "Потребители с незавършен профил",
    "announcement_comment": "Коментар към обявата",
-   "submit":"Изпрати"
+   "submit":"Изпрати",
+   "user_comment": "Коментар до потребителя"
 
   },
   "community": {
