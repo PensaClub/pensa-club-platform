@@ -317,7 +317,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmitComment}
       >
-        <h2>Comment on Announcement</h2>
+        <h2>{t('admin.announcement_comment')}</h2>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}

@@ -361,7 +361,9 @@
    "username": "Username",
    "ads_subscription": "Subscriptions",
    "search_clear": "Clear search",
-   "unfinished_users_profile": "Unfinished Users Profile"
+   "unfinished_users_profile": "Unfinished Users Profile",
+   "announcement_comment": "Comment on Announcement",
+   "submit":"Submit"
 
   },
   "community": {
