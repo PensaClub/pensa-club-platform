@@ -15,26 +15,23 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [comment, setComment] = useState('');
-  // eslint-disable-next-line no-unused-vars
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
   const [selectedAd, setSelectedAd] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCriteria, setSearchCriteria] = useState('summary');
   const [searchResults, setSearchResults] = useState([]);
-  const [adminEmail, setAdminEmail] = useState('')
+  const [adminEmail, setAdminEmail] = useState('');
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
 
-  // eslint-disable-next-line no-unused-vars
-  const [isSearching, setIsSearching] = useState(false);
   const { t } = useTranslation();
   const { profileData } = useAuthContext();
 
   const { fetchApprovedAds, updateAdStatus, deleteAd } = useAdminContext();
 
   useEffect(() => {
-    const loadPendingAds = async () => {
+    const loadApprovedAds = async () => {
       try {
         const approvedAds = await fetchApprovedAds();
         setAnnouncements(approvedAds);
@@ -46,19 +43,14 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
         console.error(e);
       }
     };
-    loadPendingAds();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    loadApprovedAds();
   }, [setAnnouncements]);
 
   const sortedAnnouncements = [...searchResults].sort((a, b) => {
     if (sortConfig.key === 'id') {
-      const idA = a.adId;
-      const idB = b.adId;
-      return sortConfig.direction === 'ascending' ? idA.localeCompare(idB) : idB.localeCompare(idA);
+      return sortConfig.direction === 'ascending' ? a.adId.localeCompare(b.adId) : b.adId.localeCompare(a.adId);
     } else if (sortConfig.key === 'email') {
-      const emailA = a.account.email.split('@')[0];
-      const emailB = b.account.email.split('@')[0];
-      return sortConfig.direction === 'ascending' ? emailA.localeCompare(emailB) : emailB.localeCompare(emailA);
+      return sortConfig.direction === 'ascending' ? a.account.email.localeCompare(b.account.email) : b.account.email.localeCompare(a.account.email);
     } else if (sortConfig.key === 'date') {
       return sortConfig.direction === 'ascending' ? new Date(a.creationDate) - new Date(b.creationDate) : new Date(b.creationDate) - new Date(a.creationDate);
     } else {
@@ -123,7 +115,6 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
   };
 
   const handleSearch = () => {
-    setIsSearching(true);
     const results = announcements.filter((announcement) => {
       if (searchCriteria === 'summary') {
         return announcement.summary.toLowerCase().includes(searchTerm.toLowerCase());
@@ -135,7 +126,6 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
       return false;
     });
     setSearchResults(results);
-    setIsSearching(false);
   };
 
   const resetFilters = () => {
@@ -143,22 +133,26 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
     setSearchCriteria('summary');
     setSearchResults(announcements);
   };
+
   const trimString = (str, num) => {
     if (str.length <= num) return str;
     return str.slice(0, num) + '...';
-  }
+  };
+
   const handleTextClick = (text) => {
     setModalContent(text);
     setIsTextModalOpen(true);
   };
+
   const closeTextModal = () => {
     setIsTextModalOpen(false);
     setModalContent('');
-  }
+  };
+
   return (
     <div className="approved-announcements-container">
       <h2>{t('profile.approved_announcements')}</h2>
-      <div className="search-container">
+      <div className="search-container-approved">
         <input
           type="text"
           placeholder={t('admin.search') + '...'}
@@ -175,12 +169,15 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
         </select>
         <button onClick={handleSearch}>{t('admin.search')}</button>
         {searchTerm && (
-          <FontAwesomeIcon
-            icon={faArrowRotateLeft}
-            className="reset-icon"
-            onClick={resetFilters}
-          />
-        )}
+            <div className="reset-icon-container">
+              <FontAwesomeIcon
+                icon={faArrowRotateLeft}
+                className="reset-icon-approved"
+                onClick={resetFilters}
+              />
+              <span className="reset-text-approved" onClick={resetFilters}>{t('admin_messages.search_clear')}</span>
+            </div>
+          )}
       </div>
 
       <hr />
@@ -190,12 +187,32 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
           <span>{t('admin.comment')}</span>
         </div>
         <div className="legend-item">
-          <img src={'/icons/denied.svg'} alt="reject" className="legend-icon" />
+          <img src={'/icons/denied.svg'} alt="Reject" className="legend-icon" />
           <span>{t('admin.reject')}</span>
         </div>
         <div className="legend-item">
-          <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
+          <img src={'/icons/delete-button.svg'} alt="Delete" className="legend-icon" />
           <span>{t('admin.delete')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/number.svg'} alt="Number" className="legend-icon" />
+          <span>{t('admin.number')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/email.svg'} alt="Email" className="legend-icon" />
+          <span>{t('admin.user_email')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/date.svg'} alt="Creation Date" className="legend-icon" />
+          <span>{t('admin.creation_date')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/ads.svg'} alt="Ads" className="legend-icon" />
+          <span>{t('admin.announcement_title')}</span>
+        </div>
+        <div className="legend-item">
+          <img src={'/icons/actions.svg'} alt="Actions" className="legend-icon" />
+          <span>{t('admin.actions')}</span>
         </div>
       </div>
       <hr />
@@ -203,27 +220,35 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
         <table className="approved-announcements-table">
           <thead>
             <tr>
-
-              <th className="number-cell" onClick={() => requestSort('id')}>
-                {t('admin.number')}
-                {sortConfig.key === 'id' ? (
+              <th className="number-cell" onClick={() => requestSort('adId')}>
+                <img src="/icons/number.svg" alt="Number" className="table-icon" />
+                <span>{t('admin.number')}</span>
+                {sortConfig.key === 'adId' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th onClick={() => requestSort('email')}>
-                {t('admin.user_email')}
+              <th onClick={() => requestSort('email')} className='email-approved-ads'>
+                <img src="/icons/email.svg" alt="Email" className="table-icon" />
+                <span>{t('admin.user_email')}</span>
                 {sortConfig.key === 'email' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th>{t('admin.announcement_title')}</th>
+              <th className='ads-approved-ads'>
+                <img src="/icons/ads.svg" alt="Ads" className="table-icon" />
+                <span>{t('admin.announcement_title')}</span>
+              </th>
               <th className='th-date-approved' onClick={() => requestSort('date')}>
-                {t('admin.creation_date')}
+                <img src="/icons/date.svg" alt="Creation Date" className="table-icon" />
+                <span>{t('admin.creation_date')}</span>
                 {sortConfig.key === 'date' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th>{t('admin.actions')}</th>
+              <th>
+                <img src="/icons/actions.svg" alt="Actions" className="table-icon" />
+                <span>{t('admin.actions')}</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -246,13 +271,13 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
                   />
                   <img
                     src={'/icons/denied.svg'}
-                    alt="reject"
+                    alt="Reject"
                     className="comment-icon"
                     onClick={() => handleReject(announcement.adId, announcement.summary)}
                   />
                   <img
                     src={'/icons/delete-button.svg'}
-                    alt="delete"
+                    alt="Delete"
                     className="comment-icon"
                     onClick={() => handleDelete(announcement.adId)}
                   />

@@ -15,46 +15,37 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [comment, setComment] = useState('');
-    // eslint-disable-next-line no-unused-vars
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
     const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
     const [selectedAd, setSelectedAd] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchCriteria, setSearchCriteria] = useState('summary');
     const [searchResults, setSearchResults] = useState([]);
-    const [adminEmail, setAdminEmail] = useState('')
+    const [adminEmail, setAdminEmail] = useState('');
     const [isTextModalOpen, setIsTextModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-    // eslint-disable-next-line no-unused-vars
-    const [isSearching, setIsSearching] = useState(false);
     const { t } = useTranslation();
     const { profileData } = useAuthContext();
     const { fetchRejectAds, updateAdStatus, deleteAd } = useAdminContext();
 
     useEffect(() => {
-        const loadPendingAds = async () => {
+        const loadRejectAds = async () => {
             try {
-                const pendingAds = await fetchRejectAds();
-                setAnnouncements(pendingAds);
-                setSearchResults(pendingAds);
+                const rejectAds = await fetchRejectAds();
+                setAnnouncements(rejectAds);
+                setSearchResults(rejectAds);
                 setAdminEmail(profileData.email);
-
-                setRejectCount(pendingAds.length);
-
+                setRejectCount(rejectAds.length);
             } catch (e) {
                 console.error(e);
             }
         };
-        loadPendingAds();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        loadRejectAds();
     }, [setAnnouncements]);
 
     const sortedAnnouncements = [...searchResults].sort((a, b) => {
         if (sortConfig.key === 'email') {
-            const emailA = a.account.email.split('@')[0];
-            const emailB = b.account.email.split('@')[0];
-            return sortConfig.direction === 'ascending' ? emailA.localeCompare(emailB) : emailB.localeCompare(emailA);
+            return sortConfig.direction === 'ascending' ? a.account.email.localeCompare(b.account.email) : b.account.email.localeCompare(a.account.email);
         } else if (sortConfig.key === 'date') {
             return sortConfig.direction === 'ascending' ? new Date(a.creationDate) - new Date(b.creationDate) : new Date(b.creationDate) - new Date(a.creationDate);
         } else if (sortConfig.key === 'id') {
@@ -81,7 +72,7 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
         setIsModalOpen(false);
     };
 
-    const handleApprove = async (id,summary) => {
+    const handleApprove = async (id, summary) => {
         try {
             const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.your_ad')} "${summary}" ${t('admin.approved_ad')}`;
             const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
@@ -101,7 +92,7 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
         try {
             const defaultComment = `${t('admin.from_admin')} ${adminEmail}: ${t('admin.deleted_ad')}`;
             const finalComment = comment ? `${t('admin.from_admin')} ${adminEmail}: ${comment}` : defaultComment;
-            await deleteAd(id,finalComment);
+            await deleteAd(id, finalComment);
             setComment('');
 
             const updatedAds = await fetchRejectAds();
@@ -119,7 +110,6 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
     };
 
     const handleSearch = () => {
-        setIsSearching(true);
         const results = announcements.filter((announcement) => {
             if (searchCriteria === 'summary') {
                 return announcement.summary.toLowerCase().includes(searchTerm.toLowerCase());
@@ -131,7 +121,6 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
             return false;
         });
         setSearchResults(results);
-        setIsSearching(false);
     };
 
     const resetFilters = () => {
@@ -139,22 +128,26 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
         setSearchCriteria('summary');
         setSearchResults(announcements);
     };
+
     const trimString = (str, num) => {
         if (str.length <= num) return str;
         return str.slice(0, num) + '...';
-    }
-    const handleTextClick = (text) => {
-      setModalContent(text);
-      setIsTextModalOpen(true);
     };
+
+    const handleTextClick = (text) => {
+        setModalContent(text);
+        setIsTextModalOpen(true);
+    };
+
     const closeTextModal = () => {
-      setIsTextModalOpen(false);
-      setModalContent('');
-    }
+        setIsTextModalOpen(false);
+        setModalContent('');
+    };
+
     return (
         <div className="reject-announcements-container">
             <h2>{t('profile.reject_announcements')}</h2>
-            <div className="search-container">
+            <div className="search-container-reject">
                 <input
                     type="text"
                     placeholder={t('admin.search') + '...'}
@@ -171,12 +164,15 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                 </select>
                 <button onClick={handleSearch}>{t('admin.search')}</button>
                 {searchTerm && (
-                    <FontAwesomeIcon
-                        icon={faArrowRotateLeft}
-                        className="reset-icon"
-                        onClick={resetFilters}
-                    />
-                )}
+          <div className="reset-icon-container">
+            <FontAwesomeIcon
+              icon={faArrowRotateLeft}
+              className="reset-icon-reject"
+              onClick={resetFilters}
+            />
+            <span className="reset-text-reject" onClick={resetFilters}>{t('admin_messages.search_clear')}</span>
+          </div>
+        )}
             </div>
             <hr />
             <div className="legend-container">
@@ -185,12 +181,32 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                     <span>{t('admin.comment')}</span>
                 </div>
                 <div className="legend-item">
-                    <img src={'/icons/approve-invoice.svg'} alt="approved" className="legend-icon" />
+                    <img src={'/icons/approve-invoice.svg'} alt="Approve" className="legend-icon" />
                     <span>{t('admin.approve')}</span>
                 </div>
                 <div className="legend-item">
-                    <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
+                    <img src={'/icons/delete-button.svg'} alt="Delete" className="legend-icon" />
                     <span>{t('admin.delete')}</span>
+                </div>
+                <div className="legend-item">
+                    <img src={'/icons/number.svg'} alt="Number" className="legend-icon" />
+                    <span>{t('admin.number')}</span>
+                </div>
+                <div className="legend-item">
+                    <img src={'/icons/email.svg'} alt="Email" className="legend-icon" />
+                    <span>{t('admin.user_email')}</span>
+                </div>
+                <div className="legend-item">
+                    <img src={'/icons/date.svg'} alt="Creation Date" className="legend-icon" />
+                    <span>{t('admin.creation_date')}</span>
+                </div>
+                <div className="legend-item">
+                    <img src={'/icons/ads.svg'} alt="Ads" className="legend-icon" />
+                    <span>{t('admin.announcement_title')}</span>
+                </div>
+                <div className="legend-item">
+                    <img src={'/icons/actions.svg'} alt="Actions" className="legend-icon" />
+                    <span>{t('admin.actions')}</span>
                 </div>
             </div>
             <hr />
@@ -199,36 +215,45 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                     <thead>
                         <tr>
                             <th className="number-cell" onClick={() => requestSort('adId')}>
-                                {t('admin.number')}
+                                <img src="/icons/number.svg" alt="Number" className="table-icon" />
+                                <span>{t('admin.number')}</span>
                                 {sortConfig.key === 'adId' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th className="th-email-reject" onClick={() => requestSort('email')}>
-                                {t('admin.user_email')}
+                            <th onClick={() => requestSort('email')} className="th-email-reject">
+                                <img src="/icons/email.svg" alt="Email" className="table-icon" />
+                                <span>{t('admin.user_email')}</span>
                                 {sortConfig.key === 'email' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th className="th-title-reject">{t('admin.announcement_title')}</th>
+                            <th className="th-title-reject">
+                                <img src="/icons/ads.svg" alt="Ads" className="table-icon" />
+                                <span>{t('admin.announcement_title')}</span>
+                            </th>
                             <th className="th-date-reject" onClick={() => requestSort('date')}>
-                                {t('admin.creation_date')}
+                                <img src="/icons/date.svg" alt="Creation Date" className="table-icon" />
+                                <span>{t('admin.creation_date')}</span>
                                 {sortConfig.key === 'date' ? (
                                     sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                                 ) : null}
                             </th>
-                            <th>{t('admin.actions')}</th>
+                            <th>
+                                <img src="/icons/actions.svg" alt="Actions" className="table-icon" />
+                                <span>{t('admin.actions')}</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortedAnnouncements.map((announcement, index) => (
                             <tr key={announcement.adId}>
                                 <td className="number-cell id-table-admin">{index + 1}</td>
-                                <td className='trimmed-email-reject'  onClick={()=>handleTextClick(announcement?.account?.email)}>
-                                    <Link to={`#`}>{trimString(announcement?.account?.email,12)}</Link>
+                                <td className='trimmed-email-reject' onClick={() => handleTextClick(announcement?.account?.email)}>
+                                    <Link to={`#`}>{trimString(announcement?.account?.email, 12)}</Link>
                                 </td>
                                 <td className='trimmed-tittle-reject'>
-                                    <Link to={`#`} onClick={() => handleAdClick(announcement)}>{trimString(announcement?.summary,10)}</Link>
+                                    <Link to={`#`} onClick={() => handleAdClick(announcement)}>{trimString(announcement?.summary, 10)}</Link>
                                 </td>
                                 <td>{announcement?.creationDate}</td>
                                 <td className="actions-admin">
@@ -240,13 +265,13 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                                     />
                                     <img
                                         src={'/icons/approve-invoice.svg'}
-                                        alt="approved"
+                                        alt="Approve"
                                         className="comment-icon"
                                         onClick={() => handleApprove(announcement.adId, announcement.summary)}
                                     />
                                     <img
                                         src={'/icons/delete-button.svg'}
-                                        alt="delete"
+                                        alt="Delete"
                                         className="comment-icon"
                                         onClick={() => handleDelete(announcement.adId)}
                                     />
@@ -279,14 +304,14 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
                     handleDelete={handleDelete}
                 />
             )}
-               {isTextModalOpen && (
-        <div className="text-modal-overlay-reject">
-          <div className="text-modal-content-reject-ads ">
-            <span className="close-button-reject" onClick={closeTextModal}>&times;</span>
-            <p>{modalContent}</p>
-          </div>
-        </div>
-      )}
+            {isTextModalOpen && (
+                <div className="text-modal-overlay-reject">
+                    <div className="text-modal-content-reject-ads">
+                        <span className="close-button-reject" onClick={closeTextModal}>&times;</span>
+                        <p>{modalContent}</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

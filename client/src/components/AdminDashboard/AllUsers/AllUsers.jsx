@@ -28,6 +28,7 @@ export const AllUsers = ({ setAllUsers }) => {
   const { deleteUserData } = useAdminContext()
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
+
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -96,25 +97,10 @@ export const AllUsers = ({ setAllUsers }) => {
     setIsModalOpen(false);
   };
 
-  // const handleReject = async (id) => {
-  //   try {
-  //     if (!comment) {
-  //       notify('enter-comment');
-  //       return;
-  //     }
-  //     setComment('');
-  //     const updatedUsers = await onAllUsers();
-  //     setUsers(updatedUsers.accounts);
-  //     setSearchResults(updatedUsers.accounts);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
   const handleDelete = async (email) => {
     try {
       setComment('');
-     await deleteUserData(email);
+      await deleteUserData(email);
       const updatedUsers = await onAllUsers();
       setUsers(updatedUsers.accounts);
       setSearchResults(updatedUsers.accounts);
@@ -186,22 +172,26 @@ export const AllUsers = ({ setAllUsers }) => {
   const handlePasswordReset = (email) => {
     onForgetPasswordSubmit({ email });
   };
+
   const trimString = (str, num) => {
     if (str.length <= num) return str;
     return str.slice(0, num) + '...';
   }
+
   const handleTextClick = (text) => {
     setModalContent(text);
     setIsTextModalOpen(true);
   };
+
   const closeTextModal = () => {
     setIsTextModalOpen(false);
     setModalContent('');
   }
+
   return (
     <div className="all-users-container">
       <h2>{t('admin.all_users')}</h2>
-      <div className="search-container">
+      <div className="search-container-all-users">
         <input
           type="text"
           placeholder={t('admin.search') + '...'}
@@ -217,66 +207,103 @@ export const AllUsers = ({ setAllUsers }) => {
         </select>
         <button onClick={handleSearch}>{t('admin.search')}</button>
         {searchTerm && (
-          <FontAwesomeIcon
-            icon={faArrowRotateLeft}
-            className="reset-icon"
-            onClick={resetFilters}
-          />
+          <div className="reset-icon-container">
+            <FontAwesomeIcon
+              icon={faArrowRotateLeft}
+              className="reset-icon-all-users"
+              onClick={resetFilters}
+            />
+            <span className="reset-text-all-users" onClick={resetFilters}>{t('admin_messages.search_clear')}</span>
+          </div>
         )}
       </div>
       <hr />
       <div className="legend-container">
-        <div className="legend-item">
-          <img src={'/icons/comment.svg'} alt="Comment" className="legend-icon" />
-          <span>{t('admin.comment')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/gears-icon.svg'} alt="approved" className="legend-icon" />
-          <span>{t('admin.settings')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/denied.svg'} alt="reject" className="legend-icon" />
-          <span>{t('admin.ban')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
-          <span>{t('admin.delete')}</span>
-        </div>
-      </div>
+  <div className="legend-item">
+    <img src={'/icons/comment.svg'} alt="Comment" className="legend-icon" />
+    <span>{t('admin.comment')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/gears-icon.svg'} alt="approved" className="legend-icon" />
+    <span>{t('admin.settings')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/denied.svg'} alt="reject" className="legend-icon" />
+    <span>{t('admin.ban')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
+    <span>{t('admin.delete')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/number.svg'} alt="Number" className="legend-icon" />
+    <span>{t('admin.number')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/email.svg'} alt="Email" className="legend-icon" />
+    <span>{t('admin.user_email')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/registration.svg'} alt="Registration Date" className="legend-icon" />
+    <span>{t('admin.user_registration_date')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/status.svg'} alt="Status" className="legend-icon" />
+    <span>{t('admin.status')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/ads.svg'} alt="Ads" className="legend-icon" />
+    <span>{t('profile.ads-statistic')}</span>
+  </div>
+  <div className="legend-item">
+    <img src={'/icons/actions.svg'} alt="Actions" className="legend-icon" />
+    <span>{t('admin.actions')}</span>
+  </div>
+</div>
+
       <hr />
       <div className="all-users-table-container">
         <table className="all-users-table">
           <thead>
             <tr>
               <th className="number-cell" onClick={toggleRowOrder}>
-                {t('admin.number')}
+                <img src="/icons/number.svg" alt="Number" className="table-icon" />
+                <span>{t('admin.number')}</span>
                 {rowOrder === 'ascending' ? ' ↑' : ' ↓'}
               </th>
-              <th className='th-email-all-users' Click={() => requestSort('email')}>
-                {t('admin.user_email')}
+
+              <th className="th-email-all-users" onClick={() => requestSort('email')}>
+                <span>{t('admin.user_email')}</span>
+                <img src="/icons/email.svg" alt="Email" className="table-icon" />
                 {sortConfig.key === 'email' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th onClick={() => requestSort('date')} className='registration-date-admin'>
-                {t('admin.user_registration_date')}
+              <th onClick={() => requestSort('date')} className="registration-date-admin-all-users">
+                <span>{t('admin.user_registration_date')}</span>
+                <img src="/icons/registration.svg" alt="Registration" className="table-icon" />
                 {sortConfig.key === 'date' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th onClick={() => requestSort('status')}>
-                {t('admin.status')}
+              <th onClick={() => requestSort('status')} className='status-all-users'> 
+                <span>{t('admin.status')}</span>
+                <img src="/icons/status.svg" alt="Status" className="table-icon" />
                 {sortConfig.key === 'status' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th onClick={() => requestSort('ads')} className='ads-cell'>
-                {t('profile.ads-statistic')}
+              <th onClick={() => requestSort('ads')} className="ads-cell-all-users">
+                <span>{t('profile.ads-statistic')}</span>
+                <img src="/icons/ads.svg" alt="Ads" className="table-icon" />
                 {sortConfig.key === 'ads' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th>{t('admin.actions')}</th>
+              <th>
+                <span>{t('admin.actions')}</span>
+                <img src="/icons/actions.svg" alt="Actions" className="table-icon" />
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -284,7 +311,7 @@ export const AllUsers = ({ setAllUsers }) => {
               <tr key={user.email}>
                 <td className="number-cell">{index + 1}</td>
                 <td className='trimmed-email-all-users' onClick={() => handleTextClick(user?.email)}>
-                  <Link to={`#`}>{trimString(user?.email,12)}</Link>
+                  <Link to={`#`}>{trimString(user?.email, 12)}</Link>
                 </td>
                 <td>{formatDate(user?.createdAt)}</td>
                 <td>{getStatus(user?.enabled)}</td>
@@ -341,7 +368,7 @@ export const AllUsers = ({ setAllUsers }) => {
         handleRoleChange={handleRoleChange}
         handlePasswordReset={handlePasswordReset}
       />
-   {isTextModalOpen && (
+      {isTextModalOpen && (
         <div className="text-modal-overlay-all-users">
           <div className="text-modal-content-all-users-ads ">
             <span className="close-button-all-users" onClick={closeTextModal}>&times;</span>

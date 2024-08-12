@@ -360,7 +360,9 @@
    "rejected": "Rejected",
    "username": "Username",
    "ads_subscription": "Subscriptions",
-   "search_clear": "Clear search"
+   "search_clear": "Clear search",
+   "unfinished_users_profile": "Unfinished Users Profile"
+
   },
   "community": {
     "community": "Community",
