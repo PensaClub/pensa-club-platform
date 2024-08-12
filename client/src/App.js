@@ -73,18 +73,18 @@ function App() {
                       element={<ResetPasswordPage />}
                     />
                     <Route element={<AuthGuard />}>
-                    <Route path="/ad/details/:adId" element={<AdDetails />} />
+                      <Route path="/ad/details/:adId" element={<AdDetails />} />
                       <Route path="/ad/edit/:adId" element={<EditAd />} />
                       <Route path="/ad" element={<AdPage />} />
                       <Route path="/ad/create" element={<CreateAd />} />
                       <Route path="/logout" element={<Logout />} />
                       <Route path="/profile/*" element={<Profile />} />
+                      <Route path="/craigslist" element={<CommunityPage />} />
                     </Route>
 
                     <Route element={<PublicGuard />}>
                       <Route path="/sign-up" element={<LoginRegister />} />
                     </Route>
-                    <Route path="/craigslist" element={<CommunityPage />} />
                     <Route path="/ads" element={<AdsCard />} />
                     <Route path="/filter" element={<FiltersMap />} />
                     <Route path="/map" element={<MapPage />} />

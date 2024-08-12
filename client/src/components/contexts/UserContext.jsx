@@ -230,12 +230,19 @@ export const UserProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await userService.forgetPassword(data);
-      setIsLoading(false);
       notify('email-send');
       return response;
     } catch (error) {
-      notify('error', error);
+      if(error?.message === "There is no user registered with that email address."){
+        notify('password-change-email-invalid');
+        throw error;
+      }
+      else 
+        notify('error', error);
       showErrorAndSetTimeouts(error.message);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 

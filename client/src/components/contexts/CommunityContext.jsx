@@ -257,7 +257,14 @@ export const CommunityProvider = ({ children }) => {
             notify("email-send")    
              return response;
         } catch (e) {
-            notify('error', e);
+            if(e?.message ==="Subscriber already exists.") 
+                notify('subscriber-exists');
+            else if (e?.message === "Username must be between 3 and 16 characters long." )
+                notify('subscribe-username-length');
+            else if (e?.message === "Username must start with a letter, can only contain letters, numbers, and underscores" )
+                notify('subscribe-username-content');
+            else 
+                notify('error', e);
             showErrorAndSetTimeouts(e.message);
             // throw e;
         } finally {
