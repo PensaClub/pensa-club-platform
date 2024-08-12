@@ -120,6 +120,7 @@
     max-height: 0;
     opacity: 0;
   }
+
   to {
     max-height: 100px;
     opacity: 1;
@@ -150,12 +151,42 @@
 .pagination-info {
   margin: 0 10px;
 }
+
+@media (max-width: 550px) {
+  .search-container-message {
+    flex-direction: column;
+    gap: 0.6em;
+  }
+
+  .reset-text {
+    margin-top: 0.6em;
+  }
+
+  .message-row {
+    flex-direction: column;
+    gap: 0.8em;
+    align-items: flex-start;
+
+  }
+
+  .message-author {
+    margin-left: initial;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    gap: 1em;
+  }
+
+}
+
 @media (min-width: 768px) and (max-width: 1200px) {
   .search-actions-messages {
     flex-direction: row;
 
+  }
 }
-}
+
 @media (max-width: 650px) {
   .search-button-message {
     padding: 5px 10px;
@@ -179,9 +210,10 @@
     align-items: flex-start;
   }
 }
+
 @media (min-width: 1200px) {
   .search-actions-messages {
     flex-direction: row;
 
-}
+  }
 }
