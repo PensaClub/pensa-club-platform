@@ -66,8 +66,15 @@ export const ReSendEmail = () => {
                     {email && <p><span>{t("form.email-label")}: {email}</span></p>}
                     <p>{t('form.resend-email-simple-text')}</p>
                     <button className='forget-resend-btn' type="submit" onClick={handleResendEmail} disabled={isLocked}>
-                    {t('form.resend-button-text')} {isLocked && `(${t('form.wait')} ${Math.floor(timer / 60)}:${timer % 60 < 10 ? '0' : ''}${timer % 60} ${t('form.minutes')})`}
+                        {t('form.resend-button-text')}
                     </button>
+                    {isLocked && attempts < 3  && (
+                            <p className='wait-message'>
+                              ({t('form.wait')} {Math.floor(timer / 60)}:
+                              {timer % 60 < 10 ? '0' : ''}
+                              {timer % 60} {t('form.minutes')})
+                            </p>
+                    )}
                     {isLocked && attempts >= 3 && <p>{t('form.too-many-attempts')} {Math.floor(timer / 60)} {t('form.minutes')} {t('form.and')} {timer % 60} {t('form.seconds')}.</p>}
                     
                     <Link to="/sign-up">{t('form.back-to-login')}</Link>

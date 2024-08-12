@@ -66,6 +66,7 @@ export const UserProvider = ({ children }) => {
       setProfileData(response.user);
       setIsAdmin(userRole === 'admin');
       notify('success-login');
+      
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
         setAddressId({ ...data });
@@ -73,14 +74,17 @@ export const UserProvider = ({ children }) => {
       } else {
         navigate('/');
       }
+
     } catch (error) {
       if (error.message == "Email or password are invalid.") {
         notify('error-authorize')
+      return error.message;
+
       } else {
         notify('error', error);
       }
     
-      showErrorAndSetTimeouts(error.message);
+      // showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -226,12 +230,19 @@ export const UserProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await userService.forgetPassword(data);
-      setIsLoading(false);
       notify('email-send');
       return response;
     } catch (error) {
-      notify('error', error);
+      if(error?.message === "There is no user registered with that email address."){
+        notify('password-change-email-invalid');
+        throw error;
+      }
+      else 
+        notify('error', error);
       showErrorAndSetTimeouts(error.message);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 

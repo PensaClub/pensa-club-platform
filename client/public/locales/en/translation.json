@@ -90,10 +90,10 @@
     "forget-password": "Forget password",
     "reset-forget-password": "Reset your password by providing your account email below.",
     "check-email": "Check Your Email",
-    "reset-password-link": "You will receive a link at the email address you provided, which will allow you to reset your account password.",
+    "reset-password-link": "You will receive a link at the email address you provided, which will allow you to reset your account password and will be valid for the next 15 minutes.",
     "resend-email-simple-text": "If you don't see the email in your inbox, please check your spam, junk, social, or other folders where it might have ended up.",
     "resend-button-text": "Resend Email",
-    "wait": "wait",
+    "wait": "Please wait",
     "minutes": "minutes",
     "seconds": "seconds",
     "and": "and",
@@ -258,7 +258,8 @@
     "messages": "Messages",
     "in_box": "Inbox",
     "rejected_ads": "was not approved",
-    "your_ad": "Your ad"
+    "your_ad": "Your ad",
+    "alert_message": "Your profile is incomplete. Please complete it to continue using all features of the platform."
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -359,7 +360,9 @@
    "rejected": "Rejected",
    "username": "Username",
    "ads_subscription": "Subscriptions",
-   "search_clear": "Clear search"
+   "search_clear": "Clear search",
+   "unfinished_users_profile": "Unfinished Users Profile"
+
   },
   "community": {
     "community": "Community",
@@ -471,6 +474,10 @@
     "password-change-same-passwords": "Old and new password are the same!",
     "password-change-old-invalid": "Old password is invalid!",
     "password-change-repeat-invalid": "Passwords do not match!",
+    "password-change-email-invalid": "There isn't a registered user with this email!",
+    "subscriber-exists": "This email is already subscribed!",
+    "subscribe-username-length": "Username must be between 3 and 16 characters long!",
+    "subscribe-username-content": "Username must start with a letter and can only contain letters, numbers, and underscores!" ,
     "error": "An error occurred. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",
@@ -482,7 +489,8 @@
     "success-delete-user": "Successfully delete user!",
     "success_delete_message": "Successfully delete message!",
     "error-authorize": "Error! Invalid email and/or wrong password!",
-    "success-comment": "Successfully add comment!"
+    "success-comment": "Successfully add comment!",
+    "success-delete-message": "Successfully delete message!"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",

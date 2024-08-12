@@ -35,7 +35,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
         comments: user.comments.map(comment => ({
           ...comment,
           date: formatDate(comment.date),
-        })).sort((a, b) => new Date(b.date) - new Date(a.date)) 
+        })).sort((a, b) => new Date(b.date) - new Date(a.date))
       }));
 
       setUsers(formattedUsers);
@@ -121,7 +121,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
         comments: user.comments.map(comment => ({
           ...comment,
           date: formatDate(comment.date),
-        })).sort((a, b) => new Date(b.date) - new Date(a.date)) 
+        })).sort((a, b) => new Date(b.date) - new Date(a.date))
       }));
       setUsers(formattedUsers);
       setSearchResults(formattedUsers);
@@ -141,7 +141,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
         comments: user.comments.map(comment => ({
           ...comment,
           date: formatDate(comment.date),
-        })).sort((a, b) => new Date(b.date) - new Date(a.date)) 
+        })).sort((a, b) => new Date(b.date) - new Date(a.date))
       }));
       setUsers(formattedUsers);
       setSearchResults(formattedUsers);
@@ -188,7 +188,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
   return (
     <div className="admin-suggestUsers-container">
       <h2>{t('admin.all_suggested_users')}</h2>
-      <div className="search-container">
+      <div className="search-container-suggestUsers">
         <input
           type="text"
           placeholder={t('admin.search') + '...'}
@@ -205,57 +205,92 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
         </select>
         <button onClick={handleSearch}>{t('admin.search')}</button>
         {searchTerm && (
-          <FontAwesomeIcon
-            icon={faArrowRotateLeft}
-            className="reset-icon"
-            onClick={resetFilters}
-          />
+          <div className="reset-icon-container">
+            <FontAwesomeIcon
+              icon={faArrowRotateLeft}
+              className="reset-icon-suggestUsers"
+              onClick={resetFilters}
+            />
+            <span className="reset-text-suggestUsers" onClick={resetFilters}>{t('admin_messages.search_clear')}</span>
+          </div>
         )}
       </div>
       <hr />
       <div className="legend-container">
-        <div className="legend-item">
-          <img src={'/icons/resolved.svg'} alt="Comment" className="legend-icon" />
-          <span>{t('admin.resolved')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
-          <span>{t('admin.delete')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/comment.svg'} alt="Comment" className="legend-icon" />
-          <span>{t('admin.comment')}</span>
-        </div>
-      </div>
+    <div className="legend-item">
+        <img src={'/icons/resolved.svg'} alt="Resolved" className="legend-icon" />
+        <span>{t('admin.resolved')}</span>
+    </div>
+    <div className="legend-item">
+        <img src={'/icons/delete-button.svg'} alt="Delete" className="legend-icon" />
+        <span>{t('admin.delete')}</span>
+    </div>
+    <div className="legend-item">
+        <img src={'/icons/comment.svg'} alt="Comment" className="legend-icon" />
+        <span>{t('admin.comment')}</span>
+    </div>
+    <div className="legend-item">
+        <img src={'/icons/suggestion.svg'} alt="Suggested By" className="legend-icon" />
+        <span>{t('admin.recommended_by')}</span>
+    </div>
+    <div className="legend-item">
+        <img src={'/icons/nominee.svg'} alt="Nominee" className="legend-icon" />
+        <span>{t('admin.recommended_person')}</span>
+    </div>
+    <div className="legend-item">
+        <img src={'/icons/phone.svg'} alt="Phone" className="legend-icon" />
+        <span>{t('admin.phone')}</span>
+    </div>
+    <div className="legend-item">
+        <img src={'/icons/messages.svg'} alt="Messages" className="legend-icon" />
+        <span>{t('admin.message')}</span>
+    </div>
+    <div className="legend-item">
+        <img src={'/icons/actions.svg'} alt="Actions" className="legend-icon" />
+        <span>{t('admin.actions')}</span>
+    </div>
+</div>
+
       <hr />
       <div className="suggestUsers-container-table-container">
         <table className="suggestUsers-container-table">
           <thead>
             <tr>
               <th className="number-cell" onClick={toggleRowOrder}>
-                {t('admin.number')}
+                <img src="/icons/number.svg" alt="Number" className="table-icon" />
+                <span>{t('admin.number')}</span>
                 {rowOrder === 'ascending' ? ' ↑' : ' ↓'}
               </th>
               <th onClick={() => requestSort('refferer_name')} className='recommended-by'>
-                {t('admin.recommended_by')}
+                <span>{t('admin.recommended_by')}</span>
+                <img src="/icons/suggestion.svg" alt="Suggested By" className="table-icon" />
                 {sortConfig.key === 'refferer_name' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
               <th onClick={() => requestSort('name')} className='recommended-name'>
-                {t('admin.recommended_person')}
+                <span>{t('admin.recommended_person')}</span>
+                <img src="/icons/nominee.svg" alt="Nominee" className="table-icon" />
                 {sortConfig.key === 'name' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
               <th onClick={() => requestSort('phone_number')} className='recommended-phone'>
-                {t('admin.phone')}
+                <span>{t('admin.phone')}</span>
+                <img src="/icons/phone.svg" alt="Phone" className="table-icon" />
                 {sortConfig.key === 'phone_number' ? (
                   sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
                 ) : null}
               </th>
-              <th className='message-suggest-all'>{t('admin.message')}</th>
-              <th>{t('admin.actions')}</th>
+              <th className='message-suggest-all'>
+                <span>{t('admin.message')}</span>
+                <img src="/icons/messages.svg" alt="Messages" className="table-icon" />
+              </th>
+              <th>
+                <span>{t('admin.actions')}</span>
+                <img src="/icons/actions.svg" alt="Actions" className="table-icon" />
+              </th>
+
             </tr>
           </thead>
           <tbody>

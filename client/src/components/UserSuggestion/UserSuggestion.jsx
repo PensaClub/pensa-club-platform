@@ -52,6 +52,7 @@ export const UserSuggestion = () => {
         break;
       case 'message':
         if (value.length < 5 && value.length > 100) error = t('user-suggestion.message-lenght');
+        break;
       default:
         break;
     }

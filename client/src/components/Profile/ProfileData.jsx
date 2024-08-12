@@ -176,6 +176,7 @@ export const ProfileData = () => {
     setSelectedMonth('');
     setSelectedYear('');
     setIsFormChanged(false); 
+    navigate('/profile');
   };
 
   return (

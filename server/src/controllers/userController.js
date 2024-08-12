@@ -189,7 +189,7 @@ userController.post('/request-reset-password', async (req, res, next) => {
   try {
     const user = await user_account.findOne({ where: { email } });
     if (!user) {
-      return res.status(404).json({ message: 'There is no user registered with that email address' });
+      return res.status(404).json({ message: 'There is no user registered with that email address.' });
     }
 
     const resetToken = uuid.v4();

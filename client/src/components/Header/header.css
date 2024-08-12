@@ -410,7 +410,7 @@ header > a:nth-child(1) {
     top: 100%;
     right: 0;
     left: auto;
-    min-width: 15rem;
+    min-width: 17rem;
     padding: 0.5rem 0;
     margin: var(--s-space) 0 0;
     font-size: 1rem;
