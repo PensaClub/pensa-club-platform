@@ -341,7 +341,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
         comment={comment}
         setComment={setComment}
       >
-        <h2>Comment on User</h2>
+        <h2>{t('admin.user_comment')}</h2>
       </SuggestUserComments>
       {isTextModalOpen && (
         <div className="text-modal-overlay">

@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import './commentModal.css';
 
 export const CommentModal = ({ isOpen, onClose, onSubmit, children }) => {
+  const {t} = useTranslation();
   if (!isOpen) return null;
 
   return (
@@ -11,7 +13,7 @@ export const CommentModal = ({ isOpen, onClose, onSubmit, children }) => {
         </button>
         {children}
         <button className="modal-submit-admin" onClick={onSubmit}>
-          Submit
+          {t('admin.submit')}
         </button>
       </div>
     </div>

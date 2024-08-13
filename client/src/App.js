@@ -37,6 +37,8 @@ import { EditAd } from './components/Community/AdPage/EditAd/EditAd.jsx';
 import { AdminProvider } from './components/contexts/AdminContext.jsx';
 import { CookieConsent } from './components/CookieConsent/CookieConsent.jsx';
 import { useCookies } from 'react-cookie';
+import { PrivacyPolicy } from './components/PrivacyPolicy/PrivacyPolicy.jsx';
+
 
 function App() {
   const location = useLocation();
@@ -67,7 +69,6 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/server-error" element={<ServerError />} />
-                    <Route path="/" element={<Home />} />
                     <Route path="/server-error" element={<ServerError />} />
                     <Route path="/forget-password" element={<ForgetPassword />} />
                     <Route path="/resend-email" element={<ReSendEmail />} />
@@ -88,6 +89,8 @@ function App() {
                     <Route element={<PublicGuard />}>
                       <Route path="/sign-up" element={<LoginRegister />} />
                     </Route>
+                    <Route path="/craigslist" element={<CommunityPage />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/ads" element={<AdsCard />} />
                     <Route path="/filter" element={<FiltersMap />} />
                     <Route path="/map" element={<MapPage />} />

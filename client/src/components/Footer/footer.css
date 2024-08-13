@@ -108,6 +108,17 @@ footer {
   font-size: var(--xs-font-size);
   padding: var(--s-space) 0;
   color: var(--text-white);
+  text-align: center;
+}
+.footer-privacy a {
+  font-size: var(--xs-font-size);
+  padding: var(--s-space) 0;
+  color: var(--text-white);
+}
+.footer-privacy a {
+  font-size: var(--xs-font-size);
+  padding: var(--s-space) 0;
+  color: var(--text-white);
 }
 @media only screen and (max-width: 1200px) {
  .hide-on-mobile {

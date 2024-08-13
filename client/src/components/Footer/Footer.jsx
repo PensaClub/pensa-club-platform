@@ -20,7 +20,9 @@ export const Footer = ({ additionalClasses }) => {
                 </div>
                 <div className="footer-links">
                     <h3>{t('footer.partners')}</h3>
-                    <p>{t('footer.softuni')}</p>
+                    <p><Link to={"https://buditel.softuni.bg/"} target="_blank">{t('footer.softuni_buditel')}</Link></p>
+                    <p><Link to={"https://costeffective.software/"} target="_blank">Cost-Effective Solutions</Link></p>
+                    <p><Link to={"https://softuni.bg/"} target="_blank">{t('footer.softuni')}</Link></p>
                 </div>
                 <div className="footer-info">
                     <div className="second-info">
@@ -30,15 +32,12 @@ export const Footer = ({ additionalClasses }) => {
                     <div className="info-desc">
                         <p>{t('footer.country-city')}</p>
 
-                        <p>{t('footer.street')}</p>
-
-                        <p>{t('footer.phone')}</p>
                         <p>{t('footer.email')}</p>
                     </div>
                 </div>
             </section>
             <section className='footer-privacy'>
-                <p>{t('footer.privacy')}</p>
+                <p><Link to="/privacy-policy">{t('footer.privacy')}</Link></p>
                 <p>&copy; {t('footer.copyright')}</p>
             </section>
         </footer>
