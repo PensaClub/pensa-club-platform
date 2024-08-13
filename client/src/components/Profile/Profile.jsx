@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, NavLink } from 'react-router-dom';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import { ProfileData } from './ProfileData';
 import ProfileForm from './ProfileForm';
@@ -112,101 +112,103 @@ export const Profile = () => {
 
       <section className={`account-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`}>
         <h3>{t('profile.account')}</h3>
-        <Link to='data' onClick={toggleMenu}>
+        <NavLink to='data' onClick={toggleMenu}>
           <FontAwesomeIcon icon={faUser} className='icon' />
           {t('profile.personal_data')}
-        </Link>
-        <Link to='address' onClick={toggleMenu}>
+        </NavLink>
+        <NavLink to='address' onClick={toggleMenu} className={({ isActive }) =>
+                `${isActive ? "active" : ""}`
+              }>
           <FontAwesomeIcon icon={faLocationDot} className='icon' />
           {t('profile.address')}
-        </Link>
-        <Link to='password' onClick={toggleMenu}>
+        </NavLink>
+        <NavLink to='password' onClick={toggleMenu}>
           <FontAwesomeIcon icon={faLock} className='icon' />
           {t('profile.password')}
-        </Link>
-        <Link to='announced' onClick={toggleMenu}>
+        </NavLink>
+        <NavLink to='announced' onClick={toggleMenu}>
           <FontAwesomeIcon icon={faScroll} className='icon' />
           {t('profile.announced')}
-        </Link>
-        <Link to='skills' onClick={toggleMenu}>
+        </NavLink>
+        <NavLink to='skills' onClick={toggleMenu}>
           <FontAwesomeIcon icon={faUniversalAccess} className='icon' />
           {t('map.skills')}
-        </Link>
-        <Link to='workOptions' onClick={toggleMenu}>
+        </NavLink>
+        <NavLink to='workOptions' onClick={toggleMenu}>
           <FontAwesomeIcon icon={faBriefcase} className='icon' />
           {t('map.job')}
-        </Link>
-        <Link to='interestOptions' onClick={toggleMenu}>
+        </NavLink>
+        <NavLink to='interestOptions' onClick={toggleMenu}>
           <FontAwesomeIcon icon={faUsersGear} className='icon' />
           {t('map.interests')}
-        </Link>
+        </NavLink>
         
-        <Link to='messages' onClick={toggleMenu}>
+        <NavLink to='messages' onClick={toggleMenu}>
           <FontAwesomeIcon icon={faMountainSun} className='icon' />
           {t('profile.messages')}
-        </Link>
+        </NavLink>
         {isAdmin && (
           <div className="admin-dashboard">
             <h3>{t('profile.admin_dashboard')}</h3>
-            <Link to='ads-admin' onClick={toggleAdsSubMenu}>
+            <NavLink to='ads-admin' onClick={toggleAdsSubMenu}>
               <FontAwesomeIcon icon={faBookOpenReader} className='icon' />
               {t('profile.ads-statistic')}
-            </Link>
+            </NavLink>
             <div className={`ads-submenu ${showAdsSubMenu ? 'show' : ''}`}>
-              <Link to='pending-announcements' onClick={toggleMenu}>
+              <NavLink to='pending-announcements' onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faScroll} className='icon' />
                 {t('profile.pending_announcements')} {adsCount > 0 && (<>- {adsCount} {adsCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
-              </Link>
-              <Link to='approved-announcements' onClick={toggleMenu}>
+              </NavLink>
+              <NavLink to='approved-announcements' onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faCircleCheck} className='icon' />
                 {t('profile.approved_announcements')} {approvedCount > 0 && (<>- {approvedCount} {approvedCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
-              </Link>
-              <Link to='reject-announcements' onClick={toggleMenu}>
+              </NavLink>
+              <NavLink to='reject-announcements' onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faBan} className='icon' />
                 {t('profile.reject_announcements')} {rejectCount > 0 && (<>- {rejectCount} {rejectCount === 1 ? t('profile.ads-one') : t('profile.ads')}</>)}
-              </Link>
+              </NavLink>
             </div>
-            <Link to='users-statistic' onClick={toggleUsersSubMenu}>
+            <NavLink to='users-statistic' onClick={toggleUsersSubMenu}>
               <FontAwesomeIcon icon={faChartPie} className='icon' />
               {t('admin.users')}
-            </Link>
+            </NavLink>
             <div className={`ads-submenu ${showUsersSubMenu ? 'show' : ''}`}>
-              <Link to='users-admin' onClick={toggleMenu}>
+              <NavLink to='users-admin' onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faUsers} className='icon' />
                 {t('profile.all_users')} {allUsers >= 1 && (<>- {allUsers}</>)}
-              </Link>
+              </NavLink>
             </div>
             <div className={`ads-submenu ${showUsersSubMenu ? 'show' : ''}`}>
-              <Link to='users-unfinished' onClick={toggleMenu}>
+              <NavLink to='users-unfinished' onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faAddressCard} className='icon' />
                 {t('admin.unfinished_users')} {unfinishedUsers >= 1 && (<>- {unfinishedUsers}</>)}
-              </Link>
+              </NavLink>
             </div>
-            <Link to='admin-suggest-users' onClick={toggleSuggestSubMenu}>
+            <NavLink to='admin-suggest-users' onClick={toggleSuggestSubMenu}>
               <FontAwesomeIcon icon={faPeopleArrows} className='icon' />
               {t('admin.admin-suggest-users')} {allSuggestedUsers >= 1 && (<>- {allSuggestedUsers}</>)}
-            </Link>
+            </NavLink>
             <div className={`ads-submenu ${showSuggestSubMenu ? 'show' : ''}`}>
-              <Link to='suggest-resolved-users' onClick={toggleMenu}>
+              <NavLink to='suggest-resolved-users' onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faAddressCard} className='icon' />
                 {t('admin.suggest_resolved_users')} {resolvedUsers >= 1 && (<>- {resolvedUsers}</>)}
-              </Link>
+              </NavLink>
             </div>
-            <Link to='subscription-admin'>
+            <NavLink to='subscription-admin'>
               <FontAwesomeIcon icon={faEnvelope} className='icon' />
               {t('admin.ads_subscription')} {allSubscriptionEmails >= 1 && (<>- {allSubscriptionEmails}</>)}
-            </Link>
+            </NavLink>
           </div>
         )}
       </section>
       <div className='main-profile'>
         {isFinish === true && !isAdminPanel && (
           <section className='profile-data'>
-            <Link to='/logout' onClick={handleLogout}>
+            <NavLink to='/logout' onClick={handleLogout}>
               <button type='button' className='top-right-button'>
                 {t('profile.logout')}
               </button>
-            </Link>
+            </NavLink>
             <div className='avatar'>
               <img src={profileData?.details?.imageURL || '/images/sign-up/avatar.jpg'} alt='User avatar' />
             </div>

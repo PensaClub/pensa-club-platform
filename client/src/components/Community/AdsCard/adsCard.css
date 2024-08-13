@@ -64,7 +64,7 @@
     gap: 2em;
     color: var(--text-white);
     padding: 0 1em;
-
+    cursor: pointer;
 }
 
 .ads-info h3 {

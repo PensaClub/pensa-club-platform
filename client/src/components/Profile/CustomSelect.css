@@ -104,11 +104,10 @@
     flex-grow: 1; 
 }
 
-
-
 svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
     color: rgb(226, 96, 32);
 }
+
 .checkbox-item.checked {
     background-color: rgb(239, 185, 158); 
 }

@@ -34,6 +34,7 @@
 
 .where-modal-content h2 {
     margin-top: 0;
+    font-size: calc(var(--m-font-size) + 5px);
 }
 
 .where-select-container {

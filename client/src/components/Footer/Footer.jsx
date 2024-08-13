@@ -37,7 +37,7 @@ export const Footer = ({ additionalClasses }) => {
                 </div>
             </section>
             <section className='footer-privacy'>
-                <p>{t('footer.privacy')}</p>
+                <p><Link to="/privacy-policy">{t('footer.privacy')}</Link></p>
                 <p>&copy; {t('footer.copyright')}</p>
             </section>
         </footer>
