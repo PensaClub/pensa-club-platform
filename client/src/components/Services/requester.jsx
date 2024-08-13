@@ -20,9 +20,9 @@ const requester = async (method, url, data) => {
   const serializedAuth = localStorage.getItem('auth');
   if (serializedAuth) {
     const auth = JSON.parse(serializedAuth);
-
     if (auth.token) {
       const accessToken = await refreshToken(auth);
+      if (!accessToken) return window.location.replace('/sign-up');
       options.headers = {
         ...options.headers,
         Authorization: `Bearer ${accessToken}`,
@@ -35,6 +35,7 @@ const requester = async (method, url, data) => {
   const result = await response.json();
 
   if (!response.ok) {
+    if (response.status === 401) return window.location.replace('/sign-up');
     throw result;
   }
 
