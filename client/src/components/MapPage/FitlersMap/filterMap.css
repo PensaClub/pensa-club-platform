@@ -91,9 +91,9 @@
 
 .options-container {
   position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 11%);
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   box-shadow: 0 0.1em 0.2em rgba(0, 0, 0, 0.1);
