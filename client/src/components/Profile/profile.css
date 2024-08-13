@@ -80,6 +80,14 @@
   text-decoration: underline;
 }
 
+.account-menu a.active {
+  color: var(--green-cm-light);
+}
+
+.account-menu a.active svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
+  color: var(--green-cm-light);
+} 
+
 .account-menu .icon {
   padding-right: 1rem;
   width: 25px;
@@ -143,13 +151,14 @@
 }
 
 .password-input-container .toggle-password {
-  font-size: 1em;
+  font-size: 1.3em;
   position: absolute;
-  top: 50%;
-  right: 10px;
+  top: 41%;
+  right: 5px;
   transform: translateY(-50%);
   cursor: pointer;
   pointer-events: auto;
+
 }
 
 .admin-dashboard h3 {
@@ -618,6 +627,12 @@
   .profile-section .date {
     flex-direction: column;
   }
+  .password-input-container input{
+    font-size: 12px;
+  }
+  .input{
+		font-size: 12px;
+	  }
 }
 
 @media (min-width: 650px) {

@@ -133,10 +133,10 @@
 }
 
 .toggle-password {
-	font-size: 1.5em;
+	font-size: 1.3em;
 	position: absolute;
-	top: 40%;
-	right: 10px;
+	top: 41%;
+	right: 5px;
 	transform: translateY(-50%);
 	cursor: pointer;
 	pointer-events: auto;
@@ -290,4 +290,10 @@
 	.container{
 		height:760px
 	}
+	.password-input-container input{
+		font-size: 12px;
+	  }
+	  .input{
+		font-size: 12px;
+	  }
   }

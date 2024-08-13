@@ -1,11 +1,11 @@
 const userController = require('express').Router();
 
 const bcrypt = require('bcrypt');
-const { tokenCreator, tokenVerification } = require('../utils/jwt');
+const { tokenVerification, tokenGenerator } = require('../utils/jwt');
 const CustomError = require('../utils/customError');
 
 const { where } = require('sequelize');
-const { user_account, user_details, user_ads } = require('../sequelize/models/index');
+const { user_account, user_details, user_ads, refreshToken } = require('../sequelize/models/index');
 const uuid = require('uuid');
 
 const isAuth = require('../middlewares/isAuth');
@@ -18,8 +18,6 @@ const emailRegex =
 //Example - john.doe@example.com
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
-
-const secret = process.env.SECRET;
 
 userController.post('/register', async (req, res, next) => {
   let errors = {};
@@ -56,14 +54,17 @@ userController.post('/register', async (req, res, next) => {
     const userExist = await user_account.findOne({ where: { email } });
 
     if (userExist) {
-      return res.status(401).json({ message: 'User already exists with this email.' });
+      return res.status(409).json({ message: 'User already exists with this email.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await user_account.create({ email, password: hashedPassword });
 
-    const token = tokenCreator(user);
+    const { token } = tokenGenerator('access', user);
+    const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
+
+    await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
 
     const data = {
       email: user.email,
@@ -71,11 +72,11 @@ userController.post('/register', async (req, res, next) => {
       enabled: user.finished,
     };
 
-    res.cookie('token', token, {
+    res.cookie('refreshJwtToken', refreshJwtToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: expiryDate - Date.now(),
     });
     res.status(201).json({ message: 'User successfully created!', user: data, token });
   } catch (err) {
@@ -105,7 +106,7 @@ userController.post('/login', async (req, res, next) => {
         {
           model: user_details,
           as: 'details',
-          attributes: { exclude: ['user_accounts_id', 'id'] },
+          attributes: { exclude: ['user_accounts_id'] },
         },
         {
           model: user_ads,
@@ -133,13 +134,13 @@ userController.post('/login', async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(401).json({ message: 'Email or password are invalid.' });
+      return res.status(409).json({ message: 'Email or password are invalid.' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Email or password are invalid.' });
+      return res.status(409).json({ message: 'Email or password are invalid.' });
     }
 
     const data = {
@@ -158,14 +159,18 @@ userController.post('/login', async (req, res, next) => {
       data.details = details;
     }
 
-    const token = tokenCreator(user);
+    const { token } = tokenGenerator('access', user);
+    const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
 
-    res.cookie('token', token, {
+    await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
+
+    res.cookie('refreshJwtToken', refreshJwtToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: expiryDate - Date.now(),
     });
+
     res.status(200).json({ message: 'User successfully logged in!', user: data, token });
   } catch (err) {
     next(err);
@@ -175,9 +180,21 @@ userController.post('/login', async (req, res, next) => {
 userController.post('/logout', isAuth, async (req, res, next) => {
   try {
     if (req.user) {
-      res.status(200).json({ message: 'Logout successful.' });
-    } else {
-      throw new CustomError({ message: 'Invalid or missing token!', statusCode: 401 });
+      const refreshJwtToken = req.cookies.refreshJwtToken;
+      if (refreshJwtToken) {
+        try {
+          const decodedToken = tokenVerification('refresh', refreshJwtToken);
+          await refreshToken.destroy({ where: { token: decodedToken.refreshTokenId } });
+          res.clearCookie('refreshJwtToken', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+          });
+          res.status(200).json({ message: 'Logout successful.' });
+        } catch (err) {
+          next(err);
+        }
+      }
     }
   } catch (err) {
     next(err);
@@ -249,7 +266,7 @@ userController.post('/reset-password', async (req, res, next) => {
       if (oldPassword === newPassword) {
         return res.status(400).json({ message: 'Old and new password are the same.' });
       }
-      const decodedToken = tokenVerification(token, secret);
+      const decodedToken = tokenVerification('access', token);
       user = await user_account.findOne({ where: { email: decodedToken.email } });
 
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);

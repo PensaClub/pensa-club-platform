@@ -65,29 +65,12 @@ export const ProfileInterests = () => {
     }, [profileData, setAllUsers]);
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validateForm()) {
+  
             await onEditProfileDataSubmit(form);
     
             resetFields(setForm, initialFormState);
             navigate('/profile');
-        } else {
-
-            setTimeout(() => {
-                if (form && form.interestOptions && form.interestOptions.length > 0) {
-                  
-                    resetFields(setForm, initialFormState);
-                }
-            }, 2000);
-        }
-    };
-    
-    const validateForm = () => {
-        const errors = {};
-        if (form?.interestOptions?.length === 0) {
-            errors.interestOptions = t('profile.interests_options_error');
-        }
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
+  
     };
 
     const handleResetForm = () => {
@@ -104,7 +87,7 @@ export const ProfileInterests = () => {
                     onSelect={(selected) => setForm({ ...form, interestOptions: selected })}
                 />
             </label>
-            {errors.interestOptions && <div className="error">{errors.interestOptions}</div>}
+            {/* {errors.interestOptions && <div className="error">{errors.interestOptions}</div>} */}
             <div className="btn-inline">
                 <button type="submit" className="btn-general btn-green">{t('profile.save_btn')}</button>
                 <button type="reset" className="btn-general btn-red" onClick={handleResetForm}>{t('profile.close_btn')}</button>
