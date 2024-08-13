@@ -78,7 +78,7 @@
     "errors": {
       "required-field": "This field is required!",
       "invalid-email": "Email is invalid!",
-      "password-format": "Password must be at least 8 characters long, containing at least one small letter, one capital letter and a number!",
+      "password-format": "Password must be at least 8 characters long, containing latin latters (small and/or capital) and at least one number!",
       "passwords-not-match": "Passwords do not match!"
     },
     "new-password": "New password",
@@ -361,7 +361,10 @@
    "username": "Username",
    "ads_subscription": "Subscriptions",
    "search_clear": "Clear search",
-   "unfinished_users_profile": "Unfinished Users Profile"
+   "unfinished_users_profile": "Unfinished Users Profile",
+   "announcement_comment": "Comment on Announcement",
+   "submit":"Submit",
+   "user_comment": "Comment on user"
 
   },
   "community": {

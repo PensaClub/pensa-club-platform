@@ -80,6 +80,14 @@
   text-decoration: underline;
 }
 
+.account-menu a.active {
+  color: var(--green-cm-light);
+}
+
+.account-menu a.active svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
+  color: var(--green-cm-light);
+} 
+
 .account-menu .icon {
   padding-right: 1rem;
   width: 25px;
