@@ -56,7 +56,8 @@ export const CreateAd = () => {
     adTown: profileData.details?.settlement
       ? getAdTownValue(currentLanguage, profileData.details.settlement)
       : "",
-    street: `${profileData.details?.settlement}, ул. ${profileData.details?.street}, ${profileData.details?.streetNumber}`,
+      street: `${profileData.details?.settlement}, ул. ${profileData.details?.street}${profileData.details?.streetNumber ? ", " + profileData.details?.streetNumber : ""}`,
+
     useOtherCity: false,
 
     extraFields: {

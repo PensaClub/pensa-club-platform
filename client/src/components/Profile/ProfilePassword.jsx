@@ -49,6 +49,7 @@ export const ProfilePassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
     const trimmedForm = trimObjectStrings(form);
     setForm(trimmedForm);
 
@@ -62,12 +63,15 @@ export const ProfilePassword = () => {
         isValid = false;
       }
     });
-
     setErrors(newErrors);
-
     if (isValid) {
       await onPasswordReset({ ...trimmedForm, tokenType: 'jwt' });
       resetFields(setForm, initialFormState);
+      navigate('/profile');
+      }
+     }
+    catch(error) {
+      console.error("Error while changing password: " + error?.message)
      }
   };
 

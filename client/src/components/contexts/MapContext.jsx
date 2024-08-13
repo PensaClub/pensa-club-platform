@@ -4,6 +4,7 @@ import { Loader } from "../Loader/Loader";
 import { useAuthContext } from "./UserContext";
 import { mapServiceFactory } from "../Services/MapService";
 import './error.css';
+import { notify } from "../../utils/notify";
 
 export const MapContext = createContext()
 
@@ -33,6 +34,7 @@ export const MapProvider = ({ children }) => {
             setIsLoading(false);
             return response;
         } catch (e) {
+            notify('error', e)
             showErrorAndSetTimeouts(e.message)
         }
     }

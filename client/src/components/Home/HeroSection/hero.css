@@ -162,6 +162,15 @@
     font-size: 2.4rem;
   }
 }
+@media (min-width: 767px) and (max-width: 1200px) {
+  .left-side p{
+    padding-left: 70px;
+    max-width: 60ch
+  }
+  .hero-section h1 {
+  padding-left: 75px;
+  }
+}
 
 @media (max-width: 1400px) {
   .parent-hero {

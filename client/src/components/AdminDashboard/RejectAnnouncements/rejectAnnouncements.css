@@ -113,14 +113,14 @@
     border: 2px solid #f1f1f1;
     border-radius: var(--radius-input);
   }
-  .search-container {
+  .search-container-reject {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.search-container input[type="text"] {
+.search-container-reject input[type="text"] {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -128,14 +128,14 @@
     margin-right: 10px;
 }
 
-.search-container select {
+.search-container-reject select {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     margin-right: 10px;
 }
 
-.search-container button {
+.search-container-reject button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -145,7 +145,7 @@
     margin-right: 10px;
 }
 
-.search-container .reset-icon {
+.search-container-reject .reset-icon-reject {
     font-size: 1.5rem;
     color: #007bff;
     cursor: pointer;
@@ -245,6 +245,40 @@
     transform: translateY(0);
   }
 }
+.reset-icon-reject{
+  display: none;
+}
+@media (min-width: 768px) and (max-width: 1200px) {
+  .reject-announcements-table th img.table-icon {
+      display: inline-block;
+      width: 25px;
+
+  }
+  .reject-announcements-table th span {
+      display: none;
+  }
+  /* .approved-announcements-table th{
+    width: 100px;
+  } */
+  .reset-text-reject {
+    display: none;
+  }
+  .search-container-reject .reset-icon-reject {
+    font-size: 1.5rem;
+    color: var(--green) !important;
+    cursor: pointer;
+    display: inline-block;
+  }
+}
+
+@media (max-width: 767px), (min-width: 1201px) {
+  .reject-announcements-table th img.table-icon {
+      display: none;
+  }
+  .reject-announcements-table th span {
+      display: inline;
+  }
+}
   @media (max-width: 767px) {
     .reject-announcements-container h2 {
       font-size: var(--s-font-size);
@@ -298,6 +332,31 @@
       justify-content: space-between;
       width: 100%;
     }
+    .search-container-reject {
+      flex-direction: column;
+      align-items: center;
+    }
+    .reset-text-reject {
+      display: block;
+      margin-left: 0;
+      background-color: var(--yellow);
+      text-align: center;
+      border-radius: var(--radius-input);
+      padding: 0.5em;
+    }
+    .search-container-reject input[type="text"],
+    .search-container-reject select,
+    .search-container-reject button {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+    
+    .search-container-reject button,
+    .search-container-reject .reset-icon-reject {
+      padding: 10px;
+    }
+        
   }
   @media (min-width: 900px) and (max-width: 1100px) {
     .actions-admin {
@@ -399,28 +458,37 @@
       width: 60px;
       height: 60px;
     }
+    .reset-text-reject {
+      display: none;
+    }
+    .search-container-reject .reset-icon-reject {
+      font-size: 1.5rem;
+      color: var(--green) !important;
+      cursor: pointer;
+      display: inline-block;
+    }
   }
   
 @media (max-width: 767px) {
-    .search-container {
+    .search-container-reject {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .search-container input[type="text"], 
-    .search-container select, 
-    .search-container button {
+    .search-container-reject input[type="text"], 
+    .search-container-reject select, 
+    .search-container-reject button {
         width: 100%;
         margin-right: 0;
         margin-bottom: 10px;
     }
 
-    .search-container button, 
-    .search-container .reset-icon {
+    .search-container-reject button, 
+    .search-container-reject .reset-icon-reject {
         padding: 10px;
     }
 
-    .search-container .reset-icon {
+    .search-container-reject .reset-icon-reject {
         align-self: flex-end;
         font-size: 1.2rem;
     }

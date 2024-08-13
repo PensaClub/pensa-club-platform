@@ -254,8 +254,7 @@ export const Header = ({ additionalClasses }) => {
 
       <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>
         <p>
-          Вашият профил е непълен. Моля, завършете го, за да продължите да
-          използвате всички възможности на платформата.
+        {t("profile.alert_message")}
         </p>
       </AlertModal>
     </section>

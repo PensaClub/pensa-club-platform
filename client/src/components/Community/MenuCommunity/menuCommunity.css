@@ -1,39 +1,70 @@
-.menu-community{
-   position: sticky;
-    display: flex ;
+.menu-community {
+    position: sticky;
+    display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    background-color: var( --green-cm-light);
+    background-color: var(--green-cm-light);
     padding: 1em;
     bottom: 0;
+    z-index: 1010;
+
 }
-.commun-menu-icons{
+
+.commun-menu-icons {
     font-size: var(--s-font-size);
-    color: var(--green-cm)!important;
+    color: var(--green-cm) !important;
     transition: color 0.3s ease;
     cursor: pointer;
 }
+
 .commun-menu-icons.active {
-    color: white!important;
+    color: white !important;
 }
+
+.warning-icon-image-community {
+    position: absolute;
+    background-color: white;
+    color: var(--red) !important;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: var(--m-font-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    top: -2px;
+    transform: translateY(-50%);
+    right: 32px;
+    z-index: 1;
+    animation: bounce 4s infinite;
+}
+
 @media (min-width: 768px) and (max-width: 1199px) {
-    .after-header{
+    .after-header {
         display: none;
     }
-    .menu-community{
+
+    .menu-community {
         position: fixed;
         top: 0;
-        bottom:0;
+        bottom: 0;
         left: 0;
-        flex-direction:column-reverse;
+        flex-direction: column-reverse;
         width: 7%;
         z-index: 1005;
     }
+
+    .warning-icon-image-community {
+        top: 2px;
+        right: -5px;
+    }
 }
+
 @media (min-width: 1200px) {
-    .menu-community{
+    .menu-community {
         display: none;
     }
-    
+
 }
