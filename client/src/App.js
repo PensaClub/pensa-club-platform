@@ -39,7 +39,6 @@ import { CookieConsent } from './components/CookieConsent/CookieConsent.jsx';
 import { useCookies } from 'react-cookie';
 import { PrivacyPolicy } from './components/PrivacyPolicy/PrivacyPolicy.jsx';
 
-
 function App() {
   const location = useLocation();
   const isCommunityPage =
