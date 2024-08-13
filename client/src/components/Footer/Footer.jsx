@@ -32,9 +32,6 @@ export const Footer = ({ additionalClasses }) => {
                     <div className="info-desc">
                         <p>{t('footer.country-city')}</p>
 
-                        <p>{t('footer.street')}</p>
-
-                        <p>{t('footer.phone')}</p>
                         <p>{t('footer.email')}</p>
                     </div>
                 </div>
