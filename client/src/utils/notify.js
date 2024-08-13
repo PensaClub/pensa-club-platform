@@ -165,6 +165,7 @@ export const notify = (key, error) => {
       break;
     case 'error':
       if (error?.message === 'Your session has expired. Please log in again.'
+        || error?.message === "Something went wrong! JsonWebTokenError: jwt malformed"
         || error?.message === 'Unauthorized') {
         toast.error(<Trans i18nKey="notification.session-expired" />, {
           role: 'alert',
