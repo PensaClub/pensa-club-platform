@@ -35,12 +35,14 @@ import { SuggestUserProvider } from './components/contexts/SuggestUserContext.js
 import { AdDetails } from './components/Community/AdPage/AdDetails/AdDetails.jsx';
 import { EditAd } from './components/Community/AdPage/EditAd/EditAd.jsx';
 import { AdminProvider } from './components/contexts/AdminContext.jsx';
+import { CookieConsent } from './components/CookieConsent/CookieConsent.jsx';
+import { useCookies } from 'react-cookie';
 
 function App() {
   const location = useLocation();
   const isCommunityPage =
     location.pathname === '/craigslist' || location.pathname.startsWith('/ad');
-
+    const [cookies] = useCookies(["cookieConsent"]);
   return (
     <>
       <ErrorBoundary>
@@ -53,6 +55,7 @@ function App() {
                   <Header
                     additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
                   />
+                    {!cookies.cookieConsent && <CookieConsent />}
                   <HeaderCommunity />
                   <ToastContainer
                     role="alert"
