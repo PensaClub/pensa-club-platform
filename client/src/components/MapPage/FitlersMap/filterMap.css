@@ -306,7 +306,11 @@
     text-align: center;
   }
 }
-
+@media (min-width: 800px ) and (max-width: 1200px){
+  .logo-map img {
+    margin-left: 5.5em;
+  }
+}
 @media screen and (max-device-width: 1067px) and (orientation: landscape) {
   .selected-option {
     font-size: var(--xxs-font-size);
