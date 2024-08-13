@@ -470,7 +470,7 @@
     "ad-reject": "The Ad has been rejected!",
     "user-already-exists": "An error occurred. User with this email address already exists!",
     "username-is-taken": "The username {{username}}is already taken. Try different one!",
-    "session-expired": "Your session has expired. Please log in again.",
+    "session-expired": "You are unauthorized or your session has expired. Please log in again.",
     "password-change-same-passwords": "Old and new password are the same!",
     "password-change-old-invalid": "Old password is invalid!",
     "password-change-repeat-invalid": "Passwords do not match!",
