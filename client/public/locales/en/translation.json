@@ -559,6 +559,11 @@
     "select_all": "Select all",
     "admin": "Admin"
   },
+  "cookieConsent": {
+    "message": "We use cookies to enhance your user experience. By using our website, you agree to our use of cookies.",
+    "learnMore": "Learn more.",
+    "accept": "Accept"
+  },
   "privacyPolicy": {
     "title": "Privacy Policy",
     "introductionTitle": "Introduction",
