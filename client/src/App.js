@@ -2,7 +2,7 @@ import './App.css';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { Home } from './components/Home/Home';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { NotFound } from './components/ErrorPages/NotFound/NotFound';
 import { ServerError } from './components/ErrorPages/ServerError/ServerError';
 import { LoginRegister } from './components/LoginRegister/LoginRegister';
@@ -38,13 +38,20 @@ import { AdminProvider } from './components/contexts/AdminContext.jsx';
 import { CookieConsent } from './components/CookieConsent/CookieConsent.jsx';
 import { useCookies } from 'react-cookie';
 import { PrivacyPolicy } from './components/PrivacyPolicy/PrivacyPolicy.jsx';
-
+import { setNavigator } from './utils/handle401Error.jsx';
+import { useEffect } from 'react';
 
 function App() {
   const location = useLocation();
   const isCommunityPage =
     location.pathname === '/craigslist' || location.pathname.startsWith('/ad');
     const [cookies] = useCookies(["cookieConsent"]);
+    const navigate = useNavigate();
+   
+    useEffect(() => {
+      setNavigator(navigate); 
+    }, [navigate]);
+
   return (
     <>
       <ErrorBoundary>
@@ -82,8 +89,10 @@ function App() {
                       <Route path="/ad" element={<AdPage />} />
                       <Route path="/ad/create" element={<CreateAd />} />
                       <Route path="/logout" element={<Logout />} />
+                      {/* <Route path="/profile" element={<Profile />} /> */}
+
                       <Route path="/profile/*" element={<Profile />} />
-                      <Route path="/craigslist" element={<CommunityPage />} />
+
                     </Route>
 
                     <Route element={<PublicGuard />}>

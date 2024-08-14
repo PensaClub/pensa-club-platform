@@ -1,15 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from 'react';
 import { userServiceFactory } from '../Services/userService';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './error.css';
 import { Loader } from '../Loader/Loader';
 import { loadAddressData } from '../../utils/loadAddressData';
 import { notify } from '../../utils/notify';
 import { toast } from 'react-toastify';
-
+import { getAuthStatus, setAuthStatusUpdater } from '../../utils/handle401Error';
+ 
 export const UserContext = createContext();
-
+ 
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
@@ -19,16 +21,31 @@ export const UserProvider = ({ children }) => {
   // eslint-disable-next-line no-unused-vars
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isAuthenticated, setIsAuthenticated] = useState(getAuthStatus());
   const userService = userServiceFactory(isAuth.token);
+ 
   const navigate = useNavigate();
-
+  const location = useLocation();
+  useEffect(() => {
+    if (!isAuthenticated&& location.pathname.startsWith('/profile')) {
+      setIsAuth({});
+ 
+      navigate('/sign-up');
+    }
+  }, [isAuthenticated, navigate,location]);
+ 
   useEffect(() => {
     if (profileData?.role) {
       setIsAdmin(profileData.role === 'admin');
     }
   }, [profileData, setIsAdmin]);
-
+ 
+  useEffect(() => {
+    setAuthStatusUpdater(() => {
+      setIsAuthenticated(false);
+    });
+  }, []);
+ 
   const showErrorAndSetTimeouts = (error) => {
     setErrorMessage(error);
     setIsLoading(false);
@@ -37,12 +54,22 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }, 3000);
   };
-
+  const handleAuthChange = (newAuthData) => {
+    if (newAuthData && newAuthData.token) {
+      setIsAuth(newAuthData);
+      setIsAuthenticated(true);
+      localStorage.setItem('auth', JSON.stringify(newAuthData));
+    } else {
+      setIsAuth({});
+      setIsAuthenticated(false);
+      localStorage.removeItem('auth');
+    }
+  };
   const onRegisterSubmit = async (data) => {
     setIsLoading(true);
     try {
       const response = await userService.register(data);
-      setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
+      handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
       setProfileData(response.user);
       setIsAdmin(response.user.role === 'admin');
@@ -55,18 +82,18 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-
+ 
   const onLoginSubmit = async (data) => {
     setIsLoading(true);
     try {
       const response = await userService.login(data);
       const userRole = response.user.role;
-      setIsAuth({ token: response.token, email: response.user.email, enabled: response.user.enabled });
+      handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
       setIsFinish(response.user.enabled);
       setProfileData(response.user);
       setIsAdmin(userRole === 'admin');
       notify('success-login');
-      
+ 
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
         setAddressId({ ...data });
@@ -74,22 +101,19 @@ export const UserProvider = ({ children }) => {
       } else {
         navigate('/');
       }
-
+ 
     } catch (error) {
       if (error.message == "Email or password are invalid.") {
-        notify('error-authorize')
-      return error.message;
-
+        notify('error-authorize');
+        return error.message;
       } else {
         notify('error', error);
       }
-    
-      // showErrorAndSetTimeouts(error.message);
     } finally {
       setIsLoading(false);
     }
   };
-
+ 
   const onLogout = () => {
     setIsLoading(true);
     try {
@@ -98,6 +122,7 @@ export const UserProvider = ({ children }) => {
       setProfileData({});
       setAddressId({});
       setIsAdmin(false);
+      setIsAuthenticated(false);
       notify('success-logout');
     } catch (error) {
       notify('error', error);
@@ -106,7 +131,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-
+ 
   const onProfileDataSubmit = async (details) => {
     setIsLoading(true);
     try {
@@ -127,14 +152,14 @@ export const UserProvider = ({ children }) => {
     } catch (error) {
       const isUsernameTaken =
         error?.message === "Unique constraint violation." && error?.details.some(error => error.field === 'username');
-        notify(isUsernameTaken ? 'username-is-taken' : 'error', error);
-        showErrorAndSetTimeouts(error.message);
-        throw error;
+      notify(isUsernameTaken ? 'username-is-taken' : 'error', error);
+      showErrorAndSetTimeouts(error.message);
+      throw error;
     } finally {
       setIsLoading(false);
     }
   };
-
+ 
   const onEditProfileDataSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -146,7 +171,7 @@ export const UserProvider = ({ children }) => {
         setAddressId({ ...data });
       }
       // setIsAdmin(response.user.role === 'admin');
-
+ 
       notify('success-data');
     } catch (error) {
       notify('error', error);
@@ -155,7 +180,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-
+ 
   const getProfileData = async () => {
     setIsLoading(true);
     try {
@@ -172,7 +197,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-
+ 
   const onPasswordReset = async (data) => {
     setIsLoading(true);
     try {
@@ -186,14 +211,14 @@ export const UserProvider = ({ children }) => {
       notify('success-password-change');
       return response;
     } catch (error) {
-      if(error?.message === "Old and new password are the same.")
+      if (error?.message === "Old and new password are the same.")
         notify('password-change-same-passwords');
-      else if(error?.message === "Old password is invalid.") 
+      else if (error?.message === "Old password is invalid.")
         notify('password-change-old-invalid');
-      else if(error?.message === "Repeat password does not match.") 
+      else if (error?.message === "Repeat password does not match.")
         notify('password-change-repeat-invalid');
       else notify('error', error);
-      
+ 
       showErrorAndSetTimeouts(error.message);
       throw error;
     } finally {
@@ -204,18 +229,18 @@ export const UserProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const response = await userService.changeRole(mail, role, comment);
-      
+ 
       // Ако променяме текущияя потребител, обновяваме localStorage
       if (mail === isAuth.email) {
         const updatedProfileData = { ...profileData, role };
         setProfileData(updatedProfileData);
         setIsAdmin(role === 'admin');
-      
+ 
         localStorage.setItem('userDetails', JSON.stringify(updatedProfileData));
         localStorage.setItem('isAdmin', JSON.stringify(role === 'admin'));
       }
-  
-      notify('success-role-change to'+ role);
+ 
+      notify('success-role-change to' + role);
       return response;
     } catch (e) {
       notify('error', e)
@@ -225,7 +250,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-  
+ 
   const onForgetPasswordSubmit = async (data) => {
     try {
       setIsLoading(true);
@@ -233,11 +258,11 @@ export const UserProvider = ({ children }) => {
       notify('email-send');
       return response;
     } catch (error) {
-      if(error?.message === "There is no user registered with that email address."){
+      if (error?.message === "There is no user registered with that email address.") {
         notify('password-change-email-invalid');
         throw error;
       }
-      else 
+      else
         notify('error', error);
       showErrorAndSetTimeouts(error.message);
     }
@@ -245,7 +270,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-
+ 
   const onSuggestSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -260,16 +285,16 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-
+ 
   const isUserAdmin = () => isAdmin;
-
+ 
   const contextService = {
     onRegisterSubmit,
     onLoginSubmit,
     userEmail: isAuth.email,
     username: profileData?.details?.username,
     token: isAuth.token,
-    isAuthentication: !!isAuth.token,
+    isAuthentication: isAuthenticated && !!isAuth.token,
     onLogout,
     onPasswordReset,
     isFinish,
@@ -284,7 +309,7 @@ export const UserProvider = ({ children }) => {
     isAdmin,
     onChangeAdminRole
   };
-
+ 
   return (
     <UserContext.Provider value={contextService}>
       {children}
@@ -292,7 +317,7 @@ export const UserProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
-
+ 
 export const useAuthContext = () => {
   const context = useContext(UserContext);
   return context;
