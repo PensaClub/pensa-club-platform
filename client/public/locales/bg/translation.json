@@ -453,7 +453,9 @@
     "no_ads": "Нямате публикувани обяви",
     "event_start_date": "Начало",
     "event_end_date": "Край",
-    "missing_phone": "Не е подадеден телефонен номер"
+    "missing_phone": "Не е подадеден телефонен номер",
+    "select_category": "Избери категория"
+
   },
   "notification": {
     "success-data": "Данните за потребителя са запазени успешно!",
