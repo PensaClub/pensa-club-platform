@@ -18,6 +18,7 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      if(event.target.classList.contains("details-underlined")) return; // excludes username/view all ads clicks
       if (sidebarRef.current && !sidebarRef.current.contains(event.target) && !isModalOpen) {
         closeSidebar();
       }
