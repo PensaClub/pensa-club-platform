@@ -1,3 +1,4 @@
+import { handle401Error } from '../../utils/handle401Error';
 import { refreshToken } from '../../utils/refreshToken';
 
 const requester = async (method, url, data) => {
@@ -33,7 +34,10 @@ const requester = async (method, url, data) => {
   const response = await fetch(url, options);
 
   const result = await response.json();
-
+  if (response.status === 401) {
+    handle401Error(); 
+  
+  }
   if (!response.ok) {
     if (response.status === 401) return window.location.replace('/sign-up');
     throw result;
