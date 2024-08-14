@@ -45,7 +45,7 @@
 
 .filter-main label {
   display: block;
-  font-size: calc(var(--xs-font-size) + 2px);
+  font-size: calc(var(--xxs-font-size) + 2px);
   font-weight: bold;
   text-align: center;
   text-shadow: var(--text-shadow);
@@ -99,6 +99,7 @@
   box-shadow: 0 0.1em 0.2em rgba(0, 0, 0, 0.1);
   background-color: var(--bg-white);
   z-index: 500;
+  width: 480px;
 }
 
 .options::-webkit-scrollbar {
@@ -147,6 +148,7 @@
 .option input[type="checkbox"] {
   margin-right: 8px;
   height: 20px;
+
 }
 
 .option:hover {
@@ -308,9 +310,12 @@
     text-align: center;
   }
 }
-@media (min-width: 800px ) and (max-width: 1200px){
+@media (min-width: 767px ) and (max-width: 1200px){
   .logo-map img {
     margin-left: 5.5em;
+  }
+  .options-container {
+    width: 390px;
   }
 }
 @media screen and (max-device-width: 1067px) and (orientation: landscape) {
@@ -321,10 +326,31 @@
     font-size: var(--xxs-font-size);
     margin-top: 3.3em;
   }
+  .options-container {
+    width: 390px;
+  }
 }
-
+@media (min-width: 1200px ){
+  .option input[type="checkbox"] {
+    margin-right: 8px;
+    height: 23px;
+    width: 22px;
+  }
+  .filter-main label {
+ 
+    font-size: calc(var(--xs-font-size) + 2px);
+  }
+  .options-container {
+    width: 480px;
+  }
+}
 .map {
   position: relative;
   display: flex;
   flex-direction: column;
+}
+.option input[type="checkbox"] {
+  margin-right: 8px;
+  height: 23px;
+  width: 22px;
 }

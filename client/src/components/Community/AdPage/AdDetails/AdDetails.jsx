@@ -73,6 +73,7 @@ export const AdDetails = () => {
 
   const handleReadMoreClick = async (e) => {
     e.preventDefault();
+    if(isSidebarOpen) return;
     try {
       const userAdsResponse = await getMyAds(ad?.account?.email);
       const sortedAds = userAdsResponse?.ads.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));

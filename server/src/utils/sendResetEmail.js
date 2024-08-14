@@ -3,8 +3,14 @@
 async function sendResetEmail(email, resetToken) {
     const resetLink = `${process.env.FRONTEND_SERVER}/reset-password?token=${resetToken}`;
     const subject = 'Password Reset Request';
-    const body = `Click the following link to reset your password: ${resetLink}`;
-
+    const body = `
+  <html>
+    <body>
+      <p>Click the following link to reset your password:</p>
+      <a href="${resetLink}" style="color: #1a73e8; text-decoration: none;">${resetLink}</a>
+    </body>
+  </html>
+`;
     const url = `https://mail.zoho.eu/api/accounts/${process.env.ZOHO_ACCOUNT_ID}/messages`;
     const data = {
         fromAddress: 'info@pensa.club',

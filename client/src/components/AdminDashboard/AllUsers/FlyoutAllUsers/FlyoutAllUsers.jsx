@@ -109,7 +109,7 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                     </div>
                     <div className="flyout-buttons">
                         <button className="flyout-save" onClick={onRoleChangeSubmit} disabled={!isRoleChanged}>
-                            {t('admin.save')}
+                            {t('admin.reject')}
                         </button>
                         <button className="flyout-back" onClick={onClose}>
                             <FontAwesomeIcon icon={faArrowRotateLeft} /> {t('admin.back')}

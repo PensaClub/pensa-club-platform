@@ -41,11 +41,11 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
-      case 'success-delete-message':
-        toast.success(<Trans i18nKey="notification.success-delete-message" />, {
-          role: 'alert',
-        });
-        break;
+    case 'success-delete-message':
+      toast.success(<Trans i18nKey="notification.success-delete-message" />, {
+        role: 'alert',
+      });
+      break;
     case 'success-login':
       toast.success(<Trans i18nKey="notification.success-login" />, {
         role: 'alert',
@@ -164,7 +164,9 @@ export const notify = (key, error) => {
       });
       break;
     case 'error':
-      if (error?.message === 'Your session has expired. Please log in again.') {
+      if (error?.message === 'Your session has expired. Please log in again.'
+        || error?.message === "Something went wrong! JsonWebTokenError: jwt malformed"
+        || error?.message === 'Unauthorized') {
         toast.error(<Trans i18nKey="notification.session-expired" />, {
           role: 'alert',
         });
