@@ -120,7 +120,8 @@
     "read_more": "Прочети повече",
     "close": "Затвори",
     "and": "И",
-    "more": "Още"
+    "more": "Още",
+     "zoom_instructions": "Задръжте бутона Ctrl натиснат, докато превъртате, за да промените мащаба на картата"
   },
   "notify_modal": {
     "part1": "Моля,",
@@ -278,7 +279,7 @@
     "event_start_date": "Начална дата",
     "event_end_date": "Крайна дата",
     "approve": "Одобри",
-    "reject": "Отказ",
+    "reject": "Отхвърли",
     "delete": "Изтрий",
     "users": "Потребители",
     "all_announcements_statistic": "Статистика на обявите ",
