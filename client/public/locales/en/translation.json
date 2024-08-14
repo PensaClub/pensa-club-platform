@@ -126,7 +126,8 @@
     "read_more": "Read more",
     "close": "Close",
     "and": "and",
-    "more": "more"
+    "more": "more",
+     "zoom_instructions": "Hold down the Ctrl key while scrolling to zoom the map"
   },
   "notify_modal": {
     "part1": "Please,",

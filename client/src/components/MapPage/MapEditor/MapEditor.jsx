@@ -6,7 +6,7 @@ import L, { DivIcon, point } from 'leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import './mapEditor.css';
 import './scrollModal.css';
-
+import { t } from 'i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -68,7 +68,7 @@ const MapWithZoomControl = () => {
             {showModal && (
                 <div className={`mapeditor-modal-overlay ${showModal ? 'show' : ''}`}>
                     <div className="mapeditor-modal-content">
-                        Задръжте бутона Ctrl натиснат, докато превъртате, за да промените мащаба на картата
+                    <p>{t('map.zoom_instructions')}</p>
                     </div>
                 </div>
             )}
