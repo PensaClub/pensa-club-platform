@@ -38,6 +38,7 @@ import { AdminProvider } from './components/contexts/AdminContext.jsx';
 import { CookieConsent } from './components/CookieConsent/CookieConsent.jsx';
 import { useCookies } from 'react-cookie';
 import { PrivacyPolicy } from './components/PrivacyPolicy/PrivacyPolicy.jsx';
+
 import { setNavigator } from './utils/handle401Error.jsx';
 import { useEffect } from 'react';
 

@@ -26,7 +26,7 @@ export async function refreshToken(authInfo) {
       localStorage.setItem('auth', JSON.stringify(newAuth));
       return newAuth.token;
     } else {
-      localStorage.removeItem('auth');
+      localStorage.clear();
       return null;
     }
   } else {
