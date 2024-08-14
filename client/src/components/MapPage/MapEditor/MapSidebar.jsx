@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useAuthContext } from '../../contexts/UserContext';
 import './sidebar.css';
+import { AdModalNotify } from '../../Community/AdsCard/AdModalNotify';
 
 export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage }) => {
     const { t } = useTranslation();
@@ -14,6 +15,7 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage 
     const { isAuthentication } = useAuthContext();
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showNotifyModal, setShowNotifyModal] = useState(false); 
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -55,6 +57,8 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage 
     const handleAdClick = (ad) => {
         if (isAuthentication) {
             navigate(`/ad/details/${ad.adId}`);
+        } else {
+            setShowNotifyModal(true); 
         }
     };
 
@@ -72,7 +76,6 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage 
         scrollContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Филтриране на обявите само със статус "approved"
     const approvedAds = userAds.filter(ad => ad.status === 'approved');
 
     return (
@@ -131,6 +134,9 @@ export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage 
                     )}
                 </div>
             </div>
+            {showNotifyModal && (
+                <AdModalNotify onClose={() => setShowNotifyModal(false)} />
+            )}
         </div>
     );
 };
