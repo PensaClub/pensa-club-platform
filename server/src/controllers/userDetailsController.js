@@ -86,8 +86,8 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
 
     const updatedDetails = { ...fieldSwap(restOfDetails, 'mapFromDb'), age: ageCalculate(restOfDetails.birth_date) };
 
-    eventEmitter.emit('userCacheUpdate', { type: 'user', data: { ...updatedDetails }, adId: null, userId: req.user.userId, action: 'details' });
-    eventEmitter.emit('userCacheUpdate', { type: 'user', data: null, adId: null, userId: req.user.userId, action: 'enabled' });
+    eventEmitter.emit('userCacheUpdate', { type: 'users', data: { ...updatedDetails }, adId: null, userId: req.user.userId, action: 'details' });
+    eventEmitter.emit('userCacheUpdate', { type: 'users', data: null, adId: null, userId: req.user.userId, action: 'enabled' });
 
     res.status(200).send({ message: 'Details successfully updated!', user: { email: req.user.email, enabled: true, details: updatedDetails }, token });
   } catch (err) {
@@ -95,7 +95,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
   }
 });
 
-userDetailsController.get('/all-users', async (req, res, next) => {
+userDetailsController.get('/all-users', memoryCache('users'), async (req, res, next) => {
   try {
     const accounts = await user_account.findAll({
       attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', ['role_change_comment', 'roleChangeComment']],
@@ -186,8 +186,8 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
 
     updatedDetails.age = ageCalculate(updatedDetails.birthDate);
 
-    eventEmitter.emit('userCacheUpdate', { type: 'user', data: { ...updatedDetails }, adId: null, userId: req.user.userId, action: 'details' });
-    eventEmitter.emit('userCacheUpdate', { type: 'user', data: null, adId: null, userId: req.user.userId, action: 'enabled' });
+    eventEmitter.emit('userCacheUpdate', { type: 'users', data: { ...updatedDetails }, adId: null, userId: req.user.userId, action: 'details' });
+    eventEmitter.emit('userCacheUpdate', { type: 'users', data: null, adId: null, userId: req.user.userId, action: 'enabled' });
 
     res.status(200).json({ message: 'Details edited successfully!', details: updatedDetails });
   } catch (err) {
