@@ -172,7 +172,8 @@ export const AdDetails = () => {
                     >
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faPhone} className="icon" />
-                        <p>{t('ads.call')}</p>
+                        {userDetails?.phoneNumber?(<p>{userDetails?.phoneNumber}</p>):
+                        (<p>{t('ads.call')}</p>)}
                       </div>
                     </Link>
                     <Link
@@ -181,7 +182,7 @@ export const AdDetails = () => {
                     >
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faEnvelope} className="icon" />
-                        <p>{t('ads.send-message')}</p>
+                        <p>{ad?.account?.email}</p>
                       </div>
                     </Link>
                     <Link>
@@ -195,12 +196,14 @@ export const AdDetails = () => {
                   </div>
                   <div className="ads-details-card">
                     <div className="img-ads-details">
-                      <div>
+                      <div className='position-category'>
                         {ad?.images && ad?.images?.length > 0 && (
                           <ImageEnlarger images={ad?.images.map(img => img.imageURL)} ad={ad} t={t} />
                         )}
-                        <p>{t(`search-criteria.${ad?.category}`)}</p>
+                      <p className='position-text-absolute'>{t(`search-criteria.${ad?.category}`)}</p>
+                        
                       </div>
+                      {/* <p className='position-text-absolute'>{t(`search-criteria.${ad?.category}`)}</p> */}
                       <div className="ads-details-desc">
                         <h3>{t('ads.description')}</h3>
                         <hr />
