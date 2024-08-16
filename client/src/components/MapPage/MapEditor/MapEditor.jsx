@@ -68,7 +68,7 @@ const MapWithZoomControl = () => {
             {showModal && (
                 <div className={`mapeditor-modal-overlay ${showModal ? 'show' : ''}`}>
                     <div className="mapeditor-modal-content">
-                    <p>{t('map.zoom_instructions')}</p>
+                        <p>{t('map.zoom_instructions')}</p>
                     </div>
                 </div>
             )}
@@ -94,13 +94,15 @@ export const MapEditor = ({ filteredUsers }) => {
     const [open, setOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef(null);
+    const mapContainerRef = useRef(null); // Референция към обграждащия `div` на картата
     const [modalImage, setModalImage] = useState(null);
-
+    const [scrollPosition, setScrollPosition] = useState(0);
     const { isAuthentication } = useAuthContext();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
     useEffect(() => {
+
         fetch('/Bulgaria_admin_level_6.geojson')
             .then(response => response.json())
             .then(data => {
@@ -183,16 +185,30 @@ export const MapEditor = ({ filteredUsers }) => {
         });
         return null;
     };
-
     const handleReadMoreClick = (e, user) => {
         e.preventDefault();
         setSelectedUser(user);
         setIsSidebarOpen(true);
-    };
+    
+        if (mapContainerRef.current) {
+            mapContainerRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start', 
+            });
 
+            setTimeout(() => {
+                window.scrollBy(0, 500); 
+            }, 500); 
+        }
+    };
+    
     const closeSidebar = () => {
         setSelectedUser(null);
         setIsSidebarOpen(false);
+        window.scrollTo({
+            top: scrollPosition,
+            behavior: 'smooth',
+        });
     };
 
     const trimString = (str, num) => {
@@ -204,54 +220,63 @@ export const MapEditor = ({ filteredUsers }) => {
 
     return (
         <div className="map-editor">
-            <MapContainer className="map-container" center={position} zoom={7} scrollWheelZoom={false} style={{ height: "70vh", width: "100%" }} fullscreenControl={true}>
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url={'https://tile.openstreetmap.org/{z}/{x}/{y}.png'}
-                />
-                <MapWithZoomControl />
-                <MapEvents />
-
-                <MarkerClusterGroup
-                    chunkedLoading
-                    iconCreateFunction={createCustomClusterIcon}
-                    showCoverageOnHover={false}
+            <div ref={mapContainerRef}>
+                <MapContainer
+                    className="map-container"
+                    center={position}
+                    zoom={7}
+                    scrollWheelZoom={false}
+                    style={{ height: "70vh", width: "100%" }}
+                    fullscreenControl={true}
                 >
-                    {filteredUsers.map(user => (
-                        user.details?.location && (
-                            <Marker key={user.email} position={[user.details.location.lat, user.details.location.lon]}>
-                                <Popup>
-                                    <div className="ad-card-editor">
-                                        <img src={user?.details?.imageURL || "/images/homePage/avatar2.png"} alt={user.details.firstName} className="ad-img-editor" />
-                                        <div className="ad-details-editor">
-                                            <h3 className="ad-name-editor">{user.details.username}</h3>
-                                            {user.details.workOptions && user.details.workOptions.length > 0 && (
-                                                <p className="ad-description-editor">
-                                                    {t('map.profession')}: {user.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ')}
-                                                </p>
-                                            )}
-                                            {user.details.interestOptions && user.details.interestOptions.length > 0 && (
-                                                <p className="ad-description-editor">
-                                                    {t('map.interests')}: {user.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ')}
-                                                </p>
-                                            )}
-                                            {user.details.skills && user.details.skills.length > 0 && (
-                                                <p className="ad-description-editor">
-                                                    {t('map.skills')}: {user.details.skills.map(option => t(`options.skills.${option}`)).join(', ')}
-                                                </p>
-                                            )}
-                                            <Link to="#" id="read-more-editor" className="read-more" onClick={(e) => handleReadMoreClick(e, user)}>{t('map.read_more')}</Link>
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url={'https://tile.openstreetmap.org/{z}/{x}/{y}.png'}
+                    />
+                    <MapWithZoomControl />
+                    <MapEvents />
+
+                    <MarkerClusterGroup
+                        chunkedLoading
+                        iconCreateFunction={createCustomClusterIcon}
+                        showCoverageOnHover={false}
+                    >
+                        {filteredUsers.map(user => (
+                            user.details?.location && (
+                                <Marker key={user.email} position={[user.details.location.lat, user.details.location.lon]}>
+                                    <Popup>
+                                        <div className="ad-card-editor">
+                                            <img src={user?.details?.imageURL || "/images/homePage/avatar2.png"} alt={user.details.firstName} className="ad-img-editor" />
+                                            <div className="ad-details-editor">
+                                                <h3 className="ad-name-editor">{user.details.username}</h3>
+                                                {user.details.workOptions && user.details.workOptions.length > 0 && (
+                                                    <p className="ad-description-editor">
+                                                        {t('map.profession')}: {user.details.workOptions.map(option => t(`options.work-options.${option}`)).join(', ')}
+                                                    </p>
+                                                )}
+                                                {user.details.interestOptions && user.details.interestOptions.length > 0 && (
+                                                    <p className="ad-description-editor">
+                                                        {t('map.interests')}: {user.details.interestOptions.map(option => t(`options.interestOptions.${option}`)).join(', ')}
+                                                    </p>
+                                                )}
+                                                {user.details.skills && user.details.skills.length > 0 && (
+                                                    <p className="ad-description-editor">
+                                                        {t('map.skills')}: {user.details.skills.map(option => t(`options.skills.${option}`)).join(', ')}
+                                                    </p>
+                                                )}
+                                                <Link to="#" id="read-more-editor" className="read-more" onClick={(e) => handleReadMoreClick(e, user)}>{t('map.read_more')}</Link>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Popup>
-                            </Marker>
-                        )
-                    ))}
-                </MarkerClusterGroup>
-                {showGeoJSON && geoJsonData && (
-                    <GeoJSON data={geoJsonData} style={normalStyle} onEachFeature={onEachFeature} />
-                )}
-            </MapContainer>
+                                    </Popup>
+                                </Marker>
+                            )
+                        ))}
+                    </MarkerClusterGroup>
+                    {showGeoJSON && geoJsonData && (
+                        <GeoJSON data={geoJsonData} style={normalStyle} onEachFeature={onEachFeature} />
+                    )}
+                </MapContainer>
+            </div>
             {selectedUser && (
                 <MapSidebar
                     selectedUser={selectedUser}
