@@ -86,7 +86,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
 
   const handleComment = (user) => {
     setSelectedUser(user);
-    setComments(user.comments || []);
+    setComments(user?.comments || []);
     setIsModalOpen(true);
   };
 

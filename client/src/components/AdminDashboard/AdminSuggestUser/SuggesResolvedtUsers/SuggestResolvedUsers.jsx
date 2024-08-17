@@ -85,7 +85,7 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
 
     const handleComment = (user) => {
         setSelectedUser(user);
-        setComments(user.comments || []);
+        setComments(user?.comments || []);
         setIsModalOpen(true);
     };
 
@@ -124,7 +124,7 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
 
             const formattedUsers = updatedUsers.map(user => ({
                 ...user,
-                comments: user.comments.map(comment => ({
+                comments: user?.comments.map(comment => ({
                     ...comment,
                     date: formatDate(comment.date),
                 })).sort((a, b) => new Date(b.date) - new Date(a.date))
