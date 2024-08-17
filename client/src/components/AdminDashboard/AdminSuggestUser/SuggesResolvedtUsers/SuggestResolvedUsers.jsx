@@ -24,6 +24,7 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
     const [modalContent, setModalContent] = useState('');
     const [isTextModalOpen, setIsTextModalOpen] = useState(false);
     const [comments, setComments] = useState([]);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const loadUsers = async () => {
@@ -99,16 +100,22 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
     };
 
     const handleSubmitComment = async () => {
-        try {
-            const newComment = await onCreateComment({ userId: selectedUser.id, comment });
-            const formattedDate = formatDate(new Date());
-            setComments([{ date: formattedDate, comment }, ...comments]);
-            setComment('');
-        } catch (error) {
-            console.error(error);
+        if (!comment.trim()) {
+          setError(t('user-suggestion.empty_comment_error')); 
+          return;
         }
-    };
-
+      
+        try {
+          const newComment = await onCreateComment({ userId: selectedUser.id, comment });
+          const formattedDate = formatDate(new Date());
+          setComments([{ date: formattedDate, comment }, ...comments]);
+          setComment('');
+          setError(''); 
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      
     const handleDelete = async (id) => {
         try {
             await getDeleteSuggest(id);
@@ -307,11 +314,14 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
             </div>
             <ResolvedComments
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={() => {setIsModalOpen(false); 
+                    setError(''); }}
                 onSubmit={handleSubmitComment}
                 comments={comments}
                 comment={comment}
                 setComment={setComment}
+                error={error}
+                setError={setError}
             >
                 <h2>{t('admin.user_comment')}</h2>
             </ResolvedComments>
