@@ -94,7 +94,7 @@ export const MapEditor = ({ filteredUsers }) => {
     const [open, setOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef(null);
-    const mapContainerRef = useRef(null); // Референция към обграждащия `div` на картата
+    const mapContainerRef = useRef(null); 
     const [modalImage, setModalImage] = useState(null);
     const [scrollPosition, setScrollPosition] = useState(0);
     const { isAuthentication } = useAuthContext();
