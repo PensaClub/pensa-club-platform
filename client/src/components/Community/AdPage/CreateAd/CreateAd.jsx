@@ -510,7 +510,7 @@ export const CreateAd = () => {
                         )}
                       </div>
                       <div className="form-group">
-                        <label htmlFor="adTown">{t("ads.ad_town")}</label>
+                        <label htmlFor="adTown">{t("ads.ad_town_village")}</label>
                         <select
                           id="adTown"
                           name="adTown"
