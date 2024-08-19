@@ -394,7 +394,7 @@
     "no_ads_found": "No ads found",
     "no_ads_message": "It looks like there are no ads that match your criteria.",
     "clear_filters": "Clear Filters",
-    "tag_search": "Enter Tag",
+    "tag_search": "Enter keyword",
     "login_to_view": "Please,",
     "login": "log in",
     "to_see_details": "to see details"
@@ -552,7 +552,8 @@
     "comments": "Comments",
     "submit": "Submit",
     "name-lenght": "Name should not be longer than 40 symbols.",
-    "message-lenght": "Message should not be longer than 100 symbols."
+    "message-lenght": "Message should not be longer than 100 symbols.",
+    "empty_comment_error": "Comment cannot be empty."
   },
   "admin_messages":{
     "search_desc": "Search by description...", 

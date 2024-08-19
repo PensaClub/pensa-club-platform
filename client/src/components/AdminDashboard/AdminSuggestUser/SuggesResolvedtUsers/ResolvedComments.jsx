@@ -2,7 +2,7 @@
 import './resolvedComments.css';
 import { useTranslation } from 'react-i18next';
 
-export const ResolvedComments = ({ isOpen, onClose, onSubmit, comments, comment, setComment }) => {
+export const ResolvedComments = ({ isOpen, onClose, onSubmit, comments, comment, setComment, error,setError  }) => {
   const { t } = useTranslation();
 
   if (!isOpen) return null;
@@ -36,10 +36,14 @@ export const ResolvedComments = ({ isOpen, onClose, onSubmit, comments, comment,
           <h2>{t('user-suggestion.add_new_comment')}</h2>
           <textarea
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            onChange={(e) => {
+              setComment(e.target.value);
+              setError(''); 
+            }}
             rows="5"
             cols="50"
           />
+          {error && <p className="error-text">{error}</p>}
         </div>
         <button className="modal-submit-admin" onClick={onSubmit}>
           {t('user-suggestion.submit')}
