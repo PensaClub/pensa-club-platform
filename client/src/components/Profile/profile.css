@@ -295,8 +295,13 @@
 .profile-form .gender input,
 .profile-form input[type="checkbox"] {
   box-shadow: none;
+
 }
 
+.profile-form input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
 .btn-profile {
   width: 200px;
   align-self: center;
