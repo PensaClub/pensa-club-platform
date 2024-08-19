@@ -418,7 +418,7 @@
     "description": "Description",
     "ad_town": "City",
     "ad_address": "Address",
-    "use_other_city": "Use Other City",
+    "use_other_city": "Use Other Address",
     "first_name": "First Name",
     "last_name": "Last Name",
     "email_ad": "Email",
