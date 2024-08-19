@@ -82,3 +82,7 @@
   align-self: flex-start;
   text-indent: 0.3rem;
 }
+.error-text {
+  color: red;
+  margin-top: 5px;
+}

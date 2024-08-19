@@ -172,11 +172,14 @@ const ProfileForm = () => {
       settlement: settlementName,
     });
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-  };
+
+    const error = validateField(name, value, form, t);
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+
+  }
 
   const handleGenderChange = (e) => {
     setForm({ ...form, gender: e.target.value });
@@ -215,6 +218,7 @@ const ProfileForm = () => {
 
     Object.keys(trimmedForm).forEach((field) => {
       const value = trimmedForm[field];
+
       const error = validateField(field, value, trimmedForm, t);
       if (error) {
         isValid = false;
