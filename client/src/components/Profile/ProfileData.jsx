@@ -20,7 +20,7 @@ export const ProfileData = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [errors, setErrors] = useState({});
   const [isYearSelectOpen, setIsYearSelectOpen] = useState(false);
-  const [isFormChanged, setIsFormChanged] = useState(false); 
+  const [isFormChanged, setIsFormChanged] = useState(false);
 
   const { setAllUsers } = useMappingContext();
   const { handleImageChange, uploadImages, images } = useImageUpload();
@@ -41,17 +41,17 @@ export const ProfileData = () => {
   const [form, setForm] = useState(initialFormState);
 
   const handleInputChange = (e) => {
-  const { name, value } = e.target;
+    const { name, value } = e.target;
     setForm({ ...form, [name]: value });
+    if (errors[name]) {
+      setErrors(prevErrors => ({ ...prevErrors, [name]: null }));
+    }
 
-    const error = validateField(name, value, form, t);
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
-
-    setIsFormChanged(true); 
+    setIsFormChanged(true);
   }
   const handleGenderChange = (e) => {
     setForm({ ...form, gender: e.target.value });
-    setIsFormChanged(true); 
+    setIsFormChanged(true);
   };
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export const ProfileData = () => {
         ...prevForm,
         birthDate: formattedDate,
       }));
-      setIsFormChanged(true); 
+      setIsFormChanged(true);
     } else if (!selectedDate && !selectedMonth && !selectedYear) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -103,7 +103,7 @@ export const ProfileData = () => {
     if (e.target.value === '') {
       setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
     }
-    setIsFormChanged(true); 
+    setIsFormChanged(true);
   };
 
   const handleSelectedMonthChange = (e) => {
@@ -111,7 +111,7 @@ export const ProfileData = () => {
     if (e.target.value === '') {
       setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
     }
-    setIsFormChanged(true); 
+    setIsFormChanged(true);
   };
 
   const handleSelectedYearChange = (e) => {
@@ -119,7 +119,7 @@ export const ProfileData = () => {
     if (e.target.value === '') {
       setForm((prevForm) => ({ ...prevForm, birthDate: '' }));
     }
-    setIsFormChanged(true); 
+    setIsFormChanged(true);
   };
 
   const handleSubmit = async (e) => {
@@ -167,9 +167,9 @@ export const ProfileData = () => {
   };
 
   const onBlurHandler = (e) => {
-    setIsYearSelectOpen(false); 
+    setIsYearSelectOpen(false);
     const { name, value } = e.target;
-    const error = validateField(name, value,form, t);
+    const error = validateField(name, value, form, t);
     console.log(`Field ${name} value ${value} blurred with error: ${error}`);
 
     setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
@@ -180,7 +180,7 @@ export const ProfileData = () => {
     setSelectedDate('');
     setSelectedMonth('');
     setSelectedYear('');
-    setIsFormChanged(false); 
+    setIsFormChanged(false);
     navigate('/profile');
   };
 
@@ -198,7 +198,7 @@ export const ProfileData = () => {
               onChange={(e) => {
                 handleImageChange(e);
                 handleImage(e);
-                setIsFormChanged(true); 
+                setIsFormChanged(true);
               }}
             />
             <label htmlFor='imageUrl' className='label-image'>
