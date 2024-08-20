@@ -41,11 +41,14 @@ export const ProfileData = () => {
   const [form, setForm] = useState(initialFormState);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-    setIsFormChanged(true); 
-  };
 
+    const error = validateField(name, value, form, t);
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+
+    setIsFormChanged(true); 
+  }
   const handleGenderChange = (e) => {
     setForm({ ...form, gender: e.target.value });
     setIsFormChanged(true); 
@@ -166,7 +169,9 @@ export const ProfileData = () => {
   const onBlurHandler = (e) => {
     setIsYearSelectOpen(false); 
     const { name, value } = e.target;
-    const error = validateField(name, value);
+    const error = validateField(name, value,form, t);
+    console.log(`Field ${name} value ${value} blurred with error: ${error}`);
+
     setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
   };
 

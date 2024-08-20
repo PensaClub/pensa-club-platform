@@ -1,9 +1,13 @@
+import { useTranslation } from 'react-i18next';
 export const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
-export const nameRegex = /^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
+export const nameRegex = /^[a-zA-Zа-яА-Я0-9_]{3,20}(-[a-zA-Zа-яА-Я0-9_]{3,20})*$/i;
+export const streetRegex = /^[a-zA-Zа-яА-Я0-9\s]{3,60}$/;
 export const emailRegex = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 export const phoneNumberRegex = /^(?:\+\d{7,15}|\d{10})$/;
 export const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
 export const validateField = (name, value, form = {}, t) => {
+    console.log(`Field ${name} value ${value} blurred with `);
 
     let error = '';
     switch (name) {
@@ -16,13 +20,17 @@ export const validateField = (name, value, form = {}, t) => {
             else if (!emailRegex.test(value)) error =  t('profile.email_error');
             break;
         case 'firstName':
-            if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
+            if (!nameRegex.test(value)) error = t('profile.name_invalid');
             break;
         case 'lastName':
-            if (value && !nameRegex.test(value)) error = t('profile.name_invalid');
+            if (!nameRegex.test(value)) error = t('profile.name_invalid');
             break;
         case 'phoneNumber':
-            if (value && !phoneNumberRegex.test(value)) error = t('profile.phone_number_invalid');
+            if (!value) {
+                error = ''; 
+            } else if (!phoneNumberRegex.test(value)) {
+                error = t('profile.phone_number_invalid');
+            }
             break;
         case 'region':
             if (!value) error = t('profile.region_required');
@@ -35,6 +43,7 @@ export const validateField = (name, value, form = {}, t) => {
             break;
         case 'street':
             if (!value) error = t('profile.street_required');
+            else if (!streetRegex.test(value)) error = t('profile.street_invalid');
             break;
         case 'password':
             if (!passwordRegex.test(value)) {
