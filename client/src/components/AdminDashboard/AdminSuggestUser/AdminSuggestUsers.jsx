@@ -31,7 +31,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
     const loadUsers = async () => {
       const allUsers = await getAllSuggested();
 
-      const formattedUsers = allUsers.map(user => ({
+      const formattedUsers = allUsers?.map(user => ({
         ...user,
         comments: user.comments.map(comment => ({
           ...comment,
@@ -307,7 +307,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
                 <td>
                   <Link to={`#`}>{user.refferer_name || 'N/A'}</Link>
                 </td>
-                <td>{user.name || 'N/A'}</td>
+                <td className='all-name-td'>{user.name || 'N/A'}</td>
                 <td>{user.phone_number || 'N/A'}</td>
                 <td>
                   <span onClick={() => handleTextClick(user.message)} className="clickable-text">

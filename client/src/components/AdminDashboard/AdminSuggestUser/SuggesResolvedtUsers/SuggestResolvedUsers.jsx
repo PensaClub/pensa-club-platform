@@ -285,7 +285,7 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
                                 <td>
                                     <Link to={`#`}>{user.refferer_name || 'N/A'}</Link>
                                 </td>
-                                <td>{user.name || 'N/A'}</td>
+                                <td className='resolved-name-td'>{user.name || 'N/A'}</td>
                                 <td>{user.phone_number || 'N/A'}</td>
                                 <td>
                                     <span onClick={() => handleTextClick(user.message)} className="clickable-text">

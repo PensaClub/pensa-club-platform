@@ -128,7 +128,7 @@ export const UserSuggestion = () => {
               onBlur={onBlurHandler}
               required
             />
-            {errors.reffererName && (
+            {errors?.reffererName && (
               <p className="error">{t(`${errors.reffererName}`)}</p>
             )}
 
