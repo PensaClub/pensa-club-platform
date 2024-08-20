@@ -59,7 +59,16 @@ function sanitizeData(newData) {
       const sanitizedObject = {};
       for (const [key, value] of Object.entries(obj)) {
         if (key !== 'id' && key !== 'userId') {
-          sanitizedObject[key] = deepSanitize(value);
+          if (key === 'email' && value === process.env.ADMIN_EMAIL) {
+            sanitizedObject[key] = value;
+            continue;
+          }
+          if (key === 'details' && sanitizedObject['email'] === process.env.ADMIN_EMAIL) {
+            const { location, ...restDetails } = value;
+            sanitizedObject[key] = deepSanitize(restDetails);
+          } else {
+            sanitizedObject[key] = deepSanitize(value);
+          }
         }
       }
       return sanitizedObject;
@@ -155,7 +164,7 @@ eventEmitter.on('userCacheUpdate', async ({ type, data, adId, userId, action }) 
     }
   }
 
-  const parsedCache = JSON.parse(cache.get('users'));
+  let parsedCache = JSON.parse(cache.get('users'));
 
   const accountId = userId !== null ? userId : parsedCache.find((account) => account.ads.find((ad) => ad.adId === adId))?.id || null;
   if (!accountId) return;

@@ -93,10 +93,12 @@
     margin-bottom: 4px; 
 }
 
-.checkbox-item input[type="checkbox"] {
+.checkbox-item-custom input[type="checkbox"] {
     margin-right: 8px; 
     width: auto;
     box-shadow: none;
+    width: 20px;
+    height: 20px;
 }
 
 

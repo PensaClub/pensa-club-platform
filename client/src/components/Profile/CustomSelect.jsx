@@ -79,7 +79,7 @@ const CustomSelect = ({ options, selectedOptions, onSelect }) => {
                     </div>
 
                     {options.map(option => (
-                        <div key={option.value} className={`checkbox-item ${selectedOptions.includes(option.value) ? 'checked' : ''}`}>
+                        <div key={option.value} className={`checkbox-item-custom ${selectedOptions.includes(option.value) ? 'checked' : ''}`}>
                             <label>
                                 <input
                                     type="checkbox"

@@ -1,8 +1,7 @@
-
 import './suggestUserComments.css';
 import { useTranslation } from 'react-i18next';
 
-export const SuggestUserComments = ({ isOpen, onClose, onSubmit, comments, comment, setComment }) => {
+export const SuggestUserComments = ({ isOpen, onClose, onSubmit, comments, comment, setComment, error,setError }) => {
   const { t } = useTranslation();
 
   if (!isOpen) return null;
@@ -36,13 +35,17 @@ export const SuggestUserComments = ({ isOpen, onClose, onSubmit, comments, comme
           <h2>{t('user-suggestion.add_new_comment')}</h2>
           <textarea
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            onChange={(e) => {
+              setComment(e.target.value);
+              setError(''); 
+            }}
             rows="5"
             cols="50"
           />
+          {error && <p className="error-text">{error}</p>} 
         </div>
         <button className="modal-submit-admin" onClick={onSubmit}>
-        {t('user-suggestion.submit')}
+          {t('user-suggestion.submit')}
         </button>
       </div>
     </div>

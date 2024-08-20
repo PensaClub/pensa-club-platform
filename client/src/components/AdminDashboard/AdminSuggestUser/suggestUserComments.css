@@ -171,3 +171,7 @@
     font-size: var(--l-font-size);
   }
 }
+.error-text {
+  color: red;
+  margin-top: 5px;
+}

@@ -80,23 +80,30 @@
 }
 
 .parent-motto {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10em;
 }
 .motto-img {
+  margin-left: 10%;
   display: flex;
   justify-content: end;
   align-items: start;
+  width: 70%;
+  min-width: 550px;
+  
 }
 
 .motto-img img {
-  width: 62%;
+  width: 100%;
   height: auto;
+  max-height: 1070px;
   object-fit: contain;
 }
 
 .motto-desc {
+  margin-right: 10%;
   display: flex;
   width: 80%;
   flex-direction: column;
