@@ -474,6 +474,7 @@
     "success-delete-ads": "Ad was deleted successfully!",
     "success-edit-ads": "Ad was edited successfully!",
     "success-suggested": "You have successfully suggested a friend!",
+    "success-approved-suggest": "Recommendation approved",
     "success-password-change": "Your password was changed successfully!",
     "enter-comment": "Enter a comment",
     "ad-approved": "The Ad has been approved!",

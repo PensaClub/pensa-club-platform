@@ -81,6 +81,11 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
+      case 'success-approved-suggest':
+        toast.success(<Trans i18nKey="notification.success-approved-suggest" />, {
+          role: 'alert',
+        });
+        break;
     case 'success-password-change':
       toast.success(<Trans i18nKey="notification.success-password-change" />, {
         role: 'alert',
