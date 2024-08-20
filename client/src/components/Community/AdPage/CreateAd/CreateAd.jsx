@@ -15,7 +15,7 @@ import DatePicker from "react-datepicker";
 import { v4 } from "uuid";
 import { TagInput } from "./TagInput";
 import { notify } from "../../../../utils/notify";
- 
+
 export const CreateAd = () => {
   const { t, i18n } = useTranslation();
   const [fieldDefinitions, setFieldDefinitions] = useState({});
@@ -39,14 +39,14 @@ export const CreateAd = () => {
   const currentLanguage = i18n.language;
   const navigate = useNavigate();
   const getEmailPrefix = (email) => email.split("@")[0];
- 
+
   const emailPrefix = getEmailPrefix(profileData.email);
- 
+
   const getAdTownValue = (language, settlement) => {
     if (!settlement || !settlement.bg || !settlement.en) return "";
     return language === "bg" ? settlement.bg : settlement.en;
   };
- 
+
   const initialValues = {
     adId: v4(),
     summary: "",
@@ -58,9 +58,9 @@ export const CreateAd = () => {
       ? getAdTownValue(currentLanguage, profileData.details.settlement)
       : "",
     street: `${profileData.details?.settlement}, ул. ${profileData.details?.street}${profileData.details?.streetNumber ? ", " + profileData.details?.streetNumber : ""}`,
- 
+
     useOtherCity: false,
- 
+
     extraFields: {
       price: "",
       eventStartDate: null,
@@ -70,9 +70,9 @@ export const CreateAd = () => {
   const handleCheckboxChange = async (e) => {
     const isChecked = e.target.checked;
     setUseOtherCity(isChecked);
- 
+
     if (isChecked) {
- 
+
       setValues((prevValues) => ({
         ...prevValues,
         adRegion: "",
@@ -84,35 +84,32 @@ export const CreateAd = () => {
       setSelectedSubregion("");
       setSelectedTown("");
     } else {
+
       const addressId = JSON.parse(localStorage.getItem("addressId"));
- 
+
       if (addressId) {
         try {
-          const region = regions.find(
-            (region) => region.id === addressId.regionId
-          );
- 
+
+          const region = regions.find((region) => region.id === addressId.regionId);
+
           if (!subregions[addressId.regionId] || subregions[addressId.regionId].length === 0) {
             await fetchSubregions(addressId.regionId);
           }
- 
+
           const subregion = (subregions[addressId.regionId] || []).find(
             (subregion) => subregion.id === addressId.municipalityId
           );
- 
-          let townList = settlements;
-          if (!townList.length) {
-            const townResponse = await fetch(
-              `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
-            );
-            townList = await townResponse.json();
-            setSettlements(townList);
-          }
- 
+
+          const townResponse = await fetch(
+            `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
+          );
+          const townList = await townResponse.json();
+          setSettlements(townList);
+
           const town = townList.find(
             (settlement) => settlement.id === addressId.settlementId
           );
- 
+
           if (region && subregion && town) {
             setSelectedRegion(addressId.regionId);
             setSelectedSubregion(addressId.municipalityId);
@@ -125,7 +122,7 @@ export const CreateAd = () => {
               street: `${town.bg || town.en}, ул. ${profileData.details?.street || ""}${profileData.details?.streetNumber
                 ? ", " + profileData.details.streetNumber
                 : ""
-              }`,
+                }`,
             }));
           }
         } catch (error) {
@@ -133,11 +130,11 @@ export const CreateAd = () => {
         }
       }
     }
-  };  
- 
+  };
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
- 
+
   }, []);
   useEffect(() => {
     if (!isFinish) {
@@ -145,28 +142,28 @@ export const CreateAd = () => {
       notify('finish-profile');
     }
   }, [isFinish, navigate]);
- 
+
   useEffect(() => {
     if (!isFinish) return;
- 
+
     if (selectedRegion) {
       fetchSubregions(selectedRegion);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRegion]);
- 
+
   useEffect(() => {
     if (!isFinish) return;
- 
+
     if (selectedRegion && selectedSubregion) {
       fetchTowns(selectedRegion, selectedSubregion).then(setTowns);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRegion, selectedSubregion]);
- 
+
   useEffect(() => {
     if (!isFinish) return;
- 
+
     const loadFieldDefinitions = async () => {
       try {
         const response = await fetch("/fieldDefinitions.json");
@@ -176,13 +173,13 @@ export const CreateAd = () => {
         console.error("Failed to load field definitions", error);
       }
     };
- 
+
     loadFieldDefinitions();
   }, [isFinish]);
- 
+
   useEffect(() => {
     if (!isFinish) return;
- 
+
     const fetchData = async () => {
       const addressId = JSON.parse(localStorage.getItem("addressId"));
       if (addressId) {
@@ -190,18 +187,18 @@ export const CreateAd = () => {
           const region = regions.find(
             (region) => region.id === addressId.regionId
           );
- 
+
           if (
             !subregions[addressId.regionId] ||
             subregions[addressId.regionId].length === 0
           ) {
             await fetchSubregions(addressId.regionId);
           }
- 
+
           const subregion = (subregions[addressId.regionId] || []).find(
             (subregion) => subregion.id === addressId.municipalityId
           );
- 
+
           let townList = settlements;
           if (!townList.length) {
             const townResponse = await fetch(
@@ -210,11 +207,11 @@ export const CreateAd = () => {
             townList = await townResponse.json();
             // setSettlements(townList);
           }
- 
+
           const town = townList.find(
             (settlement) => settlement.id === addressId.settlementId
           );
- 
+
           if (region && subregion && town) {
             setSelectedRegion((prev) => prev || addressId.regionId);
             setSelectedSubregion((prev) => prev || addressId.municipalityId);
@@ -231,22 +228,22 @@ export const CreateAd = () => {
         }
       }
     };
- 
+
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish, currentLanguage, regions, subregions]);
- 
+
   useEffect(() => {
     if (!isFinish) return;
- 
+
     if (selectedRegion && selectedSubregion) {
       fetchTowns(selectedRegion, selectedSubregion).then(setSettlements);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish, selectedSubregion, selectedRegion]);
- 
+
   const handleNavigate = () => navigate("/craigslist");
- 
+
   const formatDateToYYYYMMDD = (date) => {
     if (!date) {
       const fields = fieldDefinitions.fields?.[values.category] || [];
@@ -257,13 +254,13 @@ export const CreateAd = () => {
     let month = "" + (d.getMonth() + 1);
     let day = "" + d.getDate();
     const year = d.getFullYear();
- 
+
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
- 
+
     return [year, month, day].join("-");
   };
- 
+
   const formatPrice = (price) => {
     if (!price) {
       const fields = fieldDefinitions.fields?.[values.category] || [];
@@ -272,7 +269,7 @@ export const CreateAd = () => {
     }
     return price;
   };
- 
+
   const {
     onChangeHandler,
     onBlurHandler,
@@ -295,14 +292,14 @@ export const CreateAd = () => {
         extraFields: {
           ...formData.extraFields,
           price: formatPrice(formData.extraFields.price),
- 
+
           eventStartDate: formatDateToYYYYMMDD(
             formData.extraFields.eventStartDate
           ),
           eventEndDate: formatDateToYYYYMMDD(formData.extraFields.eventEndDate),
         },
       };
- 
+
       try {
         await createAd(updatedFormData);
       } catch (error) {
@@ -311,7 +308,7 @@ export const CreateAd = () => {
     },
     emailPrefix
   );
- 
+
   const renderFields = () => {
     const fields = fieldDefinitions.fields?.[values.category] || [];
     return fields.length > 0 ? (
@@ -354,7 +351,7 @@ export const CreateAd = () => {
       </div>
     ) : null;
   };
- 
+
   return (
     <>
       <section className="ad-community-background">
@@ -391,7 +388,7 @@ export const CreateAd = () => {
                       onBlur={onBlurHandler}
                       required 
                     >
-                      <option value="">{t("ads.select_category")}</option> 
+                       <option value="">{t("ads.select_category")}</option> 
                       {searchCriteria.searchCriteria?.map((criteria) => (
                         <option key={criteria.value} value={criteria.value}>
                           {t(criteria.name)}
@@ -432,11 +429,11 @@ export const CreateAd = () => {
                           onChange={(e) => {
                             const newRegion = e.target.value;
                             setSelectedRegion(newRegion);
- 
+
                             if (useOtherCity) {
                               setSelectedSubregion("");
                               setSelectedTown("");
- 
+
                               setValues((prevValues) => ({
                                 ...prevValues,
                                 adRegion: newRegion,
@@ -447,7 +444,7 @@ export const CreateAd = () => {
                                 fetchSubregions(newRegion);
                               }
                             } else {
- 
+
                               setValues((prevValues) => ({
                                 ...prevValues,
                                 adRegion: newRegion,
