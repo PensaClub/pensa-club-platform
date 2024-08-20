@@ -552,7 +552,7 @@
     "comments": "Comments",
     "submit": "Submit",
     "name-lenght": "Name must be between 3 and 40 characters in length.",
-    "message-lenght": "The length of the message must be between 5 and 100 characters"
+    "message-lenght": "The length of the message must be between 5 and 100 characters",
     "empty_comment_error": "Comment cannot be empty."
   },
   "admin_messages": {
