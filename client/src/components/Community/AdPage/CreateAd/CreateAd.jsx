@@ -50,7 +50,7 @@ export const CreateAd = () => {
   const initialValues = {
     adId: v4(),
     summary: "",
-    category: "donate",
+    category: "",
     description: "",
     adRegion: profileData.details?.region || "",
     adSubregion: profileData.details?.subregion || "",
@@ -386,7 +386,9 @@ export const CreateAd = () => {
                       value={values.category}
                       onChange={onChangeHandler}
                       onBlur={onBlurHandler}
+                      required 
                     >
+                       <option value="">{t("ads.select_category")}</option> 
                       {searchCriteria.searchCriteria?.map((criteria) => (
                         <option key={criteria.value} value={criteria.value}>
                           {t(criteria.name)}
