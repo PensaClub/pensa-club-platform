@@ -111,6 +111,11 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
+      case 'form_contains_errors':
+        toast.error(<Trans i18nKey="forms.form_contains_errors" />, {
+          role: 'alert',
+        });
+        break;
     case 'user-already-exists':
       toast.error(<Trans i18nKey="notification.user-already-exists" />, {
         role: 'alert',
