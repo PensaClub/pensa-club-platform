@@ -17,17 +17,24 @@ export const validateField = (name, value, form = {}, t) => {
             break;
         case 'email':
             if (!value) error = t('profile.email_required');
-            else if (!emailRegex.test(value)) error =  t('profile.email_error');
+            else if (!emailRegex.test(value)) error = t('profile.email_error');
             break;
         case 'firstName':
-            if (!nameRegex.test(value)) error = t('profile.name_invalid');
+            if (!value) {
+                error = '';
+            } else if (!nameRegex.test(value)) {
+                error = t('profile.name_invalid');
+
+            }
             break;
         case 'lastName':
-            if (!nameRegex.test(value)) error = t('profile.name_invalid');
+            if (!value) {
+                error = '';
+            } else if (!nameRegex.test(value)) error = t('profile.name_invalid');
             break;
         case 'phoneNumber':
             if (!value) {
-                error = ''; 
+                error = '';
             } else if (!phoneNumberRegex.test(value)) {
                 error = t('profile.phone_number_invalid');
             }
@@ -58,15 +65,15 @@ export const validateField = (name, value, form = {}, t) => {
         case 'rePassword':
             if (value !== form.newPassword) {
                 error = t('profile.password_match');
-            }  
+            }
             break;
         default:
             break;
     }
-    return error ;
- };
+    return error;
+};
 
- export const generateNumberOptions = (start, end) => {
+export const generateNumberOptions = (start, end) => {
     const options = [];
     if (start >= end) {
         for (let i = start; i >= end; i--) {
