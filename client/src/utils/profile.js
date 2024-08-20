@@ -7,7 +7,6 @@ export const phoneNumberRegex = /^(?:\+\d{7,15}|\d{10})$/;
 export const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 export const validateField = (name, value, form = {}, t) => {
-    console.log(`Field ${name} value ${value} blurred with `);
 
     let error = '';
     switch (name) {
