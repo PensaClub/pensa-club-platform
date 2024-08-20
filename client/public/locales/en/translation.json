@@ -127,7 +127,7 @@
     "close": "Close",
     "and": "and",
     "more": "more",
-     "zoom_instructions": "Hold down the Ctrl key while scrolling to zoom the map"
+    "zoom_instructions": "Hold down the Ctrl key while scrolling to zoom the map"
   },
   "notify_modal": {
     "part1": "Please,",
@@ -261,7 +261,8 @@
     "in_box": "Inbox",
     "rejected_ads": "was not approved",
     "your_ad": "Your ad",
-    "alert_message": "Your profile is incomplete. Please complete it to continue using all features of the platform."
+    "alert_message": "Your profile is incomplete. Please complete it to continue using all features of the platform.",
+    "street_invalid": "Please enter a valid street. The street should contain between 3 and 60 characters, including Bulgarian and English letters and numbers."
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -349,25 +350,24 @@
     "deleted_ad": "Your ad was deleted",
     "approved-suggested_users": "Approved suggested users",
     "admins": "Admins",
-   "guests":"Guests",
-   "count":"count",
-   "total":"total",
-   "completed":"completed",
-   "not_completed":"not completed",
-   "pending_ads": "Pending Ads",
-   "approved_ads": "Approved Ads",
-   "rejected_ads": "Rejected Ads",
-   "pending": "Pending",
-   "approved": "Approved",
-   "rejected": "Rejected",
-   "username": "Username",
-   "ads_subscription": "Subscriptions",
-   "search_clear": "Clear search",
-   "unfinished_users_profile": "Unfinished Users Profile",
-   "announcement_comment": "Comment on Announcement",
-   "submit":"Submit",
-   "user_comment": "Comment on user"
-
+    "guests": "Guests",
+    "count": "count",
+    "total": "total",
+    "completed": "completed",
+    "not_completed": "not completed",
+    "pending_ads": "Pending Ads",
+    "approved_ads": "Approved Ads",
+    "rejected_ads": "Rejected Ads",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "username": "Username",
+    "ads_subscription": "Subscriptions",
+    "search_clear": "Clear search",
+    "unfinished_users_profile": "Unfinished Users Profile",
+    "announcement_comment": "Comment on Announcement",
+    "submit": "Submit",
+    "user_comment": "Comment on user"
   },
   "community": {
     "community": "Community",
@@ -487,7 +487,7 @@
     "password-change-email-invalid": "There isn't a registered user with this email!",
     "subscriber-exists": "This email is already subscribed!",
     "subscribe-username-length": "Username must be between 3 and 16 characters long!",
-    "subscribe-username-content": "Username must start with a letter and can only contain letters, numbers, and underscores!" ,
+    "subscribe-username-content": "Username must start with a letter and can only contain letters, numbers, and underscores!",
     "error": "An error occurred. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",
@@ -551,12 +551,12 @@
     "comment": "Comment",
     "comments": "Comments",
     "submit": "Submit",
-    "name-lenght": "Name should not be longer than 40 symbols.",
-    "message-lenght": "Message should not be longer than 100 symbols.",
+    "name-lenght": "Name must be between 3 and 40 characters in length.",
+    "message-lenght": "The length of the message must be between 5 and 100 characters",
     "empty_comment_error": "Comment cannot be empty."
   },
-  "admin_messages":{
-    "search_desc": "Search by description...", 
+  "admin_messages": {
+    "search_desc": "Search by description...",
     "search": "Search",
     "search_clear": "Clear search",
     "previous": "Previous",

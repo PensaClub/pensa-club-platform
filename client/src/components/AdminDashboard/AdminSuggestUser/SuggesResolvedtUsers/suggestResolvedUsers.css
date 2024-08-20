@@ -1,13 +1,13 @@
-/* Скриване на иконите по подразбиране */
+
 .suggestUsers-container-table th img.table-icon {
   display: none;
 }
 
-/* Показване на иконите в специфични резолюции */
+
 @media (min-width: 768px) and (max-width: 1200px) {
   .suggestUsers-container-table th img.table-icon {
       display: inline-block;
-      width: 25px; /* Можеш да коригираш размера според нуждите си */
+      width: 25px; 
   }
   
   .suggestUsers-container-table th span {
@@ -15,7 +15,7 @@
   }
 }
 
-/* Остатък от стиловете за таблицата */
+
 .admin-suggestUsers-container {
   width: 90%;
   margin: 0 auto;
