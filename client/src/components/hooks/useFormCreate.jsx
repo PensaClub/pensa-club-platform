@@ -5,6 +5,7 @@ import imageCompression from "browser-image-compression";
 import { v4 } from "uuid";
 import { validateFieldCreateAd } from "../../utils/ad";
 import { useTranslation } from "react-i18next";
+import { notify } from "../../utils/notify";
 // import defaultImage from 'public/images/community/no-image.png';
 
 export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
@@ -133,9 +134,18 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
     e.preventDefault();
     handleTrimFields();
   
+    const hasErrors = Object.values(errors).some(
+      (error) => error !== null && Object.values(error).length > 0
+    );
+  
+    if (hasErrors) {
+      notify("form_contains_errors");
+      return; 
+    }
+  
     try {
       let uploadTasks = [];
-  
+    
       if (imageFiles.every(file => file === null)) {
         const defaultFile = await fetch(defaultImageURL).then(res => res.blob());
         const imageRef = ref(firebaseStorage, `ads/${emailPrefix}/${v4()}`);
@@ -143,24 +153,20 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
         const imageURL = await getDownloadURL(snapshot.ref);
         uploadTasks = [{ imageURL, firebaseImagePath: imageRef.fullPath }];
       } else {
-      
-        uploadTasks = imageFiles.map(async (file) => {
+        uploadTasks = imageFiles.map(async (file, index) => {
           if (!file) return null;
-  
           const options = {
             maxSizeMB: 5,
             maxWidthOrHeight: 350,
           };
-  
           const compressedFile = await imageCompression(file, options);
           const imageRef = ref(firebaseStorage, `ads/${emailPrefix}/${v4()}`);
           const snapshot = await uploadBytes(imageRef, compressedFile);
           const imageURL = await getDownloadURL(snapshot.ref);
-  
           return { imageURL, firebaseImagePath: imageRef.fullPath };
         });
       }
-  
+    
       const imageUrls = await Promise.all(uploadTasks);
       const newImages = imageUrls.filter((x) => x !== null);
       const newImagesIndexes = imageUrls.reduce(
@@ -171,13 +177,13 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
       let filteredImageObjects = values?.images ? [...values?.images] : [];
   
       newImages.forEach((newImage, index) => {
-        filteredImageObjects[newImagesIndexes[index]] = newImage; // Overwrite changed images
+        filteredImageObjects[newImagesIndexes[index]] = newImage; 
       });
   
       filteredImageObjects = filteredImageObjects.filter(
         (val) =>
-          images.includes(val.imageURL) || // Check whether images are still in state
-          newImages.some((img) => img.imageURL === val.imageURL) // For new images to pass
+          images.includes(val.imageURL) || 
+          newImages.some((img) => img.imageURL === val.imageURL) 
       );
   
       const filteredValues = filterEmptyFields({
@@ -193,8 +199,8 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
     } catch (error) {
       console.error("Error uploading images: ", error);
     }
-  };  
-
+  };
+  
   return {
     onChangeHandler,
     onBlurHandler,

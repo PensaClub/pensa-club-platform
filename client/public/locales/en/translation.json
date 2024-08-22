@@ -619,5 +619,8 @@
     "dataDisclosureLaw": "Law enforcement: when required by law",
     "thirdPartyWebsitesTitle": "Third Party Websites",
     "thirdPartyWebsitesText": "Our website may contain links to third-party websites. We are not responsible for the privacy policies or content of these websites. We recommend you review the privacy policies of these websites before providing any personal information."
+  },
+  "forms":{
+    "form_contains_errors": "The form contains errors. Please correct them and try again."
   }
 }
