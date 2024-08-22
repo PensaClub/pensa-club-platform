@@ -139,7 +139,9 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
     );
   
     if (hasErrors) {
+
       notify("form_contains_errors");
+      setErrors({})
       return; 
     }
   
