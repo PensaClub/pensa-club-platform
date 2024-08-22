@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -43,7 +43,8 @@ export const AdDetails = () => {
   const { getAdById, fetchTowns, getMyAds } = useContext(CommunityContext);
   const { adId } = useParams();
   const [modalImage, setModalImage] = useState(null);
-
+  const adContainerRef = useRef(null); 
+  const [scrollPosition, setScrollPosition] = useState(0);
   useEffect(() => {
     async function fetchAd() {
       try {
@@ -80,6 +81,16 @@ export const AdDetails = () => {
       setUserAds({ ...userAdsResponse, ads: sortedAds });
       setSelectedUser(userDetails);
       setIsSidebarOpen(true);
+      if (adContainerRef.current) {
+        adContainerRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start', 
+        });
+
+        setTimeout(() => {
+            window.scrollBy(0, 500); 
+        }, 500); 
+    }
     } catch (error) {
       console.error('Failed to fetch user ads', error);
     }
@@ -88,6 +99,10 @@ export const AdDetails = () => {
   const closeSidebar = () => {
     setSelectedUser(null);
     setIsSidebarOpen(false);
+    window.scrollTo({
+      top: scrollPosition,
+      behavior: 'smooth',
+  });
   };
 
   const shareAd = async () => {
@@ -142,7 +157,7 @@ export const AdDetails = () => {
   return (
     <>
       <section className="background-ads-details">
-        <section className="ads-details-page">
+        <section className="ads-details-page" ref={adContainerRef}>
           <HeaderCommunity />
           <section className="main-details">
             <div className="hero-bg-details"></div>
@@ -172,7 +187,8 @@ export const AdDetails = () => {
                     >
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faPhone} className="icon" />
-                        <p>{t('ads.call')}</p>
+                        {userDetails?.phoneNumber?(<p>{userDetails?.phoneNumber}</p>):
+                        (<p>{t('ads.call')}</p>)}
                       </div>
                     </Link>
                     <Link
@@ -181,7 +197,7 @@ export const AdDetails = () => {
                     >
                       <div className="group-icon">
                         <FontAwesomeIcon icon={faEnvelope} className="icon" />
-                        <p>{t('ads.send-message')}</p>
+                        <p>{ad?.account?.email}</p>
                       </div>
                     </Link>
                     <Link>
@@ -195,12 +211,14 @@ export const AdDetails = () => {
                   </div>
                   <div className="ads-details-card">
                     <div className="img-ads-details">
-                      <div>
+                      <div className='position-category'>
                         {ad?.images && ad?.images?.length > 0 && (
                           <ImageEnlarger images={ad?.images.map(img => img.imageURL)} ad={ad} t={t} />
                         )}
-                        <p>{t(`search-criteria.${ad?.category}`)}</p>
+                      <p className='position-text-absolute'>{t(`search-criteria.${ad?.category}`)}</p>
+                        
                       </div>
+                      {/* <p className='position-text-absolute'>{t(`search-criteria.${ad?.category}`)}</p> */}
                       <div className="ads-details-desc">
                         <h3>{t('ads.description')}</h3>
                         <hr />

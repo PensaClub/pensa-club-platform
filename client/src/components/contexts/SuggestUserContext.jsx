@@ -46,7 +46,7 @@ export const SuggestUserProvider = ({ children }) => {
       // eslint-disable-next-line no-unused-vars
       const response = await suggestUserService.suggestResolve(id);
 
-      notify('success-suggest');
+      notify('success-approved-suggest');
     } catch (error) {
       notify('error', error);
       showErrorAndSetTimeouts(error.message);

@@ -106,6 +106,8 @@
 
 .form-group input,
 .form-group select {
+    opacity: 1;
+    color: #111;
     height: 55px;
     padding: 0 1em;
     font-size: calc(var(--xxs-font-size) + 1px);

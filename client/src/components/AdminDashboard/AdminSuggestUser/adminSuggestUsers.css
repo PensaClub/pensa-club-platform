@@ -18,7 +18,7 @@
 }
 .recommended-name,
 .recommended-by {
-  width: 170px;
+  width: 130px;
   word-wrap: break-word;
   word-break: break-word;
   white-space: normal;
@@ -47,7 +47,7 @@
 .suggestUsers-container-table td {
   padding: 8px;
   border: 1px solid #ddd;
-  white-space: nowrap;
+  /* white-space: nowrap; */
   text-align: center;
 }
 
@@ -251,6 +251,10 @@
 }
 
 @media (min-width: 768px) and (max-width: 1200px) {
+  .all-name-td {
+    word-wrap: break-word !important;  /* Позволява пренасяне на думите */
+    max-width: 150px;       /* Максимална ширина на клетката */
+  }
   .admin-suggestUsers-container h2 {
     font-size: var(--s-font-size);
   }
@@ -321,6 +325,7 @@
     display: inline-block;
   }
 }
+
 @media (min-width: 980px) and (max-width: 1200px) {
   .admin-suggestUsers-container {
     width: 100%;
@@ -341,7 +346,7 @@
   }
   .recommended-name,
   .recommended-by {
-    width: 370px;
+    width: 305px;
   }
   .suggestUsers-container-table {
     font-size: var(--xs-font-size)!important;
@@ -550,4 +555,19 @@
   to {
     transform: translateY(0);
   }
+}
+@media (min-width: 1200px) and (max-width: 1500px) {
+  .recommended-name,
+  .recommended-by {
+    width: 200px;
+  }
+  .suggestUsers-container-table {
+    font-size: var(--xxs-font-size)!important;
+  }
+  .clickable-text {
+    font-size: var(--xxs-font-size)!important;
+}
+.message-suggest-all{
+  width: 130px;
+}
 }

@@ -26,6 +26,7 @@ export const CreateAd = () => {
   const [selectedTown, setSelectedTown] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedSubregion, setSelectedSubregion] = useState("");
+  const [useOtherCity, setUseOtherCity] = useState(false);
   const {
     regions,
     subregions,
@@ -56,7 +57,7 @@ export const CreateAd = () => {
     adTown: profileData.details?.settlement
       ? getAdTownValue(currentLanguage, profileData.details.settlement)
       : "",
-      street: `${profileData.details?.settlement}, ул. ${profileData.details?.street}${profileData.details?.streetNumber ? ", " + profileData.details?.streetNumber : ""}`,
+    street: `${profileData.details?.settlement}, ул. ${profileData.details?.street}${profileData.details?.streetNumber ? ", " + profileData.details?.streetNumber : ""}`,
 
     useOtherCity: false,
 
@@ -66,11 +67,75 @@ export const CreateAd = () => {
       eventEndDate: null,
     },
   };
+  const handleCheckboxChange = async (e) => {
+    const isChecked = e.target.checked;
+    setUseOtherCity(isChecked);
+
+    if (isChecked) {
+
+      setValues((prevValues) => ({
+        ...prevValues,
+        adRegion: "",
+        adSubregion: "",
+        adTown: "",
+        street: "",
+      }));
+      setSelectedRegion("");
+      setSelectedSubregion("");
+      setSelectedTown("");
+    } else {
+
+      const addressId = JSON.parse(localStorage.getItem("addressId"));
+
+      if (addressId) {
+        try {
+
+          const region = regions.find((region) => region.id === addressId.regionId);
+
+          if (!subregions[addressId.regionId] || subregions[addressId.regionId].length === 0) {
+            await fetchSubregions(addressId.regionId);
+          }
+
+          const subregion = (subregions[addressId.regionId] || []).find(
+            (subregion) => subregion.id === addressId.municipalityId
+          );
+
+          const townResponse = await fetch(
+            `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
+          );
+          const townList = await townResponse.json();
+          setSettlements(townList);
+
+          const town = townList.find(
+            (settlement) => settlement.id === addressId.settlementId
+          );
+
+          if (region && subregion && town) {
+            setSelectedRegion(addressId.regionId);
+            setSelectedSubregion(addressId.municipalityId);
+            setSelectedTown(town.id);
+            setValues((state) => ({
+              ...state,
+              adRegion: addressId.regionId,
+              adSubregion: addressId.municipalityId,
+              adTown: addressId.settlementId,
+              street: `${town.bg || town.en}, ул. ${profileData.details?.street || ""}${profileData.details?.streetNumber
+                ? ", " + profileData.details.streetNumber
+                : ""
+                }`,
+            }));
+          }
+        } catch (error) {
+          console.error("Failed to load data", error);
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
 
-}, []);
+  }, []);
   useEffect(() => {
     if (!isFinish) {
       navigate('/profile/profile-form');
@@ -140,7 +205,7 @@ export const CreateAd = () => {
               `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
             );
             townList = await townResponse.json();
-            setSettlements(townList);
+            // setSettlements(townList);
           }
 
           const town = townList.find(
@@ -323,7 +388,7 @@ export const CreateAd = () => {
                       onBlur={onBlurHandler}
                       required 
                     >
-                      <option value="">{t("ads.select_category")}</option> 
+                       <option value="">{t("ads.select_category")}</option> 
                       {searchCriteria.searchCriteria?.map((criteria) => (
                         <option key={criteria.value} value={criteria.value}>
                           {t(criteria.name)}
@@ -362,17 +427,33 @@ export const CreateAd = () => {
                           name="adRegion"
                           value={selectedRegion}
                           onChange={(e) => {
-                            setSelectedRegion(e.target.value);
-                            setValues((state) => ({
-                              ...state,
-                              adRegion: e.target.value,
-                              adSubregion: "",
-                              adTown: "",
-                            }));
+                            const newRegion = e.target.value;
+                            setSelectedRegion(newRegion);
+
+                            if (useOtherCity) {
+                              setSelectedSubregion("");
+                              setSelectedTown("");
+
+                              setValues((prevValues) => ({
+                                ...prevValues,
+                                adRegion: newRegion,
+                                adSubregion: "",
+                                adTown: "",
+                              }));
+                              if (newRegion) {
+                                fetchSubregions(newRegion);
+                              }
+                            } else {
+
+                              setValues((prevValues) => ({
+                                ...prevValues,
+                                adRegion: newRegion,
+                              }));
+                            }
                           }}
                           onBlur={onBlurHandler}
                           required
-                          disabled={!values.useOtherCity}
+                          disabled={!useOtherCity}
                         >
                           <option value="">
                             {t("community.select_region")}
@@ -396,16 +477,20 @@ export const CreateAd = () => {
                           name="adSubregion"
                           value={selectedSubregion}
                           onChange={(e) => {
-                            setSelectedSubregion(e.target.value);
+                            const newSubregion = e.target.value;
+                            setSelectedSubregion(newSubregion);
                             setValues((state) => ({
                               ...state,
-                              adSubregion: e.target.value,
-                              adTown: "",
+                              adSubregion: newSubregion,
+                              adTown: state.adTown,
                             }));
+                            if (!useOtherCity) {
+                              setSelectedTown("");
+                            }
                           }}
                           onBlur={onBlurHandler}
                           required
-                          disabled={!values.useOtherCity || !selectedRegion}
+                          disabled={!useOtherCity}
                         >
                           <option value="">
                             {t("community.select_municipality")}
@@ -424,7 +509,7 @@ export const CreateAd = () => {
                         )}
                       </div>
                       <div className="form-group">
-                        <label htmlFor="adTown">{t("ads.ad_town")}</label>
+                        <label htmlFor="adTown">{t("ads.ad_town_village")}</label>
                         <select
                           id="adTown"
                           name="adTown"
@@ -438,7 +523,7 @@ export const CreateAd = () => {
                           }}
                           onBlur={onBlurHandler}
                           required
-                          disabled={!values.useOtherCity || !selectedSubregion}
+                          disabled={!useOtherCity}
                         >
                           <option value="">{t("ads.select_town")}</option>
                           {selectedSubregion &&
@@ -458,13 +543,8 @@ export const CreateAd = () => {
                         type="checkbox"
                         id="useOtherCity"
                         name="useOtherCity"
-                        checked={values.useOtherCity}
-                        onChange={(e) =>
-                          setValues((state) => ({
-                            ...state,
-                            useOtherCity: e.target.checked,
-                          }))
-                        }
+                        checked={useOtherCity}
+                        onChange={handleCheckboxChange}
                       />
                       <label htmlFor="useOtherCity">
                         {t("ads.use_other_city")}
@@ -480,7 +560,7 @@ export const CreateAd = () => {
                       value={values.street}
                       onChange={onChangeHandler}
                       onBlur={onBlurHandler}
-                      disabled={!values.useOtherCity}
+                      disabled={!useOtherCity}
                       required
                     />
                     {errors.street && <p className="error">{errors.street}</p>}

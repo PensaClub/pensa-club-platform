@@ -127,7 +127,7 @@
     "close": "Close",
     "and": "and",
     "more": "more",
-     "zoom_instructions": "Hold down the Ctrl key while scrolling to zoom the map"
+    "zoom_instructions": "Hold down the Ctrl key while scrolling to zoom the map"
   },
   "notify_modal": {
     "part1": "Please,",
@@ -238,7 +238,7 @@
     "settlement_required": "Settlement is required",
     "street_required": "Street is required",
     "username_required": "Username is required",
-    "username_error": "Username must be between 7 and 16 characters. It should start with small or capital letter. May contain uppercase letters, lowercase letters, numbers and _",
+    "username_error": "Username must be between 7 and 16 characters. It should start with small or capital letter. May contain uppercase letters, lowercase letters, numbers, _ and –. They are forbidden: !, @, # ,$ ,% ,^ ,&, *, ( ) , +, =. { }, [ ], | ,\\, :, ;,< ,> ,?, /, ~",
     "email_required": "Email is required",
     "email_error": "Email is invalid",
     "name_required": "Name is required",
@@ -261,7 +261,8 @@
     "in_box": "Inbox",
     "rejected_ads": "was not approved",
     "your_ad": "Your ad",
-    "alert_message": "Your profile is incomplete. Please complete it to continue using all features of the platform."
+    "alert_message": "Your profile is incomplete. Please complete it to continue using all features of the platform.",
+    "street_invalid": "Please enter a valid street. The street should contain between 3 and 60 characters, including Bulgarian and English letters and numbers."
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -349,25 +350,24 @@
     "deleted_ad": "Your ad was deleted",
     "approved-suggested_users": "Approved suggested users",
     "admins": "Admins",
-   "guests":"Guests",
-   "count":"count",
-   "total":"total",
-   "completed":"completed",
-   "not_completed":"not completed",
-   "pending_ads": "Pending Ads",
-   "approved_ads": "Approved Ads",
-   "rejected_ads": "Rejected Ads",
-   "pending": "Pending",
-   "approved": "Approved",
-   "rejected": "Rejected",
-   "username": "Username",
-   "ads_subscription": "Subscriptions",
-   "search_clear": "Clear search",
-   "unfinished_users_profile": "Unfinished Users Profile",
-   "announcement_comment": "Comment on Announcement",
-   "submit":"Submit",
-   "user_comment": "Comment on user"
-
+    "guests": "Guests",
+    "count": "count",
+    "total": "total",
+    "completed": "completed",
+    "not_completed": "not completed",
+    "pending_ads": "Pending Ads",
+    "approved_ads": "Approved Ads",
+    "rejected_ads": "Rejected Ads",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "username": "Username",
+    "ads_subscription": "Subscriptions",
+    "search_clear": "Clear search",
+    "unfinished_users_profile": "Unfinished Users Profile",
+    "announcement_comment": "Comment on Announcement",
+    "submit": "Submit",
+    "user_comment": "Comment on user"
   },
   "community": {
     "community": "Community",
@@ -394,7 +394,7 @@
     "no_ads_found": "No ads found",
     "no_ads_message": "It looks like there are no ads that match your criteria.",
     "clear_filters": "Clear Filters",
-    "tag_search": "Enter Tag",
+    "tag_search": "Enter keyword",
     "login_to_view": "Please,",
     "login": "log in",
     "to_see_details": "to see details"
@@ -418,7 +418,7 @@
     "description": "Description",
     "ad_town": "City",
     "ad_address": "Address",
-    "use_other_city": "Use Other City",
+    "use_other_city": "Use Other Address",
     "first_name": "First Name",
     "last_name": "Last Name",
     "email_ad": "Email",
@@ -434,13 +434,13 @@
     "cancel_btn": "Cancel",
     "sub_text-one": "to 32 characters",
     "sub_text-two": "to 1000 characters",
-    "select_town": "Select town",
+    "select_town": "Select city/village",
     "ad_region": "Region",
     "ad_municipality": "Municipality",
-    "tags_ad": "Tags can be added by pressing Enter or Space.",
-    "tags": "Tags",
-    "max_tags": "Max Tags is 5",
-    "enter_tag": "Enter a Tag",
+    "tags_ad": "Keywords can be added by pressing Enter or Space.",
+    "tags": "Keywords",
+    "max_tags": "Max Keywords is 5",
+    "enter_tag": "Enter a keyword.",
     "view_more": "view more",
     "edit": "Edit",
     "edit_ad": "Edit ad",
@@ -462,7 +462,8 @@
     "event_start_date": "Start Date",
     "event_end_date": "End Date",
     "missing_phone": "Phone number is not available",
-    "select_category": "Select category"
+    "select_category": "Select category",
+    "ad_town_village": "City/Village"
   },
   "notification": {
     "success-data": "User Data successfully submitted!",
@@ -473,6 +474,7 @@
     "success-delete-ads": "Ad was deleted successfully!",
     "success-edit-ads": "Ad was edited successfully!",
     "success-suggested": "You have successfully suggested a friend!",
+    "success-approved-suggest": "Recommendation approved",
     "success-password-change": "Your password was changed successfully!",
     "enter-comment": "Enter a comment",
     "ad-approved": "The Ad has been approved!",
@@ -486,7 +488,7 @@
     "password-change-email-invalid": "There isn't a registered user with this email!",
     "subscriber-exists": "This email is already subscribed!",
     "subscribe-username-length": "Username must be between 3 and 16 characters long!",
-    "subscribe-username-content": "Username must start with a letter and can only contain letters, numbers, and underscores!" ,
+    "subscribe-username-content": "Username must start with a letter and can only contain letters, numbers, and underscores!",
     "error": "An error occurred. Please try submitting data again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",
@@ -550,11 +552,12 @@
     "comment": "Comment",
     "comments": "Comments",
     "submit": "Submit",
-    "name-lenght": "Name should not be longer than 40 symbols.",
-    "message-lenght": "Message should not be longer than 100 symbols."
+    "name-lenght": "Name must be between 3 and 40 characters in length.",
+    "message-lenght": "The length of the message must be between 5 and 100 characters",
+    "empty_comment_error": "Comment cannot be empty."
   },
-  "admin_messages":{
-    "search_desc": "Search by description...", 
+  "admin_messages": {
+    "search_desc": "Search by description...",
     "search": "Search",
     "search_clear": "Clear search",
     "previous": "Previous",
@@ -617,5 +620,8 @@
     "dataDisclosureLaw": "Law enforcement: when required by law",
     "thirdPartyWebsitesTitle": "Third Party Websites",
     "thirdPartyWebsitesText": "Our website may contain links to third-party websites. We are not responsible for the privacy policies or content of these websites. We recommend you review the privacy policies of these websites before providing any personal information."
+  },
+  "forms":{
+    "form_contains_errors": "The form contains errors. Please correct them and try again."
   }
 }

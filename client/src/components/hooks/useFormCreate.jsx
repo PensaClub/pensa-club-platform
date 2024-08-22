@@ -5,6 +5,8 @@ import imageCompression from "browser-image-compression";
 import { v4 } from "uuid";
 import { validateFieldCreateAd } from "../../utils/ad";
 import { useTranslation } from "react-i18next";
+import { notify } from "../../utils/notify";
+// import defaultImage from 'public/images/community/no-image.png';
 
 export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const [values, setValues] = useState(initialValues);
@@ -13,7 +15,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const [images, setImages] = useState([null, null, null, null]);
   const [imageFiles, setImageFiles] = useState([null, null, null, null]);
   const { t } = useTranslation();
-
+  const defaultImageURL = '/images/community/no-image1.png';
   const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 
   const onChangeHandler = (e) => {
@@ -131,48 +133,67 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     handleTrimFields();
+  
+    const hasErrors = Object.values(errors).some(
+      (error) => error !== null && Object.values(error).length > 0
+    );
+  
+    if (hasErrors) {
 
+      notify("form_contains_errors");
+      setErrors({})
+      return; 
+    }
+  
     try {
-      const uploadTasks = imageFiles.map(async (file) => {
-        if (!file) return null;
-
-        const options = {
-          maxSizeMB: 5,
-          maxWidthOrHeight: 350,
-        };
-
-        const compressedFile = await imageCompression(file, options);
+      let uploadTasks = [];
+    
+      if (imageFiles.every(file => file === null)) {
+        const defaultFile = await fetch(defaultImageURL).then(res => res.blob());
         const imageRef = ref(firebaseStorage, `ads/${emailPrefix}/${v4()}`);
-        const snapshot = await uploadBytes(imageRef, compressedFile);
+        const snapshot = await uploadBytes(imageRef, defaultFile);
         const imageURL = await getDownloadURL(snapshot.ref);
-
-        return { imageURL, firebaseImagePath: imageRef.fullPath };
-      });
-
+        uploadTasks = [{ imageURL, firebaseImagePath: imageRef.fullPath }];
+      } else {
+        uploadTasks = imageFiles.map(async (file, index) => {
+          if (!file) return null;
+          const options = {
+            maxSizeMB: 5,
+            maxWidthOrHeight: 350,
+          };
+          const compressedFile = await imageCompression(file, options);
+          const imageRef = ref(firebaseStorage, `ads/${emailPrefix}/${v4()}`);
+          const snapshot = await uploadBytes(imageRef, compressedFile);
+          const imageURL = await getDownloadURL(snapshot.ref);
+          return { imageURL, firebaseImagePath: imageRef.fullPath };
+        });
+      }
+    
       const imageUrls = await Promise.all(uploadTasks);
       const newImages = imageUrls.filter((x) => x !== null);
       const newImagesIndexes = imageUrls.reduce(
         (acc, url, urlIndex) => (url ? [...acc, urlIndex] : acc),
         []
       );
-
+  
       let filteredImageObjects = values?.images ? [...values?.images] : [];
-
+  
       newImages.forEach((newImage, index) => {
-        filteredImageObjects[newImagesIndexes[index]] = newImage; // Overwrite changed images
+        filteredImageObjects[newImagesIndexes[index]] = newImage; 
       });
-
+  
       filteredImageObjects = filteredImageObjects.filter(
         (val) =>
-          images.includes(val.imageURL) || // Check whether images are still in state
-          newImages.some((img) => img.imageURL === val.imageURL) // For new images to pass
+          images.includes(val.imageURL) || 
+          newImages.some((img) => img.imageURL === val.imageURL) 
       );
+  
       const filteredValues = filterEmptyFields({
         ...values,
         images: filteredImageObjects,
       });
       if (onSubmitHandler) onSubmitHandler(filteredValues);
-
+  
       setValues(initialValues);
       setErrors({});
       setImages([null, null, null, null]);
@@ -181,7 +202,7 @@ export const useFormCreate = (initialValues, onSubmitHandler, emailPrefix) => {
       console.error("Error uploading images: ", error);
     }
   };
-
+  
   return {
     onChangeHandler,
     onBlurHandler,
