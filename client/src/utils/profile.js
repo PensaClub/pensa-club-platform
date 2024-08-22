@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-export const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
+export const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_-]{6,16}$/;
 export const nameRegex = /^[a-zA-Zа-яА-Я0-9_]{3,20}(-[a-zA-Zа-яА-Я0-9_]{3,20})*$/i;
 export const streetRegex = /^[a-zA-Zа-яА-Я0-9\s]{3,60}$/;
 export const emailRegex = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

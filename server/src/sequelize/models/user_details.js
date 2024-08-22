@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Username must be between 6 and 16 characters.",
           },
           is: {
-            args: /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/,
+            args: /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_-]{6,16}$/,
             msg: "Username must start with a letter and can only contain letters, numbers, and underscores.",
           },
         },

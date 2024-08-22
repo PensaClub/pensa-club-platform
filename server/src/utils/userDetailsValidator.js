@@ -1,4 +1,4 @@
-const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/;
+const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_-]{6,16}$/;
 const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
 const nameRegex = /^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;

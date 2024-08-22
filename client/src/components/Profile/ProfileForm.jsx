@@ -177,9 +177,9 @@ const ProfileForm = () => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
 
-    const error = validateField(name, value, form, t);
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
-
+    if (errors[name]) {
+      setErrors(prevErrors => ({ ...prevErrors, [name]: null }));
+    }
   }
 
   const handleGenderChange = (e) => {
