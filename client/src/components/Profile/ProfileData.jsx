@@ -46,7 +46,7 @@ export const ProfileData = () => {
     if (errors[name]) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: null }));
     }
-
+  
     setIsFormChanged(true);
   }
   const handleGenderChange = (e) => {
@@ -172,7 +172,7 @@ export const ProfileData = () => {
     const error = validateField(name, value, form, t);
     console.log(`Field ${name} value ${value} blurred with error: ${error}`);
 
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+       setErrors(prevErrors => ({ ...prevErrors, [name]: error }));
   };
 
   const handleResetForm = () => {
