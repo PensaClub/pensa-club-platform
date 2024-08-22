@@ -12,6 +12,7 @@ Pensa.club is a platform designed to make it easier for elderly people to use th
 - **Guest**: Has no permissions to view or create listings.
 - **User**: Can add listings and view approved ones.
 - **Administrator**: Can approve and delete listings, as well as change user roles.
+- **Admin Dashboard with Statistics**: An administrator can access a comprehensive statistics dashboard, created using Recharts, to visualize key metrics such as user growth, active vs. inactive users, and ad performance.
 
 ## Technologies
 
