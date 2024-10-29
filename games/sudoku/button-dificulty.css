@@ -1,0 +1,67 @@
+.radio-inputs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  width: 300px;
+  font-size: 14px;
+  margin-bottom: 25px;
+  color: #000000;
+  padding: 0.7em 1.7em;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.radio-inputs .radio {
+flex: 1 1 auto;
+text-align: center;
+}
+
+.radio-inputs .radio input {
+display: none;
+}
+
+.radio-inputs .radio .name {
+display: flex;
+cursor: pointer;
+align-items: center;
+justify-content: center;
+border-radius: 0.5rem;
+border: none;
+padding: .5rem 0;
+color: #000000;
+transition: all .15s ease-in-out;
+}
+
+.radio-inputs {
+  display: flex;
+  width: 94%;
+  justify-content: space-between;
+  padding: 10px 20px;
+  }
+
+.radio {
+max-width: 20%;
+color: #000000;
+padding: 0.7em 1.7em;
+border-radius: 50em;
+cursor: pointer;
+transition: all 0.3s;
+box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+width: 70px;
+height: 30px;
+}
+
+.radio-inputs :hover{
+display: inline-flex;
+align-items: center;
+justify-content: center;
+color:rgb(0, 0, 0);
+font-size: 20px;
+border: none;
+cursor: pointer;
+transition: .3s ease all;
+position: relative;
+overflow: hidden;
+}
+
+  
