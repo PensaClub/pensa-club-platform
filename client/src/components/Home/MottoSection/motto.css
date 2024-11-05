@@ -1,87 +1,25 @@
 .motto-section {
-    padding: var(--xl-space) 0;
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-    padding-bottom: calc(var(--xxl-space) + 1em);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+    justify-content: center;
+    padding: 0 180px;
+    gap: 40px;
+  }
 
-}
-.motto-desc {
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.motto-desc img {
-
-    display: block;
-    max-width: 60px;
-    height: auto;
-    opacity: 0.6;
-    padding-bottom: var( --l-space);
-    overflow: hidden;
-}
-
-.motto-info {
-    padding: var(--m-space);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1.2;
-    gap: 3em;
-}
-
-.motto-info h3 {
-
-    font-size: calc(var(--l-font-size) - 10px);
-    text-align: center;
-
-    text-shadow: var(--text-shadow);
-    font-weight: 500;
-    letter-spacing: 1px;
-
-}
-
-.motto-info p {
-    text-align: center;
-    font-weight: 500;
-    padding: 1em 0;
-    font-style: italic;
-    font-weight: 10;
-    letter-spacing: 1px;
-    font-size: var(--s-font-size);
-
-}
-
-.motto-info span {
-    font-weight: 900;
-    font-size: var(--s-font-size);
-
-}
-
-#btn-join {
-    width: auto;
-}
-
-@media (min-width: 850px) {
-    .motto-desc {
-        max-width: 50%;
-        margin: 0 auto;
+  @media (max-width: 600px) {
+  }
+  
+  @media (max-width: 960px) {
+    .motto-section {
+        grid-template-columns: repeat(1, 1fr);
+        padding: 60px 40px;
     }
+  }
+  @media (min-width: 767px) and (max-width: 1200px) {
 
-    .motto-info h3 {
-        font-size: calc(var(--l-font-size) - 6px);
-    }
+  }
+  
+  @media (max-width: 1400px) {
 
-    .motto-info p {
-        font-weight: 100;
-        font-size: var(--s-font-size);
-        letter-spacing: 1.3px;
-
-    }
-
-    .motto-info span {
-        font-size: var(--s-font-size);
-    }
-
-}
+  }

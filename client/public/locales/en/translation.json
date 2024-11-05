@@ -31,8 +31,9 @@
     "no_results": "No results found"
   },
   "hero": {
-    "title": "DECENT LIFE FOR PEOPLE IN THE THIRD AGE",
-    "desc": "Bulgaria is the country in the European Union (EU) in which the <span>elderly</span> are most threatened by poverty, social exclusion and material difficulties, according to data from the European statistical service Eurostat. <span>Bulgarian pensioners</span> are also the most isolated from the Internet in the EU. Only one in ten people uses the web, and half of those who have internet access write e-mails, read news and search for information about goods. Only <span>2%</span> of them shop online, and every third uses on social networks.",
+    "title": "DECENT LIFE IN THE THIRD AGE",
+    "short-desc": "Everyone deserves a",
+    "desc": "An innovative platform that creates a community of people of the same age, with shared interests, new ideas, and new knowledge!",
     "testimonials": {
       "first-revolution-title": "First Industrial Revolution",
       "first-revolution-desc": "It is distinguished by the introduction of the steam engine, which led to the mechanization of production and the development of the railway transport.",
@@ -47,18 +48,24 @@
     }
   },
   "motto": {
-    "title1": "LET'S BREAK THIS TREND",
-    "title2": "LET'S CHANGE THIS MODEL",
-    "title3": "KEEPING UP WITH THE TIMES",
-    "desc": "This is an innovative platform, a <span>tool</span> for creating a community. A community of people of the same age, with similar interests, new ideas, and new knowledge. A community for interaction and mutual support. The expected outcome is an improvement in <span>quality of life</span>, through <span>active engagement</span> in contemporary life, support for <span>new skills</span> and interests, and encouragement towards a <span>healthy and fulfilling, dignified life</span>!",
-    "about-btn": "Recommend a friend"
+    "title1": "Social",
+    "title2": "Brain activity",
+    "title3": "Health care",
+    "desc1":"Create new connections, join groups, and share interests.",
+    "desc2":"Stimulate your thinking, improve your memory, while having fun and learning.",
+    "desc3":"Healthy practices, tips, and resources that will help you live better.",
+    "about-btn": "Join the club"
+  },
+  "about": {
+    "title": "our mission",
+    "desc": "To create an innovative platform, a tool for building community. We unite people of similar age with common interests, new ideas, and knowledge. We strive to build a community based on interaction and mutual support. The expected outcome is to improve quality of life through active engagement in modernity, support for acquiring new skills and interests, and encouraging a healthy, fulfilling, and dignified life."
   },
   "news-subscribe": {
     "title": "Stay up to date with",
     "desc": "Sign up for the latest news, updates and tips.",
     "name-placeholder": "Name*",
     "email-placeholder": "Email*",
-    "subscribe-btn": "Subscribe",
+    "subscribe-btn": "Register",
     "errors": {
       "required-field": "This field is required!",
       "invalid-email": "Email is invalid!"

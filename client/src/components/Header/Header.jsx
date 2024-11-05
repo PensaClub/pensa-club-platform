@@ -75,7 +75,7 @@ export const Header = ({ additionalClasses }) => {
       case "other":
         return "/images/homePage/user-it.png";
       default:
-        return "/images/homePage/user-female.png";
+        return "/images/homePage/user-img.png";
     }
   };
   return (
@@ -237,7 +237,7 @@ export const Header = ({ additionalClasses }) => {
                 <div className="dropdown-item">
                   {currentLanguage !== "bg" && (
                     <button onClick={() => changeLanguage("bg")}>
-                      български
+                      Български
                     </button>
                   )}
                   {currentLanguage !== "en" && (
