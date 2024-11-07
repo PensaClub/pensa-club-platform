@@ -2,7 +2,7 @@
     position: sticky;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
     background-color: var(--bg-white);
     padding: 1em;
@@ -41,7 +41,7 @@
     animation: bounce 4s infinite;
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1024px) {
     .after-header {
         display: none;
     }
@@ -62,7 +62,7 @@
     }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
     .menu-community {
         display: none;
     }
