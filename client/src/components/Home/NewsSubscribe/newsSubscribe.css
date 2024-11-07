@@ -80,7 +80,7 @@
   height: 7px;
 }
 
-@media (min-width: 850px) and (orientation: landscape) {
+@media (min-width: 900px) and (orientation: landscape) {
   .col-subscribe {
     flex-direction: row;
   }
@@ -110,6 +110,14 @@
   #btn-subscribe {
     margin-top: 5px;
     min-width: calc(var(--container-min-width) - 140px);
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1199px) {
+
+  .subscribe-news {
+      padding: 4em 0.5em;
+      padding-left: 7%;
   }
 }
 .recaptcha-container {

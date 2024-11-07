@@ -78,11 +78,15 @@ h2 {
 }
 
 h3 {
-  font-size: var(--m-font-size);
+  font-size: var(--s-font-size);
 }
 
 label, span, p, input {
   font-size: var(--xs-font-size);
+}
+
+p {
+  font-weight: 460;
 }
 
 

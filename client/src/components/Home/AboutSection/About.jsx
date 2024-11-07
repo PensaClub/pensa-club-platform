@@ -7,23 +7,23 @@ export const AboutSection = () => {
 
   return (
     <>
-      <section class="about">
-        <div class="bg-about">
+      <section className="about">
+        <div className="bg-about">
           <img
             src="/images/homePage/logo-2.png"
             alt="Pensa"
           />
         </div>
-        <div class="about-content-img">
+        <div className="about-content-img">
           <img src="/images/homePage/about-img.webp" alt="" />
         </div>
-        <div class="about-content">
+        <div className="about-content">
           <h3>{ t("about.title")}</h3>
           <p>
             { t("about.desc")}
           </p>
           <Link
-                  to="/suggest-user"
+                  to="/profile"
                   className="btn-general btn-orange"
                   id="btn-join"
                 >

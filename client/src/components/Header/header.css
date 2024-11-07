@@ -61,7 +61,10 @@ header.scrolled {
   font-weight: 600;
   line-height: 25px;
   text-decoration: none;
-  color: var(--green);
+  color: var(--green);    
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 header > a:nth-child(1) {
   font-size: var(--s-font-size);
@@ -178,7 +181,6 @@ header > a:nth-child(1) {
   display: none;
   position: fixed;
   top: 70px;
-  /* left: 0; */
   width: 100%;
   background: rgba(255, 255, 255, 0.8);
   -webkit-backdrop-filter:blur(10px);
@@ -230,7 +232,6 @@ header > a:nth-child(1) {
 
 .social-icons-header {
   display: flex;
-  /* width: min-content; */
   padding: 0 var(--m-space);
   align-items: center;
 }
@@ -337,7 +338,6 @@ header > a:nth-child(1) {
     display: flex;
     align-items: center;
     padding: 0 var(--l-space);
-    /* margin: 0 var(--l-space); */
     position: relative;
   }
 
