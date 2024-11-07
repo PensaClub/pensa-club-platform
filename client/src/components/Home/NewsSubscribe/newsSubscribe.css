@@ -1,12 +1,13 @@
 .subscribe-news {
   width: 100%;
-  background-image: var(--bg-image-rotated);
-  background-size: 100%;
+  /* background-image: var(--bg-image-rotated);
+  background-size: 100%; */
+  background-color: var(--bg-gray);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2em 1em;
+  padding: 4em 1em;
 }
 .news-form {
   width: 100%;
@@ -25,7 +26,7 @@
 }
 
 .single-subscribe-info h3 {
-  font-size: var(--l-font-size);
+  font-size: var(--m-font-size);
   font-weight: 700;
   text-align: center;
 }
@@ -34,12 +35,13 @@
   font-size: inherit;
   font-weight: 700;
   color: var(--green);
+  font-size: var(--l-font-size);
 }
 
 .single-subscribe-info p {
-  font-size: var(--s-font-size);
+  font-size: var(--xs-font-size);
   font-weight: 500;
-  padding-top: var(--l-space);
+  padding-top: var(--s-space);
   text-align: center;
 }
 .form-row {

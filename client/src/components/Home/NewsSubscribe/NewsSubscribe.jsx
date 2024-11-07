@@ -131,7 +131,7 @@ export const NewsSubscribe = () => {
                         </div>
                     </div>
                     <div className="news-btn">
-                        <button type="submit" className="btn-general btn-green" id="btn-subscribe">{t('news-subscribe.subscribe-btn')}</button>
+                        <button type="submit" className="btn-general btn-orange" id="btn-subscribe">{t('news-subscribe.subscribe-btn')}</button>
                     </div>
                 </form>
             </section>
