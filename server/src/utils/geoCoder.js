@@ -31,19 +31,19 @@ const errorMessage = {
 
 module.exports = async function geoCoder(data) {
   try {
-    const filteredData = filterEmptyValues({
-      streetNumber: data.streetNumber,
-      streetName: data.street,
-      municipality: data.municipality,
-      countrySubdivision: data.region,
-      countryTertiarySubdivision: data.settlement,
-      CountrySecondarySubdivision: data.district,
-    });
+    // const filteredData = filterEmptyValues({
+    //   streetNumber: data.streetNumber,
+    //   streetName: data.street,
+    //   municipality: data.municipality,
+    //   countrySubdivision: data.region,
+    //   countryTertiarySubdivision: data.settlement,
+    //   CountrySecondarySubdivision: data.district,
+    // });
 
     const queryParams = new URLSearchParams({
       key,
-      countryCode: "BG",
-      ...filteredData,
+      countryCode: "BG"
+      // ...filteredData,
     }).toString();
 
     const response = await fetch(`${url}?${queryParams}`);

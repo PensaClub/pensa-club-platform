@@ -1,23 +1,14 @@
 "use strict";
-const { Model } = require("sequelize");
-module.exports = (sequelize, DataTypes) => {
-  class user_details extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-      user_details.belongsTo(models.user_account, {
-        foreignKey: "user_accounts_id", // Foreign key in user_details table
-        targetKey: "id", // Primary key in user_accounts table
-        as: "account",
-      });
-    }
-  }
-  user_details.init(
-    {
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, DataTypes) {
+    await queryInterface.createTable("user_details", {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       phone_number: {
         type: DataTypes.STRING(16),
         allowNull: true,
@@ -38,14 +29,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Username is required.",
+            msg: "Username cannot be empty.",
           },
           len: {
             args: [6, 16],
             msg: "Username must be between 6 and 16 characters.",
           },
           is: {
-            args: /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_-]{6,16}$/,
+            args: /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{6,16}$/,
             msg: "Username must start with a letter and can only contain letters, numbers, and underscores.",
           },
         },
@@ -89,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Region is required.",
+            msg: "Region cannot be empty.",
           },
         },
       },
@@ -164,12 +155,25 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
       },
-      user_accounts_id: DataTypes.INTEGER,
-    },
-    {
-      sequelize,
-      modelName: "user_details",
-    }
-  );
-  return user_details;
+      user_accounts_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "user_accounts",
+          key: "id",
+        },
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+    });
+  },
+  async down(queryInterface, DataTypes) {
+    await queryInterface.dropTable("user_details");
+  },
 };
