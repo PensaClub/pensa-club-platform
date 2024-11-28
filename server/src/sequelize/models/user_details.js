@@ -93,24 +93,6 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      municipality: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Municipality is required.",
-          },
-        },
-      },
-      settlement: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Settlement is required.",
-          },
-        },
-      },
       work_options: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
@@ -141,39 +123,6 @@ module.exports = (sequelize, DataTypes) => {
             if (value !== null && !Array.isArray(value)) {
               throw new Error("Interest options must be an array of strings.");
             }
-          },
-        },
-      },
-      district: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
-      },
-      block: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
-      },
-      street: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Street is required.",
-          },
-        },
-      },
-      street_number: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
-      },
-      location: {
-        type: DataTypes.JSONB,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Location information is required.",
           },
         },
       },
