@@ -25,7 +25,6 @@ export const Login = ({ navToRegister }) => {
         setRecaptchaSize("normal");
       }
     };
-
     updateRecaptchaSize(); // Initial check
     window.addEventListener("resize", updateRecaptchaSize);
 

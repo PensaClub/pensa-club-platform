@@ -1,6 +1,6 @@
 import "./menuCommunity.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapLocation, faHouseUser, faUser, faBars, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faMapLocation, faHouseUser, faUser, faBars, faCircleExclamation, faPlus, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../contexts/UserContext";
 import { useState, useEffect, useRef } from "react";
@@ -23,9 +23,9 @@ export const MenuCommunity = () => {
 
     const handleUserClick = () => {
         if (!isAuthentication) {
-            navigate('/profile');
-        } else {
             navigate('/sign-up');
+        } else {
+            navigate('/profile/data');
         }
     };
 
@@ -65,10 +65,11 @@ export const MenuCommunity = () => {
         <>
             <nav className="menu-community">
                 <FontAwesomeIcon icon={faHouseUser} className={getLocation('/')} onClick={() => handleNavigation('/')} />
+                <FontAwesomeIcon icon={faUserGroup} className={getLocation('/craigslist')} onClick={handleReloadPage} />
+                <FontAwesomeIcon icon={faPlus} className={getLocation('/ad/create')} onClick={() => handleNavigation('/ad/create')}/>
                 <FontAwesomeIcon icon={faMapLocation} className={getLocation('/map')} onClick={() => handleNavigation('/map')} />
-                <FontAwesomeIcon icon={faBars} className={getLocation('/craigslist')} onClick={handleReloadPage} />
-                <div className="profile-container" ref={dropdownRef}>
-                    <FontAwesomeIcon icon={faUser} className={getLocation('/profile')} onClick={handleUserClick} />
+                {/* <div className="profile-container" ref={dropdownRef}>
+                    <FontAwesomeIcon icon={faUser} className={getLocation('/profile/data')} onClick={handleUserClick} />
                     {isAuthentication && !finishProfile && (
                         <span
                             className="warning-icon-image-community"
@@ -80,7 +81,7 @@ export const MenuCommunity = () => {
                             <FontAwesomeIcon icon={faCircleExclamation} />
                         </span>
                     )}
-                </div>
+                </div> */}
             </nav>
 
             <AlertModal isOpen={isModalOpen} onClose={handleModalToggle}>

@@ -373,7 +373,7 @@ export const CreateAd = () => {
                       onBlur={onBlurHandler}
                       required
                     />
-                    <p className="desc-sub-text">{t("ads.sub_text-one")}</p>
+                    {/* <p className="desc-sub-text">{t("ads.sub_text-one")}</p> */}
                     {errors.summary && (
                       <p className="error">{errors.summary}</p>
                     )}
@@ -411,7 +411,7 @@ export const CreateAd = () => {
                     onBlur={onBlurHandler}
                     required
                   />
-                  <p className="desc-sub-text">{t("ads.sub_text-two")}</p>
+                  {/* <p className="desc-sub-text">{t("ads.sub_text-two")}</p> */}
                   {errors.description && (
                     <p className="error">{errors.description}</p>
                   )}
@@ -600,16 +600,16 @@ export const CreateAd = () => {
                   </div>
                 </div>
                 <div className="button-group">
-                  <button type="submit" className="publish-button">
+                  <button type="submit" className="btn-general btn-orange">
                     {t("ads.publish_btn")}
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     className="cancel-button"
                     onClick={handleNavigate}
                   >
                     {t("ads.cancel_btn")}
-                  </button>
+                  </button> */}
                 </div>
               </form>
             </div>
