@@ -18,8 +18,22 @@
     cursor: pointer;
 }
 
+.commun-menu-icons:nth-child(3) {
+    background-color: var(--green);
+    border-radius: 50%;
+    color: white !important;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+}
+
 .commun-menu-icons.active {
     color: var(--orange) !important;
+}
+
+.commun-menu-icons.active:nth-child(3) {
+    color:  white !important;
+    background-color: var(--orange) !important;
 }
 
 .warning-icon-image-community {

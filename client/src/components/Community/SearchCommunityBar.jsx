@@ -50,7 +50,7 @@ export const SearchCommunityBar = ({
                     )}
                 </p>
             </div>
-            <button className="search-button" onClick={() => handleSearch()}>{t('community.search_btn')}</button>
+            <button className="btn-general btn-orange" onClick={() => handleSearch()}>{t('community.search_btn')}</button>
             {showResetIcon && (
                 <FontAwesomeIcon
                     icon={faArrowRotateLeft}

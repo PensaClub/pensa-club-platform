@@ -188,7 +188,7 @@
     "clear": "Изчистете",
     "selected": "избрани",
     "select": "Изберете",
-    "profile_form_title": "Попълнете данните си",
+    "profile_form_title": "Pensa потребител",
     "add_photo": "Добави снимка",
     "username": "Потребителско име",
     "gender": "Пол",
@@ -372,6 +372,7 @@
   },
   "community": {
     "community": "Общност",
+    "category-search": "Категория",
     "what_search": "Какво търсиш",
     "where_search": "Къде ",
     "where_search_menu": "Къде търсиш",

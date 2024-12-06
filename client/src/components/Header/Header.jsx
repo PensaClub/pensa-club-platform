@@ -18,7 +18,7 @@ import {
 import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";
 
-export const Header = ({ additionalClasses }) => {
+export const Header = () => {
   const { t, i18n } = useTranslation();
 
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -81,7 +81,7 @@ export const Header = ({ additionalClasses }) => {
   return (
     <section className="site-header">
       <header
-        className={`header ${additionalClasses} ${isMenuOpen ? "scrolled" : ""}`}
+        className={`header ${isMenuOpen ? "scrolled" : ""}`}
       >
         <Link to="/">
           <img src="/images/homePage/logo-2.png" alt="logo" className="logo" /> Pensa Club
@@ -149,7 +149,7 @@ export const Header = ({ additionalClasses }) => {
             <div
               className={`dropdown-menu dropdown-menu-right rounded-0 ${isDropdownOpen ? "active" : ""}`}
             >
-              <div className="social-icons-header">
+              {/* <div className="social-icons-header">
                 <FontAwesomeIcon icon={faMap} className="social-mobile" />
                 <Link
                   to="/map"
@@ -168,7 +168,7 @@ export const Header = ({ additionalClasses }) => {
                 >
                   {t("header.craigslist")}
                 </Link>
-              </div>
+              </div> */}
               {!isAuthentication && (
                 <>
                   <div className="social-icons-header">
@@ -199,7 +199,7 @@ export const Header = ({ additionalClasses }) => {
                     <FontAwesomeIcon icon={faUser} />
                     <div className="alert-modal">
                       <Link
-                        to="/profile"
+                        to={ finishProfile ? "/profile/data" : "/profile/profile-form"}
                         className={`dropdown-item ${!finishProfile ? "incomplete-profile" : ""}`}
                         onClick={handleDropdownItemClick}
                       >

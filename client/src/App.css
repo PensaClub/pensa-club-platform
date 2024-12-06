@@ -39,7 +39,7 @@
   --s-font-size: 24px;
   --xs-font-size: 18px;
   --xxs-font-size: 16px;
-  --text-shadow: 0 1px 20px rgba(0, 0, 0, 0.2);
+  --text-shadow: 0 2px 40px rgba(0, 0, 0, 0.09);
  
 
   /* Border Radius */ 
@@ -85,7 +85,7 @@ label, span, p, input {
   font-size: var(--xs-font-size);
 }
 
-p {
+p, a {
   font-weight: 460;
 }
 

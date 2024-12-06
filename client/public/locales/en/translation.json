@@ -194,7 +194,7 @@
     "clear": "Clear",
     "selected": "selected",
     "select": "Select",
-    "profile_form_title": "Fill in your details",
+    "profile_form_title": "Pensa user",
     "add_photo": "Add photo",
     "username": "Username",
     "gender": "Gender",
@@ -379,6 +379,7 @@
   },
   "community": {
     "community": "Community",
+    "category-search": "Category",
     "what_search": "What search",
     "where_search": "Where",
     "where_search_menu": "Where search",

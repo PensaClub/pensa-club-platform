@@ -96,7 +96,7 @@ export const SearchBar = ({ handleSearch }) => {
               : t('community.when_search') + '?'}
           </p>
         </div>
-        <button className="search-button" onClick={handleSearchClick}>
+        <button className="btn-orange btn-general" onClick={handleSearchClick}>
           {t('community.search_btn')}
         </button>
       </div>

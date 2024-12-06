@@ -14,16 +14,15 @@ export const useImagePreview = () => {
 
     if (input.target && input.target.files) {
       const file = input.target.files[0];
-
+      
       if (!allowedTypes.includes(file.type)) return;
 
       const reader = new FileReader();
-
       reader.onloadend = () => {
         setPreviewImage(reader.result);
       };
 
-      reader.readAsDataURL(file);
+      return reader.readAsDataURL(file);
     }
   }, []);
 
