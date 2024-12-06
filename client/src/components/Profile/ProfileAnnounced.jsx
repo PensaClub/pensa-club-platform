@@ -1,17 +1,18 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
-import './profile.css';
-import { useTranslation } from 'react-i18next';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuthContext } from '../contexts/UserContext';
-import { useCommunityContext } from '../contexts/CommunityContext';
-import { DeleteAd } from '../Community/AdPage/DeleteAd/DeleteAd';
-import { differenceInDays } from 'date-fns';
+import React, { useEffect, useState } from "react";
+import "./profile.css";
+import { useTranslation } from "react-i18next";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuthContext } from "../contexts/UserContext";
+import { useCommunityContext } from "../contexts/CommunityContext";
+import { DeleteAd } from "../Community/AdPage/DeleteAd/DeleteAd";
+import { differenceInDays } from "date-fns";
+import { MapContainer } from "react-leaflet";
 
 const getMonthFromDate = (dateString, language) => {
   const date = new Date(dateString);
-  return date.toLocaleString(language, { month: 'long' });
+  return date.toLocaleString(language, { month: "long" });
 };
 
 const getCategoryTranslation = (category, t) => {
@@ -24,7 +25,7 @@ const formatDate = (dateString, language, t) => {
   const month = getMonthFromDate(dateString, language);
   const year = date.getFullYear();
 
-  if (language === 'bg-BG') {
+  if (language === "bg-BG") {
     return `${day} ${t(`months.${month.toLowerCase()}`)} ${year}`;
   } else {
     return `${day} ${month} ${year}`;
@@ -32,8 +33,8 @@ const formatDate = (dateString, language, t) => {
 };
 
 const cutToFirstWord = (text) => {
-  if (!text) return '';
-  const firstSpaceIndex = text.indexOf(' ');
+  if (!text) return "";
+  const firstSpaceIndex = text.indexOf(" ");
   return firstSpaceIndex !== -1 ? text.substring(0, firstSpaceIndex) : text;
 };
 
@@ -41,7 +42,8 @@ export const ProfileAnnounced = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
-  const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions} = useCommunityContext();
+  const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions } =
+    useCommunityContext();
   const { profileData } = useAuthContext();
   const [ads, setAds] = useState([]);
   const [townNames, setTownNames] = useState({});
@@ -51,16 +53,18 @@ export const ProfileAnnounced = () => {
   useEffect(() => {
     const fetchAds = async () => {
       if (!profileData || !profileData?.email) {
-        console.error('Profile data or email is missing');
+        console.error("Profile data or email is missing");
         return;
       }
 
       try {
         const result = await getMyAds(profileData?.email);
-        const sortedAds = result?.ads.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        const sortedAds = result?.ads.sort(
+          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+        );
         setAds(sortedAds);
       } catch (error) {
-        console.error('Failed to fetch ads', error);
+        console.error("Failed to fetch ads", error);
       }
     };
 
@@ -68,7 +72,7 @@ export const ProfileAnnounced = () => {
   }, [profileData.email]);
 
   const getAdTownValue = (language, town) => {
-    return language === 'bg' ? town?.bg : town.en;
+    return language === "bg" ? town?.bg : town.en;
   };
 
   useEffect(() => {
@@ -76,8 +80,13 @@ export const ProfileAnnounced = () => {
       const newTownNames = {};
       await Promise.all(
         ads.map(async (ad) => {
-          const townsData = await fetchTowns(Number(ad?.adRegion), Number(ad?.adSubregion));
-          const town = townsData.find(town => town?.id === Number(ad?.adTown));
+          const townsData = await fetchTowns(
+            Number(ad?.adRegion),
+            Number(ad?.adSubregion)
+          );
+          const town = townsData.find(
+            (town) => town?.id === Number(ad?.adTown)
+          );
           if (town) {
             newTownNames[ad.adId] = getAdTownValue(currentLanguage, town);
           }
@@ -100,9 +109,9 @@ export const ProfileAnnounced = () => {
     if (selectedAd) {
       try {
         await deleteAd(selectedAd?.adId);
-        setAds(ads.filter(ad => ad?.adId !== selectedAd?.adId));
+        setAds(ads.filter((ad) => ad?.adId !== selectedAd?.adId));
       } catch (error) {
-        console.error('Failed to delete ad', error);
+        console.error("Failed to delete ad", error);
       }
       setIsDeleteModalOpen(false);
       setSelectedAd(null);
@@ -123,97 +132,141 @@ export const ProfileAnnounced = () => {
     try {
       await updateExpirationDate(adId);
       const updatedAds = await getMyAds(profileData?.email);
-      const sortedAds = updatedAds?.ads.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+      const sortedAds = updatedAds?.ads.sort(
+        (a, b) => new Date(b.creationDate) - new Date(a.creationDate)
+      );
       setAds(sortedAds);
     } catch (error) {
-      console.error('Failed to update expiration date', error);
+      console.error("Failed to update expiration date", error);
     }
   };
 
   return (
-    <>
+    <div className="announced-container">
       {ads?.length > 0 ? (
-        ads.map(ad => {
-          const daysUntilExpiration = differenceInDays(new Date(ad.expirationDate), new Date());
+        ads.map((ad) => {
+          const daysUntilExpiration = differenceInDays(
+            new Date(ad.expirationDate),
+            new Date()
+          );
 
           return (
             <div className={`announced ${ad?.status}`} key={ad.adId}>
-              <Link to={ad.status === 'approved' ? `/ad/details/${ad.adId}` : '#'}>
-                <p className={
-                  ad?.status === 'approved' ? 'view-more' :
-                    ad?.status === 'pending' ? 'pending-approval' :
-                      ad?.status === 'denied' ? 'pending-approval' : ''
-                }>
-                  {ad?.status === 'approved' ? t('ads.view_more') :
-                    ad?.status === 'pending' ? t('ads.pending_approval') :
-                      ad?.status === 'denied' ? t('ads.denied') : ''}
+              <Link
+                to={ad.status === "approved" ? `/ad/details/${ad.adId}` : "#"}
+              >
+                <p
+                  className={
+                    ad?.status === "approved"
+                      ? "view-more"
+                      : ad?.status === "pending"
+                      ? "pending-approval"
+                      : ad?.status === "denied"
+                      ? "pending-approval"
+                      : ""
+                  }
+                >
+                  {ad?.status === "approved"
+                    ? t("ads.view_more")
+                    : ad?.status === "pending"
+                    ? t("ads.pending_approval")
+                    : ad?.status === "denied"
+                    ? t("ads.denied")
+                    : ""}
                 </p>
               </Link>
-              <section className='profile-data ads'>
-                <div className='avatar-announced'>
-                  <img src={ad?.images[0]?.imageURL || "/images/sign-up/avatar.jpg"} alt="Ad photo" />
+              <section className="ads-card">
+                <div className="img-ads">
+                  <img
+                    src={
+                      ad?.images[0]?.imageURL || "/images/sign-up/avatar.jpg"
+                    }
+                    alt="Ad photo"
+                  />
                   <p>{getCategoryTranslation(ad.category, t)}</p>
                 </div>
-                <div className='user-data user-data-ads'>
+                <div className="ads-info">
                   <h3>{ad?.summary}</h3>
-                  <div className='ads-data-elipse'>
-                    <p className='elipse price'>{townNames[ad.adId] || ad?.adTown}</p>
+                  <div className="ads-data-elipse">
+                    <p className="elipse price">
+                      {townNames[ad.adId] || ad?.adTown}
+                    </p>
                     {ad?.extraFields.price && (
-                      <p className='elipse price'> {ad?.extraFields?.price} {t('ads.price_lv')} </p>
+                      <p className="elipse price">
+                        {" "}
+                        {ad?.extraFields?.price} {t("ads.price_lv")}{" "}
+                      </p>
                     )}
                   </div>
-                  <div className='ads-elipse'>
-                    <p className='elipse'>{getCategoryTranslation(ad?.category, t)}</p>
-                    <p className='elipse'>{cutToFirstWord(ad?.summary)}</p>
-                    <p className='elipse'>{getMonthFromDate(ad?.creationDate, currentLanguage)}</p>
-                  </div>
-                  <p>{t('ads.valid_until')}: {formatDate(ad?.expirationDate, currentLanguage, t)}</p>
+                  {/* <div className="ads-elipse">
+                    <p className="elipse">
+                      {getCategoryTranslation(ad?.category, t)}
+                    </p>
+                    <p className="elipse">{cutToFirstWord(ad?.summary)}</p>
+                    <p className="elipse">
+                      {getMonthFromDate(ad?.creationDate, currentLanguage)}
+                    </p>
+                  </div> */}
+                  <p>
+                    {t("ads.valid_until")}:{" "}
+                    {formatDate(ad?.expirationDate, currentLanguage, t)}
+                  </p>
                 </div>
-              </section>
-              <div className='ads-btns'>
-                <button className={'ads-btn red'} onClick={() => handleEditClick(ad)}>
-                  {t('ads.edit')}
-                </button>
-                <button
-                  className={'ads-btn green'}
-                  onClick={() => handleDeleteClick(ad)}>
-                  {t('ads.delete')}
-                </button>
-              </div>
-              {ad?.status === 'denied' && (
-                <p className='admin-comment'>{t('ads.admin_comment')}: {ad?.adminComment}</p>
-              )}
-              {daysUntilExpiration <= 7 && (
-                <p className='refresh'>
-                  {t('ads.refresh')}
-                  <span
-                    className="refresh-here"
-                    onClick={() => handleRefreshClick(ad?.adId)}
+                <div className="ads-btns">
+                  <button
+                    className={"ads-btn red"}
+                    onClick={() => handleEditClick(ad)}
                   >
-                    {t('ads.refresh_here')}
-                  </span>
-                </p>
-              )}
+                    {t("ads.edit")}
+                  </button>
+                  <button
+                    className={"ads-btn green"}
+                    onClick={() => handleDeleteClick(ad)}
+                  >
+                    {t("ads.delete")}
+                  </button>
+                </div>
+                {ad?.status === "denied" && (
+                  <p className="admin-comment">
+                    {t("ads.admin_comment")}: {ad?.adminComment}
+                  </p>
+                )}
+                {daysUntilExpiration <= 7 && (
+                  <p className="refresh">
+                    {t("ads.refresh")}
+                    <span
+                      className="refresh-here"
+                      onClick={() => handleRefreshClick(ad?.adId)}
+                    >
+                      {t("ads.refresh_here")}
+                    </span>
+                  </p>
+                )}
+              </section>
             </div>
           );
         })
       ) : (
-        <><h4 className='no-ads'>{t('ads.no_ads')}</h4>
-        <div className='btn-center'>
-        <Link to='/ad/create'>
-              <button type='button' className='btn-general btn-orange'>
-              {t("header.ad-create")}
+        <div className="no-ads-section">
+          <p className="no-ads">{t("ads.no_ads")}</p>
+          <div className="btn-center">
+            <Link to="/ad/create">
+              <button type="button" className="btn-general btn-orange">
+                {t("header.ad-create")}
               </button>
             </Link>
-        </div></>
+          </div>
+        </div>
       )}
       <DeleteAd
         isOpen={isDeleteModalOpen}
         onClose={handleCloseModal}
         onDelete={handleDeleteAd}
         adName={selectedAd?.summary}
-        adImage={selectedAd?.images[0]?.imageURL || "/images/sign-up/avatar.jpg"}
+        adImage={
+          selectedAd?.images[0]?.imageURL || "/images/sign-up/avatar.jpg"
+        }
       />
-    </>
+    </div>
   );
 };

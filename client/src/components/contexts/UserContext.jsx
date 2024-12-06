@@ -18,7 +18,6 @@ export const UserProvider = ({ children }) => {
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.enabled);
   const [isAdmin, setIsAdmin] = useLocalStorage('isAdmin', false);
-  // eslint-disable-next-line no-unused-vars
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(getAuthStatus());
@@ -138,7 +137,11 @@ export const UserProvider = ({ children }) => {
   const onProfileDataSubmit = async (details) => {
     setIsLoading(true);
     try {
+      console.log(details);
+      
       const response = await userService.setUserData(details);
+      console.log(response);
+      
       if (response.message === 'No such address was found!') {
         navigate('/profile/profile-form');
         notify('warn-address');
@@ -153,7 +156,8 @@ export const UserProvider = ({ children }) => {
       navigate('/profile');
       notify('success-data');
     } catch (error) {
-
+      console.log(error);
+      
       const isUsernameTaken =
         error?.message === "Unique constraint violation." && error?.details.some(error => error.field === 'username');
 

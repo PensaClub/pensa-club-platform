@@ -18,12 +18,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--s-space);
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: var(--s-space);
+    border-radius: var(--m-space);
     background-color: #fff;
     cursor: pointer;
-    box-shadow: var(--container-shadow);
+    box-shadow: 0 2px 40px rgba(0, 0, 0, 0.09);
 }
 
 .custom-select-header span:not(.custom-select-chevron) {

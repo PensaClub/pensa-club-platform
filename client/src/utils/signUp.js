@@ -4,7 +4,7 @@ export const trimFields = (fields) => {
 
   // eslint-disable-next-line no-useless-escape
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/
+  const passwordRegex = /^(?=.*[a-zA-Z]).{4,}$/;
 
 export const resetFields = (setFieldFunctions) => {
   setFieldFunctions.forEach((setField) => setField({ email: "", password: "", rePassword: "",newPassword:"" }));
