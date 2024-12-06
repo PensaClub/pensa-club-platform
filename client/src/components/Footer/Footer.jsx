@@ -30,6 +30,7 @@ export const Footer = ({ additionalClasses }) => {
                         <h3 onClick={()=>window.scrollTo({ top: 0 })}>Pensa club &copy;</h3>
                     </div>
                     <div className="info-desc">
+                        <p>{t('footer.financial')}: <Link to={"https://bg.usembassy.gov/education-culture/grant-opportunities/"}target="_blank">Small Grants US Embassy</Link></p>
                         <p>{t('footer.country-city')}</p>
 
                         <p>{t('footer.email')}</p>
