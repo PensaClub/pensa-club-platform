@@ -29,6 +29,13 @@ export const AboutSection = () => {
                 >
                   {t("motto.about-btn")}
                 </Link>
+                <Link
+                  to="/suggest-user"
+                  className="btn-general btn-green"
+                  id="btn-suggestion"
+                >
+                  {t("motto.suggestion-btn")}
+                </Link>
         </div>
       </section>
     </>

@@ -72,6 +72,10 @@
     cursor: pointer;
 }
 
+.what-modal-content .btn-general, where-modal-content .btn-general , .when-modal-content .btn-general{
+    width: 100%;
+}
+
 @media (min-width: 768px) and (max-width: 1199px) {
     .when-search-button {
         font-size: var(--s-font-size);

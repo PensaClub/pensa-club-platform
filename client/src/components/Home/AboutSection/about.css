@@ -50,6 +50,10 @@
 .about button {
   margin-top: 20px;
 }
+
+#btn-suggestion {
+  margin-top: 20px;
+}
 @media (max-width: 767px) {
   .about {
     padding: 40px;

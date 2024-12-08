@@ -67,73 +67,84 @@ export const CreateAd = () => {
       eventEndDate: null,
     },
   };
-  const handleCheckboxChange = async (e) => {
-    const isChecked = e.target.checked;
-    setUseOtherCity(isChecked);
+  // const handleCheckboxChange = async (e) => {
+  //   const isChecked = e.target.checked;
+  //   setUseOtherCity(isChecked);
 
-    if (isChecked) {
+  //   if (isChecked) {
 
-      setValues((prevValues) => ({
-        ...prevValues,
-        adRegion: "",
-        adSubregion: "",
-        adTown: "",
-        street: "",
-      }));
-      setSelectedRegion("");
-      setSelectedSubregion("");
-      setSelectedTown("");
-    } else {
+  //     setValues((prevValues) => ({
+  //       ...prevValues,
+  //       adRegion: "",
+  //       adSubregion: "",
+  //       adTown: "",
+  //       street: "",
+  //     }));
+  //     setSelectedRegion("");
+  //     setSelectedSubregion("");
+  //     setSelectedTown("");
+  //   } else {
 
-      const addressId = JSON.parse(localStorage.getItem("addressId"));
+  //     const addressId = JSON.parse(localStorage.getItem("addressId"));
 
-      if (addressId) {
-        try {
+  //     if (addressId) {
+  //       try {
 
-          const region = regions.find((region) => region.id === addressId.regionId);
+  //         const region = regions.find((region) => region.id === addressId.regionId);
 
-          if (!subregions[addressId.regionId] || subregions[addressId.regionId].length === 0) {
-            await fetchSubregions(addressId.regionId);
-          }
+  //         if (!subregions[addressId.regionId] || subregions[addressId.regionId].length === 0) {
+  //           await fetchSubregions(addressId.regionId);
+  //         }
 
-          const subregion = (subregions[addressId.regionId] || []).find(
-            (subregion) => subregion.id === addressId.municipalityId
-          );
+  //         const subregion = (subregions[addressId.regionId] || []).find(
+  //           (subregion) => subregion.id === addressId.municipalityId
+  //         );
 
-          const townResponse = await fetch(
-            `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
-          );
-          const townList = await townResponse.json();
-          setSettlements(townList);
+  //         const townResponse = await fetch(
+  //           `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
+  //         );
+  //         const townList = await townResponse.json();
+  //         setSettlements(townList);
 
-          const town = townList.find(
-            (settlement) => settlement.id === addressId.settlementId
-          );
+  //         const town = townList.find(
+  //           (settlement) => settlement.id === addressId.settlementId
+  //         );
 
-          if (region && subregion && town) {
-            setSelectedRegion(addressId.regionId);
-            setSelectedSubregion(addressId.municipalityId);
-            setSelectedTown(town.id);
-            setValues((state) => ({
-              ...state,
-              adRegion: addressId.regionId,
-              adSubregion: addressId.municipalityId,
-              adTown: addressId.settlementId,
-              street: `${town.bg || town.en}, ул. ${profileData.details?.street || ""}${profileData.details?.streetNumber
-                ? ", " + profileData.details.streetNumber
-                : ""
-                }`,
-            }));
-          }
-        } catch (error) {
-          console.error("Failed to load data", error);
-        }
-      }
-    }
-  };
+  //         if (region && subregion && town) {
+  //           setSelectedRegion(addressId.regionId);
+  //           setSelectedSubregion(addressId.municipalityId);
+  //           setSelectedTown(town.id);
+  //           setValues((state) => ({
+  //             ...state,
+  //             adRegion: addressId.regionId,
+  //             adSubregion: addressId.municipalityId,
+  //             adTown: addressId.settlementId,
+  //             street: `${town.bg || town.en}, ул. ${profileData.details?.street || ""}${profileData.details?.streetNumber
+  //               ? ", " + profileData.details.streetNumber
+  //               : ""
+  //               }`,
+  //           }));
+  //         }
+  //       } catch (error) {
+  //         console.error("Failed to load data", error);
+  //       }
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
+    setUseOtherCity(true);
+    setValues((prevValues) => ({
+      ...prevValues,
+      adRegion: "",
+      adSubregion: "",
+      adTown: "",
+      street: "",
+    }));
+    setSelectedRegion("");
+    setSelectedSubregion("");
+    setSelectedTown("");
 
   }, []);
   useEffect(() => {
@@ -538,7 +549,7 @@ export const CreateAd = () => {
                         )}
                       </div>
                     </div>
-                    <div className="checkbox-group useOtherCity">
+                    {/* <div className="checkbox-group useOtherCity">
                       <input
                         type="checkbox"
                         id="useOtherCity"
@@ -549,7 +560,7 @@ export const CreateAd = () => {
                       <label htmlFor="useOtherCity">
                         {t("ads.use_other_city")}
                       </label>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="form-group">
                     <label htmlFor="street">{t("ads.ad_address")}</label>

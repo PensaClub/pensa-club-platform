@@ -48,6 +48,22 @@ font-size: calc(var(--m-font-size) + 5px);
 
 }
 
+.what-select {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.open-categories {
+    width: 100%;
+    height: 100%;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    background-color: #ffffff;
+}
+
 .what-search-button {
     padding: 0.5rem 1rem;
     border: none;
@@ -60,6 +76,46 @@ font-size: calc(var(--m-font-size) + 5px);
     width: 100%;
 }
 
+
+.what-categories {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding-top: 10px;
+    padding-left: 8px;
+}
+
+.what-categories label {
+    display: flex;
+    /* flex-direction: row-reverse; */
+    margin-right: auto;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: var(--xxs-font-size);
+    text-transform: uppercase;
+}
+
+.what-categories label input {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+    border: 4px solid var(--green);
+    /* border-radius: 50%; */
+    outline: none;
+    cursor: pointer;
+    background-color: #fff;
+    margin-right: 12px;
+}
+
+.what-categories label input:checked {
+    background-color: var(--orange);
+    border-color: var(--green);
+}
+
+.what-modal-content .btn-general, where-modal-content .btn-general , .when-modal-content .btn-general{
+    width: 100%;
+}
 @media (min-width: 768px) and (max-width: 1199px) {
     .what-search-button {
         font-size: var(--s-font-size);
@@ -68,13 +124,15 @@ font-size: calc(var(--m-font-size) + 5px);
 
 @media (min-width: 1200px) {
     .what-search-button {
-        font-size: var(--m-font-size);
+        font-size: var(--s-font-size);
     }
 
     .what-input,
     .what-select {
-
         font-size: var(--xs-font-size);
+    }
 
+    .what-select {
+        display: none;
     }
 }

@@ -13,15 +13,18 @@
   padding-top: 4em;
   display: flex;
   justify-content: center;
-  flex-direction: column;
+  align-items: center;
+  flex-direction: row;
   gap: 2em;
+  margin-top: -140px;
+
 }
 
 .parent-hero::before {
   content: "";
   background-image: url("../../../../public/images/homePage/hero-img.jpg");
   background-size: cover;
-  filter: grayscale(40%) blur(2px);
+  filter: grayscale(40%) blur(3px);
   background-position: top;
   position: absolute;
   top: 60px;
@@ -48,11 +51,33 @@
   height: 120%;
   z-index: -1;
 }
+/* 
+.parent-hero > div {
+  width: 50%;
+}
+.parent-hero > div:first-child {
+  margin-right: auto;
+}
+.parent-hero > div:last-child {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80%;
+  background-color: #ffffff54;
+  backdrop-filter: blur(10px);
+  height: 70vh;
+  align-self: center;
+  border-radius: 40px;
+  width: 40%;
+  margin-right: 44px;
+} */
 
 .left-side {
   display: flex;
   flex-direction: column;
-  max-width: 50%;
+  /* max-width: 100%; */
+  max-width: 60%;
   align-items: flex-start;
   padding-left: 160px;
 }
@@ -82,6 +107,47 @@
   color: var(--orange);
   font-weight: 700;
   font-size: var(--s-font-size);
+}
+
+.right-side {
+width:80%;
+height: auto;
+border-radius: 40px;
+overflow: hidden;
+}
+
+
+.frame-container{
+  width: 60%;
+  height: 60%;
+  /* position: relative; 
+  padding-bottom: 56.25%; 
+  height: 0; 
+  overflow: hidden; */
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  background-color: #000;
+
+}
+
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.frame-container .responsive-iframe {
+  pointer-events: none; /* Скрива взаимодействието по подразбиране */
+}
+
+.frame-container:hover .responsive-iframe {
+  pointer-events: auto; /* Разрешава взаимодействие при hover */
 }
 .btn-hero {
   display: flex;
@@ -191,10 +257,22 @@
   display: none;
 }
 
+.information-slide {
+  width: 100%;
+  margin-top: 76px;
+  z-index: 10;
+}
+
+.information-slide marquee {
+  padding: 10px 0;
+    backdrop-filter: blur(10px);
+    background-color: #ffffff94;
+}
 
 @media (max-width: 1280px) {
   .parent-hero {
     padding-top: 0;
+    margin-top: -140px;
   }
   .hero-section {
     padding: 10px;
@@ -225,7 +303,7 @@
   .parent-hero {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    /* flex-direction: column; */
     align-items: center;
     gap: 6em;
   }

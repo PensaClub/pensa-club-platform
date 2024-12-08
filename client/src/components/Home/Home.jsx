@@ -6,6 +6,7 @@ import { NewsSubscribe } from "./NewsSubscribe/NewsSubscribe";
 import { useEffect } from "react";
 import { MottoSection } from "./MottoSection/MottoSection";
 import { AboutSection } from "./AboutSection/About";
+import { UserSuggestion } from "../UserSuggestion/UserSuggestion";
 
 export const Home = () => {
   useEffect(() => {

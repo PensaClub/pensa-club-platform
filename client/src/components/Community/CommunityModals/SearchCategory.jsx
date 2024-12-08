@@ -8,13 +8,18 @@ export const SearchCategory = ({setFilters, filters, handleSearch}) => {
     const { t } = useTranslation();
   
     const handleCategory = (category) => {
-        setFilters(prev => ({ ...prev, tags: searchQuery, category: category }));
+        setFilters(prev => ({ ...prev, tags: searchQuery, category: prev.category.includes(category) ? prev.category.filter(c => c !== category) : [...prev.category, category]  }));
         
     };
 
     const handleSubmit = () => {
         handleSearch();
     }
+
+    useEffect(() => {
+        console.log(filters);
+        
+    }, [filters])
 
     return (
         <div className="search-category-container">
@@ -24,7 +29,7 @@ export const SearchCategory = ({setFilters, filters, handleSearch}) => {
                     {searchCriteria?.searchCriteria?.map(criteria => (
                         <label htmlFor={criteria.value} key={criteria.value}>
                             {t(criteria.name)}
-                        <input type='radio' id={criteria.value} name={t('community.what_search')} onChange={(e) => handleCategory(e.target.id)}/>
+                        <input type='checkbox' id={criteria.value} name={t('community.what_search')} onChange={(e) => handleCategory(e.target.id)} checked={filters.category.includes(criteria.value) ? true : false}/>
                         </label>
                     ))}
                 </div>

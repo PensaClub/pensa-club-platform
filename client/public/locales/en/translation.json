@@ -32,6 +32,7 @@
   },
   "hero": {
     "title": "DECENT LIFE IN THE THIRD AGE",
+    "slide-info": "The website is a work in progress, developed by high-school students, building a 'Bridge between generations'. It is unfolding slowly, with uncertainties and many twists and turns....but we all cherish the JOURNEY WE ARE TAKING TOGETHER!",
     "short-desc": "Everyone deserves a",
     "desc": "An innovative platform that creates a community of people of the same age, with shared interests, new ideas, and new knowledge!",
     "testimonials": {
@@ -54,7 +55,8 @@
     "desc1":"Create new connections, join groups, and share interests.",
     "desc2":"Stimulate your thinking, improve your memory, while having fun and learning.",
     "desc3":"Healthy practices, tips, and resources that will help you live better.",
-    "about-btn": "Join the club"
+    "about-btn": "Join the club",
+    "suggestion-btn": "Invite a friend"
   },
   "about": {
     "title": "our mission",

@@ -170,8 +170,9 @@ export const Profile = () => {
                   </p>
                 ) : (
                   <p>
-                    <FontAwesomeIcon icon={faLocationDot} className="icon" />{" "}
-                    {addressId?.settlementEn}, {addressId?.municipalityEn},{" "}
+                    <FontAwesomeIcon icon={faLocationDot} className="icon" />
+                    {/* {" "} */}
+                    {/* {addressId?.settlementEn}, {addressId?.municipalityEn},{" "} */}
                     {addressId?.regionEn}
                   </p>
                 )}
