@@ -307,8 +307,9 @@ adsController.get('/ads-search', rbac.checkPermission('read_record'), async (req
 
     const processCategoryField = (value) => {
       if (value !== 'all') {
-        if (validCategories.includes(value)) {
-          whereCondition.category = value;
+        const currentValue = value.split(','); 
+        if (currentValue.every(v => validCategories.includes(v))) {
+          whereCondition.category = value.split(',');
         } else {
           errors.category = `Invalid category: ${value}. Valid categories are ${validCategories.join(', ')}. Excluding this filter from search.`;
         }
