@@ -21,12 +21,6 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
     userDetailsValidator(req.body, req.path);
     const {
       region,
-      municipality,
-      settlement,
-      district,
-      block,
-      street,
-      streetNumber,
       phoneNumber,
       username,
       workOptions,
@@ -40,22 +34,15 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
       firebaseImagePath,
     } = req.body;
 
-    const location = await geoCoder({ streetNumber, street, district, settlement, municipality, region });
+    // const location = await geoCoder({ streetNumber, street, district, settlement, municipality, region });
 
     const data = {
       phone_number: phoneNumber,
       username,
       region,
-      municipality,
-      settlement,
       work_options: workOptions,
       skills,
       interest_options: interestOptions,
-      district,
-      block,
-      street,
-      street_number: streetNumber,
-      location,
       first_name: firstName,
       last_name: lastName,
       gender,
@@ -109,16 +96,9 @@ userDetailsController.get('/all-users', memoryCache('users'), async (req, res, n
             ['first_name', 'firstName'],
             ['last_name', 'lastName'],
             'region',
-            'municipality',
-            'settlement',
             ['work_options', 'workOptions'],
             'skills',
             ['interest_options', 'interestOptions'],
-            'district',
-            'block',
-            'street',
-            ['street_number', 'streetNumber'],
-            'location',
             'gender',
             'imageURL',
             ['firebase_image_path', 'firebaseImagePath'],
@@ -162,7 +142,7 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
   try {
     userDetailsValidator(req.body, req.path);
 
-    const addressUpdate = ['region', 'municipality', 'settlement', 'district', 'block', 'street', 'streetNumber'];
+    const addressUpdate = ['region' ];
 
     const addressData = {};
 
@@ -210,16 +190,9 @@ userDetailsController.get('/single-user', isAuth, rbac.checkPermission('read_rec
             ['first_name', 'firstName'],
             ['last_name', 'lastName'],
             'region',
-            'municipality',
-            'settlement',
             ['work_options', 'workOptions'],
             'skills',
             ['interest_options', 'interestOptions'],
-            'district',
-            'block',
-            'street',
-            ['street_number', 'streetNumber'],
-            'location',
             'gender',
             'imageURL',
             ['firebase_image_path', 'firebaseImagePath'],

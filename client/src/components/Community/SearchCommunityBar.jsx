@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faLocationDot, faCalendar, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -17,17 +17,16 @@ export const SearchCommunityBar = ({
 }) => {
     const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
-
     return (
         <div className="search-bar-commun-s">
             <div className="icons-com" onClick={() => setIsSearchWhatOpen(true)}>
                 <FontAwesomeIcon icon={faMagnifyingGlass} className="commun-icon" />
                 <p>
-                    {(filters?.tags || filters?.category !== '') ? (
+                    {/* {(filters?.tags || filters?.category !== '') ? (
                         `${filters?.tags} ${filters?.category !== 'all' ? (t(`search-criteria.${filters?.category}`, { fallbackLng: currentLanguage }) !== `search-criteria.${filters?.category}` ? t(`search-criteria.${filters?.category}`) : filters?.category) : t('search-criteria.all_menu')}`
-                    ) : (
-                        t('community.what_search') + '?'
-                    )}
+                    ) : ( */}
+                        {t('community.what_search') + '?'}
+                    {/* )} */}
                 </p>
             </div>
             <div className="divider"></div>
@@ -50,7 +49,7 @@ export const SearchCommunityBar = ({
                     )}
                 </p>
             </div>
-            <button className="search-button" onClick={() => handleSearch()}>{t('community.search_btn')}</button>
+            <button className="btn-general btn-orange" onClick={() => handleSearch()}>{t('community.search_btn')}</button>
             {showResetIcon && (
                 <FontAwesomeIcon
                     icon={faArrowRotateLeft}
