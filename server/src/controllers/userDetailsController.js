@@ -34,7 +34,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
       firebaseImagePath,
     } = req.body;
 
-    const location = await geoCoder({ streetNumber, street, district, settlement, municipality, region });
+    // const location = await geoCoder({ streetNumber, street, district, settlement, municipality, region });
 
     const data = {
       phone_number: phoneNumber,

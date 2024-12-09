@@ -32,6 +32,7 @@ function fieldSwap(details, mappingType) {
     adminComment: 'admin_comment',
     roleChangeComment: 'role_change_comment',
     updatedAt: 'updatedAt',
+    street: 'street'
   };
 
   const mapFromDb = {
@@ -65,6 +66,7 @@ function fieldSwap(details, mappingType) {
     admin_comment: 'adminComment',
     role_change_comment: 'roleChangeComment',
     updatedAt: 'updatedAt',
+    street: 'street'
   };
 
   const fieldMapping = mappingType === 'mapToDb' ? mapToDb : mapFromDb;
