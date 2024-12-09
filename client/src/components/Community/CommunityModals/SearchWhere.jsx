@@ -82,7 +82,7 @@ export const SearchWhere = ({ isOpen, onClose, setFilters, filters }) => {
                         ))}
                     </select>
                 </div>
-                <button onClick={handleSearch} className="where-search-button">{t('community.apply_btn')}</button>
+                <button onClick={handleSearch} className="btn-general btn-orange">{t('community.apply_btn')}</button>
             </div>
         </div>
     );

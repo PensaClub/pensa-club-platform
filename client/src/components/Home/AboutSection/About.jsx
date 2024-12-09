@@ -23,11 +23,18 @@ export const AboutSection = () => {
             { t("about.desc")}
           </p>
           <Link
-                  to="/profile"
+                  to="/profile/data"
                   className="btn-general btn-orange"
                   id="btn-join"
                 >
                   {t("motto.about-btn")}
+                </Link>
+                <Link
+                  to="/suggest-user"
+                  className="btn-general btn-green"
+                  id="btn-suggestion"
+                >
+                  {t("motto.suggestion-btn")}
                 </Link>
         </div>
       </section>

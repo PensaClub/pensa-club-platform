@@ -33,7 +33,7 @@ export const CommunityPage = () => {
 
   const [filters, setFilters] = useState({
     tags: "",
-    category: "",
+    category: [],
     where: "",
     creationDate: "",
     expirationDate: "",
@@ -54,7 +54,6 @@ export const CommunityPage = () => {
   const getAdTownValue = (language, town) => {
     return language === "bg" ? town.bg : town.en;
   };
-
   useEffect(() => {
     window.scrollTo({ top: 0 });
     handleSearch();
@@ -62,6 +61,7 @@ export const CommunityPage = () => {
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const filtersFromQuery = Object.fromEntries(query.entries());
+    
     setFilters((prevFilters) => ({ ...prevFilters, ...filtersFromQuery }));
     //бутона от менюто за навигация слага кеури ресет=true ао го има ресетва филтрите
     if (query.get("reset") === "true") {
@@ -250,7 +250,7 @@ export const CommunityPage = () => {
                 </div>
               </div>
             ) : (
-              <FiltersCommunity handleSearch={handleSearch} />
+              <FiltersCommunity handleSearch={handleSearch()} />
             )}
             <div ref={loaderRef} />
           </section>
