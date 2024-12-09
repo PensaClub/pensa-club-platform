@@ -20,12 +20,12 @@ export const Home = () => {
                     <MottoSection />
                 </Fade> */}
         <MottoSection />
-        <Slide direction="left" duration="3000" triggerOnce="true">
+        {/* <Slide direction="left" duration="3000" triggerOnce="true"> */}
           <AboutSection/>
-        </Slide>
-        <Fade delay="10" duration="2000" triggerOnce="true">
+        {/* </Slide> */}
+        {/* <Fade delay="10" duration="2000" triggerOnce="true"> */}
           <NewsSubscribe />
-        </Fade>
+        {/* </Fade> */}
       </div>
     </>
   );

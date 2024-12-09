@@ -151,6 +151,19 @@ export const ProfileData = () => {
     setIsFormChanged(true);
   };
 
+  const getProfileImage = (gender) => {
+    switch (gender) {
+      case "male":
+        return "/images/homePage/user-male.png";
+      case "female":
+        return "/images/homePage/user-female.png";
+      case "other":
+        return "/images/homePage/user-it.png";
+      default:
+        return "/images/homePage/user-img.png";
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -191,7 +204,7 @@ export const ProfileData = () => {
         await onEditProfileDataSubmit(changedData);
 
         window.scrollTo(0, 0);
-        navigate("/profile");
+        navigate("/profile/data");
       } catch (error) {
         return toast.error(
           t("errors.profile_data_submit", { error: error.message })
@@ -226,7 +239,8 @@ export const ProfileData = () => {
           <img
               src={
                 previewImage ||
-                "/images/homePage/user-img.png"
+                getProfileImage(profileData?.details?.gender)
+                // "/images/homePage/user-img.png"
               }
             alt="User avatar"
           />

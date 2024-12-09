@@ -23,7 +23,7 @@ export const AboutSection = () => {
             { t("about.desc")}
           </p>
           <Link
-                  to="/profile"
+                  to="/profile/data"
                   className="btn-general btn-orange"
                   id="btn-join"
                 >

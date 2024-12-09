@@ -98,6 +98,19 @@ export const Profile = () => {
     setModalOpen(!isModalOpen);
   };
 
+  const getProfileImage = (gender) => {
+    switch (gender) {
+      case "male":
+        return "/images/homePage/user-male.png";
+      case "female":
+        return "/images/homePage/user-female.png";
+      case "other":
+        return "/images/homePage/user-it.png";
+      default:
+        return "/images/homePage/user-img.png";
+    }
+  };
+
   const isAdminPanel =
     location.pathname.startsWith("/profile/pending-announcements") ||
     location.pathname.startsWith("/profile/approved-announcements") ||
@@ -131,7 +144,8 @@ export const Profile = () => {
             <img
               src={
                 profileData?.details?.imageURL ||
-                "/images/homePage/user-img.png"
+                getProfileImage(profileData?.details?.gender)
+                // "/images/homePage/user-img.png"
               }
               alt="User avatar"
             />

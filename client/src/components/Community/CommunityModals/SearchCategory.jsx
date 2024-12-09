@@ -15,12 +15,7 @@ export const SearchCategory = ({setFilters, filters, handleSearch}) => {
     const handleSubmit = () => {
         handleSearch();
     }
-
-    useEffect(() => {
-        console.log(filters);
-        
-    }, [filters])
-
+    
     return (
         <div className="search-category-container">
             <div className="search-category-content">

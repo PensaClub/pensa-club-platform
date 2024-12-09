@@ -8,7 +8,7 @@ export const MottoSection = () => {
 
   return (
     <>
-      <Slide delay="30" duration="3000" fraction="0.1" triggerOnce="true">
+      {/* <Slide delay="30" duration="3000" fraction="0.1" triggerOnce="true"> */}
         <section className="motto-section">
           <MottoCard
             icon={"fa fa-comments-o"}
@@ -26,7 +26,7 @@ export const MottoSection = () => {
             desc={t("motto.desc3")}
           />
         </section>
-      </Slide>
+      {/* </Slide> */}
     </>
   );
 };
