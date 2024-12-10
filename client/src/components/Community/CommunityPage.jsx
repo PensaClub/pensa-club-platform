@@ -250,7 +250,8 @@ export const CommunityPage = () => {
                 </div>
               </div>
             ) : (
-              <FiltersCommunity handleSearch={handleSearch()} />
+              <FiltersCommunity handleSearch={handleSearch} />
+              // <FiltersCommunity handleSearch={handleSearch()} />
             )}
             <div ref={loaderRef} />
           </section>

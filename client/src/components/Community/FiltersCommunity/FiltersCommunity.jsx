@@ -23,7 +23,8 @@ export const FiltersCommunity = ({ handleSearch }) => {
                 }
             });
         }
-    }, [regions, fetchSubregions, subregions]);
+    }, []);
+    // }, [regions, fetchSubregions, subregions]);
 
     const toggleSelect = (regionId) => {
         setOpenSelects(prev => ({ ...prev, [regionId]: !prev[regionId] }));
