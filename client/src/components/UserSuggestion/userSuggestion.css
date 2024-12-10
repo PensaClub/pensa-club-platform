@@ -65,6 +65,14 @@
   .container-suggest .form-suggest__title {
     font-size: var(--m-font-size);
   }
+
+  .container-suggest {
+    width: 100%;
+
+  }
+  .banner-section-suggest {
+    padding-top: 20px;
+  }
 }
 
 @media (min-width: 850px) {
