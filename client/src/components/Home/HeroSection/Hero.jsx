@@ -35,7 +35,7 @@ export const Hero = () => {
               <div className="frame-container">
               <iframe
             className="responsive-iframe"
-                src="https://www.youtube.com/embed/OoMK37wiiA8?autoplay=1&mute=1&loop=1showinfo=0&modestbranding=1"
+                src="https://www.youtube.com/embed/_Q-TeezmAkw?autoplay=1&mute=1&loop=1showinfo=0&modestbranding=1"
                 title="Да научим баба как да си направи имейл"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
