@@ -16,11 +16,15 @@ import {
 import './articleView.css';
 import { getArticleBySlug } from '../data/articlesData';
 import RecentArticles from './RecentArticles/RecentArticles';
+import { useAnalytics } from '../../contexts/AnalyticsContext';
+import { useTranslation } from 'react-i18next';
 
 const ArticleView = () => {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { trackArticle, getViewCount } = useAnalytics();
+const {t} = useTranslation();
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -36,6 +40,11 @@ const ArticleView = () => {
       setArticle(foundArticle);
       setLoading(false);
       window.scrollTo(0, 0);
+      
+      // Проследяване на посещението след зареждане на статията
+      if (foundArticle) {
+        trackArticle(foundArticle.id, foundArticle.title);
+      }
     }, 300);
   }, [slug]);
 // da se sloji na6iqt loader
@@ -171,6 +180,14 @@ const ArticleView = () => {
                 <FontAwesomeIcon icon={faLinkedinIn} />
               </Link>
             </div>
+            {article && (
+            <div className="article-view-count">
+              <svg width="16" height="16" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M8 3.9c-6.7 0-8 5.1-8 5.1s2.2 4.1 7.9 4.1 8.1-4 8.1-4-1.3-5.2-8-5.2zM5.3 5.4c0.5-0.3 1.3-0.3 1.3-0.3s-0.5 0.9-0.5 1.6c0 0.7 0.2 1.1 0.2 1.1l-1.1 0.2c0 0-0.3-0.5-0.3-1.2 0-0.8 0.4-1.4 0.4-1.4zM7.9 12.1c-4.1 0-6.2-2.3-6.8-3.2 0.3-0.7 1.1-2.2 3.1-3.2-0.1 0.4-0.2 0.8-0.2 1.3 0 2.2 1.8 4 4 4s4-1.8 4-4c0-0.5-0.1-0.9-0.2-1.3 2 0.9 2.8 2.5 3.1 3.2-0.7 0.9-2.8 3.2-7 3.2z"></path>
+              </svg>
+              <span>{getViewCount(article.id)} {t('articles.views')}</span>
+            </div>
+          )}
           </div>
           
           <div className="article-navigation">
@@ -194,6 +211,7 @@ const ArticleView = () => {
               </Link>
             )}
           </div>
+         
         </main>
         
         <aside className="article-sidebar">

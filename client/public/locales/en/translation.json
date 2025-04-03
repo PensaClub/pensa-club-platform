@@ -623,5 +623,8 @@
   },
   "forms":{
     "form_contains_errors": "The form contains errors. Please correct them and try again."
+  },
+  "articles":{
+    "views": "Views"
   }
 }

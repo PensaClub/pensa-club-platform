@@ -206,6 +206,38 @@
   .article-card:hover .image-alt-caption {
     opacity: 0.9;
     }  
+    .article-card-views {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      margin-left: auto;
+      padding: 4px 8px;
+      background-color: #f5f7fa;
+      border-radius: 16px;
+      color: #777;
+      font-size: 0.85rem;
+      width: fit-content;
+      transition: all 0.2s ease;
+    }
+    .article-card-views span {
+      font-weight: 500;
+      font-size: 0.8em;
+    }
+    .article-card-views:hover {
+      background-color: #eef0f5;
+      color: var(--orange);
+    }
+    
+    .article-card-views svg {
+      color: #888;
+      transition: color 0.2s ease;
+    }
+    
+    .article-card-views:hover svg {
+      color: var(--orange);
+    }
   @media (max-width: 992px) {
     .article-card-featured .article-card-image-container {
       height: 350px;
@@ -221,6 +253,10 @@
       height: 220px;
     }
     
+    .article-card-views {
+      font-size: 0.75rem;
+      padding: 3px 6px;
+    }
     .article-card-featured .article-card-image-container {
       height: 250px;
     }
