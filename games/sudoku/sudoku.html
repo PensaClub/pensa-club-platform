@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Game</title>
+    <link rel="stylesheet" href="button-dificulty.css">
+    <link rel="stylesheet" href="buttons.css">
+    <link rel="stylesheet" href="main.css">
+    <script src="https://kit.fontawesome.com/8d092f11e9.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Судоку</h1>
+        <div class="difficulty-selection">
+            <h4>Изберете трудност</h4>
+            <h4>Когато сте го решили кликнете "НОВА ИГРА"</h4>
+            <div  id="difficulty" class="radio-inputs">
+                <label class="radio active">
+                    <input type="radio" name="radio" value="easy" checked="true">
+                    <span class="name">Лесно</span>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="radio" value="medium">
+                    <span class="name">Средно</span>
+                </label>
+
+                <label class="radio">
+                    <input type="radio" name="radio" value="hard">
+                    <span class="name">Трудно</span>
+                </label>
+            </div>
+        </div>
+<div class="board-container">
+    <div class="game-board" id="game-board"></div>
+    <div class = "slot-wrapper-buttons">
+        
+        
+        
+</div>
+</div>
+
+        <button id="start-button" class="button-new-game">нова игра</button>
+    </div>
+    <script src="sudoku.js"></script>
+
+</body>
+</html>

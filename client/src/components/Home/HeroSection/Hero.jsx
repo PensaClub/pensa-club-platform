@@ -12,63 +12,40 @@ export const Hero = () => {
   return (
     <>
       <section className="hero-section">
+        <div className="information-slide">
+          <marquee>{t("hero.slide-info")}</marquee>
+        </div>
         <div className="parent-hero">
-          <Slide direction="left" duration="2000" triggerOnce="true">
+          {/* <Slide direction="left" duration="2000" triggerOnce="true"> */}
             <div className="left-side">
+              <p>{t("hero.short-desc")}</p>
               <h1>{t("hero.title")}</h1>
               <p>
                 <Trans i18nKey="hero.desc" components={{ span: <strong /> }} />
               </p>
+              <Link
+                to="/profile/data"
+                className="btn-general btn-orange"
+                id="btn-join"
+              >
+                {t("motto.about-btn")}
+              </Link>
             </div>
-          </Slide>
-        </div>
-        <img src="/images/homePage/logo-2.png" alt="logo" className="logo" />
-        <Fade delay="30" duration="3000" fraction="0.1" triggerOnce="true">
-          <div className="parent-motto">
-            <div className="motto-img">
-              <img
-                src="/images/homePage/models-full-img.png"
-                alt=""
-                className="hero-img-desktop"
-              />
-            </div>
-            <div className="motto-desc">
-              <div className="motto-info">
-                <img
-                  src="/images/homePage/models-1-2.png"
-                  alt=""
-                  className="hero-img-mobile"
-                />
-                <h3>{t("motto.title1")} </h3>
-                <img
-                  src="/images/homePage/models-3.png"
-                  alt=""
-                  className="hero-img-mobile"
-                />
-                <h3>{t("motto.title2")}</h3>
-                <img
-                  src="/images/homePage/models-4-5.png"
-                  alt=""
-                  className="hero-img-mobile"
-                />
-                <h3>{t("motto.title3")} </h3>
-                <p>
-                  <Trans
-                    i18nKey="motto.desc"
-                    components={{ span: <strong /> }}
-                  />
-                </p>
-                <Link
-                  to="/suggest-user"
-                  className="btn-general btn-orange"
-                  id="btn-join"
-                >
-                  {t("motto.about-btn")}
-                </Link>
+            <div className="right-side">
+              <div className="frame-container">
+              <iframe
+            className="responsive-iframe"
+                src="https://www.youtube.com/embed/BqSxjmvXzzY?autoplay=1&mute=1&loop=1&playlist=BqSxjmvXzzY&showinfo=0&modestbranding=1"
+                title="57 Years Apart - A Boy And a Man Talk About Life"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
               </div>
             </div>
-          </div>
-        </Fade>
+          {/* </Slide> */}
+        </div>
       </section>
     </>
   );

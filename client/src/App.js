@@ -71,10 +71,12 @@ function App() {
             <CommunityProvider>
               <SuggestUserProvider>
                 <AdminProvider>
+
                   <AnalyticsProvider>
                     <Header
                       // additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
                     />
+
                     {!cookies.cookieConsent && <CookieConsent />}
                     <HeaderCommunity />
                     <ToastContainer

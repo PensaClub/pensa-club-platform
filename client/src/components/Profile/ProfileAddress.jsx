@@ -195,7 +195,7 @@ const ProfileAddress = () => {
         </select>
         {errors.region && <span className='error'>{errors.region}</span>}
       </label>
-      <label>
+      {/* <label>
         {t('profile.municipality')}: <span>*</span>
         <select
           name='municipality'
@@ -269,7 +269,7 @@ const ProfileAddress = () => {
           style={{ borderColor: errors.streetNumber ? '#BB1D3D' : '' }}
         />
         {errors.streetNumber && <span className='error'>{errors.streetNumber}</span>}
-      </label>
+      </label> */}
       <span className='required-fields'>{t('profile.required_fields')}</span>
       <div className="btn-inline">
       <button className='btn-general btn-green' type='submit'>

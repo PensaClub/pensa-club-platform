@@ -41,16 +41,6 @@ export const validateField = (name, value, form = {}, t) => {
         case 'region':
             if (!value) error = t('profile.region_required');
             break;
-        case 'municipality':
-            if (!value) error = t('profile.municipality_required');
-            break;
-        case 'settlement':
-            if (!value) error = t('profile.settlement_required');
-            break;
-        case 'street':
-            if (!value) error = t('profile.street_required');
-            else if (!streetRegex.test(value)) error = t('profile.street_invalid');
-            break;
         case 'password':
             if (!passwordRegex.test(value)) {
                 error = t('profile.password_error');

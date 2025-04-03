@@ -6,6 +6,7 @@ import { resetFields, handleReset } from '../../utils/profile';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useMappingContext } from '../contexts/MapContext';
+import { ProfileSkills } from './ProfileSkills';
 
 export const ProfileInterests = () => {
     const { onEditProfileDataSubmit, profileData } = useContext(UserContext);    
@@ -78,6 +79,7 @@ export const ProfileInterests = () => {
         navigate('/profile');
     };
     return (
+        <>
         <form className="profile-form" onSubmit={handleSubmit}>
             <label>
                 <h3>{t('profile.add_interests')}</h3>
@@ -93,5 +95,7 @@ export const ProfileInterests = () => {
                 <button type="reset" className="btn-general btn-red" onClick={handleResetForm}>{t('profile.close_btn')}</button>
             </div>
         </form>
+        <ProfileSkills></ProfileSkills>
+        </>
     );
 };

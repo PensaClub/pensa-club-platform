@@ -1,52 +1,156 @@
 .hero-section {
-  background-image: var(--bg-image);
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 3em;
+  overflow: hidden;
 }
 
 .parent-hero {
+  min-height: 100vh;
+  width: 100%;
   padding-top: 4em;
   display: flex;
   justify-content: center;
-  flex-direction: column;
   align-items: center;
+  flex-direction: row;
   gap: 2em;
+  margin-top: -170px;
+
+}
+
+.parent-hero::before {
+  content: "";
+  background-image: url("../../../../public/images/homePage/hero-img.jpg");
+  background-size: cover;
+  filter: grayscale(40%) blur(3px);
+  background-position: top;
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  height: 120%;
+  z-index: -1;
+}
+
+.parent-hero::after {
+  content: "";
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.6391806722689075) 0%,
+    rgba(255, 255, 255, 0.4543067226890757) 33%,
+    rgba(255, 255, 255, 0.23862044817927175) 57%,
+    rgba(255, 255, 255, 0) 79%
+  );
+  background-size: cover;
+  background-position: top;
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  height: 120%;
+  z-index: -1;
+}
+
+.parent-hero > div {
+  width: 50%;
+}
+.parent-hero > div:first-child {
+  margin-right: auto;
+}
+.parent-hero > div:last-child {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff54;
+  backdrop-filter: blur(10px);
+  height: 60vh;
+  align-self: center;
+  border-radius: 40px;
+  width: 50%;
+  margin-right: 0px;
+  padding: 100px;
+  
 }
 
 .left-side {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   max-width: 100%;
-  align-items: center;
-  padding-top: 5em;
+  /* max-width: 60%; */
+  align-items: flex-start;
+  padding-left: 160px;
 }
 
 .left-side h1 {
-  font-size: var(--l-font-size);
+  font-size: 42px;
   color: var(--green);
   padding-bottom: var(--m-space);
-  text-align: center;
-  text-shadow: var(--text-shadow);
+  z-index: 50;
+  line-height: 70px;
+  font-weight: 800;
 }
 
 .left-side p {
-  max-width: 75ch;
-  text-align: center;
-  padding: 0 var(--m-space);
-  font-size: var(--s-font-size);
+  max-width: 90%;
+  padding: 0;
+  font-size: var(--xs-font-size);
 }
 .left-side p span {
   font-weight: 900;
   font-size: var(--s-font-size);
   text-shadow: var(--text-shadow);
+}
+
+.left-side p:first-child {
+  margin-bottom: 10px;
+  color: var(--orange);
+  font-weight: 700;
+  font-size: var(--s-font-size);
+}
+
+.right-side {
+width:80%;
+height: auto;
+border-radius: 40px;
+overflow: hidden;
+
+}
+
+
+.frame-container{
+  width: 60%;
+  height: 60%;
+  /* position: relative; 
+  padding-bottom: 56.25%; 
+  height: 0; 
+  overflow: hidden; */
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  background-color: #000;
+  border-radius: 40px;
+}
+
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.frame-container .responsive-iframe {
+  pointer-events: none; /* Скрива взаимодействието по подразбиране */
+}
+
+.frame-container:hover .responsive-iframe {
+  pointer-events: auto; /* Разрешава взаимодействие при hover */
 }
 .btn-hero {
   display: flex;
@@ -92,7 +196,6 @@
   align-items: start;
   width: 70%;
   min-width: 550px;
-  
 }
 
 .motto-img img {
@@ -147,35 +250,55 @@
 #btn-join {
   width: auto;
   margin-top: 0;
-  padding: 8px;
-  width: 100%;
   max-width: 500px;
-
+  margin-top: 60px;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .hero-img-mobile {
   display: none;
 }
 
-@media (max-width: 600px) {
+.information-slide {
+  width: 100%;
+  margin-top: 76px;
+  z-index: 10;
+}
+
+.information-slide marquee {
+  padding: 10px 0;
+    backdrop-filter: blur(10px);
+    background-color: #ffffff94;
+}
+
+@media (max-width: 1280px) {
+  .parent-hero {
+    padding-top: 0;
+    margin-top: 0px;
+  }
+  .hero-section {
+    padding: 10px;
+  }
   .hero-section h3 {
     font-size: 1.8rem;
   }
-}
+  .left-side {
+    max-width:max-content;
+    align-items: center;
+    padding: 0;
+    text-align: center;
+  }
+  .hero-section h1 {
+    font-size: 2.1rem;
+    line-height: 50px;
+  }
 
-@media (max-width: 960px) {
-  .hero-section h1 {
-    font-size: 2.4rem;
+  .left-side p {
+    max-width: 60ch;
   }
-}
-@media (min-width: 767px) and (max-width: 1200px) {
-  .left-side p{
-    padding-left: 70px;
-    max-width: 60ch
-  }
-  .hero-section h1 {
-  padding-left: 75px;
+  .parent-hero::after {
+  background: rgba(255, 255, 255, 0.33);
   }
 }
 
@@ -183,7 +306,7 @@
   .parent-hero {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 6em;
   }
@@ -215,4 +338,40 @@
   .motto-info > * {
     margin: 0 auto;
   }
+}
+
+@media (min-width: 768px) and (max-width: 1024px){
+  .left-side {
+    padding: 4em 0.5em;
+    padding-left: 7%;
+  }
+
+}
+
+@media(max-width: 1024px) {
+  .parent-hero {
+     flex-direction: column;
+  }
+
+  .parent-hero > div:first-child {
+    width: 90%;
+    margin-right: 0;
+}
+
+
+.parent-hero > div:last-child {
+  width: 100%;
+  margin-right: 0px;
+  padding: 0px 30px;
+  height: 30vh;
+
+}
+
+.parent-hero::before {
+  height: 100%;
+}
+
+.information-slide {
+  margin-top: 70px;
+}
 }

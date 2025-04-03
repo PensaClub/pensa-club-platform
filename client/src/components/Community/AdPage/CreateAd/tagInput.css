@@ -29,7 +29,7 @@
     padding-bottom: 0.5em;
     font-size: calc(var(--xxs-font-size) + 1px);
     font-weight: 600;
-    color: var(--brown);
+    /* color: var(--brown); */
 }
 
 .tag button {
@@ -59,22 +59,27 @@
 .desc-sub-text span {
     display: flex;
     margin-bottom: 0.7em;
-    font-style: italic;
+    /* font-style: italic; */
+    text-indent: 0;
     font-size: calc(var(--xxs-font-size) - 3px);
     line-height: 1.2em;
-
+    color: var(--orange)
 }
 
 .tag-input-container input {
-    padding: 10px;
-    font-size: 1rem;
-    outline: none;
-    border-radius: var(--radius);
-    border: 1px solid var(--brown);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    background-color: var(--form-input-bg);
-    font-size: calc(var(--xxs-font-size) + 1px);
-    height: 55px;
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: var(--m-space);
+    /* margin-top: 0.5rem; */
+    box-shadow: 0 2px 40px rgba(0, 0, 0, 0.09);
+}
+
+
+.tag-input-container input:focus {
+    outline: 2px solid var(--orange);
 }
 .desc-sub-text.alert-tags {
     color: red;

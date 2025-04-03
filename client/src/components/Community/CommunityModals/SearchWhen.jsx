@@ -108,7 +108,7 @@ export const SearchWhen = ({ isOpen, onClose, setFilters, filters, setCreationDa
                         />
                     </div>
                 )}
-                <button onClick={handleSearch} className="when-search-button">{t('community.apply_btn')}</button>
+                <button onClick={handleSearch} className="btn-general btn-orange">{t('community.apply_btn')}</button>
             </div>
         </div>
     );

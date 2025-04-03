@@ -38,13 +38,12 @@
   --m-font-size: 30px;
   --s-font-size: 24px;
   --xs-font-size: 18px;
-  --xxs-font-size: 14px;
-
-  --text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --xxs-font-size: 16px;
+  --text-shadow: 0 2px 40px rgba(0, 0, 0, 0.09);
  
 
   /* Border Radius */ 
-  --radius: 20px;
+  --radius: 40px;
   --radius-input: 10px;
 
   /* Spacing eg. Margin and Padding*/
@@ -79,11 +78,15 @@ h2 {
 }
 
 h3 {
-  font-size: var(--m-font-size);
+  font-size: var(--s-font-size);
 }
 
 label, span, p, input {
   font-size: var(--xs-font-size);
+}
+
+p, a {
+  font-weight: 460;
 }
 
 
@@ -95,7 +98,7 @@ label, span, p, input {
 @font-face {
   font-family: 'Montserrat';
   src: url('../../client/public/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
-  font-weight: normal;
+  /* font-weight: normal; */
   font-style: normal;
 }
 
@@ -141,9 +144,8 @@ button, input, textarea {
 /* Genral Button Styles */
 .btn-general {
   display: inline-block;
-  /* width: 200px; */
   margin-top: 20px;
-  padding: 14px 28px;
+  padding: 14px 60px;
   border-radius: var(--radius);
 
   transition: background-color 0.3s ease;
@@ -151,9 +153,9 @@ button, input, textarea {
   /* background-color: var(--green); */
   color: var(--text-white);
 
-  font-size: var(--s-font-size);
+  font-size: var(--xs-font-size);
   text-decoration: none;
-  font-weight: 500;    
+  font-weight: 600;    
   
   cursor: pointer;
 }

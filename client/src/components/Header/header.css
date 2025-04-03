@@ -12,7 +12,7 @@ header {
   transition: all 0.3s ease;
   z-index: 1000;
   background-color: var(--bg-white);
-  height: 70px;
+  height: 80px;
   box-shadow: var(--text-shadow);
 }
 
@@ -32,6 +32,7 @@ header::before {
   width: 100%;
   height: 100%;
   opacity: 0.1;
+  -webkit-backdrop-filter:blur(50px);
   backdrop-filter: blur(50px);
   z-index: -1;
 }
@@ -53,14 +54,17 @@ header::after {
 }
 
 header.scrolled {
-  background-color: var(--orange);
+  /* background-color: var(--orange); */
 }
 .header-community-logo a{
   font-size: var(--s-font-size);
   font-weight: 600;
   line-height: 25px;
   text-decoration: none;
-  color: var(--green);
+  color: var(--green);    
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 header > a:nth-child(1) {
   font-size: var(--s-font-size);
@@ -68,6 +72,8 @@ header > a:nth-child(1) {
   line-height: 25px;
   text-decoration: none;
   color: var(--green);
+  display: flex;
+  align-items: center;
 }
 
 #check {
@@ -89,6 +95,7 @@ header > a:nth-child(1) {
   width: 100%;
   height: 0;
   background: transparent;
+  -webkit-backdrop-filter:blur(50px);
   backdrop-filter: blur(50px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -118,8 +125,9 @@ header > a:nth-child(1) {
 }
 
 .navbar a {
-  font-size: var(--s-font-size);
+  font-size: var(--xxs-font-size);
   font-weight: 600;
+  text-transform: uppercase;
 }
 
 .nav-item:hover::after {
@@ -141,22 +149,20 @@ header > a:nth-child(1) {
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   margin-left: 20px;
   overflow: hidden;
-  box-shadow: var(--container-shadow);
-}
+  border: 4px solid var(--orange)
+  }
 
 .profile-img {
   object-fit: cover;
-  margin-left: -4px;
-  height: 100%;
-  width: 100%;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .dropdown {
-  right: calc(var(--s-space) + 6px);
   position: relative;
 }
 
@@ -166,21 +172,51 @@ header > a:nth-child(1) {
 
 .dropdown-toggle {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-self: center;
 }
 /* dropdown-menu */
 .dropdown-menu {
-  display: none;
-  position: fixed;
-  top: 70px;
-  left: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter:blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
-  padding: 1em 0;
   z-index: 1000;
-  text-align: center;
+  display: none;
+  position: absolute;
+  right: -100px;
+  min-width: 17rem;
+  padding: 0.5rem 0;
+  margin: var(--s-space) 0 0;
+  font-size: 1rem;
+  color: #292b2c;
+  text-align: left;
+  list-style: none;
+  background-color: var(--bg-white);
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius);
+  flex-direction: column;
+  align-items: center;
+  top: 50px;
+}
+
+.dropdown-menu .social-icons-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0.2rem;
+  transform: translateX(-50%);
+  background-color: var(--green);
+  transition: all 0.5s ease;
+  border-radius: 15px;
+  font-size: 1rem;
+  color: #292b2c;
+  text-align: left;
+  list-style: none;
 }
 
 .dropdown-menu.active {
@@ -222,12 +258,12 @@ header > a:nth-child(1) {
 }
 
 .social-icons-header {
+  width: 100%;
   display: flex;
-  width: min-content;
-  justify-content: center;
-  margin: 0 auto;
-  padding: 0 var(--m-space);
   align-items: center;
+  padding: 0 var(--l-space);
+  position: relative;
+
 }
 /* alert modal */
 .alert-modal {
@@ -249,12 +285,12 @@ header > a:nth-child(1) {
   }
 }
 .incomplete-profile {
-  color: var(--red) !important;
+  /* color: var(--red) !important;   */
   position: relative;
   display: inline-flex;
   align-items: center;
-  font-weight: 900 !important;
-  text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.7);
+  /* font-weight: 900 !important;
+  text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.7); */
 }
 .warning-icon {
   position: absolute;
@@ -328,10 +364,12 @@ header > a:nth-child(1) {
     display: none !important;
   }
   .social-icons-header {
+    width: 100%;
     display: flex;
     align-items: center;
     padding: 0 var(--l-space);
-    margin: 0 var(--l-space);
+    position: relative;
+    
   }
 
   .social-icons-header:hover {
@@ -356,12 +394,13 @@ header > a:nth-child(1) {
     width: auto;
     height: auto;
     background: none;
+    -webkit-backdrop-filter:none;
     backdrop-filter: none;
     box-shadow: none;
     overflow: initial;
     transition: none;
     display: flex;
-    gap: 1em;
+    gap: 2em;
     margin-left: auto;
   }
 
@@ -376,7 +415,7 @@ header > a:nth-child(1) {
     color: var(--gray);
     font-weight: 600;
     line-height: 25px;
-    letter-spacing: -0.13px;
+    /* letter-spacing: -0.13px; */
     text-decoration: none;
     transition: all 0.5s ease;
     cursor: pointer;
@@ -408,8 +447,8 @@ header > a:nth-child(1) {
     display: none;
     position: absolute;
     top: 100%;
-    right: 0;
-    left: auto;
+    right: -100px;
+    /* left: auto; */
     min-width: 17rem;
     padding: 0.5rem 0;
     margin: var(--s-space) 0 0;
@@ -428,8 +467,6 @@ header > a:nth-child(1) {
     flex-direction: column;
     align-items: center;
     top: 50px;
-    left: auto;
-    right: 0;
   }
   .dropdown-menu .dropdown-item .desktop-unactive {
     display: none;
@@ -440,10 +477,10 @@ header > a:nth-child(1) {
     font-size: var(--xs-font-size);
     cursor: pointer;
   }
-  .dropdown-menu .dropdown-item::after {
+  .dropdown-menu .social-icons-header::after {
     content: "";
     position: absolute;
-    bottom: -0.5rem;
+    bottom: 0;
     left: 50%;
     width: 0;
     height: 0.2rem;
@@ -452,8 +489,8 @@ header > a:nth-child(1) {
     transition: all 0.5s ease;
     border-radius: 15px;
   }
-  .dropdown-menu .dropdown-item:hover::after {
-    width: 50%;
+  .dropdown-menu .social-icons-header:hover::after {
+    width: 90%;
   }
   .dropdown-menu .dropdown-item:hover,
   .dropdown-menu .dropdown-item:hover button {
@@ -466,6 +503,16 @@ header > a:nth-child(1) {
 }
 @media only screen and (max-width: 1200px) {
   .header.hide-on-mobile {
+    /* display: none; */
+  }
+
+  .navbar {
     display: none;
+  }
+}
+
+@media (max-width: 850px) {
+  .dropdown-menu {
+    right: -20px;
   }
 }
