@@ -73,7 +73,7 @@ function App() {
                 <AdminProvider>
                   <AnalyticsProvider>
                     <Header
-                      additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
+                      // additionalClasses={isCommunityPage ? 'hide-on-mobile ' : ''}
                     />
                     {!cookies.cookieConsent && <CookieConsent />}
                     <HeaderCommunity />
