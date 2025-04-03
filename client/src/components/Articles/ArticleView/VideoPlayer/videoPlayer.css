@@ -1,0 +1,314 @@
+.video-player-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    overflow: hidden;
+    background-color: #000;
+  }
+  
+  .video-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .video-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  
+  .video-thumbnail-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 1;
+  }
+  
+  .video-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .video-play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+  }
+  
+  .video-play-overlay:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .play-icon {
+    font-size: 3rem;
+    color: white;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+  }
+  
+  .video-play-overlay:hover .play-icon {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  
+  .video-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+  
+  .video-controls.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .video-controls.visible {
+    opacity: 1;
+  }
+  .progress-container {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .progress-filled {
+    height: 100%;
+    background-color: var(--red);
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .time-display {
+    font-size: 0.75rem;
+    color: white;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .controls-buttons {
+    display: flex;
+    align-items: center;
+    /* gap: 15px; */
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .control-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    padding: 0;
+    margin: 0 8px;
+  }
+  
+  .control-button:hover {
+    opacity: 1;
+  }
+  .control-button.active {
+    color: var(--orange);
+  }
+
+  .control-button>svg:not(:root).svg-inline--fa{
+    /* , svg:not(:host).svg-inline--fa */
+   color:var(--text-white)
+  }
+
+  .volume-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .volume-slider-container {
+    width: 0;
+    height: 80px;
+    overflow: hidden;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.2s ease, height 0.2s ease;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+  }
+  .volume-container:hover .volume-slider-container {
+    width: 30px;
+    padding: 10px 0;
+  }
+  .volume-slider {
+    height: 60px;
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    margin: 0 auto;
+  }
+
+.volume-level {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .settings-container {
+    position: relative;
+  }
+
+  .settings-menu {
+    position: absolute;
+    bottom: 40px;
+    right: -50px;
+    width: 200px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 3;
+  }  
+  .settings-section {
+    margin-bottom: 10px;
+  }
+  .settings-section h4 {
+    color: white;
+    font-size: 0.85rem;
+    margin: 0 0 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+  }
+  .speed-options, .subtitle-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .speed-button, .subtitle-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .speed-button:hover, .subtitle-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .speed-button.active, .subtitle-button.active {
+    background-color: var(--orange);
+    color: white;
+  }
+  .subtitles-container {
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    z-index: 1;
+  }
+  
+  .subtitles-container p {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 0;
+    font-size: 1rem;
+  }
+  .download-button {
+    text-decoration: none;
+    color: aliceblue;
+  }
+  
+  /* YouTube iframe container */
+  .youtube-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+  }
+  
+  .youtube-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .play-icon {
+      font-size: 2.5rem;
+    }
+    
+    .control-button {
+      font-size: 1rem;
+      margin: 0 5px;
+    }
+    
+    .video-controls {
+      padding: 8px;
+    }
+    
+    .progress-bar {
+      height: 4px;
+      margin-bottom: 4px;
+    }
+    .time-display span {
+        font-size: 0.65rem;
+      }
+      .settings-menu {
+        width: 150px;
+        right: -20px;
+      }
+      
+      .settings-section h4 {
+        font-size: 0.75rem;
+      }
+      
+      .speed-button, .subtitle-button {
+        padding: 4px 6px;
+        font-size: 0.7rem;
+      }
+
+  }
