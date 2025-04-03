@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,19 +17,23 @@ import { getArticleBySlug } from '../data/articlesData';
 import RecentArticles from './RecentArticles/RecentArticles';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
 import { useTranslation } from 'react-i18next';
+import ImageSlider from './ImageSlider/ImageSlider';
+import VideoPlayer from './VideoPlayer/VideoPlayer';
 
 const ArticleView = () => {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const { trackArticle, getViewCount } = useAnalytics();
-const {t} = useTranslation();
+  const { t } = useTranslation();
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   }, []);
+
   useEffect(() => {
     // Симулираме API заявка чрез нашите мокнати данни
     setLoading(true);
@@ -47,7 +50,7 @@ const {t} = useTranslation();
       }
     }, 300);
   }, [slug]);
-// da se sloji na6iqt loader
+
   if (loading) {
     return (
       <div className="article-loading">
@@ -75,24 +78,17 @@ const {t} = useTranslation();
   // Функция за рендериране на главното медия (снимка, слайдер или видео)
   const renderMainMedia = () => {
     if (article.mainImage.type === 'slider' && article.mainImage.sources.length > 1) {
-      // Тук ще бъде слайдерът - за момента показваме само първата снимка
-      return (
-        <div className="article-main-image">
-          <img src={article.mainImage.sources[0]} alt={article.mainImage.alt} />
-          <div className="image-slider-indicator">
-            <span>1/{article.mainImage.sources.length}</span>
-          </div>
-        </div>
-      );
+      return <ImageSlider images={article.mainImage.sources} alt={article.mainImage.alt} />;
     } else if (article.mainImage.type === 'video') {
-      // Тук ще бъде видео плейърът - за момента показваме thumbnail
       return (
-        <div className="article-main-video">
-          <img src={article.mainImage.thumbnail} alt={article.mainImage.alt} />
-          <div className="video-play-button">
-            <span>▶</span>
-          </div>
-        </div>
+        <VideoPlayer 
+        src={article.mainImage.sources[0]} 
+        thumbnail={article.mainImage.thumbnail} 
+        alt={article.mainImage.alt} 
+        subtitles={article.mainImage.subtitles || []}
+        downloadUrl={article.mainImage.downloadUrl}
+        allowDownload={article.mainImage.allowDownload}
+        />
       );
     } else {
       // Обикновена снимка
