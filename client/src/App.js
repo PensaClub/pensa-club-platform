@@ -41,6 +41,8 @@ import { PrivacyPolicy } from './components/PrivacyPolicy/PrivacyPolicy.jsx';
 
 import { setNavigator } from './utils/handle401Error.jsx';
 import { useEffect } from 'react';
+import ArticleView from './components/Articles/ArticleView/ArticleView.jsx';
+import ArticlesList from './components/Articles/ArticlesList/ArticlesList.jsx';
 
 function App() {
   const location = useLocation();
@@ -84,6 +86,8 @@ function App() {
                       path="/reset-password"
                       element={<ResetPasswordPage />}
                     />
+                    <Route path="/articles" element={<ArticlesList />} />
+                    <Route path="/articles/:slug" element={<ArticleView />} />
                     <Route element={<AuthGuard />}>
                       <Route path="/ad/details/:adId" element={<AdDetails />} />
                       <Route path="/ad/edit/:adId" element={<EditAd />} />
