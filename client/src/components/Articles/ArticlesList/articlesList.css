@@ -3,11 +3,9 @@
     width: 100%;
     margin: 0 auto;
     color: #333;
-    font-family: 'Roboto', sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
     padding-top: 80px;
-
     padding-bottom: 140px;
-
 }
 
 .articles-hero {
@@ -97,7 +95,7 @@
 .all-articles-title {
     font-size: 1.6em;
     text-align: left;
-    margin-left: 4em;
+    margin-left: 3.5em;
     margin-bottom: 0.5em;
     position: relative;
     display: inline-block;
@@ -119,7 +117,7 @@
 .slider-title {
     font-size: 1.6em;
     text-align: left;
-    margin-left: 4em;
+    margin-left: 3.5em;
     margin-bottom: 0.5em;
     position: relative;
     display: inline-block;
@@ -195,7 +193,37 @@
     border-top: 3px solid var(--orange);
     animation: spin 1s linear infinite;
 }
+/* Добавка към articlesList.css */
+.articles-content-with-sidebar {
+  display: flex;
+  max-width: 1750px;
+  margin: 0 2em;
+  padding: 0 3rem;
+  gap: 20px;
+}
 
+.sidebar-promo {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.articles-main-content {
+  flex-grow: 1;
+}
+
+@media (max-width: 992px) {
+  .articles-content-with-sidebar {
+    flex-direction: column;
+    margin: 0 0.5em;
+    padding: 0 2rem;
+    gap: 20px;
+  }
+
+  .sidebar-promo {
+    width: 100%;
+    order: -1; /* Показва промото най-отгоре при мобилни */
+  }
+}
 @keyframes spin {
     0% {
         transform: rotate(0deg);
