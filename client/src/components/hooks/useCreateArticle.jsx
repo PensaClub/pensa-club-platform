@@ -1,26 +1,19 @@
 import { useState } from "react";
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
-import { firebaseStorage } from "../../firebase";
-import imageCompression from "browser-image-compression";
-import { v4 } from "uuid";
 import { useTranslation } from "react-i18next";
 import { notify } from "../../utils/notify";
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
+import { convertEditorToHtml, createEditorState } from "../Articles/articleUtils/editor";
+import { generateSlug } from "../Articles/articleUtils/formatting";
+import { isFormValid, validateArticleField, validateArticleForm } from "../Articles/articleUtils/validation";
+import { allowedImageTypes, allowedVideoTypes, compressImage, uploadFileWithProgress } from "../Articles/articleUtils/file-utils";
+import { prepareArticleValuesForSubmit } from "../Articles/articleUtils/article-utils";
+// Импортиране на всички изнесени utility функции
+// import { createEditorState, convertEditorToHtml, isEditorEmpty } from "../../utils/editor";
+// import { generateSlug } from "../../utils/formatting";
+// import { allowedImageTypes, allowedVideoTypes, compressImage, uploadFileWithProgress } from "../../utils/file-utils";
+// import { prepareArticleValuesForSubmit } from "../../utils/article-utils";
+// import { validateArticleField, validateArticleForm, isFormValid } from "../../utils/validation";
 
 export const useCreateArticle = (initialValues, onSubmitHandler) => {
-  const createEditorState = (html = '') => {
-    if (html) {
-      const contentBlock = htmlToDraft(html);
-      if (contentBlock) {
-        const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-        return EditorState.createWithContent(contentState);
-      }
-    }
-    return EditorState.createEmpty();
-  };
-
   const [values, setValues] = useState(initialValues || {
     title: "",
     slug: "",
@@ -57,33 +50,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   const [isUploading, setIsUploading] = useState(false);
   const { t } = useTranslation();
 
-  const allowedImageTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
-  const allowedVideoTypes = ["video/mp4", "video/webm", "video/ogg"];
-
-  // Генерираме slug от заглавие
-  const generateSlug = (title) => {
-    if (!title) return "";
-    return title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '') // Премахваме специални символи
-      .replace(/\s+/g, '-') // Заменяме интервали с тирета
-      .replace(/-+/g, '-'); // Премахваме повтарящи се тирета
-  };
-
-  // Конвертиране на EditorState в HTML
-  const convertEditorToHtml = (editorState) => {
-    if (!editorState) return '';
-    return draftToHtml(convertToRaw(editorState.getCurrentContent()));
-  };
-
-  // Проверка дали EditorState е празен
-  const isEditorEmpty = (editorState) => {
-    if (!editorState) return true;
-    const content = editorState.getCurrentContent();
-    return !content.hasText();
-  };
-
-  // Обработка на промени в полетата - подобрена версия
+  // Обработка на промени в полетата
   const onChangeHandler = (e, isEditor = false, editorValue = null) => {
     if (isEditor) {
       const { name, value } = editorValue;
@@ -181,55 +148,17 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     }
   };
 
-  // Валидация полета
-  const validateField = (name, value) => {
-    let error = "";
-    
-    switch (name) {
-      case "title":
-        error = !value.trim() ? t("articles.title_required") : 
-                value.length < 4 ? t("articles.title_too_short") : 
-                value.length > 100 ? t("articles.title_too_long") : "";
-        break;
-      case "slug":
-        error = !value.trim() ? t("articles.slug_required") : 
-                !/^[a-z0-9-]+$/.test(value) ? t("articles.slug_invalid_format") : "";
-        break;
-      case "author":
-        error = !value.trim() ? t("articles.author_required") : "";
-        break;
-      case "summary":
-        error = isEditorEmpty(value) ? t("articles.summary_required") : "";
-        break;
-      case "mainImage.alt":
-        error = isEditorEmpty(value) ? t("articles.image_alt_required") : "";
-        break;
-      default:
-        if (name.startsWith("sections")) {
-          const field = name.split(".").pop();
-          if (field === "title" && !value.trim()) {
-            error = t("articles.section_title_required");
-          } else if (field === "content" && isEditorEmpty(value)) {
-            error = t("articles.section_content_required");
-          }
-        }
-        break;
-    }
-    
-    return error;
-  };
-
   // Обработка на загуба на фокус за валидация
   const onBlurHandler = (e, isEditor = false, editorValue = null) => {
     if (isEditor) {
       const { name, value } = editorValue;
-      const error = validateField(name, value);
+      const error = validateArticleField(name, value, t);
       setErrors(prev => ({ ...prev, [name]: error }));
       return;
     }
     
     const { name, value } = e.target;
-    const error = validateField(name, value);
+    const error = validateArticleField(name, value, t);
     
     setErrors(prev => ({
       ...prev,
@@ -249,7 +178,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     }));
   };
 
-  // Добавяне на нова секция - обновена да използва order
+  // Добавяне на нова секция
   const addSection = () => {
     setValues(prev => {
       const newOrder = prev.sections.length + 1;
@@ -259,7 +188,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
           ...prev.sections,
           {
             title: "",
-            content: EditorState.createEmpty(),
+            content: createEditorState(),
             image: null,
             order: newOrder
           }
@@ -268,7 +197,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     });
   };
 
-  // Премахване на секция - обновена да преномерира order
+  // Премахване на секция
   const removeSection = (index) => {
     if (values.sections.length <= 1) {
       notify("articles.minimum_one_section");
@@ -318,67 +247,50 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     }));
   };
 
-  // Обработка на файлове с изображения за основното изображение
-// Обработка на файлове с изображения или видео за основното изображение
-const handleMainImageFiles = (files) => {
-  if (!files || files.length === 0) return;
-  
-  const fileArray = Array.from(files);
-  
-  // Проверяваме типа на медията
-  if (values.mainImage.type === "video") {
-    // За видео, проверяваме само първия файл
-    const videoFile = fileArray[0];
-    if (!allowedVideoTypes.includes(videoFile.type)) {
-      notify("articles.invalid_video_format");
-      return;
-    }
+  // Обработка на файлове с изображения или видео за основното изображение
+  const handleMainImageFiles = (files) => {
+    if (!files || files.length === 0) return;
     
-    // За видео, запазваме само един файл
-    setMediaFiles(prev => ({
-      ...prev,
-      mainImage: [videoFile]
-    }));
-  } else {
-    // За изображения, филтрираме по допустими формати
-    const validFiles = fileArray.filter(file => 
-      allowedImageTypes.includes(file.type)
-    );
+    const fileArray = Array.from(files);
     
-    if (validFiles.length !== fileArray.length) {
-      notify("articles.invalid_image_format");
-    }
-    
-    if (values.mainImage.type === "slider") {
-      // За слайдер можем да добавим множество изображения
+    // Проверяваме типа на медията
+    if (values.mainImage.type === "video") {
+      // За видео, проверяваме само първия файл
+      const videoFile = fileArray[0];
+      if (!allowedVideoTypes.includes(videoFile.type)) {
+        notify("articles.invalid_video_format");
+        return;
+      }
+      
+      // За видео, запазваме само един файл
       setMediaFiles(prev => ({
         ...prev,
-        mainImage: [...prev.mainImage, ...validFiles]
+        mainImage: [videoFile]
       }));
     } else {
-      // За единично изображение, заменяме съществуващото
-      setMediaFiles(prev => ({
-        ...prev,
-        mainImage: [validFiles[0]]
-      }));
+      // За изображения, филтрираме по допустими формати
+      const validFiles = fileArray.filter(file => 
+        allowedImageTypes.includes(file.type)
+      );
+      
+      if (validFiles.length !== fileArray.length) {
+        notify("articles.invalid_image_format");
+      }
+      
+      if (values.mainImage.type === "slider") {
+        // За слайдер можем да добавим множество изображения
+        setMediaFiles(prev => ({
+          ...prev,
+          mainImage: [...prev.mainImage, ...validFiles]
+        }));
+      } else {
+        // За единично изображение, заменяме съществуващото
+        setMediaFiles(prev => ({
+          ...prev,
+          mainImage: [validFiles[0]]
+        }));
+      }
     }
-  }
-};
-
-// handleMainVideoFile вече не е нужна, може да се премахне
-  // Обработка на файлове с видео за основното изображение
-  const handleMainVideoFile = (file) => {
-    if (!file) return;
-    
-    if (!allowedVideoTypes.includes(file.type)) {
-      notify("articles.invalid_video_format");
-      return;
-    }
-    
-    setMediaFiles(prev => ({
-      ...prev,
-      mainImage: [file]
-    }));
   };
 
   // Обработка на файлове с изображения за секции
@@ -428,74 +340,9 @@ const handleMainImageFiles = (files) => {
 
   // Валидация на формата преди изпращане
   const validateForm = () => {
-    console.log("Започва валидация на формата");
-    const newErrors = {};
-    
-    // Само основни полета
-    newErrors.title = validateField("title", values.title);
-    newErrors.slug = validateField("slug", values.slug);
-    newErrors.author = validateField("author", values.author);
-    newErrors.summary = validateField("summary", values.summary);
-    console.log("След валидация на основни полета:", newErrors);
-    
-    // Секции - само проверка за заглавие и съдържание
-    values.sections.forEach((section, index) => {
-      if (!section.title?.trim()) {
-        newErrors[`sections[${index}].title`] = t("articles.section_title_required");
-      }
-      
-      if (isEditorEmpty(section.content)) {
-        newErrors[`sections[${index}].content`] = t("articles.section_content_required");
-      }
-    });
-    console.log("След валидация на секции:", newErrors);
-    
+    const newErrors = validateArticleForm(values, t);
     setErrors(newErrors);
-    
-    const isValid = Object.values(newErrors).every(error => !error);
-    console.log("Форма валидна:", isValid, "Грешки:", newErrors);
-    return isValid;
-  };
-
-  // Конвертиране на всички EditorState полета в HTML преди изпращане
-  const prepareValuesForSubmit = (values) => {
-    const prepared = { ...values };
-    
-    // Конвертиране на summary
-    prepared.summary = convertEditorToHtml(values.summary);
-    
-    // Конвертиране на mainImage.alt
-    prepared.mainImage = {
-      ...values.mainImage,
-      alt: convertEditorToHtml(values.mainImage.alt)
-    };
-    
-    // Конвертиране на съдържанието на секциите
-    prepared.sections = values.sections.map(section => {
-      const updatedSection = { ...section };
-      
-      if (section.content) {
-        updatedSection.content = convertEditorToHtml(section.content);
-      }
-      
-      if (section.image && section.image.alt && typeof section.image.alt !== 'string') {
-        updatedSection.image = {
-          ...section.image,
-          alt: convertEditorToHtml(section.image.alt)
-        };
-      }
-      
-      if (section.image && section.image.caption && typeof section.image.caption !== 'string') {
-        updatedSection.image = {
-          ...updatedSection.image,
-          caption: convertEditorToHtml(section.image.caption)
-        };
-      }
-      
-      return updatedSection;
-    });
-    
-    return prepared;
+    return isFormValid(newErrors);
   };
 
   // Качване на всички медийни файлове
@@ -511,67 +358,36 @@ const handleMainImageFiles = (files) => {
       if (mediaFiles.mainImage.length > 0) {
         if (values.mainImage.type === "image" || values.mainImage.type === "slider") {
           // Качване на изображения
-          const imageUploads = mediaFiles.mainImage.map(async (file, index) => {
-            const options = {
+          const imageUploads = mediaFiles.mainImage.map(async (file) => {
+            const compressedFile = await compressImage(file, {
               maxSizeMB: 2,
-              maxWidthOrHeight: 1920,
-            };
-            
-            let compressedFile;
-            try {
-              compressedFile = await imageCompression(file, options);
-            } catch (err) {
-              console.error("Image compression error:", err);
-              compressedFile = file;
-            }
-            
-            const imageRef = ref(firebaseStorage, `articles/images/${v4()}`);
-            const uploadTask = uploadBytesResumable(imageRef, compressedFile);
-            
-            return new Promise((resolve, reject) => {
-              uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                  const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  // Обновяваме общия прогрес
-                  setUploadProgress(prevProgress => 
-                    (prevProgress + progress / (mediaFiles.mainImage.length + Object.keys(mediaFiles.sectionImages).length)) / 2
-                  );
-                },
-                (error) => {
-                  reject(error);
-                },
-                async () => {
-                  const url = await getDownloadURL(uploadTask.snapshot.ref);
-                  resolve(url);
-                }
-              );
+              maxWidthOrHeight: 1920
             });
+            
+            // Използваме утилитата за качване на файл с прогрес
+            return uploadFileWithProgress(
+              compressedFile, 
+              'articles/images', 
+              (progress) => {
+                // Обновяваме общия прогрес
+                setUploadProgress(prevProgress => 
+                  (prevProgress + progress / (mediaFiles.mainImage.length + Object.keys(mediaFiles.sectionImages).length)) / 2
+                );
+              }
+            );
           });
           
           mainImageUrls = await Promise.all(imageUploads);
         } else if (values.mainImage.type === "video") {
-          // Качване на видео с чънкове
+          // Качване на видео
           const videoFile = mediaFiles.mainImage[0];
-          const videoRef = ref(firebaseStorage, `articles/videos/${v4()}`);
-          const uploadTask = uploadBytesResumable(videoRef, videoFile);
-          
-          const videoUrl = await new Promise((resolve, reject) => {
-            uploadTask.on(
-              "state_changed",
-              (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                setUploadProgress(progress / 2); // Първата половина на прогреса
-              },
-              (error) => {
-                reject(error);
-              },
-              async () => {
-                const url = await getDownloadURL(uploadTask.snapshot.ref);
-                resolve(url);
-              }
-            );
-          });
+          const videoUrl = await uploadFileWithProgress(
+            videoFile, 
+            'articles/videos', 
+            (progress) => {
+              setUploadProgress(progress / 2); // Първата половина на прогреса
+            }
+          );
           
           mainImageUrls = [videoUrl];
         }
@@ -581,39 +397,21 @@ const handleMainImageFiles = (files) => {
       if (Object.keys(mediaFiles.sectionImages).length > 0) {
         const sectionImagePromises = Object.entries(mediaFiles.sectionImages).map(
           async ([sectionIndex, file]) => {
-            const options = {
+            const compressedFile = await compressImage(file, {
               maxSizeMB: 1,
-              maxWidthOrHeight: 1200,
-            };
-            
-            let compressedFile;
-            try {
-              compressedFile = await imageCompression(file, options);
-            } catch (err) {
-              console.error("Section image compression error:", err);
-              compressedFile = file;
-            }
-            
-            const imageRef = ref(firebaseStorage, `articles/section-images/${v4()}`);
-            const uploadTask = uploadBytesResumable(imageRef, compressedFile);
-            
-            return new Promise((resolve, reject) => {
-              uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                  const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  // Обновяваме общия прогрес за втората половина
-                  setUploadProgress(50 + progress / (2 * Object.keys(mediaFiles.sectionImages).length));
-                },
-                (error) => {
-                  reject(error);
-                },
-                async () => {
-                  const url = await getDownloadURL(uploadTask.snapshot.ref);
-                  resolve({ sectionIndex, url });
-                }
-              );
+              maxWidthOrHeight: 1200
             });
+            
+            const url = await uploadFileWithProgress(
+              compressedFile, 
+              'articles/section-images', 
+              (progress) => {
+                // Обновяваме общия прогрес за втората половина
+                setUploadProgress(50 + progress / (2 * Object.keys(mediaFiles.sectionImages).length));
+              }
+            );
+            
+            return { sectionIndex, url };
           }
         );
         
@@ -668,8 +466,8 @@ const handleMainImageFiles = (files) => {
       // Качване на медийни файлове
       const mediaUpdatedValues = await uploadAllMedia();
       
-      // Конвертиране на EditorState полета в HTML
-      const preparedValues = prepareValuesForSubmit(mediaUpdatedValues);
+      // Използваме утилитата за подготовка на стойностите за изпращане
+      const preparedValues = prepareArticleValuesForSubmit(mediaUpdatedValues);
       
       // Извикване на обработчика с обновените стойности
       if (onSubmitHandler) {
@@ -700,7 +498,6 @@ const handleMainImageFiles = (files) => {
     onSubmit,
     handleMainImageTypeChange,
     handleMainImageFiles,
-    handleMainVideoFile,
     handleSectionImageFile,
     removeMainImage,
     removeSectionImage,

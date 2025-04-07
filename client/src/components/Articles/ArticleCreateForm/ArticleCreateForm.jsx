@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faPlus, faMinus, faImage, faVideo, faSliders,
@@ -9,10 +9,10 @@ import "./articleCreateForm.css";
 import ArticlePreview from "./ArticlePreview/ArticlePreview";
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState } from 'draft-js';
 import { useCreateArticle } from "../../hooks/useCreateArticle";
 import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
 import { useArticleContext } from "../../contexts/ArticleContext";
+import { createEditorState } from "../articleUtils/editor";
 
 const ArticleCreateForm = () => {
     const { t } = useTranslation();
@@ -24,11 +24,11 @@ const ArticleCreateForm = () => {
         slug: "",
         author: "",
         publishDate: new Date().toISOString().split('T')[0],
-        summary: EditorState.createEmpty(),
+        summary: createEditorState(),
         mainImage: {
             type: "image",
             sources: [],
-            alt: EditorState.createEmpty(),
+            alt: createEditorState(),
             thumbnail: "",
             videoUrl: "",
             subtitles: [],
@@ -37,7 +37,7 @@ const ArticleCreateForm = () => {
         sections: [
             {
                 title: "",
-                content: EditorState.createEmpty(),
+                content: createEditorState(),
                 image: null,
                 order: 1,
             },
@@ -46,7 +46,8 @@ const ArticleCreateForm = () => {
         previousArticle: null,
         nextArticle: null,
     };
-
+    
+    // И след това инициализираме хука с initialValues
     const {
         values,
         errors,
@@ -69,10 +70,76 @@ const ArticleCreateForm = () => {
     } = useCreateArticle(initialValues, createArticle);
 
     const [newTag, setNewTag] = useState("");
-    const [forceUpdate] = useState(); // За принудително обновяване на компонента при нужда
+    // Използваме useReducer вместо useState за forceUpdate за по-доброто изпълнение
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     // Референция за input полето за видео URL
     const videoUrlInputRef = useRef(null);
+
+    // ВАЖНО: Кеширане на blob URLs за избягване на много заявки и премигване
+    // Кеширане на blob URL-и за видео (създава се само при промяна на mediaFiles.mainImage)
+    const videoPreviewUrl = useMemo(() => {
+        if (mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && mediaFiles.mainImage[0]) {
+            try {
+                return URL.createObjectURL(mediaFiles.mainImage[0]);
+            } catch (error) {
+                console.error("Error creating URL:", error);
+                return null;
+            }
+        }
+        return null;
+    }, [mediaFiles.mainImage]); // Зависи само от mediaFiles.mainImage
+
+    // Кеширане на blob URL-и за изображения в слайдера
+    const mainImagePreviewUrls = useMemo(() => {
+        if (mediaFiles.mainImage && mediaFiles.mainImage.length > 0) {
+            return mediaFiles.mainImage.map(file => {
+                try {
+                    return URL.createObjectURL(file);
+                } catch (error) {
+                    console.error("Error creating URL:", error);
+                    return null;
+                }
+            });
+        }
+        return [];
+    }, [mediaFiles.mainImage]);
+
+    // Кеширане на blob URL-и за изображения в секциите
+    const sectionImagePreviewUrls = useMemo(() => {
+        const urls = {};
+        if (mediaFiles.sectionImages) {
+            Object.entries(mediaFiles.sectionImages).forEach(([index, file]) => {
+                try {
+                    urls[index] = URL.createObjectURL(file);
+                } catch (error) {
+                    console.error("Error creating URL for section image:", error);
+                    urls[index] = null;
+                }
+            });
+        }
+        return urls;
+    }, [mediaFiles.sectionImages]);
+
+    // ВАЖНО: Почистване на blob URL-и при размонтиране на компонента
+    useEffect(() => {
+        return () => {
+            // Освобождаване на видео URL
+            if (videoPreviewUrl) {
+                URL.revokeObjectURL(videoPreviewUrl);
+            }
+            
+            // Освобождаване на URL-и на основни изображения
+            mainImagePreviewUrls.forEach(url => {
+                if (url) URL.revokeObjectURL(url);
+            });
+            
+            // Освобождаване на URL-и на секционни изображения
+            Object.values(sectionImagePreviewUrls).forEach(url => {
+                if (url) URL.revokeObjectURL(url);
+            });
+        };
+    }, [videoPreviewUrl, mainImagePreviewUrls, sectionImagePreviewUrls]);
 
     const handleEditorChange = (editorState, name) => {
         onChangeHandler(null, true, { name, value: editorState });
@@ -127,8 +194,8 @@ const ArticleCreateForm = () => {
             // Подаваме директно за обработка
             handleMainImageFiles([videoFile]);
 
-            // Добавяме форсирано обновяване
-            setTimeout(() => forceUpdate({}), 100);
+            // Добавяме форсирано обновяване, но сега използваме useReducer версията
+            setTimeout(() => forceUpdate(), 100);
         }
     };
 
@@ -166,8 +233,8 @@ const ArticleCreateForm = () => {
         // Уведомяваме потребителя, че външното видео е добавено
         alert(`Външното видео е добавено успешно.`);
 
-        // Принуждаваме компонента да се преизрисува
-        forceUpdate({});
+        // Принуждаваме компонента да се преизрисува с useReducer версията
+        forceUpdate();
     };
 
     // Общи настройки за редактора
@@ -212,18 +279,7 @@ const ArticleCreateForm = () => {
         },
     };
 
-    const getVideoPreviewUrl = () => {
-        if (mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && mediaFiles.mainImage[0]) {
-            try {
-                console.log("Creating URL for:", mediaFiles.mainImage[0]); // Debug log
-                return URL.createObjectURL(mediaFiles.mainImage[0]);
-            } catch (error) {
-                console.error("Error creating URL:", error);
-                return null;
-            }
-        }
-        return null;
-    };
+    // Премахваме стария getVideoPreviewUrl, защото използваме кеширания videoPreviewUrl
 
     if (previewMode) {
         return (
@@ -391,15 +447,15 @@ const ArticleCreateForm = () => {
                                         />
                                     </div>
 
-                                    {/* Предпреглед на качени изображения */}
+                                    {/* Предпреглед на качени изображения - използва кешираните URLs */}
                                     {mediaFiles.mainImage.length > 0 && (
                                         <div className="media-preview-container">
                                             {mediaFiles.mainImage.map((file, index) => (
                                                 <div key={index} className="image-preview-item">
                                                     <img
-                                                        src={URL.createObjectURL(file)}
+                                                        src={mainImagePreviewUrls[index]} // Използваме кеширания URL
                                                         alt={`Предпреглед ${index}`}
-                                                        onClick={() => handleImageClick(URL.createObjectURL(file))}
+                                                        onClick={() => handleImageClick(mainImagePreviewUrls[index])} // Използваме кеширания URL
                                                     />
                                                     <button
                                                         type="button"
@@ -501,8 +557,7 @@ const ArticleCreateForm = () => {
                                         </div>
                                     </div>
 
-                                    {/* Предпреглед на видео с VideoPlayer компонент */}
-                                    {/* Предпреглед на видео */}
+                                    {/* Предпреглед на видео - използва кеширания URL */}
                                     {values.mainImage.type === "video" && mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && (
                                         <div className="video-preview-container">
                                             <div className="video-element-wrapper">
@@ -510,7 +565,7 @@ const ArticleCreateForm = () => {
                                                     controls
                                                     width="100%"
                                                     height="auto"
-                                                    src={getVideoPreviewUrl()}
+                                                    src={videoPreviewUrl} // Използваме кеширания URL
                                                     poster={values.mainImage.thumbnail || ""}
                                                 >
                                                     Вашият браузър не поддържа HTML5 видео.
@@ -552,7 +607,7 @@ const ArticleCreateForm = () => {
                                                     className="remove-video-btn"
                                                     onClick={() => {
                                                         onChangeHandler({ target: { name: "mainImage.videoUrl", value: "" } });
-                                                        forceUpdate({});
+                                                        forceUpdate(); // Използваме useReducer версията
                                                     }}
                                                 >
                                                     <FontAwesomeIcon icon={faTimes} /> Премахни
@@ -643,13 +698,13 @@ const ArticleCreateForm = () => {
                                             </div>
                                         )}
 
-                                        {/* Ако изображение за секцията е избрано */}
+                                        {/* Ако изображение за секцията е избрано - използваме кеширания URL */}
                                         {mediaFiles.sectionImages && mediaFiles.sectionImages[index] && (
                                             <div className="section-image-preview">
                                                 <img
-                                                    src={URL.createObjectURL(mediaFiles.sectionImages[index])}
+                                                    src={sectionImagePreviewUrls[index]} // Използваме кеширания URL
                                                     alt={`Секция ${index + 1}`}
-                                                    onClick={() => handleImageClick(URL.createObjectURL(mediaFiles.sectionImages[index]))}
+                                                    onClick={() => handleImageClick(sectionImagePreviewUrls[index])} // Използваме кеширания URL
                                                 />
                                                 <button
                                                     type="button"
