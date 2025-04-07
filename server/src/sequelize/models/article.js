@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             summary: {
                 type: DataTypes.TEXT,
-                allowNull: false,
+                allowNull: true,
             },
             author: {
                 type: DataTypes.STRING,
@@ -59,8 +59,15 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             publishDate: {
-                type: DataTypes.DATE,
-                allowNull: false,
+                type: DataTypes.DATEONLY,
+                allowNull: true,
+                defaultValue: DataTypes.NOW,
+                set(value) {
+                    if (value) {
+                        const dateOnly = new Date(value).toISOString().split('T')[0];
+                        this.setDataValue('publishDate', dateOnly);
+                    }
+                },
             },
             relatedArticleId: {
                 type: DataTypes.INTEGER,

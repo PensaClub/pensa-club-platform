@@ -20,11 +20,11 @@ module.exports = {
             },
             src: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             alt: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             caption: {
                 type: Sequelize.STRING,
@@ -32,11 +32,11 @@ module.exports = {
             },
             createdAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
             },
             updatedAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
             },
         });
     },

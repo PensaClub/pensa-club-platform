@@ -19,23 +19,23 @@ module.exports = {
             },
             title: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             content: {
                 type: Sequelize.TEXT,
-                allowNull: false,
+                allowNull: true,
             },
             order: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
             },
             createdAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
             },
             updatedAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
             },
         });
         await queryInterface.addIndex('sections', ['articleId', 'order']);

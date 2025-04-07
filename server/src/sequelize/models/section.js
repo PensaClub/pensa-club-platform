@@ -16,15 +16,15 @@ module.exports = (sequelize, DataTypes) => {
         {
             title: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             content: {
                 type: DataTypes.TEXT,
-                allowNull: false,
+                allowNull: true,
             },
             order: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                allowNull: true,
             },
             articleId: {
                 type: DataTypes.INTEGER,
@@ -38,6 +38,14 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
+                allowNull: false,
+            },
+            createdAt: {
+                type: DataTypes.DATEONLY,
+                allowNull: false,
+            },
+            updatedAt: {
+                type: DataTypes.DATEONLY,
                 allowNull: false,
             },
         },

@@ -107,7 +107,6 @@ articleController.post('/create', isAuth, async (req, res, next) => {
         const errors = {};
         if (!title) errors.title = 'Title is required';
         if (!slug) errors.slug = 'Slug is required';
-        if (!summary) errors.summary = 'Summary is required';
 
         if (Object.keys(errors).length > 0) {
             throw new customError({
@@ -136,7 +135,7 @@ articleController.post('/create', isAuth, async (req, res, next) => {
                     slug,
                     summary,
                     author: author || userDetails.username,
-                    publishDate: publishDate || new Date(),
+                    publishDate,
                     tags: tags || [],
                     updatedBy: userDetails.username,
                     relatedArticleId,
@@ -161,9 +160,9 @@ articleController.post('/create', isAuth, async (req, res, next) => {
                     sections.map(async (sectionData, index) => {
                         const newSection = await section.create(
                             {
-                                title: sectionData.title,
-                                content: sectionData.content,
-                                order: index + 1,
+                                title: sectionData.title ?? null,
+                                content: sectionData.content ?? null,
+                                order: sectionData.order || index + 1,
                                 articleId: created.id,
                             },
                             { transaction: t }
@@ -225,7 +224,12 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
         }
 
         if (slug && slug !== existingArticle.slug) {
-            const slugExists = await article.findOne({ where: { slug } });
+            const slugExists = await article.findOne({
+                where: {
+                    slug,
+                    id: { [Op.ne]: articleId },
+                },
+            });
             if (slugExists) {
                 throw new customError('Article with this slug already exists', 400);
             }
@@ -239,11 +243,11 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
             await updateArticleRelationships(existingArticle, article, { relatedArticleId, nextArticleId, previousArticleId }, t);
 
             const articleUpdate = {
-                ...(title && { title }),
-                ...(slug && { slug }),
-                ...(summary && { summary }),
-                ...(author && { author }),
-                ...(tags && { tags }),
+                ...(title !== undefined && { title }),
+                ...(slug !== undefined && { slug }),
+                ...(summary !== undefined && { summary }),
+                ...(author !== undefined && { author }),
+                ...(tags !== undefined && { tags }),
                 updatedBy: userDetails.username,
             };
 
@@ -266,45 +270,94 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
             if (sections && Array.isArray(sections)) {
                 const existingSections = await section.findAll({
                     where: { articleId: existingArticle.id },
-                    attributes: ['id'],
+                    include: [sectionImage],
                     transaction: t,
                 });
 
-                await sectionImage.destroy({
-                    where: {
-                        sectionId: {
-                            [Op.in]: existingSections.map((s) => s.id),
+                // Create sets for easier comparison
+                const existingSectionIds = new Set(existingSections.map((s) => s.id));
+                const newSectionIds = new Set(sections.filter((s) => s.id).map((s) => s.id));
+
+                // Find sections to delete (exist in DB but not in new array)
+                const sectionsToDelete = existingSections.filter((s) => !newSectionIds.has(s.id));
+
+                // Delete sections (and their images due to CASCADE)
+                if (sectionsToDelete.length > 0) {
+                    await section.destroy({
+                        where: {
+                            id: sectionsToDelete.map((s) => s.id),
                         },
-                    },
-                    transaction: t,
-                });
+                        transaction: t,
+                    });
+                }
 
-                await section.destroy({
-                    where: { articleId: existingArticle.id },
-                    transaction: t,
-                });
-
+                // Process each section from the frontend
                 for (const sectionData of sections) {
-                    const newSection = await section.create(
-                        {
-                            title: sectionData.title,
-                            content: sectionData.content,
-                            order: sectionData.order,
-                            articleId: existingArticle.id,
-                        },
-                        { transaction: t }
-                    );
-
-                    if (sectionData.sectionImage) {
-                        await sectionImage.create(
+                    if (!sectionData.id) {
+                        // Create new section
+                        const newSection = await section.create(
                             {
-                                src: sectionData.sectionImage.src,
-                                alt: sectionData.sectionImage.alt,
-                                caption: sectionData.sectionImage.caption,
-                                sectionId: newSection.id,
+                                title: sectionData.title ?? null,
+                                content: sectionData.content ?? null,
+                                order: sectionData.order,
+                                articleId: existingArticle.id,
                             },
                             { transaction: t }
                         );
+
+                        // Create section image if provided
+                        if (sectionData.sectionImage) {
+                            await sectionImage.create(
+                                {
+                                    src: sectionData.sectionImage.src ?? null,
+                                    alt: sectionData.sectionImage.alt ?? null,
+                                    caption: sectionData.sectionImage.caption ?? null,
+                                    sectionId: newSection.id,
+                                },
+                                { transaction: t }
+                            );
+                        }
+                    } else if (existingSectionIds.has(sectionData.id)) {
+                        // Update existing section
+                        const existingSection = existingSections.find((s) => s.id === sectionData.id);
+
+                        await existingSection.update(
+                            {
+                                title: sectionData.title ?? null,
+                                content: sectionData.content ?? null,
+                                order: sectionData.order,
+                            },
+                            { transaction: t }
+                        );
+
+                        // Handle section image
+                        if (sectionData.sectionImage) {
+                            if (existingSection.sectionImage) {
+                                // Update existing image
+                                await existingSection.sectionImage.update(
+                                    {
+                                        src: sectionData.sectionImage.src ?? null,
+                                        alt: sectionData.sectionImage.alt ?? null,
+                                        caption: sectionData.sectionImage.caption ?? null,
+                                    },
+                                    { transaction: t }
+                                );
+                            } else {
+                                // Create new image
+                                await sectionImage.create(
+                                    {
+                                        src: sectionData.sectionImage.src ?? null,
+                                        alt: sectionData.sectionImage.alt ?? null,
+                                        caption: sectionData.sectionImage.caption ?? null,
+                                        sectionId: existingSection.id,
+                                    },
+                                    { transaction: t }
+                                );
+                            }
+                        } else if (existingSection.sectionImage) {
+                            // Remove image if it's no longer provided
+                            await existingSection.sectionImage.destroy({ transaction: t });
+                        }
                     }
                 }
             }

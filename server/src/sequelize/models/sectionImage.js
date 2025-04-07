@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         {
             src: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             alt: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             caption: {
                 type: DataTypes.STRING,
@@ -35,6 +35,14 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
+                allowNull: false,
+            },
+            createdAt: {
+                type: DataTypes.DATEONLY,
+                allowNull: false,
+            },
+            updatedAt: {
+                type: DataTypes.DATEONLY,
                 allowNull: false,
             },
         },

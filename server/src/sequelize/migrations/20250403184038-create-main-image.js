@@ -19,17 +19,16 @@ module.exports = {
                 unique: true,
             },
             type: {
-                type: Sequelize.ENUM('image', 'slider', 'video'),
-                allowNull: false,
+                type: Sequelize.STRING,
+                allowNull: true,
             },
             sources: {
                 type: Sequelize.ARRAY(Sequelize.STRING),
-                allowNull: false,
                 defaultValue: [],
             },
             alt: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             thumbnail: {
                 type: Sequelize.STRING,
@@ -37,16 +36,15 @@ module.exports = {
             },
             createdAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
             },
             updatedAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
             },
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_mainImages_type";');
         await queryInterface.dropTable('mainImages');
     },
 };

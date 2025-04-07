@@ -20,7 +20,7 @@ module.exports = {
             },
             summary: {
                 type: Sequelize.TEXT,
-                allowNull: false,
+                allowNull: true,
             },
             author: {
                 type: Sequelize.STRING,
@@ -35,8 +35,9 @@ module.exports = {
                 allowNull: false,
             },
             publishDate: {
-                type: Sequelize.DATE,
-                allowNull: false,
+                type: Sequelize.DATEONLY,
+                allowNull: true,
+                defaultValue: Sequelize.NOW,
             },
             relatedArticleId: {
                 type: Sequelize.INTEGER,
@@ -67,11 +68,11 @@ module.exports = {
             },
             createdAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
             },
             updatedAt: {
                 allowNull: false,
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
             },
         });
         await queryInterface.addIndex('articles', {
