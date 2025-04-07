@@ -168,12 +168,12 @@ articleController.post('/create', isAuth, async (req, res, next) => {
                             { transaction: t }
                         );
 
-                        if (sectionData.sectionImage) {
+                        if (sectionData.image) {
                             await sectionImage.create(
                                 {
-                                    src: sectionData.sectionImage.src,
-                                    alt: sectionData.sectionImage.alt,
-                                    caption: sectionData.sectionImage.caption,
+                                    src: sectionData.image.src,
+                                    alt: sectionData.image.alt,
+                                    caption: sectionData.image.caption,
                                     sectionId: newSection.id,
                                 },
                                 { transaction: t }
@@ -274,14 +274,11 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
                     transaction: t,
                 });
 
-                // Create sets for easier comparison
                 const existingSectionIds = new Set(existingSections.map((s) => s.id));
                 const newSectionIds = new Set(sections.filter((s) => s.id).map((s) => s.id));
 
-                // Find sections to delete (exist in DB but not in new array)
                 const sectionsToDelete = existingSections.filter((s) => !newSectionIds.has(s.id));
 
-                // Delete sections (and their images due to CASCADE)
                 if (sectionsToDelete.length > 0) {
                     await section.destroy({
                         where: {
@@ -291,10 +288,8 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
                     });
                 }
 
-                // Process each section from the frontend
                 for (const sectionData of sections) {
                     if (!sectionData.id) {
-                        // Create new section
                         const newSection = await section.create(
                             {
                                 title: sectionData.title ?? null,
@@ -305,20 +300,18 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
                             { transaction: t }
                         );
 
-                        // Create section image if provided
-                        if (sectionData.sectionImage) {
+                        if (sectionData.image) {
                             await sectionImage.create(
                                 {
-                                    src: sectionData.sectionImage.src ?? null,
-                                    alt: sectionData.sectionImage.alt ?? null,
-                                    caption: sectionData.sectionImage.caption ?? null,
+                                    src: sectionData.image.src ?? null,
+                                    alt: sectionData.image.alt ?? null,
+                                    caption: sectionData.image.caption ?? null,
                                     sectionId: newSection.id,
                                 },
                                 { transaction: t }
                             );
                         }
                     } else if (existingSectionIds.has(sectionData.id)) {
-                        // Update existing section
                         const existingSection = existingSections.find((s) => s.id === sectionData.id);
 
                         await existingSection.update(
@@ -330,32 +323,28 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
                             { transaction: t }
                         );
 
-                        // Handle section image
-                        if (sectionData.sectionImage) {
+                        if (sectionData.image) {
                             if (existingSection.sectionImage) {
-                                // Update existing image
                                 await existingSection.sectionImage.update(
                                     {
-                                        src: sectionData.sectionImage.src ?? null,
-                                        alt: sectionData.sectionImage.alt ?? null,
-                                        caption: sectionData.sectionImage.caption ?? null,
+                                        src: sectionData.image.src ?? null,
+                                        alt: sectionData.image.alt ?? null,
+                                        caption: sectionData.image.caption ?? null,
                                     },
                                     { transaction: t }
                                 );
                             } else {
-                                // Create new image
                                 await sectionImage.create(
                                     {
-                                        src: sectionData.sectionImage.src ?? null,
-                                        alt: sectionData.sectionImage.alt ?? null,
-                                        caption: sectionData.sectionImage.caption ?? null,
+                                        src: sectionData.image.src ?? null,
+                                        alt: sectionData.image.alt ?? null,
+                                        caption: sectionData.image.caption ?? null,
                                         sectionId: existingSection.id,
                                     },
                                     { transaction: t }
                                 );
                             }
                         } else if (existingSection.sectionImage) {
-                            // Remove image if it's no longer provided
                             await existingSection.sectionImage.destroy({ transaction: t });
                         }
                     }
