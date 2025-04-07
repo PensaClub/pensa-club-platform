@@ -11,7 +11,8 @@ import {
 import {
   faFacebookF,
   faTwitter,
-  faLinkedinIn
+  faLinkedinIn,
+  faTelegram
 } from '@fortawesome/free-brands-svg-icons';
 import './articleView.css';
 import { getArticleBySlug } from '../data/articlesData';
@@ -26,20 +27,16 @@ import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 const ArticleView = () => {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
+  const [currentUrl, setCurrentUrl] = useState('');
 
   const { setIsLoading } = useLoading();
   const { trackArticle, getViewCount } = useAnalytics();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: 'smooth'
-  //   });
-  // }, []);
-
   useEffect(() => {
+    // Запазваме текущия URL за споделяне с абсолютен път
+    setCurrentUrl(window.location.origin + window.location.pathname);
 
     setIsLoading(true);
     const foundArticle = getArticleBySlug(slug);
@@ -47,7 +44,7 @@ const ArticleView = () => {
     setTimeout(() => {
       setArticle(foundArticle);
       setIsLoading(false);
-  
+
       // Проследяване на посещението след зареждане на статията
       if (foundArticle) {
         trackArticle(foundArticle.id, foundArticle.title);
@@ -64,8 +61,37 @@ const ArticleView = () => {
     }
   }, [article]);
 
-  if (!article) {
+  // Директно споделяне чрез отваряне на нов прозорец със съответния URL
+  const shareOnFacebook = (e) => {
+    e.preventDefault();
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+    window.open(shareUrl, 'facebook-share', 'width=580,height=520');
+  };
 
+  // Споделяне в Twitter
+  const shareOnTwitter = (e) => {
+    e.preventDefault();
+    const text = article ? article.title : "";
+    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(currentUrl)}`;
+    window.open(shareUrl, 'twitter-share', 'width=550,height=420');
+  };
+
+  // Споделяне в LinkedIn
+  const shareOnLinkedIn = (e) => {
+    e.preventDefault();
+    const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`;
+    window.open(shareUrl, 'linkedin-share', 'width=550,height=420');
+  };
+
+  // Споделяне в Telegram
+  const shareOnTelegram = (e) => {
+    e.preventDefault();
+    const text = article ? article.title : "";
+    const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(text)}`;
+    window.open(shareUrl, 'telegram-share', 'width=550,height=420');
+  };
+
+  if (!article) {
     return (
       <div className="article-not-found">
         <h2>Статията не е намерена</h2>
@@ -96,7 +122,6 @@ const ArticleView = () => {
         />
       );
     } else {
-
       return (
         <div className="article-main-image">
           <img src={article.mainImage.sources[0]} alt={article.mainImage.alt} />
@@ -172,19 +197,37 @@ const ArticleView = () => {
                 ))}
               </div>
             )}
-
             <div className="article-social">
               <div className="social-text">Споделете:</div>
               <div className="social-icons">
-                <Link to="#" className="social-icon facebook">
+                <button
+                  className="social-icon facebook"
+                  onClick={shareOnFacebook}
+                  aria-label="Споделете във Facebook"
+                >
                   <FontAwesomeIcon icon={faFacebookF} />
-                </Link>
-                <Link to="#" className="social-icon twitter">
+                </button>
+                <button
+                  className="social-icon twitter"
+                  onClick={shareOnTwitter}
+                  aria-label="Споделете в Twitter"
+                >
                   <FontAwesomeIcon icon={faTwitter} />
-                </Link>
-                <Link to="#" className="social-icon linkedin">
+                </button>
+                <button
+                  className="social-icon linkedin"
+                  onClick={shareOnLinkedIn}
+                  aria-label="Споделете в LinkedIn"
+                >
                   <FontAwesomeIcon icon={faLinkedinIn} />
-                </Link>
+                </button>
+                <button
+                  className="social-icon telegram"
+                  onClick={shareOnTelegram}
+                  aria-label="Споделете в Telegram"
+                >
+                  <FontAwesomeIcon icon={faTelegram} />
+                </button>
               </div>
               {article && (
                 <div className="article-view-count">

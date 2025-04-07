@@ -48,6 +48,7 @@ import { AnalyticsProvider } from './components/contexts/AnalyticsContext.jsx';
 
 import FooterWithLoading from './FooterWithLoading/FooterWithLoading.jsx';
 import { LoadingProvider } from './components/contexts/LoadingContext.jsx';
+import { ArticleProvider } from './components/contexts/ArticleContext.jsx';
 
 function App() {
   const location = useLocation();
@@ -75,7 +76,7 @@ function App() {
             <CommunityProvider>
               <SuggestUserProvider>
                 <AdminProvider>
-
+                  <ArticleProvider>
                   <AnalyticsProvider>
                     <LoadingProvider>
                       <Header
@@ -136,6 +137,7 @@ function App() {
                       <MenuCommunity />
                     </LoadingProvider>
                   </AnalyticsProvider>
+                  </ArticleProvider>
                 </AdminProvider>
               </SuggestUserProvider>
             </CommunityProvider>

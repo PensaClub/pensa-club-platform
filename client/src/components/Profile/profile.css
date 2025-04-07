@@ -37,15 +37,25 @@
 }
 
 .main-profile {
-  display: flex;
-  flex-direction: column;
-  width: 40%;
-  border-radius: var(--m-space);
-  box-shadow: 0 2px 40px rgba(0, 0, 0, 0.09);
-  background-color: var(--bg-white);
+  width: 280px; /* По-тясно меню */
+  position: sticky;
+  top: 50px;
+  align-self: flex-start;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+  margin-right: 30px;
 }
-
+.profile-section {
+  display: flex;
+  background-size: cover;
+  position: relative;
+  padding: 3rem 1.5rem;
+  align-items: flex-start;
+  gap: 30px;
+}
 .main-data {
+  max-width: 1700px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -84,6 +94,7 @@
   align-self: flex-start;
   height: 100%;
   padding-bottom: 40px;
+
 }
 
 .account-menu a,
@@ -941,7 +952,8 @@ input.input-image {
     padding-left: 0;
     gap: 0px;
     flex-direction: column;
-    
+    flex: 1;
+    padding-left: 0;
     /* align-items: stretch; */
   }
 

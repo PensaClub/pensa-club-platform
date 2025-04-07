@@ -364,7 +364,18 @@
 .social-icon.linkedin {
   background-color: #0077b5;
 }
+.social-icon.telegram {
+  background-color: #0088cc;
+}
 
+.social-icon.telegram:hover {
+  background-color: #0077b5;
+}
+
+.social-icons {
+  display: flex;
+  gap: 0.8rem;
+}
 .article-navigation {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -373,7 +384,9 @@
   padding-top: 1em;
   border-top: 1px solid #eaeaea;
 }
-
+.article-social button{
+  cursor: pointer;
+}
 .prev-article,
 .next-article {
   display: flex;

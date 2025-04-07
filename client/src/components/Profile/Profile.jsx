@@ -29,6 +29,7 @@ import {
   faAddressCard,
   faPeopleArrows,
   faCircleExclamation,
+  faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 import { ProfileSkills } from "./ProfileSkills";
 import { ProfileWorks } from "./ProfileWorks";
@@ -46,6 +47,7 @@ import { AdminSuggestUsers } from "../AdminDashboard/AdminSuggestUser/AdminSugge
 import { SuggestResolvedUsers } from "../AdminDashboard/AdminSuggestUser/SuggesResolvedtUsers/SuggestResolvedUsers";
 import { ProfileMessages } from "./ProfileMessages";
 import { AdminSubscription } from "../AdminDashboard/AdminSubscription/AdminSubscription";
+import ArticleCreateForm from "../Articles/ArticleCreateForm/ArticleCreateForm";
 
 export const Profile = () => {
   const location = useLocation();
@@ -157,7 +159,7 @@ export const Profile = () => {
               ""
             )}
             {profileData?.details?.firstName ||
-            profileData?.details?.lastName ? (
+              profileData?.details?.lastName ? (
               <p>
                 <FontAwesomeIcon icon={faUser} className="icon" />
                 {profileData?.details?.firstName
@@ -195,9 +197,8 @@ export const Profile = () => {
           </div>
         </section>
         <section
-          className={`account-menu ${menuOpen ? "open" : ""} ${
-            !isFinish ? "disabled" : ""
-          }`}
+          className={`account-menu ${menuOpen ? "open" : ""} ${!isFinish ? "disabled" : ""
+            }`}
         >
           <NavLink to="data" onClick={toggleMenu}>
             <FontAwesomeIcon icon={faUser} className="icon" />
@@ -303,15 +304,18 @@ export const Profile = () => {
                 {t("admin.ads_subscription")}{" "}
                 {allSubscriptionEmails >= 1 && <>- {allSubscriptionEmails}</>}
               </NavLink>
+              <NavLink to="article-create" onClick={toggleMenu}>
+                <FontAwesomeIcon icon={faNewspaper} className="icon" />
+                Създаване на статии
+              </NavLink>
             </div>
           )}
         </section>
       </div>
       <div className="main-data">
         <section
-          className={`account-menu-mobile ${menuOpen ? "open" : ""} ${
-            !isFinish ? "disabled" : ""
-          }`}
+          className={`account-menu-mobile ${menuOpen ? "open" : ""} ${!isFinish ? "disabled" : ""
+            }`}
         >
           <NavLink to="data" onClick={toggleMenu}>
             <FontAwesomeIcon icon={faUser} className="icon" />
@@ -348,6 +352,7 @@ export const Profile = () => {
           {isAdmin && (
             <div className="admin-dashboard">
               <h3>{t("profile.admin_dashboard")}</h3>
+
               <NavLink to="ads-admin" onClick={toggleAdsSubMenu}>
                 <FontAwesomeIcon icon={faBookOpenReader} className="icon" />
                 {t("profile.ads-statistic")}
@@ -388,6 +393,7 @@ export const Profile = () => {
                   )}
                 </NavLink>
               </div>
+
               <NavLink to="users-statistic" onClick={toggleUsersSubMenu}>
                 <FontAwesomeIcon icon={faChartPie} className="icon" />
                 {t("admin.users")}
@@ -495,6 +501,14 @@ export const Profile = () => {
             element={
               <AdminGuard>
                 <AllUsersStatistics />
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="article-create"
+            element={
+              <AdminGuard>
+                <ArticleCreateForm />
               </AdminGuard>
             }
           />

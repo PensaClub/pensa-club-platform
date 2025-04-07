@@ -114,11 +114,13 @@ const VideoPlayer = ({ src, thumbnail, alt, subtitles = [], downloadUrl = null, 
     const rect = progressBar.getBoundingClientRect();
     const pos = (e.clientX - rect.left) / progressBar.offsetWidth;
     
-    if (videoRef.current) {
-      videoRef.current.currentTime = pos * videoRef.current.duration;
+    if (videoRef.current && !isNaN(pos) && isFinite(pos) && isFinite(videoRef.current.duration)) {
+      const newTime = pos * videoRef.current.duration;
+      if (isFinite(newTime)) {
+        videoRef.current.currentTime = newTime;
+      }
     }
   };
-
   const handleVideoLoad = () => {
     setIsVideoLoaded(true);
     if (videoRef.current) {
