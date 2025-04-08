@@ -697,9 +697,9 @@ p.elipse {
     color: var(--brown) !important;
   }
 
-  .ads-details-back a {
+  /* .ads-details-back a {
     font-size: ;
-  }
+  } */
 
   .ad-details-back-phone {
     display: none;

@@ -24,6 +24,7 @@ header {
   z-index: 98;
 }
 
+
 header::before {
   content: "";
   top: 0;
@@ -66,6 +67,7 @@ header.scrolled {
   align-items: center;
   justify-content: center;
 }
+
 header > a:nth-child(1) {
   font-size: var(--s-font-size);
   font-weight: 600;

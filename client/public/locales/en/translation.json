@@ -192,6 +192,7 @@
     }
   },
   "profile": {
+    "main": "Profile Dashboard",
     "select_all": "Select all",
     "clear": "Clear",
     "selected": "selected",

@@ -1,6 +1,6 @@
 .article-create-container {
-    max-width: 1600px;
-    margin: 6em auto;
+    max-width: 1350px;
+    margin: 4em auto;
     background-color: #fff;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -18,8 +18,8 @@
   }
   
   .article-form {
-    max-width: 1200px;
-    width: 1000px;
+    max-width: 100%x;
+    width: 100%;
     padding: 30px;
   }
   
@@ -104,7 +104,7 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background-color: #e74c3c;
+    background-color: #a03226;
     color: white;
     margin-right: 8px;
     font-weight: bold;
