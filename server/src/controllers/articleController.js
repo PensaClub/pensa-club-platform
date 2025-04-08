@@ -134,7 +134,7 @@ articleController.post('/create', isAuth, async (req, res, next) => {
                     title,
                     slug,
                     summary,
-                    author: author || userDetails.username,
+                    author: author,
                     publishDate,
                     tags: tags || [],
                     updatedBy: userDetails.username,
@@ -183,7 +183,7 @@ articleController.post('/create', isAuth, async (req, res, next) => {
                 );
             }
 
-            await updateArticleRelationships(created, article, { relatedArticleId, nextArticleId, previousArticleId }, t);
+            await updateArticleRelationships(created, { relatedArticleId, nextArticleId, previousArticleId }, t);
 
             return created;
         });
@@ -240,7 +240,7 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
         });
 
         const updatedArticle = await article.sequelize.transaction(async (t) => {
-            await updateArticleRelationships(existingArticle, article, { relatedArticleId, nextArticleId, previousArticleId }, t);
+            await updateArticleRelationships(existingArticle, { relatedArticleId, nextArticleId, previousArticleId }, t);
 
             const articleUpdate = {
                 ...(title !== undefined && { title }),

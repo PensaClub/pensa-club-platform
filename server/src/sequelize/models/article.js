@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             author: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             tags: {
                 type: DataTypes.ARRAY(DataTypes.STRING),

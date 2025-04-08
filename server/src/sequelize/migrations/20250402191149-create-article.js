@@ -24,7 +24,7 @@ module.exports = {
             },
             author: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             tags: {
                 type: Sequelize.ARRAY(Sequelize.STRING),
@@ -75,6 +75,7 @@ module.exports = {
                 type: Sequelize.DATEONLY,
             },
         });
+
         await queryInterface.addIndex('articles', {
             fields: ['tags'],
             using: 'gin',

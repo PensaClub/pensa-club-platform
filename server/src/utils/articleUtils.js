@@ -1,11 +1,12 @@
 const { Op } = require('sequelize');
+const { article } = require('../models');
 
-async function updateArticleRelationships(articleInstance, ArticleModel, relationships, transaction) {
+async function updateArticleRelationships(articleInstance, relationships, transaction) {
     const { relatedArticleId, nextArticleId, previousArticleId } = relationships;
 
     const clearExistingConnections = async (fieldName, articleId) => {
         if (articleId !== undefined) {
-            const articlesWithConnection = await ArticleModel.findAll({
+            const articlesWithConnection = await article.findAll({
                 where: {
                     [fieldName]: articleId,
                     id: { [Op.ne]: articleInstance.id },
@@ -44,6 +45,26 @@ async function updateArticleRelationships(articleInstance, ArticleModel, relatio
     }
 }
 
+async function cleanupOldArticles() {
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+    try {
+        const result = await article.destroy({
+            where: {
+                createdAt: {
+                    [Op.lt]: oneYearAgo,
+                },
+            },
+        });
+
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     updateArticleRelationships,
+    cleanupOldArticles,
 };
