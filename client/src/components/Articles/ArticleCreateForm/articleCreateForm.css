@@ -6,7 +6,9 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     overflow: hidden;
   }
-  
+    .article-create-container svg{
+      color: var(--orange)!important;
+    }
   .article-form-title {
     margin: 0;
     padding: 30px;
@@ -827,6 +829,29 @@
     font-size: 0.9rem;
 }
 
+.image-controls-container {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-top: 1px solid #e0e0e0;
+}
+.image-info-details {
+  flex: 1;
+}
+.image-info-details h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 1.1rem;
+
+}
+.image-info-details p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 0.9rem;
+
+}
 .remove-video-btn {
     background-color: rgba(231, 76, 60, 0.1);
     color: #e74c3c;

@@ -13,7 +13,11 @@ export const createEditorState = (html = '') => {
   }
   return EditorState.createEmpty();
 };
-
+export const getPlainTextFromEditor = (editorState) => {
+  if (!editorState) return '';
+  const content = editorState.getCurrentContent();
+  return content.getPlainText();
+};
 // Конвертиране на EditorState в HTML
 export const convertEditorToHtml = (editorState) => {
   if (!editorState) return '';

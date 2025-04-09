@@ -8,7 +8,9 @@
     overflow: hidden;
     position: relative;
   }
-  
+  .article-preview-container svg{
+    color: var(--orange)!important;
+  }
   .preview-header {
     display: flex;
     justify-content: space-between;

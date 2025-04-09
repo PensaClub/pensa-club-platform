@@ -66,6 +66,7 @@ export const Profile = () => {
   const [allSubscriptionEmails, setAllSubscriptionEmails] = useState("");
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
+  const sideMenuRef = useRef(null);
   // Модернизирано управление на състоянията на подменютата
   const [subMenuStates, setSubMenuStates] = useState({
     ads: false,
@@ -147,9 +148,28 @@ export const Profile = () => {
     setMenuOpen(!menuOpen);
   };
 
-  const handleLogout = () => {
-    navigate("/logout");
-  };
+  useEffect(() => {
+    const handleClickOutsideMenu = (event) => {
+      if (
+        window.innerWidth <= 1024 && 
+        sideMenuRef.current && 
+        event.target && 
+        event.target.nodeType && 
+        !sideMenuRef.current.contains(event.target) &&
+        !(event.target.closest && event.target.closest('.menu-toggle'))
+      ) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutsideMenu);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideMenu);
+    };
+  }, []);
+
+  // const handleLogout = () => {
+  //   navigate("/logout");
+  // };
   const toggleProfileMenu = () => {
     setProfileMenuOpen(!profileMenuOpen);
   };
@@ -197,7 +217,9 @@ export const Profile = () => {
         <button onClick={toggleMenu} className="menu-toggle" data-testid="menu-toggle">
           <MenuIcon />
         </button>
-        <img src="/images/homePage/logo-2.png" alt="Logo" className="logo-site-profile" />
+        <Link to="/" className="logo-link">
+          <img src="/images/homePage/logo-2.png" alt="Logo" className="logo-site-profile" />
+        </Link>
         <h2>Pensa Club</h2>
 
         <div className="search-container">
@@ -205,70 +227,70 @@ export const Profile = () => {
           <input type="text" placeholder="Търси ..." className="search-input" />
         </div>
 
-      <div className="header-right">
-  <button className="notification-button">
-    <NotificationIcon primaryStroke="#333" secondaryStroke="#20b2aa" />
-  </button>
-  <div className="profile-menu" ref={profileMenuRef}>
-    <button className="profile-button" onClick={toggleProfileMenu}>
-      <img 
-        src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)} 
-        alt="User" 
-        className="profile-image" 
-      />
-    </button>
-    <span className="profile-name">
-      {profileData?.details?.username || profileData?.email}
-    </span>
-    
-    {/* Падащото меню */}
-    {profileMenuOpen && (
-      <div className="profile-dropdown">
-        <div className="dropdown-header">
-          <img 
-            src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)} 
-            alt="User" 
-            className="dropdown-profile-image" 
-          />
-          <div className="dropdown-username">
-            {profileData?.details?.username || profileData?.email}
+        <div className="header-right">
+          <button className="notification-button">
+            <NotificationIcon primaryStroke="#333" secondaryStroke="#20b2aa" />
+          </button>
+          <div className="profile-menu" ref={profileMenuRef}>
+            <button className="profile-button" onClick={toggleProfileMenu}>
+              <img
+                src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)}
+                alt="User"
+                className="profile-image"
+              />
+            </button>
+            <span className="profile-name">
+              {profileData?.details?.username || profileData?.email}
+            </span>
+
+            {/* Падащото меню */}
+            {profileMenuOpen && (
+              <div className="profile-dropdown-new">
+                <div className="dropdown-header">
+                  <img
+                    src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)}
+                    alt="User"
+                    className="dropdown-profile-image"
+                  />
+                  <div className="dropdown-username">
+                    {profileData?.details?.username || profileData?.email}
+                  </div>
+                </div>
+                <div className="dropdown-links">
+                  <NavLink to="/" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <DashboardIcon className="menu-icon" />
+                      {t("header.home")}
+                    </span>
+                  </NavLink>
+                  <NavLink to="/craigslist?reset=true" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <ForumIcon className="menu-icon" />
+                      {t("header.craigslist")}
+                    </span>
+                  </NavLink>
+                  <NavLink to="/ad/create" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <JobsAdsIcon className="menu-icon" />
+                      {t("header.ad-create")}
+                    </span>
+                  </NavLink>
+                  <NavLink to="/logout" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <LogoutIcon className="menu-icon" />
+                      {t("header.logout")}
+                    </span>
+                  </NavLink>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        <div className="dropdown-links">
-          <NavLink to="/map" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-            <span className="link-content">
-              <DashboardIcon className="menu-icon" />
-              {t("header.map")}
-            </span>
-          </NavLink>
-          <NavLink to="/craigslist?reset=true" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-            <span className="link-content">
-              <ForumIcon className="menu-icon" />
-              {t("header.craigslist")}
-            </span>
-          </NavLink>
-          <NavLink to="/ad/create" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-            <span className="link-content">
-              <JobsAdsIcon className="menu-icon" />
-              {t("header.ad-create")}
-            </span>
-          </NavLink>
-          <NavLink to="/logout" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-            <span className="link-content">
-              <LogoutIcon className="menu-icon" />
-              {t("header.logout")}
-            </span>
-          </NavLink>
-        </div>
-      </div>
-    )}
-  </div>
-</div>
       </header>
 
       <div className="profile-container">
         {/* Странично меню, стилизирано като в админския панел */}
-        <nav className={`side-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`}>
+        <nav className={`side-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`} ref={sideMenuRef}>
           <div className="menu-content">
             <div className="menu-header">
               <div className="current-section">{getCurrentSection()}</div>

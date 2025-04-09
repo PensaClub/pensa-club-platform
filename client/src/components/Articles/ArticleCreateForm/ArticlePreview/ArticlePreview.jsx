@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./articlePreview.css";
 import VideoPlayer from "../../ArticleView/VideoPlayer/VideoPlayer";
+import ScrollToTop from "../../../ScrollToTop/ScrollToTop";
 
 const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) => {
   // Форматиране на дата
@@ -18,13 +19,13 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
   // Подготовка на URL за медиафайлове
   const prepareMediaUrls = () => {
     let sources = [...article.mainImage.sources];
-    
+
     // Добавяме временни URL за тъкмо качените файлове
     if (mediaFiles.mainImage.length > 0) {
       const tempUrls = mediaFiles.mainImage.map(file => URL.createObjectURL(file));
       sources = [...tempUrls, ...sources];
     }
-    
+
     return sources;
   };
 
@@ -39,23 +40,23 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
         return null;
       }
     }
-    
+
     // За външни URLs
     if (article.mainImage.videoUrl && article.mainImage.videoUrl.trim()) {
       return article.mainImage.videoUrl;
     }
-    
+
     // За вече качени видеа
     if (article.mainImage.sources && article.mainImage.sources.length > 0) {
       return article.mainImage.sources[0];
     }
-    
+
     return null;
   };
 
   const renderMainMedia = () => {
     const sources = prepareMediaUrls();
-    
+
     if (article.mainImage.type === 'slider' && sources.length > 1) {
       return (
         <div className="article-main-image">
@@ -81,8 +82,8 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
         // Показваме плейсхолдър, ако нямаме видео източник
         return (
           <div className="article-main-video">
-            <img 
-              src={article.mainImage.thumbnail || "https://via.placeholder.com/800x450?text=Видео+превю"} 
+            <img
+              src={article.mainImage.thumbnail || "https://via.placeholder.com/800x450?text=Видео+превю"}
               alt="Видео превю"
             />
             <div className="video-play-button">
@@ -98,7 +99,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
         </div>
       );
     }
-    
+
     return (
       <div className="article-placeholder">
         <p>Няма избрано основно изображение</p>
@@ -111,42 +112,42 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
     if (mediaFiles.sectionImages && mediaFiles.sectionImages[index]) {
       return URL.createObjectURL(mediaFiles.sectionImages[index]);
     }
-    
+
     return section.image && section.image.src ? section.image.src : null;
   };
-  
+
   // Рендериране на HTML съдържание
   const renderHtml = (content) => {
     if (!content) return <p>Няма съдържание</p>;
-    
-    const html = typeof content === 'string' 
-      ? content 
+
+    const html = typeof content === 'string'
+      ? content
       : convertEditorToHtml(content);
-    
+
     return <div dangerouslySetInnerHTML={{ __html: html }} />;
   };
 
   return (
     <div className="article-preview-container">
       <div className="preview-header">
-        <button 
-          className="back-to-edit-btn" 
+        <button
+          className="back-to-edit-btn"
           onClick={onBack}
         >
           <FontAwesomeIcon icon={faArrowLeft} /> Назад към редактирането
         </button>
         <h3>Предпреглед на статията</h3>
       </div>
-      
+
       <div className="preview-watermark">ПРЕДПРЕГЛЕД</div>
-      
+
       <div className="preview-mode">
         <h1 className="article-title view">{article.title || "Заглавие на статията"}</h1>
 
         <div className="article-summary">
           {renderHtml(article.summary)}
         </div>
-        
+
         <div className="article-meta">
           <div className="meta-item">
             <FontAwesomeIcon icon={faUser} />
@@ -157,7 +158,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
             <span>{formatDate(article.publishDate)}</span>
           </div>
         </div>
-        
+
         {renderMainMedia()}
 
         <div className="article-body">
@@ -175,8 +176,8 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
                     />
                     {section.image && section.image.caption && (
                       <figcaption>
-                        {typeof section.image.caption === 'string' 
-                          ? section.image.caption 
+                        {typeof section.image.caption === 'string'
+                          ? section.image.caption
                           : renderHtml(section.image.caption)}
                       </figcaption>
                     )}
@@ -197,6 +198,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
           </div>
         )}
       </div>
+      <ScrollToTop/>
     </div>
   );
 };

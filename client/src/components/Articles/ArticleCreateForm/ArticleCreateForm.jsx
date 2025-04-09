@@ -13,6 +13,7 @@ import { useCreateArticle } from "../../hooks/useCreateArticle";
 import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
 import { useArticleContext } from "../../contexts/ArticleContext";
 import { createEditorState } from "../articleUtils/editor";
+import ScrollToTop from "../../ScrollToTop/ScrollToTop";
 
 const ArticleCreateForm = () => {
     const { t } = useTranslation();
@@ -46,8 +47,7 @@ const ArticleCreateForm = () => {
         previousArticle: null,
         nextArticle: null,
     };
-    
-    // И след това инициализираме хука с initialValues
+
     const {
         values,
         errors,
@@ -66,7 +66,7 @@ const ArticleCreateForm = () => {
         addTag,
         removeTag,
         mediaFiles,
-        convertEditorToHtml
+        convertEditorToHtml,
     } = useCreateArticle(initialValues, createArticle);
 
     const [newTag, setNewTag] = useState("");
@@ -128,12 +128,12 @@ const ArticleCreateForm = () => {
             if (videoPreviewUrl) {
                 URL.revokeObjectURL(videoPreviewUrl);
             }
-            
+
             // Освобождаване на URL-и на основни изображения
             mainImagePreviewUrls.forEach(url => {
                 if (url) URL.revokeObjectURL(url);
             });
-            
+
             // Освобождаване на URL-и на секционни изображения
             Object.values(sectionImagePreviewUrls).forEach(url => {
                 if (url) URL.revokeObjectURL(url);
@@ -453,17 +453,24 @@ const ArticleCreateForm = () => {
                                             {mediaFiles.mainImage.map((file, index) => (
                                                 <div key={index} className="image-preview-item">
                                                     <img
-                                                        src={mainImagePreviewUrls[index]} // Използваме кеширания URL
+                                                        src={mainImagePreviewUrls[index]}
                                                         alt={`Предпреглед ${index}`}
-                                                        onClick={() => handleImageClick(mainImagePreviewUrls[index])} // Използваме кеширания URL
+                                                        onClick={() => handleImageClick(mainImagePreviewUrls[index])}
                                                     />
-                                                    <button
-                                                        type="button"
-                                                        className="remove-image-btn"
-                                                        onClick={() => removeMainImage(index)}
-                                                    >
-                                                        <FontAwesomeIcon icon={faTimes} />
-                                                    </button>
+                                                    <div className="image-controls-container">
+                                                        <div className="image-info-details">
+                                                            <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || 'Изображение' }}></h4>
+                                                            <p>{file.name || "Безименен файл"}</p>
+                                                            <p>Размер: {file.size ? (file.size / (1024 * 1024)).toFixed(2) + " MB" : "Неизвестен размер"}</p>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            className="remove-image-btn"
+                                                            onClick={() => removeMainImage(index)}
+                                                        >
+                                                            <FontAwesomeIcon icon={faTimes} /> Премахни
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
@@ -806,6 +813,7 @@ const ArticleCreateForm = () => {
                     </div>
                 </div>
             )}
+            <ScrollToTop />
         </div>
     );
 };

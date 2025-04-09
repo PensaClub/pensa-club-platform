@@ -6,7 +6,8 @@
     "register": "Register",
     "profile": "Profile",
     "logout": "Logout",
-    "ad-create": "Create ad"
+    "ad-create": "Create ad",
+    "home": "Home"
   },
   "footer": {
     "site-map": "Site Map",
@@ -60,7 +61,7 @@
     "suggestion-btn": "Invite a friend"
   },
   "about": {
-    "title": "our mission",
+    "title": "Our mission",
     "desc": "To create an innovative platform, a tool for building community. We unite people of similar age with common interests, new ideas, and knowledge. We strive to build a community based on interaction and mutual support. The expected outcome is to improve quality of life through active engagement in modernity, support for acquiring new skills and interests, and encouraging a healthy, fulfilling, and dignified life."
   },
   "news-subscribe": {

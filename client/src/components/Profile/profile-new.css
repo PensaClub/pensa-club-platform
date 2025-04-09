@@ -291,7 +291,7 @@
     color: var(--orange);
   }
   
-  /* Подменю */
+
   .sub-menu {
     margin-left: 20px;
     border-left: 2px solid #ddd;
@@ -383,6 +383,7 @@
     border-radius: 50%;
     margin-right: 15px;
     border: 2px solid var(--green);
+    object-fit: cover;
   }
   
   .side-menu-profile-info {
@@ -566,7 +567,7 @@
     transform: scale(1.05);
   }
   
-  .profile-dropdown {
+  .profile-dropdown-new{
     position: absolute;
     top: 45px;
     right: 0;
