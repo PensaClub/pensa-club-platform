@@ -2,7 +2,7 @@ import React from "react";
 import "./motto.css";
 import { useTranslation } from "react-i18next";
 
-import { MottoCard } from "./MottoCard/MottoCard";
+import { MottoCard } from "./MottoCard/mottoCard";
 
 export const MottoSection = () => {
   const { t } = useTranslation();
