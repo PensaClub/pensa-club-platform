@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import {trackArticleView, loadViewCounts, fetchViewCounts } from '../Services/analyticsService';
 
 const AnalyticsContext = createContext();

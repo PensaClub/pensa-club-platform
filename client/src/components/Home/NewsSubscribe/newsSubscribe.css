@@ -1,133 +1,299 @@
-.subscribe-news {
+.subscribe-modern {
+  position: relative;
+  padding: 120px 5%;
+  margin: 80px 0 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.subscribe-modern.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Фонови елементи */
+.subscribe-background {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  /* background-image: var(--bg-image-rotated);
-  background-size: 100%; */
-  background-color: var(--bg-gray);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 4em 1em;
+  height: 100%;
+  background: linear-gradient(180deg, #f9f9f9, #f4f4f4);
+  z-index: -1;
 }
-.news-form {
+
+.bg-wave {
+  position: absolute;
+  top: -10px;
+  left: 0;
   width: 100%;
-}
-.single-subscribe-info {
-  padding: var(--l-space) 0;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 80%;
+  height: 70px;
+  background-color: white;
+  border-radius: 0 0 50% 50%/0 0 100% 100%;
 }
 
-.news-form {
-  max-width: 80%;
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.04;
 }
 
-.single-subscribe-info h3 {
-  font-size: var(--m-font-size);
-  font-weight: 700;
+.shape1 {
+  top: 20%;
+  right: -5%;
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, var(--orange), var(--green));
+}
+
+.shape2 {
+  bottom: 10%;
+  left: -5%;
+  width: 350px;
+  height: 350px;
+  background: linear-gradient(135deg, var(--bg-blue-text), var(--green));
+}
+
+.subscribe-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  opacity: 0.5;
+}
+
+/* Основен контейнер */
+.subscribe-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Заглавие и описание */
+.subscribe-header {
   text-align: center;
+  margin-bottom: 50px;
 }
 
-.single-subscribe-info h3 > span {
-  font-size: inherit;
-  font-weight: 700;
+.subscribe-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--text-black);
+  position: relative;
+  display: inline-block;
+}
+
+.subscribe-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--green));
+  border-radius: 4px;
+}
+
+.subscribe-title .highlight {
   color: var(--green);
-  font-size: var(--l-font-size);
+  font-weight: 900;
+  position: relative;
+  display: inline-block;
+  margin-left: 8px;
 }
-
-.single-subscribe-info p {
-  font-size: var(--xs-font-size);
-  font-weight: 500;
-  padding-top: var(--s-space);
-  text-align: center;
+.subscribe-title span{
+  font-size: calc(var(--m-font-size) + 0.2em);
 }
-.form-row {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  padding: 0.7em;
-}
-
-.form-row {
-  display: flex;
-  padding-bottom: 1em;
-}
-.col-subscribe {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7em;
-}
-
-#btn-subscribe {
-  margin-top: 0;
-}
-.news-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0.7em;
-}
-.error-message {
-  color: red;
-  font-size: 0.875rem;
-  margin-top: 5px;
-}
-.after-news {
+/* .subscribe-title .highlight::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  height: 7px;
+  height: 8px;
+  background-color: rgba(27, 109, 77, 0.1);
+  z-index: -1;
+  border-radius: 4px;
+} */
+
+.subscribe-description {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
-@media (min-width: 900px) and (orientation: landscape) {
-  .col-subscribe {
-    flex-direction: row;
-  }
-  .news-form {
-    display: flex;
-    justify-content: center;
-  }
-  .news-btn button:hover {
-    opacity: 0.7;
-  }
-  .error-email {
-    display: flex;
-    flex-direction: column;
-  }
-  .error-username {
-    display: flex;
-    flex-direction: column;
-  }
-
-  #email,
-  #name {
-    width: calc(var(--container-min-width) - 80px);
-    padding: calc(var(--m-space) - 6px) 0.2em;
-    font-size: var(--m-space);
-  }
-
-  #btn-subscribe {
-    margin-top: 5px;
-    min-width: calc(var(--container-min-width) - 140px);
-  }
+/* Форма */
+.subscribe-form-container {
+  background-color: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-@media (min-width: 900px) and (max-width: 1199px) {
-
-  .subscribe-news {
-      padding: 4em 0.5em;
-      padding-left: 7%;
-  }
+.subscribe-form-container:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
 }
-.recaptcha-container {
+
+.recaptcha-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  /* margin-top: 0px;  */
+  margin-bottom: 20px;
 }
-.lock-message {
-  color: red;
-  text-align: center;
-  margin-top: 20px;
+
+.subscribe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 250px;
+}
+
+.input-wrapper {
+  position: relative;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.input-wrapper.focused {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 2px rgba(226, 96, 32, 0.1);
+}
+
+.input-wrapper.error {
+  border-color: #ff4d4d;
+  box-shadow: 0 0 0 2px rgba(255, 77, 77, 0.1);
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  color: #999;
+  transition: color 0.3s ease;
+}
+
+.input-wrapper.focused .input-icon {
+  color: var(--orange);
+}
+
+.input-wrapper input {
+  border: none;
+  padding: 16px 16px 16px 0;
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+}
+
+.input-wrapper input::placeholder {
+  color: #aaa;
+  transition: color 0.3s ease;
+}
+
+.input-wrapper.focused input::placeholder {
+  color: #bbb;
+}
+
+.error-message {
+  color: #ff4d4d;
+  font-size: 0.875rem;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.subscribe-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(to right, var(--orange), #f07d44);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(226, 96, 32, 0.2);
+}
+
+.subscribe-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(226, 96, 32, 0.3);
+}
+
+.subscribe-button svg {
+  transition: transform 0.3s ease;
+}
+
+.subscribe-button:hover svg {
+  transform: translateX(5px);
+}
+
+/* Респонсивен дизайн */
+@media (max-width: 768px) {
+  .subscribe-modern {
+    padding: 80px 5%;
+    margin: 40px 0 0;
+  }
+  
+  .subscribe-title {
+    font-size: 2rem;
+  }
+  
+  .subscribe-form-container {
+    padding: 30px 20px;
+  }
+  
+  .form-fields {
+    flex-direction: column;
+  }
+  
+  .subscribe-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .subscribe-modern {
+    padding: 60px 5%;
+  }
+  
+  .subscribe-title {
+    font-size: 1.8rem;
+  }
+  
+  .subscribe-description {
+    font-size: 1rem;
+  }
 }
