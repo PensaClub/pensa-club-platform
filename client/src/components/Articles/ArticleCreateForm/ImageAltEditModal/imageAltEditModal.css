@@ -1,0 +1,77 @@
+
+.image-alt-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .image-alt-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .image-preview {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .alt-editor-container {
+    margin-bottom: 20px;
+  }
+  
+  .help-text {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .image-actions {
+    display: flex;
+    gap: 5px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+  
+  .edit-alt-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 3px 6px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .image-alt-preview {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .section-image-preview {
+    position: relative;
+  }

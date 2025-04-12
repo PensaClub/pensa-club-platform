@@ -1,6 +1,5 @@
 import { convertEditorToHtml } from './editor';
 
-// Подготовка на стойностите за изпращане с конвертиране на EditorState
 export const prepareArticleValuesForSubmit = (values) => {
   const prepared = { ...values };
   
@@ -13,27 +12,50 @@ export const prepareArticleValuesForSubmit = (values) => {
     alt: convertEditorToHtml(values.mainImage.alt)
   };
   
-  // Конвертиране на съдържанието на секциите
+  // Конвертиране на секциите
   prepared.sections = values.sections.map(section => {
     const updatedSection = { ...section };
     
+    // Конвертиране на съдържанието
     if (section.content) {
       updatedSection.content = convertEditorToHtml(section.content);
     }
     
-    if (section.image && section.image.alt && typeof section.image.alt !== 'string') {
-      updatedSection.image = {
-        ...section.image,
-        alt: convertEditorToHtml(section.image.alt)
-      };
+    // Обработка на изображенията в масив
+    if (section.image) {
+      if (Array.isArray(section.image) && section.image.length > 0) {
+        // Конвертираме всички изображения в масива
+        updatedSection.image = section.image.map(img => {
+          if (!img || !img.src) return null;
+          
+          return {
+            src: img.src,
+            alt: img.alt ? convertEditorToHtml(img.alt) : '',
+            caption: img.caption ? convertEditorToHtml(img.caption) : ''
+          };
+        }).filter(img => img !== null);
+        
+        // Ако няма изображения след филтрирането, задаваме image на null
+        if (updatedSection.image.length === 0) {
+          updatedSection.image = null;
+        }
+      } else if (!Array.isArray(section.image) && section.image.src) {
+        // Ако image е обект (не масив), но има src, обработваме го
+        updatedSection.image = {
+          src: section.image.src,
+          alt: convertEditorToHtml(section.image.alt),
+          caption: section.image.caption ? convertEditorToHtml(section.image.caption) : ''
+        };
+      } else {
+        // Ако няма valid image, задаваме го на null
+        updatedSection.image = null;
+      }
+    } else {
+      updatedSection.image = null;
     }
     
-    if (section.image && section.image.caption && typeof section.image.caption !== 'string') {
-      updatedSection.image = {
-        ...updatedSection.image,
-        caption: convertEditorToHtml(section.image.caption)
-      };
-    }
+    // Премахваме полетата, които не са нужни при изпращане
+    if (updatedSection.images) delete updatedSection.images;
     
     return updatedSection;
   });
