@@ -2,6 +2,7 @@ const articleController = require('express').Router();
 const customError = require('../utils/customError');
 const { article, mainImage, section, sectionImage, user_details } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
+const { checkPermission } = require('../middlewares/rbac');
 const { updateArticleRelationships } = require('../utils/articleUtils');
 const { Op, where } = require('sequelize');
 
@@ -42,7 +43,7 @@ const articleIncludeConfig = [
 
 const articleAttributes = ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'tags', 'updatedBy', 'createdAt', 'updatedAt'];
 
-articleController.get('/all', async (req, res, next) => {
+articleController.get('/all', checkPermission('read_article'), async (req, res, next) => {
     try {
         const articles = await article.findAll({
             include: articleIncludeConfig,
@@ -60,7 +61,7 @@ articleController.get('/all', async (req, res, next) => {
     }
 });
 
-articleController.get('/single/:id', async (req, res, next) => {
+articleController.get('/single/:id', checkPermission('read_article'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
         if (isNaN(articleId)) {
@@ -88,7 +89,7 @@ articleController.get('/single/:id', async (req, res, next) => {
     }
 });
 
-articleController.post('/create', isAuth, async (req, res, next) => {
+articleController.post('/create', isAuth, checkPermission('create_article'), async (req, res, next) => {
     try {
         const {
             title,
@@ -168,15 +169,19 @@ articleController.post('/create', isAuth, async (req, res, next) => {
                             { transaction: t }
                         );
 
-                        if (sectionData.image) {
-                            await sectionImage.create(
-                                {
-                                    src: sectionData.image.src,
-                                    alt: sectionData.image.alt,
-                                    caption: sectionData.image.caption,
-                                    sectionId: newSection.id,
-                                },
-                                { transaction: t }
+                        if (sectionData.image && Array.isArray(sectionData.image)) {
+                            await Promise.all(
+                                sectionData.image.map(async (imageData) => {
+                                    await sectionImage.create(
+                                        {
+                                            src: imageData.src ?? null,
+                                            alt: imageData.alt ?? null,
+                                            caption: imageData.caption ?? null,
+                                            sectionId: newSection.id,
+                                        },
+                                        { transaction: t }
+                                    );
+                                })
                             );
                         }
                     })
@@ -199,7 +204,7 @@ articleController.post('/create', isAuth, async (req, res, next) => {
     }
 });
 
-articleController.put('/:id', isAuth, async (req, res, next) => {
+articleController.put('/:id', isAuth, checkPermission('update_article'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
         if (isNaN(articleId)) {
@@ -300,15 +305,19 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
                             { transaction: t }
                         );
 
-                        if (sectionData.image) {
-                            await sectionImage.create(
-                                {
-                                    src: sectionData.image.src ?? null,
-                                    alt: sectionData.image.alt ?? null,
-                                    caption: sectionData.image.caption ?? null,
-                                    sectionId: newSection.id,
-                                },
-                                { transaction: t }
+                        if (sectionData.image && Array.isArray(sectionData.image)) {
+                            await Promise.all(
+                                sectionData.image.map(async (imageData) => {
+                                    await sectionImage.create(
+                                        {
+                                            src: imageData.src ?? null,
+                                            alt: imageData.alt ?? null,
+                                            caption: imageData.caption ?? null,
+                                            sectionId: newSection.id,
+                                        },
+                                        { transaction: t }
+                                    );
+                                })
                             );
                         }
                     } else if (existingSectionIds.has(sectionData.id)) {
@@ -323,27 +332,44 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
                             { transaction: t }
                         );
 
-                        if (sectionData.image) {
-                            if (existingSection.sectionImage) {
-                                await existingSection.sectionImage.update(
-                                    {
-                                        src: sectionData.image.src ?? null,
-                                        alt: sectionData.image.alt ?? null,
-                                        caption: sectionData.image.caption ?? null,
+                        if (sectionData.image && Array.isArray(sectionData.image)) {
+                            await sectionImage.destroy({
+                                where: {
+                                    sectionId: existingSection.id,
+                                    id: {
+                                        [Op.notIn]: sectionData.image.filter((img) => img.id).map((img) => img.id),
                                     },
-                                    { transaction: t }
-                                );
-                            } else {
-                                await sectionImage.create(
-                                    {
-                                        src: sectionData.image.src ?? null,
-                                        alt: sectionData.image.alt ?? null,
-                                        caption: sectionData.image.caption ?? null,
-                                        sectionId: existingSection.id,
-                                    },
-                                    { transaction: t }
-                                );
-                            }
+                                },
+                                transaction: t,
+                            });
+
+                            await Promise.all(
+                                sectionData.image.map(async (imageData) => {
+                                    if (imageData.id) {
+                                        await sectionImage.update(
+                                            {
+                                                src: imageData.src ?? null,
+                                                alt: imageData.alt ?? null,
+                                                caption: imageData.caption ?? null,
+                                            },
+                                            {
+                                                where: { id: imageData.id },
+                                                transaction: t,
+                                            }
+                                        );
+                                    } else {
+                                        await sectionImage.create(
+                                            {
+                                                src: imageData.src ?? null,
+                                                alt: imageData.alt ?? null,
+                                                caption: imageData.caption ?? null,
+                                                sectionId: existingSection.id,
+                                            },
+                                            { transaction: t }
+                                        );
+                                    }
+                                })
+                            );
                         } else if (existingSection.sectionImage) {
                             await existingSection.sectionImage.destroy({ transaction: t });
                         }
@@ -364,7 +390,7 @@ articleController.put('/:id', isAuth, async (req, res, next) => {
     }
 });
 
-articleController.delete('/:id', isAuth, async (req, res, next) => {
+articleController.delete('/:id', isAuth, checkPermission('delete_article'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
         if (isNaN(articleId)) {
