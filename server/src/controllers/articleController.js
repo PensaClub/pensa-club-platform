@@ -5,6 +5,7 @@ const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const { updateArticleRelationships } = require('../utils/articleUtils');
 const { Op, where } = require('sequelize');
+const rateLimiter = require('../middlewares/rateLimiter');
 
 const articleIncludeConfig = [
     {
@@ -61,7 +62,7 @@ articleController.get('/all', checkPermission('read_article'), async (req, res, 
     }
 });
 
-articleController.get('/single/:id', checkPermission('read_article'), async (req, res, next) => {
+articleController.get('/single/:id', isAuth(true), rateLimiter, checkPermission('read_article'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
         if (isNaN(articleId)) {
