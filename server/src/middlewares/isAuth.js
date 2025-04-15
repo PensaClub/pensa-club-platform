@@ -1,7 +1,7 @@
 const jwt = require('../utils/jwt');
 const { user_account } = require('../sequelize/models/index');
 
-module.exports = function authentication(allowGuest = false) {
+function createMiddleware(allowGuest = false) {
     return async function (req, res, next) {
         const authHeader = req.headers.authorization;
         const refreshJwtToken = req.cookies.refreshJwtToken;
@@ -40,4 +40,12 @@ module.exports = function authentication(allowGuest = false) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
     };
-};
+}
+
+// Default middleware that requires valid authentication tokens
+const defaultMiddleware = createMiddleware(false);
+
+// Allows both authenticated users and guests - used with rate limiters for public endpoints
+defaultMiddleware.allowGuest = createMiddleware(true);
+
+module.exports = defaultMiddleware;

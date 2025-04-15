@@ -62,7 +62,7 @@ articleController.get('/all', checkPermission('read_article'), async (req, res, 
     }
 });
 
-articleController.get('/single/:id', isAuth(true), rateLimiter, checkPermission('read_article'), async (req, res, next) => {
+articleController.get('/single/:id', isAuth.allowGuest, rateLimiter, checkPermission('read_article'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
         if (isNaN(articleId)) {
