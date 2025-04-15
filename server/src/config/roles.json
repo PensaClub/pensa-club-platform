@@ -1,16 +1,43 @@
 {
-  "roles": [
-    {
-      "name": "admin",
-      "permissions": ["create_record", "read_record", "update_record", "approve_record", "delete_record", "delete_account", "read_subscriptions"]
-    },
-    {
-      "name": "user",
-      "permissions": ["create_record", "read_record", "update_record", "delete_record"]
-    },
-    {
-      "name": "guest",
-      "permissions": ["read_record"]
-    }
-  ]
+    "roles": [
+        {
+            "name": "admin",
+            "permissions": [
+                "create_record",
+                "read_record",
+                "update_record",
+                "approve_record",
+                "delete_record",
+                "delete_account",
+                "read_subscriptions",
+                "create_article",
+                "read_article",
+                "update_article",
+                "delete_article"
+            ]
+        },
+        {
+            "name": "moderator",
+            "permissions": [
+                "create_record",
+                "read_record",
+                "update_record",
+                "approve_record",
+                "delete_record",
+                "read_subscriptions",
+                "create_article",
+                "read_article",
+                "update_article",
+                "delete_article"
+            ]
+        },
+        {
+            "name": "user",
+            "permissions": ["create_record", "read_record", "update_record", "delete_record", "read_article"]
+        },
+        {
+            "name": "guest",
+            "permissions": ["read_record", "read_article"]
+        }
+    ]
 }

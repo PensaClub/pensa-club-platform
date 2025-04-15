@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { article } = require('../models');
+const { article } = require('../sequelize/models');
 
 async function updateArticleRelationships(articleInstance, relationships, transaction) {
     const { relatedArticleId, nextArticleId, previousArticleId } = relationships;
