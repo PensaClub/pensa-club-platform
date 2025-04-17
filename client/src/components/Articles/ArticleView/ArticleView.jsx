@@ -25,6 +25,7 @@ import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { useArticleContext } from '../../contexts/ArticleContext';
 import { renderHtml } from '../articleUtils/article-utils';
 import { useArticleLimit } from '../../contexts/ArticleLimitContext';
+import Pagination from '../Pagination/Pagination';
 
 const ArticleView = () => {
   const { showAssistant } = useArticleLimit();
@@ -36,76 +37,91 @@ const ArticleView = () => {
   const [previousArticle, setPreviousArticle] = useState(null);
   const [nextArticle, setNextArticle] = useState(null);
   const [activeSectionSlides, setActiveSectionSlides] = useState({});
+  
+  // Добавяме state за пагинация
+  const [currentPage, setCurrentPage] = useState(1);
+  const sectionsPerPage = 3;
 
   const { setIsLoading } = useLoading();
   const { trackArticle, getViewCount } = useAnalytics();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const { getAllArticles, articlesLoaded,getArticleById, articles } = useArticleContext();
+  const { getAllArticles, articlesLoaded, getArticleById, articles } = useArticleContext();
 
-  // Функция за намиране на предишна и следваща статия
+  // Функция за смяна на страница
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    // Скролваме към началото на статията при смяна на страница
+    window.scrollTo({
+      top: document.querySelector('.article-body').offsetTop - 100,
+      behavior: 'smooth'
+    });
+  };
+  
+  // Функция за изчисляване на общия брой страници
+  const calculateTotalPages = (sections) => {
+    if (!sections || sections.length === 0) return 1;
+    return Math.ceil(sections.length / sectionsPerPage);
+  };
+  
+  // Функция за вземане на секциите за текущата страница
+  const getCurrentPageSections = () => {
+    if (!article || !article.sections) return [];
+    
+    const startIndex = (currentPage - 1) * sectionsPerPage;
+    const endIndex = startIndex + sectionsPerPage;
+    return article.sections.slice(startIndex, endIndex);
+  };
+
   const findAdjacentArticles = (allArticles, currentArticle) => {
     if (!currentArticle || !allArticles || allArticles.length === 0) return { prev: null, next: null };
-    
-    // Сортираме статиите по дата (от най-нови към най-стари)
+ 
     const sortedArticles = [...allArticles].sort((a, b) => 
       new Date(b.publishDate) - new Date(a.publishDate)
     );
-    
-    // Намираме индекса на текущата статия
+
     const currentIndex = sortedArticles.findIndex(a => a.id === currentArticle.id);
     
     if (currentIndex === -1) return { prev: null, next: null };
-    
-    // Определяме предишната статия (по-нова)
+
     const prev = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
-    
-    // Определяме следващата статия (по-стара)
+
     const next = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
     
     return { prev, next };
   };
 
-  // Функция за намиране на свързана статия по тагове
   const findRelatedArticle = (allArticles, currentArticle) => {
     if (!currentArticle || !currentArticle.tags || !allArticles || allArticles.length <= 1) {
       return null;
     }
-    
-    // Функция за изчисляване на сходство между две статии
+
     const calculateSimilarity = (article1, article2) => {
       if (!article1.tags || !article2.tags) return 0;
       
-      // Брой общи тагове
       const commonTags = article1.tags.filter(tag => article2.tags.includes(tag));
-      
-      // Ако няма общи тагове, коефициентът е 0
+
       if (commonTags.length === 0) return 0;
-      
-      // Изчисляваме коефициент на сходство (колкото по-голям, толкова по-сходни са статиите)
+
       const similarity = commonTags.length / Math.sqrt(article1.tags.length * article2.tags.length);
       
       return similarity;
     };
-    
-    // Изчисляваме сходството за всички статии
+
     const articlesWithSimilarity = allArticles
-      .filter(a => a.id !== currentArticle.id) // Изключваме текущата статия
+      .filter(a => a.id !== currentArticle.id)
       .map(article => ({
         article,
         similarity: calculateSimilarity(currentArticle, article)
       }))
-      .filter(item => item.similarity > 0); // Премахваме статии без общи тагове
-    
-    // Сортираме по сходство (от най-високо към най-ниско)
+      .filter(item => item.similarity > 0); 
+
     articlesWithSimilarity.sort((a, b) => b.similarity - a.similarity);
     
-    // Връщаме най-сходната статия, ако има такава
     return articlesWithSimilarity.length > 0 ? articlesWithSimilarity[0].article : null;
   };
 
-  // Функция за плъзгачите в секциите
   const handleSectionSlideChange = (sectionIndex, slideIndex) => {
     setActiveSectionSlides(prev => ({
       ...prev,
@@ -114,25 +130,26 @@ const ArticleView = () => {
   };
 
   useEffect(() => {
-    // Запазваме текущия URL за споделяне с абсолютен път
+    // При промяна на статията, връщаме пагинацията към първа страница
+    setCurrentPage(1);
+  }, [slug]);
+
+  useEffect(() => {
     setCurrentUrl(window.location.origin + window.location.pathname);
   
     const loadArticle = async () => {
       setIsLoading(true);
       
       try {
-        // Първо проверяваме дали имаме статии в контекста за намиране на ID по slug
         let articleId = null;
         
         if (articlesLoaded && articles.length > 0) {
-          // Търсим статията по slug в кешираните статии
           const cachedArticle = articles.find(a => a.slug === slug);
           if (cachedArticle) {
             articleId = cachedArticle.id;
           }
         }
         
-        // Ако не намерим ID в кеша, правим заявка за всички статии
         if (!articleId) {
           const allArticles = await getAllArticles();
           const foundArticle = allArticles.find(a => a.slug === slug);
@@ -142,29 +159,24 @@ const ArticleView = () => {
         }
         
         if (articleId) {
-          // Зареждаме пълната информация за статията по ID
           const foundArticle = await getArticleById(articleId);
     
           if (foundArticle.error && foundArticle.type === 'ARTICLE_LIMIT_REACHED') {
             showAssistant();
             
-            // По-надеждна логика за навигация
             const isDirectAccess = !document.referrer || document.referrer.indexOf(window.location.host) === -1;
             
             if (isDirectAccess) {
-              // Ако е директен достъп (няма референт от нашия домейн)
               navigate('/');
             } else {
-              // Вместо navigate(-1), отиваме към списъка със статии
               navigate('/articles');
             }
             
-            return; // Прекратяваме изпълнението тук
+            return;
           }
     
           setArticle(foundArticle);
           
-          // Останалата част от кода...
           if (articlesLoaded && articles.length > 0) {
             const { prev, next } = findAdjacentArticles(articles, foundArticle);
             setPreviousArticle(prev);
@@ -181,7 +193,6 @@ const ArticleView = () => {
             setRelatedArticle(related);
           }
           
-          // Проследяване на посещението
           trackArticle(foundArticle.id, foundArticle.title);
         } else {
           console.error("Статията не е намерена:", slug);
@@ -189,22 +200,16 @@ const ArticleView = () => {
       } catch (error) {
         console.error("Грешка при зареждане на статията:", error);
       
-        // Проверяваме за специфична грешка за лимит на статии
         if (error.message === 'ARTICLE_LIMIT_REACHED' || 
             (error.response && error.response.status === 429)) {
           
-          // Показваме асистента
           showAssistant();
           
-          // По-надеждна логика за навигация при грешка
           const isArticlesList = location.pathname === '/articles';
           
           if (!isArticlesList) {
-            // Винаги навигираме към списъка със статии вместо назад,
-            // което е по-надеждно от navigate(-1)
             navigate('/articles');
           }
-          // Ако вече сме в списъка, просто оставаме там
         }
       } finally {
         setIsLoading(false);
@@ -212,7 +217,7 @@ const ArticleView = () => {
     };
     
     loadArticle();
-  }, [slug, location.key,showAssistant, navigate]);
+  }, [slug, location.key, showAssistant, navigate]);
 
   useEffect(() => {
     if (article) {
@@ -223,14 +228,12 @@ const ArticleView = () => {
     }
   }, [article]);
 
-  // Директно споделяне чрез отваряне на нов прозорец със съответния URL
   const shareOnFacebook = (e) => {
     e.preventDefault();
     const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
     window.open(shareUrl, 'facebook-share', 'width=580,height=520');
   };
 
-  // Споделяне в Twitter
   const shareOnTwitter = (e) => {
     e.preventDefault();
     const text = article ? article.title : "";
@@ -238,14 +241,12 @@ const ArticleView = () => {
     window.open(shareUrl, 'twitter-share', 'width=550,height=420');
   };
 
-  // Споделяне в LinkedIn
   const shareOnLinkedIn = (e) => {
     e.preventDefault();
     const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`;
     window.open(shareUrl, 'linkedin-share', 'width=550,height=420');
   };
 
-  // Споделяне в Telegram
   const shareOnTelegram = (e) => {
     e.preventDefault();
     const text = article ? article.title : "";
@@ -292,11 +293,8 @@ const ArticleView = () => {
     }
   };
 
-  // Рендериране на снимките в секция
   const renderSectionImages = (section, sectionIndex) => {
-    // Проверяваме дали има изображения в секцията
     if (!section.sectionImages || section.sectionImages.length === 0) {
-      // Обработка за обратна съвместимост - ако имаме едно старо изображение
       if (section.image && section.image.src) {
         return (
           <figure className="section-figure">
@@ -310,7 +308,6 @@ const ArticleView = () => {
       return null;
     }
 
-    // Ако има само едно изображение, показваме го директно
     if (section.sectionImages.length === 1) {
       const image = section.sectionImages[0];
       return (
@@ -323,7 +320,6 @@ const ArticleView = () => {
       );
     }
 
-    // Ако има повече от едно изображение, използваме слайдер
     return (
       <div className="section-slider-container">
         <ImageSlider 
@@ -332,7 +328,6 @@ const ArticleView = () => {
           onSlideChange={(slideIndex) => handleSectionSlideChange(sectionIndex, slideIndex)}
         />
         
-        {/* Показваме caption за текущия слайд */}
         {section.sectionImages[activeSectionSlides[sectionIndex] || 0]?.caption && (
           <div className="single-slider-caption-container">
             <div className="single-slide-caption">
@@ -355,7 +350,6 @@ const ArticleView = () => {
         </div>
       </div>
       <div className="article-container">
-
         <div className="article-layout">
           <main className="article-content">
             <h1 className="article-title-view view">{article.title}</h1>
@@ -382,19 +376,35 @@ const ArticleView = () => {
             )}
 
             <div className="article-body">
-              {article.sections.map((section, index) => (
-                <section key={index} className="article-section">
-                  <h2 className="section-title">{section.title}</h2>
-                  <div className="section-content">
-                    <div dangerouslySetInnerHTML={{ __html: section.content }} />
-                    {renderSectionImages(section, index)}
-                  </div>
-                </section>
-              ))}
+              {/* Рендерираме само секциите за текущата страница */}
+              {getCurrentPageSections().map((section, index) => {
+                // Изчисляваме реалния индекс на секцията спрямо всички секции
+                const actualIndex = (currentPage - 1) * sectionsPerPage + index;
+                return (
+                  <section key={actualIndex} className="article-section">
+                    <h2 className="section-title">{section.title}</h2>
+                    <div className="section-content">
+                      <div dangerouslySetInnerHTML={{ __html: section.content }} />
+                      {renderSectionImages(section, actualIndex)}
+                    </div>
+                  </section>
+                );
+              })}
+              
+              {/* Показваме пагинацията само ако имаме повече от 3 секции */}
+              {article.sections && article.sections.length > sectionsPerPage && (
+                <div className="article-pagination-wrapper">
+                  <Pagination 
+                    currentPage={currentPage}
+                    totalPages={calculateTotalPages(article.sections)}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              )}
             </div>
 
             {article.tags && article.tags.length > 0 && (
-              <div className="article-tags">
+              <div className="article-tags-view">
                 {article.tags.map((tag, index) => (
                   <span key={index} className="article-tag">
                     {tag}
@@ -465,7 +475,6 @@ const ArticleView = () => {
                 </Link>
               )}
             </div>
-
           </main>
 
           <aside className="article-sidebar">

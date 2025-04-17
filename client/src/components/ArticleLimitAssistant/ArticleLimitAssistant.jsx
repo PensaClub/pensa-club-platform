@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import './articleLimitAssistant.css';
-import assistantAnimation from './animations.json'; // Изберете една от анимациите по-горе
+import assistantAnimation from './animations.json'; 
 
 const ArticleLimitAssistant = ({ isVisible, onClose }) => {
   useEffect(() => {
