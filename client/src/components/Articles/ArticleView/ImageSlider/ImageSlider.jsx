@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import './imageSlider.css';
 
-const ImageSlider = ({ images, alt }) => {
+const ImageSlider = ({ images, alt, onSlideChange }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Известяваме родителския компонент при промяна на слайда
+  useEffect(() => {
+    if (onSlideChange) {
+      onSlideChange(currentIndex);
+    }
+  }, [currentIndex]);
 
   const goToPrevious = () => {
     const isFirstSlide = currentIndex === 0;

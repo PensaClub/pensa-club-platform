@@ -2,7 +2,8 @@ import { useState, useRef, useMemo, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faPlus, faMinus, faImage, faVideo, faSliders,
-    faUpload, faEye, faSave, faTimes, faCloudUploadAlt
+    faUpload, faEye, faSave, faTimes, faCloudUploadAlt,
+    faEdit
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import "./articleCreateForm.css";
@@ -14,12 +15,18 @@ import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
 import { useArticleContext } from "../../contexts/ArticleContext";
 import { createEditorState } from "../articleUtils/editor";
 import ScrollToTop from "../../ScrollToTop/ScrollToTop";
+import { ImageAltEditModal } from "./ImageAltEditModal/ImageAltEditModal";
 
 const ArticleCreateForm = () => {
     const { t } = useTranslation();
     const { createArticle } = useArticleContext();
     const [previewMode, setPreviewMode] = useState(false);
-
+    const [isAltModalOpen, setIsAltModalOpen] = useState(false);
+    const [currentEditingImage, setCurrentEditingImage] = useState({
+        sectionIndex: null,
+        imageIndex: null,
+        image: null
+    });
     const initialValues = {
         title: "",
         slug: "",
@@ -59,25 +66,29 @@ const ArticleCreateForm = () => {
         handleMainImageTypeChange,
         handleMainImageFiles,
         handleSectionImageFile,
+        handleMainImageUrl,
+        handleSectionImageUrl,
+        removeUrlImage,
         removeMainImage,
         removeSectionImage,
         addSection,
         removeSection,
         addTag,
+        updateImageInfo,
         removeTag,
         mediaFiles,
         convertEditorToHtml,
+        updateImageAlt,
     } = useCreateArticle(initialValues, createArticle);
 
     const [newTag, setNewTag] = useState("");
-    // Използваме useReducer вместо useState за forceUpdate за по-доброто изпълнение
-    const [, forceUpdate] = useReducer(x => x + 1, 0);
 
-    // Референция за input полето за видео URL
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
+    const [imageUrl, setImageUrl] = useState("");
+    const [sectionImageUrls, setSectionImageUrls] = useState({});
+
     const videoUrlInputRef = useRef(null);
 
-    // ВАЖНО: Кеширане на blob URLs за избягване на много заявки и премигване
-    // Кеширане на blob URL-и за видео (създава се само при промяна на mediaFiles.mainImage)
     const videoPreviewUrl = useMemo(() => {
         if (mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && mediaFiles.mainImage[0]) {
             try {
@@ -88,8 +99,28 @@ const ArticleCreateForm = () => {
             }
         }
         return null;
-    }, [mediaFiles.mainImage]); // Зависи само от mediaFiles.mainImage
+    }, [mediaFiles.mainImage]);
+    const handleAddImageUrl = () => {
+        if (handleMainImageUrl(imageUrl)) {
+            setImageUrl("");
+        }
+    };
 
+    const openAltEditModal = (sectionIndex, imageIndex, image) => {
+        // Копираме изображението за да избегнем проблеми с референции
+        setCurrentEditingImage({
+            sectionIndex,
+            imageIndex,
+            image: { ...image } 
+        });
+        setIsAltModalOpen(true);
+    };
+
+    // Функция за запазване на промените в ALT текста
+    const handleSaveImageInfo = (altEditorState, captionEditorState) => {
+        const { sectionIndex, imageIndex } = currentEditingImage;
+        updateImageInfo(sectionIndex, imageIndex, altEditorState, captionEditorState);
+    };
     // Кеширане на blob URL-и за изображения в слайдера
     const mainImagePreviewUrls = useMemo(() => {
         if (mediaFiles.mainImage && mediaFiles.mainImage.length > 0) {
@@ -174,8 +205,6 @@ const ArticleCreateForm = () => {
     // Функция за обработка на видео файлове
     const handleVideoFile = (files) => {
         if (!files || files.length === 0) return;
-
-        console.log("Video file selected:", files[0]); // Добавяме лог
 
         const videoFile = files[0]; // Вземаме само първия файл за видео
         if (videoFile) {
@@ -424,6 +453,27 @@ const ArticleCreateForm = () => {
                                         {errors["mainImage.alt"] && <div className="error-message">{errors["mainImage.alt"]}</div>}
                                     </div>
 
+                                    {/* Нова секция за добавяне чрез URL */}
+                                    <div className="form-group-article">
+                                        <label>Добавяне чрез URL</label>
+                                        <div className="image-url-input">
+                                            <input
+                                                type="text"
+                                                placeholder="Въведете URL на изображение"
+                                                value={imageUrl}
+                                                onChange={(e) => setImageUrl(e.target.value)}
+                                                onKeyPress={(e) => e.key === 'Enter' && handleAddImageUrl()}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="add-image-url-btn"
+                                                onClick={handleAddImageUrl}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} /> Добави
+                                            </button>
+                                        </div>
+                                    </div>
+
                                     <div className="file-upload-area">
                                         <div className="file-upload-icon">
                                             <FontAwesomeIcon icon={faCloudUploadAlt} />
@@ -447,30 +497,42 @@ const ArticleCreateForm = () => {
                                         />
                                     </div>
 
-                                    {/* Предпреглед на качени изображения - използва кешираните URLs */}
-                                    {mediaFiles.mainImage.length > 0 && (
+                                    {/* Предпреглед на всички изображения - файлове и URL-и */}
+                                    {(mediaFiles.mainImage.length > 0 || values.mainImage.sources.length > 0) && (
                                         <div className="media-preview-container">
+                                            {/* Показване на файловете */}
                                             {mediaFiles.mainImage.map((file, index) => (
-                                                <div key={index} className="image-preview-item">
+                                                <div key={`file-${index}`} className="image-preview-item">
                                                     <img
                                                         src={mainImagePreviewUrls[index]}
                                                         alt={`Предпреглед ${index}`}
                                                         onClick={() => handleImageClick(mainImagePreviewUrls[index])}
                                                     />
-                                                    <div className="image-controls-container">
-                                                        <div className="image-info-details">
-                                                            <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || 'Изображение' }}></h4>
-                                                            <p>{file.name || "Безименен файл"}</p>
-                                                            <p>Размер: {file.size ? (file.size / (1024 * 1024)).toFixed(2) + " MB" : "Неизвестен размер"}</p>
-                                                        </div>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-image-btn"
-                                                            onClick={() => removeMainImage(index)}
-                                                        >
-                                                            <FontAwesomeIcon icon={faTimes} /> Премахни
-                                                        </button>
-                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        className="remove-image-btn"
+                                                        onClick={() => removeMainImage(index)}
+                                                    >
+                                                        <FontAwesomeIcon icon={faTimes} />
+                                                    </button>
+                                                </div>
+                                            ))}
+
+                                            {/* Показване на URL адресите */}
+                                            {values.mainImage.sources.map((url, index) => (
+                                                <div key={`url-${index}`} className="image-preview-item">
+                                                    <img
+                                                        src={url}
+                                                        alt={`URL изображение ${index}`}
+                                                        onClick={() => handleImageClick(url)}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="remove-image-btn"
+                                                        onClick={() => removeUrlImage(index)}
+                                                    >
+                                                        <FontAwesomeIcon icon={faTimes} />
+                                                    </button>
                                                 </div>
                                             ))}
                                         </div>
@@ -654,7 +716,7 @@ const ArticleCreateForm = () => {
                                     )}
                                 </div>
 
-                                <div className="section-content">
+                                <div className="section-content-create">
                                     <div className="form-group-article">
                                         <label htmlFor={`section-title-${index}`}>Заглавие <span className="required">*</span></label>
                                         <input
@@ -688,40 +750,113 @@ const ArticleCreateForm = () => {
                                     </div>
 
                                     <div className="form-group-article">
-                                        <label htmlFor={`section-image-${index}`}>Изображение към секцията</label>
+                                        <label htmlFor={`section-image-${index}`}>Изображения към секцията</label>
 
-                                        {!mediaFiles.sectionImages[index] && !section.image?.src && (
-                                            <div className="file-upload-area" style={{ padding: '20px' }}>
-                                                <label htmlFor={`section-image-${index}`} className="file-upload-label">
-                                                    <FontAwesomeIcon icon={faUpload} /> Избери изображение
-                                                </label>
+                                        <div className="form-group-article">
+                                            <label>Добавяне чрез URL</label>
+                                            <div className="image-url-input">
                                                 <input
-                                                    type="file"
-                                                    id={`section-image-${index}`}
-                                                    onChange={(e) => handleSectionImageFile(e.target.files[0], index)}
-                                                    accept="image/jpeg,image/png,image/jpg,image/webp"
-                                                    className="file-input"
-                                                />
-                                            </div>
-                                        )}
-
-                                        {/* Ако изображение за секцията е избрано - използваме кеширания URL */}
-                                        {mediaFiles.sectionImages && mediaFiles.sectionImages[index] && (
-                                            <div className="section-image-preview">
-                                                <img
-                                                    src={sectionImagePreviewUrls[index]} // Използваме кеширания URL
-                                                    alt={`Секция ${index + 1}`}
-                                                    onClick={() => handleImageClick(sectionImagePreviewUrls[index])} // Използваме кеширания URL
+                                                    type="text"
+                                                    placeholder="Въведете URL на изображение"
+                                                    value={sectionImageUrls[index] || ''}
+                                                    onChange={(e) => setSectionImageUrls({ ...sectionImageUrls, [index]: e.target.value })}
+                                                    onKeyPress={(e) => e.key === 'Enter' && handleSectionImageUrl(sectionImageUrls[index], index)}
                                                 />
                                                 <button
                                                     type="button"
-                                                    className="remove-image-btn"
-                                                    onClick={() => removeSectionImage(index)}
+                                                    className="add-image-url-btn"
+                                                    onClick={() => {
+                                                        if (handleSectionImageUrl(sectionImageUrls[index], index)) {
+                                                            setSectionImageUrls({ ...sectionImageUrls, [index]: '' });
+                                                        }
+                                                    }}
                                                 >
-                                                    <FontAwesomeIcon icon={faTimes} />
+                                                    <FontAwesomeIcon icon={faPlus} /> Добави
                                                 </button>
                                             </div>
-                                        )}
+                                        </div>
+
+                                        <div className="file-upload-area" style={{ padding: '20px' }}>
+                                            <label htmlFor={`section-image-${index}`} className="file-upload-label">
+                                                <FontAwesomeIcon icon={faUpload} /> Избери изображение
+                                            </label>
+                                            <input
+                                                type="file"
+                                                id={`section-image-${index}`}
+                                                multiple={true}
+                                                onChange={(e) => {
+                                                    if (e.target.files && e.target.files.length > 0) {
+                                                        handleSectionImageFile(e.target.files, index);
+                                                    }
+                                                }}
+                                                accept="image/jpeg,image/png,image/jpg,image/webp"
+                                                className="file-input"
+                                            />
+                                        </div>
+
+                                        {/* Показване на всички изображения */}
+                                        <div className="section-images-container">
+
+                                            {/* Показване на всички изображения от масива */}
+                                            {Array.isArray(section.image) && section.image.map((image, imgIndex) => (
+                                                <div key={`image-${imgIndex}`} className="section-image-preview">
+                                                    <img
+                                                        src={image.src}
+                                                        alt={convertEditorToHtml(image.alt) || `Секция ${index + 1} - Изображение ${imgIndex + 1}`}
+                                                        onClick={() => handleImageClick(image.src)}
+                                                    />
+                                                    <div className="img-alt-actions">
+                                                        <button
+                                                            type="button"
+                                                            className="img-alt-edit-btn"
+                                                            onClick={() => openAltEditModal(index, imgIndex, image)}
+                                                            title="Редактирай информация"
+                                                        >
+                                                            <FontAwesomeIcon icon={faEdit} />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            className="remove-image-btn"
+                                                            onClick={() => removeSectionImage(index, imgIndex)}
+                                                            title="Премахни изображението"
+                                                        >
+                                                            <FontAwesomeIcon icon={faTimes} />
+                                                        </button>
+                                                    </div>
+
+                                                    {/* ALT текст */}
+                                                    {image.alt && convertEditorToHtml(image.alt) && (
+                                                        <div className="img-alt-text-preview">
+                                                            ALT: <span className="truncated-alt-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.alt) }}></span>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Caption */}
+                                                    {image.caption && convertEditorToHtml(image.caption) && (
+                                                        <div className="img-caption-preview">
+                                                            <span className="truncated-caption-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.caption) }}></span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                            {/* За обратна съвместимост - ако image не е масив, но има src */}
+                                            {section.image && !Array.isArray(section.image) && section.image.src && (
+                                                <div className="section-image-preview">
+                                                    <img
+                                                        src={section.image.src}
+                                                        alt={`Секция ${index + 1}`}
+                                                        onClick={() => handleImageClick(section.image.src)}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="remove-image-btn"
+                                                        onClick={() => removeSectionImage(index)}
+                                                    >
+                                                        <FontAwesomeIcon icon={faTimes} />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -814,7 +949,15 @@ const ArticleCreateForm = () => {
                 </div>
             )}
             <ScrollToTop />
+            {/* В края на компонента, преди последния затварящ таг */}
+            <ImageAltEditModal
+                isOpen={isAltModalOpen}
+                onClose={() => setIsAltModalOpen(false)}
+                image={currentEditingImage.image}
+                onSave={handleSaveImageInfo}
+            />
         </div>
+
     );
 };
 
