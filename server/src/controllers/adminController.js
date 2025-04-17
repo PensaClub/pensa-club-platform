@@ -5,7 +5,7 @@ const eventEmitter = require('../utils/eventEmitter.js');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
 
-adminController.post('/change-role', isAuth, rbac.checkPermission('approve_record'), async (req, res, next) => {
+adminController.post('/change-role', isAuth, rbac.checkPermission('account', 'update'), async (req, res, next) => {
     const { email, role, roleChangeComment } = req.body;
     const allowedRoles = ['admin', 'moderator', 'user', 'guest'];
     try {
@@ -30,7 +30,7 @@ adminController.post('/change-role', isAuth, rbac.checkPermission('approve_recor
     }
 });
 
-adminController.delete('/delete-account/:userEmail', isAuth, rbac.checkPermission('delete_account'), async (req, res, next) => {
+adminController.delete('/delete-account/:userEmail', isAuth, rbac.checkPermission('account', 'delete'), async (req, res, next) => {
     try {
         const { userEmail } = req.params;
 
@@ -50,7 +50,7 @@ adminController.delete('/delete-account/:userEmail', isAuth, rbac.checkPermissio
     }
 });
 
-adminController.patch('/delete-comment/', isAuth, rbac.checkPermission('delete_record'), async (req, res, next) => {
+adminController.patch('/delete-comment/', isAuth, rbac.checkPermission('comment', 'delete'), async (req, res, next) => {
     try {
         const { email, adId } = req.body;
         if (!email) return res.status(400).json({ message: 'Email is required.' });

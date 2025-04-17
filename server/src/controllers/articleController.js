@@ -44,7 +44,7 @@ const articleIncludeConfig = [
 
 const articleAttributes = ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'tags', 'updatedBy', 'createdAt', 'updatedAt'];
 
-articleController.get('/all', checkPermission('read_article'), async (req, res, next) => {
+articleController.get('/all', checkPermission('article', 'read'), async (req, res, next) => {
     try {
         const articles = await article.findAll({
             include: articleIncludeConfig,
@@ -62,7 +62,7 @@ articleController.get('/all', checkPermission('read_article'), async (req, res, 
     }
 });
 
-articleController.get('/single/:id', isAuth.allowGuest, rateLimiter, checkPermission('read_article'), async (req, res, next) => {
+articleController.get('/single/:id', isAuth.allowGuest, rateLimiter, checkPermission('article', 'read'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
         if (isNaN(articleId)) {
@@ -90,7 +90,7 @@ articleController.get('/single/:id', isAuth.allowGuest, rateLimiter, checkPermis
     }
 });
 
-articleController.post('/create', isAuth, checkPermission('create_article'), async (req, res, next) => {
+articleController.post('/create', isAuth, checkPermission('article', 'create'), async (req, res, next) => {
     try {
         const {
             title,
@@ -205,7 +205,7 @@ articleController.post('/create', isAuth, checkPermission('create_article'), asy
     }
 });
 
-articleController.put('/:id', isAuth, checkPermission('update_article'), async (req, res, next) => {
+articleController.put('/:id', isAuth, checkPermission('article', 'update'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
         if (isNaN(articleId)) {
@@ -391,7 +391,7 @@ articleController.put('/:id', isAuth, checkPermission('update_article'), async (
     }
 });
 
-articleController.delete('/:id', isAuth, checkPermission('delete_article'), async (req, res, next) => {
+articleController.delete('/:id', isAuth, checkPermission('article', 'delete'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
         if (isNaN(articleId)) {
