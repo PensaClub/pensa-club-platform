@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import './recentArticles.css';
-import { getRecentArticles, articles } from '../../data/articlesData';
+import { useArticleContext } from '../../../contexts/ArticleContext';
 
 const RecentArticles = ({ currentArticleId }) => {
   const [recentArticles, setRecentArticles] = useState([]);
@@ -14,29 +14,45 @@ const RecentArticles = ({ currentArticleId }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const sidebarRef = useRef(null);
+  const { getAllArticles, articles, articlesLoaded } = useArticleContext();
+  const [serverArticles, setServerArticles] = useState([]);
 
   useEffect(() => {
-    const recent = getRecentArticles(6).filter(
-      article => article.id !== currentArticleId
-    ).slice(0, 5);
-
-    setRecentArticles(recent);
-  }, [currentArticleId]);
-
-  // useEffect за проследяване на скрола
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (sidebarRef.current) {
-  //       const { top } = sidebarRef.current.getBoundingClientRect();
-  //       setIsSticky(window.scrollY > 100);
-  //     }
-  //   };
-
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, []);
+    const loadArticles = async () => {
+      // Проверка дали вече имаме заредени статии в контекста
+      let allArticles = articles;
+      
+      // Ако нямаме статии в контекста, опитваме да ги заредим
+      if (!articlesLoaded || articles.length === 0) {
+        console.log('RecentArticles: Зареждаме статии от сървъра');
+        allArticles = await getAllArticles();
+      } else {
+        console.log('RecentArticles: Използваме статии от контекста:', articles.length);
+      }
+      
+      // Запазваме статиите от сървъра в отделна променлива
+      setServerArticles(allArticles || []);
+      
+      if (allArticles && allArticles.length > 0) {
+        // Сортираме статиите по дата (от най-нови към най-стари)
+        const sortedArticles = [...allArticles].sort((a, b) => 
+          new Date(b.publishDate) - new Date(a.publishDate)
+        );
+        
+        // Филтрираме текущата статия и взимаме първите 5
+        const recent = sortedArticles
+          .filter(article => article.id !== Number(currentArticleId))
+          .slice(0, 5);
+        
+        console.log(`RecentArticles: Намерени ${recent.length} скорошни статии`);
+        setRecentArticles(recent);
+      } else {
+        console.warn('RecentArticles: Няма налични статии за показване');
+      }
+    };
+    
+    loadArticles();
+  }, [currentArticleId, articles, articlesLoaded, getAllArticles]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -46,15 +62,24 @@ const RecentArticles = ({ currentArticleId }) => {
       return;
     }
 
+    // Проверяваме дали имаме заредени статии от сървъра
+    if (!serverArticles || serverArticles.length === 0) {
+      console.warn('Няма заредени статии за търсене');
+      setFilteredArticles([]);
+      setIsSearching(true);
+      return;
+    }
+
     const searchLower = searchTerm.toLowerCase();
 
-    // Търсим в заглавието, описанието и таговете
-    const results = articles.filter(article =>
+    // Търсим САМО в статиите от сървъра
+    const results = serverArticles.filter(article =>
       article.title.toLowerCase().includes(searchLower) ||
-      (article.summary && article.summary.toLowerCase().includes(searchLower)) ||
+      (article.summary && typeof article.summary === 'string' && article.summary.toLowerCase().includes(searchLower)) ||
       (article.tags && article.tags.some(tag => tag.toLowerCase().includes(searchLower)))
     ).slice(0, 5);
 
+    console.log(`Намерени ${results.length} резултата за търсене "${searchTerm}"`);
     setFilteredArticles(results);
     setIsSearching(true);
     setIsArticlesExpanded(true); 
@@ -119,13 +144,19 @@ const RecentArticles = ({ currentArticleId }) => {
 
         {isArticlesExpanded && (
           <div className="recent-articles-list">
+            {recentArticles.length === 0 && !isSearching && (
+              <div className="no-results">
+                <p>Зареждане на последни публикации...</p>
+              </div>
+            )}
+            
             {(isSearching ? filteredArticles : recentArticles).map(article => (
               <div className="recent-article-item" key={article.id}>
                 <Link to={`/articles/${article.slug}`} className="recent-article-link">
                   <div className="recent-article-image">
                     <img
                       src={article.mainImage.type === 'video' ?
-                        article.mainImage.thumbnail :
+                        article.mainImage.thumbnail || article.mainImage.sources[0] :
                         article.mainImage.sources[0]}
                       alt={article.title}
                     />

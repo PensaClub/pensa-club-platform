@@ -62,3 +62,8 @@ export const prepareArticleValuesForSubmit = (values) => {
   
   return prepared;
 };
+// Функция за рендериране на HTML съдържание
+export const renderHtml = (content) => {
+  if (!content) return null;
+  return <div dangerouslySetInnerHTML={{ __html: content }} />;
+};

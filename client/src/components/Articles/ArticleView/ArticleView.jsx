@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarAlt,
@@ -15,7 +15,6 @@ import {
   faTelegram
 } from '@fortawesome/free-brands-svg-icons';
 import './articleView.css';
-import { getArticleBySlug } from '../data/articlesData';
 import RecentArticles from './RecentArticles/RecentArticles';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
 import { useTranslation } from 'react-i18next';
@@ -23,34 +22,159 @@ import ImageSlider from './ImageSlider/ImageSlider';
 import VideoPlayer from './VideoPlayer/VideoPlayer';
 import { useLoading } from '../../contexts/LoadingContext';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
+import { useArticleContext } from '../../contexts/ArticleContext';
+import { renderHtml } from '../articleUtils/article-utils';
 
 const ArticleView = () => {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const [currentUrl, setCurrentUrl] = useState('');
+  const [relatedArticle, setRelatedArticle] = useState(null);
+  const [previousArticle, setPreviousArticle] = useState(null);
+  const [nextArticle, setNextArticle] = useState(null);
+  const [activeSectionSlides, setActiveSectionSlides] = useState({});
 
   const { setIsLoading } = useLoading();
   const { trackArticle, getViewCount } = useAnalytics();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { getAllArticles, articlesLoaded,getArticleById, articles } = useArticleContext();
+
+  // Функция за намиране на предишна и следваща статия
+  const findAdjacentArticles = (allArticles, currentArticle) => {
+    if (!currentArticle || !allArticles || allArticles.length === 0) return { prev: null, next: null };
+    
+    // Сортираме статиите по дата (от най-нови към най-стари)
+    const sortedArticles = [...allArticles].sort((a, b) => 
+      new Date(b.publishDate) - new Date(a.publishDate)
+    );
+    
+    // Намираме индекса на текущата статия
+    const currentIndex = sortedArticles.findIndex(a => a.id === currentArticle.id);
+    
+    if (currentIndex === -1) return { prev: null, next: null };
+    
+    // Определяме предишната статия (по-нова)
+    const prev = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
+    
+    // Определяме следващата статия (по-стара)
+    const next = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
+    
+    return { prev, next };
+  };
+
+  // Функция за намиране на свързана статия по тагове
+  const findRelatedArticle = (allArticles, currentArticle) => {
+    if (!currentArticle || !currentArticle.tags || !allArticles || allArticles.length <= 1) {
+      return null;
+    }
+    
+    // Функция за изчисляване на сходство между две статии
+    const calculateSimilarity = (article1, article2) => {
+      if (!article1.tags || !article2.tags) return 0;
+      
+      // Брой общи тагове
+      const commonTags = article1.tags.filter(tag => article2.tags.includes(tag));
+      
+      // Ако няма общи тагове, коефициентът е 0
+      if (commonTags.length === 0) return 0;
+      
+      // Изчисляваме коефициент на сходство (колкото по-голям, толкова по-сходни са статиите)
+      const similarity = commonTags.length / Math.sqrt(article1.tags.length * article2.tags.length);
+      
+      return similarity;
+    };
+    
+    // Изчисляваме сходството за всички статии
+    const articlesWithSimilarity = allArticles
+      .filter(a => a.id !== currentArticle.id) // Изключваме текущата статия
+      .map(article => ({
+        article,
+        similarity: calculateSimilarity(currentArticle, article)
+      }))
+      .filter(item => item.similarity > 0); // Премахваме статии без общи тагове
+    
+    // Сортираме по сходство (от най-високо към най-ниско)
+    articlesWithSimilarity.sort((a, b) => b.similarity - a.similarity);
+    
+    // Връщаме най-сходната статия, ако има такава
+    return articlesWithSimilarity.length > 0 ? articlesWithSimilarity[0].article : null;
+  };
+
+  // Функция за плъзгачите в секциите
+  const handleSectionSlideChange = (sectionIndex, slideIndex) => {
+    setActiveSectionSlides(prev => ({
+      ...prev,
+      [sectionIndex]: slideIndex
+    }));
+  };
 
   useEffect(() => {
     // Запазваме текущия URL за споделяне с абсолютен път
     setCurrentUrl(window.location.origin + window.location.pathname);
-
-    setIsLoading(true);
-    const foundArticle = getArticleBySlug(slug);
-
-    setTimeout(() => {
-      setArticle(foundArticle);
-      setIsLoading(false);
-
-      // Проследяване на посещението след зареждане на статията
-      if (foundArticle) {
-        trackArticle(foundArticle.id, foundArticle.title);
+  
+    const loadArticle = async () => {
+      setIsLoading(true);
+      
+      try {
+        // Първо проверяваме дали имаме статии в контекста за намиране на ID по slug
+        let articleId = null;
+        
+        if (articlesLoaded && articles.length > 0) {
+          // Търсим статията по slug в кешираните статии
+          const cachedArticle = articles.find(a => a.slug === slug);
+          if (cachedArticle) {
+            articleId = cachedArticle.id;
+          }
+        }
+        
+        // Ако не намерим ID в кеша, правим заявка за всички статии
+        if (!articleId) {
+          const allArticles = await getAllArticles();
+          const foundArticle = allArticles.find(a => a.slug === slug);
+          if (foundArticle) {
+            articleId = foundArticle.id;
+          }
+        }
+        
+        if (articleId) {
+          // Зареждаме пълната информация за статията по ID
+          const foundArticle = await getArticleById(articleId);
+          setArticle(foundArticle);
+          
+          // Използваме кешираните статии за свързаните функционалности
+          if (articlesLoaded && articles.length > 0) {
+            const { prev, next } = findAdjacentArticles(articles, foundArticle);
+            setPreviousArticle(prev);
+            setNextArticle(next);
+            
+            const related = findRelatedArticle(articles, foundArticle);
+            setRelatedArticle(related);
+          } else {
+            // Ако нямаме кеширани статии, използваме резултата от getAllArticles
+            const { prev, next } = findAdjacentArticles(articles, foundArticle);
+            setPreviousArticle(prev);
+            setNextArticle(next);
+            
+            const related = findRelatedArticle(articles, foundArticle);
+            setRelatedArticle(related);
+          }
+          
+          // Проследяване на посещението
+          trackArticle(foundArticle.id, foundArticle.title);
+        } else {
+          console.error("Статията не е намерена:", slug);
+        }
+      } catch (error) {
+        console.error("Грешка при зареждане на статията:", error);
+      } finally {
+        setIsLoading(false);
       }
-    }, 20);
-  }, [slug, setIsLoading]);
+    };
+    
+    loadArticle();
+  }, [slug, location.key]);
 
   useEffect(() => {
     if (article) {
@@ -113,7 +237,7 @@ const ArticleView = () => {
     } else if (article.mainImage.type === 'video') {
       return (
         <VideoPlayer
-          src={article.mainImage.sources[0]}
+          src={article.mainImage.videoUrl || article.mainImage.sources[0]}
           thumbnail={article.mainImage.thumbnail}
           alt={article.mainImage.alt}
           subtitles={article.mainImage.subtitles || []}
@@ -130,6 +254,62 @@ const ArticleView = () => {
     }
   };
 
+  // Рендериране на снимките в секция
+  const renderSectionImages = (section, sectionIndex) => {
+    // Проверяваме дали има изображения в секцията
+    if (!section.sectionImages || section.sectionImages.length === 0) {
+      // Обработка за обратна съвместимост - ако имаме едно старо изображение
+      if (section.image && section.image.src) {
+        return (
+          <figure className="section-figure">
+            <img src={section.image.src} alt={section.image.alt || `Изображение към ${section.title}`} />
+            {section.image.caption && (
+              <figcaption>{section.image.caption}</figcaption>
+            )}
+          </figure>
+        );
+      }
+      return null;
+    }
+
+    // Ако има само едно изображение, показваме го директно
+    if (section.sectionImages.length === 1) {
+      const image = section.sectionImages[0];
+      return (
+        <figure className="section-figure">
+          <img src={image.src} alt={image.alt || `Изображение към ${section.title}`} />
+          {image.caption && (
+            <figcaption dangerouslySetInnerHTML={{ __html: image.caption }} />
+          )}
+        </figure>
+      );
+    }
+
+    // Ако има повече от едно изображение, използваме слайдер
+    return (
+      <div className="section-slider-container">
+        <ImageSlider 
+          images={section.sectionImages.map(img => img.src)}
+          alt={`Изображения към ${section.title}`}
+          onSlideChange={(slideIndex) => handleSectionSlideChange(sectionIndex, slideIndex)}
+        />
+        
+        {/* Показваме caption за текущия слайд */}
+        {section.sectionImages[activeSectionSlides[sectionIndex] || 0]?.caption && (
+          <div className="single-slider-caption-container">
+            <div className="single-slide-caption">
+              <div className="single-caption-content-view" 
+                dangerouslySetInnerHTML={{ 
+                  __html: section.sectionImages[activeSectionSlides[sectionIndex] || 0].caption 
+                }} 
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="article-main">
       <div className="articles-hero-view">
@@ -140,12 +320,10 @@ const ArticleView = () => {
 
         <div className="article-layout">
           <main className="article-content">
-            <h1 className="article-title view">{article.title}</h1>
+            <h1 className="article-title-view view">{article.title}</h1>
 
-            <div className="article-summary">
-              {article.summary}
-            </div>
-            <div className="article-meta">
+            <div className="article-summary-view">{renderHtml(article.summary)}</div>
+            <div className="article-meta-view">
               <div className="meta-item">
                 <FontAwesomeIcon icon={faUser} />
                 <span>{article.author}</span>
@@ -157,10 +335,10 @@ const ArticleView = () => {
             </div>
             {renderMainMedia()}
 
-            {article.relatedArticle && (
+            {relatedArticle && (
               <div className="related-article-link">
-                <Link to={`/articles/${article.relatedArticle.slug}`}>
-                  Свързана статия: {article.relatedArticle.title}
+                <Link to={`/articles/${relatedArticle.slug}`}>
+                  Свързана статия: {relatedArticle.title}
                 </Link>
               </div>
             )}
@@ -170,19 +348,8 @@ const ArticleView = () => {
                 <section key={index} className="article-section">
                   <h2 className="section-title">{section.title}</h2>
                   <div className="section-content">
-                    <p>{section.content}</p>
-
-                    {section.image && (
-                      <figure className="section-figure">
-                        <img
-                          src={section.image.src}
-                          alt={section.image.alt}
-                        />
-                        {section.image.caption && (
-                          <figcaption>{section.image.caption}</figcaption>
-                        )}
-                      </figure>
-                    )}
+                    <div dangerouslySetInnerHTML={{ __html: section.content }} />
+                    {renderSectionImages(section, index)}
                   </div>
                 </section>
               ))}
@@ -240,21 +407,21 @@ const ArticleView = () => {
             </div>
 
             <div className="article-navigation">
-              {article.previousArticle && (
-                <Link to={`/articles/${article.previousArticle.slug}`} className="prev-article">
+              {previousArticle && (
+                <Link to={`/articles/${previousArticle.slug}`} className="prev-article">
                   <FontAwesomeIcon icon={faChevronLeft} />
                   <div className="nav-article-info">
                     <span className="nav-label">Предишна статия</span>
-                    <span className="nav-title">{article.previousArticle.title}</span>
+                    <span className="nav-title">{previousArticle.title}</span>
                   </div>
                 </Link>
               )}
 
-              {article.nextArticle && (
-                <Link to={`/articles/${article.nextArticle.slug}`} className="next-article">
+              {nextArticle && (
+                <Link to={`/articles/${nextArticle.slug}`} className="next-article">
                   <div className="nav-article-info">
                     <span className="nav-label">Следваща статия</span>
-                    <span className="nav-title">{article.nextArticle.title}</span>
+                    <span className="nav-title">{nextArticle.title}</span>
                   </div>
                   <FontAwesomeIcon icon={faChevronRight} />
                 </Link>
@@ -264,7 +431,7 @@ const ArticleView = () => {
           </main>
 
           <aside className="article-sidebar">
-            <RecentArticles currentArticleId={article.id} />
+          <RecentArticles currentArticleId={article.id} allArticles={articles} />
           </aside>
         </div>
       </div>

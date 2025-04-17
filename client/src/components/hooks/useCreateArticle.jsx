@@ -713,7 +713,35 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       };
     });
   };
-
+  const uploadThumbnailFile = async (file) => {
+    try {
+      setIsUploading(true);
+      
+      // Използваме същата функция за качване на файлове
+      const thumbnailUrl = await uploadFileWithProgress(
+        file,
+        'articles/thumbnails',
+        (progress) => {
+          setUploadProgress(progress);
+        }
+      );
+      
+      // След качване, актуализираме стойността на thumbnail
+      onChangeHandler({ 
+        target: { 
+          name: "mainImage.thumbnail", 
+          value: thumbnailUrl // URL на качения файл
+        } 
+      });
+      
+      notify("Миниатюрата е успешно качена!");
+    } catch (error) {
+      console.error("Грешка при качване на миниатюра:", error);
+      notify("error", error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
   // Изпращане на формата
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -753,6 +781,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   return {
     values,
     setValues,
+    uploadThumbnailFile,
     errors,
     isUploading,
     uploadProgress,

@@ -11,15 +11,15 @@ export const articleServiceFactory = (token) => {
     },
     
     getArticleById: async (id) => {
-      return requester.get(`${apiUrl}/articles/${id}`);
+      return requester.get(`${apiUrl}/articles/single/${id}`);
     },
     
     getUserArticles: async (email) => {
       return requester.get(`${apiUrl}/articles/user-articles/${email}`);
     },
     
-    getAllArticles: async (page = 1, limit = 10) => {
-      return requester.get(`${apiUrl}/articles/all?page=${page}&limit=${limit}`);
+    getAllArticles: async () => {
+      return requester.get(`${apiUrl}/articles/all`);
     },
     
     updateArticle: async (articleData) => {
