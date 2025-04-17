@@ -38,6 +38,16 @@ const requester = async (method, url, data) => {
     handle401Error(); 
   
   }
+
+  if (response.status === 429) {
+    return {
+      error: true,
+      type: 'ARTICLE_LIMIT_REACHED',
+      status: 429,
+      message: 'Достигнат лимит на статии'
+    };
+  }
+  
   if (!response.ok) {
     if (response.status === 401) return window.location.replace('/sign-up');
     throw result;

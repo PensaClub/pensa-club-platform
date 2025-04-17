@@ -24,8 +24,11 @@ import { useLoading } from '../../contexts/LoadingContext';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { useArticleContext } from '../../contexts/ArticleContext';
 import { renderHtml } from '../articleUtils/article-utils';
+import { useArticleLimit } from '../../contexts/ArticleLimitContext';
 
 const ArticleView = () => {
+  const { showAssistant } = useArticleLimit();
+
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const [currentUrl, setCurrentUrl] = useState('');
@@ -141,9 +144,27 @@ const ArticleView = () => {
         if (articleId) {
           // Зареждаме пълната информация за статията по ID
           const foundArticle = await getArticleById(articleId);
+    
+          if (foundArticle.error && foundArticle.type === 'ARTICLE_LIMIT_REACHED') {
+            showAssistant();
+            
+            // По-надеждна логика за навигация
+            const isDirectAccess = !document.referrer || document.referrer.indexOf(window.location.host) === -1;
+            
+            if (isDirectAccess) {
+              // Ако е директен достъп (няма референт от нашия домейн)
+              navigate('/');
+            } else {
+              // Вместо navigate(-1), отиваме към списъка със статии
+              navigate('/articles');
+            }
+            
+            return; // Прекратяваме изпълнението тук
+          }
+    
           setArticle(foundArticle);
           
-          // Използваме кешираните статии за свързаните функционалности
+          // Останалата част от кода...
           if (articlesLoaded && articles.length > 0) {
             const { prev, next } = findAdjacentArticles(articles, foundArticle);
             setPreviousArticle(prev);
@@ -152,7 +173,6 @@ const ArticleView = () => {
             const related = findRelatedArticle(articles, foundArticle);
             setRelatedArticle(related);
           } else {
-            // Ако нямаме кеширани статии, използваме резултата от getAllArticles
             const { prev, next } = findAdjacentArticles(articles, foundArticle);
             setPreviousArticle(prev);
             setNextArticle(next);
@@ -168,13 +188,31 @@ const ArticleView = () => {
         }
       } catch (error) {
         console.error("Грешка при зареждане на статията:", error);
+      
+        // Проверяваме за специфична грешка за лимит на статии
+        if (error.message === 'ARTICLE_LIMIT_REACHED' || 
+            (error.response && error.response.status === 429)) {
+          
+          // Показваме асистента
+          showAssistant();
+          
+          // По-надеждна логика за навигация при грешка
+          const isArticlesList = location.pathname === '/articles';
+          
+          if (!isArticlesList) {
+            // Винаги навигираме към списъка със статии вместо назад,
+            // което е по-надеждно от navigate(-1)
+            navigate('/articles');
+          }
+          // Ако вече сме в списъка, просто оставаме там
+        }
       } finally {
         setIsLoading(false);
       }
     };
     
     loadArticle();
-  }, [slug, location.key]);
+  }, [slug, location.key,showAssistant, navigate]);
 
   useEffect(() => {
     if (article) {
