@@ -350,7 +350,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
           {renderHtml(article.summary)}
         </div>
 
-        <div className="article-meta">
+        <div className="article-meta-preview">
           <div className="meta-item">
             <FontAwesomeIcon icon={faUser} />
             <span>{article.author || "Автор"}</span>
@@ -392,7 +392,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
                                   sectionImages[activeSlides[index] || 0]?.caption.trim() !== '<p></p>'  ? (
                                   <div className="caption-content"
                                     dangerouslySetInnerHTML={{ __html: sectionImages[activeSlides[index] || 0].caption }} />
-                                ) : <div className="slider-caption-container" style={{backgroundColor:'initinal', display:'none'}}></div>}
+                                ) : null}
                               </div>
                             </div>
                           )}

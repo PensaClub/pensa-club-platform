@@ -16,6 +16,7 @@ import { useArticleContext } from "../../contexts/ArticleContext";
 import { createEditorState } from "../articleUtils/editor";
 import ScrollToTop from "../../ScrollToTop/ScrollToTop";
 import { ImageAltEditModal } from "./ImageAltEditModal/ImageAltEditModal";
+import VideoThumbnailGenerator from "./VideoThumbnailGenerator/VideoThumbnailGenerator";
 
 const ArticleCreateForm = () => {
     const { t } = useTranslation();
@@ -78,6 +79,7 @@ const ArticleCreateForm = () => {
         removeTag,
         mediaFiles,
         convertEditorToHtml,
+        uploadThumbnailFile,
         updateImageAlt,
     } = useCreateArticle(initialValues, createArticle);
 
@@ -111,7 +113,7 @@ const ArticleCreateForm = () => {
         setCurrentEditingImage({
             sectionIndex,
             imageIndex,
-            image: { ...image } 
+            image: { ...image }
         });
         setIsAltModalOpen(true);
     };
@@ -655,6 +657,16 @@ const ArticleCreateForm = () => {
                                                 </button>
                                             </div>
                                         </div>
+                                    )}
+                                    {/* Добавяме генератора на thumbnail за качени видео файлове */}
+                                    {values.mainImage.type === "video" && mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && (
+                                        <VideoThumbnailGenerator
+                                            videoFile={mediaFiles.mainImage[0]}
+                                            onThumbnailGenerated={(thumbnailFile) => {
+                                                // Качваме файла с използване на съществуващата функция за качване
+                                                uploadThumbnailFile(thumbnailFile);
+                                            }}
+                                        />
                                     )}
 
                                     {/* Предпреглед за външно видео от URL */}

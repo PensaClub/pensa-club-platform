@@ -49,14 +49,14 @@ const ClubCardPromo = () => {
     setIsHovering(false);
   };
 
-  // Премахваме и ефекта на огъване за изображението на картата
-  const handleCardImageMove = () => {
-    // Не правим нищо
-  };
+  // // Премахваме и ефекта на огъване за изображението на картата
+  // const handleCardImageMove = () => {
+  //   // Не правим нищо
+  // };
 
-  const resetCardImage = () => {
-    // Не правим нищо
-  };
+  // const resetCardImage = () => {
+  //   // Не правим нищо
+  // };
 
   return (
     <div 

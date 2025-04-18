@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarAlt,
@@ -15,7 +15,6 @@ import {
   faTelegram
 } from '@fortawesome/free-brands-svg-icons';
 import './articleView.css';
-import { getArticleBySlug } from '../data/articlesData';
 import RecentArticles from './RecentArticles/RecentArticles';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
 import { useTranslation } from 'react-i18next';
@@ -23,34 +22,202 @@ import ImageSlider from './ImageSlider/ImageSlider';
 import VideoPlayer from './VideoPlayer/VideoPlayer';
 import { useLoading } from '../../contexts/LoadingContext';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
+import { useArticleContext } from '../../contexts/ArticleContext';
+import { renderHtml } from '../articleUtils/article-utils';
+import { useArticleLimit } from '../../contexts/ArticleLimitContext';
+import Pagination from '../Pagination/Pagination';
 
 const ArticleView = () => {
+  const { showAssistant } = useArticleLimit();
+
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const [currentUrl, setCurrentUrl] = useState('');
+  const [relatedArticle, setRelatedArticle] = useState(null);
+  const [previousArticle, setPreviousArticle] = useState(null);
+  const [nextArticle, setNextArticle] = useState(null);
+  const [activeSectionSlides, setActiveSectionSlides] = useState({});
+  
+  // Добавяме state за пагинация
+  const [currentPage, setCurrentPage] = useState(1);
+  const sectionsPerPage = 3;
 
   const { setIsLoading } = useLoading();
   const { trackArticle, getViewCount } = useAnalytics();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { getAllArticles, articlesLoaded, getArticleById, articles } = useArticleContext();
+
+  // Функция за смяна на страница
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    // Скролваме към началото на статията при смяна на страница
+    window.scrollTo({
+      top: document.querySelector('.article-body').offsetTop - 100,
+      behavior: 'smooth'
+    });
+  };
+  
+  // Функция за изчисляване на общия брой страници
+  const calculateTotalPages = (sections) => {
+    if (!sections || sections.length === 0) return 1;
+    return Math.ceil(sections.length / sectionsPerPage);
+  };
+  
+  // Функция за вземане на секциите за текущата страница
+  const getCurrentPageSections = () => {
+    if (!article || !article.sections) return [];
+    
+    const startIndex = (currentPage - 1) * sectionsPerPage;
+    const endIndex = startIndex + sectionsPerPage;
+    return article.sections.slice(startIndex, endIndex);
+  };
+
+  const findAdjacentArticles = (allArticles, currentArticle) => {
+    if (!currentArticle || !allArticles || allArticles.length === 0) return { prev: null, next: null };
+ 
+    const sortedArticles = [...allArticles].sort((a, b) => 
+      new Date(b.publishDate) - new Date(a.publishDate)
+    );
+
+    const currentIndex = sortedArticles.findIndex(a => a.id === currentArticle.id);
+    
+    if (currentIndex === -1) return { prev: null, next: null };
+
+    const prev = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
+
+    const next = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
+    
+    return { prev, next };
+  };
+
+  const findRelatedArticle = (allArticles, currentArticle) => {
+    if (!currentArticle || !currentArticle.tags || !allArticles || allArticles.length <= 1) {
+      return null;
+    }
+
+    const calculateSimilarity = (article1, article2) => {
+      if (!article1.tags || !article2.tags) return 0;
+      
+      const commonTags = article1.tags.filter(tag => article2.tags.includes(tag));
+
+      if (commonTags.length === 0) return 0;
+
+      const similarity = commonTags.length / Math.sqrt(article1.tags.length * article2.tags.length);
+      
+      return similarity;
+    };
+
+    const articlesWithSimilarity = allArticles
+      .filter(a => a.id !== currentArticle.id)
+      .map(article => ({
+        article,
+        similarity: calculateSimilarity(currentArticle, article)
+      }))
+      .filter(item => item.similarity > 0); 
+
+    articlesWithSimilarity.sort((a, b) => b.similarity - a.similarity);
+    
+    return articlesWithSimilarity.length > 0 ? articlesWithSimilarity[0].article : null;
+  };
+
+  const handleSectionSlideChange = (sectionIndex, slideIndex) => {
+    setActiveSectionSlides(prev => ({
+      ...prev,
+      [sectionIndex]: slideIndex
+    }));
+  };
 
   useEffect(() => {
-    // Запазваме текущия URL за споделяне с абсолютен път
+    // При промяна на статията, връщаме пагинацията към първа страница
+    setCurrentPage(1);
+  }, [slug]);
+
+  useEffect(() => {
     setCurrentUrl(window.location.origin + window.location.pathname);
-
-    setIsLoading(true);
-    const foundArticle = getArticleBySlug(slug);
-
-    setTimeout(() => {
-      setArticle(foundArticle);
-      setIsLoading(false);
-
-      // Проследяване на посещението след зареждане на статията
-      if (foundArticle) {
-        trackArticle(foundArticle.id, foundArticle.title);
+  
+    const loadArticle = async () => {
+      setIsLoading(true);
+      
+      try {
+        let articleId = null;
+        
+        if (articlesLoaded && articles.length > 0) {
+          const cachedArticle = articles.find(a => a.slug === slug);
+          if (cachedArticle) {
+            articleId = cachedArticle.id;
+          }
+        }
+        
+        if (!articleId) {
+          const allArticles = await getAllArticles();
+          const foundArticle = allArticles.find(a => a.slug === slug);
+          if (foundArticle) {
+            articleId = foundArticle.id;
+          }
+        }
+        
+        if (articleId) {
+          const foundArticle = await getArticleById(articleId);
+    
+          if (foundArticle.error && foundArticle.type === 'ARTICLE_LIMIT_REACHED') {
+            showAssistant();
+            
+            const isDirectAccess = !document.referrer || document.referrer.indexOf(window.location.host) === -1;
+            
+            if (isDirectAccess) {
+              navigate('/');
+            } else {
+              navigate('/articles');
+            }
+            
+            return;
+          }
+    
+          setArticle(foundArticle);
+          
+          if (articlesLoaded && articles.length > 0) {
+            const { prev, next } = findAdjacentArticles(articles, foundArticle);
+            setPreviousArticle(prev);
+            setNextArticle(next);
+            
+            const related = findRelatedArticle(articles, foundArticle);
+            setRelatedArticle(related);
+          } else {
+            const { prev, next } = findAdjacentArticles(articles, foundArticle);
+            setPreviousArticle(prev);
+            setNextArticle(next);
+            
+            const related = findRelatedArticle(articles, foundArticle);
+            setRelatedArticle(related);
+          }
+          
+          trackArticle(foundArticle.id, foundArticle.title);
+        } else {
+          console.error("Статията не е намерена:", slug);
+        }
+      } catch (error) {
+        console.error("Грешка при зареждане на статията:", error);
+      
+        if (error.message === 'ARTICLE_LIMIT_REACHED' || 
+            (error.response && error.response.status === 429)) {
+          
+          showAssistant();
+          
+          const isArticlesList = location.pathname === '/articles';
+          
+          if (!isArticlesList) {
+            navigate('/articles');
+          }
+        }
+      } finally {
+        setIsLoading(false);
       }
-    }, 20);
-  }, [slug, setIsLoading]);
+    };
+    
+    loadArticle();
+  }, [slug, location.key, showAssistant, navigate]);
 
   useEffect(() => {
     if (article) {
@@ -61,14 +228,12 @@ const ArticleView = () => {
     }
   }, [article]);
 
-  // Директно споделяне чрез отваряне на нов прозорец със съответния URL
   const shareOnFacebook = (e) => {
     e.preventDefault();
     const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
     window.open(shareUrl, 'facebook-share', 'width=580,height=520');
   };
 
-  // Споделяне в Twitter
   const shareOnTwitter = (e) => {
     e.preventDefault();
     const text = article ? article.title : "";
@@ -76,14 +241,12 @@ const ArticleView = () => {
     window.open(shareUrl, 'twitter-share', 'width=550,height=420');
   };
 
-  // Споделяне в LinkedIn
   const shareOnLinkedIn = (e) => {
     e.preventDefault();
     const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`;
     window.open(shareUrl, 'linkedin-share', 'width=550,height=420');
   };
 
-  // Споделяне в Telegram
   const shareOnTelegram = (e) => {
     e.preventDefault();
     const text = article ? article.title : "";
@@ -113,7 +276,7 @@ const ArticleView = () => {
     } else if (article.mainImage.type === 'video') {
       return (
         <VideoPlayer
-          src={article.mainImage.sources[0]}
+          src={article.mainImage.videoUrl || article.mainImage.sources[0]}
           thumbnail={article.mainImage.thumbnail}
           alt={article.mainImage.alt}
           subtitles={article.mainImage.subtitles || []}
@@ -130,6 +293,56 @@ const ArticleView = () => {
     }
   };
 
+  const renderSectionImages = (section, sectionIndex) => {
+    if (!section.sectionImages || section.sectionImages.length === 0) {
+      if (section.image && section.image.src) {
+        return (
+          <figure className="section-figure">
+            <img src={section.image.src} alt={section.image.alt || `Изображение към ${section.title}`} />
+            {section.image.caption && (
+              <figcaption>{section.image.caption}</figcaption>
+            )}
+          </figure>
+        );
+      }
+      return null;
+    }
+
+    if (section.sectionImages.length === 1) {
+      const image = section.sectionImages[0];
+      return (
+        <figure className="section-figure">
+          <img src={image.src} alt={image.alt || `Изображение към ${section.title}`} />
+          {image.caption && (
+            <figcaption dangerouslySetInnerHTML={{ __html: image.caption }} />
+          )}
+        </figure>
+      );
+    }
+
+    return (
+      <div className="section-slider-container">
+        <ImageSlider 
+          images={section.sectionImages.map(img => img.src)}
+          alt={`Изображения към ${section.title}`}
+          onSlideChange={(slideIndex) => handleSectionSlideChange(sectionIndex, slideIndex)}
+        />
+        
+        {section.sectionImages[activeSectionSlides[sectionIndex] || 0]?.caption && (
+          <div className="single-slider-caption-container">
+            <div className="single-slide-caption">
+              <div className="single-caption-content-view" 
+                dangerouslySetInnerHTML={{ 
+                  __html: section.sectionImages[activeSectionSlides[sectionIndex] || 0].caption 
+                }} 
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="article-main">
       <div className="articles-hero-view">
@@ -137,15 +350,12 @@ const ArticleView = () => {
         </div>
       </div>
       <div className="article-container">
-
         <div className="article-layout">
           <main className="article-content">
-            <h1 className="article-title view">{article.title}</h1>
+            <h1 className="article-title-view view">{article.title}</h1>
 
-            <div className="article-summary">
-              {article.summary}
-            </div>
-            <div className="article-meta">
+            <div className="article-summary-view">{renderHtml(article.summary)}</div>
+            <div className="article-meta-view">
               <div className="meta-item">
                 <FontAwesomeIcon icon={faUser} />
                 <span>{article.author}</span>
@@ -157,39 +367,44 @@ const ArticleView = () => {
             </div>
             {renderMainMedia()}
 
-            {article.relatedArticle && (
+            {relatedArticle && (
               <div className="related-article-link">
-                <Link to={`/articles/${article.relatedArticle.slug}`}>
-                  Свързана статия: {article.relatedArticle.title}
+                <Link to={`/articles/${relatedArticle.slug}`}>
+                  Свързана статия: {relatedArticle.title}
                 </Link>
               </div>
             )}
 
             <div className="article-body">
-              {article.sections.map((section, index) => (
-                <section key={index} className="article-section">
-                  <h2 className="section-title">{section.title}</h2>
-                  <div className="section-content">
-                    <p>{section.content}</p>
-
-                    {section.image && (
-                      <figure className="section-figure">
-                        <img
-                          src={section.image.src}
-                          alt={section.image.alt}
-                        />
-                        {section.image.caption && (
-                          <figcaption>{section.image.caption}</figcaption>
-                        )}
-                      </figure>
-                    )}
-                  </div>
-                </section>
-              ))}
+              {/* Рендерираме само секциите за текущата страница */}
+              {getCurrentPageSections().map((section, index) => {
+                // Изчисляваме реалния индекс на секцията спрямо всички секции
+                const actualIndex = (currentPage - 1) * sectionsPerPage + index;
+                return (
+                  <section key={actualIndex} className="article-section">
+                    <h2 className="section-title">{section.title}</h2>
+                    <div className="section-content">
+                      <div dangerouslySetInnerHTML={{ __html: section.content }} />
+                      {renderSectionImages(section, actualIndex)}
+                    </div>
+                  </section>
+                );
+              })}
+              
+              {/* Показваме пагинацията само ако имаме повече от 3 секции */}
+              {article.sections && article.sections.length > sectionsPerPage && (
+                <div className="article-pagination-wrapper">
+                  <Pagination 
+                    currentPage={currentPage}
+                    totalPages={calculateTotalPages(article.sections)}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              )}
             </div>
 
             {article.tags && article.tags.length > 0 && (
-              <div className="article-tags">
+              <div className="article-tags-view">
                 {article.tags.map((tag, index) => (
                   <span key={index} className="article-tag">
                     {tag}
@@ -240,31 +455,30 @@ const ArticleView = () => {
             </div>
 
             <div className="article-navigation">
-              {article.previousArticle && (
-                <Link to={`/articles/${article.previousArticle.slug}`} className="prev-article">
+              {previousArticle && (
+                <Link to={`/articles/${previousArticle.slug}`} className="prev-article">
                   <FontAwesomeIcon icon={faChevronLeft} />
                   <div className="nav-article-info">
                     <span className="nav-label">Предишна статия</span>
-                    <span className="nav-title">{article.previousArticle.title}</span>
+                    <span className="nav-title">{previousArticle.title}</span>
                   </div>
                 </Link>
               )}
 
-              {article.nextArticle && (
-                <Link to={`/articles/${article.nextArticle.slug}`} className="next-article">
+              {nextArticle && (
+                <Link to={`/articles/${nextArticle.slug}`} className="next-article">
                   <div className="nav-article-info">
                     <span className="nav-label">Следваща статия</span>
-                    <span className="nav-title">{article.nextArticle.title}</span>
+                    <span className="nav-title">{nextArticle.title}</span>
                   </div>
                   <FontAwesomeIcon icon={faChevronRight} />
                 </Link>
               )}
             </div>
-
           </main>
 
           <aside className="article-sidebar">
-            <RecentArticles currentArticleId={article.id} />
+          <RecentArticles currentArticleId={article.id} allArticles={articles} />
           </aside>
         </div>
       </div>

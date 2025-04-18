@@ -209,7 +209,7 @@
   text-decoration: underline;
 }
 
-.article-title.view {
+.article-title-view.view {
   font-size: 2.2rem;
   font-weight: 700;
   line-height: 1.3;
@@ -217,16 +217,23 @@
   color: #333;
 }
 
-.article-title.view {
+.article-title-view.view {
   font-size: 2.2rem;
   /* text-align: center; */
 }
-
-.article-meta {
+.single-caption-content-view{
+  /* margin-top: 15px; */
+  padding: 1px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+.article-meta-view {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
   gap: 1.5rem;
-  margin: 0 2rem 1.5rem;
+  margin: 0 1rem 1rem;
   font-size: 0.9rem;
   color: #777;
 }
@@ -237,7 +244,7 @@
   gap: 0.5rem;
 }
 
-.article-summary {
+.article-summary-view {
   font-size: 1.15rem;
   line-height: 1.7;
   color: #555;
@@ -271,9 +278,16 @@
 }
 
 .section-content p {
-  margin-bottom: 1.2rem;
+  margin: 0.4rem;
+  font-size: var(--xxs-font-size);
 }
-
+.section-slider-container{
+  margin: 20px 0;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); */
+}
 .section-figure {
   margin: 1.5rem 0;
   border-radius: 10px;
@@ -295,12 +309,12 @@
   font-style: italic;
 }
 
-.article-tags {
+.article-tags-view {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin: 2rem;
-  padding-top: 1.5rem;
+  margin: 1rem;
+  padding-top: 1.6rem;
   border-top: 1px solid #eaeaea;
 }
 
@@ -465,7 +479,25 @@
     transform: rotate(360deg);
   }
 }
+.article-pagination-wrapper {
+  display: flex;
+  justify-content: center;
+}
 
+.article-section {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 /* Responsive design */
 @media (max-width: 768px) {
   .article-title.view {
@@ -474,9 +506,9 @@
   }
 
   .article-meta,
-  .article-summary,
+  .article-summary-view,
   .article-body,
-  .article-tags,
+  .article-tags-view,
   .article-social,
   .article-navigation {
     margin-left: 1.5rem;

@@ -282,7 +282,7 @@
 .info-content {
   display: inline-block;
   white-space: nowrap;
-  animation: scrolling 120s linear infinite;
+  animation: scrolling 100s linear infinite; 
 }
 
 .info-content span {
@@ -293,8 +293,8 @@
 }
 
 @keyframes scrolling {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* Премествa само с половин ширина */
 }
 
 /* Адаптивен дизайн - запазен */

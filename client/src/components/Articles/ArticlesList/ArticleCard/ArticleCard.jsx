@@ -21,17 +21,19 @@ export const ArticleCard = ({ article, featured = false }) => {
     return new Date(dateString).toLocaleDateString('bg-BG', options);
   };
 
-  // Проверява дали URL е външен (започва с http или https)
   const isExternalUrl = (url) => {
+   
+    if (url && url.includes('firebasestorage.googleapis.com')) {
+      return false;
+    }
     return url && (url.startsWith('http://') || url.startsWith('https://'));
   };
 
-  // Получава правилния URL източник (локален или външен)
   const getImageSource = () => {
     if (article.mainImage.type === 'video') {
       return article.mainImage.thumbnail;
     } else {
-      // Ако първият източник е URL, връща го директно, иначе третира като локален път
+  
       const source = article.mainImage.sources[0];
       return source;
     }

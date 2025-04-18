@@ -6,6 +6,7 @@
   max-height: 500px;
   padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
   overflow: hidden;
+  text-indent: initial;
 }
 
 .slider-main {

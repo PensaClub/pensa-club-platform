@@ -49,6 +49,7 @@ import { AnalyticsProvider } from './components/contexts/AnalyticsContext.jsx';
 import FooterWithLoading from './FooterWithLoading/FooterWithLoading.jsx';
 import { LoadingProvider } from './components/contexts/LoadingContext.jsx';
 import { ArticleProvider } from './components/contexts/ArticleContext.jsx';
+import { ArticleLimitProvider } from './components/contexts/ArticleLimitContext.jsx';
 
 function App() {
   const location = useLocation();
@@ -80,6 +81,7 @@ function App() {
                   <ArticleProvider>
                     <AnalyticsProvider>
                       <LoadingProvider>
+                      <ArticleLimitProvider>
                       {!isProfilePage &&<Header
                           additionalClasses={isProfilePage ? 'hide-header' : ''}
                         />}
@@ -138,6 +140,7 @@ function App() {
                           />
                         )}
                         {!isProfilePage &&<MenuCommunity />}
+                        </ArticleLimitProvider>
                       </LoadingProvider>
                     </AnalyticsProvider>
                   </ArticleProvider>

@@ -97,8 +97,12 @@ export const Hero = () => {
       {/* Scrolling Info Banner */}
       <div className="scrolling-info">
         <div className="info-content">
-          <span>{t("hero.slide-info")}</span>
-          <span>{t("hero.slide-info")}</span>
+        <span>{t("hero.slide-info")}</span>
+    <span>{t("hero.slide-info")}</span>
+    <span>{t("hero.slide-info")}</span>
+    <span>{t("hero.slide-info")}</span>
+    <span>{t("hero.slide-info")}</span>
+    {/* <span>{t("hero.slide-info")}</span> */}
         </div>
       </div>
     </div>
