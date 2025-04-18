@@ -1,21 +1,25 @@
+/* sectionQuickMenu.css */
 .left-quick-menu {
     position: fixed;
-    left: 460px;
+    left: calc(340px + 5%);
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     gap: 12px;
     z-index: 9999;
-    background-color: #425061; 
+    background: #f0f4f8;
+    box-shadow: 8px 8px 16px #cfd8e0, -8px -8px 16px #ffffff;
+    border: none;
     padding: 25px 15px;
     border-radius: 26px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .quick-btn {
-    width: 35px;
-    height: 35px;
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.quick-btn {
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     border: none;
     display: flex;
@@ -25,57 +29,111 @@
     transition: all 0.3s ease;
     color: white;
     font-size: 18px;
-  }
-  
-  .quick-btn:hover {
-    transform: scale(1.1);
-  }
-  
-  .add-btn {
-    background-color: #31c9bd; /* Зеленият цвят от снимката */
-    box-shadow: 0 0 10px rgba(49, 201, 189, 0.5);
-  }
-  
-  .ai-btn {
-    background-color: #54c5f8; /* Синият цвят от снимката */
-    box-shadow: 0 0 10px rgba(84, 197, 248, 0.5);
-  }
-  
-  .settings-btn, 
-  .circle-btn {
-    background-color: #2f3b4b;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
-  }
-  
-  .document-btn {
-    background-color: #2f3b4b;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
-  }
-  
-  .delete-btn {
-    background-color: #2f3b4b; /* Кошчето също е в тъмно сив/син цвят */
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
-  }
-.fa-trash svg{
-    color: white!important;
 }
-  .quick-btn:disabled {
+
+.quick-btn:hover {
+    transform: scale(1.1);
+}
+
+.add-btn {
+    background-color: #2f3b4b;
+
+    box-shadow: 0 0 10px rgba(49, 201, 189, 0.5);
+}
+
+.arrow-up-btn,
+.arrow-down-btn {
+    background-color: #54c5f8;
+    box-shadow: 0 0 10px rgba(84, 197, 248, 0.5);
+}
+
+.delete-btn {
+    background-color: #2f3b4b;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+.quick-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-  
-  /* Стил за активен бутон */
-  .quick-btn.active {
+}
+
+.quick-btn.active {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-  }
-  
-  /* Плавна анимация при появяване */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-10px) translateY(-50%); }
-    to { opacity: 1; transform: translateX(0) translateY(-50%); }
-  }
-  
-  .left-quick-menu {
+}
+
+.delete-btn,
+.add-btn svg {
+    color: white !important;
+}
+
+.delete-btn svg {
+    color: white !important;
+}
+
+.delete-btn:hover svg {
+    color: red !important;
+}
+
+.trash-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Плавна анимация при появяване */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px) translateY(-50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) translateY(-50%);
+    }
+}
+
+.left-quick-menu {
     animation: fadeIn 0.3s ease;
-  }
+}
+
+/* Медийни заявки за различни екрани */
+@media screen and (max-width: 1600px) {
+    .left-quick-menu {
+        left: calc(230px + 5%);
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    .left-quick-menu {
+        left: calc(230px + 5%);
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .left-quick-menu {
+        left: 250px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .left-quick-menu {
+        position: fixed;
+        top: 200px;
+        left: 12px;
+        /* right: 20px; */
+        transform: none;
+        flex-direction: column;
+        /* margin-bottom: 20px; */
+        align-self: flex-end;
+        animation: none;
+        padding: 12px 8px;
+
+    }
+
+    .quick-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+}
