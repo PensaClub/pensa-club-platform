@@ -36,7 +36,7 @@ const RecentArticles = ({ currentArticleId }) => {
       if (allArticles && allArticles.length > 0) {
         // Сортираме статиите по дата (от най-нови към най-стари)
         const sortedArticles = [...allArticles].sort((a, b) => 
-          new Date(b.publishDate) - new Date(a.publishDate)
+          new Date(b.updatedAt) - new Date(a.updatedAt)
         );
         
         // Филтрираме текущата статия и взимаме първите 5

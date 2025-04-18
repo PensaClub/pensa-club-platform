@@ -109,7 +109,7 @@ const ArticlesList = () => {
         
         // Сортираме статиите по дата (от най-нови към най-стари)
         const sortedArticles = transformedArticles.sort((a, b) => {
-          return new Date(b.publishDate) - new Date(a.publishDate);
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
         });
 
         processArticles(sortedArticles);
