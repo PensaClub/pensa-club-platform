@@ -12,7 +12,7 @@ export const SectionQuickMenu = ({
 }) => {
   return (
     <div className="left-quick-menu">
-      {/* Бутон за добавяне */}
+
       <button
         type="button"
         className="quick-btn add-btn"
@@ -21,8 +21,7 @@ export const SectionQuickMenu = ({
       >
         <FontAwesomeIcon icon={faPlus} />
       </button>
-      
-      {/* Стрелка нагоре */}
+
       <button
         type="button"
         className="quick-btn arrow-up-btn"
@@ -32,8 +31,7 @@ export const SectionQuickMenu = ({
       >
         <FontAwesomeIcon icon={faChevronUp} />
       </button>
-      
-      {/* Стрелка надолу */}
+
       <button
         type="button"
         className="quick-btn arrow-down-btn"
@@ -43,8 +41,7 @@ export const SectionQuickMenu = ({
       >
         <FontAwesomeIcon icon={faChevronDown} />
       </button>
-      
-      {/* Бутон за изтриване */}
+
       {totalSections > 1 && (
         <button
           type="button"

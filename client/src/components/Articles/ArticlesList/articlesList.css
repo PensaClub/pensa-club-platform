@@ -210,6 +210,120 @@
 .articles-main-content {
   flex-grow: 1;
 }
+.all-articles-header-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    margin-left: 3.5em;
+    margin-right: 3.5em;
+  }
+
+  .articles-search-list {
+    flex: 0 1 350px;
+  }
+
+  .articles-search-list .search-input-wrapper-list {
+    display: flex;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    background-color: white;
+  }
+
+  .articles-search-list input {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+    background: transparent;
+  }
+
+  .articles-search-list .search-button-list {
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .articles-search-list .search-button-list:hover {
+    background-color: rgba(84, 197, 248, 0.1);
+  }
+  
+  .articles-search-list .search-button-list svg {
+    width: 35px;
+    height: 35px;
+    opacity: 0.7;
+  }
+
+  .search-results-info-list {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .search-results-info-list p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .clear-search-list {
+    background: none;
+    border: none;
+    color: rgb(71, 185, 225);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-size: 14px;
+  }
+  
+  .clear-search-list:hover {
+    color: #333;
+  }
+  
+  /* Отзивчив дизайн */
+  @media (max-width: 992px) {
+    .all-articles-header-list {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+    
+    .articles-search-list {
+      width: 100%;
+      flex: 1;
+    }
+    .articles-search-list .search-button-list svg {
+        width: 30px;
+        height: 30px;
+        opacity: 0.7;
+      }
+  }
+  
+  @media (max-width: 768px) {
+    .all-articles-header-list {
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+    
+    .all-articles-title {
+      font-size: 1.4em;
+    }
+  }
 
 @media (max-width: 992px) {
   .articles-content-with-sidebar {
@@ -221,7 +335,7 @@
 
   .sidebar-promo {
     width: 100%;
-    order: -1; /* Показва промото най-отгоре при мобилни */
+    order: -1;
   }
 }
 @keyframes spin {

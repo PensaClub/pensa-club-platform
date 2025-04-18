@@ -186,61 +186,61 @@ const ArticleCreateForm = () => {
     };
     const moveSectionUp = (index) => {
         if (index <= 0) return;
-        
+
         // Създаваме ново копие на масива със секции
         const updatedSections = [...values.sections];
-        
+
         // Запазваме текущата секция и тази над нея
-        const currentSection = {...updatedSections[index]};
-        const prevSection = {...updatedSections[index - 1]};
-        
+        const currentSection = { ...updatedSections[index] };
+        const prevSection = { ...updatedSections[index - 1] };
+
         // Разменяме ги
         updatedSections[index - 1] = currentSection;
         updatedSections[index] = prevSection;
-        
+
         // Актуализираме order свойството
         updatedSections.forEach((section, idx) => {
-          section.order = idx + 1;
+            section.order = idx + 1;
         });
-        
+
         // Правим директен update на секциите в стейта
         onChangeHandler(null, true, { name: "sections", value: updatedSections });
-        
+
         // ВАЖНО! Разменяме медия файловете също
         swapSectionsMedia(index, index - 1);
-        
+
         // Актуализираме активната секция
         setActiveSection(index - 1);
-      };
-      
-      const moveSectionDown = (index) => {
+    };
+
+    const moveSectionDown = (index) => {
         if (index >= values.sections.length - 1) return;
-        
+
         // Създаваме ново копие на масива със секции
         const updatedSections = [...values.sections];
-        
+
         // Запазваме текущата секция и тази под нея
-        const currentSection = {...updatedSections[index]};
-        const nextSection = {...updatedSections[index + 1]};
-        
+        const currentSection = { ...updatedSections[index] };
+        const nextSection = { ...updatedSections[index + 1] };
+
         // Разменяме ги
         updatedSections[index + 1] = currentSection;
         updatedSections[index] = nextSection;
-        
+
         // Актуализираме order свойството
         updatedSections.forEach((section, idx) => {
-          section.order = idx + 1;
+            section.order = idx + 1;
         });
-        
+
         // Правим директен update на секциите в стейта
         onChangeHandler(null, true, { name: "sections", value: updatedSections });
-        
+
         // ВАЖНО! Разменяме медия файловете също
         swapSectionsMedia(index, index + 1);
-        
+
         // Актуализираме активната секция
         setActiveSection(index + 1);
-      };
+    };
     const handleTagAdd = (e) => {
         e.preventDefault();
         if (newTag.trim()) {
@@ -387,12 +387,12 @@ const ArticleCreateForm = () => {
         <div className="article-create-container">
             {/* Постоянно фиксирано меню - ще се показва винаги */}
             <SectionQuickMenu
-                 sectionIndex={activeSection !== null ? activeSection : 0} 
-                 totalSections={values.sections.length}
-                 onAddSection={addSection}
-                 onMoveUp={moveSectionUp}
-                 onMoveDown={moveSectionDown}
-                 onRemove={removeSection}
+                sectionIndex={activeSection !== null ? activeSection : 0}
+                totalSections={values.sections.length}
+                onAddSection={addSection}
+                onMoveUp={moveSectionUp}
+                onMoveDown={moveSectionDown}
+                onRemove={removeSection}
             />
             <h2 className="article-form-title">Създаване на нова статия</h2>
 

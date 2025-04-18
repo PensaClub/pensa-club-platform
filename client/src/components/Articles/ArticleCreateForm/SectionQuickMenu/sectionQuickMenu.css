@@ -1,4 +1,4 @@
-/* sectionQuickMenu.css */
+
 .left-quick-menu {
     position: fixed;
     left: calc(340px + 5%);
@@ -11,7 +11,7 @@
     background: #f0f4f8;
     box-shadow: 8px 8px 16px #cfd8e0, -8px -8px 16px #ffffff;
     border: none;
-    padding: 20px 15px;
+    padding: 20px 10px;
     border-radius: 15px;
     /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); */
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -80,7 +80,6 @@
     height: 20px;
 }
 
-/* Плавна анимация при появяване */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -97,7 +96,6 @@
     animation: fadeIn 0.3s ease;
 }
 
-/* Медийни заявки за различни екрани */
 @media screen and (max-width: 1600px) {
     .left-quick-menu {
         left: calc(230px + 5%);
