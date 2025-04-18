@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { notify } from "../../utils/notify";
@@ -27,7 +28,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       {
         title: "",
         content: createEditorState(),
-        image: [], // Използваме масив за съхранение на изображения
+        image: [], 
         order: 1, 
       },
     ],
@@ -39,7 +40,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   const [errors, setErrors] = useState({});
   const [mediaFiles, setMediaFiles] = useState({
     mainImage: [],
-    sectionImages: {} // Обектът ще съдържа структура от типа: {sectionIndex: [файл1, файл2, ...]}
+    sectionImages: {} 
   });
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -186,7 +187,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
           {
             title: "",
             content: createEditorState(),
-            image: [], // Инициализираме като празен масив
+            image: [], 
             order: newOrder
           }
         ]
@@ -742,7 +743,24 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       setIsUploading(false);
     }
   };
-  // Изпращане на формата
+
+const swapSectionsMedia = (index1, index2) => {
+  setMediaFiles(prev => {
+    const newSectionImages = { ...prev.sectionImages };
+
+    const temp1 = newSectionImages[index1];
+    const temp2 = newSectionImages[index2];
+
+    newSectionImages[index1] = temp2;
+    newSectionImages[index2] = temp1;
+    
+    return {
+      ...prev,
+      sectionImages: newSectionImages
+    };
+  });
+};
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -789,6 +807,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     updateImageAlt,
     onBlurHandler,
     imageUrl,
+    swapSectionsMedia,
     onSubmit,
     handleMainImageTypeChange,
     handleMainImageFiles,

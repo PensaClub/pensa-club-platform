@@ -56,8 +56,8 @@ export const validateArticleForm = (values, t) => {
   // Основни полета
   errors.title = validateArticleField("title", values.title, t);
   errors.slug = validateArticleField("slug", values.slug, t);
-  errors.author = validateArticleField("author", values.author, t);
-  errors.summary = validateArticleField("summary", values.summary, t);
+  // errors.author = validateArticleField("author", values.author, t);
+  // errors.summary = validateArticleField("summary", values.summary, t);
   
   // Секции
   values.sections.forEach((section, index) => {

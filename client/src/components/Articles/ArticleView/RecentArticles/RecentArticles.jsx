@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import './recentArticles.css';
 import { useArticleContext } from '../../../contexts/ArticleContext';
+import { filterArticles } from '../../articleUtils/search'; 
 
 const RecentArticles = ({ currentArticleId }) => {
   const [recentArticles, setRecentArticles] = useState([]);
@@ -19,15 +20,14 @@ const RecentArticles = ({ currentArticleId }) => {
 
   useEffect(() => {
     const loadArticles = async () => {
-      // Проверка дали вече имаме заредени статии в контекста
+
       let allArticles = articles;
       
       // Ако нямаме статии в контекста, опитваме да ги заредим
       if (!articlesLoaded || articles.length === 0) {
-        console.log('RecentArticles: Зареждаме статии от сървъра');
         allArticles = await getAllArticles();
       } else {
-        console.log('RecentArticles: Използваме статии от контекста:', articles.length);
+        // console.log('RecentArticles: Използваме статии от контекста:', articles.length);
       }
       
       // Запазваме статиите от сървъра в отделна променлива
@@ -36,15 +36,14 @@ const RecentArticles = ({ currentArticleId }) => {
       if (allArticles && allArticles.length > 0) {
         // Сортираме статиите по дата (от най-нови към най-стари)
         const sortedArticles = [...allArticles].sort((a, b) => 
-          new Date(b.publishDate) - new Date(a.publishDate)
+          new Date(b.updatedAt) - new Date(a.updatedAt)
         );
         
         // Филтрираме текущата статия и взимаме първите 5
         const recent = sortedArticles
           .filter(article => article.id !== Number(currentArticleId))
           .slice(0, 5);
-        
-        console.log(`RecentArticles: Намерени ${recent.length} скорошни статии`);
+
         setRecentArticles(recent);
       } else {
         console.warn('RecentArticles: Няма налични статии за показване');
@@ -70,16 +69,8 @@ const RecentArticles = ({ currentArticleId }) => {
       return;
     }
 
-    const searchLower = searchTerm.toLowerCase();
+    const results = filterArticles(serverArticles, searchTerm).slice(0, 5);
 
-    // Търсим САМО в статиите от сървъра
-    const results = serverArticles.filter(article =>
-      article.title.toLowerCase().includes(searchLower) ||
-      (article.summary && typeof article.summary === 'string' && article.summary.toLowerCase().includes(searchLower)) ||
-      (article.tags && article.tags.some(tag => tag.toLowerCase().includes(searchLower)))
-    ).slice(0, 5);
-
-    console.log(`Намерени ${results.length} резултата за търсене "${searchTerm}"`);
     setFilteredArticles(results);
     setIsSearching(true);
     setIsArticlesExpanded(true); 
