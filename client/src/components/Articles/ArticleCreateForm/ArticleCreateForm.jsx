@@ -17,12 +17,14 @@ import { createEditorState } from "../articleUtils/editor";
 import ScrollToTop from "../../ScrollToTop/ScrollToTop";
 import { ImageAltEditModal } from "./ImageAltEditModal/ImageAltEditModal";
 import VideoThumbnailGenerator from "./VideoThumbnailGenerator/VideoThumbnailGenerator";
-
+import { SectionQuickMenu } from "./SectionQuickMenu/SectionQuickMenu";
+// import { faChevronUp, faChevronDown, faTrash } from "@fortawesome/free-solid-svg-icons";
 const ArticleCreateForm = () => {
     const { t } = useTranslation();
     const { createArticle } = useArticleContext();
     const [previewMode, setPreviewMode] = useState(false);
     const [isAltModalOpen, setIsAltModalOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState(null);
     const [currentEditingImage, setCurrentEditingImage] = useState({
         sectionIndex: null,
         imageIndex: null,
@@ -74,6 +76,7 @@ const ArticleCreateForm = () => {
         removeSectionImage,
         addSection,
         removeSection,
+        swapSectionsMedia,
         addTag,
         updateImageInfo,
         removeTag,
@@ -181,7 +184,63 @@ const ArticleCreateForm = () => {
     const handleEditorBlur = (name, editorState) => {
         onBlurHandler(null, true, { name, value: editorState });
     };
-
+    const moveSectionUp = (index) => {
+        if (index <= 0) return;
+        
+        // Създаваме ново копие на масива със секции
+        const updatedSections = [...values.sections];
+        
+        // Запазваме текущата секция и тази над нея
+        const currentSection = {...updatedSections[index]};
+        const prevSection = {...updatedSections[index - 1]};
+        
+        // Разменяме ги
+        updatedSections[index - 1] = currentSection;
+        updatedSections[index] = prevSection;
+        
+        // Актуализираме order свойството
+        updatedSections.forEach((section, idx) => {
+          section.order = idx + 1;
+        });
+        
+        // Правим директен update на секциите в стейта
+        onChangeHandler(null, true, { name: "sections", value: updatedSections });
+        
+        // ВАЖНО! Разменяме медия файловете също
+        swapSectionsMedia(index, index - 1);
+        
+        // Актуализираме активната секция
+        setActiveSection(index - 1);
+      };
+      
+      const moveSectionDown = (index) => {
+        if (index >= values.sections.length - 1) return;
+        
+        // Създаваме ново копие на масива със секции
+        const updatedSections = [...values.sections];
+        
+        // Запазваме текущата секция и тази под нея
+        const currentSection = {...updatedSections[index]};
+        const nextSection = {...updatedSections[index + 1]};
+        
+        // Разменяме ги
+        updatedSections[index + 1] = currentSection;
+        updatedSections[index] = nextSection;
+        
+        // Актуализираме order свойството
+        updatedSections.forEach((section, idx) => {
+          section.order = idx + 1;
+        });
+        
+        // Правим директен update на секциите в стейта
+        onChangeHandler(null, true, { name: "sections", value: updatedSections });
+        
+        // ВАЖНО! Разменяме медия файловете също
+        swapSectionsMedia(index, index + 1);
+        
+        // Актуализираме активната секция
+        setActiveSection(index + 1);
+      };
     const handleTagAdd = (e) => {
         e.preventDefault();
         if (newTag.trim()) {
@@ -324,7 +383,17 @@ const ArticleCreateForm = () => {
     }
 
     return (
+
         <div className="article-create-container">
+            {/* Постоянно фиксирано меню - ще се показва винаги */}
+            <SectionQuickMenu
+                 sectionIndex={activeSection !== null ? activeSection : 0} 
+                 totalSections={values.sections.length}
+                 onAddSection={addSection}
+                 onMoveUp={moveSectionUp}
+                 onMoveDown={moveSectionDown}
+                 onRemove={removeSection}
+            />
             <h2 className="article-form-title">Създаване на нова статия</h2>
 
             <form className="article-form" onSubmit={onSubmit}>
@@ -714,7 +783,11 @@ const ArticleCreateForm = () => {
                         </div>
 
                         {values.sections.map((section, index) => (
-                            <div key={index} className="article-section-item">
+                            <div
+                                key={index}
+                                className={`article-section-item ${activeSection === index ? 'active-section' : ''}`}
+                                onClick={() => setActiveSection(index)}
+                            >
                                 <div className="section-header">
                                     <h4>Секция {index + 1}</h4>
                                     {values.sections.length > 1 && (

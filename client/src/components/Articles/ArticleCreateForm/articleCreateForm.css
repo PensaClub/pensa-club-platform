@@ -5,6 +5,7 @@
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     overflow: hidden;
+    
   }
     .article-create-container svg{
       color: var(--orange)!important;
@@ -1053,7 +1054,9 @@
 .alt-modal-editor-wrapper:last-of-type {
   border-bottom: none;
 }
-
+.article-section-item.active-section {
+  box-shadow: 0 0 0 2px #31c9bd;
+}
 @media (max-width: 768px) {
   .alt-modal-container {
     padding: 20px;
