@@ -1,4 +1,4 @@
-import { convertEditorToHtml } from './editor';
+import { convertEditorToHtml, createEditorState } from './editor';
 
 export const prepareArticleValuesForSubmit = (values) => {
   const prepared = { ...values };
@@ -66,4 +66,48 @@ export const prepareArticleValuesForSubmit = (values) => {
 export const renderHtml = (content) => {
   if (!content) return null;
   return <div dangerouslySetInnerHTML={{ __html: content }} />;
+};
+export const createEmptySection = (orderNumber) => {
+  return {
+    title: "",
+    content: createEditorState(),
+    image: [],
+    order: orderNumber
+  };
+};
+export const addSectionToArray = (sections) => {
+  const newOrder = sections.length + 1;
+  return [...sections, createEmptySection(newOrder)];
+};
+export const removeSectionByIndex = (sections, indexToRemove) => {
+  // Ако е последната секция, връщаме оригиналния масив
+  if (sections.length <= 1) return sections;
+  
+  const updatedSections = [...sections];
+  updatedSections.splice(indexToRemove, 1);
+  
+  // Преномериране на секциите
+  return updatedSections.map((section, idx) => ({
+    ...section,
+    order: idx + 1
+  }));
+};
+
+/**
+ * Размяна на медийни файлове между две секции
+ * @param {Object} sectionImages - Обект със секционни изображения
+ * @param {Number} index1 - Индекс на първата секция
+ * @param {Number} index2 - Индекс на втората секция
+ * @returns {Object} - Обновен обект със секционни изображения
+ */
+export const swapSectionMediaFiles = (sectionImages, index1, index2) => {
+  const newSectionImages = { ...sectionImages };
+  
+  const temp1 = newSectionImages[index1];
+  const temp2 = newSectionImages[index2];
+  
+  newSectionImages[index1] = temp2;
+  newSectionImages[index2] = temp1;
+  
+  return newSectionImages;
 };

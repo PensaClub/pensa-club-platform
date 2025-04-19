@@ -46,3 +46,7 @@ export const uploadFileWithProgress = (file, path, onProgress) => {
     );
   });
 };
+export const isValidImageUrl = (url) => {
+  if (!url) return false;
+  return !!url.match(/^(https?:\/\/)(.+)\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i);
+};

@@ -272,23 +272,42 @@ const ArticleView = () => {
 
   const renderMainMedia = () => {
     if (article.mainImage.type === 'slider' && article.mainImage.sources.length > 1) {
-      return <ImageSlider images={article.mainImage.sources} alt={article.mainImage.alt} />;
+      return (
+        <div className="main-media-container">
+          <ImageSlider images={article.mainImage.sources} alt={article.mainImage.alt} />
+          {article.mainImage.caption && (
+            <div className="main-image-caption-container">
+              <div className="main-image-caption" dangerouslySetInnerHTML={{ __html: article.mainImage.caption }} />
+            </div>
+          )}
+        </div>
+      );
     } else if (article.mainImage.type === 'video') {
       return (
-        <VideoPlayer
-          src={article.mainImage.videoUrl || article.mainImage.sources[0]}
-          thumbnail={article.mainImage.thumbnail}
-          alt={article.mainImage.alt}
-          subtitles={article.mainImage.subtitles || []}
-          downloadUrl={article.mainImage.downloadUrl}
-          allowDownload={article.mainImage.allowDownload}
-        />
+        <div className="main-media-container">
+          <VideoPlayer
+            src={article.mainImage.videoUrl || article.mainImage.sources[0]}
+            thumbnail={article.mainImage.thumbnail}
+            alt={article.mainImage.alt}
+            subtitles={article.mainImage.subtitles || []}
+            downloadUrl={article.mainImage.downloadUrl}
+            allowDownload={article.mainImage.allowDownload}
+          />
+          {article.mainImage.caption && (
+            <div className="main-image-caption-container">
+              <div className="main-image-caption" dangerouslySetInnerHTML={{ __html: article.mainImage.caption }} />
+            </div>
+          )}
+        </div>
       );
     } else {
       return (
-        <div className="article-main-image">
+        <figure className="article-main-image">
           <img src={article.mainImage.sources[0]} alt={article.mainImage.alt} />
-        </div>
+          {article.mainImage.caption && (
+            <figcaption dangerouslySetInnerHTML={{ __html: article.mainImage.caption }} />
+          )}
+        </figure>
       );
     }
   };
