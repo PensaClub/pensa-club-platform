@@ -5,9 +5,11 @@ import { notify } from "../../utils/notify";
 import { convertEditorToHtml, createEditorState } from "../Articles/articleUtils/editor";
 import { generateSlug } from "../Articles/articleUtils/formatting";
 import { isFormValid, validateArticleField, validateArticleForm } from "../Articles/articleUtils/validation";
-import { allowedImageTypes, allowedVideoTypes, compressImage, uploadFileWithProgress } from "../Articles/articleUtils/file-utils";
-import { prepareArticleValuesForSubmit } from "../Articles/articleUtils/article-utils";
+import { allowedImageTypes, allowedVideoTypes, compressImage, uploadFileWithProgress,isValidImageUrl } from "../Articles/articleUtils/file-utils";
+import { prepareArticleValuesForSubmit, addSectionToArray, removeSectionByIndex, createEmptySection,swapSectionMediaFiles } from "../Articles/articleUtils/article-utils";
+import { updateSectionImageAlt, updateSectionImageInfo } from "../Articles/articleUtils/image-utils";
 
+import { addTagToArray, removeTagByIndex } from "../Articles/articleUtils/tags";
 export const useCreateArticle = (initialValues, onSubmitHandler) => {
   const [values, setValues] = useState(initialValues || {
     title: "",
@@ -176,72 +178,44 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     }));
   };
 
-  // Добавяне на нова секция
+  // Дожавям нова секция
   const addSection = () => {
-    setValues(prev => {
-      const newOrder = prev.sections.length + 1;
-      return {
-        ...prev,
-        sections: [
-          ...prev.sections,
-          {
-            title: "",
-            content: createEditorState(),
-            image: [], 
-            order: newOrder
-          }
-        ]
-      };
-    });
+    setValues(prev => ({
+      ...prev,
+      sections: addSectionToArray(prev.sections)
+    }));
   };
 
-  // Премахване на секция
   const removeSection = (index) => {
     if (values.sections.length <= 1) {
       notify("articles.minimum_one_section");
       return;
     }
-
-    const updatedSections = [...values.sections];
-    updatedSections.splice(index, 1);
-
-    // Преномериране на order след изтриване
-    const renumberedSections = updatedSections.map((section, idx) => ({
-      ...section,
-      order: idx + 1
-    }));
-
+  
     setValues(prev => ({
       ...prev,
-      sections: renumberedSections
+      sections: removeSectionByIndex(prev.sections, index)
     }));
-
+  
     // Премахване от медийните файлове
     if (mediaFiles.sectionImages[index]) {
       const updatedMediaFiles = { ...mediaFiles };
       delete updatedMediaFiles.sectionImages[index];
       setMediaFiles(updatedMediaFiles);
     }
-  };
+  }
 
-  // Добавяне на таг
   const addTag = (tag) => {
-    if (!tag || values.tags.includes(tag)) return;
-
     setValues(prev => ({
       ...prev,
-      tags: [...prev.tags, tag]
+      tags: addTagToArray(prev.tags, tag)
     }));
   };
 
-  // Премахване на таг
   const removeTag = (index) => {
-    const updatedTags = [...values.tags];
-    updatedTags.splice(index, 1);
-
     setValues(prev => ({
       ...prev,
-      tags: updatedTags
+      tags: removeTagByIndex(prev.tags, index)
     }));
   };
 
@@ -366,23 +340,20 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     }));
   };
 
-  // Премахване на изображение от секция
   const removeSectionImage = (sectionIndex, imageIndex = 0) => {
-    // Обновяваме стойностите
+
     setValues(prev => {
       const updatedSections = [...prev.sections];
-      
-      // Проверяваме дали секцията съществува
+
       if (!updatedSections[sectionIndex]) {
         return prev;
       }
       
-      // Проверяваме дали image е масив
       if (Array.isArray(updatedSections[sectionIndex].image)) {
         // Премахваме изображението от масива
         updatedSections[sectionIndex].image.splice(imageIndex, 1);
       } else {
-        // Ако не е масив, го превръщаме в празен масив
+
         updatedSections[sectionIndex].image = [];
       }
       
@@ -392,7 +363,6 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       };
     });
 
-    // Обновяваме медийните файлове - премахваме файла, ако е file изображение
     setMediaFiles(prev => {
       const sectionFiles = prev.sectionImages[sectionIndex] || [];
       
@@ -413,7 +383,6 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     });
   };
 
-  // Валидация на формата преди изпращане
   const validateForm = () => {
     const newErrors = validateArticleForm(values, t);
     setErrors(newErrors);
@@ -511,10 +480,8 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
         sectionImagesUrlsBySection[sectionIndex] = sectionImagesUrls;
       }
 
-      // Обновяваме стойностите с URL адресите
       const updatedValues = { ...values };
 
-      // Обновяваме основното изображение/видео
       if (mainImageUrls.length > 0) {
         updatedValues.mainImage.sources = [
           ...mainImageUrls,
@@ -556,8 +523,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
             }
           }
         }
-        
-        // Обновяваме секцията
+
         updatedValues.sections[index].image = updatedImages;
       }
 
@@ -575,7 +541,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   const handleMainImageUrl = (url) => {
     if (!url) return false;
     
-    if (!url.match(/^(https?:\/\/)(.+)\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i)) {
+    if (!isValidImageUrl(url)) {
       notify("articles.invalid_image_url");
       return false;
     }
@@ -589,7 +555,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     }));
     
     notify("articles.image_url_added");
-    return true; // Връщаме true, ако всичко е наред
+    return true;
   };
 
   // Добавяне на URL адрес към секционно изображение
@@ -603,18 +569,15 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
 
     setValues(prev => {
       const updatedSections = [...prev.sections];
-      
-      // Проверяваме дали секцията съществува
+
       if (!updatedSections[sectionIndex]) {
         return prev;
       }
-      
-      // Инициализираме масива с изображения, ако не съществува
+
       if (!Array.isArray(updatedSections[sectionIndex].image)) {
         updatedSections[sectionIndex].image = [];
       }
       
-      // Добавяме новото изображение от URL
       updatedSections[sectionIndex].image.push({
         src: url,
         alt: createEditorState(),
@@ -646,79 +609,25 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       };
     });
   };
+
   const updateImageAlt = (sectionIndex, imageIndex, altText) => {
-    setValues(prev => {
-      const updatedSections = [...prev.sections];
-      
-      // Проверяваме дали секцията и изображението съществуват
-      if (!updatedSections[sectionIndex] || 
-          !Array.isArray(updatedSections[sectionIndex].image) ||
-          !updatedSections[sectionIndex].image[imageIndex]) {
-        return prev;
-      }
-      
-      // Обновяваме alt текста
-      const updatedImages = [...updatedSections[sectionIndex].image];
-      
-      // Ако altText е стринг, създаваме нов EditorState от него
-      // В противен случай използваме директно подадения EditorState
-      const newAlt = typeof altText === 'string' 
-        ? createEditorState(altText)
-        : altText;
-      
-      updatedImages[imageIndex] = {
-        ...updatedImages[imageIndex],
-        alt: newAlt
-      };
-      
-      updatedSections[sectionIndex].image = updatedImages;
-      
-      return {
-        ...prev,
-        sections: updatedSections
-      };
-    });
+    setValues(prev => ({
+      ...prev,
+      sections: updateSectionImageAlt(prev.sections, sectionIndex, imageIndex, altText)
+    }));
   };
-  // Добавете тази функция в хука useCreateArticle
+
   const updateImageInfo = (sectionIndex, imageIndex, altText, captionText) => {
-    setValues(prev => {
-      const updatedSections = [...prev.sections];
-      
-      // Проверяваме дали секцията и изображението съществуват
-      if (!updatedSections[sectionIndex] || 
-          !Array.isArray(updatedSections[sectionIndex].image) ||
-          !updatedSections[sectionIndex].image[imageIndex]) {
-        return prev;
-      }
-      
-      // Създаваме ново копие на масива с изображения
-      const updatedImages = [...updatedSections[sectionIndex].image];
-      
-      // Създаваме ново копие на обекта на изображението
-      updatedImages[imageIndex] = {
-        ...updatedImages[imageIndex],
-        alt: altText,
-        caption: captionText
-      };
-      
-      // Създаваме ново копие на секциите и присвояваме новия масив с изображения
-      updatedSections[sectionIndex] = {
-        ...updatedSections[sectionIndex],
-        image: updatedImages
-      };
-      
-      // Връщаме ново копие на цялото състояние
-      return {
-        ...prev,
-        sections: updatedSections
-      };
-    });
+    setValues(prev => ({
+      ...prev,
+      sections: updateSectionImageInfo(prev.sections, sectionIndex, imageIndex, altText, captionText)
+    }));
   };
+
   const uploadThumbnailFile = async (file) => {
     try {
       setIsUploading(true);
-      
-      // Използваме същата функция за качване на файлове
+ 
       const thumbnailUrl = await uploadFileWithProgress(
         file,
         'articles/thumbnails',
@@ -731,7 +640,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       onChangeHandler({ 
         target: { 
           name: "mainImage.thumbnail", 
-          value: thumbnailUrl // URL на качения файл
+          value: thumbnailUrl 
         } 
       });
       
@@ -744,22 +653,12 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     }
   };
 
-const swapSectionsMedia = (index1, index2) => {
-  setMediaFiles(prev => {
-    const newSectionImages = { ...prev.sectionImages };
-
-    const temp1 = newSectionImages[index1];
-    const temp2 = newSectionImages[index2];
-
-    newSectionImages[index1] = temp2;
-    newSectionImages[index2] = temp1;
-    
-    return {
+  const swapSectionsMedia = (index1, index2) => {
+    setMediaFiles(prev => ({
       ...prev,
-      sectionImages: newSectionImages
-    };
-  });
-};
+      sectionImages: swapSectionMediaFiles(prev.sectionImages, index1, index2)
+    }));
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
