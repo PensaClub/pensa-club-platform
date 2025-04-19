@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 
 export const ArticleCard = ({ article, featured = false }) => {
+  const { t } = useTranslation();
   const { getViewCount, loadArticleViewCounts } = useAnalytics();
 
   useEffect(() => {
@@ -73,19 +74,19 @@ export const ArticleCard = ({ article, featured = false }) => {
             {article.mainImage.type === 'slider' && article.mainImage.sources.length > 1 && (
               <div className="media-badge slider-badge">
                 <FontAwesomeIcon icon={faImages} />
-                <span>{article.mainImage.sources.length} снимки</span>
+                <span>{article.mainImage.sources.length} {t('articles.articleCard.photos')}</span>
               </div>
             )}
             {article.mainImage.type === 'video' && (
               <div className="media-badge video-badge">
                 <FontAwesomeIcon icon={faPlayCircle} />
-                <span>Видео</span>
+                <span>{t('articles.articleCard.video')}</span>
               </div>
             )}
             {isExternalResource && (
               <div className="media-badge external-badge">
                 <FontAwesomeIcon icon={faExternalLinkAlt} />
-                <span>Външен източник</span>
+                <span>{t('articles.articleCard.externalSource')}</span>
               </div>
             )}
           </Link>

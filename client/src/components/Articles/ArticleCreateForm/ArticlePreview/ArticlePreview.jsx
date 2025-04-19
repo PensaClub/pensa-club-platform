@@ -288,11 +288,11 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
                 ? convertEditorToHtml(img.alt)
                 : String(img.alt);
             } else {
-              altText = `Изображение към секция ${index + 1}`;
+              altText = t('articles.preview.sectionImage', { number: index + 1 });
             }
           } catch (error) {
             console.error(`Грешка при обработка на alt:`, error);
-            altText = `Изображение към секция ${index + 1}`;
+            altText = t('articles.preview.sectionImage', { number: index + 1 });
           }
 
           // Обработка на caption

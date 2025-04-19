@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 import './imageSlider.css';
 
 const ImageSlider = ({ images, alt, onSlideChange }) => {
+  const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   // Известяваме родителския компонент при промяна на слайда
   useEffect(() => {
     if (onSlideChange) {
@@ -36,17 +38,17 @@ const ImageSlider = ({ images, alt, onSlideChange }) => {
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
         <div className="slider-image-container">
-          <img 
-            src={images[currentIndex]} 
-            alt={`${alt} - слайд ${currentIndex + 1}`}
-            className="slider-image" 
+          <img
+            src={images[currentIndex]}
+            alt={`${alt} - ${t('articles.slider.slide')} ${currentIndex + 1}`}
+            className="slider-image"
           />
         </div>
         <button className="slider-arrow right" onClick={goToNext}>
           <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </div>
-      
+
       <div className="slider-dots">
         {images.map((_, slideIndex) => (
           <div

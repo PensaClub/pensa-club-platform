@@ -37,7 +37,7 @@ const ArticleView = () => {
   const [previousArticle, setPreviousArticle] = useState(null);
   const [nextArticle, setNextArticle] = useState(null);
   const [activeSectionSlides, setActiveSectionSlides] = useState({});
-  
+
   // Добавяме state за пагинация
   const [currentPage, setCurrentPage] = useState(1);
   const sectionsPerPage = 3;
@@ -58,17 +58,17 @@ const ArticleView = () => {
       behavior: 'smooth'
     });
   };
-  
+
   // Функция за изчисляване на общия брой страници
   const calculateTotalPages = (sections) => {
     if (!sections || sections.length === 0) return 1;
     return Math.ceil(sections.length / sectionsPerPage);
   };
-  
+
   // Функция за вземане на секциите за текущата страница
   const getCurrentPageSections = () => {
     if (!article || !article.sections) return [];
-    
+
     const startIndex = (currentPage - 1) * sectionsPerPage;
     const endIndex = startIndex + sectionsPerPage;
     return article.sections.slice(startIndex, endIndex);
@@ -76,19 +76,19 @@ const ArticleView = () => {
 
   const findAdjacentArticles = (allArticles, currentArticle) => {
     if (!currentArticle || !allArticles || allArticles.length === 0) return { prev: null, next: null };
- 
-    const sortedArticles = [...allArticles].sort((a, b) => 
+
+    const sortedArticles = [...allArticles].sort((a, b) =>
       new Date(b.publishDate) - new Date(a.publishDate)
     );
 
     const currentIndex = sortedArticles.findIndex(a => a.id === currentArticle.id);
-    
+
     if (currentIndex === -1) return { prev: null, next: null };
 
     const prev = currentIndex > 0 ? sortedArticles[currentIndex - 1] : null;
 
     const next = currentIndex < sortedArticles.length - 1 ? sortedArticles[currentIndex + 1] : null;
-    
+
     return { prev, next };
   };
 
@@ -99,13 +99,13 @@ const ArticleView = () => {
 
     const calculateSimilarity = (article1, article2) => {
       if (!article1.tags || !article2.tags) return 0;
-      
+
       const commonTags = article1.tags.filter(tag => article2.tags.includes(tag));
 
       if (commonTags.length === 0) return 0;
 
       const similarity = commonTags.length / Math.sqrt(article1.tags.length * article2.tags.length);
-      
+
       return similarity;
     };
 
@@ -115,10 +115,10 @@ const ArticleView = () => {
         article,
         similarity: calculateSimilarity(currentArticle, article)
       }))
-      .filter(item => item.similarity > 0); 
+      .filter(item => item.similarity > 0);
 
     articlesWithSimilarity.sort((a, b) => b.similarity - a.similarity);
-    
+
     return articlesWithSimilarity.length > 0 ? articlesWithSimilarity[0].article : null;
   };
 
@@ -136,20 +136,20 @@ const ArticleView = () => {
 
   useEffect(() => {
     setCurrentUrl(window.location.origin + window.location.pathname);
-  
+
     const loadArticle = async () => {
       setIsLoading(true);
-      
+
       try {
         let articleId = null;
-        
+
         if (articlesLoaded && articles.length > 0) {
           const cachedArticle = articles.find(a => a.slug === slug);
           if (cachedArticle) {
             articleId = cachedArticle.id;
           }
         }
-        
+
         if (!articleId) {
           const allArticles = await getAllArticles();
           const foundArticle = allArticles.find(a => a.slug === slug);
@@ -157,56 +157,56 @@ const ArticleView = () => {
             articleId = foundArticle.id;
           }
         }
-        
+
         if (articleId) {
           const foundArticle = await getArticleById(articleId);
-    
+
           if (foundArticle.error && foundArticle.type === 'ARTICLE_LIMIT_REACHED') {
             showAssistant();
-            
+
             const isDirectAccess = !document.referrer || document.referrer.indexOf(window.location.host) === -1;
-            
+
             if (isDirectAccess) {
               navigate('/');
             } else {
               navigate('/articles');
             }
-            
+
             return;
           }
-    
+
           setArticle(foundArticle);
-          
+
           if (articlesLoaded && articles.length > 0) {
             const { prev, next } = findAdjacentArticles(articles, foundArticle);
             setPreviousArticle(prev);
             setNextArticle(next);
-            
+
             const related = findRelatedArticle(articles, foundArticle);
             setRelatedArticle(related);
           } else {
             const { prev, next } = findAdjacentArticles(articles, foundArticle);
             setPreviousArticle(prev);
             setNextArticle(next);
-            
+
             const related = findRelatedArticle(articles, foundArticle);
             setRelatedArticle(related);
           }
-          
+
           trackArticle(foundArticle.id, foundArticle.title);
         } else {
           console.error("Статията не е намерена:", slug);
         }
       } catch (error) {
         console.error("Грешка при зареждане на статията:", error);
-      
-        if (error.message === 'ARTICLE_LIMIT_REACHED' || 
+
+        if (error.message === 'ARTICLE_LIMIT_REACHED' ||
             (error.response && error.response.status === 429)) {
-          
+
           showAssistant();
-          
+
           const isArticlesList = location.pathname === '/articles';
-          
+
           if (!isArticlesList) {
             navigate('/articles');
           }
@@ -215,7 +215,7 @@ const ArticleView = () => {
         setIsLoading(false);
       }
     };
-    
+
     loadArticle();
   }, [slug, location.key, showAssistant, navigate]);
 
@@ -257,9 +257,9 @@ const ArticleView = () => {
   if (!article) {
     return (
       <div className="article-not-found">
-        <h2>Статията не е намерена</h2>
+        <h2>{t('articles.articleView.articleNotFound')}</h2>
         <Link to="/articles" className="back-to-articles">
-          Към всички статии
+          {t('articles.articleView.backToArticles')}
         </Link>
       </div>
     );
@@ -317,7 +317,7 @@ const ArticleView = () => {
       if (section.image && section.image.src) {
         return (
           <figure className="section-figure">
-            <img src={section.image.src} alt={section.image.alt || `Изображение към ${section.title}`} />
+            <img src={section.image.src} alt={section.image.alt || t('articles.articleView.imageFor', { title: section.title })} />
             {section.image.caption && (
               <figcaption>{section.image.caption}</figcaption>
             )}
@@ -331,7 +331,7 @@ const ArticleView = () => {
       const image = section.sectionImages[0];
       return (
         <figure className="section-figure">
-          <img src={image.src} alt={image.alt || `Изображение към ${section.title}`} />
+          <img src={image.src} alt={image.alt || t('articles.articleView.imageFor', { title: section.title })} />
           {image.caption && (
             <figcaption dangerouslySetInnerHTML={{ __html: image.caption }} />
           )}
@@ -341,19 +341,19 @@ const ArticleView = () => {
 
     return (
       <div className="section-slider-container">
-        <ImageSlider 
+        <ImageSlider
           images={section.sectionImages.map(img => img.src)}
-          alt={`Изображения към ${section.title}`}
+          alt={`${t('articles.articleView.imagesFor')} ${section.title}`}
           onSlideChange={(slideIndex) => handleSectionSlideChange(sectionIndex, slideIndex)}
         />
-        
+
         {section.sectionImages[activeSectionSlides[sectionIndex] || 0]?.caption && (
           <div className="single-slider-caption-container">
             <div className="single-slide-caption">
-              <div className="single-caption-content-view" 
-                dangerouslySetInnerHTML={{ 
-                  __html: section.sectionImages[activeSectionSlides[sectionIndex] || 0].caption 
-                }} 
+              <div className="single-caption-content-view"
+                dangerouslySetInnerHTML={{
+                  __html: section.sectionImages[activeSectionSlides[sectionIndex] || 0].caption
+                }}
               />
             </div>
           </div>
@@ -389,7 +389,7 @@ const ArticleView = () => {
             {relatedArticle && (
               <div className="related-article-link">
                 <Link to={`/articles/${relatedArticle.slug}`}>
-                  Свързана статия: {relatedArticle.title}
+                  {t('articles.articleView.relatedArticle')}: {relatedArticle.title}
                 </Link>
               </div>
             )}
@@ -409,11 +409,11 @@ const ArticleView = () => {
                   </section>
                 );
               })}
-              
+
               {/* Показваме пагинацията само ако имаме повече от 3 секции */}
               {article.sections && article.sections.length > sectionsPerPage && (
                 <div className="article-pagination-wrapper">
-                  <Pagination 
+                  <Pagination
                     currentPage={currentPage}
                     totalPages={calculateTotalPages(article.sections)}
                     onPageChange={handlePageChange}
@@ -432,33 +432,33 @@ const ArticleView = () => {
               </div>
             )}
             <div className="article-social">
-              <div className="social-text">Споделете:</div>
+              <div className="social-text">{t('articles.articleView.share')}:</div>
               <div className="social-icons">
                 <button
                   className="social-icon facebook"
                   onClick={shareOnFacebook}
-                  aria-label="Споделете във Facebook"
+                  aria-label={t('articles.articleView.shareOnFacebook')}
                 >
                   <FontAwesomeIcon icon={faFacebookF} />
                 </button>
                 <button
                   className="social-icon twitter"
                   onClick={shareOnTwitter}
-                  aria-label="Споделете в Twitter"
+                  aria-label={t('articles.articleView.shareOnTwitter')}
                 >
                   <FontAwesomeIcon icon={faTwitter} />
                 </button>
                 <button
                   className="social-icon linkedin"
                   onClick={shareOnLinkedIn}
-                  aria-label="Споделете в LinkedIn"
+                  aria-label={t('articles.articleView.shareOnLinkedIn')}
                 >
                   <FontAwesomeIcon icon={faLinkedinIn} />
                 </button>
                 <button
                   className="social-icon telegram"
                   onClick={shareOnTelegram}
-                  aria-label="Споделете в Telegram"
+                  aria-label={t('articles.articleView.shareOnTelegram')}
                 >
                   <FontAwesomeIcon icon={faTelegram} />
                 </button>
@@ -478,7 +478,7 @@ const ArticleView = () => {
                 <Link to={`/articles/${previousArticle.slug}`} className="prev-article">
                   <FontAwesomeIcon icon={faChevronLeft} />
                   <div className="nav-article-info">
-                    <span className="nav-label">Предишна статия</span>
+                    <span className="nav-label">{t('articles.articleView.previousArticle')}</span>
                     <span className="nav-title">{previousArticle.title}</span>
                   </div>
                 </Link>
@@ -487,7 +487,7 @@ const ArticleView = () => {
               {nextArticle && (
                 <Link to={`/articles/${nextArticle.slug}`} className="next-article">
                   <div className="nav-article-info">
-                    <span className="nav-label">Следваща статия</span>
+                    <span className="nav-label">{t('articles.articleView.nextArticle')}</span>
                     <span className="nav-title">{nextArticle.title}</span>
                   </div>
                   <FontAwesomeIcon icon={faChevronRight} />

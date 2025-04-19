@@ -638,18 +638,7 @@
   },
   "articles":{
     "views": "Прегледи",
-    "articlesList": {
-        "ourArticles": "Нашите статии",
-        "infoDescription": "Информация, съвети и полезни ресурси за дигитална грамотност",
-        "latestArticles": "Последни статии",
-        "noArticles": "Няма намерени статии.",
-        "allArticles": "Всички статии",
-        "searchPlaceholder": "Търсене в публикациите...",
-        "searchFor": "Резултати за",
-        "clearSearch": "Изчисти",
-        "noSearchResults": "Няма намерени статии за \"{{term}}\"",
-        "noAvailableArticles": "Няма налични статии"
-    },
+    "slide": "слайд",
     "preview": {
         "backToEditing": "Назад към редактирането",
         "noMainImage": "Няма избрано основно изображение",
@@ -680,6 +669,18 @@
         "moveUp": "Премести нагоре",
         "moveDown": "Премести надолу",
         "removeSection": "Премахни секцията"
+    },
+    "thumbnailGenerator": {
+        "title": "Създайте миниатюра от видеото",
+        "processing": "Обработка...",
+        "useThisFrame": "Използвай този кадър",
+        "selectedThumbnail": "Избран кадър за миниатюра:",
+        "readyToUpload": "Миниатюрата е готова за качване",
+        "howTo": "Как да изберете миниатюра:",
+        "step1": "Пуснете видеото или използвайте плъзгача, за да намерите подходящ кадър",
+        "step2": "Кликнете паузa, когато стигнете до момент, който искате да използвате",
+        "step3": "Натиснете бутона \"Използвай този кадър\"",
+        "step4": "Готово! Кадърът ще бъде използван като миниатюра на видеото"
     },
     "createForm": {
         "createNewArticle": "Създаване на нова статия",
@@ -758,6 +759,78 @@
         "videoAddedSuccess": "Външното видео е добавено успешно.",
 
         "or": "или"
+    },
+    "articleCard": {
+        "photos": "снимки",
+        "video": "видео",
+        "externalSource": "външен източник"
+    },
+    "articleSlider": {
+        "previousSlide": "Предишен слайд",
+        "nextSlide": "Следващ слайд"
+    },
+    "articleClubCard": {
+        "exclusive": "Ексклузивно",
+        "discountsPrefix": "Отстъпки в над",
+        "discountsSuffix": "обекта",
+        "exclusiveTrainingPrefix": "Достъп до",
+        "exclusiveTrainingHighlight": "ексклузивни",
+        "exclusiveTrainingSuffix": "обучения",
+        "communityPrefix": "Част от",
+        "communityHighlight": "общност",
+        "communitySuffix": "от съмишленици",
+        "joinUs": "Стани част от нас"
+    },
+    "articlesList": {
+        "ourArticles": "Нашите статии",
+        "infoDescription": "Информация, съвети и полезни ресурси за дигитална грамотност",
+        "latestArticles": "Последни статии",
+        "noArticles": "Няма намерени статии.",
+        "allArticles": "Всички статии",
+        "searchPlaceholder": "Търсене в публикациите...",
+        "searchFor": "Резултати за",
+        "clearSearch": "Изчисти",
+        "noSearchResults": "Няма намерени статии за \"{{term}}\"",
+        "noAvailableArticles": "Няма налични статии"
+    },
+    "recentArticles": {
+        "search": "Търсене",
+        "searchPlaceholder": "Търсене в публикациите...",
+        "searchResults": "Резултати от търсене",
+        "latestPosts": "Последни публикации",
+        "clear": "Изчисти",
+        "loading": "Зареждане на последни публикации...",
+        "category": "ДИГИТАЛНА ГРАМОТНОСТ",
+        "noResults": "Няма намерени резултати за \"{{searchTerm}}\""
+    },
+    "articleVideoPlayer": {
+        "back10Seconds": "Назад 10 секунди",
+        "forward10Seconds": "Напред 10 секунди",
+        "pause": "Пауза",
+        "play": "Пусни",
+        "mute": "Заглуши",
+        "unmute": "Пусни звука",
+        "subtitles": "Субтитри",
+        "settings": "Настройки",
+        "fullScreen": "На цял екран",
+        "download": "Изтегли",
+        "speed": "Скорост",
+        "subtitlesOff": "Изключени",
+        "youtubePlayer": "YouTube видео плейър"
+    },
+    "articleView": {
+        "articleNotFound": "Статията не е намерена",
+        "backToArticles": "Към всички статии",
+        "imageFor": "Изображение към {{title}}",
+        "imagesFor": "Изображения към",
+        "share": "Споделете",
+        "shareOnFacebook": "Споделете във Facebook",
+        "shareOnTwitter": "Споделете в Twitter",
+        "shareOnLinkedIn": "Споделете в LinkedIn",
+        "shareOnTelegram": "Споделете в Telegram",
+        "previousArticle": "Предишна статия",
+        "nextArticle": "Следваща статия",
+        "relatedArticle": "Свързана статия"
     }
   }
 }

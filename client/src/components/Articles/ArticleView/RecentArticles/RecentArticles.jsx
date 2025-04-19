@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import './recentArticles.css';
 import { useArticleContext } from '../../../contexts/ArticleContext';
-import { filterArticles } from '../../articleUtils/search'; 
+import { filterArticles } from '../../articleUtils/search';
+import { useTranslation } from 'react-i18next';
 
 const RecentArticles = ({ currentArticleId }) => {
+  const { t } = useTranslation('articles');
   const [recentArticles, setRecentArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,23 +24,23 @@ const RecentArticles = ({ currentArticleId }) => {
     const loadArticles = async () => {
 
       let allArticles = articles;
-      
+
       // Ако нямаме статии в контекста, опитваме да ги заредим
       if (!articlesLoaded || articles.length === 0) {
         allArticles = await getAllArticles();
       } else {
         // console.log('RecentArticles: Използваме статии от контекста:', articles.length);
       }
-      
+
       // Запазваме статиите от сървъра в отделна променлива
       setServerArticles(allArticles || []);
-      
+
       if (allArticles && allArticles.length > 0) {
         // Сортираме статиите по дата (от най-нови към най-стари)
-        const sortedArticles = [...allArticles].sort((a, b) => 
+        const sortedArticles = [...allArticles].sort((a, b) =>
           new Date(b.updatedAt) - new Date(a.updatedAt)
         );
-        
+
         // Филтрираме текущата статия и взимаме първите 5
         const recent = sortedArticles
           .filter(article => article.id !== Number(currentArticleId))
@@ -49,7 +51,7 @@ const RecentArticles = ({ currentArticleId }) => {
         console.warn('RecentArticles: Няма налични статии за показване');
       }
     };
-    
+
     loadArticles();
   }, [currentArticleId, articles, articlesLoaded, getAllArticles]);
 
@@ -73,7 +75,7 @@ const RecentArticles = ({ currentArticleId }) => {
 
     setFilteredArticles(results);
     setIsSearching(true);
-    setIsArticlesExpanded(true); 
+    setIsArticlesExpanded(true);
   };
 
   const clearSearch = () => {
@@ -88,7 +90,7 @@ const RecentArticles = ({ currentArticleId }) => {
           className="widget-header"
           onClick={() => setIsSearchExpanded(!isSearchExpanded)}
         >
-          <h3>Търсене</h3>
+          <h3>{t('recentArticles.search')}</h3>
           <FontAwesomeIcon icon={isSearchExpanded ? faMinus : faPlus} />
         </div>
 
@@ -98,7 +100,7 @@ const RecentArticles = ({ currentArticleId }) => {
               <div className="search-input-wrapper">
                 <input
                   type="text"
-                  placeholder="Търсене в публикациите..."
+                  placeholder={t('recentArticles.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -123,10 +125,10 @@ const RecentArticles = ({ currentArticleId }) => {
           onClick={() => setIsArticlesExpanded(!isArticlesExpanded)}
         >
           <h3>
-            {isSearching ? 'Резултати от търсене' : 'Последни публикации'}
+            {isSearching ? t('recentArticles.searchResults') : t('recentArticles.latestPosts')}
             {isSearching && (
               <button className="clear-search" onClick={clearSearch}>
-                Изчисти
+                {t('recentArticles.clear')}
               </button>
             )}
           </h3>
@@ -137,10 +139,10 @@ const RecentArticles = ({ currentArticleId }) => {
           <div className="recent-articles-list">
             {recentArticles.length === 0 && !isSearching && (
               <div className="no-results">
-                <p>Зареждане на последни публикации...</p>
+                <p>{t('recentArticles.loading')}</p>
               </div>
             )}
-            
+
             {(isSearching ? filteredArticles : recentArticles).map(article => (
               <div className="recent-article-item" key={article.id}>
                 <Link to={`/articles/${article.slug}`} className="recent-article-link">
@@ -156,7 +158,7 @@ const RecentArticles = ({ currentArticleId }) => {
                     <div className="article-category">
                       {article.tags && article.tags.length > 0 ?
                         article.tags[0].toUpperCase() :
-                        'ДИГИТАЛНА ГРАМОТНОСТ'}
+                        t('recentArticles.category')}
                     </div>
                     <h4 className="recent-article-title">{article.title}</h4>
                   </div>
@@ -166,7 +168,7 @@ const RecentArticles = ({ currentArticleId }) => {
 
             {isSearching && filteredArticles.length === 0 && (
               <div className="no-results">
-                <p>Няма намерени резултати за "{searchTerm}"</p>
+                <p>{t('recentArticles.noResults', { searchTerm })}</p>
               </div>
             )}
           </div>
