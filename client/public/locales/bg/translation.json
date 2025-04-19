@@ -637,6 +637,127 @@
     "form_contains_errors": "Формата съдържа грешки. Моля, поправете ги и опитайте отново!"
   },
   "articles":{
-    "views": "Прегледи"
+    "views": "Прегледи",
+    "articlesList": {
+        "ourArticles": "Нашите статии",
+        "infoDescription": "Информация, съвети и полезни ресурси за дигитална грамотност",
+        "latestArticles": "Последни статии",
+        "noArticles": "Няма намерени статии.",
+        "allArticles": "Всички статии",
+        "searchPlaceholder": "Търсене в публикациите...",
+        "searchFor": "Резултати за",
+        "clearSearch": "Изчисти",
+        "noSearchResults": "Няма намерени статии за \"{{term}}\"",
+        "noAvailableArticles": "Няма налични статии"
+    },
+    "preview": {
+        "backToEditing": "Назад към редактирането",
+        "noMainImage": "Няма избрано основно изображение",
+        "temporaryImage": "Временно изображение",
+        "preview": "ПРЕДПРЕГЛЕД",
+        "articlePreview": "Предпреглед на статията",
+        "articleTitle": "Заглавие на статията",
+        "author": "Автор",
+        "sectionTitle": "Заглавие на секция {{number}}",
+        "sectionImage": "Изображение към секция {{number}}",
+        "noContent": "Няма съдържание",
+        "sliderImage": "Слайдер изображение",
+        "videoPreview": "Видео превю",
+        "mainImage": "Основно изображение"
+    },
+    "imageEdit": {
+        "title": "Редактиране на информация за изображението",
+        "editAlt": "Редактиране на изображение",
+        "altLabel": "Алтернативен текст :",
+        "captionLabel": "Надпис :",
+        "altHelpText": "Добрият алтернативен текст описва съдържанието на изображението за потребители, които не могат да го видят.",
+        "captionHelpText": "Надписът се показва под изображението и дава допълнителен контекст за всички потребители.",
+        "cancel": "Отказ",
+        "save": "Запази"
+    },
+    "sectionMenu": {
+        "addSection": "Добави нова секция",
+        "moveUp": "Премести нагоре",
+        "moveDown": "Премести надолу",
+        "removeSection": "Премахни секцията"
+    },
+    "createForm": {
+        "createNewArticle": "Създаване на нова статия",
+        "basicInfo": "Основна информация",
+        "mainMedia": "Основна медия",
+        "content": "Съдържание на статията",
+        "sections": "Секции",
+        "tags": "Тагове",
+
+        "title": "Заглавие",
+        "slug": "URL идентификатор",
+        "author": "Автор",
+        "publishDate": "Дата на публикуване",
+        "summary": "Резюме",
+        "contentSimple": "Съдържание",
+        "section": "Секция",
+
+        "singleImage": "Единично изображение",
+        "slider": "Слайдер",
+        "video": "Видео",
+        "videoFile": "Видео файл",
+        "urlVideo": "Видео URL",
+        "externalVideo": "Външно видео",
+
+        "altText": "Алтернативен текст",
+        "videoTitle": "Заглавие на видеото",
+        "thumbnail": "Миниатюра за видеото",
+        "sectionImages": "Изображения към секцията",
+
+        "titlePlaceholder": "Въведете заглавие на статията",
+        "slugPlaceholder": "пример-за-url-идентификатор",
+        "authorPlaceholder": "Име на автора",
+        "summaryPlaceholder": "Кратко резюме на статията",
+        "sectionTitlePlaceholder": "Заглавие на секцията",
+        "sectionContentPlaceholder": "Въведете съдържание на секцията",
+        "imageDescriptionPlaceholder": "Описание на изображението",
+        "imageUrlPlaceholder": "Въведете URL на изображение",
+        "videoUrlPlaceholder": "Въведете YouTube/Vimeo URL",
+        "videoTitlePlaceholder": "Заглавие или описание на видеото",
+        "videoThumbnailPlaceholder": "URL адрес на миниатюрата на видеото (опционално)",
+        "tagPlaceholder": "Въведете таг и натиснете Enter",
+
+        "addBtn": "Добави",
+        "removeBtn": "Премахни",
+        "previewBtn": "Предпреглед",
+        "saveBtn": "Запази",
+        "addSectionBtn": "Добави секция",
+        "uploadMainImageBtn": "Качи основно изображение",
+        "uploadSliderImagesBtn": "Качи изображения за слайдера",
+        "uploadVideoBtn": "Качи видео файл",
+        "uploadFile": "Качване на файл",
+
+        "dragDropFile": "Плъзнете файлове тук или кликнете за избор",
+        "dragDropVideo": "Плъзнете видео файл тук или кликнете за избор",
+        "chooseImage": "Избери изображение",
+        "addViaUrl": "Добавяне чрез URL",
+        "chooseVideoMethod": "Изберете начин на добавяне на видео",
+        "supportedFormats": "Поддържани формати: MP4, WebM, OGG. Максимален размер: 100 MB",
+        "unnamedFile": "Безименен файл",
+        "unknownSize": "неизвестен размер",
+        "size": "Размер:",
+        "uploaded": "качено",
+
+        "preview": "Предпреглед {{index}}",
+        "urlImage": "URL изображение {{index}}",
+        "expandedView": "Разширен изглед",
+        "editInfo": "Редактирай информация",
+        "removeImage": "Премахни изображението",
+        "sectionWithNumber": "Секция {{number}}",
+
+        "browserNotSupport": "Вашият браузър не поддържа HTML5 видео.",
+        "requiredField": "Полето е задължително!",
+        "invalidVideoFormat": "Моля, качете видео файл в MP4, WebM или OGG формат.",
+        "videoSizeExceeded": "Видео файлът надвишава максималния размер от 100MB.",
+        "invalidVideoUrl": "Моля, въведете валиден YouTube или Vimeo URL адрес.",
+        "videoAddedSuccess": "Външното видео е добавено успешно.",
+
+        "or": "или"
+    }
   }
 }

@@ -639,6 +639,127 @@
     "form_contains_errors": "The form contains errors. Please correct them and try again."
   },
   "articles":{
-    "views": "Views"
+    "views": "Views",
+    "articlesList": {
+        "ourArticles": "Our Articles",
+        "infoDescription": "Information, tips and useful resources for digital literacy",
+        "latestArticles": "Latest articles",
+        "noArticles": "No articles found.",
+        "allArticles": "All articles",
+        "searchPlaceholder": "Search in publications...",
+        "searchFor": "Results for",
+        "clearSearch": "Clear",
+        "noSearchResults": "No articles found for \"{{term}}\"",
+        "noAvailableArticles": "No articles available."
+    },
+    "preview": {
+        "backToEditing": "Back to editing",
+        "noMainImage": "No main image selected",
+        "temporaryImage": "Temporary image",
+        "preview": "PREVIEW",
+        "articlePreview": "Article Preview",
+        "articleTitle": "Article Title",
+        "author": "Author",
+        "sectionTitle": "Section Title {{number}}",
+        "sectionImage": "Image for section {{number}}",
+        "noContent": "No content",
+        "sliderImage": "Slider image",
+        "videoPreview": "Video preview",
+        "mainImage": "Main image"
+    },
+    "imageEdit": {
+        "title": "Edit image information",
+        "editAlt": "Edit image",
+        "altLabel": "Alternative text :",
+        "captionLabel": "Caption :",
+        "altHelpText": "Good alternative text describes the image content for users who cannot see it.",
+        "captionHelpText": "The caption appears below the image and provides additional context for all users.",
+        "cancel": "Cancel",
+        "save": "Save"
+    },
+    "sectionMenu": {
+        "addSection": "Add new section",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "removeSection": "Remove section"
+    },
+    "createForm": {
+        "createNewArticle": "Create new article",
+        "basicInfo": "Basic information",
+        "mainMedia": "Main media",
+        "content": "Article content",
+        "sections": "Sections",
+        "tags": "Tags",
+
+        "title": "Title",
+        "slug": "URL Identifier",
+        "author": "Author",
+        "publishDate": "Publication date",
+        "summary": "Summary",
+        "contentSimple": "Content",
+        "section": "Section",
+
+        "singleImage": "Single image",
+        "slider": "Slider",
+        "video": "Video",
+        "videoFile": "Video file",
+        "urlVideo": "Video URL",
+        "externalVideo": "External video",
+
+        "altText": "Alternative Text",
+        "videoTitle": "Video title",
+        "thumbnail": "Video thumbnail",
+        "sectionImages": "Section images",
+
+        "titlePlaceholder": "Enter article title",
+        "slugPlaceholder": "example-url-identifier",
+        "authorPlaceholder": "Author name",
+        "summaryPlaceholder": "Brief article summary",
+        "sectionTitlePlaceholder": "Section title",
+        "sectionContentPlaceholder": "Enter section content",
+        "imageDescriptionPlaceholder": "Image description",
+        "imageUrlPlaceholder": "Enter image URL",
+        "videoUrlPlaceholder": "Enter YouTube/Vimeo URL",
+        "videoTitlePlaceholder": "Video title or description",
+        "videoThumbnailPlaceholder": "Video thumbnail URL (optional)",
+        "tagPlaceholder": "Enter tag and press Enter",
+
+        "addBtn": "Add",
+        "removeBtn": "Remove",
+        "previewBtn": "Preview",
+        "saveBtn": "Save",
+        "addSectionBtn": "Add Section",
+        "uploadMainImageBtn": "Upload main image",
+        "uploadSliderImagesBtn": "Upload slider images",
+        "uploadVideoBtn": "Upload video file",
+        "uploadFile": "Upload file",
+
+        "dragDropFile": "Drag files here or click to select",
+        "dragDropVideo": "Drag video file here or click to select",
+        "chooseImage": "Choose image",
+        "addViaUrl": "Add via URL",
+        "chooseVideoMethod": "Choose video addition method",
+        "supportedFormats": "Supported formats: MP4, WebM, OGG. Maximum size: 100 MB",
+        "unnamedFile": "Unnamed File",
+        "unknownSize": "unknown size",
+        "size": "Size:",
+        "uploaded": "uploaded",
+
+        "preview": "Preview {{index}}",
+        "urlImage": "URL Image {{index}}",
+        "expandedView": "Expanded view",
+        "editInfo": "Edit information",
+        "removeImage": "Remove image",
+        "sectionWithNumber": "Section {{number}}",
+
+        "browserNotSupport": "Your browser does not support HTML5 video.",
+        "requiredField": "This field is required!",
+        "invalidVideoFormat": "Please upload a video file in MP4, WebM, or OGG format.",
+        "videoSizeExceeded": "Video file exceeds the maximum size of 100MB.",
+        "invalidVideoUrl": "Please enter a valid YouTube or Vimeo URL.",
+        "videoAddedSuccess": "External video added successfully.",
+
+        "or": "or"
+    }
   }
 }

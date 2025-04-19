@@ -271,13 +271,13 @@ const ArticleCreateForm = () => {
         if (videoFile) {
             // Проверка за видео формат
             if (!/video\/(mp4|webm|ogg)/.test(videoFile.type)) {
-                alert("Моля, качете видео файл в MP4, WebM или OGG формат.");
+                alert(t('articles.createForm.invalidVideoFormat'));
                 return;
             }
 
             // Проверка за размер на файла (100MB = 104857600 bytes)
             if (videoFile.size > 104857600) {
-                alert("Видео файлът надвишава максималния размер от 100MB.");
+                alert(t('articles.createForm.videoSizeExceeded'));
                 return;
             }
 
@@ -298,7 +298,7 @@ const ArticleCreateForm = () => {
         const vimeoRegex = /^(https?:\/\/)?(www\.)?vimeo\.com\/.+$/;
 
         if (!youtubeRegex.test(values.mainImage.videoUrl) && !vimeoRegex.test(values.mainImage.videoUrl)) {
-            alert("Моля, въведете валиден YouTube или Vimeo URL адрес.");
+            alert(t('articles.createForm.invalidVideoUrl'));
             return;
         }
 
@@ -321,7 +321,7 @@ const ArticleCreateForm = () => {
         }
 
         // Уведомяваме потребителя, че външното видео е добавено
-        alert(`Външното видео е добавено успешно.`);
+        alert(t('articles.createForm.videoAddedSuccess'));
 
         // Принуждаваме компонента да се преизрисува с useReducer версията
         forceUpdate();
@@ -394,15 +394,15 @@ const ArticleCreateForm = () => {
                 onMoveDown={moveSectionDown}
                 onRemove={removeSection}
             />
-            <h2 className="article-form-title">Създаване на нова статия</h2>
+            <h2 className="article-form-title">{t('articles.createForm.createNewArticle')}</h2>
 
             <form className="article-form" onSubmit={onSubmit}>
                 {/* Основна информация */}
                 <div className="form-section">
-                    <h3>Основна информация</h3>
+                    <h3>{t('articles.createForm.basicInfo')}</h3>
                     <div className="form-section-content">
                         <div className="form-group-article">
-                            <label htmlFor="title">Заглавие <span className="required">*</span></label>
+                            <label htmlFor="title">{t('articles.createForm.title')} <span className="required">*</span></label>
                             <input
                                 type="text"
                                 id="title"
@@ -411,13 +411,13 @@ const ArticleCreateForm = () => {
                                 onChange={onChangeHandler}
                                 onBlur={onBlurHandler}
                                 className={errors.title ? "error" : ""}
-                                placeholder="Въведете заглавие на статията"
+                                placeholder={t('articles.createForm.titlePlaceholder')}
                             />
                             {errors.title && <div className="error-message">{errors.title}</div>}
                         </div>
 
                         <div className="form-group-article">
-                            <label htmlFor="slug">URL идентификатор <span className="required">*</span></label>
+                            <label htmlFor="slug">{t('articles.createForm.slug')} <span className="required">*</span></label>
                             <input
                                 type="text"
                                 id="slug"
@@ -426,13 +426,13 @@ const ArticleCreateForm = () => {
                                 onChange={onChangeHandler}
                                 onBlur={onBlurHandler}
                                 className={errors.slug ? "error" : ""}
-                                placeholder="пример-за-url-идентификатор"
+                                placeholder={t('articles.createForm.slugPlaceholder')}
                             />
                             {errors.slug && <div className="error-message">{errors.slug}</div>}
                         </div>
 
                         <div className="form-group-article">
-                            <label htmlFor="author">Автор <span className="required">*</span></label>
+                            <label htmlFor="author">{t('articles.createForm.author')} <span className="required">*</span></label>
                             <input
                                 type="text"
                                 id="author"
@@ -441,13 +441,13 @@ const ArticleCreateForm = () => {
                                 onChange={onChangeHandler}
                                 onBlur={onBlurHandler}
                                 className={errors.author ? "error" : ""}
-                                placeholder="Име на автора"
+                                placeholder={t('articles.createForm.authorPlaceholder')}
                             />
                             {errors.author && <div className="error-message">{errors.author}</div>}
                         </div>
 
                         <div className="form-group-article">
-                            <label htmlFor="publishDate">Дата на публикуване</label>
+                            <label htmlFor="publishDate">{t('articles.createForm.publishDate')}</label>
                             <input
                                 type="date"
                                 id="publishDate"
@@ -458,14 +458,14 @@ const ArticleCreateForm = () => {
                         </div>
 
                         <div className="form-group-article">
-                            <label htmlFor="summary">Резюме <span className="required">*</span></label>
+                            <label htmlFor="summary">{t('articles.createForm.summary')} <span className="required">*</span></label>
                             <div className={errors.summary ? "editor-container error" : "editor-container"}>
                                 <Editor
                                     editorState={values.summary}
                                     onEditorStateChange={(editorState) => handleEditorChange(editorState, "summary")}
                                     onBlur={() => handleEditorBlur("summary", values.summary)}
                                     toolbar={editorToolbarOptions}
-                                    placeholder="Кратко резюме на статията"
+                                    placeholder={t('articles.createForm.summaryPlaceholder')}
                                     wrapperClassName="editor-wrapper"
                                     editorClassName="editor-main"
                                     toolbarClassName="editor-toolbar"
@@ -478,7 +478,7 @@ const ArticleCreateForm = () => {
 
                 {/* Основно изображение или медия */}
                 <div className="form-section">
-                    <h3>Основна медия</h3>
+                    <h3>{t('articles.createForm.mainMedia')}</h3>
                     <div className="form-section-content">
                         <div className="media-type-selector">
                             <button
@@ -486,21 +486,21 @@ const ArticleCreateForm = () => {
                                 className={values.mainImage.type === "image" ? "active" : ""}
                                 onClick={() => handleMainImageTypeChange("image")}
                             >
-                                <FontAwesomeIcon icon={faImage} /> Единично изображение
+                                <FontAwesomeIcon icon={faImage} /> {t('articles.createForm.singleImage')}
                             </button>
                             <button
                                 type="button"
                                 className={values.mainImage.type === "slider" ? "active" : ""}
                                 onClick={() => handleMainImageTypeChange("slider")}
                             >
-                                <FontAwesomeIcon icon={faSliders} /> Слайдер
+                                <FontAwesomeIcon icon={faSliders} /> {t('articles.createForm.slider')}
                             </button>
                             <button
                                 type="button"
                                 className={values.mainImage.type === "video" ? "active" : ""}
                                 onClick={() => handleMainImageTypeChange("video")}
                             >
-                                <FontAwesomeIcon icon={faVideo} /> Видео
+                                <FontAwesomeIcon icon={faVideo} /> {t('articles.createForm.video')}
                             </button>
                         </div>
 
@@ -508,14 +508,14 @@ const ArticleCreateForm = () => {
                             {(values.mainImage.type === "image" || values.mainImage.type === "slider") && (
                                 <>
                                     <div className="form-group-article">
-                                        <label htmlFor="mainImageAlt">Алтернативен текст <span className="required">*</span></label>
+                                        <label htmlFor="mainImageAlt">{t('articles.createForm.altText')} <span className="required">*</span></label>
                                         <div className={errors["mainImage.alt"] ? "editor-container error" : "editor-container"}>
                                             <Editor
                                                 editorState={values.mainImage.alt}
                                                 onEditorStateChange={(editorState) => handleEditorChange(editorState, "mainImage.alt")}
                                                 onBlur={() => handleEditorBlur("mainImage.alt", values.mainImage.alt)}
                                                 toolbar={minimalEditorToolbarOptions}
-                                                placeholder="Описание на изображението"
+                                                placeholder={t('articles.createForm.imageDescriptionPlaceholder')}
                                                 wrapperClassName="editor-wrapper-small"
                                                 editorClassName="editor-main-small"
                                                 toolbarClassName="editor-toolbar-small"
@@ -526,11 +526,11 @@ const ArticleCreateForm = () => {
 
                                     {/* Нова секция за добавяне чрез URL */}
                                     <div className="form-group-article">
-                                        <label>Добавяне чрез URL</label>
+                                        <label>{t('articles.createForm.addViaUrl')}</label>
                                         <div className="image-url-input">
                                             <input
                                                 type="text"
-                                                placeholder="Въведете URL на изображение"
+                                                placeholder={t('articles.createForm.imageUrlPlaceholder')}
                                                 value={imageUrl}
                                                 onChange={(e) => setImageUrl(e.target.value)}
                                                 onKeyPress={(e) => e.key === 'Enter' && handleAddImageUrl()}
@@ -540,7 +540,7 @@ const ArticleCreateForm = () => {
                                                 className="add-image-url-btn"
                                                 onClick={handleAddImageUrl}
                                             >
-                                                <FontAwesomeIcon icon={faPlus} /> Добави
+                                                <FontAwesomeIcon icon={faPlus} /> {t('articles.createForm.addBtn')}
                                             </button>
                                         </div>
                                     </div>
@@ -550,13 +550,13 @@ const ArticleCreateForm = () => {
                                             <FontAwesomeIcon icon={faCloudUploadAlt} />
                                         </div>
                                         <p className="file-upload-text">
-                                            Плъзнете файлове тук или кликнете за избор
+                                            {t('articles.createForm.dragDropFile')}
                                         </p>
                                         <label htmlFor="mainImageFile" className="file-upload-label">
                                             <FontAwesomeIcon icon={faUpload} />
                                             {values.mainImage.type === "image"
-                                                ? "Качи основно изображение"
-                                                : "Качи изображения за слайдера"}
+                                                ? t('articles.createForm.uploadMainImageBtn')
+                                                : t('articles.createForm.uploadSliderImagesBtn')}
                                         </label>
                                         <input
                                             type="file"
@@ -576,7 +576,7 @@ const ArticleCreateForm = () => {
                                                 <div key={`file-${index}`} className="image-preview-item">
                                                     <img
                                                         src={mainImagePreviewUrls[index]}
-                                                        alt={`Предпреглед ${index}`}
+                                                        alt={t('articles.createForm.preview', { index: index })}
                                                         onClick={() => handleImageClick(mainImagePreviewUrls[index])}
                                                     />
                                                     <button
@@ -594,7 +594,7 @@ const ArticleCreateForm = () => {
                                                 <div key={`url-${index}`} className="image-preview-item">
                                                     <img
                                                         src={url}
-                                                        alt={`URL изображение ${index}`}
+                                                        alt={t('articles.createForm.urlImage', { index: index })}
                                                         onClick={() => handleImageClick(url)}
                                                     />
                                                     <button
@@ -615,14 +615,14 @@ const ArticleCreateForm = () => {
                             {values.mainImage.type === "video" && (
                                 <>
                                     <div className="form-group-article">
-                                        <label htmlFor="mainImageAlt">Заглавие на видеото <span className="required">*</span></label>
+                                        <label htmlFor="mainImageAlt">{t('articles.createForm.videoTitle')} <span className="required">*</span></label>
                                         <div className={errors["mainImage.alt"] ? "editor-container error" : "editor-container"}>
                                             <Editor
                                                 editorState={values.mainImage.alt}
                                                 onEditorStateChange={(editorState) => handleEditorChange(editorState, "mainImage.alt")}
                                                 onBlur={() => handleEditorBlur("mainImage.alt", values.mainImage.alt)}
                                                 toolbar={minimalEditorToolbarOptions}
-                                                placeholder="Заглавие или описание на видеото"
+                                                placeholder={t('articles.createForm.videoTitlePlaceholder')}
                                                 wrapperClassName="editor-wrapper-small"
                                                 editorClassName="editor-main-small"
                                                 toolbarClassName="editor-toolbar-small"
@@ -632,33 +632,33 @@ const ArticleCreateForm = () => {
                                     </div>
 
                                     <div className="form-group-article">
-                                        <label htmlFor="videoThumbnail">Миниатюра за видеото</label>
+                                        <label htmlFor="videoThumbnail">{t('articles.createForm.thumbnail')}</label>
                                         <input
                                             type="text"
                                             id="videoThumbnail"
                                             name="mainImage.thumbnail"
                                             value={values.mainImage.thumbnail}
                                             onChange={onChangeHandler}
-                                            placeholder="URL адрес на миниатюрата на видеото (опционално)"
+                                            placeholder={t('articles.createForm.videoThumbnailPlaceholder')}
                                         />
                                     </div>
 
                                     <div className="video-upload-options">
                                         <div className="form-group-article">
-                                            <label>Изберете начин на добавяне на видео</label>
+                                            <label>{t('articles.createForm.chooseVideoMethod')}</label>
                                             <div className="video-options-buttons">
                                                 <button
                                                     type="button"
                                                     className="video-option-btn"
                                                     onClick={() => document.getElementById('mainVideoFile').click()}
                                                 >
-                                                    <FontAwesomeIcon icon={faUpload} /> Качване на файл
+                                                    <FontAwesomeIcon icon={faUpload} /> {t('articles.createForm.uploadFile')}
                                                 </button>
-                                                <span className="or-divider">или</span>
+                                                <span className="or-divider">{t('articles.createForm.or')}</span>
                                                 <div className="video-url-input">
                                                     <input
                                                         type="text"
-                                                        placeholder="Въведете YouTube/Vimeo URL"
+                                                        placeholder={t('articles.createForm.videoUrlPlaceholder')}
                                                         name="mainImage.videoUrl"
                                                         value={values.mainImage.videoUrl || ''}
                                                         onChange={onChangeHandler}
@@ -670,7 +670,7 @@ const ArticleCreateForm = () => {
                                                         className="add-video-url-btn"
                                                         onClick={handleAddVideoUrl}
                                                     >
-                                                        <FontAwesomeIcon icon={faPlus} /> Добави
+                                                        <FontAwesomeIcon icon={faPlus} /> {t('articles.createForm.addBtn')}
                                                     </button>
                                                 </div>
                                             </div>
@@ -681,10 +681,10 @@ const ArticleCreateForm = () => {
                                                 <FontAwesomeIcon icon={faCloudUploadAlt} />
                                             </div>
                                             <p className="file-upload-text">
-                                                Плъзнете видео файл тук или кликнете за избор
+                                                {t('articles.createForm.dragDropVideo')}
                                             </p>
                                             <label htmlFor="mainVideoFile" className="file-upload-label">
-                                                <FontAwesomeIcon icon={faUpload} /> Качи видео файл
+                                                <FontAwesomeIcon icon={faUpload} /> {t('articles.createForm.uploadVideoBtn')}
                                             </label>
                                             <input
                                                 type="file"
@@ -693,7 +693,7 @@ const ArticleCreateForm = () => {
                                                 accept="video/mp4,video/webm,video/ogg"
                                                 className="file-input"
                                             />
-                                            <p className="upload-info">Поддържани формати: MP4, WebM, OGG. Максимален размер: 100 MB</p>
+                                            <p className="upload-info">{t('articles.createForm.supportedFormats')}</p>
                                         </div>
                                     </div>
 
@@ -708,21 +708,21 @@ const ArticleCreateForm = () => {
                                                     src={videoPreviewUrl} // Използваме кеширания URL
                                                     poster={values.mainImage.thumbnail || ""}
                                                 >
-                                                    Вашият браузър не поддържа HTML5 видео.
+                                                    {t('articles.createForm.browserNotSupport')}
                                                 </video>
                                             </div>
                                             <div className="video-controls-container">
                                                 <div className="video-info-details">
-                                                    <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || 'Видео файл' }}></h4>
-                                                    <p>{mediaFiles.mainImage[0]?.name || "Безименен файл"}</p>
-                                                    <p>Размер: {mediaFiles.mainImage[0]?.size ? (mediaFiles.mainImage[0].size / (1024 * 1024)).toFixed(2) + " MB" : "Неизвестен размер"}</p>
+                                                    <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || t('articles.createForm.videoFile') }}></h4>
+                                                    <p>{mediaFiles.mainImage[0]?.name || t('articles.createForm.unnamedFile')}</p>
+                                                    <p>{t('articles.createForm.size')} {mediaFiles.mainImage[0]?.size ? (mediaFiles.mainImage[0].size / (1024 * 1024)).toFixed(2) + " MB" : t('articles.createForm.unknownSize')}</p>
                                                 </div>
                                                 <button
                                                     type="button"
                                                     className="remove-video-btn"
                                                     onClick={() => removeMainImage(0)}
                                                 >
-                                                    <FontAwesomeIcon icon={faTimes} /> Премахни
+                                                    <FontAwesomeIcon icon={faTimes} /> {t('articles.createForm.removeBtn')}
                                                 </button>
                                             </div>
                                         </div>
@@ -744,12 +744,12 @@ const ArticleCreateForm = () => {
                                             <VideoPlayer
                                                 src={values.mainImage.videoUrl}
                                                 thumbnail={values.mainImage.thumbnail || ''}
-                                                alt={convertEditorToHtml(values.mainImage.alt) || 'Видео от URL'}
+                                                alt={convertEditorToHtml(values.mainImage.alt) || t('articles.createForm.urlVideo')}
                                                 allowDownload={false}
                                             />
                                             <div className="video-controls-container">
                                                 <div className="video-info-details">
-                                                    <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || 'Външно видео' }}></h4>
+                                                    <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || t('articles.createForm.externalVideo') }}></h4>
                                                     <p>URL: {values.mainImage.videoUrl}</p>
                                                 </div>
                                                 <button
@@ -760,7 +760,7 @@ const ArticleCreateForm = () => {
                                                         forceUpdate(); // Използваме useReducer версията
                                                     }}
                                                 >
-                                                    <FontAwesomeIcon icon={faTimes} /> Премахни
+                                                    <FontAwesomeIcon icon={faTimes} /> {t('articles.createForm.removeBtn')}
                                                 </button>
                                             </div>
                                         </div>
@@ -773,12 +773,12 @@ const ArticleCreateForm = () => {
 
                 {/* Секции статии */}
                 <div className="form-section">
-                    <h3>Съдържание на статията</h3>
+                    <h3>{t('articles.createForm.content')}</h3>
                     <div className="form-section-content">
                         <div className="section-header" style={{ background: 'none', padding: '0 0 20px 0' }}>
-                            <h4>Секции</h4>
+                            <h4>{t('articles.createForm.sections')}</h4>
                             <button type="button" className="add-section-btn" onClick={addSection}>
-                                <FontAwesomeIcon icon={faPlus} /> Добави секция
+                                <FontAwesomeIcon icon={faPlus} /> {t('articles.createForm.addSectionBtn')}
                             </button>
                         </div>
 
@@ -789,21 +789,21 @@ const ArticleCreateForm = () => {
                                 onClick={() => setActiveSection(index)}
                             >
                                 <div className="section-header">
-                                    <h4>Секция {index + 1}</h4>
+                                    <h4>{t('articles.createForm.sectionWithNumber', { number: index + 1 })}</h4>
                                     {values.sections.length > 1 && (
                                         <button
                                             type="button"
                                             className="remove-section-btn"
                                             onClick={() => removeSection(index)}
                                         >
-                                            <FontAwesomeIcon icon={faMinus} /> Премахни
+                                            <FontAwesomeIcon icon={faMinus} /> {t('articles.createForm.removeBtn')}
                                         </button>
                                     )}
                                 </div>
 
                                 <div className="section-content-create">
                                     <div className="form-group-article">
-                                        <label htmlFor={`section-title-${index}`}>Заглавие <span className="required">*</span></label>
+                                        <label htmlFor={`section-title-${index}`}>{t('articles.createForm.title')} <span className="required">*</span></label>
                                         <input
                                             type="text"
                                             id={`section-title-${index}`}
@@ -812,20 +812,20 @@ const ArticleCreateForm = () => {
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
                                             className={errors[`sections[${index}].title`] ? "error" : ""}
-                                            placeholder="Заглавие на секцията"
+                                            placeholder={t('articles.createForm.sectionTitlePlaceholder')}
                                         />
                                         {errors[`sections[${index}].title`] && <div className="error-message">{errors[`sections[${index}].title`]}</div>}
                                     </div>
 
                                     <div className="form-group-article">
-                                        <label htmlFor={`section-content-${index}`}>Съдържание <span className="required">*</span></label>
+                                        <label htmlFor={`section-content-${index}`}>{t('articles.createForm.contentSimple')} <span className="required">*</span></label>
                                         <div className={errors[`sections[${index}].content`] ? "editor-container error" : "editor-container"}>
                                             <Editor
                                                 editorState={section.content}
                                                 onEditorStateChange={(editorState) => handleEditorChange(editorState, `sections[${index}].content`)}
                                                 onBlur={() => handleEditorBlur(`sections[${index}].content`, section.content)}
                                                 toolbar={editorToolbarOptions}
-                                                placeholder="Въведете съдържание на секцията"
+                                                placeholder={t('articles.createForm.sectionContentPlaceholder')}
                                                 wrapperClassName="editor-wrapper"
                                                 editorClassName="editor-main"
                                                 toolbarClassName="editor-toolbar"
@@ -835,14 +835,14 @@ const ArticleCreateForm = () => {
                                     </div>
 
                                     <div className="form-group-article">
-                                        <label htmlFor={`section-image-${index}`}>Изображения към секцията</label>
+                                    <label htmlFor={`section-image-${index}`}>{t('articles.createForm.sectionImages')}</label>
 
                                         <div className="form-group-article">
-                                            <label>Добавяне чрез URL</label>
+                                            <label>{t('articles.createForm.addViaUrl')}</label>
                                             <div className="image-url-input">
                                                 <input
                                                     type="text"
-                                                    placeholder="Въведете URL на изображение"
+                                                    placeholder={t('articles.createForm.imageUrlPlaceholder')}
                                                     value={sectionImageUrls[index] || ''}
                                                     onChange={(e) => setSectionImageUrls({ ...sectionImageUrls, [index]: e.target.value })}
                                                     onKeyPress={(e) => e.key === 'Enter' && handleSectionImageUrl(sectionImageUrls[index], index)}
@@ -856,14 +856,14 @@ const ArticleCreateForm = () => {
                                                         }
                                                     }}
                                                 >
-                                                    <FontAwesomeIcon icon={faPlus} /> Добави
+                                                    <FontAwesomeIcon icon={faPlus} /> {t('articles.createForm.addBtn')}
                                                 </button>
                                             </div>
                                         </div>
 
                                         <div className="file-upload-area" style={{ padding: '20px' }}>
                                             <label htmlFor={`section-image-${index}`} className="file-upload-label">
-                                                <FontAwesomeIcon icon={faUpload} /> Избери изображение
+                                                <FontAwesomeIcon icon={faUpload} /> {t('articles.createForm.chooseImage')}
                                             </label>
                                             <input
                                                 type="file"
@@ -887,7 +887,7 @@ const ArticleCreateForm = () => {
                                                 <div key={`image-${imgIndex}`} className="section-image-preview">
                                                     <img
                                                         src={image.src}
-                                                        alt={convertEditorToHtml(image.alt) || `Секция ${index + 1} - Изображение ${imgIndex + 1}`}
+                                                        alt={t('articles.createForm.sectionWithNumber', { number: index + 1 })}
                                                         onClick={() => handleImageClick(image.src)}
                                                     />
                                                     <div className="img-alt-actions">
@@ -895,7 +895,7 @@ const ArticleCreateForm = () => {
                                                             type="button"
                                                             className="img-alt-edit-btn"
                                                             onClick={() => openAltEditModal(index, imgIndex, image)}
-                                                            title="Редактирай информация"
+                                                            title={t('articles.createForm.editInfo')}
                                                         >
                                                             <FontAwesomeIcon icon={faEdit} />
                                                         </button>
@@ -903,7 +903,7 @@ const ArticleCreateForm = () => {
                                                             type="button"
                                                             className="remove-image-btn"
                                                             onClick={() => removeSectionImage(index, imgIndex)}
-                                                            title="Премахни изображението"
+                                                            title={t('articles.createForm.removeImage')}
                                                         >
                                                             <FontAwesomeIcon icon={faTimes} />
                                                         </button>
@@ -929,7 +929,7 @@ const ArticleCreateForm = () => {
                                                 <div className="section-image-preview">
                                                     <img
                                                         src={section.image.src}
-                                                        alt={`Секция ${index + 1}`}
+                                                        alt={t('articles.createForm.sectionWithNumber', { number: index + 1 })}
                                                         onClick={() => handleImageClick(section.image.src)}
                                                     />
                                                     <button
@@ -951,7 +951,7 @@ const ArticleCreateForm = () => {
 
                 {/* Тагове */}
                 <div className="form-section">
-                    <h3>Тагове</h3>
+                    <h3>{t('articles.createForm.tags')}</h3>
                     <div className="form-section-content">
                         <div className="tags-container">
                             <div className="tags-input-group">
@@ -960,7 +960,7 @@ const ArticleCreateForm = () => {
                                     id="newTag"
                                     value={newTag}
                                     onChange={(e) => setNewTag(e.target.value)}
-                                    placeholder="Въведете таг и натиснете Enter"
+                                    placeholder={t('articles.createForm.tagPlaceholder')}
                                     onKeyPress={(e) => e.key === 'Enter' && handleTagAdd(e)}
                                 />
                                 <button
@@ -968,7 +968,7 @@ const ArticleCreateForm = () => {
                                     className="add-tag-btn"
                                     onClick={handleTagAdd}
                                 >
-                                    <FontAwesomeIcon icon={faPlus} /> Добави
+                                    <FontAwesomeIcon icon={faPlus} /> {t('articles.createForm.addBtn')}
                                 </button>
                             </div>
 
@@ -998,7 +998,7 @@ const ArticleCreateForm = () => {
                         <div className="progress-bar">
                             <div className="progress-fill" style={{ width: `${uploadProgress}%` }}></div>
                         </div>
-                        <span>{uploadProgress.toFixed(0)}% качено</span>
+                        <span>{uploadProgress.toFixed(0)}% {t('articles.createForm.uploaded')}</span>
                     </div>
                 )}
 
@@ -1009,7 +1009,7 @@ const ArticleCreateForm = () => {
                         className="preview-btn"
                         onClick={handlePreviewToggle}
                     >
-                        <FontAwesomeIcon icon={faEye} /> Предпреглед
+                        <FontAwesomeIcon icon={faEye} />  {t('articles.createForm.previewBtn')}
                     </button>
 
                     <button
@@ -1017,7 +1017,7 @@ const ArticleCreateForm = () => {
                         className="submit-btn"
                         disabled={isUploading}
                     >
-                        <FontAwesomeIcon icon={faSave} /> Запази
+                        <FontAwesomeIcon icon={faSave} /> {t('articles.createForm.saveBtn')}
                     </button>
                 </div>
             </form>
@@ -1026,7 +1026,7 @@ const ArticleCreateForm = () => {
             {expandedImageUrl && (
                 <div className="image-modal" onClick={closeExpandedImage}>
                     <div className="image-modal-content">
-                        <img src={expandedImageUrl} alt="Разширен изглед" />
+                        <img src={expandedImageUrl} alt={t('articles.createForm.expandedView')} />
                         <button className="close-modal-btn" onClick={closeExpandedImage}>
                             <FontAwesomeIcon icon={faTimes} />
                         </button>
