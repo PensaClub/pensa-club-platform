@@ -498,6 +498,30 @@
     transform: translateY(0);
   }
 }
+
+.main-image-caption-container {
+  margin-top: 10px;
+  text-align: center;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-image-caption {
+  font-size: 0.9em;
+  color: #666;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.article-main-image figcaption {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #666;
+  line-height: 1.4;
+  font-style: italic;
+}
 /* Responsive design */
 @media (max-width: 768px) {
   .article-title.view {

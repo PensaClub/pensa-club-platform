@@ -36,11 +36,12 @@ const ArticlesList = () => {
       // Копираме основните полета
       const transformedArticle = {
         ...article,
-        summary: typeof article.summary === 'string' ? article.summary.replace(/<[^>]+>/g, '') : article.summary,
+
+        summary: typeof article.summary === 'string' ? article.summary : article.summary,
         mainImage: {
           ...article.mainImage,
-
-          alt: typeof article.mainImage.alt === 'string' ? article.mainImage.alt.replace(/<[^>]+>/g, '') : article.mainImage.alt
+    
+          alt: typeof article.mainImage.alt === 'string' ? article.mainImage.alt : article.mainImage.alt
         }
       };
 

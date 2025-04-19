@@ -22,7 +22,7 @@ export const ArticleCard = ({ article, featured = false }) => {
   };
 
   const isExternalUrl = (url) => {
-   
+
     if (url && url.includes('firebasestorage.googleapis.com')) {
       return false;
     }
@@ -33,7 +33,7 @@ export const ArticleCard = ({ article, featured = false }) => {
     if (article.mainImage.type === 'video') {
       return article.mainImage.thumbnail;
     } else {
-  
+
       const source = article.mainImage.sources[0];
       return source;
     }
@@ -92,9 +92,10 @@ export const ArticleCard = ({ article, featured = false }) => {
         </div>
 
         {article.mainImage.alt && (
-          <div className="image-alt-caption">
-            {article.mainImage.alt}
-          </div>
+          <div
+            className="image-alt-caption"
+            dangerouslySetInnerHTML={{ __html: article.mainImage.alt }}
+          />
         )}
 
         <div className="article-card-content">
@@ -102,9 +103,10 @@ export const ArticleCard = ({ article, featured = false }) => {
             <h2 className="article-title">{article.title}</h2>
           </Link>
 
-          <p className="article-excerpt">
-            {article.summary}
-          </p>
+          <div
+            className="article-excerpt"
+            dangerouslySetInnerHTML={{ __html: article.summary }}
+          />
 
           {!featured && (
             <div className="article-views-counter">
