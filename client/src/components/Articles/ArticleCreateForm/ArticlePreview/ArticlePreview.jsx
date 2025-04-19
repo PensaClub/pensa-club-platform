@@ -9,8 +9,10 @@ import "./articlePreview.css";
 import VideoPlayer from "../../ArticleView/VideoPlayer/VideoPlayer";
 import ScrollToTop from "../../../ScrollToTop/ScrollToTop";
 import ImageSlider from "../../ArticleView/ImageSlider/ImageSlider";
+import {useTranslation} from 'react-i18next';
 
 const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) => {
+  const { t } = useTranslation();
   // Състояние за активния слайд
   const [activeSlides, setActiveSlides] = useState({});
 
@@ -135,7 +137,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
         <div className="article-main-slider">
           <ImageSlider
             images={sources}
-            alt={article.mainImage.alt ? convertEditorToHtml(article.mainImage.alt) : "Слайдер изображение"}
+            alt={article.mainImage.alt ? convertEditorToHtml(article.mainImage.alt) : t('articles.preview.sliderImage')}
           />
         </div>
       );
@@ -159,7 +161,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
           <div className="article-main-video">
             <img
               src={article.mainImage.thumbnail || "https://via.placeholder.com/800x450?text=Видео+превю"}
-              alt="Видео превю"
+              alt={t('articles.preview.videoPreview')}
             />
             <div className="video-play-button">
               <span>▶</span>
@@ -170,14 +172,14 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
     } else if (sources.length > 0) {
       return (
         <div className="article-main-image">
-          <img src={sources[0]} alt={article.mainImage.alt ? convertEditorToHtml(article.mainImage.alt) : "Основно изображение"} />
+          <img src={sources[0]} alt={article.mainImage.alt ? convertEditorToHtml(article.mainImage.alt) : t('articles.preview.mainImage')} />
         </div>
       );
     }
 
     return (
       <div className="article-placeholder">
-        <p>Няма избрано основно изображение</p>
+        <p>{t('articles.preview.noMainImage')}</p>
       </div>
     );
   };
@@ -221,7 +223,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
               tempUrlsRef.current.sectionImages[index].push(tempUrl);
 
               // КЛЮЧОВА ПРОМЯНА: Запазваме съществуващите alt и caption ако има такива
-              let altText = "Временно изображение";
+              let altText = t('articles.preview.temporaryImage');
               let captionHtml = null;
 
               // Опитваме се да използваме метаданни от съответния индекс в existingImages
@@ -320,7 +322,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
 
   // Рендериране на HTML съдържание
   const renderHtml = (content) => {
-    if (!content) return <p>Няма съдържание</p>;
+    if (!content) return <p>{t('articles.preview.noContent')}</p>;
 
     const html = typeof content === 'string'
       ? content
@@ -336,15 +338,15 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
           className="back-to-edit-btn"
           onClick={onBack}
         >
-          <FontAwesomeIcon icon={faArrowLeft} /> Назад към редактирането
+          <FontAwesomeIcon icon={faArrowLeft} />  {t('articles.preview.backToEditing')}
         </button>
-        <h3>Предпреглед на статията</h3>
+        <h3>{t('articles.preview.articlePreview')}</h3>
       </div>
 
-      <div className="preview-watermark">ПРЕДПРЕГЛЕД</div>
+      <div className="preview-watermark">{t('articles.preview.preview')}</div>
 
       <div className="preview-mode">
-        <h1 className="article-title view">{article.title || "Заглавие на статията"}</h1>
+        <h1 className="article-title view">{article.title || t('articles.preview.articleTitle')}</h1>
 
         <div className="article-summary">
           {renderHtml(article.summary)}
@@ -353,7 +355,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
         <div className="article-meta-preview">
           <div className="meta-item">
             <FontAwesomeIcon icon={faUser} />
-            <span>{article.author || "Автор"}</span>
+            <span>{article.author || t('articles.preview.author')}</span>
           </div>
           <div className="meta-item">
             <FontAwesomeIcon icon={faCalendarAlt} />
@@ -369,7 +371,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
 
             return (
               <section key={index} className="article-section-preview">
-                <h2 className="section-title-preview">{section.title || `Заглавие на секция ${index + 1}`}</h2>
+                <h2 className="section-title-preview">{section.title || t('articles.preview.sectionTitle', { number: index + 1 })}</h2>
                 <div className="section-content-preview">
                   {renderHtml(section.content)}
 
@@ -380,7 +382,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
                         <div className="slider-container-preview">
                           <ImageSlider
                             images={sectionImages.map(img => img.src)}
-                            alt={`Изображения към секция ${index + 1}`}
+                            alt={t('articles.preview.sectionImage', { number: index + 1 })}
                             onSlideChange={(slideIndex) => handleSlideChange(index, slideIndex)}
                           />
 
@@ -402,7 +404,7 @@ const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) =>
                         <figure className="section-figure-preview">
                           <img
                             src={sectionImages[0].src}
-                            alt={sectionImages[0].alt || `Изображение към секция ${index + 1}`}
+                            alt={t('articles.preview.sectionImage', { number: index + 1 })}
                           />
                           {sectionImages[0].caption && (
                             <figcaption dangerouslySetInnerHTML={{ __html: sectionImages[0].caption }} />

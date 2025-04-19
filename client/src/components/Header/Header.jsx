@@ -86,7 +86,7 @@ export const Header = ({ additionalClasses }) => {
               to="/articles"
               className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
             >
-             Статии
+               {t("header.articles")}
             </NavLink>
             <div className="has-dropdown">
               <NavLink

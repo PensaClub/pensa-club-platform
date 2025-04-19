@@ -11,22 +11,24 @@ import ClubCardPromo from './ClubCardPromo/ClubCardPromo';
 import { useArticleContext } from '../../contexts/ArticleContext';
 import { createEditorState } from '../articleUtils/editor';
 import { useLocation } from 'react-router-dom';
-import { filterArticles } from '../articleUtils/search'; 
+import { filterArticles } from '../articleUtils/search';
+import {useTranslation} from 'react-i18next';
 
 const ArticlesList = () => {
+  const { t } = useTranslation();
   const [allArticles, setAllArticles] = useState([]);
   const [featuredArticle, setFeaturedArticle] = useState(null);
   const [sliderArticles, setSliderArticles] = useState([]);
   const { setIsLoading } = useLoading();
   const [currentPage, setCurrentPage] = useState(1);
-  const [articlesPerPage] = useState(3); 
+  const [articlesPerPage] = useState(3);
   const { getAllArticles, articles: contextArticles, articlesLoaded } = useArticleContext();
   const location = useLocation();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
-  
+
   // Функция за трансформиране на статиите от сървъра в подходящия формат за компонентите
   const transformServerArticles = (articlesFromServer) => {
     // Съществуващата функция остава непроменена
@@ -46,12 +48,12 @@ const ArticlesList = () => {
       if (article.sections) {
         transformedArticle.sections = article.sections.map(section => {
           // Създаваме EditorState за content ако е string
-          const content = typeof section.content === 'string' 
-            ? createEditorState(section.content) 
+          const content = typeof section.content === 'string'
+            ? createEditorState(section.content)
             : section.content;
 
           // Трансформираме sectionImages към формата, който компонентът очаква
-          const image = Array.isArray(section.sectionImages) 
+          const image = Array.isArray(section.sectionImages)
             ? section.sectionImages.map(img => ({
                 src: img.src,
                 alt: typeof img.alt === 'string' ? createEditorState(img.alt) : img.alt,
@@ -70,26 +72,26 @@ const ArticlesList = () => {
       return transformedArticle;
     });
   };
-  
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   }, []);
-  
+
   useEffect(() => {
     const fetchArticles = async () => {
       try {
         setIsLoading(true);
-        
+
         // Проверка дали в URL има параметър за принудително обновяване
         const query = new URLSearchParams(location.search);
         const shouldRefresh = query.get('refresh') === 'true';
-        
+
         // Опитваме да вземем статиите от контекста/сървъра
         let articlesData;
-        
+
         // Проверяваме дали вече имаме заредени статии в контекста
         if (articlesLoaded && contextArticles.length > 0 && !shouldRefresh) {
 
@@ -97,16 +99,16 @@ const ArticlesList = () => {
         } else {
 
           articlesData = await getAllArticles(shouldRefresh);
-          
+
           // Изчистваме URL-a от refresh параметъра ако е необходимо
           if (shouldRefresh) {
             window.history.replaceState({}, document.title, '/articles');
           }
         }
-        
+
         // Трансформираме статиите за правилно показване
         const transformedArticles = transformServerArticles(articlesData);
-        
+
         // Сортираме статиите по дата (от най-нови към най-стари)
         const sortedArticles = transformedArticles.sort((a, b) => {
           return new Date(b.updatedAt) - new Date(a.updatedAt);
@@ -122,10 +124,10 @@ const ArticlesList = () => {
         setIsLoading(false);
       }
     };
-    
+
     fetchArticles();
   }, [articlesLoaded, location.search, location.key]);
-  
+
   // Помощна функция за обработка на статиите и настройка на featured/slider статии
   const processArticles = (articles) => {
     if (!articles || articles.length === 0) {
@@ -137,43 +139,43 @@ const ArticlesList = () => {
     }
 
     setAllArticles(articles);
-    
+
     setFeaturedArticle(articles[0]);
     setSliderArticles(articles.slice(1));
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    
+
     const term = searchTerm.trim();
     if (!term) {
       setIsSearchActive(false);
       setFilteredArticles([]);
       return;
     }
-    
+
     const results = filterArticles(allArticles, term);
     setFilteredArticles(results);
     setIsSearchActive(true);
     setCurrentPage(1);
   };
-  
+
   // Функция за изчистване на търсенето
   const clearSearch = () => {
     setSearchTerm('');
     setIsSearchActive(false);
     setFilteredArticles([]);
   };
-  
+
   // Изчисляване на статиите, които ще се покажат
   const displayedArticles = isSearchActive ? filteredArticles : allArticles;
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = displayedArticles.slice(indexOfFirstArticle, indexOfLastArticle);
-  
+
   // Изчисляване на общия брой страници
   const totalPages = Math.ceil(displayedArticles.length / articlesPerPage);
-  
+
   const handleSlideClick = (article) => {
     // Разменяме статията от слайдера с featured статията
     setFeaturedArticle(article);
@@ -189,11 +191,11 @@ const ArticlesList = () => {
       behavior: 'smooth'
     });
   };
-  
+
   // Функция за смяна на страницата
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    
+
     // Скролваме до началото на секцията "Всички статии"
     const allArticlesSection = document.querySelector('.all-articles-title');
     if (allArticlesSection) {
@@ -203,21 +205,23 @@ const ArticlesList = () => {
       });
     }
   };
-  
+
   return (
     <div className="articles-list-container">
       <div className="articles-hero">
         <div className="hero-content">
-          <h1>Нашите статии</h1>
-          <p>Информация, съвети и полезни ресурси за дигитална грамотност</p>
+          {/* <h1>Нашите статии</h1> */}
+          <h1>{t('articles.articlesList.ourArticles')}</h1>
+          {/* <p>Информация, съвети и полезни ресурси за дигитална грамотност</p> */}
+          <p>{t('articles.articlesList.infoDescription')}</p>
         </div>
       </div>
-  
+
       <div className="articles-content-with-sidebar">
         <div className="sidebar-promo">
           <ClubCardPromo />
         </div>
-        
+
         <div className="articles-main-content">
           {featuredArticle && (
             <div className="featured-article-container">
@@ -228,28 +232,28 @@ const ArticlesList = () => {
           <div className="articles-divider"></div>
 
           <div className="slider-section">
-            <h2 className="slider-title">Последни статии</h2>
+            <h2 className="slider-title">{t('articles.articlesList.latestArticles')}</h2>
             {sliderArticles.length > 0 ? (
-              <ArticlesSlider 
-                articles={sliderArticles} 
-                onSlideClick={handleSlideClick} 
+              <ArticlesSlider
+                articles={sliderArticles}
+                onSlideClick={handleSlideClick}
               />
             ) : (
-              <p className="no-articles-message">Няма налични статии за показване в слайдера.</p>
+              <p className="no-articles-message">{t('articles.articlesList.noArticles')}</p>
             )}
           </div>
 
           <div className="articles-divider"></div>
 
           <div className="all-articles-header-list">
-            <h2 className="all-articles-title">Всички статии</h2>
-            
+            <h2 className="all-articles-title">{t('articles.articlesList.allArticles')}</h2>
+
             <div className="articles-search-list">
               <form onSubmit={handleSearch}>
                 <div className="search-input-wrapper-list">
                   <input
                     type="text"
-                    placeholder="Търсене в публикациите..."
+                    placeholder={t('articles.articlesList.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -264,13 +268,13 @@ const ArticlesList = () => {
                   </button>
                 </div>
               </form>
-              
+
               {isSearchActive && (
                 <div className="search-results-info-list">
                   <p>
-                    Резултати за "{searchTerm}": {filteredArticles.length}
+                    {t('articles.articlesList.searchFor')} "{searchTerm}": {filteredArticles.length}
                     <button className="clear-search-list" onClick={clearSearch}>
-                      Изчисти
+                      {t('articles.articlesList.clearSearch')}
                     </button>
                   </p>
                 </div>
@@ -286,12 +290,12 @@ const ArticlesList = () => {
             </div>
           ) : (
             <p className="no-articles-message">
-              {isSearchActive ? `Няма намерени статии за "${searchTerm}"` : "Няма налични статии."}
+              {isSearchActive ? t('articles.articlesList.noSearchResults', { term: searchTerm }) : t('articles.articlesList.noAvailableArticles')}
             </p>
           )}
-              
+
           {totalPages > 1 && (
-            <Pagination 
+            <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}
