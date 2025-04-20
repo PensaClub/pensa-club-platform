@@ -350,7 +350,7 @@
   .side-menu-profile {
     display: flex;
     justify-content: center;
-    margin: 20px;
+    margin: 0px 15px;
   }
   
   .admin-profile-side-menu {
@@ -415,7 +415,7 @@
   
   .back-to-site {
     justify-self: center;
-    margin: 20px;
+    margin: 0px 20px;
   }
   .back-to-site-title {
     padding: 10px 15px;
@@ -459,7 +459,7 @@
     opacity: 1 !important;
     margin: 0 !important;
     padding: 5px 0 !important;
-    font-size: 1.3rem !important;
+    font-size: var(--xs-font-size) ;
     align-items: center;
     position: relative;
     z-index: 1;
@@ -687,6 +687,7 @@
     
     .profile-panel.menu-open .side-menu {
       pointer-events: auto;
+      z-index: 11111;
     }
     
     .menu-toggle {
