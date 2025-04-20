@@ -1106,7 +1106,7 @@
     }
     
     .editor-main, .editor-main-small {
-        min-height: 100px;
+        min-height: 200px;
     }
     
     .rdw-option-wrapper {
@@ -1200,4 +1200,297 @@
         align-self: flex-end;
         margin-top: 10px;
     }
+}
+@media screen and (max-width: 1600px) {
+  .article-create-container {
+    max-width: 1150px;
+  }
+}
+@media screen and (max-width: 1366px) {
+  .article-create-container {
+    max-width: 920px;
+  }
+  .rdw-option-wrapper{
+    min-width: 30px;
+    height: 30px;
+  }
+  .editor-toolbar-small {
+    padding: initial;
+  }
+
+}
+@media screen and (max-width: 1200px) {
+  .article-create-container {
+    max-width: 840px;
+  }
+  .form-section h3 {
+    font-size: 1rem;
+    padding: 15px 20px ;
+  }
+  .form-group-article label {
+    font-size: var(--xxs-font-size);
+  }
+  .media-type-selector button{
+    font-size: 0.8rem;
+    padding: 10px 7px;
+  }
+  .form-group-article input[type="text"], .form-group-article input[type="date"], .form-group-article textarea, .tags-input-group input {
+    padding: 10px 14px;
+    font-size: 0.8rem;
+  }
+  .add-image-url-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  .file-upload-label {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  .article-form-title {
+    font-size: 1.5rem;
+    padding: 20px;
+  }
+  .add-tag-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  .preview-btn{
+    padding: 10px 20px;
+    font-size: 0.8rem;
+    gap: 5px;
+  }
+  .submit-btn{
+    padding: 10px 20px;
+    font-size: 0.8rem;
+    gap: 5px;
+  }
+}
+@media screen and (max-width: 550px) {
+  .article-create-container {
+    margin: 1em auto;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .article-form {
+    padding: 15px;
+  }
+  .section-images-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .article-form-title {
+    padding: 15px;
+    font-size: 1.3rem;
+  }
+  
+  .form-section h3 {
+    padding: 12px 15px;
+    font-size: 1rem;
+  }
+  
+  .form-section-content {
+    padding: 12px;
+  }
+  
+  .rdw-option-wrapper {
+    padding: 4px;
+    min-width: 22px !important;
+    height: 22px !important;
+    margin: 1px !important;
+  }
+  
+  .rdw-dropdown-wrapper {
+    height: 22px !important;
+    min-width: 50px !important;
+  }
+  
+  .rdw-dropdown-carettoopen {
+    height: 8px !important;
+  }
+  
+  .editor-toolbar, .editor-toolbar-small {
+    padding: 2px;
+  }
+  
+  .image-preview-item {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .section-image-preview {
+    width: 100%;
+  }
+  
+  .form-group-article {
+    margin-bottom: 15px;
+  }
+  
+  .video-element-wrapper video {
+    height: auto !important;
+  }
+  
+  .preview-btn, .submit-btn {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Нов медиен запит за 480px */
+@media screen and (max-width: 480px) {
+  .article-create-container {
+    margin: 0.5em auto;
+    border-radius: 8px;
+  }
+  
+  .article-form-title {
+    padding: 12px;
+    font-size: 1.1rem;
+  }
+  
+  .article-form {
+    padding: 10px;
+  }
+  
+  .form-section h3 {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .form-section-content {
+    padding: 10px;
+  }
+  
+  .form-group-article label {
+    margin-bottom: 4px;
+    font-size: 0.7rem;
+  }
+  
+  .form-group-article input[type="text"],
+  .form-group-article input[type="date"],
+  .form-group-article textarea,
+  .tags-input-group input {
+    padding: 8px 10px;
+    font-size: 0.6rem;
+    border-radius: 6px;
+  }
+  
+  .rdw-editor-toolbar {
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding: 2px !important;
+    /* font-size: 12px; */
+  }
+  
+  .rdw-editor-toolbar::-webkit-scrollbar {
+    height: 3px;
+  }
+  
+  .rdw-editor-toolbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+  }
+  
+  .rdw-option-wrapper {
+    min-width: 15px !important;
+    height: 15px !important;
+    padding: initial;
+    /* margin: 1px !important; */
+  }
+  
+  .rdw-dropdown-wrapper {
+    min-width: 45px !important;
+    height: 20px !important;
+  }
+  
+  .rdw-dropdown-selectedtext {
+    padding: 0 2px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .rdw-dropdown-optionwrapper {
+    width: 100px;
+  }
+  
+  .image-preview-item {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .file-upload-area {
+    padding: 15px;
+  }
+  
+  .file-upload-icon {
+    font-size: 25px;
+    margin-bottom: 10px;
+  }
+  
+  .file-upload-text {
+    font-size: 0.8rem;
+    margin: 10px 0;
+  }
+  
+  .file-upload-label {
+    padding: 8px 15px;
+    font-size: 0.8rem;
+    border-radius: 20px;
+  }
+  
+  .video-info-details h4 {
+    font-size: 0.9rem;
+  }
+  
+  .video-info-details p {
+    font-size: 0.8rem;
+  }
+  
+  .tags-list {
+    gap: 8px;
+  }
+  
+  .tag-item {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .preview-btn, .submit-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    gap: 5px;
+  }
+  
+  .article-section-item {
+    margin-bottom: 15px;
+  }
+  
+  .section-header {
+    padding: 10px 15px;
+  }
+  
+  .section-header h4 {
+    font-size: 0.9rem;
+  }
+  
+  .section-content-create {
+    padding: 15px;
+  }
+  
+  .error-message {
+    font-size: 0.75rem;
+  }
+  
+  .editor-main, .editor-main-small {
+    min-height: 120px;
+    padding: 8px 12px;
+    font-size: calc(var(--xxs-font-size) - 2px);
+  }
+  .rdw-option-wrapper{
+    min-width: 15px;
+    height: 15px;
+  }
 }

@@ -21,7 +21,7 @@
   }
   
   .article-card-featured .article-card-image-container {
-    height: 450px;
+    height: 350px;
   }
   
   .article-card-featured .article-title {
@@ -68,7 +68,7 @@
     font-style: italic;
   }
   .article-meta-top span {
-    font-size: 13px;
+    font-size: var(--xxs-font-size);
 }
   .author-name {
     color: var(--orange); 
@@ -194,6 +194,9 @@
     /* border-bottom: 1px solid #eee; */
     line-height: 1.4;
     transition: opacity 0.3s ease;
+  }
+  .image-alt-caption p{
+    font-size: var(--xxs-font-size);
   }
   .media-badge.external-badge{
     left:15px;

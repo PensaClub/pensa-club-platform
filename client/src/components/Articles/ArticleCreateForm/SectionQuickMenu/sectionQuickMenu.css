@@ -1,7 +1,7 @@
 
 .left-quick-menu {
     position: fixed;
-    left: calc(340px + 5%);
+    left: calc(260px + 5%);
     top: 50%;
     transform: translateY(-50%);
     display: flex;
@@ -18,8 +18,8 @@
 }
 
 .quick-btn {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: none;
     display: flex;
@@ -98,13 +98,18 @@
 
 @media screen and (max-width: 1600px) {
     .left-quick-menu {
-        left: calc(230px + 5%);
+        left: calc(225px + 5%);
     }
+    .left-quick-menu {
+    
+    padding: 20px 8px;
+}
 }
 
 @media screen and (max-width: 1366px) {
     .left-quick-menu {
-        left: calc(230px + 5%);
+        left: calc(235px + 5%);
+        padding: 15px 5px;
     }
 }
 
@@ -117,7 +122,7 @@
 @media screen and (max-width: 768px) {
     .left-quick-menu {
         position: fixed;
-        top: 200px;
+        top: 260px;
         left: 12px;
         /* right: 20px; */
         transform: none;
@@ -133,5 +138,53 @@
         width: 30px;
         height: 30px;
         font-size: 16px;
+    }
+}
+@media screen and (min-width: 769px) and (max-width: 1025px) {
+    .left-quick-menu {
+        left: 20px;
+        padding: 15px 8px;
+        border-radius: 12px;
+        gap: 10px;
+        background: #f0f4f8;
+        box-shadow: 5px 5px 10px #cfd8e0, -5px -5px 10px #ffffff;
+    }
+    
+    .quick-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    .add-btn {
+        background-color: #2f3b4b;
+    }
+    
+    .arrow-up-btn,
+    .arrow-down-btn {
+        background-color: #54c5f8;
+        box-shadow: 0 0 8px rgba(84, 197, 248, 0.4);
+    }
+    
+    .delete-btn {
+        background-color: #2f3b4b;
+    }
+    
+    .trash-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Корекция за overlapping медиа запити */
+@media screen and (max-width: 1200px) {
+    .left-quick-menu {
+        left: 250px;
+    }
+}
+
+@media screen and (max-width: 1025px) {
+    .left-quick-menu {
+        left: 20px;
     }
 }

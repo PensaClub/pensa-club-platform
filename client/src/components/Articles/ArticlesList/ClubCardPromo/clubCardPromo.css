@@ -185,7 +185,7 @@
   }
   
   .card-text {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 800;
     background: linear-gradient(135deg, #222, #444);
     -webkit-background-clip: text;
@@ -198,7 +198,7 @@
   .card-image-wrapper {
     position: relative;
     width: 100%;
-    height: 180px;
+    height: 150px;
     margin: 25px 0;
     perspective: 1000px;
   }
@@ -283,7 +283,7 @@
   }
   
   .benefits-list {
-    margin: 30px 0 25px;
+    margin: 25px 0 25px;
     opacity: 0;
     animation: fadeInUp 0.8s 0.6s forwards;
   }
@@ -703,32 +703,32 @@
   }
   @media (min-width: 577px) and (max-width: 992px) {
     .club-card-promo {
-      max-width: 100%;  /* Вместо фиксираната стойност от 280px */
+      max-width: 100%; 
       width: 100%;
       margin: 30px auto;
       padding: 25px 20px;
     }
     
     .card-image-wrapper {
-      height: auto;  /* Нека височината се определя от съдържанието */
+      height: auto;  
       max-height: 200px;
     }
     
     .card-image-container {
-      height: auto;  /* Автоматична височина базирана на съотношението */
-      aspect-ratio: 16/10;  /* Запазваме съотношението на изображението */
+      height: auto;  
+      aspect-ratio: 16/10;  
       min-height: 160px;
       max-height: 200px;
     }
     
     .card-image {
-      object-fit: contain;  /* Това ще гарантира, че картата не се деформира */
+      object-fit: contain;  
       width: auto;
       max-width: 100%;
       height: 100%;
     }
     
-    /* Правим бенефитите и бутона да са по-адаптивни за тези разрешения */
+ 
     .benefits-list {
       margin: 20px 0;
     }
@@ -772,7 +772,6 @@
     }
   }
   
-  /* За по-големи екрани */
   @media (min-width: 993px) {
     .club-card-promo {
       max-width: 320px;
