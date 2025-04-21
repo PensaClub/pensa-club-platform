@@ -19,7 +19,7 @@ export const AllArticles = () => {
     const fetchArticles = async () => {
       const fetchedArticles = await getAllArticles(true);
       if (fetchedArticles && fetchedArticles.length > 0) {
-        // Зареждаме аналитичните данни за всички статии
+
         loadArticleViewCounts(fetchedArticles.map(article => article.id));
       }
     };
@@ -38,7 +38,6 @@ export const AllArticles = () => {
         ))
       );
       
-      // Сортиране на статиите според избраната опция
       const sorted = [...filtered].sort((a, b) => {
         switch(sortOption) {
           case 'updateAt':
@@ -60,12 +59,10 @@ export const AllArticles = () => {
     }
   }, [articles, searchTerm, sortOption]);
 
-  // Вземаме текущите статии за пагинацията
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
-  
-  // Смяна на страница
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (

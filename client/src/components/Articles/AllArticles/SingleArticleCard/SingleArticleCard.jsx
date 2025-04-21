@@ -21,21 +21,18 @@ export const SingleArticleCard = ({ article }) => {
   const { deleteArticle } = useArticleContext();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  
-  // Форматиране на дата и други функционалности...
+
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('bg-BG', options);
   };
 
-  // Проверка дали URL е външен
   const isExternalUrl = (url) => {
     if (!url) return false;
     if (url.includes('firebasestorage.googleapis.com')) return false;
     return url.startsWith('http://') || url.startsWith('https://');
   };
 
-  // Получаване на източник на изображение
   const getImageSource = () => {
     if (article.mainImage.type === 'video') {
       return article.mainImage.thumbnail;
@@ -61,7 +58,6 @@ export const SingleArticleCard = ({ article }) => {
   };
   
   const toggleActive = (e) => {
-    // Спиране на event bubbling
     e.stopPropagation();
     setIsActive(!isActive);
   };
@@ -107,7 +103,7 @@ export const SingleArticleCard = ({ article }) => {
             <Link 
               to={`/profile/article-edit/${article.id}`} 
               className="article-card-edit-btn"
-              onClick={(e) => e.stopPropagation()} // Предотвратява активиране/деактивиране при кликване на бутона
+              onClick={(e) => e.stopPropagation()} 
             >
               <FontAwesomeIcon icon={faEdit} />
               <span>Редактирай</span>
