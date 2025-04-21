@@ -48,6 +48,7 @@ import { SuggestResolvedUsers } from "../AdminDashboard/AdminSuggestUser/SuggesR
 import { ProfileMessages } from "./ProfileMessages";
 import { AdminSubscription } from "../AdminDashboard/AdminSubscription/AdminSubscription";
 import ArticleCreateForm from "../Articles/ArticleCreateForm/ArticleCreateForm";
+import { AllArticles } from "../Articles/AllArticles/AllArticles";
 
 export const Profile = () => {
   const location = useLocation();
@@ -71,7 +72,8 @@ export const Profile = () => {
   const [subMenuStates, setSubMenuStates] = useState({
     ads: false,
     users: false,
-    suggest: false
+    suggest: false,
+    articles: false
   });
 
   // Получаваме текущата секция от URL-а с обект за съпоставяне
@@ -97,6 +99,7 @@ export const Profile = () => {
       "/profile/admin-suggest-users": t("admin.admin-suggest-users"),
       "/profile/suggest-resolved-users": t("admin.suggest_resolved_users"),
       "/profile/subscription-admin": t("admin.ads_subscription"),
+      "/profile/articles": "Статии",
       "/profile/article-create": "Създаване на статии",
     };
 
@@ -151,10 +154,10 @@ export const Profile = () => {
   useEffect(() => {
     const handleClickOutsideMenu = (event) => {
       if (
-        window.innerWidth <= 1024 && 
-        sideMenuRef.current && 
-        event.target && 
-        event.target.nodeType && 
+        window.innerWidth <= 1024 &&
+        sideMenuRef.current &&
+        event.target &&
+        event.target.nodeType &&
         !sideMenuRef.current.contains(event.target) &&
         !(event.target.closest && event.target.closest('.menu-toggle'))
       ) {
@@ -489,15 +492,30 @@ export const Profile = () => {
 
                   <li>
                     <NavLink
-                      to="article-create"
+                      to="articles"
+                      onClick={() => toggleSubMenu('articles')}
                       className={({ isActive }) => isActive ? 'active' : ''}
                     >
                       <span className="link-content">
                         <ForumIcon className="icon" />
-                        Създаване на статии
+                        Статии
                       </span>
-                      <ArrowIcon className="icon-arrow" />
+                      <span className={`arrow-icon ${subMenuStates.articles ? 'rotated' : ''}`}>
+                        {subMenuStates.articles ?
+                          <DownArrowIcon /> :
+                          <ArrowIcon />
+                        }
+                      </span>
                     </NavLink>
+                    <ul className={`sub-menu ${subMenuStates.articles ? 'expanded' : ''}`}>
+                      <li>
+                        <NavLink to="article-create" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Създаване на статии
+                        </NavLink>
+                      </li>
+                      {/* Тук може да добавяте и други подсекции свързани с публикации */}
+                    </ul>
                   </li>
                 </ul>
               </div>
@@ -573,6 +591,8 @@ export const Profile = () => {
             <Route path="ads-admin" element={<AdminGuard><AllAnnouncements /></AdminGuard>} />
             <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
             <Route path="article-create" element={<AdminGuard><ArticleCreateForm /></AdminGuard>} />
+            <Route path="articles" element={<AdminGuard><AllArticles /></AdminGuard>} />
+
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
             <Route path="pending-announcements" element={<AdminGuard><PendingAnnouncements setAdsCount={setAdsCount} /></AdminGuard>} />
