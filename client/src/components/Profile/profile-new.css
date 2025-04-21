@@ -203,7 +203,7 @@
   }
   
   .menu-section {
-    padding: 20px;
+    padding: 15px;
   }
   
   .menu-section.main, .menu-section.admin {
@@ -253,6 +253,8 @@
     padding: 10px;
     border-radius: 5px;
     transition: all 0.3s ease;
+    text-indent: initial;
+
   }
   
   .side-menu a:hover {
@@ -314,6 +316,8 @@
   }
   
   .sub-menu a {
+    justify-content: initial;
+    text-indent: initial;
     padding-left: 30px;
     position: relative;
   }

@@ -22,12 +22,12 @@ export const articleServiceFactory = (token) => {
       return requester.get(`${apiUrl}/articles/all`);
     },
     
-    updateArticle: async (articleData) => {
-      return requester.patch(`${apiUrl}/articles/update`, articleData);
+    updateArticle: async (id,articleData) => {
+      return requester.put(`${apiUrl}/articles/${id}`, articleData);
     },
     
     deleteArticle: async (id) => {
-      return requester.del(`${apiUrl}/articles/delete/${id}`);
+      return requester.del(`${apiUrl}/articles/${id}`);
     }
   };
 };
