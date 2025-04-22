@@ -73,7 +73,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
             mainImage: [],
             sectionImages: {}
         };
-        
+
         // Ако редактираме статия със съществуващи изображения в секциите
         if (actualInitialValues && actualInitialValues.sections) {
             actualInitialValues.sections.forEach((section, index) => {
@@ -84,7 +84,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                 }
             });
         }
-        
+
         return mediaFiles;
     }, []);
 
@@ -121,7 +121,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         mediaFiles,
         values
     }));
-    
+
     const [newTag, setNewTag] = useState("");
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [imageUrl, setImageUrl] = useState("");
@@ -181,12 +181,15 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
     // Кеширане на blob URL-и за изображения в секциите
     const sectionImagePreviewUrls = useMemo(() => {
         const urls = {};
+
+        // 1. Обработка на файлове от mediaFiles.sectionImages
         if (mediaFiles.sectionImages) {
             Object.entries(mediaFiles.sectionImages).forEach(([index, file]) => {
                 try {
-                    if (Array.isArray(file) && file.length > 0) {
+                    if (Array.isArray(file) && file.length > 0 &&
+                        (file[0] instanceof Blob || file[0] instanceof File)) {
                         urls[index] = URL.createObjectURL(file[0]);
-                    } else if (file) {
+                    } else if (file && (file instanceof Blob || file instanceof File)) {
                         urls[index] = URL.createObjectURL(file);
                     }
                 } catch (error) {
@@ -195,6 +198,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                 }
             });
         }
+
         return urls;
     }, [mediaFiles.sectionImages]);
 
@@ -781,7 +785,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                         <VideoThumbnailGenerator
                                             videoFile={mediaFiles.mainImage[0]}
                                             onThumbnailGenerated={(thumbnailFile) => {
-                                                // Качваме файла с използване на съществуващата функция за качване
                                                 uploadThumbnailFile(thumbnailFile);
                                             }}
                                         />
@@ -799,7 +802,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                             <div className="video-controls-container">
                                                 <div className="video-info-details">
                                                     <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || t('articles.createForm.externalVideo') }}></h4>
-                                                    <p>URL: {values.mainImage.videoUrl}</p>
+                                                    {/* <p>URL: {values.mainImage.videoUrl}</p> */}
                                                 </div>
                                                 <button
                                                     type="button"
@@ -930,11 +933,12 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
                                         {/* Показване на всички изображения */}
                                         <div className="section-images-container">
+
                                             {/* Показване на всички изображения от масива */}
                                             {Array.isArray(section.image) && section.image.map((image, imgIndex) => {
-                                                // Проверка дали имаме валиден src адрес
+
                                                 if (!image || !image.src) return null;
-                                                
+
                                                 return (
                                                     <div key={`image-${imgIndex}`} className="section-image-preview">
                                                         <img
@@ -943,7 +947,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                                             onClick={() => handleImageClick(image.src)}
                                                             onError={(e) => {
                                                                 console.error(`Грешка при зареждане на изображение: ${image.src}`);
-                                                                e.target.src = '/default-image-placeholder.jpg'; // Заместител при грешка
+                                                                e.target.src = '/default-image-placeholder.jpg';
                                                             }}
                                                         />
                                                         <div className="img-alt-actions">
@@ -964,14 +968,14 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                                                 <FontAwesomeIcon icon={faTimes} />
                                                             </button>
                                                         </div>
-                                                        
+
                                                         {/* ALT текст */}
                                                         {image.alt && convertEditorToHtml(image.alt) && (
                                                             <div className="img-alt-text-preview">
                                                                 ALT: <span className="truncated-alt-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.alt) }}></span>
                                                             </div>
                                                         )}
-                                                        
+
                                                         {/* Caption */}
                                                         {image.caption && convertEditorToHtml(image.caption) && (
                                                             <div className="img-caption-preview">
@@ -981,7 +985,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                                     </div>
                                                 );
                                             })}
-                                            
+
                                             {/* За обратна съвместимост - ако image не е масив, но има src */}
                                             {section.image && !Array.isArray(section.image) && section.image.src && (
                                                 <div className="section-image-preview">

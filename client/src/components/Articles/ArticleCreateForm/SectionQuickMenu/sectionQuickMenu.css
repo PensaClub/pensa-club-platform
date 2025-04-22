@@ -1,7 +1,7 @@
 
 .left-quick-menu {
     position: fixed;
-    left: calc(260px + 5%);
+    left: calc(300px + 5%);
     top: 50%;
     transform: translateY(-50%);
     display: flex;

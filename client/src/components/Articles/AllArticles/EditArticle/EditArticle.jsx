@@ -63,77 +63,91 @@ function EditArticle() {
   const prepareArticleForEdit = (article) => {
     // Копираме статията
     const preparedArticle = { ...article };
-    
     // Преобразуваме резюмето към EditorState
     preparedArticle.summary = createEditorState(article.summary);
     
-    // Преобразуваме alt текста за главно изображение
-    if (preparedArticle.mainImage && preparedArticle.mainImage.alt) {
-      preparedArticle.mainImage.alt = createEditorState(preparedArticle.mainImage.alt);
-    } else if (preparedArticle.mainImage) {
-      preparedArticle.mainImage.alt = createEditorState();
+    // КЛЮЧОВА ПРОМЯНА: Проверяваме за видео URL в sources масива
+    if (preparedArticle.mainImage) {
+        // Запазваме типа и thumbnail
+        preparedArticle.mainImage.type = article.mainImage.type || "image";
+        preparedArticle.mainImage.thumbnail = article.mainImage.thumbnail || "";
+        
+        // ВАЖНО: Извличане на videoUrl от sources масива
+        if (preparedArticle.mainImage.type === "video") {
+            // Ако videoUrl е undefined, но имаме sources масив с поне един елемент
+            if (!preparedArticle.mainImage.videoUrl && 
+                preparedArticle.mainImage.sources && 
+                preparedArticle.mainImage.sources.length > 0) {
+                
+                preparedArticle.mainImage.videoUrl = preparedArticle.mainImage.sources[0];
+
+            }
+        }
+        
+        // Преобразуваме alt текста
+        if (preparedArticle.mainImage.alt) {
+            preparedArticle.mainImage.alt = createEditorState(preparedArticle.mainImage.alt);
+        } else {
+            preparedArticle.mainImage.alt = createEditorState();
+        }
     }
     
     // Преобразуваме секциите
     if (preparedArticle.sections && preparedArticle.sections.length > 0) {
-      preparedArticle.sections = preparedArticle.sections.map(section => {
-        // Преобразуваме съдържанието към EditorState
-        const sectionCopy = {
-          ...section,
-          content: createEditorState(section.content)
-        };
-        
-        // ВАЖНО: Инициализираме масив image, ако не съществува
-        if (!sectionCopy.image) {
-          sectionCopy.image = [];
-        }
-        
-        // Проверяваме дали секцията има sectionImages (вложени изображения)
-        if (section.sectionImages && Array.isArray(section.sectionImages)) {
-          
-          // Вече имаме масив image, затова добавяме всички изображения от sectionImages
-          section.sectionImages.forEach(img => {
-            if (img.src) {
-              sectionCopy.image.push({
-                src: img.src,
-                alt: img.alt ? createEditorState(img.alt) : createEditorState(),
-                caption: img.caption ? createEditorState(img.caption) : createEditorState()
-              });
-       
+        preparedArticle.sections = preparedArticle.sections.map(section => {
+            // Преобразуваме съдържанието към EditorState
+            const sectionCopy = {
+                ...section,
+                content: createEditorState(section.content)
+            };
+            
+            // ВАЖНО: Инициализираме масив image, ако не съществува
+            if (!sectionCopy.image) {
+                sectionCopy.image = [];
             }
-          });
-        }
-        
-        // Обработка на изображенията в секцията (ако вече имаме масив image)
-        if (Array.isArray(section.image)) {
-          // Трансформираме съществуващия масив image
-          const transformedImages = section.image.map(img => ({
-            ...img,
-            src: img.src,
-            alt: img.alt ? createEditorState(img.alt) : createEditorState(),
-            caption: img.caption ? createEditorState(img.caption) : createEditorState()
-          }));
-          
-          // Обединяваме с вече добавените от sectionImages
-          sectionCopy.image = [...sectionCopy.image, ...transformedImages];
-  
-        }
-        else if (section.image && section.image.src) {
-          // Ако имаме само едно изображение, което не е в масив
-          sectionCopy.image.push({
-            src: section.image.src,
-            alt: section.image.alt ? createEditorState(section.image.alt) : createEditorState(),
-            caption: section.image.caption ? createEditorState(section.image.caption) : createEditorState()
-          });
-         
-        }
-        
-        return sectionCopy;
-      });
+            
+            // Проверяваме дали секцията има sectionImages (вложени изображения)
+            if (section.sectionImages && Array.isArray(section.sectionImages)) {
+                // Вече имаме масив image, затова добавяме всички изображения от sectionImages
+                section.sectionImages.forEach(img => {
+                    if (img.src) {
+                        sectionCopy.image.push({
+                            src: img.src,
+                            alt: img.alt ? createEditorState(img.alt) : createEditorState(),
+                            caption: img.caption ? createEditorState(img.caption) : createEditorState()
+                        });
+                    }
+                });
+            }
+            
+            // Обработка на изображенията в секцията (ако вече имаме масив image)
+            if (Array.isArray(section.image)) {
+                // Трансформираме съществуващия масив image
+                const transformedImages = section.image.map(img => ({
+                    ...img,
+                    src: img.src,
+                    alt: img.alt ? createEditorState(img.alt) : createEditorState(),
+                    caption: img.caption ? createEditorState(img.caption) : createEditorState()
+                }));
+                
+                // Обединяваме с вече добавените от sectionImages
+                sectionCopy.image = [...sectionCopy.image, ...transformedImages];
+            }
+            else if (section.image && section.image.src) {
+                // Ако имаме само едно изображение, което не е в масив
+                sectionCopy.image.push({
+                    src: section.image.src,
+                    alt: section.image.alt ? createEditorState(section.image.alt) : createEditorState(),
+                    caption: section.image.caption ? createEditorState(section.image.caption) : createEditorState()
+                });
+            }
+            
+            return sectionCopy;
+        });
     }
-        
+    
     return preparedArticle;
-  };
+};
   
   // Функция за обработка на Submit от формата
   const handleUpdateArticle = async (formData) => {
