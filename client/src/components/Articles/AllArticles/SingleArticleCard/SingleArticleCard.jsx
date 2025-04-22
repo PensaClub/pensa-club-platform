@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faEdit, 
-  faEye, 
-  faImages, 
-  faVideo, 
-  faCalendarAlt, 
+import {
+  faEdit,
+  faEye,
+  faImages,
+  faVideo,
+  faCalendarAlt,
   faUser,
   faLink,
   faExternalLinkAlt,
@@ -37,7 +37,7 @@ export const SingleArticleCard = ({ article }) => {
     if (article.mainImage.type === 'video') {
       return article.mainImage.thumbnail;
     } else {
-      return article.mainImage.sources[0] || '';
+      return article.mainImage.sources[0]?.src || '';
     }
   };
 
@@ -49,31 +49,31 @@ export const SingleArticleCard = ({ article }) => {
     if (plainText.length <= maxLength) return plainText;
     return plainText.substr(0, maxLength) + '...';
   };
-  
+
   const handleDelete = async () => {
     const success = await deleteArticle(article.id);
     if (success) {
       setShowDeleteConfirm(false);
     }
   };
-  
+
   const toggleActive = (e) => {
     e.stopPropagation();
     setIsActive(!isActive);
   };
 
   return (
-    <div 
+    <div
       className={`single-article-card ${isActive ? 'active' : ''}`}
       onClick={toggleActive}
     >
       <div className="article-image-container">
-        <img 
-          src={getImageSource() || '/default-article-image.jpg'} 
-          alt={article.title} 
+        <img
+          src={getImageSource() || '/default-article-image.jpg'}
+          alt={article.title}
           className="article-thumbnail"
         />
-        
+
         <div className="article-badges">
           {article.mainImage.type === 'slider' && article.mainImage.sources.length > 1 && (
             <span className="article-badge slider-badge">
@@ -81,14 +81,14 @@ export const SingleArticleCard = ({ article }) => {
               <span>{article.mainImage.sources.length} снимки</span>
             </span>
           )}
-          
+
           {article.mainImage.type === 'video' && (
             <span className="article-badge video-badge">
               <FontAwesomeIcon icon={faVideo} />
               <span>Видео</span>
             </span>
           )}
-          
+
           {isExternalResource && (
             <span className="article-badge external-badge">
               <FontAwesomeIcon icon={faExternalLinkAlt} />
@@ -96,21 +96,21 @@ export const SingleArticleCard = ({ article }) => {
             </span>
           )}
         </div>
-        
+
         {/* Бутони в долните ъгли - показват се само когато картата е активна */}
         {isActive && (
           <>
-            <Link 
-              to={`/profile/article-edit/${article.id}`} 
+            <Link
+              to={`/profile/article-edit/${article.id}`}
               className="article-card-edit-btn"
-              onClick={(e) => e.stopPropagation()} 
+              onClick={(e) => e.stopPropagation()}
             >
               <FontAwesomeIcon icon={faEdit} />
               <span>Редактирай</span>
             </Link>
-            
-            <button 
-              className="article-card-delete-btn" 
+
+            <button
+              className="article-card-delete-btn"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowDeleteConfirm(true);
@@ -122,29 +122,29 @@ export const SingleArticleCard = ({ article }) => {
           </>
         )}
       </div>
-      
+
       <div className="article-content">
         <h3 className="article-title">{article.title}</h3>
-        
+
         <div className="article-meta">
           <div className="meta-item">
             <FontAwesomeIcon icon={faUser} className="meta-icon" />
             <span>{article.author}</span>
           </div>
-          
+
           <div className="meta-item">
             <FontAwesomeIcon icon={faCalendarAlt} className="meta-icon" />
             <span>{formatDate(article.publishDate)}</span>
           </div>
-          
+
           <div className="meta-item views">
             <FontAwesomeIcon icon={faEye} className="meta-icon" />
             <span>{getViewCount(article.id)} прегледа</span>
           </div>
         </div>
-        
+
         <p className="article-summary">{truncateText(article.summary, 120)}</p>
-        
+
         <div className="article-footer">
           <div className="article-tags">
             {article.tags && article.tags.slice(0, 3).map((tag, index) => (
@@ -154,12 +154,12 @@ export const SingleArticleCard = ({ article }) => {
               <span className="tag-more">+{article.tags.length - 3}</span>
             )}
           </div>
-          
+
           <div className="article-links">
-            <a 
-              href={`/articles/${article.slug}`} 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              href={`/articles/${article.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="preview-link"
               onClick={(e) => e.stopPropagation()}
             >
@@ -169,7 +169,7 @@ export const SingleArticleCard = ({ article }) => {
           </div>
         </div>
       </div>
-      
+
       {/* Модален прозорец за потвърждение на изтриването */}
       {showDeleteConfirm && (
         <div className="delete-modal-overlay" onClick={(e) => e.stopPropagation()}>

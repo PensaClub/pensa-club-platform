@@ -34,9 +34,8 @@ export const ArticleCard = ({ article, featured = false }) => {
     if (article.mainImage.type === 'video') {
       return article.mainImage.thumbnail;
     } else {
-
       const source = article.mainImage.sources[0];
-      return source;
+      return source?.src;
     }
   };
 

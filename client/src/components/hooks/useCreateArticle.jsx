@@ -30,8 +30,8 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       {
         title: "",
         content: createEditorState(),
-        image: [], 
-        order: 1, 
+        image: [],
+        order: 1,
       },
     ],
     tags: [],
@@ -42,14 +42,14 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   const [errors, setErrors] = useState({});
   const [mediaFiles, setMediaFiles] = useState({
     mainImage: [],
-    sectionImages: {} 
+    sectionImages: {}
   });
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const { t } = useTranslation();
   const [imageUrl, setImageUrl] = useState("");
   const [sectionImageUrls, setSectionImageUrls] = useState({});
-  
+
   // Обработка на промени в полетата
   const onChangeHandler = (e, isEditor = false, editorValue = null) => {
     if (isEditor) {
@@ -188,15 +188,15 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
 
   const removeSection = (index) => {
     if (values.sections.length <= 1) {
-      notify("articles.minimum_one_section");
+      notify("notification.minimum_one_section");
       return;
     }
-  
+
     setValues(prev => ({
       ...prev,
       sections: removeSectionByIndex(prev.sections, index)
     }));
-  
+
     // Премахване от медийните файлове
     if (mediaFiles.sectionImages[index]) {
       const updatedMediaFiles = { ...mediaFiles };
@@ -230,7 +230,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       // За видео, проверяваме само първия файл
       const videoFile = fileArray[0];
       if (!allowedVideoTypes.includes(videoFile.type)) {
-        notify("articles.invalid_video_format");
+        notify("notification.invalid_video_format");
         return;
       }
 
@@ -246,7 +246,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       );
 
       if (validFiles.length !== fileArray.length) {
-        notify("articles.invalid_image_format");
+        notify("notification.invalid_image_format");
       }
 
       if (values.mainImage.type === "slider") {
@@ -273,7 +273,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     const validFiles = fileArray.filter(file => allowedImageTypes.includes(file.type));
 
     if (validFiles.length !== fileArray.length) {
-      notify("articles.invalid_image_format");
+      notify("notification.invalid_image_format");
     }
 
     if (validFiles.length === 0) return;
@@ -282,7 +282,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     setMediaFiles(prev => {
       // Проверяваме дали вече има масив за този индекс
       const existingFiles = prev.sectionImages[sectionIndex] || [];
-      
+
       return {
         ...prev,
         sectionImages: {
@@ -295,17 +295,17 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     // Обновяваме стойностите на секцията
     setValues(prev => {
       const updatedSections = [...prev.sections];
-      
+
       // Проверяваме дали секцията съществува
       if (!updatedSections[sectionIndex]) {
         return prev;
       }
-      
+
       // Инициализираме масива с изображения, ако не съществува
       if (!Array.isArray(updatedSections[sectionIndex].image)) {
         updatedSections[sectionIndex].image = [];
       }
-      
+
       // Добавяме новите изображения към масива
       const newImages = validFiles.map(file => ({
         src: URL.createObjectURL(file),
@@ -314,18 +314,18 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
         isFile: true,
         file: file
       }));
-      
+
       updatedSections[sectionIndex].image = [
         ...updatedSections[sectionIndex].image,
         ...newImages
       ];
-      
+
       return {
         ...prev,
         sections: updatedSections
       };
     });
-    
+
     return true;
   };
 
@@ -348,7 +348,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       if (!updatedSections[sectionIndex]) {
         return prev;
       }
-      
+
       if (Array.isArray(updatedSections[sectionIndex].image)) {
         // Премахваме изображението от масива
         updatedSections[sectionIndex].image.splice(imageIndex, 1);
@@ -356,7 +356,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
 
         updatedSections[sectionIndex].image = [];
       }
-      
+
       return {
         ...prev,
         sections: updatedSections
@@ -365,11 +365,11 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
 
     setMediaFiles(prev => {
       const sectionFiles = prev.sectionImages[sectionIndex] || [];
-      
+
       if (sectionFiles.length > imageIndex) {
         const updatedFiles = [...sectionFiles];
         updatedFiles.splice(imageIndex, 1);
-        
+
         return {
           ...prev,
           sectionImages: {
@@ -378,7 +378,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
           }
         };
       }
-      
+
       return prev;
     });
   };
@@ -397,7 +397,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     try {
       let mainImageUrls = [];
       let totalFilesCount = mediaFiles.mainImage.length;
-      
+
       // Изчисляваме общия брой на файловете за качване
       Object.values(mediaFiles.sectionImages).forEach(files => {
         if (Array.isArray(files)) {
@@ -406,7 +406,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
           totalFilesCount += 1;
         }
       });
-      
+
       let uploadedFilesCount = 0;
 
       // 1. Качване на основното изображение/видео
@@ -427,7 +427,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
                 setUploadProgress((uploadedFilesCount / totalFilesCount) * 100);
               }
             );
-            
+
             return url;
           });
 
@@ -450,21 +450,21 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
 
       // 2. Качване на изображения за секции
       const sectionImagesUrlsBySection = {};
-      
+
       // За всяка секция с изображения
       for (const [sectionIndex, files] of Object.entries(mediaFiles.sectionImages)) {
         if (!files || (Array.isArray(files) && files.length === 0)) continue;
-        
+
         const filesArray = Array.isArray(files) ? files : [files];
         const sectionImagesUrls = [];
-        
+
         // Качваме всеки файл
         for (const file of filesArray) {
           const compressedFile = await compressImage(file, {
             maxSizeMB: 1,
             maxWidthOrHeight: 1200
           });
-          
+
           const url = await uploadFileWithProgress(
             compressedFile,
             'articles/section-images',
@@ -473,10 +473,10 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
               setUploadProgress((uploadedFilesCount / totalFilesCount) * 100);
             }
           );
-          
+
           sectionImagesUrls.push(url);
         }
-        
+
         sectionImagesUrlsBySection[sectionIndex] = sectionImagesUrls;
       }
 
@@ -492,19 +492,19 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       // Обновяваме секциите с изображения
       for (const [sectionIndex, urls] of Object.entries(sectionImagesUrlsBySection)) {
         if (!urls || urls.length === 0) continue;
-        
+
         const index = parseInt(sectionIndex, 10);
         if (isNaN(index) || !updatedValues.sections[index]) continue;
-        
+
         // Получаваме текущите изображения
         let currentImages = updatedValues.sections[index].image || [];
         if (!Array.isArray(currentImages)) {
           currentImages = [];
         }
-        
+
         // Заместваме временните URL с реалните
         const updatedImages = [...currentImages];
-        
+
         // Намираме изображенията, които са файлове и ги заместваме с новите URL
         let urlIndex = 0;
         for (let i = 0; i < updatedImages.length; i++) {
@@ -540,12 +540,12 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   // Добавяне на URL адрес към основното изображение (слайдер)
   const handleMainImageUrl = (url) => {
     if (!url) return false;
-    
+
     if (!isValidImageUrl(url)) {
-      notify("articles.invalid_image_url");
+      notify("notification.invalid_image_url");
       return false;
     }
-    
+
     setValues(prev => ({
       ...prev,
       mainImage: {
@@ -553,8 +553,8 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
         sources: [...prev.mainImage.sources, url]
       }
     }));
-    
-    notify("articles.image_url_added");
+
+    notify("notification.image_url_added");
     return true;
   };
 
@@ -563,7 +563,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     if (!url) return false;
 
     if (!url.match(/^(https?:\/\/)(.+)\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i)) {
-      notify("articles.invalid_image_url");
+      notify("notification.invalid_image_url");
       return false;
     }
 
@@ -577,20 +577,20 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       if (!Array.isArray(updatedSections[sectionIndex].image)) {
         updatedSections[sectionIndex].image = [];
       }
-      
+
       updatedSections[sectionIndex].image.push({
         src: url,
         alt: createEditorState(),
         caption: createEditorState()
       });
-      
+
       return {
         ...prev,
         sections: updatedSections
       };
     });
-    
-    notify("articles.section_image_url_added");
+
+    notify("notification.section_image_url_added");
     return true;
   };
 
@@ -599,7 +599,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     setValues(prev => {
       const newSources = [...prev.mainImage.sources];
       newSources.splice(index, 1);
-      
+
       return {
         ...prev,
         mainImage: {
@@ -627,7 +627,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   const uploadThumbnailFile = async (file) => {
     try {
       setIsUploading(true);
- 
+
       const thumbnailUrl = await uploadFileWithProgress(
         file,
         'articles/thumbnails',
@@ -635,19 +635,19 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
           setUploadProgress(progress);
         }
       );
-      
+
       // След качване, актуализираме стойността на thumbnail
-      onChangeHandler({ 
-        target: { 
-          name: "mainImage.thumbnail", 
-          value: thumbnailUrl 
-        } 
+      onChangeHandler({
+        target: {
+          name: "mainImage.thumbnail",
+          value: thumbnailUrl
+        }
       });
-      
-      notify("Миниатюрата е успешно качена!");
+
+      notify("notification.thumbnail_upload_success");
     } catch (error) {
       console.error("Грешка при качване на миниатюра:", error);
-      notify("error", error);
+      notify("notification.thumbnail_upload_error", error);
     } finally {
       setIsUploading(false);
     }
@@ -666,7 +666,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     // Валидиране на формата
     const isValid = validateForm();
     if (!isValid) {
-      notify("articles.form_contains_errors");
+      notify("notification.form_contains_errors");
       return;
     }
 
@@ -691,7 +691,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       setErrors({});
     } catch (error) {
       console.error("Error submitting article:", error);
-      notify("error", error);
+      notify("notification.error", error);
     }
   };
 
