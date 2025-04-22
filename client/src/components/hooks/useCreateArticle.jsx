@@ -1,5 +1,5 @@
 /* eslint-disable no-loop-func */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { notify } from "../../utils/notify";
 import { convertEditorToHtml, createEditorState } from "../Articles/articleUtils/editor";
@@ -11,6 +11,22 @@ import { updateSectionImageAlt, updateSectionImageInfo } from "../Articles/artic
 
 import { addTagToArray, removeTagByIndex } from "../Articles/articleUtils/tags";
 export const useCreateArticle = (initialValues, onSubmitHandler) => {
+  // Подготвяме началните mediaFiles според наличните изображения от initialValues
+  const preparedMediaFiles = {
+    mainImage: [],
+    sectionImages: {}
+  };
+  
+  // Ако редактираме статия със съществуващи изображения в секциите
+  if (initialValues && initialValues.sections) {
+    initialValues.sections.forEach((section, index) => {
+      if (Array.isArray(section.image) && section.image.length > 0) {
+        // Имаме изображения в тази секция - добавяме празен масив
+        preparedMediaFiles.sectionImages[index] = [];
+      }
+    });
+  }
+
   const [values, setValues] = useState(initialValues || {
     title: "",
     slug: "",
@@ -40,10 +56,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [mediaFiles, setMediaFiles] = useState({
-    mainImage: [],
-    sectionImages: {} 
-  });
+  const [mediaFiles, setMediaFiles] = useState(preparedMediaFiles);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const { t } = useTranslation();

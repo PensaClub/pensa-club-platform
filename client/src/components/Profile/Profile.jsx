@@ -49,6 +49,7 @@ import { ProfileMessages } from "./ProfileMessages";
 import { AdminSubscription } from "../AdminDashboard/AdminSubscription/AdminSubscription";
 import ArticleCreateForm from "../Articles/ArticleCreateForm/ArticleCreateForm";
 import { AllArticles } from "../Articles/AllArticles/AllArticles";
+import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
 
 export const Profile = () => {
   const location = useLocation();
@@ -592,6 +593,7 @@ export const Profile = () => {
             <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
             <Route path="article-create" element={<AdminGuard><ArticleCreateForm /></AdminGuard>} />
             <Route path="articles" element={<AdminGuard><AllArticles /></AdminGuard>} />
+            <Route path="article-edit/:id" element={<AdminGuard><EditArticle /></AdminGuard>} />
 
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
