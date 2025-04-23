@@ -85,7 +85,7 @@ export const AboutSection = () => {
           </div>
         </div>
         
-        <div className="about-container" style={{flexDirection: "row-reverse"}}>
+        <div className="about-container vison" >
           <div className="about-image-container">
             <div className="image-wrapper">
               <img src="/images/homePage/old-people-sectinon-2.webp" alt="Възрастни хора в дигиталния свят" className="about-image" />

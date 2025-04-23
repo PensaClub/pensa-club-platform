@@ -186,7 +186,9 @@
   gap: 20px;
   flex-wrap: wrap;
 }
-
+.about-container.vison{
+  flex-direction: row-reverse;
+}
 .about-button {
   display: inline-flex;
   align-items: center;
@@ -243,6 +245,9 @@
   .about-container {
     flex-direction: column;
     text-align: center;
+  }
+  .about-container.vison{
+    flex-direction: column;
   }
   
   .content-accent {
