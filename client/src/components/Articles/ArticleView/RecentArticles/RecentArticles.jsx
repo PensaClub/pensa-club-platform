@@ -149,8 +149,8 @@ const RecentArticles = ({ currentArticleId }) => {
                   <div className="recent-article-image">
                     <img
                       src={article.mainImage.type === 'video' ?
-                        article.mainImage.thumbnail || article.mainImage.sources[0]?.src :
-                        article.mainImage.sources[0]?.src}
+                        article.mainImage.thumbnail || article.mainImage.sources[0] :
+                        article.mainImage.sources[0]}
                       alt={article.title}
                     />
                   </div>

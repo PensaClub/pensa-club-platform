@@ -37,7 +37,7 @@ export const SingleArticleCard = ({ article }) => {
     if (article.mainImage.type === 'video') {
       return article.mainImage.thumbnail;
     } else {
-      return article.mainImage.sources[0]?.src || '';
+      return article.mainImage.sources[0] || '';
     }
   };
 

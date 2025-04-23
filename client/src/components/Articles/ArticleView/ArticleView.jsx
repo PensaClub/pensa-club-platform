@@ -274,7 +274,7 @@ const ArticleView = () => {
     if (article.mainImage.type === 'slider' && article.mainImage.sources.length > 1) {
       return (
         <div className="main-media-container">
-          <ImageSlider images={article.mainImage.sources.map(img => img.src)} alt={article.mainImage.alt} />
+          <ImageSlider images={article.mainImage.sources} alt={article.mainImage.alt} />
           {article.mainImage.caption && (
             <div className="main-image-caption-container">
               <div className="main-image-caption" dangerouslySetInnerHTML={{ __html: article.mainImage.caption }} />
@@ -303,7 +303,7 @@ const ArticleView = () => {
     } else {
       return (
         <figure className="article-main-image">
-          <img src={article.mainImage.sources[0]?.src} alt={article.mainImage.alt} />
+          <img src={article.mainImage.sources[0]} alt={article.mainImage.alt} />
           {article.mainImage.caption && (
             <figcaption dangerouslySetInnerHTML={{ __html: article.mainImage.caption }} />
           )}

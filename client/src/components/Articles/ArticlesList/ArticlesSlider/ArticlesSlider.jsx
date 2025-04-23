@@ -51,7 +51,7 @@ export const ArticlesSlider = ({ articles, onSlideClick }) => {
             >
               <div className="slide-image-container">
                 <img
-                  src={article.mainImage.type === 'video' ? article.mainImage.thumbnail : article.mainImage.sources[0].src}
+                  src={article.mainImage.type === 'video' ? article.mainImage.thumbnail : article.mainImage.sources[0]}
                   alt={article.title}
                   className="slide-image"
                 />
