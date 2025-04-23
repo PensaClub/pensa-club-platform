@@ -1,4 +1,4 @@
-/* analyticsPanel.css */
+
 .analytics-panel {
     background-color: #fff;
     border-radius: 16px;
@@ -202,7 +202,7 @@
   
   .sources-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 2fr);
     gap: 15px;
   }
   
