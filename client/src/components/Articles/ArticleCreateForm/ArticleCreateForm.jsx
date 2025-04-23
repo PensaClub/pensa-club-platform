@@ -1,4 +1,5 @@
-import { useState, useRef, useMemo, useEffect, useReducer } from "react";
+
+import React, { useState, useRef, useMemo, useEffect, useReducer, forwardRef, useImperativeHandle } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faPlus, faMinus, faImage, faVideo, faSliders,
@@ -7,19 +8,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import "./articleCreateForm.css";
-import ArticlePreview from "./ArticlePreview/ArticlePreview";
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { useCreateArticle } from "../../hooks/useCreateArticle";
-import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
 import { useArticleContext } from "../../contexts/ArticleContext";
 import { createEditorState } from "../articleUtils/editor";
 import ScrollToTop from "../../ScrollToTop/ScrollToTop";
-import { ImageAltEditModal } from "./ImageAltEditModal/ImageAltEditModal";
-import VideoThumbnailGenerator from "./VideoThumbnailGenerator/VideoThumbnailGenerator";
-import { SectionQuickMenu } from "./SectionQuickMenu/SectionQuickMenu";
-// import { faChevronUp, faChevronDown, faTrash } from "@fortawesome/free-solid-svg-icons";
-const ArticleCreateForm = () => {
+import { ImageAltEditModal } from "../ArticleCreateForm/ImageAltEditModal/ImageAltEditModal";
+import VideoThumbnailGenerator from "../ArticleCreateForm/VideoThumbnailGenerator/VideoThumbnailGenerator";
+import { SectionQuickMenu } from "../ArticleCreateForm/SectionQuickMenu/SectionQuickMenu";
+import ArticlePreview from "./ArticlePreview/ArticlePreview";
+import { useCreateArticle } from "../../hooks/useCreateArticle";
+import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
+
+const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubmitHandler, isEditMode }, ref) => {
     const { t } = useTranslation();
     const { createArticle } = useArticleContext();
     const [previewMode, setPreviewMode] = useState(false);
@@ -30,7 +31,9 @@ const ArticleCreateForm = () => {
         imageIndex: null,
         image: null
     });
-    const initialValues = {
+
+    // Използваме propInitialValues (ако има такива) или дефолтните стойности
+    const defaultValues = {
         title: "",
         slug: "",
         author: "",
@@ -49,7 +52,7 @@ const ArticleCreateForm = () => {
             {
                 title: "",
                 content: createEditorState(),
-                image: null,
+                image: [],
                 order: 1,
             },
         ],
@@ -57,6 +60,33 @@ const ArticleCreateForm = () => {
         previousArticle: null,
         nextArticle: null,
     };
+
+    // Използваме пропнатите стойности, ако има такива
+    const actualInitialValues = propInitialValues || defaultValues;
+
+    // Определяме правилния onSubmitHandler
+    const submitHandler = onSubmitHandler || createArticle;
+
+    // Подготвяме началните mediaFiles според наличните изображения от initialValues
+    const preparedMediaFiles = useMemo(() => {
+        const mediaFiles = {
+            mainImage: [],
+            sectionImages: {}
+        };
+
+        // Ако редактираме статия със съществуващи изображения в секциите
+        if (actualInitialValues && actualInitialValues.sections) {
+            actualInitialValues.sections.forEach((section, index) => {
+                if (Array.isArray(section.image) && section.image.length > 0) {
+                    // Имаме изображения в тази секция - добавяме празен масив
+                    // Това ще ни помогне да знаем, че секцията има изображения
+                    mediaFiles.sectionImages[index] = [];
+                }
+            });
+        }
+
+        return mediaFiles;
+    }, []);
 
     const {
         values,
@@ -84,10 +114,15 @@ const ArticleCreateForm = () => {
         convertEditorToHtml,
         uploadThumbnailFile,
         updateImageAlt,
-    } = useCreateArticle(initialValues, createArticle);
+    } = useCreateArticle(actualInitialValues, submitHandler);
+
+    useImperativeHandle(ref, () => ({
+        onSubmit,
+        mediaFiles,
+        values
+    }));
 
     const [newTag, setNewTag] = useState("");
-
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [imageUrl, setImageUrl] = useState("");
     const [sectionImageUrls, setSectionImageUrls] = useState({});
@@ -105,6 +140,7 @@ const ArticleCreateForm = () => {
         }
         return null;
     }, [mediaFiles.mainImage]);
+
     const handleAddImageUrl = () => {
         if (handleMainImageUrl(imageUrl)) {
             setImageUrl("");
@@ -126,6 +162,7 @@ const ArticleCreateForm = () => {
         const { sectionIndex, imageIndex } = currentEditingImage;
         updateImageInfo(sectionIndex, imageIndex, altEditorState, captionEditorState);
     };
+
     // Кеширане на blob URL-и за изображения в слайдера
     const mainImagePreviewUrls = useMemo(() => {
         if (mediaFiles.mainImage && mediaFiles.mainImage.length > 0) {
@@ -144,16 +181,24 @@ const ArticleCreateForm = () => {
     // Кеширане на blob URL-и за изображения в секциите
     const sectionImagePreviewUrls = useMemo(() => {
         const urls = {};
+
+        // 1. Обработка на файлове от mediaFiles.sectionImages
         if (mediaFiles.sectionImages) {
             Object.entries(mediaFiles.sectionImages).forEach(([index, file]) => {
                 try {
-                    urls[index] = URL.createObjectURL(file);
+                    if (Array.isArray(file) && file.length > 0 &&
+                        (file[0] instanceof Blob || file[0] instanceof File)) {
+                        urls[index] = URL.createObjectURL(file[0]);
+                    } else if (file && (file instanceof Blob || file instanceof File)) {
+                        urls[index] = URL.createObjectURL(file);
+                    }
                 } catch (error) {
                     console.error("Error creating URL for section image:", error);
                     urls[index] = null;
                 }
             });
         }
+
         return urls;
     }, [mediaFiles.sectionImages]);
 
@@ -184,6 +229,7 @@ const ArticleCreateForm = () => {
     const handleEditorBlur = (name, editorState) => {
         onBlurHandler(null, true, { name, value: editorState });
     };
+
     const moveSectionUp = (index) => {
         if (index <= 0) return;
 
@@ -241,6 +287,7 @@ const ArticleCreateForm = () => {
         // Актуализираме активната секция
         setActiveSection(index + 1);
     };
+
     const handleTagAdd = (e) => {
         e.preventDefault();
         if (newTag.trim()) {
@@ -369,8 +416,6 @@ const ArticleCreateForm = () => {
         },
     };
 
-    // Премахваме стария getVideoPreviewUrl, защото използваме кеширания videoPreviewUrl
-
     if (previewMode) {
         return (
             <ArticlePreview
@@ -382,8 +427,16 @@ const ArticleCreateForm = () => {
         );
     }
 
-    return (
+    // Определяме текстовете според режима (създаване или редактиране)
+    const formTitle = isEditMode
+        ? t('articles.editForm.editArticle', 'Редактиране на статия')
+        : t('articles.createForm.createNewArticle');
 
+    const submitButtonText = isEditMode
+        ? t('articles.editForm.saveChanges', 'Запази промените')
+        : t('articles.createForm.saveBtn');
+
+    return (
         <div className="article-create-container">
             {/* Постоянно фиксирано меню - ще се показва винаги */}
             <SectionQuickMenu
@@ -394,7 +447,7 @@ const ArticleCreateForm = () => {
                 onMoveDown={moveSectionDown}
                 onRemove={removeSection}
             />
-            <h2 className="article-form-title">{t('articles.createForm.createNewArticle')}</h2>
+            <h2 className="article-form-title">{formTitle}</h2>
 
             <form className="article-form" onSubmit={onSubmit}>
                 {/* Основна информация */}
@@ -699,7 +752,7 @@ const ArticleCreateForm = () => {
 
                                     {/* Предпреглед на видео - използва кеширания URL */}
                                     {values.mainImage.type === "video" && mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && (
-                                        <div className="video-preview-container">
+                                        <div className="video-preview-container" >
                                             <div className="video-element-wrapper">
                                                 <video
                                                     controls
@@ -732,7 +785,6 @@ const ArticleCreateForm = () => {
                                         <VideoThumbnailGenerator
                                             videoFile={mediaFiles.mainImage[0]}
                                             onThumbnailGenerated={(thumbnailFile) => {
-                                                // Качваме файла с използване на съществуващата функция за качване
                                                 uploadThumbnailFile(thumbnailFile);
                                             }}
                                         />
@@ -750,7 +802,7 @@ const ArticleCreateForm = () => {
                                             <div className="video-controls-container">
                                                 <div className="video-info-details">
                                                     <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || t('articles.createForm.externalVideo') }}></h4>
-                                                    <p>URL: {values.mainImage.videoUrl}</p>
+                                                    {/* <p>URL: {values.mainImage.videoUrl}</p> */}
                                                 </div>
                                                 <button
                                                     type="button"
@@ -835,7 +887,7 @@ const ArticleCreateForm = () => {
                                     </div>
 
                                     <div className="form-group-article">
-                                    <label htmlFor={`section-image-${index}`}>{t('articles.createForm.sectionImages')}</label>
+                                        <label htmlFor={`section-image-${index}`}>{t('articles.createForm.sectionImages')}</label>
 
                                         <div className="form-group-article">
                                             <label>{t('articles.createForm.addViaUrl')}</label>
@@ -883,47 +935,57 @@ const ArticleCreateForm = () => {
                                         <div className="section-images-container">
 
                                             {/* Показване на всички изображения от масива */}
-                                            {Array.isArray(section.image) && section.image.map((image, imgIndex) => (
-                                                <div key={`image-${imgIndex}`} className="section-image-preview">
-                                                    <img
-                                                        src={image.src}
-                                                        alt={t('articles.createForm.sectionWithNumber', { number: index + 1 })}
-                                                        onClick={() => handleImageClick(image.src)}
-                                                    />
-                                                    <div className="img-alt-actions">
-                                                        <button
-                                                            type="button"
-                                                            className="img-alt-edit-btn"
-                                                            onClick={() => openAltEditModal(index, imgIndex, image)}
-                                                            title={t('articles.createForm.editInfo')}
-                                                        >
-                                                            <FontAwesomeIcon icon={faEdit} />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-image-btn"
-                                                            onClick={() => removeSectionImage(index, imgIndex)}
-                                                            title={t('articles.createForm.removeImage')}
-                                                        >
-                                                            <FontAwesomeIcon icon={faTimes} />
-                                                        </button>
+                                            {Array.isArray(section.image) && section.image.map((image, imgIndex) => {
+
+                                                if (!image || !image.src) return null;
+
+                                                return (
+                                                    <div key={`image-${imgIndex}`} className="section-image-preview">
+                                                        <img
+                                                            src={image.src}
+                                                            alt={t('articles.createForm.sectionWithNumber', { number: index + 1 })}
+                                                            onClick={() => handleImageClick(image.src)}
+                                                            onError={(e) => {
+                                                                console.error(`Грешка при зареждане на изображение: ${image.src}`);
+                                                                e.target.src = '/default-image-placeholder.jpg';
+                                                            }}
+                                                        />
+                                                        <div className="img-alt-actions">
+                                                            <button
+                                                                type="button"
+                                                                className="img-alt-edit-btn"
+                                                                onClick={() => openAltEditModal(index, imgIndex, image)}
+                                                                title={t('articles.createForm.editInfo')}
+                                                            >
+                                                                <FontAwesomeIcon icon={faEdit} />
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                className="remove-image-btn"
+                                                                onClick={() => removeSectionImage(index, imgIndex)}
+                                                                title={t('articles.createForm.removeImage')}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTimes} />
+                                                            </button>
+                                                        </div>
+
+                                                        {/* ALT текст */}
+                                                        {image.alt && convertEditorToHtml(image.alt) && (
+                                                            <div className="img-alt-text-preview">
+                                                                ALT: <span className="truncated-alt-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.alt) }}></span>
+                                                            </div>
+                                                        )}
+
+                                                        {/* Caption */}
+                                                        {image.caption && convertEditorToHtml(image.caption) && (
+                                                            <div className="img-caption-preview">
+                                                                <span className="truncated-caption-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.caption) }}></span>
+                                                            </div>
+                                                        )}
                                                     </div>
+                                                );
+                                            })}
 
-                                                    {/* ALT текст */}
-                                                    {image.alt && convertEditorToHtml(image.alt) && (
-                                                        <div className="img-alt-text-preview">
-                                                            ALT: <span className="truncated-alt-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.alt) }}></span>
-                                                        </div>
-                                                    )}
-
-                                                    {/* Caption */}
-                                                    {image.caption && convertEditorToHtml(image.caption) && (
-                                                        <div className="img-caption-preview">
-                                                            <span className="truncated-caption-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.caption) }}></span>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
                                             {/* За обратна съвместимост - ако image не е масив, но има src */}
                                             {section.image && !Array.isArray(section.image) && section.image.src && (
                                                 <div className="section-image-preview">
@@ -1017,7 +1079,7 @@ const ArticleCreateForm = () => {
                         className="submit-btn"
                         disabled={isUploading}
                     >
-                        <FontAwesomeIcon icon={faSave} /> {t('articles.createForm.saveBtn')}
+                        <FontAwesomeIcon icon={faSave} /> {submitButtonText}
                     </button>
                 </div>
             </form>
@@ -1042,8 +1104,7 @@ const ArticleCreateForm = () => {
                 onSave={handleSaveImageInfo}
             />
         </div>
-
     );
-};
+});
 
 export default ArticleCreateForm;

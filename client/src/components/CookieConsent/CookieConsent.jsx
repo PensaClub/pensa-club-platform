@@ -17,7 +17,7 @@ export const CookieConsent = () => {
     };
 
     useEffect(() => {
-        if (!cookies.cookieConsent) { // показва съобщението само ако няма съгласие
+        if (!cookies.cookieConsent) { 
             const timeout = setTimeout(() => {
                 setIsVisible(true);
             }, 3000);

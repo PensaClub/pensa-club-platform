@@ -192,7 +192,7 @@ export const ArticleProvider = ({ children }) => {
     }
   };
 
-  const updateArticle = async (articleData) => {
+  const updateArticle = async (id,articleData) => {
     if (!isAdmin) {
       console.warn('Потребителят не е администратор, не може да редактира статия');
       notify('unauthorized-action');
@@ -201,7 +201,7 @@ export const ArticleProvider = ({ children }) => {
     
     try {
       setIsLoading(true);
-      const response = await articleService.updateArticle(articleData);
+      const response = await articleService.updateArticle(id,articleData);
       
       // Актуализиране на списъка със статии след редактиране
       setArticles(prevArticles => 
@@ -220,6 +220,7 @@ export const ArticleProvider = ({ children }) => {
       return null;
     } finally {
       setIsLoading(false);
+      navigate('profile/articles');
     }
   };
 
