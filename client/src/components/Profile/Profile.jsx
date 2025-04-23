@@ -101,7 +101,7 @@ export const Profile = () => {
       "/profile/suggest-resolved-users": t("admin.suggest_resolved_users"),
       "/profile/subscription-admin": t("admin.ads_subscription"),
       "/profile/articles": "Статии",
-      "/profile/article-create": "Създаване на статии",
+      "/profile/article-create": "Нова статия",
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -512,7 +512,7 @@ export const Profile = () => {
                       <li>
                         <NavLink to="article-create" className={({ isActive }) => isActive ? 'active' : ''}>
                           <CircleIcon className="icon" />
-                          Създаване на статии
+                          Нова статия
                         </NavLink>
                       </li>
                       {/* Тук може да добавяте и други подсекции свързани с публикации */}
