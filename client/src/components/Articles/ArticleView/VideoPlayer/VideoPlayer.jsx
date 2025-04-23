@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 // HTML5VideoPlayer.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
