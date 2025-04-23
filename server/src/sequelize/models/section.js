@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             section.belongsTo(models.article, {
                 foreignKey: 'articleId',
             });
-            section.hasMany(models.sectionImage, {
+            section.hasMany(models.image, {
                 foreignKey: 'sectionId',
             });
         }

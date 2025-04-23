@@ -8,7 +8,7 @@ import { filterArticles } from '../../articleUtils/search';
 import { useTranslation } from 'react-i18next';
 
 const RecentArticles = ({ currentArticleId }) => {
-  const { t } = useTranslation('articles');
+  const { t } = useTranslation();
   const [recentArticles, setRecentArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -90,7 +90,7 @@ const RecentArticles = ({ currentArticleId }) => {
           className="widget-header"
           onClick={() => setIsSearchExpanded(!isSearchExpanded)}
         >
-          <h3>{t('recentArticles.search')}</h3>
+          <h3>{t('articles.recentArticles.search')}</h3>
           <FontAwesomeIcon icon={isSearchExpanded ? faMinus : faPlus} />
         </div>
 
@@ -100,7 +100,7 @@ const RecentArticles = ({ currentArticleId }) => {
               <div className="search-input-wrapper">
                 <input
                   type="text"
-                  placeholder={t('recentArticles.searchPlaceholder')}
+                  placeholder={t('articles.recentArticles.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -125,10 +125,10 @@ const RecentArticles = ({ currentArticleId }) => {
           onClick={() => setIsArticlesExpanded(!isArticlesExpanded)}
         >
           <h3>
-            {isSearching ? t('recentArticles.searchResults') : t('recentArticles.latestPosts')}
+            {isSearching ? t('articles.recentArticles.searchResults') : t('articles.recentArticles.latestPosts')}
             {isSearching && (
               <button className="clear-search" onClick={clearSearch}>
-                {t('recentArticles.clear')}
+                {t('articles.recentArticles.clear')}
               </button>
             )}
           </h3>
@@ -139,7 +139,7 @@ const RecentArticles = ({ currentArticleId }) => {
           <div className="recent-articles-list">
             {recentArticles.length === 0 && !isSearching && (
               <div className="no-results">
-                <p>{t('recentArticles.loading')}</p>
+                <p>{t('articles.recentArticles.loading')}</p>
               </div>
             )}
 
@@ -158,7 +158,7 @@ const RecentArticles = ({ currentArticleId }) => {
                     <div className="article-category">
                       {article.tags && article.tags.length > 0 ?
                         article.tags[0].toUpperCase() :
-                        t('recentArticles.category')}
+                        t('articles.recentArticles.category')}
                     </div>
                     <h4 className="recent-article-title">{article.title}</h4>
                   </div>
@@ -168,7 +168,7 @@ const RecentArticles = ({ currentArticleId }) => {
 
             {isSearching && filteredArticles.length === 0 && (
               <div className="no-results">
-                <p>{t('recentArticles.noResults', { searchTerm })}</p>
+                <p>{t('articles.recentArticles.noResults', { searchTerm })}</p>
               </div>
             )}
           </div>

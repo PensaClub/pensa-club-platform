@@ -1,6 +1,6 @@
 const articleController = require('express').Router();
 const customError = require('../utils/customError');
-const { article, mainImage, section, sectionImage, user_details } = require('../sequelize/models');
+const { article, mainImage, section, user_details, image } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const { updateArticleRelationships } = require('../utils/articleUtils');
@@ -11,7 +11,14 @@ const articleIncludeConfig = [
     {
         model: mainImage,
         as: 'mainImage',
-        attributes: ['id', 'type', 'sources', 'alt', 'thumbnail'],
+        attributes: ['id', 'type', 'alt', 'thumbnail'],
+        include: [
+            {
+                model: image,
+                as: 'sources',
+                attributes: ['id', 'src', 'alt', 'caption'],
+            },
+        ],
     },
     {
         model: section,
@@ -19,7 +26,7 @@ const articleIncludeConfig = [
         attributes: ['id', 'title', 'content', 'order'],
         include: [
             {
-                model: sectionImage,
+                model: image,
                 attributes: ['id', 'src', 'alt', 'caption'],
             },
         ],
@@ -46,13 +53,12 @@ const articleAttributes = ['id', 'title', 'slug', 'summary', 'author', 'publishD
 
 articleController.get('/all', checkPermission('article', 'read'), async (req, res, next) => {
     try {
+        const excludeSections = articleIncludeConfig.filter((config) => config.as !== 'sections');
+
         const articles = await article.findAll({
-            include: articleIncludeConfig,
+            include: excludeSections,
             attributes: articleAttributes,
-            order: [
-                ['publishDate', 'DESC'],
-                [{ model: section, as: 'sections' }, 'order', 'ASC'],
-            ],
+            order: [['publishDate', 'DESC']],
         });
 
         return res.json(articles || []);
@@ -173,7 +179,7 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
                         if (sectionData.image && Array.isArray(sectionData.image)) {
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
-                                    await sectionImage.create(
+                                    await image.create(
                                         {
                                             src: imageData.src ?? null,
                                             alt: imageData.alt ?? null,
@@ -276,7 +282,12 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             if (sections && Array.isArray(sections)) {
                 const existingSections = await section.findAll({
                     where: { articleId: existingArticle.id },
-                    include: [sectionImage],
+                    include: [
+                        {
+                            model: image,
+                            attributes: ['id', 'src', 'alt', 'caption'],
+                        },
+                    ],
                     transaction: t,
                 });
 
@@ -309,7 +320,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                         if (sectionData.image && Array.isArray(sectionData.image)) {
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
-                                    await sectionImage.create(
+                                    await image.create(
                                         {
                                             src: imageData.src ?? null,
                                             alt: imageData.alt ?? null,
@@ -334,7 +345,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                         );
 
                         if (sectionData.image && Array.isArray(sectionData.image)) {
-                            await sectionImage.destroy({
+                            await image.destroy({
                                 where: {
                                     sectionId: existingSection.id,
                                     id: {
@@ -347,7 +358,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
                                     if (imageData.id) {
-                                        await sectionImage.update(
+                                        await image.update(
                                             {
                                                 src: imageData.src ?? null,
                                                 alt: imageData.alt ?? null,
@@ -359,7 +370,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                                             }
                                         );
                                     } else {
-                                        await sectionImage.create(
+                                        await image.create(
                                             {
                                                 src: imageData.src ?? null,
                                                 alt: imageData.alt ?? null,
@@ -371,8 +382,11 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                                     }
                                 })
                             );
-                        } else if (existingSection.sectionImage) {
-                            await existingSection.sectionImage.destroy({ transaction: t });
+                        } else if (existingSection.image) {
+                            await image.destroy({
+                                where: { sectionId: existingSection.id },
+                                transaction: t,
+                            });
                         }
                     }
                 }

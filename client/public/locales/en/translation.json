@@ -8,7 +8,8 @@
     "logout": "Logout",
     "ad-create": "Create ad",
     "home": "Home",
-    "articles": "Articles"
+    "articles": "Articles",
+    "welcome": "Welcome"
   },
   "footer": {
     "site-map": "Site Map",
@@ -503,7 +504,7 @@
     "subscriber-exists": "This email is already subscribed!",
     "subscribe-username-length": "Username must be between 3 and 16 characters long!",
     "subscribe-username-content": "Username must start with a letter and can only contain letters, numbers, and underscores!",
-    "error": "An error occurred. Please try submitting data again!",
+    "error": "An error occurred. Please try again!",
     "email-send": "The email has been sent successfully!",
     "error-images": "You can only upload up to 4 images.",
     "success-delete-suggest": "Successfully delete suggested user!",
@@ -515,7 +516,19 @@
     "success_delete_message": "Successfully delete message!",
     "error-authorize": "Error! Invalid email and/or wrong password!",
     "success-comment": "Successfully add comment!",
-    "success-delete-message": "Successfully delete message!"
+    "success-delete-message": "Successfully delete message!",
+    "article-created-success": "Article created successfully!",
+    "article-updated-success": "Article updated successfully!",
+    "article-deleted-success": "Article deleted successfully!",
+    "unauthorized-action": "Unauthorized action! You don't have the required permissions.",
+    "thumbnail_upload_error": "Error uploading thumbnail: {{error}}",
+    "thumbnail_upload_success": "Thumbnail uploaded successfully!",
+    "minimum_one_section": "At least one section is required",
+    "invalid_video_format": "Invalid video format",
+    "invalid_image_format": "Invalid image format",
+    "invalid_image_url": "Invalid image URL",
+    "image_url_added": "Image URL added successfully",
+    "section_image_url_added": "Section image URL added successfully"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
@@ -819,6 +832,18 @@
         "speed": "Speed",
         "subtitlesOff": "Off",
         "youtubePlayer": "YouTube video player"
+    },
+    "validation": {
+        "title_required": "Title is required",
+        "title_too_short": "Title must be at least 4 characters long",
+        "title_too_long": "Title cannot exceed 100 characters",
+        "slug_required": "URL identifier is required",
+        "slug_invalid_format": "URL identifier can only contain lowercase letters, numbers, and hyphens",
+        "author_required": "Author is required",
+        "summary_required": "Summary is required",
+        "image_alt_required": "Image alternative text is required",
+        "section_title_required": "Section title is required",
+        "section_content_required": "Section content is required"
     }
   }
 }
