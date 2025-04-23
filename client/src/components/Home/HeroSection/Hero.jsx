@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 export const Hero = () => {
   const { t } = useTranslation();
   const bgRef = useRef(null);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       if (bgRef.current) {
@@ -14,7 +14,7 @@ export const Hero = () => {
         bgRef.current.style.transform = `translateY(${scrollY * 0.5}px)`;
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -24,25 +24,25 @@ export const Hero = () => {
       {/* Parallax Background */}
       <div className="hero-bg-image" ref={bgRef}></div>
       <div className="hero-overlay"></div>
-      
+
       {/* Main Content */}
       <div className="hero-content-wrapper">
         <div className="hero-text-container">
           <div className="hero-subtitle">{t("hero.short-desc")}</div>
           <h1 className="hero-title">
-            ДОСТОЕН ЖИВОТ<br />В ТРЕТАТА ВЪЗРАСТ
+          <Trans i18nKey="hero.title-part1" /><br />{t('hero.title-part2')}
           </h1>
           <div className="hero-description">
             <Trans i18nKey="hero.desc" components={{ span: <strong /> }} />
           </div>
           <Link to="/profile/data" className="hero-button">
-            <span>Влез в клуба</span>
+            <span>{t('hero.join-the-club')}</span>
             <svg viewBox="0 0 24 24" width="24" height="24">
               <path fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M5 12h14m-6-6l6 6-6 6"/>
             </svg>
           </Link>
         </div>
-        
+
         <div className="hero-video-container">
           <div className="video-frame">
             <div className="video-frame-inner">
@@ -85,15 +85,15 @@ export const Hero = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Wave Transition */}
       <div className="wave-container">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-          <path d="M0,32L48,48C96,64,192,96,288,96C384,96,480,64,576,53.3C672,43,768,53,864,58.7C960,64,1056,64,1152,53.3C1248,43,1344,21,1392,10.7L1440,0L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z" 
+          <path d="M0,32L48,48C96,64,192,96,288,96C384,96,480,64,576,53.3C672,43,768,53,864,58.7C960,64,1056,64,1152,53.3C1248,43,1344,21,1392,10.7L1440,0L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"
                 fill="#f7f7f7" fillOpacity="1"></path>
         </svg>
       </div>
-      
+
       {/* Scrolling Info Banner */}
       <div className="scrolling-info">
         <div className="info-content">

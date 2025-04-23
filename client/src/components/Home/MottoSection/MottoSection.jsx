@@ -9,8 +9,8 @@ export const MottoSection = () => {
 
   return (
     <section className="motto-section-modern">
-      <h2 className="motto-main-title">Какво ви предлагаме</h2>
-      
+      <h2 className="motto-main-title">{t('motto.main-title')}</h2>
+
       <div className="motto-cards-container">
         <MottoCard
           icon={"fa fa-comments-o"}

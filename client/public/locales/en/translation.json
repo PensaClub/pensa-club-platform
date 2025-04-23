@@ -35,7 +35,8 @@
     "no_results": "No results found"
   },
   "hero": {
-    "title": "DECENT LIFE IN THE THIRD AGE",
+    "title-part1": "DIGNIFIED<br/>LIFE",
+    "title-part2": "IN OLD AGE",
     "slide-info": "The website is a work in progress, developed by high-school students, building a 'Bridge between generations'. It is unfolding slowly, with uncertainties and many twists and turns....but we all cherish the JOURNEY WE ARE TAKING TOGETHER!",
     "short-desc": "Everyone deserves a",
     "desc": "An innovative platform that creates a community of people of the same age, with shared interests, new ideas, and new knowledge!",
@@ -50,7 +51,8 @@
       "forth-revolution-desc": "Focused on smart factories that use the Internet of Things (IoT), automated decision making and machine learning to further increase manufacturing efficiency.",
       "fifth-revolution-title": "Revolution 5.0",
       "fifth-revolution-desc": "This is the latest stage in the development, which involves the use of artificial intelligence not only for automation, but also for the integration of human creative and analytical potential"
-    }
+    },
+    "join-the-club": "Join the club"
   },
   "motto": {
     "title1": "Social",
@@ -60,11 +62,16 @@
     "desc2":"Stimulate your thinking, improve your memory, while having fun and learning.",
     "desc3":"Healthy practices, tips, and resources that will help you live better.",
     "about-btn": "Join the club",
-    "suggestion-btn": "Invite a friend"
+    "suggestion-btn": "Invite a friend",
+    "learn-more-btn": "Learn more",
+    "join-us-btn": "Join us",
+    "main-title": "What we offer you"
   },
   "about": {
     "title": "Our mission",
-    "desc": "To create an innovative platform, a tool for building community. We unite people of similar age with common interests, new ideas, and knowledge. We strive to build a community based on interaction and mutual support. The expected outcome is to improve quality of life through active engagement in modernity, support for acquiring new skills and interests, and encouraging a healthy, fulfilling, and dignified life."
+    "desc": "To create an innovative platform, a tool for building community. We unite people of similar age with common interests, new ideas, and knowledge. We strive to build a community based on interaction and mutual support. The expected outcome is to improve quality of life through active engagement in modernity, support for acquiring new skills and interests, and encouraging a healthy, fulfilling, and dignified life.",
+    "ourVision": "Our vision",
+    "visionDesc": "Our vision is a world where age is no barrier to digital inclusion. We are creating a bridge between generations, where older people receive accessible support in navigating technology. We believe that through mutual support and shared experiences, we can build a community where everyone, regardless of age, feels confident in the digital world."
   },
   "news-subscribe": {
     "title": "Stay up to date with",
