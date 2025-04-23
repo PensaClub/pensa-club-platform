@@ -1189,7 +1189,9 @@
 .remove-video-btn:hover {
     background-color: rgba(231, 76, 60, 0.2);
 }
-
+.player-controls svg{
+   color: var(--bg-white) !important;
+}
 @media (max-width: 768px) {
     .video-controls-container {
         flex-direction: column;
