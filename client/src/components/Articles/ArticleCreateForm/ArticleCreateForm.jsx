@@ -752,7 +752,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
                                     {/* Предпреглед на видео - използва кеширания URL */}
                                     {values.mainImage.type === "video" && mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && (
-                                        <div className="video-preview-container">
+                                        <div className="video-preview-container" >
                                             <div className="video-element-wrapper">
                                                 <video
                                                     controls

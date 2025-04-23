@@ -152,6 +152,11 @@ function EditArticle() {
   // Функция за обработка на Submit от формата
   const handleUpdateArticle = async (formData) => {
     try {
+      if (window.preventNavigationFlag) {
+        window.preventNavigationFlag = false;
+        return;
+      }
+      
       setStatusMessage({
         type: "warning",
         text: "Запазване на статията..."

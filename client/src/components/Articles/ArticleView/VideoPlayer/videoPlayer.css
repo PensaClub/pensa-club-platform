@@ -101,6 +101,17 @@
   border-radius: 3px;
 }
 
+/* Нов стил за буфериран прогрес */
+.progress-buffered {
+  position: absolute;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+  top: 0;
+  left: 0;
+  transition: width 0.1s linear;
+}
+
 .progress-filled {
   position: absolute;
   height: 100%;
@@ -252,4 +263,33 @@
   .play-button-overlay svg {
     font-size: 2.8rem;
   }
+}
+
+/* Промяна на основните цветове за да са по-близо до NOVA плейъра */
+.progress-filled {
+  background-color: #00a0ff; /* NOVA синьо */
+}
+
+.progress-handle {
+  background-color: #00a0ff;
+}
+
+.progress-buffered {
+  background-color: rgba(0, 160, 255, 0.3); /* По-светло NOVA синьо */
+}
+
+/* Добавяме анимация при бутоните */
+.control-button:hover svg {
+  transform: scale(1.1);
+}
+
+/* Малък блясък на прогрес бара */
+.progress-filled::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
 }

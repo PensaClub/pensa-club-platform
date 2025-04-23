@@ -22,6 +22,7 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [bufferedTime, setBufferedTime] = useState(0);
   
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -41,7 +42,16 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
   };
 
   // Функция за старт/пауза на видео
-  const togglePlay = () => {
+  const togglePlay = (e) => {
+    // Спираме разпространението на събитието и предотвратяваме стандартното действие
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    
+    // Задаваме глобален флаг, който ще бъде проверен в handleUpdateArticle
+    window.preventNavigationFlag = true;
+    
     const video = videoRef.current;
     if (video) {
       if (video.paused) {
@@ -56,7 +66,13 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
   };
 
   // Функция за смяна на звука
-  const toggleMute = () => {
+  const toggleMute = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    window.preventNavigationFlag = true;
+    
     const video = videoRef.current;
     if (video) {
       video.muted = !video.muted;
@@ -66,6 +82,9 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
 
   // Функция за промяна на силата на звука
   const handleVolumeChange = (e) => {
+    e.stopPropagation();
+    window.preventNavigationFlag = true;
+    
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     
@@ -83,16 +102,36 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
     }
   };
 
+  // Следене на буфера
+  const handleBufferProgress = () => {
+    const video = videoRef.current;
+    if (video && video.buffered.length > 0) {
+      const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+      setBufferedTime(bufferedEnd);
+    }
+  };
+
   // Функция за промяна на позицията на плеъра
   const handleSeek = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    window.preventNavigationFlag = true;
+    
     if (videoRef.current) {
-      const percentage = e.nativeEvent.offsetX / e.currentTarget.offsetWidth;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const percentage = (e.clientX - rect.left) / rect.width;
       videoRef.current.currentTime = percentage * duration;
     }
   };
 
   // Функция за цял екран
-  const handleFullScreen = () => {
+  const handleFullScreen = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    window.preventNavigationFlag = true;
+    
     if (containerRef.current) {
       if (containerRef.current.requestFullscreen) {
         containerRef.current.requestFullscreen();
@@ -134,14 +173,18 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
     const handleVolumeEvent = () => {
-      setVolume(video.volume);
-      setIsMuted(video.muted);
+      if (video) {
+        setVolume(video.volume);
+        setIsMuted(video.muted);
+      }
     };
     
     if (video) {
       video.addEventListener('play', handlePlay);
       video.addEventListener('pause', handlePause);
       video.addEventListener('volumechange', handleVolumeEvent);
+      video.addEventListener('progress', handleBufferProgress);
+      video.addEventListener('waiting', handleBufferProgress);
     }
     
     return () => {
@@ -149,6 +192,8 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
         video.removeEventListener('play', handlePlay);
         video.removeEventListener('pause', handlePause);
         video.removeEventListener('volumechange', handleVolumeEvent);
+        video.removeEventListener('progress', handleBufferProgress);
+        video.removeEventListener('waiting', handleBufferProgress);
       }
       
       if (timeoutRef.current) {
@@ -160,34 +205,45 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
   // Клавиатурни контроли
   useEffect(() => {
     const handleKeyPress = (e) => {
-      if (document.activeElement.tagName.toLowerCase() === 'input') return;
+      if (document.activeElement.tagName.toLowerCase() === 'input' || 
+          document.activeElement.tagName.toLowerCase() === 'textarea') {
+        return;
+      }
       
-      if (containerRef.current && containerRef.current.contains(document.activeElement)) {
-        switch (e.key) {
-          case ' ':
-          case 'k':
-            e.preventDefault();
-            togglePlay();
-            break;
-          case 'f':
-            handleFullScreen();
-            break;
-          case 'm':
-            toggleMute();
-            break;
-          case 'ArrowRight':
-            if (videoRef.current) {
-              videoRef.current.currentTime += 10;
-            }
-            break;
-          case 'ArrowLeft':
-            if (videoRef.current) {
-              videoRef.current.currentTime -= 10;
-            }
-            break;
-          default:
-            break;
-        }
+      // Премахваме проверката за активен елемент - така клавишите работят навсякъде
+      switch (e.key) {
+        case ' ':
+        case 'k':
+          e.preventDefault();
+          window.preventNavigationFlag = true;
+          togglePlay();
+          break;
+        case 'f':
+          e.preventDefault();
+          window.preventNavigationFlag = true;
+          handleFullScreen();
+          break;
+        case 'm':
+          e.preventDefault();
+          window.preventNavigationFlag = true;
+          toggleMute();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          window.preventNavigationFlag = true;
+          if (videoRef.current) {
+            videoRef.current.currentTime += 10;
+          }
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          window.preventNavigationFlag = true;
+          if (videoRef.current) {
+            videoRef.current.currentTime -= 10;
+          }
+          break;
+        default:
+          break;
       }
     };
 
@@ -220,9 +276,10 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
       className="html5-player-container" 
       onMouseMove={handleMouseMove}
       onMouseLeave={() => isPlaying && setHideControls(true)}
+      onClick={(e) => e.stopPropagation()}
     >
       {(thumbnail && !isPlaying && !isLoaded) && (
-        <div className="thumbnail-container" onClick={togglePlay}>
+        <div className="thumbnail-container" onClick={(e) => togglePlay(e)}>
           <img src={thumbnail} alt={alt || ''} className="video-thumbnail" />
           <div className="play-button-overlay">
             <FontAwesomeIcon icon={faPlay} />
@@ -235,9 +292,10 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
         className="native-video-player"
         src={src}
         poster={thumbnail}
-        onClick={togglePlay}
+        onClick={(e) => togglePlay(e)}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleMetadataLoaded}
+        onProgress={handleBufferProgress}
         onEnded={() => setIsPlaying(false)}
         preload="metadata"
         playsInline
@@ -246,10 +304,18 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
       <div className={`player-controls ${hideControls ? 'hidden' : ''}`}>
         <div className="progress-bar" onClick={handleSeek}>
           <div className="progress-background"></div>
+          
+          {/* Нов буфер елемент */}
+          <div 
+            className="progress-buffered"
+            style={{ width: `${(bufferedTime / duration) * 100}%` }}
+          ></div>
+          
           <div 
             className="progress-filled"
             style={{ width: `${(currentTime / duration) * 100}%` }}
           ></div>
+          
           <div 
             className="progress-handle"
             style={{ left: `${(currentTime / duration) * 100}%` }}
@@ -258,12 +324,20 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
         
         <div className="bottom-controls">
           <div className="left-controls">
-            <button onClick={togglePlay} className="control-button">
+            <button 
+              type="button" 
+              onClick={(e) => togglePlay(e)} 
+              className="control-button"
+            >
               <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
             </button>
             
             <div className="volume-control">
-              <button onClick={toggleMute} className="control-button">
+              <button 
+                type="button"
+                onClick={(e) => toggleMute(e)} 
+                className="control-button"
+              >
                 <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeUp} />
               </button>
               <input 
@@ -274,6 +348,7 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
                 className="volume-slider"
+                onClick={(e) => e.stopPropagation()}
               />
             </div>
             
@@ -289,13 +364,15 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
                 download 
                 className="control-button"
                 title={t('articles.videoPlayer.download')}
+                onClick={(e) => e.stopPropagation()}
               >
                 <FontAwesomeIcon icon={faDownload} />
               </Link>
             )}
             
             <button 
-              onClick={handleFullScreen} 
+              type="button"
+              onClick={(e) => handleFullScreen(e)} 
               className="control-button"
               title={t('articles.videoPlayer.fullscreen')}
             >
