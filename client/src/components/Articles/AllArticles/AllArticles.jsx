@@ -4,11 +4,13 @@ import './allArticles.css';
 import { useArticleContext } from '../../contexts/ArticleContext';
 import Pagination from '../Pagination/Pagination';
 import { SingleArticleCard } from './SingleArticleCard/SingleArticleCard';
+import { useTranslation } from 'react-i18next';
 
 export const AllArticles = () => {
+  const { t } = useTranslation();
   const { articles, getAllArticles, isLoading } = useArticleContext();
   const { loadArticleViewCounts } = useAnalytics();
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(8);
@@ -23,21 +25,21 @@ export const AllArticles = () => {
         loadArticleViewCounts(fetchedArticles.map(article => article.id));
       }
     };
-    
+
     fetchArticles();
   }, []);
 
   useEffect(() => {
     if (articles.length > 0) {
-      const filtered = articles.filter(article => 
+      const filtered = articles.filter(article =>
         article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         article.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
         article.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (article.tags && article.tags.some(tag => 
+        (article.tags && article.tags.some(tag =>
           tag.toLowerCase().includes(searchTerm.toLowerCase())
         ))
       );
-      
+
       const sorted = [...filtered].sort((a, b) => {
         switch(sortOption) {
           case 'updateAt':
@@ -54,7 +56,7 @@ export const AllArticles = () => {
             return new Date(b.updateAt || b.publishDate) - new Date(a.updateAt || a.publishDate);
         }
       });
-      
+
       setFilteredArticles(sorted);
     }
   }, [articles, searchTerm, sortOption]);
@@ -68,12 +70,12 @@ export const AllArticles = () => {
   return (
     <div className="admin-articles-container">
       <div className="admin-articles-header">
-        <h1 className="admin-articles-title">Управление на статии</h1>
+        <h1 className="admin-articles-title">{t('articles.allArticles.management')}</h1>
         <p className="admin-articles-subtitle">
-          Общо статии: {articles.length} | Филтрирани: {filteredArticles.length}
+          {t('articles.allArticles.totalArticles', { count: articles.length, filtered: filteredArticles.length })}
         </p>
       </div>
-      
+
 <div className="admin-articles-toolbar">
   <div className="search-wrapper">
     <svg className="search-icon-all" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -85,33 +87,33 @@ export const AllArticles = () => {
     </svg>
     <input
       type="text"
-      placeholder="Търсене по заглавие, съдържание, автор или таг..."
+      placeholder={t('articles.allArticles.searchPlaceholder')}
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
       className="search-input-all"
     />
   </div>
-  
-  <select 
-    value={sortOption} 
+
+  <select
+    value={sortOption}
     onChange={(e) => setSortOption(e.target.value)}
     className="sort-select"
   >
-    <option value="updateAt">Най-скоро обновени</option>
-    <option value="publishDate">Най-скоро публикувани</option>
-    <option value="title">По заглавие</option>
-    <option value="author">По автор</option>
-    <option value="views">По брой прегледи</option>
+    <option value="updateAt">{t('articles.allArticles.sortOptions.recentlyUpdated')}</option>
+    <option value="publishDate">{t('articles.allArticles.sortOptions.recentlyPublished')}</option>
+    <option value="title">{t('articles.allArticles.sortOptions.byTitle')}</option>
+    <option value="author">{t('articles.allArticles.sortOptions.byAuthor')}</option>
+    <option value="views">{t('articles.allArticles.sortOptions.byViews')}</option>
   </select>
 </div>
-      
+
       {isLoading ? (
-        <div className="loading-spinner">Зареждане...</div>
+        <div className="loading-spinner">{t('articles.allArticles.loading')}</div>
       ) : (
         <>
           {filteredArticles.length === 0 ? (
             <div className="no-articles">
-              <p>Няма намерени статии отговарящи на търсенето.</p>
+              <p>{t('articles.allArticles.noArticlesFound')}</p>
             </div>
           ) : (
             <div className="admin-articles-grid">
@@ -120,7 +122,7 @@ export const AllArticles = () => {
               ))}
             </div>
           )}
-          
+
           <Pagination
             currentPage={currentPage}
             totalPages={Math.ceil(filteredArticles.length / articlesPerPage)}

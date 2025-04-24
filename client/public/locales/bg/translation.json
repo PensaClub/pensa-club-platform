@@ -277,8 +277,19 @@
     "rejected_ads": " не е одобрена",
     "your_ad": "Вашата обява",
     "alert_message": " Вашият профил е непълен. Моля, завършете го, за да продължите да използвате всички възможности на платформата.",
-     "street_invalid": "Моля, въведете валидна улица. Улицата трябва да съдържа между 3 и 60 символа, включващи български и английски букви и цифри."
-  },
+    "street_invalid": "Моля, въведете валидна улица. Улицата трябва да съдържа между 3 и 60 символа, включващи български и английски букви и цифри.",
+    "search_placeholder": "Търси ...",
+    "articles": "Статии",
+    "new_article": "Нова статия",
+    "profile_image":"Профилна снимка",
+    "to_website_btn": "Към сайта",
+    "warning_desc": "Ако желаете да се възползвате от всички възможности на платформата, продължете като Pensa потребител или продължете като обикновен потребител.",
+    "warning": "Вашият профил е непълен!",
+    "pensa_user_btn": "Pensa потребител",
+    "standard_user_btn": "Обикновен потребител",
+    "profile_data_alt": "Профилна снимка на потребителя",
+    "upload_image_btn": "Качи снимка"
+   },
   "admin": {
     "pending_announcements": "Неодобрени обяви",
     "search": "Търси",
@@ -781,9 +792,16 @@
         "or": "или"
     },
     "articleCard": {
-        "photos": "снимки",
-        "video": "видео",
-        "externalSource": "външен източник"
+        "photos": "photos",
+        "video": "Video",
+        "externalSource": "External source",
+        "edit": "Edit",
+        "delete": "Delete",
+        "views": "views",
+        "preview": "Preview",
+        "deleteConfirmation": "Delete Confirmation",
+        "deleteConfirmMessage": "Are you sure you want to delete the article \"{{title}}\"?",
+        "cancel": "Cancel"
     },
     "articleSlider": {
         "previousSlide": "Предишен слайд",
@@ -863,6 +881,51 @@
         "image_alt_required": "Алтернативният текст на изображението е задължителен",
         "section_title_required": "Заглавието на секцията е задължително",
         "section_content_required": "Съдържанието на секцията е задължително"
-    }
+    },
+    "editArticle": {
+        "edit_article": "Редактиране на статия",
+        "cancel": "Отказ",
+        "article_info": "Информация за статията",
+        "pewview": "Прегледи:",
+        "created_at": "Създадена на",
+        "updated_at": "Последна промяна",
+        "just_saved": "Току-що запазено"
+    },
+    "analytics": {
+        "no_data": "Няма данни за показване. Моля, изберете статия.",
+        "analytical_data": "Аналитични данни",
+        "total_views": "Общо прегледи",
+        "refresh_data": "Обнови данните",
+        "trend": "Тенденция",
+        "growth": "ръст",
+        "decline": "спад",
+        "average_time": "Средно време",
+        "shares": "Споделяния",
+        "audience": "Аудитория",
+        "devices": "Устройства",
+        "desktop": "Десктоп",
+        "mobile": "Мобилни",
+        "tablet": "Таблети",
+        "traffic_sources": "Източници на трафик",
+        "search_engines": "Търсачки",
+        "direct": "Директно",
+        "social": "Социални",
+        "referral": "Реферал",
+        "data_statistic": "Данните се базират на броя прегледи и статистики от Google Analytics (G-GE8XZREVM6)."
+    },
+    "allArticles": {
+        "management": "Управление на статии",
+        "totalArticles": "Общо статии: {{count}} | Филтрирани: {{filtered}}",
+        "searchPlaceholder": "Търсене по заглавие, съдържание, автор или таг...",
+        "sortOptions": {
+            "recentlyUpdated": "Най-скоро обновени",
+            "recentlyPublished": "Най-скоро публикувани",
+            "byTitle": "По заглавие",
+            "byAuthor": "По автор",
+            "byViews": "По брой прегледи"
+        },
+        "loading": "Зареждане...",
+        "noArticlesFound": "Няма намерени статии отговарящи на търсенето."
+      }
   }
 }

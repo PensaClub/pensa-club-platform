@@ -242,7 +242,7 @@ export const ProfileData = () => {
                 getProfileImage(profileData?.details?.gender)
                 // "/images/homePage/user-img.png"
               }
-            alt="User avatar"
+            alt={t("profile.profile_data_alt")}
           />
           <div className="user-data">
             <input
