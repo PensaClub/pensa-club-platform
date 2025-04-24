@@ -15,8 +15,10 @@ import {
 import './singleArticleCard.css';
 import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { useArticleContext } from '../../../contexts/ArticleContext';
+import { useTranslation } from 'react-i18next';
 
 export const SingleArticleCard = ({ article }) => {
+  const { t } = useTranslation();
   const { getViewCount } = useAnalytics();
   const { deleteArticle } = useArticleContext();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -78,21 +80,21 @@ export const SingleArticleCard = ({ article }) => {
           {article.mainImage.type === 'slider' && article.mainImage.sources.length > 1 && (
             <span className="article-badge slider-badge">
               <FontAwesomeIcon icon={faImages} />
-              <span>{article.mainImage.sources.length} снимки</span>
+              <span>{article.mainImage.sources.length} {t('articles.articleCard.photos')}</span>
             </span>
           )}
 
           {article.mainImage.type === 'video' && (
             <span className="article-badge video-badge">
               <FontAwesomeIcon icon={faVideo} />
-              <span>Видео</span>
+              <span>{t('articles.articleCard.video')}</span>
             </span>
           )}
 
           {isExternalResource && (
             <span className="article-badge external-badge">
               <FontAwesomeIcon icon={faExternalLinkAlt} />
-              <span>Външен източник</span>
+              <span>{t('articles.articleCard.externalSource')}</span>
             </span>
           )}
         </div>
@@ -106,7 +108,7 @@ export const SingleArticleCard = ({ article }) => {
               onClick={(e) => e.stopPropagation()}
             >
               <FontAwesomeIcon icon={faEdit} />
-              <span>Редактирай</span>
+              <span>{t('articles.articleCard.edit')}</span>
             </Link>
 
             <button
@@ -117,7 +119,7 @@ export const SingleArticleCard = ({ article }) => {
               }}
             >
               <FontAwesomeIcon icon={faTrashAlt} />
-              <span>Изтрий</span>
+              <span>{t('articles.articleCard.delete')}</span>
             </button>
           </>
         )}
@@ -139,7 +141,7 @@ export const SingleArticleCard = ({ article }) => {
 
           <div className="meta-item views">
             <FontAwesomeIcon icon={faEye} className="meta-icon" />
-            <span>{getViewCount(article.id)} прегледа</span>
+            <span>{getViewCount(article.id)} {t('articles.articleCard.views')}</span>
           </div>
         </div>
 
@@ -164,7 +166,7 @@ export const SingleArticleCard = ({ article }) => {
               onClick={(e) => e.stopPropagation()}
             >
               <FontAwesomeIcon icon={faLink} />
-              <span>Преглед</span>
+              <span>{t('articles.articleCard.preview')}</span>
             </a>
           </div>
         </div>
@@ -174,11 +176,11 @@ export const SingleArticleCard = ({ article }) => {
       {showDeleteConfirm && (
         <div className="delete-modal-overlay" onClick={(e) => e.stopPropagation()}>
           <div className="delete-modal">
-            <h4>Потвърждение за изтриване</h4>
-            <p>Сигурни ли сте, че искате да изтриете статията "{article.title}"?</p>
+            <h4>{t('articles.articleCard.deleteConfirmation')}</h4>
+            <p>{t('articles.articleCard.deleteConfirmMessage', { title: article.title })}</p>
             <div className="delete-modal-buttons">
-              <button className="cancel-button" onClick={() => setShowDeleteConfirm(false)}>Отказ</button>
-              <button className="confirm-button" onClick={handleDelete}>Изтрий</button>
+              <button className="cancel-button" onClick={() => setShowDeleteConfirm(false)}>{t('articles.articleCard.cancel')}</button>
+              <button className="confirm-button" onClick={handleDelete}>{t('articles.articleCard.delete')}</button>
             </div>
           </div>
         </div>

@@ -230,7 +230,7 @@ export const Profile = () => {
 
         <div className="search-container">
           <SearchIcon className="search-icon" />
-          <input type="text" placeholder="Търси ..." className="search-input" />
+          <input type="text" placeholder={t('profile.search_placeholder')} className="search-input" />
         </div>
 
         <div className="header-right">
@@ -525,7 +525,7 @@ export const Profile = () => {
                     >
                       <span className="link-content">
                         <ForumIcon className="icon" />
-                        Статии
+                        {t('profile.articles')}
                       </span>
                       <span className={`arrow-icon ${subMenuStates.articles ? 'rotated' : ''}`}>
                         {subMenuStates.articles ?
@@ -538,7 +538,7 @@ export const Profile = () => {
                       <li>
                         <NavLink to="article-create" className={({ isActive }) => isActive ? 'active' : ''}>
                           <CircleIcon className="icon" />
-                          Нова статия
+                          {t('profile.new_article')}
                         </NavLink>
                       </li>
                       {/* Тук може да добавяте и други подсекции свързани с публикации */}
@@ -552,7 +552,7 @@ export const Profile = () => {
               <div className="admin-profile-side-menu">
                 <img
                   src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)}
-                  alt="Профилна снимка"
+                  alt={t('profile.profile_image')}
                   className="side-menu-profile-image"
                 />
                 <div className="side-menu-profile-info">
@@ -568,7 +568,7 @@ export const Profile = () => {
             <div className="back-to-site">
               <h2 className="back-to-site-title">
                 <NavLink to="/">
-                  <LeftArrowIcon /> Към сайта
+                  <LeftArrowIcon /> {t('profile.to_website_btn')}
                 </NavLink>
               </h2>
             </div>
@@ -578,12 +578,8 @@ export const Profile = () => {
         <main className="profile-content">
           {!isFinish && (
             <div className="unfinished-profiles">
-              <p className="warning-info">Вашият профил е непълен!</p>
-              <p>
-                Ако желаете да се възползвате от всички възможности на
-                платформата, продължете като Pensa потребител или продължете като
-                обикновен потребител.
-              </p>
+              <p className="warning-info">{t('profile.warning')}</p>
+              <p>{t('profile.warning_desc')}</p>
               <div className="profile-data-btns">
                 <NavLink
                   to="/profile/profile-form"
@@ -592,12 +588,12 @@ export const Profile = () => {
                   }}
                 >
                   <button type="button" className="btn-general btn-orange">
-                    Pensa потребител
+                    {t('profile.pensa_user_btn')}
                   </button>
                 </NavLink>
                 <NavLink to="/">
                   <button type="button" className="btn-general btn-green">
-                    Обикновен потребител
+                    {t('profile.standard_user_btn')}
                   </button>
                 </NavLink>
               </div>

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faSave, faTimes, faEdit, faCalendarAlt, 
+  faSave, faTimes, faEdit, faCalendarAlt,
   faUser, faEye, faExclamationTriangle, faCheckCircle
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
@@ -21,31 +21,31 @@ function EditArticle() {
   const { t } = useTranslation();
   const { getArticleById, updateArticle } = useArticleContext();
   const { getViewCount } = useAnalytics();
-  
+
   const [originalArticle, setOriginalArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
   const [articleFormKey, setArticleFormKey] = useState(`article-form-${Date.now()}`);
-  
+
   // Зареждане на статията при монтиране на компонента
   useEffect(() => {
     const loadArticle = async () => {
       try {
         setIsLoading(true);
         const article = await getArticleById(id);
-        
+
         if (!article) {
           throw new Error("Статията не беше намерена");
         }
-        
+
         // Преобразуваме HTML съдържанието обратно към формат на редактора
         const preparedArticle = prepareArticleForEdit(article);
         setOriginalArticle(preparedArticle);
         setIsLoading(false);
-        
+
         console.log("Подготвена статия за формата:", preparedArticle);
-        
+
         // Генерираме нов ключ за формата, за да е сигурно, че ще се рендерира отначало
         setArticleFormKey(`article-form-${Date.now()}`);
       } catch (error) {
@@ -55,35 +55,35 @@ function EditArticle() {
         navigate("/profile/articles");
       }
     };
-    
+
     loadArticle();
   }, [id, navigate]);
-  
+
   // Функция за подготовка на статия за редактиране
   const prepareArticleForEdit = (article) => {
     // Копираме статията
     const preparedArticle = { ...article };
     // Преобразуваме резюмето към EditorState
     preparedArticle.summary = createEditorState(article.summary);
-    
+
     // КЛЮЧОВА ПРОМЯНА: Проверяваме за видео URL в sources масива
     if (preparedArticle.mainImage) {
         // Запазваме типа и thumbnail
         preparedArticle.mainImage.type = article.mainImage.type || "image";
         preparedArticle.mainImage.thumbnail = article.mainImage.thumbnail || "";
-        
+
         // ВАЖНО: Извличане на videoUrl от sources масива
         if (preparedArticle.mainImage.type === "video") {
             // Ако videoUrl е undefined, но имаме sources масив с поне един елемент
-            if (!preparedArticle.mainImage.videoUrl && 
-                preparedArticle.mainImage.sources && 
+            if (!preparedArticle.mainImage.videoUrl &&
+                preparedArticle.mainImage.sources &&
                 preparedArticle.mainImage.sources.length > 0) {
-                
+
                 preparedArticle.mainImage.videoUrl = preparedArticle.mainImage.sources[0];
 
             }
         }
-        
+
         // Преобразуваме alt текста
         if (preparedArticle.mainImage.alt) {
             preparedArticle.mainImage.alt = createEditorState(preparedArticle.mainImage.alt);
@@ -91,7 +91,7 @@ function EditArticle() {
             preparedArticle.mainImage.alt = createEditorState();
         }
     }
-    
+
     // Преобразуваме секциите
     if (preparedArticle.sections && preparedArticle.sections.length > 0) {
         preparedArticle.sections = preparedArticle.sections.map(section => {
@@ -100,12 +100,12 @@ function EditArticle() {
                 ...section,
                 content: createEditorState(section.content)
             };
-            
+
             // ВАЖНО: Инициализираме масив image, ако не съществува
             if (!sectionCopy.image) {
                 sectionCopy.image = [];
             }
-            
+
             // Проверяваме дали секцията има sectionImages (вложени изображения)
             if (section.sectionImages && Array.isArray(section.sectionImages)) {
                 // Вече имаме масив image, затова добавяме всички изображения от sectionImages
@@ -119,7 +119,7 @@ function EditArticle() {
                     }
                 });
             }
-            
+
             // Обработка на изображенията в секцията (ако вече имаме масив image)
             if (Array.isArray(section.image)) {
                 // Трансформираме съществуващия масив image
@@ -129,7 +129,7 @@ function EditArticle() {
                     alt: img.alt ? createEditorState(img.alt) : createEditorState(),
                     caption: img.caption ? createEditorState(img.caption) : createEditorState()
                 }));
-                
+
                 // Обединяваме с вече добавените от sectionImages
                 sectionCopy.image = [...sectionCopy.image, ...transformedImages];
             }
@@ -141,14 +141,14 @@ function EditArticle() {
                     caption: section.image.caption ? createEditorState(section.image.caption) : createEditorState()
                 });
             }
-            
+
             return sectionCopy;
         });
     }
-    
+
     return preparedArticle;
 };
-  
+
   // Функция за обработка на Submit от формата
   const handleUpdateArticle = async (formData) => {
     try {
@@ -156,34 +156,34 @@ function EditArticle() {
         window.preventNavigationFlag = false;
         return;
       }
-      
+
       setStatusMessage({
         type: "warning",
         text: "Запазване на статията..."
       });
-      
+
       // Добавяме id и updateAt към formData
       const articleToUpdate = {
         ...formData,
         id: originalArticle.id,
         updateAt: new Date().toISOString()
       };
-      
+
       // Подаваме към updateArticle функцията
       await updateArticle(id, articleToUpdate);
-      
+
       setStatusMessage({
         type: "success",
         text: "Статията беше успешно обновена!"
       });
-      
+
       setLastSaved(new Date());
-      
+
       // Изчистваме съобщението след известно време
       setTimeout(() => {
         setStatusMessage(null);
       }, 3000);
-      
+
     } catch (error) {
       console.error("Грешка при обновяване на статията:", error);
       setStatusMessage({
@@ -193,12 +193,12 @@ function EditArticle() {
       notify("error", error.message);
     }
   };
-  
+
   // Функция за отказ и връщане към списъка със статии
   const handleCancel = () => {
     navigate("/profile/articles");
   };
-  
+
   // Ако още зареждаме статията, показваме съобщение за зареждане
   if (isLoading || !originalArticle) {
     return (
@@ -209,7 +209,7 @@ function EditArticle() {
       </div>
     );
   }
-  
+
   // Форматиране на дата
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -227,33 +227,33 @@ function EditArticle() {
       <div className="edit-article-main">
         <div className="edit-article-header">
           <h1 className="edit-article-title">
-            <FontAwesomeIcon icon={faEdit} /> Редактиране на статия
+            <FontAwesomeIcon icon={faEdit} /> {t('articles.editArticle.edit_article')}
           </h1>
-          
+
           <div className="edit-article-actions">
             <button className="edit-article-action-btn cancel-btn" onClick={handleCancel}>
-              <FontAwesomeIcon icon={faTimes} /> Отказ
+              <FontAwesomeIcon icon={faTimes} /> {t('articles.editArticle.cancel')}
             </button>
           </div>
         </div>
-        
+
         {/* Статус съобщение */}
         {statusMessage && (
           <div className={`edit-article-status ${statusMessage.type}`}>
-            <FontAwesomeIcon 
+            <FontAwesomeIcon
               icon={
-                statusMessage.type === "success" ? faCheckCircle : 
+                statusMessage.type === "success" ? faCheckCircle :
                 statusMessage.type === "error" ? faExclamationTriangle :
                 faExclamationTriangle
-              } 
+              }
             />
             <p className="status-message">{statusMessage.text}</p>
           </div>
         )}
-        
+
         {/* Форма за редактиране на статия */}
         {originalArticle && (
-          <ArticleCreateForm 
+          <ArticleCreateForm
             key={articleFormKey}
             initialValues={originalArticle}
             onSubmitHandler={handleUpdateArticle}
@@ -261,62 +261,62 @@ function EditArticle() {
           />
         )}
       </div>
-      
+
       <div className="edit-article-sidebar">
         {/* Информация за статията */}
         <div className="edit-article-info">
-          <h3>Информация за статията</h3>
-          
+          <h3>{t('articles.editArticle.article_info')}</h3>
+
           <div className="article-info-item">
             <span className="article-info-label">
-              <FontAwesomeIcon icon={faEye} /> Прегледи:
+              <FontAwesomeIcon icon={faEye} /> {t('articles.editArticle.preview')}:
             </span>
             <span className="article-info-value">
               {getViewCount(originalArticle.id) || 0}
             </span>
           </div>
-          
+
           <div className="article-info-item">
             <span className="article-info-label">
-              <FontAwesomeIcon icon={faCalendarAlt} /> Създадена на:
+              <FontAwesomeIcon icon={faCalendarAlt} /> {t('articles.editArticle.created_at')}:
             </span>
             <span className="article-info-value">
               {formatDate(originalArticle.publishDate)}
             </span>
           </div>
-          
+
           {originalArticle.updateAt && (
             <div className="article-info-item">
               <span className="article-info-label">
-                <FontAwesomeIcon icon={faCalendarAlt} /> Последна промяна:
+                <FontAwesomeIcon icon={faCalendarAlt} /> {t('articles.editArticle.updated_at')}:
               </span>
               <span className="article-info-value">
                 {formatDate(originalArticle.updateAt)}
               </span>
             </div>
           )}
-          
+
           {lastSaved && (
             <div className="article-info-item">
               <span className="article-info-label">
-                <FontAwesomeIcon icon={faCalendarAlt} /> Току-що запазена:
+                <FontAwesomeIcon icon={faCalendarAlt} /> {t('articles.editArticle.just_saved')}:
               </span>
               <span className="article-info-value">
                 {formatDate(lastSaved)}
               </span>
             </div>
           )}
-          
+
           <div className="article-info-item">
             <span className="article-info-label">
-              <FontAwesomeIcon icon={faUser} /> Автор:
+              <FontAwesomeIcon icon={faUser} /> {t('articles.preview.author')}:
             </span>
             <span className="article-info-value">
               {originalArticle.author}
             </span>
           </div>
         </div>
-        
+
         {/* Панел с аналитични данни */}
         <AnalyticsPanel articleId={originalArticle.id} articleTitle={originalArticle.title} />
       </div>

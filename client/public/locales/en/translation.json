@@ -283,7 +283,18 @@
     "rejected_ads": "was not approved",
     "your_ad": "Your ad",
     "alert_message": "Your profile is incomplete. Please complete it to continue using all features of the platform.",
-    "street_invalid": "Please enter a valid street. The street should contain between 3 and 60 characters, including Bulgarian and English letters and numbers."
+    "street_invalid": "Please enter a valid street. The street should contain between 3 and 60 characters, including Bulgarian and English letters and numbers.",
+    "search_placeholder": "Search ...",
+    "articles": "Articles",
+    "new_article": "New article",
+    "profile_image": "Profile image",
+    "to_website_btn": "Go to website",
+    "warning_desc": "If you want to take advantage of all the platform's features, continue as a Pensa user or continue as a regular user.",
+    "warning": "Your profile is incomplete!",
+    "pensa_user_btn": "Pensa user",
+    "standard_user_btn": "Standard user",
+    "profile_data_alt": "User avatar",
+    "upload_image_btn": "Upload photo"
   },
   "admin": {
     "pending_announcements": "Pending Announcements",
@@ -785,7 +796,14 @@
     "articleCard": {
         "photos": "photos",
         "video": "Video",
-        "externalSource": "External source"
+        "externalSource": "External source",
+        "edit": "Редактирай",
+        "delete": "Изтрий",
+        "views": "прегледа",
+        "preview": "Преглед",
+        "deleteConfirmation": "Потвърждение за изтриване",
+        "deleteConfirmMessage": "Сигурни ли сте, че искате да изтриете статията \"{{title}}\"?",
+        "cancel": "Отказ"
     },
     "articleSlider": {
         "previousSlide": "Previous slide",
@@ -851,6 +869,51 @@
         "image_alt_required": "Image alternative text is required",
         "section_title_required": "Section title is required",
         "section_content_required": "Section content is required"
+    },
+    "editArticle": {
+        "edit_article": "Edit article",
+        "cancel": "Cancel",
+        "article_info": "Article information",
+        "preview": "Preview:",
+        "created_at": "Created on",
+        "updated_at": "Last change",
+        "just_saved": "Just saved"
+    },
+    "analytics": {
+        "no_data": "No data to display. Please select an article.",
+        "analytical_data": "Analytical Data",
+        "total_views": "Total Views",
+        "refresh_data": "Refresh Data",
+        "trend": "Trend",
+        "growth": "growth",
+        "decline": "decline",
+        "average_time": "Average time",
+        "shares": "Shares",
+        "audience": "Audience",
+        "devices": "Devices",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "tablet": "Tablets",
+        "traffic_sources": "Traffic sources",
+        "search_engines": "Search engines",
+        "direct": "Direct",
+        "social": "Social",
+        "referral": "Referral",
+        "data_statistic": "Data is based on view counts and Google Analytics statistics (G-GE8XZREVM6)."
+    },
+    "allArticles": {
+        "management": "Article Management",
+        "totalArticles": "Total articles: {{count}} | Filtered: {{filtered}}",
+        "searchPlaceholder": "Search by title, content, author or tag...",
+        "sortOptions": {
+            "recentlyUpdated": "Most recently updated",
+            "recentlyPublished": "Most recently published",
+            "byTitle": "By title",
+            "byAuthor": "By author",
+            "byViews": "By view count"
+        },
+        "loading": "Loading...",
+        "noArticlesFound": "No articles found matching your search."
     }
   }
 }

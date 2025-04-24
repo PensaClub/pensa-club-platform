@@ -10,15 +10,17 @@ import {
 import "./analyticsPanel.css";
 import { useAnalytics } from "../../../contexts/AnalyticsContext";
 import ReactGA from 'react-ga4';
+import { useTranslation } from "react-i18next";
 
 const AnalyticsPanel = ({ articleId, articleTitle }) => {
+  const { t } = useTranslation();
   const { getViewCount, loadArticleViewCounts, viewCounts } = useAnalytics();
   const [gaData, setGaData] = useState(null);
-  
+
   useEffect(() => {
     if (articleId) {
       loadArticleViewCounts([articleId]);
-      
+
       // Опит за извличане на допълнителни данни от Google Analytics
       fetchGAData();
     }
@@ -28,13 +30,13 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
     // Тук можем да използваме ReactGA за допълнителни заявки
     // Google Analytics обаче не предоставя директен достъп до данни през клиентската част
     // Затова симулираме някои базови метрики на базата на реални прегледи
-    
+
     const realViewCount = getViewCount(articleId);
-    
+
     // Изчисляваме различни метрики на базата на реалния брой прегледи
     const deviceDistribution = calculateDeviceDistribution(realViewCount);
     const trafficSources = calculateTrafficSources(realViewCount);
-    
+
     setGaData({
       viewTrend: calculateViewTrend(realViewCount),
       avgTimeOnPage: calculateAverageTime(realViewCount),
@@ -44,7 +46,7 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
       shares: { total: Math.floor(realViewCount * 0.15) } // Приблизително 15% от прегледите са от споделяния
     });
   };
-  
+
   // Логика за изчисляване на тенденцията на базата на реалния брой прегледи
   const calculateViewTrend = (viewCount) => {
     // Примерна логика: статии с повече от 50 прегледа имат положителна тенденция
@@ -54,7 +56,7 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
       direction: viewCount > 10 ? 'up' : 'down'
     };
   };
-  
+
   // Логика за изчисляване на средното време
   const calculateAverageTime = (viewCount) => {
     // По-популярните статии обикновено имат по-дълго време на четене
@@ -62,13 +64,13 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
     const seconds = Math.floor(Math.random() * 59);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
-  
+
   // Логика за изчисляване на процента на отпадане
   const calculateBounceRate = (viewCount) => {
     // По-популярните статии имат по-нисък процент на отпадане
     return `${Math.max(30, 70 - Math.floor(viewCount / 10))}%`;
   };
-  
+
   // Логика за изчисляване на разпределението по устройства
   const calculateDeviceDistribution = (viewCount) => {
     // Базова логика за разпределение по устройства
@@ -78,7 +80,7 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
       tablet: 10 + Math.floor(viewCount % 5)
     };
   };
-  
+
   // Логика за изчисляване на източници на трафик
   const calculateTrafficSources = (viewCount) => {
     return {
@@ -90,7 +92,7 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
   };
 
   const viewCount = getViewCount(articleId) || 0;
-  
+
   const refreshAnalytics = () => {
     if (articleId) {
       loadArticleViewCounts([articleId]);
@@ -102,11 +104,11 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
     return (
       <div className="analytics-panel">
         <div className="analytics-header">
-          <h2><FontAwesomeIcon icon={faChartLine} /> Аналитични данни</h2>
+          <h2><FontAwesomeIcon icon={faChartLine} /> {t('articles.analytics.analytical_data')}</h2>
         </div>
         <div className="no-data-message">
           <FontAwesomeIcon icon={faExclamationCircle} size="2x" style={{ color: '#20b2aa', marginBottom: '15px' }} />
-          <p>Няма данни за показване. Моля, изберете статия.</p>
+          <p>{t('articles.analytics.no_data')}</p>
         </div>
       </div>
     );
@@ -117,23 +119,23 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
     return (
       <div className="analytics-panel">
         <div className="analytics-header">
-          <h2><FontAwesomeIcon icon={faChartLine} /> Аналитични данни</h2>
+          <h2><FontAwesomeIcon icon={faChartLine} /> {t('articles.analytics.analytical_data')}</h2>
         </div>
-        
+
         <div className="analytics-overview">
           <div className="metric-card primary">
             <div className="metric-icon">
               <FontAwesomeIcon icon={faEye} />
             </div>
             <div className="metric-content">
-              <h3>Общо прегледи</h3>
+              <h3>{t('articles.analytics.total_views')}</h3>
               <div className="metric-value">{viewCount}</div>
             </div>
           </div>
         </div>
-        
+
         <button className="refresh-button" onClick={refreshAnalytics}>
-          <FontAwesomeIcon icon={faSync} /> Обнови данните
+          <FontAwesomeIcon icon={faSync} /> {t('articles.analytics.refresh_data')}
         </button>
       </div>
     );
@@ -142,102 +144,102 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
   return (
     <div className="analytics-panel">
       <div className="analytics-header">
-        <h2><FontAwesomeIcon icon={faChartLine} /> Аналитични данни</h2>
+        <h2><FontAwesomeIcon icon={faChartLine} /> {t('articles.analytics.analytical_data')}</h2>
       </div>
-      
+
       <div className="analytics-overview">
         <div className="metric-card primary">
           <div className="metric-icon">
             <FontAwesomeIcon icon={faEye} />
           </div>
           <div className="metric-content">
-            <h3>Общо прегледи</h3>
+            <h3>{t('articles.analytics.total_views')}</h3>
             <div className="metric-value">{viewCount}</div>
           </div>
         </div>
-        
+
         <div className="metrics-grid">
           <div className="metric-card">
             <div className="metric-icon">
-              <FontAwesomeIcon 
-                icon={gaData.viewTrend.direction === 'up' ? faArrowUp : faArrowDown} 
-                className={gaData.viewTrend.direction === 'up' ? 'trend-up' : 'trend-down'} 
+              <FontAwesomeIcon
+                icon={gaData.viewTrend.direction === 'up' ? faArrowUp : faArrowDown}
+                className={gaData.viewTrend.direction === 'up' ? 'trend-up' : 'trend-down'}
               />
             </div>
             <div className="metric-content">
-              <h3>Тенденция</h3>
+              <h3>{t('articles.analytics.trend')}</h3>
               <div className="metric-value">
                 {gaData.viewTrend.value}%
                 <span className={`trend-${gaData.viewTrend.direction}`}>
-                  {gaData.viewTrend.direction === 'up' ? ' ръст' : ' спад'}
+                  {t(`articles.analytics.${gaData.viewTrend.direction === 'up' ? 'growth' : 'decline'}`)}
                 </span>
               </div>
             </div>
           </div>
-          
+
           <div className="metric-card">
             <div className="metric-icon">
               <FontAwesomeIcon icon={faClock} />
             </div>
             <div className="metric-content">
-              <h3>Средно време</h3>
+              <h3>{t('articles.analytics.average_time')}</h3>
               <div className="metric-value">{gaData.avgTimeOnPage}</div>
             </div>
           </div>
-          
+
           <div className="metric-card">
             <div className="metric-icon">
               <FontAwesomeIcon icon={faShareAlt} />
             </div>
             <div className="metric-content">
-              <h3>Споделяния</h3>
+              <h3>{t('articles.analytics.shares')}</h3>
               <div className="metric-value">{gaData.shares.total}</div>
             </div>
           </div>
         </div>
       </div>
-      
+
       <div className="analytics-section">
-        <h3><FontAwesomeIcon icon={faUserFriends} /> Аудитория</h3>
-        
+        <h3><FontAwesomeIcon icon={faUserFriends} /> {t('articles.analytics.audience')}</h3>
+
         <div className="analytics-chart">
           <div className="chart-header">
-            <h4>Устройства</h4>
+            <h4>{t('articles.analytics.devices')}</h4>
           </div>
           <div className="horizontal-bars">
             <div className="bar-item">
               <div className="bar-label">
-                <FontAwesomeIcon icon={faDesktop} /> Десктоп
+                <FontAwesomeIcon icon={faDesktop} /> {t('articles.analytics.desktop')}
               </div>
               <div className="bar-container">
-                <div 
-                  className="bar-fill desktop" 
+                <div
+                  className="bar-fill desktop"
                   style={{width: `${gaData.devices.desktop}%`}}
                 ></div>
               </div>
               <div className="bar-value">{gaData.devices.desktop}%</div>
             </div>
-            
+
             <div className="bar-item">
               <div className="bar-label">
-                <FontAwesomeIcon icon={faMobile} /> Мобилни
+                <FontAwesomeIcon icon={faMobile} /> {t('articles.analytics.mobile')}
               </div>
               <div className="bar-container">
-                <div 
-                  className="bar-fill mobile" 
+                <div
+                  className="bar-fill mobile"
                   style={{width: `${gaData.devices.mobile}%`}}
                 ></div>
               </div>
               <div className="bar-value">{gaData.devices.mobile}%</div>
             </div>
-            
+
             <div className="bar-item">
               <div className="bar-label">
-                <FontAwesomeIcon icon={faTabletAlt} /> Таблети
+                <FontAwesomeIcon icon={faTabletAlt} /> {t('articles.analytics.tablet')}
               </div>
               <div className="bar-container">
-                <div 
-                  className="bar-fill tablet" 
+                <div
+                  className="bar-fill tablet"
                   style={{width: `${gaData.devices.tablet}%`}}
                 ></div>
               </div>
@@ -246,47 +248,47 @@ const AnalyticsPanel = ({ articleId, articleTitle }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="analytics-section">
-        <h3><FontAwesomeIcon icon={faGlobe} /> Източници на трафик</h3>
-        
+        <h3><FontAwesomeIcon icon={faGlobe} /> {t('articles.analytics.traffic_sources')}</h3>
+
         <div className="sources-list">
           <div className="source-item">
             <div className="source-name">
-              <FontAwesomeIcon icon={faSearch} /> Търсачки
+              <FontAwesomeIcon icon={faSearch} /> {t('articles.analytics.search_engines')}
             </div>
             <div className="source-value">{gaData.traffic.search}%</div>
           </div>
-          
+
           <div className="source-item">
             <div className="source-name">
-              <FontAwesomeIcon icon={faLink} /> Директно
+              <FontAwesomeIcon icon={faLink} /> {t('articles.analytics.direct')}
             </div>
             <div className="source-value">{gaData.traffic.direct}%</div>
           </div>
-          
+
           <div className="source-item">
             <div className="source-name">
-              <FontAwesomeIcon icon={faShareAlt} /> Социални
+              <FontAwesomeIcon icon={faShareAlt} /> {t('articles.analytics.social')}
             </div>
             <div className="source-value">{gaData.traffic.social}%</div>
           </div>
-          
+
           <div className="source-item">
             <div className="source-name">
-              <FontAwesomeIcon icon={faLink} /> Реферал
+              <FontAwesomeIcon icon={faLink} /> {t('articles.analytics.referral')}
             </div>
             <div className="source-value">{gaData.traffic.referral}%</div>
           </div>
         </div>
       </div>
-      
+
       <div className="analytics-info">
-        <p className="analytics-note">Данните се базират на броя прегледи и статистики от Google Analytics (G-GE8XZREVM6).</p>
+        <p className="analytics-note"> {t('articles.analytics.data_statistic')}</p>
       </div>
-      
+
       <button className="refresh-button" onClick={refreshAnalytics}>
-        <FontAwesomeIcon icon={faSync} /> Обнови данните
+        <FontAwesomeIcon icon={faSync} /> {t('articles.analytics.refresh_data')}
       </button>
     </div>
   );
