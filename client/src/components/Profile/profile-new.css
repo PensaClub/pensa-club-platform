@@ -1,5 +1,5 @@
 :root {
-    /* Основни цветове от профил панела */
+ 
     --orange: #E26020;
     --green: #1B6D4D;
     --green-cm-light: #2b5b3f;
@@ -10,11 +10,10 @@
     --text-white: #fff;
     --text-black: #333;
     
-    /* Градиенти и ефекти от articleCreateForm */
     --gradient-teal: linear-gradient(135deg, #20b2aa, #006666);
     --shadow-teal: 0 6px 15px rgba(32, 178, 170, 0.4);
     
-    /* Цветове от админ панела */
+
     --menu-shadow-color: rgba(0, 0, 0, 0.1);
     --menu-hover-bg: rgba(255, 255, 255, 0.1);
     --menu-dot-color: #4a0000;
@@ -28,7 +27,7 @@
   .hide-header {
     display: none !important;
   }
-  /* Основен контейнер */
+
   .profile-panel {
     display: flex;
     flex-direction: column;
@@ -48,6 +47,7 @@
     position: sticky;
     top: 0;
     z-index: 1111;
+    transition: none;
   }
   
   .profile-header h2 {
@@ -85,10 +85,11 @@
   }
   
   .profile-image {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     object-fit: cover;
+    margin-right: 10px;
   }
   
   .profile-menu {
@@ -510,54 +511,10 @@
     margin-top: 20px;
   }
   
-  /* Responsive */
-  /* @media (max-width: 1024px) {
-    .profile-header {
-      padding: 0.5rem;
-    }
-    
-    .search-container {
-      display: none;
-    }
-    
-    .profile-name {
-      display: none;
-    }
-    
-    .side-menu {
-      left: -300px;
-      transition: left 0.3s ease;
-    }
-    
-    .side-menu.open {
-      left: 0;
-    }
-    
-    .profile-content {
-      margin-left: 0;
-    }
-    
-    .menu-toggle {
-      display: block;
-    }
-    
-    .profile-panel.menu-open .profile-content {
-      opacity: 0.5;
-    }
-  } */
-/*   
-  @media (min-width: 1025px) {
-    .menu-toggle {
-      display: none;
-    }
-  } */
-
-
 .hide-header {
     display: none !important;
   }
   
-  /* Стилове за профил менюто */
   .profile-menu {
     position: relative;
   }
@@ -638,8 +595,43 @@
   
   .dropdown-item:hover .menu-icon {
     color: var(--green);
-  }
 
+  }
+/* Стилове за бутона за смяна на езика */
+.language-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--text-white);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+.language-toggle span{
+ font-size: var(--xs-font-size);
+  color: var(--text-white);
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+.language-toggle:hover {
+  transform: scale(1.05);
+}
+
+.language-toggle svg {
+  width: 22px;
+  height: 22px;
+  display: none;
+}
+
+.language-indicator {
+  font-weight: 600;
+  font-size: 14px;
+  background: linear-gradient(135deg, var(--bg-blue-text), var(--text-white));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 @media (max-width: 1280px) {
     .profile-content {
       margin-left: 250px;
@@ -719,7 +711,9 @@
     .profile-header h2 {
       font-size: 1.2rem;
     }
-    
+    .search-container{
+      display: none;
+    }
     .logo-site-profile {
       height: 30px;
     }
@@ -757,8 +751,9 @@
     }
     
     .profile-image {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
+      margin-right: 10px;
     }
     
     .profile-name {
