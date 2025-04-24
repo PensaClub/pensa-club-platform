@@ -475,7 +475,6 @@ header.scrolled + .header-line {
   font-weight: 500;
 }
 
-/* Скриване на десктоп навигацията и показване на мобилната на малки екрани */
 @media (max-width: 992px) {
   .desktop-nav {
     display: none;
@@ -485,7 +484,7 @@ header.scrolled + .header-line {
     display: block;
   }
   
-  /* Тъмна overlay когато менюто е отворено */
+
   .mobile-menu-container.active::before {
     content: '';
     position: fixed;
@@ -498,13 +497,13 @@ header.scrolled + .header-line {
   }
 }
 
-/* Допълнителни стилове за по-малки екрани */
+
 @media (max-width: 576px) {
   .mobile-menu-container {
     max-width: 100%;
   }
 }
-/* Адаптивен дизайн */
+
 @media (max-width: 992px) {
   .navbar {
     display: none;
