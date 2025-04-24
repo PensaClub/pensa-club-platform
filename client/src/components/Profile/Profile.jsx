@@ -50,6 +50,7 @@ import { AdminSubscription } from "../AdminDashboard/AdminSubscription/AdminSubs
 import ArticleCreateForm from "../Articles/ArticleCreateForm/ArticleCreateForm";
 import { AllArticles } from "../Articles/AllArticles/AllArticles";
 import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
+import { changeLanguage } from "i18next";
 
 export const Profile = () => {
   const location = useLocation();
@@ -217,6 +218,7 @@ export const Profile = () => {
   return (
     <div className={`profile-panel ${menuOpen ? 'menu-open' : ''}`}>
       {/* Хедър, подобен на админския */}
+
       <header className="profile-header">
         <button onClick={toggleMenu} className="menu-toggle" data-testid="menu-toggle">
           <MenuIcon />
@@ -232,9 +234,14 @@ export const Profile = () => {
         </div>
 
         <div className="header-right">
-          <button className="notification-button">
-            <NotificationIcon primaryStroke="#333" secondaryStroke="#20b2aa" />
+          {/* Заменена камбанка с бутон за смяна на езика */}
+          <button className="language-toggle" onClick={() => changeLanguage(currentLanguage !== "bg" ? "bg" : "en")}>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+              <path d="M12.87 15.07L10.33 12.56L10.36 12.53C12.1 10.59 13.34 8.36 14.07 6H17V4H10V2H8V4H1V6H12.17C11.5 7.92 10.44 9.75 9 11.35C8.07 10.32 7.3 9.19 6.69 8H4.69C5.42 9.63 6.42 11.17 7.67 12.56L2.58 17.58L4 19L9 14L12.11 17.11L12.87 15.07ZM18.5 10H16.5L12 22H14L15.12 19H19.87L21 22H23L18.5 10ZM15.88 17L17.5 12.67L19.12 17H15.88Z" fill="currentColor" />
+            </svg>
+            <span className="language-indicator">{currentLanguage === "bg" ? "BG" : "EN"}</span>
           </button>
+
           <div className="profile-menu" ref={profileMenuRef}>
             <button className="profile-button" onClick={toggleProfileMenu}>
               <img
@@ -247,7 +254,7 @@ export const Profile = () => {
               {profileData?.details?.username || profileData?.email}
             </span>
 
-            {/* Падащото меню */}
+            {/* Падащото меню с добавени линкове */}
             {profileMenuOpen && (
               <div className="profile-dropdown-new">
                 <div className="dropdown-header">
@@ -267,18 +274,37 @@ export const Profile = () => {
                       {t("header.home")}
                     </span>
                   </NavLink>
+
+                  {/* Добавен линк за статии */}
+                  <NavLink to="/articles" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <ForumIcon className="menu-icon" />
+                      {t("header.articles")}
+                    </span>
+                  </NavLink>
+
                   <NavLink to="/craigslist?reset=true" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <ForumIcon className="menu-icon" />
                       {t("header.craigslist")}
                     </span>
                   </NavLink>
+
+                  {/* Добавен линк за общност */}
+                  <NavLink to="/community" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <UsersIcon className="menu-icon" />
+                      {t("header.community")}
+                    </span>
+                  </NavLink>
+
                   <NavLink to="/ad/create" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <JobsAdsIcon className="menu-icon" />
                       {t("header.ad-create")}
                     </span>
                   </NavLink>
+
                   <NavLink to="/logout" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <LogoutIcon className="menu-icon" />
