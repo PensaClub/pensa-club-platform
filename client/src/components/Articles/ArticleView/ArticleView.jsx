@@ -201,7 +201,7 @@ const ArticleView = () => {
         console.error("Грешка при зареждане на статията:", error);
 
         if (error.message === 'ARTICLE_LIMIT_REACHED' ||
-            (error.response && error.response.status === 429)) {
+          (error.response && error.response.status === 429)) {
 
           showAssistant();
 
@@ -372,8 +372,6 @@ const ArticleView = () => {
         <div className="article-layout">
           <main className="article-content">
             <h1 className="article-title-view view">{article.title}</h1>
-
-            <div className="article-summary-view">{renderHtml(article.summary)}</div>
             <div className="article-meta-view">
               <div className="meta-item">
                 <FontAwesomeIcon icon={faUser} />
@@ -385,7 +383,6 @@ const ArticleView = () => {
               </div>
             </div>
             {renderMainMedia()}
-
             {relatedArticle && (
               <div className="related-article-link">
                 <Link to={`/articles/${relatedArticle.slug}`}>
@@ -393,6 +390,7 @@ const ArticleView = () => {
                 </Link>
               </div>
             )}
+            <div className="article-summary-view">{renderHtml(article.summary)}</div>
 
             <div className="article-body">
               {/* Рендерираме само секциите за текущата страница */}
@@ -497,7 +495,7 @@ const ArticleView = () => {
           </main>
 
           <aside className="article-sidebar">
-          <RecentArticles currentArticleId={article.id} allArticles={articles} />
+            <RecentArticles currentArticleId={article.id} allArticles={articles} />
           </aside>
         </div>
       </div>

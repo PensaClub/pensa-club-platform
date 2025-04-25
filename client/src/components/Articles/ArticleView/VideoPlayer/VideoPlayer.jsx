@@ -29,11 +29,27 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
   const containerRef = useRef(null);
   const timeoutRef = useRef(null);
 
+  // Добавяне на дебъг информация
+  console.log('Video Source:', src);
+
   // За обработка на YouTube връзки
-  const isYouTubeLink = src && typeof src === 'string' && src.includes('youtube.com');
+  const isYouTubeLink = src && typeof src === 'string' && 
+  (src.includes('youtube.com') || src.includes('youtu.be'));
+  
   const youtubeVideoId = isYouTubeLink ?
-    src.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i)?.[1] :
+  src.match(/(?:youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=)|youtu\.be\/)([^"&?\/\s]{11})/i)?.[1] :
+  null;
+
+  // Добавяне на поддръжка за Vimeo
+  const isVimeoLink = src && typeof src === 'string' && src.includes('vimeo.com');
+  const vimeoId = isVimeoLink ? 
+    src.match(/(?:vimeo\.com\/(?:video\/|channels\/.*\/|groups\/.*\/videos\/|album\/.*\/video\/|))?(\d+)(?:$|\/|\?)/i)?.[1] :
     null;
+    console.log('Video Source:', src);
+    console.log('Is YouTube:', isYouTubeLink);
+    console.log('YouTube ID:', youtubeVideoId);
+    console.log('Is Vimeo:', isVimeoLink);
+    console.log('Vimeo ID:', vimeoId);
 
   // Форматиране на време
   const formatTime = (timeInSeconds) => {
@@ -255,16 +271,33 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
   }, [isPlaying]);
 
   // За YouTube видеа
-  if (isYouTubeLink && youtubeVideoId) {
+ // Алтернативно решение - заменете YouTube iframe логиката с:
+if (isYouTubeLink && youtubeVideoId) {
+  return (
+    <div className="html5-player-container">
+      <div style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden'}}>
+        <iframe 
+          style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0}}
+          src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+          allowFullScreen
+          title="YouTube video"
+        ></iframe>
+      </div>
+    </div>
+  );
+}
+
+  // За Vimeo видеа
+  if (isVimeoLink && vimeoId) {
     return (
       <div className="html5-player-container">
         <iframe
           width="100%"
           height="100%"
-          src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-          title={alt || t('articles.videoPlayer.youtubeVideo')}
+          src={`https://player.vimeo.com/video/${vimeoId}`}
+          title={alt || t('articles.videoPlayer.vimeoVideo')}
           frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen
         ></iframe>
       </div>
