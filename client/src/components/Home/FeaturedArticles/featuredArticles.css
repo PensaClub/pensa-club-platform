@@ -1,4 +1,4 @@
-/* featuredArticles.css - Съвременен и артистичен дизайн */
+
 .inspiration-section {
   position: relative;
   padding: 100px 0 120px;
@@ -11,7 +11,7 @@
   --light: #EBEEFE;
 }
 
-/* Вълнообразен фон и преход */
+
 .inspiration-bg {
   position: absolute;
   top: 0;
@@ -27,10 +27,10 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 160px; /* Увеличена височина */
-  transform: translateY(-75%); /* Нова стойност */
+  height: 160px; 
+  transform: translateY(-75%); 
   fill: #F4F6FF;
-  filter: blur(8px); /* Добавен blur ефект за по-мек преход */
+  filter: blur(8px); 
   z-index: 1;
 }
 .second-wave {
@@ -43,7 +43,7 @@
   fill: #F4F6FF;
   z-index: 0;
 }
-/* Декоративни елементи */
+
 .inspiration-decor {
   position: absolute;
   z-index: 1;
@@ -90,7 +90,6 @@
   z-index: 1;
 }
 
-/* Основен контейнер */
 .inspiration-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -99,7 +98,6 @@
   z-index: 2;
 }
 
-/* Елегантен хедър */
 .inspiration-header {
   text-align: center;
   margin-bottom: 90px;
@@ -135,13 +133,11 @@
   line-height: 1.7;
 }
 
-/* Основна структура за показване на съдържание */
 .inspiration-stream {
   position: relative;
   margin-bottom: 80px;
 }
 
-/* Основна линия */
 .stream-line {
   position: absolute;
   top: 0;
@@ -157,13 +153,11 @@
   z-index: 1;
 }
 
-/* Контейнер за статиите */
 .stream-articles {
   position: relative;
   z-index: 2;
 }
 
-/* Елемент статия */
 .stream-article {
   display: flex;
   margin-bottom: 120px;
@@ -174,12 +168,10 @@
   margin-bottom: 0;
 }
 
-/* Алтернативно подреждане на статиите */
 .stream-article:nth-child(even) {
   flex-direction: row-reverse;
 }
 
-/* Визуален маркер върху линията */
 .stream-marker {
   position: absolute;
   top: 70px;
@@ -233,7 +225,7 @@
 }
 
 .stream-article:nth-child(even) .stream-image-container {
-  margin-left: 5%;
+  /* margin-left: 5%; */
 }
 
 .stream-image-wrap {

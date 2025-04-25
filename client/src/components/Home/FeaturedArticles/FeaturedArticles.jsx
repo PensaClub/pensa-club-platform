@@ -1,5 +1,5 @@
-// FeaturedArticles.jsx
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./featuredArticles.css";
 import { useArticleContext } from "../../contexts/ArticleContext";
@@ -41,7 +41,6 @@ export const FeaturedArticles = () => {
     }
   };
 
-  // Форматиране на дата
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('bg-BG', {
       year: 'numeric',
@@ -50,7 +49,6 @@ export const FeaturedArticles = () => {
     });
   };
 
-  // Премахване на HTML тагове и съкращаване на текст
   const cleanAndTruncateText = (html, length) => {
     if (!html) return '';
     const doc = new DOMParser().parseFromString(html, 'text/html');
