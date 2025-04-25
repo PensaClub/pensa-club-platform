@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { MottoSection } from "./MottoSection/MottoSection";
 import { AboutSection } from "./AboutSection/About";
 import { UserSuggestion } from "../UserSuggestion/UserSuggestion";
+import { FeaturedArticles } from "./FeaturedArticles/FeaturedArticles";
 
 export const Home = () => {
   useEffect(() => {
@@ -22,6 +23,7 @@ export const Home = () => {
         <MottoSection />
         {/* <Slide direction="left" duration="3000" triggerOnce="true"> */}
           <AboutSection/>
+          <FeaturedArticles />
         {/* </Slide> */}
         {/* <Fade delay="10" duration="2000" triggerOnce="true"> */}
           <NewsSubscribe />

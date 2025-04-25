@@ -1,0 +1,624 @@
+/* featuredArticles.css - Съвременен и артистичен дизайн */
+.inspiration-section {
+  position: relative;
+  padding: 100px 0 120px;
+  margin-top: -40px;
+  overflow: hidden;
+  --primary: #6C63FF;
+  --secondary: #4AB1D8;
+  --accent: #B76CFD;
+  --dark: #2A2A4A;
+  --light: #EBEEFE;
+}
+
+/* Вълнообразен фон и преход */
+.inspiration-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #F4F6FF, #FFFFFF);
+  z-index: 0;
+}
+
+.wave-transition {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 160px; /* Увеличена височина */
+  transform: translateY(-75%); /* Нова стойност */
+  fill: #F4F6FF;
+  filter: blur(8px); /* Добавен blur ефект за по-мек преход */
+  z-index: 1;
+}
+.second-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  transform: translateY(-50%);
+  fill: #F4F6FF;
+  z-index: 0;
+}
+/* Декоративни елементи */
+.inspiration-decor {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.2;
+}
+
+.decor-blob-1 {
+  top: 10%;
+  right: -100px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--primary) 0%, rgba(108, 99, 255, 0) 70%);
+}
+
+.decor-blob-2 {
+  bottom: -100px;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--secondary) 0%, rgba(74, 177, 216, 0) 70%);
+}
+
+.decor-blob-3 {
+  top: 40%;
+  left: 20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--accent) 0%, rgba(183, 108, 253, 0) 70%);
+}
+
+.inspiration-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(rgba(108, 99, 255, 0.04) 2px, transparent 2px),
+    radial-gradient(rgba(183, 108, 253, 0.04) 2px, transparent 2px);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+  z-index: 1;
+}
+
+/* Основен контейнер */
+.inspiration-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 50px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Елегантен хедър */
+.inspiration-header {
+  text-align: center;
+  margin-bottom: 90px;
+  position: relative;
+}
+
+.inspiration-title {
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 25px;
+  position: relative;
+  display: inline-block;
+}
+
+.inspiration-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 10px;
+}
+
+.inspiration-subtitle {
+  font-size: 1.3rem;
+  color: #585880;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Основна структура за показване на съдържание */
+.inspiration-stream {
+  position: relative;
+  margin-bottom: 80px;
+}
+
+/* Основна линия */
+.stream-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: calc(100% - 60px);
+  background: linear-gradient(to bottom, 
+    var(--primary) 0%, 
+    var(--secondary) 30%, 
+    #FF8D4D 65%, 
+    var(--accent) 100%);
+  z-index: 1;
+}
+
+/* Контейнер за статиите */
+.stream-articles {
+  position: relative;
+  z-index: 2;
+}
+
+/* Елемент статия */
+.stream-article {
+  display: flex;
+  margin-bottom: 120px;
+  position: relative;
+}
+
+.stream-article:last-child {
+  margin-bottom: 0;
+}
+
+/* Алтернативно подреждане на статиите */
+.stream-article:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* Визуален маркер върху линията */
+.stream-marker {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  border: 2px solid var(--primary);
+}
+
+.stream-marker::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.stream-article:nth-child(2) .stream-marker {
+  border-color: var(--secondary);
+}
+
+.stream-article:nth-child(2) .stream-marker::before {
+  background: var(--secondary);
+}
+
+.stream-article:nth-child(3) .stream-marker {
+  border-color: var(--accent);
+}
+
+.stream-article:nth-child(3) .stream-marker::before {
+  background: var(--accent);
+}
+
+/* Изображение на статията */
+.stream-image-container {
+  width: 45%;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.stream-article:nth-child(odd) .stream-image-container {
+  margin-right: 5%;
+}
+
+.stream-article:nth-child(even) .stream-image-container {
+  margin-left: 5%;
+}
+
+.stream-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 65%;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(42, 42, 74, 0.12);
+  transform: rotate(-1deg);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.stream-article:nth-child(even) .stream-image-wrap {
+  transform: rotate(1deg);
+}
+
+.stream-article:hover .stream-image-wrap {
+  transform: rotate(0) translateY(-10px);
+  box-shadow: 0 30px 60px rgba(42, 42, 74, 0.15);
+}
+
+.stream-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.stream-article:hover .stream-image {
+  transform: scale(1.05);
+}
+
+/* Декоративни елементи за изображението */
+.stream-image-accent {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.stream-image-accent::before,
+.stream-image-accent::after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  opacity: 0.6;
+  z-index: -1;
+  transition: transform 0.5s ease;
+}
+
+.stream-image-accent::before {
+  top: -20px;
+  left: -20px;
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  border-radius: 50% 60% 70% 40% / 40% 50% 60% 50%;
+}
+
+.stream-image-accent::after {
+  bottom: -20px;
+  right: -20px;
+  background: linear-gradient(45deg, var(--secondary), var(--accent));
+  border-radius: 70% 40% 50% 60% / 60% 50% 70% 40%;
+}
+
+.stream-article:hover .stream-image-accent::before {
+  transform: translate(-5px, -5px) scale(1.1);
+}
+
+.stream-article:hover .stream-image-accent::after {
+  transform: translate(5px, 5px) scale(1.1);
+}
+
+/* Съдържание на статията */
+.stream-content {
+  width: 45%;
+  padding-top: 50px;
+  padding-left: 30px;
+}
+
+.stream-article:nth-child(even) .stream-content {
+  padding-left: 0;
+  padding-right: 30px;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.article-date {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 5px 15px;
+  border-radius: 30px;
+  background-color: rgba(108, 99, 255, 0.1);
+  color: var(--primary);
+}
+
+.stream-article:nth-child(2) .article-date {
+  background-color: rgba(74, 177, 216, 0.1);
+  color: var(--secondary);
+}
+
+.stream-article:nth-child(3) .article-date {
+  background-color: rgba(183, 108, 253, 0.1);
+  color: var(--accent);
+}
+
+.article-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0 0 25px;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+}
+
+.stream-article:hover .article-title {
+  color: var(--primary);
+}
+
+.stream-article:nth-child(2):hover .article-title {
+  color: var(--secondary);
+}
+
+.stream-article:nth-child(3):hover .article-title {
+  color: var(--accent);
+}
+
+.article-excerpt {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #5B5B7E;
+  margin-bottom: 35px;
+}
+
+.article-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4776E6;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 5px;
+  transition: color 0.3s ease;
+}
+
+.stream-article:nth-child(1) .article-link {
+  color: #4776E6;
+}
+
+.stream-article:nth-child(2) .article-link {
+  color: #4776E6;
+}
+
+.stream-article:nth-child(3) .article-link {
+  color: #4776E6;
+}
+
+.article-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  transform: scaleX(0.3);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.article-link:hover::after {
+  transform: scaleX(1);
+}
+
+.article-link svg {
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
+.article-link:hover svg {
+  transform: translateX(6px);
+}
+
+/* Долна част */
+.inspiration-footer {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.inspiration-all-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  padding: 16px 40px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, var(--primary), var(--accent));
+  box-shadow: 0 15px 30px rgba(108, 99, 255, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.inspiration-all-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--accent), var(--primary));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.inspiration-all-link:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(108, 99, 255, 0.3);
+}
+
+.inspiration-all-link:hover::before {
+  opacity: 1;
+}
+
+.inspiration-all-link svg {
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
+.inspiration-all-link:hover svg {
+  transform: translateX(5px);
+}
+
+/* Адаптивен дизайн */
+@media (max-width: 1200px) {
+  .inspiration-section {
+    padding: 120px 0 100px;
+  }
+  
+  .inspiration-title {
+    font-size: 3rem;
+  }
+  
+  .stream-article {
+    margin-bottom: 100px;
+  }
+  
+  .article-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .inspiration-section {
+    padding: 100px 0 80px;
+  }
+  
+  .inspiration-title {
+    font-size: 2.6rem;
+  }
+  
+  .stream-line {
+    left: 30px;
+  }
+  
+  .stream-marker {
+    left: 30px;
+  }
+  
+  .stream-article,
+  .stream-article:nth-child(even) {
+    flex-direction: column;
+    margin-bottom: 80px;
+  }
+  
+  .stream-image-container,
+  .stream-content {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  
+  .stream-image-container {
+    padding-left: 60px;
+  }
+  
+  .stream-content {
+    padding-top: 30px;
+    padding-left: 60px;
+    padding-right: 0;
+  }
+  
+  .stream-article:nth-child(even) .stream-content {
+    padding-left: 60px;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .inspiration-section {
+    padding: 80px 0 60px;
+    margin-top: -40px;
+  }
+  
+  .inspiration-container {
+    padding: 0 30px;
+  }
+  
+  .inspiration-title {
+    font-size: 2.2rem;
+  }
+  
+  .inspiration-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .stream-article {
+    margin-bottom: 70px;
+  }
+  
+  .article-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .article-excerpt {
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-width: 576px) {
+  .inspiration-section {
+    padding: 70px 0 50px;
+  }
+  
+  .inspiration-container {
+    padding: 0 20px;
+  }
+  
+  .inspiration-title {
+    font-size: 2rem;
+  }
+  
+  .stream-line {
+    left: 20px;
+  }
+  
+  .stream-marker {
+    left: 20px;
+    width: 16px;
+    height: 16px;
+  }
+  
+  .stream-marker::before {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .stream-image-container,
+  .stream-content {
+    padding-left: 40px;
+  }
+  
+  .stream-article:nth-child(even) .stream-content {
+    padding-left: 40px;
+  }
+  
+  .article-title {
+    font-size: 1.6rem;
+  }
+}
