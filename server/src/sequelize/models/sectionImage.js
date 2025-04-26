@@ -2,22 +2,18 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class image extends Model {
+    class sectionImage extends Model {
         static associate(models) {
-            image.belongsTo(models.section, {
+            sectionImage.belongsTo(models.section, {
                 foreignKey: 'sectionId',
-            });
-            image.belongsTo(models.mainImage, {
-                foreignKey: 'mainImageId',
-                as: 'sources',
             });
         }
     }
-    image.init(
+    sectionImage.init(
         {
             src: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             alt: {
                 type: DataTypes.STRING,
@@ -29,17 +25,9 @@ module.exports = (sequelize, DataTypes) => {
             },
             sectionId: {
                 type: DataTypes.INTEGER,
-                allowNull: true,
+                allowNull: false,
                 references: {
                     model: 'sections',
-                    key: 'id',
-                },
-            },
-            mainImageId: {
-                type: DataTypes.INTEGER,
-                allowNull: true,
-                references: {
-                    model: 'mainImages',
                     key: 'id',
                 },
             },
@@ -60,8 +48,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelName: 'image',
+            modelName: 'sectionImage',
         }
     );
-    return image;
+    return sectionImage;
 };

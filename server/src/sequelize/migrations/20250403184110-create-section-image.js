@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('images', {
+        await queryInterface.createTable('sectionImages', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -15,20 +15,12 @@ module.exports = {
                     key: 'id',
                 },
                 onDelete: 'CASCADE',
-                allowNull: true,
-            },
-            mainImageId: {
-                type: Sequelize.INTEGER,
-                references: {
-                    model: 'mainImages',
-                    key: 'id',
-                },
-                onDelete: 'CASCADE',
-                allowNull: true,
+                allowNull: false,
+                unique: true,
             },
             src: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             alt: {
                 type: Sequelize.STRING,
@@ -47,11 +39,8 @@ module.exports = {
                 type: Sequelize.DATEONLY,
             },
         });
-
-        await queryInterface.addIndex('images', ['sectionId']);
-        await queryInterface.addIndex('images', ['mainImageId']);
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('images');
+        await queryInterface.dropTable('sectionImages');
     },
 };

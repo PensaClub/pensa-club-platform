@@ -7,10 +7,6 @@ module.exports = (sequelize, DataTypes) => {
             mainImage.belongsTo(models.article, {
                 foreignKey: 'articleId',
             });
-            mainImage.hasMany(models.image, {
-                foreignKey: 'mainImageId',
-                as: 'sources',
-            });
         }
     }
     mainImage.init(
@@ -19,11 +15,19 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
+            sources: {
+                type: DataTypes.ARRAY(DataTypes.STRING),
+                defaultValue: [],
+            },
             alt: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
             thumbnail: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            videoUrl: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
