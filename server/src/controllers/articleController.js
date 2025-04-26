@@ -1,6 +1,6 @@
 const articleController = require('express').Router();
 const customError = require('../utils/customError');
-const { article, mainImage, section, user_details, image } = require('../sequelize/models');
+const { article, mainImage, section, sectionImage, user_details } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const { updateArticleRelationships } = require('../utils/articleUtils');
@@ -11,14 +11,7 @@ const articleIncludeConfig = [
     {
         model: mainImage,
         as: 'mainImage',
-        attributes: ['id', 'type', 'alt', 'thumbnail'],
-        include: [
-            {
-                model: image,
-                as: 'sources',
-                attributes: ['id', 'src', 'alt', 'caption'],
-            },
-        ],
+        attributes: ['id', 'type', 'sources', 'alt', 'thumbnail', 'videoUrl'],
     },
     {
         model: section,
@@ -26,7 +19,7 @@ const articleIncludeConfig = [
         attributes: ['id', 'title', 'content', 'order'],
         include: [
             {
-                model: image,
+                model: sectionImage,
                 attributes: ['id', 'src', 'alt', 'caption'],
             },
         ],
@@ -179,7 +172,7 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
                         if (sectionData.image && Array.isArray(sectionData.image)) {
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
-                                    await image.create(
+                                    await sectionImage.create(
                                         {
                                             src: imageData.src ?? null,
                                             alt: imageData.alt ?? null,
@@ -282,12 +275,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             if (sections && Array.isArray(sections)) {
                 const existingSections = await section.findAll({
                     where: { articleId: existingArticle.id },
-                    include: [
-                        {
-                            model: image,
-                            attributes: ['id', 'src', 'alt', 'caption'],
-                        },
-                    ],
+                    include: [sectionImage],
                     transaction: t,
                 });
 
@@ -320,7 +308,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                         if (sectionData.image && Array.isArray(sectionData.image)) {
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
-                                    await image.create(
+                                    await sectionImage.create(
                                         {
                                             src: imageData.src ?? null,
                                             alt: imageData.alt ?? null,
@@ -345,7 +333,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                         );
 
                         if (sectionData.image && Array.isArray(sectionData.image)) {
-                            await image.destroy({
+                            await sectionImage.destroy({
                                 where: {
                                     sectionId: existingSection.id,
                                     id: {
@@ -358,7 +346,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
                                     if (imageData.id) {
-                                        await image.update(
+                                        await sectionImage.update(
                                             {
                                                 src: imageData.src ?? null,
                                                 alt: imageData.alt ?? null,
@@ -370,7 +358,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                                             }
                                         );
                                     } else {
-                                        await image.create(
+                                        await sectionImage.create(
                                             {
                                                 src: imageData.src ?? null,
                                                 alt: imageData.alt ?? null,
@@ -382,11 +370,8 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                                     }
                                 })
                             );
-                        } else if (existingSection.image) {
-                            await image.destroy({
-                                where: { sectionId: existingSection.id },
-                                transaction: t,
-                            });
+                        } else if (existingSection.sectionImage) {
+                            await existingSection.sectionImage.destroy({ transaction: t });
                         }
                     }
                 }

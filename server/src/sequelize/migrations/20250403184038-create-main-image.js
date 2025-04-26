@@ -22,6 +22,10 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
+            sources: {
+                type: Sequelize.ARRAY(Sequelize.STRING),
+                defaultValue: [],
+            },
             alt: {
                 type: Sequelize.STRING,
                 allowNull: true,
@@ -39,10 +43,7 @@ module.exports = {
                 type: Sequelize.DATEONLY,
             },
         });
-
-        await queryInterface.addIndex('mainImages', ['articleId']);
     },
-
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('mainImages');
     },
