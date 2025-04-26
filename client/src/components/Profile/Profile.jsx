@@ -291,10 +291,10 @@ export const Profile = () => {
                   </NavLink>
 
                   {/* Добавен линк за общност */}
-                  <NavLink to="/community" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                  <NavLink to="/map" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <UsersIcon className="menu-icon" />
-                      {t("header.community")}
+                      {t("header.map")}
                     </span>
                   </NavLink>
 
