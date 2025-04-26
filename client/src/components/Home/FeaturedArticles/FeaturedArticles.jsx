@@ -68,7 +68,7 @@ export const FeaturedArticles = () => {
       <svg className="second-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120">
         <path fillRule="evenodd" d="M0,10 C200,30 400,80 720,90 C1040,100 1320,70 1920,10 L1920,120 L0,120 Z" />
       </svg>
-    
+
       <div className="inspiration-bg"></div>
       <div className="inspiration-pattern"></div>
       <div className="inspiration-decor decor-blob-1"></div>
@@ -78,10 +78,10 @@ export const FeaturedArticles = () => {
       <div className="inspiration-container">
         <div className="inspiration-header">
           <h2 className="inspiration-title">
-            {t('home.featuredArticles.title', 'Обогатете знанията си с нашите статии')}
+            {t('home.featuredArticles.title')}
           </h2>
           <p className="inspiration-subtitle">
-            {t('home.featuredArticles.subtitle', 'Интерактивно пътешествие в света на дигиталната грамотност')}
+            {t('home.featuredArticles.subtitle')}
           </p>
         </div>
 
@@ -119,7 +119,7 @@ export const FeaturedArticles = () => {
                   </p>
 
                   <Link to={`/articles/${article.slug}`} className="article-link">
-                    <span>{t('home.featuredArticles.readMore', 'Прочети повече')}</span>
+                    <span>{t('home.featuredArticles.readMore')}</span>
                     <svg viewBox="0 0 24 24" width="20" height="20">
                       <path
                         d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z"
@@ -135,7 +135,7 @@ export const FeaturedArticles = () => {
 
         <div className="inspiration-footer">
           <Link to="/articles" className="inspiration-all-link">
-            <span>{t('home.featuredArticles.viewAllArticles', 'Всички статии')}</span>
+            <span>{t('home.featuredArticles.viewAllArticles')}</span>
             <svg viewBox="0 0 24 24" width="20" height="20">
               <path
                 d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z"
