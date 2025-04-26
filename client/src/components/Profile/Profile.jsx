@@ -556,7 +556,10 @@ export const Profile = () => {
                   className="side-menu-profile-image"
                 />
                 <div className="side-menu-profile-info">
-                  <span className="side-menu-profile-name">{profileData?.details?.username || profileData?.email}</span>
+                  <span className="side-menu-profile-name">
+                    {profileData?.details?.username ||
+                      (profileData?.email ? profileData.email.split('@')[0] : '')}
+                  </span>
                   {/* <NavLink to="/profile/data" className="side-menu-profile-link">
                     {t("profile.view_profile")}
                     <RightArrowIcon />
