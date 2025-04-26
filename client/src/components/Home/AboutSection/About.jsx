@@ -43,17 +43,17 @@ export const AboutSection = () => {
           <div className="bg-shape shape1"></div>
           <div className="bg-shape shape2"></div>
           <div className="bg-logo">
-            <img src="/images/homePage/logo-2.png" alt="Pensa" />
+            <img src="/images/homePage/logo-2.png" alt={t("about.logo_alt")} />
           </div>
         </div>
 
         <div className="about-container">
           <div className="about-image-container">
             <div className="image-wrapper">
-              <img src="/images/homePage/about-img.webp" alt="" className="about-image" />
+              <img src="/images/homePage/about-img.webp" alt={t("about.about_image_alt")} className="about-image" />
               <div className="image-accent"></div>
             </div>
-            <div className="image-overlay-text">Pensa</div>
+            <div className="image-overlay-text">{t("about.overlay_pensa")}</div>
           </div>
 
           <div className="about-content-modern">
@@ -81,17 +81,17 @@ export const AboutSection = () => {
           <div className="bg-shape shape1"></div>
           <div className="bg-shape shape2"></div>
           <div className="bg-logo">
-            <img src="/images/homePage/logo-2.png" alt="Pensa" />
+            <img src="/images/homePage/logo-2.png" alt={t("about.logo_alt")} />
           </div>
         </div>
 
         <div className="about-container vison" >
           <div className="about-image-container">
             <div className="image-wrapper">
-              <img src="/images/homePage/old-people-sectinon-2.webp" alt="Възрастни хора в дигиталния свят" className="about-image" />
+              <img src="/images/homePage/old-people-sectinon-2.webp" alt={t("about.vision_image_alt")} className="about-image" />
               <div className="image-accent"></div>
             </div>
-            <div className="image-overlay-text">Визия</div>
+            <div className="image-overlay-text">{t("about.overlay_vision")}</div>
           </div>
 
           <div className="about-content-modern">
