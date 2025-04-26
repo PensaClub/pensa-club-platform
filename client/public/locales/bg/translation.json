@@ -6,7 +6,10 @@
     "register": "Регистрация",
     "profile": "Профил",
     "logout": "Излез от профила",
-    "ad-create": "Добави обява"
+    "ad-create": "Добави обява",
+    "home": "Начало",
+    "articles": "Статии",
+    "welcome": "Добре дошли"
   },
   "footer": {
     "site-map": "Карта на сайта",
@@ -26,7 +29,8 @@
     "financial": "С финансовата подкрепа на"
   },
   "hero": {
-    "title": "ДОСТОЕН ЖИВОТ В ТРЕТАТА ВЪЗРАСТ",
+    "title-part1": "ДОСТОЕН ЖИВОТ",
+    "title-part2": "В ТРЕТАТА ВЪЗРАСТ",
     "slide-info": "Сайтът е в процес на развитие. Разработва се от ученици в 10 и 11 клас, които изграждат 'мост между поколенията'. Бавно, несигурно, с много завои ....но всички се наслаждаваме на ПЪТЯ, ПО КОЙТО ВЪРВИМ, ЗАЕДНО!",
     "short-desc": "Всеки заслужава",
     "desc": "Иновативна платформа, която създава общност от хора на еднаква възраст, с еднакви интереси, нови идеи и нови знания!",
@@ -41,7 +45,11 @@
       "forth-revolution-desc": "Focused on smart factories that use the Internet of Things (IoT), automated decision making and machine learning to further increase manufacturing efficiency.",
       "fifth-revolution-title": "Revolution 5.0",
       "fifth-revolution-desc": "This is the latest stage in the development, which involves the use of artificial intelligence not only for automation, but also for the integration of human creative and analytical potential"
-    }
+    },
+    "join-the-club": "Влез в клуба",
+    "play-pause": "Пусни/Пауза",
+    "sound": "Звук",
+    "fullscreen": "Цял екран"
   },
   "motto": {
     "title1": "Общност",
@@ -51,11 +59,21 @@
     "desc2":"Стимулирайте мисленето, подобрете паметта, докато се забавлявате и учите.",
     "desc3":"Здравословни практики, съвети и ресурси, които ще ви помогнат да живеете по-добре.",
     "about-btn": "Влез в клуба",
-    "suggestion-btn": "Покани приятел"
+    "suggestion-btn": "Покани приятел",
+    "learn-more-btn": "Научете повече",
+    "join-us-btn": "Включете се",
+    "main-title": "Какво ви предлагаме"
   },
   "about": {
-    "title": "нашата мисия",
-    "desc": "Да създадем иновативна платформа, инструмент за изграждане на общност. Обединяваме хора на еднаква възраст с общи интереси, нови идеи и знания. Стремим се да изградим общност, основана на взаимодействие и взаимопомощ. Очакваният резултат е подобряване на качеството на живот чрез активно включване в съвременността, подкрепа за придобиване на нови умения и интереси, както и насърчаване на здравословен, пълноценен и достоен живот."
+    "title": "Нашата мисия",
+    "desc": "Да създадем иновативна платформа, инструмент за изграждане на общност. Обединяваме хора на еднаква възраст с общи интереси, нови идеи и знания. Стремим се да изградим общност, основана на взаимодействие и взаимопомощ. Очакваният резултат е подобряване на качеството на живот чрез активно включване в съвременността, подкрепа за придобиване на нови умения и интереси, както и насърчаване на здравословен, пълноценен и достоен живот.",
+    "ourVision": "Визията ни",
+    "visionDesc": "Нашата визия е свят, в който възрастта не е пречка за дигиталното включване. Създаваме мост между поколенията, където по-възрастните хора получават достъпна подкрепа при навлизането в технологиите. Вярваме, че чрез взаимопомощ и споделен опит, можем да изградим общност, в която всеки, независимо от годините си, се чувства уверен в дигиталния свят.",
+    "logo_alt": "Лого на Pensa",
+    "about_image_alt": "За Pensa",
+    "vision_image_alt": "Възрастни хора в дигиталния свят",
+    "overlay_pensa": "Pensa",
+    "overlay_vision": "Визия"
   },
   "news-subscribe": {
     "title": "Бъдете в течение с",
@@ -186,6 +204,7 @@
     }
   },
   "profile": {
+    "main": "Профил панел",
     "select_all": "Изберете всички",
     "clear": "Изчистете",
     "selected": "избрани",
@@ -266,8 +285,19 @@
     "rejected_ads": " не е одобрена",
     "your_ad": "Вашата обява",
     "alert_message": " Вашият профил е непълен. Моля, завършете го, за да продължите да използвате всички възможности на платформата.",
-     "street_invalid": "Моля, въведете валидна улица. Улицата трябва да съдържа между 3 и 60 символа, включващи български и английски букви и цифри."
-  },
+    "street_invalid": "Моля, въведете валидна улица. Улицата трябва да съдържа между 3 и 60 символа, включващи български и английски букви и цифри.",
+    "search_placeholder": "Търси ...",
+    "articles": "Статии",
+    "new_article": "Нова статия",
+    "profile_image":"Профилна снимка",
+    "to_website_btn": "Към сайта",
+    "warning_desc": "Ако желаете да се възползвате от всички възможности на платформата, продължете като Pensa потребител или продължете като обикновен потребител.",
+    "warning": "Вашият профил е непълен!",
+    "pensa_user_btn": "Pensa потребител",
+    "standard_user_btn": "Обикновен потребител",
+    "profile_data_alt": "Профилна снимка на потребителя",
+    "upload_image_btn": "Качи снимка"
+   },
   "admin": {
     "pending_announcements": "Неодобрени обяви",
     "search": "Търси",
@@ -314,7 +344,7 @@
     "ban": "Блокирай",
     "settings": "Настройки",
     "comment": "Коментар",
-    "send_message": "Send message",
+    "send_message": "Изпрати съобщение",
     "all_users": "Всички потребители",
     "unfinished_users": "Незавършени профили",
     "all_users_statistics": "Всички потребителски статистики",
@@ -504,7 +534,19 @@
     "success_delete_message": "Успешно изтрихте съобщение!",
     "error-authorize": "Грешка! Невалиден имейл и/или грешна парола!",
     "success-comment": "Коментарът беше добавен успешно!",
-    "success-delete-message": "Съобщението беше изтрито успешно!"
+    "success-delete-message": "Съобщението беше изтрито успешно!",
+    "article-created-success": "Статията е създадена успешно!",
+    "article-updated-success": "Статията е обновена успешно!",
+    "article-deleted-success": "Статията е изтрита успешно!",
+    "unauthorized-action": "Неоторизирано действие! Нямате необходимите права.",
+    "thumbnail_upload_error": "Грешка при качване на миниатюра: {{error}}",
+    "thumbnail_upload_success": "Миниатюрата е качена успешно!",
+    "minimum_one_section": "Необходима е поне една секция",
+    "invalid_video_format": "Невалиден формат на видеото",
+    "invalid_image_format": "Невалиден формат на изображението",
+    "invalid_image_url": "Невалиден URL адрес на изображението",
+    "image_url_added": "URL адресът на изображението е добавен успешно",
+    "section_image_url_added": "URL адресът на изображението в секцията е добавен успешно"
   },
   "errors": {
     "image_type": "Файл от тип {{type}} не е позволен! Позволените типове снимки са PNG/JPG/JPEG.",
@@ -564,7 +606,13 @@
     "our_latest_ads": "Последните публикации",
     "see_more_ads": "Вижте още публикации",
     "town": "гр.",
-    "no_results": "Няма намерени резултати"
+    "no_results": "Няма намерени резултати",
+    "featuredArticles": {
+      "title": "Обогатете знанията си с нашите статии",
+      "subtitle": "Интерактивно пътешествие в света на дигиталната грамотност",
+      "readMore": "Прочети повече",
+      "viewAllArticles": "Всички статии"
+    }
   },
   "admin_messages": {
     "search_desc": "Търси по описание...",
@@ -632,5 +680,266 @@
   },
   "forms":{
     "form_contains_errors": "Формата съдържа грешки. Моля, поправете ги и опитайте отново!"
+  },
+  "articles":{
+    "views": "Прегледи",
+    "slide": "слайд",
+    "preview": {
+        "backToEditing": "Назад към редактирането",
+        "noMainImage": "Няма избрано основно изображение",
+        "temporaryImage": "Временно изображение",
+        "preview": "ПРЕДПРЕГЛЕД",
+        "articlePreview": "Предпреглед на статията",
+        "articleTitle": "Заглавие на статията",
+        "author": "Автор",
+        "sectionTitle": "Заглавие на секция {{number}}",
+        "sectionImage": "Изображение към секция {{number}}",
+        "noContent": "Няма съдържание",
+        "sliderImage": "Слайдер изображение",
+        "videoPreview": "Видео превю",
+        "mainImage": "Основно изображение"
+    },
+    "imageEdit": {
+        "title": "Редактиране на информация за изображението",
+        "editAlt": "Редактиране на изображение",
+        "altLabel": "Алтернативен текст :",
+        "captionLabel": "Надпис :",
+        "altHelpText": "Добрият алтернативен текст описва съдържанието на изображението за потребители, които не могат да го видят.",
+        "captionHelpText": "Надписът се показва под изображението и дава допълнителен контекст за всички потребители.",
+        "cancel": "Отказ",
+        "save": "Запази"
+    },
+    "sectionMenu": {
+        "addSection": "Добави нова секция",
+        "moveUp": "Премести нагоре",
+        "moveDown": "Премести надолу",
+        "removeSection": "Премахни секцията"
+    },
+    "thumbnailGenerator": {
+        "title": "Създайте миниатюра от видеото",
+        "processing": "Обработка...",
+        "useThisFrame": "Използвай този кадър",
+        "selectedThumbnail": "Избран кадър за миниатюра:",
+        "readyToUpload": "Миниатюрата е готова за качване",
+        "howTo": "Как да изберете миниатюра:",
+        "step1": "Пуснете видеото или използвайте плъзгача, за да намерите подходящ кадър",
+        "step2": "Кликнете паузa, когато стигнете до момент, който искате да използвате",
+        "step3": "Натиснете бутона \"Използвай този кадър\"",
+        "step4": "Готово! Кадърът ще бъде използван като миниатюра на видеото"
+    },
+    "createForm": {
+        "createNewArticle": "Създаване на нова статия",
+        "basicInfo": "Основна информация",
+        "mainMedia": "Основна медия",
+        "content": "Съдържание на статията",
+        "sections": "Секции",
+        "tags": "Тагове",
+
+        "title": "Заглавие",
+        "slug": "URL идентификатор",
+        "author": "Автор",
+        "publishDate": "Дата на публикуване",
+        "summary": "Резюме",
+        "contentSimple": "Съдържание",
+        "section": "Секция",
+
+        "singleImage": "Единично изображение",
+        "slider": "Слайдер",
+        "video": "Видео",
+        "videoFile": "Видео файл",
+        "urlVideo": "Видео URL",
+        "externalVideo": "Външно видео",
+
+        "altText": "Алтернативен текст",
+        "videoTitle": "Заглавие на видеото",
+        "thumbnail": "Миниатюра за видеото",
+        "sectionImages": "Изображения към секцията",
+
+        "titlePlaceholder": "Въведете заглавие на статията",
+        "slugPlaceholder": "пример-за-url-идентификатор",
+        "authorPlaceholder": "Име на автора",
+        "summaryPlaceholder": "Кратко резюме на статията",
+        "sectionTitlePlaceholder": "Заглавие на секцията",
+        "sectionContentPlaceholder": "Въведете съдържание на секцията",
+        "imageDescriptionPlaceholder": "Описание на изображението",
+        "imageUrlPlaceholder": "Въведете URL на изображение",
+        "videoUrlPlaceholder": "Въведете YouTube/Vimeo URL",
+        "videoTitlePlaceholder": "Заглавие или описание на видеото",
+        "videoThumbnailPlaceholder": "URL адрес на миниатюрата на видеото (опционално)",
+        "tagPlaceholder": "Въведете таг и натиснете Enter",
+
+        "addBtn": "Добави",
+        "removeBtn": "Премахни",
+        "previewBtn": "Предпреглед",
+        "saveBtn": "Запази",
+        "addSectionBtn": "Добави секция",
+        "uploadMainImageBtn": "Качи основно изображение",
+        "uploadSliderImagesBtn": "Качи изображения за слайдера",
+        "uploadVideoBtn": "Качи видео файл",
+        "uploadFile": "Качване на файл",
+
+        "dragDropFile": "Плъзнете файлове тук или кликнете за избор",
+        "dragDropVideo": "Плъзнете видео файл тук или кликнете за избор",
+        "chooseImage": "Избери изображение",
+        "addViaUrl": "Добавяне чрез URL",
+        "chooseVideoMethod": "Изберете начин на добавяне на видео",
+        "supportedFormats": "Поддържани формати: MP4, WebM, OGG. Максимален размер: 100 MB",
+        "unnamedFile": "Безименен файл",
+        "unknownSize": "неизвестен размер",
+        "size": "Размер:",
+        "uploaded": "качено",
+
+        "preview": "Предпреглед {{index}}",
+        "urlImage": "URL изображение {{index}}",
+        "expandedView": "Разширен изглед",
+        "editInfo": "Редактирай информация",
+        "removeImage": "Премахни изображението",
+        "sectionWithNumber": "Секция {{number}}",
+
+        "browserNotSupport": "Вашият браузър не поддържа HTML5 видео.",
+        "requiredField": "Полето е задължително!",
+        "invalidVideoFormat": "Моля, качете видео файл в MP4, WebM или OGG формат.",
+        "videoSizeExceeded": "Видео файлът надвишава максималния размер от 100MB.",
+        "invalidVideoUrl": "Моля, въведете валиден YouTube или Vimeo URL адрес.",
+        "videoAddedSuccess": "Външното видео е добавено успешно.",
+
+        "or": "или"
+    },
+    "articleCard": {
+        "photos": "photos",
+        "video": "Video",
+        "externalSource": "External source",
+        "edit": "Edit",
+        "delete": "Delete",
+        "views": "views",
+        "preview": "Preview",
+        "deleteConfirmation": "Delete Confirmation",
+        "deleteConfirmMessage": "Are you sure you want to delete the article \"{{title}}\"?",
+        "cancel": "Cancel"
+    },
+    "articleSlider": {
+        "previousSlide": "Предишен слайд",
+        "nextSlide": "Следващ слайд"
+    },
+    "articleClubCard": {
+        "exclusive": "Ексклузивно",
+        "discountsPrefix": "Отстъпки в над",
+        "discountsSuffix": "обекта",
+        "exclusiveTrainingPrefix": "Достъп до",
+        "exclusiveTrainingHighlight": "ексклузивни",
+        "exclusiveTrainingSuffix": "обучения",
+        "communityPrefix": "Част от",
+        "communityHighlight": "общност",
+        "communitySuffix": "от съмишленици",
+        "joinUs": "Стани част от нас"
+    },
+    "articlesList": {
+        "ourArticles": "Нашите статии",
+        "infoDescription": "Информация, съвети и полезни ресурси за дигитална грамотност",
+        "latestArticles": "Последни статии",
+        "noArticles": "Няма намерени статии.",
+        "allArticles": "Всички статии",
+        "searchPlaceholder": "Търсене в публикациите...",
+        "searchFor": "Резултати за",
+        "clearSearch": "Изчисти",
+        "noSearchResults": "Няма намерени статии за \"{{term}}\"",
+        "noAvailableArticles": "Няма налични статии"
+    },
+    "recentArticles": {
+        "search": "Търсене",
+        "searchPlaceholder": "Търсене в публикациите...",
+        "searchResults": "Резултати от търсене",
+        "latestPosts": "Последни публикации",
+        "clear": "Изчисти",
+        "loading": "Зареждане на последни публикации...",
+        "category": "ДИГИТАЛНА ГРАМОТНОСТ",
+        "noResults": "Няма намерени резултати за \"{{searchTerm}}\""
+    },
+    "articleVideoPlayer": {
+        "back10Seconds": "Назад 10 секунди",
+        "forward10Seconds": "Напред 10 секунди",
+        "pause": "Пауза",
+        "play": "Пусни",
+        "mute": "Заглуши",
+        "unmute": "Пусни звука",
+        "subtitles": "Субтитри",
+        "settings": "Настройки",
+        "fullScreen": "На цял екран",
+        "download": "Изтегли",
+        "speed": "Скорост",
+        "subtitlesOff": "Изключени",
+        "youtubePlayer": "YouTube видео плейър"
+    },
+    "articleView": {
+        "articleNotFound": "Статията не е намерена",
+        "backToArticles": "Към всички статии",
+        "imageFor": "Изображение към {{title}}",
+        "imagesFor": "Изображения към",
+        "share": "Споделете",
+        "shareOnFacebook": "Споделете във Facebook",
+        "shareOnTwitter": "Споделете в Twitter",
+        "shareOnLinkedIn": "Споделете в LinkedIn",
+        "shareOnTelegram": "Споделете в Telegram",
+        "previousArticle": "Предишна статия",
+        "nextArticle": "Следваща статия",
+        "relatedArticle": "Свързана статия"
+    },
+    "validation": {
+        "title_required": "Заглавието е задължително",
+        "title_too_short": "Заглавието трябва да е поне 4 символа",
+        "title_too_long": "Заглавието не може да надвишава 100 символа",
+        "slug_required": "URL идентификаторът е задължителен",
+        "slug_invalid_format": "URL идентификаторът може да съдържа само малки букви, цифри и тирета",
+        "author_required": "Авторът е задължителен",
+        "summary_required": "Резюмето е задължително",
+        "image_alt_required": "Алтернативният текст на изображението е задължителен",
+        "section_title_required": "Заглавието на секцията е задължително",
+        "section_content_required": "Съдържанието на секцията е задължително"
+    },
+    "editArticle": {
+        "edit_article": "Редактиране на статия",
+        "cancel": "Отказ",
+        "article_info": "Информация за статията",
+        "pewview": "Прегледи:",
+        "created_at": "Създадена на",
+        "updated_at": "Последна промяна",
+        "just_saved": "Току-що запазено"
+    },
+    "analytics": {
+        "no_data": "Няма данни за показване. Моля, изберете статия.",
+        "analytical_data": "Аналитични данни",
+        "total_views": "Общо прегледи",
+        "refresh_data": "Обнови данните",
+        "trend": "Тенденция",
+        "growth": "ръст",
+        "decline": "спад",
+        "average_time": "Средно време",
+        "shares": "Споделяния",
+        "audience": "Аудитория",
+        "devices": "Устройства",
+        "desktop": "Десктоп",
+        "mobile": "Мобилни",
+        "tablet": "Таблети",
+        "traffic_sources": "Източници на трафик",
+        "search_engines": "Търсачки",
+        "direct": "Директно",
+        "social": "Социални",
+        "referral": "Реферал",
+        "data_statistic": "Данните се базират на броя прегледи и статистики от Google Analytics (G-GE8XZREVM6)."
+    },
+    "allArticles": {
+        "management": "Управление на статии",
+        "totalArticles": "Общо статии: {{count}} | Филтрирани: {{filtered}}",
+        "searchPlaceholder": "Търсене по заглавие, съдържание, автор или таг...",
+        "sortOptions": {
+            "recentlyUpdated": "Най-скоро обновени",
+            "recentlyPublished": "Най-скоро публикувани",
+            "byTitle": "По заглавие",
+            "byAuthor": "По автор",
+            "byViews": "По брой прегледи"
+        },
+        "loading": "Зареждане...",
+        "noArticlesFound": "Няма намерени статии отговарящи на търсенето."
+      }
   }
 }

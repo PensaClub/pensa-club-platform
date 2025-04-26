@@ -1,0 +1,779 @@
+.club-card-promo {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    padding: 30px 25px;
+    border-radius: 24px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    margin: 40px auto;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    background: linear-gradient(125deg, #f8fafe, #e8f4f4);
+    z-index: 1;
+    transform-style: preserve-3d;
+  }
+  
+  .club-card-promo.animated {
+    animation: fadeInUp 0.8s forwards, floatCard 6s ease-in-out infinite;
+  }
+  
+  .club-card-promo:hover {
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-background {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    z-index: -1;
+  }
+  
+  .bg-circles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.15;
+    filter: blur(2px);
+  }
+  
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #008B8B, #20B2AA);
+  }
+  
+  .bg-circle-1 {
+    top: -20%;
+    right: -15%;
+    width: 150px;
+    height: 150px;
+    opacity: 0.4;
+    animation: morphCircle 18s ease-in-out infinite alternate;
+  }
+  
+  .bg-circle-2 {
+    bottom: -30%;
+    left: -20%;
+    width: 200px;
+    height: 200px;
+    opacity: 0.3;
+    animation: morphCircle 15s ease-in-out infinite alternate-reverse;
+  }
+  
+  .bg-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background-image: 
+      repeating-linear-gradient(45deg, #008B8B 0, #008B8B 1px, transparent 0, transparent 50%);
+    background-size: 10px 10px;
+    animation: patternShift 30s linear infinite;
+  }
+  
+  .bg-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  
+  .card-sparkle {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: overlay;
+    z-index: 2;
+    transition: opacity 0.2s;
+  }
+  
+  .club-card-promo.hovering .card-sparkle {
+    opacity: 0.7;
+  }
+  
+  .active-dot {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    box-shadow: 0 0 0 rgba(76, 175, 80, 0.4);
+    animation: pulse 2s infinite;
+  }
+  
+  .promo-tag {
+    position: absolute;
+    top: -5px;
+    right: 32px;
+    background: linear-gradient(135deg, #008B8B, #20B2AA);
+    padding: 8px 16px 6px;
+    border-radius: 0 0 12px 12px;
+    transform: translateY(-100%);
+    animation: slideInTag 0.5s 0.3s forwards;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+  
+  .tag-text {
+    position: relative;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    z-index: 1;
+  }
+  
+  .tag-shine {
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: shineEffect 3s linear infinite;
+  }
+  
+  .promo-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+    transform: translateY(10px);
+    opacity: 0;
+    animation: fadeInUp 0.6s 0.2s forwards;
+  }
+  
+  .brand {
+    position: relative;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #008B8B, #20B2AA, #00CED1);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    margin-bottom: 0;
+    animation: gradientText 3s ease infinite;
+  }
+  
+  .brand::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #20B2AA, transparent);
+    animation: lineMove 3s ease infinite;
+  }
+  
+  .card-text {
+    font-size: 30px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #222, #444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  
+  .card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    margin: 25px 0;
+    perspective: 1000px;
+  }
+  
+  .card-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle at center,
+      rgba(32, 178, 170, 0.3) 0%,
+      rgba(0, 139, 139, 0) 70%
+    );
+    filter: blur(20px);
+    border-radius: 16px;
+    z-index: -1;
+    animation: pulsate 3s ease-in-out infinite;
+  }
+  
+  .card-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-out;
+    animation: fadeInUp 0.8s 0.4s forwards, floatCard 6s ease-in-out infinite;
+    opacity: 0;
+  }
+  
+  .card-image-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(135deg, #20B2AA, transparent, #008B8B, transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    animation: borderGlow 3s ease infinite;
+    pointer-events: none;
+  }
+  
+  .club-card-promo:hover .card-image-container::before {
+    opacity: 1;
+  }
+  
+  .card-image {
+    width: 97%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s;
+  }
+  
+  .club-card-promo:hover .card-image {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-reflection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.25) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    border-radius: 16px;
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+  
+  .club-card-promo:hover .card-reflection {
+    opacity: 1;
+    animation: reflectionMove 2s ease infinite;
+  }
+  
+  .benefits-list {
+    margin: 25px 0 25px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.6s forwards;
+  }
+  
+  .benefit-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    transition: transform 0.3s;
+    padding-left: 5px;
+  }
+  
+  .benefit-item:hover {
+    transform: translateX(5px);
+  }
+  
+  .benefit-icon {
+    min-width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+    color: white;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .benefit-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    transition: all 0.4s;
+  }
+  
+  .benefit-item:hover .benefit-icon::after {
+    left: 100%;
+    transition: 0.7s;
+  }
+  
+  .percentage {
+    background: linear-gradient(135deg, #ff7043, #ff9800);
+    box-shadow: 0 3px 10px rgba(255, 122, 67, 0.4);
+  }
+  
+  .learning {
+    background: linear-gradient(135deg, #26c6da, #00bcd4);
+    box-shadow: 0 3px 10px rgba(38, 198, 218, 0.4);
+  }
+  
+  .community {
+    background: linear-gradient(135deg, #66bb6a, #4caf50);
+    box-shadow: 0 3px 10px rgba(102, 187, 106, 0.4);
+  }
+  
+  .benefit-item:hover .benefit-icon {
+    transform: scale(1.1) rotate(5deg);
+  }
+  
+  .benefit-item p {
+    font-size: 15px;
+    font-weight: 500;
+    color: #444;
+    margin: 0;
+    line-height: 1.3;
+  }
+  
+  .highlight-text {
+    font-weight: 700;
+    color: #008B8B;
+  }
+  
+  .join-us-wrapper {
+    position: relative;
+    display: block;
+    margin-top: 30px;
+    padding: 16px 0;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    border-radius: 40px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.8s forwards;
+    background: linear-gradient(135deg, #008B8B, #20B2AA);
+    box-shadow: 0 5px 15px rgba(0, 139, 139, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .join-us-wrapper:hover {
+    background: linear-gradient(135deg, #007777, #1ca19a);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 139, 139, 0.5);
+    letter-spacing: 0.5px;
+  }
+  
+  .join-us-wrapper:active {
+    transform: translateY(1px);
+  }
+  
+  .join-us-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: 0.5s;
+  }
+  
+  .join-us-wrapper:hover::before {
+    left: 100%;
+  }
+  
+  .join-us-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+  
+  .join-us-wrapper:hover::after {
+    width: 80%;
+  }
+  
+  .join-us-text {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .join-text {
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+  }
+  
+  .join-arrow {
+    font-size: 22px;
+    margin-left: 8px;
+    transition: transform 0.3s;
+  }
+  
+  .join-us-wrapper:hover .join-arrow {
+    transform: translateX(5px);
+    animation: arrowBounce 1s ease infinite;
+  }
+  
+  .floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .floating-element {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.3;
+  }
+  
+  .element-1 {
+    width: 30px;
+    height: 30px;
+    top: 20%;
+    left: 10%;
+    background: linear-gradient(135deg, #008B8B, transparent);
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  .element-2 {
+    width: 20px;
+    height: 20px;
+    bottom: 20%;
+    right: 15%;
+    background: linear-gradient(135deg, #20B2AA, transparent);
+    animation: float 9s ease-in-out infinite 1s;
+  }
+  
+  .element-3 {
+    width: 15px;
+    height: 15px;
+    top: 40%;
+    right: 10%;
+    background: linear-gradient(135deg, #008B8B, transparent);
+    animation: float 7s ease-in-out infinite 0.5s;
+  }
+  
+  .element-4 {
+    width: 25px;
+    height: 25px;
+    bottom: 30%;
+    left: 15%;
+    background: linear-gradient(135deg, #20B2AA, transparent);
+    animation: float 10s ease-in-out infinite 2s;
+  }
+  
+  .element-5 {
+    width: 18px;
+    height: 18px;
+    top: 70%;
+    left: 30%;
+    background: linear-gradient(135deg, #008B8B, transparent);
+    animation: float 8s ease-in-out infinite 1.5s;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes shineEffect {
+    0% {
+      left: -150%;
+    }
+    100% {
+      left: 150%;
+    }
+  }
+  
+  @keyframes slideInTag {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes floatCard {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  
+  @keyframes pulsate {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.95);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes reflectionMove {
+    0% {
+      opacity: 0;
+    }
+    25% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 0;
+    }
+    75% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  @keyframes arrowBounce {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(10deg);
+    }
+  }
+  
+  @keyframes patternMove {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+  
+  @keyframes gradientText {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  @keyframes lineMove {
+    0%, 100% {
+      transform: scaleX(0.8);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes morphCircle {
+    0% {
+      border-radius: 50%;
+      transform: rotate(0deg);
+    }
+    50% {
+      border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+      transform: rotate(8deg);
+    }
+    100% {
+      border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
+      transform: rotate(0deg);
+    }
+  }
+  
+  @keyframes patternShift {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100px 100px;
+    }
+  }
+  
+  @keyframes borderGlow {
+    0%, 100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .club-card-promo {
+      position: relative;
+      max-width: 280px;
+      margin: 30px auto;
+    }
+    
+    .benefit-item p {
+      font-size: 14px;
+    }
+    
+    .brand {
+      font-size: 24px;
+    }
+    
+    .card-text {
+      font-size: 28px;
+    }
+  }
+  @media (min-width: 577px) and (max-width: 992px) {
+    .club-card-promo {
+      max-width: 100%; 
+      width: 100%;
+      margin: 30px auto;
+      padding: 25px 20px;
+    }
+    
+    .card-image-wrapper {
+      height: auto;  
+      max-height: 200px;
+    }
+    
+    .card-image-container {
+      height: auto;  
+      aspect-ratio: 16/10;  
+      min-height: 160px;
+      max-height: 200px;
+    }
+    
+    .card-image {
+      object-fit: contain;  
+      width: auto;
+      max-width: 100%;
+      height: 100%;
+    }
+    
+ 
+    .benefits-list {
+      margin: 20px 0;
+    }
+    
+    .benefit-item {
+      margin-bottom: 15px;
+    }
+    
+    .benefit-icon {
+      min-width: 34px;
+      height: 34px;
+    }
+    
+    .join-us-wrapper {
+      margin-top: 20px;
+      padding: 14px 0;
+    }
+  }
+  
+  /* Още по-малки екрани */
+  @media (max-width: 576px) {
+    .club-card-promo {
+      max-width: 100%;
+      padding: 20px 15px;
+    }
+    
+    .card-image-container {
+      height: 160px;
+    }
+    
+    .card-text {
+      font-size: 26px;
+    }
+    
+    .brand {
+      font-size: 22px;
+    }
+    
+    .benefit-item p {
+      font-size: 13px;
+    }
+  }
+  
+  @media (min-width: 993px) {
+    .club-card-promo {
+      max-width: 320px;
+    }
+  }

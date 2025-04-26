@@ -1,0 +1,351 @@
+.article-preview-container {
+  max-width: 1200px;
+  margin: 6em auto;
+  padding: 0;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  position: relative;
+}
+
+.article-preview-container svg {
+  color: var(--orange) !important;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background: linear-gradient(135deg, #20b2aa, #006666);
+  color: #fff;
+}
+
+.preview-header h3 {
+  color: #fff;
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.back-to-edit-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.back-to-edit-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.preview-watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 6rem;
+  opacity: 0.05;
+  color: #000;
+  pointer-events: none;
+  z-index: 100;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.preview-mode {
+  position: relative;
+}
+
+.article-title.view {
+  margin: 0;
+  padding: 30px 30px 20px;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #333;
+}
+
+.article-summary {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #555;
+  margin: 0 2rem 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.article-meta-preview {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0 1rem 1rem;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.article-main-image,
+.article-main-video {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+  /* 16:9 aspect ratio */
+  overflow: hidden;
+}
+
+.article-main-image img,
+.article-main-video img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-slider-indicator {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+}
+
+.video-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.video-play-button span {
+  color: #20b2aa;
+  font-size: 2.5rem;
+  margin-left: 6px;
+  text-indent: initial;
+}
+
+.article-body {
+  padding: 30px;
+}
+
+.article-section-preview {
+  margin-bottom: 30px;
+}
+
+.section-title-preview {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0.3em 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+  color: #333;
+}
+
+.section-content-preview {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #444;
+}
+
+.section-content-preview p {
+  margin-bottom: 20px;
+}
+
+.section-figure-preview {
+  margin: 30px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.section-figure-preview img {
+  width: 100%;
+  display: block;
+}
+
+.section-figure-preview figcaption {
+  padding: 15px;
+  font-style: italic;
+  color: #666;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 30px 30px;
+}
+
+.article-tag {
+  background-color: #f0f8ff;
+  color: #20b2aa;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(32, 178, 170, 0.3);
+  transition: all 0.3s ease;
+}
+
+.article-tag:hover {
+  background-color: rgba(32, 178, 170, 0.1);
+}
+
+.article-placeholder {
+  padding: 80px 0;
+  text-align: center;
+  background-color: #f9f9f9;
+  color: #999;
+  font-style: italic;
+}
+
+/* Стилове за caption-ите */
+.section-figure-preview {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-figure-preview img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+.section-figure-preview figcaption {
+  margin-top: 10px;
+  font-style: italic;
+  color: #555;
+  text-align: center;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+/* Стилове за слайдер и caption-и */
+.slider-container-preview {
+  margin: 20px 0;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.slider-caption-container {
+  margin-top: 15px;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.slider-caption-container h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #444;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.single-slide-caption {
+  font-style: italic;
+  color: #555;
+  line-height: 1.5;
+}
+
+.caption-content {
+  margin: 0;
+}
+
+.caption-content p:first-child {
+  margin-top: 0;
+}
+
+.caption-content p:last-child {
+  margin-bottom: 0;
+}
+
+.no-caption {
+  color: #888;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Responsive стилове */
+@media (max-width: 768px) {
+
+  .section-figure-preview figcaption,
+  .caption-content,
+  .no-caption {
+    font-size: 14px;
+  }
+
+  .slider-caption-container {
+    padding: 10px;
+  }
+
+  .slider-caption-container h4 {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .article-title.view {
+    font-size: 1.8rem;
+    padding: 20px 20px 10px;
+  }
+
+  .article-summary,
+  .article-meta,
+  .article-body,
+  .article-tags {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .preview-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .back-to-edit-btn {
+    width: 100%;
+  }
+}

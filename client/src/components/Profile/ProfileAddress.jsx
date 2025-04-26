@@ -20,16 +20,16 @@ const ProfileAddress = () => {
   const { onAllUsers,  } = useMappingContext();
 
   const initialFormState = {
-    region: profileData.details.region || '',
-    regionId: addressId.regionId || '',
-    municipality: profileData.details.municipality || '',
-    municipalityId: addressId.municipalityId || '',
-    settlement: profileData.details.settlement || '',
-    settlementId: addressId.settlementId || '',
-    district: profileData.details.district || '',
-    block: profileData.details.block || '',
-    street: profileData.details.street || '',
-    streetNumber: profileData.details.streetNumber || '',
+    region: profileData?.details?.region || '',
+  regionId: addressId?.regionId || '',
+  municipality: profileData?.details?.municipality || '',
+  municipalityId: addressId?.municipalityId || '',
+  settlement: profileData?.details?.settlement || '',
+  settlementId: addressId?.settlementId || '',
+  district: profileData?.details?.district || '',
+  block: profileData?.details?.block || '',
+  street: profileData?.details?.street || '',
+  streetNumber: profileData?.details?.streetNumber || '',
   };
   const [form, setForm] = useState(initialFormState);
 

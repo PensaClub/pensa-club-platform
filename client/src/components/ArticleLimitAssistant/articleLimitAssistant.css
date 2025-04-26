@@ -1,0 +1,134 @@
+.assistant-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .assistant-container {
+    max-width: 650px;
+    width: 90%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+  }
+  
+  .assistant-content {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+  }
+  
+  .assistant-message {
+    flex: 1;
+    padding: 30px;
+  }
+  
+  .assistant-message h3 {
+    color: #20b2aa;
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  .assistant-message p {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-size: 16px;
+  }
+  
+  .assistant-buttons {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .assistant-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .register-btn {
+    background: linear-gradient(135deg, #20b2aa, #006666);
+    color: white;
+  }
+  
+  .login-btn {
+    background: white;
+    color: #20b2aa;
+    border: 1px solid #20b2aa;
+  }
+  
+  .register-btn:hover {
+    background: linear-gradient(135deg, #006666, #20b2aa);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 102, 102, 0.2);
+  }
+  
+  .login-btn:hover {
+    background-color: rgba(32, 178, 170, 0.05);
+    transform: translateY(-2px);
+  }
+  
+  .assistant-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    z-index: 5;
+  }
+  
+  .assistant-close:hover {
+    color: #20b2aa;
+  }
+  
+  .lottie-container {
+    flex: 0 0 200px;
+    background: linear-gradient(to bottom, #f8f8f8, #f0f0f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  @media (max-width: 650px) {
+    .assistant-content {
+      flex-direction: column-reverse;
+    }
+    
+    .lottie-container {
+      flex: 0 0 180px;
+      width: 100%;
+    }
+    
+    .assistant-message {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .assistant-buttons {
+      justify-content: center;
+    }
+  }

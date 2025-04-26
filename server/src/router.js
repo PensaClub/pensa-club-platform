@@ -8,6 +8,7 @@ const suggestUserController = require('./controllers/suggestUserController');
 const adminController = require('./controllers/adminController');
 const subscriberController = require('./controllers/subscribersController');
 const authController = require('./controllers/authController');
+const articleController = require('./controllers/articleController');
 
 router.use('/auth', userController);
 router.use('/user', userDetailsController);
@@ -16,9 +17,10 @@ router.use('/suggest', suggestUserController);
 router.use('/admin', adminController);
 router.use('/subscribe', subscriberController);
 router.use('/token', authController);
+router.use('/articles', articleController);
 
 router.use((err, req, res, next) => {
-  errorHandler(err, req, res, err.statusCode || 500);
+    errorHandler(err, req, res, err.statusCode || 500);
 });
 
 module.exports = router;

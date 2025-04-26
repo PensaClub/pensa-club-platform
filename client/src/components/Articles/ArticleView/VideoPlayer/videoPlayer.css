@@ -1,0 +1,295 @@
+/* html5VideoPlayer.css */
+.html5-player-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 аспектно съотношение */
+  overflow: hidden;
+  background-color: #000;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.native-video-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.thumbnail-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.video-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-button-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease;
+}
+
+.play-button-overlay:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.play-button-overlay svg {
+  font-size: 3.5rem;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  opacity: 0.9;
+  transition: all 0.2s ease;
+}
+
+.play-button-overlay:hover svg {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.player-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  z-index: 10;
+  padding: 10px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.player-controls.hidden {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  margin-bottom: 15px;
+  position: relative;
+  cursor: pointer;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+/* Нов стил за буфериран прогрес */
+.progress-buffered {
+  position: absolute;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+  top: 0;
+  left: 0;
+  transition: width 0.1s linear;
+}
+
+.progress-filled {
+  position: absolute;
+  height: 100%;
+  background-color: #F44336;
+  border-radius: 3px;
+  top: 0;
+  left: 0;
+  transition: width 0.1s linear;
+}
+
+.progress-handle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background-color: #F44336;
+  border-radius: 50%;
+  margin-left: -6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.progress-bar:hover .progress-handle {
+  opacity: 1;
+}
+
+.progress-bar:hover {
+  height: 8px;
+}
+
+.bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-controls, .right-controls {
+  display: flex;
+  align-items: center;
+}
+
+.control-button {
+  background: none;
+  border: none;
+  padding: 5px;
+  margin: 0 5px;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: all 0.2s ease;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.control-button:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.control-button:active {
+  transform: scale(0.95);
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.volume-slider {
+  width: 0;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  -webkit-appearance: none;
+  cursor: pointer;
+  margin: 0 8px;
+  opacity: 0;
+  transition: width 0.2s ease, opacity 0.2s ease;
+}
+
+.volume-control:hover .volume-slider {
+  width: 80px;
+  opacity: 1;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.time-display {
+  color: white;
+  font-size: 0.85rem;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .control-button {
+    font-size: 1rem;
+    margin: 0 3px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .volume-control:hover .volume-slider {
+    width: 50px;
+  }
+  
+  .time-display {
+    font-size: 0.75rem;
+    margin-left: 5px;
+  }
+  
+  .player-controls {
+    padding: 8px;
+  }
+  
+  .progress-bar {
+    height: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .progress-bar:hover {
+    height: 6px;
+  }
+  
+  .play-button-overlay svg {
+    font-size: 2.8rem;
+  }
+}
+
+/* Промяна на основните цветове за да са по-близо до NOVA плейъра */
+.progress-filled {
+  background-color: #00a0ff; /* NOVA синьо */
+}
+
+.progress-handle {
+  background-color: #00a0ff;
+}
+
+.progress-buffered {
+  background-color: rgba(0, 160, 255, 0.3); /* По-светло NOVA синьо */
+}
+
+/* Добавяме анимация при бутоните */
+.control-button:hover svg {
+  transform: scale(1.1);
+}
+
+/* Малък блясък на прогрес бара */
+.progress-filled::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
+}

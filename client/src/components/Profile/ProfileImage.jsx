@@ -36,7 +36,7 @@ export const ProfileImage = () => {
       <section className="profile-data">
         <div className="profile-data__inner">
           <div className="avatar">
-            <img src={previewImage || "/images/sign-up/avatar.jpg"} alt="User avatar" />
+            <img src={previewImage || "/images/sign-up/avatar.jpg"} alt={t("profile.profile_data_alt")} />
           </div>
           <div className="user-data">
             <input
@@ -53,7 +53,7 @@ export const ProfileImage = () => {
             </label>
           </div>
           <button onClick={handleUpload} className="label">
-            Upload Photo
+            {t("profile.upload_image_btn")}
           </button>
         </div>
       </section>
