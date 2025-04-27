@@ -25,6 +25,7 @@ export const CommunityPage = () => {
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [lastPage, setLastPage] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [isResetFilters, setIsResetFilters] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ export const CommunityPage = () => {
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const filtersFromQuery = Object.fromEntries(query.entries());
-    
+
     setFilters((prevFilters) => ({ ...prevFilters, ...filtersFromQuery }));
     //бутона от менюто за навигация слага кеури ресет=true ао го има ресетва филтрите
     if (query.get("reset") === "true") {
@@ -71,6 +72,11 @@ export const CommunityPage = () => {
       handleSearch(filtersFromQuery, 1);
     }
   }, [location.search, navigate]);
+
+  useEffect(() => {
+    isResetFilters && handleSearch();
+    setIsResetFilters(false);
+  }, [isResetFilters]);
 
   const handleSearch = async (customFilters = null, pageNum = 1) => {
     const searchFilters = customFilters ? customFilters : filters;
@@ -148,6 +154,7 @@ export const CommunityPage = () => {
     setShowResetIcon(false);
     setSearchPerformed(false);
     setPage(1);
+    setIsResetFilters(true);
   };
 
   const getWhereLabel = () => {
@@ -234,24 +241,30 @@ export const CommunityPage = () => {
               />
             </div>
 
-            {ads.result.length > 0 ? (
-              <AdsCard ads={ads} isLoading={isLoading} />
-            ) : searchPerformed ? (
-              <div className="no-ads-container">
-                <h3>{t("community.no_ads_found")}</h3>
-                <div className="no-ads-message">
-                  <p>{t("community.no_ads_message")}</p>
-                  <button
-                    className="clear-filters-button"
-                    onClick={resetFilters}
-                  >
-                    {t("community.clear_filters")}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <FiltersCommunity handleSearch={handleSearch()} />
-            )}
+            {
+              ads.result.length > 0 ? (
+                <AdsCard ads={ads} isLoading={isLoading} />
+              ) : (
+                searchPerformed && (
+                  <div className="no-ads-container">
+                    <h3>{t("community.no_ads_found")}</h3>
+                    <div className="no-ads-message">
+                      <p>{t("community.no_ads_message")}</p>
+                      <button
+                        className="clear-filters-button"
+                        onClick={resetFilters}
+                      >
+                        {t("community.clear_filters")}
+                      </button>
+                    </div>
+                  </div>
+                )
+              )
+              // : (
+              // <FiltersCommunity handleSearch={handleSearch} />
+              // <FiltersCommunity handleSearch={handleSearch()} />
+              // )
+            }
             <div ref={loaderRef} />
           </section>
         </section>

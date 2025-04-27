@@ -282,18 +282,26 @@
 	font-size: 2px;
 
 }
-@media (max-width: 450px) {
+@media (max-width: 750px) {
 	.form{
 		height: 80%;
 		margin-top: 65px;
 	}
 	.container{
-		height:760px
+		width: 100%;
+		height:100vh;
 	}
 	.password-input-container input{
 		font-size: 12px;
 	  }
 	  .input{
 		font-size: 12px;
+	  }
+
+	  .container-wrapper {
+		padding: 0;
+	  }
+	  .banner-section {
+		padding-top: 20px;
 	  }
   }
