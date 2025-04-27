@@ -1215,7 +1215,10 @@
     width: 30px;
     height: 30px;
   }
-  
+  .remove-image-btn{
+    width: 32px;
+    height: 32px;
+  }
     .section-image-preview .img-alt-edit-btn {
       right: 50px;
     }
