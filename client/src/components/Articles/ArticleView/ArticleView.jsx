@@ -54,7 +54,7 @@ const ArticleView = () => {
     setCurrentPage(pageNumber);
     // Скролваме към началото на статията при смяна на страница
     window.scrollTo({
-      top: document.querySelector('.article-body').offsetTop - 100,
+      top: document.querySelector('.article-body-view').offsetTop - 100,
       behavior: 'smooth'
     });
   };
@@ -392,7 +392,7 @@ const ArticleView = () => {
             )}
             <div className="article-summary-view">{renderHtml(article.summary)}</div>
 
-            <div className="article-body">
+            <div className="article-body-view">
               {/* Рендерираме само секциите за текущата страница */}
               {getCurrentPageSections().map((section, index) => {
                 // Изчисляваме реалния индекс на секцията спрямо всички секции
