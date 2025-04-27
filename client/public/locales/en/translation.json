@@ -811,13 +811,13 @@
         "photos": "photos",
         "video": "Video",
         "externalSource": "External source",
-        "edit": "Редактирай",
-        "delete": "Изтрий",
-        "views": "прегледа",
-        "preview": "Преглед",
-        "deleteConfirmation": "Потвърждение за изтриване",
-        "deleteConfirmMessage": "Сигурни ли сте, че искате да изтриете статията \"{{title}}\"?",
-        "cancel": "Отказ"
+        "edit": "Edit",
+        "delete": "Delete",
+        "views": "views",
+        "preview": "Preview",
+        "deleteConfirmation": "Delete Confirmation",
+        "deleteConfirmMessage": "Are you sure you want to delete the article \"{{title}}\"?",
+        "cancel": "Cancel"
     },
     "articleSlider": {
         "previousSlide": "Previous slide",
@@ -871,6 +871,20 @@
         "speed": "Speed",
         "subtitlesOff": "Off",
         "youtubePlayer": "YouTube video player"
+    },
+    "articleView": {
+        "articleNotFound": "Article not found",
+        "backToArticles": "Back to all articles",
+        "imageFor": "Image for {{title}}",
+        "imagesFor": "Images for",
+        "share": "Share",
+        "shareOnFacebook": "Share on Facebook",
+        "shareOnTwitter": "Share on Twitter",
+        "shareOnLinkedIn": "Share on LinkedIn",
+        "shareOnTelegram": "Share on Telegram",
+        "previousArticle": "Previous article",
+        "nextArticle": "Next article",
+        "relatedArticle": "Related article"
     },
     "validation": {
         "title_required": "Title is required",

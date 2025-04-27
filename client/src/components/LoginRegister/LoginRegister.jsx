@@ -14,9 +14,14 @@ export const LoginRegister = () => {
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const view = query.get('view');
-    if (view === 'register') {
+    const tab = query.get('tab'); 
+    
+    if (view === 'register' || tab === 'register') {
       setActiveView(true);
+    } else if (view === 'login' || tab === 'login') {
+      setActiveView(false);
     } else {
+ 
       setActiveView(false);
     }
   }, [location.search]);

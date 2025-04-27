@@ -25,7 +25,7 @@
     width: 100%;
     padding: 30px;
   }
-  
+
   .form-section {
     margin-bottom: 40px;
     border-radius: 12px;
@@ -240,7 +240,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: rgba(231, 76, 60, 0.8);
+    background-color: rgba(44, 62, 80, 0.8);
     color: white;
     border: none;
     border-radius: 50%;
@@ -254,14 +254,16 @@
     opacity: 0;
     transform: scale(0.8);
   }
-  
+  .remove-image-btn >svg{
+    color: white!important;
+  }
   .image-preview-item:hover .remove-image-btn {
     opacity: 1;
     transform: scale(1);
   }
   
   .remove-image-btn:hover {
-    background-color: #e74c3c;
+    background-color: rgba(44, 62, 80, 1);
   }
   
   
@@ -658,7 +660,7 @@
     position: absolute;
   top: 10px;
   right: 10px;
-  background-color: rgba(231, 76, 60, 0.8);
+  background-color: rgba(44, 62, 80, 0.8);
   color: white;
   border: none;
   border-radius: 50%;
@@ -675,14 +677,16 @@
     opacity: 1;
   }
   .section-image-preview .remove-image-btn:hover {
-    background-color: #e74c3c;
+    background-color: rgba(44, 62, 80, 1);
     transform: scale(1.1);
   }
 
   .rdw-dropdown-optionwrapper{
     width: 135px;
   }
-
+  .section-image-preview .remove-image-btn>svg{
+    color: white!important;
+  }
   .rdw-option-wrapper{
     padding: 8px;
     min-width: 35px;
@@ -1198,17 +1202,28 @@
         align-items: flex-start;
     }
     
-    .section-image-preview .remove-image-btn,
-    .section-image-preview .img-alt-edit-btn {
-      opacity: 1;
-      width: 32px;
-      height: 32px;
-    }
+    .image-preview-item .remove-image-btn,
+  .section-image-preview .remove-image-btn,
+  .video-preview-container .remove-video-btn,
+  .img-alt-actions,.img-alt-edit-btn {
+    opacity: 1 !important;
+    display: flex !important;
+  }
+  .remove-image-btn,
+  .remove-video-btn,
+  .img-alt-edit-btn {
+    width: 30px;
+    height: 30px;
+  }
+  .remove-image-btn{
+    width: 32px;
+    height: 32px;
+  }
     .section-image-preview .img-alt-edit-btn {
       right: 50px;
     }
     .section-image-preview .remove-image-btn {
-      background-color: rgba(231, 76, 60, 0.9);
+      background-color: rgba(44, 62, 80, 0.8);
     }
     .section-image-preview .img-alt-edit-btn {
       background-color: rgba(32, 178, 170, 0.9);
@@ -1219,6 +1234,14 @@
     .remove-video-btn {
         align-self: flex-end;
         margin-top: 10px;
+    }
+    .img-alt-actions {
+      position: absolute;
+      top: 5px;
+      right: 2px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 3px;
+      border-radius: 5px;
     }
 }
 @media screen and (max-width: 1600px) {
