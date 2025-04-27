@@ -16,7 +16,7 @@ export const ArticleLimitProvider = ({ children }) => {
   };
 
   return (
-    <ArticleLimitContext.Provider value={{ showAssistant }}>
+    <ArticleLimitContext.Provider value={{ showAssistant,hideAssistant }}>
       {children}
       <ArticleLimitAssistant 
         isVisible={showLimitAssistant} 

@@ -32,8 +32,8 @@ const ArticleLimitAssistant = ({ isVisible, onClose }) => {
             <h3>Харесва ли Ви съдържанието?</h3>
             <p>Регистрирайте се, за да продължите да четете неограничен брой статии и да получите пълен достъп до платформата.</p>
             <div className="assistant-buttons">
-              <Link to="/sign-up" className="assistant-btn register-btn">Регистрация</Link>
-              <Link to="/sign-up?tab=login" className="assistant-btn login-btn">Вход</Link>
+              <Link to="/sign-up?tab=register" className="assistant-btn register-btn" onClick={onClose}>Регистрация</Link>
+              <Link to="/sign-up?tab=login" className="assistant-btn login-btn" onClick={onClose}>Вход</Link>
             </div>
           </div>
           
