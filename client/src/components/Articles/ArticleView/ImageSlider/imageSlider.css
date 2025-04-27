@@ -52,11 +52,11 @@
 }
 
 .slider-arrow.left {
-  left: 15px;
+  left: 5px;
 }
 
 .slider-arrow.right {
-  right: 15px;
+  right: 5px;
 }
 
 .slider-arrow:hover {

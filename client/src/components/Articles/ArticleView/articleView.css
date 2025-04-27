@@ -546,6 +546,57 @@
   margin-top: 0; 
   text-align: center;
 }
+.image-modal-overlay-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.image-modal-content-view {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  height: 50vh;
+}
+
+.modal-close-btn-view {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close-btn-view:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Модификации за слайдера в модалния прозорец */
+.image-modal-content-view .slider-container {
+  height: 100%;
+  padding-bottom: 0;
+}
+
+.image-modal-content .slider-image {
+  object-fit: contain;
+}
 @media (min-width: 1200px) {
   .article-main-image,
   .section-figure {
