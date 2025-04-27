@@ -6,7 +6,8 @@ import {
   faCalendarAlt,
   faUser,
   faChevronLeft,
-  faChevronRight
+  faChevronRight,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFacebookF,
@@ -48,15 +49,32 @@ const ArticleView = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { getAllArticles, articlesLoaded, getArticleById, articles } = useArticleContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImages, setModalImages] = useState([]);
+  const [modalStartIndex, setModalStartIndex] = useState(0);
 
   // Функция за смяна на страница
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     // Скролваме към началото на статията при смяна на страница
     window.scrollTo({
-      top: document.querySelector('.article-body').offsetTop - 100,
+      top: document.querySelector('.article-body-view').offsetTop - 100,
       behavior: 'smooth'
     });
+  };
+  const openImageModal = (images, startIndex = 0) => {
+    setModalImages(images);
+    setModalStartIndex(startIndex);
+    setIsModalOpen(true);
+    // Предотвратяваме скролиране на страницата
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Функция за затваряне на модалния прозорец
+  const closeImageModal = () => {
+    setIsModalOpen(false);
+    // Възстановяваме скролирането
+    document.body.style.overflow = 'auto';
   };
 
   // Функция за изчисляване на общия брой страници
@@ -274,7 +292,13 @@ const ArticleView = () => {
     if (article.mainImage.type === 'slider' && article.mainImage.sources.length > 1) {
       return (
         <div className="main-media-container">
-          <ImageSlider images={article.mainImage.sources} alt={article.mainImage.alt} />
+          <div className="clickable-slider">
+            <ImageSlider
+              images={article.mainImage.sources}
+              alt={article.mainImage.alt}
+              onImageClick={() => openImageModal(article.mainImage.sources)}
+            />
+          </div>
           {article.mainImage.caption && (
             <div className="main-image-caption-container">
               <div className="main-image-caption" dangerouslySetInnerHTML={{ __html: article.mainImage.caption }} />
@@ -303,7 +327,12 @@ const ArticleView = () => {
     } else {
       return (
         <figure className="article-main-image">
-          <img src={article.mainImage.sources[0]} alt={article.mainImage.alt} />
+          <img
+            src={article.mainImage.sources[0]}
+            alt={article.mainImage.alt}
+            onClick={() => openImageModal(article.mainImage.sources)}
+            style={{ cursor: 'pointer' }}
+          />
           {article.mainImage.caption && (
             <figcaption dangerouslySetInnerHTML={{ __html: article.mainImage.caption }} />
           )}
@@ -317,7 +346,12 @@ const ArticleView = () => {
       if (section.image && section.image.src) {
         return (
           <figure className="section-figure">
-            <img src={section.image.src} alt={section.image.alt || t('articles.articleView.imageFor', { title: section.title })} />
+            <img
+              src={section.image.src}
+              alt={section.image.alt || t('articles.articleView.imageFor', { title: section.title })}
+              onClick={() => openImageModal([section.image.src])}
+              style={{ cursor: 'pointer' }}
+            />
             {section.image.caption && (
               <figcaption>{section.image.caption}</figcaption>
             )}
@@ -331,35 +365,43 @@ const ArticleView = () => {
       const image = section.sectionImages[0];
       return (
         <figure className="section-figure">
-          <img src={image.src} alt={image.alt || t('articles.articleView.imageFor', { title: section.title })} />
+          <img
+            src={image.src}
+            alt={image.alt || t('articles.articleView.imageFor', { title: section.title })}
+            onClick={() => openImageModal([image.src])}
+            style={{ cursor: 'pointer' }}
+          />
           {image.caption && (
             <figcaption dangerouslySetInnerHTML={{ __html: image.caption }} />
           )}
         </figure>
       );
     }
+    if (section.sectionImages.length > 1) {
+      const sectionImageUrls = section.sectionImages.map(img => img.src);
+      return (
+        <div className="section-slider-container">
+          <ImageSlider
+            images={sectionImageUrls}
+            alt={`${t('articles.articleView.imagesFor')} ${section.title}`}
+            onSlideChange={(slideIndex) => handleSectionSlideChange(sectionIndex, slideIndex)}
+            onImageClick={() => openImageModal(sectionImageUrls, activeSectionSlides[sectionIndex] || 0)}
+          />
 
-    return (
-      <div className="section-slider-container">
-        <ImageSlider
-          images={section.sectionImages.map(img => img.src)}
-          alt={`${t('articles.articleView.imagesFor')} ${section.title}`}
-          onSlideChange={(slideIndex) => handleSectionSlideChange(sectionIndex, slideIndex)}
-        />
-
-        {section.sectionImages[activeSectionSlides[sectionIndex] || 0]?.caption && (
-          <div className="single-slider-caption-container">
-            <div className="single-slide-caption">
-              <div className="single-caption-content-view"
-                dangerouslySetInnerHTML={{
-                  __html: section.sectionImages[activeSectionSlides[sectionIndex] || 0].caption
-                }}
-              />
+          {section.sectionImages[activeSectionSlides[sectionIndex] || 0]?.caption && (
+            <div className="single-slider-caption-container">
+              <div className="single-slide-caption">
+                <div className="single-caption-content-view"
+                  dangerouslySetInnerHTML={{
+                    __html: section.sectionImages[activeSectionSlides[sectionIndex] || 0].caption
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    );
+          )}
+        </div>
+      );
+    }
   };
 
   return (
@@ -392,7 +434,7 @@ const ArticleView = () => {
             )}
             <div className="article-summary-view">{renderHtml(article.summary)}</div>
 
-            <div className="article-body">
+            <div className="article-body-view">
               {/* Рендерираме само секциите за текущата страница */}
               {getCurrentPageSections().map((section, index) => {
                 // Изчисляваме реалния индекс на секцията спрямо всички секции
@@ -499,6 +541,16 @@ const ArticleView = () => {
           </aside>
         </div>
       </div>
+      {isModalOpen && (
+        <div className="image-modal-overlay-view" onClick={closeImageModal}>
+          <div className="image-modal-content-view" onClick={e => e.stopPropagation()}>
+            <button className="modal-close-btn-view" onClick={closeImageModal}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <ImageSlider images={modalImages} alt="Enlarged image" initialIndex={modalStartIndex} />
+          </div>
+        </div>
+      )}
       <ScrollToTop />
     </div>
   );

@@ -329,7 +329,7 @@
   .articles-content-with-sidebar {
     flex-direction: column;
     margin: 0 0.5em;
-    padding: 0 2rem;
+    padding: 0 1rem;
     gap: 20px;
   }
 
@@ -411,7 +411,12 @@
     .articles-hero {
         padding: 3rem 1rem;
     }
-
+    .articles-content-with-sidebar {
+        flex-direction: column;
+        margin: 0 0.5em;
+        padding: 0 0.5rem;
+        gap: 20px;
+      }
     .articles-hero h1 {
         font-size: 1.8rem;
     }
