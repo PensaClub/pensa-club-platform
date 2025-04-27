@@ -806,16 +806,16 @@
         "or": "или"
     },
     "articleCard": {
-        "photos": "photos",
-        "video": "Video",
-        "externalSource": "External source",
-        "edit": "Edit",
-        "delete": "Delete",
-        "views": "views",
-        "preview": "Preview",
-        "deleteConfirmation": "Delete Confirmation",
-        "deleteConfirmMessage": "Are you sure you want to delete the article \"{{title}}\"?",
-        "cancel": "Cancel"
+        "photos": "снимки",
+        "video": "Видео",
+        "externalSource": "Външен източник",
+        "edit": "Редактирай",
+        "delete": "Изтрий",
+        "views": "Прегледа",
+        "preview": "Преглед",
+        "deleteConfirmation": "Потвърждение за изтриване",
+        "deleteConfirmMessage": "Сигурни ли сте, че искате да изтриете статията \"{{title}}\"?",
+        "cancel": "Отказ"
     },
     "articleSlider": {
         "previousSlide": "Предишен слайд",
@@ -900,7 +900,7 @@
         "edit_article": "Редактиране на статия",
         "cancel": "Отказ",
         "article_info": "Информация за статията",
-        "pewview": "Прегледи:",
+        "preview": "Прегледи:",
         "created_at": "Създадена на",
         "updated_at": "Последна промяна",
         "just_saved": "Току-що запазено"
