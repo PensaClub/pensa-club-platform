@@ -427,7 +427,10 @@
     "user_role": "User Role",
     "password_management": "Password Management",
     "save_changes": "Save Changes",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "with_ads": "With Ads",
+    "total_unfinished": "Total Unfinished",
+    "current_date": "Current Date"
   },
   "community": {
     "community": "Community",
