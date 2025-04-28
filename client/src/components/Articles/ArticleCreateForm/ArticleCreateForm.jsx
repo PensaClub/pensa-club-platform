@@ -21,7 +21,7 @@ import { useCreateArticle } from "../../hooks/useCreateArticle";
 import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
 
 const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubmitHandler, isEditMode }, ref) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { createArticle } = useArticleContext();
     const [previewMode, setPreviewMode] = useState(false);
     const [isAltModalOpen, setIsAltModalOpen] = useState(false);
@@ -429,11 +429,11 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
     // Определяме текстовете според режима (създаване или редактиране)
     const formTitle = isEditMode
-        ? t('articles.editForm.editArticle', 'Редактиране на статия')
+        ? t('articles.editArticle.edit_article')
         : t('articles.createForm.createNewArticle');
 
     const submitButtonText = isEditMode
-        ? t('articles.editForm.saveChanges', 'Запази промените')
+        ? t('articles.editArticle.save_changes')
         : t('articles.createForm.saveBtn');
 
     return (
@@ -522,6 +522,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                     wrapperClassName="editor-wrapper"
                                     editorClassName="editor-main"
                                     toolbarClassName="editor-toolbar"
+                                    key={i18n.language}
                                 />
                             </div>
                             {errors.summary && <div className="error-message">{errors.summary}</div>}
@@ -572,6 +573,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                                 wrapperClassName="editor-wrapper-small"
                                                 editorClassName="editor-main-small"
                                                 toolbarClassName="editor-toolbar-small"
+                                                key={i18n.language}
                                             />
                                         </div>
                                         {errors["mainImage.alt"] && <div className="error-message">{errors["mainImage.alt"]}</div>}
@@ -679,6 +681,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                                 wrapperClassName="editor-wrapper-small"
                                                 editorClassName="editor-main-small"
                                                 toolbarClassName="editor-toolbar-small"
+                                                key={i18n.language}
                                             />
                                         </div>
                                         {errors["mainImage.alt"] && <div className="error-message">{errors["mainImage.alt"]}</div>}
@@ -881,6 +884,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                                 wrapperClassName="editor-wrapper"
                                                 editorClassName="editor-main"
                                                 toolbarClassName="editor-toolbar"
+                                                key={i18n.language}
                                             />
                                         </div>
                                         {errors[`sections[${index}].content`] && <div className="error-message">{errors[`sections[${index}].content`]}</div>}

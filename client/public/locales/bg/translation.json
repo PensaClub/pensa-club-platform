@@ -898,6 +898,7 @@
     },
     "editArticle": {
         "edit_article": "Редактиране на статия",
+        "save_changes": "Запази промените",
         "cancel": "Отказ",
         "article_info": "Информация за статията",
         "preview": "Прегледи:",

@@ -900,6 +900,7 @@
     },
     "editArticle": {
         "edit_article": "Edit article",
+        "save_changes": "Save changes",
         "cancel": "Cancel",
         "article_info": "Article information",
         "preview": "Preview:",

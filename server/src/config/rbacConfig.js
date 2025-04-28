@@ -17,7 +17,7 @@ const permissions = {
         delete: ['admin'],
     },
     comment: {
-        delete: ['admin', 'moderator'],
+        delete: ['admin'],
     },
     subscription: {
         read: ['admin', 'moderator'],
