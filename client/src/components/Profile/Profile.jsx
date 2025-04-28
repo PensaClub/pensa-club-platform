@@ -28,7 +28,8 @@ import {
   BillingIcon,
   JobsAdsIcon,
   EducationIcon,
-  MenuIcon
+  MenuIcon,
+  SearchIconProfile
 } from "../Articles/articleUtils/AdminIcons";
 
 import { ProfileSkills } from "./ProfileSkills";
@@ -229,7 +230,7 @@ export const Profile = () => {
         <h2>Pensa Club</h2>
 
         <div className="search-container">
-          <SearchIcon className="search-icon" />
+          <SearchIconProfile className="-profile" />
           <input type="text" placeholder={t('profile.search_placeholder')} className="search-input" />
         </div>
 

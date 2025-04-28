@@ -1,8 +1,6 @@
 import './unfinishedProfiles.css';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useMappingContext } from '../../contexts/MapContext';
 import { useAuthContext } from '../../contexts/UserContext';
@@ -18,26 +16,29 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCriteria, setSearchCriteria] = useState('email');
   const [searchResults, setSearchResults] = useState([]);
-  const [adminEmail, setAdminEmail] = useState('')
+  const [adminEmail, setAdminEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const { t } = useTranslation();
   const { onAllUsers } = useMappingContext();
-  const { onForgetPasswordSubmit,onChangeAdminRole,profileData } = useAuthContext();
+  const { onForgetPasswordSubmit, onChangeAdminRole, profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
+
   useEffect(() => {
     const loadUsers = async () => {
+      setIsLoading(true);
       try {
         const allUsers = await onAllUsers();
         const filteredUsers = allUsers.accounts.filter((user) => !user.enabled);
         setUsers(filteredUsers);
-
         setUnfinishedUsers(filteredUsers?.length);
         setAdminEmail(profileData.email);
         setSearchResults(filteredUsers);
-
       } catch (e) {
         console.error(e);
+      } finally {
+        setIsLoading(false);
       }
     };
     loadUsers();
@@ -119,13 +120,19 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   };
 
   const getStatus = (enabled) => {
-    return enabled ? t('admin.finish') : t('admin.unfinish');
+    return enabled ? (
+      <span className="status-badge status-active">{t('admin.finish')}</span>
+    ) : (
+      <span className="status-badge status-inactive-unfinished">{t('admin.unfinish')}</span>
+    );
   };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
+
   const handleFlyoutOpen = (user) => {
     setSelectedUser(user);
     setIsFlyoutOpen(true);
@@ -137,74 +144,108 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   };
 
   const handleRoleChange = async (email, role) => {
-    let defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment',)} ${ role }`;
-    if(role === "guest") {
-      defaultComment=`${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment_banned')}`
+    let defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment',)} ${role}`;
+    if (role === "guest") {
+      defaultComment = `${t('admin.from_admin',)} ${adminEmail}: ${t('admin.default_comment_banned')}`;
     }
     const finalComment = comment || defaultComment;
-  
+
     try {
       await onChangeAdminRole(email, role, finalComment);
-      const updatedUsers = await onAllUsers(); 
+      const updatedUsers = await onAllUsers();
       if (updatedUsers && updatedUsers.accounts) {
-        setUsers(updatedUsers.accounts); 
+        setUsers(updatedUsers.accounts);
         setSearchResults(updatedUsers.accounts.filter((user) => !user.enabled));
-
       } else {
         console.error("Failed to fetch updated users.");
       }
-      setIsFlyoutOpen(false); 
+      setIsFlyoutOpen(false);
     } catch (e) {
       console.error(e);
     }
   };
 
   const handlePasswordReset = (email) => {
-    onForgetPasswordSubmit({ email })
+    onForgetPasswordSubmit({ email });
   };
+
   const trimString = (str, num) => {
     if (str.length <= num) return str;
     return str.slice(0, num) + '...';
-  }
+  };
+
   const handleTextClick = (text) => {
     setModalContent(text);
     setIsTextModalOpen(true);
   };
+
   const closeTextModal = () => {
     setIsTextModalOpen(false);
     setModalContent('');
-  }
+  };
+
   return (
-    <div className="unfinished-container">
-      <h2>{t('admin.unfinished_users_profile')}</h2>
-      <div className="search-container-unfinished-users">
-        <input
-          type="text"
-          placeholder={t('admin.search') + '...'}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <select
-          value={searchCriteria}
-          onChange={(e) => setSearchCriteria(e.target.value)}
-        >
-          <option value="email">{t('admin.email')}</option>
-          <option value="date">{t('admin.creation_date')}</option>
-        </select>
-        <button onClick={handleSearch}>{t('admin.search')}</button>
-        {searchTerm && (
-          <div className="reset-icon-container">
-            <FontAwesomeIcon
-              icon={faArrowRotateLeft}
-              className="reset-icon-unfinished-users"
-              onClick={resetFilters}
-            />
-            <span className="reset-text-unfinished-users" onClick={resetFilters}>{t('admin_messages.search_clear')}</span>
+    <div className="users-dashboard">
+      <div className="dashboard-header">
+        <h2 className="dashboard-title">{t('admin.unfinished_users_profile')}</h2>
+        <div className="dashboard-stats">
+          <div className="stat-item">
+            <span className="stat-value">{users.length}</span>
+            <span className="stat-label">{t('admin.total_unfinished')}</span>
           </div>
-        )}
+          <div className="stat-item">
+            <span className="stat-value">{users.filter(u => u.ads?.length > 0).length}</span>
+            <span className="stat-label">{t('admin.with_ads')}</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-value">{new Date().toLocaleDateString()}</span>
+            <span className="stat-label">{t('admin.current_date')}</span>
+          </div>
+        </div>
       </div>
-      <hr />
-      <div className="legend-container">
+      
+      <div className="search-panel">
+        <div className="search-input-group">
+          <div className="search-icon-wrapper">
+            <svg className="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder={`${t('admin.search')}...`}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input-unfinished"
+          />
+          {searchTerm && (
+            <button className="clear-search-unfinished" onClick={resetFilters}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          )}
+        </div>
+        
+        <div className="search-controls">
+          <select
+            value={searchCriteria}
+            onChange={(e) => setSearchCriteria(e.target.value)}
+            className="search-criteria-unfinished"
+          >
+            <option value="email">{t('admin.email')}</option>
+            <option value="date">{t('admin.creation_date')}</option>
+          </select>
+          
+          <button onClick={handleSearch} className="search-button-unfinished">
+            {t('admin.search')}
+          </button>
+        </div>
+      </div>
+      
+      <div className="legend-panel">
         <div className="legend-item">
           <img src={'/icons/comment.svg'} alt="Comment" className="legend-icon" />
           <span>{t('admin.comment')}</span>
@@ -221,119 +262,144 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
           <img src={'/icons/delete-button.svg'} alt="delete" className="legend-icon" />
           <span>{t('admin.delete')}</span>
         </div>
-        <div className="legend-item">
-          <img src={'/icons/number.svg'} alt="Number" className="legend-icon" />
-          <span>{t('admin.number')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/email.svg'} alt="Email" className="legend-icon" />
-          <span>{t('admin.user_email')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/registration.svg'} alt="Registration Date" className="legend-icon" />
-          <span>{t('admin.user_registration_date')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/status.svg'} alt="Status" className="legend-icon" />
-          <span>{t('admin.status')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/ads.svg'} alt="Ads" className="legend-icon" />
-          <span>{t('profile.ads-statistic')}</span>
-        </div>
-        <div className="legend-item">
-          <img src={'/icons/actions.svg'} alt="Actions" className="legend-icon" />
-          <span>{t('admin.actions')}</span>
-        </div>
       </div>
-      <hr />
-      <div className="unfinished-table-container">
-        <table className="unfinished-table">
-          <thead>
-            <tr>
-              <th className="number-cell" onClick={() => requestSort('id')}>
-                <img src="/icons/number.svg" alt="Number" className="table-icon" />
-                <span>{t('admin.number')}</span>
-                {sortConfig.key === 'id' ? (
-                  sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
-                ) : null}
-              </th>
-              <th onClick={() => requestSort('email')}>
-                <img src="/icons/email.svg" alt="Email" className="table-icon" />
-                <span>{t('admin.user_email')}</span>
-                {sortConfig.key === 'email' ? (
-                  sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
-                ) : null}
-              </th>
-              <th onClick={() => requestSort('date')} className='registration-date-admin-unfinished'>
-                <img src="/icons/registration.svg" alt="Registration Date" className="table-icon" />
-                <span>{t('admin.user_registration_date')}</span>
-                {sortConfig.key === 'date' ? (
-                  sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
-                ) : null}
-              </th>
-              <th onClick={() => requestSort('status')}>
-                <img src="/icons/status.svg" alt="Status" className="table-icon" />
-                <span>{t('admin.status')}</span>
-                {sortConfig.key === 'status' ? (
-                  sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
-                ) : null}
-              </th>
-              <th onClick={() => requestSort('ads')} className='ads-cell-unfinished'>
-                <img src="/icons/ads.svg" alt="Ads" className="table-icon" />
-                <span>{t('profile.ads-statistic')}</span>
-                {sortConfig.key === 'ads' ? (
-                  sortConfig.direction === 'ascending' ? ' ↑' : ' ↓'
-                ) : null}
-              </th>
-              <th>
-                <img src="/icons/actions.svg" alt="Actions" className="table-icon" />
-                <span>{t('admin.actions')}</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedUsers.map((user, index) => (
-              <tr key={user.email}>
-                <td className="number-cell">{sortConfig.key === 'id' && sortConfig.direction === 'descending' ? sortedUsers.length - index : index + 1}</td>
-                <td className='trimmed-email-unfinished' onClick={() => handleTextClick(user?.email)}>
-                  <Link to={`#`}>{trimString(user?.email,12)}</Link>
-                </td>
-                <td>{formatDate(user.createdAt)}</td>
-                <td>{getStatus(user.enabled)}</td>
-                <td>{user.ads?.length}</td>
-                <td className="actions-admin">
-                  <img
-                    src={'/icons/comment.svg'}
-                    alt="Comment"
-                    className="comment-icon"
-                    onClick={() => handleComment(user)}
-                  />
-                  <img
-                    src={'/icons/gears-icon.svg'}
-                    alt="approved"
-                    className="comment-icon"
-                    onClick={() => handleFlyoutOpen(user)}
-                  />
-                  <img
-                    src={'/icons/denied.svg'}
-                    alt="reject"
-                    className="comment-icon"
-                    onClick={() => handleRoleChange(user.email, "guest")}
-                  />
-                  <img
-                    src={'/icons/delete-button.svg'}
-                    alt="delete"
-                    className="comment-icon"
-                    onClick={() => handleDelete(user.id)}
-                  />
-                </td>
+
+      {isLoading ? (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>{t('admin.loading_users')}</p>
+        </div>
+      ) : (
+        <div className="users-table-container">
+          <table className="users-table">
+            <thead>
+              <tr>
+                <th className="number-column" onClick={() => requestSort('id')}>
+                  <div className="th-content">
+                    <span>{t('admin.number')}</span>
+                    {sortConfig.key === 'id' && (
+                      <span className={`sort-icon ${sortConfig.direction === 'ascending' ? 'asc' : 'desc'}`}>
+                        {sortConfig.direction === 'ascending' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </div>
+                </th>
+                <th className="email-column" onClick={() => requestSort('email')}>
+                  <div className="th-content">
+                    <span>{t('admin.user_email')}</span>
+                    {sortConfig.key === 'email' && (
+                      <span className={`sort-icon ${sortConfig.direction === 'ascending' ? 'asc' : 'desc'}`}>
+                        {sortConfig.direction === 'ascending' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </div>
+                </th>
+                <th className="date-column" onClick={() => requestSort('date')}>
+                  <div className="th-content">
+                    <span>{t('admin.user_registration_date')}</span>
+                    {sortConfig.key === 'date' && (
+                      <span className={`sort-icon ${sortConfig.direction === 'ascending' ? 'asc' : 'desc'}`}>
+                        {sortConfig.direction === 'ascending' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </div>
+                </th>
+                <th className="status-column" onClick={() => requestSort('status')}>
+                  <div className="th-content">
+                    <span>{t('admin.status')}</span>
+                    {sortConfig.key === 'status' && (
+                      <span className={`sort-icon ${sortConfig.direction === 'ascending' ? 'asc' : 'desc'}`}>
+                        {sortConfig.direction === 'ascending' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </div>
+                </th>
+                <th className="ads-column" onClick={() => requestSort('ads')}>
+                  <div className="th-content">
+                    <span>{t('profile.ads-statistic')}</span>
+                    {sortConfig.key === 'ads' && (
+                      <span className={`sort-icon ${sortConfig.direction === 'ascending' ? 'asc' : 'desc'}`}>
+                        {sortConfig.direction === 'ascending' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </div>
+                </th>
+                <th className="actions-column">
+                  <div className="th-content">
+                    <span>{t('admin.actions')}</span>
+                  </div>
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {sortedUsers?.length === 0 && <p className='no-result-fly'>No results found...</p>}
-      </div>
+            </thead>
+            <tbody>
+              {sortedUsers.length > 0 ? (
+                sortedUsers.map((user, index) => (
+                  <tr key={user.email} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
+                    <td className="number-cell">{index + 1}</td>
+                    <td 
+                      className="email-cell"
+                      onClick={() => handleTextClick(user?.email)}
+                    >
+                      <span className="email-text">{trimString(user?.email, 20)}</span>
+                    </td>
+                    <td className="date-cell">{formatDate(user?.createdAt)}</td>
+                    <td className="status-cell">{getStatus(user?.enabled)}</td>
+                    <td className="ads-cell">
+                      <span className="ads-count">{user?.ads?.length || 0}</span>
+                    </td>
+                    <td className="actions-cell">
+                      <div className="action-buttons-unfinished">
+                        <button 
+                          className="action-btn-unfinished comment-btn"
+                          onClick={() => handleComment(user)}
+                          title={t('admin.comment')}
+                        >
+                          <img src={'/icons/comment.svg'} alt="Comment" />
+                        </button>
+                        <button 
+                          className="action-btn-unfinished settings-btn"
+                          onClick={() => handleFlyoutOpen(user)}
+                          title={t('admin.settings')}
+                        >
+                          <img src={'/icons/gears-icon.svg'} alt="Settings" />
+                        </button>
+                        <button 
+                          className="action-btn-unfinished ban-btn"
+                          onClick={() => handleRoleChange(user.email, "guest")}
+                          title={t('admin.ban')}
+                        >
+                          <img src={'/icons/denied.svg'} alt="Ban" />
+                        </button>
+                        <button 
+                          className="action-btn-unfinished delete-btn"
+                          onClick={() => handleDelete(user.id)}
+                          title={t('admin.delete')}
+                        >
+                          <img src={'/icons/delete-button.svg'} alt="Delete" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="no-results">
+                    <div className="no-results-message">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <p>{t('admin.no_results')}</p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+      
       <CommentModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -345,8 +411,10 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
           onChange={(e) => setComment(e.target.value)}
           rows="5"
           cols="50"
+          placeholder={t('admin.enter_comment')}
         />
       </CommentModal>
+      
       <FlyoutUnfinished
         isOpen={isFlyoutOpen}
         onClose={handleFlyoutClose}
@@ -354,11 +422,15 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
         handleRoleChange={handleRoleChange}
         handlePasswordReset={handlePasswordReset}
       />
-  {isTextModalOpen && (
-        <div className="text-modal-overlay-unfinished">
-          <div className="text-modal-content-unfinished-ads ">
-            <span className="close-button-unfinished" onClick={closeTextModal}>&times;</span>
-            <p>{modalContent}</p>
+      
+      {isTextModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="modal-close" onClick={closeTextModal}>&times;</button>
+            <div className="modal-body">
+              <h3>{t('admin.full_email')}</h3>
+              <p className="modal-text">{modalContent}</p>
+            </div>
           </div>
         </div>
       )}
