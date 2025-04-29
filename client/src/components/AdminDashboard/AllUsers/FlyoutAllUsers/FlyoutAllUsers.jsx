@@ -9,7 +9,7 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
     const [role, setRole] = useState('');
     const [originalRole, setOriginalRole] = useState('');
     const { t } = useTranslation();
-
+    console.log('role', role);
     useEffect(() => {
         if (user && user.details && user.details.imageURL) {
             setSelectedImage(user.details.imageURL);
@@ -57,7 +57,7 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                         </svg>
                     </button>
                 </div>
-                
+
                 {user ? (
                     <div className="flyout-content">
                         <div className="user-profile-card">
@@ -69,7 +69,7 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                                 {getStatus(user.enabled)}
                             </div>
                         </div>
-                        
+
                         <div className="user-details-section">
                             <h5 className="section-title">{t('admin.personal_information')}</h5>
                             <div className="details-grid">
@@ -91,7 +91,7 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                                 )}
                             </div>
                         </div>
-                        
+
                         <div className="user-details-section">
                             <h5 className="section-title">{t('admin.location')}</h5>
                             <div className="details-grid">
@@ -112,14 +112,14 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                                         <div className="detail-item full-width">
                                             <span className="detail-label">{t('admin.address')}</span>
                                             <span className="detail-value">
-                                                {user.details.street} {user.details.street_number} 
+                                                {user.details.street} {user.details.street_number}
                                                 {user.details.block && <>, {user.details.block}</>}
                                             </span>
                                         </div>
                                     </>
                                 )}
                             </div>
-                            
+
                             {user.details && user.details.location && (
                                 <div className="user-map">
                                     <MapContainer center={[user.details.location.lat, user.details.location.lon]} zoom={13} style={{ height: '250px', width: '100%' }}>
@@ -132,11 +132,59 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                                 </div>
                             )}
                         </div>
-                        
+
                         <div className="user-actions-section">
                             <div className="roles-control">
                                 <h5 className="section-title">{t('admin.user_role')}</h5>
                                 <div className="role-options">
+                                    <label className={`role-option ${role === 'limited' ? 'selected' : ''}`}>
+                                        <input
+                                            type="radio"
+                                            name="role"
+                                            value="limited"
+                                            checked={role === 'limited'}
+                                            onChange={onRoleChange}
+                                        />
+                                        <div className="role-icon limited-role">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <rect
+                                                    x="3"
+                                                    y="5"
+                                                    width="18"
+                                                    height="14"
+                                                    rx="2"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    fill="none"
+                                                />
+                                                <path
+                                                    d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeDasharray="2 2"
+                                                />
+                                                <path
+                                                    d="M16 8H19"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                />
+                                                <path
+                                                    d="M16 16H19"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                />
+                                            </svg>
+                                        </div>
+                                        <span>{t('admin.role_limited')}</span>
+                                    </label>
                                     <label className={`role-option ${role === 'user' ? 'selected' : ''}`}>
                                         <input
                                             type="radio"
@@ -153,7 +201,38 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                                         </div>
                                         <span>{t('admin.role_user')}</span>
                                     </label>
-                                    
+                                    <label className={`role-option ${role === 'moderator' ? 'selected' : ''}`}>
+                                        <input
+                                            type="radio"
+                                            name="role"
+                                            value="moderator"
+                                            checked={role === 'moderator'}
+                                            onChange={onRoleChange}
+                                        />
+                                        <div className="role-icon moderator-role">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M12 3L4 7V12C4 16.42 7.36 20.44 12 21C16.64 20.44 20 16.42 20 12V7L12 3Z"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    fill="none"
+                                                />
+                                                <path
+                                                    d="M12 8L13.25 10.55L16 11L14 13L14.5 15.5L12 14.25L9.5 15.5L10 13L8 11L10.75 10.55L12 8Z"
+                                                    fill="currentColor"
+                                                />
+                                            </svg>
+                                        </div>
+                                        <span>{t('admin.role_moderator')}</span>
+                                    </label>
                                     <label className={`role-option ${role === 'admin' ? 'selected' : ''}`}>
                                         <input
                                             type="radio"
@@ -173,7 +252,7 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                                     </label>
                                 </div>
                             </div>
-                            
+
                             <div className="password-reset-control">
                                 <h5 className="section-title">{t('admin.password_management')}</h5>
                                 <button className="reset-password-button" onClick={handlePasswordResetClick}>
@@ -185,10 +264,10 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div className="flyout-footer">
-                            <button 
-                                className="save-changes-btn" 
+                            <button
+                                className="save-changes-btn"
                                 disabled={!isRoleChanged}
                                 onClick={onRoleChangeSubmit}
                             >
@@ -199,7 +278,7 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
                                 </svg>
                                 {t('admin.save_changes')}
                             </button>
-                            
+
                             <button className="cancel-btn" onClick={onClose}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
