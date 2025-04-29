@@ -9,7 +9,7 @@ export const FlyoutAllUsers = ({ isOpen, onClose, user, handleRoleChange, handle
     const [role, setRole] = useState('');
     const [originalRole, setOriginalRole] = useState('');
     const { t } = useTranslation();
-    console.log('role', role);
+
     useEffect(() => {
         if (user && user.details && user.details.imageURL) {
             setSelectedImage(user.details.imageURL);
