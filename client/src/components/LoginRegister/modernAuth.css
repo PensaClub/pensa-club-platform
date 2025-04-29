@@ -1,0 +1,428 @@
+:root {
+    --orange-primary: #FF7A3D;
+    --orange-light: #FF965B;
+    --orange-dark: #E65A1F;
+    --dark-blue: #2A3B4C;
+    --light-blue: #E9F0F7;
+    --gray-light: #F5F7FA;
+    --gray-medium: #A0AEC0;
+    --white: #FFFFFF;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-strong: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --radius: 16px;
+    --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .auth-section {
+    min-height: 100vh;
+    position: relative;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8)), url("../../../public/images/sign-up/selfie-seniors2.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+  }
+  
+  .auth-container {
+    width: 100%;
+    max-width: 1100px;
+    position: relative;
+  }
+  
+  /* Стъклен контейнер */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    position: relative;
+    min-height: 580px;
+    display: flex;
+  }
+  
+  /* Оранжева странична лента за десктоп */
+  .sidebar {
+    display: none;
+    background: linear-gradient(135deg, var(--orange-primary) 0%, var(--orange-dark) 100%);
+    color: white;
+    width: 40%;
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .sidebar-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .sidebar-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  
+  .sidebar-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+  
+  .sidebar-decoration {
+    position: absolute;
+    bottom: -5%;
+    right: -15%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+  }
+  
+  .sidebar-decoration:before {
+    content: '';
+    position: absolute;
+    top: -15%;
+    left: -20%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Контейнер за форми */
+  .forms-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .form-slide {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* padding: 2.5rem; */
+  }
+  
+  .login-slide {
+    transform: translateX(0);
+  }
+  
+  .register-slide {
+    transform: translateX(100%);
+  }
+  
+  .show-login .login-slide {
+    transform: translateX(0);
+  }
+  
+  .show-login .register-slide {
+    transform: translateX(100%);
+  }
+  
+  .show-register .login-slide {
+    transform: translateX(-100%);
+  }
+  
+  .show-register .register-slide {
+    transform: translateX(0);
+  }
+  
+  /* Форма */
+  .auth-form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .form-title {
+    color: var(--dark-blue);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-subtitle {
+    color: var(--gray-medium);
+    font-size: 0.95rem;
+  }
+  
+  /* Инпут групи */
+  .input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--dark-blue);
+    margin-bottom: 0.5rem;
+  }
+  
+  .input-wrapper-sign-up {
+    position: relative;
+  }
+  
+  .auth-input {
+    width: 100%;
+    background-color: var(--gray-light);
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    color: var(--dark-blue);
+    transition: all 0.3s ease;
+  }
+  
+  .auth-input:focus {
+    border-color: var(--orange-primary);
+    background-color: var(--white);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.15);
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--gray-medium);
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .toggle-password:hover {
+    color: var(--orange-primary);
+  }
+  
+  .input-error {
+    color: #e53e3e;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+  }
+  
+  /* Бутони */
+  .auth-btn {
+    width: 100%;
+    background: linear-gradient(to right, var(--orange-primary), var(--orange-light));
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.9rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: 1rem;
+    box-shadow: 0 4px 10px rgba(255, 122, 61, 0.3);
+  }
+  
+  .auth-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 122, 61, 0.4);
+  }
+  
+  .auth-btn:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  .auth-btn:disabled {
+    background: var(--gray-medium);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  /* Бяла светлина около бутона (не в него) */
+  .auth-btn {
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .auth-btn::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: calc(var(--radius) + 3px);
+    background: transparent;
+    opacity: 0;
+    z-index: -1;
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0);
+    transition: opacity 0.4s ease, box-shadow 0.4s ease;
+  }
+  
+  .auth-btn:hover::after {
+    opacity: 1;
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Линкове и текст */
+  .form-link {
+    color: var(--gray-medium);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+  }
+  
+  .form-link:hover {
+    color: var(--orange-primary);
+  }
+  
+  .forgot-password {
+    display: block;
+    text-align: right;
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-footer {
+    margin-top: 2rem;
+    text-align: center;
+    color: var(--gray-medium);
+    font-size: 0.9rem;
+  }
+  
+  .switch-form-link {
+    color: var(--orange-primary);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 0.25rem;
+    transition: all 0.3s ease;
+  }
+  
+  .switch-form-link:hover {
+    color: var(--orange-dark);
+    text-decoration: underline;
+  }
+  
+  /* ReCAPTCHA */
+  .recaptcha-container {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+  }
+  
+  /* Декоративни елементи */
+  .floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0.05;
+  }
+  
+  .shape-1 {
+    width: 150px;
+    height: 150px;
+    background-color: var(--orange-primary);
+    top: -50px;
+    right: 10%;
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  .shape-2 {
+    width: 80px;
+    height: 80px;
+    background-color: var(--orange-dark);
+    bottom: 10%;
+    left: 5%;
+    animation: float 6s ease-in-out infinite alternate;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(5deg);
+    }
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+  }
+  
+  /* По-компактни полета за регистрационната форма */
+  .register-slide .input-group {
+    margin-bottom: 1rem;
+  }
+  
+  .register-slide .auth-input {
+    padding: 0.7rem 1rem;
+  }
+  
+  .register-slide .form-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Медия запитвания */
+  @media (min-width: 850px) {
+    .sidebar {
+      display: block;
+    }
+    
+    .forms-container {
+      width: 60%;
+    }
+    
+    .auth-form {
+      padding-top: 2rem;
+    }
+  }
+  
+  @media (max-width: 850px) {
+    .form-slide {
+      padding: 2rem 1.5rem;
+      max-height: 580px;
+      overflow-y: auto;
+    }
+    
+    .glass-card {
+      min-height: 580px;
+    }
+  }
+  
+  @media (max-width: 450px) {
+    .auth-section {
+      padding: 0.5rem;
+      align-items: flex-start;
+      padding-top: 2rem;
+    }
+    
+    .glass-card {
+      min-height: 600px;
+    }
+    
+    .form-slide {
+      padding: 1.5rem 1rem;
+    }
+    
+    .form-title {
+      font-size: 1.5rem;
+    }
+  }
