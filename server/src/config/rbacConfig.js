@@ -1,14 +1,14 @@
 const permissions = {
     ad: {
         create: ['admin', 'moderator', 'user'],
-        read: ['admin', 'moderator', 'user', 'guest'],
+        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
         update: ['admin', 'moderator', 'user'],
         delete: ['admin', 'moderator', 'user'],
         approve: ['admin', 'moderator'],
     },
     article: {
         create: ['admin', 'moderator'],
-        read: ['admin', 'moderator', 'user', 'guest'],
+        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
         update: ['admin', 'moderator'],
         delete: ['admin', 'moderator'],
     },
@@ -29,7 +29,7 @@ const permissions = {
         comment: ['admin', 'moderator'],
     },
     userDetails: {
-        read: ['admin', 'moderator', 'user'],
+        read: ['admin', 'moderator', 'user', 'limited'],
     },
 };
 
