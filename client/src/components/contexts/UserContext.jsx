@@ -156,7 +156,6 @@ export const UserProvider = ({ children }) => {
       navigate('/profile');
       notify('success-data');
     } catch (error) {
-      console.log(error);
       
       const isUsernameTaken =
         error?.message === "Unique constraint violation." && error?.details.some(error => error.field === 'username');
@@ -245,6 +244,7 @@ export const UserProvider = ({ children }) => {
 
         localStorage.setItem('userDetails', JSON.stringify(updatedProfileData));
         localStorage.setItem('isAdmin', JSON.stringify(role === 'admin'));
+        
       }
 
       notify('success-role-change to' + role);
