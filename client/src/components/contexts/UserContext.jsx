@@ -9,42 +9,44 @@ import { loadAddressData } from '../../utils/loadAddressData';
 import { notify } from '../../utils/notify';
 import { toast } from 'react-toastify';
 import { getAuthStatus, setAuthStatusUpdater } from '../../utils/handle401Error';
- 
+
 export const UserContext = createContext();
- 
+
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isFinish, setIsFinish] = useState(isAuth.enabled);
   const [isAdmin, setIsAdmin] = useLocalStorage('isAdmin', false);
+  const [isModerator, setIsModerator] = useLocalStorage('isModerator', false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(getAuthStatus());
   const userService = userServiceFactory(isAuth.token);
- 
+
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
     if (!isAuthenticated&& location.pathname.startsWith('/profile')) {
       setIsAuth({});
- 
+
       navigate('/sign-up');
     }
   }, [isAuthenticated, navigate,location]);
- 
+
   useEffect(() => {
     if (profileData?.role) {
       setIsAdmin(profileData.role === 'admin');
+      setIsModerator(profileData.role === 'moderator');
     }
-  }, [profileData, setIsAdmin]);
- 
+  }, [profileData, setIsAdmin, setIsModerator]);
+
   useEffect(() => {
     setAuthStatusUpdater(() => {
       setIsAuthenticated(false);
     });
   }, []);
- 
+
   const showErrorAndSetTimeouts = (error) => {
     setErrorMessage(error);
     setIsLoading(false);
@@ -81,7 +83,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
- 
+
   const onLoginSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -91,6 +93,7 @@ export const UserProvider = ({ children }) => {
       setIsFinish(response.user.enabled);
       setProfileData(response.user);
       setIsAdmin(userRole === 'admin');
+      setIsModerator(userRole === 'moderator');
       notify('success-login');
 
       if (response.user.enabled) {
@@ -124,6 +127,7 @@ export const UserProvider = ({ children }) => {
       setProfileData({});
       setAddressId({});
       setIsAdmin(false);
+      setIsModerator(false);
       setIsAuthenticated(false);
       notify('success-logout');
     } catch (error) {
@@ -133,15 +137,15 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
- 
+
   const onProfileDataSubmit = async (details) => {
     setIsLoading(true);
     try {
       console.log(details);
-      
+
       const response = await userService.setUserData(details);
       console.log(response);
-      
+
       if (response.message === 'No such address was found!') {
         navigate('/profile/profile-form');
         notify('warn-address');
@@ -156,7 +160,7 @@ export const UserProvider = ({ children }) => {
       navigate('/profile');
       notify('success-data');
     } catch (error) {
-      
+
       const isUsernameTaken =
         error?.message === "Unique constraint violation." && error?.details.some(error => error.field === 'username');
 
@@ -167,7 +171,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
- 
+
   const onEditProfileDataSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -179,7 +183,7 @@ export const UserProvider = ({ children }) => {
         setAddressId({ ...data });
       }
       // setIsAdmin(response.user.role === 'admin');
- 
+
       notify('success-data');
     } catch (error) {
       notify('error', error);
@@ -188,7 +192,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
- 
+
   const getProfileData = async () => {
     setIsLoading(true);
     try {
@@ -205,7 +209,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
- 
+
   const onPasswordReset = async (data) => {
     setIsLoading(true);
     try {
@@ -241,10 +245,11 @@ export const UserProvider = ({ children }) => {
         const updatedProfileData = { ...profileData, role };
         setProfileData(updatedProfileData);
         setIsAdmin(role === 'admin');
+        setIsModerator(role === 'moderator');
 
         localStorage.setItem('userDetails', JSON.stringify(updatedProfileData));
         localStorage.setItem('isAdmin', JSON.stringify(role === 'admin'));
-        
+        localStorage.setItem('isModerator', JSON.stringify(role === 'moderator'));
       }
 
       notify('success-role-change to' + role);
@@ -276,7 +281,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
- 
+
   const onSuggestSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -291,9 +296,9 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
- 
+
   const isUserAdmin = () => isAdmin;
- 
+
   const contextService = {
     onRegisterSubmit,
     onLoginSubmit,
@@ -313,9 +318,10 @@ export const UserProvider = ({ children }) => {
     onSuggestSubmit,
     isUserAdmin,
     isAdmin,
+    isModerator,
     onChangeAdminRole,
   };
- 
+
   return (
     <UserContext.Provider value={contextService}>
       {children}
@@ -323,7 +329,7 @@ export const UserProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
- 
+
 export const useAuthContext = () => {
   const context = useContext(UserContext);
   return context;
