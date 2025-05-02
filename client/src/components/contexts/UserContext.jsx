@@ -297,6 +297,29 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const sendContactForm = async (data) => {
+    setIsLoading(true);
+    try {
+      const { name, email, subject, message, recaptchaToken } = data;
+      const response = await userService.sendContactForm({
+        name,
+        email,
+        subject,
+        message,
+        recaptchaToken
+      });
+      
+      notify('contact-form-success');
+      return response;
+    } catch (error) {
+      notify('error', error);
+      showErrorAndSetTimeouts(error.message);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const isUserAdmin = () => isAdmin;
 
   const contextService = {
@@ -320,6 +343,7 @@ export const UserProvider = ({ children }) => {
     isAdmin,
     isModerator,
     onChangeAdminRole,
+    sendContactForm
   };
 
   return (

@@ -41,6 +41,8 @@ export const userServiceFactory = (token) => {
     suggestUser: (data) => {
       return requester.post(`${apiUrl}/user/suggest`, data);
     },
-
+    sendContactForm: (data) => {
+      return requester.post(`${apiUrl}/user/contact-form`, data);
+    },
   };
 };

@@ -50,6 +50,7 @@ import FooterWithLoading from './FooterWithLoading/FooterWithLoading.jsx';
 import { LoadingProvider } from './components/contexts/LoadingContext.jsx';
 import { ArticleProvider } from './components/contexts/ArticleContext.jsx';
 import { ArticleLimitProvider } from './components/contexts/ArticleLimitContext.jsx';
+import ContactForm from './components/ContactForm/ContactForm.jsx';
 
 function App() {
   const location = useLocation();
@@ -97,6 +98,7 @@ function App() {
 
                         <Routes>
                           <Route path="/" element={<Home />} />
+                          <Route path="/contact" element={<ContactForm />} />
                           <Route path="/server-error" element={<ServerError />} />
                           <Route path="/server-error" element={<ServerError />} />
                           <Route path="/forget-password" element={<ForgetPassword />} />
