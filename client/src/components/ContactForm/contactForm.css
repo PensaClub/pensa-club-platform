@@ -27,8 +27,7 @@
     opacity: 1;
     transform: translateY(0);
   }
-  
-  /* Background elements */
+
   .contact-background {
     position: absolute;
     top: 0;
@@ -91,15 +90,13 @@
     background-size: 40px 40px;
     background-position: 0 0, 20px 20px;
   }
-  
-  /* Container */
+
   .contact-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
   }
-  
-  /* Header */
+
   .contact-header {
     text-align: center;
     margin-bottom: 60px;
@@ -143,15 +140,13 @@
     margin: 0 auto;
     line-height: 1.6;
   }
-  
-  /* Content layout */
+
   .contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
   }
-  
-  /* Contact info cards */
+
   .contact-info {
     display: flex;
     flex-direction: column;
@@ -231,8 +226,7 @@
     color: white;
     transform: translateY(-3px);
   }
-  
-  /* Map container */
+
   .map-container {
     border-radius: var(--radius);
     overflow: hidden;
@@ -240,8 +234,7 @@
     margin-top: 10px;
     height: 250px;
   }
-  
-  /* Form container */
+
   .contact-form-container {
     background: white;
     border-radius: var(--radius);
@@ -249,15 +242,13 @@
     box-shadow: var(--shadow-md);
     position: relative;
   }
-  
-  /* reCAPTCHA */
+
   .recaptcha-wrapper {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
   }
-  
-  /* Success message */
+
   .success-message {
     position: absolute;
     top: 0;
@@ -300,8 +291,7 @@
     color: #585880;
     margin-top: 10px;
   }
-  
-  /* Form elements */
+
   .contact-form {
     display: flex;
     flex-direction: column;
@@ -379,8 +369,7 @@
     text-align: center;
     margin-bottom: 10px;
   }
-  
-  /* Submit button */
+
   .contact-button {
     background: linear-gradient(135deg, #E26020, #FF9D5C);
     color: white;
@@ -419,8 +408,7 @@
   .contact-button:hover svg {
     transform: translateX(5px);
   }
-  
-  /* Loading spinner */
+
   .loading-spinner {
     animation: spin 1.5s linear infinite;
     width: 24px;
@@ -453,8 +441,7 @@
       stroke-dashoffset: -124;
     }
   }
-  
-  /* Responsive design */
+
   @media (max-width: 992px) {
     .contact-title {
       font-size: 2.4rem;
