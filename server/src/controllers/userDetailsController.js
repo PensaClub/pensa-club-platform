@@ -11,6 +11,7 @@ const fieldSwap = require('../utils/fieldSwap.js');
 const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
 const rbac = require('../middlewares/rbac');
+const forwardEmailsViaZoho = require('../utils/forwardEmailsViaZoho.js');
 
 userDetailsController.post('/details', isAuth, async (req, res, next) => {
     if (req.user.enabled) {
@@ -222,6 +223,33 @@ userDetailsController.get('/single-user', isAuth, rbac.checkPermission('userDeta
             message: 'User data retrieved successfully.',
             user,
         });
+    } catch (err) {
+        next(err);
+    }
+});
+
+userDetailsController.post('/contact-form', async (req, res, next) => {
+    try {
+        const { name, message, email, recaptchaToken, subject } = req.body;
+
+        if (!name || !message || !email || !subject) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'Invalid email format' });
+        }
+
+        await forwardEmailsViaZoho({
+            name,
+            userEmail: email,
+            subject: subject || 'Contact Form Submission',
+            body: message,
+            toAddresses: ['help@pensa.club', 'pensa.club@gmail.com'],
+        });
+
+        return res.status(200).json({ message: 'Your message has been sent successfully.' });
     } catch (err) {
         next(err);
     }
