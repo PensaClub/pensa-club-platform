@@ -262,16 +262,7 @@ export const ContactForm = () => {
                     </div>
 
                     <div className="contact-form-container">
-                        {showRecaptcha && (
-                            <div className="recaptcha-wrapper">
-                                <ReCAPTCHA
-                                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                                    onChange={onRecaptchaChange}
-                                    size={recaptchaSize}
-                                />
-                            </div>
-                        )}
-
+                     
                         {submitSuccess && (
                             <div className="success-message">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -387,6 +378,15 @@ export const ContactForm = () => {
                                 )}
                             </button>
                         </form>
+                        {showRecaptcha && (
+                            <div className="recaptcha-wrapper">
+                                <ReCAPTCHA
+                                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                    onChange={onRecaptchaChange}
+                                    size={recaptchaSize}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
