@@ -16,6 +16,7 @@ export const Footer = ({ additionalClasses }) => {
                     <p><Link to="/map">{t('footer.map')}</Link></p>
                     <p><Link to="/craigslist">{t('footer.craigslist')}</Link></p>
                     {isAuthentication && (<p><Link to="/ad/create">{t('footer.add-ad')}</Link></p>)}
+                    <p><Link to="/contact">{t('footer.contact')}</Link></p>
 
                 </div>
                 <div className="footer-links">

@@ -14,6 +14,7 @@
   "footer": {
     "site-map": "Site Map",
     "communities": "Communities",
+    "contact":"Contact",
     "map": "Map",
     "craigslist": "Community",
     "partners": "Partners",
@@ -435,6 +436,37 @@
     "total_unfinished": "Total Unfinished",
     "current_date": "Current Date"
   },
+  "contact": {
+    "title": "Contact",
+    "description": "If you have any questions or suggestions, don't hesitate to get in touch with us",
+    "location": {
+      "title": "Address",
+      "address": "Sofia, Bulgaria"
+    },
+    "email": {
+      "title": "Email",
+      "address": "help@pensa.club"
+    },
+    "social": {
+      "title": "Social Media"
+    },
+    "form": {
+      "name": "Your name",
+      "email": "Your email",
+      "subject": "Subject",
+      "message": "Your message",
+      "send": "Send",
+      "sending": "Sending..."
+    },
+    "errors": {
+      "required-field": "This field is required",
+      "invalid-email": "Please enter a valid email address",
+      "submit-error": "An error occurred while sending. Please try again."
+    },
+    "success": "Your message has been sent successfully!",
+    "confirmation_email": "We have sent a confirmation to your email address"
+  },
+  
   "community": {
     "community": "Community",
     "category-search": "Category",
