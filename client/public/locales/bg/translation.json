@@ -92,6 +92,7 @@
     "email-label": "Имейл адрес",
     "email-placeholder": "ivan@abv.bg",
     "password-label": "Парола",
+     "continue-with": "Или продължете с",
     "password-placeholder": "Парола",
     "rePassword-label": "Повтори паролата",
     "rePassword-placeholder": "Повтори паролата",

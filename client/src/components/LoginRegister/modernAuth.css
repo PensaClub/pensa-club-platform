@@ -33,8 +33,7 @@
     max-width: 1100px;
     position: relative;
   }
-  
-  /* Стъклен контейнер */
+
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
@@ -100,10 +99,11 @@
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
   }
-  
-  /* Контейнер за форми */
+
   .forms-container {
     width: 100%;
+    height: 70vh;
+
     position: relative;
     overflow: hidden;
   }
@@ -141,8 +141,7 @@
   .show-register .register-slide {
     transform: translateX(0);
   }
-  
-  /* Форма */
+
   .auth-form {
     max-width: 400px;
     margin: 0 auto;
@@ -164,8 +163,7 @@
     color: var(--gray-medium);
     font-size: 0.95rem;
   }
-  
-  /* Инпут групи */
+
   .input-group {
     margin-bottom: 1.5rem;
     position: relative;
@@ -222,8 +220,7 @@
     font-size: 0.8rem;
     margin-top: 0.4rem;
   }
-  
-  /* Бутони */
+
   .auth-btn {
     width: 100%;
     background: linear-gradient(to right, var(--orange-primary), var(--orange-light));
@@ -281,8 +278,7 @@
     opacity: 1;
     box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.7);
   }
-  
-  /* Линкове и текст */
+
   .form-link {
     color: var(--gray-medium);
     text-decoration: none;
@@ -321,15 +317,13 @@
     color: var(--orange-dark);
     text-decoration: underline;
   }
-  
-  /* ReCAPTCHA */
+
   .recaptcha-container {
     display: flex;
     justify-content: center;
     margin: 1.5rem 0;
   }
-  
-  /* Декоративни елементи */
+ 
   .floating-shape {
     position: absolute;
     border-radius: 50%;
@@ -379,7 +373,77 @@
   .register-slide .form-header {
     margin-bottom: 1.5rem;
   }
-  
+  /* Google auth */
+.social-auth-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: var(--gray-medium);
+}
+
+.social-auth-separator::before,
+.social-auth-separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--gray-medium);
+  opacity: 0.3;
+}
+
+.social-auth-separator span {
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.google-auth-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Допълнителен стил за Google бутона, за да изглежда по-добре */
+.google-auth-container > div {
+  width: 100% !important;
+  max-width: 280px;
+}
+.google-auth-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.google-auth-container iframe {
+  scale: 1.05;
+}
+.custom-google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 280px;
+  height: 40px;
+  background-color: white;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 1px 12px;
+  cursor: pointer;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+  color: rgb(23, 43, 77);
+  font-weight: 500;
+}
+.custom-google-btn span{
+  font-family: BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: var(--xs-font-size);
+  font-weight: 600;
+  color: rgb(23, 43, 77);
+
+}
+.google-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
   /* Медия запитвания */
   @media (min-width: 850px) {
     .sidebar {
@@ -388,17 +452,29 @@
     
     .forms-container {
       width: 60%;
+      height: 75vh;
     }
-    
+    .auth-container {
+
+      margin :4em 0 ;
+       }
     .auth-form {
       padding-top: 2rem;
     }
   }
   
   @media (max-width: 850px) {
+    .auth-container {
+
+      margin :4em 0 ;
+       }
+    .forms-container {
+      width: 100%;
+      height: 80vh;
+    }
     .form-slide {
       padding: 2rem 1.5rem;
-      max-height: 580px;
+      max-height: 780px;
       overflow-y: auto;
     }
     
