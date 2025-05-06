@@ -50,8 +50,10 @@ import FooterWithLoading from './FooterWithLoading/FooterWithLoading.jsx';
 import { LoadingProvider } from './components/contexts/LoadingContext.jsx';
 import { ArticleProvider } from './components/contexts/ArticleContext.jsx';
 import { ArticleLimitProvider } from './components/contexts/ArticleLimitContext.jsx';
+
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx';
+import ContactForm from './components/ContactForm/ContactForm.jsx';
 
 function App() {
   const location = useLocation();
@@ -98,25 +100,26 @@ function App() {
                                 position="bottom-right"
                               />
 
-                              <Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/server-error" element={<ServerError />} />
-                                <Route path="/server-error" element={<ServerError />} />
-                                <Route path="/forget-password" element={<ForgetPassword />} />
-                                <Route path="/resend-email" element={<ReSendEmail />} />
-                                <Route
-                                  path="/reset-password"
-                                  element={<ResetPasswordPage />}
-                                />
-                                <Route path="/articles" element={<ArticlesList />} />
-                                <Route path="/articles/:slug" element={<ArticleView />} />
-                                <Route element={<AuthGuard />}>
-                                  <Route path="/ad/details/:adId" element={<AdDetails />} />
-                                  <Route path="/ad/edit/:adId" element={<EditAd />} />
-                                  <Route path="/ad" element={<AdPage />} />
-                                  <Route path="/ad/create" element={<CreateAd />} />
-                                  <Route path="/logout" element={<Logout />} />
-                                  {/* <Route path="/profile" element={<Profile />} /> */}
+                        <Routes>
+                          <Route path="/" element={<Home />} />
+                          <Route path="/contact" element={<ContactForm />} />
+                          <Route path="/server-error" element={<ServerError />} />
+                          <Route path="/server-error" element={<ServerError />} />
+                          <Route path="/forget-password" element={<ForgetPassword />} />
+                          <Route path="/resend-email" element={<ReSendEmail />} />
+                          <Route
+                            path="/reset-password"
+                            element={<ResetPasswordPage />}
+                          />
+                          <Route path="/articles" element={<ArticlesList />} />
+                          <Route path="/articles/:slug" element={<ArticleView />} />
+                          <Route element={<AuthGuard />}>
+                            <Route path="/ad/details/:adId" element={<AdDetails />} />
+                            <Route path="/ad/edit/:adId" element={<EditAd />} />
+                            <Route path="/ad" element={<AdPage />} />
+                            <Route path="/ad/create" element={<CreateAd />} />
+                            <Route path="/logout" element={<Logout />} />
+                            {/* <Route path="/profile" element={<Profile />} /> */}
 
                                   <Route path="/profile/*" element={<Profile />} />
 

@@ -37,6 +37,7 @@ import { ProfileWorks } from "./ProfileWorks";
 import { ProfileInterests } from "./ProfileInterests";
 import { ProfileAnnounced } from "./ProfileAnnounced";
 import { AdminGuard } from "../Guards/AdminGuard";
+import { ManagementGuard } from "../Guards/ManagementGuard";
 import { PendingAnnouncements } from "../AdminDashboard/PendingAnnouncements/PendingAnnouncements";
 import { ApprovedAnnouncements } from "../AdminDashboard/ApprovedAnnouncements/ApprovedAnnouncements";
 import { AllAnnouncements } from "../AdminDashboard/AllAnnouncements/AllAnnouncements";
@@ -59,7 +60,7 @@ export const Profile = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isFinish, profileData, isAdmin, addressId } = useContext(UserContext);
+  const { isFinish, profileData, isAdmin, isModerator, addressId } = useContext(UserContext);
   const [adsCount, setAdsCount] = useState("");
   const [approvedCount, setApprovedCount] = useState("");
   const [rejectCount, setRejectCount] = useState("");
@@ -402,7 +403,7 @@ export const Profile = () => {
               </ul>
             </div>
 
-            {isAdmin && (
+            {(isAdmin || isModerator) && (
               <div className="menu-section admin">
                 <h3>{t("profile.admin_dashboard")}</h3>
                 <ul>
@@ -445,38 +446,40 @@ export const Profile = () => {
                     </ul>
                   </li>
 
-                  <li>
-                    <NavLink
-                      to="users-statistic"
-                      onClick={() => toggleSubMenu('users')}
-                      className={({ isActive }) => isActive ? 'active' : ''}
-                    >
-                      <span className="link-content">
-                        <AnalyticsIcon className="icon" />
-                        {t("admin.users")}
-                      </span>
-                      <span className={`arrow-icon ${subMenuStates.users ? 'rotated' : ''}`}>
-                        {subMenuStates.users ?
-                          <DownArrowIcon /> :
-                          <ArrowIcon />
-                        }
-                      </span>
-                    </NavLink>
-                    <ul className={`sub-menu ${subMenuStates.users ? 'expanded' : ''}`}>
-                      <li>
-                        <NavLink to="users-admin" className={({ isActive }) => isActive ? 'active' : ''}>
-                          <CircleIcon className="icon" />
-                          {t("profile.all_users")} {allUsers >= 1 && <>- {allUsers}</>}
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="users-unfinished" className={({ isActive }) => isActive ? 'active' : ''}>
-                          <CircleIcon className="icon" />
-                          {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
-                        </NavLink>
-                      </li>
-                    </ul>
-                  </li>
+                  {isAdmin && (
+                    <li>
+                      <NavLink
+                        to="users-statistic"
+                        onClick={() => toggleSubMenu('users')}
+                        className={({ isActive }) => isActive ? 'active' : ''}
+                      >
+                        <span className="link-content">
+                          <AnalyticsIcon className="icon" />
+                          {t("admin.users")}
+                        </span>
+                        <span className={`arrow-icon ${subMenuStates.users ? 'rotated' : ''}`}>
+                          {subMenuStates.users ?
+                            <DownArrowIcon /> :
+                            <ArrowIcon />
+                          }
+                        </span>
+                      </NavLink>
+                      <ul className={`sub-menu ${subMenuStates.users ? 'expanded' : ''}`}>
+                        <li>
+                          <NavLink to="users-admin" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <CircleIcon className="icon" />
+                            {t("profile.all_users")} {allUsers >= 1 && <>- {allUsers}</>}
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink to="users-unfinished" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <CircleIcon className="icon" />
+                            {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
+                          </NavLink>
+                        </li>
+                      </ul>
+                    </li>
+                  )}
 
                   <li>
                     <NavLink
@@ -606,6 +609,7 @@ export const Profile = () => {
 
           <Outlet />
           <Routes>
+            {/* Regular user routes */}
             {!isFinish && <Route path="profile-form" element={<ProfileForm />} />}
             <Route path="data" element={<ProfileData />} />
             <Route path="address" element={<ProfileAddress />} />
@@ -615,20 +619,23 @@ export const Profile = () => {
             <Route path="announced" element={<ProfileAnnounced />} profileData={profileData} />
             <Route path="interestOptions" element={<ProfileInterests />} />
             <Route path="messages" element={<ProfileMessages />} />
-            <Route path="ads-admin" element={<AdminGuard><AllAnnouncements /></AdminGuard>} />
-            <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
-            <Route path="article-create" element={<AdminGuard><ArticleCreateForm /></AdminGuard>} />
-            <Route path="articles" element={<AdminGuard><AllArticles /></AdminGuard>} />
-            <Route path="article-edit/:id" element={<AdminGuard><EditArticle /></AdminGuard>} />
 
+            {/* Management routes (Admin & Moderator) */}
+            <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
+            <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
+            <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="article-edit/:id" element={<ManagementGuard><EditArticle /></ManagementGuard>} />
+            <Route path="pending-announcements" element={<ManagementGuard><PendingAnnouncements setAdsCount={setAdsCount} /></ManagementGuard>} />
+            <Route path="approved-announcements" element={<ManagementGuard><ApprovedAnnouncements setApprovedCount={setApprovedCount} /></ManagementGuard>} />
+            <Route path="reject-announcements" element={<ManagementGuard><RejectAnnouncements setRejectCount={setRejectCount} /></ManagementGuard>} />
+            <Route path="admin-suggest-users" element={<ManagementGuard><AdminSuggestUsers setAllSuggestedUsers={setAllSuggestedUsers} /></ManagementGuard>} />
+            <Route path="subscription-admin" element={<ManagementGuard><AdminSubscription setAllSubscriptionEmails={setAllSubscriptionEmails} /></ManagementGuard>} />
+            <Route path="suggest-resolved-users" element={<ManagementGuard><SuggestResolvedUsers setResolvedUsers={setResolvedUsers} /></ManagementGuard>} />
+
+            {/* Admin-only routes */}
+            <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
-            <Route path="pending-announcements" element={<AdminGuard><PendingAnnouncements setAdsCount={setAdsCount} /></AdminGuard>} />
-            <Route path="approved-announcements" element={<AdminGuard><ApprovedAnnouncements setApprovedCount={setApprovedCount} /></AdminGuard>} />
-            <Route path="reject-announcements" element={<AdminGuard><RejectAnnouncements setRejectCount={setRejectCount} /></AdminGuard>} />
-            <Route path="admin-suggest-users" element={<AdminGuard><AdminSuggestUsers setAllSuggestedUsers={setAllSuggestedUsers} /></AdminGuard>} />
-            <Route path="subscription-admin" element={<AdminGuard><AdminSubscription setAllSubscriptionEmails={setAllSubscriptionEmails} /></AdminGuard>} />
-            <Route path="suggest-resolved-users" element={<AdminGuard><SuggestResolvedUsers setResolvedUsers={setResolvedUsers} /></AdminGuard>} />
           </Routes>
         </main>
       </div>

@@ -7,7 +7,7 @@ const rbac = require('../middlewares/rbac');
 
 adminController.post('/change-role', isAuth, rbac.checkPermission('account', 'update'), async (req, res, next) => {
     const { email, role, roleChangeComment } = req.body;
-    const allowedRoles = ['admin', 'moderator', 'user', 'guest'];
+    const allowedRoles = ['admin', 'moderator', 'user', 'guest', 'limited'];
     try {
         if (!allowedRoles.includes(role)) return res.status(400).json({ message: 'Invalid role.' });
         if (email === process.env.ADMIN_EMAIL) return res.status(400).json({ message: 'Cannot change role of the admin account.' });
