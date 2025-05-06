@@ -32,6 +32,20 @@ export const ContactForm = () => {
     const sectionRef = useRef(null);
     
     useEffect(() => {
+
+        const clearRecaptchaToken = () => {
+          localStorage.removeItem("contactRecaptchaToken");
+          setRecaptchaToken(null);
+        };
+        
+        const tokenCleanupInterval = setInterval(clearRecaptchaToken, 120000);
+        
+        return () => {
+          clearInterval(tokenCleanupInterval);
+        };
+      }, []);
+
+    useEffect(() => {
         window.scrollTo({ top: 0 });
     }, [])
 
