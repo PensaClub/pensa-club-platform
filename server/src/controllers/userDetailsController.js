@@ -11,7 +11,9 @@ const fieldSwap = require('../utils/fieldSwap.js');
 const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
 const rbac = require('../middlewares/rbac');
-const forwardEmailsViaZoho = require('../utils/forwardEmailsViaZoho.js');
+const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+const verifyRecaptcha = require('../utils/verifyRecaptcha.js');
+const CustomError = require('../utils/customError');
 
 userDetailsController.post('/details', isAuth, async (req, res, next) => {
     if (req.user.enabled) {
@@ -241,6 +243,12 @@ userDetailsController.post('/contact-form', async (req, res, next) => {
             return res.status(400).json({ error: 'Invalid email format' });
         }
 
+        const recaptchaResult = await verifyRecaptcha(recaptchaToken);
+
+        if (!recaptchaResult.success || (recaptchaResult.score !== undefined && recaptchaResult.score < 0.5)) {
+            throw new CustomError('Failed reCAPTCHA verification', 400, { reason: recaptchaResult['error-codes'] || 'Low score' });
+        }
+
         await forwardEmailsViaZoho({
             name,
             userEmail: email,
@@ -251,6 +259,7 @@ userDetailsController.post('/contact-form', async (req, res, next) => {
 
         return res.status(200).json({ message: 'Your message has been sent successfully.' });
     } catch (err) {
+        console.log(err);
         next(err);
     }
 });
