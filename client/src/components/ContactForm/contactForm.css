@@ -247,6 +247,7 @@
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
+    margin-top: 1em;
   }
 
   .success-message {
@@ -403,6 +404,7 @@
     width: 20px;
     height: 20px;
     transition: transform 0.3s ease;
+    rotate: 180deg;
   }
   
   .contact-button:hover svg {
