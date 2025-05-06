@@ -37,10 +37,14 @@ export const ContactForm = () => {
 
     useEffect(() => {
         const token = localStorage.getItem("contactRecaptchaToken");
-        if (token) {
-            setRecaptchaToken(token);
-        }
+        const count = parseInt(localStorage.getItem("contactSubmissionCount") || "0");
 
+        if (token && count < 3) {
+            setRecaptchaToken(token);
+        } else {
+            localStorage.removeItem("contactRecaptchaToken");
+        }
+      
         const updateRecaptchaSize = () => {
             if (window.innerWidth <= 450) {
                 setRecaptchaSize("compact");
@@ -49,7 +53,6 @@ export const ContactForm = () => {
             }
         };
 
-        // Анимация при скролване
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting) {
@@ -63,9 +66,9 @@ export const ContactForm = () => {
             observer.observe(sectionRef.current);
         }
 
-        updateRecaptchaSize(); // Initial check
+        updateRecaptchaSize(); 
         window.addEventListener("resize", updateRecaptchaSize);
-
+       
         return () => {
             window.removeEventListener("resize", updateRecaptchaSize);
             if (sectionRef.current) {
@@ -83,7 +86,6 @@ export const ContactForm = () => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
 
-        // Clear error when user types
         if (value) {
             setErrors({ ...errors, [name]: "" });
         }
@@ -126,6 +128,16 @@ export const ContactForm = () => {
         return Object.keys(newErrors).length === 0;
     };
 
+    //тъпият брояч за recaptcha който забравих
+    const incrementSubmissionCount = () => {
+        const count = parseInt(localStorage.getItem("contactSubmissionCount") || "0");
+        if (count >= 3) { // След 3 изпращания
+          localStorage.removeItem("contactRecaptchaToken"); 
+          localStorage.setItem("contactSubmissionCount", "0"); 
+        } else {
+          localStorage.setItem("contactSubmissionCount", String(count + 1));
+        }
+      };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -155,8 +167,8 @@ export const ContactForm = () => {
                 localStorage.setItem("contactRecaptchaToken", recaptchaToken);
                 setShowRecaptcha(false);
                 setRecaptchaToken(null);
-
-                // Reset success message after 5 seconds
+                incrementSubmissionCount();
+              
                 setTimeout(() => {
                     setSubmitSuccess(false);
                 }, 5000);

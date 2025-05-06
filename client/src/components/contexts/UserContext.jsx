@@ -129,6 +129,7 @@ export const UserProvider = ({ children }) => {
       setIsAdmin(false);
       setIsModerator(false);
       setIsAuthenticated(false);
+      localStorage.removeItem("contactRecaptchaToken");
       notify('success-logout');
     } catch (error) {
       notify('error', error);
