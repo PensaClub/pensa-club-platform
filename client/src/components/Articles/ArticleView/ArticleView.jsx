@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -53,6 +53,25 @@ const ArticleView = () => {
   const [modalImages, setModalImages] = useState([]);
   const [modalStartIndex, setModalStartIndex] = useState(0);
 
+  useEffect(() => {
+
+    const handlePopState = () => {
+
+      if (isModalOpen) {
+        setIsModalOpen(false);
+        document.body.style.overflow = 'auto';
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+  
+      document.body.style.overflow = 'auto';
+    };
+  }, [isModalOpen]);
+
   // Функция за смяна на страница
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -71,11 +90,11 @@ const ArticleView = () => {
   };
 
   // Функция за затваряне на модалния прозорец
-  const closeImageModal = () => {
+  const closeImageModal = useCallback(() => {
     setIsModalOpen(false);
     // Възстановяваме скролирането
     document.body.style.overflow = 'auto';
-  };
+  }, []);
 
   // Функция за изчисляване на общия брой страници
   const calculateTotalPages = (sections) => {
