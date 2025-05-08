@@ -1,32 +1,58 @@
 import React, { useEffect, useRef } from 'react';
 import { useGoogleAuth } from '../contexts/GoogleAuthContext';
+import { useNavigate } from 'react-router-dom';
 
-export const CustomGoogleButton = () => {
-  const { handleGoogleLogin } = useGoogleAuth();
+export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
+  const { handleGoogleLogin, handleGoogleRegister } = useGoogleAuth();
   const buttonRef = useRef(null);
+  const navigate = useNavigate();
   
   // Използваме environment variable с резервна стойност
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "224833004247-o2q7ff1onln6j5pkhtqtnct74p0ehjj9.apps.googleusercontent.com";
   
   useEffect(() => {
-    // Дебъг информация
     console.log("Client ID being used:", clientId);
+    console.log("Button mode:", mode);
     
-    // Функция, която проверява дали Google API е заредено и инициализира бутона
     const loadGoogleApi = () => {
       if (typeof window === 'undefined' || !window.google || !window.google.accounts) {
-        // Ако API не е заредено, опитваме отново след малко
         setTimeout(loadGoogleApi, 100);
         return;
       }
       
       try {
-        // Инициализираме Google Sign-In
         window.google.accounts.id.initialize({
           client_id: clientId,
-          callback: (response) => {
+          callback: async (response) => {
             if (response && response.credential) {
-              handleGoogleLogin(response.credential);
+              try {
+                let result;
+                
+                if (mode === 'register') {
+                  result = await handleGoogleRegister(response.credential);
+                } else {
+                  result = await handleGoogleLogin(response.credential);
+                }
+                
+                // Проверяваме за нужда от пренасочване
+                if (result && result.redirectToRegister) {
+                  // Пренасочване към регистрация
+                  if (onSwitchMode) {
+                    onSwitchMode('register');
+                  } else {
+                    navigate('/sign-up');
+                  }
+                } else if (result && result.redirectToLogin) {
+                  // Пренасочване към вход
+                  if (onSwitchMode) {
+                    onSwitchMode('login');
+                  } else {
+                    navigate('/login');
+                  }
+                }
+              } catch (error) {
+                console.error("Error during Google auth:", error);
+              }
             }
           }
         });
@@ -37,7 +63,6 @@ export const CustomGoogleButton = () => {
       }
     };
     
-    // Зареждаме Google API
     if (document.getElementById('google-api-script') === null) {
       const script = document.createElement('script');
       script.id = 'google-api-script';
@@ -49,7 +74,7 @@ export const CustomGoogleButton = () => {
     } else {
       loadGoogleApi();
     }
-  }, [handleGoogleLogin, clientId]);
+  }, [handleGoogleLogin, handleGoogleRegister, clientId, mode, navigate, onSwitchMode]);
   
   const handleGoogleButtonClick = () => {
     if (window.google && window.google.accounts) {
@@ -67,7 +92,7 @@ export const CustomGoogleButton = () => {
       ref={buttonRef}
     >
       <img src="/google-icon.svg" alt="Google" className="google-icon" />
-      <span>Google</span>
+      <span>{mode === 'register' ? 'Регистрация с Google' : 'Вход с Google'}</span>
     </button>
   );
 };

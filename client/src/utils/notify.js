@@ -81,8 +81,18 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
-      case 'success-approved-suggest':
-        toast.success(<Trans i18nKey="notification.success-approved-suggest" />, {
+    case 'success-approved-suggest':
+      toast.success(<Trans i18nKey="notification.success-approved-suggest" />, {
+        role: 'alert',
+      });
+      break;
+    case 'google-user-not-found':
+      toast.error(<Trans i18nKey="notification.success-approved-suggest" />, {
+        role: 'alert',
+      });
+      break;
+      case 'errors-register':
+        toast.error(<Trans i18nKey="notification.errors.errors-register" />, {
           role: 'alert',
         });
         break;
@@ -116,12 +126,17 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
-      case 'form_contains_errors':
-        toast.error(<Trans i18nKey="forms.form_contains_errors" />, {
-          role: 'alert',
-        });
-        break;
+    case 'form_contains_errors':
+      toast.error(<Trans i18nKey="forms.form_contains_errors" />, {
+        role: 'alert',
+      });
+      break;
     case 'user-already-exists':
+      toast.error(<Trans i18nKey="notification.user-already-exists" />, {
+        role: 'alert',
+      });
+      break;
+    case 'user-already-exists-register':
       toast.error(<Trans i18nKey="notification.user-already-exists" />, {
         role: 'alert',
       });
