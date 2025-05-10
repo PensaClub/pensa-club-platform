@@ -344,7 +344,20 @@ export const UserProvider = ({ children }) => {
     isAdmin,
     isModerator,
     onChangeAdminRole,
-    sendContactForm
+    sendContactForm,
+    setProfileData,
+    setUser: (user) => {
+      setProfileData(user);
+      setIsFinish(user.enabled);
+      if (user.role) {
+        setIsAdmin(user.role === 'admin');
+        setIsModerator(user.role === 'moderator');
+      }
+    },
+    setIsAuthenticated: (value) => {
+      setIsAuthenticated(value);
+    },
+    handleAuthChange,
   };
 
   return (

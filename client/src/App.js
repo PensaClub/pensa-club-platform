@@ -50,6 +50,9 @@ import FooterWithLoading from './FooterWithLoading/FooterWithLoading.jsx';
 import { LoadingProvider } from './components/contexts/LoadingContext.jsx';
 import { ArticleProvider } from './components/contexts/ArticleContext.jsx';
 import { ArticleLimitProvider } from './components/contexts/ArticleLimitContext.jsx';
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx';
 import ContactForm from './components/ContactForm/ContactForm.jsx';
 
 function App() {
@@ -69,32 +72,33 @@ function App() {
     setNavigator(navigate);
   }, [navigate]);
   const isProfilePage = location.pathname.startsWith('/profile');
-  
+
   return (
     <>
       <ErrorBoundary>
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+          <UserProvider>
+            <GoogleAuthProvider>
+              <MapProvider>
+                <CommunityProvider>
+                  <SuggestUserProvider>
+                    <AdminProvider>
+                      <ArticleProvider>
+                        <AnalyticsProvider>
+                          <LoadingProvider>
+                            <ArticleLimitProvider>
+                              {!isProfilePage && <Header
+                                additionalClasses={isProfilePage ? 'hide-header' : ''}
+                              />}
 
-        <UserProvider>
-          <MapProvider>
-            <CommunityProvider>
-              <SuggestUserProvider>
-                <AdminProvider>
-                  <ArticleProvider>
-                    <AnalyticsProvider>
-                      <LoadingProvider>
-                      <ArticleLimitProvider>
-                      {!isProfilePage &&<Header
-                          additionalClasses={isProfilePage ? 'hide-header' : ''}
-                        />}
-
-                        {!cookies.cookieConsent && <CookieConsent />}
-                        <HeaderCommunity />
-                        <ToastContainer
-                          role="alert"
-                          className={'notification'}
-                          limit={3}
-                          position="bottom-right"
-                        />
+                              {!cookies.cookieConsent && <CookieConsent />}
+                              <HeaderCommunity />
+                              <ToastContainer
+                                role="alert"
+                                className={'notification'}
+                                limit={3}
+                                position="bottom-right"
+                              />
 
                         <Routes>
                           <Route path="/" element={<Home />} />
@@ -117,40 +121,42 @@ function App() {
                             <Route path="/logout" element={<Logout />} />
                             {/* <Route path="/profile" element={<Profile />} /> */}
 
-                            <Route path="/profile/*" element={<Profile />} />
+                                  <Route path="/profile/*" element={<Profile />} />
 
-                          </Route>
+                                </Route>
 
-                          <Route element={<PublicGuard />}>
-                            <Route path="/sign-up" element={<LoginRegister />} />
-                          </Route>
-                          <Route path="/craigslist" element={<CommunityPage />} />
-                          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                          <Route path="/ads" element={<AdsCard />} />
-                          <Route path="/filter" element={<FiltersMap />} />
-                          <Route path="/map" element={<MapPage />} />
-                          <Route path="/suggest-user" element={<UserSuggestion />} />
-                          <Route path="/errors/*" element={<ErrorPageBoundary />} />
-                          <Route path="404/*" element={<NotFound />} />
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
-                        {!isProfilePage && (
-                          <FooterWithLoading
-                            additionalClasses={
-                              isCommunityPage ? 'hide-on-mobile position-fix' : ''
-                            }
-                          />
-                        )}
-                        {!isProfilePage &&<MenuCommunity />}
-                        </ArticleLimitProvider>
-                      </LoadingProvider>
-                    </AnalyticsProvider>
-                  </ArticleProvider>
-                </AdminProvider>
-              </SuggestUserProvider>
-            </CommunityProvider>
-          </MapProvider>
-        </UserProvider>
+                                <Route element={<PublicGuard />}>
+                                  <Route path="/sign-up" element={<LoginRegister />} />
+                                </Route>
+                                <Route path="/craigslist" element={<CommunityPage />} />
+                                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                                <Route path="/ads" element={<AdsCard />} />
+                                <Route path="/filter" element={<FiltersMap />} />
+                                <Route path="/map" element={<MapPage />} />
+                                <Route path="/suggest-user" element={<UserSuggestion />} />
+                                <Route path="/errors/*" element={<ErrorPageBoundary />} />
+                                <Route path="404/*" element={<NotFound />} />
+                                <Route path="*" element={<NotFound />} />
+                              </Routes>
+                              {!isProfilePage && (
+                                <FooterWithLoading
+                                  additionalClasses={
+                                    isCommunityPage ? 'hide-on-mobile position-fix' : ''
+                                  }
+                                />
+                              )}
+                              {!isProfilePage && <MenuCommunity />}
+                            </ArticleLimitProvider>
+                          </LoadingProvider>
+                        </AnalyticsProvider>
+                      </ArticleProvider>
+                    </AdminProvider>
+                  </SuggestUserProvider>
+                </CommunityProvider>
+              </MapProvider>
+            </GoogleAuthProvider>
+          </UserProvider>
+        </GoogleOAuthProvider>
       </ErrorBoundary>
     </>
   );

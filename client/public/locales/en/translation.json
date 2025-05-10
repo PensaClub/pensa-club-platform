@@ -101,6 +101,7 @@
   },
   "form": {
     "login": "Login",
+        "continue-with": "Or continue with",
     "register": "Register",
     "email-label": "Email",
     "email-placeholder": "john@yahoo.com",
@@ -565,7 +566,10 @@
     "ad_town_village": "City/Village"
   },
   "notification": {
-    "success-data": "User Data successfully submitted!",
+    "google-notfound-user-register":"Google account not found! Please register first",
+    "google-user-exists-register":"You already have an account registered with this Google account. We'll redirect you to login.",
+    "google-user-not-found": "You don't have a registered account with this Google account. Please register first.",
+   "success-data": "User Data successfully submitted!",
     "success-register": "Your account is successfully created!",
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
@@ -612,13 +616,14 @@
     "invalid_image_format": "Invalid image format",
     "invalid_image_url": "Invalid image URL",
     "image_url_added": "Image URL added successfully",
-    "section_image_url_added": "Section image URL added successfully"
+    "section_image_url_added": "Section image URL added successfully",
+      "errors-register":"An error occurred. Please try again later."
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
     "profile_data_submit": "Error while updating profile data: {{error}}",
     "unknown": "unknown",
-    "share": "An error occurred while trying to share the content."
+    "share": "An error occurred while trying to share the content."    
   },
   "search-criteria": {
     "recommend": "Recommend",

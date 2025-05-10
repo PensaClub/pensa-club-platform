@@ -81,11 +81,26 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
-      case 'success-approved-suggest':
-        toast.success(<Trans i18nKey="notification.success-approved-suggest" />, {
-          role: 'alert',
-        });
-        break;
+    case 'success-approved-suggest':
+      toast.success(<Trans i18nKey="notification.success-approved-suggest" />, {
+        role: 'alert',
+      });
+      break;
+    case 'google-user-not-found':
+      toast.error(<Trans i18nKey="notification.success-approved-suggest" />, {
+        role: 'alert',
+      });
+      break;
+    case 'google-user-exists':
+      toast.warning(<Trans i18nKey="notification.user-already-exists" />, {
+        role: 'alert',
+      });
+      break;
+    case 'errors-register':
+      toast.error(<Trans i18nKey="notification.errors-register" />, {
+        role: 'alert',
+      });
+      break;
     case 'success-password-change':
       toast.success(<Trans i18nKey="notification.success-password-change" />, {
         role: 'alert',
@@ -116,12 +131,22 @@ export const notify = (key, error) => {
         role: 'alert',
       });
       break;
-      case 'form_contains_errors':
-        toast.error(<Trans i18nKey="forms.form_contains_errors" />, {
-          role: 'alert',
-        });
-        break;
+    case 'form_contains_errors':
+      toast.error(<Trans i18nKey="forms.form_contains_errors" />, {
+        role: 'alert',
+      });
+      break;
     case 'user-already-exists':
+      toast.error(<Trans i18nKey="notification.user-already-exists" />, {
+        role: 'alert',
+      });
+      break;
+    case 'google-user-not-found':
+      toast.warning(<Trans i18nKey="notification.google-user-not-found" />, {
+        role: 'alert',
+      });
+      break;
+    case 'user-already-exists-register':
       toast.error(<Trans i18nKey="notification.user-already-exists" />, {
         role: 'alert',
       });
