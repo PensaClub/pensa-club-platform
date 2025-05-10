@@ -12,26 +12,35 @@ export const LoginRegister = () => {
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const view = query.get('view');
+    const tab = query.get('tab');
 
-    const tab = query.get('tab'); 
-    
     if (view === 'register' || tab === 'register') {
       setActiveView(true);
     } else if (view === 'login' || tab === 'login') {
       setActiveView(false);
     } else {
- 
       setActiveView(false);
     }
 
+    if (window.google && window.google.accounts) {
+      window.google.accounts.id.cancel();
+    }
   }, [location.search]);
 
   const handleLoginClick = () => {
     setActiveView(false);
+
+    if (window.google && window.google.accounts) {
+      window.google.accounts.id.cancel();
+    }
   };
 
   const handleRegisterClick = () => {
     setActiveView(true);
+
+    if (window.google && window.google.accounts) {
+      window.google.accounts.id.cancel();
+    }
   };
 
   return (
@@ -39,7 +48,6 @@ export const LoginRegister = () => {
       <section className="auth-section">
         <div className="auth-container">
           <div className="glass-card">
-            {/* Странична лента - показва се само на десктоп */}
             <div className="sidebar">
               <div className="sidebar-content">
                 <div>
@@ -47,14 +55,14 @@ export const LoginRegister = () => {
                     {activeView ? 'Добре дошли!' : 'Здравейте отново!'}
                   </h1>
                   <p className="sidebar-text">
-                    {activeView 
-                      ? 'Присъединете се към нашето общество и открийте всички възможности, които предлагаме.' 
+                    {activeView
+                      ? 'Присъединете се към нашето общество и открийте всички възможности, които предлагаме.'
                       : 'Радваме се да Ви видим отново. Влезте в профила си, за да продължите своето пътуване с нас.'}
                   </p>
                 </div>
-                
-                <button 
-                  className="auth-btn" 
+
+                <button
+                  className="auth-btn"
                   onClick={activeView ? handleLoginClick : handleRegisterClick}
                 >
                   {activeView ? 'Вход' : 'Регистрация'}
@@ -62,12 +70,15 @@ export const LoginRegister = () => {
               </div>
               <div className="sidebar-decoration"></div>
             </div>
-            
-            {/* Контейнер за формите */}
+
             <div className="forms-container">
               <div className={`auth-forms-wrapper ${activeView ? 'show-register' : 'show-login'}`}>
-                <Login navToRegister={handleRegisterClick} />
-                <Register navToLogin={handleLoginClick} />
+                {/* Използваме ключове и ререндериране, но запазваме CSS анимациите */}
+                {activeView ? (
+                  <Register navToLogin={handleLoginClick} />
+                ) : (
+                  <Login navToRegister={handleRegisterClick} />
+                )}
               </div>
             </div>
           </div>

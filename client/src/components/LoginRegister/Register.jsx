@@ -149,7 +149,7 @@ export const Register = ({ navToLogin }) => {
           <span>{t('form.continue-with')}</span>
         </div>
         <div className="google-auth-container">
-          <CustomGoogleButton mode="register" />
+        <CustomGoogleButton mode="register" onSwitchMode={navToLogin} />
         </div>
 
         <div className="form-footer">
