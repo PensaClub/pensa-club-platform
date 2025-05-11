@@ -43,7 +43,24 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
             firebase_image_path: firebaseImagePath,
         };
 
-        const details = await user_details.create(data);
+        // Check if user details already exist
+        const existingDetails = await user_details.findOne({
+            where: { user_accounts_id: req.user.userId },
+        });
+
+        let details;
+        if (existingDetails) {
+            // Update existing details
+            const [_, updatedDetails] = await user_details.update(data, {
+                where: { user_accounts_id: req.user.userId },
+                returning: true,
+                plain: true,
+            });
+            details = updatedDetails;
+        } else {
+            // Create new details
+            details = await user_details.create(data);
+        }
 
         const { id, user_accounts_id, ...restOfDetails } = details.dataValues;
 
@@ -73,7 +90,7 @@ userDetailsController.post('/details', isAuth, async (req, res, next) => {
     }
 });
 
-userDetailsController.get('/all-users', memoryCache('users'), async (req, res, next) => {
+userDetailsController.get('/all-users', async (req, res, next) => {
     try {
         const accounts = await user_account.findAll({
             attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', ['role_change_comment', 'roleChangeComment']],
@@ -166,7 +183,7 @@ userDetailsController.patch('/update-details', isAuth, async (req, res, next) =>
     }
 });
 
-userDetailsController.get('/single-user', isAuth, rbac.checkPermission('userDetails', 'read'), memoryCache('users'), async (req, res, next) => {
+userDetailsController.get('/single-user', isAuth, rbac.checkPermission('userDetails', 'read'), async (req, res, next) => {
     try {
         const user = await user_account.findOne({
             where: { id: req.user.userId },

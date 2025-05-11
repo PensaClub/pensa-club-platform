@@ -1,5 +1,6 @@
 const { ValidationError, UniqueConstraintError, ForeignKeyConstraintError, DatabaseError } = require('sequelize');
 const { TokenExpiredError } = require('jsonwebtoken');
+const { ZodError } = require('zod');
 const CustomError = require('../utils/customError');
 
 function errorHandler(error, req, res, next) {
@@ -10,6 +11,14 @@ function errorHandler(error, req, res, next) {
         message = error.message;
         statusCode = error.statusCode;
         details = error.details;
+    } else if (error instanceof ZodError) {
+        message = 'Validation error(s): ' + error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ');
+        statusCode = 400;
+        details = error.errors.map((err) => ({
+            field: err.path.join('.'),
+            message: err.message,
+            value: err.received,
+        }));
     } else if (error instanceof UniqueConstraintError) {
         const fieldErrors = error.errors.map((err) => ({
             field: err.path,

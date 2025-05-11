@@ -51,12 +51,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             password: {
                 type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    notEmpty: {
-                        msg: 'Password is required.',
-                    },
-                },
+                allowNull: true,
             },
             finished: {
                 type: DataTypes.BOOLEAN,
@@ -93,6 +88,11 @@ module.exports = (sequelize, DataTypes) => {
                         }
                     },
                 },
+            },
+            is_google_user: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
             },
         },
         {
