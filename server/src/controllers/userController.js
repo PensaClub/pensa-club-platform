@@ -1,76 +1,57 @@
 const userController = require('express').Router();
 
-const bcrypt = require('bcrypt');
-const { tokenVerification, tokenGenerator } = require('../utils/jwt');
-const CustomError = require('../utils/customError');
-
+const { user_details, user_account, user_ads, refreshToken } = require('../sequelize/models/index');
+const ageCalculate = require('../utils/ageCalculate.js');
+const isAuth = require('../middlewares/isAuth.js');
 const { where } = require('sequelize');
-const { user_account, user_details, user_ads, refreshToken } = require('../sequelize/models/index');
-const uuid = require('uuid');
+const { tokenGenerator } = require('../utils/jwt.js');
+const eventEmitter = require('../utils/eventEmitter.js');
+const rbac = require('../middlewares/rbac.js');
+const { forwardEmailsViaZoho } = require('../utils/zohoEmails.js');
+const verifyRecaptcha = require('../utils/verifyRecaptcha.js');
+const CustomError = require('../utils/customError.js');
+const { userDetailsSchema, updateUserDetailsSchema } = require('../schemas/userDetails.schema');
 
-const isAuth = require('../middlewares/isAuth');
-const { sendResetEmail } = require('../utils/zohoEmails');
-const fieldSwap = require('../utils/fieldSwap');
-const ageCalculate = require('../utils/ageCalculate');
+userController.post('/details', isAuth, async (req, res, next) => {
+    if (req.user.enabled) {
+        return res.status(403).send({ message: 'User details have already been submitted once.' });
+    }
 
-const emailRegex =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//Example - john.doe@example.com
-
-const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
-
-userController.post('/register', async (req, res, next) => {
-    let errors = {};
     try {
-        const { email, password, rePassword } = req.body;
+        const validationResult = userDetailsSchema.safeParse(req.body);
+        if (!validationResult.success) {
+            throw validationResult.error;
+        }
+        const data = {
+            ...validationResult.data,
+            userAccountsId: req.user.userId,
+        };
 
-        Object.entries(req.body).forEach(([fieldName, value]) => {
-            if (value === '') {
-                let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-                errors[fieldName] = `${error} is required.`;
-            }
+        const existingDetails = await user_details.findOne({
+            where: { userAccountsId: req.user.userId },
         });
 
-        if (Object.keys(errors).length > 0) {
-            throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });
+        let details;
+        if (existingDetails) {
+            const [_, updatedDetails] = await user_details.update(data, {
+                where: { userAccountsId: req.user.userId },
+                returning: true,
+                plain: true,
+            });
+            details = updatedDetails;
+        } else {
+            details = await user_details.create(data);
         }
 
-        if (!emailRegex.test(email)) {
-            errors.email = 'Invalid email.';
-        }
+        const { id, userAccountsId, ...restOfDetails } = details.dataValues;
 
-        if (!passwordRegex.test(password)) {
-            errors.password = 'Password must be at least 8 characters long, contain at least one letter and one number.';
-        }
+        const user = await user_account.update({ finished: true }, { where: { id: req.user.userId }, returning: true, plain: true });
 
-        if (password !== rePassword) {
-            errors.rePassword = 'Passwords do not match.';
-        }
+        const { token } = tokenGenerator('access', user[1].dataValues);
+        const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user[1].dataValues);
 
-        if (Object.keys(errors).length > 0) {
-            throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });
-        }
-
-        const userExist = await user_account.findOne({ where: { email } });
-
-        if (userExist) {
-            return res.status(409).json({ message: 'User already exists with this email.' });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const user = await user_account.create({ email, password: hashedPassword });
-
-        const { token } = tokenGenerator('access', user);
-        const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
-
-        await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
-
-        const data = {
-            email: user.email,
-            role: user.role,
-            enabled: user.finished,
-        };
+        await refreshToken.destroy({ where: { userId: req.user.userId } });
+        await refreshToken.create({ userId: user[1].dataValues.id, token: refreshTokenId, expiryDate });
 
         res.cookie('refreshJwtToken', refreshJwtToken, {
             httpOnly: true,
@@ -78,207 +59,194 @@ userController.post('/register', async (req, res, next) => {
             sameSite: 'strict',
             maxAge: expiryDate - Date.now(),
         });
-        res.status(201).json({ message: 'User successfully created!', user: data, token });
+
+        const updatedDetails = { ...restOfDetails, age: ageCalculate(restOfDetails.birthDate) };
+
+        eventEmitter.emit('userCacheUpdate', { type: 'users', data: { ...updatedDetails }, adId: null, userId: req.user.userId, action: 'details' });
+        eventEmitter.emit('userCacheUpdate', { type: 'users', data: null, adId: null, userId: req.user.userId, action: 'enabled' });
+
+        res.status(200).send({ message: 'Details successfully updated!', user: { email: req.user.email, enabled: true, details: updatedDetails }, token });
     } catch (err) {
         next(err);
     }
 });
 
-userController.post('/login', async (req, res, next) => {
-    let errors = {};
+userController.get('/all-users', async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-
-        Object.entries(req.body).forEach(([fieldName, value]) => {
-            if (value === '') {
-                let error = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-                errors[fieldName] = `${error} is required.`;
-            }
-        });
-
-        if (Object.keys(errors).length > 0) {
-            throw new CustomError({ message: 'Validation errors', statusCode: 400, details: errors });
-        }
-
-        const user = await user_account.findOne({
-            where: { email },
+        const accounts = await user_account.findAll({
+            attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', 'roleChangeComment'],
             include: [
                 {
                     model: user_details,
                     as: 'details',
-                    attributes: { exclude: ['user_accounts_id'] },
+                    attributes: [
+                        'phoneNumber',
+                        'username',
+                        'firstName',
+                        'lastName',
+                        'region',
+                        'workOptions',
+                        'skills',
+                        'interestOptions',
+                        'gender',
+                        'imageURL',
+                        'firebaseImagePath',
+                    ],
                 },
                 {
                     model: user_ads,
-                    as: 'ads',
                     required: false,
+                    as: 'ads',
                     attributes: [
-                        ['ad_id', 'adId'],
+                        'adId',
                         'summary',
                         'category',
                         'description',
-                        ['ad_region', 'adRegion'],
-                        ['ad_subregion', 'adSubregion'],
-                        ['ad_town', 'adTown'],
+                        'adRegion',
+                        'adSubregion',
+                        'adTown',
                         'street',
                         'tags',
                         'images',
                         'status',
-                        ['admin_comment', 'adminComment'],
-                        ['extra_fields', 'extraFields'],
-                        ['creation_date', 'creationDate'],
-                        ['expiration_date', 'expirationDate'],
+                        'adminComment',
+                        'extraFields',
+                        'creationDate',
+                        'expirationDate',
+                        'userId',
                     ],
                 },
             ],
         });
 
-        if (!user) {
-            return res.status(409).json({ message: 'Email or password are invalid.' });
+        if (accounts.length === 0) return res.status(404).json({ message: 'No user accounts found.' });
+
+        res.status(200).json({ message: 'Users data retrieved successfully.', accounts });
+    } catch (err) {
+        next(err);
+    }
+});
+
+userController.patch('/update-details', isAuth, async (req, res, next) => {
+    try {
+        const validationResult = updateUserDetailsSchema.safeParse(req.body);
+        if (!validationResult.success) {
+            throw validationResult.error;
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const [_, details] = await user_details.update(validationResult.data, { where: { userAccountsId: req.user.userId }, returning: true, plain: true });
 
-        if (!isPasswordValid) {
-            return res.status(409).json({ message: 'Email or password are invalid.' });
-        }
+        const updatedDetails = details.dataValues;
+        updatedDetails.age = ageCalculate(updatedDetails.birthDate);
 
-        const data = {
-            email: user.email,
-            role: user.role,
-            enabled: user.finished,
-            roleChangeComment: user.role_change_comment,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-            ads: user.ads,
-        };
+        eventEmitter.emit('userCacheUpdate', { type: 'users', data: { ...updatedDetails }, adId: null, userId: req.user.userId, action: 'details' });
+        eventEmitter.emit('userCacheUpdate', { type: 'users', data: null, adId: null, userId: req.user.userId, action: 'enabled' });
 
-        if (user.dataValues.details) {
-            const details = fieldSwap(user.dataValues.details.dataValues, 'mapFromDb');
-            details.age = ageCalculate(details.birthDate);
-            data.details = details;
-        }
+        res.status(200).json({ message: 'Details edited successfully!', details: updatedDetails });
+    } catch (err) {
+        next(err);
+    }
+});
 
-        const { token } = tokenGenerator('access', user);
-        const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
-
-        await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
-
-        res.cookie('refreshJwtToken', refreshJwtToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: expiryDate - Date.now(),
+userController.get('/single-user', isAuth, rbac.checkPermission('userDetails', 'read'), async (req, res, next) => {
+    try {
+        const user = await user_account.findOne({
+            where: { id: req.user.userId },
+            attributes: ['email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', 'roleChangeComment', 'password'],
+            include: [
+                {
+                    model: user_details,
+                    as: 'details',
+                    attributes: [
+                        'phoneNumber',
+                        'username',
+                        'firstName',
+                        'lastName',
+                        'region',
+                        'workOptions',
+                        'skills',
+                        'interestOptions',
+                        'gender',
+                        'imageURL',
+                        'firebaseImagePath',
+                    ],
+                },
+                {
+                    model: user_ads,
+                    required: false,
+                    as: 'ads',
+                    attributes: [
+                        'adId',
+                        'summary',
+                        'category',
+                        'description',
+                        'adRegion',
+                        'adSubregion',
+                        'adTown',
+                        'street',
+                        'tags',
+                        'images',
+                        'status',
+                        'adminComment',
+                        'extraFields',
+                        'creationDate',
+                        'expirationDate',
+                        'userId',
+                    ],
+                },
+            ],
         });
 
-        res.status(200).json({ message: 'User successfully logged in!', user: data, token });
+        if (!user) return res.status(404).json({ message: 'User not found.' });
+
+        const { id, password, details, ...restUser } = user.dataValues;
+
+        return res.status(200).json({
+            message: 'User data retrieved successfully.',
+            user: {
+                ...restUser,
+                hasPassword: !!password,
+                details: {
+                    ...details.dataValues,
+                    age: ageCalculate(details?.birthDate),
+                },
+            },
+        });
     } catch (err) {
         next(err);
     }
 });
 
-userController.post('/logout', isAuth, async (req, res, next) => {
+userController.post('/contact-form', async (req, res, next) => {
     try {
-        if (req.user) {
-            const refreshJwtToken = req.cookies.refreshJwtToken;
-            if (refreshJwtToken) {
-                try {
-                    const decodedToken = tokenVerification('refresh', refreshJwtToken);
-                    await refreshToken.destroy({ where: { token: decodedToken.refreshTokenId } });
-                    res.clearCookie('refreshJwtToken', {
-                        httpOnly: true,
-                        secure: true,
-                        sameSite: 'strict',
-                    });
-                    res.status(200).json({ message: 'Logout successful.' });
-                } catch (err) {
-                    next(err);
-                }
-            }
+        const { name, message, email, recaptchaToken, subject } = req.body;
+
+        if (!name || !message || !email || !subject) {
+            return res.status(400).json({ error: 'Missing required fields' });
         }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'Invalid email format' });
+        }
+
+        const recaptchaResult = await verifyRecaptcha(recaptchaToken);
+
+        if (!recaptchaResult.success || (recaptchaResult.score !== undefined && recaptchaResult.score < 0.5)) {
+            throw new CustomError('Failed reCAPTCHA verification', 400, { reason: recaptchaResult['error-codes'] || 'Low score' });
+        }
+
+        await forwardEmailsViaZoho({
+            name,
+            userEmail: email,
+            subject: subject || 'Contact Form Submission',
+            body: message,
+            toAddresses: ['help@pensa.club', 'pensa.club@gmail.com'],
+        });
+
+        return res.status(200).json({ message: 'Your message has been sent successfully.' });
     } catch (err) {
-        next(err);
-    }
-});
-
-userController.post('/request-reset-password', async (req, res, next) => {
-    const { email } = req.body;
-    try {
-        const user = await user_account.findOne({ where: { email } });
-        if (!user) {
-            return res.status(404).json({ message: 'There is no user registered with that email address.' });
-        }
-
-        const resetToken = uuid.v4();
-        const expiryTime = Date.now() + 900000; // 15 min
-
-        user.reset_token = resetToken;
-        user.token_expiration = expiryTime;
-        await user.save();
-
-        try {
-            await sendResetEmail(email, resetToken);
-            res.status(200).json({ message: `A reset password link has been sent to ${email}.` });
-        } catch (emailError) {
-            next(new Error(`Error sending email: ${emailError}`));
-        }
-    } catch (err) {
-        next(err);
-    }
-});
-
-userController.post('/reset-password', async (req, res, next) => {
-    const { oldPassword, newPassword, reNewPassword, tokenType, token } = req.body;
-    let user;
-    try {
-        if (tokenType !== 'jwt' && tokenType !== 'reset') {
-            return res.status(400).json({ message: 'Invalid token type.' });
-        }
-        if (!newPassword) {
-            return res.status(400).json({ message: 'New password is required.' });
-        }
-        if (!reNewPassword) {
-            return res.status(400).json({ message: 'Repeat password is required.' });
-        }
-        if (newPassword !== reNewPassword) {
-            return res.status(400).json({ message: 'Repeat password does not match.' });
-        }
-        if (!passwordRegex.test(newPassword)) {
-            return res.status(400).json({ message: 'New password must be at least 8 characters long, contain at least one letter and one number.' });
-        }
-
-        if (tokenType === 'reset') {
-            user = await user_account.findOne({ where: { reset_token: token } });
-            if (!user || !user.token_expiration) {
-                return res.status(404).json({ message: "User with that token wasn't found." });
-            }
-            if (user.token_expiration.getTime() < Date.now()) {
-                return res.status(400).json({ message: 'Reset token has expired.' });
-            }
-            user.reset_token = null;
-            user.token_expiration = null;
-        }
-
-        if (tokenType === 'jwt') {
-            if (!oldPassword) {
-                return res.status(400).json({ message: 'Old password is required.' });
-            }
-            if (oldPassword === newPassword) {
-                return res.status(400).json({ message: 'Old and new password are the same.' });
-            }
-            const decodedToken = tokenVerification('access', token);
-            user = await user_account.findOne({ where: { email: decodedToken.email } });
-
-            const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-            if (!isPasswordValid) {
-                return res.status(400).json({ message: 'Old password is invalid.' });
-            }
-        }
-        const newHashedPassword = await bcrypt.hash(newPassword, 10);
-        user.password = newHashedPassword;
-        await user.save();
-        res.status(200).json({ message: 'Password reset was successful.' });
-    } catch (err) {
+        console.log(err);
         next(err);
     }
 });

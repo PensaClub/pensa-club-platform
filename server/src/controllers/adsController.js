@@ -2,21 +2,29 @@ const adsController = require('express').Router();
 const { user_account, user_details, user_ads } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac');
-const fieldSwap = require('../utils/fieldSwap.js');
-const adsValidator = require('../utils/adsValidator.js');
 const { where, Op, literal } = require('sequelize');
 const memoryCache = require('../middlewares/caching.js');
 const eventEmitter = require('../utils/eventEmitter.js');
-const extraFieldsValidator = require('../utils/extraFieldsValidator.js');
+const { createAdSchema, updateAdSchema, extraFieldsSchema } = require('../schemas/ads.schema');
 
 adsController.post('/ad-create', isAuth, rbac.checkPermission('ad', 'create'), async (req, res, next) => {
     try {
         const { extraFields, ...regularFields } = req.body;
 
-        adsValidator(regularFields, req.path);
-        if (extraFields) extraFieldsValidator(extraFields);
+        const validationResult = createAdSchema.safeParse(regularFields);
+        if (!validationResult.success) {
+            throw validationResult.error;
+        }
 
-        const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
+        if (extraFields) {
+            const extraFieldsResult = extraFieldsSchema.safeParse(extraFields);
+            if (!extraFieldsResult.success) {
+                throw extraFieldsResult.error;
+            }
+            extraFields = extraFieldsResult.data;
+        }
+
+        const data = { ...regularFields, extraFields };
 
         if (data.status) {
             return res.status(400).json({ message: 'Status cannot be updated through this endpoint.' });
@@ -26,13 +34,11 @@ adsController.post('/ad-create', isAuth, rbac.checkPermission('ad', 'create'), a
             return res.status(400).json({ message: 'Admin comment cannot be updated through this endpoint.' });
         }
 
-        const ad = await user_ads.create({ user_id: req.user.userId, ...data });
+        const ad = await user_ads.create({ userId: req.user.userId, ...data });
 
-        const formatted = fieldSwap(ad.dataValues, 'mapFromDb');
+        eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...ad.dataValues }, adId: ad.adId, userId: req.user.userId });
 
-        eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...formatted }, adId: ad.ad_id, userId: req.user.userId });
-
-        res.status(200).json({ message: 'Ad successfully created.' });
+        return res.status(200).json({ message: 'Ad successfully created.' });
     } catch (err) {
         next(err);
     }
@@ -50,7 +56,7 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, rbac.checkPermission('ad', 'a
             status: adStatus,
         };
 
-        if (adId) whereCondition.ad_id = adId;
+        if (adId) whereCondition.adId = adId;
 
         const ads = await user_ads.findAll({
             where: whereCondition,
@@ -72,12 +78,12 @@ adsController.get(`/:adStatus-ads/:adId?`, isAuth, rbac.checkPermission('ad', 'a
         }
 
         const mappedAds = ads.map((ad) => {
-            const newAd = fieldSwap(ad.get({ plain: true }), 'mapFromDb');
+            const newAd = ad.get({ plain: true });
             newAd.account = { email: ad.account.email };
             return newAd;
         });
 
-        res.status(200).json({ message: `${adStatus.charAt(0).toUpperCase() + adStatus.slice(1)} ads successfully retrieved.`, ads: mappedAds });
+        return res.status(200).json({ message: `${adStatus.charAt(0).toUpperCase() + adStatus.slice(1)} ads successfully retrieved.`, ads: mappedAds });
     } catch (err) {
         next(err);
     }
@@ -87,7 +93,7 @@ adsController.get('/adById/:adId', rbac.checkPermission('ad', 'read'), memoryCac
     try {
         const adId = req.params.adId;
         const ad = await user_ads.findOne({
-            where: { ad_id: adId },
+            where: { adId },
             include: [
                 {
                     model: user_account,
@@ -97,7 +103,7 @@ adsController.get('/adById/:adId', rbac.checkPermission('ad', 'read'), memoryCac
                         {
                             model: user_details,
                             as: 'details',
-                            attributes: ['username', 'imageURL', 'work_options', 'interest_options', 'skills', 'phone_number', 'gender'],
+                            attributes: ['username', 'imageURL', 'workOptions', 'interestOptions', 'skills', 'phoneNumber', 'gender'],
                         },
                     ],
                 },
@@ -106,11 +112,14 @@ adsController.get('/adById/:adId', rbac.checkPermission('ad', 'read'), memoryCac
 
         if (!ad) return res.status(404).json({ message: `Ad with ID ${adId} does not exist.` });
 
-        const mappedAd = fieldSwap(ad.dataValues, 'mapFromDb');
-
-        const mappedDetails = fieldSwap(ad.dataValues.account.dataValues.details.dataValues, 'mapFromDb');
-
-        res.status(200).json({ message: 'Ad successfully retrieved.', ads: mappedAd, details: { ...mappedDetails, email: ad.account.dataValues.email } });
+        return res.status(200).json({
+            message: 'Ad successfully retrieved.',
+            ads: ad.dataValues,
+            details: {
+                ...ad.dataValues.account.dataValues.details.dataValues,
+                email: ad.account.dataValues.email,
+            },
+        });
     } catch (err) {
         next(err);
     }
@@ -128,7 +137,7 @@ adsController.get('/ads-user/:email', isAuth, rbac.checkPermission('ad', 'read')
         if (!email) return res.status(404).json({ message: 'Email is required.' });
 
         const ads = await user_ads.findAll({
-            whereCondition,
+            where: whereCondition,
             include: [
                 {
                     model: user_account,
@@ -141,9 +150,7 @@ adsController.get('/ads-user/:email', isAuth, rbac.checkPermission('ad', 'read')
 
         if (ads.length === 0) return res.status(404).json({ message: 'No ads found for the specified user.', ads: [] });
 
-        const mappedAds = ads.map((ad) => fieldSwap(ad.dataValues, 'mapFromDb'));
-
-        res.status(200).json({ message: 'User ads successfully retrieved.', ads: mappedAds });
+        return res.status(200).json({ message: 'User ads successfully retrieved.', ads: ads.map((ad) => ad.dataValues) });
     } catch (err) {
         next(err);
     }
@@ -166,12 +173,12 @@ adsController.post('/ad-update-status', isAuth, rbac.checkPermission('ad', 'appr
         const [updatedRowsCount, [updatedAd]] = await user_ads.update(
             {
                 status: newStatus,
-                admin_comment: adminComment,
+                adminComment,
             },
             {
                 where: {
-                    ad_id: adId,
-                    status: { [Op.ne]: newStatus }, // Only update if current status is different
+                    adId,
+                    status: { [Op.ne]: newStatus },
                 },
                 returning: true,
             }
@@ -179,11 +186,9 @@ adsController.post('/ad-update-status', isAuth, rbac.checkPermission('ad', 'appr
 
         if (updatedRowsCount === 0) return res.status(404).json({ message: `Ad could not be found or status is already ${newStatus}` });
 
-        const mappedAd = fieldSwap(updatedAd.dataValues, 'mapFromDb');
+        eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...updatedAd.dataValues }, adId, userId: null });
 
-        eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...mappedAd }, adId, userId: null });
-
-        res.status(200).json({ message: 'Ad status has been updated successfully.' });
+        return res.status(200).json({ message: 'Ad status has been updated successfully.' });
     } catch (err) {
         next(err);
     }
@@ -193,18 +198,18 @@ adsController.delete('/ad-delete/:adId', isAuth, rbac.checkPermission('ad', 'del
     try {
         const adId = req.params.adId;
 
-        const ad = await user_ads.findOne({ where: { ad_id: adId } });
+        const ad = await user_ads.findOne({ where: { adId } });
 
         if (!ad) return res.status(404).json({ message: "ID doesn't match an existing ad." });
 
-        if (req.user.role === 'admin' || req.user?.userId == ad.user_id) {
+        if (req.user.role === 'admin' || req.user?.userId == ad.userId) {
             await ad.destroy();
 
             eventEmitter.emit('userCacheUpdate', { type: 'ads', data: null, adId, userId: null, action: 'delete' });
 
             return res.status(200).json({ message: 'Ad has been deleted successfully.' });
         }
-        res.status(400).json({ message: 'Access denied.' });
+        return res.status(400).json({ message: 'Access denied.' });
     } catch (err) {
         next(err);
     }
@@ -214,10 +219,20 @@ adsController.patch('/ad-edit', isAuth, rbac.checkPermission('ad', 'update'), as
     try {
         const { extraFields, ...regularFields } = req.body;
 
-        adsValidator(regularFields);
-        if (extraFields) extraFieldsValidator(extraFields);
+        const validationResult = updateAdSchema.safeParse(regularFields);
+        if (!validationResult.success) {
+            throw validationResult.error;
+        }
 
-        const data = fieldSwap({ ...regularFields, extraFields }, 'mapToDb');
+        if (extraFields) {
+            const extraFieldsResult = extraFieldsSchema.safeParse(extraFields);
+            if (!extraFieldsResult.success) {
+                throw extraFieldsResult.error;
+            }
+            extraFields = extraFieldsResult.data;
+        }
+
+        const data = { ...regularFields, extraFields };
 
         if (regularFields.status) {
             return res.status(400).json({ message: 'Status cannot be updated through this endpoint.' });
@@ -227,8 +242,8 @@ adsController.patch('/ad-edit', isAuth, rbac.checkPermission('ad', 'update'), as
         }
 
         const where = {
-            ad_id: regularFields.adId,
-            user_id: req.user.userId,
+            adId: regularFields.adId,
+            userId: req.user.userId,
         };
 
         const [affectedRows, [details]] = await user_ads.update({ ...data, status: 'pending' }, { where, returning: true });
@@ -237,11 +252,9 @@ adsController.patch('/ad-edit', isAuth, rbac.checkPermission('ad', 'update'), as
             return res.status(404).json({ message: 'Ad not found or wrong user credentials.' });
         }
 
-        const updatedDetails = fieldSwap(details.dataValues, 'mapFromDb');
+        eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...details.dataValues }, adId: regularFields.adId, userId: req.user.userId });
 
-        eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...updatedDetails }, adId: regularFields.adId, userId: req.user.userId });
-
-        res.status(200).json({ message: 'Ad details edited successfully!', details: updatedDetails });
+        return res.status(200).json({ message: 'Ad details edited successfully!', details: details.dataValues });
     } catch (err) {
         next(err);
     }
@@ -299,9 +312,9 @@ adsController.get('/ads-search', rbac.checkPermission('ad', 'read'), async (req,
                 return;
             }
             if (key === 'creationDate') {
-                whereCondition.creation_date = { [Op.gte]: value };
+                whereCondition.creationDate = { [Op.gte]: value };
             } else if (key === 'expirationDate') {
-                whereCondition.expiration_date = { [Op.lte]: value };
+                whereCondition.expirationDate = { [Op.lte]: value };
             }
         };
 
@@ -323,9 +336,8 @@ adsController.get('/ads-search', rbac.checkPermission('ad', 'read'), async (req,
         };
 
         const processAdField = (key, value) => {
-            const newKey = `${key.toLowerCase().replace('ad', 'ad_')}`;
             adLocationConditions.push({
-                [newKey]: value,
+                [key]: value,
             });
         };
 
@@ -360,7 +372,7 @@ adsController.get('/ads-search', rbac.checkPermission('ad', 'read'), async (req,
             const start = query[startKey];
             const end = query[endKey];
             if (start && dateRegex.test(start) && end && dateRegex.test(end)) {
-                if (fieldKey === 'extra_fields') {
+                if (fieldKey === 'extraFields') {
                     whereCondition[fieldKey] = {
                         eventStartDate: { [Op.gte]: query[startKey] },
                         eventEndDate: { [Op.lte]: query[endKey] },
@@ -381,8 +393,8 @@ adsController.get('/ads-search', rbac.checkPermission('ad', 'read'), async (req,
             }
         };
 
-        processDateRangeFields('eventStartDate', 'eventEndDate', 'extra_fields');
-        processDateRangeFields('startDate', 'endDate', 'creation_date');
+        processDateRangeFields('eventStartDate', 'eventEndDate', 'extraFields');
+        processDateRangeFields('startDate', 'endDate', 'creationDate');
 
         if (adLocationConditions.length > 0) {
             whereCondition[Op.and] = adLocationConditions;
@@ -417,19 +429,19 @@ adsController.get('/ads-search', rbac.checkPermission('ad', 'read'), async (req,
             limit: paginationConditions.limit,
             offset: paginationConditions.offset,
             attributes: [
-                ['ad_id', 'adId'],
+                'adId',
                 'summary',
                 'category',
-                ['ad_region', 'adRegion'],
-                ['ad_subregion', 'adSubregion'],
-                ['ad_town', 'adTown'],
+                'adRegion',
+                'adSubregion',
+                'adTown',
                 'street',
                 'tags',
                 'images',
                 'status',
-                ['extra_fields', 'extraFields'],
-                ['creation_date', 'creationDate'],
-                ['expiration_date', 'expirationDate'],
+                'extraFields',
+                'creationDate',
+                'expirationDate',
                 'updatedAt',
             ],
             include: [
@@ -442,14 +454,14 @@ adsController.get('/ads-search', rbac.checkPermission('ad', 'read'), async (req,
                         {
                             model: user_details,
                             as: 'details',
-                            attributes: ['username', ['first_name', 'firstName'], ['last_name', 'lastName'], 'imageURL', 'gender'],
+                            attributes: ['username', 'firstName', 'lastName', 'imageURL', 'gender'],
                         },
                     ],
                 },
             ],
         });
 
-        res.status(200).json({ result, errors, lastPage: paginationConditions.lastPage });
+        return res.status(200).json({ result, errors, lastPage: paginationConditions.lastPage });
     } catch (err) {
         next(err);
     }
@@ -464,17 +476,21 @@ adsController.patch('/update-expiration-date/:adId', isAuth, rbac.checkPermissio
         const expirationDate = new Date(new Date().setDate(new Date().getDate() + 30)).toISOString().split('T')[0];
 
         const [affectedRows, [details]] = await user_ads.update(
-            { expiration_date: expirationDate },
-            { where: { user_id: req.user.userId, ad_id: adId }, returning: true }
+            { expirationDate },
+            {
+                where: {
+                    userId: req.user.userId,
+                    adId,
+                },
+                returning: true,
+            }
         );
 
         if (affectedRows === 0) return res.status(404).json({ message: 'No such ad was found.' });
 
-        const mappedAds = fieldSwap(details.dataValues, 'mapFromDb');
+        eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...details.dataValues }, adId, userId: req.user.userId });
 
-        eventEmitter.emit('userCacheUpdate', { type: 'ads', data: { ...mappedAds }, adId, userId: req.user.userId });
-
-        res.status(200).json({ message: `Expiration date successfully changed to ${expirationDate}` });
+        return res.status(200).json({ message: `Expiration date successfully changed to ${expirationDate}` });
     } catch (err) {
         next(err);
     }

@@ -7,7 +7,7 @@ export async function refreshToken(authInfo) {
   const tokenExpiresIn = new Date(decodedToken.exp * 1000) - new Date();
 
   if (tokenExpiresIn < 1 * 60 * 1000) {
-    const response = await fetch(`${apiUrl}/token/refresh`, {
+    const response = await fetch(`${apiUrl}/auth/refresh`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
