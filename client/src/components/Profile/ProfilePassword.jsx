@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 export const ProfilePassword = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { onPasswordReset } = useContext(UserContext);
+  const { onPasswordReset, hasPassword, setProfileData } = useContext(UserContext);
 
   const initialFormState = {
     oldPassword: '',
@@ -65,7 +65,16 @@ export const ProfilePassword = () => {
     });
     setErrors(newErrors);
     if (isValid) {
-      await onPasswordReset({ ...trimmedForm, tokenType: 'jwt' });
+      const payload = {
+        ...trimmedForm,
+        oldPassword: hasPassword ? trimmedForm.oldPassword : null,
+        tokenType: 'jwt'
+      };
+      await onPasswordReset(payload);
+      setProfileData((prevData) => ({
+        ...prevData,
+        hasPassword: true
+      }));
       resetFields(setForm, initialFormState);
       navigate('/profile');
       }
@@ -83,23 +92,25 @@ export const ProfilePassword = () => {
   return (
     <form className='profile-form' onSubmit={handleSubmit}>
       <h3>{t('profile.change_password')}</h3>
-      <label htmlFor='oldPassword'>
-        {t('profile.old_password')}: <span>*</span>
-        <div className='password-input-container'>
-          <input
-            type={showPasswords.oldPassword ? 'text' : 'password'}
-            name='oldPassword'
-            value={form.oldPassword}
-            onChange={handleInputChange}
-            onBlur={onBlurHandler}
-            required
-          />
-          <span className='toggle-password' onClick={() => toggleShowPassword('oldPassword')}>
-            {showPasswords.oldPassword ? '👁️' : '👁️‍🗨️'}
-          </span>
-        </div>
-        {errors.oldPassword && <div className='error'>{errors.oldPassword}</div>}
-      </label>
+      {hasPassword && (
+        <label htmlFor='oldPassword'>
+          {t('profile.old_password')}: <span>*</span>
+          <div className='password-input-container'>
+            <input
+              type={showPasswords.oldPassword ? 'text' : 'password'}
+              name='oldPassword'
+              value={form.oldPassword}
+              onChange={handleInputChange}
+              onBlur={onBlurHandler}
+              required
+            />
+            <span className='toggle-password' onClick={() => toggleShowPassword('oldPassword')}>
+              {showPasswords.oldPassword ? '👁️' : '👁️‍🗨️'}
+            </span>
+          </div>
+          {errors.oldPassword && <div className='error'>{errors.oldPassword}</div>}
+        </label>
+      )}
       <label>
         {t('profile.new_password')}: <span>*</span>
         <div className='password-input-container'>

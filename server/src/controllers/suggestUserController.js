@@ -23,9 +23,9 @@ suggestUserController.post('/', async (req, res, next) => {
 
         const data = {
             name,
-            phone_number: phoneNumber,
+            phoneNumber,
             message,
-            refferer_name: reffererName,
+            reffererName,
         };
 
         const details = await user_suggest.create(data);

@@ -58,7 +58,7 @@ const resetPasswordSchema = z
             errorMap: () => ({ message: 'Invalid token type.' }),
         }),
         token: z.string().min(1, 'Token is required.'),
-        oldPassword: z.string().min(1, 'Old password is required.').optional(),
+        oldPassword: z.string().optional().nullable(),
     })
     .refine((data) => data.newPassword === data.reNewPassword, {
         message: 'Repeat password does not match.',
@@ -66,26 +66,14 @@ const resetPasswordSchema = z
     })
     .refine(
         (data) => {
-            if (data.tokenType === 'jwt') {
-                return data.oldPassword !== data.newPassword;
+            if (data.tokenType === 'jwt' && data.oldPassword) {
+                return data.newPassword !== data.oldPassword;
             }
             return true;
         },
         {
             message: 'Old and new password are the same.',
             path: ['newPassword'],
-        }
-    )
-    .refine(
-        (data) => {
-            if (data.tokenType === 'jwt' && !data.oldPassword) {
-                return false;
-            }
-            return true;
-        },
-        {
-            message: 'Old password is required for JWT token type.',
-            path: ['oldPassword'],
         }
     );
 

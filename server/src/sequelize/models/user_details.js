@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             user_details.belongsTo(models.user_account, {
-                foreignKey: 'user_accounts_id', // Foreign key in user_details table
+                foreignKey: 'userAccountsId',
                 targetKey: 'id', // Primary key in user_accounts table
                 as: 'account',
             });
@@ -18,10 +18,11 @@ module.exports = (sequelize, DataTypes) => {
     }
     user_details.init(
         {
-            phone_number: {
+            phoneNumber: {
                 type: DataTypes.STRING(16),
                 allowNull: true,
                 defaultValue: null,
+                field: 'phone_number',
                 validate: {
                     len: {
                         args: [8, 16],
@@ -50,10 +51,11 @@ module.exports = (sequelize, DataTypes) => {
                     },
                 },
             },
-            first_name: {
+            firstName: {
                 type: DataTypes.STRING(20),
                 allowNull: true,
                 defaultValue: null,
+                field: 'first_name',
                 validate: {
                     customValidator(value) {
                         if (value && value.length > 0) {
@@ -67,10 +69,11 @@ module.exports = (sequelize, DataTypes) => {
                     },
                 },
             },
-            last_name: {
+            lastName: {
                 type: DataTypes.STRING(20),
                 allowNull: true,
                 defaultValue: null,
+                field: 'last_name',
                 validate: {
                     customValidator(value) {
                         if (value && value.length > 0) {
@@ -93,9 +96,10 @@ module.exports = (sequelize, DataTypes) => {
                     },
                 },
             },
-            work_options: {
+            workOptions: {
                 type: DataTypes.ARRAY(DataTypes.STRING),
                 allowNull: true,
+                field: 'work_options',
                 validate: {
                     isArray(value) {
                         if (value !== null && !Array.isArray(value)) {
@@ -115,9 +119,10 @@ module.exports = (sequelize, DataTypes) => {
                     },
                 },
             },
-            interest_options: {
+            interestOptions: {
                 type: DataTypes.ARRAY(DataTypes.STRING),
                 allowNull: true,
+                field: 'interest_options',
                 validate: {
                     isArray(value) {
                         if (value !== null && !Array.isArray(value)) {
@@ -138,10 +143,11 @@ module.exports = (sequelize, DataTypes) => {
                     },
                 },
             },
-            birth_date: {
+            birthDate: {
                 type: DataTypes.DATEONLY,
                 defaultValue: null,
                 allowNull: true,
+                field: 'birth_date',
                 validate: {
                     isDate: true,
                     isNotInFuture(value) {
@@ -159,12 +165,16 @@ module.exports = (sequelize, DataTypes) => {
                     isUrl: true,
                 },
             },
-            firebase_image_path: {
+            firebaseImagePath: {
                 type: DataTypes.STRING,
                 allowNull: true,
                 defaultValue: null,
+                field: 'firebase_image_path',
             },
-            user_accounts_id: DataTypes.INTEGER,
+            userAccountsId: {
+                type: DataTypes.INTEGER,
+                field: 'user_accounts_id',
+            },
         },
         {
             sequelize,

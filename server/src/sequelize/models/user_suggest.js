@@ -2,101 +2,103 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class user_suggest extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-  }
-
-  user_suggest.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-      },
-      phone_number: {
-        type: DataTypes.STRING(16),
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: 'Phone number is required.',
-          },
-          len: {
-            args: [8, 16],
-            msg: 'Phone number has invalid number of characters.',
-          },
-          is: {
-            args: /^(?:\+\d{7,15}|\d{10})$/,
-            msg: 'Phone number must be a valid format.',
-          },
-        },
-      },
-      name: {
-        type: DataTypes.STRING(40),
-        allowNull: true,
-        defaultValue: null,
-        validate: {
-          customValidator(value) {
-            if (value && value.length > 0) {
-              if (value.length < 3 || value.length > 40) {
-                throw new Error('Name must be between 3 and 40 characters in length.');
-              }
-              if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
-                throw new Error('Name must be 3-40 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
-              }
-            }
-          },
-        },
-      },
-      refferer_name: {
-        type: DataTypes.STRING(40),
-        allowNull: true,
-        defaultValue: null,
-        validate: {
-          customValidator(value) {
-            if (value && value.length > 0) {
-              if (value.length < 3 || value.length > 40) {
-                throw new Error('Name must be between 3 and 40 characters in length.');
-              }
-              if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
-                throw new Error('Name must be 3-40 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
-              }
-            }
-          },
-        },
-      },
-      message: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
-        validate: {
-          isLength(value) {
-            if (value !== null && value !== '' && (value.length < 5 || value.length > 100)) {
-              throw new Error('The length of the message must be between 5 and 100 characters.');
-            }
-          },
-        },
-      },
-      resolved: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      comments: {
-        type: DataTypes.JSONB,
-        allowNull: false,
-        defaultValue: [],
-      },
-    },
-    {
-      sequelize,
-      modelName: 'user_suggest',
+    class user_suggest extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
     }
-  );
 
-  return user_suggest;
+    user_suggest.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+            },
+            phoneNumber: {
+                type: DataTypes.STRING(16),
+                allowNull: false,
+                field: 'phone_number',
+                validate: {
+                    notEmpty: {
+                        msg: 'Phone number is required.',
+                    },
+                    len: {
+                        args: [8, 16],
+                        msg: 'Phone number has invalid number of characters.',
+                    },
+                    is: {
+                        args: /^(?:\+\d{7,15}|\d{10})$/,
+                        msg: 'Phone number must be a valid format.',
+                    },
+                },
+            },
+            name: {
+                type: DataTypes.STRING(40),
+                allowNull: true,
+                defaultValue: null,
+                validate: {
+                    customValidator(value) {
+                        if (value && value.length > 0) {
+                            if (value.length < 3 || value.length > 40) {
+                                throw new Error('Name must be between 3 and 40 characters in length.');
+                            }
+                            if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
+                                throw new Error('Name must be 3-40 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
+                            }
+                        }
+                    },
+                },
+            },
+            reffererName: {
+                type: DataTypes.STRING(40),
+                allowNull: true,
+                defaultValue: null,
+                field: 'refferer_name',
+                validate: {
+                    customValidator(value) {
+                        if (value && value.length > 0) {
+                            if (value.length < 3 || value.length > 40) {
+                                throw new Error('Name must be between 3 and 40 characters in length.');
+                            }
+                            if (!/^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i.test(value)) {
+                                throw new Error('Name must be 3-40 characters, using letters, hyphens, and include both Cyrillic or Latin alphabets.');
+                            }
+                        }
+                    },
+                },
+            },
+            message: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                defaultValue: null,
+                validate: {
+                    isLength(value) {
+                        if (value !== null && value !== '' && (value.length < 5 || value.length > 100)) {
+                            throw new Error('The length of the message must be between 5 and 100 characters.');
+                        }
+                    },
+                },
+            },
+            resolved: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
+            },
+            comments: {
+                type: DataTypes.JSONB,
+                allowNull: false,
+                defaultValue: [],
+            },
+        },
+        {
+            sequelize,
+            modelName: 'user_suggest',
+        }
+    );
+
+    return user_suggest;
 };
