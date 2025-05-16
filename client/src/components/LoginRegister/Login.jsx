@@ -38,7 +38,7 @@ export const Login = ({ navToRegister }) => {
     },
     async (formData) => {
       if (showRecaptcha && !recaptchaToken) {
-        alert("Please complete the reCAPTCHA");
+        alert(t('form.recaptcha-required'));
         return;
       }
 
@@ -88,7 +88,7 @@ export const Login = ({ navToRegister }) => {
       <div className="auth-form">
         <div className="form-header">
           <h2 className="form-title">{t('form.login')}</h2>
-          <p className="form-subtitle">Добре дошли отново в нашата платформа</p>
+          <p className="form-subtitle">{t('form.welcome-back')}</p>
         </div>
 
         <form onSubmit={onSubmit}>

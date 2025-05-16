@@ -4,8 +4,10 @@ import { Register } from './Register';
 import { NewsSubscribe } from '../Home/NewsSubscribe/NewsSubscribe';
 import { useLocation } from 'react-router-dom';
 import './modernAuth.css';
+import { useTranslation } from 'react-i18next';
 
 export const LoginRegister = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const [activeView, setActiveView] = useState(false);
 
@@ -52,12 +54,12 @@ export const LoginRegister = () => {
               <div className="sidebar-content">
                 <div>
                   <h1 className="sidebar-title">
-                    {activeView ? 'Добре дошли!' : 'Здравейте отново!'}
+                    {activeView ? t('form.welcome-left-side') : t('form.welcome-back-left-side')}
                   </h1>
                   <p className="sidebar-text">
                     {activeView
-                      ? 'Присъединете се към нашето общество и открийте всички възможности, които предлагаме.'
-                      : 'Радваме се да Ви видим отново. Влезте в профила си, за да продължите своето пътуване с нас.'}
+                      ? t('form.join-community')
+                      : t('form.welcome-back-left-side-desc')}
                   </p>
                 </div>
 
@@ -65,7 +67,7 @@ export const LoginRegister = () => {
                   className="auth-btn"
                   onClick={activeView ? handleLoginClick : handleRegisterClick}
                 >
-                  {activeView ? 'Вход' : 'Регистрация'}
+                  {activeView ? t('form.login') : t('form.register')}
                 </button>
               </div>
               <div className="sidebar-decoration"></div>

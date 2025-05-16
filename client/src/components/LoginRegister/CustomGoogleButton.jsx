@@ -1,14 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import { useGoogleAuth } from '../contexts/GoogleAuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
+  const {t} = useTranslation();
   const { handleGoogleLogin, handleGoogleRegister } = useGoogleAuth();
   const buttonRef = useRef(null);
   const navigate = useNavigate();
-  
-  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "224833004247-o2q7ff1onln6j5pkhtqtnct74p0ehjj9.apps.googleusercontent.com";
-  
+
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
   useEffect(() => {
     if (typeof window === 'undefined' || !window.google || !window.google.accounts) {
       // Зареждаме Google API ако не е заредено
@@ -23,7 +25,7 @@ export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
       return;
     }
     window.google.accounts.id.cancel();
-    
+
     window.google.accounts.id.initialize({
       client_id: clientId,
       callback: async (response) => {
@@ -37,7 +39,7 @@ export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
             } else {
               result = await handleGoogleLogin(response.credential);
             }
-            
+
             if (result && result.redirectToRegister) {
               if (onSwitchMode) {
                 onSwitchMode('register');
@@ -57,10 +59,10 @@ export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
         }
       }
     });
-    
+
     console.log("Google API initialized in mode:", mode);
   }, [clientId, handleGoogleLogin, handleGoogleRegister, mode, navigate, onSwitchMode]);
-  
+
   const handleGoogleButtonClick = () => {
     if (window.google && window.google.accounts) {
       window.google.accounts.id.prompt();
@@ -68,16 +70,16 @@ export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
       console.error("Google API не е заредено все още!");
     }
   };
-  
+
   return (
-    <button 
-      type="button" 
-      className="custom-google-btn" 
+    <button
+      type="button"
+      className="custom-google-btn"
       onClick={handleGoogleButtonClick}
       ref={buttonRef}
     >
       <img src="/google-icon.svg" alt="Google" className="google-icon" />
-      <span>{mode === 'register' ? 'Регистрация с Google' : 'Вход с Google'}</span>
+      <span>{mode === 'register' ? t('form.google-register') : t('form.google-login')}</span>
     </button>
   );
 };

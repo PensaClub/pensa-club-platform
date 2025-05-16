@@ -51,7 +51,7 @@ export const Register = ({ navToLogin }) => {
       <div className="auth-form">
         <div className="form-header">
           <h2 className="form-title">{t('form.register')}</h2>
-          <p className="form-subtitle">Създайте акаунт и се присъединете към нас</p>
+          <p className="form-subtitle">{t('form.welcome-new')}</p>
         </div>
 
         <form onSubmit={onSubmit}>
