@@ -9,7 +9,7 @@ const { createAdSchema, updateAdSchema, extraFieldsSchema } = require('../schema
 
 adsController.post('/ad-create', isAuth, rbac.checkPermission('ad', 'create'), async (req, res, next) => {
     try {
-        const { extraFields, ...regularFields } = req.body;
+        let { extraFields, ...regularFields } = req.body;
 
         const validationResult = createAdSchema.safeParse(regularFields);
         if (!validationResult.success) {
