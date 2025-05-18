@@ -317,6 +317,11 @@ authController.post('/google-login', async (req, res, next) => {
             return res.status(404).json({ message: 'User not found. Please register.' });
         }
 
+        if (user.dataValues.details && (!user.dataValues.details.imageURL || user.dataValues.details.imageURL.trim() === '')) {
+            await user_details.update({ imageURL: payload.picture }, { where: { userAccountsId: user.id } });
+            user.dataValues.details.imageURL = payload.picture;
+        }
+
         const data = {
             email: user.email,
             role: user.role,

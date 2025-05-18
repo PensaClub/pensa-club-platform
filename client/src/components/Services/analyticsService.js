@@ -7,7 +7,7 @@ const localViewCountCache = {};
 export const initGA = (trackingId) => {
   if (trackingId) {
     ReactGA.initialize(trackingId);
-    console.log('Google Analytics initialized');
+    // console.log('Google Analytics initialized');
     return true;
   }
   return false;
@@ -28,17 +28,17 @@ export const trackArticleView = (articleId, articleTitle) => {
     value: 1,
     article_id: articleId
   });
-  
+
   // Актуализира локалния кеш на броячите
   if (localViewCountCache[articleId]) {
     localViewCountCache[articleId]++;
   } else {
     localViewCountCache[articleId] = 1;
   }
-  
+
   // Запазване на посещенията в localStorage
   saveViewCounts();
-  
+
   console.log(`Article view tracked: ${articleTitle} (${articleId})`);
 };
 
@@ -75,7 +75,7 @@ export const fetchViewCounts = async (articleIds) => {
   // В реално приложение, тук би имало заявка към вашия сървър
   // За демо целите използваме localStorage
   loadViewCounts();
-  
+
   // Симулираме някакво случайно начално число за статии без посещения
   const result = {};
   articleIds.forEach(id => {
@@ -85,6 +85,6 @@ export const fetchViewCounts = async (articleIds) => {
     }
     result[id] = localViewCountCache[id];
   });
-  
+
   return result;
 };

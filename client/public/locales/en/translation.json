@@ -575,10 +575,10 @@
     "ad_town_village": "City/Village"
   },
   "notification": {
-    "google-notfound-user-register":"Google account not found! Please register first",
+    "google-not-found-user-register": "Google account not found! Please register first.",
     "google-user-exists-register":"You already have an account registered with this Google account. We'll redirect you to login.",
     "google-user-not-found": "You don't have a registered account with this Google account. Please register first.",
-   "success-data": "User Data successfully submitted!",
+    "success-data": "User Data successfully submitted!",
     "success-register": "Your account is successfully created!",
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
@@ -626,7 +626,10 @@
     "invalid_image_url": "Invalid image URL",
     "image_url_added": "Image URL added successfully",
     "section_image_url_added": "Section image URL added successfully",
-      "errors-register":"An error occurred. Please try again later."
+    "errors-register":"An error occurred. Please try again later.",
+    "google-login-error": "There was a problem logging in with Google. Please try again.",
+    "google-register-error": "There was a problem registering with Google. Please try again.",
+    "google-user-exists": "You already have an account registered with this Google account. We'll redirect you to login."
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",

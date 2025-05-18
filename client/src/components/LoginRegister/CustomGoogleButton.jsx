@@ -32,7 +32,7 @@ export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
         if (response && response.credential) {
           try {
             let result;
-            console.log("Google callback executing in mode:", mode);
+            // console.log("Google callback executing in mode:", mode);
 
             if (mode === 'register') {
               result = await handleGoogleRegister(response.credential);
@@ -60,7 +60,7 @@ export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
       }
     });
 
-    console.log("Google API initialized in mode:", mode);
+    // console.log("Google API initialized in mode:", mode);
   }, [clientId, handleGoogleLogin, handleGoogleRegister, mode, navigate, onSwitchMode]);
 
   const handleGoogleButtonClick = () => {
