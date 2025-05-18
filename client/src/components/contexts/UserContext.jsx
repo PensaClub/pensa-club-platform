@@ -16,7 +16,6 @@ export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
-  const [isFinish, setIsFinish] = useState(isAuth.enabled);
   const [isAdmin, setIsAdmin] = useLocalStorage('isAdmin', false);
   const [isModerator, setIsModerator] = useLocalStorage('isModerator', false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -71,7 +70,6 @@ export const UserProvider = ({ children }) => {
     try {
       const response = await userService.register(data);
       handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
-      setIsFinish(response.user.enabled);
       setProfileData(response.user);
       setIsAdmin(response.user.role === 'admin');
       navigate('/profile/profile-form');
@@ -90,7 +88,6 @@ export const UserProvider = ({ children }) => {
       const response = await userService.login(data);
       const userRole = response.user.role;
       handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
-      setIsFinish(response.user.enabled);
       setProfileData(response.user);
       setIsAdmin(userRole === 'admin');
       setIsModerator(userRole === 'moderator');
@@ -142,10 +139,7 @@ export const UserProvider = ({ children }) => {
   const onProfileDataSubmit = async (details) => {
     setIsLoading(true);
     try {
-      console.log(details);
-
       const response = await userService.setUserData(details);
-      console.log(response);
 
       if (response.message === 'No such address was found!') {
         navigate('/profile/profile-form');
@@ -155,7 +149,6 @@ export const UserProvider = ({ children }) => {
       const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
       setAddressId({ ...data });
       setProfileData(response.user);
-      setIsFinish(response.user.enabled);
       setIsAuth({ ...isAuth, token: response.token, enabled: response.user.enabled });
       // setIsAdmin(response.user.role === 'admin');
       navigate('/profile');
@@ -224,7 +217,6 @@ export const UserProvider = ({ children }) => {
       notify('success-password-change');
       return response;
     } catch (error) {
-
       if (error?.message === 'Old and new password are the same.') notify('password-change-same-passwords');
       else if (error?.message === 'Old password is invalid.') notify('password-change-old-invalid');
       else if (error?.message === 'Repeat password does not match.') notify('password-change-repeat-invalid');
@@ -309,7 +301,7 @@ export const UserProvider = ({ children }) => {
         message,
         recaptchaToken
       });
-      
+
       notify('contact-form-success');
       return response;
     } catch (error) {
@@ -332,7 +324,7 @@ export const UserProvider = ({ children }) => {
     isAuthentication: isAuthenticated && !!isAuth.token,
     onLogout,
     onPasswordReset,
-    isFinish,
+    isFinish: !!profileData?.enabled,
     onProfileDataSubmit,
     onEditProfileDataSubmit,
     getProfileData,
@@ -344,7 +336,20 @@ export const UserProvider = ({ children }) => {
     isAdmin,
     isModerator,
     onChangeAdminRole,
-    sendContactForm
+    sendContactForm,
+    setProfileData,
+    setUser: (user) => {
+      setProfileData(user);
+      if (user.role) {
+        setIsAdmin(user.role === 'admin');
+        setIsModerator(user.role === 'moderator');
+      }
+    },
+    setIsAuthenticated: (value) => {
+      setIsAuthenticated(value);
+    },
+    handleAuthChange,
+    hasPassword: !!profileData?.hasPassword,
   };
 
   return (

@@ -101,6 +101,7 @@
   },
   "form": {
     "login": "Login",
+    "continue-with": "Or continue with",
     "register": "Register",
     "email-label": "Email",
     "email-placeholder": "john@yahoo.com",
@@ -133,7 +134,16 @@
     "minutes": "minutes",
     "seconds": "seconds",
     "and": "and",
-    "too-many-attempts": "You have exceeded the number of attempts. Please try again after"
+    "too-many-attempts": "You have exceeded the number of attempts. Please try again after",
+    "google-login": "Sign in with Google",
+    "google-register": "Sign up with Google",
+    "welcome-back": "Welcome back to our platform!",
+    "welcome-new": "Create an account and join us.",
+    "recaptcha-required": "Please complete the reCAPTCHA",
+    "welcome-left-side": "Welcome!",
+    "welcome-back-left-side": "Hello again!",
+    "join-community": "Join our community and discover all the opportunities we offer.",
+    "welcome-back-left-side-desc":"We're glad to see you again. Log in to your profile to continue your journey with us."
   },
   "error-page": {
     "error": "Error",
@@ -466,7 +476,7 @@
     "success": "Your message has been sent successfully!",
     "confirmation_email": "We have sent a confirmation to your email address"
   },
-  
+
   "community": {
     "community": "Community",
     "category-search": "Category",
@@ -565,7 +575,10 @@
     "ad_town_village": "City/Village"
   },
   "notification": {
-    "success-data": "User Data successfully submitted!",
+    "google-notfound-user-register":"Google account not found! Please register first",
+    "google-user-exists-register":"You already have an account registered with this Google account. We'll redirect you to login.",
+    "google-user-not-found": "You don't have a registered account with this Google account. Please register first.",
+   "success-data": "User Data successfully submitted!",
     "success-register": "Your account is successfully created!",
     "success-login": "Your successfully logged in!",
     "success-logout": "You logged out successfully!",
@@ -612,7 +625,8 @@
     "invalid_image_format": "Invalid image format",
     "invalid_image_url": "Invalid image URL",
     "image_url_added": "Image URL added successfully",
-    "section_image_url_added": "Section image URL added successfully"
+    "section_image_url_added": "Section image URL added successfully",
+      "errors-register":"An error occurred. Please try again later."
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",

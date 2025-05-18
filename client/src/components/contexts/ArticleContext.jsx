@@ -63,9 +63,8 @@ export const ArticleProvider = ({ children }) => {
 
     try {
       setIsLoading(true);
-      console.log('Предстои извикване на articleService.getAllArticles');
+     
       const fetchedArticles = await articleService.getAllArticles();
-      console.log('Получени са статии от сървъра:', fetchedArticles);
       
       const sortedArticles = fetchedArticles.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
@@ -167,8 +166,6 @@ export const ArticleProvider = ({ children }) => {
           }
         });
       }
-      
-      console.log('Файлове за изтриване:', filesToDelete);
 
       if (filesToDelete.length > 0) {
         const deletePromises = filesToDelete.map(url => deleteFileFromStorage(url));

@@ -15,7 +15,7 @@
     "site-map": "Карта на сайта",
     "communities": "Общества",
     "map": "Карта",
-    "contact":"Свържете се с нас",
+    "contact": "Свържете се с нас",
     "craigslist": "Общност",
     "partners": "Партньори",
     "softuni_buditel": "СофтУни Будител",
@@ -93,6 +93,7 @@
     "email-label": "Имейл адрес",
     "email-placeholder": "ivan@abv.bg",
     "password-label": "Парола",
+    "continue-with": "Или продължете с",
     "password-placeholder": "Парола",
     "rePassword-label": "Повтори паролата",
     "rePassword-placeholder": "Повтори паролата",
@@ -121,7 +122,16 @@
     "minutes": "минути",
     "seconds": "секунди",
     "and": "и",
-    "too-many-attempts": "Превишихте броя на опитите. Моля, опитайте отново след"
+    "too-many-attempts": "Превишихте броя на опитите. Моля, опитайте отново след",
+    "google-login": "Вход с Google",
+    "google-register": "Регистрация с Google",
+    "welcome-back": "Добре дошли отново в нашата платформа!",
+    "welcome-new": "Създайте акаунт и се присъединете към нас.",
+    "recaptcha-required": "Моля, попълнете reCAPTCHA",
+    "welcome-left-side": "Добре дошли!",
+    "welcome-back-left-side": "Здравейте отново!",
+    "join-community": "Присъединете се към нашето общество и открийте всички възможности, които предлагаме.",
+    "welcome-back-left-side-desc": "Радваме се да Ви видим отново. Влезте в профила си, за да продължите своето пътуване с нас."
   },
   "error-page": {
     "error": "Грешка",
@@ -423,7 +433,7 @@
     "total_unfinished": "Общо незавършени",
     "current_date": "Текуща дата"
   },
-   "contact": {
+  "contact": {
     "title": "Свържете се с",
     "description": "Ако имате въпроси или предложения, не се колебайте да се свържете с нас",
     "location": {
@@ -551,7 +561,9 @@
     "ad_town_village": "Град/Село"
   },
   "notification": {
+    "google-notfound-user-register": "Нямате регистриран профил с този Google акаунт. Моля, регистрирайте се първо.",
     "success-data": "Данните за потребителя са запазени успешно!",
+    "google-user-not-found": "Нямате регистриран профил с този Google акаунт. Моля, регистрирайте се първо.",
     "success-register": "Профилът е успешно създаден!",
     "success-login": "Успешно влязохте в профила си.",
     "success-logout": "Успешно излязохте от профила си.",
@@ -597,7 +609,8 @@
     "invalid_image_format": "Невалиден формат на изображението",
     "invalid_image_url": "Невалиден URL адрес на изображението",
     "image_url_added": "URL адресът на изображението е добавен успешно",
-    "section_image_url_added": "URL адресът на изображението в секцията е добавен успешно"
+    "section_image_url_added": "URL адресът на изображението в секцията е добавен успешно",
+    "errors-register": "Възникна проблем при регистрацията с Google. Моля, опитайте отново."
   },
   "errors": {
     "image_type": "Файл от тип {{type}} не е позволен! Позволените типове снимки са PNG/JPG/JPEG.",

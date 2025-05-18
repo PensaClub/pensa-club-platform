@@ -29,9 +29,6 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
   const containerRef = useRef(null);
   const timeoutRef = useRef(null);
 
-  // Добавяне на дебъг информация
-  console.log('Video Source:', src);
-
   // За обработка на YouTube връзки
   const isYouTubeLink = src && typeof src === 'string' && 
   (src.includes('youtube.com') || src.includes('youtu.be'));
@@ -45,11 +42,6 @@ const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = 
   const vimeoId = isVimeoLink ? 
     src.match(/(?:vimeo\.com\/(?:video\/|channels\/.*\/|groups\/.*\/videos\/|album\/.*\/video\/|))?(\d+)(?:$|\/|\?)/i)?.[1] :
     null;
-    console.log('Video Source:', src);
-    console.log('Is YouTube:', isYouTubeLink);
-    console.log('YouTube ID:', youtubeVideoId);
-    console.log('Is Vimeo:', isVimeoLink);
-    console.log('Vimeo ID:', vimeoId);
 
   // Форматиране на време
   const formatTime = (timeInSeconds) => {

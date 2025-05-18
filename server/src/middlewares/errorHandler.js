@@ -1,5 +1,6 @@
 const { ValidationError, UniqueConstraintError, ForeignKeyConstraintError, DatabaseError } = require('sequelize');
 const { TokenExpiredError } = require('jsonwebtoken');
+const { ZodError } = require('zod');
 const CustomError = require('../utils/customError');
 
 function errorHandler(error, req, res, next) {
@@ -10,6 +11,17 @@ function errorHandler(error, req, res, next) {
         message = error.message;
         statusCode = error.statusCode;
         details = error.details;
+    } else if (error instanceof ZodError) {
+        statusCode = 400;
+        const formatted = error.format();
+        const flattened = flattenZodErrors(formatted);
+
+        const firstError = Object.values(flattened)[0];
+        if (Array.isArray(firstError) && firstError.length > 0) {
+            message = firstError[0];
+        } else {
+            message = 'Validation error(s)';
+        }
     } else if (error instanceof UniqueConstraintError) {
         const fieldErrors = error.errors.map((err) => ({
             field: err.path,
@@ -56,5 +68,17 @@ const dbErrors = {
     42501: { message: 'Permission denied', statusCode: 403 },
     '22P02': { message: 'Invalid text representation', statusCode: 400 },
 };
+
+function flattenZodErrors(formatted, path = [], acc = {}) {
+    for (const [key, value] of Object.entries(formatted)) {
+        if (key === '_errors' && value.length > 0) {
+            const joinedPath = path.join('.');
+            acc[joinedPath] = value;
+        } else if (typeof value === 'object' && value !== null) {
+            flattenZodErrors(value, [...path, key], acc);
+        }
+    }
+    return acc;
+}
 
 module.exports = errorHandler;
