@@ -237,11 +237,12 @@ export const ProfileData = () => {
         <h3>{t("profile.personal_data")}</h3>
         <div className="avatar">
           <img
-              src={
-                previewImage ||
-                getProfileImage(profileData?.details?.gender)
-                // "/images/homePage/user-img.png"
-              }
+            src={
+              previewImage ||
+              profileData?.details?.imageURL ||
+              getProfileImage(profileData?.details?.gender) ||
+              "/images/homePage/user-img.png"
+            }
             alt={t("profile.profile_data_alt")}
           />
           <div className="user-data">

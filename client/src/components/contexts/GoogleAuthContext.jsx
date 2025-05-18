@@ -3,6 +3,7 @@ import { googleAuthServiceFactory } from '../Services/googleAuthService';
 import { useAuthContext } from './UserContext';
 import { notify } from '../../utils/notify';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const GoogleAuthContext = createContext();
 
@@ -13,6 +14,7 @@ export const GoogleAuthProvider = ({ children }) => {
   const { handleAuthChange, setProfileData } = useAuthContext();
   const googleAuthService = googleAuthServiceFactory();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleGoogleLogin = async (credential) => {
     setIsProcessing(true);
@@ -31,7 +33,9 @@ export const GoogleAuthProvider = ({ children }) => {
 
       if (response.user) {
         setProfileData(response.user);
-        if (!response.user.enabled) {
+        if (response.user.enabled) {
+          navigate('/');
+        } else {
           navigate('/profile/profile-form');
         }
       }
@@ -45,7 +49,7 @@ export const GoogleAuthProvider = ({ children }) => {
       if (error.message === 'User not found. Please register.' ||
           error.message.includes('not found')) {
 
-        notify('google-user-not-found', 'Нямате регистриран профил с този Google акаунт. Моля, регистрирайте се първо.');
+        notify('google-user-not-found', t('notification.google-user-not-found'));
 
         navigate('/sign-up?tab=register');
 
@@ -54,7 +58,7 @@ export const GoogleAuthProvider = ({ children }) => {
         return { redirectToRegister: true };
       }
 
-      notify('error', 'Възникна проблем при входа с Google. Моля, опитайте отново.');
+      notify('error', t('notification.google-login-error'));
       setError('login-failed');
       setIsProcessing(false);
       throw error;
@@ -93,7 +97,7 @@ export const GoogleAuthProvider = ({ children }) => {
       if (error.message === 'User already exists. Please login.' ||
           error.message.includes('already exists')) {
 
-        notify('google-user-exists', 'Имате вече регистриран профил с този Google акаунт. Ще ви пренасочим към входа.');
+        notify('google-user-exists', t('notification.google-user-exists'));
 
         navigate('/sign-up?tab=login');
 
@@ -102,7 +106,7 @@ export const GoogleAuthProvider = ({ children }) => {
         return { redirectToLogin: true };
       }
 
-      notify('error', 'Възникна проблем при регистрацията с Google. Моля, опитайте отново.');
+      notify('error', t('notification.google-register-error'));
       setError('register-failed');
       setIsProcessing(false);
       throw error;

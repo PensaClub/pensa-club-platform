@@ -87,7 +87,7 @@ export const notify = (key, error) => {
       });
       break;
     case 'google-user-not-found':
-      toast.error(<Trans i18nKey="notification.success-approved-suggest" />, {
+      toast.error(<Trans i18nKey="notification.google-not-found-user-register" />, {
         role: 'alert',
       });
       break;
