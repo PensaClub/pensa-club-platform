@@ -98,11 +98,11 @@ export const UserProvider = ({ children }) => {
         setAddressId({ ...data });
         navigate('/');
       } else {
-        navigate('/');
+        navigate('/profile/profile-form');
       }
 
     } catch (error) {
-      if (error.message == 'Email or password are invalid.') {
+      if (error.message === 'Email or password are invalid.') {
 
         notify('error-authorize');
         return error.message;
