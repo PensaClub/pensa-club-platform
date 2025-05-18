@@ -67,70 +67,6 @@ export const CreateAd = () => {
       eventEndDate: null,
     },
   };
-  // const handleCheckboxChange = async (e) => {
-  //   const isChecked = e.target.checked;
-  //   setUseOtherCity(isChecked);
-
-  //   if (isChecked) {
-
-  //     setValues((prevValues) => ({
-  //       ...prevValues,
-  //       adRegion: "",
-  //       adSubregion: "",
-  //       adTown: "",
-  //       street: "",
-  //     }));
-  //     setSelectedRegion("");
-  //     setSelectedSubregion("");
-  //     setSelectedTown("");
-  //   } else {
-
-  //     const addressId = JSON.parse(localStorage.getItem("addressId"));
-
-  //     if (addressId) {
-  //       try {
-
-  //         const region = regions.find((region) => region.id === addressId.regionId);
-
-  //         if (!subregions[addressId.regionId] || subregions[addressId.regionId].length === 0) {
-  //           await fetchSubregions(addressId.regionId);
-  //         }
-
-  //         const subregion = (subregions[addressId.regionId] || []).find(
-  //           (subregion) => subregion.id === addressId.municipalityId
-  //         );
-
-  //         const townResponse = await fetch(
-  //           `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
-  //         );
-  //         const townList = await townResponse.json();
-  //         setSettlements(townList);
-
-  //         const town = townList.find(
-  //           (settlement) => settlement.id === addressId.settlementId
-  //         );
-
-  //         if (region && subregion && town) {
-  //           setSelectedRegion(addressId.regionId);
-  //           setSelectedSubregion(addressId.municipalityId);
-  //           setSelectedTown(town.id);
-  //           setValues((state) => ({
-  //             ...state,
-  //             adRegion: addressId.regionId,
-  //             adSubregion: addressId.municipalityId,
-  //             adTown: addressId.settlementId,
-  //             street: `${town.bg || town.en}, ул. ${profileData.details?.street || ""}${profileData.details?.streetNumber
-  //               ? ", " + profileData.details.streetNumber
-  //               : ""
-  //               }`,
-  //           }));
-  //         }
-  //       } catch (error) {
-  //         console.error("Failed to load data", error);
-  //       }
-  //     }
-  //   }
-  // };
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -190,49 +126,29 @@ export const CreateAd = () => {
 
   useEffect(() => {
     if (!isFinish) return;
+    if (!regions || regions.length === 0) return;
 
     const fetchData = async () => {
       const addressId = JSON.parse(localStorage.getItem("addressId"));
-      if (addressId) {
+      if (addressId && addressId.regionId) {
         try {
           const region = regions.find(
-            (region) => region.id === addressId.regionId
+            (region) => String(region.id) === String(addressId.regionId)
           );
 
-          if (
-            !subregions[addressId.regionId] ||
-            subregions[addressId.regionId].length === 0
-          ) {
+          if (!region) {
+            console.warn("Region not found:", addressId.regionId);
+            return;
+          }
+
+          setSelectedRegion(addressId.regionId);
+          setValues((state) => ({
+            ...state,
+            adRegion: addressId.regionId,
+          }));
+
+          if (!subregions[addressId.regionId] || subregions[addressId.regionId].length === 0) {
             await fetchSubregions(addressId.regionId);
-          }
-
-          const subregion = (subregions[addressId.regionId] || []).find(
-            (subregion) => subregion.id === addressId.municipalityId
-          );
-
-          let townList = settlements;
-          if (!townList.length) {
-            const townResponse = await fetch(
-              `/regions-data/region-${addressId.regionId}/towns/towns-${addressId.municipalityId}.json`
-            );
-            townList = await townResponse.json();
-            // setSettlements(townList);
-          }
-
-          const town = townList.find(
-            (settlement) => settlement.id === addressId.settlementId
-          );
-
-          if (region && subregion && town) {
-            setSelectedRegion((prev) => prev || addressId.regionId);
-            setSelectedSubregion((prev) => prev || addressId.municipalityId);
-            setSelectedTown((prev) => prev || town.id);
-            setValues((state) => ({
-              ...state,
-              adRegion: addressId.regionId,
-              adSubregion: addressId.municipalityId,
-              adTown: addressId.settlementId,
-            }));
           }
         } catch (error) {
           console.error("Failed to load data", error);
@@ -296,7 +212,7 @@ export const CreateAd = () => {
     async (formData) => {
       const updatedFormData = {
         ...formData,
-        adRegion: selectedRegion || profileData.details.region,
+        adRegion: String(selectedRegion || profileData.details.region),
         adSubregion: selectedSubregion || profileData.details.subregion,
         adTown: selectedTown || profileData.details.settlement,
         tags,
@@ -384,7 +300,6 @@ export const CreateAd = () => {
                       onBlur={onBlurHandler}
                       required
                     />
-                    {/* <p className="desc-sub-text">{t("ads.sub_text-one")}</p> */}
                     {errors.summary && (
                       <p className="error">{errors.summary}</p>
                     )}
@@ -397,9 +312,9 @@ export const CreateAd = () => {
                       value={values.category}
                       onChange={onChangeHandler}
                       onBlur={onBlurHandler}
-                      required 
+                      required
                     >
-                       <option value="">{t("ads.select_category")}</option> 
+                       <option value="">{t("ads.select_category")}</option>
                       {searchCriteria.searchCriteria?.map((criteria) => (
                         <option key={criteria.value} value={criteria.value}>
                           {t(criteria.name)}
@@ -422,7 +337,6 @@ export const CreateAd = () => {
                     onBlur={onBlurHandler}
                     required
                   />
-                  {/* <p className="desc-sub-text">{t("ads.sub_text-two")}</p> */}
                   {errors.description && (
                     <p className="error">{errors.description}</p>
                   )}
@@ -549,18 +463,6 @@ export const CreateAd = () => {
                         )}
                       </div>
                     </div>
-                    {/* <div className="checkbox-group useOtherCity">
-                      <input
-                        type="checkbox"
-                        id="useOtherCity"
-                        name="useOtherCity"
-                        checked={useOtherCity}
-                        onChange={handleCheckboxChange}
-                      />
-                      <label htmlFor="useOtherCity">
-                        {t("ads.use_other_city")}
-                      </label>
-                    </div> */}
                   </div>
                   <div className="form-group">
                     <label htmlFor="street">{t("ads.ad_address")}</label>
@@ -614,13 +516,6 @@ export const CreateAd = () => {
                   <button type="submit" className="btn-general btn-orange">
                     {t("ads.publish_btn")}
                   </button>
-                  {/* <button
-                    type="button"
-                    className="cancel-button"
-                    onClick={handleNavigate}
-                  >
-                    {t("ads.cancel_btn")}
-                  </button> */}
                 </div>
               </form>
             </div>
