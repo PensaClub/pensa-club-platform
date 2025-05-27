@@ -1,0 +1,237 @@
+.init-card-container {
+  position: relative;
+  background: white;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.init-card-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Bookmark Button */
+.init-bookmark-btn {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 0 0 8px 8px;
+  padding: 8px 6px 6px 6px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.init-bookmark-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #dc2626;
+  transform: scale(1.1);
+}
+
+.init-bookmark-btn.init-bookmarked {
+  background: #dc2626;
+  color: white;
+  animation: init-bookmark-pulse 0.6s ease;
+}
+
+.init-bookmark-btn.init-bookmarked:hover {
+  background: #b91c1c;
+  color: white;
+}
+
+@keyframes init-bookmark-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Image */
+.init-card-image-wrapper {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+}
+
+.init-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.init-card-container:hover .init-card-image {
+  transform: scale(1.05);
+}
+
+/* Category Badge */
+.init-category-badge {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  max-width: calc(100% - 30px);
+  backdrop-filter: blur(5px);
+}
+
+/* Content */
+.init-card-content {
+  padding: 24px 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.init-title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.init-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a202c;
+  line-height: 1.4;
+  margin: 0 0 16px 0;
+  transition: color 0.3s ease;
+}
+
+.init-card-container:hover .init-card-title {
+  color: #2b6cb0;
+}
+
+.init-card-description {
+  color: #4a5568;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Read More Link */
+.init-read-more {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #dc2626;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: fit-content;
+  margin-top: auto;
+}
+
+.init-read-more:hover {
+  color: #b91c1c;
+  gap: 10px;
+}
+
+.init-read-more svg {
+  transition: transform 0.2s ease;
+}
+
+.init-read-more:hover svg {
+  transform: translateX(3px);
+}
+
+/* View Counter */
+.init-view-counter {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 6px 10px;
+  border-radius: 12px;
+  color: #666;
+  font-size: 0.8rem;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.init-view-counter:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #2b6cb0;
+}
+
+.init-view-counter svg {
+  width: 14px;
+  height: 14px;
+  transition: color 0.2s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .init-card-image-wrapper {
+    height: 220px;
+  }
+  
+  .init-card-content {
+    padding: 20px 16px;
+  }
+  
+  .init-card-title {
+    font-size: 1.1rem;
+  }
+  
+  .init-card-description {
+    font-size: 0.9rem;
+  }
+  
+  .init-category-badge {
+    font-size: 0.7rem;
+    padding: 6px 10px;
+  }
+  
+  .init-bookmark-btn {
+    right: 10px;
+    padding: 6px 5px 5px 5px;
+  }
+  
+  .init-view-counter {
+    bottom: 12px;
+    right: 12px;
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .init-card-image-wrapper {
+    height: 200px;
+  }
+  
+  .init-card-content {
+    padding: 16px 12px;
+  }
+  
+  .init-category-badge {
+    font-size: 0.65rem;
+    padding: 5px 8px;
+    bottom: 10px;
+    left: 10px;
+  }
+}

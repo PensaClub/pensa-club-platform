@@ -54,6 +54,7 @@ import { ArticleLimitProvider } from './components/contexts/ArticleLimitContext.
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx';
 import ContactForm from './components/ContactForm/ContactForm.jsx';
+import { InitiativesList } from './components/Initiatives/InitiativesList/InitiativesList.jsx';
 
 function App() {
   const location = useLocation();
@@ -112,6 +113,8 @@ function App() {
                             element={<ResetPasswordPage />}
                           />
                           <Route path="/articles" element={<ArticlesList />} />
+                          <Route path="/initiatives" element={<InitiativesList />} />
+
                           <Route path="/articles/:slug" element={<ArticleView />} />
                           <Route element={<AuthGuard />}>
                             <Route path="/ad/details/:adId" element={<AdDetails />} />
