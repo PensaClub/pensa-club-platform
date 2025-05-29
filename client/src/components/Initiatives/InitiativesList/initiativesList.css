@@ -6,7 +6,6 @@
   min-height: 100vh;
 }
 
-/* Header Section */
 .initiatives-header-section {
   background: #ffffff;
   padding-bottom: 40px;
@@ -21,7 +20,6 @@
   margin-top: 0;
 }
 
-/* Search Row */
 .initiatives-search-row {
   display: flex;
   align-items: center;
@@ -81,7 +79,6 @@
   color: #4b5563;
 }
 
-/* Filter Dropdowns */
 .initiatives-filters-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -121,7 +118,6 @@
   pointer-events: none;
 }
 
-/* Results Header */
 .initiatives-results-header {
   display: flex;
   justify-content: space-between;
@@ -164,7 +160,6 @@
   border-color: #1f2937;
 }
 
-/* Grid */
 .initiatives-cards-grid {
  display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -172,7 +167,6 @@
   margin-top: 20px;
 }
 
-/* Loading */
 .initiatives-loading-wrapper {
   display: flex;
   flex-direction: column;
@@ -196,7 +190,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* No Results */
 .initiatives-no-results {
   text-align: center;
   padding: 4rem 2rem;
@@ -209,7 +202,7 @@
     gap: 20px;
   }
 }
-/* Responsive */
+
 @media (max-width: 768px) {
   .initiatives-main-container {
     padding: 80px 15px 60px;

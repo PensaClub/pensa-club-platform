@@ -1000,5 +1000,35 @@
       "loading": "Зареждане...",
       "noArticlesFound": "Няма намерени статии отговарящи на търсенето."
     }
+  },
+  "initiatives": {
+    "initiativesList": {
+      "title": "Търсене на инициативи",
+      "ourInitiatives": "Нашите инициативи",
+      "infoDescription": "Открийте и се включете в инициативи за по-добро бъдеще",
+      "searchPlaceholder": "Търсен термин...",
+      "areasSupport": "Области на подкрепа",
+      "allAreas": "Всички области",
+      "targetAudience": "Целева аудитория",
+      "allStatuses": "Всички статуси",
+      "searchRecommendations": "Препоръки за търсене",
+      "allLocations": "Всички локации",
+      "showOpenClosed": "покажи само отворени кампании",
+      "showMap": "Покажи картата",
+      "hideMap": "Скрий картата",
+      "projectsIn": "инициативи в",
+      "countries": "държави",
+      "clearFilters": "Изчисти всички филтри",
+      "statusActive": "Активни",
+      "statusPlanned": "Планирани",
+      "statusCompleted": "Завършени",
+      "noResults": "Няма намерени инициативи със зададените критерии.",
+      "loading": "Зареждане на инициативи..."
+    },
+    "initiativeCard": {
+      "removeBookmark": "Премахни от запазени",
+      "addBookmark": "Запази за по-късно",
+      "readMore": "Прочети повече"
+    }
   }
 }

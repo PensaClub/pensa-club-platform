@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './initiativeCard.css';
 import { useTranslation } from 'react-i18next';
@@ -22,11 +22,16 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
     onBookmarkToggle(initiative.id);
   };
 
-  // Цветове за линиите (ротация)
   const getColorClass = (index) => {
     const colors = ['init-color-blue', 'init-color-purple', 'init-color-teal'];
     return colors[index % colors.length];
   };
+
+ const truncateText = (text, maxLength = 100) => {
+  return text && text.length > maxLength 
+    ? text.substring(0, maxLength) + ' ...' 
+    : text;
+};
 
   return (
     <div className="init-card-container">
@@ -34,7 +39,8 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
       <button 
         className={`init-bookmark-btn ${isBookmarked ? 'init-bookmarked' : ''}`}
         onClick={handleBookmarkClick}
-        aria-label={isBookmarked ? 'Премахни от запазени' : 'Запази за по-късно'}
+       aria-label={isBookmarked ? t('initiatives.initiativeCard.removeBookmark') : t('initiatives.initiativeCard.addBookmark')}
+
       >
         <BookmarkIcon />
       </button>
@@ -67,7 +73,7 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
 
         {/* Description */}
         <p className="init-card-description">
-          {initiative.shortDescription}
+          {truncateText(initiative.shortDescription)}
         </p>
 
         {/* Read More Link */}
@@ -75,7 +81,7 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
           <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Read more
+         {t('initiatives.initiativeCard.readMore')}
         </Link>
       </div>
 

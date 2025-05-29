@@ -6,7 +6,7 @@
       "title": "Pensa Club - Дигитална общност за възрастни",
       "shortDescription": "Иновативна платформа за създаване на общност от хора на еднаква възраст, с еднакви интереси, нови идеи и знания.",
       "mainImage": {
-        "src": "/images/initiatives/pensa-club-hero.jpg",
+        "src": "https://rivervalleyseniorliving.com/wp-content/uploads/2024/03/Screenshot-2024-03-21-at-8.10.58-AM.jpg",
         "alt": "Възрастни хора използват дигитални технологии в общност"
       },
       "category": "Дигитализация",
@@ -20,6 +20,7 @@
       "createdAt": "2024-01-15T10:00:00Z",
       "updatedAt": "2024-03-20T14:30:00Z",
       "status": "active",
+      "campaignStatus": "open",
       "sections": [
         {
           "id": "mission",
@@ -136,7 +137,7 @@
       "title": "Програма за здравословно стареене",
       "shortDescription": "Комплексна програма за физическо и психическо здраве на възрастни хора.",
       "mainImage": {
-        "src": "/images/initiatives/healthy-aging.jpg",
+        "src": "https://pibindia.wordpress.com/wp-content/uploads/2016/11/health-aging.jpg?w=1095",
         "alt": "Възрастни хора правят упражнения в парк"
       },
       "category": "Здраве",
@@ -150,6 +151,7 @@
       "createdAt": "2024-02-10T09:00:00Z",
       "updatedAt": "2024-03-25T16:20:00Z", 
       "status": "active",
+      "campaignStatus": "open",
       "sections": [
         {
           "id": "overview",
@@ -208,7 +210,7 @@
       "title": "Междупоколенческо учене",
       "shortDescription": "Програма за обмен на знания и опит между поколенията.",
       "mainImage": {
-        "src": "/images/initiatives/intergenerational.jpg",
+        "src": "https://www.earlychildhoodireland.ie/wp-content/uploads/2024/02/Intergenerational.png",
         "alt": "Млад човек обучава възрастен на компютър"
       },
       "category": "Образование",
@@ -222,6 +224,7 @@
       "createdAt": "2024-03-01T11:00:00Z",
       "updatedAt": "2024-03-28T10:15:00Z",
       "status": "active",
+      "campaignStatus": "closed",
       "sections": [
         {
           "id": "concept",
