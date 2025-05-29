@@ -2,28 +2,23 @@ import { useState, useEffect } from 'react';
 import './initiativesList.css';
 import { useTranslation } from 'react-i18next';
 import { InitiativeCard } from './InitiativeCard/InitiativeCard';
-import mockData from '../data/mockInitiatives.json';
 import { InitiativesSearch } from '../InitiativesSearch/InitiativesSearch';
+import { useInitiativeContext } from '../../contexts/InitiativeProvider';
+import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 
 export const InitiativesList = () => {
   const { t } = useTranslation();
-  const [initiatives, setInitiatives] = useState([]);
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
   const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchInitiatives = async () => {
-    try {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setInitiatives(mockData.initiatives);
-      setFilteredInitiatives(mockData.initiatives);
-    } catch (error) {
-      console.error('Грешка при зареждане на инициативи:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [isFiltering, setIsFiltering] = useState(false);
+  
+  const { 
+    initiatives, 
+    getAllInitiatives, 
+    loadMoreInitiatives, 
+    hasMore, 
+    isLoading 
+  } = useInitiativeContext();
 
   // Зареждане на bookmarks от localStorage
   useEffect(() => {
@@ -48,11 +43,28 @@ export const InitiativesList = () => {
     });
   };
 
+  const handleFilter = (filtered) => {
+    setFilteredInitiatives(filtered);
+    setIsFiltering(filtered.length !== initiatives.length);
+  };
+
+  const handleLoadMore = () => {
+    if (!isLoading && hasMore) {
+      loadMoreInitiatives();
+    }
+  };
+
   useEffect(() => {
-    fetchInitiatives();
+    getAllInitiatives(1);
   }, []);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isFiltering) {
+      setFilteredInitiatives(initiatives);
+    }
+  }, [initiatives, isFiltering]);
+
+  if (isLoading && initiatives.length === 0) {
     return (
       <div className="initiatives-loading-wrapper">
         <div className="initiatives-loading-spinner"></div>
@@ -61,32 +73,57 @@ export const InitiativesList = () => {
     );
   }
 
+  const displayedInitiatives = isFiltering ? filteredInitiatives : initiatives;
+
   return (
     <div className="initiatives-main-container">
       {/* Search & Filters */}
       <InitiativesSearch 
         initiatives={initiatives}
-        onFilter={setFilteredInitiatives}
+        onFilter={handleFilter}
       />
 
       {/* Initiatives Grid */}
-      {filteredInitiatives.length > 0 ? (
-        <div className="initiatives-cards-grid">
-          {filteredInitiatives.map((initiative, index) => (
-            <InitiativeCard 
-              key={initiative.id} 
-              initiative={initiative}
-              index={index}
-              isBookmarked={bookmarkedInitiatives.includes(initiative.id)}
-              onBookmarkToggle={handleBookmarkToggle}
-            />
-          ))}
-        </div>
+      {displayedInitiatives.length > 0 ? (
+        <>
+          <div className="initiatives-cards-grid">
+            {displayedInitiatives.map((initiative, index) => (
+              <InitiativeCard 
+                key={initiative.id} 
+                initiative={initiative}
+                index={index}
+                isBookmarked={bookmarkedInitiatives.includes(initiative.id)}
+                onBookmarkToggle={handleBookmarkToggle}
+              />
+            ))}
+          </div>
+
+          {/* Load More Button - показва се само ако няма активни филтри и има още данни */}
+          {!isFiltering && hasMore && (
+            <div className="initiatives-load-more-section">
+              <button 
+                className="initiatives-load-more-button"
+                onClick={handleLoadMore}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <div className="initiatives-load-more-spinner"></div>
+                    {t('initiatives.initiativesList.loading')}
+                  </>
+                ) : (
+                  t('initiatives.initiativesList.loadMore')
+                )}
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="initiatives-no-results">
           <p>{t('initiatives.initiativesList.noResults')}</p>
         </div>
       )}
+    <ScrollToTop/>
     </div>
   );
 };

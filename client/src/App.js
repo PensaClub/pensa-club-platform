@@ -55,6 +55,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx';
 import ContactForm from './components/ContactForm/ContactForm.jsx';
 import { InitiativesList } from './components/Initiatives/InitiativesList/InitiativesList.jsx';
+import { InitiativeProvider } from './components/contexts/InitiativeProvider.jsx';
 
 function App() {
   const location = useLocation();
@@ -85,6 +86,7 @@ function App() {
                   <SuggestUserProvider>
                     <AdminProvider>
                       <ArticleProvider>
+                        <InitiativeProvider>
                         <AnalyticsProvider>
                           <LoadingProvider>
                             <ArticleLimitProvider>
@@ -152,6 +154,7 @@ function App() {
                             </ArticleLimitProvider>
                           </LoadingProvider>
                         </AnalyticsProvider>
+                        </InitiativeProvider>
                       </ArticleProvider>
                     </AdminProvider>
                   </SuggestUserProvider>

@@ -23,7 +23,7 @@
       "campaignStatus": "open",
       "sections": [
         {
-          "id": "mission",
+          "tittle-slug": "mission",
           "title": "Мисия",
           "content": "Да създадем иновативна платформа, инструмент за изграждане на общност. Обединяваме хора на еднаква възраст с общи интереси, нови идеи и знания.",
           "image": {
@@ -32,7 +32,7 @@
           }
         },
         {
-          "id": "about",
+          "tittle-slug": "about",
           "title": "Какво представлява Pensa Club?",
           "content": "Пенса клуб се финансира от Фондация ПЕНСА, която работи в областта на Образованието, Обучението и Социалната политика, като ефективно прилага инструменти, механизми и ценности, ключови за постигане на Социална интеграция и Равни възможности за две групи в обществото -- децата и пенсионерите в България.",
           "image": {
@@ -41,7 +41,7 @@
           }
         },
         {
-          "id": "goals",
+          "tittle-slug": "goals",
           "title": "Цели",
           "content": "Изграждане на общност, основана на взаимодействие и взаимопомощ. Подобряване качеството на живот чрез активно включване на възрастните хора в съвременното общество. Подкрепа за придобиване на нови умения и интереси, както и насърчаване на здравословен, пълноценен и достоен живот.",
           "image": {
@@ -154,7 +154,7 @@
       "campaignStatus": "open",
       "sections": [
         {
-          "id": "overview",
+          "tittle-slug": "overview",
           "title": "Общ преглед",
           "content": "Програмата за здравословно стареене обединява физически активности, психологическа подкрепа и социални дейности за възрастни хора над 60 години.",
           "image": {
@@ -163,7 +163,7 @@
           }
         },
         {
-          "id": "physical-activities",
+          "tittle-slug": "physical-activities",
           "title": "Физически активности",
           "content": "Специално разработени упражнения за възрастни хора, включващи йога, разходки в природата и лека гимнастика.",
           "image": {
@@ -227,7 +227,7 @@
       "campaignStatus": "closed",
       "sections": [
         {
-          "id": "concept",
+          "tittle-slug": "concept",
           "title": "Концепция",
           "content": "Създаване на мостове между поколенията чрез споделяне на знания, умения и опит.",
           "image": {
@@ -266,6 +266,132 @@
         "email": "maria.stoyanova@intergenerational.bg", 
         "phone": "+359 888 654 321",
         "image": "/images/contacts/maria-stoyanova.jpg"
+      }
+    },
+      {
+      "id": 4,
+      "slug": "digital-literacy-seniors",
+      "title": "Дигитална грамотност за възрастни",
+      "shortDescription": "Курсове за основи на интернет, имейл и социални мрежи за хора над 65 години.",
+      "mainImage": {
+        "src": "https://crestwoodmanoronline.org/wp-content/uploads/Crestwood-Manor-519545542.jpg",
+        "alt": "Възрастни хора се обучават на компютри"
+      },
+      "category": "Образование",
+      "location": {
+        "address": "Бургас, България",
+        "coordinates": {
+          "lat": 42.5048,
+          "lng": 27.4626
+        }
+      },
+      "createdAt": "2024-01-20T08:00:00Z",
+      "updatedAt": "2024-03-15T12:00:00Z",
+      "status": "active",
+      "campaignStatus": "open",
+      "sections": [
+        {
+          "tittle-slug": "overview",
+          "title": "Преглед",
+          "content": "Безплатни курсове за дигитална грамотност, специално проектирани за възрастни хора.",
+          "image": {
+            "src": "/images/initiatives/digital-literacy.jpg",
+            "alt": "Компютърен курс за възрастни"
+          }
+        }
+      ],
+      "contact": {
+        "name": "Иван Петров",
+        "position": "Инструктор",
+        "email": "ivan.petrov@digitalseniors.bg",
+        "phone": "+359 888 111 222"
+      }
+    },
+    {
+      "id": 5,
+      "slug": "community-gardening",
+      "title": "Общностно градинарство",
+      "shortDescription": "Създаване на градини в квартала за социализация и здравословно хранене.",
+      "mainImage": {
+        "src": "https://civicwell.org/wp-content/uploads/2013/07/feature-cultivating-community-gardens.jpg",
+        "alt": "Хора работят заедно в градина"
+      },
+      "category": "Общност",
+      "location": {
+        "address": "Стара Загора, България",
+        "coordinates": {
+          "lat": 42.4258,
+          "lng": 25.6342
+        }
+      },
+      "createdAt": "2024-02-05T10:30:00Z",
+      "updatedAt": "2024-03-10T14:45:00Z",
+      "status": "active",
+      "campaignStatus": "open",
+      "sections": [],
+      "contact": {
+        "name": "Петя Георгиева",
+        "position": "Координатор",
+        "email": "petya.georgieva@garden.bg",
+        "phone": "+359 888 333 444"
+      }
+    },
+    {
+      "id": 6,
+      "slug": "senior-buddy-system",
+      "title": "Система приятели за възрастни",
+      "shortDescription": "Програма за свързване на по-млади възрастни с по-стари за взаимопомощ.",
+      "mainImage": {
+        "src": "https://www.students-care.org/wp-content/uploads/2023/10/2.jpg",
+        "alt": "Двама възрастни приятели се разхождат"
+      },
+      "category": "Социални услуги",
+      "location": {
+        "address": "Плевен, България",
+        "coordinates": {
+          "lat": 43.4092,
+          "lng": 24.618
+        }
+      },
+      "createdAt": "2024-03-12T09:15:00Z",
+      "updatedAt": "2024-03-30T11:30:00Z",
+      "status": "planned",
+      "campaignStatus": "closed",
+      "sections": [],
+      "contact": {
+        "name": "Димитър Стоянов",
+        "position": "Социален работник",
+        "email": "dimitar.stoyanov@buddy.bg",
+        "phone": "+359 888 555 666"
+      }
+    },
+    {
+      "id": 7,
+      "slug": "arts-crafts-seniors",
+      "title": "Изкуства и занаяти за възрастни",
+      "shortDescription": "Творчески работилници за рисуване, плетене и керамика за активно стареене.",
+      "mainImage": {
+        "src": "https://cdn2.hubspot.net/hubfs/2881057/Crafts%20for%20Senior%20to%20Do%20at%20Home1000px.jpg",
+        "alt": "Възрастни хора рисуват в ателие"
+      },
+      "category": "Култура",
+      "location": {
+        "address": "Русе, България",
+        "coordinates": {
+          "lat": 43.8564,
+          "lng": 25.9704
+        }
+      },
+      "createdAt": "2024-01-30T13:00:00Z",
+      "updatedAt": "2024-03-22T16:00:00Z",
+      "status": "completed",
+      "campaignStatus": "closed",
+      "sections": [],
+      "contact": {
+        "name": "Анна Николова",
+        "position": "Художничка",
+        "email": "anna.nikolova@arts.bg",
+        "phone": "+359 888 777 888"
       }
     }
   ]

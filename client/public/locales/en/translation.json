@@ -1027,7 +1027,8 @@
       "statusPlanned": "Planned",
       "statusCompleted": "Completed",
       "noResults": "No initiatives found with the specified criteria.",
-      "loading": "Loading initiatives..."
+      "loading": "Loading initiatives...",
+      "loadMore": "Load more"
     },
     "initiativeCard": {
       "removeBookmark": "Remove from saved",
