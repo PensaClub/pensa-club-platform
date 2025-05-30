@@ -1,10 +1,10 @@
 /* Contact Section */
-.contact-section {
+.contact-section-initiatives {
   margin: 4rem 0;
   padding: 0;
 }
 
-.main-contact-card {
+.main-contact-card-initiatives {
   display: grid;
   grid-template-columns: 300px 1fr;
   border-radius: 0;
@@ -14,7 +14,7 @@
   background: white;
 }
 
-.contact-image-section {
+.contact-image-section-initiatives {
   background: #f8f9fa;
   display: flex;
   align-items: center;
@@ -22,14 +22,14 @@
   padding: 2rem;
 }
 
-.contact-photo {
+.contact-photo-initiatives {
   width: 200px;
   height: 250px;
   object-fit: cover;
   border-radius: 8px;
 }
 
-.contact-avatar {
+.contact-avatar-initiatives {
   width: 200px;
   height: 250px;
   background: linear-gradient(135deg, #1B8B8A, #E26020);
@@ -42,7 +42,7 @@
   color: white;
 }
 
-.contact-info-section {
+.contact-info-section-initiatives {
   background: linear-gradient(135deg, #1B8B8A 0%, #0891b2 100%);
   color: white;
   padding: 2.5rem;
@@ -51,7 +51,7 @@
   justify-content: center;
 }
 
-.contact-name {
+.contact-name-initiatives {
   font-size: 1.8rem;
   font-weight: 700;
   color: white;
@@ -60,24 +60,24 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.contact-position {
+.contact-position-initiatives {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0 0 2rem 0;
   font-weight: 400;
 }
 
-.contact-details {
+.contact-details-initiatives {
   margin-bottom: 2rem;
 }
 
-.contact-item {
+.contact-item-initiatives {
   display: flex;
   flex-direction: column;
   margin-bottom: 1.5rem;
 }
 
-.contact-label {
+.contact-label-initiatives {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
@@ -86,7 +86,7 @@
   letter-spacing: 0.5px;
 }
 
-.contact-value {
+.contact-value-initiatives {
   color: white;
   text-decoration: none;
   font-size: 1.1rem;
@@ -94,12 +94,12 @@
   transition: all 0.2s ease;
 }
 
-.contact-value:hover {
+.contact-value-initiatives:hover {
   color: rgba(255, 255, 255, 0.8);
   text-decoration: underline;
 }
 
-.email-contact-btn {
+.email-contact-btn-initiatives {
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -115,25 +115,25 @@
   align-self: flex-start;
 }
 
-.email-contact-btn:hover {
+.email-contact-btn-initiatives:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   color: white;
 }
 
-.email-icon {
+.email-icon-initiatives {
   font-size: 1.2rem;
 }
 
 /* Additional Contacts */
-.additional-contacts-section {
+.additional-contacts-section-initiatives {
   margin-top: 3rem;
   padding-top: 2rem;
   border-top: 1px solid #e5e7eb;
 }
 
-.additional-title {
+.additional-title-initiatives {
   font-size: 1.3rem;
   font-weight: 600;
   color: #1a202c;
@@ -142,13 +142,13 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.additional-contacts-grid {
+.additional-contacts-grid-initiatives {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-.additional-contact-card {
+.additional-contact-card-initiatives {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
@@ -160,12 +160,12 @@
   transition: all 0.3s ease;
 }
 
-.additional-contact-card:hover {
+.additional-contact-card-initiatives:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
-.additional-contact-avatar {
+.additional-contact-avatar-initiatives {
   width: 60px;
   height: 60px;
   background: linear-gradient(135deg, #6b7280, #9ca3af);
@@ -179,11 +179,11 @@
   flex-shrink: 0;
 }
 
-.additional-contact-info {
+.additional-contact-info-initiatives {
   flex: 1;
 }
 
-.additional-contact-name {
+.additional-contact-name-initiatives {
   font-size: 1.1rem;
   font-weight: 600;
   color: #1a202c;
@@ -191,13 +191,13 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.additional-contact-details {
+.additional-contact-details-initiatives {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.additional-contact-item {
+.additional-contact-item-initiatives {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -207,96 +207,96 @@
   transition: color 0.2s ease;
 }
 
-.additional-contact-item:hover {
+.additional-contact-item-initiatives:hover {
   color: #1B8B8A;
 }
 
-.contact-icon {
+.contact-icon-initiatives {
   font-size: 0.9rem;
   width: 16px;
 }
 
 /* Multiple Main Contacts Grid (за случаи когато има повече основни контакти) */
-.multiple-main-contacts {
+.multiple-main-contacts-initiatives {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 2rem;
   margin: 2rem 0;
 }
 
-.multiple-main-contacts .main-contact-card {
+.multiple-main-contacts-initiatives .main-contact-card-initiatives {
   margin: 0;
 }
 
 /* Responsive Design */
 @media (max-width: 992px) {
-  .main-contact-card {
+  .main-contact-card-initiatives {
     grid-template-columns: 1fr;
   }
   
-  .contact-image-section {
+  .contact-image-section-initiatives {
     padding: 2rem;
     justify-content: center;
   }
   
-  .contact-photo,
-  .contact-avatar {
+  .contact-photo-initiatives,
+  .contact-avatar-initiatives {
     width: 150px;
     height: 180px;
   }
   
-  .contact-avatar {
+  .contact-avatar-initiatives {
     font-size: 3rem;
   }
   
-  .contact-info-section {
+  .contact-info-section-initiatives {
     text-align: center;
   }
 }
 
 @media (max-width: 768px) {
-  .additional-contacts-grid {
+  .additional-contacts-grid-initiatives {
     grid-template-columns: 1fr;
   }
   
-  .contact-name {
+  .contact-name-initiatives {
     font-size: 1.5rem;
   }
   
-  .contact-position {
+  .contact-position-initiatives {
     font-size: 1rem;
   }
   
-  .contact-photo,
-  .contact-avatar {
+  .contact-photo-initiatives,
+  .contact-avatar-initiatives {
     width: 120px;
     height: 150px;
   }
   
-  .contact-avatar {
+  .contact-avatar-initiatives {
     font-size: 2.5rem;
   }
 
-  .multiple-main-contacts {
+  .multiple-main-contacts-initiatives {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .main-contact-card {
+  .main-contact-card-initiatives {
     margin: 1rem 0;
   }
   
-  .contact-info-section {
+  .contact-info-section-initiatives {
     padding: 2rem 1.5rem;
   }
   
-  .additional-contact-card {
+  .additional-contact-card-initiatives {
     flex-direction: column;
     text-align: center;
   }
   
-  .additional-contact-avatar {
+  .additional-contact-avatar-initiatives {
     align-self: center;
   }
 }

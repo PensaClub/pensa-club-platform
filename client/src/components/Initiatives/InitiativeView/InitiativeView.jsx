@@ -40,30 +40,6 @@ export const InitiativeView = () => {
     return { firstSentence, restSentences };
   };
 
-  // Mock данни за stories и publications (временно)
-  const mockStories = [
-    {
-      id: 1,
-      title: "Как технологиите променят живота на възрастните",
-      description: "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
-      image: { src: "/images/stories/story1.jpg", alt: "Възрастни с технологии" },
-      publishedAt: "2024-03-15T10:00:00Z",
-      author: "Мария Стоянова",
-      link: "/stories/digital-transformation"
-    }
-  ];
-
-  const mockPublications = [
-    {
-      id: 1,
-      title: "Ръководство за дигитална грамотност",
-      description: "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
-      image: { src: "/images/publications/guide1.jpg", alt: "Дигитално ръководство" },
-      publishedAt: "2024-02-20T10:00:00Z",
-      link: "/publications/digital-literacy-guide"
-    }
-  ];
-
   if (isLoading) {
     return <Loader />;
   }
@@ -134,7 +110,7 @@ export const InitiativeView = () => {
             
             <div className="sections-grid">
               {initiative.sections.map((section, index) => (
-                <div key={index} className="content-section">
+                <div key={`section-${section.id || section['tittle-slug'] || index}`} className="content-section">
                   <div className="section-content">
                     <h3 className="section-heading">{section.title}</h3>
                     <p className="section-text">{section.content}</p>
@@ -163,7 +139,7 @@ export const InitiativeView = () => {
             
             <div className="materials-grid">
               {initiative.downloadMaterials.map((material) => (
-                <div key={material.id} className="material-card">
+                <div key={`download-material-${material.id}`} className="material-card">
                   <div className="material-preview">
                     {material.image ? (
                       <img src={material.image.src} alt={material.image.alt} />
@@ -198,11 +174,13 @@ export const InitiativeView = () => {
           </section>
         )}
 
-        {/* Stories & Publications */}
-        <StoriesPublications 
-          stories={mockStories} 
-          publications={mockPublications} 
-        />
+        {/* Stories & Publications - използвам реалните данни от JSON */}
+        {(initiative.stories || initiative.publications) && (
+          <StoriesPublications 
+            stories={initiative.stories || []} 
+            publications={initiative.publications || []} 
+          />
+        )}
 
         {/* Projects Map */}
         {initiative.projects && initiative.projects.length > 0 && (
@@ -228,19 +206,17 @@ export const InitiativeView = () => {
             
             <div className="projects-grid">
               {initiative.projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard key={`initiative-project-${project.id}`} project={project} />
               ))}
             </div>
           </section>
         )}
 
-        {/* Contact Section - Заместено с компонент */}
-     {(initiative.contact || initiative.additionalContacts) && (
-  <ContactSection 
-    contact={initiative.contact}
-    additionalContacts={initiative.additionalContacts}
-  />
-)}
+        {/* Contact Section */}
+        <ContactSection 
+          contact={initiative.contact}
+          additionalContacts={initiative.additionalContacts}
+        />
       </div>
     </div>
   );

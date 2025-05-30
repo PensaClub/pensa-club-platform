@@ -21,13 +21,51 @@
       "updatedAt": "2024-03-20T14:30:00Z",
       "status": "active",
       "campaignStatus": "open",
+       "stories": [
+        {
+          "id": "pensa-story-tech-transformation",
+          "title": "Как технологиите променят живота на възрастните",
+          "description": "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
+          "image": { "src": "/images/stories/pensa-story1.jpg", "alt": "Възрастни с технологии" },
+          "publishedAt": "2024-03-15T10:00:00Z",
+          "author": "Мария Стоянова",
+          "link": "/stories/pensa-digital-transformation"
+        },
+        {
+          "id": "pensa-story-community-building",
+          "title": "Изграждане на дигитална общност",
+          "description": "Как Pensa Club свързва хора с общи интереси и създава нови приятелства.",
+          "image": { "src": "/images/stories/pensa-story2.jpg", "alt": "Pensa Club общност" },
+          "publishedAt": "2024-03-10T14:00:00Z",
+          "author": "Валери Кекевски",
+          "link": "/stories/pensa-community-building"
+        }
+      ],
+      "publications": [
+        {
+          "id": "pensa-pub-digital-guide",
+          "title": "Ръководство за дигитална грамотност",
+          "description": "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
+          "image": { "src": "/images/publications/pensa-guide1.jpg", "alt": "Дигитално ръководство" },
+          "publishedAt": "2024-02-20T10:00:00Z",
+          "link": "/publications/pensa-digital-literacy-guide"
+        },
+        {
+          "id": "pensa-pub-platform-manual",
+          "title": "Наръчник за платформата Pensa Club",
+          "description": "Детайлно ръководство за използване на всички функции на платформата.",
+          "image": { "src": "/images/publications/pensa-guide2.jpg", "alt": "Наръчник Pensa Club" },
+          "publishedAt": "2024-02-15T16:00:00Z",
+          "link": "/publications/pensa-platform-manual"
+        }
+      ],
       "sections": [
         {
           "tittle-slug": "mission",
           "title": "Мисия",
           "content": "Да създадем иновативна платформа, инструмент за изграждане на общност. Обединяваме хора на еднаква възраст с общи интереси, нови идеи и знания.",
           "image": {
-            "src": "/images/initiatives/mission.jpg",
+            "src": "https://www.parcelpending.com/wp-content/uploads/2023/11/Senior-Care-Technology.jpg",
             "alt": "Група възрастни хора в дискусия"
           }
         },
@@ -36,7 +74,7 @@
           "title": "Какво представлява Pensa Club?",
           "content": "Пенса клуб се финансира от Фондация ПЕНСА, която работи в областта на Образованието, Обучението и Социалната политика, като ефективно прилага инструменти, механизми и ценности, ключови за постигане на Социална интеграция и Равни възможности за две групи в обществото -- децата и пенсионерите в България.",
           "image": {
-            "src": "/images/initiatives/about-pensa.jpg", 
+            "src": "/images/homePage/logo.png", 
             "alt": "Лого на Pensa Club"
           }
         },
@@ -45,7 +83,7 @@
           "title": "Цели",
           "content": "Изграждане на общност, основана на взаимодействие и взаимопомощ. Подобряване качеството на живот чрез активно включване на възрастните хора в съвременното общество. Подкрепа за придобиване на нови умения и интереси, както и насърчаване на здравословен, пълноценен и достоен живот.",
           "image": {
-            "src": "/images/initiatives/goals.jpg",
+            "src": "https://abclifeliteracy.ca/wp-content/uploads/DigitalLiteracy.jpg",
             "alt": "Възрастни хора се обучават на компютри"
           }
         },
@@ -54,7 +92,7 @@
           "title": "Алумни клуб",
           "content": "В рамките на нашата визия за социална ангажираност и междупоколенческо сътрудничество, предстои създаването на Алумни Клуб на пенсионираните служители на Роберт Бош България. Този проект ще бъде вдъхновен от дългогодишните ценности и ангажименти на Фондация Роберт Бош.",
           "image": {
-            "src": "/images/initiatives/alumni-club.jpg",
+            "src": "https://www.bosch-stiftung.de/sites/default/files/styles/im1260/public/images/media/2025-02/Projekt%20Restart_470x577_Sofiia%20Soliar.png.jpg?itok=rgk6yAK1",
             "alt": "Група бивши служители на Роберт Бош"
           }
         }
@@ -68,7 +106,7 @@
           "fileSize": "2.5 MB",
           "downloadUrl": "/downloads/pensa-club-presentation.pdf",
           "image": {
-            "src": "/images/initiatives/presentation-cover.jpg",
+            "src": "https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/articles%2Fimages%2Fbec38821-e41d-4cf6-8f18-3599ff1c8664?alt=media&token=15d2d76f-ed59-427a-83b3-a2f055f42f74",
             "alt": "Корица на презентацията"
           }
         },
@@ -80,7 +118,7 @@
           "fileSize": "1.8 MB", 
           "downloadUrl": "/downloads/alumni-club-proposal.docx",
           "image": {
-            "src": "/images/initiatives/alumni-document.jpg",
+            "src": "https://www.bosch-stiftung.de/sites/default/files/styles/im1920/public/images/media/2025-04/16_9_Malawi%20GC%20unity%20Kopie.jpg?itok=YoSV1Syz",
             "alt": "Документ за Алумни клуб"
           }
         }
@@ -116,7 +154,7 @@
         "position": "Ръководител проект Pensa Club",
         "email": "valeri.kekevski@pensaclub.bg",
         "phone": "+359 888 123 456",
-        "image": "/images/contacts/valeri-kekevski.jpg"
+        "image": "https://derma-act.bg/wp-content/uploads/2024/01/IMG_1818.jpg"
       },
       "additionalContacts": [
         {
@@ -152,6 +190,44 @@
       "updatedAt": "2024-03-25T16:20:00Z", 
       "status": "active",
       "campaignStatus": "open",
+       "stories": [
+        {
+          "id": "pensa-story-tech-transformation",
+          "title": "Как технологиите променят живота на възрастните",
+          "description": "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
+          "image": { "src": "/images/stories/pensa-story1.jpg", "alt": "Възрастни с технологии" },
+          "publishedAt": "2024-03-15T10:00:00Z",
+          "author": "Мария Стоянова",
+          "link": "/stories/pensa-digital-transformation"
+        },
+        {
+          "id": "pensa-story-community-building",
+          "title": "Изграждане на дигитална общност",
+          "description": "Как Pensa Club свързва хора с общи интереси и създава нови приятелства.",
+          "image": { "src": "/images/stories/pensa-story2.jpg", "alt": "Pensa Club общност" },
+          "publishedAt": "2024-03-10T14:00:00Z",
+          "author": "Валери Кекевски",
+          "link": "/stories/pensa-community-building"
+        }
+      ],
+      "publications": [
+        {
+          "id": "pensa-pub-digital-guide",
+          "title": "Ръководство за дигитална грамотност",
+          "description": "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
+          "image": { "src": "/images/publications/pensa-guide1.jpg", "alt": "Дигитално ръководство" },
+          "publishedAt": "2024-02-20T10:00:00Z",
+          "link": "/publications/pensa-digital-literacy-guide"
+        },
+        {
+          "id": "pensa-pub-platform-manual",
+          "title": "Наръчник за платформата Pensa Club",
+          "description": "Детайлно ръководство за използване на всички функции на платформата.",
+          "image": { "src": "/images/publications/pensa-guide2.jpg", "alt": "Наръчник Pensa Club" },
+          "publishedAt": "2024-02-15T16:00:00Z",
+          "link": "/publications/pensa-platform-manual"
+        }
+      ],
       "sections": [
         {
           "tittle-slug": "overview",
@@ -225,6 +301,44 @@
       "updatedAt": "2024-03-28T10:15:00Z",
       "status": "active",
       "campaignStatus": "closed",
+       "stories": [
+        {
+          "id": "pensa-story-tech-transformation",
+          "title": "Как технологиите променят живота на възрастните",
+          "description": "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
+          "image": { "src": "/images/stories/pensa-story1.jpg", "alt": "Възрастни с технологии" },
+          "publishedAt": "2024-03-15T10:00:00Z",
+          "author": "Мария Стоянова",
+          "link": "/stories/pensa-digital-transformation"
+        },
+        {
+          "id": "pensa-story-community-building",
+          "title": "Изграждане на дигитална общност",
+          "description": "Как Pensa Club свързва хора с общи интереси и създава нови приятелства.",
+          "image": { "src": "/images/stories/pensa-story2.jpg", "alt": "Pensa Club общност" },
+          "publishedAt": "2024-03-10T14:00:00Z",
+          "author": "Валери Кекевски",
+          "link": "/stories/pensa-community-building"
+        }
+      ],
+      "publications": [
+        {
+          "id": "pensa-pub-digital-guide",
+          "title": "Ръководство за дигитална грамотност",
+          "description": "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
+          "image": { "src": "/images/publications/pensa-guide1.jpg", "alt": "Дигитално ръководство" },
+          "publishedAt": "2024-02-20T10:00:00Z",
+          "link": "/publications/pensa-digital-literacy-guide"
+        },
+        {
+          "id": "pensa-pub-platform-manual",
+          "title": "Наръчник за платформата Pensa Club",
+          "description": "Детайлно ръководство за използване на всички функции на платформата.",
+          "image": { "src": "/images/publications/pensa-guide2.jpg", "alt": "Наръчник Pensa Club" },
+          "publishedAt": "2024-02-15T16:00:00Z",
+          "link": "/publications/pensa-platform-manual"
+        }
+      ],
       "sections": [
         {
           "tittle-slug": "concept",
@@ -289,6 +403,44 @@
   "updatedAt": "2024-03-15T12:00:00Z",
   "status": "active",
   "campaignStatus": "open",
+   "stories": [
+        {
+          "id": "pensa-story-tech-transformation",
+          "title": "Как технологиите променят живота на възрастните",
+          "description": "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
+          "image": { "src": "/images/stories/pensa-story1.jpg", "alt": "Възрастни с технологии" },
+          "publishedAt": "2024-03-15T10:00:00Z",
+          "author": "Мария Стоянова",
+          "link": "/stories/pensa-digital-transformation"
+        },
+        {
+          "id": "pensa-story-community-building",
+          "title": "Изграждане на дигитална общност",
+          "description": "Как Pensa Club свързва хора с общи интереси и създава нови приятелства.",
+          "image": { "src": "/images/stories/pensa-story2.jpg", "alt": "Pensa Club общност" },
+          "publishedAt": "2024-03-10T14:00:00Z",
+          "author": "Валери Кекевски",
+          "link": "/stories/pensa-community-building"
+        }
+      ],
+      "publications": [
+        {
+          "id": "pensa-pub-digital-guide",
+          "title": "Ръководство за дигитална грамотност",
+          "description": "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
+          "image": { "src": "/images/publications/pensa-guide1.jpg", "alt": "Дигитално ръководство" },
+          "publishedAt": "2024-02-20T10:00:00Z",
+          "link": "/publications/pensa-digital-literacy-guide"
+        },
+        {
+          "id": "pensa-pub-platform-manual",
+          "title": "Наръчник за платформата Pensa Club",
+          "description": "Детайлно ръководство за използване на всички функции на платформата.",
+          "image": { "src": "/images/publications/pensa-guide2.jpg", "alt": "Наръчник Pensa Club" },
+          "publishedAt": "2024-02-15T16:00:00Z",
+          "link": "/publications/pensa-platform-manual"
+        }
+      ],
   "sections": [
     {
       "tittle-slug": "overview",
@@ -398,6 +550,44 @@
   "updatedAt": "2024-03-10T14:45:00Z",
   "status": "active",
   "campaignStatus": "open",
+   "stories": [
+        {
+          "id": "pensa-story-tech-transformation",
+          "title": "Как технологиите променят живота на възрастните",
+          "description": "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
+          "image": { "src": "/images/stories/pensa-story1.jpg", "alt": "Възрастни с технологии" },
+          "publishedAt": "2024-03-15T10:00:00Z",
+          "author": "Мария Стоянова",
+          "link": "/stories/pensa-digital-transformation"
+        },
+        {
+          "id": "pensa-story-community-building",
+          "title": "Изграждане на дигитална общност",
+          "description": "Как Pensa Club свързва хора с общи интереси и създава нови приятелства.",
+          "image": { "src": "/images/stories/pensa-story2.jpg", "alt": "Pensa Club общност" },
+          "publishedAt": "2024-03-10T14:00:00Z",
+          "author": "Валери Кекевски",
+          "link": "/stories/pensa-community-building"
+        }
+      ],
+      "publications": [
+        {
+          "id": "pensa-pub-digital-guide",
+          "title": "Ръководство за дигитална грамотност",
+          "description": "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
+          "image": { "src": "/images/publications/pensa-guide1.jpg", "alt": "Дигитално ръководство" },
+          "publishedAt": "2024-02-20T10:00:00Z",
+          "link": "/publications/pensa-digital-literacy-guide"
+        },
+        {
+          "id": "pensa-pub-platform-manual",
+          "title": "Наръчник за платформата Pensa Club",
+          "description": "Детайлно ръководство за използване на всички функции на платформата.",
+          "image": { "src": "/images/publications/pensa-guide2.jpg", "alt": "Наръчник Pensa Club" },
+          "publishedAt": "2024-02-15T16:00:00Z",
+          "link": "/publications/pensa-platform-manual"
+        }
+      ],
   "sections": [
     {
       "tittle-slug": "mission",
@@ -507,6 +697,44 @@
   "updatedAt": "2024-03-30T11:30:00Z",
   "status": "planned",
   "campaignStatus": "closed",
+   "stories": [
+        {
+          "id": "pensa-story-tech-transformation",
+          "title": "Как технологиите променят живота на възрастните",
+          "description": "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
+          "image": { "src": "/images/stories/pensa-story1.jpg", "alt": "Възрастни с технологии" },
+          "publishedAt": "2024-03-15T10:00:00Z",
+          "author": "Мария Стоянова",
+          "link": "/stories/pensa-digital-transformation"
+        },
+        {
+          "id": "pensa-story-community-building",
+          "title": "Изграждане на дигитална общност",
+          "description": "Как Pensa Club свързва хора с общи интереси и създава нови приятелства.",
+          "image": { "src": "/images/stories/pensa-story2.jpg", "alt": "Pensa Club общност" },
+          "publishedAt": "2024-03-10T14:00:00Z",
+          "author": "Валери Кекевски",
+          "link": "/stories/pensa-community-building"
+        }
+      ],
+      "publications": [
+        {
+          "id": "pensa-pub-digital-guide",
+          "title": "Ръководство за дигитална грамотност",
+          "description": "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
+          "image": { "src": "/images/publications/pensa-guide1.jpg", "alt": "Дигитално ръководство" },
+          "publishedAt": "2024-02-20T10:00:00Z",
+          "link": "/publications/pensa-digital-literacy-guide"
+        },
+        {
+          "id": "pensa-pub-platform-manual",
+          "title": "Наръчник за платформата Pensa Club",
+          "description": "Детайлно ръководство за използване на всички функции на платформата.",
+          "image": { "src": "/images/publications/pensa-guide2.jpg", "alt": "Наръчник Pensa Club" },
+          "publishedAt": "2024-02-15T16:00:00Z",
+          "link": "/publications/pensa-platform-manual"
+        }
+      ],
   "sections": [
     {
       "tittle-slug": "concept",
@@ -604,6 +832,44 @@
   "updatedAt": "2024-03-22T16:00:00Z",
   "status": "completed",
   "campaignStatus": "closed",
+   "stories": [
+        {
+          "id": "pensa-story-tech-transformation",
+          "title": "Как технологиите променят живота на възрастните",
+          "description": "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
+          "image": { "src": "/images/stories/pensa-story1.jpg", "alt": "Възрастни с технологии" },
+          "publishedAt": "2024-03-15T10:00:00Z",
+          "author": "Мария Стоянова",
+          "link": "/stories/pensa-digital-transformation"
+        },
+        {
+          "id": "pensa-story-community-building",
+          "title": "Изграждане на дигитална общност",
+          "description": "Как Pensa Club свързва хора с общи интереси и създава нови приятелства.",
+          "image": { "src": "/images/stories/pensa-story2.jpg", "alt": "Pensa Club общност" },
+          "publishedAt": "2024-03-10T14:00:00Z",
+          "author": "Валери Кекевски",
+          "link": "/stories/pensa-community-building"
+        }
+      ],
+      "publications": [
+        {
+          "id": "pensa-pub-digital-guide",
+          "title": "Ръководство за дигитална грамотност",
+          "description": "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
+          "image": { "src": "/images/publications/pensa-guide1.jpg", "alt": "Дигитално ръководство" },
+          "publishedAt": "2024-02-20T10:00:00Z",
+          "link": "/publications/pensa-digital-literacy-guide"
+        },
+        {
+          "id": "pensa-pub-platform-manual",
+          "title": "Наръчник за платформата Pensa Club",
+          "description": "Детайлно ръководство за използване на всички функции на платформата.",
+          "image": { "src": "/images/publications/pensa-guide2.jpg", "alt": "Наръчник Pensa Club" },
+          "publishedAt": "2024-02-15T16:00:00Z",
+          "link": "/publications/pensa-platform-manual"
+        }
+      ],
   "sections": [
     {
       "tittle-slug": "workshops",
