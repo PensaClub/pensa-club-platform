@@ -1,0 +1,302 @@
+/* Contact Section */
+.contact-section {
+  margin: 4rem 0;
+  padding: 0;
+}
+
+.main-contact-card {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 2rem 0;
+  background: white;
+}
+
+.contact-image-section {
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.contact-photo {
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.contact-avatar {
+  width: 200px;
+  height: 250px;
+  background: linear-gradient(135deg, #1B8B8A, #E26020);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+}
+
+.contact-info-section {
+  background: linear-gradient(135deg, #1B8B8A 0%, #0891b2 100%);
+  color: white;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.contact-position {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 2rem 0;
+  font-weight: 400;
+}
+
+.contact-details {
+  margin-bottom: 2rem;
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.contact-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-value {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.contact-value:hover {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+}
+
+.email-contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  text-decoration: none;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  align-self: flex-start;
+}
+
+.email-contact-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+.email-icon {
+  font-size: 1.2rem;
+}
+
+/* Additional Contacts */
+.additional-contacts-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.additional-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.additional-contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.additional-contact-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.additional-contact-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.additional-contact-avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #6b7280, #9ca3af);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+}
+
+.additional-contact-info {
+  flex: 1;
+}
+
+.additional-contact-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 0.8rem 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.additional-contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.additional-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.additional-contact-item:hover {
+  color: #1B8B8A;
+}
+
+.contact-icon {
+  font-size: 0.9rem;
+  width: 16px;
+}
+
+/* Multiple Main Contacts Grid (за случаи когато има повече основни контакти) */
+.multiple-main-contacts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.multiple-main-contacts .main-contact-card {
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .main-contact-card {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-image-section {
+    padding: 2rem;
+    justify-content: center;
+  }
+  
+  .contact-photo,
+  .contact-avatar {
+    width: 150px;
+    height: 180px;
+  }
+  
+  .contact-avatar {
+    font-size: 3rem;
+  }
+  
+  .contact-info-section {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .additional-contacts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-name {
+    font-size: 1.5rem;
+  }
+  
+  .contact-position {
+    font-size: 1rem;
+  }
+  
+  .contact-photo,
+  .contact-avatar {
+    width: 120px;
+    height: 150px;
+  }
+  
+  .contact-avatar {
+    font-size: 2.5rem;
+  }
+
+  .multiple-main-contacts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-contact-card {
+    margin: 1rem 0;
+  }
+  
+  .contact-info-section {
+    padding: 2rem 1.5rem;
+  }
+  
+  .additional-contact-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .additional-contact-avatar {
+    align-self: center;
+  }
+}

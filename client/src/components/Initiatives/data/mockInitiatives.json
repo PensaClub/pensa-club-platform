@@ -268,131 +268,429 @@
         "image": "/images/contacts/maria-stoyanova.jpg"
       }
     },
-      {
-      "id": 4,
-      "slug": "digital-literacy-seniors",
-      "title": "Дигитална грамотност за възрастни",
-      "shortDescription": "Курсове за основи на интернет, имейл и социални мрежи за хора над 65 години.",
-      "mainImage": {
-        "src": "https://crestwoodmanoronline.org/wp-content/uploads/Crestwood-Manor-519545542.jpg",
-        "alt": "Възрастни хора се обучават на компютри"
-      },
-      "category": "Образование",
-      "location": {
-        "address": "Бургас, България",
-        "coordinates": {
-          "lat": 42.5048,
-          "lng": 27.4626
-        }
-      },
-      "createdAt": "2024-01-20T08:00:00Z",
-      "updatedAt": "2024-03-15T12:00:00Z",
-      "status": "active",
-      "campaignStatus": "open",
-      "sections": [
-        {
-          "tittle-slug": "overview",
-          "title": "Преглед",
-          "content": "Безплатни курсове за дигитална грамотност, специално проектирани за възрастни хора.",
-          "image": {
-            "src": "/images/initiatives/digital-literacy.jpg",
-            "alt": "Компютърен курс за възрастни"
-          }
-        }
-      ],
-      "contact": {
-        "name": "Иван Петров",
-        "position": "Инструктор",
-        "email": "ivan.petrov@digitalseniors.bg",
-        "phone": "+359 888 111 222"
+ {
+  "id": 4,
+  "slug": "digital-literacy-seniors",
+  "title": "Дигитална грамотност за възрастни",
+  "shortDescription": "Курсове за основи на интернет, имейл и социални мрежи за хора над 65 години.",
+  "mainImage": {
+    "src": "https://crestwoodmanoronline.org/wp-content/uploads/Crestwood-Manor-519545542.jpg",
+    "alt": "Възрастни хора се обучават на компютри"
+  },
+  "category": "Образование",
+  "location": {
+    "address": "Бургас, България",
+    "coordinates": {
+      "lat": 42.5048,
+      "lng": 27.4626
+    }
+  },
+  "createdAt": "2024-01-20T08:00:00Z",
+  "updatedAt": "2024-03-15T12:00:00Z",
+  "status": "active",
+  "campaignStatus": "open",
+  "sections": [
+    {
+      "tittle-slug": "overview",
+      "title": "Преглед на програмата",
+      "content": "Безплатни курсове за дигитална грамотност, специално проектирани за възрастни хора. Обучението включва основи на работа с компютър, интернет търсене, електронна поща и социални мрежи.",
+      "image": {
+        "src": "/images/initiatives/digital-literacy.jpg",
+        "alt": "Компютърен курс за възрастни"
       }
     },
     {
-      "id": 5,
-      "slug": "community-gardening",
-      "title": "Общностно градинарство",
-      "shortDescription": "Създаване на градини в квартала за социализация и здравословно хранене.",
-      "mainImage": {
-        "src": "https://civicwell.org/wp-content/uploads/2013/07/feature-cultivating-community-gardens.jpg",
-        "alt": "Хора работят заедно в градина"
-      },
-      "category": "Общност",
-      "location": {
-        "address": "Стара Загора, България",
-        "coordinates": {
-          "lat": 42.4258,
-          "lng": 25.6342
-        }
-      },
-      "createdAt": "2024-02-05T10:30:00Z",
-      "updatedAt": "2024-03-10T14:45:00Z",
-      "status": "active",
-      "campaignStatus": "open",
-      "sections": [],
-      "contact": {
-        "name": "Петя Георгиева",
-        "position": "Координатор",
-        "email": "petya.georgieva@garden.bg",
-        "phone": "+359 888 333 444"
+      "tittle-slug": "curriculum",
+      "title": "Учебна програма",
+      "content": "Курсът се провежда в продължение на 8 седмици с 2 занятия седмично. Включва практически упражнения с имейл, видео разговори, онлайн банкиране и електронно правителство.",
+      "image": {
+        "src": "/images/initiatives/digital-curriculum.jpg",
+        "alt": "Учебна програма за дигитални умения"
       }
     },
     {
-      "id": 6,
-      "slug": "senior-buddy-system",
-      "title": "Система приятели за възрастни",
-      "shortDescription": "Програма за свързване на по-млади възрастни с по-стари за взаимопомощ.",
-      "mainImage": {
-        "src": "https://www.students-care.org/wp-content/uploads/2023/10/2.jpg",
-        "alt": "Двама възрастни приятели се разхождат"
-      },
-      "category": "Социални услуги",
-      "location": {
-        "address": "Плевен, България",
-        "coordinates": {
-          "lat": 43.4092,
-          "lng": 24.618
-        }
-      },
-      "createdAt": "2024-03-12T09:15:00Z",
-      "updatedAt": "2024-03-30T11:30:00Z",
-      "status": "planned",
-      "campaignStatus": "closed",
-      "sections": [],
-      "contact": {
-        "name": "Димитър Стоянов",
-        "position": "Социален работник",
-        "email": "dimitar.stoyanov@buddy.bg",
-        "phone": "+359 888 555 666"
-      }
-    },
-    {
-      "id": 7,
-      "slug": "arts-crafts-seniors",
-      "title": "Изкуства и занаяти за възрастни",
-      "shortDescription": "Творчески работилници за рисуване, плетене и керамика за активно стареене.",
-      "mainImage": {
-        "src": "https://cdn2.hubspot.net/hubfs/2881057/Crafts%20for%20Senior%20to%20Do%20at%20Home1000px.jpg",
-        "alt": "Възрастни хора рисуват в ателие"
-      },
-      "category": "Култура",
-      "location": {
-        "address": "Русе, България",
-        "coordinates": {
-          "lat": 43.8564,
-          "lng": 25.9704
-        }
-      },
-      "createdAt": "2024-01-30T13:00:00Z",
-      "updatedAt": "2024-03-22T16:00:00Z",
-      "status": "completed",
-      "campaignStatus": "closed",
-      "sections": [],
-      "contact": {
-        "name": "Анна Николова",
-        "position": "Художничка",
-        "email": "anna.nikolova@arts.bg",
-        "phone": "+359 888 777 888"
+      "tittle-slug": "support",
+      "title": "Техническа подкрепа",
+      "content": "Всеки курсист получава индивидуална подкрепа и достъп до учебни материали. Предоставяме таблети за упражнения и постоянна техническа помощ.",
+      "image": {
+        "src": "/images/initiatives/tech-support.jpg",
+        "alt": "Техническа подкрепа за възрастни"
       }
     }
+  ],
+  "downloadMaterials": [
+    {
+      "id": "digital-guide",
+      "title": "Ръководство за дигитални умения",
+      "description": "Пълно ръководство с илюстрации за основни дигитални умения и безопасност онлайн.",
+      "fileType": "pdf",
+      "fileSize": "4.1 MB",
+      "downloadUrl": "/downloads/digital-literacy-guide.pdf",
+      "image": {
+        "src": "/images/initiatives/digital-guide-cover.jpg",
+        "alt": "Корица на ръководството за дигитални умения"
+      }
+    },
+    {
+      "id": "safety-tips",
+      "title": "Съвети за онлайн безопасност",
+      "description": "Важни съвети за защита от измами и безопасно използване на интернет.",
+      "fileType": "pdf",
+      "fileSize": "1.2 MB",
+      "downloadUrl": "/downloads/online-safety-tips.pdf",
+      "image": {
+        "src": "/images/initiatives/safety-tips-cover.jpg",
+        "alt": "Съвети за онлайн безопасност"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "tablet-program",
+      "title": "Програма за таблети",
+      "description": "Предоставяне на таблети на курсистите за практически упражнения у дома.",
+      "status": "active",
+      "image": "/images/projects/tablet-program.jpg",
+      "link": "/projects/tablet-program"
+    },
+    {
+      "id": "digital-helpers",
+      "title": "Дигитални помощници",
+      "description": "Програма за обучение на млади доброволци да помагат на възрастни с технологиите.",
+      "status": "in-progress",
+      "image": "/images/projects/digital-helpers.jpg",
+      "link": "/projects/digital-helpers"
+    }
+  ],
+  "contact": {
+    "name": "Иван Петров",
+    "position": "Инструктор по дигитални умения",
+    "email": "ivan.petrov@digitalseniors.bg",
+    "phone": "+359 888 111 222",
+    "image": "/images/contacts/ivan-petrov.jpg"
+  },
+  "additionalContacts": [
+    {
+      "name": "Мила Стоянова",
+      "phone": "+359 888 111 223",
+      "email": "mila.stoyanova@digitalseniors.bg"
+    }
+  ]
+},
+{
+  "id": 5,
+  "slug": "community-gardening",
+  "title": "Общностно градинарство",
+  "shortDescription": "Създаване на градини в квартала за социализация и здравословно хранене.",
+  "mainImage": {
+    "src": "https://civicwell.org/wp-content/uploads/2013/07/feature-cultivating-community-gardens.jpg",
+    "alt": "Хора работят заедно в градина"
+  },
+  "category": "Общност",
+  "location": {
+    "address": "Стара Загора, България",
+    "coordinates": {
+      "lat": 42.4258,
+      "lng": 25.6342
+    }
+  },
+  "createdAt": "2024-02-05T10:30:00Z",
+  "updatedAt": "2024-03-10T14:45:00Z",
+  "status": "active",
+  "campaignStatus": "open",
+  "sections": [
+    {
+      "tittle-slug": "mission",
+      "title": "Мисия на проекта",
+      "content": "Създаване на общностни градини които обединяват съседи, насърчават здравословното хранене и изграждат социални връзки между поколенията.",
+      "image": {
+        "src": "/images/initiatives/garden-mission.jpg",
+        "alt": "Общностна градина с възрастни и млади хора"
+      }
+    },
+    {
+      "tittle-slug": "activities",
+      "title": "Дейности в градината",
+      "content": "Сезонно засаждане на зеленчуци и билки, компостиране, работилници за биологично земеделие и общи обеди с реколтата от градината.",
+      "image": {
+        "src": "/images/initiatives/garden-activities.jpg",
+        "alt": "Дейности в общностната градина"
+      }
+    },
+    {
+      "tittle-slug": "benefits",
+      "title": "Ползи за общността",
+      "content": "Подобряване на физическото здраве чрез работа на открито, социализация, достъп до пресни продукти и укрепване на съседските отношения.",
+      "image": {
+        "src": "/images/initiatives/garden-benefits.jpg",
+        "alt": "Ползи от общностното градинарство"
+      }
+    }
+  ],
+  "downloadMaterials": [
+    {
+      "id": "gardening-guide",
+      "title": "Ръководство за градинарство",
+      "description": "Практическо ръководство за създаване и поддържане на общностна градина през всички сезони.",
+      "fileType": "pdf",
+      "fileSize": "5.3 MB",
+      "downloadUrl": "/downloads/community-gardening-guide.pdf",
+      "image": {
+        "src": "/images/initiatives/gardening-guide-cover.jpg",
+        "alt": "Корица на ръководството за градинарство"
+      }
+    },
+    {
+      "id": "plant-calendar",
+      "title": "Календар за засаждане",
+      "description": "Сезонен календар с препоръки кога и какво да засаждаме в българския климат.",
+      "fileType": "pdf",
+      "fileSize": "2.1 MB",
+      "downloadUrl": "/downloads/planting-calendar.pdf",
+      "image": {
+        "src": "/images/initiatives/calendar-cover.jpg",
+        "alt": "Календар за засаждане"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "seed-library",
+      "title": "Библиотека от семена",
+      "description": "Създаване на общностна банка семена за размяна между градинарите.",
+      "status": "active",
+      "image": "/images/projects/seed-library.jpg",
+      "link": "/projects/seed-library"
+    },
+    {
+      "id": "garden-expansion",
+      "title": "Разширяване на градините",
+      "description": "Създаване на нови общностни градини в други квартали на града.",
+      "status": "planned",
+      "image": "/images/projects/garden-expansion.jpg",
+      "link": "/projects/garden-expansion"
+    }
+  ],
+  "contact": {
+    "name": "Петя Георгиева",
+    "position": "Координатор общностни градини",
+    "email": "petya.georgieva@garden.bg",
+    "phone": "+359 888 333 444",
+    "image": "/images/contacts/petya-georgieva.jpg"
+  },
+  "additionalContacts": [
+    {
+      "name": "Стефан Николов",
+      "phone": "+359 888 333 445",
+      "email": "stefan.nikolov@garden.bg"
+    }
+  ]
+},
+{
+  "id": 6,
+  "slug": "senior-buddy-system",
+  "title": "Система приятели за възрастни",
+  "shortDescription": "Програма за свързване на по-млади възрастни с по-стари за взаимопомощ.",
+  "mainImage": {
+    "src": "https://www.students-care.org/wp-content/uploads/2023/10/2.jpg",
+    "alt": "Двама възрастни приятели се разхождат"
+  },
+  "category": "Социални услуги",
+  "location": {
+    "address": "Плевен, България",
+    "coordinates": {
+      "lat": 43.4092,
+      "lng": 24.618
+    }
+  },
+  "createdAt": "2024-03-12T09:15:00Z",
+  "updatedAt": "2024-03-30T11:30:00Z",
+  "status": "planned",
+  "campaignStatus": "closed",
+  "sections": [
+    {
+      "tittle-slug": "concept",
+      "title": "Концепция на програмата",
+      "content": "Свързваме възрастни хора за взаимна подкрепа и приятелство. Програмата създава двойки от участници които се подкрепят емоционално и практически.",
+      "image": {
+        "src": "/images/initiatives/buddy-concept.jpg",
+        "alt": "Концепция за система приятели"
+      }
+    },
+    {
+      "tittle-slug": "matching",
+      "title": "Подбиране на двойки",
+      "content": "Внимателно подбираме съвместими участници въз основа на интереси, местоположение и нужди. Всяка двойка получава ориентация и подкрепа.",
+      "image": {
+        "src": "/images/initiatives/buddy-matching.jpg",
+        "alt": "Процес на подбиране на двойки"
+      }
+    },
+    {
+      "tittle-slug": "activities",
+      "title": "Общи дейности",
+      "content": "Редовни срещи за разходка, чай, посещения на културни събития или просто разговор. Организираме и групови активности за всички участници.",
+      "image": {
+        "src": "/images/initiatives/buddy-activities.jpg",
+        "alt": "Общи дейности на приятелите"
+      }
+    }
+  ],
+  "downloadMaterials": [
+    {
+      "id": "buddy-handbook",
+      "title": "Наръчник за приятели",
+      "description": "Ръководство с идеи за дейности, съвети за общуване и как да изграждаме трайни приятелства.",
+      "fileType": "pdf",
+      "fileSize": "2.8 MB",
+      "downloadUrl": "/downloads/buddy-handbook.pdf",
+      "image": {
+        "src": "/images/initiatives/buddy-handbook-cover.jpg",
+        "alt": "Корица на наръчника за приятели"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "buddy-app",
+      "title": "Мобилно приложение",
+      "description": "Разработка на приложение за лесна комуникация между приятелите и организиране на срещи.",
+      "status": "planned",
+      "image": "/images/projects/buddy-app.jpg",
+      "link": "/projects/buddy-app"
+    },
+    {
+      "id": "volunteer-network",
+      "title": "Мрежа от доброволци",
+      "description": "Обучение на доброволци които да координират и подкрепят системата приятели.",
+      "status": "in-progress",
+      "image": "/images/projects/volunteer-network.jpg",
+      "link": "/projects/volunteer-network"
+    }
+  ],
+  "contact": {
+    "name": "Димитър Стоянов",
+    "position": "Социален работник и координатор",
+    "email": "dimitar.stoyanov@buddy.bg",
+    "phone": "+359 888 555 666",
+    "image": "/images/contacts/dimitar-stoyanov.jpg"
+  },
+  "additionalContacts": [
+    {
+      "name": "Анелия Петрова",
+      "phone": "+359 888 555 667",
+      "email": "anelia.petrova@buddy.bg"
+    }
+  ]
+},
+{
+  "id": 7,
+  "slug": "arts-crafts-seniors",
+  "title": "Изкуства и занаяти за възрастни",
+  "shortDescription": "Творчески работилници за рисуване, плетене и керамика за активно стареене.",
+  "mainImage": {
+    "src": "https://cdn2.hubspot.net/hubfs/2881057/Crafts%20for%20Senior%20to%20Do%20at%20Home1000px.jpg",
+    "alt": "Възрастни хора рисуват в ателие"
+  },
+  "category": "Култура",
+  "location": {
+    "address": "Русе, България",
+    "coordinates": {
+      "lat": 43.8564,
+      "lng": 25.9704
+    }
+  },
+  "createdAt": "2024-01-30T13:00:00Z",
+  "updatedAt": "2024-03-22T16:00:00Z",
+  "status": "completed",
+  "campaignStatus": "closed",
+  "sections": [
+    {
+      "tittle-slug": "workshops",
+      "title": "Творчески работилници",
+      "content": "Разнообразни работилници за рисуване с акварел, плетене, бродерия, керамика и декупаж. Всеки участник може да избере дейностите които го интересуват.",
+      "image": {
+        "src": "/images/initiatives/art-workshops.jpg",
+        "alt": "Творчески работилници за възрастни"
+      }
+    },
+    {
+      "tittle-slug": "exhibitions",
+      "title": "Изложби и събития",
+      "content": "Организираме редовни изложби с творчеството на участниците, както и благотворителни базари за продажба на изделията.",
+      "image": {
+        "src": "/images/initiatives/art-exhibitions.jpg",
+        "alt": "Изложба с творчество на възрастни"
+      }
+    },
+    {
+      "tittle-slug": "therapy",
+      "title": "Терапевтични ползи",
+      "content": "Творческите дейности подобряват моторните умения, стимулират паметта и намаляват стреса. Групите създават социални връзки и чувство за принадлежност.",
+      "image": {
+        "src": "/images/initiatives/art-therapy.jpg",
+        "alt": "Терапевтични ползи от изкуството"
+      }
+    }
+  ],
+  "downloadMaterials": [
+    {
+      "id": "art-techniques",
+      "title": "Техники и материали",
+      "description": "Ръководство с основни техники за рисуване, плетене и керамика, подходящи за начинаещи.",
+      "fileType": "pdf",
+      "fileSize": "6.2 MB",
+      "downloadUrl": "/downloads/art-techniques-guide.pdf",
+      "image": {
+        "src": "/images/initiatives/art-guide-cover.jpg",
+        "alt": "Корица на ръководството за изкуство"
+      }
+    },
+    {
+      "id": "pattern-collection",
+      "title": "Колекция шарки",
+      "description": "Сборник с шарки за плетене, бродерия и рисуване за вдъхновение на участниците.",
+      "fileType": "pdf",
+      "fileSize": "8.1 MB",
+      "downloadUrl": "/downloads/pattern-collection.pdf",
+      "image": {
+        "src": "/images/initiatives/patterns-cover.jpg",
+        "alt": "Колекция шарки"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "community-mural",
+      "title": "Обществена стенопис",
+      "description": "Създаване на голям стенопис в центъра на града с участието на всички творци.",
+      "status": "completed",
+      "image": "/images/projects/community-mural.jpg",
+      "link": "/projects/community-mural"
+    },
+    {
+      "id": "art-mentorship",
+      "title": "Художествено менторство",
+      "description": "Програма където опитни художници обучават начинаещи възрастни творци.",
+      "status": "active",
+      "image": "/images/projects/art-mentorship.jpg",
+      "link": "/projects/art-mentorship"
+    }
+  ],
+  "contact": {
+    "name": "Анна Николова",
+    "position": "Художничка и координатор",
+    "email": "anna.nikolova@arts.bg",
+    "phone": "+359 888 777 888",
+    "image": "/images/contacts/anna-nikolova.jpg"
+  },
+  "additionalContacts": [
+    {
+      "name": "Васил Димитров",
+      "phone": "+359 888 777 889",
+      "email": "vasil.dimitrov@arts.bg"
+    }
+  ]
+}
   ]
 }

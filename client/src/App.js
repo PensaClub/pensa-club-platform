@@ -56,6 +56,7 @@ import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx'
 import ContactForm from './components/ContactForm/ContactForm.jsx';
 import { InitiativesList } from './components/Initiatives/InitiativesList/InitiativesList.jsx';
 import { InitiativeProvider } from './components/contexts/InitiativeProvider.jsx';
+import { InitiativeView } from './components/Initiatives/InitiativeView/InitiativeView.jsx';
 
 function App() {
   const location = useLocation();
@@ -116,6 +117,7 @@ function App() {
                           />
                           <Route path="/articles" element={<ArticlesList />} />
                           <Route path="/initiatives" element={<InitiativesList />} />
+                          <Route path="/initiatives/:slug" element={<InitiativeView />} />
 
                           <Route path="/articles/:slug" element={<ArticleView />} />
                           <Route element={<AuthGuard />}>
