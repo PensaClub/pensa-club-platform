@@ -1037,6 +1037,15 @@
       "activeInitiatives": "Активни инициативи",
       "participants": "Участници",
       "cities": "Града"
+    },
+    "map": {
+      "projectsIn": "проекта в",
+      "cities": "града",
+      "hideMap": "Скрий картата",
+      "initiatives": "инициативи",
+      "more": "още",
+      "organizationName": "Pensa club",
+      "privacyStatement": "Privacy Statement"
     }
   }
 }

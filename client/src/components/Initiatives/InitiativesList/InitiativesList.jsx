@@ -3,6 +3,7 @@ import './initiativesList.css';
 import { useTranslation } from 'react-i18next';
 import { InitiativeCard } from './InitiativeCard/InitiativeCard';
 import { InitiativesSearch } from '../InitiativesSearch/InitiativesSearch';
+import { InitiativesMap } from './InitiativesMap/InitiativesMap'; // Нов импорт
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { InitiativesHero } from './InitiativesHero/InitiativesHero';
@@ -12,6 +13,7 @@ export const InitiativesList = () => {
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
   const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
+  const [showMap, setShowMap] = useState(false); // Нов state
 
   const {
     initiatives,
@@ -49,6 +51,11 @@ export const InitiativesList = () => {
     setIsFiltering(filtered.length !== initiatives.length);
   };
 
+  // Нова функция за управление на картата
+  const handleMapToggle = (mapVisible) => {
+    setShowMap(mapVisible);
+  };
+
   const handleLoadMore = () => {
     if (!isLoading && hasMore) {
       loadMoreInitiatives();
@@ -84,10 +91,20 @@ export const InitiativesList = () => {
         <InitiativesSearch
           initiatives={initiatives}
           onFilter={handleFilter}
+          onMapToggle={handleMapToggle} // Нов prop
+          showMap={showMap} // Нов prop
         />
 
-        {/* Initiatives Grid */}
-        {displayedInitiatives.length > 0 ? (
+        {/* Map Section - показва се само ако showMap е true */}
+        {showMap && (
+          <InitiativesMap
+            initiatives={displayedInitiatives}
+            onHide={() => setShowMap(false)}
+          />
+        )}
+
+        {/* Initiatives Grid - скрива се когато картата е показана */}
+        {!showMap && displayedInitiatives.length > 0 ? (
           <>
             <div className="initiatives-cards-grid">
               {displayedInitiatives.map((initiative, index) => (
@@ -121,14 +138,14 @@ export const InitiativesList = () => {
               </div>
             )}
           </>
-        ) : (
+        ) : !showMap && displayedInitiatives.length === 0 && (
           <div className="initiatives-no-results">
             <p>{t('initiatives.initiativesList.noResults')}</p>
           </div>
         )}
+        
         <ScrollToTop />
       </div>
     </div>
-
   );
 };
