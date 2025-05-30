@@ -34,10 +34,10 @@ export const Header = ({ additionalClasses }) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
         setProfileOpen(false);
       }
-      
-      if (mobileMenuRef.current && 
-          !mobileMenuRef.current.contains(e.target) && 
-          !e.target.classList.contains('mobile-menu-toggle')) {
+
+      if (mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target) &&
+        !e.target.classList.contains('mobile-menu-toggle')) {
         setMobileMenuOpen(false);
       }
     };
@@ -57,7 +57,7 @@ export const Header = ({ additionalClasses }) => {
     } else {
       document.body.style.overflow = 'auto';
     }
-    
+
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -109,7 +109,7 @@ export const Header = ({ additionalClasses }) => {
               to="/articles"
               className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
             >
-               {t("header.articles")}
+              {t("header.articles")}
             </NavLink>
             <div className="has-dropdown">
               <NavLink
@@ -128,6 +128,12 @@ export const Header = ({ additionalClasses }) => {
                     <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor" />
                   </svg>
                   {t("header.map")}
+                </Link>
+                <Link to="/initiatives" className="dropdown-link">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L3.09 8.26L4 21L12 17L20 21L20.91 8.26L12 2ZM12 4.15L18.09 8.72L17.34 18.28L12 15.28L6.66 18.28L5.91 8.72L12 4.15Z" fill="currentColor" />
+                  </svg>
+                  {t("header.initiatives")}
                 </Link>
                 {/* <Link to="/community" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -150,11 +156,11 @@ export const Header = ({ additionalClasses }) => {
           <button className="mobile-menu-toggle" onClick={toggleMobileMenu} aria-label="Меню">
             {mobileMenuOpen ? (
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="currentColor"/>
+                <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="currentColor" />
               </svg>
             ) : (
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z" fill="currentColor"/>
+                <path d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z" fill="currentColor" />
               </svg>
             )}
           </button>
@@ -256,52 +262,52 @@ export const Header = ({ additionalClasses }) => {
             <h3>Pensa Club</h3>
             <button className="mobile-close-btn" onClick={toggleMobileMenu}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="currentColor"/>
+                <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="currentColor" />
               </svg>
             </button>
           </div>
-          
+
           <div className="mobile-menu-links">
             {/* Добавен линк към началната страница */}
             {location.pathname !== "/" && (
-              <NavLink 
-                to="/" 
+              <NavLink
+                to="/"
                 className="mobile-nav-item"
                 onClick={toggleMobileMenu}
               >
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z" fill="currentColor"/>
+                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z" fill="currentColor" />
                 </svg>
                 {t("header.home") || "Начална страница"}
               </NavLink>
             )}
-            
-            <NavLink 
-              to="/articles" 
+
+            <NavLink
+              to="/articles"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
               onClick={toggleMobileMenu}
             >
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/>
-                <path d="M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor"/>
+                <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor" />
+                <path d="M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
               </svg>
               {t("header.articles")}
             </NavLink>
-            
-            <NavLink 
-              to="/craigslist?reset=true" 
+
+            <NavLink
+              to="/craigslist?reset=true"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
               onClick={toggleMobileMenu}
             >
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-2a8 8 0 100-16 8 8 0 000 16z" fill="currentColor"/>
-                <path d="M12 11.5c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm-4.5 0c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm9 0c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm-4.5 4.5c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5z" fill="currentColor"/>
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-2a8 8 0 100-16 8 8 0 000 16z" fill="currentColor" />
+                <path d="M12 11.5c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm-4.5 0c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm9 0c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm-4.5 4.5c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5z" fill="currentColor" />
               </svg>
               {t("header.craigslist")}
             </NavLink>
-            
-            <NavLink 
-              to="/map" 
+
+            <NavLink
+              to="/map"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
               onClick={toggleMobileMenu}
             >
@@ -310,9 +316,9 @@ export const Header = ({ additionalClasses }) => {
               </svg>
               {t("header.map")}
             </NavLink>
-            
-            <NavLink 
-              to="/community" 
+
+            <NavLink
+              to="/community"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
               onClick={toggleMobileMenu}
             >
@@ -321,20 +327,20 @@ export const Header = ({ additionalClasses }) => {
               </svg>
               {t("header.community")}
             </NavLink>
-            
-            <NavLink 
-              to="/ad/create" 
+
+            <NavLink
+              to="/ad/create"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
               onClick={toggleMobileMenu}
             >
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/>
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor" />
               </svg>
               {t("header.ad-create")}
             </NavLink>
-            
+
             <div className="mobile-menu-divider"></div>
-            
+
             {!isAuthentication ? (
               <>
                 <Link to="/sign-up?view=login" className="mobile-nav-item" onClick={toggleMobileMenu}>
@@ -372,7 +378,7 @@ export const Header = ({ additionalClasses }) => {
                 </Link>
               </>
             )}
-            
+
             <div className="mobile-language-switcher">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12.87 15.07L10.33 12.56L10.36 12.53C12.1 10.59 13.34 8.36 14.07 6H17V4H10V2H8V4H1V6H12.17C11.5 7.92 10.44 9.75 9 11.35C8.07 10.32 7.3 9.19 6.69 8H4.69C5.42 9.63 6.42 11.17 7.67 12.56L2.58 17.58L4 19L9 14L12.11 17.11L12.87 15.07ZM18.5 10H16.5L12 22H14L15.12 19H19.87L21 22H23L18.5 10ZM15.88 17L17.5 12.67L19.12 17H15.88Z" fill="currentColor" />

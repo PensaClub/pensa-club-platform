@@ -9,7 +9,8 @@
     "ad-create": "Добави обява",
     "home": "Начало",
     "articles": "Статии",
-    "welcome": "Добре дошли"
+    "welcome": "Добре дошли",
+    "initiatives": "Инициативи"
   },
   "footer": {
     "site-map": "Карта на сайта",
@@ -998,6 +999,53 @@
       },
       "loading": "Зареждане...",
       "noArticlesFound": "Няма намерени статии отговарящи на търсенето."
+    }
+  },
+  "initiatives": {
+    "initiativesList": {
+      "title": "Търсене на инициативи",
+      "ourInitiatives": "Нашите инициативи",
+      "infoDescription": "Открийте и се включете в инициативи за по-добро бъдеще",
+      "searchPlaceholder": "Търсен термин...",
+      "areasSupport": "Области на подкрепа",
+      "allAreas": "Всички области",
+      "targetAudience": "Целева аудитория",
+      "allStatuses": "Всички статуси",
+      "searchRecommendations": "Препоръки за търсене",
+      "allLocations": "Всички локации",
+      "showOpenClosed": "покажи само отворени кампании",
+      "showMap": "Покажи картата",
+      "hideMap": "Скрий картата",
+      "projectsIn": "инициативи в",
+      "countries": "държави",
+      "clearFilters": "Изчисти всички филтри",
+      "statusActive": "Активни",
+      "statusPlanned": "Планирани",
+      "statusCompleted": "Завършени",
+      "noResults": "Няма намерени инициативи със зададените критерии.",
+      "loading": "Зареждане на инициативи...",
+      "loadMore": "Зареди още"
+    },
+    "initiativeCard": {
+      "removeBookmark": "Премахни от запазени",
+      "addBookmark": "Запази за по-късно",
+      "readMore": "Прочети повече"
+    },
+    "hero": {
+      "title": "Инициативи за общност и взаимопомощ",
+      "description": "Открийте и се включете в инициативи, които създават мостове между поколенията и укрепват общността ни",
+      "activeInitiatives": "Активни инициативи",
+      "participants": "Участници",
+      "cities": "Града"
+    },
+    "map": {
+      "projectsIn": "проекта в",
+      "cities": "града",
+      "hideMap": "Скрий картата",
+      "initiatives": "инициативи",
+      "more": "още",
+      "organizationName": "Pensa club",
+      "privacyStatement": "Privacy Statement"
     }
   }
 }
