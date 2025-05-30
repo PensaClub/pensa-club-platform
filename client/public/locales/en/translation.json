@@ -1034,6 +1034,13 @@
       "removeBookmark": "Remove from saved",
       "addBookmark": "Save for later",
       "readMore": "Read more"
-    }
+    },
+      "hero": {
+    "title": "Community and Mutual Aid Initiatives",
+    "description": "Discover and participate in initiatives that build bridges between generations and strengthen our community",
+    "activeInitiatives": "Active Initiatives",
+    "participants": "Participants", 
+    "cities": "Cities"
+  }
   }
 }

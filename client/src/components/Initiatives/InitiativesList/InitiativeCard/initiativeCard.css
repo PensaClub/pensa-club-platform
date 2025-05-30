@@ -133,7 +133,7 @@ text-indent: initial;
   align-items: center;
   gap: 6px;
   color: #dc2626;
-  font-size: 0.9rem;
+  font-size: calc(var(--xxs-font-size));
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
