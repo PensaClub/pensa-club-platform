@@ -1,4 +1,3 @@
-import React from 'react';
 import './projectCard.css';
 import { useTranslation } from 'react-i18next';
 
@@ -17,10 +16,10 @@ export const ProjectCard = ({ project }) => {
 
   const getStatusLabel = (status) => {
     switch (status) {
-      case 'active': return t('initiatives.projects.statusActive', 'Активен');
-      case 'in-progress': return t('initiatives.projects.statusInProgress', 'В процес');
-      case 'planned': return t('initiatives.projects.statusPlanned', 'Планиран');
-      case 'completed': return t('initiatives.projects.statusCompleted', 'Завършен');
+      case 'active': return t('initiatives.projects.statusActive');
+      case 'in-progress': return t('initiatives.projects.statusInProgress');
+      case 'planned': return t('initiatives.projects.statusPlanned', );
+      case 'completed': return t('initiatives.projects.statusCompleted');
       default: return status;
     }
   };
@@ -52,7 +51,7 @@ export const ProjectCard = ({ project }) => {
         
         <a href={project.link} className="project-read-more">
           <span className="project-arrow">→</span>
-          {t('initiatives.projects.learnMore', 'Научете повече')}
+          {t('initiatives.projects.learnMore')}
         </a>
       </div>
     </div>

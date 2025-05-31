@@ -1,0 +1,246 @@
+
+.initiative-comment-item {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  align-items: flex-start;
+}
+
+.initiative-comment-reply {
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+}
+
+.initiative-comment-avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.initiative-comment-avatar img,
+.initiative-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.initiative-avatar-placeholder {
+ background: linear-gradient(135deg, #92400E, #B45309);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.initiative-comment-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.initiative-comment-bubble {
+  background: #f1f3f4;
+  border-radius: 16px;
+  padding: 8px 12px;
+  margin-bottom: 0.25rem;
+  max-width: fit-content;
+  word-wrap: break-word;
+}
+
+.initiative-comment-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.initiative-comment-author {
+  font-weight: 600;
+  color: #050505;
+  font-size: 0.8rem;
+}
+
+.initiative-comment-edited {
+  color: #65676b;
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.initiative-comment-text-container {
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #1B8B8A #f1f3f4;
+}
+
+.initiative-comment-text-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.initiative-comment-text-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.initiative-comment-text-container::-webkit-scrollbar-thumb {
+  background: #1B8B8A;
+  border-radius: 2px;
+}
+
+.initiative-comment-text {
+  color: #050505;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.initiative-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.initiative-comment-time {
+  color: #65676b;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.initiative-like-btn,
+.initiative-reply-btn,
+.initiative-edit-btn,
+.initiative-delete-btn,
+.initiative-show-replies-btn {
+  background: none;
+  border: none;
+  color: #65676b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.initiative-like-btn:hover,
+.initiative-reply-btn:hover,
+.initiative-show-replies-btn:hover {
+  color: #1B8B8A;
+}
+
+.initiative-like-btn.liked {
+  color: #1B8B8A;
+}
+
+.initiative-edit-btn:hover {
+  color: #d97706;
+}
+
+.initiative-delete-btn:hover {
+  color: #dc2626;
+}
+
+.initiative-comment-edit-form {
+  margin-top: 0.5rem;
+}
+
+.initiative-edit-textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 0.5rem;
+  border: 1px solid #1B8B8A;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  resize: vertical;
+  margin-bottom: 0.5rem;
+  background: white;
+}
+
+.initiative-edit-textarea:focus {
+  outline: none;
+  border-color: #1B8B8A;
+  box-shadow: 0 0 0 2px rgba(27, 139, 138, 0.1);
+}
+
+.initiative-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.initiative-save-btn {
+  background: #1B8B8A;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.initiative-save-btn:hover:not(:disabled) {
+  background: #167a79;
+}
+
+.initiative-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.initiative-cancel-btn {
+  background: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.initiative-cancel-btn:hover {
+  background: #5b6470;
+}
+
+.initiative-replies-list {
+  margin-top: 0.5rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .initiative-comment-item {
+    gap: 0.5rem;
+  }
+  
+  .initiative-comment-reply {
+    margin-left: 1.5rem;
+  }
+  
+  .initiative-comment-avatar {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .initiative-comment-avatar img,
+  .initiative-avatar-placeholder {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+  
+  .initiative-comment-meta {
+    gap: 0.75rem;
+    margin-left: 0.5rem;
+  }
+  
+  .initiative-comment-text {
+    font-size: 0.85rem;
+  }
+}

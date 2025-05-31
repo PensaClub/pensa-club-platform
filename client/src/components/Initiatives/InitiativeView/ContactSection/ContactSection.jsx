@@ -5,9 +5,6 @@ import { useTranslation } from 'react-i18next';
 export const ContactSection = ({ contact, additionalContacts }) => {
   const { t } = useTranslation();
   
-  console.log('Contact:', contact);
-  console.log('Additional contacts:', additionalContacts);
-  
   if (!contact) {
     return null;
   }
@@ -15,7 +12,7 @@ export const ContactSection = ({ contact, additionalContacts }) => {
   return (
     <section id="contact" className="contact-section-initiatives">
       <h2 className="section-title">
-        {t('initiatives.view.contactPerson', 'Контактно лице')}
+        {t('initiatives.view.contactPerson')}
       </h2>
       
       {/* Main Contact */}
@@ -41,7 +38,7 @@ export const ContactSection = ({ contact, additionalContacts }) => {
           <div className="contact-details-initiatives">
             <div className="contact-item-initiatives">
               <span className="contact-label-initiatives">
-                {t('initiatives.view.phone', 'Телефон')}
+                {t('initiatives.view.phone')}
               </span>
               <a href={`tel:${contact.phone}`} className="contact-value-initiatives">
                 {contact.phone}
@@ -50,7 +47,7 @@ export const ContactSection = ({ contact, additionalContacts }) => {
             
             <div className="contact-item-initiatives">
               <span className="contact-label-initiatives">
-                {t('initiatives.view.email', 'Имейл')}
+                {t('initiatives.view.email')}
               </span>
               <a href={`mailto:${contact.email}`} className="contact-value-initiatives">
                 {contact.email}
@@ -63,7 +60,7 @@ export const ContactSection = ({ contact, additionalContacts }) => {
             className="email-contact-btn-initiatives"
           >
             <span className="email-icon-initiatives">✉️</span>
-            {t('initiatives.view.emailTo', 'e-mail to')} {contact.name.split(' ')[0]}
+            {t('initiatives.view.emailTo',)} {contact.name.split(' ')[0]}
           </a>
         </div>
       </div>
@@ -72,7 +69,7 @@ export const ContactSection = ({ contact, additionalContacts }) => {
       {additionalContacts && additionalContacts.length > 0 && (
         <div className="additional-contacts-section-initiatives">
           <h4 className="additional-title-initiatives">
-            {t('initiatives.view.additionalContacts', 'Допълнителни контакти')}
+            {t('initiatives.view.additionalContacts')}
           </h4>
           
           <div className="additional-contacts-grid-initiatives">

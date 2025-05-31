@@ -1038,14 +1038,86 @@
       "participants": "Участници",
       "cities": "Града"
     },
+    "view": {
+      "notFound": "Инициативата не беше намерена",
+      "backToList": "Назад към списъка",
+      "stories": "Истории",
+      "projects": "Проекти",
+      "contact": "Контакт",
+      "aboutInitiative": "За инициативата",
+      "downloadMaterials": "Материали за изтегляне",
+      "download": "Изтегли",
+      "projectsOnMap": "Проекти на картата",
+      "projectsOverview": "Преглед на проектите",
+      "contactPerson": "Лице за контакт",
+      "phone": "Телефон",
+      "email": "Имейл",
+      "emailTo": "изпрати имейл до",
+      "additionalContacts": "Допълнителни контакти"
+    },
+    "projects": {
+      "statusActive": "Активен",
+      "statusInProgress": "В процес",
+      "statusPlanned": "Планиран",
+      "statusCompleted": "Завършен",
+      "learnMore": "Научете повече"
+    },
+    "storiesPublications": {
+      "title": "Истории и публикации",
+      "story": "История",
+      "publication": "Публикация",
+      "by": "от",
+      "readMore": "Прочети повече",
+      "loadMore": "Покажи още"
+    },
     "map": {
       "projectsIn": "проекта в",
       "cities": "града",
       "hideMap": "Скрий картата",
       "initiatives": "инициативи",
+      "locations": "различни локации",
+      "location": "локация",
       "more": "още",
       "organizationName": "Pensa club",
       "privacyStatement": "Privacy Statement"
+    }
+  },
+  "comments": {
+     "title": "Коментари",
+    "addComment": "Добави коментар",
+    "cancel": "Отказ",
+    "loginRequired": "Моля, влезте в профила си за да коментирате",
+    "loginPrompt": "Моля, влезте в профила си за да коментирате и участвате в дискусията.",
+    "loginLink": "Вход в профила",
+    "placeholder": "Споделете вашето мнение за тази инициатива...",
+    "loading": "Зареждане на коментари...",
+    "noComments": "Все още няма коментари. Бъдете първия, който ще сподели мнение!",
+    "form": {
+      "placeholder": "Напишете коментар...",
+      "shortcut": "Ctrl + Enter за бързо публикуване",
+      "cancel": "Отказ",
+      "submit": "Публикувай",
+      "submitting": "Публикуване...",
+      "defaultUser": "Потребител"
+    },
+     "disabled": {
+      "title": "Коментарите са изключени",
+      "message": "За тази инициатива коментарите не са разрешени от администратора."
+    },
+    "item": {
+      "edited": "редактиран",
+      "save": "Запази",
+      "cancel": "Отказ",
+      "like": "Харесай",
+      "unlike": "Отхаресай",
+      "loginToLike": "Влезте в профила си за да харесате",
+      "reply": "Отговори",
+      "edit": "Редактирай",
+      "delete": "Изтрий",
+      "deleteConfirm": "Сигурни ли сте, че искате да изтриете коментара?",
+      "showReplies": "Покажи отговори ({{count}})",
+      "hideReplies": "Скрий отговори ({{count}})",
+      "replyPlaceholder": "Отговори на {{name}}..."
     }
   }
 }

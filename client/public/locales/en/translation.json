@@ -1042,14 +1042,86 @@
       "participants": "Participants",
       "cities": "Cities"
     },
-     "map": {
+    "view": {
+      "notFound": "Initiative not found",
+      "backToList": "Back to list",
+      "stories": "Stories",
+      "projects": "Projects",
+      "contact": "Contact",
+      "aboutInitiative": "About the initiative",
+      "downloadMaterials": "Download materials",
+      "download": "Download",
+      "projectsOnMap": "Projects on map",
+      "projectsOverview": "Projects overview",
+      "contactPerson": "Contact person",
+      "phone": "Phone",
+      "email": "Email",
+      "emailTo": "email to",
+      "additionalContacts": "Additional contacts"
+    },
+    "projects": {
+      "statusActive": "Active",
+      "statusInProgress": "In Progress",
+      "statusPlanned": "Planned",
+      "statusCompleted": "Completed",
+      "learnMore": "Learn more"
+    },
+    "storiesPublications": {
+      "title": "Stories and Publications",
+      "story": "Story",
+      "publication": "Publication",
+      "by": "by",
+      "readMore": "Read more",
+      "loadMore": "Load more"
+    },
+    "map": {
       "projectsIn": "projects in",
       "cities": "cities",
       "hideMap": "Hide Map",
       "initiatives": "initiatives",
       "more": "more",
+      "locations": "different locations",
+      "location": "location",
       "organizationName": "Pensa club",
       "privacyStatement": "Privacy Statement"
+    }
+  },
+  "comments": {
+    "title": "Comments",
+    "addComment": "Add Comment",
+    "cancel": "Cancel",
+    "loginRequired": "Please log in to comment",
+    "loginPrompt": "Please log in to comment and participate in the discussion.",
+    "loginLink": "Login",
+    "placeholder": "Share your thoughts about this initiative...",
+    "loading": "Loading comments...",
+    "noComments": "No comments yet. Be the first to share your opinion!",
+    "form": {
+      "placeholder": "Write a comment...",
+      "shortcut": "Ctrl + Enter to post quickly",
+      "cancel": "Cancel",
+      "submit": "Post",
+      "submitting": "Posting...",
+      "defaultUser": "User"
+    },
+      "disabled": {
+      "title": "Comments are disabled",
+      "message": "Comments have been disabled for this initiative by the administrator."
+    },
+    "item": {
+      "edited": "edited",
+      "save": "Save",
+      "cancel": "Cancel",
+      "like": "Like",
+      "unlike": "Unlike",
+      "loginToLike": "Login to like",
+      "reply": "Reply",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Are you sure you want to delete this comment?",
+      "showReplies": "Show replies ({{count}})",
+      "hideReplies": "Hide replies ({{count}})",
+      "replyPlaceholder": "Reply to {{name}}..."
     }
   }
 }

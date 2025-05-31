@@ -9,11 +9,15 @@
 .initiatives-main-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 80px 20px 60px;
+  padding: 50px 20px 60px;
   background: #ffffff;
   min-height: 100vh;
 }
-
+.initiatives-grid-container{
+  background-color: #1a202c;
+  width: 100%;
+  margin: 0 auto;
+}
 .initiatives-header-section {
   background: #ffffff;
   padding-bottom: 40px;

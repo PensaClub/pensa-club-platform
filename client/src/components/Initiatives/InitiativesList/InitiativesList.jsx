@@ -13,7 +13,7 @@ export const InitiativesList = () => {
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
   const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
-  const [showMap, setShowMap] = useState(false); // Нов state
+  const [showMap, setShowMap] = useState(false); 
 
   const {
     initiatives,
@@ -23,6 +23,13 @@ export const InitiativesList = () => {
     isLoading
   } = useInitiativeContext();
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  },[]);
+  
   // Зареждане на bookmarks от localStorage
   useEffect(() => {
     const saved = localStorage.getItem('bookmarkedInitiatives');
