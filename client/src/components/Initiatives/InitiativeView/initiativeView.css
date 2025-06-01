@@ -14,7 +14,7 @@
 
 .initiative-hero-image {
   width: 100%;
-  height: 650px; 
+  height: 650px;
   position: relative;
   overflow: hidden;
   background: #f8f9fa;
@@ -24,10 +24,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top; 
+  object-position: center top;
   filter: brightness(0.9);
   transition: transform 0.3s ease;
 }
+
 .initiative-hero-content {
   background: linear-gradient(135deg, rgba(27, 139, 138, 0.95) 0%, rgba(8, 145, 178, 0.95) 100%);
   color: white;
@@ -102,7 +103,7 @@
 
 /* Main Content */
 .initiative-content {
-  max-width: 1320px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 4rem 2rem;
 }
@@ -208,7 +209,7 @@
 
 .materials-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -293,7 +294,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #1B8B8A, #E26020);
+  background: linear-gradient(135deg, #3B82C7, #1E5A96);
   color: white;
   text-decoration: none;
   padding: 0.8rem 1.5rem;
@@ -453,6 +454,7 @@
   border-radius: 8px;
   border-left: 3px solid #1B8B8A;
 }
+
 .projects-grid-section {
   margin: 4rem 0;
 }
@@ -463,6 +465,7 @@
   gap: 2rem;
   margin: 2rem 0;
 }
+
 .additional-contact .contact-name {
   font-size: 1rem;
   font-weight: 600;
@@ -520,6 +523,10 @@
     padding: 2rem 1.5rem;
   }
 
+  .content-section:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+
   .initiative-title {
     font-size: 2rem;
   }
@@ -536,6 +543,10 @@
   .content-section:nth-child(even) .section-content,
   .content-section:nth-child(even) .section-image {
     order: unset;
+  }
+
+  .content-section:nth-child(even) {
+    grid-template-columns: 1fr;
   }
 
   .contact-card {

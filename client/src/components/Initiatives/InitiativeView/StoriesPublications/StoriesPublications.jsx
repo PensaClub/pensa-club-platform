@@ -1,6 +1,7 @@
   import React, { useState } from 'react';
   import './storiesPublications.css';
   import { useTranslation } from 'react-i18next';
+import { truncateText } from '../../../../utils/truncateText';
 
   export const StoriesPublications = ({ stories = [], publications = [] }) => {
     const { t } = useTranslation();
@@ -59,7 +60,7 @@
                 </h3>
                 
                 <p className="story-description">
-                  {item.description || item.excerpt}
+                  {truncateText(item.description,60) || item.excerpt}
                 </p>
                 
                 <div className="story-meta">

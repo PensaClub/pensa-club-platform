@@ -67,7 +67,7 @@
 }
 
 .initiative-login-link {
-  background: linear-gradient(135deg, #1B8B8A, #E26020);
+  background: linear-gradient(to right, var(--orange-primary), var(--orange-light));
   color: white;
   text-decoration: none;
   padding: 0.8rem 1.5rem;

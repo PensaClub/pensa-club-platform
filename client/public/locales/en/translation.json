@@ -1057,7 +1057,8 @@
       "phone": "Phone",
       "email": "Email",
       "emailTo": "email to",
-      "additionalContacts": "Additional contacts"
+      "additionalContacts": "Additional contacts",
+      "comments": "Comments"
     },
     "projects": {
       "statusActive": "Active",

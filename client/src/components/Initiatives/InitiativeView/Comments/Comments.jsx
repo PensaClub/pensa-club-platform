@@ -6,6 +6,7 @@ import { useAuthContext } from '../../../contexts/UserContext';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { CommentItem } from '../CommentItem/CommentItem';
 import { CommentForm } from '../CommentForm/CommentForm';
+import { Link } from 'react-router-dom';
 
 export const Comments = ({ initiativeId, commentsEnabled = true }) => {
     const { t } = useTranslation();
@@ -119,9 +120,9 @@ export const Comments = ({ initiativeId, commentsEnabled = true }) => {
             {!isAuthentication && (
                 <div className="initiative-login-prompt">
                     <p>{t('comments.loginPrompt')}</p>
-                    <a href="/sign-up" className="initiative-login-link">
+                    <Link to="/sign-up?tab=login" className="initiative-login-link">
                         {t('comments.loginLink')}
-                    </a>
+                    </Link>
                 </div>
             )}
 

@@ -1,3 +1,4 @@
+import { truncateText } from '../../../../utils/truncateText';
 import './projectCard.css';
 import { useTranslation } from 'react-i18next';
 
@@ -46,7 +47,7 @@ export const ProjectCard = ({ project }) => {
         </h3>
         
         <p className="project-description">
-          {project.description}
+          {truncateText(project.description,80)}
         </p>
         
         <a href={project.link} className="project-read-more">

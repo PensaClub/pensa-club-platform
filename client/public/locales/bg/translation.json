@@ -1053,7 +1053,8 @@
       "phone": "Телефон",
       "email": "Имейл",
       "emailTo": "изпрати имейл до",
-      "additionalContacts": "Допълнителни контакти"
+      "additionalContacts": "Допълнителни контакти",
+      "comments": "Коментари"
     },
     "projects": {
       "statusActive": "Активен",

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, NavLink } from 'react-router-dom';
 import './initiativeView.css';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
@@ -10,6 +10,7 @@ import { InitiativesMap } from '../InitiativesList/InitiativesMap/InitiativesMap
 import { ProjectCard } from './ProjectCard/ProjectCard';
 import { ContactSection } from './ContactSection/ContactSection';
 import { Comments } from './Comments/Comments';
+import { truncateText } from '../../../utils/truncateText';
 
 export const InitiativeView = () => {
     const { slug } = useParams();
@@ -49,6 +50,19 @@ export const InitiativeView = () => {
         const restSentences = sentences.slice(1).join(' ');
         return { firstSentence, restSentences };
     };
+
+    const handleSmoothScroll = (e) => {
+    e.preventDefault();
+    const targetId = e.currentTarget.getAttribute('href').substring(1);
+    const targetElement = document.getElementById(targetId);
+    
+    if (targetElement) {
+        targetElement.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start' 
+        });
+    }
+};
 
     // Трансформиране на проектите в формат подходящ за картата
     const transformProjectsForMap = (projects) => {
@@ -111,21 +125,21 @@ export const InitiativeView = () => {
 
                             {/* Navigation Links */}
                             <div className="initiative-nav">
-                                <a href="#sections" className="nav-link">
+                                <a  href="#sections" onClick={handleSmoothScroll} className="nav-link">
                                     <span className="nav-icon">📖</span>
                                     {t('initiatives.view.stories')}
                                 </a>
-                                <a href="#projects" className="nav-link">
+                                <a href="#projects" onClick={handleSmoothScroll} className="nav-link">
                                     <span className="nav-icon">🚀</span>
                                     {t('initiatives.view.projects')}
                                 </a>
-                                <a href="#contact" className="nav-link">
+                                <a href="#contact" onClick={handleSmoothScroll} className="nav-link">
                                     <span className="nav-icon">📞</span>
                                     {t('initiatives.view.contact')}
                                 </a>
                                 {/* Показваме коментарите в навигацията само ако са разрешени */}
                                 {initiative.commentsEnabled && (
-                                    <a href="#comments" className="nav-link">
+                                    <a href="#comments" onClick={handleSmoothScroll} className="nav-link">
                                         <span className="nav-icon">💬</span>
                                         {t('initiatives.view.comments')}
                                         {initiative.commentsCount > 0 && (
@@ -195,7 +209,7 @@ export const InitiativeView = () => {
 
                                     <div className="material-info">
                                         <h3 className="material-title">{material.title}</h3>
-                                        <p className="material-description">{material.description}</p>
+                                        <p className="material-description">{truncateText(material.description,40)}</p>
 
                                         <div className="material-meta">
                                             <span className="file-type">{material.fileType.toUpperCase()}</span>
