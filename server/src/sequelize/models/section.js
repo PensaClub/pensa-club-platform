@@ -5,15 +5,42 @@ module.exports = (sequelize, DataTypes) => {
     class section extends Model {
         static associate(models) {
             section.belongsTo(models.article, {
-                foreignKey: 'articleId',
+                foreignKey: 'sectionableId',
+                constraints: false,
+                scope: {
+                    sectionLinkConnection: 'article',
+                },
             });
-            section.hasMany(models.sectionImage, {
-                foreignKey: 'sectionId',
+            section.belongsTo(models.initiative, {
+                foreignKey: 'sectionableId',
+                constraints: false,
+                scope: {
+                    sectionLinkConnection: 'initiative',
+                },
+            });
+            section.hasMany(models.image, {
+                as: 'sectionImages',
+                foreignKey: 'imageableId',
+                constraints: false,
+                scope: {
+                    imageLinkConnection: 'section',
+                },
             });
         }
     }
     section.init(
         {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+            },
+            'title-slug': {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'title_slug',
+            },
             title: {
                 type: DataTypes.STRING,
                 allowNull: true,
@@ -26,19 +53,15 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: true,
             },
-            articleId: {
+            sectionableId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'articles',
-                    key: 'id',
-                },
+                field: 'sectionable_id',
             },
-            id: {
-                type: DataTypes.INTEGER,
-                primaryKey: true,
-                autoIncrement: true,
+            sectionLinkConnection: {
+                type: DataTypes.STRING,
                 allowNull: false,
+                field: 'section_link_connection',
             },
             createdAt: {
                 type: DataTypes.DATEONLY,

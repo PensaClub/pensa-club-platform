@@ -1,6 +1,6 @@
 const articleController = require('express').Router();
 const customError = require('../utils/customError');
-const { article, mainImage, section, sectionImage, user_details } = require('../sequelize/models');
+const { article, mainImage, section, image, user_details } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const { updateArticleRelationships } = require('../utils/articleUtils');
@@ -17,10 +17,14 @@ const articleIncludeConfig = [
         model: section,
         as: 'sections',
         attributes: ['id', 'title', 'content', 'order'],
+        where: { sectionLinkConnection: 'article' },
         include: [
             {
-                model: sectionImage,
+                model: image,
+                as: 'sectionImages',
                 attributes: ['id', 'src', 'alt', 'caption'],
+                where: { imageLinkConnection: 'section' },
+                required: false,
             },
         ],
         order: [['order', 'ASC']],
@@ -164,7 +168,8 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
                                 title: sectionData.title ?? null,
                                 content: sectionData.content ?? null,
                                 order: sectionData.order || index + 1,
-                                articleId: created.id,
+                                sectionableId: created.id,
+                                sectionLinkConnection: 'article',
                             },
                             { transaction: t }
                         );
@@ -172,12 +177,13 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
                         if (sectionData.image && Array.isArray(sectionData.image)) {
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
-                                    await sectionImage.create(
+                                    await image.create(
                                         {
                                             src: imageData.src ?? null,
                                             alt: imageData.alt ?? null,
                                             caption: imageData.caption ?? null,
-                                            sectionId: newSection.id,
+                                            imageableId: newSection.id,
+                                            imageLinkConnection: 'section',
                                         },
                                         { transaction: t }
                                     );
@@ -274,8 +280,8 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
 
             if (sections && Array.isArray(sections)) {
                 const existingSections = await section.findAll({
-                    where: { articleId: existingArticle.id },
-                    include: [sectionImage],
+                    where: { sectionableId: existingArticle.id, sectionLinkConnection: 'article' },
+                    include: [image],
                     transaction: t,
                 });
 
@@ -300,7 +306,8 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                                 title: sectionData.title ?? null,
                                 content: sectionData.content ?? null,
                                 order: sectionData.order,
-                                articleId: existingArticle.id,
+                                sectionableId: existingArticle.id,
+                                sectionLinkConnection: 'article',
                             },
                             { transaction: t }
                         );
@@ -308,12 +315,13 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                         if (sectionData.image && Array.isArray(sectionData.image)) {
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
-                                    await sectionImage.create(
+                                    await image.create(
                                         {
                                             src: imageData.src ?? null,
                                             alt: imageData.alt ?? null,
                                             caption: imageData.caption ?? null,
-                                            sectionId: newSection.id,
+                                            imageableId: newSection.id,
+                                            imageLinkConnection: 'section',
                                         },
                                         { transaction: t }
                                     );
@@ -333,9 +341,10 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                         );
 
                         if (sectionData.image && Array.isArray(sectionData.image)) {
-                            await sectionImage.destroy({
+                            await image.destroy({
                                 where: {
-                                    sectionId: existingSection.id,
+                                    imageableId: existingSection.id,
+                                    imageLinkConnection: 'section',
                                     id: {
                                         [Op.notIn]: sectionData.image.filter((img) => img.id).map((img) => img.id),
                                     },
@@ -346,32 +355,42 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
                             await Promise.all(
                                 sectionData.image.map(async (imageData) => {
                                     if (imageData.id) {
-                                        await sectionImage.update(
+                                        await image.update(
                                             {
                                                 src: imageData.src ?? null,
                                                 alt: imageData.alt ?? null,
                                                 caption: imageData.caption ?? null,
                                             },
                                             {
-                                                where: { id: imageData.id },
+                                                where: {
+                                                    id: imageData.id,
+                                                    imageLinkConnection: 'section',
+                                                },
                                                 transaction: t,
                                             }
                                         );
                                     } else {
-                                        await sectionImage.create(
+                                        await image.create(
                                             {
                                                 src: imageData.src ?? null,
                                                 alt: imageData.alt ?? null,
                                                 caption: imageData.caption ?? null,
-                                                sectionId: existingSection.id,
+                                                imageableId: existingSection.id,
+                                                imageLinkConnection: 'section',
                                             },
                                             { transaction: t }
                                         );
                                     }
                                 })
                             );
-                        } else if (existingSection.sectionImage) {
-                            await existingSection.sectionImage.destroy({ transaction: t });
+                        } else if (existingSection.images) {
+                            await image.destroy({
+                                where: {
+                                    imageableId: existingSection.id,
+                                    imageLinkConnection: 'section',
+                                },
+                                transaction: t,
+                            });
                         }
                     }
                 }
