@@ -1,5 +1,5 @@
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { Loader } from "../Loader/Loader";
 import { notify } from "../../utils/notify";
 import { useNavigate } from "react-router-dom";
@@ -10,20 +10,34 @@ import mockData from '../Initiatives/data/mockInitiatives.json';
 export const InitiativeContext = createContext();
 
 export const InitiativeProvider = ({ children }) => {
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [initiatives, setInitiatives] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [initiativesLoaded, setInitiativesLoaded] = useState(false);
-
+  const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState(() => {
+    try {
+      const saved = localStorage.getItem('bookmarkedInitiatives');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        console.log("Initial load from localStorage:", parsed);
+        return parsed;
+      }
+    } catch (error) {
+      console.error("Error loading bookmarks from localStorage:", error);
+    }
+    return [];
+  });
+  
+  const [bookmarksLoaded, setBookmarksLoaded] = useState(false);
   const [comments, setComments] = useState({});
   const [commentsLoading, setCommentsLoading] = useState(false);
-  
+
   const { isAuthentication, userEmail, username, profileData } = useAuthContext();
   const navigate = useNavigate();
-  
+
   const initiativeService = initiativeServiceFactory();
 
   const showErrorAndSetTimeouts = useCallback((error) => {
@@ -34,6 +48,28 @@ export const InitiativeProvider = ({ children }) => {
       setIsLoading(false);
     }, 3000);
   }, []);
+
+  // useEffect(() => {
+  //   const saved = localStorage.getItem('bookmarkedInitiatives');
+  //   if (saved) {
+  //     try {
+  //       const parsed = JSON.parse(saved);
+  //       setBookmarkedInitiatives(parsed);
+  //       console.log("Loaded bookmarks from localStorage:", parsed);
+  //     } catch (error) {
+  //       console.error("Error parsing bookmarks from localStorage:", error);
+  //     }
+  //   }
+  //   setBookmarksLoaded(true); // Маркираме че сме заредили
+  // }, []);
+
+  // Записване в localStorage - само СЛЕД като сме заредили от localStorage
+  useEffect(() => {
+    if (bookmarksLoaded) { // Записваме само след като сме заредили
+      localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
+      console.log("Saved bookmarks to localStorage:", bookmarkedInitiatives);
+    }
+  }, [bookmarkedInitiatives, bookmarksLoaded]);
 
   // Helper functions
   const generateId = useCallback(() => {
@@ -51,14 +87,14 @@ export const InitiativeProvider = ({ children }) => {
         const startIndex = (page - 1) * limit;
         const endIndex = startIndex + limit;
         const paginatedData = mockData.initiatives.slice(startIndex, endIndex);
-        
+
         resolve({
           data: paginatedData,
           hasMore: endIndex < mockData.initiatives.length,
           totalCount: mockData.initiatives.length,
           currentPage: page
         });
-      }, 200); 
+      }, 200);
     });
   }, []);
 
@@ -70,17 +106,17 @@ export const InitiativeProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await getMockInitiatives(page, 6);
-      
+
       if (page === 1) {
         setInitiatives(response.data);
       } else {
         setInitiatives(prev => [...prev, ...response.data]);
       }
-      
+
       setHasMore(response.hasMore);
       setCurrentPage(response.currentPage);
       setInitiativesLoaded(true);
-      
+
       return response;
     } catch (e) {
       console.error('Error fetching initiatives:', e);
@@ -107,14 +143,14 @@ export const InitiativeProvider = ({ children }) => {
   const getInitiativeById = useCallback(async (id) => {
     try {
       setIsLoading(true);
-      const initiative = mockData.initiatives.find(init => 
+      const initiative = mockData.initiatives.find(init =>
         init.id === parseInt(id) || init.slug === id
       );
-      
+
       if (!initiative) {
         throw new Error('Initiative not found');
       }
-      
+
       return initiative;
     } catch (e) {
       console.error('Error fetching initiative by ID:', e);
@@ -125,40 +161,50 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [showErrorAndSetTimeouts]);
 
-const getComments = useCallback(async (initiativeId) => {
-    try {
-        // Проверяваме дали вече имаме коментарите в кеша
-        if (comments[initiativeId]) {
-            return comments[initiativeId];
-        }
+  const toggleBookmark = useCallback((initiativeId) => {
+    setBookmarkedInitiatives(prev => {
+      if (prev.includes(initiativeId)) {
+        return prev.filter(id => id !== initiativeId);
+      } else {
+        return [...prev, initiativeId];
+      }
+    });
+  }, []);
 
-        setCommentsLoading(true);
-        
-        // Find initiative in mock data
-        const initiative = mockData.initiatives.find(init => 
-            init.id === parseInt(initiativeId) || init.slug === initiativeId
-        );
-        
-        if (!initiative) {
-            throw new Error('Initiative not found');
-        }
-        
-        // Cache comments in state - със защита
-        const initiativeComments = Array.isArray(initiative.comments) ? initiative.comments : [];
-        setComments(prev => ({
-            ...prev,
-            [initiativeId]: initiativeComments
-        }));
-        
-        return initiativeComments;
+  const getComments = useCallback(async (initiativeId) => {
+    try {
+      // Проверяваме дали вече имаме коментарите в кеша
+      if (comments[initiativeId]) {
+        return comments[initiativeId];
+      }
+
+      setCommentsLoading(true);
+
+      // Find initiative in mock data
+      const initiative = mockData.initiatives.find(init =>
+        init.id === parseInt(initiativeId) || init.slug === initiativeId
+      );
+
+      if (!initiative) {
+        throw new Error('Initiative not found');
+      }
+
+      // Cache comments in state - със защита
+      const initiativeComments = Array.isArray(initiative.comments) ? initiative.comments : [];
+      setComments(prev => ({
+        ...prev,
+        [initiativeId]: initiativeComments
+      }));
+
+      return initiativeComments;
     } catch (error) {
-        console.error('Error getting comments:', error);
-        notify('error', 'Failed to load comments');
-        return []; // Връщаме празен array вместо да хвърляме грешка
+      console.error('Error getting comments:', error);
+      notify('error', 'Failed to load comments');
+      return []; // Връщаме празен array вместо да хвърляме грешка
     } finally {
-        setCommentsLoading(false);
+      setCommentsLoading(false);
     }
-}, [comments]);
+  }, [comments]);
 
   const addComment = useCallback(async (initiativeId, content) => {
     try {
@@ -257,11 +303,11 @@ const getComments = useCallback(async (initiativeId) => {
           const isLiked = comment.likes.includes(userEmail);
           return {
             ...comment,
-            likes: isLiked 
+            likes: isLiked
               ? comment.likes.filter(email => email !== userEmail)
               : [...comment.likes, userEmail],
-            likesCount: isLiked 
-              ? comment.likesCount - 1 
+            likesCount: isLiked
+              ? comment.likesCount - 1
               : comment.likesCount + 1
           };
         }
@@ -338,17 +384,17 @@ const getComments = useCallback(async (initiativeId) => {
               const isLiked = reply.likes.includes(userEmail);
               return {
                 ...reply,
-                likes: isLiked 
+                likes: isLiked
                   ? reply.likes.filter(email => email !== userEmail)
                   : [...reply.likes, userEmail],
-                likesCount: isLiked 
-                  ? reply.likesCount - 1 
+                likesCount: isLiked
+                  ? reply.likesCount - 1
                   : reply.likesCount + 1
               };
             }
             return reply;
           });
-          
+
           return {
             ...comment,
             replies: updatedReplies
@@ -381,7 +427,7 @@ const getComments = useCallback(async (initiativeId) => {
     currentPage,
     isLoading,
     initiativesLoaded,
-    
+
     // Comments functions
     getComments,
     addComment,
@@ -392,6 +438,12 @@ const getComments = useCallback(async (initiativeId) => {
     likeReply,
     comments,
     commentsLoading,
+
+    //bookmarks
+    bookmarkedInitiatives,
+    toggleBookmark,
+    isBookmarked: (id) => bookmarkedInitiatives.includes(id),
+    hasBookmarks: bookmarkedInitiatives.length > 0,
   };
 
   return (

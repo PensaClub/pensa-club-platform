@@ -4,6 +4,8 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";
+import { useInitiativeContext } from "../contexts/InitiativeProvider";
+import { BookmarkIcon, BookmarkIconHeader } from "../Initiatives/Icons/InitiativeIcons";
 
 export const Header = ({ additionalClasses }) => {
   const { t, i18n } = useTranslation();
@@ -11,7 +13,9 @@ export const Header = ({ additionalClasses }) => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthentication, isFinish, profileData } = useContext(UserContext);
+  const { bookmarkedInitiatives, hasBookmarks } = useInitiativeContext();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
   const profileRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
@@ -49,6 +53,7 @@ export const Header = ({ additionalClasses }) => {
   useEffect(() => {
     setProfileOpen(false);
     setMobileMenuOpen(false);
+    setMobileCommunityOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -65,6 +70,10 @@ export const Header = ({ additionalClasses }) => {
 
   const toggleProfileMenu = () => {
     setProfileOpen(!profileOpen);
+  };
+
+  const toggleMobileCommunity = () => {
+    setMobileCommunityOpen(!mobileCommunityOpen);
   };
 
   const toggleMobileMenu = () => {
@@ -164,6 +173,7 @@ export const Header = ({ additionalClasses }) => {
               </svg>
             )}
           </button>
+          {/* Bookmark иконка - само за desktop */}
 
           <div className="profile-section-home" ref={profileRef}>
             {isAuthentication && !isFinish && (
@@ -187,7 +197,7 @@ export const Header = ({ additionalClasses }) => {
                   getProfileImage(profileData?.details?.gender)
                 }
                 alt="Profile"
-                className="profile-image"
+                className="profile-image-header"
               />
             </div>
 
@@ -197,6 +207,16 @@ export const Header = ({ additionalClasses }) => {
               </div>
 
               <div className="dropdown-menu-links">
+                {/* В mobile-menu-links, преди mobile-menu-divider */}
+
+                {hasBookmarks && isAuthentication &&(
+                  <Link to="/bookmarks" className="mobile-nav-item" onClick={toggleMobileMenu}>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19 21L12 16L5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21Z" fill="currentColor" />
+                    </svg>
+                    За четене ({bookmarkedInitiatives.length})
+                  </Link>
+                )}
                 {!isAuthentication ? (
                   <>
                     <Link to="/sign-up?view=login" className="menu-link">
@@ -251,6 +271,14 @@ export const Header = ({ additionalClasses }) => {
               </div>
             </div>
           </div>
+          {hasBookmarks && isAuthentication && (
+            <div className="bookmark-header-section desktop-bookmark">
+              <Link to="/bookmarks" className="bookmark-header-button">
+                <BookmarkIconHeader />
+                <span className="bookmark-count">{bookmarkedInitiatives.length}</span>
+              </Link>
+            </div>
+          )}
         </div>
       </header>
 
@@ -268,6 +296,7 @@ export const Header = ({ additionalClasses }) => {
           </div>
 
           <div className="mobile-menu-links">
+
             {/* Добавен линк към началната страница */}
             {location.pathname !== "/" && (
               <NavLink
@@ -294,39 +323,64 @@ export const Header = ({ additionalClasses }) => {
               {t("header.articles")}
             </NavLink>
 
-            <NavLink
-              to="/craigslist?reset=true"
-              className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
-              onClick={toggleMobileMenu}
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-2a8 8 0 100-16 8 8 0 000 16z" fill="currentColor" />
-                <path d="M12 11.5c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm-4.5 0c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm9 0c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5zm-4.5 4.5c.827 0 1.5-.673 1.5-1.5s-.673-1.5-1.5-1.5-1.5.673-1.5 1.5.673 1.5 1.5 1.5z" fill="currentColor" />
-              </svg>
-              {t("header.craigslist")}
-            </NavLink>
+            {/* Общност с dropdown */}
+            <div className="mobile-dropdown-container">
+              <button
+                className={`mobile-nav-item mobile-dropdown-toggle ${mobileCommunityOpen ? 'active' : ''}`}
+                onClick={toggleMobileCommunity}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 12.75C13.63 12.75 15.07 13.14 16.24 13.65C17.32 14.13 18 15.21 18 16.38V18H6V16.39C6 15.21 6.68 14.13 7.76 13.66C8.93 13.14 10.37 12.75 12 12.75ZM4 13H8V11H4V13ZM16 13H20V11H16V13ZM12 10.5C10.34 10.5 9 9.16 9 7.5C9 5.84 10.34 4.5 12 4.5C13.66 4.5 15 5.84 15 7.5C15 9.16 13.66 10.5 12 10.5ZM21 9.75C21 11.16 19.16 12 18 12C18.84 12 20 10.84 20 9.75C20 8.66 18.84 7.5 18 7.5C19.16 7.5 21 8.36 21 9.75ZM3 9.75C3 8.36 4.84 7.5 6 7.5C5.16 7.5 4 8.66 4 9.75C4 10.84 5.16 12 6 12C4.84 12 3 11.16 3 9.75Z" fill="currentColor" />
+                </svg>
+                {t("header.craigslist")}
+                <svg
+                  className={`mobile-dropdown-arrow ${mobileCommunityOpen ? 'rotated' : ''}`}
+                  width="12"
+                  height="6"
+                  viewBox="0 0 12 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
 
-            <NavLink
-              to="/map"
-              className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
-              onClick={toggleMobileMenu}
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor" />
-              </svg>
-              {t("header.map")}
-            </NavLink>
+              <div className={`mobile-dropdown-content ${mobileCommunityOpen ? 'active' : ''}`}>
 
-            <NavLink
-              to="/community"
-              className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
-              onClick={toggleMobileMenu}
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 12.75C13.63 12.75 15.07 13.14 16.24 13.65C17.32 14.13 18 15.21 18 16.38V18H6V16.39C6 15.21 6.68 14.13 7.76 13.66C8.93 13.14 10.37 12.75 12 12.75ZM4 13H8V11H4V13ZM16 13H20V11H16V13ZM12 10.5C10.34 10.5 9 9.16 9 7.5C9 5.84 10.34 4.5 12 4.5C13.66 4.5 15 5.84 15 7.5C15 9.16 13.66 10.5 12 10.5ZM21 9.75C21 11.16 19.16 12 18 12C18.84 12 20 10.84 20 9.75C20 8.66 18.84 7.5 18 7.5C19.16 7.5 21 8.36 21 9.75ZM3 9.75C3 8.36 4.84 7.5 6 7.5C5.16 7.5 4 8.66 4 9.75C4 10.84 5.16 12 6 12C4.84 12 3 11.16 3 9.75Z" fill="currentColor" />
-              </svg>
-              {t("header.community")}
-            </NavLink>
+                <NavLink
+                  to="/craigslist?reset=true"
+                  className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
+                  onClick={toggleMobileMenu}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12.75C13.63 12.75 15.07 13.14 16.24 13.65C17.32 14.13 18 15.21 18 16.38V18H6V16.39C6 15.21 6.68 14.13 7.76 13.66C8.93 13.14 10.37 12.75 12 12.75ZM4 13H8V11H4V13ZM16 13H20V11H16V13ZM12 10.5C10.34 10.5 9 9.16 9 7.5C9 5.84 10.34 4.5 12 4.5C13.66 4.5 15 5.84 15 7.5C15 9.16 13.66 10.5 12 10.5ZM21 9.75C21 11.16 19.16 12 18 12C18.84 12 20 10.84 20 9.75C20 8.66 18.84 7.5 18 7.5C19.16 7.5 21 8.36 21 9.75ZM3 9.75C3 8.36 4.84 7.5 6 7.5C5.16 7.5 4 8.66 4 9.75C4 10.84 5.16 12 6 12C4.84 12 3 11.16 3 9.75Z" fill="currentColor" />
+                  </svg>
+                  {t("header.craigslist")}
+                </NavLink>
+
+                <NavLink
+                  to="/initiatives"
+                  className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
+                  onClick={toggleMobileMenu}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L3.09 8.26L4 21L12 17L20 21L20.91 8.26L12 2ZM12 4.15L18.09 8.72L17.34 18.28L12 15.28L6.66 18.28L5.91 8.72L12 4.15Z" fill="currentColor" />
+                  </svg>
+                  {t("header.initiatives")}
+                </NavLink>
+
+                <NavLink
+                  to="/map"
+                  className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
+                  onClick={toggleMobileMenu}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor" />
+                  </svg>
+                  {t("header.map")}
+                </NavLink>
+              </div>
+            </div>
 
             <NavLink
               to="/ad/create"

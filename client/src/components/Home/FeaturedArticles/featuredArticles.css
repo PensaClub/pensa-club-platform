@@ -363,7 +363,7 @@
   color: var(--accent);
 }
 
-.article-excerpt {
+.article-excerpt-home {
   font-size: 1.1rem;
   line-height: 1.8;
   color: #5B5B7E;
@@ -567,7 +567,7 @@
     margin-bottom: 15px;
   }
   
-  .article-excerpt {
+  .article-excerpt-home {
     font-size: 1rem;
     margin-bottom: 25px;
   }

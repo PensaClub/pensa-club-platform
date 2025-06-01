@@ -11,7 +11,9 @@ import { InitiativesHero } from './InitiativesHero/InitiativesHero';
 export const InitiativesList = () => {
   const { t } = useTranslation();
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
-  const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
+  // const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
+  const {toggleBookmark,bookmarkedInitiatives} = useInitiativeContext();
+
   const [isFiltering, setIsFiltering] = useState(false);
   const [showMap, setShowMap] = useState(false); 
 
@@ -28,29 +30,24 @@ export const InitiativesList = () => {
       top: 0,
       behavior: 'smooth'
     });
+    
   },[]);
   
-  // Зареждане на bookmarks от localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('bookmarkedInitiatives');
-    if (saved) {
-      setBookmarkedInitiatives(JSON.parse(saved));
-    }
-  }, []);
+  // // Зареждане на bookmarks от localStorage
+  // useEffect(() => {
+  //   const saved = localStorage.getItem('bookmarkedInitiatives');
+  //   if (saved) {
+  //     setBookmarkedInitiatives(JSON.parse(saved));
+  //   }
+  // }, []);
 
-  // Запазване на bookmarks в localStorage
-  useEffect(() => {
-    localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
-  }, [bookmarkedInitiatives]);
+  // // Запазване на bookmarks в localStorage
+  // useEffect(() => {
+  //   localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
+  // }, [bookmarkedInitiatives]);
 
   const handleBookmarkToggle = (initiativeId) => {
-    setBookmarkedInitiatives(prev => {
-      if (prev.includes(initiativeId)) {
-        return prev.filter(id => id !== initiativeId);
-      } else {
-        return [...prev, initiativeId];
-      }
-    });
+  toggleBookmark(initiativeId); 
   };
 
   const handleFilter = (filtered) => {
