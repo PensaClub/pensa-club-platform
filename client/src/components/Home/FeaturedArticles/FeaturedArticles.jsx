@@ -114,7 +114,7 @@ export const FeaturedArticles = () => {
 
                   <h3 className="article-title">{article.title}</h3>
 
-                  <p className="article-excerpt">
+                  <p className="article-excerpt-home">
                     {cleanAndTruncateText(article.summary, 220)}
                   </p>
 

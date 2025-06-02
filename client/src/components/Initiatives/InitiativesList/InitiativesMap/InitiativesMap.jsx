@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import './initiativesMap.css';
 import { useTranslation } from 'react-i18next';
@@ -15,25 +16,14 @@ L.Icon.Default.mergeOptions({
 export const InitiativesMap = ({ initiatives, onHide }) => {
     const { t } = useTranslation();
 
-    const cityGroups = useMemo(() => {
-        const groups = {};
-        initiatives.forEach(initiative => {
-            const cityKey = initiative.location.address;
-            if (!groups[cityKey]) {
-                groups[cityKey] = {
-                    city: cityKey,
-                    coordinates: initiative.location.coordinates,
-                    initiatives: [],
-                    count: 0
-                };
-            }
-            groups[cityKey].initiatives.push(initiative);
-            groups[cityKey].count++;
-        });
-        return Object.values(groups);
+    // Премахваме grouping логиката - cluster ще се прави автоматично
+    const markers = useMemo(() => {
+        return initiatives.map((initiative, index) => ({
+            id: initiative.id || index,
+            position: [initiative.location.coordinates.lat, initiative.location.coordinates.lng],
+            initiative: initiative
+        }));
     }, [initiatives]);
-
-    const uniqueCities = cityGroups.length;
 
     const createCustomIcon = (count) => {
         return L.divIcon({
@@ -47,6 +37,7 @@ export const InitiativesMap = ({ initiatives, onHide }) => {
             iconAnchor: [20, 20],
         });
     };
+
     const createCustomIconWithCounter = (count) => {
         return L.divIcon({
             className: 'custom-png-marker',
@@ -56,16 +47,26 @@ export const InitiativesMap = ({ initiatives, onHide }) => {
         <span class="marker-counter">${count}</span>
       </div>
     `,
-            iconSize: [10, 10],
-            iconAnchor: [15, 30],
-            popupAnchor: [0, -30]
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40]
         });
     };
+
+    // Custom cluster icon
+    const createClusterCustomIcon = (cluster) => {
+        return L.divIcon({
+            html: `<div class="cluster-icon">${cluster.getChildCount()}</div>`,
+            className: 'custom-marker-cluster',
+            iconSize: [40, 40],
+        });
+    };
+
     return (
         <div className="initiatives-map-container">
             <div className="map-header">
                 <h2 className="map-title">
-                    {initiatives.length} {t('initiatives.map.projectsIn')} {uniqueCities} {t('initiatives.map.cities')}
+                    {initiatives.length} {t('initiatives.map.projectsIn')} {initiatives.length > 1 ? t('initiatives.map.locations') : t('initiatives.map.location')}
                 </h2>
                 <button className="hide-map-btn" onClick={onHide}>
                     ⊗ {t('initiatives.map.hideMap')}
@@ -84,39 +85,46 @@ export const InitiativesMap = ({ initiatives, onHide }) => {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
                     />
 
-                    {cityGroups.map((group, index) => (
-                        <Marker
-                            key={index}
-                            position={[group.coordinates.lat, group.coordinates.lng]}
-                            icon={createCustomIconWithCounter(group.count)}
-                        >
-                            <Popup>
-                                <div className="map-popup">
-                                    <h3>{group.city}</h3>
-                                    <p><strong>{group.count}</strong> {t('initiatives.map.initiatives')}</p>
-                                    <div className="initiative-list">
-                                        {group.initiatives.slice(0, 3).map((initiative, idx) => (
-                                            <div key={idx} className="initiative-item">
-                                                • {initiative.title}
-                                            </div>
-                                        ))}
-                                        {group.initiatives.length > 3 && (
-                                            <div className="more-initiatives">
-                                                +{group.initiatives.length - 3} {t('initiatives.map.more')}
-                                            </div>
-                                        )}
+                    <MarkerClusterGroup
+                        chunkedLoading
+                        iconCreateFunction={createClusterCustomIcon}
+                        maxClusterRadius={80}
+                        spiderfyOnMaxZoom={true}
+                        showCoverageOnHover={false}
+                        zoomToBoundsOnClick={true}
+                    >
+                        {markers.map((marker) => (
+                            <Marker
+                                key={marker.id}
+                                position={marker.position}
+                                icon={createCustomIconWithCounter(1)}
+                            >
+                                <Popup>
+                                    <div className="map-popup">
+                                        <h3>{marker.initiative.title}</h3>
+                                        <p>{marker.initiative.shortDescription}</p>
+                                        <div className="initiative-info">
+                                            <span className="status-badge-view status-{marker.initiative.status}">
+                                                {t('initiatives.map.status')}: {marker.initiative.status}
+                                            </span>
+                                            {marker.initiative.category && (
+                                                <span className="category-badge">
+                                                    {t('initiatives.map.category')}: {marker.initiative.category}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            </Popup>
-                        </Marker>
-                    ))}
+                                </Popup>
+                            </Marker>
+                        ))}
+                    </MarkerClusterGroup>
                 </MapContainer>
             </div>
 
             <div className="map-footer">
-                <span>Pensa club </span> 
+                <span>Pensa club </span>
                 <Link to="/privacy-policy" className="privacy-link">
-                     {t('initiatives.map.privacyStatement')}
+                    {t('initiatives.map.privacyStatement')}
                 </Link>
             </div>
         </div>

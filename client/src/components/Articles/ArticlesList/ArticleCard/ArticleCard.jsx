@@ -6,6 +6,7 @@ import './articleCard.css';
 import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
+import { truncateText } from '../../../../utils/truncateText';
 
 export const ArticleCard = ({ article, featured = false }) => {
   const { t } = useTranslation();
@@ -94,7 +95,7 @@ export const ArticleCard = ({ article, featured = false }) => {
         {article.mainImage.alt && (
           <div
             className="image-alt-caption"
-            dangerouslySetInnerHTML={{ __html: article.mainImage.alt }}
+            dangerouslySetInnerHTML={{ __html: truncateText(article.mainImage.alt,75) }}
           />
         )}
 
@@ -105,7 +106,7 @@ export const ArticleCard = ({ article, featured = false }) => {
 
           <div
             className="article-excerpt"
-            dangerouslySetInnerHTML={{ __html: article.summary }}
+            dangerouslySetInnerHTML={{ __html: truncateText(article.summary,180)}}
           />
 
           {!featured && (

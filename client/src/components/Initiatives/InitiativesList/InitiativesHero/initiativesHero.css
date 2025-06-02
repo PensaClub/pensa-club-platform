@@ -249,13 +249,14 @@
   display: block;
   font-size: 1.4rem;
   font-weight: 800;
-  color: #dc2626;
+  /* color: #dc2626; */
+  color: white;
   line-height: 1;
   margin-bottom: 0.2rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.stat-label {
+.stat-label-view {
   font-size: 0.65rem;
   color: rgba(255, 255, 255, 0.9);
   font-weight: 500;

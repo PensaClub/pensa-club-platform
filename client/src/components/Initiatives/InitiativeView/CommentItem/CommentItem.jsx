@@ -1,0 +1,219 @@
+// Comments/CommentItem/CommentItem.jsx
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useCommentItem } from '../../../hooks/useCommentItem';
+import { formatDistanceToNow } from 'date-fns';
+import { bg, enUS } from 'date-fns/locale';
+import './commentItem.css';
+
+export const CommentItem = ({ comment, initiativeId, onUpdate, isReply = false, parentCommentId = null }) => {
+    const { t, i18n } = useTranslation();
+    
+    const {
+        isEditing,
+        showReplyForm,
+        showReplies,
+        editContent,
+        setEditContent,
+        isOwner,
+        isLiked,
+        hasReplies,
+        isAuthentication,
+        handleLike,
+        handleEdit,
+        handleDelete,
+        handleReply,
+        handleStartEdit,
+        handleCancelEdit,
+        toggleReplies,
+        toggleReplyForm
+    } = useCommentItem(comment, initiativeId, onUpdate, isReply, parentCommentId);
+
+    // Динамичен импорт на CommentForm
+    const [CommentForm, setCommentForm] = useState(null);
+
+    const loadCommentForm = async () => {
+        if (!CommentForm) {
+            const { CommentForm: FormComponent } = await import('../CommentForm/CommentForm');
+            setCommentForm(() => FormComponent);
+        }
+    };
+
+    const handleShowReplyForm = () => {
+        if (showReplyForm) {
+            toggleReplyForm();
+        } else {
+            loadCommentForm();
+            toggleReplyForm();
+        }
+    };
+
+    const handleDeleteWithConfirm = () => {
+        if (window.confirm(t('comments.item.deleteConfirm'))) {
+            handleDelete();
+        }
+    };
+
+    // Функция за обновяване на replies
+    const handleReplyUpdate = (updatedReply, action) => {
+        let updatedComment = { ...comment };
+        
+        switch (action) {
+            case 'like':
+                // Когато харесваме reply, обновяваме целия parent коментар
+                updatedComment = updatedReply;
+                break;
+            case 'update':
+                updatedComment.replies = comment.replies.map(reply => 
+                    reply.id === updatedReply.id ? updatedReply : reply
+                );
+                break;
+            case 'delete':
+                updatedComment.replies = comment.replies.filter(reply => reply.id !== updatedReply.id);
+                break;
+            default:
+                break;
+        }
+        
+        onUpdate(updatedComment, 'update');
+    };
+
+    const timeAgo = formatDistanceToNow(new Date(comment.createdAt), {
+        addSuffix: true,
+        locale: i18n.language === 'bg' ? bg : enUS
+    });
+
+    return (
+        <div className={`initiative-comment-item ${isReply ? 'initiative-comment-reply' : ''}`}>
+            <div className="initiative-comment-avatar">
+                {comment.userAvatar ? (
+                    <img src={comment.userAvatar} alt={comment.userName} />
+                ) : (
+                    <div className="initiative-avatar-placeholder">
+                        {comment.userName.charAt(0).toUpperCase()}
+                    </div>
+                )}
+            </div>
+
+            <div className="initiative-comment-content">
+                <div className="initiative-comment-bubble">
+                    <div className="initiative-comment-header">
+                        <span className="initiative-comment-author">{comment.userName}</span>
+                        {comment.updatedAt && (
+                            <span className="initiative-comment-edited">
+                                ({t('comments.item.edited')})
+                            </span>
+                        )}
+                    </div>
+
+                    {isEditing ? (
+                        <div className="initiative-comment-edit-form">
+                            <textarea
+                                value={editContent}
+                                onChange={(e) => setEditContent(e.target.value)}
+                                className="initiative-edit-textarea"
+                                autoFocus
+                            />
+                            <div className="initiative-edit-actions">
+                                <button 
+                                    onClick={handleEdit}
+                                    className="initiative-save-btn"
+                                    disabled={!editContent.trim()}
+                                >
+                                    {t('comments.item.save')}
+                                </button>
+                                <button 
+                                    onClick={handleCancelEdit}
+                                    className="initiative-cancel-btn"
+                                >
+                                    {t('comments.item.cancel')}
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="initiative-comment-text-container">
+                            <div className="initiative-comment-text">
+                                {comment.content}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className="initiative-comment-meta">
+                    <span className="initiative-comment-time">{timeAgo}</span>
+                    
+                    <button 
+                        onClick={handleLike}
+                        className={`initiative-like-btn ${isLiked ? 'liked' : ''}`}
+                        disabled={!isAuthentication}
+                    >
+                        {isLiked ? 'Харесано' : 'Харесай'}
+                        {comment.likesCount > 0 && ` (${comment.likesCount})`}
+                    </button>
+
+                    {!isReply && isAuthentication && (
+                        <button 
+                            onClick={handleShowReplyForm}
+                            className="initiative-reply-btn"
+                        >
+                            {t('comments.item.reply')}
+                        </button>
+                    )}
+
+                    {isOwner && (
+                        <>
+                            <button 
+                                onClick={handleStartEdit}
+                                className="initiative-edit-btn"
+                            >
+                                {t('comments.item.edit')}
+                            </button>
+                            <button 
+                                onClick={handleDeleteWithConfirm}
+                                className="initiative-delete-btn"
+                            >
+                                {t('comments.item.delete')}
+                            </button>
+                        </>
+                    )}
+
+                    {hasReplies && (
+                        <button 
+                            onClick={toggleReplies}
+                            className="initiative-show-replies-btn"
+                        >
+                            {showReplies 
+                                ? t('comments.item.hideReplies', { count: comment.replies.length })
+                                : t('comments.item.showReplies', { count: comment.replies.length })
+                            }
+                        </button>
+                    )}
+                </div>
+
+                {showReplyForm && CommentForm && (
+                    <CommentForm 
+                        onSubmit={handleReply}
+                        onCancel={toggleReplyForm}
+                        placeholder={t('comments.item.replyPlaceholder', { name: comment.userName })}
+                        isReply={true}
+                    />
+                )}
+
+                {showReplies && hasReplies && (
+                    <div className="initiative-replies-list">
+                        {comment.replies.map(reply => (
+                            <CommentItem 
+                                key={reply.id}
+                                comment={reply}
+                                initiativeId={initiativeId}
+                                onUpdate={handleReplyUpdate}
+                                isReply={true}
+                                parentCommentId={comment.id} // Важно: предаваме parent comment ID
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};

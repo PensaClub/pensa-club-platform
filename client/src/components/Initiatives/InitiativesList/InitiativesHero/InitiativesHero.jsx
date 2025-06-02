@@ -48,15 +48,15 @@ export const InitiativesHero = () => {
           <div className="initiatives-hero-stats">
             <div className="hero-stat-item">
               <span className="stat-number">7</span>
-              <span className="stat-label">{t('initiatives.hero.activeInitiatives')}</span>
+              <span className="stat-label-view">{t('initiatives.hero.activeInitiatives')}</span>
             </div>
             <div className="hero-stat-item">
               <span className="stat-number">150+</span>
-              <span className="stat-label">{t('initiatives.hero.participants')}</span>
+              <span className="stat-label-view">{t('initiatives.hero.participants')}</span>
             </div>
             <div className="hero-stat-item">
               <span className="stat-number">5</span>
-              <span className="stat-label">{t('initiatives.hero.cities')}</span>
+              <span className="stat-label-view">{t('initiatives.hero.cities')}</span>
             </div>
           </div>
         </div>

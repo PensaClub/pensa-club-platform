@@ -11,9 +11,11 @@ import { InitiativesHero } from './InitiativesHero/InitiativesHero';
 export const InitiativesList = () => {
   const { t } = useTranslation();
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
-  const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
+  // const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
+  const { toggleBookmark, bookmarkedInitiatives } = useInitiativeContext();
+
   const [isFiltering, setIsFiltering] = useState(false);
-  const [showMap, setShowMap] = useState(false); // Нов state
+  const [showMap, setShowMap] = useState(false);
 
   const {
     initiatives,
@@ -23,27 +25,29 @@ export const InitiativesList = () => {
     isLoading
   } = useInitiativeContext();
 
-  // Зареждане на bookmarks от localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('bookmarkedInitiatives');
-    if (saved) {
-      setBookmarkedInitiatives(JSON.parse(saved));
-    }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
   }, []);
 
-  // Запазване на bookmarks в localStorage
-  useEffect(() => {
-    localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
-  }, [bookmarkedInitiatives]);
+  // // Зареждане на bookmarks от localStorage
+  // useEffect(() => {
+  //   const saved = localStorage.getItem('bookmarkedInitiatives');
+  //   if (saved) {
+  //     setBookmarkedInitiatives(JSON.parse(saved));
+  //   }
+  // }, []);
+
+  // // Запазване на bookmarks в localStorage
+  // useEffect(() => {
+  //   localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
+  // }, [bookmarkedInitiatives]);
 
   const handleBookmarkToggle = (initiativeId) => {
-    setBookmarkedInitiatives(prev => {
-      if (prev.includes(initiativeId)) {
-        return prev.filter(id => id !== initiativeId);
-      } else {
-        return [...prev, initiativeId];
-      }
-    });
+    toggleBookmark(initiativeId);
   };
 
   const handleFilter = (filtered) => {
@@ -86,14 +90,17 @@ export const InitiativesList = () => {
   return (
     <div className="initiatives-list-container">
       <InitiativesHero />
+        <div className="initiatives-before-container">
+
+          {/* Search & Filters */}
+          <InitiativesSearch
+            initiatives={initiatives}
+            onFilter={handleFilter}
+            onMapToggle={handleMapToggle} // Нов prop
+            showMap={showMap} // Нов prop
+          />
+        </div>
       <div className="initiatives-main-container">
-        {/* Search & Filters */}
-        <InitiativesSearch
-          initiatives={initiatives}
-          onFilter={handleFilter}
-          onMapToggle={handleMapToggle} // Нов prop
-          showMap={showMap} // Нов prop
-        />
 
         {/* Map Section - показва се само ако showMap е true */}
         {showMap && (
@@ -143,7 +150,7 @@ export const InitiativesList = () => {
             <p>{t('initiatives.initiativesList.noResults')}</p>
           </div>
         )}
-        
+
         <ScrollToTop />
       </div>
     </div>
