@@ -411,7 +411,7 @@ header.scrolled + .header-line {
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 15px;
+  padding:0 20px;
   color: var(--gray);
   text-decoration: none;
   border-radius: 10px;
@@ -548,7 +548,7 @@ header.scrolled + .header-line {
   width: 22px;
   height: 28px;
       border-radius: 0 0 8px 8px;
-      /* margin-bottom: 1rem; */
+      margin-left: 1rem;
   /* background-color: #dc2626; */
   color: white;
   text-decoration: none;

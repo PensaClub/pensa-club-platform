@@ -50,6 +50,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   line-height: 1.3;
+  text-indent: initial;
 }
 
 .project-link {
@@ -71,6 +72,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-indent: initial;
 }
 
 .project-read-more {

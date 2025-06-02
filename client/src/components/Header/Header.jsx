@@ -174,7 +174,14 @@ export const Header = ({ additionalClasses }) => {
             )}
           </button>
           {/* Bookmark иконка - само за desktop */}
-
+   {hasBookmarks && isAuthentication && (
+            <div className="bookmark-header-section desktop-bookmark">
+              <Link to="/bookmarks" className="bookmark-header-button">
+                <BookmarkIconHeader />
+                <span className="bookmark-count">{bookmarkedInitiatives.length}</span>
+              </Link>
+            </div>
+          )}
           <div className="profile-section-home" ref={profileRef}>
             {isAuthentication && !isFinish && (
               <span
@@ -271,14 +278,7 @@ export const Header = ({ additionalClasses }) => {
               </div>
             </div>
           </div>
-          {hasBookmarks && isAuthentication && (
-            <div className="bookmark-header-section desktop-bookmark">
-              <Link to="/bookmarks" className="bookmark-header-button">
-                <BookmarkIconHeader />
-                <span className="bookmark-count">{bookmarkedInitiatives.length}</span>
-              </Link>
-            </div>
-          )}
+       
         </div>
       </header>
 

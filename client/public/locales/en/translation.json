@@ -1084,7 +1084,9 @@
       "locations": "different locations",
       "location": "location",
       "organizationName": "Pensa club",
-      "privacyStatement": "Privacy Statement"
+      "privacyStatement": "Privacy Statement",
+      "category": "Category",
+      "status": "Status"
     }
   },
   "comments": {

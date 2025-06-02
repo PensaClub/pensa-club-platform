@@ -198,7 +198,7 @@
 
 .section-image img {
   width: 100%;
-  height: 250px;
+  height: 300px;
   object-fit: cover;
 }
 
@@ -258,6 +258,7 @@
   color: #1a202c;
   margin: 0 0 0.5rem 0;
   line-height: 1.3;
+  text-indent: initial;
 }
 
 .material-description {

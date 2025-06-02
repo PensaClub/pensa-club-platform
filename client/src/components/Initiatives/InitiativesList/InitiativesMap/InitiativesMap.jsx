@@ -104,12 +104,12 @@ export const InitiativesMap = ({ initiatives, onHide }) => {
                                         <h3>{marker.initiative.title}</h3>
                                         <p>{marker.initiative.shortDescription}</p>
                                         <div className="initiative-info">
-                                            <span className="status-badge status-{marker.initiative.status}">
-                                                {marker.initiative.status}
+                                            <span className="status-badge-view status-{marker.initiative.status}">
+                                                {t('initiatives.map.status')}: {marker.initiative.status}
                                             </span>
                                             {marker.initiative.category && (
                                                 <span className="category-badge">
-                                                    {marker.initiative.category}
+                                                    {t('initiatives.map.category')}: {marker.initiative.category}
                                                 </span>
                                             )}
                                         </div>

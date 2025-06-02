@@ -32,7 +32,10 @@
           "content": "Страхотна инициатива! Точно това ни трябваше в общността. Надявам се да може да участвам активно и да помогна на други възрастни хора.",
           "createdAt": "2024-03-20T10:30:00Z",
           "updatedAt": null,
-          "likes": ["valeri@example.com", "georgi@example.com"],
+          "likes": [
+            "valeri@example.com",
+            "georgi@example.com"
+          ],
           "likesCount": 2,
           "replies": [
             {
@@ -44,7 +47,9 @@
               "content": "Благодаря за подкрепата, Мария! Разчитаме на активни участници като вас 🙏",
               "createdAt": "2024-03-20T11:15:00Z",
               "updatedAt": null,
-              "likes": ["maria@example.com"],
+              "likes": [
+                "maria@example.com"
+              ],
               "likesCount": 1,
               "parentId": "comment-1"
             }
@@ -59,7 +64,9 @@
           "content": "Кога ще стартира официално платформата? Имам много въпроси и предложения за подобрения. Как мога да се свържа с екипа?",
           "createdAt": "2024-03-21T14:20:00Z",
           "updatedAt": null,
-          "likes": ["elena@example.com"],
+          "likes": [
+            "elena@example.com"
+          ],
           "likesCount": 1,
           "replies": [
             {
@@ -86,7 +93,10 @@
           "content": "Отлична идея за свързване на поколенията! Как мога да се включа като доброволец?",
           "createdAt": "2024-03-22T09:45:00Z",
           "updatedAt": null,
-          "likes": ["maria@example.com", "georgi@example.com"],
+          "likes": [
+            "maria@example.com",
+            "georgi@example.com"
+          ],
           "likesCount": 2,
           "replies": []
         }
@@ -209,6 +219,7 @@
       "projects": [
         {
           "id": "pensa-digital-platform",
+          "slug": "pensa-digital-platform",
           "title": "Дигитална платформа Pensa Club",
           "description": "Разработка на уеб платформа за свързване на възрастни хора с общи интереси.",
           "status": "in-progress",
@@ -296,7 +307,10 @@
           "content": "Участвах в йога занятията и съм много доволна! Препоръчвам на всички възрастни хора да се включат.",
           "createdAt": "2024-03-25T08:30:00Z",
           "updatedAt": null,
-          "likes": ["ivan@example.com", "petra@example.com"],
+          "likes": [
+            "ivan@example.com",
+            "petra@example.com"
+          ],
           "likesCount": 2,
           "replies": []
         },
@@ -321,7 +335,9 @@
               "content": "Здравейте Иван! Следващите групи стартират на 15 април. Запишете се на телефона в контактите.",
               "createdAt": "2024-03-26T17:20:00Z",
               "updatedAt": null,
-              "likes": ["ivan@example.com"],
+              "likes": [
+                "ivan@example.com"
+              ],
               "likesCount": 1,
               "parentId": "comment-5"
             }
@@ -393,6 +409,7 @@
       "projects": [
         {
           "id": "health-community-gardens",
+          "slug": "health-community-gardens",
           "title": "Общностни градини",
           "description": "Създаване на градини за възрастни хора за физическа активност и социализация.",
           "status": "active",
@@ -405,6 +422,7 @@
         },
         {
           "id": "health-fitness-centers",
+          "slug": "health-fitness-centers",
           "title": "Фитнес центрове за възрастни",
           "description": "Специализирани фитнес центрове с оборудване за възрастни хора.",
           "status": "planned",
@@ -503,6 +521,7 @@
       "projects": [
         {
           "id": "inter-tech-mentoring",
+          "slug": "inter-tech-mentoring",
           "title": "Технологично менторство",
           "description": "Младежи обучават възрастни в използването на смартфони и таблети.",
           "status": "active",
@@ -515,6 +534,7 @@
         },
         {
           "id": "inter-cultural-exchange",
+          "slug": "inter-cultural-exchange",
           "title": "Културен обмен",
           "description": "Програма за споделяне на традиции и култура между поколенията.",
           "status": "in-progress",
@@ -566,7 +586,10 @@
           "content": "Благодарение на курса вече мога да пиша имейли на внуците си! Страхотни преподаватели.",
           "createdAt": "2024-03-15T13:45:00Z",
           "updatedAt": null,
-          "likes": ["milka@example.com", "ivan@example.com"],
+          "likes": [
+            "milka@example.com",
+            "ivan@example.com"
+          ],
           "likesCount": 2,
           "replies": [
             {
@@ -593,7 +616,9 @@
           "content": "Има ли курсове и за социални мрежи? Искам да науча как да ползвам Facebook.",
           "createdAt": "2024-03-16T10:20:00Z",
           "updatedAt": null,
-          "likes": ["stoyan@example.com"],
+          "likes": [
+            "stoyan@example.com"
+          ],
           "likesCount": 1,
           "replies": []
         },
@@ -697,6 +722,7 @@
       "projects": [
         {
           "id": "digital-tablet-program",
+          "slug":"digital-tablet-program",
           "title": "Програма за таблети",
           "description": "Предоставяне на таблети на курсистите за практически упражнения у дома.",
           "status": "active",
@@ -710,6 +736,7 @@
         {
           "id": "digital-helpers",
           "title": "Дигитални помощници",
+          "slug":"digital-helpers",
           "description": "Програма за обучение на млади доброволци да помагат на възрастни с технологиите.",
           "status": "in-progress",
           "image": "/images/projects/digital-helpers.jpg",
@@ -721,6 +748,7 @@
         },
         {
           "id": "digital-library-centers",
+          "slug":"digital-library-centers",
           "title": "Дигитални центрове в библиотеки",
           "description": "Създаване на компютърни зони в местните библиотеки за обучение.",
           "status": "planned",
@@ -779,7 +807,9 @@
           "content": "Градината вече е готова за новия сезон! Очакваме ви всички да се включите в засаждането.",
           "createdAt": "2024-03-10T16:30:00Z",
           "updatedAt": null,
-          "likes": ["stefan@example.com"],
+          "likes": [
+            "stefan@example.com"
+          ],
           "likesCount": 1,
           "replies": []
         },
@@ -804,7 +834,9 @@
               "content": "Доматите ще засадим в края на април когато мине студът.",
               "createdAt": "2024-03-11T10:20:00Z",
               "updatedAt": null,
-              "likes": ["stefan@example.com"],
+              "likes": [
+                "stefan@example.com"
+              ],
               "likesCount": 1,
               "parentId": "comment-12"
             }
@@ -897,6 +929,7 @@
       "projects": [
         {
           "id": "garden-seed-library",
+          "slug":"garden-seed-library",
           "title": "Библиотека от семена",
           "description": "Създаване на общностна банка семена за размяна между градинарите.",
           "status": "active",
@@ -909,6 +942,7 @@
         },
         {
           "id": "garden-expansion",
+          "slug":"garden-expansion",
           "title": "Разширяване на градините",
           "description": "Създаване на нови общностни градини в други квартали на града.",
           "status": "planned",
@@ -921,6 +955,8 @@
         },
         {
           "id": "garden-composting-center",
+          "slug":"garden-composting-center",
+
           "title": "Компостиращ център",
           "description": "Центр за компостиране на органични отпадъци от квартала.",
           "status": "in-progress",
@@ -1041,9 +1077,11 @@
           }
         }
       ],
-     "projects": [
+      "projects": [
         {
           "id": "buddy-app",
+          "slug":"buddy-app",
+
           "title": "Мобилно приложение",
           "description": "Разработка на приложение за лесна комуникация между приятелите и организиране на срещи.",
           "status": "planned",
@@ -1056,6 +1094,8 @@
         },
         {
           "id": "buddy-volunteer-network",
+          "slug":"buddy-volunteer-network",
+
           "title": "Мрежа от доброволци",
           "description": "Обучение на доброволци които да координират и подкрепят системата приятели.",
           "status": "in-progress",
@@ -1068,6 +1108,8 @@
         },
         {
           "id": "buddy-meeting-centers",
+          "slug":"buddy-meeting-centers",
+
           "title": "Центрове за срещи",
           "description": "Създаване на комфортни места за срещи между приятелите.",
           "status": "planned",
@@ -1126,7 +1168,9 @@
           "content": "Работилниците бяха невероятни! Научих се да правя керамика и се запознах с прекрасни хора.",
           "createdAt": "2024-03-22T18:00:00Z",
           "updatedAt": null,
-          "likes": ["vasil@example.com"],
+          "likes": [
+            "vasil@example.com"
+          ],
           "likesCount": 1,
           "replies": []
         },
@@ -1139,7 +1183,9 @@
           "content": "Благодаря на всички участници! Беше чудесна група за работа.",
           "createdAt": "2024-03-23T10:30:00Z",
           "updatedAt": null,
-          "likes": ["anna@example.com"],
+          "likes": [
+            "anna@example.com"
+          ],
           "likesCount": 1,
           "replies": []
         }
@@ -1230,6 +1276,8 @@
       "projects": [
         {
           "id": "arts-community-mural",
+          "slug":"arts-community-mural",
+
           "title": "Обществена стенопис",
           "description": "Създаване на голям стенопис в центъра на града с участието на всички творци.",
           "status": "completed",
@@ -1242,6 +1290,8 @@
         },
         {
           "id": "arts-mentorship",
+          "slug":"arts-mentorship",
+
           "title": "Художествено менторство",
           "description": "Програма където опитни художници обучават начинаещи възрастни творци.",
           "status": "active",
@@ -1254,6 +1304,8 @@
         },
         {
           "id": "arts-gallery-space",
+          "slug":"arts-gallery-space",
+
           "title": "Галерийно пространство",
           "description": "Постоянна галерия за показване на творбите на участниците.",
           "status": "planned",

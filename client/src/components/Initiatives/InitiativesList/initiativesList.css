@@ -1,23 +1,29 @@
-/* .initiatives-list-container {
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 40%, #fefefe 100%);
-  width: 100%;
+.initiatives-list-container {
+background: linear-gradient(to bottom, rgb(255, 255, 255) 0%, rgb(240, 242, 247) 100%);
+  /* width: 100%;
   min-height: 100vh;
   padding: 0;
-  margin: 0;
-} */
+  margin: 0; */
+}
 
 .initiatives-main-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 50px 20px 60px;
-  background: #ffffff;
+  /* background: #ffffff; */
   min-height: 100vh;
 }
+.initiatives-before-container{
+  width: 100%;
+  background-color: white;
+}
+
 .initiatives-grid-container{
   background-color: #1a202c;
   width: 100%;
   margin: 0 auto;
 }
+
 .initiatives-header-section {
   background: #ffffff;
   padding-bottom: 40px;

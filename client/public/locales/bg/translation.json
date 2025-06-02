@@ -1080,7 +1080,9 @@
       "location": "локация",
       "more": "още",
       "organizationName": "Pensa club",
-      "privacyStatement": "Privacy Statement"
+      "privacyStatement": "Privacy Statement",
+      "category": "Категория",
+      "status": "Статус"
     }
   },
   "comments": {

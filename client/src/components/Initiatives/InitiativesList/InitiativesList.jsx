@@ -12,10 +12,10 @@ export const InitiativesList = () => {
   const { t } = useTranslation();
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
   // const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
-  const {toggleBookmark,bookmarkedInitiatives} = useInitiativeContext();
+  const { toggleBookmark, bookmarkedInitiatives } = useInitiativeContext();
 
   const [isFiltering, setIsFiltering] = useState(false);
-  const [showMap, setShowMap] = useState(false); 
+  const [showMap, setShowMap] = useState(false);
 
   const {
     initiatives,
@@ -30,9 +30,9 @@ export const InitiativesList = () => {
       top: 0,
       behavior: 'smooth'
     });
-    
-  },[]);
-  
+
+  }, []);
+
   // // Зареждане на bookmarks от localStorage
   // useEffect(() => {
   //   const saved = localStorage.getItem('bookmarkedInitiatives');
@@ -47,7 +47,7 @@ export const InitiativesList = () => {
   // }, [bookmarkedInitiatives]);
 
   const handleBookmarkToggle = (initiativeId) => {
-  toggleBookmark(initiativeId); 
+    toggleBookmark(initiativeId);
   };
 
   const handleFilter = (filtered) => {
@@ -90,14 +90,17 @@ export const InitiativesList = () => {
   return (
     <div className="initiatives-list-container">
       <InitiativesHero />
+        <div className="initiatives-before-container">
+
+          {/* Search & Filters */}
+          <InitiativesSearch
+            initiatives={initiatives}
+            onFilter={handleFilter}
+            onMapToggle={handleMapToggle} // Нов prop
+            showMap={showMap} // Нов prop
+          />
+        </div>
       <div className="initiatives-main-container">
-        {/* Search & Filters */}
-        <InitiativesSearch
-          initiatives={initiatives}
-          onFilter={handleFilter}
-          onMapToggle={handleMapToggle} // Нов prop
-          showMap={showMap} // Нов prop
-        />
 
         {/* Map Section - показва се само ако showMap е true */}
         {showMap && (
@@ -147,7 +150,7 @@ export const InitiativesList = () => {
             <p>{t('initiatives.initiativesList.noResults')}</p>
           </div>
         )}
-        
+
         <ScrollToTop />
       </div>
     </div>

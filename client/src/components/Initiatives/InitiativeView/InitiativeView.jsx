@@ -74,7 +74,7 @@ export const InitiativeView = () => {
                 id: project.id,
                 title: project.title,
                 shortDescription: project.description,
-                category: "Project",
+                category: "Проект",
                 status: project.status,
                 location: {
                     address: `${project.title}`,

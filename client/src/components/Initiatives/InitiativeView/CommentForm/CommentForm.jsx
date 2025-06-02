@@ -37,8 +37,8 @@ export const CommentForm = ({
     return (
         <div className={`initiative-comment-form ${isReply ? 'initiative-comment-form-reply' : ''}`}>
             <div className="initiative-comment-form-avatar">
-                {profileData?.avatar ? (
-                    <img src={profileData.avatar} alt={displayName} />
+                {profileData?.details.imageURL ? (
+                    <img src={profileData.details.imageURL} alt={displayName} />
                 ) : (
                     <div className="initiative-comment-form-avatar-placeholder">
                         {displayName.charAt(0).toUpperCase()}

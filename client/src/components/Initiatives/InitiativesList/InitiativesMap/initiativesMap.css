@@ -120,10 +120,12 @@
   color: var(--black);
   background: #f8f9fa;
 }
+
 .map-footer span {
   color: rgb(45, 55, 72);
   font-weight: bold;
 }
+
 .privacy-link {
   color: var(--black);
   text-decoration: none;
@@ -184,6 +186,23 @@
   height: 20px;
   border-radius: 10px;
   font-size: 9px;
+}
+.status-badge-view{
+    display: inline-block;
+  /* padding: 0.25rem 0.75rem; */
+  border-radius: 100px;
+   font-weight: 600;
+  font-size: calc(var(--xxs-font-size) - 4px);
+  text-indent: initial;
+}
+.category-badge {
+  display: inline-block;
+  padding: 0rem 0.75rem;
+  border-radius: 100px;
+   font-weight: 600;
+  font-size: calc(var(--xxs-font-size) - 4px);
+  text-indent: initial;
+
 }
 
 @media (max-width: 768px) {

@@ -24,6 +24,13 @@
   border-radius: 50%;
   object-fit: cover;
 }
+.initiative-avatar-placeholder{
+  text-indent: initial;
+}
+
+.additional-contact-avatar-initiatives{
+  text-indent: initial;
+}
 
 .initiative-comment-form-avatar-placeholder {
   background: linear-gradient(135deg, #065F46, #1E40AF);
