@@ -60,6 +60,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATE,
                 allowNull: false,
                 defaultValue: DataTypes.NOW,
+                field: 'published_at',
             },
             initiativeId: {
                 type: DataTypes.INTEGER,
@@ -68,6 +69,7 @@ module.exports = (sequelize, DataTypes) => {
                     model: 'initiatives',
                     key: 'id',
                 },
+                field: 'initiative_id',
             },
         },
         {

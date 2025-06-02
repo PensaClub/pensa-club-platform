@@ -1,13 +1,13 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class downloadMaterials extends Model {
+    class DownloadMaterial extends Model {
         static associate(models) {
-            downloadMaterials.belongsTo(models.initiative, {
+            DownloadMaterial.belongsTo(models.initiative, {
                 foreignKey: 'initiativeId',
             });
 
-            downloadMaterials.hasOne(models.image, {
+            DownloadMaterial.hasOne(models.image, {
                 as: 'image',
                 foreignKey: 'imageableId',
                 constraints: false,
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
     }
-    downloadMaterials.init(
+    DownloadMaterial.init(
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -65,12 +65,22 @@ module.exports = (sequelize, DataTypes) => {
             downloadUrl: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                field: 'download_url',
+            },
+            initiativeId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'initiatives',
+                    key: 'id',
+                },
+                field: 'initiative_id',
             },
         },
         {
             sequelize,
-            modelName: 'downloadMaterials',
+            modelName: 'downloadMaterial',
         }
     );
-    return downloadMaterials;
+    return DownloadMaterial;
 };

@@ -1,14 +1,14 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class contacts extends Model {
+    class Contact extends Model {
         static associate(models) {
-            contacts.belongsTo(models.initiative, {
+            Contact.belongsTo(models.initiative, {
                 foreignKey: 'initiativeId',
             });
         }
     }
-    contacts.init(
+    Contact.init(
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -42,11 +42,20 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: false,
                 field: 'is_main_contact',
             },
+            initiativeId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'initiatives',
+                    key: 'id',
+                },
+                field: 'initiative_id',
+            },
         },
         {
             sequelize,
-            modelName: 'contacts',
+            modelName: 'contact',
         }
     );
-    return contacts;
+    return Contact;
 };

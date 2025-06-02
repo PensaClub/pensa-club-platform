@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             const imageableModels = [
                 { model: 'section', connection: 'section' },
                 { model: 'publishedContent', connection: 'publishedContent' },
-                { model: 'downloadMaterials', connection: 'downloadMaterials' },
+                { model: 'downloadMaterial', connection: 'downloadMaterial' },
                 { model: 'initiative', connection: 'initiative' },
             ];
 

@@ -17,7 +17,7 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            shortDescription: {
+            short_description: {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
@@ -38,16 +38,16 @@ module.exports = {
                 allowNull: true,
             },
             status: {
-                type: Sequelize.ENUM('in-progress', 'active', 'planned'),
+                type: Sequelize.ENUM('in-progress', 'active', 'planned', 'completed'),
                 allowNull: false,
                 defaultValue: 'in-progress',
             },
-            campaignStatus: {
+            campaign_status: {
                 type: Sequelize.ENUM('open', 'closed'),
                 allowNull: false,
                 defaultValue: 'open',
             },
-            commentsEnabled: {
+            comments_enabled: {
                 type: Sequelize.BOOLEAN,
                 defaultValue: true,
             },

@@ -1,14 +1,14 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class projects extends Model {
+    class Project extends Model {
         static associate(models) {
-            projects.belongsTo(models.initiative, {
+            Project.belongsTo(models.initiative, {
                 foreignKey: 'initiativeId',
             });
         }
     }
-    projects.init(
+    Project.init(
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -30,13 +30,13 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             status: {
-                type: DataTypes.ENUM('in-progress', 'active', 'planned'),
+                type: DataTypes.ENUM('in-progress', 'active', 'planned', 'completed'),
                 allowNull: false,
                 defaultValue: 'in-progress',
                 validate: {
                     isIn: {
-                        args: ['in-progress', 'active', 'planned'],
-                        msg: 'Status must be in-progress, active or planned',
+                        args: ['in-progress', 'active', 'planned', 'completed'],
+                        msg: 'Status must be in-progress, active, planned or completed',
                     },
                 },
             },
@@ -48,11 +48,28 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
+            initiativeId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'initiatives',
+                    key: 'id',
+                },
+                field: 'initiative_id',
+            },
+            lat: {
+                type: DataTypes.FLOAT,
+                allowNull: true,
+            },
+            lng: {
+                type: DataTypes.FLOAT,
+                allowNull: true,
+            },
         },
         {
             sequelize,
-            modelName: 'projects',
+            modelName: 'project',
         }
     );
-    return projects;
+    return Project;
 };

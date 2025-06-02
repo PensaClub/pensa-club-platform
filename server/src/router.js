@@ -8,6 +8,7 @@ const suggestUserController = require('./controllers/suggestUserController');
 const adminController = require('./controllers/adminController');
 const subscriberController = require('./controllers/subscribersController');
 const articleController = require('./controllers/articleController');
+const initiativeController = require('./controllers/initiativeController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -16,6 +17,7 @@ router.use('/suggest', suggestUserController);
 router.use('/admin', adminController);
 router.use('/subscribe', subscriberController);
 router.use('/articles', articleController);
+router.use('/initiatives', initiativeController);
 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);

@@ -29,7 +29,7 @@ module.exports = {
                 type: Sequelize.DECIMAL(10, 2),
                 allowNull: false,
             },
-            downloadUrl: {
+            download_url: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },

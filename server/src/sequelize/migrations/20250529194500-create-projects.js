@@ -22,7 +22,7 @@ module.exports = {
                 allowNull: true,
             },
             status: {
-                type: Sequelize.ENUM('in-progress', 'active', 'planned'),
+                type: Sequelize.ENUM('in-progress', 'active', 'planned', 'completed'),
                 allowNull: false,
                 defaultValue: 'in-progress',
             },
@@ -43,6 +43,14 @@ module.exports = {
                 },
                 onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
+            },
+            lat: {
+                type: Sequelize.FLOAT,
+                allowNull: true,
+            },
+            lng: {
+                type: Sequelize.FLOAT,
+                allowNull: true,
             },
             createdAt: {
                 allowNull: false,

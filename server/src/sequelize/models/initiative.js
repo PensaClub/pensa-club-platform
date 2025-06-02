@@ -4,12 +4,12 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Initiative extends Model {
         static associate(models) {
-            Initiative.hasMany(models.projects, {
+            Initiative.hasMany(models.project, {
                 foreignKey: 'initiativeId',
                 as: 'projects',
             });
 
-            Initiative.hasMany(models.downloadMaterials, {
+            Initiative.hasMany(models.downloadMaterial, {
                 foreignKey: 'initiativeId',
                 as: 'downloadMaterials',
             });
@@ -30,12 +30,12 @@ module.exports = (sequelize, DataTypes) => {
                 },
             });
 
-            Initiative.hasMany(models.contacts, {
+            Initiative.hasMany(models.contact, {
                 foreignKey: 'initiativeId',
                 as: 'additionalContacts',
             });
 
-            Initiative.hasOne(models.contacts, {
+            Initiative.hasOne(models.contact, {
                 foreignKey: 'initiativeId',
                 as: 'contact',
                 scope: {
@@ -81,6 +81,7 @@ module.exports = (sequelize, DataTypes) => {
             shortDescription: {
                 type: DataTypes.STRING,
                 allowNull: true,
+                field: 'short_description',
             },
             category: {
                 type: DataTypes.STRING,
@@ -99,13 +100,13 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             status: {
-                type: DataTypes.ENUM('in-progress', 'active', 'planned'),
+                type: DataTypes.ENUM('in-progress', 'active', 'planned', 'completed'),
                 allowNull: false,
                 defaultValue: 'in-progress',
                 validate: {
                     isIn: {
-                        args: ['in-progress', 'active', 'planned'],
-                        msg: 'Status must be in-progress, active or planned',
+                        args: ['in-progress', 'active', 'planned', 'completed'],
+                        msg: 'Status must be in-progress, active, planned or completed',
                     },
                 },
             },
@@ -119,10 +120,12 @@ module.exports = (sequelize, DataTypes) => {
                         msg: 'Campaign Status must be open or closed',
                     },
                 },
+                field: 'campaign_status',
             },
             commentsEnabled: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: true,
+                field: 'comments_enabled',
             },
         },
         {
