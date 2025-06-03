@@ -9,9 +9,18 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
+            creator_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'user_accounts',
+                    key: 'id',
+                },
+            },
             slug: {
                 type: Sequelize.STRING,
                 allowNull: true,
+                unique: true,
             },
             title: {
                 type: Sequelize.STRING,

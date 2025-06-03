@@ -26,6 +26,15 @@ module.exports = (sequelize, DataTypes) => {
                     imageLinkConnection: 'section',
                 },
             });
+
+            // section.hasMany(models.image, {
+            //     as: 'image',
+            //     foreignKey: 'imageableId',
+            //     constraints: false,
+            //     scope: {
+            //         imageLinkConnection: 'section',
+            //     },
+            // });
         }
     }
     section.init(
@@ -36,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 allowNull: false,
             },
-            'title-slug': {
+            titleSlug: {
                 type: DataTypes.STRING,
                 allowNull: true,
                 field: 'title_slug',

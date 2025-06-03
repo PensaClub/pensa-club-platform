@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 allowNull: false,
             },
-            'title-slug': {
+            titleSlug: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 field: 'title_slug',

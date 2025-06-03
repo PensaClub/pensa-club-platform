@@ -4,6 +4,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Initiative extends Model {
         static associate(models) {
+            Initiative.belongsTo(models.user_account, {
+                foreignKey: 'creatorId',
+                as: 'creator',
+            });
+
             Initiative.hasMany(models.project, {
                 foreignKey: 'initiativeId',
                 as: 'projects',
@@ -70,9 +75,20 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 allowNull: false,
             },
+            creatorId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'user_accounts',
+                    key: 'id',
+                },
+                field: 'creator_id',
+                onDelete: 'CASCADE',
+            },
             slug: {
                 type: DataTypes.STRING,
                 allowNull: true,
+                unique: true,
             },
             title: {
                 type: DataTypes.STRING,

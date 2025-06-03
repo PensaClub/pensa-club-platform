@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'imageableId',
                 constraints: false,
                 scope: {
-                    imageLinkConnection: 'downloadMaterials',
+                    imageLinkConnection: 'downloadMaterial',
                 },
             });
         }
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
-            'title-slug': {
+            titleSlug: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 field: 'title_slug',
@@ -54,8 +54,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'file_size',
                 validate: {
-                    min: 0,
-                    msg: 'File size cant be negative',
+                    min: {
+                        args: [0],
+                        message: 'File size cannot be negative',
+                    },
                 },
                 get() {
                     const size = this.getDataValue('fileSize');

@@ -14,9 +14,18 @@ const transformInitiative = (initiative) => {
         },
     };
 
-    if (transformedInitiative.mainImage) {
-        const { imageableId, imageLinkConnection, ...imageData } = transformedInitiative.mainImage;
-        transformedInitiative.mainImage = imageData;
+    // Transform sections
+    if (transformedInitiative.sections) {
+        transformedInitiative.sections = transformedInitiative.sections.map((section) => {
+            if (section.sectionImages) {
+                const { sectionImages, ...singleSection } = section;
+                return {
+                    ...singleSection,
+                    image: sectionImages,
+                };
+            }
+            return section;
+        });
     }
 
     return transformedInitiative;

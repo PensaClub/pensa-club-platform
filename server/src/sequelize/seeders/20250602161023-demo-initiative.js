@@ -19,6 +19,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'open',
                     comments_enabled: true,
+                    creator_id: 1,
                 },
                 // Initiative 2: Healthy Aging Program
                 {
@@ -34,6 +35,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'open',
                     comments_enabled: true,
+                    creator_id: 1,
                 },
                 // Initiative 3: Intergenerational Learning
                 {
@@ -49,6 +51,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'closed',
                     comments_enabled: false,
+                    creator_id: 1,
                 },
                 // Initiative 4: Digital Literacy for Seniors
                 {
@@ -64,6 +67,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'open',
                     comments_enabled: true,
+                    creator_id: 2,
                 },
                 // Initiative 5: Community Gardening
                 {
@@ -79,6 +83,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'open',
                     comments_enabled: true,
+                    creator_id: 2,
                 },
                 // Initiative 6: Senior Buddy System
                 {
@@ -94,6 +99,7 @@ module.exports = {
                     status: 'planned',
                     campaign_status: 'closed',
                     comments_enabled: false,
+                    creator_id: 2,
                 },
                 // Initiative 7: Arts & Crafts for Seniors
                 {
@@ -109,6 +115,7 @@ module.exports = {
                     status: 'completed',
                     campaign_status: 'closed',
                     comments_enabled: true,
+                    creator_id: 2,
                 },
             ],
             { returning: true }
@@ -1075,16 +1082,16 @@ module.exports = {
         await queryInterface.bulkInsert('images', [
             // Pensa Club download materials images
             {
-                src: '/images/downloads/pensa-presentation.jpg',
-                alt: 'Презентация на Pensa Club',
+                src: 'https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/articles%2Fimages%2Fbec38821-e41d-4cf6-8f18-3599ff1c8664?alt=media&token=15d2d76f-ed59-427a-83b3-a2f055f42f74',
+                alt: 'Корица на презентацията',
                 imageable_id: downloadMaterials[0].id, // First download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
-                src: '/images/downloads/alumni-proposal.jpg',
-                alt: 'Предложение за Алумни клуб',
+                src: 'https://www.bosch-stiftung.de/sites/default/files/styles/im1920/public/images/media/2025-04/16_9_Malawi%20GC%20unity%20Kopie.jpg?itok=YoSV1Syz',
+                alt: 'Документ за Алумни клуб',
                 imageable_id: downloadMaterials[1].id, // Second download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
@@ -1092,8 +1099,8 @@ module.exports = {
             },
             // Healthy Aging Program download materials images
             {
-                src: '/images/downloads/exercise-guide.jpg',
-                alt: 'Ръководство за физически упражнения',
+                src: '/images/initiatives/exercise-guide-cover.jpg',
+                alt: 'Корица на ръководството за упражнения',
                 imageable_id: downloadMaterials[2].id, // Third download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
@@ -1101,8 +1108,8 @@ module.exports = {
             },
             // Intergenerational Learning download materials images
             {
-                src: '/images/downloads/program-guide.jpg',
-                alt: 'Ръководство за междупоколенчески програми',
+                src: '/images/initiatives/program-guide-cover.jpg',
+                alt: 'Корица на ръководството',
                 imageable_id: downloadMaterials[3].id, // Fourth download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
@@ -1110,15 +1117,15 @@ module.exports = {
             },
             // Digital Literacy download materials images
             {
-                src: '/images/downloads/digital-guide.jpg',
-                alt: 'Основно ръководство за дигитална грамотност',
+                src: '/images/initiatives/digital-guide-cover.jpg',
+                alt: 'Корица на ръководството за дигитални умения',
                 imageable_id: downloadMaterials[4].id, // Fifth download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
-                src: '/images/downloads/safety-tips.jpg',
+                src: '/images/initiatives/safety-tips-cover.jpg',
                 alt: 'Съвети за онлайн безопасност',
                 imageable_id: downloadMaterials[5].id, // Sixth download material
                 image_link_connection: 'downloadMaterial',
@@ -1127,15 +1134,15 @@ module.exports = {
             },
             // Community Gardening download materials images
             {
-                src: '/images/downloads/gardening-guide.jpg',
-                alt: 'Ръководство за градинарство',
+                src: '/images/initiatives/gardening-guide-cover.jpg',
+                alt: 'Корица на ръководството за градинарство',
                 imageable_id: downloadMaterials[6].id, // Seventh download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
-                src: '/images/downloads/plant-calendar.jpg',
+                src: '/images/initiatives/calendar-cover.jpg',
                 alt: 'Календар за засаждане',
                 imageable_id: downloadMaterials[7].id, // Eighth download material
                 image_link_connection: 'downloadMaterial',
@@ -1144,8 +1151,8 @@ module.exports = {
             },
             // Senior Buddy System download materials images
             {
-                src: '/images/downloads/buddy-handbook.jpg',
-                alt: 'Ръководство за приятели',
+                src: '/images/initiatives/buddy-handbook-cover.jpg',
+                alt: 'Корица на наръчника за приятели',
                 imageable_id: downloadMaterials[8].id, // Ninth download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
@@ -1153,16 +1160,16 @@ module.exports = {
             },
             // Arts & Crafts download materials images
             {
-                src: '/images/downloads/art-techniques.jpg',
-                alt: 'Техники за изкуство и занаяти',
+                src: '/images/initiatives/art-guide-cover.jpg',
+                alt: 'Корица на ръководството за изкуство',
                 imageable_id: downloadMaterials[9].id, // Tenth download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
-                src: '/images/downloads/pattern-collection.jpg',
-                alt: 'Колекция от шаблони',
+                src: '/images/initiatives/patterns-cover.jpg',
+                alt: 'Колекция шарки',
                 imageable_id: downloadMaterials[10].id, // Eleventh download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),

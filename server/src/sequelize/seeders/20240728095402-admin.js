@@ -26,18 +26,18 @@ module.exports = {
         );
 
         const data = {
-            phone_number: '0888888888',
+            phoneNumber: '0888888888',
             username: 'AdminPensa',
-            first_name: 'AdminPensa',
-            last_name: 'AdminPensa',
+            firstName: 'AdminPensa',
+            lastName: 'AdminPensa',
             region: 'Търговище',
             workOptions: ['architecture_construction', 'medicine_healthcare'],
             skills: ['communication_skills'],
             interestOptions: ['volunteering', 'spiritual_practices'],
             location: { lat: 43.34658, lon: 26.23078 },
             gender: 'male',
-            birth_date: '1990-01-01',
-            user_accounts_id: userAccount.id,
+            birthDate: '1990-01-01',
+            userAccountsId: userAccount.id,
             createdAt: new Date(),
             updatedAt: new Date(),
             imageURL:
