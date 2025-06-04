@@ -41,24 +41,12 @@ module.exports = (sequelize, DataTypes) => {
             fileType: {
                 type: DataTypes.ENUM('pdf', 'docx'),
                 allowNull: false,
-                validate: {
-                    isIn: {
-                        args: ['pdf', 'docx'],
-                        msg: 'File type must be pdf or docx',
-                    },
-                },
                 field: 'file_type',
             },
             fileSize: {
                 type: DataTypes.DECIMAL(10, 2),
                 allowNull: false,
                 field: 'file_size',
-                validate: {
-                    min: {
-                        args: [0],
-                        message: 'File size cannot be negative',
-                    },
-                },
                 get() {
                     const size = this.getDataValue('fileSize');
                     return size ? `${size} MB` : null;

@@ -119,23 +119,11 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.ENUM('in-progress', 'active', 'planned', 'completed'),
                 allowNull: false,
                 defaultValue: 'in-progress',
-                validate: {
-                    isIn: {
-                        args: ['in-progress', 'active', 'planned', 'completed'],
-                        msg: 'Status must be in-progress, active, planned or completed',
-                    },
-                },
             },
             campaignStatus: {
                 type: DataTypes.ENUM('open', 'closed'),
                 allowNull: false,
                 defaultValue: 'open',
-                validate: {
-                    isIn: {
-                        args: ['open', 'closed'],
-                        msg: 'Campaign Status must be open or closed',
-                    },
-                },
                 field: 'campaign_status',
             },
             commentsEnabled: {

@@ -28,6 +28,19 @@ const transformInitiative = (initiative) => {
         });
     }
 
+    if (transformedInitiative.projects) {
+        transformedInitiative.projects = transformedInitiative.projects.map((project) => {
+            const { lat, lng, ...restOfProject } = project;
+            return {
+                ...restOfProject,
+                coordinates: {
+                    lat,
+                    lng,
+                },
+            };
+        });
+    }
+
     return transformedInitiative;
 };
 

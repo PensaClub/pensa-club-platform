@@ -5,6 +5,8 @@ const rbac = require('../middlewares/rbac');
 const { initiative, image, project, downloadMaterial, publishedContent, contact, section, user_account, user_details } = require('../sequelize/models');
 const customError = require('../utils/customError');
 const transformInitiative = require('../utils/initiativeUtils');
+const { InitiativeSchema } = require('../schemas/initiatives.schema');
+const z = require('zod');
 
 const initiativeConfig = [
     {
@@ -31,7 +33,7 @@ const initiativeConfig = [
         model: project,
         as: 'projects',
         required: true,
-        attributes: ['id', 'titleSlug', 'title', 'description', 'status', 'image', 'link', 'lat', 'lng'],
+        attributes: ['id', 'titleSlug', 'slug', 'title', 'description', 'status', 'image', 'link', 'lat', 'lng'],
     },
     {
         model: downloadMaterial,
@@ -187,67 +189,40 @@ initiativeController.get('/all', async (req, res, next) => {
 
 initiativeController.post('/create', isAuth, async (req, res, next) => {
     try {
-        const {
-            title,
-            slug,
-            shortDescription,
-            category,
-            location,
-            status,
-            campaignStatus,
-            commentsEnabled,
-            mainImage,
-            projects,
-            downloadMaterials,
-            stories,
-            publications,
-            contact: incomingContact,
-            additionalContacts,
-            sections,
-        } = req.body;
+        const { location, ...restBody } = req.body;
+        const initiativeData = {
+            ...restBody,
+            address: location?.address || null,
+            lat: location?.coordinates?.lat || null,
+            lng: location?.coordinates?.lng || null,
+        };
 
-        // Basic validation
-        if (!title || !slug) {
-            throw new customError({
-                message: 'Title and slug are required',
-                statusCode: 400,
-            });
-        }
+        const validatedData = InitiativeSchema.parse(initiativeData);
 
-        // Check if initiative with same slug exists
-        const existingInitiative = await initiative.findOne({ where: { slug } });
-        if (existingInitiative) {
-            throw new customError({
-                message: 'Initiative with this slug already exists',
-                statusCode: 409,
-            });
-        }
-
-        // Create initiative with all associated data using transaction
         const result = await initiative.sequelize.transaction(async (t) => {
-            // Create main initiative
+            // Create initiative
             const newInitiative = await initiative.create(
                 {
-                    title,
-                    slug,
-                    shortDescription,
-                    category,
-                    address: location?.address,
-                    lat: location?.coordinates?.lat,
-                    lng: location?.coordinates?.lng,
-                    status: status || 'in-progress',
-                    campaignStatus: campaignStatus || 'open',
-                    commentsEnabled: commentsEnabled ?? true,
                     creatorId: req.user.userId,
+                    slug: validatedData.slug,
+                    title: validatedData.title,
+                    shortDescription: validatedData.shortDescription,
+                    category: validatedData.category,
+                    address: validatedData.address,
+                    lat: validatedData.lat,
+                    lng: validatedData.lng,
+                    status: validatedData.status,
+                    campaignStatus: validatedData.campaignStatus,
+                    commentsEnabled: validatedData.commentsEnabled,
                 },
                 { transaction: t }
             );
 
-            // Create main image if provided
-            if (mainImage) {
+            // Create main image
+            if (validatedData.mainImage) {
                 await image.create(
                     {
-                        ...mainImage,
+                        ...validatedData.mainImage,
                         imageableId: newInitiative.id,
                         imageLinkConnection: 'initiative',
                     },
@@ -256,12 +231,20 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create projects
-            if (projects && projects.length > 0) {
+            if (validatedData.projects?.length > 0) {
                 await Promise.all(
-                    projects.map((projectData) =>
+                    validatedData.projects.map((projectData) =>
                         project.create(
                             {
-                                ...projectData,
+                                titleSlug: projectData.titleSlug,
+                                slug: projectData.slug,
+                                title: projectData.title,
+                                description: projectData.description,
+                                status: projectData.status,
+                                image: projectData.image,
+                                link: projectData.link,
+                                lat: projectData.coordinates?.lat,
+                                lng: projectData.coordinates?.lng,
                                 initiativeId: newInitiative.id,
                             },
                             { transaction: t }
@@ -271,13 +254,18 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create download materials
-            if (downloadMaterials && downloadMaterials.length > 0) {
+            if (validatedData.downloadMaterials?.length > 0) {
                 await Promise.all(
-                    downloadMaterials.map(async (materialData) => {
+                    validatedData.downloadMaterials.map(async (materialData) => {
                         const { image: materialImage, ...materialFields } = materialData;
                         const createdMaterial = await downloadMaterial.create(
                             {
-                                ...materialFields,
+                                titleSlug: materialData.title,
+                                title: materialData.title,
+                                description: materialData.description,
+                                fileType: materialData.fileType,
+                                fileSize: parseFloat(materialData.fileSize),
+                                downloadUrl: materialData.downloadUrl,
                                 initiativeId: newInitiative.id,
                             },
                             { transaction: t }
@@ -298,14 +286,19 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create stories
-            if (stories && stories.length > 0) {
+            if (validatedData.stories?.length > 0) {
                 await Promise.all(
-                    stories.map(async (storyData) => {
+                    validatedData.stories.map(async (storyData) => {
                         const { image: storyImage, ...storyFields } = storyData;
                         const createdStory = await publishedContent.create(
                             {
-                                ...storyFields,
+                                titleSlug: storyData.title,
+                                title: storyData.title,
+                                description: storyData.description,
+                                link: storyData.link,
+                                author: storyData.author,
                                 type: 'story',
+                                publishedAt: storyData.publishedAt,
                                 initiativeId: newInitiative.id,
                             },
                             { transaction: t }
@@ -326,14 +319,18 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create publications
-            if (publications && publications.length > 0) {
+            if (validatedData.publications?.length > 0) {
                 await Promise.all(
-                    publications.map(async (publicationData) => {
+                    validatedData.publications.map(async (publicationData) => {
                         const { image: publicationImage, ...publicationFields } = publicationData;
                         const createdPublication = await publishedContent.create(
                             {
-                                ...publicationFields,
+                                titleSlug: publicationData.title,
+                                title: publicationData.title,
+                                description: publicationData.description,
+                                link: publicationData.link,
                                 type: 'publication',
+                                publishedAt: publicationData.publishedAt,
                                 initiativeId: newInitiative.id,
                             },
                             { transaction: t }
@@ -354,10 +351,10 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create main contact
-            if (incomingContact) {
+            if (validatedData.contact) {
                 await contact.create(
                     {
-                        ...incomingContact,
+                        ...validatedData.contact,
                         isMainContact: true,
                         initiativeId: newInitiative.id,
                     },
@@ -366,9 +363,9 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create additional contacts
-            if (additionalContacts && additionalContacts.length > 0) {
+            if (validatedData.additionalContacts?.length > 0) {
                 await Promise.all(
-                    additionalContacts.map((contactData) =>
+                    validatedData.additionalContacts.map((contactData) =>
                         contact.create(
                             {
                                 ...contactData,
@@ -382,49 +379,45 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create sections
-            if (sections && sections.length > 0) {
+            if (validatedData.sections?.length > 0) {
                 await Promise.all(
-                    sections.map(async (sectionData) => {
-                        const { sectionImages, ...sectionFields } = sectionData;
+                    validatedData.sections.map(async (sectionData) => {
+                        const { image: sectionImage, ...sectionFields } = sectionData;
                         const createdSection = await section.create(
                             {
-                                ...sectionFields,
+                                titleSlug: sectionData.titleSlug,
+                                title: sectionData.title,
+                                content: sectionData.content,
                                 sectionableId: newInitiative.id,
                                 sectionLinkConnection: 'initiative',
                             },
                             { transaction: t }
                         );
 
-                        if (sectionImages && sectionImages.length > 0) {
-                            await Promise.all(
-                                sectionImages.map((imageData) =>
-                                    image.create(
-                                        {
-                                            ...imageData,
-                                            imageableId: createdSection.id,
-                                            imageLinkConnection: 'section',
-                                        },
-                                        { transaction: t }
-                                    )
-                                )
+                        if (sectionImage) {
+                            await image.create(
+                                {
+                                    ...sectionImage,
+                                    imageableId: createdSection.id,
+                                    imageLinkConnection: 'section',
+                                },
+                                { transaction: t }
                             );
                         }
                     })
                 );
             }
 
-            // Fetch the complete initiative with all associations
             const completeInitiative = await initiative.findByPk(newInitiative.id, {
                 include: initiativeConfig,
                 attributes: initiativeAttributes,
                 transaction: t,
             });
-
             return completeInitiative;
         });
 
-        const transformedInitiative = transformInitiative(result);
-        return res.status(201).json(transformedInitiative);
+        const transformedResponse = transformInitiative(result);
+        return res.status(201).json(transformedResponse);
     } catch (err) {
         next(err);
     }

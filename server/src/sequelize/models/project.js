@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+            slug: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
             description: {
                 type: DataTypes.STRING,
                 allowNull: true,
@@ -33,12 +37,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.ENUM('in-progress', 'active', 'planned', 'completed'),
                 allowNull: false,
                 defaultValue: 'in-progress',
-                validate: {
-                    isIn: {
-                        args: ['in-progress', 'active', 'planned', 'completed'],
-                        msg: 'Status must be in-progress, active, planned or completed',
-                    },
-                },
             },
             image: {
                 type: DataTypes.STRING,
