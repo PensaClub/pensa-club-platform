@@ -91,7 +91,7 @@
       "commentsCount": 1,
       "publications": [
         {
-          "id": "platform-tech-specs",
+          "titleSlug": "platform-tech-specs",
           "title": "Техническа спецификация на платформата",
           "description": "Детайлно описание на техническите изисквания и архитектура на платформата.",
           "image": {
@@ -111,7 +111,7 @@
           "title": "Общ преглед на проекта",
           "content": "Проектът за дигитална платформа Pensa Club има за цел да създаде иновативно решение за свързване на възрастни хора с общи интереси и потребности.",
           "image": {
-            "src": "/images/projects/platform-overview.jpg",
+            "src": "https://media.azpm.org/master/image/2018/5/21/spot/teeniors_2.jpg",
             "alt": "Преглед на платформата"
           }
         },
@@ -120,7 +120,7 @@
           "title": "Основни функционалности",
           "content": "Платформата ще включва профили на потребители, системи за съобщения, календар с събития, форуми за дискусии и мобилно приложение.",
           "image": {
-            "src": "/images/projects/platform-features.jpg",
+            "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBL-h0PBWZaJ8g36hYPBo8_OF3KFsyZHoMYQ&s",
             "alt": "Функционалности на платформата"
           }
         }

@@ -218,13 +218,13 @@
       ],
       "projects": [
         {
-          "id": "pensa-digital-platform",
+          "tittle-slug": "pensa-digital-platform",
           "slug": "pensa-digital-platform",
           "title": "Дигитална платформа Pensa Club",
           "description": "Разработка на уеб платформа за свързване на възрастни хора с общи интереси.",
           "status": "in-progress",
           "image": "https://activatedinsights.com/wp-content/uploads/2015/06/Older-couple-using-laptop-mb.jpg",
-          "link": "/projects/digital-platform",
+          "link": "/projects/pensa-digital-platform",
           "coordinates": {
             "lat": 42.6951,
             "lng": 23.3274
@@ -236,7 +236,7 @@
           "description": "Установяване на партньорство с Фондация Роберт Бош за създаване на Алумни клуб.",
           "status": "planned",
           "image": "https://www.spot.uz/media/img/2022/08/hxj2CB16611736277606_l.jpg",
-          "link": "/projects/bosch-partnership",
+          "link": "/projects/pensa-bosch-partnership",
           "coordinates": {
             "lat": 42.7025,
             "lng": 23.3156
@@ -248,7 +248,7 @@
           "description": "Програма за свързване на възрастни хора с младежи чрез технологии.",
           "status": "active",
           "image": "https://media.azpm.org/master/image/2018/5/21/spot/teeniors_2.jpg",
-          "link": "/projects/intergenerational-bridge",
+          "link": "/projects/health-community-gardens",
           "coordinates": {
             "lat": 42.6913,
             "lng": 23.3298

@@ -6,7 +6,20 @@ import { formatDistanceToNow } from 'date-fns';
 import { bg, enUS } from 'date-fns/locale';
 import './commentItem.css';
 
-export const CommentItem = ({ comment, initiativeId, onUpdate, isReply = false, parentCommentId = null }) => {
+export const CommentItem = ({ 
+    comment, 
+    entityId,  // Нов параметър вместо initiativeId
+    entityType = 'initiative', // Нов параметър
+    onUpdate, 
+    isReply = false, 
+    parentCommentId = null,
+    // Нови параметри за функциите
+    updateCommentFunc,
+    deleteCommentFunc,
+    likeCommentFunc,
+    addReplyFunc,
+    likeReplyFunc
+}) => {
     const { t, i18n } = useTranslation();
     
     const {
@@ -27,7 +40,19 @@ export const CommentItem = ({ comment, initiativeId, onUpdate, isReply = false, 
         handleCancelEdit,
         toggleReplies,
         toggleReplyForm
-    } = useCommentItem(comment, initiativeId, onUpdate, isReply, parentCommentId);
+    } = useCommentItem(
+        comment, 
+        entityId, 
+        onUpdate, 
+        isReply, 
+        parentCommentId,
+        entityType,
+        updateCommentFunc,
+        deleteCommentFunc,
+        likeCommentFunc,
+        addReplyFunc,
+        likeReplyFunc
+    );
 
     // Динамичен импорт на CommentForm
     const [CommentForm, setCommentForm] = useState(null);
@@ -64,12 +89,12 @@ export const CommentItem = ({ comment, initiativeId, onUpdate, isReply = false, 
                 updatedComment = updatedReply;
                 break;
             case 'update':
-                updatedComment.replies = comment.replies.map(reply => 
+                updatedComment.replies = (comment.replies || []).map(reply => 
                     reply.id === updatedReply.id ? updatedReply : reply
                 );
                 break;
             case 'delete':
-                updatedComment.replies = comment.replies.filter(reply => reply.id !== updatedReply.id);
+                updatedComment.replies = (comment.replies || []).filter(reply => reply.id !== updatedReply.id);
                 break;
             default:
                 break;
@@ -183,8 +208,8 @@ export const CommentItem = ({ comment, initiativeId, onUpdate, isReply = false, 
                             className="initiative-show-replies-btn"
                         >
                             {showReplies 
-                                ? t('comments.item.hideReplies', { count: comment.replies.length })
-                                : t('comments.item.showReplies', { count: comment.replies.length })
+                                ? t('comments.item.hideReplies', { count: (comment.replies || []).length })
+                                : t('comments.item.showReplies', { count: (comment.replies || []).length })
                             }
                         </button>
                     )}
@@ -201,14 +226,20 @@ export const CommentItem = ({ comment, initiativeId, onUpdate, isReply = false, 
 
                 {showReplies && hasReplies && (
                     <div className="initiative-replies-list">
-                        {comment.replies.map(reply => (
+                        {(comment.replies || []).map(reply => (
                             <CommentItem 
                                 key={reply.id}
                                 comment={reply}
-                                initiativeId={initiativeId}
+                                entityId={entityId}
+                                entityType={entityType}
                                 onUpdate={handleReplyUpdate}
                                 isReply={true}
-                                parentCommentId={comment.id} // Важно: предаваме parent comment ID
+                                parentCommentId={comment.id}
+                                updateCommentFunc={updateCommentFunc}
+                                deleteCommentFunc={deleteCommentFunc}
+                                likeCommentFunc={likeCommentFunc}
+                                addReplyFunc={addReplyFunc}
+                                likeReplyFunc={likeReplyFunc}
                             />
                         ))}
                     </div>

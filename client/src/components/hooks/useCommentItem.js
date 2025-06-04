@@ -1,17 +1,22 @@
 // hooks/useCommentItem.js
 import { useState } from 'react';
 import { useAuthContext } from '../contexts/UserContext';
-import { useInitiativeContext } from '../contexts/InitiativeProvider';
 
-export const useCommentItem = (comment, initiativeId, onUpdate, isReply = false, parentCommentId = null) => {
+export const useCommentItem = (
+    comment, 
+    entityId, 
+    onUpdate, 
+    isReply = false, 
+    parentCommentId = null,
+    entityType = 'initiative',
+    // Функции предавани от Comments компонента
+    updateCommentFunc,
+    deleteCommentFunc,
+    likeCommentFunc,
+    addReplyFunc,
+    likeReplyFunc
+) => {
     const { isAuthentication, userEmail } = useAuthContext();
-    const { 
-        updateComment, 
-        deleteComment, 
-        likeComment, 
-        addReply,
-        likeReply 
-    } = useInitiativeContext();
     
     const [isEditing, setIsEditing] = useState(false);
     const [showReplyForm, setShowReplyForm] = useState(false);
@@ -20,7 +25,7 @@ export const useCommentItem = (comment, initiativeId, onUpdate, isReply = false,
 
     // Permissions
     const isOwner = isAuthentication && userEmail === comment.userEmail;
-    const isLiked = isAuthentication && comment.likes.includes(userEmail);
+    const isLiked = isAuthentication && (comment.likes || []).includes(userEmail);
     const hasReplies = comment.replies && comment.replies.length > 0;
 
     const handleLike = async () => {
@@ -29,12 +34,12 @@ export const useCommentItem = (comment, initiativeId, onUpdate, isReply = false,
         try {
             let updatedComment;
             
-            // Ако това е reply, използваме likeReply
+            // Ако това е reply, използваме likeReplyFunc
             if (isReply && parentCommentId) {
-                updatedComment = await likeReply(initiativeId, parentCommentId, comment.id);
+                updatedComment = await likeReplyFunc(entityId, parentCommentId, comment.id);
             } else {
-                // Ако това е основен коментар, използваме likeComment
-                updatedComment = await likeComment(initiativeId, comment.id);
+                // Ако това е основен коментар, използваме likeCommentFunc
+                updatedComment = await likeCommentFunc(entityId, comment.id);
             }
             
             onUpdate(updatedComment, 'like');
@@ -47,7 +52,7 @@ export const useCommentItem = (comment, initiativeId, onUpdate, isReply = false,
         if (!editContent.trim()) return;
 
         try {
-            const updatedComment = await updateComment(initiativeId, comment.id, editContent);
+            const updatedComment = await updateCommentFunc(entityId, comment.id, editContent);
             onUpdate(updatedComment, 'update');
             setIsEditing(false);
         } catch (error) {
@@ -57,7 +62,7 @@ export const useCommentItem = (comment, initiativeId, onUpdate, isReply = false,
 
     const handleDelete = async () => {
         try {
-            await deleteComment(initiativeId, comment.id);
+            await deleteCommentFunc(entityId, comment.id);
             onUpdate(comment, 'delete');
         } catch (error) {
             console.error('Error deleting comment:', error);
@@ -66,7 +71,7 @@ export const useCommentItem = (comment, initiativeId, onUpdate, isReply = false,
 
     const handleReply = async (content) => {
         try {
-            const reply = await addReply(initiativeId, comment.id, content);
+            const reply = await addReplyFunc(entityId, comment.id, content);
             const updatedComment = {
                 ...comment,
                 replies: [...(comment.replies || []), reply]
