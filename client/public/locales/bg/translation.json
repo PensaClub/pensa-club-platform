@@ -1122,5 +1122,97 @@
       "hideReplies": "Скрий отговори ({{count}})",
       "replyPlaceholder": "Отговори на {{name}}..."
     }
+  },
+  "projectView": {
+    "loading": "Зареждане...",
+    "breadcrumb": {
+      "initiatives": "Инициативи",
+      "backToInitiative": "Връщане към инициативата"
+    },
+    "status": {
+      "active": "Активен",
+      "in-progress": "В процес",
+      "completed": "Завършен",
+      "planned": "Планиран",
+      "paused": "Паузиран",
+      "cancelled": "Отменен"
+    },
+    "priority": {
+      "high": "Висок",
+      "medium": "Среден",
+      "low": "Нисък"
+    },
+    "priorityLabel": "приоритет",
+    "meta": {
+      "category": "Категория",
+      "location": "Локация",
+      "participants": "Участници"
+    },
+    "buttons": {
+      "apply": "Кандидатствай",
+      "alreadyApplied": "Вече сте кандидатствали",
+      "bookmark": "Запази"
+    },
+    "stats": {
+      "funded": "Финансирано",
+      "duration": "Продължителност",
+      "team": "Екип"
+    },
+    "navigation": {
+      "publications": "Публикации",
+      "team": "Екип",
+      "applications": "Кандидатстване",
+      "comments": "Коментари"
+    },
+    "sections": {
+      "publications": "Публикации",
+      "team": "Екип"
+    },
+      "messages": {
+      "loginRequired": "Моля влезте в профила си за да кандидатствате за този проект."
+    }
+  },
+  "applicationForm": {
+    "dateLocale": "bg-BG",
+    "alerts": {
+      "loginRequired": "Трябва да сте логнати за да кандидатствате!",
+      "alreadyApplied": "Вече сте кандидатствали за този проект!",
+      "error": "Възникна грешка при кандидатстването. Моля опитайте отново."
+    },
+    "loginRequired": {
+      "title": "Необходимо е влизане",
+      "subtitle": "За да кандидатствате за този проект, моля влезте в профила си."
+    },
+    "success": {
+      "message": "Вече сте кандидатствали за този проект! Екипът на Pensa Club ще се свърже с Вас."
+    },
+    "titles": {
+      "yourApplication": "Вашата кандидатура",
+      "applyForProject": "Кандидатствай за проекта"
+    },
+    "subtitles": {
+      "successfullyApplied": "Успешно сте кандидатствали за участие в \"{{projectTitle}}\"",
+      "fillForm": "Попълнете формуляра по-долу за да кандидатствате за участие в \"{{projectTitle}}\""
+    },
+    "fields": {
+      "firstName": "Име",
+      "lastName": "Фамилия",
+      "email": "Имейл адрес",
+      "phone": "Телефон",
+      "anonymous": "Направи кандидатурата анонимна (името ви няма да се показва публично)"
+    },
+    "placeholders": {
+      "phone": "+359 888 123 456"
+    },
+    "buttons": {
+      "submit": "Изпрати кандидатура",
+      "submitting": "Изпращане..."
+    },
+    "recentApplications": {
+      "title": "Последни кандидатури ({{count}})",
+      "anonymousUser": "Анонимен потребител",
+      "empty": "Все още няма кандидати за този проект. Бъдете първи!"
+    }
   }
+  
 }

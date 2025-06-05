@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../contexts/UserContext';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import './applicationForm.css';
 
 export const ApplicationForm = ({ project, onSubmit }) => {
+  const { t } = useTranslation();
   const { profileData, isAuthentication } = useAuthContext();
   const { recentApplications } = useInitiativeContext();
   const [isLoading, setIsLoading] = useState(false);
@@ -36,12 +38,12 @@ export const ApplicationForm = ({ project, onSubmit }) => {
     e.preventDefault();
     
     if (!isAuthentication) {
-      alert('Трябва да сте логнати за да кандидатствате!');
+      alert(t('applicationForm.alerts.loginRequired'));
       return;
     }
 
     if (hasApplied) {
-      alert('Вече сте кандидатствали за този проект!');
+      alert(t('applicationForm.alerts.alreadyApplied'));
       return;
     }
 
@@ -59,14 +61,15 @@ export const ApplicationForm = ({ project, onSubmit }) => {
       
     } catch (error) {
       console.error('Application failed:', error);
-      alert('Възникна грешка при кандидатстването. Моля опитайте отново.');
+      alert(t('applicationForm.alerts.error'));
     } finally {
       setIsLoading(false);
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('bg-BG', {
+    const currentLang = t('applicationForm.dateLocale');
+    return new Date(dateString).toLocaleDateString(currentLang, {
       day: 'numeric',
       month: 'short',
       hour: '2-digit',
@@ -82,9 +85,9 @@ export const ApplicationForm = ({ project, onSubmit }) => {
     return (
       <div className="application-form-container" id="application-form">
         <div className="application-form-header">
-          <h2 className="application-form-title">Необходимо е влизане</h2>
+          <h2 className="application-form-title">{t('applicationForm.loginRequired.title')}</h2>
           <p className="application-form-subtitle">
-            За да кандидатствате за този проект, моля влезте в профила си.
+            {t('applicationForm.loginRequired.subtitle')}
           </p>
         </div>
       </div>
@@ -95,18 +98,18 @@ export const ApplicationForm = ({ project, onSubmit }) => {
     <div className="application-form-container" id="application-form">
       {hasApplied && (
         <div className="application-form-success">
-          ✅ Вече сте кандидатствали за този проект! Екипът на Pensa Club ще се свърже с Вас.
+          ✅ {t('applicationForm.success.message')}
         </div>
       )}
 
       <div className="application-form-header">
         <h2 className="application-form-title">
-          {hasApplied ? 'Вашата кандидатура' : 'Кандидатствай за проекта'}
+          {hasApplied ? t('applicationForm.titles.yourApplication') : t('applicationForm.titles.applyForProject')}
         </h2>
         <p className="application-form-subtitle">
           {hasApplied 
-            ? `Успешно сте кандидатствали за участие в "${project.title}"`
-            : `Попълнете формуляра по-долу за да кандидатствате за участие в "${project.title}"`
+            ? t('applicationForm.subtitles.successfullyApplied', { projectTitle: project.title })
+            : t('applicationForm.subtitles.fillForm', { projectTitle: project.title })
           }
         </p>
       </div>
@@ -116,7 +119,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
           <div className="application-form-row">
             <div className="application-form-field">
               <label htmlFor="firstName" className="application-form-label required">
-                Име
+                {t('applicationForm.fields.firstName')}
               </label>
               <input
                 type="text"
@@ -132,7 +135,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
 
             <div className="application-form-field">
               <label htmlFor="lastName" className="application-form-label required">
-                Фамилия
+                {t('applicationForm.fields.lastName')}
               </label>
               <input
                 type="text"
@@ -150,7 +153,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
           <div className="application-form-row">
             <div className="application-form-field">
               <label htmlFor="email" className="application-form-label required">
-                Имейл адрес
+                {t('applicationForm.fields.email')}
               </label>
               <input
                 type="email"
@@ -166,7 +169,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
 
             <div className="application-form-field">
               <label htmlFor="phone" className="application-form-label">
-                Телефон
+                {t('applicationForm.fields.phone')}
               </label>
               <input
                 type="tel"
@@ -175,7 +178,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
                 value={formData.phone}
                 onChange={handleInputChange}
                 className="application-form-input"
-                placeholder="+359 888 123 456"
+                placeholder={t('applicationForm.placeholders.phone')}
                 disabled={isLoading}
               />
             </div>
@@ -194,7 +197,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
                 <span className="application-form-checkbox-mark"></span>
               </label>
               <label htmlFor="isAnonymous" className="application-form-checkbox-label">
-                Направи кандидатурата анонимна (името ви няма да се показва публично)
+                {t('applicationForm.fields.anonymous')}
               </label>
             </div>
           </div>
@@ -207,10 +210,10 @@ export const ApplicationForm = ({ project, onSubmit }) => {
             >
               {isLoading ? (
                 <span className="application-form-loading">
-                  ⏳ Изпращане...
+                  ⏳ {t('applicationForm.buttons.submitting')}
                 </span>
               ) : (
-                '📤 Изпрати кандидатура'
+                `📤 ${t('applicationForm.buttons.submit')}`
               )}
             </button>
           </div>
@@ -220,7 +223,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
       {/* Recent Applications */}
       <div className="application-form-recent-applications">
         <h3 className="application-form-recent-title">
-          Последни кандидатури ({sortedApplications?.length || 0})
+          {t('applicationForm.recentApplications.title', { count: sortedApplications?.length || 0 })}
         </h3>
         
         {sortedApplications && sortedApplications.length > 0 ? (
@@ -228,7 +231,10 @@ export const ApplicationForm = ({ project, onSubmit }) => {
             {sortedApplications.slice(0, 5).map((application, index) => (
               <div key={application.id || index} className="application-form-recent-item">
                 <span className="application-form-recent-user">
-                  {application.isAnonymous ? 'Анонимен потребител' : `${application.firstName} ${application.lastName}`}
+                  {application.isAnonymous 
+                    ? t('applicationForm.recentApplications.anonymousUser') 
+                    : `${application.firstName} ${application.lastName}`
+                  }
                 </span>
                 <span className="application-form-recent-date">
                   {formatDate(application.appliedAt)}
@@ -238,7 +244,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
           </div>
         ) : (
           <div className="application-form-recent-empty">
-            Все още няма кандидати за този проект. Бъдете първи! 🚀
+            {t('applicationForm.recentApplications.empty')} 🚀
           </div>
         )}
       </div>
