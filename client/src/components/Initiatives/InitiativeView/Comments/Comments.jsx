@@ -8,7 +8,7 @@ import { CommentItem } from '../CommentItem/CommentItem';
 import { CommentForm } from '../CommentForm/CommentForm';
 import { Link } from 'react-router-dom';
 
-export const Comments = ({ 
+export const Comments = ({
     initiativeId,        // За backward compatibility с InitiativeView
     entityId,           // Унифициран ID за проекти
     entityType = 'initiative', // 'initiative' или 'project'
@@ -17,48 +17,34 @@ export const Comments = ({
 }) => {
     const { t } = useTranslation();
     const { isAuthentication } = useAuthContext();
-    const { 
+    const {
         // Initiative functions
-        getComments, 
-        addComment,
-        updateComment,
-        deleteComment,
-        likeComment,
-        addReply,
-        likeReply,
-        
-        // Project functions
-        getProjectComments,
-        addProjectComment,
-        updateProjectComment,
-        deleteProjectComment,
-        likeProjectComment,
-        addProjectReply,
-        likeProjectReply,
-        
-        commentsLoading 
+        getComments, addComment, updateComment, deleteComment, likeComment, addReply, updateReply, deleteReply, likeReply,
+        // Project functions  
+        getProjectComments, addProjectComment, updateProjectComment, deleteProjectComment, likeProjectComment, addProjectReply, updateProjectReply, deleteProjectReply, likeProjectReply,
+        commentsLoading
     } = useInitiativeContext();
-    
-    const [comments, setComments] = useState([]); 
+
+    const [comments, setComments] = useState([]);
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    // Определяме правилното ID и дали е проект
     const targetId = initiativeId || entityId;
     const isProject = entityType === 'project';
-    
-    // Избираме правилните функции базирано на типа
+
     const fetchComments = isProject ? getProjectComments : getComments;
     const submitComment = isProject ? addProjectComment : addComment;
     const updateCommentFunc = isProject ? updateProjectComment : updateComment;
     const deleteCommentFunc = isProject ? deleteProjectComment : deleteComment;
     const likeCommentFunc = isProject ? likeProjectComment : likeComment;
     const addReplyFunc = isProject ? addProjectReply : addReply;
+    const updateReplyFunc = isProject ? updateProjectReply : updateReply; 
+    const deleteReplyFunc = isProject ? deleteProjectReply : deleteReply;  
     const likeReplyFunc = isProject ? likeProjectReply : likeReply;
 
     useEffect(() => {
         if (!commentsEnabled || !targetId) return;
-        
+
         const loadComments = async () => {
             try {
                 const commentsData = await fetchComments(targetId);
@@ -98,7 +84,7 @@ export const Comments = ({
                 };
                 const newComments = [commentWithReplies, ...comments];
                 setComments(newComments);
-                
+
                 // Уведоми родителя за промяната
                 if (onCommentsChange) {
                     onCommentsChange(newComments.length);
@@ -112,12 +98,12 @@ export const Comments = ({
 
     const handleUpdateComments = (updatedComment, action) => {
         if (!updatedComment) return;
-        
+
         setComments(prev => {
             let newComments;
             switch (action) {
                 case 'update':
-                    newComments = prev.map(comment => 
+                    newComments = prev.map(comment =>
                         comment?.id === updatedComment.id ? updatedComment : comment
                     );
                     break;
@@ -126,19 +112,19 @@ export const Comments = ({
                     break;
                 case 'like':
                 case 'reply':
-                    newComments = prev.map(comment => 
+                    newComments = prev.map(comment =>
                         comment?.id === updatedComment.id ? updatedComment : comment
                     );
                     break;
                 default:
                     return prev;
             }
-            
+
             // Уведоми родителя за промяната в броя коментари
             if (onCommentsChange && action === 'delete') {
                 onCommentsChange(newComments.length);
             }
-            
+
             return newComments;
         });
     };
@@ -165,9 +151,9 @@ export const Comments = ({
                 <h2 className="initiative-comments-section-title">
                     {t('comments.title')} ({comments.length})
                 </h2>
-                
+
                 {isAuthentication && (
-                    <button 
+                    <button
                         className="initiative-add-comment-btn"
                         onClick={() => setShowCommentForm(!showCommentForm)}
                     >
@@ -186,7 +172,7 @@ export const Comments = ({
             )}
 
             {showCommentForm && (
-                <CommentForm 
+                <CommentForm
                     onSubmit={handleAddComment}
                     onCancel={() => setShowCommentForm(false)}
                     placeholder={t('comments.placeholder')}
@@ -209,7 +195,7 @@ export const Comments = ({
                         comments
                             .filter(comment => comment && comment.id) // Филтрираме валидни коментари
                             .map(comment => (
-                                <CommentItem 
+                                <CommentItem
                                     key={comment.id}
                                     comment={comment}
                                     entityId={targetId}
@@ -220,6 +206,8 @@ export const Comments = ({
                                     likeCommentFunc={likeCommentFunc}
                                     addReplyFunc={addReplyFunc}
                                     likeReplyFunc={likeReplyFunc}
+                                    updateReplyFunc={updateReplyFunc}
+                                    deleteReplyFunc={deleteReplyFunc}
                                 />
                             ))
                     )}

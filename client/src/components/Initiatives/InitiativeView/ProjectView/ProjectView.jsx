@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import { useAuthContext } from '../../../contexts/UserContext';
 import { BookmarkIcon } from '../../Icons/InitiativeIcons';
 import { StoriesPublications } from '../StoriesPublications/StoriesPublications';
 import { Comments } from '../Comments/Comments';
+import { ApplicationForm } from '../ApplicationForm/ApplicationForm';
 
 export const ProjectView = () => {
   const { slug } = useParams();
@@ -16,18 +17,21 @@ export const ProjectView = () => {
     getProjectById, 
     currentProject, 
     isLoading,
-    getProjectComments, // Запазваме само за навигацията
+    getProjectComments,
+    getProjectApplications,
     applyToProject,
     isBookmarked,
-    toggleBookmark
+    toggleBookmark,
+    recentApplications
   } = useInitiativeContext();
   
-  const { isAuthentication } = useAuthContext();
+  const { isAuthentication, profileData } = useAuthContext();
   const [activeSection, setActiveSection] = useState('overview');
-  const [showApplicationForm, setShowApplicationForm] = useState(false);
-
-  // Запазваме само за навигацията - брой коментари
   const [commentsCount, setCommentsCount] = useState(0);
+  const applicationsLoadedRef = useRef(false);
+
+  // Проверявам дали потребителят вече е кандидатствал
+  const hasUserApplied = recentApplications?.some(app => app.email === profileData?.email);
 
   useEffect(() => {
     if (slug) {
@@ -35,13 +39,27 @@ export const ProjectView = () => {
     }
   }, [slug, getProjectById]);
 
-  // Зареждаме само броя коментари за навигацията
+  // Зареждаме броя коментари за навигацията
   useEffect(() => {
-    if (currentProject) {
+    if (currentProject?.id && commentsCount === 0) {
       loadCommentsCount();
     }
-  }, [currentProject]);
-useEffect(() => {
+  }, [currentProject?.id]);
+
+  // Зареждаме кандидатурите за проекта - само веднъж
+  useEffect(() => {
+    if (currentProject?.id && !applicationsLoadedRef.current) {
+      getProjectApplications(currentProject.id);
+      applicationsLoadedRef.current = true;
+    }
+  }, [currentProject?.id]);
+
+  // Reset when project changes
+  useEffect(() => {
+    applicationsLoadedRef.current = false;
+  }, [currentProject?.id]);
+
+  useEffect(() => {
     const navLinks = document.querySelector('.project-view-nav-links');
     if (!navLinks) return;
 
@@ -70,7 +88,7 @@ useEffect(() => {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - navLinks.offsetLeft;
-        const walk = (x - startX) * 1; // Колко бързо да скролира
+        const walk = (x - startX) * 1;
         navLinks.scrollLeft = scrollLeft - walk;
     };
 
@@ -85,9 +103,10 @@ useEffect(() => {
         navLinks.removeEventListener('mouseup', handleMouseUp);
         navLinks.removeEventListener('mousemove', handleMouseMove);
     };
-}, [currentProject]);
+  }, [currentProject?.id]);
+
   const loadCommentsCount = async () => {
-    if (currentProject) {
+    if (currentProject?.id) {
       try {
         const projectComments = await getProjectComments(currentProject.id);
         setCommentsCount(projectComments.length);
@@ -98,17 +117,24 @@ useEffect(() => {
     }
   };
 
-  // Callback функция за обновяване на броя коментари
   const handleCommentsChange = (newCount) => {
     setCommentsCount(newCount);
   };
 
   const handleApplicationSubmit = async (applicationData) => {
     try {
-      await applyToProject(currentProject.id, applicationData);
-      setShowApplicationForm(false);
+      const result = await applyToProject(currentProject.id, applicationData);
+      console.log('Application submitted successfully:', result);
     } catch (error) {
       console.error('Application failed:', error);
+    }
+  };
+
+  const scrollToApplicationForm = () => {
+    const element = document.getElementById('application-form');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection('application-form');
     }
   };
 
@@ -193,9 +219,9 @@ useEffect(() => {
                   {isAuthentication && canApply && (
                     <button 
                       className="project-view-btn-apply"
-                      onClick={() => setShowApplicationForm(true)}
+                      onClick={scrollToApplicationForm}
                     >
-                      Кандидатствай
+                      {hasUserApplied ? 'Вече сте кандидатствали' : 'Кандидатствай'}
                     </button>
                   )}
                   
@@ -258,6 +284,13 @@ useEffect(() => {
               onClick={() => scrollToSection('team')}
             >
               Екип
+            </button>
+            
+            <button
+              className={`project-view-nav-link ${activeSection === 'application-form' ? 'active' : ''}`}
+              onClick={() => scrollToSection('application-form')}
+            >
+              Кандидатстване
             </button>
             
             <button
@@ -335,6 +368,14 @@ useEffect(() => {
             </div>
           </section>
 
+          {/* Application Form Section - Винаги видима */}
+          <section id="application-form" className="project-view-section">
+            <ApplicationForm
+              project={currentProject}
+              onSubmit={handleApplicationSubmit}
+            />
+          </section>
+
           {/* Comments Section */}
           <section id="comments" className="project-view-section project-view-comments-section">
             <Comments
@@ -346,15 +387,6 @@ useEffect(() => {
           </section>
         </div>
       </div>
-
-      {/* Application Modal */}
-      {/* {showApplicationForm && (
-        <ApplicationForm
-          project={currentProject}
-          onSubmit={handleApplicationSubmit}
-          onClose={() => setShowApplicationForm(false)}
-        />
-      )} */}
     </div>
   );
 };

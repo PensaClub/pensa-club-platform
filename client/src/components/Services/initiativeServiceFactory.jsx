@@ -66,6 +66,26 @@ export const initiativeServiceFactory = (token) => {
 
     likeProjectComment: async (projectId, commentId) => {
       return requester.post(`${apiUrl}/projects/${projectId}/comments/${commentId}/like`);
-    }
+    },
+     // Project applications endpoints
+    getProjectApplications: async (projectId) => {
+      return requester.get(`${apiUrl}/projects/${projectId}/applications`);
+    },
+
+    getAllApplications: async () => {
+      return requester.get(`${apiUrl}/applications/all`);
+    },
+
+    getApplicationById: async (applicationId) => {
+      return requester.get(`${apiUrl}/applications/${applicationId}`);
+    },
+
+    updateApplicationStatus: async (applicationId, status) => {
+      return requester.patch(`${apiUrl}/applications/${applicationId}/status`, { status });
+    },
+
+    deleteApplication: async (applicationId) => {
+      return requester.del(`${apiUrl}/applications/${applicationId}`);
+    },
   };
 };

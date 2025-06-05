@@ -14,6 +14,8 @@ export const useCommentItem = (
     deleteCommentFunc,
     likeCommentFunc,
     addReplyFunc,
+    updateReplyFunc,    // ← НОВ за редактиране на replies
+    deleteReplyFunc,    // ← НОВ за триене на replies
     likeReplyFunc
 ) => {
     const { isAuthentication, userEmail } = useAuthContext();
@@ -52,7 +54,16 @@ export const useCommentItem = (
         if (!editContent.trim()) return;
 
         try {
-            const updatedComment = await updateCommentFunc(entityId, comment.id, editContent);
+            let updatedComment;
+            
+            if (isReply && parentCommentId) {
+                // За replies използвай updateReplyFunc
+                updatedComment = await updateReplyFunc(entityId, parentCommentId, comment.id, editContent);
+            } else {
+                // За коментари използвай updateCommentFunc
+                updatedComment = await updateCommentFunc(entityId, comment.id, editContent);
+            }
+            
             onUpdate(updatedComment, 'update');
             setIsEditing(false);
         } catch (error) {
@@ -62,7 +73,14 @@ export const useCommentItem = (
 
     const handleDelete = async () => {
         try {
-            await deleteCommentFunc(entityId, comment.id);
+            if (isReply && parentCommentId) {
+                // За replies използвай deleteReplyFunc
+                await deleteReplyFunc(entityId, parentCommentId, comment.id);
+            } else {
+                // За коментари използвай deleteCommentFunc
+                await deleteCommentFunc(entityId, comment.id);
+            }
+            
             onUpdate(comment, 'delete');
         } catch (error) {
             console.error('Error deleting comment:', error);

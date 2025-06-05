@@ -7,6 +7,7 @@ import { useAuthContext } from "./UserContext";
 import { initiativeServiceFactory } from "../Services/initiativeServiceFactory";
 import mockData from '../Initiatives/data/mockInitiatives.json';
 import projectsData from '../Initiatives/data/mockProjects.json';
+import { useMockApplications } from "../hooks/useMockApplications";
 
 export const InitiativeContext = createContext();
 
@@ -40,7 +41,15 @@ export const InitiativeProvider = ({ children }) => {
   const [comments, setComments] = useState({});
   const [commentsLoading, setCommentsLoading] = useState(false);
 
-  const { isAuthentication, userEmail, username, profileData } = useAuthContext();
+  const { isAuthentication, userEmail, username, profileData, onProjectApplicationSubmit } = useAuthContext();
+  const {
+    getApplicationsByProject,
+    addApplication,
+    getAllApplications,
+    updateApplicationStatus,
+    deleteApplication
+  } = useMockApplications();
+  const [recentApplications, setRecentApplications] = useState([]);
   const navigate = useNavigate();
 
   const initiativeService = initiativeServiceFactory();
@@ -498,23 +507,6 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [getMockProjects]);
 
-  // Project application functions
-  const applyToProject = useCallback(async (projectId, applicationData) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
-
-      // Simulate API call
-      notify('success', 'Application submitted successfully');
-      return { success: true };
-    } catch (error) {
-      console.error('Error applying to project:', error);
-      notify('error', 'Failed to submit application');
-      throw error;
-    }
-  }, [isAuthentication]);
-
   // Project comments (similar to initiative comments)
   const getProjectComments = useCallback(async (projectId) => {
     try {
@@ -581,185 +573,371 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar]);
 
-const updateProjectComment = useCallback(async (projectId, commentId, newContent) => {
-  try {
-    if (!isAuthentication) {
-      throw new Error('Authentication required');
-    }
-
-    const projectKey = `project-${projectId}`;
-    const updatedComments = (comments[projectKey] || []).map(comment => {
-      if (comment.id === commentId) {
-        return {
-          ...comment,
-          content: newContent,
-          updatedAt: new Date().toISOString()
-        };
+  const updateProjectComment = useCallback(async (projectId, commentId, newContent) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
       }
-      return comment;
-    });
 
-    setComments(prev => ({
-      ...prev,
-      [projectKey]: updatedComments
-    }));
+      const projectKey = `project-${projectId}`;
+      const updatedComments = (comments[projectKey] || []).map(comment => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            content: newContent,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return comment;
+      });
 
-    const updatedComment = updatedComments.find(c => c.id === commentId);
-    notify('success', 'Comment updated successfully');
-    return updatedComment;
-  } catch (error) {
-    console.error('Error updating project comment:', error);
-    notify('error', 'Failed to update comment');
-    throw error;
-  }
-}, [isAuthentication, comments]);
+      setComments(prev => ({
+        ...prev,
+        [projectKey]: updatedComments
+      }));
 
-const deleteProjectComment = useCallback(async (projectId, commentId) => {
-  try {
-    if (!isAuthentication) {
-      throw new Error('Authentication required');
+      const updatedComment = updatedComments.find(c => c.id === commentId);
+      notify('success', 'Comment updated successfully');
+      return updatedComment;
+    } catch (error) {
+      console.error('Error updating project comment:', error);
+      notify('error', 'Failed to update comment');
+      throw error;
     }
+  }, [isAuthentication, comments]);
 
-    const projectKey = `project-${projectId}`;
-    setComments(prev => ({
-      ...prev,
-      [projectKey]: (prev[projectKey] || []).filter(comment => comment.id !== commentId)
-    }));
-
-    notify('success', 'Comment deleted successfully');
-  } catch (error) {
-    console.error('Error deleting project comment:', error);
-    notify('error', 'Failed to delete comment');
-    throw error;
-  }
-}, [isAuthentication])
-
-const likeProjectComment = useCallback(async (projectId, commentId) => {
-  try {
-    if (!isAuthentication) {
-      throw new Error('Authentication required');
-    }
-
-    const projectKey = `project-${projectId}`;
-    const updatedComments = (comments[projectKey] || []).map(comment => {
-      if (comment.id === commentId) {
-        const isLiked = (comment.likes || []).includes(userEmail);
-        return {
-          ...comment,
-          likes: isLiked
-            ? (comment.likes || []).filter(email => email !== userEmail)
-            : [...(comment.likes || []), userEmail],
-          likesCount: isLiked
-            ? (comment.likesCount || 0) - 1
-            : (comment.likesCount || 0) + 1
-        };
+  const deleteProjectComment = useCallback(async (projectId, commentId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
       }
-      return comment;
-    });
 
-    setComments(prev => ({
-      ...prev,
-      [projectKey]: updatedComments
-    }));
+      const projectKey = `project-${projectId}`;
+      setComments(prev => ({
+        ...prev,
+        [projectKey]: (prev[projectKey] || []).filter(comment => comment.id !== commentId)
+      }));
 
-    return updatedComments.find(c => c.id === commentId);
-  } catch (error) {
-    console.error('Error liking project comment:', error);
-    notify('error', 'Failed to like comment');
-    throw error;
-  }
-}, [isAuthentication, userEmail, comments]);
-
-const addProjectReply = useCallback(async (projectId, parentCommentId, content) => {
-  try {
-    if (!isAuthentication) {
-      throw new Error('Authentication required');
+      notify('success', 'Comment deleted successfully');
+    } catch (error) {
+      console.error('Error deleting project comment:', error);
+      notify('error', 'Failed to delete comment');
+      throw error;
     }
+  }, [isAuthentication])
 
-    const newReply = {
-      id: generateId(),
-      userId: userEmail,
-      userEmail: userEmail,
-      userName: getUserDisplayName(),
-      userAvatar: profileData?.avatar || null,
-      content: content,
-      createdAt: new Date().toISOString(),
-      updatedAt: null,
-      likes: [],
-      likesCount: 0,
-      parentId: parentCommentId
-    };
-
-    const projectKey = `project-${projectId}`;
-    const updatedComments = (comments[projectKey] || []).map(comment => {
-      if (comment.id === parentCommentId) {
-        return {
-          ...comment,
-          replies: [...(comment.replies || []), newReply] // ← Ред 354 вероятно е тук
-        };
+  const likeProjectComment = useCallback(async (projectId, commentId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
       }
-      return comment;
-    });
 
-    setComments(prev => ({
-      ...prev,
-      [projectKey]: updatedComments
-    }));
+      const projectKey = `project-${projectId}`;
+      const updatedComments = (comments[projectKey] || []).map(comment => {
+        if (comment.id === commentId) {
+          const isLiked = (comment.likes || []).includes(userEmail);
+          return {
+            ...comment,
+            likes: isLiked
+              ? (comment.likes || []).filter(email => email !== userEmail)
+              : [...(comment.likes || []), userEmail],
+            likesCount: isLiked
+              ? (comment.likesCount || 0) - 1
+              : (comment.likesCount || 0) + 1
+          };
+        }
+        return comment;
+      });
 
-    notify('success', 'Reply added successfully');
-    return newReply;
-  } catch (error) {
-    console.error('Error adding project reply:', error);
-    notify('error', 'Failed to add reply');
-    throw error;
-  }
-}, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar, comments]);
+      setComments(prev => ({
+        ...prev,
+        [projectKey]: updatedComments
+      }));
 
-const likeProjectReply = useCallback(async (projectId, commentId, replyId) => {
-  try {
-    if (!isAuthentication) {
-      throw new Error('Authentication required');
+      return updatedComments.find(c => c.id === commentId);
+    } catch (error) {
+      console.error('Error liking project comment:', error);
+      notify('error', 'Failed to like comment');
+      throw error;
     }
+  }, [isAuthentication, userEmail, comments]);
 
-    const projectKey = `project-${projectId}`;
-    const updatedComments = (comments[projectKey] || []).map(comment => {
-      if (comment.id === commentId) {
-        const updatedReplies = (comment.replies || []).map(reply => {
-          if (reply.id === replyId) {
-            const isLiked = (reply.likes || []).includes(userEmail);
-            return {
-              ...reply,
-              likes: isLiked
-                ? (reply.likes || []).filter(email => email !== userEmail)
-                : [...(reply.likes || []), userEmail],
-              likesCount: isLiked
-                ? (reply.likesCount || 0) - 1
-                : (reply.likesCount || 0) + 1
-            };
-          }
-          return reply;
-        });
-
-        return {
-          ...comment,
-          replies: updatedReplies
-        };
+  const addProjectReply = useCallback(async (projectId, parentCommentId, content) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
       }
-      return comment;
-    });
 
-    setComments(prev => ({
-      ...prev,
-      [projectKey]: updatedComments
-    }));
+      const newReply = {
+        id: generateId(),
+        userId: userEmail,
+        userEmail: userEmail,
+        userName: getUserDisplayName(),
+        userAvatar: profileData?.avatar || null,
+        content: content,
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        likes: [],
+        likesCount: 0,
+        parentId: parentCommentId
+      };
 
-    return updatedComments.find(c => c.id === commentId);
+      const projectKey = `project-${projectId}`;
+      const updatedComments = (comments[projectKey] || []).map(comment => {
+        if (comment.id === parentCommentId) {
+          return {
+            ...comment,
+            replies: [...(comment.replies || []), newReply] // ← Ред 354 вероятно е тук
+          };
+        }
+        return comment;
+      });
+
+      setComments(prev => ({
+        ...prev,
+        [projectKey]: updatedComments
+      }));
+
+      notify('success', 'Reply added successfully');
+      return newReply;
+    } catch (error) {
+      console.error('Error adding project reply:', error);
+      notify('error', 'Failed to add reply');
+      throw error;
+    }
+  }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar, comments]);
+
+  const likeProjectReply = useCallback(async (projectId, commentId, replyId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const projectKey = `project-${projectId}`;
+      const updatedComments = (comments[projectKey] || []).map(comment => {
+        if (comment.id === commentId) {
+          const updatedReplies = (comment.replies || []).map(reply => {
+            if (reply.id === replyId) {
+              const isLiked = (reply.likes || []).includes(userEmail);
+              return {
+                ...reply,
+                likes: isLiked
+                  ? (reply.likes || []).filter(email => email !== userEmail)
+                  : [...(reply.likes || []), userEmail],
+                likesCount: isLiked
+                  ? (reply.likesCount || 0) - 1
+                  : (reply.likesCount || 0) + 1
+              };
+            }
+            return reply;
+          });
+
+          return {
+            ...comment,
+            replies: updatedReplies
+          };
+        }
+        return comment;
+      });
+
+      setComments(prev => ({
+        ...prev,
+        [projectKey]: updatedComments
+      }));
+
+      return updatedComments.find(c => c.id === commentId);
+    } catch (error) {
+      console.error('Error liking project reply:', error);
+      notify('error', 'Failed to like reply');
+      throw error;
+    }
+  }, [isAuthentication, userEmail, comments]);
+
+  // UPDATE REPLY за инициативи
+  const updateReply = useCallback(async (initiativeId, commentId, replyId, newContent) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const updatedComments = comments[initiativeId].map(comment => {
+        if (comment.id === commentId) {
+          const updatedReplies = comment.replies.map(reply => {
+            if (reply.id === replyId) {
+              return {
+                ...reply,
+                content: newContent,
+                updatedAt: new Date().toISOString()
+              };
+            }
+            return reply;
+          });
+          return { ...comment, replies: updatedReplies };
+        }
+        return comment;
+      });
+
+      setComments(prev => ({ ...prev, [initiativeId]: updatedComments }));
+
+      const updatedComment = updatedComments.find(c => c.id === commentId);
+      notify('success', 'Reply updated successfully');
+      return updatedComment;
+    } catch (error) {
+      console.error('Error updating reply:', error);
+      notify('error', 'Failed to update reply');
+      throw error;
+    }
+  }, [isAuthentication, comments]);
+
+  // DELETE REPLY за инициативи
+  const deleteReply = useCallback(async (initiativeId, commentId, replyId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const updatedComments = comments[initiativeId].map(comment => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            replies: comment.replies.filter(reply => reply.id !== replyId)
+          };
+        }
+        return comment;
+      });
+
+      setComments(prev => ({ ...prev, [initiativeId]: updatedComments }));
+
+      const updatedComment = updatedComments.find(c => c.id === commentId);
+      notify('success', 'Reply deleted successfully');
+      return updatedComment;
+    } catch (error) {
+      console.error('Error deleting reply:', error);
+      notify('error', 'Failed to delete reply');
+      throw error;
+    }
+  }, [isAuthentication, comments]);
+
+  // UPDATE PROJECT REPLY
+  const updateProjectReply = useCallback(async (projectId, commentId, replyId, newContent) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const projectKey = `project-${projectId}`;
+      const updatedComments = (comments[projectKey] || []).map(comment => {
+        if (comment.id === commentId) {
+          const updatedReplies = (comment.replies || []).map(reply => {
+            if (reply.id === replyId) {
+              return {
+                ...reply,
+                content: newContent,
+                updatedAt: new Date().toISOString()
+              };
+            }
+            return reply;
+          });
+          return { ...comment, replies: updatedReplies };
+        }
+        return comment;
+      });
+
+      setComments(prev => ({ ...prev, [projectKey]: updatedComments }));
+
+      const updatedComment = updatedComments.find(c => c.id === commentId);
+      notify('success', 'Reply updated successfully');
+      return updatedComment;
+    } catch (error) {
+      console.error('Error updating project reply:', error);
+      notify('error', 'Failed to update reply');
+      throw error;
+    }
+  }, [isAuthentication, comments]);
+
+  // DELETE PROJECT REPLY
+  const deleteProjectReply = useCallback(async (projectId, commentId, replyId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const projectKey = `project-${projectId}`;
+      const updatedComments = (comments[projectKey] || []).map(comment => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            replies: (comment.replies || []).filter(reply => reply.id !== replyId)
+          };
+        }
+        return comment;
+      });
+
+      setComments(prev => ({ ...prev, [projectKey]: updatedComments }));
+
+      const updatedComment = updatedComments.find(c => c.id === commentId);
+      notify('success', 'Reply deleted successfully');
+      return updatedComment;
+    } catch (error) {
+      console.error('Error deleting project reply:', error);
+      notify('error', 'Failed to delete reply');
+      throw error;
+    }
+  }, [isAuthentication, comments]);
+
+  // Функция за зареждане на кандидатури за проект
+const getProjectApplications = useCallback(async (projectId) => {
+  if (!projectId) return;
+  
+  try {
+    const projectApplications = await getApplicationsByProject(projectId);
+    setRecentApplications(projectApplications);
+    return projectApplications;
   } catch (error) {
-    console.error('Error liking project reply:', error);
-    notify('error', 'Failed to like reply');
-    throw error;
+    console.error('Error loading project applications:', error);
+    setRecentApplications([]);
+    return [];
   }
-}, [isAuthentication, userEmail, comments]);
+}, [getApplicationsByProject]);
+
+  // Функция за добавяне на нова кандидатура
+const applyToProject = useCallback(async (projectId, applicationData) => {
+  if (!projectId || !applicationData) return;
+  
+  try {
+    setIsLoading(true);
+    
+    // 1. Изпращаме заявката към сървъра чрез UserContext (за уведомления)
+    const response = await onProjectApplicationSubmit({
+      projectId,
+      ...applicationData
+    });
+    
+    // 2. Ако заявката е успешна, обновяваме данните чрез хука
+    if (response.success) {
+      const newApplication = await addApplication({
+        ...applicationData,
+        projectId
+      });
+      
+      // Обновяваме локалното състояние за текущия проект
+      setRecentApplications(prev => {
+        const filtered = prev.filter(app => app.id !== newApplication.id);
+        return [newApplication, ...filtered.slice(0, 4)];
+      });
+      
+      return { success: true, application: newApplication };
+    }
+    
+    return response;
+    
+  } catch (error) {
+    console.error('Error applying to project:', error);
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [onProjectApplicationSubmit, addApplication]);
 
   const contextService = {
     // Existing initiative functions
@@ -783,6 +961,8 @@ const likeProjectReply = useCallback(async (projectId, commentId, replyId) => {
     likeReply,
     comments,
     commentsLoading,
+    updateReply,
+    deleteReply,
 
     //bookmarks
     bookmarkedInitiatives,
@@ -797,7 +977,6 @@ const likeProjectReply = useCallback(async (projectId, commentId, replyId) => {
     projects,
     currentProject,
     projectsLoaded,
-    applyToProject,
 
     // Project comments
     getProjectComments,
@@ -806,7 +985,16 @@ const likeProjectReply = useCallback(async (projectId, commentId, replyId) => {
     deleteProjectComment,
     likeProjectComment,
     addProjectReply,
-    likeProjectReply
+    likeProjectReply,
+    updateProjectReply,
+    deleteProjectReply,
+    getProjectApplications,
+    recentApplications,
+    applyToProject,
+    getAllApplications, // За админи
+    updateApplicationStatus, // За админи  
+    deleteApplication, // За админи
+
   };
 
   return (

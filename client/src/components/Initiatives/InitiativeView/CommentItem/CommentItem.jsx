@@ -8,16 +8,19 @@ import './commentItem.css';
 
 export const CommentItem = ({ 
     comment, 
-    entityId,  // Нов параметър вместо initiativeId
-    entityType = 'initiative', // Нов параметър
+    entityId,
+    entityType = 'initiative',
     onUpdate, 
     isReply = false, 
     parentCommentId = null,
-    // Нови параметри за функциите
+    // Функции за коментари
     updateCommentFunc,
     deleteCommentFunc,
     likeCommentFunc,
     addReplyFunc,
+    // Функции за replies
+    updateReplyFunc,
+    deleteReplyFunc,
     likeReplyFunc
 }) => {
     const { t, i18n } = useTranslation();
@@ -51,6 +54,8 @@ export const CommentItem = ({
         deleteCommentFunc,
         likeCommentFunc,
         addReplyFunc,
+        updateReplyFunc,    // ← ПРЕДАЙ
+        deleteReplyFunc,    // ← ПРЕДАЙ
         likeReplyFunc
     );
 
@@ -239,6 +244,8 @@ export const CommentItem = ({
                                 deleteCommentFunc={deleteCommentFunc}
                                 likeCommentFunc={likeCommentFunc}
                                 addReplyFunc={addReplyFunc}
+                                updateReplyFunc={updateReplyFunc}    // ← ПРЕДАЙ НАТАТЪК
+                                deleteReplyFunc={deleteReplyFunc}    // ← ПРЕДАЙ НАТАТЪК
                                 likeReplyFunc={likeReplyFunc}
                             />
                         ))}
