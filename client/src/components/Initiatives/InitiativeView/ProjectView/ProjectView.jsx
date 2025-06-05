@@ -25,7 +25,7 @@ export const ProjectView = () => {
   const { isAuthentication } = useAuthContext();
   const [activeSection, setActiveSection] = useState('overview');
   const [showApplicationForm, setShowApplicationForm] = useState(false);
-  
+
   // Запазваме само за навигацията - брой коментари
   const [commentsCount, setCommentsCount] = useState(0);
 
@@ -41,7 +41,51 @@ export const ProjectView = () => {
       loadCommentsCount();
     }
   }, [currentProject]);
+useEffect(() => {
+    const navLinks = document.querySelector('.project-view-nav-links');
+    if (!navLinks) return;
 
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    const handleMouseDown = (e) => {
+        isDown = true;
+        navLinks.style.cursor = 'grabbing';
+        startX = e.pageX - navLinks.offsetLeft;
+        scrollLeft = navLinks.scrollLeft;
+    };
+
+    const handleMouseLeave = () => {
+        isDown = false;
+        navLinks.style.cursor = 'grab';
+    };
+
+    const handleMouseUp = () => {
+        isDown = false;
+        navLinks.style.cursor = 'grab';
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - navLinks.offsetLeft;
+        const walk = (x - startX) * 1; // Колко бързо да скролира
+        navLinks.scrollLeft = scrollLeft - walk;
+    };
+
+    navLinks.addEventListener('mousedown', handleMouseDown);
+    navLinks.addEventListener('mouseleave', handleMouseLeave);
+    navLinks.addEventListener('mouseup', handleMouseUp);
+    navLinks.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+        navLinks.removeEventListener('mousedown', handleMouseDown);
+        navLinks.removeEventListener('mouseleave', handleMouseLeave);
+        navLinks.removeEventListener('mouseup', handleMouseUp);
+        navLinks.removeEventListener('mousemove', handleMouseMove);
+    };
+}, [currentProject]);
   const loadCommentsCount = async () => {
     if (currentProject) {
       try {
