@@ -332,6 +332,34 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+const onProjectApplicationSubmit = async (applicationData) => {
+  setIsLoading(true);
+  try {
+    // Временно закоментирано до готовност на endpoint
+    // const response = await userService.applyToProject(applicationData);
+    
+    // Mock response за тестване
+    const mockResponse = {
+      success: true,
+      message: 'Кандидатурата е изпратена успешно',
+      application: {
+        id: `app-${Date.now()}`,
+        ...applicationData,
+        status: 'pending'
+      }
+    };
+    
+    notify('application-success');
+    return mockResponse;
+  } catch (error) {
+    notify('error', error);
+    showErrorAndSetTimeouts(`Error submitting application: ${error.message}`);
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+};
+
   const isUserAdmin = () => isAdmin;
 
   const contextService = {
@@ -372,6 +400,7 @@ export const UserProvider = ({ children }) => {
     },
     handleAuthChange,
     hasPassword: !!profileData?.hasPassword,
+    onProjectApplicationSubmit
   };
 
   return (

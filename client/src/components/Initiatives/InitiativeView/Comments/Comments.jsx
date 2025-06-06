@@ -8,28 +8,53 @@ import { CommentItem } from '../CommentItem/CommentItem';
 import { CommentForm } from '../CommentForm/CommentForm';
 import { Link } from 'react-router-dom';
 
-export const Comments = ({ initiativeId, commentsEnabled = true }) => {
+export const Comments = ({
+    initiativeId,        // За backward compatibility с InitiativeView
+    entityId,           // Унифициран ID за проекти
+    entityType = 'initiative', // 'initiative' или 'project'
+    commentsEnabled = true,
+    onCommentsChange
+}) => {
     const { t } = useTranslation();
     const { isAuthentication } = useAuthContext();
-    const { 
-        getComments, 
-        addComment, 
-        commentsLoading 
+    const {
+        // Initiative functions
+        getComments, addComment, updateComment, deleteComment, likeComment, addReply, updateReply, deleteReply, likeReply,
+        // Project functions  
+        getProjectComments, addProjectComment, updateProjectComment, deleteProjectComment, likeProjectComment, addProjectReply, updateProjectReply, deleteProjectReply, likeProjectReply,
+        commentsLoading
     } = useInitiativeContext();
-    
-    const [comments, setComments] = useState([]); 
+
+    const [comments, setComments] = useState([]);
     const [showCommentForm, setShowCommentForm] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false); 
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    const targetId = initiativeId || entityId;
+    const isProject = entityType === 'project';
+
+    const fetchComments = isProject ? getProjectComments : getComments;
+    const submitComment = isProject ? addProjectComment : addComment;
+    const updateCommentFunc = isProject ? updateProjectComment : updateComment;
+    const deleteCommentFunc = isProject ? deleteProjectComment : deleteComment;
+    const likeCommentFunc = isProject ? likeProjectComment : likeComment;
+    const addReplyFunc = isProject ? addProjectReply : addReply;
+    const updateReplyFunc = isProject ? updateProjectReply : updateReply; 
+    const deleteReplyFunc = isProject ? deleteProjectReply : deleteReply;  
+    const likeReplyFunc = isProject ? likeProjectReply : likeReply;
 
     useEffect(() => {
-        if (!commentsEnabled || !initiativeId) return;
-        
-        const fetchComments = async () => {
+        if (!commentsEnabled || !targetId) return;
+
+        const loadComments = async () => {
             try {
-                const commentsData = await getComments(initiativeId);
-                // Проверяваме че данните са валидни
+                const commentsData = await fetchComments(targetId);
+                // Проверяваме че данните са валидни и осигуряваме replies
                 if (Array.isArray(commentsData)) {
-                    setComments(commentsData);
+                    const commentsWithReplies = commentsData.map(comment => ({
+                        ...comment,
+                        replies: comment.replies || []
+                    }));
+                    setComments(commentsWithReplies);
                 } else {
                     setComments([]);
                 }
@@ -41,8 +66,8 @@ export const Comments = ({ initiativeId, commentsEnabled = true }) => {
             }
         };
 
-        fetchComments();
-    }, [initiativeId, commentsEnabled, getComments]);
+        loadComments();
+    }, [targetId, commentsEnabled, fetchComments]);
 
     const handleAddComment = async (content) => {
         if (!isAuthentication) {
@@ -51,10 +76,19 @@ export const Comments = ({ initiativeId, commentsEnabled = true }) => {
         }
 
         try {
-            const newComment = await addComment(initiativeId, content);
-            // Проверяваме че newComment е валиден
+            const newComment = await submitComment(targetId, content);
             if (newComment && newComment.id) {
-                setComments(prev => [newComment, ...prev]);
+                const commentWithReplies = {
+                    ...newComment,
+                    replies: newComment.replies || []
+                };
+                const newComments = [commentWithReplies, ...comments];
+                setComments(newComments);
+
+                // Уведоми родителя за промяната
+                if (onCommentsChange) {
+                    onCommentsChange(newComments.length);
+                }
             }
             setShowCommentForm(false);
         } catch (error) {
@@ -64,23 +98,34 @@ export const Comments = ({ initiativeId, commentsEnabled = true }) => {
 
     const handleUpdateComments = (updatedComment, action) => {
         if (!updatedComment) return;
-        
+
         setComments(prev => {
+            let newComments;
             switch (action) {
                 case 'update':
-                    return prev.map(comment => 
+                    newComments = prev.map(comment =>
                         comment?.id === updatedComment.id ? updatedComment : comment
                     );
+                    break;
                 case 'delete':
-                    return prev.filter(comment => comment?.id !== updatedComment.id);
+                    newComments = prev.filter(comment => comment?.id !== updatedComment.id);
+                    break;
                 case 'like':
                 case 'reply':
-                    return prev.map(comment => 
+                    newComments = prev.map(comment =>
                         comment?.id === updatedComment.id ? updatedComment : comment
                     );
+                    break;
                 default:
                     return prev;
             }
+
+            // Уведоми родителя за промяната в броя коментари
+            if (onCommentsChange && action === 'delete') {
+                onCommentsChange(newComments.length);
+            }
+
+            return newComments;
         });
     };
 
@@ -106,9 +151,9 @@ export const Comments = ({ initiativeId, commentsEnabled = true }) => {
                 <h2 className="initiative-comments-section-title">
                     {t('comments.title')} ({comments.length})
                 </h2>
-                
+
                 {isAuthentication && (
-                    <button 
+                    <button
                         className="initiative-add-comment-btn"
                         onClick={() => setShowCommentForm(!showCommentForm)}
                     >
@@ -127,7 +172,7 @@ export const Comments = ({ initiativeId, commentsEnabled = true }) => {
             )}
 
             {showCommentForm && (
-                <CommentForm 
+                <CommentForm
                     onSubmit={handleAddComment}
                     onCancel={() => setShowCommentForm(false)}
                     placeholder={t('comments.placeholder')}
@@ -150,11 +195,19 @@ export const Comments = ({ initiativeId, commentsEnabled = true }) => {
                         comments
                             .filter(comment => comment && comment.id) // Филтрираме валидни коментари
                             .map(comment => (
-                                <CommentItem 
+                                <CommentItem
                                     key={comment.id}
                                     comment={comment}
-                                    initiativeId={initiativeId}
+                                    entityId={targetId}
+                                    entityType={entityType}
                                     onUpdate={handleUpdateComments}
+                                    updateCommentFunc={updateCommentFunc}
+                                    deleteCommentFunc={deleteCommentFunc}
+                                    likeCommentFunc={likeCommentFunc}
+                                    addReplyFunc={addReplyFunc}
+                                    likeReplyFunc={likeReplyFunc}
+                                    updateReplyFunc={updateReplyFunc}
+                                    deleteReplyFunc={deleteReplyFunc}
                                 />
                             ))
                     )}

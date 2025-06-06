@@ -1126,5 +1126,96 @@
       "hideReplies": "Hide replies ({{count}})",
       "replyPlaceholder": "Reply to {{name}}..."
     }
+  },
+  "projectView": {
+    "loading": "Loading...",
+    "breadcrumb": {
+      "initiatives": "Initiatives",
+      "backToInitiative": "Back to Initiative"
+    },
+    "status": {
+      "active": "Active",
+      "in-progress": "In Progress",
+      "completed": "Completed",
+      "planned": "Planned",
+      "paused": "Paused",
+      "cancelled": "Cancelled"
+    },
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "priorityLabel": "priority",
+    "meta": {
+      "category": "Category",
+      "location": "Location",
+      "participants": "Participants"
+    },
+    "buttons": {
+      "apply": "Apply",
+      "alreadyApplied": "You have already applied",
+      "bookmark": "Bookmark"
+    },
+    "stats": {
+      "funded": "Funded",
+      "duration": "Duration",
+      "team": "Team"
+    },
+    "navigation": {
+      "publications": "Publications",
+      "team": "Team",
+      "applications": "Applications",
+      "comments": "Comments"
+    },
+    "sections": {
+      "publications": "Publications",
+      "team": "Team"
+    },
+     "messages": {
+      "loginRequired": "Please log in to apply for this project."
+    }
+  },
+  "applicationForm": {
+    "dateLocale": "en-US",
+    "alerts": {
+      "loginRequired": "You must be logged in to apply!",
+      "alreadyApplied": "You have already applied for this project!",
+      "error": "An error occurred while submitting your application. Please try again."
+    },
+    "loginRequired": {
+      "title": "Login Required",
+      "subtitle": "To apply for this project, please log in to your account."
+    },
+    "success": {
+      "message": "You have already applied for this project! The Pensa Club team will contact you."
+    },
+    "titles": {
+      "yourApplication": "Your Application",
+      "applyForProject": "Apply for Project"
+    },
+    "subtitles": {
+      "successfullyApplied": "You have successfully applied to participate in \"{{projectTitle}}\"",
+      "fillForm": "Fill out the form below to apply for participation in \"{{projectTitle}}\""
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone",
+      "anonymous": "Make application anonymous (your name will not be shown publicly)"
+    },
+    "placeholders": {
+      "phone": "+1 555 123 4567"
+    },
+    "buttons": {
+      "submit": "Submit Application",
+      "submitting": "Submitting..."
+    },
+    "recentApplications": {
+      "title": "Recent Applications ({{count}})",
+      "anonymousUser": "Anonymous User",
+      "empty": "No applicants for this project yet. Be the first!"
+    }
   }
 }

@@ -1,0 +1,321 @@
+.application-form-container {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    margin: 3rem 0;
+    box-shadow: 0 20px 60px rgba(148, 163, 184, 0.15);
+    border: 1px solid rgba(203, 213, 225, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.application-form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #1B8B8A, #E26020);
+}
+
+.application-form-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.application-form-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.application-form-subtitle {
+    font-size: 1.1rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.application-form-form {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.application-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.application-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.application-form-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.application-form-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.95rem;
+}
+
+.application-form-label.required::after {
+    content: ' *';
+    color: #ef4444;
+    font-weight: 700;
+}
+
+.application-form-input {
+    padding: 1rem 1.2rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.application-form-input:focus {
+    outline: none;
+    border-color: #1B8B8A;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(27, 139, 138, 0.1);
+}
+
+.application-form-input:invalid {
+    border-color: #ef4444;
+}
+
+.application-form-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(27, 139, 138, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(27, 139, 138, 0.2);
+}
+
+.application-form-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #1B8B8A;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+
+.application-form-checkbox input {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+.application-form-checkbox input:checked + .application-form-checkbox-mark {
+    background: #1B8B8A;
+    border-color: #1B8B8A;
+}
+
+.application-form-checkbox input:checked + .application-form-checkbox-mark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.application-form-checkbox-mark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.application-form-checkbox-label {
+    color: #374151;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+}
+
+.application-form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.application-form-btn {
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.application-form-btn-submit {
+   background: linear-gradient(to right, var(--orange-primary), var(--orange-light));
+    color: white;
+    box-shadow: 0 8px 25px rgba(27, 139, 138, 0.3);
+}
+
+.application-form-btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(27, 139, 138, 0.4);
+}
+
+.application-form-btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.application-form-btn-cancel {
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+    border: 2px solid rgba(107, 114, 128, 0.3);
+}
+
+.application-form-btn-cancel:hover {
+    background: rgba(107, 114, 128, 0.2);
+    border-color: rgba(107, 114, 128, 0.5);
+    transform: translateY(-1px);
+}
+
+.application-form-recent-applications {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.application-form-recent-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.application-form-recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.application-form-recent-item {
+    padding: 1rem 1.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border-left: 4px solid #1B8B8A;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.application-form-recent-item:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+}
+
+.application-form-recent-user {
+    font-weight: 600;
+    color: #374151;
+}
+
+.application-form-recent-date {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.application-form-recent-empty {
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px dashed #d1d5db;
+}
+
+.application-form-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280;
+}
+
+.application-form-success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #059669;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .application-form-container {
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+
+    .application-form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .application-form-actions {
+        flex-direction: column;
+    }
+
+    .application-form-btn {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .application-form-recent-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .application-form-container {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .application-form-title {
+        font-size: 1.6rem;
+    }
+
+    .application-form-subtitle {
+        font-size: 1rem;
+    }
+}
