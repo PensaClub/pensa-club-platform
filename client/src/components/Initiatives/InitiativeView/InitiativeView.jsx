@@ -52,17 +52,17 @@ export const InitiativeView = () => {
     };
 
     const handleSmoothScroll = (e) => {
-    e.preventDefault();
-    const targetId = e.currentTarget.getAttribute('href').substring(1);
-    const targetElement = document.getElementById(targetId);
-    
-    if (targetElement) {
-        targetElement.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start' 
-        });
-    }
-};
+        e.preventDefault();
+        const targetId = e.currentTarget.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
 
     // Трансформиране на проектите в формат подходящ за картата
     const transformProjectsForMap = (projects) => {
@@ -125,7 +125,7 @@ export const InitiativeView = () => {
 
                             {/* Navigation Links */}
                             <div className="initiative-nav">
-                                <a  href="#sections" onClick={handleSmoothScroll} className="nav-link">
+                                <a href="#sections" onClick={handleSmoothScroll} className="nav-link">
                                     <span className="nav-icon">📖</span>
                                     {t('initiatives.view.stories')}
                                 </a>
@@ -167,7 +167,7 @@ export const InitiativeView = () => {
 
                         <div className="sections-grid">
                             {initiative.sections.map((section, index) => (
-                                <div key={`section-${section.id || section['tittle-slug'] || index}`} className="content-section">
+                                <div key={`section-${section.id || section.titleSlug || index}`} className="content-section">
                                     <div className="section-content">
                                         <h3 className="section-heading">{section.title}</h3>
                                         <p className="section-text">{section.content}</p>
@@ -196,7 +196,7 @@ export const InitiativeView = () => {
 
                         <div className="materials-grid">
                             {initiative.downloadMaterials.map((material) => (
-                                <div key={`download-material-${material.id}`} className="material-card">
+                                <div key={`download-material-${material.id||material.titleSlug}`} className="material-card">
                                     <div className="material-preview">
                                         {material.image ? (
                                             <img src={material.image.src} alt={material.image.alt} />
@@ -209,14 +209,14 @@ export const InitiativeView = () => {
 
                                     <div className="material-info">
                                         <h3 className="material-title">{material.title}</h3>
-                                        <p className="material-description">{truncateText(material.description,40)}</p>
+                                        <p className="material-description">{truncateText(material.description, 40)}</p>
 
                                         <div className="material-meta">
                                             <span className="file-type">{material.fileType.toUpperCase()}</span>
                                             <span className="file-size">{material.fileSize}</span>
                                         </div>
-                                        
-                                            <a href={material.downloadUrl}
+
+                                        <a href={material.downloadUrl}
                                             className="download-btn"
                                             download
                                         >
@@ -272,7 +272,7 @@ export const InitiativeView = () => {
 
                         <div className="projects-grid">
                             {initiative.projects.map((project) => (
-                                <ProjectCard key={`initiative-project-${project.id}`} project={project} />
+                                <ProjectCard key={`initiative-project-${project.id || project.titleSlug} `} project={project} />
                             ))}
                         </div>
                     </section>
@@ -285,7 +285,7 @@ export const InitiativeView = () => {
                 />
 
                 {/* Comments Section - показваме винаги, компонентът сам решава какво да покаже */}
-                <Comments 
+                <Comments
                     initiativeId={initiative.slug || initiative.id}
                     commentsEnabled={initiative.commentsEnabled}
                 />

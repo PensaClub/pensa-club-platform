@@ -104,7 +104,7 @@
       "commentsCount": 3,
       "stories": [
         {
-          "id": "pensa-story-tech-transformation",
+          "titleSlug": "pensa-story-tech-transformation",
           "title": "Как технологиите променят живота на възрастните",
           "description": "Истории за успешна дигитална трансформация и как възрастните хора се адаптират към новите технологии.",
           "image": {
@@ -116,7 +116,7 @@
           "link": "/stories/pensa-digital-transformation"
         },
         {
-          "id": "pensa-story-community-building",
+          "titleSlug": "pensa-story-community-building",
           "title": "Изграждане на дигитална общност",
           "description": "Как Pensa Club свързва хора с общи интереси и създава нови приятелства.",
           "image": {
@@ -130,7 +130,7 @@
       ],
       "publications": [
         {
-          "id": "pensa-pub-digital-guide",
+          "titleSlug": "pensa-pub-digital-guide",
           "title": "Ръководство за дигитална грамотност",
           "description": "Пълно ръководство за основни дигитални умения и безопасност онлайн.",
           "image": {
@@ -141,7 +141,7 @@
           "link": "/publications/pensa-digital-literacy-guide"
         },
         {
-          "id": "pensa-pub-platform-manual",
+          "titleSlug": "pensa-pub-platform-manual",
           "title": "Наръчник за платформата Pensa Club",
           "description": "Детайлно ръководство за използване на всички функции на платформата.",
           "image": {
@@ -154,7 +154,7 @@
       ],
       "sections": [
         {
-          "tittle-slug": "mission",
+          "titleSlug": "mission",
           "title": "Мисия",
           "content": "Да създадем иновативна платформа, инструмент за изграждане на общност. Обединяваме хора на еднаква възраст с общи интереси, нови идеи и знания.",
           "image": {
@@ -163,7 +163,7 @@
           }
         },
         {
-          "tittle-slug": "about",
+          "titleSlug": "about",
           "title": "Какво представлява Pensa Club?",
           "content": "Пенса клуб се финансира от Фондация ПЕНСА, която работи в областта на Образованието, Обучението и Социалната политика, като ефективно прилага инструменти, механизми и ценности, ключови за постигане на Социална интеграция и Равни възможности за две групи в обществото -- децата и пенсионерите в България.",
           "image": {
@@ -172,7 +172,7 @@
           }
         },
         {
-          "tittle-slug": "goals",
+          "titleSlug": "goals",
           "title": "Цели",
           "content": "Изграждане на общност, основана на взаимодействие и взаимопомощ. Подобряване качеството на живот чрез активно включване на възрастните хора в съвременното общество. Подкрепа за придобиване на нови умения и интереси, както и насърчаване на здравословен, пълноценен и достоен живот.",
           "image": {
@@ -181,7 +181,7 @@
           }
         },
         {
-          "id": "alumni-club",
+          "titleSlug": "alumni-club",
           "title": "Алумни клуб",
           "content": "В рамките на нашата визия за социална ангажираност и междупоколенческо сътрудничество, предстои създаването на Алумни Клуб на пенсионираните служители на Роберт Бош България. Този проект ще бъде вдъхновен от дългогодишните ценности и ангажименти на Фондация Роберт Бош.",
           "image": {
@@ -192,7 +192,7 @@
       ],
       "downloadMaterials": [
         {
-          "id": "pensa-presentation",
+          "titleSlug": "pensa-presentation",
           "title": "Пълна презентация на Pensa Club",
           "description": "Детайлна презентация с всички аспекти на проекта, мисия, цели и бъдещи планове.",
           "fileType": "pdf",
@@ -204,7 +204,7 @@
           }
         },
         {
-          "id": "alumni-proposal",
+          "titleSlug": "alumni-proposal",
           "title": "Предложение за Алумни клуб",
           "description": "Детайлно предложение за създаване на Алумни клуб в партньорство с Фондация Роберт Бош.",
           "fileType": "docx",
@@ -218,7 +218,7 @@
       ],
       "projects": [
         {
-          "tittle-slug": "pensa-digital-platform",
+          "titleSlug": "pensa-digital-platform",
           "slug": "pensa-digital-platform",
           "title": "Дигитална платформа Pensa Club",
           "description": "Разработка на уеб платформа за свързване на възрастни хора с общи интереси.",
@@ -231,7 +231,7 @@
           }
         },
         {
-          "id": "pensa-bosch-partnership",
+          "titleSlug": "pensa-bosch-partnership",
           "title": "Партньорство с Роберт Бош",
           "description": "Установяване на партньорство с Фондация Роберт Бош за създаване на Алумни клуб.",
           "status": "planned",
@@ -243,7 +243,7 @@
           }
         },
         {
-          "id": "pensa-intergenerational-bridge",
+          "titleSlug": "pensa-intergenerational-bridge",
           "title": "Междупоколенчески мост",
           "description": "Програма за свързване на възрастни хора с младежи чрез технологии.",
           "status": "active",
