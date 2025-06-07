@@ -13,7 +13,9 @@ export const initiativeServiceFactory = (token) => {
     getInitiativeById: async (id) => {
       return requester.get(`${apiUrl}/initiatives/single/${id}`);
     },
-
+    toggleBookmark: async (initiativeId) => {
+     return requester.post(`${apiUrl}/initiatives/bookmark/${initiativeId}`);
+    },
     getUserInitiatives: async (email) => {
       return requester.get(`${apiUrl}/initiatives/user-initiatives/${email}`);
     },
@@ -67,7 +69,7 @@ export const initiativeServiceFactory = (token) => {
     likeProjectComment: async (projectId, commentId) => {
       return requester.post(`${apiUrl}/projects/${projectId}/comments/${commentId}/like`);
     },
-     // Project applications endpoints
+    // Project applications endpoints
     getProjectApplications: async (projectId) => {
       return requester.get(`${apiUrl}/projects/${projectId}/applications`);
     },

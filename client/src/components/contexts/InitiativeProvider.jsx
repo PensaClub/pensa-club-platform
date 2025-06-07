@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { Loader } from "../Loader/Loader";
@@ -32,6 +33,7 @@ export const InitiativeProvider = ({ children }) => {
     }
     return [];
   });
+  
   //Проектите
   const [projects, setProjects] = useState([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
@@ -63,27 +65,6 @@ export const InitiativeProvider = ({ children }) => {
     }, 3000);
   }, []);
 
-  // useEffect(() => {
-  //   const saved = localStorage.getItem('bookmarkedInitiatives');
-  //   if (saved) {
-  //     try {
-  //       const parsed = JSON.parse(saved);
-  //       setBookmarkedInitiatives(parsed);
-  //       console.log("Loaded bookmarks from localStorage:", parsed);
-  //     } catch (error) {
-  //       console.error("Error parsing bookmarks from localStorage:", error);
-  //     }
-  //   }
-  //   setBookmarksLoaded(true); // Маркираме че сме заредили
-  // }, []);
-
-  // Записване в localStorage - само СЛЕД като сме заредили от localStorage
-  useEffect(() => {
-    if (bookmarksLoaded) { // Записваме само след като сме заредили
-      localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
-    }
-  }, [bookmarkedInitiatives, bookmarksLoaded]);
-
   // Helper functions
   const generateId = useCallback(() => {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -93,24 +74,6 @@ export const InitiativeProvider = ({ children }) => {
     return username || profileData?.details?.firstName || userEmail?.split('@')[0] || 'User';
   }, [username, profileData?.details?.firstName, userEmail]);
 
-  // Existing initiative functions
-  const getMockInitiatives = useCallback(async (page = 1, limit = 6) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const startIndex = (page - 1) * limit;
-        const endIndex = startIndex + limit;
-        const paginatedData = mockData.initiatives.slice(startIndex, endIndex);
-
-        resolve({
-          data: paginatedData,
-          hasMore: endIndex < mockData.initiatives.length,
-          totalCount: mockData.initiatives.length,
-          currentPage: page
-        });
-      }, 200);
-    });
-  }, []);
-
   const getAllInitiatives = useCallback(async (page = 1, forceRefresh = false) => {
     if (page === 1 && initiatives.length > 0 && initiativesLoaded && !forceRefresh) {
       return { data: initiatives, hasMore, currentPage };
@@ -118,27 +81,36 @@ export const InitiativeProvider = ({ children }) => {
 
     try {
       setIsLoading(true);
-      const response = await getMockInitiatives(page, 6);
+      const response = await initiativeService.getAllInitiatives(page, 6);
+
+      const responseData = {
+        data: response.data || response,
+        hasMore: response.hasMore !== undefined ? response.hasMore : (response.data || response).length === 6,
+        totalCount: response.totalCount || (response.data || response).length,
+        currentPage: page
+      };
 
       if (page === 1) {
-        setInitiatives(response.data);
+        setInitiatives(responseData.data);
       } else {
-        setInitiatives(prev => [...prev, ...response.data]);
+        setInitiatives(prev => [...prev, ...responseData.data]);
       }
 
-      setHasMore(response.hasMore);
-      setCurrentPage(response.currentPage);
+      setHasMore(responseData.hasMore);
+      setCurrentPage(responseData.currentPage);
       setInitiativesLoaded(true);
 
-      return response;
+      return responseData;
     } catch (e) {
       console.error('Error fetching initiatives:', e);
       notify('error', e);
       showErrorAndSetTimeouts(e.message);
+      // В случай на грешка, връщаме празни данни
+      return { data: [], hasMore: false, currentPage: page };
     } finally {
       setIsLoading(false);
     }
-  }, [initiatives.length, initiativesLoaded, hasMore, currentPage, getMockInitiatives, showErrorAndSetTimeouts]);
+  }, [initiatives.length, initiativesLoaded, hasMore, currentPage, initiativeService, showErrorAndSetTimeouts]);
 
   const loadMoreInitiatives = useCallback(async () => {
     if (!hasMore || isLoading) return;
@@ -156,9 +128,8 @@ export const InitiativeProvider = ({ children }) => {
   const getInitiativeById = useCallback(async (id) => {
     try {
       setIsLoading(true);
-      const initiative = mockData.initiatives.find(init =>
-        init.id === parseInt(id) || init.slug === id
-      );
+      const response = await initiativeService.getInitiativeById(id);
+      const initiative = response.data || response;
 
       if (!initiative) {
         throw new Error('Initiative not found');
@@ -167,22 +138,95 @@ export const InitiativeProvider = ({ children }) => {
       return initiative;
     } catch (e) {
       console.error('Error fetching initiative by ID:', e);
-      notify('error', e);
-      showErrorAndSetTimeouts(e.message);
+
+      if (e.response?.status === 404) {
+        notify('error', 'Initiative not found');
+        showErrorAndSetTimeouts('Initiative not found');
+      } else if (e.response?.status >= 500) {
+        notify('error', 'Server error. Please try again later.');
+        showErrorAndSetTimeouts('Server error occurred');
+      } else {
+        notify('error', e.message || 'Failed to load initiative');
+        showErrorAndSetTimeouts(e.message || 'Failed to load initiative');
+      }
+
+      throw e;
     } finally {
       setIsLoading(false);
     }
-  }, [showErrorAndSetTimeouts]);
+  }, []);
 
-  const toggleBookmark = useCallback((initiativeId) => {
+ const toggleBookmark = useCallback(async (initiativeId) => {
+  if (!isAuthentication) {
+    notify('error', 'Please login to bookmark initiatives');
+    return;
+  }
+  
+  const previousBookmarks = [...bookmarkedInitiatives];
+  const wasBookmarked = previousBookmarks.includes(initiativeId);
+  
+  try {
+ 
     setBookmarkedInitiatives(prev => {
-      if (prev.includes(initiativeId)) {
+      if (wasBookmarked) {
         return prev.filter(id => id !== initiativeId);
       } else {
         return [...prev, initiativeId];
       }
     });
+
+    const response = await initiativeService.toggleBookmark(initiativeId);
+    const apiResponse = response.data || response;
+
+    // Синхронизация с API response (за сигурност)
+    if (apiResponse.bookmarked) {
+      setBookmarkedInitiatives(prev => 
+        prev.includes(initiativeId) ? prev : [...prev, initiativeId]
+      );
+    } else {
+      setBookmarkedInitiatives(prev => prev.filter(id => id !== initiativeId));
+    }
+    
+    notify('success', apiResponse.message);
+    
+  } catch (error) {
+    // Rollback при грешка
+    setBookmarkedInitiatives(previousBookmarks);
+    console.error('Error toggling bookmark:', error);
+    notify('error', 'Failed to update bookmark');
+  }
+}, [isAuthentication, bookmarkedInitiatives, initiativeService]);
+
+  const loadUserBookmarks = useCallback(async () => {
+    if (!isAuthentication || !userEmail) return;
+
+    try {
+      const response = await initiativeService.getUserInitiatives(userEmail);
+      const userInitiatives = response.data || response;
+
+      // Извлечи ID-тата на букмаркнатите инициативи
+      const bookmarkIds = userInitiatives.map(initiative => initiative.id);
+      setBookmarkedInitiatives(bookmarkIds);
+      setBookmarksLoaded(true);
+
+    } catch (error) {
+      console.error('Error loading user bookmarks:', error);
+      setBookmarksLoaded(true); // Маркирай като заредени дори при грешка
+    }
+  }, [isAuthentication, userEmail, initiativeService]);
+
+  const clearBookmarks = useCallback(() => {
+    setBookmarkedInitiatives([]);
+    setBookmarksLoaded(false);
   }, []);
+
+ useEffect(() => {
+    if (isAuthentication && userEmail) {
+      loadUserBookmarks();
+    } else {
+      clearBookmarks();
+    }
+  }, [isAuthentication, userEmail, clearBookmarks]);
 
   const getComments = useCallback(async (initiativeId) => {
     try {
@@ -886,58 +930,58 @@ export const InitiativeProvider = ({ children }) => {
   }, [isAuthentication, comments]);
 
   // Функция за зареждане на кандидатури за проект
-const getProjectApplications = useCallback(async (projectId) => {
-  if (!projectId) return;
-  
-  try {
-    const projectApplications = await getApplicationsByProject(projectId);
-    setRecentApplications(projectApplications);
-    return projectApplications;
-  } catch (error) {
-    console.error('Error loading project applications:', error);
-    setRecentApplications([]);
-    return [];
-  }
-}, [getApplicationsByProject]);
+  const getProjectApplications = useCallback(async (projectId) => {
+    if (!projectId) return;
+
+    try {
+      const projectApplications = await getApplicationsByProject(projectId);
+      setRecentApplications(projectApplications);
+      return projectApplications;
+    } catch (error) {
+      console.error('Error loading project applications:', error);
+      setRecentApplications([]);
+      return [];
+    }
+  }, [getApplicationsByProject]);
 
   // Функция за добавяне на нова кандидатура
-const applyToProject = useCallback(async (projectId, applicationData) => {
-  if (!projectId || !applicationData) return;
-  
-  try {
-    setIsLoading(true);
-    
-    // 1. Изпращаме заявката към сървъра чрез UserContext (за уведомления)
-    const response = await onProjectApplicationSubmit({
-      projectId,
-      ...applicationData
-    });
-    
-    // 2. Ако заявката е успешна, обновяваме данните чрез хука
-    if (response.success) {
-      const newApplication = await addApplication({
-        ...applicationData,
-        projectId
+  const applyToProject = useCallback(async (projectId, applicationData) => {
+    if (!projectId || !applicationData) return;
+
+    try {
+      setIsLoading(true);
+
+      // 1. Изпращаме заявката към сървъра чрез UserContext (за уведомления)
+      const response = await onProjectApplicationSubmit({
+        projectId,
+        ...applicationData
       });
-      
-      // Обновяваме локалното състояние за текущия проект
-      setRecentApplications(prev => {
-        const filtered = prev.filter(app => app.id !== newApplication.id);
-        return [newApplication, ...filtered.slice(0, 4)];
-      });
-      
-      return { success: true, application: newApplication };
+
+      // 2. Ако заявката е успешна, обновяваме данните чрез хука
+      if (response.success) {
+        const newApplication = await addApplication({
+          ...applicationData,
+          projectId
+        });
+
+        // Обновяваме локалното състояние за текущия проект
+        setRecentApplications(prev => {
+          const filtered = prev.filter(app => app.id !== newApplication.id);
+          return [newApplication, ...filtered.slice(0, 4)];
+        });
+
+        return { success: true, application: newApplication };
+      }
+
+      return response;
+
+    } catch (error) {
+      console.error('Error applying to project:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
-    
-    return response;
-    
-  } catch (error) {
-    console.error('Error applying to project:', error);
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, [onProjectApplicationSubmit, addApplication]);
+  }, [onProjectApplicationSubmit, addApplication]);
 
   const contextService = {
     // Existing initiative functions
@@ -950,6 +994,8 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
     currentPage,
     isLoading,
     initiativesLoaded,
+    loadUserBookmarks,
+    clearBookmarks,
 
     // Comments functions
     getComments,

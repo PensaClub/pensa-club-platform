@@ -25,7 +25,7 @@ export const InitiativeView = () => {
             top: 0,
             behavior: 'smooth'
         });
-    }, []);
+    }, []); 
 
     useEffect(() => {
         const fetchInitiative = async () => {
@@ -35,16 +35,21 @@ export const InitiativeView = () => {
                 setInitiative(data);
             } catch (error) {
                 console.error('Error fetching initiative:', error);
+                setInitiative(null);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchInitiative();
+        if (slug) { 
+            fetchInitiative();
+        }
     }, [slug, getInitiativeById]);
 
-    // Разделяне на shortDescription
+    // Разделяне на shortDescription - САМО ако initiative съществува
     const getDescriptionParts = (description) => {
+        if (!description) return { firstSentence: '', restSentences: '' };
+        
         const sentences = description.split(/(?<=[.!?])\s+/);
         const firstSentence = sentences[0] || '';
         const restSentences = sentences.slice(1).join(' ');
@@ -101,6 +106,7 @@ export const InitiativeView = () => {
         );
     }
 
+    // ПРЕМЕСТИ ТУК - след проверките за initiative
     const { firstSentence, restSentences } = getDescriptionParts(initiative.shortDescription);
     const projectsForMap = transformProjectsForMap(initiative.projects);
 
@@ -110,8 +116,8 @@ export const InitiativeView = () => {
             <div className="initiative-hero">
                 <div className="initiative-hero-image">
                     <img
-                        src={initiative.mainImage.src}
-                        alt={initiative.mainImage.alt}
+                        src={initiative.mainImage?.src || ''}
+                        alt={initiative.mainImage?.alt || initiative.title}
                         className="hero-image"
                     />
                 </div>
@@ -158,8 +164,8 @@ export const InitiativeView = () => {
             </div>
 
             <div className="initiative-content">
-                {/* Sections */}
-                {initiative.sections && initiative.sections.length > 0 && (
+                {/* Sections - със защитена проверка */}
+                {initiative.sections && Array.isArray(initiative.sections) && initiative.sections.length > 0 && (
                     <section id="sections" className="initiative-sections">
                         <h2 className="section-title">
                             {t('initiatives.view.aboutInitiative')}
@@ -173,11 +179,12 @@ export const InitiativeView = () => {
                                         <p className="section-text">{section.content}</p>
                                     </div>
 
-                                    {section.image && (
+                                    {/* ОПРАВЕНА проверка за image array */}
+                                    {section.image && Array.isArray(section.image) && section.image.length > 0 && (
                                         <div className="section-image">
                                             <img
-                                                src={section.image.src}
-                                                alt={section.image.alt}
+                                                src={section.image[0].src}
+                                                alt={section.image[0].alt || section.title}
                                             />
                                         </div>
                                     )}
@@ -188,7 +195,7 @@ export const InitiativeView = () => {
                 )}
 
                 {/* Download Materials */}
-                {initiative.downloadMaterials && initiative.downloadMaterials.length > 0 && (
+                {initiative.downloadMaterials && Array.isArray(initiative.downloadMaterials) && initiative.downloadMaterials.length > 0 && (
                     <section className="download-materials">
                         <h2 className="section-title">
                             {t('initiatives.view.downloadMaterials')}
@@ -196,7 +203,7 @@ export const InitiativeView = () => {
 
                         <div className="materials-grid">
                             {initiative.downloadMaterials.map((material) => (
-                                <div key={`download-material-${material.id||material.titleSlug}`} className="material-card">
+                                <div key={`download-material-${material.id || material.titleSlug}`} className="material-card">
                                     <div className="material-preview">
                                         {material.image ? (
                                             <img src={material.image.src} alt={material.image.alt} />
@@ -212,7 +219,7 @@ export const InitiativeView = () => {
                                         <p className="material-description">{truncateText(material.description, 40)}</p>
 
                                         <div className="material-meta">
-                                            <span className="file-type">{material.fileType.toUpperCase()}</span>
+                                            <span className="file-type">{material.fileType?.toUpperCase()}</span>
                                             <span className="file-size">{material.fileSize}</span>
                                         </div>
 
@@ -231,7 +238,7 @@ export const InitiativeView = () => {
                 )}
 
                 {/* Stories & Publications */}
-                {(initiative.stories || initiative.publications) && (
+                {((initiative.stories && initiative.stories.length > 0) || (initiative.publications && initiative.publications.length > 0)) && (
                     <StoriesPublications
                         stories={initiative.stories || []}
                         publications={initiative.publications || []}
@@ -264,7 +271,7 @@ export const InitiativeView = () => {
                 )}
 
                 {/* Projects Grid */}
-                {initiative.projects && initiative.projects.length > 0 && (
+                {initiative.projects && Array.isArray(initiative.projects) && initiative.projects.length > 0 && (
                     <section className="projects-grid-section">
                         <h2 className="section-title">
                             {t('initiatives.view.projectsOverview')}
@@ -272,7 +279,7 @@ export const InitiativeView = () => {
 
                         <div className="projects-grid">
                             {initiative.projects.map((project) => (
-                                <ProjectCard key={`initiative-project-${project.id || project.titleSlug} `} project={project} />
+                                <ProjectCard key={`initiative-project-${project.id || project.titleSlug}`} project={project} />
                             ))}
                         </div>
                     </section>
