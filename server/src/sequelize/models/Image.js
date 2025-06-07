@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
                     foreignKey: 'imageableId',
                     constraints: false,
                     scope: {
-                        imageLinkConnection: connection,
+                        image_link_connection: connection,
                     },
                 });
             });

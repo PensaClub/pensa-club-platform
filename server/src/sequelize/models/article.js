@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'sections',
                 constraints: false,
                 scope: {
-                    sectionLinkConnection: 'article',
+                    section_link_connection: 'article',
                 },
             });
 

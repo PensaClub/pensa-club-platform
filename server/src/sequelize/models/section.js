@@ -8,14 +8,14 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'sectionableId',
                 constraints: false,
                 scope: {
-                    sectionLinkConnection: 'article',
+                    section_link_connection: 'article',
                 },
             });
             section.belongsTo(models.initiative, {
                 foreignKey: 'sectionableId',
                 constraints: false,
                 scope: {
-                    sectionLinkConnection: 'initiative',
+                    section_link_connection: 'initiative',
                 },
             });
             section.hasMany(models.image, {
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'imageableId',
                 constraints: false,
                 scope: {
-                    imageLinkConnection: 'section',
+                    image_link_connection: 'section',
                 },
             });
         }

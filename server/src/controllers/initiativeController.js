@@ -25,7 +25,6 @@ const initiativeConfig = [
     {
         model: image,
         as: 'mainImage',
-        where: { imageLinkConnection: 'initiative' },
         required: false,
         attributes: ['alt', 'src', 'id'],
     },
@@ -45,7 +44,6 @@ const initiativeConfig = [
                 model: image,
                 as: 'image',
                 attributes: ['id', 'src', 'alt'],
-                where: { imageLinkConnection: 'downloadMaterial' },
                 required: false,
             },
         ],
@@ -53,7 +51,6 @@ const initiativeConfig = [
     {
         model: publishedContent,
         as: 'stories',
-        where: { type: 'story' },
         required: true,
         attributes: ['id', 'titleSlug', 'title', 'description', 'link', 'publishedAt', 'author'],
         include: [
@@ -61,7 +58,6 @@ const initiativeConfig = [
                 model: image,
                 as: 'image',
                 attributes: ['id', 'src', 'alt'],
-                where: { imageLinkConnection: 'publishedContent' },
                 required: false,
             },
         ],
@@ -69,7 +65,6 @@ const initiativeConfig = [
     {
         model: publishedContent,
         as: 'publications',
-        where: { type: 'publication' },
         required: true,
         attributes: ['id', 'titleSlug', 'title', 'description', 'link', 'publishedAt'],
         include: [
@@ -77,7 +72,6 @@ const initiativeConfig = [
                 model: image,
                 as: 'image',
                 attributes: ['id', 'src', 'alt'],
-                where: { imageLinkConnection: 'publishedContent' },
                 required: false,
             },
         ],
@@ -85,21 +79,18 @@ const initiativeConfig = [
     {
         model: contact,
         as: 'contact',
-        where: { isMainContact: true },
         required: true,
         attributes: ['id', 'name', 'position', 'email', 'phone', 'image'],
     },
     {
         model: contact,
         as: 'additionalContacts',
-        where: { isMainContact: false },
         required: false,
         attributes: ['id', 'name', 'email', 'phone'],
     },
     {
         model: section,
         as: 'sections',
-        where: { sectionLinkConnection: 'initiative' },
         required: true,
         attributes: ['id', 'titleSlug', 'title', 'content'],
         include: [
@@ -107,7 +98,6 @@ const initiativeConfig = [
                 model: image,
                 as: 'sectionImages',
                 attributes: ['id', 'src', 'alt'],
-                where: { imageLinkConnection: 'section' },
                 required: false,
             },
         ],
@@ -168,20 +158,59 @@ initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
 
 initiativeController.get('/all', async (req, res, next) => {
     try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 6;
-        const offset = (page - 1) * limit;
+        const { page, limit } = req.query;
 
+        // Validate that page and limit are numbers
+        if (page && isNaN(Number(page))) {
+            throw new customError({
+                message: 'Pagination page must be a number',
+                statusCode: 400,
+            });
+        }
+
+        if (limit && isNaN(Number(limit))) {
+            throw new customError({
+                message: 'Pagination limit must be a number',
+                statusCode: 400,
+            });
+        }
+
+        const pageNumber = page ? Math.max(1, parseInt(page)) : 1;
+        const limitNumber = limit ? Math.max(1, parseInt(limit)) : 6;
+
+        // Get total count for pagination info
+        const totalCount = await initiative.count({
+            distinct: true,
+        });
+
+        const totalPages = Math.ceil(totalCount / limitNumber);
+
+        // If requested page is beyond total pages, use the last page
+        const actualPage = Math.min(pageNumber, totalPages);
+        const offset = (actualPage - 1) * limitNumber;
+
+        // Get paginated results
         const initiatives = await initiative.findAll({
             include: initiativeConfig,
             attributes: initiativeAttributes,
-            limit,
-            offset,
+            limit: limitNumber,
+            offset: offset,
             order: [['id', 'ASC']],
         });
 
         const transformedInitiatives = initiatives.map(transformInitiative);
-        return res.status(200).json(transformedInitiatives);
+
+        return res.status(200).json({
+            data: transformedInitiatives,
+            pagination: {
+                page: actualPage,
+                limit: limitNumber,
+                totalCount,
+                totalPages,
+                hasNextPage: actualPage < totalPages,
+                hasPrevPage: actualPage > 1,
+            },
+        });
     } catch (err) {
         next(err);
     }

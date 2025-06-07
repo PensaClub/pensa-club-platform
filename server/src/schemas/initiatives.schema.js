@@ -1,4 +1,4 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
 // Base schemas for common types
 const CoordinatesSchema = z.object({
@@ -92,7 +92,7 @@ const InitiativeSchema = z.object({
 
 const UpdateInitiativeSchema = InitiativeSchema.partial();
 
-export {
+module.exports = {
     InitiativeSchema,
     UpdateInitiativeSchema,
     ContactSchema,

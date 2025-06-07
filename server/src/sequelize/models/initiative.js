@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'initiativeId',
                 as: 'contact',
                 scope: {
-                    isMainContact: true,
+                    is_main_contact: true,
                 },
             });
 
@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'imageableId',
                 constraints: false,
                 scope: {
-                    imageLinkConnection: 'initiative',
+                    image_link_connection: 'initiative',
                 },
             });
 
@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'sectionableId',
                 constraints: false,
                 scope: {
-                    sectionLinkConnection: 'initiative',
+                    section_link_connection: 'initiative',
                 },
             });
         }

@@ -15,13 +15,13 @@ module.exports = {
             if (!tableDesc.imageable_id) {
                 await queryInterface.addColumn('images', 'imageable_id', {
                     type: Sequelize.INTEGER,
-                    allowNull: false,
+                    allowNull: true,
                 });
             }
             if (!tableDesc.image_link_connection) {
                 await queryInterface.addColumn('images', 'image_link_connection', {
                     type: Sequelize.STRING,
-                    allowNull: false,
+                    allowNull: true,
                 });
             }
 
@@ -34,13 +34,22 @@ module.exports = {
 
                 await queryInterface.removeColumn('images', 'sectionId');
             }
+
+            await queryInterface.changeColumn('images', 'imageable_id', {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+            });
+            await queryInterface.changeColumn('images', 'image_link_connection', {
+                type: Sequelize.STRING,
+                allowNull: false,
+            });
         }
     },
 
     async down(queryInterface, Sequelize) {
         await queryInterface.addColumn('images', 'sectionId', {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: 'sections',
                 key: 'id',
