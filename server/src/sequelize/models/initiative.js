@@ -65,6 +65,13 @@ module.exports = (sequelize, DataTypes) => {
                     section_link_connection: 'initiative',
                 },
             });
+
+            Initiative.belongsToMany(models.user_account, {
+                through: 'initiativeBookmarks',
+                as: 'bookmarkedBy',
+                foreignKey: 'initiativeId',
+                otherKey: 'userId',
+            });
         }
     }
     Initiative.init(

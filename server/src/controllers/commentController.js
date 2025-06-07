@@ -176,4 +176,64 @@ commentController.delete('/:id', isAuth, async (req, res, next) => {
     }
 });
 
+commentController.patch('/:id', isAuth, async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { content } = req.body;
+        const userId = req.user.userId;
+
+        // Validate content
+        if (!content || typeof content !== 'string' || content.trim().length === 0) {
+            throw new customError({
+                message: 'Comment content is required',
+                statusCode: 400,
+            });
+        }
+
+        const commentToUpdate = await comment.findByPk(id, {
+            include: commentConfig,
+        });
+
+        if (!commentToUpdate) {
+            throw new customError({
+                message: 'Comment not found',
+                statusCode: 404,
+            });
+        }
+
+        // Check if user owns the comment
+        if (commentToUpdate.userId !== userId) {
+            throw new customError({
+                message: 'Not authorized to update this comment',
+                statusCode: 403,
+            });
+        }
+
+        // Check if content actually changed
+        if (commentToUpdate.content === content) {
+            const transformedComment = transformComment(commentToUpdate);
+            return res.status(200).json({
+                ...transformedComment,
+                isEdited: false,
+            });
+        }
+
+        // Update the comment only if content changed
+        await commentToUpdate.update({ content });
+
+        // Get the updated comment with all relations
+        const updatedComment = await comment.findByPk(id, {
+            include: commentConfig,
+        });
+
+        const transformedComment = transformComment(updatedComment);
+        return res.status(200).json({
+            ...transformedComment,
+            isEdited: true,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 module.exports = commentController;

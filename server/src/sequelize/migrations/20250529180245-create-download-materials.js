@@ -33,7 +33,7 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            initiativeId: {
+            initiative_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 references: {

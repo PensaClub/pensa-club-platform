@@ -2,11 +2,21 @@ const initiativeController = require('express').Router();
 const { where } = require('sequelize');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
-const { initiative, image, project, downloadMaterial, publishedContent, contact, section, user_account, user_details } = require('../sequelize/models');
+const {
+    initiative,
+    image,
+    project,
+    downloadMaterial,
+    publishedContent,
+    contact,
+    section,
+    user_account,
+    user_details,
+    initiativeBookmark,
+} = require('../sequelize/models');
 const customError = require('../utils/customError');
 const transformInitiative = require('../utils/initiativeUtils');
 const { InitiativeSchema } = require('../schemas/initiatives.schema');
-const z = require('zod');
 
 const initiativeConfig = [
     {
@@ -108,19 +118,22 @@ const initiativeAttributes = ['id', 'slug', 'title', 'shortDescription', 'catego
 
 initiativeController.get('/single/:id', async (req, res, next) => {
     try {
-        const initiativeId = parseInt(req.params.id);
+        const param = req.params.id;
+        const initiativeId = parseInt(param);
 
+        let foundInitiative;
         if (isNaN(initiativeId)) {
-            throw new customError({
-                message: 'Invalid initiative ID',
-                statusCode: 400,
+            foundInitiative = await initiative.findOne({
+                where: { slug: param },
+                include: initiativeConfig,
+                attributes: initiativeAttributes,
+            });
+        } else {
+            foundInitiative = await initiative.findByPk(initiativeId, {
+                include: initiativeConfig,
+                attributes: initiativeAttributes,
             });
         }
-
-        const foundInitiative = await initiative.findByPk(initiativeId, {
-            include: initiativeConfig,
-            attributes: initiativeAttributes,
-        });
 
         if (!foundInitiative) {
             throw new customError({
@@ -140,13 +153,16 @@ initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
     try {
         const { email } = req.params;
 
-        const initiatives = await initiative.findAll({
+        const user = await user_account.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        const initiatives = await user.getBookmarkedInitiatives({
             include: initiativeConfig,
             attributes: initiativeAttributes,
-            where: {
-                '$creator.email$': email,
-            },
             order: [['id', 'ASC']],
+            through: { attributes: [] },
         });
 
         const transformedInitiatives = initiatives.map(transformInitiative);
@@ -160,36 +176,35 @@ initiativeController.get('/all', async (req, res, next) => {
     try {
         const { page, limit } = req.query;
 
-        // Validate that page and limit are numbers
-        if (page && isNaN(Number(page))) {
+        const parsedPage = page ? parseInt(page) : 1;
+        const parsedLimit = limit ? parseInt(limit) : 6;
+
+        if (page && isNaN(parsedPage)) {
             throw new customError({
                 message: 'Pagination page must be a number',
                 statusCode: 400,
             });
         }
 
-        if (limit && isNaN(Number(limit))) {
+        if (limit && isNaN(parsedLimit)) {
             throw new customError({
                 message: 'Pagination limit must be a number',
                 statusCode: 400,
             });
         }
 
-        const pageNumber = page ? Math.max(1, parseInt(page)) : 1;
-        const limitNumber = limit ? Math.max(1, parseInt(limit)) : 6;
+        const pageNumber = Math.max(1, parsedPage);
+        const limitNumber = Math.max(1, parsedLimit);
 
-        // Get total count for pagination info
         const totalCount = await initiative.count({
             distinct: true,
         });
 
         const totalPages = Math.ceil(totalCount / limitNumber);
 
-        // If requested page is beyond total pages, use the last page
         const actualPage = Math.min(pageNumber, totalPages);
         const offset = (actualPage - 1) * limitNumber;
 
-        // Get paginated results
         const initiatives = await initiative.findAll({
             include: initiativeConfig,
             attributes: initiativeAttributes,
@@ -205,7 +220,7 @@ initiativeController.get('/all', async (req, res, next) => {
             pagination: {
                 page: actualPage,
                 limit: limitNumber,
-                totalCount,
+                totalInitiatives: totalCount,
                 totalPages,
                 hasNextPage: actualPage < totalPages,
                 hasPrevPage: actualPage > 1,
@@ -449,6 +464,32 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
         return res.status(201).json(transformedResponse);
     } catch (err) {
         next(err);
+    }
+});
+
+initiativeController.post('/bookmark/:initiativeId', isAuth, async (req, res, next) => {
+    try {
+        const userId = req.user.userId;
+        const { initiativeId } = req.params;
+
+        if (!initiativeId || isNaN(Number(initiativeId))) {
+            return res.status(400).json({ error: 'Invalid initiative ID' });
+        }
+
+        const existing = await initiativeBookmark.findOne({
+            where: { userId, initiativeId },
+        });
+
+        if (existing) {
+            await existing.destroy();
+            return res.status(200).json({ message: 'Bookmark successfully removed.', bookmarked: false });
+        } else {
+            await initiativeBookmark.create({ userId, initiativeId });
+            return res.status(201).json({ message: 'Bookmark successfully added.', bookmarked: true });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 });
 

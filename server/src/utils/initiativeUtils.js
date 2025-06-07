@@ -2,7 +2,7 @@ const transformInitiative = (initiative) => {
     const plainInitiative = initiative.get({ plain: true });
 
     // Transform location data
-    const { address, lat, lng, ...initiativeData } = plainInitiative;
+    const { address, lat, lng, initiativeBookmarks, ...initiativeData } = plainInitiative;
     const transformedInitiative = {
         ...initiativeData,
         location: {

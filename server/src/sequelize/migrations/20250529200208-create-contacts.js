@@ -34,7 +34,7 @@ module.exports = {
                 allowNull: false,
                 defaultValue: false,
             },
-            initiativeId: {
+            initiative_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 references: {

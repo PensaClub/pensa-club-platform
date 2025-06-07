@@ -33,12 +33,12 @@ module.exports = {
                 type: Sequelize.ENUM('story', 'publication'),
                 allowNull: false,
             },
-            publishedAt: {
+            published_at: {
                 type: Sequelize.DATE,
                 allowNull: false,
                 defaultValue: Sequelize.NOW,
             },
-            initiativeId: {
+            initiative_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 references: {
