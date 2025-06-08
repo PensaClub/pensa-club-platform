@@ -66,6 +66,15 @@ module.exports = (sequelize, DataTypes) => {
                 },
             });
 
+            Initiative.hasMany(models.comment, {
+                foreignKey: 'commentableId',
+                as: 'comments',
+                constraints: false,
+                scope: {
+                    comment_link_connection: 'initiative',
+                },
+            });
+
             Initiative.belongsToMany(models.user_account, {
                 through: 'initiativeBookmarks',
                 as: 'bookmarkedBy',

@@ -19,7 +19,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'open',
                     comments_enabled: true,
-                    creator_id: 1,
+                    creator_id: 15,
                 },
                 // Initiative 2: Healthy Aging Program
                 {
@@ -35,7 +35,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'open',
                     comments_enabled: true,
-                    creator_id: 1,
+                    creator_id: 15,
                 },
                 // Initiative 3: Intergenerational Learning
                 {
@@ -67,7 +67,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'open',
                     comments_enabled: true,
-                    creator_id: 2,
+                    creator_id: 1,
                 },
                 // Initiative 5: Community Gardening
                 {
@@ -83,7 +83,7 @@ module.exports = {
                     status: 'active',
                     campaign_status: 'open',
                     comments_enabled: true,
-                    creator_id: 2,
+                    creator_id: 1,
                 },
                 // Initiative 6: Senior Buddy System
                 {
@@ -99,7 +99,7 @@ module.exports = {
                     status: 'planned',
                     campaign_status: 'closed',
                     comments_enabled: false,
-                    creator_id: 2,
+                    creator_id: 15,
                 },
                 // Initiative 7: Arts & Crafts for Seniors
                 {
@@ -115,7 +115,7 @@ module.exports = {
                     status: 'completed',
                     campaign_status: 'closed',
                     comments_enabled: true,
-                    creator_id: 2,
+                    creator_id: 15,
                 },
             ],
             { returning: true }
@@ -1100,7 +1100,7 @@ module.exports = {
             // Healthy Aging Program download materials images
             {
                 src: '/images/initiatives/exercise-guide-cover.jpg',
-                alt: 'Корица на ръководството за упражнения',
+                alt: 'Корица на提醒大家',
                 imageable_id: downloadMaterials[2].id, // Third download material
                 image_link_connection: 'downloadMaterial',
                 createdAt: new Date(),
@@ -1586,6 +1586,189 @@ module.exports = {
                 email: 'vasil.dimitrov@arts.bg',
                 is_main_contact: false,
                 initiative_id: initiatives[6].id,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+        ]);
+
+        // Comments
+        await queryInterface.bulkInsert('comments', [
+            {
+                content:
+                    'Страхотна инициатива! Точно това ни трябваше в общността. Надявам се да може да участвам активно и да помогна на други възрастни хора.',
+                user_id: 1,
+                commentable_id: initiatives[0].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['valeri@example.com', 'georgi@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Благодаря за подкрепата, Мария! Разчитаме на активни участници като вас 🙏',
+                user_id: 2,
+                commentable_id: initiatives[0].id,
+                comment_link_connection: 'initiative',
+                parent_id: 1,
+                likes: ['maria@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Кога ще стартира официално платформата? Имам много въпроси и предложения за подобрения. Как мога да се свържа с екипа?',
+                user_id: 3,
+                commentable_id: initiatives[0].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['elena@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Здравейте Георги! Планираме да стартираме в началото на април. Можете да ни пишете на имейла в контактите.',
+                user_id: 2,
+                commentable_id: initiatives[0].id,
+                comment_link_connection: 'initiative',
+                parent_id: 3,
+                likes: Sequelize.literal('ARRAY[]::text[]'),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Отлична идея за свързване на поколенията! Как мога да се включа като доброволец?',
+                user_id: 4,
+                commentable_id: initiatives[0].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['maria@example.com', 'georgi@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+
+            // Comments for Healthy Aging Program
+            {
+                content: 'Участвах в йога занятията и съм много доволна! Препоръчвам на всички възрастни хора да се включат.',
+                user_id: 5,
+                commentable_id: initiatives[1].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['ivan@example.com', 'petra@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Кога ще има нови групи за начинаещи? Искам да започна с по-леки упражнения.',
+                user_id: 6,
+                commentable_id: initiatives[1].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: Sequelize.literal('ARRAY[]::text[]'),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Здравейте Иван! Следващите групи стартират на 15 април. Запишете се на телефона в контактите.',
+                user_id: 4,
+                commentable_id: initiatives[1].id,
+                comment_link_connection: 'initiative',
+                parent_id: 7,
+                likes: ['ivan@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+
+            // Comments for Digital Literacy
+            {
+                content: 'Благодарение на курса вече мога да пиша имейли на внуците си! Страхотни преподаватели.',
+                user_id: 7,
+                commentable_id: initiatives[3].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['milka@example.com', 'ivan@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Радвам се да чуя това, Стояне! Това е целта ни - да свързваме семействата.',
+                user_id: 6,
+                commentable_id: initiatives[3].id,
+                comment_link_connection: 'initiative',
+                parent_id: 9,
+                likes: Sequelize.literal('ARRAY[]::text[]'),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Има ли курсове и за социални мрежи? Искам да науча как да ползвам Facebook.',
+                user_id: 8,
+                commentable_id: initiatives[3].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['stoyan@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Много полезни курсове! Препоръчвам на всички да се запишат.',
+                user_id: 9,
+                commentable_id: initiatives[3].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: Sequelize.literal('ARRAY[]::text[]'),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+
+            // Comments for Community Gardening
+            {
+                content: 'Градината вече е готова за новия сезон! Очакваме ви всички да се включите в засаждането.',
+                user_id: 10,
+                commentable_id: initiatives[4].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['stefan@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Отлична работа! Кога ще засадим доматите?',
+                user_id: 11,
+                commentable_id: initiatives[4].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: Sequelize.literal('ARRAY[]::text[]'),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Доматите ще засадим в края на април когато мине студът.',
+                user_id: 10,
+                commentable_id: initiatives[4].id,
+                comment_link_connection: 'initiative',
+                parent_id: 14,
+                likes: ['stefan@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+
+            // Comments for Arts & Crafts
+            {
+                content: 'Работилниците бяха невероятни! Научих се да правя керамика и се запознах с прекрасни хора.',
+                user_id: 12,
+                commentable_id: initiatives[6].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['vasil@example.com'],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                content: 'Благодаря на всички участници! Беше чудесна група за работа.',
+                user_id: 13,
+                commentable_id: initiatives[6].id,
+                comment_link_connection: 'initiative',
+                parent_id: null,
+                likes: ['anna@example.com'],
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },

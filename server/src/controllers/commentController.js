@@ -2,7 +2,7 @@ const commentController = require('express').Router();
 const isAuth = require('../middlewares/isAuth');
 const { comment, user_account, user_details } = require('../sequelize/models');
 const customError = require('../utils/customError');
-const { transformComment } = require('../utils/commentUtils');
+const transformComment = require('../utils/commentUtils');
 
 const commentConfig = [
     {
@@ -73,7 +73,7 @@ commentController.post('/create', isAuth, async (req, res, next) => {
         next(err);
     }
 });
-
+// SHOULD BE CHANGED TO NOT BE EMAIL - FIRST NAME OR FULL NAME
 commentController.post('/like/:id', isAuth, async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -103,7 +103,12 @@ commentController.post('/like/:id', isAuth, async (req, res, next) => {
         });
 
         const transformedComment = transformComment(updatedComment);
-        return res.status(200).json(transformedComment);
+        const response = {
+            isLiked: !hasLiked,
+            ...transformedComment,
+        };
+
+        return res.status(200).json(response);
     } catch (err) {
         next(err);
     }
@@ -147,7 +152,7 @@ commentController.delete('/:id', isAuth, async (req, res, next) => {
             });
         }
 
-        if (commentToDelete.userId !== userId) {
+        if (Number(commentToDelete.userId) !== Number(userId)) {
             throw new customError({
                 message: 'Not authorized to delete this comment',
                 statusCode: 403,
@@ -182,7 +187,6 @@ commentController.patch('/:id', isAuth, async (req, res, next) => {
         const { content } = req.body;
         const userId = req.user.userId;
 
-        // Validate content
         if (!content || typeof content !== 'string' || content.trim().length === 0) {
             throw new customError({
                 message: 'Comment content is required',
@@ -201,15 +205,13 @@ commentController.patch('/:id', isAuth, async (req, res, next) => {
             });
         }
 
-        // Check if user owns the comment
-        if (commentToUpdate.userId !== userId) {
+        if (Number(commentToUpdate.userId) !== Number(userId)) {
             throw new customError({
                 message: 'Not authorized to update this comment',
                 statusCode: 403,
             });
         }
 
-        // Check if content actually changed
         if (commentToUpdate.content === content) {
             const transformedComment = transformComment(commentToUpdate);
             return res.status(200).json({
@@ -218,10 +220,8 @@ commentController.patch('/:id', isAuth, async (req, res, next) => {
             });
         }
 
-        // Update the comment only if content changed
         await commentToUpdate.update({ content });
 
-        // Get the updated comment with all relations
         const updatedComment = await comment.findByPk(id, {
             include: commentConfig,
         });

@@ -49,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
                     key: 'id',
                 },
                 onDelete: 'CASCADE',
+                field: 'user_id',
             },
             commentableId: {
                 type: DataTypes.INTEGER,
