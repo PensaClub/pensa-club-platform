@@ -8,13 +8,13 @@ import { BookmarkIcon, ViewIcon } from '../../Icons/InitiativeIcons';
 
 export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, index }) => {
   const { t } = useTranslation();
-  const { getViewCount, loadArticleViewCounts } = useAnalytics();
+  const { getViewCount, loadInitiativeViewCounts } = useAnalytics(); // ПРОМЕНИ loadArticleViewCounts → loadInitiativeViewCounts
 
   useEffect(() => {
     if (initiative) {
-      loadArticleViewCounts([initiative.id]);
+      loadInitiativeViewCounts([initiative.id]); 
     }
-  }, [initiative?.id]);
+  }, [initiative?.id]); 
 
   const handleBookmarkClick = (e) => {
     e.preventDefault();
@@ -27,11 +27,11 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
     return colors[index % colors.length];
   };
 
- const truncateText = (text, maxLength = 100) => {
-  return text && text.length > maxLength 
-    ? text.substring(0, maxLength) + ' ...' 
-    : text;
-};
+  const truncateText = (text, maxLength = 100) => {
+    return text && text.length > maxLength 
+      ? text.substring(0, maxLength) + ' ...' 
+      : text;
+  };
 
   return (
     <div className="init-card-container">
@@ -39,8 +39,7 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
       <button 
         className={`init-bookmark-btn ${isBookmarked ? 'init-bookmarked' : ''}`}
         onClick={handleBookmarkClick}
-       aria-label={isBookmarked ? t('initiatives.initiativeCard.removeBookmark') : t('initiatives.initiativeCard.addBookmark')}
-
+        aria-label={isBookmarked ? t('initiatives.initiativeCard.removeBookmark') : t('initiatives.initiativeCard.addBookmark')}
       >
         <BookmarkIcon />
       </button>
@@ -81,14 +80,14 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
           <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-         {t('initiatives.initiativeCard.readMore')}
+          {t('initiatives.initiativeCard.readMore')}
         </Link>
       </div>
 
       {/* View Counter */}
       <div className="init-view-counter">
         <ViewIcon />
-        <span>{getViewCount(initiative.id)}</span>
+        <span>{getViewCount(initiative.id, 'initiative')}</span> {/* ДОБАВИ 'initiative' като втори параметър */}
       </div>
     </div>
   );

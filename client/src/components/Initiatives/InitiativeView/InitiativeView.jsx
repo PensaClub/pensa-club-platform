@@ -11,6 +11,7 @@ import { ProjectCard } from './ProjectCard/ProjectCard';
 import { ContactSection } from './ContactSection/ContactSection';
 import { Comments } from './Comments/Comments';
 import { truncateText } from '../../../utils/truncateText';
+import { useAnalytics } from '../../contexts/AnalyticsContext';
 
 export const InitiativeView = () => {
     const { slug } = useParams();
@@ -19,6 +20,7 @@ export const InitiativeView = () => {
     const [initiative, setInitiative] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showMap, setShowMap] = useState(true);
+     const { trackInitiative } = useAnalytics();
 
     useEffect(() => {
         window.scrollTo({
@@ -33,6 +35,9 @@ export const InitiativeView = () => {
             try {
                 const data = await getInitiativeById(slug);
                 setInitiative(data);
+                   if (data) {
+                    trackInitiative(data.id, data.title);
+                }
             } catch (error) {
                 console.error('Error fetching initiative:', error);
                 setInitiative(null);

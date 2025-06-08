@@ -1016,7 +1016,7 @@
       "showOpenClosed": "покажи само отворени кампании",
       "showMap": "Покажи картата",
       "hideMap": "Скрий картата",
-      "projectsIn": "инициативи в",
+      "projectsIn": "инициативи",
       "countries": "държави",
       "clearFilters": "Изчисти всички филтри",
       "statusActive": "Активни",
@@ -1024,7 +1024,15 @@
       "statusCompleted": "Завършени",
       "noResults": "Няма намерени инициативи със зададените критерии.",
       "loading": "Зареждане на инициативи...",
-      "loadMore": "Зареди още"
+      "loadMore": "Зареди още",
+      "oneCountry": "държава", 
+      "cities": "градове",
+      "oneCity": "град",
+      "locations": "локации",
+      "oneLocation": "локация",
+      "inCountries": "в",
+      "inCities": "в", 
+      "inLocations": "в"
     },
     "initiativeCard": {
       "removeBookmark": "Премахни от запазени",

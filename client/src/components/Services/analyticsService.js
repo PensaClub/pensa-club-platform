@@ -29,23 +29,53 @@ export const trackArticleView = (articleId, articleTitle) => {
     article_id: articleId
   });
 
-  // Актуализира локалния кеш на броячите
-  if (localViewCountCache[articleId]) {
-    localViewCountCache[articleId]++;
+  // Актуализира локалния кеш на броячите за статии
+  const key = `article_${articleId}`;
+  if (localViewCountCache[key]) {
+    localViewCountCache[key]++;
   } else {
-    localViewCountCache[articleId] = 1;
+    localViewCountCache[key] = 1;
   }
 
   // Запазване на посещенията в localStorage
   saveViewCounts();
+};
 
-  console.log(`Article view tracked: ${articleTitle} (${articleId})`);
+// Проследяване на посещение на инициатива 
+export const trackInitiativeView = (initiativeId, initiativeTitle) => {
+  ReactGA.event({
+    category: 'Initiative',
+    action: 'View',
+    label: initiativeTitle,
+    value: 1,
+    initiative_id: initiativeId
+  });
+
+  // Актуализира локалния кеш на броячите за инициативи
+  const key = `initiative_${initiativeId}`;
+  if (localViewCountCache[key]) {
+    localViewCountCache[key]++;
+  } else {
+    localViewCountCache[key] = 1;
+  }
+
+  // Запазване на посещенията в localStorage
+  saveViewCounts();
+};
+
+// Общa функция за проследяване на различни типове съдържание
+export const trackView = (contentId, contentTitle, contentType = 'article') => {
+  if (contentType === 'article') {
+    trackArticleView(contentId, contentTitle);
+  } else if (contentType === 'initiative') {
+    trackInitiativeView(contentId, contentTitle);
+  }
 };
 
 // Запазване на кеша на посещенията в localStorage
 const saveViewCounts = () => {
   try {
-    localStorage.setItem('articleViewCounts', JSON.stringify(localViewCountCache));
+    localStorage.setItem('viewCounts', JSON.stringify(localViewCountCache));
   } catch (error) {
     console.error('Error saving view counts to localStorage', error);
   }
@@ -54,7 +84,21 @@ const saveViewCounts = () => {
 // Зареждане на броячите от localStorage
 export const loadViewCounts = () => {
   try {
-    const savedCounts = localStorage.getItem('articleViewCounts');
+    // Зареди стария формат за backward compatibility
+    const oldArticleCounts = localStorage.getItem('articleViewCounts');
+    if (oldArticleCounts) {
+      const parsedOldCounts = JSON.parse(oldArticleCounts);
+      // Мигрирай стария формат към новия
+      Object.entries(parsedOldCounts).forEach(([id, count]) => {
+        localViewCountCache[`article_${id}`] = count;
+      });
+      // Премахни стария формат
+      localStorage.removeItem('articleViewCounts');
+      saveViewCounts();
+    }
+
+    // Зареди новия формат
+    const savedCounts = localStorage.getItem('viewCounts');
     if (savedCounts) {
       const parsedCounts = JSON.parse(savedCounts);
       Object.assign(localViewCountCache, parsedCounts);
@@ -65,26 +109,47 @@ export const loadViewCounts = () => {
   return localViewCountCache;
 };
 
-// Получаване на броя на посещенията за определена статия
+// Получаване на броя на посещенията за определена статия (backward compatibility)
 export const getArticleViewCount = (articleId) => {
-  return localViewCountCache[articleId] || 0;
+  return localViewCountCache[`article_${articleId}`] || 0;
+};
+
+// Получаване на броя на посещенията за определена инициатива
+export const getInitiativeViewCount = (initiativeId) => {
+  return localViewCountCache[`initiative_${initiativeId}`] || 0;
+};
+
+// Общa функция за получаване на view count
+export const getViewCount = (contentId, contentType = 'article') => {
+  const key = `${contentType}_${contentId}`;
+  return localViewCountCache[key] || 0;
 };
 
 // Симулиране на заявка към API за реални приложения, които получават данни от сървър
-export const fetchViewCounts = async (articleIds) => {
-  // В реално приложение, тук би имало заявка към вашия сървър
+export const fetchViewCounts = async (contentIds, contentType = 'article') => {
+  // В реално приложение, тук би имало заявка към сървър
   // За демо целите използваме localStorage
   loadViewCounts();
 
-  // Симулираме някакво случайно начално число за статии без посещения
+  // Симулираме някакво случайно начално число за съдържание без посещения
   const result = {};
-  articleIds.forEach(id => {
-    if (!localViewCountCache[id]) {
-      localViewCountCache[id] = Math.floor(Math.random() * 50) + 1;
+  contentIds.forEach(id => {
+    const key = `${contentType}_${id}`;
+    if (!localViewCountCache[key]) {
+      localViewCountCache[key] = Math.floor(Math.random() * 50) + 1;
       saveViewCounts();
     }
-    result[id] = localViewCountCache[id];
+    result[id] = localViewCountCache[key];
   });
 
   return result;
+};
+
+// За backward compatibility - wrapper функции
+export const fetchArticleViewCounts = async (articleIds) => {
+  return fetchViewCounts(articleIds, 'article');
+};
+
+export const fetchInitiativeViewCounts = async (initiativeIds) => {
+  return fetchViewCounts(initiativeIds, 'initiative');
 };
