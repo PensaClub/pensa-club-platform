@@ -298,7 +298,7 @@ export const InitiativeView = () => {
 
                 {/* Comments Section - показваме винаги, компонентът сам решава какво да покаже */}
                 <Comments
-                    initiativeId={initiative.slug || initiative.id}
+                    initiativeId={ initiative.id || initiative.slug }
                     commentsEnabled={initiative.commentsEnabled}
                 />
             </div>

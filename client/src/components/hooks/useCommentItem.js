@@ -5,18 +5,14 @@ import { useAuthContext } from '../contexts/UserContext';
 export const useCommentItem = (
     comment, 
     entityId, 
-    onUpdate, 
     isReply = false, 
     parentCommentId = null,
     entityType = 'initiative',
-    // Функции предавани от Comments компонента
+    // Основни функции
     updateCommentFunc,
     deleteCommentFunc,
     likeCommentFunc,
-    addReplyFunc,
-    updateReplyFunc,    // ← НОВ за редактиране на replies
-    deleteReplyFunc,    // ← НОВ за триене на replies
-    likeReplyFunc
+    addCommentFunc
 ) => {
     const { isAuthentication, userEmail } = useAuthContext();
     
@@ -34,17 +30,7 @@ export const useCommentItem = (
         if (!isAuthentication) return;
 
         try {
-            let updatedComment;
-            
-            // Ако това е reply, използваме likeReplyFunc
-            if (isReply && parentCommentId) {
-                updatedComment = await likeReplyFunc(entityId, parentCommentId, comment.id);
-            } else {
-                // Ако това е основен коментар, използваме likeCommentFunc
-                updatedComment = await likeCommentFunc(entityId, comment.id);
-            }
-            
-            onUpdate(updatedComment, 'like');
+            await likeCommentFunc(entityId, comment.id);
         } catch (error) {
             console.error('Error liking comment:', error);
         }
@@ -54,17 +40,7 @@ export const useCommentItem = (
         if (!editContent.trim()) return;
 
         try {
-            let updatedComment;
-            
-            if (isReply && parentCommentId) {
-                // За replies използвай updateReplyFunc
-                updatedComment = await updateReplyFunc(entityId, parentCommentId, comment.id, editContent);
-            } else {
-                // За коментари използвай updateCommentFunc
-                updatedComment = await updateCommentFunc(entityId, comment.id, editContent);
-            }
-            
-            onUpdate(updatedComment, 'update');
+            await updateCommentFunc(entityId, comment.id, editContent);
             setIsEditing(false);
         } catch (error) {
             console.error('Error updating comment:', error);
@@ -73,15 +49,7 @@ export const useCommentItem = (
 
     const handleDelete = async () => {
         try {
-            if (isReply && parentCommentId) {
-                // За replies използвай deleteReplyFunc
-                await deleteReplyFunc(entityId, parentCommentId, comment.id);
-            } else {
-                // За коментари използвай deleteCommentFunc
-                await deleteCommentFunc(entityId, comment.id);
-            }
-            
-            onUpdate(comment, 'delete');
+            await deleteCommentFunc(entityId, comment.id);
         } catch (error) {
             console.error('Error deleting comment:', error);
         }
@@ -89,12 +57,7 @@ export const useCommentItem = (
 
     const handleReply = async (content) => {
         try {
-            const reply = await addReplyFunc(entityId, comment.id, content);
-            const updatedComment = {
-                ...comment,
-                replies: [...(comment.replies || []), reply]
-            };
-            onUpdate(updatedComment, 'reply');
+            await addCommentFunc(entityId, content, comment.id);
             setShowReplyForm(false);
             setShowReplies(true);
         } catch (error) {
