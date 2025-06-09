@@ -1,0 +1,157 @@
+'use strict';
+const { Model } = require('sequelize');
+
+module.exports = (sequelize, DataTypes) => {
+    class Initiative extends Model {
+        static associate(models) {
+            Initiative.belongsTo(models.user_account, {
+                foreignKey: 'creatorId',
+                as: 'creator',
+            });
+
+            Initiative.hasMany(models.project, {
+                foreignKey: 'initiativeId',
+                as: 'projects',
+            });
+
+            Initiative.hasMany(models.downloadMaterial, {
+                foreignKey: 'initiativeId',
+                as: 'downloadMaterials',
+            });
+
+            Initiative.hasMany(models.publishedContent, {
+                foreignKey: 'initiativeId',
+                as: 'stories',
+                scope: {
+                    type: 'story',
+                },
+            });
+
+            Initiative.hasMany(models.publishedContent, {
+                foreignKey: 'initiativeId',
+                as: 'publications',
+                scope: {
+                    type: 'publication',
+                },
+            });
+
+            Initiative.hasMany(models.contact, {
+                foreignKey: 'initiativeId',
+                as: 'additionalContacts',
+            });
+
+            Initiative.hasOne(models.contact, {
+                foreignKey: 'initiativeId',
+                as: 'contact',
+                scope: {
+                    is_main_contact: true,
+                },
+            });
+
+            Initiative.hasOne(models.image, {
+                as: 'mainImage',
+                foreignKey: 'imageableId',
+                constraints: false,
+                scope: {
+                    image_link_connection: 'initiative',
+                },
+            });
+
+            Initiative.hasMany(models.section, {
+                as: 'sections',
+                foreignKey: 'sectionableId',
+                constraints: false,
+                scope: {
+                    section_link_connection: 'initiative',
+                },
+            });
+
+            Initiative.hasMany(models.comment, {
+                foreignKey: 'commentableId',
+                as: 'comments',
+                constraints: false,
+                scope: {
+                    comment_link_connection: 'initiative',
+                },
+            });
+
+            Initiative.belongsToMany(models.user_account, {
+                through: 'initiativeBookmarks',
+                as: 'bookmarkedBy',
+                foreignKey: 'initiativeId',
+                otherKey: 'userId',
+            });
+        }
+    }
+    Initiative.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+            },
+            creatorId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'user_accounts',
+                    key: 'id',
+                },
+                field: 'creator_id',
+                onDelete: 'CASCADE',
+            },
+            slug: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                unique: true,
+            },
+            title: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            shortDescription: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'short_description',
+            },
+            category: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            address: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            lat: {
+                type: DataTypes.FLOAT,
+                allowNull: true,
+            },
+            lng: {
+                type: DataTypes.FLOAT,
+                allowNull: true,
+            },
+            status: {
+                type: DataTypes.ENUM('in-progress', 'active', 'planned', 'completed'),
+                allowNull: false,
+                defaultValue: 'in-progress',
+            },
+            campaignStatus: {
+                type: DataTypes.ENUM('open', 'closed'),
+                allowNull: false,
+                defaultValue: 'open',
+                field: 'campaign_status',
+            },
+            commentsEnabled: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: true,
+                field: 'comments_enabled',
+            },
+        },
+        {
+            sequelize,
+            modelName: 'initiative',
+        }
+    );
+    return Initiative;
+};
