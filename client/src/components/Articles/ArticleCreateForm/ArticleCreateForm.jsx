@@ -376,15 +376,23 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
     // Общи настройки за редактора
     const editorToolbarOptions = {
-        options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'emoji', 'history'],
+        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'link', 'emoji', 'history'],
         inline: {
             options: ['bold', 'italic', 'underline', 'strikethrough'],
             className: 'editor-toolbar-inline',
         },
+          fontSize: {
+             options: [12, 14, 16, 18, 20, 24, 28, 32, 36],
+            className: 'editor-toolbar-fontsize',
+            dropdownClassName: 'editor-fontsize-dropdown',
+            inDropdown: true,
+        },
+        
         blockType: {
             options: ['Normal', 'H2', 'H3', 'H4', 'Blockquote'],
             className: 'editor-toolbar-block',
         },
+      
         list: {
             options: ['unordered', 'ordered'],
         },
@@ -405,10 +413,17 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
     // Опростени настройки за малки полета (alt текст)
     const minimalEditorToolbarOptions = {
-        options: ['inline', 'link'],
+        options: ['inline', 'link','fontSize'],
         inline: {
             options: ['bold', 'italic', 'underline'],
             className: 'editor-toolbar-inline-small',
+        },
+        fontSize: {
+             options: [12, 14, 16, 18, 20, 24, 28, 32, 36],
+            className: 'editor-toolbar-fontsize',
+            dropdownClassName: 'editor-fontsize-dropdown',
+            inDropdown: true,
+            defaultSize: 16,
         },
         link: {
             inDropdown: false,

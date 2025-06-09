@@ -54,6 +54,10 @@ import { ArticleLimitProvider } from './components/contexts/ArticleLimitContext.
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx';
 import ContactForm from './components/ContactForm/ContactForm.jsx';
+import { InitiativesList } from './components/Initiatives/InitiativesList/InitiativesList.jsx';
+import { InitiativeProvider } from './components/contexts/InitiativeProvider.jsx';
+import { InitiativeView } from './components/Initiatives/InitiativeView/InitiativeView.jsx';
+import { ProjectView } from './components/Initiatives/InitiativeView/ProjectView/ProjectView.jsx';
 
 function App() {
   const location = useLocation();
@@ -84,6 +88,7 @@ function App() {
                   <SuggestUserProvider>
                     <AdminProvider>
                       <ArticleProvider>
+                        <InitiativeProvider>
                         <AnalyticsProvider>
                           <LoadingProvider>
                             <ArticleLimitProvider>
@@ -112,6 +117,10 @@ function App() {
                             element={<ResetPasswordPage />}
                           />
                           <Route path="/articles" element={<ArticlesList />} />
+                          <Route path="/initiatives" element={<InitiativesList />} />
+                          <Route path="/initiatives/:slug" element={<InitiativeView />} />
+                          <Route path="/projects/:slug" element={<ProjectView />} />
+
                           <Route path="/articles/:slug" element={<ArticleView />} />
                           <Route element={<AuthGuard />}>
                             <Route path="/ad/details/:adId" element={<AdDetails />} />
@@ -149,6 +158,7 @@ function App() {
                             </ArticleLimitProvider>
                           </LoadingProvider>
                         </AnalyticsProvider>
+                        </InitiativeProvider>
                       </ArticleProvider>
                     </AdminProvider>
                   </SuggestUserProvider>

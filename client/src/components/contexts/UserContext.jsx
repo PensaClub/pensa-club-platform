@@ -22,16 +22,26 @@ export const UserProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(getAuthStatus());
   const userService = userServiceFactory(isAuth.token);
+  const [redirectPath, setRedirectPath] = useLocalStorage('redirectPath', null);
 
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
-    if (!isAuthenticated&& location.pathname.startsWith('/profile')) {
+    if (!isAuthenticated && location.pathname.startsWith('/profile')) {
       setIsAuth({});
-
+      setRedirectPath(location.pathname + location.search);
       navigate('/sign-up');
     }
-  }, [isAuthenticated, navigate,location]);
+  }, [isAuthenticated, navigate, location]);
+
+  useEffect(() => {
+    const excludePaths = ['/sign-up', '/login', '/forget-password', '/reset-password', '/contact'];
+    const shouldExclude = excludePaths.some(path => location.pathname.includes(path));
+
+    if (!isAuthenticated && !shouldExclude && location.pathname !== '/' && location.pathname !== '/redirecting') {
+      setRedirectPath(location.pathname + location.search);
+    }
+  }, [isAuthenticated, location, setRedirectPath]);
 
   useEffect(() => {
     if (profileData?.role) {
@@ -96,23 +106,32 @@ export const UserProvider = ({ children }) => {
       if (response.user.enabled) {
         const data = await loadAddressData(response.user.details.region, response.user.details.municipality, response.user.details.settlement);
         setAddressId({ ...data });
-        navigate('/');
+
+        // Провери дали има запазена страница за redirect
+        if (redirectPath) {
+          const pathToNavigate = redirectPath;
+          setRedirectPath(null); // Изчисти запазената страница
+          navigate(pathToNavigate);
+        } else {
+          navigate('/'); // Default redirect
+        }
       } else {
         navigate('/profile/profile-form');
       }
 
     } catch (error) {
       if (error.message === 'Email or password are invalid.') {
-
         notify('error-authorize');
         return error.message;
       } else {
         notify('error', error);
       }
-
     } finally {
       setIsLoading(false);
     }
+  };
+  const setRedirectAfterLogin = (path) => {
+    setRedirectPath(path);
   };
 
   const onLogout = async () => {
@@ -313,6 +332,34 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+const onProjectApplicationSubmit = async (applicationData) => {
+  setIsLoading(true);
+  try {
+    // Временно закоментирано до готовност на endpoint
+    // const response = await userService.applyToProject(applicationData);
+    
+    // Mock response за тестване
+    const mockResponse = {
+      success: true,
+      message: 'Кандидатурата е изпратена успешно',
+      application: {
+        id: `app-${Date.now()}`,
+        ...applicationData,
+        status: 'pending'
+      }
+    };
+    
+    notify('application-success');
+    return mockResponse;
+  } catch (error) {
+    notify('error', error);
+    showErrorAndSetTimeouts(`Error submitting application: ${error.message}`);
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+};
+
   const isUserAdmin = () => isAdmin;
 
   const contextService = {
@@ -338,6 +385,9 @@ export const UserProvider = ({ children }) => {
     onChangeAdminRole,
     sendContactForm,
     setProfileData,
+
+    setRedirectAfterLogin,
+    redirectPath,
     setUser: (user) => {
       setProfileData(user);
       if (user.role) {
@@ -350,6 +400,7 @@ export const UserProvider = ({ children }) => {
     },
     handleAuthChange,
     hasPassword: !!profileData?.hasPassword,
+    onProjectApplicationSubmit
   };
 
   return (

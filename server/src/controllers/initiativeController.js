@@ -548,7 +548,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
     try {
         const { id } = req.params;
         const { location, ...restBody } = req.body;
-
+      
         const initiativeData = {
             ...restBody,
             ...(location && {

@@ -32,8 +32,8 @@ export const userServiceFactory = (token) => {
     editUserData: (data) => {
       return requester.patch(`${apiUrl}/user/update-details`, data);
     },
-    changeRole: (email,role,roleChangeComment) => {
-      return requester.post(`${apiUrl}/admin/change-role`, {email,role,roleChangeComment});
+    changeRole: (email, role, roleChangeComment) => {
+      return requester.post(`${apiUrl}/admin/change-role`, { email, role, roleChangeComment });
     },
     getUserData: () => {
       return requester.get(`${apiUrl}/user/single-user`);
@@ -43,6 +43,9 @@ export const userServiceFactory = (token) => {
     },
     sendContactForm: (data) => {
       return requester.post(`${apiUrl}/user/contact-form`, data);
+    },
+    applyToProject: (data) => {
+      return requester.post(`${apiUrl}/projects/apply`, data);
     },
   };
 };
