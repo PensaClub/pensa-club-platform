@@ -10,18 +10,13 @@ export const CommentItem = ({
     comment, 
     entityId,
     entityType = 'initiative',
-    onUpdate, 
     isReply = false, 
     parentCommentId = null,
-    // Функции за коментари
+    // Основни функции
     updateCommentFunc,
     deleteCommentFunc,
     likeCommentFunc,
-    addReplyFunc,
-    // Функции за replies
-    updateReplyFunc,
-    deleteReplyFunc,
-    likeReplyFunc
+    addCommentFunc
 }) => {
     const { t, i18n } = useTranslation();
     
@@ -46,17 +41,13 @@ export const CommentItem = ({
     } = useCommentItem(
         comment, 
         entityId, 
-        onUpdate, 
         isReply, 
         parentCommentId,
         entityType,
         updateCommentFunc,
         deleteCommentFunc,
         likeCommentFunc,
-        addReplyFunc,
-        updateReplyFunc,    // ← ПРЕДАЙ
-        deleteReplyFunc,    // ← ПРЕДАЙ
-        likeReplyFunc
+        addCommentFunc
     );
 
     // Динамичен импорт на CommentForm
@@ -82,30 +73,6 @@ export const CommentItem = ({
         if (window.confirm(t('comments.item.deleteConfirm'))) {
             handleDelete();
         }
-    };
-
-    // Функция за обновяване на replies
-    const handleReplyUpdate = (updatedReply, action) => {
-        let updatedComment = { ...comment };
-        
-        switch (action) {
-            case 'like':
-                // Когато харесваме reply, обновяваме целия parent коментар
-                updatedComment = updatedReply;
-                break;
-            case 'update':
-                updatedComment.replies = (comment.replies || []).map(reply => 
-                    reply.id === updatedReply.id ? updatedReply : reply
-                );
-                break;
-            case 'delete':
-                updatedComment.replies = (comment.replies || []).filter(reply => reply.id !== updatedReply.id);
-                break;
-            default:
-                break;
-        }
-        
-        onUpdate(updatedComment, 'update');
     };
 
     const timeAgo = formatDistanceToNow(new Date(comment.createdAt), {
@@ -237,16 +204,12 @@ export const CommentItem = ({
                                 comment={reply}
                                 entityId={entityId}
                                 entityType={entityType}
-                                onUpdate={handleReplyUpdate}
                                 isReply={true}
                                 parentCommentId={comment.id}
                                 updateCommentFunc={updateCommentFunc}
                                 deleteCommentFunc={deleteCommentFunc}
                                 likeCommentFunc={likeCommentFunc}
-                                addReplyFunc={addReplyFunc}
-                                updateReplyFunc={updateReplyFunc}    // ← ПРЕДАЙ НАТАТЪК
-                                deleteReplyFunc={deleteReplyFunc}    // ← ПРЕДАЙ НАТАТЪК
-                                likeReplyFunc={likeReplyFunc}
+                                addCommentFunc={addCommentFunc}
                             />
                         ))}
                     </div>

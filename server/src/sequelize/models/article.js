@@ -10,8 +10,12 @@ module.exports = (sequelize, DataTypes) => {
             });
 
             Article.hasMany(models.section, {
-                foreignKey: 'articleId',
+                foreignKey: 'sectionableId',
                 as: 'sections',
+                constraints: false,
+                scope: {
+                    section_link_connection: 'article',
+                },
             });
 
             Article.belongsTo(models.article, {

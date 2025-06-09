@@ -9,9 +9,9 @@ import { CommentForm } from '../CommentForm/CommentForm';
 import { Link } from 'react-router-dom';
 
 export const Comments = ({
-    initiativeId,        // За backward compatibility с InitiativeView
-    entityId,           // Унифициран ID за проекти
-    entityType = 'initiative', // 'initiative' или 'project'
+    initiativeId,
+    entityId,
+    entityType = 'initiative',
     commentsEnabled = true,
     onCommentsChange
 }) => {
@@ -19,13 +19,13 @@ export const Comments = ({
     const { isAuthentication } = useAuthContext();
     const {
         // Initiative functions
-        getComments, addComment, updateComment, deleteComment, likeComment, addReply, updateReply, deleteReply, likeReply,
+        getComments, addComment, updateComment, deleteComment, likeComment,
         // Project functions  
-        getProjectComments, addProjectComment, updateProjectComment, deleteProjectComment, likeProjectComment, addProjectReply, updateProjectReply, deleteProjectReply, likeProjectReply,
-        commentsLoading
+        getProjectComments, addProjectComment, updateProjectComment, deleteProjectComment, likeProjectComment,
+        commentsLoading,
+        comments // ← Директно от контекста
     } = useInitiativeContext();
 
-    const [comments, setComments] = useState([]);
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -37,31 +37,19 @@ export const Comments = ({
     const updateCommentFunc = isProject ? updateProjectComment : updateComment;
     const deleteCommentFunc = isProject ? deleteProjectComment : deleteComment;
     const likeCommentFunc = isProject ? likeProjectComment : likeComment;
-    const addReplyFunc = isProject ? addProjectReply : addReply;
-    const updateReplyFunc = isProject ? updateProjectReply : updateReply; 
-    const deleteReplyFunc = isProject ? deleteProjectReply : deleteReply;  
-    const likeReplyFunc = isProject ? likeProjectReply : likeReply;
+
+    // Вземаме коментарите директно от контекста
+    const currentComments = comments[targetId] || [];
 
     useEffect(() => {
         if (!commentsEnabled || !targetId) return;
 
         const loadComments = async () => {
             try {
-                const commentsData = await fetchComments(targetId);
-                // Проверяваме че данните са валидни и осигуряваме replies
-                if (Array.isArray(commentsData)) {
-                    const commentsWithReplies = commentsData.map(comment => ({
-                        ...comment,
-                        replies: comment.replies || []
-                    }));
-                    setComments(commentsWithReplies);
-                } else {
-                    setComments([]);
-                }
+                await fetchComments(targetId);
                 setIsLoaded(true);
             } catch (error) {
                 console.error('Error fetching comments:', error);
-                setComments([]);
                 setIsLoaded(true);
             }
         };
@@ -76,58 +64,19 @@ export const Comments = ({
         }
 
         try {
-            const newComment = await submitComment(targetId, content);
-            if (newComment && newComment.id) {
-                const commentWithReplies = {
-                    ...newComment,
-                    replies: newComment.replies || []
-                };
-                const newComments = [commentWithReplies, ...comments];
-                setComments(newComments);
-
-                // Уведоми родителя за промяната
-                if (onCommentsChange) {
-                    onCommentsChange(newComments.length);
-                }
-            }
+            await submitComment(targetId, content);
             setShowCommentForm(false);
         } catch (error) {
             console.error('Error adding comment:', error);
         }
     };
 
-    const handleUpdateComments = (updatedComment, action) => {
-        if (!updatedComment) return;
-
-        setComments(prev => {
-            let newComments;
-            switch (action) {
-                case 'update':
-                    newComments = prev.map(comment =>
-                        comment?.id === updatedComment.id ? updatedComment : comment
-                    );
-                    break;
-                case 'delete':
-                    newComments = prev.filter(comment => comment?.id !== updatedComment.id);
-                    break;
-                case 'like':
-                case 'reply':
-                    newComments = prev.map(comment =>
-                        comment?.id === updatedComment.id ? updatedComment : comment
-                    );
-                    break;
-                default:
-                    return prev;
-            }
-
-            // Уведоми родителя за промяната в броя коментари
-            if (onCommentsChange && action === 'delete') {
-                onCommentsChange(newComments.length);
-            }
-
-            return newComments;
-        });
-    };
+    // Уведомяваме родителя за промяна в броя коментари
+    useEffect(() => {
+        if (onCommentsChange) {
+            onCommentsChange(currentComments.length);
+        }
+    }, [currentComments.length, onCommentsChange]);
 
     if (!commentsEnabled) {
         return (
@@ -149,7 +98,7 @@ export const Comments = ({
         <section className="initiative-comments-section" id="comments">
             <div className="initiative-comments-header">
                 <h2 className="initiative-comments-section-title">
-                    {t('comments.title')} ({comments.length})
+                    {t('comments.title')} ({currentComments.length})
                 </h2>
 
                 {isAuthentication && (
@@ -186,28 +135,24 @@ export const Comments = ({
                 </div>
             ) : (
                 <div className="initiative-comments-list">
-                    {comments.length === 0 ? (
+                    {currentComments.length === 0 ? (
                         <div className="initiative-no-comments">
                             <div className="initiative-no-comments-icon">💬</div>
                             <p>{t('comments.noComments')}</p>
                         </div>
                     ) : (
-                        comments
-                            .filter(comment => comment && comment.id) // Филтрираме валидни коментари
+                        currentComments
+                            .filter(comment => comment && comment.id)
                             .map(comment => (
                                 <CommentItem
                                     key={comment.id}
                                     comment={comment}
                                     entityId={targetId}
                                     entityType={entityType}
-                                    onUpdate={handleUpdateComments}
                                     updateCommentFunc={updateCommentFunc}
                                     deleteCommentFunc={deleteCommentFunc}
                                     likeCommentFunc={likeCommentFunc}
-                                    addReplyFunc={addReplyFunc}
-                                    likeReplyFunc={likeReplyFunc}
-                                    updateReplyFunc={updateReplyFunc}
-                                    deleteReplyFunc={deleteReplyFunc}
+                                    addCommentFunc={submitComment}
                                 />
                             ))
                     )}

@@ -226,7 +226,7 @@
     padding: 1rem 1.5rem;
     background: #f8fafc;
     border-radius: 12px;
-    border-left: 4px solid #1B8B8A;
+    border-left: 4px solid var(--orange);
     display: flex;
     justify-content: space-between;
     align-items: center;

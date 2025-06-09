@@ -186,7 +186,9 @@ header > a:nth-child(1):hover {
   justify-content: center;
   position: relative;
 }
-
+.dropdown-trigger{
+  cursor: pointer;
+}
 .profile-image-header {
   width: 46px;
   height: 46px;
@@ -403,7 +405,7 @@ header.scrolled + .header-line {
 .mobile-menu-links {
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding: 25px;
   overflow-y: auto;
 }
 
@@ -415,7 +417,7 @@ header.scrolled + .header-line {
   color: var(--gray);
   text-decoration: none;
   border-radius: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   transition: all 0.3s ease;
   font-weight: 500;
 }

@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useState, useEffect } from 'react';
-import {trackArticleView, loadViewCounts, fetchViewCounts } from '../Services/analyticsService';
+import { 
+  trackView, 
+  trackArticleView, 
+  trackInitiativeView, 
+  loadViewCounts, 
+  fetchViewCounts,
+  saveViewCounts 
+} from '../Services/analyticsService';
 
 const AnalyticsContext = createContext();
 
@@ -10,49 +17,133 @@ export const AnalyticsProvider = ({ children }) => {
   const [viewCounts, setViewCounts] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // Зареждане на началните броячи при монтиране
+  // Зареждам началните броячи при монтиране на компонента
   useEffect(() => {
     const initialCounts = loadViewCounts();
     setViewCounts(initialCounts);
     setIsLoading(false);
   }, []);
 
-  // Функция за проследяване на преглед на статия
-  const trackArticle = (articleId, articleTitle) => {
-    trackArticleView(articleId, articleTitle);
-    
-    setViewCounts(prev => ({
-      ...prev,
-      [articleId]: (prev[articleId] || 0) + 1
-    }));
-  };
+  // Запазвам view counts в localStorage при всяка промяна
+  useEffect(() => {
+    if (Object.keys(viewCounts).length > 0) {
+      try {
+        localStorage.setItem('viewCounts', JSON.stringify(viewCounts));
+      } catch (error) {
+        console.error('Error saving view counts:', error);
+      }
+    }
+  }, [viewCounts]);
 
-  // Функция за зареждане на броячи за определени статии
-  const loadArticleViewCounts = async (articleIds) => {
-    setIsLoading(true);
+  // Функция за проследяване на статии (запазвам за backward compatibility)
+  const trackArticle = (articleId, articleTitle) => {
     try {
-      const counts = await fetchViewCounts(articleIds);
+      trackArticleView(articleId, articleTitle);
+      
+      const key = `article_${articleId}`;
       setViewCounts(prev => ({
         ...prev,
-        ...counts
+        [key]: (prev[key] || 0) + 1
       }));
     } catch (error) {
-      console.error('Error loading article view counts', error);
+      console.error('Error tracking article:', error);
+    }
+  };
+
+  // Функция за проследяване на инициативи
+  const trackInitiative = (initiativeId, initiativeTitle) => {
+    try {
+      trackInitiativeView(initiativeId, initiativeTitle);
+      
+      const key = `initiative_${initiativeId}`;
+      setViewCounts(prev => ({
+        ...prev,
+        [key]: (prev[key] || 0) + 1
+      }));
+    } catch (error) {
+      console.error('Error tracking initiative:', error);
+    }
+  };
+
+  // Зареждам броячи за определени статии/инициативи
+  const loadContentViewCounts = async (contentIds, contentType = 'article') => {
+    setIsLoading(true);
+    try {
+      const counts = await fetchViewCounts(contentIds, contentType);
+      
+      // Трансформирам данните в правилен формат за state
+      const transformedCounts = {};
+      Object.entries(counts).forEach(([id, count]) => {
+        const key = `${contentType}_${id}`;
+        transformedCounts[key] = count;
+      });
+      
+      setViewCounts(prev => ({
+        ...prev,
+        ...transformedCounts
+      }));
+    } catch (error) {
+      console.error('Error loading content view counts', error);
     }
     setIsLoading(false);
   };
 
-  const getViewCount = (articleId) => {
-    return viewCounts[articleId] || 0;
+  // Запазвам за backward compatibility
+  const loadArticleViewCounts = async (articleIds) => {
+    return loadContentViewCounts(articleIds, 'article');
+  };
+
+  // Зареждам броячи специално за инициативи
+  const loadInitiativeViewCounts = async (initiativeIds) => {
+    return loadContentViewCounts(initiativeIds, 'initiative');
+  };
+
+  // Общa функция за получаване на view count
+  const getViewCount = (contentId, contentType = 'article') => {
+    try {
+      const key = `${contentType}_${contentId}`;
+      
+      // Проверявам в state-а
+      if (viewCounts[key] !== undefined) {
+        return viewCounts[key];
+      }
+      
+      // Ако няма в state-а, връщам 0 вместо да търся в сървиза
+      // защото може да причини грешки
+      return 0;
+    } catch (error) {
+      console.error('Error getting view count:', error);
+      return 0;
+    }
+  };
+
+  // Wrapper функции за backward compatibility
+  const getArticleViewCount = (articleId) => {
+    return getViewCount(articleId, 'article');
+  };
+
+  const getInitiativeViewCount = (initiativeId) => {
+    return getViewCount(initiativeId, 'initiative');
   };
 
   return (
     <AnalyticsContext.Provider value={{ 
       viewCounts, 
       isLoading, 
-      trackArticle, 
+      
+      // Основни функции
+      getViewCount,
+      loadContentViewCounts,
+      
+      // Функции за статии (backward compatibility)
+      trackArticle,
       loadArticleViewCounts,
-      getViewCount
+      getArticleViewCount,
+      
+      // Функции за инициативи
+      trackInitiative,
+      loadInitiativeViewCounts,
+      getInitiativeViewCount
     }}>
       {children}
     </AnalyticsContext.Provider>

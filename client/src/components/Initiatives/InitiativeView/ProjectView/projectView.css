@@ -61,18 +61,21 @@
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    font-size: 1rem;
+    font-size: 1em;
     max-width: 1400px;
     margin: 0 auto;
     padding: 2.5rem 2rem 3rem 2rem;
     width: 100%;
+    font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+
 }
 
 .project-view-breadcrumb-link {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     transition: color 0.3s ease;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .project-view-breadcrumb-link:hover {
@@ -89,7 +92,7 @@
 .project-view-breadcrumb-current {
     color: rgba(255, 255, 255, 0.9);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1em;
 
 }
 
@@ -555,7 +558,7 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
 }
 
 .project-view-member-position {
-    color: #1B8B8A;
+    color: var(--green);
     font-weight: 600;
     margin-bottom: 1rem;
 }

@@ -13,7 +13,9 @@ export const initiativeServiceFactory = (token) => {
     getInitiativeById: async (id) => {
       return requester.get(`${apiUrl}/initiatives/single/${id}`);
     },
-
+    toggleBookmark: async (initiativeId) => {
+      return requester.post(`${apiUrl}/initiatives/bookmark/${initiativeId}`);
+    },
     getUserInitiatives: async (email) => {
       return requester.get(`${apiUrl}/initiatives/user-initiatives/${email}`);
     },
@@ -28,6 +30,36 @@ export const initiativeServiceFactory = (token) => {
 
     deleteInitiative: async (id) => {
       return requester.del(`${apiUrl}/initiatives/${id}`);
+    },
+
+    // Initiative comments endpoints 
+
+    // Създаване на коментар/reply
+       createComment: async (commentData) => {
+      console.log('API Request:', commentData); // ← DEBUG
+      const response = await requester.post(`${apiUrl}/comments/create`, commentData);
+      console.log('API Response:', response); // ← DEBUG
+      return response;
+    },
+
+    // Обновяване на коментар/reply
+    updateComment: async (commentId, commentData) => {
+      // commentData: { content }
+      return requester.patch(`${apiUrl}/comments/${commentId}`, commentData);
+    },
+
+    // Изтриване на коментар/reply
+    deleteComment: async (commentId) => {
+      return requester.del(`${apiUrl}/comments/${commentId}`);
+    },
+
+    // Харесване на коментар/reply
+    likeComment: async (commentId) => {
+      return requester.post(`${apiUrl}/comments/like/${commentId}`);
+    },
+
+    getSingleComment: async (commentId) => {
+      return requester.get(`${apiUrl}/comments/single/${commentId}`);
     },
 
     // Project endpoints
@@ -47,27 +79,28 @@ export const initiativeServiceFactory = (token) => {
       return requester.post(`${apiUrl}/projects/${projectId}/apply`, applicationData);
     },
 
-    // Project comments
-    getProjectComments: async (projectId) => {
-      return requester.get(`${apiUrl}/projects/${projectId}/comments`);
-    },
+    // // Project comments
+    // getProjectComments: async (projectId) => {
+    //   return requester.get(`${apiUrl}/projects/${projectId}/comments`);
+    // },
 
-    addProjectComment: async (projectId, commentData) => {
-      return requester.post(`${apiUrl}/projects/${projectId}/comments`, commentData);
-    },
+    // addProjectComment: async (projectId, commentData) => {
+    //   return requester.post(`${apiUrl}/projects/${projectId}/comments`, commentData);
+    // },
 
-    updateProjectComment: async (projectId, commentId, commentData) => {
-      return requester.put(`${apiUrl}/projects/${projectId}/comments/${commentId}`, commentData);
-    },
+    // updateProjectComment: async (projectId, commentId, commentData) => {
+    //   return requester.put(`${apiUrl}/projects/${projectId}/comments/${commentId}`, commentData);
+    // },
 
-    deleteProjectComment: async (projectId, commentId) => {
-      return requester.del(`${apiUrl}/projects/${projectId}/comments/${commentId}`);
-    },
+    // deleteProjectComment: async (projectId, commentId) => {
+    //   return requester.del(`${apiUrl}/projects/${projectId}/comments/${commentId}`);
+    // },
 
-    likeProjectComment: async (projectId, commentId) => {
-      return requester.post(`${apiUrl}/projects/${projectId}/comments/${commentId}/like`);
-    },
-     // Project applications endpoints
+    // likeProjectComment: async (projectId, commentId) => {
+    //   return requester.post(`${apiUrl}/projects/${projectId}/comments/${commentId}/like`);
+    // },
+    
+    // Project applications endpoints
     getProjectApplications: async (projectId) => {
       return requester.get(`${apiUrl}/projects/${projectId}/applications`);
     },

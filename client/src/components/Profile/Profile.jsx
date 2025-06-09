@@ -72,6 +72,7 @@ export const Profile = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
   const sideMenuRef = useRef(null);
+  const [profileCommunityOpen, setProfileCommunityOpen] = useState(false);
   // Модернизирано управление на състоянията на подменютата
   const [subMenuStates, setSubMenuStates] = useState({
     ads: false,
@@ -187,6 +188,9 @@ export const Profile = () => {
       [menuName]: !prev[menuName]
     }));
   };
+  const toggleProfileCommunity = () => {
+    setProfileCommunityOpen(!profileCommunityOpen);
+  };
 
   const getProfileImage = (gender) => {
     switch (gender) {
@@ -225,11 +229,12 @@ export const Profile = () => {
         <button onClick={toggleMenu} className="menu-toggle" data-testid="menu-toggle">
           <MenuIcon />
         </button>
-        <Link to="/" className="logo-link">
-          <img src="/images/homePage/logo-2.png" alt="Logo" className="logo-site-profile" />
-        </Link>
-        <h2>Pensa Club</h2>
-
+        <div className="header-left">
+          <Link to="/" className="logo-link">
+            <img src="/images/homePage/logo-2.png" alt="Logo" className="logo-site-profile" />
+          </Link>
+          <h2>Pensa Club</h2>
+        </div>
         <div className="search-container">
           <SearchIconProfile className="-profile" />
           <input type="text" placeholder={t('profile.search_placeholder')} className="search-input" />
@@ -257,65 +262,110 @@ export const Profile = () => {
             </span>
 
             {/* Падащото меню с добавени линкове */}
-            {profileMenuOpen && (
-              <div className="profile-dropdown-new">
-                <div className="dropdown-header">
-                  <img
-                    src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)}
-                    alt="User"
-                    className="dropdown-profile-image"
-                  />
-                  <div className="dropdown-username">
-                    {profileData?.details?.username || profileData?.email}
-                  </div>
-                </div>
-                <div className="dropdown-links">
-                  <NavLink to="/" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <DashboardIcon className="menu-icon" />
-                      {t("header.home")}
-                    </span>
-                  </NavLink>
+           {profileMenuOpen && (
+  <div className="profile-dropdown-new">
+    <div className="dropdown-header">
+      <img
+        src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)}
+        alt="User"
+        className="dropdown-profile-image"
+      />
+      <div className="dropdown-username">
+        {profileData?.details?.username || profileData?.email}
+      </div>
+    </div>
+    <div className="dropdown-links">
+      <NavLink to="/" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <DashboardIcon className="menu-icon" />
+          {t("header.home")}
+        </span>
+      </NavLink>
 
-                  {/* Добавен линк за статии */}
-                  <NavLink to="/articles" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <ForumIcon className="menu-icon" />
-                      {t("header.articles")}
-                    </span>
-                  </NavLink>
+      <NavLink to="/articles" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <ForumIcon className="menu-icon" />
+          {t("header.articles")}
+        </span>
+      </NavLink>
 
-                  <NavLink to="/craigslist?reset=true" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <ForumIcon className="menu-icon" />
-                      {t("header.craigslist")}
-                    </span>
-                  </NavLink>
+      {/* Общност dropdown */}
+      <div className="profile-dropdown-container">
+        <button
+          className={`dropdown-item profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
+          onClick={toggleProfileCommunity}
+        >
+          <span className="link-content">
+            <UsersIcon className="menu-icon" />
+            {t("header.craigslist")}
+            <svg
+              className={`profile-dropdown-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
+              width="12"
+              height="6"
+              viewBox="0 0 12 6"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </button>
 
-                  {/* Добавен линк за общност */}
-                  <NavLink to="/map" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <UsersIcon className="menu-icon" />
-                      {t("header.map")}
-                    </span>
-                  </NavLink>
+        <div className={`profile-dropdown-content ${profileCommunityOpen ? 'active' : ''}`}>
+          <NavLink
+            to="/craigslist?reset=true"
+            className="profile-dropdown-item"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <ForumIcon className="menu-icon" />
+            {t("header.craigslist")}
+          </NavLink>
 
-                  <NavLink to="/ad/create" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <JobsAdsIcon className="menu-icon" />
-                      {t("header.ad-create")}
-                    </span>
-                  </NavLink>
+          <NavLink
+            to="/initiatives"
+            className="profile-dropdown-item"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <DashboardIcon className="menu-icon" />
+            {t("header.initiatives")}
+          </NavLink>
 
-                  <NavLink to="/logout" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <LogoutIcon className="menu-icon" />
-                      {t("header.logout")}
-                    </span>
-                  </NavLink>
-                </div>
-              </div>
-            )}
+          <NavLink
+            to="/map"
+            className="profile-dropdown-item"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <UsersIcon className="menu-icon" />
+            {t("header.map")}
+          </NavLink>
+        </div>
+      </div>
+
+      <NavLink to="/ad/create" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <JobsAdsIcon className="menu-icon" />
+          {t("header.ad-create")}
+        </span>
+      </NavLink>
+
+      <NavLink to="/logout" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <LogoutIcon className="menu-icon" />
+          {t("header.logout")}
+        </span>
+      </NavLink>
+    </div>
+  </div>
+)}
           </div>
         </div>
       </header>

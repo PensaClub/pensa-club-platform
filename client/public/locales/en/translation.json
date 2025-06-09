@@ -1020,7 +1020,7 @@
       "showOpenClosed": "show only open campaigns",
       "showMap": "Show Map",
       "hideMap": "Hide Map",
-      "projectsIn": "initiatives in",
+      "projectsIn": "initiatives",
       "countries": "countries",
       "clearFilters": "Clear all filters",
       "statusActive": "Active",
@@ -1028,7 +1028,15 @@
       "statusCompleted": "Completed",
       "noResults": "No initiatives found with the specified criteria.",
       "loading": "Loading initiatives...",
-      "loadMore": "Load more"
+      "loadMore": "Load more",
+      "oneCountry": "country", 
+      "cities": "cities",
+      "oneCity": "city",
+      "locations": "locations",
+      "oneLocation": "location",
+      "inCountries": "in",
+      "inCities": "in", 
+      "inLocations": "in"
     },
     "initiativeCard": {
       "removeBookmark": "Remove from saved",

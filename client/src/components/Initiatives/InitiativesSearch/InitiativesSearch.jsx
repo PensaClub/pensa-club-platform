@@ -16,6 +16,90 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
   const statuses = [...new Set(initiatives.map(init => init.status))];
   const locations = [...new Set(initiatives.map(init => init.location.address))];
 
+  // Функция за определяне на типа локации
+  const getLocationType = (locations) => {
+    if (locations.length === 0) return 'locations';
+    
+    // Списък с известни държави на български
+    const countries = [
+      'България', 'Германия', 'Франция', 'Италия', 'Испания', 'Полша', 
+      'Румъния', 'Нидерландия', 'Белгия', 'Чехия', 'Гърция', 'Португалия',
+      'Унгария', 'Швеция', 'Австрия', 'Беларус', 'Швейцария', 'Сърбия',
+      'Словакия', 'Дания', 'Финландия', 'Норвегия', 'Хърватия', 'Босна и Херцеговина',
+      'Албания', 'Литва', 'Словения', 'Латвия', 'Естония', 'Черна гора',
+      'Молдова', 'Северна Македония', 'Кипър', 'Люксембург', 'Малта', 'Исландия'
+    ];
+
+    // Анализираме адресите
+    let countryCount = 0;
+    let cityCount = 0;
+    let mixedCount = 0;
+
+    locations.forEach(location => {
+      const parts = location.split(',').map(part => part.trim());
+      
+      if (parts.length === 1) {
+        // Само един елемент - проверяваме дали е държава
+        if (countries.includes(parts[0])) {
+          countryCount++;
+        } else {
+          cityCount++;
+        }
+      } else if (parts.length >= 2) {
+        // Имаме град, държава или друга комбинация
+        const lastPart = parts[parts.length - 1];
+        if (countries.includes(lastPart)) {
+          cityCount++; // "София, България" = град
+        } else {
+          mixedCount++; // Други комбинации
+        }
+      }
+    });
+
+    // Определяме типа на базата на анализа
+    if (countryCount > cityCount && countryCount > mixedCount) {
+      return 'countries';
+    } else if (cityCount > countryCount && cityCount > mixedCount) {
+      return 'cities';
+    } else {
+      return 'locations'; // Fallback за смесени или неясни случаи
+    }
+  };
+
+  // Функция за получаване на правилния текст
+  const getLocationText = () => {
+    const locationType = getLocationType(locations);
+    
+    switch(locationType) {
+      case 'countries':
+        return locations.length === 1 
+          ? t('initiatives.initiativesList.oneCountry')
+          : t('initiatives.initiativesList.countries');
+      case 'cities':
+        return locations.length === 1
+          ? t('initiatives.initiativesList.oneCity') 
+          : t('initiatives.initiativesList.cities');
+      default:
+        return locations.length === 1
+          ? t('initiatives.initiativesList.oneLocation')
+          : t('initiatives.initiativesList.locations');
+    }
+  };
+
+  // Функция за получаване на правилния предлог "в"
+  const getLocationPreposition = () => {
+    const locationType = getLocationType(locations);
+    
+    switch(locationType) {
+      case 'countries':
+        return t('initiatives.initiativesList.inCountries'); // "в държави"
+      case 'cities':
+        return t('initiatives.initiativesList.inCities'); // "в градове"
+      default:
+        return t('initiatives.initiativesList.inLocations'); // "в локации"
+    }
+  };
+
   // Филтриране
   useEffect(() => {
     let filtered = initiatives;
@@ -177,7 +261,7 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
       {/* Results Header */}
       <div className="results-header">
         <h2 className="results-count">
-          {getFilteredCount()} {t('initiatives.initiativesList.projectsIn')} {locations.length} {t('initiatives.initiativesList.countries')}
+          {getFilteredCount()} {t('initiatives.initiativesList.projectsIn')} {getLocationPreposition()} {locations.length} {getLocationText()}
         </h2>
         
         <button 
