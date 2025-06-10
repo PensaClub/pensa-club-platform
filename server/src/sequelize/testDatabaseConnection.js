@@ -12,7 +12,7 @@ async function testDatabaseConnection() {
     await executeMigrations();
 
     try {
-        await sequelize.sync({ force: true });
+        await sequelize.sync({ force: false });
         console.log('All models were synchronized successfully.');
     } catch (error) {
         console.log('Models could not be synced.', error);

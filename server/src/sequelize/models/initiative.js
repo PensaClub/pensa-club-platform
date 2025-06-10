@@ -76,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
             });
 
             Initiative.belongsToMany(models.user_account, {
-                through: 'initiativeBookmarks',
+                through: models.initiativeBookmark,
                 as: 'bookmarkedBy',
                 foreignKey: 'initiativeId',
                 otherKey: 'userId',

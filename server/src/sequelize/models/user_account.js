@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             });
 
             user_account.belongsToMany(models.initiative, {
-                through: 'initiativeBookmarks',
+                through: models.initiativeBookmark,
                 as: 'bookmarkedInitiatives',
                 foreignKey: 'userId',
                 otherKey: 'initiativeId',

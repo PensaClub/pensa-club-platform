@@ -539,8 +539,7 @@ initiativeController.post('/bookmark/:initiativeId', isAuth, async (req, res, ne
             return res.status(201).json({ message: 'Bookmark successfully added.', bookmarked: true });
         }
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
 });
 
@@ -548,7 +547,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
     try {
         const { id } = req.params;
         const { location, ...restBody } = req.body;
-      
+
         const initiativeData = {
             ...restBody,
             ...(location && {
