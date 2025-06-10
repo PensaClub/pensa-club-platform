@@ -1025,13 +1025,13 @@
       "noResults": "Няма намерени инициативи със зададените критерии.",
       "loading": "Зареждане на инициативи...",
       "loadMore": "Зареди още",
-      "oneCountry": "държава", 
+      "oneCountry": "държава",
       "cities": "градове",
       "oneCity": "град",
       "locations": "локации",
       "oneLocation": "локация",
       "inCountries": "в",
-      "inCities": "в", 
+      "inCities": "в",
       "inLocations": "в"
     },
     "initiativeCard": {
@@ -1094,7 +1094,7 @@
     }
   },
   "comments": {
-     "title": "Коментари",
+    "title": "Коментари",
     "addComment": "Добави коментар",
     "cancel": "Отказ",
     "loginRequired": "Моля, влезте в профила си за да коментирате",
@@ -1111,7 +1111,7 @@
       "submitting": "Публикуване...",
       "defaultUser": "Потребител"
     },
-     "disabled": {
+    "disabled": {
       "title": "Коментарите са изключени",
       "message": "За тази инициатива коментарите не са разрешени от администратора."
     },
@@ -1176,7 +1176,7 @@
       "publications": "Публикации",
       "team": "Екип"
     },
-      "messages": {
+    "messages": {
       "loginRequired": "Моля влезте в профила си за да кандидатствате за този проект."
     }
   },
@@ -1221,6 +1221,27 @@
       "anonymousUser": "Анонимен потребител",
       "empty": "Все още няма кандидати за този проект. Бъдете първи!"
     }
+  },
+  "counts": {
+    "view": {
+      "singular": "преглед",
+      "plural": "прегледа"
+    },
+    "like": {
+      "singular": "харесване",
+      "plural": "харесвания"
+    },
+    "download": {
+      "singular": "изтегляне",
+      "plural": "изтегляния"
+    },
+    "comment": {
+      "singular": "коментар",
+      "plural": "коментара"
+    },
+    "article": {
+      "singular": "статия",
+      "plural": "статии"
+    }
   }
-  
 }

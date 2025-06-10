@@ -65,6 +65,25 @@ export const AnalyticsProvider = ({ children }) => {
     }
   };
 
+  // НОВА ФУНКЦИЯ: Проследяване на story/publication прегледи
+  const trackStoryOrPublication = (contentId, contentTitle, contentType) => {
+    try {
+      // Определяме правилния тип за analytics
+      const analyticsType = contentType === 'story' ? 'story' : 'publication';
+      
+      // Използваме общата trackView функция
+      trackView(contentId, contentTitle, analyticsType);
+      
+      const key = `${analyticsType}_${contentId}`;
+      setViewCounts(prev => ({
+        ...prev,
+        [key]: (prev[key] || 0) + 1
+      }));
+    } catch (error) {
+      console.error('Error tracking story/publication:', error);
+    }
+  };
+
   // Зареждам броячи за определени статии/инициативи
   const loadContentViewCounts = async (contentIds, contentType = 'article') => {
     setIsLoading(true);
@@ -98,6 +117,14 @@ export const AnalyticsProvider = ({ children }) => {
     return loadContentViewCounts(initiativeIds, 'initiative');
   };
 
+  const loadStoryViewCounts = async (storyIds) => {
+    return loadContentViewCounts(storyIds, 'story');
+  };
+
+  const loadPublicationViewCounts = async (publicationIds) => {
+    return loadContentViewCounts(publicationIds, 'publication');
+  };
+
   // Общa функция за получаване на view count
   const getViewCount = (contentId, contentType = 'article') => {
     try {
@@ -126,6 +153,14 @@ export const AnalyticsProvider = ({ children }) => {
     return getViewCount(initiativeId, 'initiative');
   };
 
+  const getStoryViewCount = (storyId) => {
+    return getViewCount(storyId, 'story');
+  };
+
+  const getPublicationViewCount = (publicationId) => {
+    return getViewCount(publicationId, 'publication');
+  };
+
   return (
     <AnalyticsContext.Provider value={{ 
       viewCounts, 
@@ -143,7 +178,14 @@ export const AnalyticsProvider = ({ children }) => {
       // Функции за инициативи
       trackInitiative,
       loadInitiativeViewCounts,
-      getInitiativeViewCount
+      getInitiativeViewCount,
+
+      // За stories и publications
+      trackStoryOrPublication,
+      loadStoryViewCounts,
+      loadPublicationViewCounts,
+      getStoryViewCount,
+      getPublicationViewCount
     }}>
       {children}
     </AnalyticsContext.Provider>

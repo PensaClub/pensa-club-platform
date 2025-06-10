@@ -1,0 +1,392 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import './storyPubView.css';
+
+import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
+import { Comments } from '../Comments/Comments';
+import { Loader } from '../../../Loader/Loader';
+import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
+import ClubCardPromo from '../../../Articles/ArticlesList/ClubCardPromo/ClubCardPromo';
+import { useAnalytics } from '../../../contexts/AnalyticsContext';
+import { getDownloadsCountText, getLikesCountText, getViewCountText } from '../../../../utils/textUtils';
+
+export const StoryPubView = ({ type }) => {
+    const { slug } = useParams();
+    const { t } = useTranslation();
+    const [content, setContent] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [relatedContent, setRelatedContent] = useState([]);
+    const { trackStoryOrPublication, getViewCount, loadContentViewCounts } = useAnalytics();
+
+    const {
+        getStoryBySlug,
+        getPublicationBySlug,
+        getRelatedContent,
+    } = useInitiativeContext();
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            setIsLoading(true);
+            try {
+                let data;
+
+                if (type === 'story') {
+                    data = await getStoryBySlug(slug);
+                } else {
+                    data = await getPublicationBySlug(slug);
+                }
+
+                setContent(data);
+
+                // Зареждаме свързаното съдържание
+                if (data) {
+                    // Track view
+                    trackStoryOrPublication(data.id, data.title, type);
+
+                    await loadContentViewCounts([data.id], type);
+
+                    const related = await getRelatedContent(type, data.id);
+                    setRelatedContent(related);
+                }
+            } catch (error) {
+                console.error(`Error fetching ${type}:`, error);
+                setContent(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (slug) {
+            fetchContent();
+        }
+    }, [slug, type, getStoryBySlug, getPublicationBySlug, getRelatedContent]);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('bg-BG', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
+    const getTypeTranslation = () => {
+        return type === 'story'
+            ? t('storyPubView.types.story', 'История')
+            : t('storyPubView.types.publication', 'Публикация');
+    };
+
+    const getCommentsEntityType = () => {
+        return type === 'story' ? 'story' : 'publication';
+    };
+
+    const getCurrentViewCount = () => {
+        if (!content) return 0;
+        return getViewCount(content.id, type);
+    };
+
+    if (isLoading) {
+        return <Loader />;
+    }
+
+    if (!content) {
+        return (
+            <div className="story-pub-not-found">
+                <div className="container">
+                    <h1>{t('storyPubView.notFound.title', 'Съдържанието не е намерено')}</h1>
+                    <p>{t('storyPubView.notFound.description', 'Заявеното съдържание не съществува или е било премахнато.')}</p>
+                    <Link to="/initiatives" className="back-link">
+                        {t('storyPubView.notFound.backToInitiatives', 'Назад към инициативите')}
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <article className="story-pub-view">
+            {/* Hero Section */}
+            <section className="story-pub-hero">
+                <div className="story-pub-hero-background">
+                    <img
+                        src={content.image.src}
+                        alt={content.image.alt}
+                        className="story-pub-hero-image"
+                    />
+                    <div className="story-pub-hero-overlay"></div>
+                </div>
+
+                <div className="story-pub-hero-content">
+                    <div className="container">
+                        {/* Breadcrumb */}
+                        <nav className="story-pub-breadcrumb">
+                            <Link to="/initiatives" className="story-pub-breadcrumb-link">
+                                {t('storyPubView.breadcrumb.initiatives', 'Инициативи')}
+                            </Link>
+                            <span className="story-pub-breadcrumb-separator">›</span>
+                            <Link
+                                to={`/initiatives/${content.initiative.slug}`}
+                                className="story-pub-breadcrumb-link"
+                            >
+                                {content.initiative.title}
+                            </Link>
+                            <span className="story-pub-breadcrumb-separator">›</span>
+                            <span className="story-pub-breadcrumb-current">{getTypeTranslation()}</span>
+                        </nav>
+                        {/* Mobile Breadcrumb Button */}
+                        <div className="story-pub-breadcrumb-mobile">
+                            <Link
+                                to={`/initiatives/${content.initiative.slug}`}
+                                className="story-pub-breadcrumb-btn"
+                            >
+                                <span className="story-pub-breadcrumb-btn-icon">←</span>
+                                <span>Назад</span>
+                            </Link>
+                        </div>
+
+                        <div className="story-pub-hero-main">
+                            <div className="story-pub-meta-badges">
+                                <span className="story-pub-type-badge">{getTypeTranslation()}</span>
+                                {content.category && (
+                                    <span className="story-pub-category-badge">{content.category}</span>
+                                )}
+                            </div>
+
+                            <h1 className="story-pub-title">{content.title}</h1>
+                            <p className="story-pub-description">{content.shortDescription}</p>
+
+                            <div className="story-pub-meta">
+                                <div className="story-pub-meta-item">
+                                    <span className="story-pub-meta-icon">📅</span>
+                                    <span className="story-pub-meta-text">{formatDate(content.publishedAt)}</span>
+                                </div>
+
+                                {content.author && (
+                                    <div className="story-pub-meta-item">
+                                        <span className="story-pub-meta-icon">✍️</span>
+                                        <span className="story-pub-meta-text">{content.author}</span>
+                                    </div>
+                                )}
+
+                                <div className="story-pub-meta-item">
+                                    <span className="story-pub-meta-icon">⏱️</span>
+                                    <span className="story-pub-meta-text">{content.readTime} четене</span>
+                                </div>
+
+                                {content.views && (
+                                    <div className="story-pub-meta-item">
+                                        <span className="story-pub-meta-icon">👁️</span>
+                                        <span className="story-pub-meta-text">{getViewCountText(getCurrentViewCount(),t)}</span>
+                                    </div>
+                                )}
+
+                                {type === 'publication' && content.downloads && (
+                                    <div className="story-pub-meta-item">
+                                        <span className="story-pub-meta-icon">⬇️</span>
+                                        <span className="story-pub-meta-text">{getDownloadsCountText(content.downloads,t)}</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {content.tags && content.tags.length > 0 && (
+                                <div className="story-pub-tags">
+                                    {content.tags.map((tag, index) => (
+                                        <span key={index} className="story-pub-tag">#{tag}</span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Main Content */}
+            <main className="story-pub-content">
+                <div className="container">
+                    <div className="story-pub-layout">
+                        {/* Article Content */}
+                        <div className="story-pub-article">
+
+                            {/* Кратко описание */}
+                            <div className="story-pub-excerpt">
+                                <p>{content.shortDescription}</p>
+                            </div>
+
+                            {/* Download Button for Publications */}
+                            {type === 'publication' && content.downloadUrl && (
+                                <div className="story-pub-download-section">
+                                    <a
+                                        href={content.downloadUrl}
+                                        className="story-pub-download-btn"
+                                        download
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <span className="download-icon">📄</span>
+                                        <div className="download-info">
+                                            <span className="download-text">
+                                                {t('storyPubView.download.button', 'Изтегли документа')}
+                                            </span>
+                                            <span className="download-details">
+                                                {content.fileType?.toUpperCase()} • {content.fileSize}
+                                            </span>
+                                        </div>
+                                    </a>
+                                </div>
+                            )}
+
+                            {/* Sections */}
+                            {content.sections && content.sections.length > 0 && (
+                                <div className="story-pub-sections">
+                                    {content.sections.map((section, index) => (
+                                        <section key={index} className="story-pub-section" id={section.titleSlug}>
+                                            <h2 className="story-pub-section-title">{section.title}</h2>
+
+                                            {section.image && (
+                                                <div className="story-pub-section-image">
+                                                    <img
+                                                        src={section.image.src}
+                                                        alt={section.image.alt}
+                                                    />
+                                                </div>
+                                            )}
+
+                                            <div className="story-pub-section-content">
+                                                {section.content}
+                                            </div>
+                                        </section>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Author Info for Stories */}
+                            {type === 'story' && content.author && (
+                                <div className="story-pub-author">
+                                    <div className="author-avatar">
+                                        {content.authorImage ? (
+                                            <img src={content.authorImage} alt={content.author} />
+                                        ) : (
+                                            <div className="author-placeholder">
+                                                {content.author.charAt(0)}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="author-info">
+                                        <h4 className="author-name">{content.author}</h4>
+                                        <p className="author-title">
+                                            {t('storyPubView.author.label', 'Автор')}
+                                        </p>
+                                        {content.authorEmail && (
+                                            <a href={`mailto:${content.authorEmail}`} className="author-email">
+                                                {content.authorEmail}
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Social Actions */}
+                            <div className="story-pub-actions">
+                                <button className="action-btn like-btn">
+                                    <span className="action-icon">❤️</span>
+                                    <span className="action-text">  
+                                        {getLikesCountText(content.likes || 0,t)}
+                                    </span>
+                                </button>
+
+                                <button className="action-btn share-btn">
+                                    <span className="action-icon">📤</span>
+                                    <span className="action-text">
+                                        {t('storyPubView.actions.share', 'Споделяне')}
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Sidebar */}
+                        <aside className="story-pub-sidebar">
+                            {/* Table of Contents */}
+                            {content.sections && content.sections.length > 1 && (
+                                <div className="story-pub-toc">
+                                    <h3 className="toc-title">
+                                        {t('storyPubView.toc.title', 'Съдържание')}
+                                    </h3>
+                                    <div className="toc-content">
+                                        <ul className="toc-list">
+                                            {content.sections.map((section, index) => (
+                                                <li key={index} className="toc-item">
+                                                    <a
+                                                        href={`#${section.titleSlug}`}
+                                                        className="toc-link"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            const target = document.getElementById(section.titleSlug);
+                                                            if (target) {
+                                                                target.scrollIntoView({
+                                                                    behavior: 'smooth',
+                                                                    block: 'start',
+                                                                    inline: 'nearest'
+                                                                });
+                                                            }
+                                                        }}
+                                                    >
+                                                        {section.title}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Related Content */}
+                            {relatedContent.length > 0 && (
+                                <div className="story-pub-related">
+                                    <h3 className="story-pub-related-title">
+                                        {t('storyPubView.related.title', 'Свързано съдържание')}
+                                    </h3>
+                                    <div className="story-pub-related-list">
+                                        {relatedContent.slice(0, 3).map((item) => (
+                                            <Link
+                                                key={item.id}
+                                                to={`/${type}s/${item.slug}`}
+                                                className="story-pub-related-card"
+                                            >
+                                                <div className="related-image">
+                                                    <img src={item.image.src} alt={item.image.alt} />
+                                                </div>
+                                                <div className="related-info">
+                                                    <span className="related-type">{getTypeTranslation()}</span>
+                                                    <h4 className="related-title">{item.title}</h4>
+                                                    <p className="related-excerpt">{item.shortDescription}</p>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            <ClubCardPromo />
+                        </aside>
+                    </div>
+
+                    {/* Comments Section */}
+                    {content.commentsEnabled && (
+                        <section className="story-pub-comments">
+                            <Comments
+                                entityId={content.id}
+                                entityType={getCommentsEntityType()}
+                                commentsEnabled={content.commentsEnabled}
+                            />
+                        </section>
+                    )}
+                </div>
+            </main>
+            <ScrollToTop />
+        </article>
+    );
+};

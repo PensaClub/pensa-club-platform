@@ -29,16 +29,7 @@ export const trackArticleView = (articleId, articleTitle) => {
     article_id: articleId
   });
 
-  // Актуализира локалния кеш на броячите за статии
-  const key = `article_${articleId}`;
-  if (localViewCountCache[key]) {
-    localViewCountCache[key]++;
-  } else {
-    localViewCountCache[key] = 1;
-  }
-
-  // Запазване на посещенията в localStorage
-  saveViewCounts();
+  updateLocalCache(`article_${articleId}`);
 };
 
 // Проследяване на посещение на инициатива 
@@ -51,24 +42,60 @@ export const trackInitiativeView = (initiativeId, initiativeTitle) => {
     initiative_id: initiativeId
   });
 
-  // Актуализира локалния кеш на броячите за инициативи
-  const key = `initiative_${initiativeId}`;
+  updateLocalCache(`initiative_${initiativeId}`);
+};
+
+export const trackStoryView = (storyId, storyTitle) => {
+  ReactGA.event({
+    category: 'Story',
+    action: 'View',
+    label: storyTitle,
+    value: 1,
+    story_id: storyId
+  });
+
+  updateLocalCache(`story_${storyId}`);
+};
+
+export const trackPublicationView = (publicationId, publicationTitle) => {
+  ReactGA.event({
+    category: 'Publication',
+    action: 'View',
+    label: publicationTitle,
+    value: 1,
+    publication_id: publicationId
+  });
+
+  updateLocalCache(`publication_${publicationId}`);
+};
+
+// Помощна функция за актуализация на локалния кеш
+const updateLocalCache = (key) => {
   if (localViewCountCache[key]) {
     localViewCountCache[key]++;
   } else {
     localViewCountCache[key] = 1;
   }
-
-  // Запазване на посещенията в localStorage
   saveViewCounts();
 };
 
 // Общa функция за проследяване на различни типове съдържание
 export const trackView = (contentId, contentTitle, contentType = 'article') => {
-  if (contentType === 'article') {
-    trackArticleView(contentId, contentTitle);
-  } else if (contentType === 'initiative') {
-    trackInitiativeView(contentId, contentTitle);
+  switch (contentType) {
+    case 'article':
+      trackArticleView(contentId, contentTitle);
+      break;
+    case 'initiative':
+      trackInitiativeView(contentId, contentTitle);
+      break;
+    case 'story':
+      trackStoryView(contentId, contentTitle);
+      break;
+    case 'publication':
+      trackPublicationView(contentId, contentTitle);
+      break;
+    default:
+      console.warn(`Unknown content type: ${contentType}`);
   }
 };
 
@@ -119,6 +146,15 @@ export const getInitiativeViewCount = (initiativeId) => {
   return localViewCountCache[`initiative_${initiativeId}`] || 0;
 };
 
+// НОВИ ФУНКЦИИ: Получаване на view counts за stories и publications
+export const getStoryViewCount = (storyId) => {
+  return localViewCountCache[`story_${storyId}`] || 0;
+};
+
+export const getPublicationViewCount = (publicationId) => {
+  return localViewCountCache[`publication_${publicationId}`] || 0;
+};
+
 // Общa функция за получаване на view count
 export const getViewCount = (contentId, contentType = 'article') => {
   const key = `${contentType}_${contentId}`;
@@ -127,8 +163,7 @@ export const getViewCount = (contentId, contentType = 'article') => {
 
 // Симулиране на заявка към API за реални приложения, които получават данни от сървър
 export const fetchViewCounts = async (contentIds, contentType = 'article') => {
-  // В реално приложение, тук би имало заявка към сървър
-  // За демо целите използваме localStorage
+
   loadViewCounts();
 
   // Симулираме някакво случайно начално число за съдържание без посещения
@@ -152,4 +187,13 @@ export const fetchArticleViewCounts = async (articleIds) => {
 
 export const fetchInitiativeViewCounts = async (initiativeIds) => {
   return fetchViewCounts(initiativeIds, 'initiative');
+};
+
+// Fetch функции за stories и publications
+export const fetchStoryViewCounts = async (storyIds) => {
+  return fetchViewCounts(storyIds, 'story');
+};
+
+export const fetchPublicationViewCounts = async (publicationIds) => {
+  return fetchViewCounts(publicationIds, 'publication');
 };

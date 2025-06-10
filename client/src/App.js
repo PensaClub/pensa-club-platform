@@ -58,6 +58,9 @@ import { InitiativesList } from './components/Initiatives/InitiativesList/Initia
 import { InitiativeProvider } from './components/contexts/InitiativeProvider.jsx';
 import { InitiativeView } from './components/Initiatives/InitiativeView/InitiativeView.jsx';
 import { ProjectView } from './components/Initiatives/InitiativeView/ProjectView/ProjectView.jsx';
+import { StoryPubView } from './components/Initiatives/InitiativeView/StoryPubView/StoryPubView.jsx';
+import { StoryView } from './components/Initiatives/InitiativeView/StoryPubView/StoryView.jsx';
+import { PublicationView } from './components/Initiatives/InitiativeView/StoryPubView/PublicationView.jsx';
 
 function App() {
   const location = useLocation();
@@ -119,6 +122,8 @@ function App() {
                           <Route path="/articles" element={<ArticlesList />} />
                           <Route path="/initiatives" element={<InitiativesList />} />
                           <Route path="/initiatives/:slug" element={<InitiativeView />} />
+                       <Route path="/stories/:slug" element={<StoryView />} />
+<Route path="/publications/:slug" element={<PublicationView />} />
                           <Route path="/projects/:slug" element={<ProjectView />} />
 
                           <Route path="/articles/:slug" element={<ArticleView />} />

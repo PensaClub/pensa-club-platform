@@ -1029,13 +1029,13 @@
       "noResults": "No initiatives found with the specified criteria.",
       "loading": "Loading initiatives...",
       "loadMore": "Load more",
-      "oneCountry": "country", 
+      "oneCountry": "country",
       "cities": "cities",
       "oneCity": "city",
       "locations": "locations",
       "oneLocation": "location",
       "inCountries": "in",
-      "inCities": "in", 
+      "inCities": "in",
       "inLocations": "in"
     },
     "initiativeCard": {
@@ -1115,7 +1115,7 @@
       "submitting": "Posting...",
       "defaultUser": "User"
     },
-      "disabled": {
+    "disabled": {
       "title": "Comments are disabled",
       "message": "Comments have been disabled for this initiative by the administrator."
     },
@@ -1180,7 +1180,7 @@
       "publications": "Publications",
       "team": "Team"
     },
-     "messages": {
+    "messages": {
       "loginRequired": "Please log in to apply for this project."
     }
   },
@@ -1224,6 +1224,28 @@
       "title": "Recent Applications ({{count}})",
       "anonymousUser": "Anonymous User",
       "empty": "No applicants for this project yet. Be the first!"
+    }
+  },
+  "counts": {
+    "view": {
+      "singular": "view",
+      "plural": "views"
+    },
+    "like": {
+      "singular": "like",
+      "plural": "likes"
+    },
+    "download": {
+      "singular": "download",
+      "plural": "downloads"
+    },
+    "comment": {
+      "singular": "comment",
+      "plural": "comments"
+    },
+    "article": {
+      "singular": "article",
+      "plural": "articles"
     }
   }
 }
