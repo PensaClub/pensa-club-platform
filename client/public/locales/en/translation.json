@@ -1278,5 +1278,11 @@
       "title": "Related Content"
     },
     "readTime": "read time"
+  },
+   "share": {
+    "button": "Share",
+    "copied": "Copied!",
+    "tooltip": "Share this content",
+    "toastMessage": "Link copied to clipboard!"
   }
 }

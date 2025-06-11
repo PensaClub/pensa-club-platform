@@ -11,6 +11,7 @@ import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 import ClubCardPromo from '../../../Articles/ArticlesList/ClubCardPromo/ClubCardPromo';
 import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { getDownloadsCountText, getLikesCountText, getViewCountText } from '../../../../utils/textUtils';
+import { ShareButton } from '../../../ShareButton/ShareButton';
 
 export const StoryPubView = ({ type }) => {
     const { slug } = useParams();
@@ -18,7 +19,17 @@ export const StoryPubView = ({ type }) => {
     const [content, setContent] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [relatedContent, setRelatedContent] = useState([]);
-    const { trackStoryOrPublication, getViewCount, loadContentViewCounts, trackContentDownload, loadDownloadCounts, getCurrentDownloadCount } = useAnalytics();
+    const {
+        trackStoryOrPublication,
+        getViewCount,
+        loadContentViewCounts,
+        trackContentDownload,
+        loadDownloadCounts,
+        getCurrentDownloadCount,
+        trackContentShare,
+        loadShareCounts,
+        getCurrentShareCount
+    } = useAnalytics();
 
     const {
         getStoryBySlug,
@@ -51,6 +62,8 @@ export const StoryPubView = ({ type }) => {
                     if (type === 'publication') {
                         await loadDownloadCounts([data.id], type);
                     }
+                    await loadShareCounts([data.id], type);
+
                     const related = await getRelatedContent(type, data.id);
                     setRelatedContent(related);
                 }
@@ -104,6 +117,10 @@ export const StoryPubView = ({ type }) => {
             );
         }
         // Не спираме default behavior-а - файлът ще се свали нормално
+    };
+
+    const handleShare = (contentId, contentTitle, contentType, shareMethod) => {
+        trackContentShare(contentId, contentTitle, contentType, shareMethod);
     };
 
     // Получаване на реалния download count
@@ -320,13 +337,13 @@ export const StoryPubView = ({ type }) => {
                                         {getLikesCountText(content.likes || 0, t)}
                                     </span>
                                 </button>
-
-                                <button className="action-btn share-btn">
-                                    <span className="action-icon">📤</span>
-                                    <span className="action-text">
-                                        {t('storyPubView.actions.share')}
-                                    </span>
-                                </button>
+                                <ShareButton
+                                    contentId={content.id}
+                                    contentTitle={content.title}
+                                    contentType={type}
+                                    onShare={handleShare}
+                                    className="action-btn"
+                                />
                             </div>
                         </div>
 

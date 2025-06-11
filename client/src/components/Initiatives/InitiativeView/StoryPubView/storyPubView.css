@@ -603,7 +603,16 @@
     /* border-top: 1px solid #e2e8f0; */
     border-bottom: 1px solid #e2e8f0;
 }
+.story-pub-actions .share-btn {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+}
 
+.story-pub-actions .share-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
 .action-btn {
     display: flex;
     align-items: center;

@@ -1,0 +1,120 @@
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.share-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.share-btn:active {
+  transform: translateY(1px);
+}
+
+.share-btn.copied {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #16a34a;
+}
+
+.share-icon {
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.share-btn:hover .share-icon {
+  transform: scale(1.1);
+}
+
+.share-text {
+  white-space: nowrap;
+}
+
+/* Toast Notification */
+.share-toast {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  animation: slideInRight 0.3s ease-out;
+}
+
+.share-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  color: #16a34a;
+  font-weight: 500;
+  max-width: 300px;
+}
+
+.share-toast-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.share-toast-text {
+  font-size: 0.875rem;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .share-toast {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+  }
+  
+  .share-toast-content {
+    padding: 0.875rem 1.25rem;
+  }
+  
+  .share-btn {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Accessibility */
+.share-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .share-btn,
+  .share-icon,
+  .share-toast {
+    transition: none;
+    animation: none;
+  }
+}

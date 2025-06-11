@@ -92,6 +92,28 @@ export const trackDownload = (contentId, contentTitle, contentType, fileType, fi
 
   saveViewCounts();
 };
+// Проследяване на share events
+export const trackShare = (contentId, contentTitle, contentType, shareMethod, userAgent = 'unknown') => {
+  ReactGA.event({
+    category: contentType === 'story' ? 'Story' : 'Publication',
+    action: 'Share',
+    label: `${shareMethod} - ${contentTitle}`,
+    value: 1,
+    content_id: contentId,
+    share_method: shareMethod,
+    user_agent: userAgent
+  });
+
+  // Актуализираме локалния кеш за shares
+  const key = `${contentType}_${contentId}_shares`;
+  if (localViewCountCache[key]) {
+    localViewCountCache[key]++;
+  } else {
+    localViewCountCache[key] = 1;
+  }
+
+  saveViewCounts();
+}
 
 // Помощна функция за актуализация на локалния кеш
 const updateLocalCache = (key) => {
@@ -191,6 +213,12 @@ export const getViewCount = (contentId, contentType = 'article') => {
   return localViewCountCache[key] || 0;
 };
 
+//Получаване на share count
+export const getShareCount = (contentId, contentType = 'story') => {
+  const key = `${contentType}_${contentId}_shares`;
+  return localViewCountCache[key] || 0;
+};
+
 // Симулиране на заявка към API за реални приложения, които получават данни от сървър
 export const fetchViewCounts = async (contentIds, contentType = 'article') => {
   // В реално приложение, тук би имало заявка към сървър
@@ -245,4 +273,20 @@ export const fetchStoryViewCounts = async (storyIds) => {
 
 export const fetchPublicationViewCounts = async (publicationIds) => {
   return fetchViewCounts(publicationIds, 'publication');
+};
+export const fetchShareCounts = async (contentIds, contentType = 'story') => {
+  loadViewCounts();
+
+  const result = {};
+  contentIds.forEach(id => {
+    const key = `${contentType}_${id}_shares`;
+    if (!localViewCountCache[key]) {
+      // Симулираме някакво случайно начално число за shares
+      localViewCountCache[key] = Math.floor(Math.random() * 10) + 1;
+      saveViewCounts();
+    }
+    result[id] = localViewCountCache[key];
+  });
+
+  return result;
 };
