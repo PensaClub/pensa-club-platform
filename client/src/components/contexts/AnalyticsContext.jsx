@@ -3,9 +3,12 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { 
   trackView, 
   trackArticleView, 
-  trackInitiativeView, 
+  trackInitiativeView,
+  trackDownload,
   loadViewCounts, 
   fetchViewCounts,
+  fetchDownloadCounts,
+  getDownloadCount,
   saveViewCounts 
 } from '../Services/analyticsService';
 
@@ -65,7 +68,7 @@ export const AnalyticsProvider = ({ children }) => {
     }
   };
 
-  // НОВА ФУНКЦИЯ: Проследяване на story/publication прегледи
+  // Проследяване на story/publication прегледи
   const trackStoryOrPublication = (contentId, contentTitle, contentType) => {
     try {
       // Определяме правилния тип за analytics
@@ -81,6 +84,22 @@ export const AnalyticsProvider = ({ children }) => {
       }));
     } catch (error) {
       console.error('Error tracking story/publication:', error);
+    }
+  };
+
+  // Track download
+  const trackContentDownload = (contentId, contentTitle, contentType, fileType, fileSize) => {
+    try {
+      trackDownload(contentId, contentTitle, contentType, fileType, fileSize);
+      
+      // Актуализираме state-а за downloads
+      const key = `${contentType}_${contentId}_downloads`;
+      setViewCounts(prev => ({
+        ...prev,
+        [key]: (prev[key] || 0) + 1
+      }));
+    } catch (error) {
+      console.error('Error tracking download:', error);
     }
   };
 
@@ -107,6 +126,28 @@ export const AnalyticsProvider = ({ children }) => {
     setIsLoading(false);
   };
 
+  // Зареждане на download counts
+  const loadDownloadCounts = async (contentIds, contentType = 'publication') => {
+    setIsLoading(true);
+    try {
+      const counts = await fetchDownloadCounts(contentIds, contentType);
+      
+      const transformedCounts = {};
+      Object.entries(counts).forEach(([id, count]) => {
+        const key = `${contentType}_${id}_downloads`;
+        transformedCounts[key] = count;
+      });
+      
+      setViewCounts(prev => ({
+        ...prev,
+        ...transformedCounts
+      }));
+    } catch (error) {
+      console.error('Error loading download counts', error);
+    }
+    setIsLoading(false);
+  };
+
   // Запазвам за backward compatibility
   const loadArticleViewCounts = async (articleIds) => {
     return loadContentViewCounts(articleIds, 'article');
@@ -117,6 +158,7 @@ export const AnalyticsProvider = ({ children }) => {
     return loadContentViewCounts(initiativeIds, 'initiative');
   };
 
+  // Зареждам броячи за stories/publications
   const loadStoryViewCounts = async (storyIds) => {
     return loadContentViewCounts(storyIds, 'story');
   };
@@ -144,6 +186,22 @@ export const AnalyticsProvider = ({ children }) => {
     }
   };
 
+  // Получаване на download count
+  const getCurrentDownloadCount = (contentId, contentType = 'publication') => {
+    try {
+      const key = `${contentType}_${contentId}_downloads`;
+      
+      if (viewCounts[key] !== undefined) {
+        return viewCounts[key];
+      }
+      
+      return 0;
+    } catch (error) {
+      console.error('Error getting download count:', error);
+      return 0;
+    }
+  };
+
   // Wrapper функции за backward compatibility
   const getArticleViewCount = (articleId) => {
     return getViewCount(articleId, 'article');
@@ -153,6 +211,7 @@ export const AnalyticsProvider = ({ children }) => {
     return getViewCount(initiativeId, 'initiative');
   };
 
+  // Wrapper функции за stories/publications
   const getStoryViewCount = (storyId) => {
     return getViewCount(storyId, 'story');
   };
@@ -180,12 +239,17 @@ export const AnalyticsProvider = ({ children }) => {
       loadInitiativeViewCounts,
       getInitiativeViewCount,
 
-      // За stories и publications
+      // Функции за stories и publications
       trackStoryOrPublication,
       loadStoryViewCounts,
       loadPublicationViewCounts,
       getStoryViewCount,
-      getPublicationViewCount
+      getPublicationViewCount,
+
+      // downloads
+      trackContentDownload,
+      loadDownloadCounts,
+      getCurrentDownloadCount
     }}>
       {children}
     </AnalyticsContext.Provider>

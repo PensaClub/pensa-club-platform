@@ -18,12 +18,13 @@ export const StoryPubView = ({ type }) => {
     const [content, setContent] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [relatedContent, setRelatedContent] = useState([]);
-    const { trackStoryOrPublication, getViewCount, loadContentViewCounts } = useAnalytics();
+    const { trackStoryOrPublication, getViewCount, loadContentViewCounts, trackContentDownload, loadDownloadCounts, getCurrentDownloadCount } = useAnalytics();
 
     const {
         getStoryBySlug,
         getPublicationBySlug,
         getRelatedContent,
+
     } = useInitiativeContext();
 
     useEffect(() => {
@@ -46,7 +47,10 @@ export const StoryPubView = ({ type }) => {
                     trackStoryOrPublication(data.id, data.title, type);
 
                     await loadContentViewCounts([data.id], type);
-
+                    // Зарежда download counts за publications
+                    if (type === 'publication') {
+                        await loadDownloadCounts([data.id], type);
+                    }
                     const related = await getRelatedContent(type, data.id);
                     setRelatedContent(related);
                 }
@@ -89,7 +93,24 @@ export const StoryPubView = ({ type }) => {
         if (!content) return 0;
         return getViewCount(content.id, type);
     };
+    const handleDownload = (e) => {
+        if (content && type === 'publication') {
+            trackContentDownload(
+                content.id,
+                content.title,
+                type,
+                content.fileType,
+                content.fileSize
+            );
+        }
+        // Не спираме default behavior-а - файлът ще се свали нормално
+    };
 
+    // Получаване на реалния download count
+    const getRealDownloadCount = () => {
+        if (!content || type !== 'publication') return 0;
+        return getCurrentDownloadCount(content.id, type);
+    };
     if (isLoading) {
         return <Loader />;
     }
@@ -98,10 +119,10 @@ export const StoryPubView = ({ type }) => {
         return (
             <div className="story-pub-not-found">
                 <div className="container">
-                    <h1>{t('storyPubView.notFound.title', 'Съдържанието не е намерено')}</h1>
-                    <p>{t('storyPubView.notFound.description', 'Заявеното съдържание не съществува или е било премахнато.')}</p>
+                    <h1>{t('storyPubView.notFound.title')}</h1>
+                    <p>{t('storyPubView.notFound.description')}</p>
                     <Link to="/initiatives" className="back-link">
-                        {t('storyPubView.notFound.backToInitiatives', 'Назад към инициативите')}
+                        {t('storyPubView.notFound.backToInitiatives')}
                     </Link>
                 </div>
             </div>
@@ -126,7 +147,7 @@ export const StoryPubView = ({ type }) => {
                         {/* Breadcrumb */}
                         <nav className="story-pub-breadcrumb">
                             <Link to="/initiatives" className="story-pub-breadcrumb-link">
-                                {t('storyPubView.breadcrumb.initiatives', 'Инициативи')}
+                                {t('storyPubView.breadcrumb.initiatives')}
                             </Link>
                             <span className="story-pub-breadcrumb-separator">›</span>
                             <Link
@@ -145,7 +166,7 @@ export const StoryPubView = ({ type }) => {
                                 className="story-pub-breadcrumb-btn"
                             >
                                 <span className="story-pub-breadcrumb-btn-icon">←</span>
-                                <span>Назад</span>
+                                <span>{t('storyPubView.breadcrumb.back')}</span>
                             </Link>
                         </div>
 
@@ -175,20 +196,20 @@ export const StoryPubView = ({ type }) => {
 
                                 <div className="story-pub-meta-item">
                                     <span className="story-pub-meta-icon">⏱️</span>
-                                    <span className="story-pub-meta-text">{content.readTime} четене</span>
+                                    <span className="story-pub-meta-text">{content.readTime} {t('storyPubView.readTime')}</span>
                                 </div>
 
                                 {content.views && (
                                     <div className="story-pub-meta-item">
                                         <span className="story-pub-meta-icon">👁️</span>
-                                        <span className="story-pub-meta-text">{getViewCountText(getCurrentViewCount(),t)}</span>
+                                        <span className="story-pub-meta-text">{getViewCountText(getCurrentViewCount(), t)}</span>
                                     </div>
                                 )}
 
                                 {type === 'publication' && content.downloads && (
                                     <div className="story-pub-meta-item">
                                         <span className="story-pub-meta-icon">⬇️</span>
-                                        <span className="story-pub-meta-text">{getDownloadsCountText(content.downloads,t)}</span>
+                                        <span className="story-pub-meta-text">{getDownloadsCountText(getRealDownloadCount(), t)}</span>
                                     </div>
                                 )}
                             </div>
@@ -220,12 +241,13 @@ export const StoryPubView = ({ type }) => {
                             {/* Download Button for Publications */}
                             {type === 'publication' && content.downloadUrl && (
                                 <div className="story-pub-download-section">
-                                    <a
-                                        href={content.downloadUrl}
+
+                                    <a href={content.downloadUrl}
                                         className="story-pub-download-btn"
                                         download
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        onClick={handleDownload}
                                     >
                                         <span className="download-icon">📄</span>
                                         <div className="download-info">
@@ -279,7 +301,7 @@ export const StoryPubView = ({ type }) => {
                                     <div className="author-info">
                                         <h4 className="author-name">{content.author}</h4>
                                         <p className="author-title">
-                                            {t('storyPubView.author.label', 'Автор')}
+                                            {t('storyPubView.author.label')}
                                         </p>
                                         {content.authorEmail && (
                                             <a href={`mailto:${content.authorEmail}`} className="author-email">
@@ -294,15 +316,15 @@ export const StoryPubView = ({ type }) => {
                             <div className="story-pub-actions">
                                 <button className="action-btn like-btn">
                                     <span className="action-icon">❤️</span>
-                                    <span className="action-text">  
-                                        {getLikesCountText(content.likes || 0,t)}
+                                    <span className="action-text">
+                                        {getLikesCountText(content.likes || 0, t)}
                                     </span>
                                 </button>
 
                                 <button className="action-btn share-btn">
                                     <span className="action-icon">📤</span>
                                     <span className="action-text">
-                                        {t('storyPubView.actions.share', 'Споделяне')}
+                                        {t('storyPubView.actions.share')}
                                     </span>
                                 </button>
                             </div>
@@ -314,7 +336,7 @@ export const StoryPubView = ({ type }) => {
                             {content.sections && content.sections.length > 1 && (
                                 <div className="story-pub-toc">
                                     <h3 className="toc-title">
-                                        {t('storyPubView.toc.title', 'Съдържание')}
+                                        {t('storyPubView.toc.title')}
                                     </h3>
                                     <div className="toc-content">
                                         <ul className="toc-list">
@@ -348,7 +370,7 @@ export const StoryPubView = ({ type }) => {
                             {relatedContent.length > 0 && (
                                 <div className="story-pub-related">
                                     <h3 className="story-pub-related-title">
-                                        {t('storyPubView.related.title', 'Свързано съдържание')}
+                                        {t('storyPubView.related.title')}
                                     </h3>
                                     <div className="story-pub-related-list">
                                         {relatedContent.slice(0, 3).map((item) => (

@@ -1247,5 +1247,36 @@
       "singular": "article",
       "plural": "articles"
     }
+  },
+    "storyPubView": {
+    "types": {
+      "story": "Story",
+      "publication": "Publication"
+    },
+    "notFound": {
+      "title": "Content not found",
+      "description": "The requested content does not exist or has been removed.",
+      "backToInitiatives": "Back to initiatives"
+    },
+    "breadcrumb": {
+      "initiatives": "Initiatives",
+      "back": "Back"
+    },
+    "download": {
+      "button": "Download document"
+    },
+    "author": {
+      "label": "Author"
+    },
+    "actions": {
+      "share": "Share"
+    },
+    "toc": {
+      "title": "Table of Contents"
+    },
+    "related": {
+      "title": "Related Content"
+    },
+    "readTime": "read time"
   }
 }

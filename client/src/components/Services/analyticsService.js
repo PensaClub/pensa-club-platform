@@ -45,6 +45,7 @@ export const trackInitiativeView = (initiativeId, initiativeTitle) => {
   updateLocalCache(`initiative_${initiativeId}`);
 };
 
+// Проследяване на story и publication
 export const trackStoryView = (storyId, storyTitle) => {
   ReactGA.event({
     category: 'Story',
@@ -67,6 +68,29 @@ export const trackPublicationView = (publicationId, publicationTitle) => {
   });
 
   updateLocalCache(`publication_${publicationId}`);
+};
+
+//  Проследяване на download
+export const trackDownload = (contentId, contentTitle, contentType, fileType, fileSize) => {
+  ReactGA.event({
+    category: contentType === 'publication' ? 'Publication' : 'Document',
+    action: 'Download',
+    label: contentTitle,
+    value: 1,
+    content_id: contentId,
+    file_type: fileType,
+    file_size: fileSize
+  });
+
+  // Актуализираме локалния кеш за downloads
+  const key = `${contentType}_${contentId}_downloads`;
+  if (localViewCountCache[key]) {
+    localViewCountCache[key]++;
+  } else {
+    localViewCountCache[key] = 1;
+  }
+
+  saveViewCounts();
 };
 
 // Помощна функция за актуализация на локалния кеш
@@ -146,13 +170,19 @@ export const getInitiativeViewCount = (initiativeId) => {
   return localViewCountCache[`initiative_${initiativeId}`] || 0;
 };
 
-// НОВИ ФУНКЦИИ: Получаване на view counts за stories и publications
+// Получаване на view counts за stories и publications
 export const getStoryViewCount = (storyId) => {
   return localViewCountCache[`story_${storyId}`] || 0;
 };
 
 export const getPublicationViewCount = (publicationId) => {
   return localViewCountCache[`publication_${publicationId}`] || 0;
+};
+
+// Получаване на download count
+export const getDownloadCount = (contentId, contentType = 'publication') => {
+  const key = `${contentType}_${contentId}_downloads`;
+  return localViewCountCache[key] || 0;
 };
 
 // Общa функция за получаване на view count
@@ -163,7 +193,8 @@ export const getViewCount = (contentId, contentType = 'article') => {
 
 // Симулиране на заявка към API за реални приложения, които получават данни от сървър
 export const fetchViewCounts = async (contentIds, contentType = 'article') => {
-
+  // В реално приложение, тук би имало заявка към сървър
+  // За демо целите използваме localStorage
   loadViewCounts();
 
   // Симулираме някакво случайно начално число за съдържание без посещения
@@ -172,6 +203,24 @@ export const fetchViewCounts = async (contentIds, contentType = 'article') => {
     const key = `${contentType}_${id}`;
     if (!localViewCountCache[key]) {
       localViewCountCache[key] = Math.floor(Math.random() * 50) + 1;
+      saveViewCounts();
+    }
+    result[id] = localViewCountCache[key];
+  });
+
+  return result;
+};
+
+// Fetch downloads counts
+export const fetchDownloadCounts = async (contentIds, contentType = 'publication') => {
+  loadViewCounts();
+
+  const result = {};
+  contentIds.forEach(id => {
+    const key = `${contentType}_${id}_downloads`;
+    if (!localViewCountCache[key]) {
+      // Симулираме някакво случайно начално число за downloads
+      localViewCountCache[key] = Math.floor(Math.random() * 20) + 1;
       saveViewCounts();
     }
     result[id] = localViewCountCache[key];
