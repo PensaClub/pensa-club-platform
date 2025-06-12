@@ -1,6 +1,6 @@
 const commentController = require('express').Router();
 const isAuth = require('../middlewares/isAuth');
-const { comment, user_account, user_details } = require('../sequelize/models');
+const { comment, user_account, user_details, initiative } = require('../sequelize/models');
 const customError = require('../utils/customError');
 const transformComment = require('../utils/commentUtils');
 
@@ -37,12 +37,32 @@ const commentConfig = [
 
 commentController.post('/create', isAuth, async (req, res, next) => {
     try {
-        const { content, commentableId, commentsLinkConnection, parentId } = req.body;
+        const { content, commentableId, commentsLinkConnection, parentId, slug } = req.body;
+
+        let finalCommentableId = commentableId;
+
+        if (slug) {
+            const initiative = await initiative.findOne({
+                where: { slug: slug },
+            });
+
+            if (initiative) {
+                finalCommentableId = initiative.id;
+            }
+        } else if (typeof commentableId === 'string') {
+            const initiative = await initiative.findOne({
+                where: { slug: commentableId },
+            });
+
+            if (initiative) {
+                finalCommentableId = initiative.id;
+            }
+        }
 
         const newComment = await comment.create({
             content,
             userId: req.user.userId,
-            commentableId,
+            commentableId: finalCommentableId,
             commentsLinkConnection,
             parentId: parentId || null,
         });
@@ -73,11 +93,24 @@ commentController.post('/create', isAuth, async (req, res, next) => {
         next(err);
     }
 });
-// SHOULD BE CHANGED TO NOT BE EMAIL - FIRST NAME OR FULL NAME
+
 commentController.post('/like/:id', isAuth, async (req, res, next) => {
     try {
         const { id } = req.params;
         const userEmail = req.user.email;
+
+        const userDetails = await user_details.findOne({
+            where: { userId: req.user.userId },
+        });
+
+        if (!userDetails) {
+            throw new customError({
+                message: 'User details not found',
+                statusCode: 404,
+            });
+        }
+
+        const userName = `${userDetails.firstName} ${userDetails.lastName}`;
 
         const commentToLike = await comment.findByPk(id, {
             include: commentConfig,
@@ -92,9 +125,9 @@ commentController.post('/like/:id', isAuth, async (req, res, next) => {
 
         const currentLikes = commentToLike.likes || [];
 
-        const hasLiked = currentLikes.includes(userEmail);
+        const hasLiked = currentLikes.includes(userName);
 
-        const updatedLikes = hasLiked ? currentLikes.filter((email) => email !== userEmail) : [...currentLikes, userEmail];
+        const updatedLikes = hasLiked ? currentLikes.filter((name) => name !== userName) : [...currentLikes, userName];
 
         await commentToLike.update({ likes: updatedLikes });
 

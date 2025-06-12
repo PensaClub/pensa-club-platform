@@ -539,8 +539,7 @@ initiativeController.post('/bookmark/:initiativeId', isAuth, async (req, res, ne
             return res.status(201).json({ message: 'Bookmark successfully added.', bookmarked: true });
         }
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
 });
 
@@ -548,11 +547,14 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
     try {
         const { id } = req.params;
         const { location, ...restBody } = req.body;
+
         const initiativeData = {
             ...restBody,
-            address: location?.address || null,
-            lat: location?.coordinates?.lat || null,
-            lng: location?.coordinates?.lng || null,
+            ...(location && {
+                address: location.address,
+                lat: location.coordinates?.lat,
+                lng: location.coordinates?.lng,
+            }),
         };
 
         const validatedData = UpdateInitiativeSchema.parse(initiativeData);
@@ -581,16 +583,16 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
             // Update initiative basic info
             await foundInitiative.update(
                 {
-                    slug: validatedData.slug,
-                    title: validatedData.title,
-                    shortDescription: validatedData.shortDescription,
-                    category: validatedData.category,
-                    address: validatedData.address,
-                    lat: validatedData.lat,
-                    lng: validatedData.lng,
-                    status: validatedData.status,
-                    campaignStatus: validatedData.campaignStatus,
-                    commentsEnabled: validatedData.commentsEnabled,
+                    ...(validatedData.slug && { slug: validatedData.slug }),
+                    ...(validatedData.title && { title: validatedData.title }),
+                    ...(validatedData.shortDescription && { shortDescription: validatedData.shortDescription }),
+                    ...(validatedData.category && { category: validatedData.category }),
+                    ...(validatedData.address && { address: validatedData.address }),
+                    ...(validatedData.lat && { lat: validatedData.lat }),
+                    ...(validatedData.lng && { lng: validatedData.lng }),
+                    ...(validatedData.status && { status: validatedData.status }),
+                    ...(validatedData.campaignStatus && { campaignStatus: validatedData.campaignStatus }),
+                    ...(validatedData.commentsEnabled !== undefined && { commentsEnabled: validatedData.commentsEnabled }),
                 },
                 { transaction: t }
             );
