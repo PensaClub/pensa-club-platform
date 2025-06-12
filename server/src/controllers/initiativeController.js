@@ -7,13 +7,15 @@ const {
     image,
     project,
     downloadMaterial,
-    publishedContent,
+    story,
+    publication,
     contact,
     section,
     user_account,
     user_details,
-    initiativeBookmark,
     comment,
+    sponsor,
+    partner,
 } = require('../sequelize/models');
 const customError = require('../utils/customError');
 const transformInitiative = require('../utils/initiativeUtils');
@@ -43,8 +45,8 @@ const initiativeConfig = [
     {
         model: project,
         as: 'projects',
-        required: true,
-        attributes: ['id', 'titleSlug', 'slug', 'title', 'description', 'status', 'image', 'link', 'lat', 'lng'],
+        //image to be added, link
+        attributes: ['id', 'slug', 'title', 'shortDescription', 'status', 'lat', 'lng'],
     },
     {
         model: downloadMaterial,
@@ -61,10 +63,9 @@ const initiativeConfig = [
         ],
     },
     {
-        model: publishedContent,
+        model: story,
         as: 'stories',
-        required: true,
-        attributes: ['id', 'titleSlug', 'title', 'description', 'link', 'publishedAt', 'author'],
+        attributes: ['id', 'titleSlug', 'title', 'shortDescription', 'publishedAt', 'author'],
         include: [
             {
                 model: image,
@@ -75,10 +76,9 @@ const initiativeConfig = [
         ],
     },
     {
-        model: publishedContent,
+        model: publication,
         as: 'publications',
-        required: true,
-        attributes: ['id', 'titleSlug', 'title', 'description', 'link', 'publishedAt'],
+        attributes: ['id', 'titleSlug', 'title', 'shortDescription', 'publishedAt'],
         include: [
             {
                 model: image,
@@ -109,6 +109,43 @@ const initiativeConfig = [
             {
                 model: image,
                 as: 'sectionImages',
+                attributes: ['id', 'src', 'alt'],
+                required: false,
+            },
+        ],
+    },
+    {
+        model: image,
+        as: 'logo',
+        required: false,
+        attributes: ['id', 'src', 'alt'],
+        where: {
+            image_link_connection: 'initiative_logo',
+        },
+    },
+    {
+        model: sponsor,
+        as: 'sponsors',
+        required: false,
+        attributes: ['id', 'name', 'website', 'amount', 'currency', 'sponsorshipType', 'isVisible'],
+        include: [
+            {
+                model: image,
+                as: 'logo',
+                attributes: ['id', 'src', 'alt'],
+                required: false,
+            },
+        ],
+    },
+    {
+        model: partner,
+        as: 'partners',
+        required: false,
+        attributes: ['id', 'name', 'website', 'description', 'partnershipType', 'isVisible'],
+        include: [
+            {
+                model: image,
+                as: 'logo',
                 attributes: ['id', 'src', 'alt'],
                 required: false,
             },
@@ -385,14 +422,13 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                 await Promise.all(
                     validatedData.stories.map(async (storyData) => {
                         const { image: storyImage, ...storyFields } = storyData;
-                        const createdStory = await publishedContent.create(
+                        const createdStory = await story.create(
                             {
                                 titleSlug: storyData.title,
                                 title: storyData.title,
                                 description: storyData.description,
                                 link: storyData.link,
                                 author: storyData.author,
-                                type: 'story',
                                 publishedAt: storyData.publishedAt,
                                 initiativeId: newInitiative.id,
                             },
@@ -404,7 +440,7 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                                 {
                                     ...storyImage,
                                     imageableId: createdStory.id,
-                                    imageLinkConnection: 'publishedContent',
+                                    imageLinkConnection: 'story',
                                 },
                                 { transaction: t }
                             );
@@ -418,13 +454,12 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                 await Promise.all(
                     validatedData.publications.map(async (publicationData) => {
                         const { image: publicationImage, ...publicationFields } = publicationData;
-                        const createdPublication = await publishedContent.create(
+                        const createdPublication = await publication.create(
                             {
                                 titleSlug: publicationData.title,
                                 title: publicationData.title,
                                 description: publicationData.description,
                                 link: publicationData.link,
-                                type: 'publication',
                                 publishedAt: publicationData.publishedAt,
                                 initiativeId: newInitiative.id,
                             },
@@ -436,7 +471,7 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                                 {
                                     ...publicationImage,
                                     imageableId: createdPublication.id,
-                                    imageLinkConnection: 'publishedContent',
+                                    imageLinkConnection: 'publication',
                                 },
                                 { transaction: t }
                             );
@@ -503,6 +538,62 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                 );
             }
 
+            // Create sponsors if provided
+            if (validatedData.sponsors?.length > 0) {
+                await Promise.all(
+                    validatedData.sponsors.map(async (sponsorData) => {
+                        const { logo, ...sponsorFields } = sponsorData;
+                        const createdSponsor = await sponsor.create(
+                            {
+                                ...sponsorFields,
+                                sponsorableId: newInitiative.id,
+                                sponsor_link_connection: 'initiative',
+                            },
+                            { transaction: t }
+                        );
+
+                        if (logo) {
+                            await image.create(
+                                {
+                                    ...logo,
+                                    imageableId: createdSponsor.id,
+                                    imageLinkConnection: 'sponsor',
+                                },
+                                { transaction: t }
+                            );
+                        }
+                    })
+                );
+            }
+
+            // Create partners if provided
+            if (validatedData.partners?.length > 0) {
+                await Promise.all(
+                    validatedData.partners.map(async (partnerData) => {
+                        const { logo, ...partnerFields } = partnerData;
+                        const createdPartner = await partner.create(
+                            {
+                                ...partnerFields,
+                                partnerableId: newInitiative.id,
+                                partner_link_connection: 'initiative',
+                            },
+                            { transaction: t }
+                        );
+
+                        if (logo) {
+                            await image.create(
+                                {
+                                    ...logo,
+                                    imageableId: createdPartner.id,
+                                    imageLinkConnection: 'partner',
+                                },
+                                { transaction: t }
+                            );
+                        }
+                    })
+                );
+            }
+
             const completeInitiative = await initiative.findByPk(newInitiative.id, {
                 include: initiativeConfig,
                 attributes: initiativeAttributes,
@@ -527,15 +618,27 @@ initiativeController.post('/bookmark/:initiativeId', isAuth, async (req, res, ne
             return res.status(400).json({ error: 'Invalid initiative ID' });
         }
 
-        const existing = await initiativeBookmark.findOne({
-            where: { userId, initiativeId },
+        const existing = await initiative.findOne({
+            where: { id: initiativeId },
+            include: [
+                {
+                    model: user_account,
+                    as: 'bookmarkedBy',
+                    where: { id: userId },
+                    required: false,
+                },
+            ],
         });
 
-        if (existing) {
-            await existing.destroy();
+        if (!existing) {
+            return res.status(404).json({ error: 'Initiative not found' });
+        }
+
+        if (existing.bookmarkedBy?.length > 0) {
+            await existing.removeBookmarkedBy(userId);
             return res.status(200).json({ message: 'Bookmark successfully removed.', bookmarked: false });
         } else {
-            await initiativeBookmark.create({ userId, initiativeId });
+            await existing.addBookmarkedBy(userId);
             return res.status(201).json({ message: 'Bookmark successfully added.', bookmarked: true });
         }
     } catch (err) {
@@ -672,10 +775,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
 
             // Update stories
             if (validatedData.stories) {
-                await publishedContent.destroy({
+                await story.destroy({
                     where: {
                         initiativeId: foundInitiative.id,
-                        type: 'story',
                     },
                     transaction: t,
                 });
@@ -683,10 +785,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     await Promise.all(
                         validatedData.stories.map(async (storyData) => {
                             const { image: storyImage, ...storyFields } = storyData;
-                            const createdStory = await publishedContent.create(
+                            const createdStory = await story.create(
                                 {
                                     ...storyFields,
-                                    type: 'story',
                                     initiativeId: foundInitiative.id,
                                 },
                                 { transaction: t }
@@ -697,7 +798,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                                     {
                                         ...storyImage,
                                         imageableId: createdStory.id,
-                                        imageLinkConnection: 'publishedContent',
+                                        imageLinkConnection: 'story',
                                     },
                                     { transaction: t }
                                 );
@@ -709,10 +810,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
 
             // Update publications
             if (validatedData.publications) {
-                await publishedContent.destroy({
+                await publication.destroy({
                     where: {
                         initiativeId: foundInitiative.id,
-                        type: 'publication',
                     },
                     transaction: t,
                 });
@@ -720,10 +820,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     await Promise.all(
                         validatedData.publications.map(async (publicationData) => {
                             const { image: publicationImage, ...publicationFields } = publicationData;
-                            const createdPublication = await publishedContent.create(
+                            const createdPublication = await publication.create(
                                 {
                                     ...publicationFields,
-                                    type: 'publication',
                                     initiativeId: foundInitiative.id,
                                 },
                                 { transaction: t }
@@ -734,7 +833,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                                     {
                                         ...publicationImage,
                                         imageableId: createdPublication.id,
-                                        imageLinkConnection: 'publishedContent',
+                                        imageLinkConnection: 'publication',
                                     },
                                     { transaction: t }
                                 );
@@ -887,7 +986,12 @@ initiativeController.delete('/:id', isAuth, async (req, res, next) => {
                 transaction: t,
             });
 
-            await publishedContent.destroy({
+            await story.destroy({
+                where: { initiativeId: id },
+                transaction: t,
+            });
+
+            await publication.destroy({
                 where: { initiativeId: id },
                 transaction: t,
             });
@@ -910,11 +1014,6 @@ initiativeController.delete('/:id', isAuth, async (req, res, next) => {
                     commentableId: id,
                     commentsLinkConnection: 'initiative',
                 },
-                transaction: t,
-            });
-
-            await initiativeBookmark.destroy({
-                where: { initiativeId: id },
                 transaction: t,
             });
 

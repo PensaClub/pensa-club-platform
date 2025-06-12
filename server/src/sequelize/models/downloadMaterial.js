@@ -4,7 +4,35 @@ module.exports = (sequelize, DataTypes) => {
     class DownloadMaterial extends Model {
         static associate(models) {
             DownloadMaterial.belongsTo(models.initiative, {
-                foreignKey: 'initiativeId',
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'initiative',
+                },
+            });
+
+            DownloadMaterial.belongsTo(models.project, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'project',
+                },
+            });
+
+            DownloadMaterial.belongsTo(models.story, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'story',
+                },
+            });
+
+            DownloadMaterial.belongsTo(models.publication, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'publication',
+                },
             });
 
             DownloadMaterial.hasOne(models.image, {
@@ -57,14 +85,15 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'download_url',
             },
-            initiativeId: {
+            downloadableId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
-                field: 'initiative_id',
+                field: 'downloadable_id',
+            },
+            downloadLinkConnection: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                field: 'download_link_connection',
             },
         },
         {

@@ -2,52 +2,38 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('contacts', {
+        await queryInterface.createTable('partners', {
             id: {
                 type: Sequelize.INTEGER,
-                primaryKey: true,
-                autoIncrement: true,
                 allowNull: false,
+                autoIncrement: true,
+                primaryKey: true,
             },
             name: {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            position: {
+            description: {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            email: {
+            website: {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            phone: {
+            partnership_type: {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            image: {
-                type: Sequelize.STRING,
-                allowNull: true,
-            },
-            is_main_contact: {
+            is_visible: {
                 type: Sequelize.BOOLEAN,
-                allowNull: false,
-                defaultValue: false,
-            },
-            is_team_member: {
-                type: Sequelize.BOOLEAN,
-                allowNull: false,
-                defaultValue: false,
-            },
-            role: {
-                type: Sequelize.STRING,
                 allowNull: true,
             },
-            contactable_id: {
+            partnerable_id: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
             },
-            contact_link_connection: {
+            partner_link_connection: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
@@ -62,11 +48,8 @@ module.exports = {
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
-
-        await queryInterface.addIndex('contacts', ['contactable_id']);
-        await queryInterface.addIndex('contacts', ['contact_link_connection']);
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('contacts');
+        await queryInterface.dropTable('partners');
     },
 };

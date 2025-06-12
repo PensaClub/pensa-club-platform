@@ -2,62 +2,81 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Initiative extends Model {
+    class initiative extends Model {
         static associate(models) {
-            Initiative.belongsTo(models.user_account, {
+            initiative.belongsTo(models.user_account, {
                 foreignKey: 'creatorId',
                 as: 'creator',
             });
 
-            Initiative.hasMany(models.project, {
-                foreignKey: 'initiativeId',
+            initiative.belongsToMany(models.project, {
+                through: 'initiative_projects',
                 as: 'projects',
+                foreignKey: 'initiative_id',
+                otherKey: 'project_id',
             });
 
-            Initiative.hasMany(models.downloadMaterial, {
-                foreignKey: 'initiativeId',
+            initiative.belongsToMany(models.story, {
+                through: 'initiative_stories',
+                as: 'stories',
+                foreignKey: 'initiative_id',
+                otherKey: 'story_id',
+            });
+
+            initiative.belongsToMany(models.publication, {
+                through: 'initiative_publications',
+                as: 'publications',
+                foreignKey: 'initiative_id',
+                otherKey: 'publication_id',
+            });
+
+            initiative.hasMany(models.downloadMaterial, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'initiative',
+                },
                 as: 'downloadMaterials',
             });
 
-            Initiative.hasMany(models.publishedContent, {
-                foreignKey: 'initiativeId',
-                as: 'stories',
+            initiative.hasMany(models.contact, {
+                foreignKey: 'contactableId',
+                constraints: false,
                 scope: {
-                    type: 'story',
+                    contact_link_connection: 'initiative',
                 },
-            });
-
-            Initiative.hasMany(models.publishedContent, {
-                foreignKey: 'initiativeId',
-                as: 'publications',
-                scope: {
-                    type: 'publication',
-                },
-            });
-
-            Initiative.hasMany(models.contact, {
-                foreignKey: 'initiativeId',
                 as: 'additionalContacts',
             });
 
-            Initiative.hasOne(models.contact, {
-                foreignKey: 'initiativeId',
-                as: 'contact',
+            initiative.hasOne(models.contact, {
+                foreignKey: 'contactableId',
+                constraints: false,
                 scope: {
+                    contact_link_connection: 'initiative',
                     is_main_contact: true,
                 },
+                as: 'contact',
             });
 
-            Initiative.hasOne(models.image, {
+            initiative.hasOne(models.image, {
                 as: 'mainImage',
                 foreignKey: 'imageableId',
                 constraints: false,
                 scope: {
-                    image_link_connection: 'initiative',
+                    image_link_connection: 'initiative_main',
                 },
             });
 
-            Initiative.hasMany(models.section, {
+            initiative.hasOne(models.image, {
+                as: 'logo',
+                foreignKey: 'imageableId',
+                constraints: false,
+                scope: {
+                    image_link_connection: 'initiative_logo',
+                },
+            });
+
+            initiative.hasMany(models.section, {
                 as: 'sections',
                 foreignKey: 'sectionableId',
                 constraints: false,
@@ -66,7 +85,7 @@ module.exports = (sequelize, DataTypes) => {
                 },
             });
 
-            Initiative.hasMany(models.comment, {
+            initiative.hasMany(models.comment, {
                 foreignKey: 'commentableId',
                 as: 'comments',
                 constraints: false,
@@ -75,15 +94,29 @@ module.exports = (sequelize, DataTypes) => {
                 },
             });
 
-            Initiative.belongsToMany(models.user_account, {
-                through: models.initiativeBookmark,
+            initiative.belongsToMany(models.user_account, {
+                through: 'initiative_bookmarks',
                 as: 'bookmarkedBy',
-                foreignKey: 'initiativeId',
-                otherKey: 'userId',
+                foreignKey: 'initiative_id',
+                otherKey: 'user_id',
+            });
+
+            initiative.hasMany(models.sponsor, {
+                foreignKey: 'sponsorableId',
+                constraints: false,
+                scope: { sponsor_link_connection: 'initiative' },
+                as: 'sponsors',
+            });
+
+            initiative.hasMany(models.partner, {
+                foreignKey: 'partnerableId',
+                constraints: false,
+                scope: { partner_link_connection: 'initiative' },
+                as: 'partners',
             });
         }
     }
-    Initiative.init(
+    initiative.init(
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -151,7 +184,9 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: 'initiative',
+            timestamps: true,
+            underscored: true,
         }
     );
-    return Initiative;
+    return initiative;
 };

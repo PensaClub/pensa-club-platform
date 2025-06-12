@@ -6,9 +6,13 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             const imageableModels = [
                 { model: 'section', connection: 'section' },
-                { model: 'publishedContent', connection: 'publishedContent' },
                 { model: 'downloadMaterial', connection: 'downloadMaterial' },
-                { model: 'initiative', connection: 'initiative' },
+                { model: 'initiative', connection: 'initiative_main' },
+                { model: 'initiative', connection: 'initiative_logo' },
+                { model: 'story', connection: 'story' },
+                { model: 'publication', connection: 'publication' },
+                { model: 'sponsor', connection: 'sponsor' },
+                { model: 'partner', connection: 'partner' },
             ];
 
             imageableModels.forEach(({ model, connection }) => {

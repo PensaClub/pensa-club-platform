@@ -33,15 +33,15 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            initiative_id: {
+            downloadable_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
                 onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
+            },
+            download_link_connection: {
+                type: Sequelize.STRING,
+                allowNull: false,
             },
             createdAt: {
                 allowNull: false,
@@ -52,6 +52,9 @@ module.exports = {
                 type: Sequelize.DATE,
             },
         });
+
+        await queryInterface.addIndex('downloadMaterials', ['downloadable_id']);
+        await queryInterface.addIndex('downloadMaterials', ['download_link_connection']);
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('downloadMaterials');

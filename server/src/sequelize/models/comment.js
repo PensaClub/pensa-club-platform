@@ -27,6 +27,14 @@ module.exports = (sequelize, DataTypes) => {
                     comment_link_connection: 'initiative',
                 },
             });
+
+            Comment.belongsTo(models.project, {
+                foreignKey: 'commentableId',
+                constraints: false,
+                scope: {
+                    comment_link_connection: 'project',
+                },
+            });
         }
     }
     Comment.init(
@@ -80,11 +88,13 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATE,
                 allowNull: false,
                 defaultValue: DataTypes.NOW,
+                field: 'created_at',
             },
             updatedAt: {
                 type: DataTypes.DATE,
                 allowNull: false,
                 defaultValue: DataTypes.NOW,
+                field: 'updated_at',
             },
         },
         {

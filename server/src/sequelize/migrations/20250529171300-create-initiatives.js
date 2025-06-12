@@ -16,6 +16,7 @@ module.exports = {
                     model: 'user_accounts',
                     key: 'id',
                 },
+                onDelete: 'CASCADE',
             },
             slug: {
                 type: Sequelize.STRING,
@@ -60,15 +61,22 @@ module.exports = {
                 type: Sequelize.BOOLEAN,
                 defaultValue: true,
             },
-            createdAt: {
+            created_at: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
-            updatedAt: {
+            updated_at: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
+
+        await queryInterface.addIndex('initiatives', ['slug']);
+        await queryInterface.addIndex('initiatives', ['status']);
+        await queryInterface.addIndex('initiatives', ['category']);
+        await queryInterface.addIndex('initiatives', ['creator_id']);
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('initiatives');

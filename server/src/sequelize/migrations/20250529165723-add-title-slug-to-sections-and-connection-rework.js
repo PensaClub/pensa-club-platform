@@ -14,13 +14,13 @@ module.exports = {
         if (!tableDesc.sectionable_id) {
             await queryInterface.addColumn('sections', 'sectionable_id', {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
             });
         }
         if (!tableDesc.section_link_connection) {
             await queryInterface.addColumn('sections', 'section_link_connection', {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             });
         }
 
@@ -33,12 +33,34 @@ module.exports = {
 
             await queryInterface.removeColumn('sections', 'articleId');
         }
+
+        await queryInterface.changeColumn('sections', 'sectionable_id', {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        });
+        await queryInterface.changeColumn('sections', 'section_link_connection', {
+            type: Sequelize.STRING,
+            allowNull: false,
+        });
     },
 
     async down(queryInterface, Sequelize) {
+        await queryInterface.changeColumn('sections', 'sectionable_id', {
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        });
+        await queryInterface.changeColumn('sections', 'section_link_connection', {
+            type: Sequelize.STRING,
+            allowNull: true,
+        });
+        await queryInterface.changeColumn('sections', 'title_slug', {
+            type: Sequelize.STRING,
+            allowNull: true,
+        });
+
         await queryInterface.addColumn('sections', 'articleId', {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: 'articles',
                 key: 'id',
@@ -50,6 +72,15 @@ module.exports = {
             SET "articleId" = sectionable_id
             WHERE section_link_connection = 'article'
         `);
+
+        await queryInterface.changeColumn('sections', 'articleId', {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'articles',
+                key: 'id',
+            },
+        });
 
         await queryInterface.removeColumn('sections', 'sectionable_id');
         await queryInterface.removeColumn('sections', 'section_link_connection');

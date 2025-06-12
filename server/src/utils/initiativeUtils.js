@@ -45,3 +45,17 @@ const transformInitiative = (initiative) => {
 };
 
 module.exports = transformInitiative;
+
+// To be used later
+
+// function transformLocationFields(obj, addressKey = 'address', latKey = 'lat', lngKey = 'lng') {
+//     const { [addressKey]: address, [latKey]: lat, [lngKey]: lng, ...rest } = obj;
+//     return {
+//         ...rest,
+//         location: {
+//             address,
+//             coordinates: { lat, lng }
+//         }
+//     };
+// }
+// module.exports = transformLocationFields;
