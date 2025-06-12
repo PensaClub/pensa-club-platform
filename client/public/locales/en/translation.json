@@ -1283,6 +1283,9 @@
     "button": "Share",
     "copied": "Copied!",
     "tooltip": "Share this content",
-    "toastMessage": "Link copied to clipboard!"
+    "toastMessage": "Link copied to clipboard!",
+    "instagramToast": "Link copied! Open Instagram and paste it in your Story or message.",
+    "readMore": "Read more at Pensa Club",
+    "copyLink": "Copy Link"
   }
 }

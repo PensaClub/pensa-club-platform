@@ -604,15 +604,15 @@
     border-bottom: 1px solid #e2e8f0;
 }
 .story-pub-actions .share-btn {
-  background: transparent;
-  border: 1px solid #e2e8f0;
+  background: white;
+  border: 2px solid #e2e8f0;
   color: #64748b;
 }
 
-.story-pub-actions .share-btn:hover {
+/* .story-pub-actions .share-btn:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
-}
+} */
 .action-btn {
     display: flex;
     align-items: center;
@@ -625,7 +625,12 @@
     transition: all 0.3s ease;
     font-weight: 500;
 }
-
+.action-text{
+     color: #64748b;
+}
+.action-text:hover {
+    color: #1B8B8A;
+}
 .action-btn:hover {
     border-color: #1B8B8A;
     color: #1B8B8A;

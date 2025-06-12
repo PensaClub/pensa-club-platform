@@ -1279,6 +1279,10 @@
     "button": "Споделяне",
     "copied": "Копирано!",
     "tooltip": "Споделете това съдържание",
-    "toastMessage": "Линкът е копиран в clipboard!"
+    "toastMessage": "Линкът е копиран в clipboard!",
+    "copyLink": "Копирай линк",
+     "instagramToast": "Линкът е копиран! Отворете Instagram и го поставете в Story или съобщение.",
+    "readMore": "Прочетете повече в Pensa Club",
+     "email": "Email"
   }
 }
