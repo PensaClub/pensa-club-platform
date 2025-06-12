@@ -1029,13 +1029,13 @@
       "noResults": "No initiatives found with the specified criteria.",
       "loading": "Loading initiatives...",
       "loadMore": "Load more",
-      "oneCountry": "country", 
+      "oneCountry": "country",
       "cities": "cities",
       "oneCity": "city",
       "locations": "locations",
       "oneLocation": "location",
       "inCountries": "in",
-      "inCities": "in", 
+      "inCities": "in",
       "inLocations": "in"
     },
     "initiativeCard": {
@@ -1115,7 +1115,7 @@
       "submitting": "Posting...",
       "defaultUser": "User"
     },
-      "disabled": {
+    "disabled": {
       "title": "Comments are disabled",
       "message": "Comments have been disabled for this initiative by the administrator."
     },
@@ -1180,7 +1180,7 @@
       "publications": "Publications",
       "team": "Team"
     },
-     "messages": {
+    "messages": {
       "loginRequired": "Please log in to apply for this project."
     }
   },
@@ -1225,5 +1225,67 @@
       "anonymousUser": "Anonymous User",
       "empty": "No applicants for this project yet. Be the first!"
     }
+  },
+  "counts": {
+    "view": {
+      "singular": "view",
+      "plural": "views"
+    },
+    "like": {
+      "singular": "like",
+      "plural": "likes"
+    },
+    "download": {
+      "singular": "download",
+      "plural": "downloads"
+    },
+    "comment": {
+      "singular": "comment",
+      "plural": "comments"
+    },
+    "article": {
+      "singular": "article",
+      "plural": "articles"
+    }
+  },
+    "storyPubView": {
+    "types": {
+      "story": "Story",
+      "publication": "Publication"
+    },
+    "notFound": {
+      "title": "Content not found",
+      "description": "The requested content does not exist or has been removed.",
+      "backToInitiatives": "Back to initiatives"
+    },
+    "breadcrumb": {
+      "initiatives": "Initiatives",
+      "back": "Back"
+    },
+    "download": {
+      "button": "Download document"
+    },
+    "author": {
+      "label": "Author"
+    },
+    "actions": {
+      "share": "Share"
+    },
+    "toc": {
+      "title": "Table of Contents"
+    },
+    "related": {
+      "title": "Related Content"
+    },
+    "readTime": "read time"
+  },
+   "share": {
+    "button": "Share",
+    "copied": "Copied!",
+    "tooltip": "Share this content",
+    "toastMessage": "Link copied to clipboard!",
+    "instagramToast": "Link copied! Open Instagram and paste it in your Story or message.",
+    "readMore": "Read more at Pensa Club",
+    "copyLink": "Copy Link"
   }
 }

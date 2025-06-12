@@ -29,16 +29,7 @@ export const trackArticleView = (articleId, articleTitle) => {
     article_id: articleId
   });
 
-  // Актуализира локалния кеш на броячите за статии
-  const key = `article_${articleId}`;
-  if (localViewCountCache[key]) {
-    localViewCountCache[key]++;
-  } else {
-    localViewCountCache[key] = 1;
-  }
-
-  // Запазване на посещенията в localStorage
-  saveViewCounts();
+  updateLocalCache(`article_${articleId}`);
 };
 
 // Проследяване на посещение на инициатива 
@@ -51,24 +42,106 @@ export const trackInitiativeView = (initiativeId, initiativeTitle) => {
     initiative_id: initiativeId
   });
 
-  // Актуализира локалния кеш на броячите за инициативи
-  const key = `initiative_${initiativeId}`;
+  updateLocalCache(`initiative_${initiativeId}`);
+};
+
+// Проследяване на story и publication
+export const trackStoryView = (storyId, storyTitle) => {
+  ReactGA.event({
+    category: 'Story',
+    action: 'View',
+    label: storyTitle,
+    value: 1,
+    story_id: storyId
+  });
+
+  updateLocalCache(`story_${storyId}`);
+};
+
+export const trackPublicationView = (publicationId, publicationTitle) => {
+  ReactGA.event({
+    category: 'Publication',
+    action: 'View',
+    label: publicationTitle,
+    value: 1,
+    publication_id: publicationId
+  });
+
+  updateLocalCache(`publication_${publicationId}`);
+};
+
+//  Проследяване на download
+export const trackDownload = (contentId, contentTitle, contentType, fileType, fileSize) => {
+  ReactGA.event({
+    category: contentType === 'publication' ? 'Publication' : 'Document',
+    action: 'Download',
+    label: contentTitle,
+    value: 1,
+    content_id: contentId,
+    file_type: fileType,
+    file_size: fileSize
+  });
+
+  // Актуализираме локалния кеш за downloads
+  const key = `${contentType}_${contentId}_downloads`;
   if (localViewCountCache[key]) {
     localViewCountCache[key]++;
   } else {
     localViewCountCache[key] = 1;
   }
 
-  // Запазване на посещенията в localStorage
+  saveViewCounts();
+};
+// Проследяване на share events
+export const trackShare = (contentId, contentTitle, contentType, shareMethod, userAgent = 'unknown') => {
+  ReactGA.event({
+    category: contentType === 'story' ? 'Story' : 'Publication',
+    action: 'Share',
+    label: `${shareMethod} - ${contentTitle}`,
+    value: 1,
+    content_id: contentId,
+    share_method: shareMethod,
+    user_agent: userAgent
+  });
+
+  // Актуализираме локалния кеш за shares
+  const key = `${contentType}_${contentId}_shares`;
+  if (localViewCountCache[key]) {
+    localViewCountCache[key]++;
+  } else {
+    localViewCountCache[key] = 1;
+  }
+
+  saveViewCounts();
+}
+
+// Помощна функция за актуализация на локалния кеш
+const updateLocalCache = (key) => {
+  if (localViewCountCache[key]) {
+    localViewCountCache[key]++;
+  } else {
+    localViewCountCache[key] = 1;
+  }
   saveViewCounts();
 };
 
 // Общa функция за проследяване на различни типове съдържание
 export const trackView = (contentId, contentTitle, contentType = 'article') => {
-  if (contentType === 'article') {
-    trackArticleView(contentId, contentTitle);
-  } else if (contentType === 'initiative') {
-    trackInitiativeView(contentId, contentTitle);
+  switch (contentType) {
+    case 'article':
+      trackArticleView(contentId, contentTitle);
+      break;
+    case 'initiative':
+      trackInitiativeView(contentId, contentTitle);
+      break;
+    case 'story':
+      trackStoryView(contentId, contentTitle);
+      break;
+    case 'publication':
+      trackPublicationView(contentId, contentTitle);
+      break;
+    default:
+      console.warn(`Unknown content type: ${contentType}`);
   }
 };
 
@@ -119,9 +192,30 @@ export const getInitiativeViewCount = (initiativeId) => {
   return localViewCountCache[`initiative_${initiativeId}`] || 0;
 };
 
+// Получаване на view counts за stories и publications
+export const getStoryViewCount = (storyId) => {
+  return localViewCountCache[`story_${storyId}`] || 0;
+};
+
+export const getPublicationViewCount = (publicationId) => {
+  return localViewCountCache[`publication_${publicationId}`] || 0;
+};
+
+// Получаване на download count
+export const getDownloadCount = (contentId, contentType = 'publication') => {
+  const key = `${contentType}_${contentId}_downloads`;
+  return localViewCountCache[key] || 0;
+};
+
 // Общa функция за получаване на view count
 export const getViewCount = (contentId, contentType = 'article') => {
   const key = `${contentType}_${contentId}`;
+  return localViewCountCache[key] || 0;
+};
+
+//Получаване на share count
+export const getShareCount = (contentId, contentType = 'story') => {
+  const key = `${contentType}_${contentId}_shares`;
   return localViewCountCache[key] || 0;
 };
 
@@ -145,6 +239,24 @@ export const fetchViewCounts = async (contentIds, contentType = 'article') => {
   return result;
 };
 
+// Fetch downloads counts
+export const fetchDownloadCounts = async (contentIds, contentType = 'publication') => {
+  loadViewCounts();
+
+  const result = {};
+  contentIds.forEach(id => {
+    const key = `${contentType}_${id}_downloads`;
+    if (!localViewCountCache[key]) {
+      // Симулираме някакво случайно начално число за downloads
+      localViewCountCache[key] = Math.floor(Math.random() * 20) + 1;
+      saveViewCounts();
+    }
+    result[id] = localViewCountCache[key];
+  });
+
+  return result;
+};
+
 // За backward compatibility - wrapper функции
 export const fetchArticleViewCounts = async (articleIds) => {
   return fetchViewCounts(articleIds, 'article');
@@ -152,4 +264,29 @@ export const fetchArticleViewCounts = async (articleIds) => {
 
 export const fetchInitiativeViewCounts = async (initiativeIds) => {
   return fetchViewCounts(initiativeIds, 'initiative');
+};
+
+// Fetch функции за stories и publications
+export const fetchStoryViewCounts = async (storyIds) => {
+  return fetchViewCounts(storyIds, 'story');
+};
+
+export const fetchPublicationViewCounts = async (publicationIds) => {
+  return fetchViewCounts(publicationIds, 'publication');
+};
+export const fetchShareCounts = async (contentIds, contentType = 'story') => {
+  loadViewCounts();
+
+  const result = {};
+  contentIds.forEach(id => {
+    const key = `${contentType}_${id}_shares`;
+    if (!localViewCountCache[key]) {
+      // Симулираме някакво случайно начално число за shares
+      localViewCountCache[key] = Math.floor(Math.random() * 10) + 1;
+      saveViewCounts();
+    }
+    result[id] = localViewCountCache[key];
+  });
+
+  return result;
 };
