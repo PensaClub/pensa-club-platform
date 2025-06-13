@@ -9,7 +9,17 @@ export const initiativeServiceFactory = (token) => {
     createInitiative: async (initiativeData) => {
       return requester.post(`${apiUrl}/initiatives/create`, initiativeData);
     },
+    saveDraftInitiative: async (draftData) => {
+      return requester.post(`${apiUrl}/initiatives/draft/save`, draftData);
+    },
 
+    getDraftInitiative: async (userId) => {
+      return requester.get(`${apiUrl}/initiatives/draft/${userId}`);
+    },
+
+    deleteDraftInitiative: async (draftId) => {
+      return requester.del(`${apiUrl}/initiatives/draft/${draftId}`);
+    },
     getInitiativeById: async (id) => {
       return requester.get(`${apiUrl}/initiatives/single/${id}`);
     },
@@ -35,7 +45,7 @@ export const initiativeServiceFactory = (token) => {
     // Initiative comments endpoints 
 
     // Създаване на коментар/reply
-       createComment: async (commentData) => {
+    createComment: async (commentData) => {
       console.log('API Request:', commentData); // ← DEBUG
       const response = await requester.post(`${apiUrl}/comments/create`, commentData);
       console.log('API Response:', response); // ← DEBUG
@@ -99,7 +109,7 @@ export const initiativeServiceFactory = (token) => {
     // likeProjectComment: async (projectId, commentId) => {
     //   return requester.post(`${apiUrl}/projects/${projectId}/comments/${commentId}/like`);
     // },
-    
+
     // Project applications endpoints
     getProjectApplications: async (projectId) => {
       return requester.get(`${apiUrl}/projects/${projectId}/applications`);

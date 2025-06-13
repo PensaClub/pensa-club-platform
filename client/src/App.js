@@ -83,7 +83,7 @@ function App() {
   return (
     <>
       <ErrorBoundary>
-      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
           <UserProvider>
             <GoogleAuthProvider>
               <MapProvider>
@@ -92,77 +92,77 @@ function App() {
                     <AdminProvider>
                       <ArticleProvider>
                         <InitiativeProvider>
-                        <AnalyticsProvider>
-                          <LoadingProvider>
-                            <ArticleLimitProvider>
-                              {!isProfilePage && <Header
-                                additionalClasses={isProfilePage ? 'hide-header' : ''}
-                              />}
+                          <AnalyticsProvider>
+                            <LoadingProvider>
+                              <ArticleLimitProvider>
+                                {!isProfilePage && <Header
+                                  additionalClasses={isProfilePage ? 'hide-header' : ''}
+                                />}
 
-                              {!cookies.cookieConsent && <CookieConsent />}
-                              <HeaderCommunity />
-                              <ToastContainer
-                                role="alert"
-                                className={'notification'}
-                                limit={3}
-                                position="bottom-right"
-                              />
-
-                        <Routes>
-                          <Route path="/" element={<Home />} />
-                          <Route path="/contact" element={<ContactForm />} />
-                          <Route path="/server-error" element={<ServerError />} />
-                          <Route path="/server-error" element={<ServerError />} />
-                          <Route path="/forget-password" element={<ForgetPassword />} />
-                          <Route path="/resend-email" element={<ReSendEmail />} />
-                          <Route
-                            path="/reset-password"
-                            element={<ResetPasswordPage />}
-                          />
-                          <Route path="/articles" element={<ArticlesList />} />
-                          <Route path="/initiatives" element={<InitiativesList />} />
-                          <Route path="/initiatives/:slug" element={<InitiativeView />} />
-                       <Route path="/stories/:slug" element={<StoryView />} />
-<Route path="/publications/:slug" element={<PublicationView />} />
-                          <Route path="/projects/:slug" element={<ProjectView />} />
-
-                          <Route path="/articles/:slug" element={<ArticleView />} />
-                          <Route element={<AuthGuard />}>
-                            <Route path="/ad/details/:adId" element={<AdDetails />} />
-                            <Route path="/ad/edit/:adId" element={<EditAd />} />
-                            <Route path="/ad" element={<AdPage />} />
-                            <Route path="/ad/create" element={<CreateAd />} />
-                            <Route path="/logout" element={<Logout />} />
-                            {/* <Route path="/profile" element={<Profile />} /> */}
-
-                                  <Route path="/profile/*" element={<Profile />} />
-
-                                </Route>
-
-                                <Route element={<PublicGuard />}>
-                                  <Route path="/sign-up" element={<LoginRegister />} />
-                                </Route>
-                                <Route path="/craigslist" element={<CommunityPage />} />
-                                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                                <Route path="/ads" element={<AdsCard />} />
-                                <Route path="/filter" element={<FiltersMap />} />
-                                <Route path="/map" element={<MapPage />} />
-                                <Route path="/suggest-user" element={<UserSuggestion />} />
-                                <Route path="/errors/*" element={<ErrorPageBoundary />} />
-                                <Route path="404/*" element={<NotFound />} />
-                                <Route path="*" element={<NotFound />} />
-                              </Routes>
-                              {!isProfilePage && (
-                                <FooterWithLoading
-                                  additionalClasses={
-                                    isCommunityPage ? 'hide-on-mobile position-fix' : ''
-                                  }
+                                {!cookies.cookieConsent && <CookieConsent />}
+                                <HeaderCommunity />
+                                <ToastContainer
+                                  role="alert"
+                                  className={'notification'}
+                                  limit={3}
+                                  position="bottom-right"
                                 />
-                              )}
-                              {!isProfilePage && <MenuCommunity />}
-                            </ArticleLimitProvider>
-                          </LoadingProvider>
-                        </AnalyticsProvider>
+
+                                <Routes>
+                                  <Route path="/" element={<Home />} />
+                                  <Route path="/contact" element={<ContactForm />} />
+                                  <Route path="/server-error" element={<ServerError />} />
+                                  <Route path="/server-error" element={<ServerError />} />
+                                  <Route path="/forget-password" element={<ForgetPassword />} />
+                                  <Route path="/resend-email" element={<ReSendEmail />} />
+                                  <Route
+                                    path="/reset-password"
+                                    element={<ResetPasswordPage />}
+                                  />
+                                  <Route path="/articles" element={<ArticlesList />} />
+                                  <Route path="/initiatives" element={<InitiativesList />} />
+                                  <Route path="/initiatives/:slug" element={<InitiativeView />} />
+                                  <Route path="/stories/:slug" element={<StoryView />} />
+                                  <Route path="/publications/:slug" element={<PublicationView />} />
+                                  <Route path="/projects/:slug" element={<ProjectView />} />
+
+                                  <Route path="/articles/:slug" element={<ArticleView />} />
+                                  <Route element={<AuthGuard />}>
+                                    <Route path="/ad/details/:adId" element={<AdDetails />} />
+                                    <Route path="/ad/edit/:adId" element={<EditAd />} />
+                                    <Route path="/ad" element={<AdPage />} />
+                                    <Route path="/ad/create" element={<CreateAd />} />
+                                    <Route path="/logout" element={<Logout />} />
+                                    {/* <Route path="/profile" element={<Profile />} /> */}
+
+                                    <Route path="/profile/*" element={<Profile />} />
+
+                                  </Route>
+
+                                  <Route element={<PublicGuard />}>
+                                    <Route path="/sign-up" element={<LoginRegister />} />
+                                  </Route>
+                                  <Route path="/craigslist" element={<CommunityPage />} />
+                                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                                  <Route path="/ads" element={<AdsCard />} />
+                                  <Route path="/filter" element={<FiltersMap />} />
+                                  <Route path="/map" element={<MapPage />} />
+                                  <Route path="/suggest-user" element={<UserSuggestion />} />
+                                  <Route path="/errors/*" element={<ErrorPageBoundary />} />
+                                  <Route path="404/*" element={<NotFound />} />
+                                  <Route path="*" element={<NotFound />} />
+                                </Routes>
+                                {!isProfilePage && (
+                                  <FooterWithLoading
+                                    additionalClasses={
+                                      isCommunityPage ? 'hide-on-mobile position-fix' : ''
+                                    }
+                                  />
+                                )}
+                                {!isProfilePage && <MenuCommunity />}
+                              </ArticleLimitProvider>
+                            </LoadingProvider>
+                          </AnalyticsProvider>
                         </InitiativeProvider>
                       </ArticleProvider>
                     </AdminProvider>

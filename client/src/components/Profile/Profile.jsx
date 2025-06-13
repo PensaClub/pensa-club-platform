@@ -53,6 +53,7 @@ import ArticleCreateForm from "../Articles/ArticleCreateForm/ArticleCreateForm";
 import { AllArticles } from "../Articles/AllArticles/AllArticles";
 import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
 import { changeLanguage } from "i18next";
+import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCreateForm/InitiativeCreateForm";
 
 export const Profile = () => {
   const location = useLocation();
@@ -106,6 +107,8 @@ export const Profile = () => {
       "/profile/subscription-admin": t("admin.ads_subscription"),
       "/profile/articles": "Статии",
       "/profile/article-create": "Нова статия",
+      "/profile/initiative-create": "Нова  инициатива",
+
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -598,6 +601,7 @@ export const Profile = () => {
                       {/* Тук може да добавяте и други подсекции свързани с публикации */}
                     </ul>
                   </li>
+                  
                 </ul>
               </div>
             )}
@@ -674,6 +678,7 @@ export const Profile = () => {
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
             <Route path="article-edit/:id" element={<ManagementGuard><EditArticle /></ManagementGuard>} />
             <Route path="pending-announcements" element={<ManagementGuard><PendingAnnouncements setAdsCount={setAdsCount} /></ManagementGuard>} />
             <Route path="approved-announcements" element={<ManagementGuard><ApprovedAnnouncements setApprovedCount={setApprovedCount} /></ManagementGuard>} />

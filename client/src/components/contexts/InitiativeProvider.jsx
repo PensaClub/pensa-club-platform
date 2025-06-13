@@ -112,6 +112,122 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [initiatives.length, initiativesLoaded, hasMore, currentPage, initiativeService, showErrorAndSetTimeouts]);
 
+  const createInitiative = useCallback(async (initiativeData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.createInitiative(initiativeData);
+
+      // Добавям новата инициатива в локалното състояние
+      setInitiatives(prev => [response.data || response, ...prev]);
+
+      notify('success', 'Initiative created successfully!');
+      return response;
+    } catch (error) {
+      console.error('Error creating initiative:', error);
+      notify('error', 'Failed to create initiative');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const saveDraftInitiative = useCallback(async (draftData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      const response = await initiativeService.saveDraftInitiative(draftData);
+      notify('success', 'Draft saved successfully!');
+      return response;
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      notify('error', 'Failed to save draft');
+      throw error;
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const getDraftInitiative = useCallback(async (userId) => {
+    try {
+      const response = await initiativeService.getDraftInitiative(userId);
+      return response.data || response;
+    } catch (error) {
+      console.error('Error loading draft:', error);
+      return null;
+    }
+  }, [initiativeService]);
+
+  const deleteDraftInitiative = useCallback(async (draftId) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      await initiativeService.deleteDraftInitiative(draftId);
+      notify('success', 'Draft deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting draft:', error);
+      notify('error', 'Failed to delete draft');
+      throw error;
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const updateInitiative = useCallback(async (id, initiativeData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.updateInitiative(id, initiativeData);
+
+      // Обновявам инициативата в локалното състояние
+      setInitiatives(prev => prev.map(init =>
+        init.id === id ? (response.data || response) : init
+      ));
+
+      notify('success', 'Initiative updated successfully!');
+      return response;
+    } catch (error) {
+      console.error('Error updating initiative:', error);
+      notify('error', 'Failed to update initiative');
+      throw error;  
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const deleteInitiative = useCallback(async (id) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await initiativeService.deleteInitiative(id);
+
+      // Премахвам инициативата от локалното състояние
+      setInitiatives(prev => prev.filter(init => init.id !== id));
+
+      notify('success', 'Initiative deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting initiative:', error);
+      notify('error', 'Failed to delete initiative');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
   const loadMoreInitiatives = useCallback(async () => {
     if (!hasMore || isLoading) return;
     const nextPage = currentPage + 1;
@@ -1329,7 +1445,12 @@ export const InitiativeProvider = ({ children }) => {
     initiativesLoaded,
     loadUserBookmarks,
     clearBookmarks,
-
+    createInitiative,
+    saveDraftInitiative,
+    getDraftInitiative,
+    deleteDraftInitiative,
+    updateInitiative,
+    deleteInitiative,
     // Comments functions
     getComments,
     addComment,
