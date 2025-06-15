@@ -35,6 +35,13 @@ module.exports = {
                 await queryInterface.removeColumn('images', 'sectionId');
             }
 
+            if (tableDesc.createdAt) {
+                await queryInterface.renameColumn('images', 'createdAt', 'created_at');
+            }
+            if (tableDesc.updatedAt) {
+                await queryInterface.renameColumn('images', 'updatedAt', 'updated_at');
+            }
+
             await queryInterface.changeColumn('images', 'imageable_id', {
                 type: Sequelize.INTEGER,
                 allowNull: false,
@@ -55,6 +62,9 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: true,
         });
+
+        await queryInterface.renameColumn('images', 'created_at', 'createdAt');
+        await queryInterface.renameColumn('images', 'updated_at', 'updatedAt');
 
         await queryInterface.addColumn('images', 'sectionId', {
             type: Sequelize.INTEGER,

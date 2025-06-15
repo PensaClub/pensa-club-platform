@@ -4,6 +4,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class project extends Model {
         static associate(models) {
+            project.belongsTo(models.user_account, {
+                foreignKey: 'creatorId',
+                as: 'creator',
+            });
+
             project.belongsToMany(models.initiative, {
                 through: 'initiative_projects',
                 as: 'initiatives',
@@ -39,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'imageableId',
                 constraints: false,
                 scope: {
-                    image_link_connection: 'project',
+                    image_link_connection: 'project_main',
                 },
             });
 
@@ -48,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'imageableId',
                 constraints: false,
                 scope: {
-                    image_link_connection: 'project',
+                    image_link_connection: 'project_logo',
                 },
             });
 
@@ -86,8 +91,33 @@ module.exports = (sequelize, DataTypes) => {
                 constraints: false,
                 scope: {
                     contact_link_connection: 'project',
-                    is_main_contact: true,
                 },
+            });
+
+            project.hasMany(models.sponsor, {
+                foreignKey: 'sponsorableId',
+                constraints: false,
+                scope: { sponsor_link_connection: 'project' },
+                as: 'sponsors',
+            });
+
+            project.hasMany(models.partner, {
+                foreignKey: 'partnerableId',
+                constraints: false,
+                scope: { partner_link_connection: 'project' },
+                as: 'partners',
+            });
+
+            project.hasMany(models.milestone, {
+                foreignKey: 'projectId',
+                as: 'milestones',
+            });
+
+            project.belongsToMany(models.user_account, {
+                through: 'project_applications',
+                as: 'appliedBy',
+                foreignKey: 'project_id',
+                otherKey: 'user_id',
             });
         }
     }
@@ -99,6 +129,16 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true,
                 allowNull: false,
+            },
+            creatorId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'user_accounts',
+                    key: 'id',
+                },
+                field: 'creator_id',
+                onDelete: 'CASCADE',
             },
             slug: {
                 type: DataTypes.STRING,
@@ -173,17 +213,10 @@ module.exports = (sequelize, DataTypes) => {
             },
 
             // Location fields
-            address: {
-                type: DataTypes.STRING,
+            location: {
+                type: DataTypes.JSONB,
                 allowNull: true,
-            },
-            lat: {
-                type: DataTypes.FLOAT,
-                allowNull: true,
-            },
-            lng: {
-                type: DataTypes.FLOAT,
-                allowNull: true,
+                defaultValue: [],
             },
 
             // Application fields
@@ -229,6 +262,7 @@ module.exports = (sequelize, DataTypes) => {
             sequelize,
             modelName: 'project',
             timestamps: true,
+            underscored: true,
         }
     );
 

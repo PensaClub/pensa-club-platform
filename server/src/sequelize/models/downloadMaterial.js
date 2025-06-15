@@ -7,7 +7,15 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'downloadableId',
                 constraints: false,
                 scope: {
-                    download_link_connection: 'initiative',
+                    download_link_connection: 'initiative_materials',
+                },
+            });
+
+            DownloadMaterial.belongsTo(models.initiative, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'initiative_documents',
                 },
             });
 
@@ -72,13 +80,9 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'file_type',
             },
             fileSize: {
-                type: DataTypes.DECIMAL(10, 2),
+                type: DataTypes.STRING,
                 allowNull: false,
                 field: 'file_size',
-                get() {
-                    const size = this.getDataValue('fileSize');
-                    return size ? `${size} MB` : null;
-                },
             },
             downloadUrl: {
                 type: DataTypes.STRING,
@@ -99,6 +103,9 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: 'downloadMaterial',
+            tableName: 'downloadMaterials',
+            timestamps: true,
+            underscored: true,
         }
     );
     return DownloadMaterial;

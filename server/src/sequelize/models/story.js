@@ -135,6 +135,7 @@ module.exports = (sequelize, DataTypes) => {
             sequelize,
             modelName: 'story',
             timestamps: true,
+            underscored: true,
         }
     );
 

@@ -11,6 +11,7 @@ const articleController = require('./controllers/articleController');
 const initiativeController = require('./controllers/initiativeController');
 const commentController = require('./controllers/commentController');
 const publicationController = require('./controllers/publicationController');
+const projectController = require('./controllers/projectController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -21,6 +22,7 @@ router.use('/subscribe', subscriberController);
 router.use('/articles', articleController);
 router.use('/initiatives', initiativeController);
 router.use('/comments', commentController);
+router.use('/projects', projectController);
 router.use('/publications', publicationController);
 
 router.use((err, req, res, next) => {

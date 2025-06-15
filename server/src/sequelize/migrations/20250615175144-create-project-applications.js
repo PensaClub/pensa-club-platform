@@ -1,36 +1,29 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('milestones', {
+        await queryInterface.createTable('project_applications', {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
                 allowNull: false,
             },
-            title: {
-                type: Sequelize.STRING,
-                allowNull: true,
-            },
-            description: {
-                type: Sequelize.TEXT,
-                allowNull: true,
-            },
-            due_date: {
-                type: Sequelize.DATE,
-                allowNull: true,
-            },
-            status: {
-                type: Sequelize.ENUM('pending', 'in-progress', 'completed', 'delayed'),
-                allowNull: true,
-                defaultValue: 'pending',
-            },
             project_id: {
                 type: Sequelize.INTEGER,
-                allowNull: true,
+                allowNull: false,
                 references: {
                     model: 'projects',
+                    key: 'id',
+                },
+                onDelete: 'CASCADE',
+            },
+            user_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'user_accounts',
                     key: 'id',
                 },
                 onDelete: 'CASCADE',
@@ -47,11 +40,11 @@ module.exports = {
             },
         });
 
-        await queryInterface.addIndex('milestones', ['project_id']);
-        await queryInterface.addIndex('milestones', ['status']);
-        await queryInterface.addIndex('milestones', ['due_date']);
+        await queryInterface.addIndex('project_applications', ['project_id']);
+        await queryInterface.addIndex('project_applications', ['user_id']);
     },
+
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('milestones');
+        await queryInterface.dropTable('project_applications');
     },
 };

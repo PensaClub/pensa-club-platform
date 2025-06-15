@@ -12,188 +12,14 @@ const {
     contact,
     section,
     user_account,
-    user_details,
     comment,
     sponsor,
     partner,
 } = require('../sequelize/models');
 const customError = require('../utils/customError');
-const transformInitiative = require('../utils/initiativeUtils');
-const transformComment = require('../utils/commentUtils');
+const { transformInitiative, initiativeConfig } = require('../utils/initiativeUtils');
+const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { InitiativeSchema, UpdateInitiativeSchema } = require('../schemas/initiatives.schema');
-
-const initiativeConfig = [
-    {
-        model: user_account,
-        as: 'creator',
-        required: true,
-        attributes: ['id', 'email'],
-        include: [
-            {
-                model: user_details,
-                as: 'details',
-                attributes: ['username', 'firstName', 'lastName', 'imageURL'],
-            },
-        ],
-    },
-    {
-        model: image,
-        as: 'mainImage',
-        required: false,
-        attributes: ['alt', 'src', 'id'],
-    },
-    {
-        model: project,
-        as: 'projects',
-        //image to be added, link
-        attributes: ['id', 'slug', 'title', 'shortDescription', 'status', 'lat', 'lng'],
-    },
-    {
-        model: downloadMaterial,
-        as: 'downloadMaterials',
-        required: true,
-        attributes: ['id', 'titleSlug', 'title', 'description', 'fileType', 'fileSize', 'downloadUrl'],
-        include: [
-            {
-                model: image,
-                as: 'image',
-                attributes: ['id', 'src', 'alt'],
-                required: false,
-            },
-        ],
-    },
-    {
-        model: story,
-        as: 'stories',
-        attributes: ['id', 'titleSlug', 'title', 'shortDescription', 'publishedAt', 'author'],
-        include: [
-            {
-                model: image,
-                as: 'image',
-                attributes: ['id', 'src', 'alt'],
-                required: false,
-            },
-        ],
-    },
-    {
-        model: publication,
-        as: 'publications',
-        attributes: ['id', 'titleSlug', 'title', 'shortDescription', 'publishedAt'],
-        include: [
-            {
-                model: image,
-                as: 'image',
-                attributes: ['id', 'src', 'alt'],
-                required: false,
-            },
-        ],
-    },
-    {
-        model: contact,
-        as: 'contact',
-        required: true,
-        attributes: ['id', 'name', 'position', 'email', 'phone', 'image'],
-    },
-    {
-        model: contact,
-        as: 'additionalContacts',
-        required: false,
-        attributes: ['id', 'name', 'email', 'phone'],
-    },
-    {
-        model: section,
-        as: 'sections',
-        required: true,
-        attributes: ['id', 'titleSlug', 'title', 'content'],
-        include: [
-            {
-                model: image,
-                as: 'sectionImages',
-                attributes: ['id', 'src', 'alt'],
-                required: false,
-            },
-        ],
-    },
-    {
-        model: image,
-        as: 'logo',
-        required: false,
-        attributes: ['id', 'src', 'alt'],
-        where: {
-            image_link_connection: 'initiative_logo',
-        },
-    },
-    {
-        model: sponsor,
-        as: 'sponsors',
-        required: false,
-        attributes: ['id', 'name', 'website', 'amount', 'currency', 'sponsorshipType', 'isVisible'],
-        include: [
-            {
-                model: image,
-                as: 'logo',
-                attributes: ['id', 'src', 'alt'],
-                required: false,
-            },
-        ],
-    },
-    {
-        model: partner,
-        as: 'partners',
-        required: false,
-        attributes: ['id', 'name', 'website', 'description', 'partnershipType', 'isVisible'],
-        include: [
-            {
-                model: image,
-                as: 'logo',
-                attributes: ['id', 'src', 'alt'],
-                required: false,
-            },
-        ],
-    },
-];
-
-const commentConfig = {
-    model: comment,
-    as: 'comments',
-    required: false,
-    attributes: ['id', 'content', 'userId', 'createdAt', 'updatedAt', 'likes', 'parentId'],
-    include: [
-        {
-            model: user_account,
-            as: 'user',
-            attributes: ['id', 'email'],
-            include: [
-                {
-                    model: user_details,
-                    as: 'details',
-                    attributes: ['username', 'firstName', 'lastName', 'imageURL'],
-                },
-            ],
-        },
-        {
-            model: comment,
-            as: 'replies',
-            attributes: ['id', 'content', 'userId', 'createdAt', 'updatedAt', 'likes', 'parentId'],
-            include: [
-                {
-                    model: user_account,
-                    as: 'user',
-                    attributes: ['id', 'email'],
-                    include: [
-                        {
-                            model: user_details,
-                            as: 'details',
-                            attributes: ['username', 'firstName', 'lastName', 'imageURL'],
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
-};
-
-const initiativeAttributes = ['id', 'slug', 'title', 'shortDescription', 'category', 'address', 'lat', 'lng', 'status', 'campaignStatus', 'commentsEnabled'];
 
 initiativeController.get('/single/:id', async (req, res, next) => {
     try {
@@ -204,13 +30,11 @@ initiativeController.get('/single/:id', async (req, res, next) => {
         if (isNaN(initiativeId)) {
             foundInitiative = await initiative.findOne({
                 where: { slug: param },
-                include: [...initiativeConfig, commentConfig],
-                attributes: initiativeAttributes,
+                include: initiativeConfig,
             });
         } else {
             foundInitiative = await initiative.findByPk(initiativeId, {
-                include: [...initiativeConfig, commentConfig],
-                attributes: initiativeAttributes,
+                include: initiativeConfig,
             });
         }
 
@@ -221,10 +45,11 @@ initiativeController.get('/single/:id', async (req, res, next) => {
             });
         }
 
+        const comments = await comment.findAll(getCommentConfig(foundInitiative.id, 'initiative'));
+
         const transformedInitiative = transformInitiative(foundInitiative);
-        if (transformedInitiative.comments) {
-            transformedInitiative.comments = transformedInitiative.comments.map((comment) => transformComment(comment));
-        }
+        transformedInitiative.comments = comments.map((comment) => transformComment(comment));
+
         return res.status(200).json(transformedInitiative);
     } catch (err) {
         next(err);
@@ -242,13 +67,20 @@ initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
 
         const initiatives = await user.getBookmarkedInitiatives({
             include: initiativeConfig,
-            attributes: initiativeAttributes,
             order: [['id', 'ASC']],
             through: { attributes: [] },
         });
 
-        const transformedInitiatives = initiatives.map(transformInitiative);
-        return res.status(200).json(transformedInitiatives);
+        const initiativesWithComments = await Promise.all(
+            initiatives.map(async (initiative) => {
+                const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
+                const transformed = transformInitiative(initiative);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
+
+        return res.status(200).json(initiativesWithComments);
     } catch (err) {
         next(err);
     }
@@ -288,23 +120,23 @@ initiativeController.get('/all', async (req, res, next) => {
         const offset = (actualPage - 1) * limitNumber;
 
         const initiatives = await initiative.findAll({
-            include: [...initiativeConfig, commentConfig],
-            attributes: initiativeAttributes,
+            include: initiativeConfig,
             limit: limitNumber,
             offset: offset,
             order: [['id', 'ASC']],
         });
 
-        const transformedInitiatives = initiatives.map((initiative) => {
-            const transformed = transformInitiative(initiative);
-            if (transformed.comments) {
-                transformed.comments = transformed.comments.map((comment) => transformComment(comment));
-            }
-            return transformed;
-        });
+        const initiativesWithComments = await Promise.all(
+            initiatives.map(async (initiative) => {
+                const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
+                const transformed = transformInitiative(initiative);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
 
         return res.status(200).json({
-            data: transformedInitiatives,
+            data: initiativesWithComments,
             pagination: {
                 page: actualPage,
                 limit: limitNumber,
@@ -375,8 +207,7 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                                 status: projectData.status,
                                 image: projectData.image,
                                 link: projectData.link,
-                                lat: projectData.coordinates?.lat,
-                                lng: projectData.coordinates?.lng,
+                                location: projectData.location,
                                 initiativeId: newInitiative.id,
                             },
                             { transaction: t }
@@ -596,7 +427,6 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
 
             const completeInitiative = await initiative.findByPk(newInitiative.id, {
                 include: initiativeConfig,
-                attributes: initiativeAttributes,
                 transaction: t,
             });
             return completeInitiative;
@@ -665,7 +495,6 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
         const result = await initiative.sequelize.transaction(async (t) => {
             const foundInitiative = await initiative.findByPk(id, {
                 include: initiativeConfig,
-                attributes: initiativeAttributes,
                 transaction: t,
             });
 
@@ -926,7 +755,6 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
 
             const updatedInitiative = await initiative.findByPk(id, {
                 include: [...initiativeConfig, commentConfig],
-                attributes: initiativeAttributes,
                 transaction: t,
             });
 

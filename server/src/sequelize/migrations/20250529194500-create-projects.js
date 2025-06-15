@@ -67,17 +67,10 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            address: {
-                type: Sequelize.STRING,
+            location: {
+                type: Sequelize.JSONB,
                 allowNull: true,
-            },
-            lat: {
-                type: Sequelize.FLOAT,
-                allowNull: true,
-            },
-            lng: {
-                type: Sequelize.FLOAT,
-                allowNull: true,
+                defaultValue: [],
             },
             application_status: {
                 type: Sequelize.ENUM('open', 'closed'),

@@ -9,10 +9,13 @@ module.exports = (sequelize, DataTypes) => {
                 { model: 'downloadMaterial', connection: 'downloadMaterial' },
                 { model: 'initiative', connection: 'initiative_main' },
                 { model: 'initiative', connection: 'initiative_logo' },
+                { model: 'initiative', connection: 'initiative_gallery' },
                 { model: 'story', connection: 'story' },
                 { model: 'publication', connection: 'publication' },
                 { model: 'sponsor', connection: 'sponsor' },
                 { model: 'partner', connection: 'partner' },
+                { model: 'project', connection: 'project_main' },
+                { model: 'project', connection: 'project_logo' },
             ];
 
             imageableModels.forEach(({ model, connection }) => {
@@ -22,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
                     scope: {
                         image_link_connection: connection,
                     },
+                    indexHints: [{ type: 'USE', values: [`idx_image_${connection}`] }],
                 });
             });
         }
@@ -60,6 +64,8 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: 'image',
+            timestamps: true,
+            underscored: true,
         }
     );
     return Image;

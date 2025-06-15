@@ -26,7 +26,7 @@ module.exports = {
                 allowNull: false,
             },
             file_size: {
-                type: Sequelize.DECIMAL(10, 2),
+                type: Sequelize.DataTypes.STRING,
                 allowNull: false,
             },
             download_url: {
@@ -43,13 +43,15 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            createdAt: {
+            created_at: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
-            updatedAt: {
+            updated_at: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
 

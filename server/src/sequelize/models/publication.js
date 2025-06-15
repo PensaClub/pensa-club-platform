@@ -70,15 +70,6 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'title_slug',
             },
-            initiativeId: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
-                field: 'initiative_id',
-            },
             title: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -148,6 +139,7 @@ module.exports = (sequelize, DataTypes) => {
             sequelize,
             modelName: 'publication',
             timestamps: true,
+            underscored: true,
         }
     );
     return publication;

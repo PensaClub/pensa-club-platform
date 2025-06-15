@@ -31,9 +31,22 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
+            detailed_description: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
             category: {
                 type: Sequelize.STRING,
                 allowNull: true,
+            },
+            custom_category: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            priority: {
+                type: Sequelize.ENUM('Low', 'Medium', 'High'),
+                allowNull: true,
+                defaultValue: 'Low',
             },
             address: {
                 type: Sequelize.STRING,
@@ -49,16 +62,104 @@ module.exports = {
             },
             status: {
                 type: Sequelize.ENUM('in-progress', 'active', 'planned', 'completed'),
-                allowNull: false,
+                allowNull: true,
                 defaultValue: 'in-progress',
             },
             campaign_status: {
                 type: Sequelize.ENUM('open', 'closed'),
-                allowNull: false,
+                allowNull: true,
                 defaultValue: 'open',
+            },
+            start_date: {
+                type: Sequelize.DATE,
+                allowNull: true,
+            },
+            end_date: {
+                type: Sequelize.DATE,
+                allowNull: true,
+            },
+            duration: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            target_age: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            target_audience: {
+                type: Sequelize.ARRAY(Sequelize.STRING),
+                allowNull: true,
+                defaultValue: [],
+            },
+            custom_audience: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            expected_budget: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            currency: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            funding_sources: {
+                type: Sequelize.ARRAY(Sequelize.STRING),
+                allowNull: true,
+                defaultValue: [],
+            },
+            organization: {
+                type: Sequelize.JSONB,
+                allowNull: true,
+            },
+            contact_email: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            contact_phone: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            social_media: {
+                type: Sequelize.JSONB,
+                allowNull: true,
+            },
+            kpis: {
+                type: Sequelize.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
+            expected_results: {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            },
+            progress_report: {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            },
+            impact_metrics: {
+                type: Sequelize.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
+            testimonials: {
+                type: Sequelize.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
+            faq: {
+                type: Sequelize.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
+            tags: {
+                type: Sequelize.ARRAY(Sequelize.STRING),
+                allowNull: true,
+                defaultValue: [],
             },
             comments_enabled: {
                 type: Sequelize.BOOLEAN,
+                allowNull: true,
                 defaultValue: true,
             },
             created_at: {

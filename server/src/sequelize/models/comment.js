@@ -84,22 +84,12 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: [],
                 allowNull: false,
             },
-            createdAt: {
-                type: DataTypes.DATE,
-                allowNull: false,
-                defaultValue: DataTypes.NOW,
-                field: 'created_at',
-            },
-            updatedAt: {
-                type: DataTypes.DATE,
-                allowNull: false,
-                defaultValue: DataTypes.NOW,
-                field: 'updated_at',
-            },
         },
         {
             sequelize,
             modelName: 'comment',
+            timestamps: true,
+            underscored: true,
             hooks: {
                 beforeUpdate: (instance) => {
                     if (instance.changed('content')) {

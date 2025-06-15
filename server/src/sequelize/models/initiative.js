@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const { Op } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class initiative extends Model {
@@ -34,16 +35,25 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'downloadableId',
                 constraints: false,
                 scope: {
-                    download_link_connection: 'initiative',
+                    download_link_connection: 'initiative_materials',
                 },
                 as: 'downloadMaterials',
+            });
+
+            initiative.hasMany(models.downloadMaterial, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'initiative_documents',
+                },
+                as: 'documents',
             });
 
             initiative.hasMany(models.contact, {
                 foreignKey: 'contactableId',
                 constraints: false,
                 scope: {
-                    contact_link_connection: 'initiative',
+                    contact_link_connection: 'initiative_additional',
                 },
                 as: 'additionalContacts',
             });
@@ -52,10 +62,19 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'contactableId',
                 constraints: false,
                 scope: {
-                    contact_link_connection: 'initiative',
+                    contact_link_connection: 'initiative_contact',
                     is_main_contact: true,
                 },
                 as: 'contact',
+            });
+
+            initiative.hasOne(models.contact, {
+                foreignKey: 'contactableId',
+                constraints: false,
+                scope: {
+                    contact_link_connection: 'initiative_responsible',
+                },
+                as: 'responsible',
             });
 
             initiative.hasOne(models.image, {
@@ -73,6 +92,26 @@ module.exports = (sequelize, DataTypes) => {
                 constraints: false,
                 scope: {
                     image_link_connection: 'initiative_logo',
+                },
+            });
+
+            initiative.hasMany(models.image, {
+                as: 'gallery',
+                foreignKey: 'imageableId',
+                constraints: false,
+                scope: {
+                    image_link_connection: 'initiative_gallery',
+                },
+            });
+
+            initiative.hasMany(models.image, {
+                as: 'allImages',
+                foreignKey: 'imageableId',
+                constraints: false,
+                scope: {
+                    image_link_connection: {
+                        [Op.in]: ['initiative_main', 'initiative_logo', 'initiative_gallery'],
+                    },
                 },
             });
 
@@ -114,10 +153,18 @@ module.exports = (sequelize, DataTypes) => {
                 scope: { partner_link_connection: 'initiative' },
                 as: 'partners',
             });
+
+            initiative.belongsToMany(models.initiative, {
+                through: 'initiative_relations',
+                as: 'relatedInitiatives',
+                foreignKey: 'initiative_id',
+                otherKey: 'related_initiative_id',
+            });
         }
     }
     initiative.init(
         {
+            // Primary key
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -134,6 +181,8 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'creator_id',
                 onDelete: 'CASCADE',
             },
+
+            // Basic info
             slug: {
                 type: DataTypes.STRING,
                 allowNull: true,
@@ -148,35 +197,163 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 field: 'short_description',
             },
+            detailedDescription: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                field: 'detailed_description',
+            },
             category: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            address: {
+            customCategory: {
                 type: DataTypes.STRING,
                 allowNull: true,
+                field: 'custom_category',
             },
-            lat: {
-                type: DataTypes.FLOAT,
+            priority: {
+                type: DataTypes.ENUM('Low', 'Medium', 'High'),
                 allowNull: true,
+                defaultValue: 'Low',
             },
-            lng: {
-                type: DataTypes.FLOAT,
+
+            // Location
+            location: {
+                type: DataTypes.JSONB,
                 allowNull: true,
+                defaultValue: [],
             },
+
+            // Status and campaign
             status: {
                 type: DataTypes.ENUM('in-progress', 'active', 'planned', 'completed'),
-                allowNull: false,
+                allowNull: true,
                 defaultValue: 'in-progress',
             },
             campaignStatus: {
                 type: DataTypes.ENUM('open', 'closed'),
-                allowNull: false,
+                allowNull: true,
                 defaultValue: 'open',
                 field: 'campaign_status',
             },
+
+            // Dates and milestones
+            startDate: {
+                type: DataTypes.DATE,
+                allowNull: true,
+                field: 'start_date',
+            },
+            endDate: {
+                type: DataTypes.DATE,
+                allowNull: true,
+                field: 'end_date',
+            },
+            duration: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            milestones: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
+
+            // Target audience
+            targetAge: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'target_age',
+            },
+            targetAudience: {
+                type: DataTypes.ARRAY(DataTypes.STRING),
+                allowNull: true,
+                defaultValue: [],
+                field: 'target_audience',
+            },
+            customAudience: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'custom_audience',
+            },
+
+            // Budget and funding
+            expectedBudget: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'expected_budget',
+            },
+            currency: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'currency',
+            },
+            fundingSources: {
+                type: DataTypes.ARRAY(DataTypes.STRING),
+                allowNull: true,
+                defaultValue: [],
+                field: 'funding_sources',
+            },
+
+            // Organization and contact
+            organization: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+            },
+            contactEmail: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'contact_email',
+            },
+            contactPhone: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'contact_phone',
+            },
+
+            // Social media and content
+            socialMedia: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+            },
+            kpis: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
+            expectedResults: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                field: 'expected_results',
+            },
+            progressReport: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                field: 'progress_report',
+            },
+            impactMetrics: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
+                field: 'impact_metrics',
+            },
+            testimonials: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
+            faq: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
+            tags: {
+                type: DataTypes.ARRAY(DataTypes.STRING),
+                allowNull: true,
+                defaultValue: [],
+            },
             commentsEnabled: {
                 type: DataTypes.BOOLEAN,
+                allowNull: true,
                 defaultValue: true,
                 field: 'comments_enabled',
             },

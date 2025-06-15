@@ -37,11 +37,6 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: 'pending',
             },
-            order: {
-                type: DataTypes.INTEGER,
-                allowNull: true,
-                defaultValue: 0,
-            },
             projectId: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
@@ -57,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
             sequelize,
             modelName: 'milestone',
             timestamps: true,
+            underscored: true,
         }
     );
 

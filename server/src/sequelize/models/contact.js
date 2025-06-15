@@ -3,36 +3,23 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Contact extends Model {
         static associate(models) {
-            Contact.belongsTo(models.initiative, {
-                foreignKey: 'contactableId',
-                constraints: false,
-                scope: {
-                    contact_link_connection: 'initiative',
-                },
-            });
+            const contactableModels = [
+                { model: 'initiative', connection: 'initiative_contact' },
+                { model: 'initiative', connection: 'initiative_responsible' },
+                { model: 'initiative', connection: 'initiative_additional' },
+                { model: 'project', connection: 'project' },
+                { model: 'story', connection: 'story' },
+                { model: 'publication', connection: 'publication' },
+            ];
 
-            Contact.belongsTo(models.project, {
-                foreignKey: 'contactableId',
-                constraints: false,
-                scope: {
-                    contact_link_connection: 'project',
-                },
-            });
-
-            Contact.belongsTo(models.story, {
-                foreignKey: 'contactableId',
-                constraints: false,
-                scope: {
-                    contact_link_connection: 'story',
-                },
-            });
-
-            Contact.belongsTo(models.publication, {
-                foreignKey: 'contactableId',
-                constraints: false,
-                scope: {
-                    contact_link_connection: 'publication',
-                },
+            contactableModels.forEach(({ model, connection }) => {
+                Contact.belongsTo(models[model], {
+                    foreignKey: 'contactableId',
+                    constraints: false,
+                    scope: {
+                        contact_link_connection: connection,
+                    },
+                });
             });
         }
     }
@@ -94,6 +81,8 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: 'contact',
+            timestamps: true,
+            underscored: true,
         }
     );
     return Contact;

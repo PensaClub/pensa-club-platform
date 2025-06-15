@@ -24,6 +24,13 @@ module.exports = {
             });
         }
 
+        if (tableDesc.createdAt) {
+            await queryInterface.renameColumn('sections', 'createdAt', 'created_at');
+        }
+        if (tableDesc.updatedAt) {
+            await queryInterface.renameColumn('sections', 'updatedAt', 'updated_at');
+        }
+
         if (tableDesc.articleId) {
             await queryInterface.sequelize.query(`
                 UPDATE sections
@@ -57,6 +64,9 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: true,
         });
+
+        await queryInterface.renameColumn('sections', 'created_at', 'createdAt');
+        await queryInterface.renameColumn('sections', 'updated_at', 'updatedAt');
 
         await queryInterface.addColumn('sections', 'articleId', {
             type: Sequelize.INTEGER,
