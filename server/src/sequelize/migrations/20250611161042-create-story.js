@@ -18,14 +18,6 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            initiative_id: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
-            },
             title: {
                 type: Sequelize.STRING,
                 allowNull: false,
@@ -126,7 +118,6 @@ module.exports = {
         });
 
         await queryInterface.addIndex('stories', ['slug']);
-        await queryInterface.addIndex('stories', ['initiative_id']);
         await queryInterface.addIndex('stories', ['category']);
         await queryInterface.addIndex('stories', ['published_at']);
 

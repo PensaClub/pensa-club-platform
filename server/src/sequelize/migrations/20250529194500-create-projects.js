@@ -9,6 +9,15 @@ module.exports = {
                 autoIncrement: true,
                 allowNull: false,
             },
+            creator_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'user_accounts',
+                    key: 'id',
+                },
+                onDelete: 'CASCADE',
+            },
             slug: {
                 type: Sequelize.STRING,
                 allowNull: true,
@@ -117,6 +126,7 @@ module.exports = {
         await queryInterface.addIndex('projects', ['slug']);
         await queryInterface.addIndex('projects', ['status']);
         await queryInterface.addIndex('projects', ['category']);
+        await queryInterface.addIndex('projects', ['creator_id']);
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('projects');

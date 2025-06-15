@@ -32,7 +32,7 @@ module.exports = {
                 allowNull: true,
             },
             detailed_description: {
-                type: Sequelize.STRING,
+                type: Sequelize.JSONB,
                 allowNull: true,
             },
             category: {
@@ -48,17 +48,10 @@ module.exports = {
                 allowNull: true,
                 defaultValue: 'Low',
             },
-            address: {
-                type: Sequelize.STRING,
+            location: {
+                type: Sequelize.JSONB,
                 allowNull: true,
-            },
-            lat: {
-                type: Sequelize.FLOAT,
-                allowNull: true,
-            },
-            lng: {
-                type: Sequelize.FLOAT,
-                allowNull: true,
+                defaultValue: [],
             },
             status: {
                 type: Sequelize.ENUM('in-progress', 'active', 'planned', 'completed'),
@@ -81,6 +74,11 @@ module.exports = {
             duration: {
                 type: Sequelize.STRING,
                 allowNull: true,
+            },
+            milestones: {
+                type: Sequelize.JSONB,
+                allowNull: true,
+                defaultValue: [],
             },
             target_age: {
                 type: Sequelize.STRING,
@@ -130,11 +128,11 @@ module.exports = {
                 defaultValue: [],
             },
             expected_results: {
-                type: Sequelize.TEXT,
+                type: Sequelize.JSONB,
                 allowNull: true,
             },
             progress_report: {
-                type: Sequelize.TEXT,
+                type: Sequelize.JSONB,
                 allowNull: true,
             },
             impact_metrics: {
