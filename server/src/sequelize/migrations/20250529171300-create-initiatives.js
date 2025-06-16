@@ -81,8 +81,9 @@ module.exports = {
                 defaultValue: [],
             },
             target_age: {
-                type: Sequelize.STRING,
+                type: Sequelize.ARRAY(Sequelize.STRING),
                 allowNull: true,
+                defaultValue: [],
             },
             target_audience: {
                 type: Sequelize.ARRAY(Sequelize.STRING),
@@ -158,6 +159,11 @@ module.exports = {
             comments_enabled: {
                 type: Sequelize.BOOLEAN,
                 allowNull: true,
+                defaultValue: true,
+            },
+            is_draft: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
                 defaultValue: true,
             },
             created_at: {

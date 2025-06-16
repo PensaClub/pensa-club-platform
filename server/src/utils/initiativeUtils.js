@@ -4,7 +4,7 @@ const initiativeConfig = [
     {
         model: user_account,
         as: 'creator',
-        attributes: ['email'],
+        attributes: ['id', 'email'],
     },
     {
         model: image,
@@ -153,10 +153,20 @@ const transformInitiative = (initiative) => {
     // Remove junction table data
     const { initiativeBookmarks, initiative_projects, initiative_stories, initiative_publications, ...initiativeData } = plainInitiative;
 
-    // Add userEmail from creator
+    // Add userEmail from creator and remove creator object
     if (initiativeData.creator) {
         initiativeData.userEmail = initiativeData.creator.email;
+        delete initiativeData.creator;
         delete initiativeData.creatorId;
+    }
+
+    // Transform main image and gallery
+    if (initiativeData.mainImage || initiativeData.gallery) {
+        initiativeData.mainImage = {
+            ...initiativeData.mainImage,
+            gallery: initiativeData.gallery || [],
+        };
+        delete initiativeData.gallery;
     }
 
     // Transform sections

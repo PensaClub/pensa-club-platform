@@ -260,8 +260,9 @@ module.exports = (sequelize, DataTypes) => {
 
             // Target audience
             targetAge: {
-                type: DataTypes.STRING,
+                type: DataTypes.ARRAY(DataTypes.STRING),
                 allowNull: true,
+                defaultValue: [],
                 field: 'target_age',
             },
             targetAudience: {
@@ -356,6 +357,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: true,
                 field: 'comments_enabled',
+            },
+            isDraft: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: true,
+                field: 'is_draft',
             },
         },
         {

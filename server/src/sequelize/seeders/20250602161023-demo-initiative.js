@@ -126,6 +126,7 @@ module.exports = {
                             description: 'Стартиране на пилотната програма',
                         },
                     ]),
+                    is_draft: false,
                 },
             ],
             { returning: true }

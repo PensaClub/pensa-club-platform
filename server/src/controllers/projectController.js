@@ -27,17 +27,19 @@ projectController.get('/all', async (req, res, next) => {
 
 projectController.get('/single/:id', async (req, res, next) => {
     try {
-        const projectId = req.params.id;
-
-        const foundProject = await project.findByPk(projectId, {
-            include: projectConfig,
-        });
+        const param = req.params.id;
+        let foundProject;
+        if (isNaN(Number(param))) {
+            foundProject = await project.findOne({ where: { slug: param } });
+        } else {
+            foundProject = await project.findByPk(Number(param));
+        }
 
         if (!foundProject) {
             return res.status(404).json({ message: 'Project not found' });
         }
 
-        const comments = await comment.findAll(getCommentConfig(projectId, 'project'));
+        const comments = await comment.findAll(getCommentConfig(foundProject.id, 'project'));
         foundProject.comments = comments.map((comment) => transformComment(comment));
 
         const transformedProject = transformProject(foundProject);
@@ -50,12 +52,16 @@ projectController.get('/single/:id', async (req, res, next) => {
 
 projectController.get('/initiative/:initiativeId', async (req, res, next) => {
     try {
-        const { initiativeId } = req.params;
+        const param = req.params.initiativeId;
+        let whereClause;
+        if (isNaN(Number(param))) {
+            whereClause = { '$initiatives.slug$': param };
+        } else {
+            whereClause = { '$initiatives.id$': Number(param) };
+        }
 
         const projects = await project.findAll({
-            where: {
-                '$initiatives.id$': initiativeId,
-            },
+            where: whereClause,
             include: projectConfig,
         });
 
@@ -78,13 +84,16 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
     try {
         const userId = req.user.userId;
         const { projectId } = req.params;
+        let whereClause;
 
-        if (!projectId || isNaN(Number(projectId))) {
-            return res.status(400).json({ error: 'Invalid project ID' });
+        if (isNaN(Number(projectId))) {
+            whereClause = { slug: projectId };
+        } else {
+            whereClause = { id: Number(projectId) };
         }
 
         const existing = await project.findOne({
-            where: { id: projectId },
+            where: whereClause,
             include: [
                 {
                     model: user_account,
