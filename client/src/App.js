@@ -61,6 +61,7 @@ import { ProjectView } from './components/Initiatives/InitiativeView/ProjectView
 import { StoryPubView } from './components/Initiatives/InitiativeView/StoryPubView/StoryPubView.jsx';
 import { StoryView } from './components/Initiatives/InitiativeView/StoryPubView/StoryView.jsx';
 import { PublicationView } from './components/Initiatives/InitiativeView/StoryPubView/PublicationView.jsx';
+import { InitiativePreviewPage } from './components/Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage.jsx';
 
 function App() {
   const location = useLocation();
@@ -128,6 +129,7 @@ function App() {
 
                                   <Route path="/articles/:slug" element={<ArticleView />} />
                                   <Route element={<AuthGuard />}>
+                                    <Route path="/initiative-preview" element={<InitiativePreviewPage />} />
                                     <Route path="/ad/details/:adId" element={<AdDetails />} />
                                     <Route path="/ad/edit/:adId" element={<EditAd />} />
                                     <Route path="/ad" element={<AdPage />} />

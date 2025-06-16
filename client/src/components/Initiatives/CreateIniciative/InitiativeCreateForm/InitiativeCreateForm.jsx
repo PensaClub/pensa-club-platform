@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 
-import React, { useState, useRef, useMemo, useCallback } from 'react';
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faPlus, faMinus, faImage, faVideo, faSliders,
@@ -9,7 +10,16 @@ import {
     faAddressCard, faChartLine, faInfoCircle, faBuilding,
     faHandshake, faTrophy, faQuestionCircle, faTag, faMapMarkerAlt,
     faLink, faBold, faItalic, faUnderline, faListUl, faListOl,
-    faQuoteLeft, faHeading, faTrash, faChevronUp, faChevronDown
+    faQuoteLeft, faHeading, faTrash, faChevronUp, faChevronDown,
+    faShare,
+    faPhone,
+    faEnvelope,
+    faUser,
+    faFileAlt,
+    faCheckCircle,
+    faSearch,
+    faCheck,
+    faCommentDots
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -24,21 +34,25 @@ import { createEditor, Editor, Transforms, Element as SlateElement } from 'slate
 
 // 🔧 Hooks and utilities
 import useCreateInitiative from '../../../hooks/useCreateInitiative';
-import {
-    createSlateEditor,
-    createSlateEditorState,
-    convertSlateToHtml,
-    isSlateEmpty
-} from '../Utils/initiativeEditorUtils';
 
 // 🎨 Components
 import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 import { InitiativeSectionQuickMenu } from '../InitiativeSectionQuickMenu/InitiativeSectionQuickMenu';
 import { LocationPicker } from '../LocationMarker/LocationMarker';
+import SectionImageItem from '../SectionImageItem/SectionImageItem';
+import MainImagePreview from '../MainImagePreview/MainImagePreview';
+import MainImageGalleryItem from '../MainImageGalleryItem/MainImageGalleryItem';
+
+import { notify } from '../../../../utils/notify';
+import { createSlateEditor, createSlateEditorState, isSlateEmpty, normalizeSlateValue } from '../Utils/initiativeEditorUtils';
+import { calculateInitiativeProgress, getProgressBreakdown } from '../Utils/formProgressUtils';
+import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { LocalStorageStatus } from '../LocalStorageStatus/LocalStorageStatus';
 
 const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
-    const { t } = useTranslation();
 
+    const { t } = useTranslation();
     // 🎯 Hook
     const {
         values,
@@ -46,13 +60,16 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         mediaFiles,
         isUploading,
         uploadProgress,
-        setValues, // 🔧 ДОБАВЕНО
+        defaultValues,
+        setValues,
         onChangeHandler,
         onBlurHandler,
         handleEditorChange,
         onSubmit,
         validateForm,
         saveDraft,
+        handleMainImageUpload,
+        handleSectionImageUpload,
         addPartner,
         removePartner,
         addSponsor,
@@ -61,6 +78,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         removeMilestone,
         addKPI,
         removeKPI,
+        removeDownloadMaterial,
         addFAQ,
         removeFAQ,
         addTag,
@@ -70,10 +88,39 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         updateSection,
         addSectionImage,
         removeSectionImage,
+        updateDocumentField,
         handleLogoUpload,
         handlePartnerLogoUpload,
         handleSponsorLogoUpload,
-        handleDocumentUpload
+        handleDocumentUpload,
+        handleRemoveGalleryImage,
+        clearMainImageGallery,
+        removeMainImage,
+        removeSectionImageItem,
+        clearSectionImages,
+        handleSetMainImage,
+        formatDate,
+        calculateDuration,
+        generateId,
+        handleContactImageUpload,
+        removeContactImage,
+        removeLogo,
+        getFileIcon,
+        editingDocument,
+        setEditingDocument,
+        handleGalleryUpload,
+        clearGallery,
+        updateGalleryImageAlt,
+        updateGalleryImageCaption,
+        removeGalleryImage,
+        handleDocumentDownload,
+        hasLocalStorageDraft,
+        localStorageTimestamp,
+        saveToLocalStorage,
+        loadFromLocalStorage,
+        clearLocalStorage,
+        setHasLocalStorageDraft,
+        setLocalStorageTimestamp,
     } = useCreateInitiative(initialValues, onSubmitHandler);
 
     // 🎯 Local state
@@ -89,9 +136,16 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     const detailedDescriptionEditor = useMemo(() => createSlateEditor(), []);
     const expectedResultsEditor = useMemo(() => createSlateEditor(), []);
     const progressReportEditor = useMemo(() => createSlateEditor(), []);
-
     // 🔧 ПОПРАВЕНО: Създаване на редактори за секциите
     const sectionEditorsRef = useRef({});
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+    const { getAllInitiatives } = useInitiativeContext();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [localStorageChecked, setLocalStorageChecked] = useState(false);
+    const [showLocalStoragePrompt, setShowLocalStoragePrompt] = useState(false)
 
     const getSectionEditor = (index) => {
         if (!sectionEditorsRef.current[index]) {
@@ -99,11 +153,178 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         }
         return sectionEditorsRef.current[index];
     };
+    useEffect(() => {
+        if (location.state?.formData) {
+            setValues(location.state.formData);
+        }
+    }, [location.state]);
+
+    // 📂 При mount - проверяваме за localStorage draft
+    useEffect(() => {
+        // Ако има initialValues (edit mode), не зареждай от localStorage
+        if (initialValues && Object.keys(initialValues).length > 0) {
+            setLocalStorageChecked(true);
+            return;
+        }
+
+        // Ако вече сме проверили localStorage, не го правим отново
+        if (localStorageChecked) {
+            return;
+        }
+
+        const savedDraft = loadFromLocalStorage();
+        if (savedDraft) {
+            // 🔧 АВТОМАТИЧНО зареждаме данните
+            setValues(prev => ({
+                ...prev,
+                ...savedDraft.data
+            }));
+
+            setHasLocalStorageDraft(true);
+            setLocalStorageTimestamp(savedDraft.timestamp);
+            setShowLocalStoragePrompt(true);
+
+            console.log('🔄 Auto-loaded draft from localStorage');
+
+            // Показваме notification след кратко забавяне
+            setTimeout(() => {
+                notify('success', `Възстановена е чернова от ${savedDraft.timestamp.toLocaleString('bg-BG')}`);
+            }, 500);
+        }
+
+        setLocalStorageChecked(true);
+    }, [initialValues, loadFromLocalStorage, setValues, setHasLocalStorageDraft, setLocalStorageTimestamp, localStorageChecked]);
+
+    // 🔧 Функция за зареждане на draft (за бутона)
+    const handleLoadDraft = () => {
+        const savedDraft = loadFromLocalStorage();
+        if (savedDraft) {
+            setValues(prev => ({
+                ...prev,
+                ...savedDraft.data
+            }));
+            setShowLocalStoragePrompt(false);
+            notify('success', 'Черновата е заредена успешно!');
+        }
+    };
+
+    // 🗑️ Функция за изтриване на draft
+    const handleClearDraft = () => {
+        const confirmed = window.confirm(
+            'Сигурни ли сте, че искате да изтриете черновата и всички данни от формата?'
+        );
+
+        if (confirmed) {
+            clearLocalStorage();
+
+            // 🔧 ПОПРАВЕНО: Използвай functional update и force re-render
+            setValues(prev => {
+
+                const freshDefaults = {
+                    title: '',
+                    slug: '',
+                    shortDescription: '',
+                    mainImage: {
+                        src: '',
+                        alt: '',
+                        caption: '',
+                        gallery: []
+                    },
+                    category: '',
+                    location: { address: '', coordinates: { lat: null, lng: null } },
+                    status: 'active',
+                    campaignStatus: 'open',
+                    commentsEnabled: true,
+                    contact: { name: '', position: '', email: '', phone: '', image: '' },
+                    additionalContacts: [],
+                    sections: [],
+                    downloadMaterials: [],
+                    projects: [],
+                    stories: [],
+                    publications: [],
+                    detailedDescription: createSlateEditorState(),
+                    customCategory: '',
+                    priority: 'Medium',
+                    startDate: '',
+                    endDate: '',
+                    duration: '',
+                    milestones: [],
+                    targetAge: [],
+                    targetAudience: [],
+                    customAudience: '',
+                    expectedBudget: '',
+                    currency: 'BGN',
+                    fundingSources: [],
+                    partners: [],
+                    sponsors: [],
+                    logo: null,
+                    responsible: { name: '', position: '', email: '', phone: '' },
+                    organization: { name: '', address: '', website: '' },
+                    socialMedia: { facebook: '', instagram: '', linkedin: '', twitter: '' },
+                    kpis: [],
+                    expectedResults: createSlateEditorState(),
+                    progressReport: createSlateEditorState(),
+                    impactMetrics: [],
+                    testimonials: [],
+                    tags: [],
+                    relatedInitiatives: [],
+                    faq: [],
+                    gallery: []
+                };
+
+                return freshDefaults;
+            });
+
+            setShowLocalStoragePrompt(false);
+            notify('info', 'Черновата и данните от формата са изтрити');
+        }
+    };
+
+    // 📝 Функция за игнориране на prompt-а
+    const handleIgnorePrompt = () => {
+        setShowLocalStoragePrompt(false);
+    };
+
+    // 🧹 Cleanup при unmount
+    useEffect(() => {
+        return () => {
+
+            if (values.title?.trim()) {
+                saveToLocalStorage(values);
+            }
+        };
+    }, [values, saveToLocalStorage]);
 
     // 🎯 Handle Slate.js changes
-    const handleSlateChange = (fieldName) => (value) => {
-        handleEditorChange(fieldName, value);
-    };
+    const handleSlateChange = useCallback((fieldName) => (value) => {
+        // Използваме functional update за да избегнем dependencies
+        setValues(prev => {
+            if (fieldName.includes('.')) {
+                const keys = fieldName.split('.');
+                const updatedValues = { ...prev };
+                let current = updatedValues;
+
+                for (let i = 0; i < keys.length - 1; i++) {
+                    if (!current[keys[i]]) {
+                        current[keys[i]] = {};
+                    }
+                    current = current[keys[i]];
+                }
+
+                current[keys[keys.length - 1]] = value;
+                return updatedValues;
+            } else {
+                return { ...prev, [fieldName]: value };
+            }
+        });
+
+        // Clear error за полето
+        // setErrors(prev => {
+        //     const newErrors = { ...prev };
+        //     delete newErrors[fieldName];
+        //     return newErrors;
+        // });
+    }, []);
 
     // 🔧 ПОПРАВЕНО: Handle Slate change за секции
     const handleSectionSlateChange = (sectionIndex) => (value) => {
@@ -261,21 +482,92 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
 
     // 🎯 Render Slate element
     const renderElement = (props) => {
+        console.log('🎨 renderElement called with type:', props.element.type);
+
         switch (props.element.type) {
             case 'block-quote':
                 return <blockquote {...props.attributes}>{props.children}</blockquote>;
             case 'bulleted-list':
                 return <ul {...props.attributes}>{props.children}</ul>;
             case 'heading-one':
-                return <h1 {...props.attributes}>{props.children}</h1>;
+                console.log('🚀 Rendering H1 element');
+                return (
+                    <h1
+                        {...props.attributes}
+                        style={{
+                            fontSize: '2rem',
+                            fontWeight: '700',
+                            lineHeight: '1.3',
+                            margin: '1rem 0 0.5rem 0',
+                            color: '#1B8B8A',
+                            border: 'none',
+                            background: 'transparent',
+                            padding: '0',
+                            boxShadow: 'none',
+                            borderRadius: '0'
+                        }}
+                    >
+                        {props.children}
+                    </h1>
+                );
             case 'heading-two':
-                return <h2 {...props.attributes}>{props.children}</h2>;
+                console.log('🚀 Rendering H2 element');
+                return (
+                    <h2
+                        {...props.attributes}
+                        style={{
+                            fontSize: '1.5rem',
+                            fontWeight: '600',
+                            lineHeight: '1.4',
+                            margin: '0.75rem 0 0.5rem 0',
+                            color: '#1B8B8A',
+                            border: 'none',
+                            background: 'transparent',
+                            padding: '0',
+                            boxShadow: 'none',
+                            borderRadius: '0'
+                        }}
+                    >
+                        {props.children}
+                    </h2>
+                );
+            case 'heading-three':
+                return (
+                    <h3
+                        {...props.attributes}
+                        style={{
+                            fontSize: '1.25rem',
+                            fontWeight: '600',
+                            lineHeight: '1.4',
+                            margin: '0.5rem 0 0.25rem 0',
+                            color: '#2d3748',
+                            border: 'none',
+                            background: 'transparent',
+                            padding: '0'
+                        }}
+                    >
+                        {props.children}
+                    </h3>
+                );
             case 'list-item':
                 return <li {...props.attributes}>{props.children}</li>;
             case 'numbered-list':
                 return <ol {...props.attributes}>{props.children}</ol>;
             default:
-                return <p {...props.attributes}>{props.children}</p>;
+                console.log('📝 Rendering default paragraph');
+                return (
+                    <p
+                        {...props.attributes}
+                        style={{
+                            fontSize: '1rem',
+                            lineHeight: '1.6',
+                            margin: '0.5rem 0',
+                            color: '#2d3748'
+                        }}
+                    >
+                        {props.children}
+                    </p>
+                );
         }
     };
 
@@ -301,76 +593,19 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     // 🏠 Navigation sections
     const navigationSections = [
         { id: 'basic-info', label: t('initiatives.create.basicInfo'), icon: faInfoCircle },
-        { id: 'sections', label: 'Секции', icon: faEdit },
+        { id: 'sections', label: t('initiatives.create.sections'), icon: faEdit },
         { id: 'timeline', label: t('initiatives.create.timeline'), icon: faClock },
         { id: 'target-scope', label: t('initiatives.create.targetScope'), icon: faBullseye },
         { id: 'resources', label: t('initiatives.create.resources'), icon: faMoneyBillWave },
         { id: 'media', label: t('initiatives.create.media'), icon: faImage },
         { id: 'contacts', label: t('initiatives.create.contacts'), icon: faAddressCard },
-        { id: 'progress', label: t('initiatives.create.progress'), icon: faChartLine },
+
+        { id: 'progress-results', label: 'Прогрес и резултати', icon: faTrophy },
         { id: 'additional', label: t('initiatives.create.additional'), icon: faTag }
     ];
 
     // 📊 Calculate form progress
-    const calculateProgress = () => {
-        const requiredFields = [
-            'title', 'shortDescription', 'detailedDescription', 'category'
-        ];
-        const completed = requiredFields.filter(field => {
-            if (field === 'detailedDescription') {
-                return values[field] && !isSlateEmpty(values[field]);
-            }
-            return values[field] && values[field].toString().trim();
-        });
-        return Math.round((completed.length / requiredFields.length) * 100);
-    };
-
-    // 🖼️ Handle main image upload
-    const handleMainImageUpload = (e) => {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-
-            const newImages = [];
-
-            Array.from(files).forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    newImages.push({
-                        src: event.target.result,
-                        alt: '',
-                        caption: ''
-                    });
-
-                    // Когато всички нови файлове са заредени
-                    if (newImages.length === files.length) {
-                        setValues(prev => {
-                            // 🔧 КЛЮЧОВА ПРОМЯНА: Проверяваме дали вече има снимки
-                            const existingGallery = prev.mainImage.gallery || [];
-                            const allImages = [...existingGallery, ...newImages];
-
-                            // Ако няма главна снимка, поставяме първата от новите
-                            const shouldUpdateMain = !prev.mainImage.src;
-
-                            return {
-                                ...prev,
-                                mainImage: {
-                                    ...prev.mainImage,
-                                    // Обновяваме главната снимка само ако няма такава
-                                    ...(shouldUpdateMain ? {
-                                        src: newImages[0].src,
-                                        alt: newImages[0].alt,
-                                        caption: newImages[0].caption
-                                    } : {}),
-                                    gallery: allImages // 🔧 КОМБИНИРАМЕ старите и новите снимки
-                                }
-                            };
-                        });
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-    };
+    const calculateProgress = () => calculateInitiativeProgress(values);
 
     // 🔗 Handle main image URL
     const handleMainImageUrl = () => {
@@ -384,12 +619,67 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         }
     };
 
+    // 🔧 ДОБАВЕНО: Оптимизирани handlers за main image
+    const updateMainImageAlt = useCallback((value) => {
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                alt: value
+            }
+        }));
+    }, []);
+
+    const updateMainImageCaption = useCallback((value) => {
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                caption: value
+            }
+        }));
+    }, []);
+
+    const updateMainImageGalleryAlt = useCallback((index, value) => {
+        setValues(prev => {
+            const updatedGallery = [...prev.mainImage.gallery];
+            updatedGallery[index] = {
+                ...updatedGallery[index],
+                alt: value
+            };
+            return {
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    gallery: updatedGallery
+                }
+            };
+        });
+    }, []);
+
+    const updateMainImageGalleryCaption = useCallback((index, value) => {
+        setValues(prev => {
+            const updatedGallery = [...prev.mainImage.gallery];
+            updatedGallery[index] = {
+                ...updatedGallery[index],
+                caption: value
+            };
+            return {
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    gallery: updatedGallery
+                }
+            };
+        });
+    }, []);
+
     // 📍 Section management functions
     const handleAddSection = () => {
         const newSection = {
             titleSlug: `section-${Date.now()}`,
             title: '',
-            content: createSlateEditorState(), // 🔧 ПОПРАВЕНО: Правилна начална стойност
+            content: createSlateEditorState(),
             images: []
         };
 
@@ -427,35 +717,39 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             setActiveSectionIndex(Math.max(0, newSections.length - 1));
         }
     };
-    // 🖼️ Section image upload functions
-    const handleSectionImageUpload = useCallback((e, sectionIndex) => {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-            const newImages = [];
 
-            Array.from(files).forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    newImages.push({
-                        src: event.target.result,
-                        alt: '',
-                        caption: ''
-                    });
+    // 🔧 ОПТИМИЗИРАН: updateSectionImageField само за alt/caption
+    const updateSectionImageAlt = useCallback((sectionIndex, imageIndex, value) => {
+        setValues(prev => {
+            const updatedSections = [...prev.sections];
+            const updatedImages = [...updatedSections[sectionIndex].images];
+            updatedImages[imageIndex] = {
+                ...updatedImages[imageIndex],
+                alt: value
+            };
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                images: updatedImages
+            };
+            return { ...prev, sections: updatedSections };
+        });
+    }, []);
 
-                    if (newImages.length === files.length) {
-                        const updatedSections = [...values.sections];
-                        const existingImages = updatedSections[sectionIndex].images || [];
-                        updatedSections[sectionIndex] = {
-                            ...updatedSections[sectionIndex],
-                            images: [...existingImages, ...newImages]
-                        };
-                        setValues(prev => ({ ...prev, sections: updatedSections }));
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-    }, [values.sections, setValues]);
+    const updateSectionImageCaption = useCallback((sectionIndex, imageIndex, value) => {
+        setValues(prev => {
+            const updatedSections = [...prev.sections];
+            const updatedImages = [...updatedSections[sectionIndex].images];
+            updatedImages[imageIndex] = {
+                ...updatedImages[imageIndex],
+                caption: value
+            };
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                images: updatedImages
+            };
+            return { ...prev, sections: updatedSections };
+        });
+    }, []);
 
     const handleSectionImageUrl = useCallback((sectionIndex) => {
         const url = sectionImageUrls[sectionIndex];
@@ -466,61 +760,81 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                 caption: ''
             };
 
-            const updatedSections = [...values.sections];
-            const existingImages = updatedSections[sectionIndex].images || [];
-            updatedSections[sectionIndex] = {
-                ...updatedSections[sectionIndex],
-                images: [...existingImages, newImage]
-            };
-            setValues(prev => ({ ...prev, sections: updatedSections }));
+            setValues(prev => {
+                const updatedSections = [...prev.sections];
+                const existingImages = updatedSections[sectionIndex].images || [];
+                updatedSections[sectionIndex] = {
+                    ...updatedSections[sectionIndex],
+                    images: [...existingImages, newImage]
+                };
+                return { ...prev, sections: updatedSections };
+            });
 
             // Clear URL input
             setSectionImageUrls(prev => ({ ...prev, [sectionIndex]: '' }));
             setShowSectionUrlInput(prev => ({ ...prev, [sectionIndex]: false }));
         }
-    }, [sectionImageUrls, values.sections, setValues]);
+    }, [sectionImageUrls]); // 
 
-    const updateSectionImageField = useCallback((sectionIndex, imageIndex, field, value) => {
-        const updatedSections = [...values.sections];
-        const updatedImages = [...updatedSections[sectionIndex].images];
-        updatedImages[imageIndex] = {
-            ...updatedImages[imageIndex],
-            [field]: value
-        };
-        updatedSections[sectionIndex] = {
-            ...updatedSections[sectionIndex],
-            images: updatedImages
-        };
-        setValues(prev => ({ ...prev, sections: updatedSections }));
-    }, [values.sections, setValues]);
+    // 🔧 НОВА: Оптимизирана функция за URL input change
+    const handleSectionUrlChange = useCallback((sectionIndex, value) => {
+        setSectionImageUrls(prev => ({
+            ...prev,
+            [sectionIndex]: value
+        }));
+    }, []);
 
-    const removeSectionImageItem = useCallback((sectionIndex, imageIndex) => {
-        const updatedSections = [...values.sections];
-        const updatedImages = updatedSections[sectionIndex].images.filter((_, i) => i !== imageIndex);
-        updatedSections[sectionIndex] = {
-            ...updatedSections[sectionIndex],
-            images: updatedImages
-        };
-        setValues(prev => ({ ...prev, sections: updatedSections }));
-    }, [values.sections, setValues]);
+    const handleSearchInitiatives = useCallback(async () => {
+        if (!searchTerm.trim()) {
+            notify('warning', 'Въведете текст за търсене');
+            return;
+        }
 
-    const clearSectionImages = useCallback((sectionIndex) => {
-        const updatedSections = [...values.sections];
-        updatedSections[sectionIndex] = {
-            ...updatedSections[sectionIndex],
-            images: []
-        };
-        setValues(prev => ({ ...prev, sections: updatedSections }));
-    }, [values.sections, setValues]);
+        try {
+            setIsSearching(true);
 
-    if (previewMode) {
-        return (
-            <div className="initiative-preview">
-                <h2>Preview Mode - TODO</h2>
-                <button onClick={() => setPreviewMode(false)}>Back to Edit</button>
-            </div>
-        );
-    }
+            // Зареждаме всички инициативи
+            const response = await getAllInitiatives(1, true);
+            const allInitiatives = response.data || [];
+
+            // Филтрираме по search term
+            const filtered = allInitiatives.filter(initiative =>
+                initiative.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                initiative.shortDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                initiative.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+
+            // Премахваме текущата инициатива ако редактираме
+            const filteredResults = filtered.filter(initiative =>
+                initiative.id !== values.id
+            );
+
+            setSearchResults(filteredResults);
+
+            if (filteredResults.length === 0) {
+                notify('info', 'Няма намерени инициативи');
+            }
+
+        } catch (error) {
+            console.error('Search error:', error);
+            notify('error', 'Грешка при търсене');
+        } finally {
+            setIsSearching(false);
+        }
+    }, [searchTerm, getAllInitiatives, values.id]);
+
+    const handlePreview = () => {
+        // Валидираме основните полета преди preview
+        if (!values.title?.trim()) {
+            notify('warning', 'Въведете заглавие преди preview');
+            return;
+        }
+
+        // Навигираме към preview страницата с данните
+        navigate('/initiative-preview', {
+            state: { previewData: values }
+        });
+    };
 
     return (
         <div className="initiative-create-container">
@@ -535,17 +849,62 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                     {t('initiatives.create.subtitle')}
                 </p>
             </div>
-
+            {/* 💾 LocalStorage Status - показваме само ако има prompt */}
+            {showLocalStoragePrompt && (
+                <LocalStorageStatus
+                    hasLocalStorageDraft={hasLocalStorageDraft}
+                    localStorageTimestamp={localStorageTimestamp}
+                    onClearDraft={handleClearDraft}
+                    onLoadDraft={handleLoadDraft}
+                    onIgnore={handleIgnorePrompt}
+                    autoLoaded={true} // 🆕 Указваме, че данните са auto-loaded
+                />
+            )}
             {/* 📊 Progress Bar */}
-            <div className="form-progress-container">
-                <div className="form-progress-bar">
+            {/* 📊 Enhanced Progress Bar */}
+            <div className="initiative-form-progress-container">
+                <div className="initiative-progress-header">
+                    <h3>Прогрес на формата</h3>
+                    <span className="initiative-progress-percentage">{calculateProgress()}% завършено</span>
+                </div>
+
+                <div className="initiative-progress-bar">
                     <div
                         className="form-progress-fill"
                         style={{ width: `${calculateProgress()}%` }}
                     ></div>
                 </div>
-                <div className="form-progress-text">
-                    {calculateProgress()}% {t('initiatives.create.completed')}
+
+                {/* Section breakdown */}
+                <div className="initiative-progress-sections">
+                    {(() => {
+                        const breakdown = getProgressBreakdown(values);
+                        return (
+                            <>
+                                <div className={`initiative-progress-section ${breakdown.basicInfo ? 'complete' : 'incomplete'}`}>
+                                    ✅ Основна информация
+                                </div>
+                                <div className={`initiative-progress-section ${breakdown.sections ? 'complete' : 'incomplete'}`}>
+                                    📝 Секции
+                                </div>
+                                <div className={`initiative-progress-section ${breakdown.timeline ? 'complete' : 'incomplete'}`}>
+                                    ⏰ Времева линия
+                                </div>
+                                <div className={`initiative-progress-section ${breakdown.targetScope ? 'complete' : 'incomplete'}`}>
+                                    🎯 Целева група
+                                </div>
+                                <div className={`initiative-progress-section ${breakdown.resources ? 'complete' : 'incomplete'}`}>
+                                    💰 Ресурси
+                                </div>
+                                <div className={`initiative-progress-section ${breakdown.media ? 'complete' : 'incomplete'}`}>
+                                    🖼️ Медия
+                                </div>
+                                <div className={`initiative-progress-section ${breakdown.contacts ? 'complete' : 'incomplete'}`}>
+                                    📞 Контакти
+                                </div>
+                            </>
+                        );
+                    })()}
                 </div>
             </div>
 
@@ -712,131 +1071,32 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                             )}
 
                                             {/* 🔧 ПОПРАВЕНО: Всяка снимка със собствени alt и caption */}
-                                            {values.mainImage.src && (
+                                            {values.mainImage?.src && (
                                                 <div className="initiative-create-images-preview">
-                                                    {/* Основна снимка */}
-                                                    <div className="initiative-create-main-image-preview">
-                                                        <img src={values.mainImage.src} alt="Main Preview" />
-                                                        <div className="image-fields">
-                                                            <input
-                                                                type="text"
-                                                                placeholder="Alt текст"
-                                                                value={values.mainImage.alt || ''}
-                                                                onChange={(e) => onChangeHandler(null, false, {
-                                                                    name: 'mainImage.alt',
-                                                                    value: e.target.value
-                                                                })}
-                                                            />
-                                                            <input
-                                                                type="text"
-                                                                placeholder="Caption"
-                                                                value={values.mainImage.caption || ''}
-                                                                onChange={(e) => onChangeHandler(null, false, {
-                                                                    name: 'mainImage.caption',
-                                                                    value: e.target.value
-                                                                })}
-                                                            />
-                                                        </div>
-                                                    </div>
+                                                    <MainImagePreview
+                                                        mainImage={values.mainImage}
+                                                        onAltChange={updateMainImageAlt}
+                                                        onCaptionChange={updateMainImageCaption}
+                                                        onRemove={removeMainImage}
+                                                    />
 
-                                                    {/* 🔧 ОБНОВЕНО: Всяка снимка от галерията със собствени полета */}
-                                                    {values.mainImage.gallery && values.mainImage.gallery.length > 1 && (
+                                                    {values.mainImage?.gallery && values.mainImage.gallery.length > 0 && (
                                                         <div className="initiative-create-gallery-preview">
                                                             <h5>Галерия ({values.mainImage.gallery.length} снимки)</h5>
                                                             <div className="initiative-create-gallery-grid">
-                                                                {values.mainImage.gallery.map((img, index) => (
-                                                                    <div key={index} className="initiative-create-gallery-item">
-                                                                        <img src={img.src} alt={img.alt || `Gallery ${index + 1}`} />
-
-                                                                        {/* 🆕 ДОБАВЕНО: Alt и caption за всяка снимка */}
-                                                                        <div className="initiative-create-gallery-controls">
-                                                                            <input
-                                                                                type="text"
-                                                                                placeholder="Alt текст"
-                                                                                value={img.alt || ''}
-                                                                                onChange={(e) => {
-                                                                                    const updatedGallery = [...values.mainImage.gallery];
-                                                                                    updatedGallery[index] = {
-                                                                                        ...updatedGallery[index],
-                                                                                        alt: e.target.value
-                                                                                    };
-                                                                                    setValues(prev => ({
-                                                                                        ...prev,
-                                                                                        mainImage: {
-                                                                                            ...prev.mainImage,
-                                                                                            gallery: updatedGallery
-                                                                                        }
-                                                                                    }));
-                                                                                }}
-                                                                                className="initiative-create-gallery-input"
-                                                                            />
-
-                                                                            <input
-                                                                                type="text"
-                                                                                placeholder="Caption"
-                                                                                value={img.caption || ''}
-                                                                                onChange={(e) => {
-                                                                                    const updatedGallery = [...values.mainImage.gallery];
-                                                                                    updatedGallery[index] = {
-                                                                                        ...updatedGallery[index],
-                                                                                        caption: e.target.value
-                                                                                    };
-                                                                                    setValues(prev => ({
-                                                                                        ...prev,
-                                                                                        mainImage: {
-                                                                                            ...prev.mainImage,
-                                                                                            gallery: updatedGallery
-                                                                                        }
-                                                                                    }));
-                                                                                }}
-                                                                                className="initiative-create-gallery-input"
-                                                                            />
-
-                                                                            <button
-                                                                                type="button"
-                                                                                onClick={() => {
-                                                                                    // Сменяме главната снимка
-                                                                                    setValues(prev => ({
-                                                                                        ...prev,
-                                                                                        mainImage: {
-                                                                                            ...prev.mainImage,
-                                                                                            src: img.src,
-                                                                                            alt: img.alt,
-                                                                                            caption: img.caption
-                                                                                        }
-                                                                                    }));
-                                                                                }}
-                                                                                className="initiative-create-set-main-btn"
-                                                                            >
-                                                                                Задай като главна
-                                                                            </button>
-
-                                                                            {/* 🆕 ДОБАВЕНО: Бутон за изтриване */}
-                                                                            <button
-                                                                                type="button"
-                                                                                onClick={() => {
-                                                                                    const updatedGallery = values.mainImage.gallery.filter((_, i) => i !== index);
-                                                                                    setValues(prev => ({
-                                                                                        ...prev,
-                                                                                        mainImage: {
-                                                                                            ...prev.mainImage,
-                                                                                            gallery: updatedGallery,
-                                                                                            // Ако изтриваме главната снимка, поставяме първата от останалите
-                                                                                            ...(prev.mainImage.src === img.src && updatedGallery.length > 0 ? {
-                                                                                                src: updatedGallery[0].src,
-                                                                                                alt: updatedGallery[0].alt,
-                                                                                                caption: updatedGallery[0].caption
-                                                                                            } : {})
-                                                                                        }
-                                                                                    }));
-                                                                                }}
-                                                                                className="initiative-create-remove-img-btn"
-                                                                            >
-                                                                                <FontAwesomeIcon icon={faTrash} />
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
+                                                                {values.mainImage.gallery
+                                                                    .filter(img => img && img.src) // 🔧 Филтрираме undefined елементи
+                                                                    .map((img, index) => (
+                                                                        <MainImageGalleryItem
+                                                                            key={`gallery-${img.src}-${index}`}
+                                                                            img={img}
+                                                                            index={index}
+                                                                            onAltChange={updateMainImageGalleryAlt}
+                                                                            onCaptionChange={updateMainImageGalleryCaption}
+                                                                            onSetMain={handleSetMainImage}
+                                                                            onRemove={handleRemoveGalleryImage}
+                                                                        />
+                                                                    ))}
                                                             </div>
                                                         </div>
                                                     )}
@@ -894,7 +1154,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                         </select>
                                         {errors.category && <div className="error-message">{errors.category}</div>}
                                     </div>
-
+                               
                                     {/* Custom Category */}
                                     {values.category === 'custom' && (
                                         <div className="form-group-initiative">
@@ -947,9 +1207,61 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                             <option value="paused">{t('initiatives.status.paused')}</option>
                                         </select>
                                     </div>
+  {/* Comments Enabled */}
+                        <div className="form-group-initiative">
+                            <div className="comments-enabled-section">
+                                <div className="comments-enabled-header">
+                                    <label className="comments-enabled-label">
+                                        <FontAwesomeIcon icon={faCommentDots} />
+                                        {t('initiatives.create.commentsEnabled')}
+                                    </label>
+                                    <div className="comments-enabled-description">
+                                        {t('initiatives.create.commentsEnabledDescription')}
+                                    </div>
+                                </div>
 
+                                <div className="comments-toggle-container">
+                                    <label className="comments-toggle">
+                                        <input
+                                            type="checkbox"
+                                            name="commentsEnabled"
+                                            checked={values.commentsEnabled}
+                                            onChange={(e) => {
+                                                setValues(prev => ({
+                                                    ...prev,
+                                                    commentsEnabled: e.target.checked
+                                                }));
+                                            }}
+                                            className="comments-toggle-input"
+                                        />
+                                        <span className="comments-toggle-slider">
+                                            <span className="comments-toggle-thumb">
+                                                <FontAwesomeIcon
+                                                    icon={values.commentsEnabled ? faCheck : faTimes}
+                                                    className="comments-toggle-icon"
+                                                />
+                                            </span>
+                                        </span>
+                                        <span className="comments-toggle-text">
+                                            {values.commentsEnabled
+                                                ? t('initiatives.create.commentsAllowed')
+                                                : t('initiatives.create.commentsDisabled')
+                                            }
+                                        </span>
+                                    </label>
+
+                                    {values.commentsEnabled && (
+                                        <div className="comments-enabled-info">
+                                            <FontAwesomeIcon icon={faInfoCircle} />
+                                            {t('initiatives.create.commentsEnabledInfo')}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
+                        </div>
+                                </div>
+                            </div>
+
                         )}
 
                         {/* 🎯 SECTION: SECTIONS  */}
@@ -1112,10 +1424,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                                                                     type="url"
                                                                                     placeholder="https://example.com/image.jpg"
                                                                                     value={sectionImageUrls[index] || ''}
-                                                                                    onChange={(e) => setSectionImageUrls(prev => ({
-                                                                                        ...prev,
-                                                                                        [index]: e.target.value
-                                                                                    }))}
+                                                                                    onChange={(e) => handleSectionUrlChange(index, e.target.value)} // 🔧 ПОПРАВЕНО
                                                                                 />
                                                                                 <button
                                                                                     type="button"
@@ -1127,43 +1436,21 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                                                         )}
 
                                                                         {/* Images preview */}
+
                                                                         {section.images && section.images.length > 0 && (
                                                                             <div className="section-images-preview">
                                                                                 <h5>Снимки към секцията ({section.images.length})</h5>
                                                                                 <div className="section-images-grid">
                                                                                     {section.images.map((img, imgIndex) => (
-                                                                                        <div key={imgIndex} className="section-image-item">
-                                                                                            <div className="section-image-header">
-                                                                                                <span className="section-image-number">#{imgIndex + 1}</span>
-                                                                                            </div>
-                                                                                            <img src={img.src} alt={img.alt || `Section image ${imgIndex + 1}`} />
-
-                                                                                            <div className="section-image-controls">
-                                                                                                <input
-                                                                                                    type="text"
-                                                                                                    placeholder="Alt текст"
-                                                                                                    value={img.alt || ''}
-                                                                                                    onChange={(e) => updateSectionImageField(index, imgIndex, 'alt', e.target.value)}
-                                                                                                    className="section-image-input"
-                                                                                                />
-
-                                                                                                <input
-                                                                                                    type="text"
-                                                                                                    placeholder="Caption"
-                                                                                                    value={img.caption || ''}
-                                                                                                    onChange={(e) => updateSectionImageField(index, imgIndex, 'caption', e.target.value)}
-                                                                                                    className="section-image-input"
-                                                                                                />
-
-                                                                                                <button
-                                                                                                    type="button"
-                                                                                                    onClick={() => removeSectionImageItem(index, imgIndex)}
-                                                                                                    className="section-remove-image-btn"
-                                                                                                >
-                                                                                                    <FontAwesomeIcon icon={faTrash} />
-                                                                                                </button>
-                                                                                            </div>
-                                                                                        </div>
+                                                                                        <SectionImageItem
+                                                                                            key={`section-${index}-img-${imgIndex}-${img.src.slice(-10)}`} // 🔧 Стабилен key
+                                                                                            img={img}
+                                                                                            sectionIndex={index}
+                                                                                            imageIndex={imgIndex}
+                                                                                            onAltChange={updateSectionImageAlt}
+                                                                                            onCaptionChange={updateSectionImageCaption}
+                                                                                            onRemove={removeSectionImageItem}
+                                                                                        />
                                                                                     ))}
                                                                                 </div>
                                                                             </div>
@@ -1421,6 +1708,2136 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                 </div>
                             </div>
                         )}
+                        {/* 🎯 SECTION 4: TIMELINE */}
+                        {activeSection === 'timeline' && (
+                            <div className="form-section-card">
+                                <div className="form-section-header">
+                                    <h2 className="form-section-title">
+                                        <FontAwesomeIcon icon={faClock} />
+                                        {t('initiatives.create.timeline')}
+                                    </h2>
+                                </div>
+                                <div className="form-section-content">
+
+                                    {/* Start Date */}
+                                    <div className="form-group-initiative">
+                                        <label htmlFor="startDate">
+                                            Дата на започване
+                                            <span className="required-indicator">*</span>
+                                        </label>
+                                        <input
+                                            type="date"
+                                            id="startDate"
+                                            name="startDate"
+                                            value={values.startDate}
+                                            onChange={onChangeHandler}
+                                            onBlur={onBlurHandler}
+                                            className={errors.startDate ? 'error' : ''}
+                                        />
+                                        {errors.startDate && <div className="error-message">{errors.startDate}</div>}
+                                    </div>
+
+                                    {/* End Date */}
+                                    <div className="form-group-initiative">
+                                        <label htmlFor="endDate">
+                                            Планирана дата на завършване
+                                        </label>
+                                        <input
+                                            type="date"
+                                            id="endDate"
+                                            name="endDate"
+                                            value={values.endDate}
+                                            onChange={onChangeHandler}
+                                            onBlur={onBlurHandler}
+                                            className={errors.endDate ? 'error' : ''}
+                                            min={values.startDate}
+                                        />
+                                        {errors.endDate && <div className="error-message">{errors.endDate}</div>}
+                                    </div>
+
+                                    {/* Duration Display */}
+                                    {values.startDate && values.endDate && (
+                                        <div className="duration-display">
+                                            <h4>📅 Продължителност</h4>
+                                            <span className="duration-value">
+                                                {calculateDuration(values.startDate, values.endDate)} дни
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {/* Milestones Section */}
+                                    <div className="milestones-section">
+                                        <div className="dynamic-section-header">
+                                            <h4>🎯 Ключови етапи (Milestones)</h4>
+                                            <button
+                                                type="button"
+                                                className="btn-initiative accent"
+                                                onClick={addMilestone}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                Добави етап
+                                            </button>
+                                        </div>
+
+                                        {values.milestones.length === 0 ? (
+                                            <div className="empty-milestones">
+                                                <p>Няма добавени етапи</p>
+                                                <button
+                                                    type="button"
+                                                    className="btn-initiative primary"
+                                                    onClick={addMilestone}
+                                                >
+                                                    <FontAwesomeIcon icon={faPlus} />
+                                                    Добави първи етап
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="milestones-list">
+                                                {values.milestones.map((milestone, index) => (
+                                                    <div key={index} className="milestone-item">
+                                                        <div className="milestone-header">
+                                                            <h5>Етап {index + 1}</h5>
+                                                            <button
+                                                                type="button"
+                                                                className="remove-milestone-btn"
+                                                                onClick={() => removeMilestone(index)}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTrash} />
+                                                                Премахни
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="milestone-fields">
+                                                            <div className="milestone-date-field">
+                                                                <label>Дата на етапа</label>
+                                                                <input
+                                                                    type="date"
+                                                                    value={milestone.date}
+                                                                    onChange={(e) => {
+                                                                        const updatedMilestones = [...values.milestones];
+                                                                        updatedMilestones[index].date = e.target.value;
+                                                                        setValues(prev => ({ ...prev, milestones: updatedMilestones }));
+                                                                    }}
+                                                                    min={values.startDate}
+                                                                    max={values.endDate}
+                                                                    className={errors[`milestones[${index}].date`] ? 'error' : ''}
+                                                                />
+                                                                {errors[`milestones[${index}].date`] && (
+                                                                    <div className="error-message">{errors[`milestones[${index}].date`]}</div>
+                                                                )}
+                                                            </div>
+
+                                                            <div className="milestone-description-field">
+                                                                <label>Описание на етапа</label>
+                                                                <textarea
+                                                                    value={milestone.description}
+                                                                    onChange={(e) => {
+                                                                        const updatedMilestones = [...values.milestones];
+                                                                        updatedMilestones[index].description = e.target.value;
+                                                                        setValues(prev => ({ ...prev, milestones: updatedMilestones }));
+                                                                    }}
+                                                                    placeholder="Описание на какво се случва в този етап..."
+                                                                    rows={2}
+                                                                    className={errors[`milestones[${index}].description`] ? 'error' : ''}
+                                                                />
+                                                                {errors[`milestones[${index}].description`] && (
+                                                                    <div className="error-message">{errors[`milestones[${index}].description`]}</div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Timeline Visual Preview */}
+                                    {values.startDate && values.endDate && values.milestones.length > 0 && (
+                                        <div className="timeline-preview">
+                                            <h4>📊 Визуализация на времевата линия</h4>
+                                            <div className="timeline-visual">
+                                                <div className="timeline-point timeline-start">
+                                                    <div className="timeline-dot"></div>
+                                                    <span className="timeline-date">{formatDate(values.startDate)}</span>
+                                                    <span className="timeline-label">Начало</span>
+                                                </div>
+
+                                                {values.milestones
+                                                    .filter(m => m.date)
+                                                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                                                    .map((milestone, index) => (
+                                                        <div key={index} className="timeline-point timeline-milestone">
+                                                            <div className="timeline-dot milestone-dot"></div>
+                                                            <span className="timeline-date">{formatDate(milestone.date)}</span>
+                                                            <span className="timeline-label">{milestone.description}</span>
+                                                        </div>
+                                                    ))}
+
+                                                <div className="timeline-point timeline-end">
+                                                    <div className="timeline-dot"></div>
+                                                    <span className="timeline-date">{formatDate(values.endDate)}</span>
+                                                    <span className="timeline-label">Край</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
+                            </div>
+                        )}
+                        {/* 🎯 SECTION 5: RESOURCES & FUNDING */}
+                        {activeSection === 'resources' && (
+                            <div className="form-section-card">
+                                <div className="form-section-header">
+                                    <h2 className="form-section-title">
+                                        <FontAwesomeIcon icon={faMoneyBillWave} />
+                                        {t('initiatives.create.resources')}
+                                    </h2>
+                                </div>
+                                <div className="form-section-content">
+
+                                    {/* 💰 FUNDING SUMMARY */}
+                                    <div className="initiative-funding-summary-section">
+                                        <h3>💰 {t('initiatives.create.fundingSummary')}</h3>
+                                        <div className="initiative-funding-overview">
+                                            <div className="initiative-funding-overview-item">
+                                                <span className="initiative-funding-label">{t('initiatives.create.totalBudget')}:</span>
+                                                <span className="initiative-funding-value">
+                                                    {values.expectedBudget ?
+                                                        `${parseInt(values.expectedBudget).toLocaleString()} ${values.currency}` :
+                                                        t('initiatives.create.notDetermined')}
+                                                </span>
+                                            </div>
+                                            <div className="initiative-funding-overview-item">
+                                                <span className="initiative-funding-label">{t('initiatives.create.partners')}:</span>
+                                                <span className="initiative-funding-value">{values.partners?.length || 0}</span>
+                                            </div>
+                                            <div className="initiative-funding-overview-item">
+                                                <span className="initiative-funding-label">{t('initiatives.create.sponsors')}:</span>
+                                                <span className="initiative-funding-value">{values.sponsors?.length || 0}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 🤝 PARTNERS SECTION */}
+                                    <div className="initiative-partners-section">
+                                        <div className="initiative-dynamic-section-header">
+                                            <h3>🤝 {t('initiatives.create.partners')}</h3>
+                                            <button
+                                                type="button"
+                                                className="btn-initiative accent"
+                                                onClick={addPartner}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                {t('initiatives.create.addPartner')}
+                                            </button>
+                                        </div>
+
+                                        {values.partners?.length === 0 ? (
+                                            <div className="initiative-empty-partners">
+                                                <div className="initiative-empty-state">
+                                                    <FontAwesomeIcon icon={faHandshake} className="initiative-empty-icon" />
+                                                    <p>{t('initiatives.create.noPartnersAdded')}</p>
+                                                    <p className="initiative-empty-description">{t('initiatives.create.partnersDescription')}</p>
+                                                    <button
+                                                        type="button"
+                                                        className="btn-initiative primary"
+                                                        onClick={addPartner}
+                                                    >
+                                                        <FontAwesomeIcon icon={faPlus} />
+                                                        {t('initiatives.create.addFirstPartner')}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="initiative-partners-list">
+                                                {values.partners.map((partner, index) => (
+                                                    <div key={partner.id || index} className="initiative-partner-card">
+                                                        <div className="initiative-partner-card-header">
+                                                            <div className="initiative-partner-number">
+                                                                <FontAwesomeIcon icon={faHandshake} />
+                                                                {t('initiatives.create.partnerNumber', { number: index + 1 })}
+                                                            </div>
+                                                            <div className="initiative-partner-actions">
+                                                                <button
+                                                                    type="button"
+                                                                    className="initiative-move-btn"
+                                                                    onClick={() => {
+                                                                        if (index > 0) {
+                                                                            const newPartners = [...values.partners];
+                                                                            [newPartners[index], newPartners[index - 1]] =
+                                                                                [newPartners[index - 1], newPartners[index]];
+                                                                            setValues(prev => ({ ...prev, partners: newPartners }));
+                                                                        }
+                                                                    }}
+                                                                    disabled={index === 0}
+                                                                    title={t('initiatives.create.moveUp')}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faChevronUp} />
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    className="initiative-move-btn"
+                                                                    onClick={() => {
+                                                                        if (index < values.partners.length - 1) {
+                                                                            const newPartners = [...values.partners];
+                                                                            [newPartners[index], newPartners[index + 1]] =
+                                                                                [newPartners[index + 1], newPartners[index]];
+                                                                            setValues(prev => ({ ...prev, partners: newPartners }));
+                                                                        }
+                                                                    }}
+                                                                    disabled={index === values.partners.length - 1}
+                                                                    title={t('initiatives.create.moveDown')}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faChevronDown} />
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    className="initiative-remove-btn"
+                                                                    onClick={() => removePartner(index)}
+                                                                    title={t('initiatives.create.removePartner')}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faTrash} />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="initiative-partner-card-content">
+                                                            <div className="initiative-partner-form-grid">
+                                                                {/* Partner Logo */}
+                                                                <div className="initiative-partner-logo-section">
+                                                                    <label>{t('initiatives.create.partnerLogo')}</label>
+                                                                    {partner.logo ? (
+                                                                        <div className="initiative-partner-logo-preview">
+                                                                            <img src={partner.logo} alt={partner.name || 'Partner logo'} />
+                                                                            <div className="initiative-logo-overlay">
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className="initiative-change-logo-btn"
+                                                                                    onClick={() => {
+                                                                                        const fileInput = document.createElement('input');
+                                                                                        fileInput.type = 'file';
+                                                                                        fileInput.accept = 'image/*';
+                                                                                        fileInput.onchange = (e) => {
+                                                                                            if (e.target.files[0]) {
+                                                                                                handlePartnerLogoUpload(e.target.files[0], index);
+                                                                                            }
+                                                                                        };
+                                                                                        fileInput.click();
+                                                                                    }}
+                                                                                >
+                                                                                    <FontAwesomeIcon icon={faEdit} />
+                                                                                </button>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className="initiative-remove-logo-btn"
+                                                                                    onClick={() => {
+                                                                                        const updatedPartners = [...values.partners];
+                                                                                        updatedPartners[index] = {
+                                                                                            ...updatedPartners[index],
+                                                                                            logo: null
+                                                                                        };
+                                                                                        setValues(prev => ({ ...prev, partners: updatedPartners }));
+                                                                                    }}
+                                                                                >
+                                                                                    <FontAwesomeIcon icon={faTimes} />
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="initiative-partner-logo-upload">
+                                                                            <label className="initiative-upload-placeholder">
+                                                                                <FontAwesomeIcon icon={faCloudUploadAlt} />
+                                                                                <span>{t('initiatives.create.uploadLogo')}</span>
+                                                                                <input
+                                                                                    type="file"
+                                                                                    accept="image/*"
+                                                                                    onChange={(e) => {
+                                                                                        if (e.target.files[0]) {
+                                                                                            handlePartnerLogoUpload(e.target.files[0], index);
+                                                                                        }
+                                                                                    }}
+                                                                                    style={{ display: 'none' }}
+                                                                                />
+                                                                            </label>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Partner Details */}
+                                                                <div className="initiative-partner-details-section">
+                                                                    {/* Partner Name */}
+                                                                    <div className="initiative-form-group-partner">
+                                                                        <label>
+                                                                            {t('initiatives.create.partnerName')}
+                                                                            <span className="required-indicator">*</span>
+                                                                        </label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={partner.name || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedPartners = [...values.partners];
+                                                                                updatedPartners[index] = {
+                                                                                    ...updatedPartners[index],
+                                                                                    name: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, partners: updatedPartners }));
+                                                                            }}
+                                                                            placeholder={t('initiatives.create.partnerNamePlaceholder')}
+                                                                            className={errors[`partners[${index}].name`] ? 'error' : ''}
+                                                                        />
+                                                                        {errors[`partners[${index}].name`] && (
+                                                                            <div className="error-message">{errors[`partners[${index}].name`]}</div>
+                                                                        )}
+                                                                    </div>
+
+                                                                    {/* Partner Type */}
+                                                                    <div className="initiative-form-group-partner">
+                                                                        <label>{t('initiatives.create.partnershipType')}</label>
+                                                                        <select
+                                                                            value={partner.type || 'Strategic'}
+                                                                            onChange={(e) => {
+                                                                                const updatedPartners = [...values.partners];
+                                                                                updatedPartners[index] = {
+                                                                                    ...updatedPartners[index],
+                                                                                    type: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, partners: updatedPartners }));
+                                                                            }}
+                                                                        >
+                                                                            <option value="Strategic">{t('initiatives.partnerTypes.strategic')}</option>
+                                                                            <option value="Resource">{t('initiatives.partnerTypes.resource')}</option>
+                                                                            <option value="Media">{t('initiatives.partnerTypes.media')}</option>
+                                                                            <option value="Technology">{t('initiatives.partnerTypes.technology')}</option>
+                                                                            <option value="Educational">{t('initiatives.partnerTypes.educational')}</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    {/* Partner Website */}
+                                                                    <div className="initiative-form-group-partner">
+                                                                        <label>{t('initiatives.create.website')}</label>
+                                                                        <input
+                                                                            type="url"
+                                                                            value={partner.website || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedPartners = [...values.partners];
+                                                                                updatedPartners[index] = {
+                                                                                    ...updatedPartners[index],
+                                                                                    website: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, partners: updatedPartners }));
+                                                                            }}
+                                                                            placeholder={t('initiatives.create.websitePlaceholder')}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Partner Description */}
+                                                            <div className="initiative-form-group-partner initiative-full-width">
+                                                                <label>{t('initiatives.create.partnerDescription')}</label>
+                                                                <textarea
+                                                                    value={partner.description || ''}
+                                                                    onChange={(e) => {
+                                                                        const updatedPartners = [...values.partners];
+                                                                        updatedPartners[index] = {
+                                                                            ...updatedPartners[index],
+                                                                            description: e.target.value
+                                                                        };
+                                                                        setValues(prev => ({ ...prev, partners: updatedPartners }));
+                                                                    }}
+                                                                    placeholder={t('initiatives.create.partnerDescriptionPlaceholder')}
+                                                                    rows={3}
+                                                                />
+                                                            </div>
+
+                                                            {/* Partner Visibility */}
+                                                            <div className="initiative-form-group-partner">
+                                                                <label className="initiative-checkbox-label">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={partner.visible !== false}
+                                                                        onChange={(e) => {
+                                                                            const updatedPartners = [...values.partners];
+                                                                            updatedPartners[index] = {
+                                                                                ...updatedPartners[index],
+                                                                                visible: e.target.checked
+                                                                            };
+                                                                            setValues(prev => ({ ...prev, partners: updatedPartners }));
+                                                                        }}
+                                                                    />
+                                                                    <span>{t('initiatives.create.showPartnerPublicly')}</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* 💰 SPONSORS SECTION */}
+                                    <div className="initiative-sponsors-section">
+                                        <div className="initiative-dynamic-section-header">
+                                            <h3>💰 {t('initiatives.create.sponsors')}</h3>
+                                            <button
+                                                type="button"
+                                                className="btn-initiative accent"
+                                                onClick={addSponsor}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                {t('initiatives.create.addSponsor')}
+                                            </button>
+                                        </div>
+
+                                        {values.sponsors?.length === 0 ? (
+                                            <div className="initiative-empty-sponsors">
+                                                <div className="initiative-empty-state">
+                                                    <FontAwesomeIcon icon={faTrophy} className="initiative-empty-icon" />
+                                                    <p>{t('initiatives.create.noSponsorsAdded')}</p>
+                                                    <p className="initiative-empty-description">{t('initiatives.create.sponsorsDescription')}</p>
+                                                    <button
+                                                        type="button"
+                                                        className="btn-initiative primary"
+                                                        onClick={addSponsor}
+                                                    >
+                                                        <FontAwesomeIcon icon={faPlus} />
+                                                        {t('initiatives.create.addFirstSponsor')}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="initiative-sponsors-list">
+                                                {values.sponsors.map((sponsor, index) => (
+                                                    <div key={sponsor.id || index} className="initiative-sponsor-card">
+                                                        <div className="initiative-sponsor-card-header">
+                                                            <div className="initiative-sponsor-number">
+                                                                <FontAwesomeIcon icon={faTrophy} />
+                                                                {t('initiatives.create.sponsorNumber', { number: index + 1 })}
+                                                            </div>
+                                                            <div className="initiative-sponsor-actions">
+                                                                <button
+                                                                    type="button"
+                                                                    className="initiative-move-btn"
+                                                                    onClick={() => {
+                                                                        if (index > 0) {
+                                                                            const newSponsors = [...values.sponsors];
+                                                                            [newSponsors[index], newSponsors[index - 1]] =
+                                                                                [newSponsors[index - 1], newSponsors[index]];
+                                                                            setValues(prev => ({ ...prev, sponsors: newSponsors }));
+                                                                        }
+                                                                    }}
+                                                                    disabled={index === 0}
+                                                                    title={t('initiatives.create.moveUp')}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faChevronUp} />
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    className="initiative-move-btn"
+                                                                    onClick={() => {
+                                                                        if (index < values.sponsors.length - 1) {
+                                                                            const newSponsors = [...values.sponsors];
+                                                                            [newSponsors[index], newSponsors[index + 1]] =
+                                                                                [newSponsors[index + 1], newSponsors[index]];
+                                                                            setValues(prev => ({ ...prev, sponsors: newSponsors }));
+                                                                        }
+                                                                    }}
+                                                                    disabled={index === values.sponsors.length - 1}
+                                                                    title={t('initiatives.create.moveDown')}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faChevronDown} />
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    className="initiative-remove-btn"
+                                                                    onClick={() => removeSponsor(index)}
+                                                                    title={t('initiatives.create.removeSponsor')}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faTrash} />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="initiative-sponsor-card-content">
+                                                            <div className="initiative-sponsor-form-grid">
+                                                                {/* Sponsor Logo */}
+                                                                <div className="initiative-sponsor-logo-section">
+                                                                    <label>{t('initiatives.create.sponsorLogo')}</label>
+                                                                    {sponsor.logo ? (
+                                                                        <div className="initiative-sponsor-logo-preview">
+                                                                            <img src={sponsor.logo} alt={sponsor.name || 'Sponsor logo'} />
+                                                                            <div className="initiative-logo-overlay">
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className="initiative-change-logo-btn"
+                                                                                    onClick={() => {
+                                                                                        const fileInput = document.createElement('input');
+                                                                                        fileInput.type = 'file';
+                                                                                        fileInput.accept = 'image/*';
+                                                                                        fileInput.onchange = (e) => {
+                                                                                            if (e.target.files[0]) {
+                                                                                                handleSponsorLogoUpload(e.target.files[0], index);
+                                                                                            }
+                                                                                        };
+                                                                                        fileInput.click();
+                                                                                    }}
+                                                                                >
+                                                                                    <FontAwesomeIcon icon={faEdit} />
+                                                                                </button>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className="initiative-remove-logo-btn"
+                                                                                    onClick={() => {
+                                                                                        const updatedSponsors = [...values.sponsors];
+                                                                                        updatedSponsors[index] = {
+                                                                                            ...updatedSponsors[index],
+                                                                                            logo: null
+                                                                                        };
+                                                                                        setValues(prev => ({ ...prev, sponsors: updatedSponsors }));
+                                                                                    }}
+                                                                                >
+                                                                                    <FontAwesomeIcon icon={faTimes} />
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="initiative-sponsor-logo-upload">
+                                                                            <label className="initiative-upload-placeholder">
+                                                                                <FontAwesomeIcon icon={faCloudUploadAlt} />
+                                                                                <span>{t('initiatives.create.uploadLogo')}</span>
+                                                                                <input
+                                                                                    type="file"
+                                                                                    accept="image/*"
+                                                                                    onChange={(e) => {
+                                                                                        if (e.target.files[0]) {
+                                                                                            handleSponsorLogoUpload(e.target.files[0], index);
+                                                                                        }
+                                                                                    }}
+                                                                                    style={{ display: 'none' }}
+                                                                                />
+                                                                            </label>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Sponsor Details */}
+                                                                <div className="initiative-sponsor-details-section">
+                                                                    {/* Sponsor Name */}
+                                                                    <div className="initiative-form-group-sponsor">
+                                                                        <label>
+                                                                            {t('initiatives.create.sponsorName')}
+                                                                            <span className="required-indicator">*</span>
+                                                                        </label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={sponsor.name || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedSponsors = [...values.sponsors];
+                                                                                updatedSponsors[index] = {
+                                                                                    ...updatedSponsors[index],
+                                                                                    name: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, sponsors: updatedSponsors }));
+                                                                            }}
+                                                                            placeholder={t('initiatives.create.sponsorNamePlaceholder')}
+                                                                            className={errors[`sponsors[${index}].name`] ? 'error' : ''}
+                                                                        />
+                                                                        {errors[`sponsors[${index}].name`] && (
+                                                                            <div className="error-message">{errors[`sponsors[${index}].name`]}</div>
+                                                                        )}
+                                                                    </div>
+
+                                                                    {/* Sponsorship Amount */}
+                                                                    <div className="initiative-form-group-sponsor">
+                                                                        <label>{t('initiatives.create.sponsorshipAmount')}</label>
+                                                                        <div className="initiative-amount-input-group">
+                                                                            <input
+                                                                                type="number"
+                                                                                value={sponsor.amount || ''}
+                                                                                onChange={(e) => {
+                                                                                    const updatedSponsors = [...values.sponsors];
+                                                                                    updatedSponsors[index] = {
+                                                                                        ...updatedSponsors[index],
+                                                                                        amount: e.target.value
+                                                                                    };
+                                                                                    setValues(prev => ({ ...prev, sponsors: updatedSponsors }));
+                                                                                }}
+                                                                                placeholder="0"
+                                                                                min="0"
+                                                                                step="100"
+                                                                            />
+                                                                            <select
+                                                                                value={sponsor.currency || 'BGN'}
+                                                                                onChange={(e) => {
+                                                                                    const updatedSponsors = [...values.sponsors];
+                                                                                    updatedSponsors[index] = {
+                                                                                        ...updatedSponsors[index],
+                                                                                        currency: e.target.value
+                                                                                    };
+                                                                                    setValues(prev => ({ ...prev, sponsors: updatedSponsors }));
+                                                                                }}
+                                                                            >
+                                                                                <option value="BGN">BGN</option>
+                                                                                <option value="EUR">EUR</option>
+                                                                                <option value="USD">USD</option>
+                                                                                <option value="GBP">GBP</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* Sponsorship Type */}
+                                                                    <div className="initiative-form-group-sponsor">
+                                                                        <label>{t('initiatives.create.sponsorshipType')}</label>
+                                                                        <select
+                                                                            value={sponsor.type || 'Financial'}
+                                                                            onChange={(e) => {
+                                                                                const updatedSponsors = [...values.sponsors];
+                                                                                updatedSponsors[index] = {
+                                                                                    ...updatedSponsors[index],
+                                                                                    type: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, sponsors: updatedSponsors }));
+                                                                            }}
+                                                                        >
+                                                                            <option value="Financial">{t('initiatives.sponsorTypes.financial')}</option>
+                                                                            <option value="Technology">{t('initiatives.sponsorTypes.technology')}</option>
+                                                                            <option value="Media">{t('initiatives.sponsorTypes.media')}</option>
+                                                                            <option value="Equipment">{t('initiatives.sponsorTypes.equipment')}</option>
+                                                                            <option value="Services">{t('initiatives.sponsorTypes.services')}</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    {/* Sponsor Website */}
+                                                                    <div className="initiative-form-group-sponsor">
+                                                                        <label>{t('initiatives.create.website')}</label>
+                                                                        <input
+                                                                            type="url"
+                                                                            value={sponsor.website || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedSponsors = [...values.sponsors];
+                                                                                updatedSponsors[index] = {
+                                                                                    ...updatedSponsors[index],
+                                                                                    website: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, sponsors: updatedSponsors }));
+                                                                            }}
+                                                                            placeholder={t('initiatives.create.sponsorWebsitePlaceholder')}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Sponsor Visibility */}
+                                                            <div className="initiative-form-group-sponsor">
+                                                                <label className="initiative-checkbox-label">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={sponsor.visible !== false}
+                                                                        onChange={(e) => {
+                                                                            const updatedSponsors = [...values.sponsors];
+                                                                            updatedSponsors[index] = {
+                                                                                ...updatedSponsors[index],
+                                                                                visible: e.target.checked
+                                                                            };
+                                                                            setValues(prev => ({ ...prev, sponsors: updatedSponsors }));
+                                                                        }}
+                                                                    />
+                                                                    <span>{t('initiatives.create.showSponsorPublicly')}</span>
+                                                                    <small>({t('initiatives.create.uncheckForAnonymous')})</small>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* 📊 BUDGET BREAKDOWN */}
+                                    {(values.expectedBudget || values.sponsors?.length > 0) && (
+                                        <div className="initiative-budget-breakdown-section">
+                                            <h3>📊 {t('initiatives.create.budgetBreakdown')}</h3>
+                                            <div className="initiative-budget-summary">
+                                                <div className="initiative-budget-item">
+                                                    <span className="initiative-budget-label">{t('initiatives.create.plannedBudget')}:</span>
+                                                    <span className="initiative-budget-amount">
+                                                        {values.expectedBudget ?
+                                                            `${parseInt(values.expectedBudget).toLocaleString()} ${values.currency}` :
+                                                            t('initiatives.create.notDetermined')}
+                                                    </span>
+                                                </div>
+
+                                                {values.sponsors?.length > 0 && (
+                                                    <>
+                                                        <div className="initiative-budget-item">
+                                                            <span className="initiative-budget-label">{t('initiatives.create.totalSponsorships')}:</span>
+                                                            <span className="initiative-budget-amount">
+                                                                {(() => {
+                                                                    const totalSponsorships = values.sponsors
+                                                                        .filter(s => s.amount && s.currency === values.currency)
+                                                                        .reduce((sum, s) => sum + parseInt(s.amount || 0), 0);
+                                                                    return `${totalSponsorships.toLocaleString()} ${values.currency}`;
+                                                                })()}
+                                                            </span>
+                                                        </div>
+
+                                                        <div className="initiative-sponsors-breakdown">
+                                                            <h4>{t('initiatives.create.sponsorDetails')}:</h4>
+                                                            {values.sponsors
+                                                                .filter(s => s.amount && s.name)
+                                                                .map((sponsor, index) => (
+                                                                    <div key={index} className="initiative-sponsor-breakdown-item">
+                                                                        <span className="initiative-sponsor-name">{sponsor.name}</span>
+                                                                        <span className="initiative-sponsor-amount">
+                                                                            {parseInt(sponsor.amount).toLocaleString()} {sponsor.currency || 'BGN'}
+                                                                        </span>
+                                                                        <span className="initiative-sponsor-type-badge">{sponsor.type}</span>
+                                                                    </div>
+                                                                ))}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
+                            </div>
+                        )}
+                        {/* 🎯 SECTION 6: MEDIA & VISUALS */}
+                        {activeSection === 'media' && (
+                            <div className="form-section-card">
+                                <div className="form-section-header">
+                                    <h2 className="form-section-title">
+                                        <FontAwesomeIcon icon={faImage} />
+                                        {t('initiatives.create.media')}
+                                    </h2>
+                                </div>
+                                <div className="form-section-content">
+
+                                    {/* 🖼️ INITIATIVE LOGO */}
+                                    <div className="initiative-logo-section">
+                                        <div className="media-section-header">
+                                            <h3>🖼️ {t('initiatives.create.initiativeLogo')}</h3>
+                                            <p className="media-section-description">{t('initiatives.create.initiativeLogoDescription')}</p>
+                                        </div>
+
+                                        <div className="initiative-logo-upload-container">
+                                            {values.logo ? (
+                                                <div className="initiative-logo-preview">
+                                                    <div className="logo-preview-header">
+                                                        <span className="logo-preview-title">{t('initiatives.create.currentLogo')}</span>
+                                                        <button
+                                                            type="button"
+                                                            className="logo-remove-btn"
+                                                            onClick={removeLogo}
+                                                            title={t('initiatives.create.removeLogo')}
+                                                        >
+                                                            <FontAwesomeIcon icon={faTimes} />
+                                                        </button>
+                                                    </div>
+                                                    <img src={values.logo} alt="Initiative logo" />
+                                                    <div className="logo-info">
+                                                        <small>{t('initiatives.create.logoRecommendation')}</small>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="initiative-logo-upload">
+                                                    <label className="logo-upload-placeholder">
+                                                        <FontAwesomeIcon icon={faCloudUploadAlt} />
+                                                        <span>{t('initiatives.create.uploadLogo')}</span>
+                                                        <small>{t('initiatives.create.logoFormats')}</small>
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onChange={handleLogoUpload}
+                                                            style={{ display: 'none' }}
+                                                        />
+                                                    </label>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* 📄 DOWNLOAD MATERIALS */}
+                                    <div className="download-materials-section">
+                                        <div className="media-section-header">
+                                            <h3>📄 {t('initiatives.create.downloadMaterials')}</h3>
+                                            <p className="media-section-description">{t('initiatives.create.downloadMaterialsDescription')}</p>
+                                            <button
+                                                type="button"
+                                                className="btn-initiative accent"
+                                                onClick={() => document.getElementById('document-upload').click()}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                {t('initiatives.create.addDocuments')}
+                                            </button>
+                                            <input
+                                                id="document-upload"
+                                                type="file"
+                                                accept=".pdf,.doc,.docx,.ppt,.pptx"
+                                                multiple
+                                                onChange={handleDocumentUpload}
+                                                style={{ display: 'none' }}
+                                            />
+                                        </div>
+
+                                        {values.downloadMaterials?.length === 0 ? (
+                                            <div className="empty-download-materials">
+                                                <div className="empty-state">
+                                                    <FontAwesomeIcon icon={faFileAlt} className="empty-icon" />
+                                                    <p>{t('initiatives.create.noDocuments')}</p>
+                                                    <p className="empty-description">{t('initiatives.create.documentsHint')}</p>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="download-materials-list">
+                                                {values.downloadMaterials.map((document, index) => (
+                                                    <div key={index} className="document-item">
+                                                        {editingDocument === index ? (
+                                                            // 📝 EDIT MODE
+                                                            <div className="document-edit-mode">
+                                                                <div className="document-icon">
+                                                                    <FontAwesomeIcon icon={getFileIcon(document.fileType)} />
+                                                                </div>
+                                                                <div className="document-edit-fields">
+                                                                    <input
+                                                                        type="text"
+                                                                        value={document.title}
+                                                                        onChange={(e) => updateDocumentField(index, 'title', e.target.value)}
+                                                                        placeholder="Document title"
+                                                                        className="document-edit-input"
+                                                                    />
+                                                                    <textarea
+                                                                        value={document.description}
+                                                                        onChange={(e) => updateDocumentField(index, 'description', e.target.value)}
+                                                                        placeholder="Document description"
+                                                                        rows={2}
+                                                                        className="document-edit-textarea"
+                                                                    />
+                                                                    <input
+                                                                        type="text"
+                                                                        value={document.image.alt}
+                                                                        onChange={(e) => updateDocumentField(index, 'image.alt', e.target.value)}
+                                                                        placeholder="Alt text"
+                                                                        className="document-edit-input"
+                                                                    />
+                                                                </div>
+                                                                <div className="document-edit-actions">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="document-save-btn"
+                                                                        onClick={() => setEditingDocument(null)}
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faSave} />
+                                                                    </button>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="document-cancel-btn"
+                                                                        onClick={() => setEditingDocument(null)}
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faTimes} />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            // 👁️ VIEW MODE (същото като сега)
+                                                            <>
+                                                                <div className="document-icon">
+                                                                    <FontAwesomeIcon icon={getFileIcon(document.fileType)} />
+                                                                </div>
+                                                                <div className="document-details">
+                                                                    <div className="document-name">
+                                                                        <button
+                                                                            onClick={() => handleDocumentDownload(document)}
+                                                                            className="document-download-btn"
+                                                                            type="button"
+                                                                        >
+                                                                            {document.title || document.originalName}
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="document-meta">
+                                                                        {document.fileType.toUpperCase()} • {document.fileSize}
+                                                                    </div>
+                                                                    {document.description && (
+                                                                        <div className="document-description">
+                                                                            {document.description}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                <div className="document-actions">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="document-edit-btn"
+                                                                        onClick={() => window.open(document.downloadUrl, '_blank')}
+                                                                        title="Отвори документа"
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faEye} />
+                                                                    </button>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="document-remove-btn"
+                                                                        onClick={() => removeDownloadMaterial(index)}
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faTrash} />
+                                                                    </button>
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* 🖼️ ADDITIONAL GALLERY */}
+                                    <div className="additional-gallery-section">
+                                        <div className="media-section-header">
+                                            <h3>🖼️ {t('initiatives.create.additionalGallery')}</h3>
+                                            <p className="media-section-description">{t('initiatives.create.additionalGalleryDescription')}</p>
+                                        </div>
+
+                                        <div className="additional-gallery-upload">
+                                            <div className="gallery-upload-methods">
+                                                <div className="gallery-upload-method">
+                                                    <label className="gallery-upload-btn">
+                                                        <FontAwesomeIcon icon={faUpload} />
+                                                        {values.gallery?.length > 0 ? t('initiatives.create.addMoreImages') : t('initiatives.create.uploadImages')}
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            multiple
+                                                            onChange={handleGalleryUpload}
+                                                            style={{ display: 'none' }}
+                                                        />
+                                                    </label>
+                                                </div>
+
+                                                {values.gallery?.length > 0 && (
+                                                    <div className="gallery-upload-method">
+                                                        <button
+                                                            type="button"
+                                                            className="gallery-clear-btn"
+                                                            onClick={clearGallery}
+                                                        >
+                                                            <FontAwesomeIcon icon={faTimes} />
+                                                            {t('initiatives.create.clearGallery')}
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {values.gallery && values.gallery.length > 0 && (
+                                                <div className="additional-gallery-preview">
+                                                    <h5>{t('initiatives.create.galleryImages')} ({values.gallery.length})</h5>
+                                                    <div className="additional-gallery-grid">
+                                                        {values.gallery.map((image, index) => (
+                                                            <div key={index} className="gallery-item">
+                                                                <img src={image.src} alt={image.alt || `Gallery image ${index + 1}`} />
+                                                                <div className="gallery-item-controls">
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder={t('initiatives.create.imageAlt')}
+                                                                        value={image.alt || ''}
+                                                                        onChange={(e) => updateGalleryImageAlt(index, e.target.value)}
+                                                                        className="gallery-input"
+                                                                    />
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder={t('initiatives.create.imageCaption')}
+                                                                        value={image.caption || ''}
+                                                                        onChange={(e) => updateGalleryImageCaption(index, e.target.value)}
+                                                                        className="gallery-input"
+                                                                    />
+                                                                    <button
+                                                                        type="button"
+                                                                        className="gallery-remove-btn"
+                                                                        onClick={() => removeGalleryImage(index)}
+                                                                        title={t('initiatives.create.removeImage')}
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faTrash} />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        )}
+                        {/* 🎯 SECTION 7: CONTACTS & LINKS */}
+                        {activeSection === 'contacts' && (
+                            <div className="form-section-card">
+                                <div className="form-section-header">
+                                    <h2 className="form-section-title">
+                                        <FontAwesomeIcon icon={faAddressCard} />
+                                        {t('initiatives.create.contacts')}
+                                    </h2>
+                                </div>
+                                <div className="form-section-content">
+                                    {/* 👨‍💼 ГЛАВЕН КОНТАКТ */}
+                                    <div className="initiative-main-contact-section">
+                                        <div className="initiative-contacts-section-header">
+                                            <h3>👨‍💼 {t('initiatives.create.mainContactGlobal')}</h3>
+                                            <p className="initiative-section-description">{t('initiatives.create.mainContactDescription')}</p>
+                                        </div>
+
+                                        <div className="initiative-main-contact-form-grid">
+                                            {/* Contact Image */}
+                                            <div className="initiative-form-group-contact-image">
+                                                <label>{t('initiatives.create.contactImage')}</label>
+                                                <div className="contact-image-upload">
+                                                    {values.contact?.image ? (
+                                                        <div className="contact-image-preview">
+                                                            <img src={values.contact.image} alt={values.contact.name || 'Contact'} />
+                                                            <button type="button" onClick={removeContactImage}>
+                                                                <FontAwesomeIcon icon={faTimes} />
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <label className="contact-image-upload-placeholder">
+                                                            <FontAwesomeIcon icon={faUser} />
+                                                            <span>Качи снимка</span>
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                onChange={handleContactImageUpload}
+                                                                style={{ display: 'none' }}
+                                                            />
+                                                        </label>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="initiative-contact-details">
+                                                {/* Name */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>
+                                                        {t('initiatives.create.contactName')}
+                                                        <span className="required-indicator">*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={values.contact?.name || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                contact: {
+                                                                    ...prev.contact,
+                                                                    name: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder={t('initiatives.create.contactNamePlaceholder')}
+                                                        className={errors['contact.name'] ? 'error' : ''}
+                                                    />
+                                                </div>
+
+                                                {/* Position */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>{t('initiatives.create.contactPosition')}</label>
+                                                    <input
+                                                        type="text"
+                                                        value={values.contact?.position || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                contact: {
+                                                                    ...prev.contact,
+                                                                    position: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder={t('initiatives.create.contactPositionPlaceholder')}
+                                                    />
+                                                </div>
+
+                                                {/* Email */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>
+                                                        {t('initiatives.create.contactEmail')}
+                                                        <span className="required-indicator">*</span>
+                                                    </label>
+                                                    <input
+                                                        type="email"
+                                                        value={values.contact?.email || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                contact: {
+                                                                    ...prev.contact,
+                                                                    email: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder={t('initiatives.create.contactEmailPlaceholder')}
+                                                    />
+                                                </div>
+
+                                                {/* Phone */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>{t('initiatives.create.contactPhone')}</label>
+                                                    <input
+                                                        type="tel"
+                                                        value={values.contact?.phone || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                contact: {
+                                                                    ...prev.contact,
+                                                                    phone: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder={t('initiatives.create.contactPhonePlaceholder')}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* 👤 RESPONSIBLE PERSON */}
+                                    <div className="initiative-responsible-section">
+                                        <div className="initiative-contacts-section-header">
+                                            <h3>👤 {t('initiatives.create.responsiblePerson')}</h3>
+                                            <p className="initiative-section-description">{t('initiatives.create.responsiblePersonDescription')}</p>
+                                        </div>
+
+                                        <div className="initiative-responsible-form-grid">
+                                            {/* Name */}
+                                            <div className="initiative-form-group-contact">
+                                                <label>
+                                                    {t('initiatives.create.fullName')}
+                                                    <span className="required-indicator">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={values.responsible?.name || ''}
+                                                    onChange={(e) => {
+                                                        setValues(prev => ({
+                                                            ...prev,
+                                                            responsible: {
+                                                                ...prev.responsible,
+                                                                name: e.target.value
+                                                            }
+                                                        }));
+                                                    }}
+                                                    placeholder={t('initiatives.create.fullNamePlaceholder')}
+                                                    className={errors['responsible.name'] ? 'error' : ''}
+                                                />
+                                                {errors['responsible.name'] && (
+                                                    <div className="error-message">{errors['responsible.name']}</div>
+                                                )}
+                                            </div>
+
+                                            {/* Position */}
+                                            <div className="initiative-form-group-contact">
+                                                <label>{t('initiatives.create.position')}</label>
+                                                <input
+                                                    type="text"
+                                                    value={values.responsible?.position || ''}
+                                                    onChange={(e) => {
+                                                        setValues(prev => ({
+                                                            ...prev,
+                                                            responsible: {
+                                                                ...prev.responsible,
+                                                                position: e.target.value
+                                                            }
+                                                        }));
+                                                    }}
+                                                    placeholder={t('initiatives.create.positionPlaceholder')}
+                                                />
+                                            </div>
+
+                                            {/* Email */}
+                                            <div className="initiative-form-group-contact">
+                                                <label>
+                                                    {t('initiatives.create.email')}
+                                                    <span className="required-indicator">*</span>
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    value={values.responsible?.email || ''}
+                                                    onChange={(e) => {
+                                                        setValues(prev => ({
+                                                            ...prev,
+                                                            responsible: {
+                                                                ...prev.responsible,
+                                                                email: e.target.value
+                                                            }
+                                                        }));
+                                                    }}
+                                                    placeholder={t('initiatives.create.emailPlaceholder')}
+                                                    className={errors['responsible.email'] ? 'error' : ''}
+                                                />
+                                                {errors['responsible.email'] && (
+                                                    <div className="error-message">{errors['responsible.email']}</div>
+                                                )}
+                                            </div>
+
+                                            {/* Phone */}
+                                            <div className="initiative-form-group-contact">
+                                                <label>{t('initiatives.create.phone')}</label>
+                                                <input
+                                                    type="tel"
+                                                    value={values.responsible?.phone || ''}
+                                                    onChange={(e) => {
+                                                        setValues(prev => ({
+                                                            ...prev,
+                                                            responsible: {
+                                                                ...prev.responsible,
+                                                                phone: e.target.value
+                                                            }
+                                                        }));
+                                                    }}
+                                                    placeholder={t('initiatives.create.phonePlaceholder')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 🏢 ORGANIZATION */}
+                                    <div className="initiative-organization-section">
+                                        <div className="initiative-contacts-section-header">
+                                            <h3>🏢 {t('initiatives.create.organization')}</h3>
+                                            <p className="initiative-section-description">{t('initiatives.create.organizationDescription')}</p>
+                                        </div>
+
+                                        <div className="initiative-organization-form-grid">
+                                            {/* Organization Name */}
+                                            <div className="initiative-form-group-contact">
+                                                <label>
+                                                    {t('initiatives.create.organizationName')}
+                                                    <span className="required-indicator">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={values.organization?.name || ''}
+                                                    onChange={(e) => {
+                                                        setValues(prev => ({
+                                                            ...prev,
+                                                            organization: {
+                                                                ...prev.organization,
+                                                                name: e.target.value
+                                                            }
+                                                        }));
+                                                    }}
+                                                    placeholder={t('initiatives.create.organizationNamePlaceholder')}
+                                                    className={errors['organization.name'] ? 'error' : ''}
+                                                />
+                                                {errors['organization.name'] && (
+                                                    <div className="error-message">{errors['organization.name']}</div>
+                                                )}
+                                            </div>
+
+                                            {/* Organization Website */}
+                                            <div className="initiative-form-group-contact">
+                                                <label>{t('initiatives.create.organizationWebsite')}</label>
+                                                <input
+                                                    type="url"
+                                                    value={values.organization?.website || ''}
+                                                    onChange={(e) => {
+                                                        setValues(prev => ({
+                                                            ...prev,
+                                                            organization: {
+                                                                ...prev.organization,
+                                                                website: e.target.value
+                                                            }
+                                                        }));
+                                                    }}
+                                                    placeholder={t('initiatives.create.organizationWebsitePlaceholder')}
+                                                    className={errors['organization.website'] ? 'error' : ''}
+                                                />
+                                                {errors['organization.website'] && (
+                                                    <div className="error-message">{errors['organization.website']}</div>
+                                                )}
+                                            </div>
+
+                                            {/* Organization Address - Full Width */}
+                                            <div className="initiative-form-group-contact initiative-contact-full-width">
+                                                <label>{t('initiatives.create.organizationAddress')}</label>
+                                                <textarea
+                                                    value={values.organization?.address || ''}
+                                                    onChange={(e) => {
+                                                        setValues(prev => ({
+                                                            ...prev,
+                                                            organization: {
+                                                                ...prev.organization,
+                                                                address: e.target.value
+                                                            }
+                                                        }));
+                                                    }}
+                                                    placeholder={t('initiatives.create.organizationAddressPlaceholder')}
+                                                    rows={3}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 📱 SOCIAL MEDIA */}
+                                    <div className="initiative-social-media-section">
+                                        <div className="initiative-contacts-section-header">
+                                            <h3>📱 {t('initiatives.create.socialMedia')}</h3>
+                                            <p className="initiative-section-description">{t('initiatives.create.socialMediaDescription')}</p>
+                                        </div>
+
+                                        <div className="initiative-social-media-grid">
+                                            {/* Facebook */}
+                                            <div className="initiative-social-media-item">
+                                                <div className="initiative-social-media-icon facebook">
+                                                    <FontAwesomeIcon icon={['fab', 'facebook-f']} />
+                                                </div>
+                                                <div className="initiative-form-group-social">
+                                                    <label>Facebook</label>
+                                                    <input
+                                                        type="url"
+                                                        value={values.socialMedia?.facebook || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                socialMedia: {
+                                                                    ...prev.socialMedia,
+                                                                    facebook: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="https://facebook.com/yourpage"
+                                                        className={errors['socialMedia.facebook'] ? 'error' : ''}
+                                                    />
+                                                    {errors['socialMedia.facebook'] && (
+                                                        <div className="error-message">{errors['socialMedia.facebook']}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Instagram */}
+                                            <div className="initiative-social-media-item">
+                                                <div className="initiative-social-media-icon instagram">
+                                                    <FontAwesomeIcon icon={['fab', 'instagram']} />
+                                                </div>
+                                                <div className="initiative-form-group-social">
+                                                    <label>Instagram</label>
+                                                    <input
+                                                        type="url"
+                                                        value={values.socialMedia?.instagram || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                socialMedia: {
+                                                                    ...prev.socialMedia,
+                                                                    instagram: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="https://instagram.com/yourprofile"
+                                                        className={errors['socialMedia.instagram'] ? 'error' : ''}
+                                                    />
+                                                    {errors['socialMedia.instagram'] && (
+                                                        <div className="error-message">{errors['socialMedia.instagram']}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* LinkedIn */}
+                                            <div className="initiative-social-media-item">
+                                                <div className="initiative-social-media-icon linkedin">
+                                                    <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
+                                                </div>
+                                                <div className="initiative-form-group-social">
+                                                    <label>LinkedIn</label>
+                                                    <input
+                                                        type="url"
+                                                        value={values.socialMedia?.linkedin || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                socialMedia: {
+                                                                    ...prev.socialMedia,
+                                                                    linkedin: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="https://linkedin.com/company/yourcompany"
+                                                        className={errors['socialMedia.linkedin'] ? 'error' : ''}
+                                                    />
+                                                    {errors['socialMedia.linkedin'] && (
+                                                        <div className="error-message">{errors['socialMedia.linkedin']}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Twitter */}
+                                            <div className="initiative-social-media-item">
+                                                <div className="initiative-social-media-icon twitter">
+                                                    <FontAwesomeIcon icon={['fab', 'twitter']} />
+                                                </div>
+                                                <div className="initiative-form-group-social">
+                                                    <label>Twitter</label>
+                                                    <input
+                                                        type="url"
+                                                        value={values.socialMedia?.twitter || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                socialMedia: {
+                                                                    ...prev.socialMedia,
+                                                                    twitter: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="https://twitter.com/yourhandle"
+                                                        className={errors['socialMedia.twitter'] ? 'error' : ''}
+                                                    />
+                                                    {errors['socialMedia.twitter'] && (
+                                                        <div className="error-message">{errors['socialMedia.twitter']}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 📞 ADDITIONAL CONTACTS */}
+                                    <div className="initiative-additional-contacts-section">
+                                        <div className="initiative-contacts-section-header">
+                                            <h3>📞 {t('initiatives.create.additionalContacts')}</h3>
+                                            <p className="initiative-section-description">{t('initiatives.create.additionalContactsDescription')}</p>
+                                            <button
+                                                type="button"
+                                                className="btn-initiative accent"
+                                                onClick={() => {
+                                                    setValues(prev => ({
+                                                        ...prev,
+                                                        additionalContacts: [
+                                                            ...(prev.additionalContacts || []),
+                                                            { id: generateId(), name: '', position: '', email: '', phone: '' }
+                                                        ]
+                                                    }));
+                                                }}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                {t('initiatives.create.addContact')}
+                                            </button>
+                                        </div>
+
+                                        {values.additionalContacts?.length === 0 ? (
+                                            <div className="initiative-empty-additional-contacts">
+                                                <div className="initiative-empty-state">
+                                                    <FontAwesomeIcon icon={faUsers} className="initiative-empty-icon" />
+                                                    <p>{t('initiatives.create.noAdditionalContacts')}</p>
+                                                    <p className="initiative-empty-description">{t('initiatives.create.additionalContactsHint')}</p>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="initiative-additional-contacts-list">
+                                                {values.additionalContacts.map((contact, index) => (
+                                                    <div key={contact.id || index} className="initiative-additional-contact-card">
+                                                        <div className="initiative-additional-contact-header">
+                                                            <div className="initiative-contact-number">
+                                                                <FontAwesomeIcon icon={faUsers} />
+                                                                {t('initiatives.create.contactNumber', { number: index + 1 })}
+                                                            </div>
+                                                            <button
+                                                                type="button"
+                                                                className="initiative-remove-contact-btn"
+                                                                onClick={() => {
+                                                                    setValues(prev => ({
+                                                                        ...prev,
+                                                                        additionalContacts: prev.additionalContacts.filter((_, i) => i !== index)
+                                                                    }));
+                                                                }}
+                                                                title={t('initiatives.create.removeContact')}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTrash} />
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="initiative-additional-contact-content">
+                                                            <div className="initiative-additional-contact-grid">
+                                                                {/* Contact Name */}
+                                                                <div className="initiative-form-group-additional-contact">
+                                                                    <label>
+                                                                        {t('initiatives.create.contactName')}
+                                                                        <span className="required-indicator">*</span>
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={contact.name || ''}
+                                                                        onChange={(e) => {
+                                                                            const updatedContacts = [...values.additionalContacts];
+                                                                            updatedContacts[index] = {
+                                                                                ...updatedContacts[index],
+                                                                                name: e.target.value
+                                                                            };
+                                                                            setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                        }}
+                                                                        placeholder={t('initiatives.create.contactNamePlaceholder')}
+                                                                        className={errors[`additionalContacts[${index}].name`] ? 'error' : ''}
+                                                                    />
+                                                                    {errors[`additionalContacts[${index}].name`] && (
+                                                                        <div className="error-message">{errors[`additionalContacts[${index}].name`]}</div>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Contact Position */}
+                                                                <div className="initiative-form-group-additional-contact">
+                                                                    <label>{t('initiatives.create.contactPosition')}</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={contact.position || ''}
+                                                                        onChange={(e) => {
+                                                                            const updatedContacts = [...values.additionalContacts];
+                                                                            updatedContacts[index] = {
+                                                                                ...updatedContacts[index],
+                                                                                position: e.target.value
+                                                                            };
+                                                                            setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                        }}
+                                                                        placeholder={t('initiatives.create.contactPositionPlaceholder')}
+                                                                    />
+                                                                </div>
+
+                                                                {/* Contact Email */}
+                                                                <div className="initiative-form-group-additional-contact">
+                                                                    <label>
+                                                                        {t('initiatives.create.contactEmail')}
+                                                                        <span className="required-indicator">*</span>
+                                                                    </label>
+                                                                    <input
+                                                                        type="email"
+                                                                        value={contact.email || ''}
+                                                                        onChange={(e) => {
+                                                                            const updatedContacts = [...values.additionalContacts];
+                                                                            updatedContacts[index] = {
+                                                                                ...updatedContacts[index],
+                                                                                email: e.target.value
+                                                                            };
+                                                                            setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                        }}
+                                                                        placeholder={t('initiatives.create.contactEmailPlaceholder')}
+                                                                        className={errors[`additionalContacts[${index}].email`] ? 'error' : ''}
+                                                                    />
+                                                                    {errors[`additionalContacts[${index}].email`] && (
+                                                                        <div className="error-message">{errors[`additionalContacts[${index}].email`]}</div>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Contact Phone */}
+                                                                <div className="initiative-form-group-additional-contact">
+                                                                    <label>{t('initiatives.create.contactPhone')}</label>
+                                                                    <input
+                                                                        type="tel"
+                                                                        value={contact.phone || ''}
+                                                                        onChange={(e) => {
+                                                                            const updatedContacts = [...values.additionalContacts];
+                                                                            updatedContacts[index] = {
+                                                                                ...updatedContacts[index],
+                                                                                phone: e.target.value
+                                                                            };
+                                                                            setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                        }}
+                                                                        placeholder={t('initiatives.create.contactPhonePlaceholder')}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* 📋 CONTACTS SUMMARY */}
+                                    {(values.responsible?.name || values.organization?.name || values.additionalContacts?.length > 0) && (
+                                        <div className="initiative-contacts-summary-section">
+                                            <h3>📋 {t('initiatives.create.contactsSummary')}</h3>
+                                            <div className="initiative-contacts-summary">
+                                                {/* Main Contact */}
+                                                {values.responsible?.name && (
+                                                    <div className="initiative-contact-summary-item main">
+                                                        <div className="initiative-contact-summary-header">
+                                                            <FontAwesomeIcon icon={faAddressCard} />
+                                                            <span>{t('initiatives.create.mainContact')}</span>
+                                                        </div>
+                                                        <div className="initiative-contact-summary-details">
+                                                            <div className="initiative-contact-name">{values.responsible.name}</div>
+                                                            {values.responsible.position && (
+                                                                <div className="initiative-contact-position">{values.responsible.position}</div>
+                                                            )}
+                                                            {values.responsible.email && (
+                                                                <div className="initiative-contact-email">
+                                                                    <FontAwesomeIcon icon={faEnvelope} />
+                                                                    <a href={`mailto:${values.responsible.email}`}>{values.responsible.email}</a>
+                                                                </div>
+                                                            )}
+                                                            {values.responsible.phone && (
+                                                                <div className="initiative-contact-phone">
+                                                                    <FontAwesomeIcon icon={faPhone} />
+                                                                    <a href={`tel:${values.responsible.phone}`}>{values.responsible.phone}</a>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Organization */}
+                                                {values.organization?.name && (
+                                                    <div className="initiative-contact-summary-item organization">
+                                                        <div className="initiative-contact-summary-header">
+                                                            <FontAwesomeIcon icon={faBuilding} />
+                                                            <span>{t('initiatives.create.organization')}</span>
+                                                        </div>
+                                                        <div className="initiative-contact-summary-details">
+                                                            <div className="initiative-contact-name">{values.organization.name}</div>
+                                                            {values.organization.website && (
+                                                                <div className="initiative-contact-website">
+                                                                    <FontAwesomeIcon icon={faLink} />
+                                                                    <a href={values.organization.website} target="_blank" rel="noopener noreferrer">
+                                                                        {values.organization.website}
+                                                                    </a>
+                                                                </div>
+                                                            )}
+                                                            {values.organization.address && (
+                                                                <div className="initiative-contact-address">
+                                                                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                                                    <span>{values.organization.address}</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Social Media Links */}
+                                                {Object.values(values.socialMedia || {}).some(link => link) && (
+                                                    <div className="initiative-contact-summary-item social">
+                                                        <div className="initiative-contact-summary-header">
+                                                            <FontAwesomeIcon icon={faShare} />
+                                                            <span>{t('initiatives.create.socialMediaLinks')}</span>
+                                                        </div>
+                                                        <div className="initiative-social-summary-links">
+                                                            {values.socialMedia?.facebook && (
+                                                                <a href={values.socialMedia.facebook} target="_blank" rel="noopener noreferrer" className="social-link facebook">
+                                                                    <FontAwesomeIcon icon={['fab', 'facebook-f']} />
+                                                                </a>
+                                                            )}
+                                                            {values.socialMedia?.instagram && (
+                                                                <a href={values.socialMedia.instagram} target="_blank" rel="noopener noreferrer" className="social-link instagram">
+                                                                    <FontAwesomeIcon icon={['fab', 'instagram']} />
+                                                                </a>
+                                                            )}
+                                                            {values.socialMedia?.linkedin && (
+                                                                <a href={values.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" className="social-link linkedin">
+                                                                    <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
+                                                                </a>
+                                                            )}
+                                                            {values.socialMedia?.twitter && (
+                                                                <a href={values.socialMedia.twitter} target="_blank" rel="noopener noreferrer" className="social-link twitter">
+                                                                    <FontAwesomeIcon icon={['fab', 'twitter']} />
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
+                            </div>
+                        )}
+                        {/* 🎯 SECTION 8: PROGRESS & RESULTS */}
+                        {activeSection === 'progress-results' && (
+                            <div className="form-section-card">
+                                <div className="form-section-header">
+                                    <h2 className="form-section-title">
+                                        <FontAwesomeIcon icon={faTrophy} />
+                                        {t('initiatives.create.progressResults')}
+                                    </h2>
+                                </div>
+                                <div className="form-section-content">
+
+                                    {/* 📊 KPIs SECTION */}
+                                    <div className="kpis-section">
+                                        <div className="dynamic-section-header">
+                                            <h3>📊 {t('initiatives.create.kpis')}</h3>
+                                            <button
+                                                type="button"
+                                                className="btn-initiative accent"
+                                                onClick={addKPI}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                {t('initiatives.create.addKpi')}
+                                            </button>
+                                        </div>
+
+                                        {values.kpis.length === 0 ? (
+                                            <div className="empty-kpis">
+                                                <p>{t('initiatives.create.noKpisAdded')}</p>
+                                                <button
+                                                    type="button"
+                                                    className="btn-initiative primary"
+                                                    onClick={addKPI}
+                                                >
+                                                    <FontAwesomeIcon icon={faPlus} />
+                                                    {t('initiatives.create.addFirstKpi')}
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="kpis-list">
+                                                {values.kpis.map((kpi, index) => (
+                                                    <div key={index} className="kpi-item">
+                                                        <div className="kpi-header">
+                                                            <h5>{t('initiatives.create.kpiNumber', { number: index + 1 })}</h5>
+                                                            <button
+                                                                type="button"
+                                                                className="remove-kpi-btn"
+                                                                onClick={() => removeKPI(index)}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTrash} />
+                                                                {t('initiatives.create.removeKpi')}
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="kpi-fields">
+                                                            <div className="kpi-name-field">
+                                                                <label>{t('initiatives.create.kpiName')}</label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={kpi.name}
+                                                                    onChange={(e) => {
+                                                                        const updatedKPIs = [...values.kpis];
+                                                                        updatedKPIs[index].name = e.target.value;
+                                                                        setValues(prev => ({ ...prev, kpis: updatedKPIs }));
+                                                                    }}
+                                                                    placeholder={t('initiatives.create.kpiNamePlaceholder')}
+                                                                />
+                                                            </div>
+
+                                                            <div className="kpi-target-field">
+                                                                <label>{t('initiatives.create.kpiTarget')}</label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={kpi.target}
+                                                                    onChange={(e) => {
+                                                                        const updatedKPIs = [...values.kpis];
+                                                                        updatedKPIs[index].target = e.target.value;
+                                                                        setValues(prev => ({ ...prev, kpis: updatedKPIs }));
+                                                                    }}
+                                                                    placeholder={t('initiatives.create.kpiTargetPlaceholder')}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* 🎯 EXPECTED RESULTS */}
+                                    <div className="expected-results-section">
+                                        <h3>🎯 {t('initiatives.create.expectedResults')}</h3>
+                                        <div className={`slate-editor-container ${errors.expectedResults ? 'error' : ''}`}>
+                                            <Slate
+                                                editor={expectedResultsEditor}
+                                                initialValue={values.expectedResults}
+                                                onChange={handleSlateChange('expectedResults')}
+                                            >
+                                                {renderSlateToolbar(expectedResultsEditor)}
+                                                <Editable
+                                                    className="slate-editable"
+                                                    placeholder={t('initiatives.create.expectedResultsPlaceholder')}
+                                                    renderElement={renderElement}
+                                                    renderLeaf={renderLeaf}
+                                                />
+                                            </Slate>
+                                        </div>
+                                        {errors.expectedResults && <div className="error-message">{errors.expectedResults}</div>}
+                                    </div>
+
+                                    {/* 📈 PROGRESS REPORT */}
+                                    <div className="progress-report-section">
+                                        <h3>📈 {t('initiatives.create.progressReport')}</h3>
+                                        <div className={`slate-editor-container ${errors.progressReport ? 'error' : ''}`}>
+                                            <Slate
+                                                editor={progressReportEditor}
+                                                initialValue={values.progressReport}
+                                                onChange={handleSlateChange('progressReport')}
+                                            >
+                                                {renderSlateToolbar(progressReportEditor)}
+                                                <Editable
+                                                    className="slate-editable"
+                                                    placeholder={t('initiatives.create.progressReportPlaceholder')}
+                                                    renderElement={renderElement}
+                                                    renderLeaf={renderLeaf}
+                                                />
+                                            </Slate>
+                                        </div>
+                                        {errors.progressReport && <div className="error-message">{errors.progressReport}</div>}
+                                    </div>
+
+                                </div>
+                            </div>
+                        )}
+                        {/* 🎯 SECTION 9: ADDITIONAL INFO */}
+                        {activeSection === 'additional' && (
+                            <div className="form-section-card">
+                                <div className="form-section-header">
+                                    <h2 className="form-section-title">
+                                        <FontAwesomeIcon icon={faTag} />
+                                        {t('initiatives.create.additional')}
+                                    </h2>
+                                </div>
+                                <div className="form-section-content">
+
+                                    {/* 🏷️ TAGS SECTION */}
+                                    <div className="tags-section">
+                                        <h3>🏷️ {t('initiatives.create.tags')}</h3>
+
+                                        <div className="tag-input-container">
+                                            <input
+                                                type="text"
+                                                value={newTag}
+                                                onChange={(e) => setNewTag(e.target.value)}
+                                                onKeyPress={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        e.preventDefault();
+                                                        if (newTag.trim()) {
+                                                            addTag(newTag.trim());
+                                                            setNewTag('');
+                                                        }
+                                                    }
+                                                }}
+                                                placeholder={t('initiatives.create.tagPlaceholder')}
+                                                className="tag-input"
+                                            />
+                                            <button
+                                                type="button"
+                                                className="add-tag-btn"
+                                                onClick={() => {
+                                                    if (newTag.trim()) {
+                                                        addTag(newTag.trim());
+                                                        setNewTag('');
+                                                    }
+                                                }}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                {t('initiatives.create.addTag')}
+                                            </button>
+                                        </div>
+
+                                        {values.tags.length > 0 && (
+                                            <div className="tags-display">
+                                                <div className="tags-list">
+                                                    {values.tags.map((tag, index) => (
+                                                        <div key={index} className="tag-item">
+                                                            <span className="tag-text">{tag}</span>
+                                                            <button
+                                                                type="button"
+                                                                className="remove-tag-btn"
+                                                                onClick={() => removeTag(index)}
+                                                                title={t('initiatives.create.removeTag')}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTimes} />
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="tags-info">
+                                                    <small>{t('initiatives.create.tagsCount', { count: values.tags.length })}</small>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* 🔗 RELATED INITIATIVES */}
+                                    <div className="related-initiatives-section">
+                                        <h3>🔗 {t('initiatives.create.relatedInitiatives')}</h3>
+                                        <p className="section-description">
+                                            {t('initiatives.create.relatedInitiativesDescription')}
+                                        </p>
+
+                                        <div className="related-input-container">
+                                            <input
+                                                type="text"
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                onKeyPress={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        e.preventDefault();
+                                                        handleSearchInitiatives();
+                                                    }
+                                                }}
+                                                placeholder={t('initiatives.create.searchInitiatives')}
+                                                className="related-search-input"
+                                            />
+                                            <button
+                                                type="button"
+                                                className="search-initiatives-btn"
+                                                onClick={handleSearchInitiatives}
+                                                disabled={isSearching}
+                                            >
+                                                <FontAwesomeIcon icon={faSearch} />
+                                                {isSearching ? t('initiatives.create.searching') : t('initiatives.create.search')}
+                                            </button>
+                                        </div>
+
+                                        {/* 🆕 SEARCH RESULTS */}
+                                        {searchResults.length > 0 && (
+                                            <div className="search-results">
+                                                <h5>{t('initiatives.create.searchResults', { count: searchResults.length })}</h5>
+                                                <div className="search-results-list">
+                                                    {searchResults.map((initiative) => (
+                                                        <div key={initiative.id} className="search-result-item">
+                                                            <div className="search-result-info">
+                                                                <div className="search-result-title">{initiative.title}</div>
+                                                                <div className="search-result-category">{initiative.category}</div>
+                                                            </div>
+                                                            <button
+                                                                type="button"
+                                                                className="add-related-btn"
+                                                                onClick={() => {
+                                                                    // Добавяме в related initiatives
+                                                                    if (!values.relatedInitiatives.includes(initiative.id)) {
+                                                                        setValues(prev => ({
+                                                                            ...prev,
+                                                                            relatedInitiatives: [...prev.relatedInitiatives, initiative.id]
+                                                                        }));
+                                                                        notify('success', t('initiatives.create.initiativeAdded', { title: initiative.title }));
+                                                                    } else {
+                                                                        notify('warning', t('initiatives.create.initiativeAlreadyAdded'));
+                                                                    }
+                                                                }}
+                                                                disabled={values.relatedInitiatives.includes(initiative.id)}
+                                                            >
+                                                                {values.relatedInitiatives.includes(initiative.id) ?
+                                                                    t('initiatives.create.added') :
+                                                                    t('initiatives.create.add')
+                                                                }
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* SELECTED RELATED INITIATIVES */}
+                                        {values.relatedInitiatives.length > 0 && (
+                                            <div className="related-initiatives-list">
+                                                <h5>{t('initiatives.create.selectedRelatedInitiatives', { count: values.relatedInitiatives.length })}</h5>
+                                                {values.relatedInitiatives.map((initiativeId, index) => {
+                                                    // Намираме инициативата по ID
+                                                    const initiative = searchResults.find(init => init.id === initiativeId) ||
+                                                        { id: initiativeId, title: `Initiative #${initiativeId}` };
+
+                                                    return (
+                                                        <div key={index} className="related-initiative-item">
+                                                            <span>{initiative.title}</span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setValues(prev => ({
+                                                                        ...prev,
+                                                                        relatedInitiatives: prev.relatedInitiatives.filter((_, i) => i !== index)
+                                                                    }));
+                                                                }}
+                                                                title={t('initiatives.create.removeRelated')}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTimes} />
+                                                            </button>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* ❓ FAQ SECTION */}
+                                    <div className="faq-section">
+                                        <div className="dynamic-section-header">
+                                            <h3>❓ {t('initiatives.create.faq')}</h3>
+                                            <button
+                                                type="button"
+                                                className="btn-initiative accent"
+                                                onClick={addFAQ}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                {t('initiatives.create.addFAQ')}
+                                            </button>
+                                        </div>
+
+                                        {values.faq.length === 0 ? (
+                                            <div className="empty-faq">
+                                                <div className="empty-state">
+                                                    <FontAwesomeIcon icon={faQuestionCircle} className="empty-icon" />
+                                                    <p>{t('initiatives.create.noFAQAdded')}</p>
+                                                    <p className="empty-description">{t('initiatives.create.faqDescription')}</p>
+                                                    <button
+                                                        type="button"
+                                                        className="btn-initiative primary"
+                                                        onClick={addFAQ}
+                                                    >
+                                                        <FontAwesomeIcon icon={faPlus} />
+                                                        {t('initiatives.create.addFirstFAQ')}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="faq-list">
+                                                {values.faq.map((faqItem, index) => (
+                                                    <div key={index} className="faq-item">
+                                                        <div className="faq-header">
+                                                            <h5>{t('initiatives.create.faqNumber', { number: index + 1 })}</h5>
+                                                            <button
+                                                                type="button"
+                                                                className="remove-faq-btn"
+                                                                onClick={() => removeFAQ(index)}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTrash} />
+                                                                {t('initiatives.create.removeFAQ')}
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="faq-fields">
+                                                            <div className="faq-question-field">
+                                                                <label>{t('initiatives.create.question')}</label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={faqItem.question}
+                                                                    onChange={(e) => {
+                                                                        const updatedFAQ = [...values.faq];
+                                                                        updatedFAQ[index].question = e.target.value;
+                                                                        setValues(prev => ({ ...prev, faq: updatedFAQ }));
+                                                                    }}
+                                                                    placeholder={t('initiatives.create.questionPlaceholder')}
+                                                                />
+                                                            </div>
+
+                                                            <div className="faq-answer-field">
+                                                                <label>{t('initiatives.create.answer')}</label>
+                                                                <textarea
+                                                                    value={faqItem.answer}
+                                                                    onChange={(e) => {
+                                                                        const updatedFAQ = [...values.faq];
+                                                                        updatedFAQ[index].answer = e.target.value;
+                                                                        setValues(prev => ({ ...prev, faq: updatedFAQ }));
+                                                                    }}
+                                                                    placeholder={t('initiatives.create.answerPlaceholder')}
+                                                                    rows={3}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                </div>
+                            </div>
+                        )}
                         {/* Navigation buttons */}
                         <div className="form-navigation">
                             <button
@@ -1469,10 +3886,19 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                 <button
                     type="button"
                     className="floating-btn preview"
-                    onClick={() => setPreviewMode(true)}
+                    onClick={handlePreview}
                     title={t('initiatives.create.preview')}
                 >
                     <FontAwesomeIcon icon={faEye} />
+                </button>
+                <button
+                    type="button"
+                    className="floating-btn create"
+                    onClick={onSubmit}
+                    title="Създай инициатива"
+                    disabled={isUploading}
+                >
+                    <FontAwesomeIcon icon={faCheckCircle} />
                 </button>
             </div>
 

@@ -6,6 +6,8 @@ import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 
+// 🎯 SLATE.JS УТИЛИТИ (за сложни полета)
+
 // Създаване на Slate редактор
 export const createSlateEditor = () => {
   return withHistory(withReact(createEditor()));
