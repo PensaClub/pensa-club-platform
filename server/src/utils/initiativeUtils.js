@@ -121,7 +121,7 @@ const initiativeConfig = [
         model: sponsor,
         as: 'sponsors',
         required: false,
-        attributes: ['id', 'name', 'website', 'amount', 'currency', 'sponsorshipType', 'isVisible'],
+        attributes: ['id', 'name', 'website', 'amount', 'currency', 'type', 'visible'],
         include: [
             {
                 model: image,
@@ -135,7 +135,7 @@ const initiativeConfig = [
         model: partner,
         as: 'partners',
         required: false,
-        attributes: ['id', 'name', 'website', 'description', 'partnershipType', 'isVisible'],
+        attributes: ['id', 'name', 'website', 'description', 'type', 'visible'],
         include: [
             {
                 model: image,

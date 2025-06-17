@@ -49,15 +49,13 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            partnershipType: {
+            type: {
                 type: DataTypes.STRING,
                 allowNull: true,
-                field: 'partnership_type',
             },
-            isVisible: {
+            visible: {
                 type: DataTypes.BOOLEAN,
                 allowNull: true,
-                field: 'is_visible',
             },
             partnerableId: {
                 type: DataTypes.INTEGER,

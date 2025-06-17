@@ -49,15 +49,13 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            sponsorshipType: {
+            type: {
                 type: DataTypes.STRING,
                 allowNull: true,
-                field: 'sponsorship_type',
             },
-            isVisible: {
+            visible: {
                 type: DataTypes.BOOLEAN,
                 allowNull: true,
-                field: 'is_visible',
             },
             website: {
                 type: DataTypes.STRING,

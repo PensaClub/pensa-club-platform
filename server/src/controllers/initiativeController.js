@@ -330,7 +330,7 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             if (req.body.sponsors?.length > 0) {
                 await Promise.all(
                     req.body.sponsors.map(async (sponsorData) => {
-                        const { logo: sponsorLogo, ...sponsorFields } = sponsorData;
+                        const { id: sponsorId, logo: sponsorLogo, ...sponsorFields } = sponsorData;
                         const createdSponsor = await sponsor.create(
                             {
                                 ...sponsorFields,
@@ -341,9 +341,10 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                         );
 
                         if (sponsorLogo) {
+                            const { id: sponsorLogoId, ...logoData } = sponsorLogo;
                             await image.create(
                                 {
-                                    ...sponsorLogo,
+                                    ...logoData,
                                     imageableId: createdSponsor.id,
                                     imageLinkConnection: 'sponsor',
                                 },
@@ -358,7 +359,7 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             if (req.body.partners?.length > 0) {
                 await Promise.all(
                     req.body.partners.map(async (partnerData) => {
-                        const { logo: partnerLogo, ...partnerFields } = partnerData;
+                        const { id: partnerId, logo: partnerLogo, ...partnerFields } = partnerData;
                         const createdPartner = await partner.create(
                             {
                                 ...partnerFields,
@@ -369,9 +370,10 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                         );
 
                         if (partnerLogo) {
+                            const { id: partnerLogoId, ...logoData } = partnerLogo;
                             await image.create(
                                 {
-                                    ...partnerLogo,
+                                    ...logoData,
                                     imageableId: createdPartner.id,
                                     imageLinkConnection: 'partner',
                                 },
@@ -500,7 +502,6 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 });
             }
 
-            // Update initiative basic info - Sequelize will only update changed fields
             await foundInitiative.update(req.body, { transaction: t });
 
             // Update main image and gallery if provided
@@ -676,7 +677,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 if (req.body.sponsors.length > 0) {
                     await Promise.all(
                         req.body.sponsors.map(async (sponsorData) => {
-                            const { logo: sponsorLogo, ...sponsorFields } = sponsorData;
+                            const { id: sponsorId, logo: sponsorLogo, ...sponsorFields } = sponsorData;
                             const createdSponsor = await sponsor.create(
                                 {
                                     ...sponsorFields,
@@ -687,9 +688,10 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                             );
 
                             if (sponsorLogo) {
+                                const { id: sponsorLogoId, ...logoData } = sponsorLogo;
                                 await image.create(
                                     {
-                                        ...sponsorLogo,
+                                        ...logoData,
                                         imageableId: createdSponsor.id,
                                         imageLinkConnection: 'sponsor',
                                     },
@@ -713,7 +715,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 if (req.body.partners.length > 0) {
                     await Promise.all(
                         req.body.partners.map(async (partnerData) => {
-                            const { logo: partnerLogo, ...partnerFields } = partnerData;
+                            const { id: partnerId, logo: partnerLogo, ...partnerFields } = partnerData;
                             const createdPartner = await partner.create(
                                 {
                                     ...partnerFields,
@@ -724,9 +726,10 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                             );
 
                             if (partnerLogo) {
+                                const { id: partnerLogoId, ...logoData } = partnerLogo;
                                 await image.create(
                                     {
-                                        ...partnerLogo,
+                                        ...logoData,
                                         imageableId: createdPartner.id,
                                         imageLinkConnection: 'partner',
                                     },

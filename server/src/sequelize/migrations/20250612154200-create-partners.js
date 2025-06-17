@@ -21,11 +21,11 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            partnership_type: {
+            type: {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            is_visible: {
+            visible: {
                 type: Sequelize.BOOLEAN,
                 allowNull: true,
             },
