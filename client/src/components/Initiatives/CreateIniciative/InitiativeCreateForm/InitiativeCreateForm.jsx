@@ -49,6 +49,7 @@ import { calculateInitiativeProgress, getProgressBreakdown } from '../Utils/form
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LocalStorageStatus } from '../LocalStorageStatus/LocalStorageStatus';
+import SlateErrorBoundary from '../SlateErrorBoundary/SlateErrorBoundary';
 
 const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
 
@@ -134,7 +135,8 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     const [sectionImageUrls, setSectionImageUrls] = useState({}); // 🆕
     // 🎨 Slate editors - правилно създаване
     const detailedDescriptionEditor = useMemo(() => createSlateEditor(), []);
-    const expectedResultsEditor = useMemo(() => createSlateEditor(), []);
+const expectedResultsEditor = useMemo(() => createSlateEditor(), []);
+
     const progressReportEditor = useMemo(() => createSlateEditor(), []);
     // 🔧 ПОПРАВЕНО: Създаване на редактори за секциите
     const sectionEditorsRef = useRef({});
@@ -337,16 +339,20 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     };
 
     // 🎯 Slate.js toolbar функции
-    const toggleMark = (editor, format) => {
+const toggleMark = (editor, format) => {
+    try {
         const isActive = isMarkActive(editor, format);
         if (isActive) {
             Editor.removeMark(editor, format);
         } else {
             Editor.addMark(editor, format, true);
         }
-    };
-
-    const toggleBlock = (editor, format) => {
+    } catch (error) {
+        console.error('Error toggling mark:', error);
+    }
+};
+ const toggleBlock = (editor, format) => {
+    try {
         const isActive = isBlockActive(editor, format);
         const isList = ['numbered-list', 'bulleted-list'].includes(format);
 
@@ -358,20 +364,30 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         const newProperties = {
             type: isActive ? 'paragraph' : isList ? 'list-item' : format,
         };
+        
         Transforms.setNodes(editor, newProperties);
 
         if (!isActive && isList) {
             const block = { type: format, children: [] };
             Transforms.wrapNodes(editor, block);
         }
-    };
+    } catch (error) {
+        console.error('Error toggling block:', error);
+    }
+};
 
-    const isMarkActive = (editor, format) => {
+  const isMarkActive = (editor, format) => {
+    try {
         const marks = Editor.marks(editor);
         return marks ? marks[format] === true : false;
-    };
+    } catch (error) {
+        console.warn('Error getting marks:', error);
+        return false;
+    }
+};
 
     const isBlockActive = (editor, format) => {
+    try {
         const { selection } = editor;
         if (!selection) return false;
 
@@ -383,7 +399,11 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         );
 
         return !!match;
-    };
+    } catch (error) {
+        console.warn('Error checking block active:', error);
+        return false;
+    }
+};
 
     // 🎯 Render Slate toolbar
     const renderSlateToolbar = (editor) => (
@@ -857,7 +877,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                     onClearDraft={handleClearDraft}
                     onLoadDraft={handleLoadDraft}
                     onIgnore={handleIgnorePrompt}
-                    autoLoaded={true} // 🆕 Указваме, че данните са auto-loaded
+                    autoLoaded={true} 
                 />
             )}
             {/* 📊 Progress Bar */}
@@ -1952,7 +1972,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                         ) : (
                                             <div className="initiative-partners-list">
                                                 {values.partners.map((partner, index) => (
-                                                    <div key={partner.id || index} className="initiative-partner-card">
+                                                    <div key={partner.titleSlug || `partner-${index}`} className="initiative-partner-card">
                                                         <div className="initiative-partner-card-header">
                                                             <div className="initiative-partner-number">
                                                                 <FontAwesomeIcon icon={faHandshake} />
@@ -3541,11 +3561,11 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                         <h3>🎯 {t('initiatives.create.expectedResults')}</h3>
                                         <div className={`slate-editor-container ${errors.expectedResults ? 'error' : ''}`}>
                                             <Slate
-                                                editor={expectedResultsEditor}
+                                                editor={expectedResultsEditor  }
                                                 initialValue={values.expectedResults}
                                                 onChange={handleSlateChange('expectedResults')}
                                             >
-                                                {renderSlateToolbar(expectedResultsEditor)}
+                                                {renderSlateToolbar(expectedResultsEditor  )}
                                                 <Editable
                                                     className="slate-editable"
                                                     placeholder={t('initiatives.create.expectedResultsPlaceholder')}
@@ -3561,6 +3581,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                     <div className="progress-report-section">
                                         <h3>📈 {t('initiatives.create.progressReport')}</h3>
                                         <div className={`slate-editor-container ${errors.progressReport ? 'error' : ''}`}>
+                                            <SlateErrorBoundary>
                                             <Slate
                                                 editor={progressReportEditor}
                                                 initialValue={values.progressReport}
@@ -3572,8 +3593,10 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                                     placeholder={t('initiatives.create.progressReportPlaceholder')}
                                                     renderElement={renderElement}
                                                     renderLeaf={renderLeaf}
+                                                    
                                                 />
                                             </Slate>
+                                            </SlateErrorBoundary>
                                         </div>
                                         {errors.progressReport && <div className="error-message">{errors.progressReport}</div>}
                                     </div>

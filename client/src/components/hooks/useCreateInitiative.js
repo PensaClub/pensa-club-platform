@@ -44,7 +44,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const { userEmail } = useAuthContext();
     const STORAGE_KEY = 'initiative_draft';
     const STORAGE_TIMESTAMP_KEY = 'initiative_draft_timestamp';
-     const [hasLocalStorageDraft, setHasLocalStorageDraft] = useState(false);
+    const [hasLocalStorageDraft, setHasLocalStorageDraft] = useState(false);
     const [localStorageTimestamp, setLocalStorageTimestamp] = useState(null);
     // DEFAULT VALUES - със правилните редактори и ВСИЧКИ структури
     const defaultValues = useMemo(() => ({
@@ -120,9 +120,9 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
         // Допълнителни
         tags: [],
-        relatedInitiatives: [], 
-        faq: [] ,
-         gallery: []
+        relatedInitiatives: [],
+        faq: [],
+        gallery: []
     }), []);
 
     const [values, setValues] = useState(initialValues || defaultValues);
@@ -157,7 +157,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const generateId = useCallback(() => {
         return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     }, []);
-   const saveToLocalStorage = useCallback((data) => {
+    const saveToLocalStorage = useCallback((data) => {
         try {
             const dataToSave = {
                 ...data,
@@ -171,102 +171,102 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             notify('warning', 'Не може да се запази чернова в браузъра');
         }
     }, []);
-    
+
     // ⚡ HANDLE INPUT CHANGES
-   const onChangeHandler = useCallback((e, isEditor = false, customData = null) => {
-    let name, value;
+    const onChangeHandler = useCallback((e, isEditor = false, customData = null) => {
+        let name, value;
 
-    if (customData) {
-        name = customData.name;
-        value = customData.value;
-    } else if (isEditor) {
-        name = e;
-        value = isEditor;
-    } else {
-        name = e.target.name;
-        value = e.target.type === 'checkbox'
-            ? (e.target.checked
-                ? [...(values[name] || []), e.target.value]
-                : (values[name] || []).filter(item => item !== e.target.value)
-            )
-            : e.target.value;
-    }
+        if (customData) {
+            name = customData.name;
+            value = customData.value;
+        } else if (isEditor) {
+            name = e;
+            value = isEditor;
+        } else {
+            name = e.target.name;
+            value = e.target.type === 'checkbox'
+                ? (e.target.checked
+                    ? [...(values[name] || []), e.target.value]
+                    : (values[name] || []).filter(item => item !== e.target.value)
+                )
+                : e.target.value;
+        }
 
-    // Auto-generate slug when title changes
-    if (name === 'title') {
-        setValues(prev => ({
-            ...prev,
-            title: value,
-            slug: generateSlug(value)
-        }));
-    } else {
-        setValues(prev => {
-            const updatedValues = { ...prev };
+        // Auto-generate slug when title changes
+        if (name === 'title') {
+            setValues(prev => ({
+                ...prev,
+                title: value,
+                slug: generateSlug(value)
+            }));
+        } else {
+            setValues(prev => {
+                const updatedValues = { ...prev };
 
-            // Handle nested objects
-            if (name.includes('.')) {
-                const keys = name.split('.');
-                let current = updatedValues;
+                // Handle nested objects
+                if (name.includes('.')) {
+                    const keys = name.split('.');
+                    let current = updatedValues;
 
-                for (let i = 0; i < keys.length - 1; i++) {
-                    if (!current[keys[i]]) {
-                        current[keys[i]] = {};
+                    for (let i = 0; i < keys.length - 1; i++) {
+                        if (!current[keys[i]]) {
+                            current[keys[i]] = {};
+                        }
+                        current = current[keys[i]];
                     }
-                    current = current[keys[i]];
+
+                    current[keys[keys.length - 1]] = value;
+                } else if (name.includes('[') && name.includes(']')) {
+                    const arrayMatch = name.match(/(\w+)\[(\d+)\]\.(\w+)/);
+                    if (arrayMatch) {
+                        const [, arrayName, index, property] = arrayMatch;
+                        const arrayIndex = parseInt(index, 10);
+
+                        if (updatedValues[arrayName] && updatedValues[arrayName][arrayIndex]) {
+                            updatedValues[arrayName][arrayIndex][property] = value;
+                        }
+                    }
+                } else {
+                    updatedValues[name] = value;
                 }
 
-                current[keys[keys.length - 1]] = value;
-            } else if (name.includes('[') && name.includes(']')) {
-                const arrayMatch = name.match(/(\w+)\[(\d+)\]\.(\w+)/);
-                if (arrayMatch) {
-                    const [, arrayName, index, property] = arrayMatch;
-                    const arrayIndex = parseInt(index, 10);
+                return updatedValues;
+            });
+        }
 
-                    if (updatedValues[arrayName] && updatedValues[arrayName][arrayIndex]) {
-                        updatedValues[arrayName][arrayIndex][property] = value;
-                    }
+        // Clear error for this field
+        if (errors[name]) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[name];
+                return newErrors;
+            });
+        }
+
+        // 🔧 ОБНОВЕН Auto-save - и localStorage и база данни
+        if (autoSaveRef.current) {
+            clearTimeout(autoSaveRef.current);
+        }
+        autoSaveRef.current = setTimeout(async () => {
+            const currentValues = { ...values, [name]: value }; // Включваме новата стойност
+
+            // 💾 Запазваме в localStorage винаги
+            saveToLocalStorage(currentValues);
+
+            // 🗄️ Опитваме да запазим и в базата данни
+            if (userEmail) {
+                try {
+                    await saveDraftInitiative({ ...currentValues, userEmail });
+                    console.log('🔄 Auto-saved to both localStorage and database');
+                } catch (error) {
+                    console.error('Auto-save to database failed:', error);
+                    console.log('🔄 Auto-saved to localStorage only');
                 }
             } else {
-                updatedValues[name] = value;
+                console.log('🔄 Auto-saved to localStorage only (no user)');
             }
-
-            return updatedValues;
-        });
-    }
-
-    // Clear error for this field
-    if (errors[name]) {
-        setErrors(prev => {
-            const newErrors = { ...prev };
-            delete newErrors[name];
-            return newErrors;
-        });
-    }
-
-    // 🔧 ОБНОВЕН Auto-save - и localStorage и база данни
-    if (autoSaveRef.current) {
-        clearTimeout(autoSaveRef.current);
-    }
-    autoSaveRef.current = setTimeout(async () => {
-        const currentValues = { ...values, [name]: value }; // Включваме новата стойност
-        
-        // 💾 Запазваме в localStorage винаги
-        saveToLocalStorage(currentValues);
-        
-        // 🗄️ Опитваме да запазим и в базата данни
-        if (userEmail) {
-            try {
-                await saveDraftInitiative({ ...currentValues, userEmail });
-                console.log('🔄 Auto-saved to both localStorage and database');
-            } catch (error) {
-                console.error('Auto-save to database failed:', error);
-                console.log('🔄 Auto-saved to localStorage only');
-            }
-        } else {
-            console.log('🔄 Auto-saved to localStorage only (no user)');
-        }
-    }, 30000);
-}, [values, errors, generateSlug, saveDraftInitiative, userEmail, saveToLocalStorage]);
+        }, 30000);
+    }, [values, errors, generateSlug, saveDraftInitiative, userEmail, saveToLocalStorage]);
 
     // 🎯 HANDLE BLUR (за валидация)
     const onBlurHandler = useCallback((e, isEditor = false, customData = null) => {
@@ -586,7 +586,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     // Partners
     const addPartner = useCallback(() => {
         const newPartner = {
-            id: generateId(),
+            titleSlug: generateId(),
             name: '',
             description: '',
             website: '',
@@ -713,8 +713,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         const newSection = {
             titleSlug: `section-${Date.now()}`,
             title: '',
-            content: createSlateEditorState(), // 🎯 Slate редактор за content
-            images: [] // { src: '', alt: '', caption: '' }
+            content: createSlateEditorState(),
+            images: []
         };
 
         setValues(prev => ({
@@ -1712,7 +1712,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         return Object.keys(newErrors).length === 0;
     }, [values]);
     // localStorage utility функции
- 
+
     const loadFromLocalStorage = useCallback(() => {
         try {
             const savedData = localStorage.getItem(STORAGE_KEY);
@@ -1750,7 +1750,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             localStorage.removeItem(STORAGE_TIMESTAMP_KEY);
             setHasLocalStorageDraft(false);
             setLocalStorageTimestamp(null);
-           
+
         } catch (error) {
             console.error('❌ Error clearing localStorage:', error);
         }
@@ -1807,7 +1807,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             const submissionData = convertFormToHtml();
             submissionData.createdAt = new Date().toISOString();
             submissionData.updatedAt = new Date().toISOString();
-
+            delete submissionData.timestamp;
             const handler = onSubmitHandler || createInitiative;
             // 🔧 ПРОМЕНЕНО: Пращаме само данните, не файловете
             await handler(submissionData);
@@ -1862,7 +1862,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         updateSection,
         addSectionImage,
         removeSectionImage,
-        
+
         // DOWNLOAD MATERIALS HANDLERS
         addDownloadMaterial,
         removeDownloadMaterial,

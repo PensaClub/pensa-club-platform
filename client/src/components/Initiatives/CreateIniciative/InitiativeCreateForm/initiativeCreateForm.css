@@ -375,7 +375,7 @@
 
 .slate-editable {
   padding: 2rem;
-  min-height: 150px;
+  max-height: none;
   outline: none;
   line-height: 1.6;
   font-size: 1rem;

@@ -15,22 +15,14 @@ export const createSlateEditor = () => {
 
 // Начална стойност за Slate
 export const createSlateEditorState = (html = '') => {
-  if (html) {
     // За сега връщаме базова структура, може да добавим HTML парсинг по-късно
     return [
       {
         type: 'paragraph',
-        children: [{ text: html.replace(/<[^>]*>/g, '') }], // Премахваме HTML таговете за сега
+        children: [{ text: '' }], // Премахваме HTML таговете за сега
       },
     ];
-  }
-  
-  return [
-    {
-      type: 'paragraph',
-      children: [{ text: '' }],
-    },
-  ];
+
 };
 
 // Конвертиране на Slate в HTML
