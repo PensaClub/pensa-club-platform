@@ -63,30 +63,30 @@ module.exports = (sequelize, DataTypes) => {
             },
             titleSlug: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'title_slug',
             },
             title: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             description: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             fileType: {
                 type: DataTypes.ENUM('pdf', 'docx'),
-                allowNull: false,
+                allowNull: true,
                 field: 'file_type',
             },
             fileSize: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'file_size',
             },
             downloadUrl: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'download_url',
             },
             downloadableId: {

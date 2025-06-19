@@ -29,6 +29,10 @@ module.exports = {
                 type: Sequelize.BOOLEAN,
                 allowNull: true,
             },
+            logo: {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            },
             partnerable_id: {
                 type: Sequelize.INTEGER,
                 allowNull: true,

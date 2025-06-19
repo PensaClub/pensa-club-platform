@@ -20,19 +20,19 @@ module.exports = {
             },
             slug: {
                 type: Sequelize.STRING,
-                allowNull: true,
+                allowNull: false,
                 unique: true,
             },
             title: {
                 type: Sequelize.STRING,
-                allowNull: true,
+                allowNull: false,
             },
             short_description: {
                 type: Sequelize.STRING,
-                allowNull: true,
+                allowNull: false,
             },
             detailed_description: {
-                type: Sequelize.JSONB,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             category: {
@@ -65,9 +65,13 @@ module.exports = {
             },
             start_date: {
                 type: Sequelize.DATE,
-                allowNull: true,
+                allowNull: false,
             },
             end_date: {
+                type: Sequelize.DATE,
+                allowNull: true,
+            },
+            timestamp: {
                 type: Sequelize.DATE,
                 allowNull: true,
             },
@@ -111,6 +115,10 @@ module.exports = {
                 type: Sequelize.JSONB,
                 allowNull: true,
             },
+            logo: {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            },
             contact_email: {
                 type: Sequelize.STRING,
                 allowNull: true,
@@ -129,11 +137,11 @@ module.exports = {
                 defaultValue: [],
             },
             expected_results: {
-                type: Sequelize.JSONB,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             progress_report: {
-                type: Sequelize.JSONB,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             impact_metrics: {

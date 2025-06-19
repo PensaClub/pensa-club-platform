@@ -18,15 +18,6 @@ module.exports = (sequelize, DataTypes) => {
                     partner_link_connection: 'project',
                 },
             });
-
-            partner.hasOne(models.image, {
-                foreignKey: 'imageableId',
-                as: 'logo',
-                constraints: false,
-                scope: {
-                    image_link_connection: 'partner',
-                },
-            });
         }
     }
     partner.init(
@@ -55,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
             },
             visible: {
                 type: DataTypes.BOOLEAN,
+                allowNull: true,
+            },
+            logo: {
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             partnerableId: {

@@ -10,16 +10,7 @@ module.exports = {
                     slug: 'pensa-club-digital-community',
                     title: 'Pensa Club - Дигитална общност за възрастни',
                     short_description: 'Иновативна платформа за създаване на общност от хора на еднаква възраст, с еднакви интереси, нови идеи и знания.',
-                    detailed_description: JSON.stringify([
-                        {
-                            type: 'paragraph',
-                            children: [
-                                {
-                                    text: 'Подробно описание на инициативата с rich text форматиране...',
-                                },
-                            ],
-                        },
-                    ]),
+                    detailed_description: '<p>Подробно описание на инициативата с rich text форматиране...</p>',
                     category: 'Дигитализация',
                     location: JSON.stringify({
                         address: 'София, България',
@@ -38,6 +29,7 @@ module.exports = {
                     priority: 'High',
                     start_date: new Date('2024-04-01'),
                     end_date: new Date('2024-12-31'),
+                    timestamp: new Date('2024-01-15T10:00:00Z'),
                     duration: '9 месеца',
                     target_age: ['Adults', 'Seniors'],
                     target_audience: ['Elderly', 'Professionals'],
@@ -50,6 +42,7 @@ module.exports = {
                         address: 'София, ул. Примерна 123',
                         website: 'https://www.pensaclub.bg',
                     }),
+                    logo: 'https://cdn-icons-png.flaticon.com/512/1968/1968641.png',
                     contact_email: 'info@pensaclub.bg',
                     contact_phone: '+359 2 123 4567',
                     social_media: JSON.stringify({
@@ -70,26 +63,8 @@ module.exports = {
                             current: '45%',
                         },
                     ]),
-                    expected_results: JSON.stringify([
-                        {
-                            type: 'paragraph',
-                            children: [
-                                {
-                                    text: 'Създаване на активна общност от над 1000 потребители...',
-                                },
-                            ],
-                        },
-                    ]),
-                    progress_report: JSON.stringify([
-                        {
-                            type: 'paragraph',
-                            children: [
-                                {
-                                    text: 'До момента сме постигнали значителен напредък...',
-                                },
-                            ],
-                        },
-                    ]),
+                    expected_results: '<p>Създаване на активна общност от над 1000 потребители...</p>',
+                    progress_report: '<p>До момента сме постигнали значителен напредък...</p>',
                     impact_metrics: JSON.stringify([
                         {
                             name: 'Подобрена дигитална грамотност',
@@ -139,18 +114,7 @@ module.exports = {
                 alt: 'Възрастни хора използват дигитални технологии в общност',
                 imageable_id: initiatives[0].id,
                 image_link_connection: 'initiative_main',
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-        ]);
-
-        // Add logo images for initiatives
-        await queryInterface.bulkInsert('images', [
-            {
-                src: 'https://cdn-icons-png.flaticon.com/512/1968/1968641.png',
-                alt: 'Pensa Club Logo',
-                imageable_id: initiatives[0].id,
-                image_link_connection: 'initiative_logo',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -211,6 +175,7 @@ module.exports = {
                 alt: 'Мисия на Pensa Club',
                 imageable_id: sections[0].id,
                 image_link_connection: 'section',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -219,6 +184,7 @@ module.exports = {
                 alt: 'За Pensa Club',
                 imageable_id: sections[1].id,
                 image_link_connection: 'section',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -227,6 +193,7 @@ module.exports = {
                 alt: 'Цели на Pensa Club',
                 imageable_id: sections[2].id,
                 image_link_connection: 'section',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -235,6 +202,7 @@ module.exports = {
                 alt: 'Алумни клуб',
                 imageable_id: sections[3].id,
                 image_link_connection: 'section',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -303,6 +271,7 @@ module.exports = {
                 alt: 'Корица на презентацията',
                 imageable_id: downloadMaterials[0].id,
                 image_link_connection: 'downloadMaterial',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -311,6 +280,7 @@ module.exports = {
                 alt: 'Документ за Алумни клуб',
                 imageable_id: downloadMaterials[1].id,
                 image_link_connection: 'downloadMaterial',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -428,6 +398,7 @@ module.exports = {
                 alt: 'Възрастни хора използват дигитални технологии в общност',
                 imageable_id: initiatives[0].id,
                 image_link_connection: 'initiative_gallery',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -436,6 +407,7 @@ module.exports = {
                 alt: 'Възрастни хора правят упражнения в парк',
                 imageable_id: initiatives[0].id,
                 image_link_connection: 'initiative_gallery',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -444,6 +416,7 @@ module.exports = {
                 alt: 'Млад човек обучава възрастен на компютър',
                 imageable_id: initiatives[0].id,
                 image_link_connection: 'initiative_gallery',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -452,6 +425,7 @@ module.exports = {
                 alt: 'Възрастни хора се обучават на компютри',
                 imageable_id: initiatives[0].id,
                 image_link_connection: 'initiative_gallery',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -460,6 +434,7 @@ module.exports = {
                 alt: 'Хора работят заедно в градина',
                 imageable_id: initiatives[0].id,
                 image_link_connection: 'initiative_gallery',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -468,6 +443,7 @@ module.exports = {
                 alt: 'Двама възрастни приятели се разхождат',
                 imageable_id: initiatives[0].id,
                 image_link_connection: 'initiative_gallery',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -476,6 +452,7 @@ module.exports = {
                 alt: 'Възрастни хора рисуват в ателие',
                 imageable_id: initiatives[0].id,
                 image_link_connection: 'initiative_gallery',
+                is_uploading: false,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -493,6 +470,7 @@ module.exports = {
                     type: 'Gold',
                     visible: true,
                     website: 'https://techsolutions.bg',
+                    logo: 'https://cdn-icons-png.flaticon.com/512/1968/1968651.png',
                     sponsorable_id: initiatives[0].id,
                     sponsor_link_connection: 'initiative',
                     created_at: new Date(),
@@ -505,6 +483,7 @@ module.exports = {
                     type: 'Silver',
                     visible: true,
                     website: 'https://digitalfuture.org',
+                    logo: 'https://cdn-icons-png.flaticon.com/512/1968/1968652.png',
                     sponsorable_id: initiatives[0].id,
                     sponsor_link_connection: 'initiative',
                     created_at: new Date(),
@@ -517,6 +496,7 @@ module.exports = {
                     type: 'Platinum',
                     visible: true,
                     website: 'https://healthplus.bg',
+                    logo: 'https://cdn-icons-png.flaticon.com/512/1968/1968653.png',
                     sponsorable_id: initiatives[0].id,
                     sponsor_link_connection: 'initiative',
                     created_at: new Date(),
@@ -537,6 +517,7 @@ module.exports = {
                     website: 'https://seniorcare.bg',
                     type: 'Strategic',
                     visible: true,
+                    logo: 'https://cdn-icons-png.flaticon.com/512/1968/1968661.png',
                     partnerable_id: initiatives[0].id,
                     partner_link_connection: 'initiative',
                     created_at: new Date(),
@@ -548,6 +529,7 @@ module.exports = {
                     website: 'https://digitalskills.academy',
                     type: 'Educational',
                     visible: true,
+                    logo: 'https://cdn-icons-png.flaticon.com/512/1968/1968662.png',
                     partnerable_id: initiatives[0].id,
                     partner_link_connection: 'initiative',
                     created_at: new Date(),
@@ -559,6 +541,7 @@ module.exports = {
                     website: 'https://wellness.sofia',
                     type: 'Healthcare',
                     visible: true,
+                    logo: 'https://cdn-icons-png.flaticon.com/512/1968/1968663.png',
                     partnerable_id: initiatives[0].id,
                     partner_link_connection: 'initiative',
                     created_at: new Date(),
@@ -567,62 +550,6 @@ module.exports = {
             ],
             { returning: true }
         );
-
-        // Add logo images for sponsors
-        await queryInterface.bulkInsert('images', [
-            {
-                src: 'https://cdn-icons-png.flaticon.com/512/1968/1968651.png',
-                alt: 'Tech Solutions Ltd Logo',
-                imageable_id: sponsors[0].id,
-                image_link_connection: 'sponsor',
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-            {
-                src: 'https://cdn-icons-png.flaticon.com/512/1968/1968652.png',
-                alt: 'Digital Future Foundation Logo',
-                imageable_id: sponsors[1].id,
-                image_link_connection: 'sponsor',
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-            {
-                src: 'https://cdn-icons-png.flaticon.com/512/1968/1968653.png',
-                alt: 'Health Plus Insurance Logo',
-                imageable_id: sponsors[2].id,
-                image_link_connection: 'sponsor',
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-        ]);
-
-        // Add logo images for partners
-        await queryInterface.bulkInsert('images', [
-            {
-                src: 'https://cdn-icons-png.flaticon.com/512/1968/1968661.png',
-                alt: 'Senior Care Association Logo',
-                imageable_id: partners[0].id,
-                image_link_connection: 'partner',
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-            {
-                src: 'https://cdn-icons-png.flaticon.com/512/1968/1968662.png',
-                alt: 'Digital Skills Academy Logo',
-                imageable_id: partners[1].id,
-                image_link_connection: 'partner',
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-            {
-                src: 'https://cdn-icons-png.flaticon.com/512/1968/1968663.png',
-                alt: 'Wellness Center Sofia Logo',
-                imageable_id: partners[2].id,
-                image_link_connection: 'partner',
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-        ]);
     },
 
     async down(queryInterface, Sequelize) {
@@ -631,6 +558,8 @@ module.exports = {
         await queryInterface.bulkDelete('images', null, {});
         await queryInterface.bulkDelete('sections', null, {});
         await queryInterface.bulkDelete('downloadMaterials', null, {});
+        await queryInterface.bulkDelete('sponsors', null, {});
+        await queryInterface.bulkDelete('partners', null, {});
         await queryInterface.bulkDelete('initiatives', null, {});
     },
 };

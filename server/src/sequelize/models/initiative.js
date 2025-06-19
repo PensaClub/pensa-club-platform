@@ -86,15 +86,6 @@ module.exports = (sequelize, DataTypes) => {
                 },
             });
 
-            initiative.hasOne(models.image, {
-                as: 'logo',
-                foreignKey: 'imageableId',
-                constraints: false,
-                scope: {
-                    image_link_connection: 'initiative_logo',
-                },
-            });
-
             initiative.hasMany(models.image, {
                 as: 'gallery',
                 foreignKey: 'imageableId',
@@ -185,20 +176,20 @@ module.exports = (sequelize, DataTypes) => {
             // Basic info
             slug: {
                 type: DataTypes.STRING,
-                allowNull: true,
+                allowNull: false,
                 unique: true,
             },
             title: {
                 type: DataTypes.STRING,
-                allowNull: true,
+                allowNull: false,
             },
             shortDescription: {
                 type: DataTypes.STRING,
-                allowNull: true,
+                allowNull: false,
                 field: 'short_description',
             },
             detailedDescription: {
-                type: DataTypes.JSONB,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'detailed_description',
             },
@@ -240,13 +231,17 @@ module.exports = (sequelize, DataTypes) => {
             // Dates and milestones
             startDate: {
                 type: DataTypes.DATE,
-                allowNull: true,
+                allowNull: false,
                 field: 'start_date',
             },
             endDate: {
                 type: DataTypes.DATE,
                 allowNull: true,
                 field: 'end_date',
+            },
+            timestamp: {
+                type: DataTypes.DATE,
+                allowNull: true,
             },
             duration: {
                 type: DataTypes.STRING,
@@ -300,6 +295,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.JSONB,
                 allowNull: true,
             },
+            logo: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+            },
             contactEmail: {
                 type: DataTypes.STRING,
                 allowNull: true,
@@ -322,12 +321,12 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: [],
             },
             expectedResults: {
-                type: DataTypes.JSONB,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'expected_results',
             },
             progressReport: {
-                type: DataTypes.JSONB,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'progress_report',
             },

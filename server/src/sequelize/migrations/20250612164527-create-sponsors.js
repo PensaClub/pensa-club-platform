@@ -29,6 +29,10 @@ module.exports = {
                 type: Sequelize.BOOLEAN,
                 allowNull: true,
             },
+            logo: {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            },
             website: {
                 type: Sequelize.STRING,
                 allowNull: true,

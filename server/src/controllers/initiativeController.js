@@ -112,6 +112,9 @@ initiativeController.get('/all', async (req, res, next) => {
 
         const totalCount = await initiative.count({
             distinct: true,
+            where: {
+                isDraft: false,
+            },
         });
 
         const totalPages = Math.ceil(totalCount / limitNumber);
@@ -120,6 +123,80 @@ initiativeController.get('/all', async (req, res, next) => {
         const offset = (actualPage - 1) * limitNumber;
 
         const initiatives = await initiative.findAll({
+            where: {
+                isDraft: false,
+            },
+            include: initiativeConfig,
+            limit: limitNumber,
+            offset: offset,
+            order: [['id', 'ASC']],
+        });
+
+        const initiativesWithComments = await Promise.all(
+            initiatives.map(async (initiative) => {
+                const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
+                const transformed = transformInitiative(initiative);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
+
+        return res.status(200).json({
+            data: initiativesWithComments,
+            pagination: {
+                page: actualPage,
+                limit: limitNumber,
+                totalInitiatives: totalCount,
+                totalPages,
+                hasNextPage: actualPage < totalPages,
+                hasPrevPage: actualPage > 1,
+            },
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+initiativeController.get('/draft', async (req, res, next) => {
+    try {
+        const { page, limit } = req.query;
+
+        const parsedPage = page ? parseInt(page) : 1;
+        const parsedLimit = limit ? parseInt(limit) : 6;
+
+        if (page && isNaN(parsedPage)) {
+            throw new customError({
+                message: 'Pagination page must be a number',
+                statusCode: 400,
+            });
+        }
+
+        if (limit && isNaN(parsedLimit)) {
+            throw new customError({
+                message: 'Pagination limit must be a number',
+                statusCode: 400,
+            });
+        }
+
+        const pageNumber = Math.max(1, parsedPage);
+        const limitNumber = Math.max(1, parsedLimit);
+
+        const totalCount = await initiative.count({
+            distinct: true,
+            where: {
+                isDraft: true,
+            },
+        });
+
+        const totalPages = Math.ceil(totalCount / limitNumber);
+
+        const actualPage = Math.min(pageNumber, totalPages);
+        const offset = (actualPage - 1) * limitNumber;
+
+        const initiatives = await initiative.findAll({
+            where: {
+                isDraft: true,
+            },
             include: initiativeConfig,
             limit: limitNumber,
             offset: offset,
@@ -244,18 +321,6 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                 }
             }
 
-            // Create logo
-            if (req.body.logo) {
-                await image.create(
-                    {
-                        ...req.body.logo,
-                        imageableId: newInitiative.id,
-                        imageLinkConnection: 'initiative_logo',
-                    },
-                    { transaction: t }
-                );
-            }
-
             // Create main contact
             if (req.body.contact) {
                 await contact.create(
@@ -302,7 +367,7 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             if (req.body.sections?.length > 0) {
                 await Promise.all(
                     req.body.sections.map(async (sectionData) => {
-                        const { image: sectionImage, ...sectionFields } = sectionData;
+                        const { images: sectionImages, ...sectionFields } = sectionData;
                         const createdSection = await section.create(
                             {
                                 ...sectionFields,
@@ -312,14 +377,18 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                             { transaction: t }
                         );
 
-                        if (sectionImage) {
-                            await image.create(
-                                {
-                                    ...sectionImage,
-                                    imageableId: createdSection.id,
-                                    imageLinkConnection: 'section',
-                                },
-                                { transaction: t }
+                        if (sectionImages && Array.isArray(sectionImages)) {
+                            await Promise.all(
+                                sectionImages.map((imageData) =>
+                                    image.create(
+                                        {
+                                            ...imageData,
+                                            imageableId: createdSection.id,
+                                            imageLinkConnection: 'section',
+                                        },
+                                        { transaction: t }
+                                    )
+                                )
                             );
                         }
                     })
@@ -330,8 +399,8 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             if (req.body.sponsors?.length > 0) {
                 await Promise.all(
                     req.body.sponsors.map(async (sponsorData) => {
-                        const { id: sponsorId, logo: sponsorLogo, ...sponsorFields } = sponsorData;
-                        const createdSponsor = await sponsor.create(
+                        const { id: sponsorId, ...sponsorFields } = sponsorData;
+                        await sponsor.create(
                             {
                                 ...sponsorFields,
                                 sponsorableId: newInitiative.id,
@@ -339,18 +408,6 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                             },
                             { transaction: t }
                         );
-
-                        if (sponsorLogo) {
-                            const { id: sponsorLogoId, ...logoData } = sponsorLogo;
-                            await image.create(
-                                {
-                                    ...logoData,
-                                    imageableId: createdSponsor.id,
-                                    imageLinkConnection: 'sponsor',
-                                },
-                                { transaction: t }
-                            );
-                        }
                     })
                 );
             }
@@ -359,8 +416,8 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
             if (req.body.partners?.length > 0) {
                 await Promise.all(
                     req.body.partners.map(async (partnerData) => {
-                        const { id: partnerId, logo: partnerLogo, ...partnerFields } = partnerData;
-                        const createdPartner = await partner.create(
+                        const { id: partnerId, ...partnerFields } = partnerData;
+                        await partner.create(
                             {
                                 ...partnerFields,
                                 partnerableId: newInitiative.id,
@@ -368,18 +425,6 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
                             },
                             { transaction: t }
                         );
-
-                        if (partnerLogo) {
-                            const { id: partnerLogoId, ...logoData } = partnerLogo;
-                            await image.create(
-                                {
-                                    ...logoData,
-                                    imageableId: createdPartner.id,
-                                    imageLinkConnection: 'partner',
-                                },
-                                { transaction: t }
-                            );
-                        }
                     })
                 );
             }
@@ -544,25 +589,6 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 }
             }
 
-            // Update logo if provided
-            if (req.body.logo) {
-                await image.destroy({
-                    where: {
-                        imageableId: foundInitiative.id,
-                        imageLinkConnection: 'initiative_logo',
-                    },
-                    transaction: t,
-                });
-                await image.create(
-                    {
-                        ...req.body.logo,
-                        imageableId: foundInitiative.id,
-                        imageLinkConnection: 'initiative_logo',
-                    },
-                    { transaction: t }
-                );
-            }
-
             // Update contact if provided
             if (req.body.contact) {
                 await contact.destroy({
@@ -640,7 +666,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 if (req.body.sections.length > 0) {
                     await Promise.all(
                         req.body.sections.map(async (sectionData) => {
-                            const { image: sectionImage, ...sectionFields } = sectionData;
+                            const { images: sectionImages, ...sectionFields } = sectionData;
                             const createdSection = await section.create(
                                 {
                                     ...sectionFields,
@@ -650,14 +676,18 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                                 { transaction: t }
                             );
 
-                            if (sectionImage) {
-                                await image.create(
-                                    {
-                                        ...sectionImage,
-                                        imageableId: createdSection.id,
-                                        imageLinkConnection: 'section',
-                                    },
-                                    { transaction: t }
+                            if (sectionImages && Array.isArray(sectionImages)) {
+                                await Promise.all(
+                                    sectionImages.map((imageData) =>
+                                        image.create(
+                                            {
+                                                ...imageData,
+                                                imageableId: createdSection.id,
+                                                imageLinkConnection: 'section',
+                                            },
+                                            { transaction: t }
+                                        )
+                                    )
                                 );
                             }
                         })
@@ -677,8 +707,8 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 if (req.body.sponsors.length > 0) {
                     await Promise.all(
                         req.body.sponsors.map(async (sponsorData) => {
-                            const { id: sponsorId, logo: sponsorLogo, ...sponsorFields } = sponsorData;
-                            const createdSponsor = await sponsor.create(
+                            const { id: sponsorId, ...sponsorFields } = sponsorData;
+                            await sponsor.create(
                                 {
                                     ...sponsorFields,
                                     sponsorableId: foundInitiative.id,
@@ -686,18 +716,6 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                                 },
                                 { transaction: t }
                             );
-
-                            if (sponsorLogo) {
-                                const { id: sponsorLogoId, ...logoData } = sponsorLogo;
-                                await image.create(
-                                    {
-                                        ...logoData,
-                                        imageableId: createdSponsor.id,
-                                        imageLinkConnection: 'sponsor',
-                                    },
-                                    { transaction: t }
-                                );
-                            }
                         })
                     );
                 }
@@ -715,8 +733,8 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 if (req.body.partners.length > 0) {
                     await Promise.all(
                         req.body.partners.map(async (partnerData) => {
-                            const { id: partnerId, logo: partnerLogo, ...partnerFields } = partnerData;
-                            const createdPartner = await partner.create(
+                            const { id: partnerId, ...partnerFields } = partnerData;
+                            await partner.create(
                                 {
                                     ...partnerFields,
                                     partnerableId: foundInitiative.id,
@@ -724,18 +742,6 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                                 },
                                 { transaction: t }
                             );
-
-                            if (partnerLogo) {
-                                const { id: partnerLogoId, ...logoData } = partnerLogo;
-                                await image.create(
-                                    {
-                                        ...logoData,
-                                        imageableId: createdPartner.id,
-                                        imageLinkConnection: 'partner',
-                                    },
-                                    { transaction: t }
-                                );
-                            }
                         })
                     );
                 }
@@ -881,7 +887,7 @@ initiativeController.delete('/:id', isAuth, async (req, res, next) => {
                 where: {
                     imageableId: foundInitiative.id,
                     imageLinkConnection: {
-                        [Op.in]: ['initiative_main', 'initiative_logo', 'initiative_gallery'],
+                        [Op.in]: ['initiative_main', 'initiative_gallery'],
                     },
                 },
                 transaction: t,

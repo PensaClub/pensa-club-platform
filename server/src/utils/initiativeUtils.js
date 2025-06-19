@@ -9,20 +9,13 @@ const initiativeConfig = [
     {
         model: image,
         as: 'mainImage',
-        required: false,
-        attributes: ['alt', 'src', 'id', 'caption'],
-    },
-    {
-        model: image,
-        as: 'logo',
-        required: false,
-        attributes: ['alt', 'src', 'id', 'caption'],
+        attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
     },
     {
         model: image,
         as: 'gallery',
         required: false,
-        attributes: ['id', 'src', 'alt', 'caption'],
+        attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
     },
     {
         model: project,
@@ -32,7 +25,7 @@ const initiativeConfig = [
             {
                 model: image,
                 as: 'mainImage',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -46,7 +39,7 @@ const initiativeConfig = [
             {
                 model: image,
                 as: 'image',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -65,7 +58,7 @@ const initiativeConfig = [
             {
                 model: image,
                 as: 'image',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -79,7 +72,7 @@ const initiativeConfig = [
             {
                 model: image,
                 as: 'image',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -112,7 +105,7 @@ const initiativeConfig = [
             {
                 model: image,
                 as: 'sectionImages',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -121,29 +114,13 @@ const initiativeConfig = [
         model: sponsor,
         as: 'sponsors',
         required: false,
-        attributes: ['id', 'name', 'website', 'amount', 'currency', 'type', 'visible'],
-        include: [
-            {
-                model: image,
-                as: 'logo',
-                attributes: ['id', 'src', 'alt', 'caption'],
-                required: false,
-            },
-        ],
+        attributes: ['id', 'name', 'website', 'amount', 'currency', 'type', 'visible', 'logo'],
     },
     {
         model: partner,
         as: 'partners',
         required: false,
-        attributes: ['id', 'name', 'website', 'description', 'type', 'visible'],
-        include: [
-            {
-                model: image,
-                as: 'logo',
-                attributes: ['id', 'src', 'alt', 'caption'],
-                required: false,
-            },
-        ],
+        attributes: ['id', 'name', 'website', 'description', 'type', 'visible', 'logo'],
     },
 ];
 
@@ -176,7 +153,7 @@ const transformInitiative = (initiative) => {
                 const { sectionImages, ...singleSection } = section;
                 return {
                     ...singleSection,
-                    image: sectionImages,
+                    images: sectionImages,
                 };
             }
             return section;

@@ -24,6 +24,13 @@ module.exports = {
                     allowNull: true,
                 });
             }
+            if (!tableDesc.is_uploading) {
+                await queryInterface.addColumn('images', 'is_uploading', {
+                    type: Sequelize.BOOLEAN,
+                    allowNull: true,
+                    defaultValue: false,
+                });
+            }
 
             if (tableDesc.sectionId) {
                 await queryInterface.sequelize.query(`
@@ -92,6 +99,7 @@ module.exports = {
 
         await queryInterface.removeColumn('images', 'imageable_id');
         await queryInterface.removeColumn('images', 'image_link_connection');
+        await queryInterface.removeColumn('images', 'is_uploading');
 
         await queryInterface.renameTable('images', 'sectionImages');
     },

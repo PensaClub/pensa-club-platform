@@ -11,27 +11,27 @@ module.exports = {
             },
             title_slug: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             title: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             description: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             file_type: {
                 type: Sequelize.ENUM('pdf', 'docx'),
-                allowNull: false,
+                allowNull: true,
             },
             file_size: {
                 type: Sequelize.DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             download_url: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             downloadable_id: {
                 type: Sequelize.INTEGER,

@@ -8,12 +8,9 @@ module.exports = (sequelize, DataTypes) => {
                 { model: 'section', connection: 'section' },
                 { model: 'downloadMaterial', connection: 'downloadMaterial' },
                 { model: 'initiative', connection: 'initiative_main' },
-                { model: 'initiative', connection: 'initiative_logo' },
                 { model: 'initiative', connection: 'initiative_gallery' },
                 { model: 'story', connection: 'story' },
                 { model: 'publication', connection: 'publication' },
-                { model: 'sponsor', connection: 'sponsor' },
-                { model: 'partner', connection: 'partner' },
                 { model: 'project', connection: 'project_main' },
                 { model: 'project', connection: 'project_logo' },
             ];
@@ -25,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
                     scope: {
                         image_link_connection: connection,
                     },
-                    indexHints: [{ type: 'USE', values: [`idx_image_${connection}`] }],
                 });
             });
         }
@@ -53,6 +49,12 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 field: 'image_link_connection',
+            },
+            isUploading: {
+                type: DataTypes.BOOLEAN,
+                allowNull: true,
+                defaultValue: false,
+                field: 'is_uploading',
             },
             id: {
                 type: DataTypes.INTEGER,
