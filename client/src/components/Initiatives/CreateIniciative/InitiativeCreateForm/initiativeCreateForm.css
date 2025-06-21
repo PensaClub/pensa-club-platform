@@ -4435,6 +4435,183 @@
 .btn-clear-location svg {
     font-size: 10px;
 }
+/* === SLATE EDITOR CONTENT СТИЛОВЕ ЗА ФОРМАТА === */
+
+/* Bold/Strong елементи */
+.initiative-create-container .slate-editable strong,
+.initiative-create-container .slate-editable b {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+}
+
+/* Italic/Em елементи */
+.initiative-create-container .slate-editable em,
+.initiative-create-container .slate-editable i {
+    font-style: italic !important;
+    color: #4a5568 !important;
+}
+
+/* Underline елементи */
+.initiative-create-container .slate-editable u {
+    text-decoration: underline !important;
+    text-decoration-color: #1B8B8A !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 2px !important;
+}
+
+/* Bulleted Lists */
+.initiative-create-container .slate-editable ul {
+    display: block !important;
+    margin: 1rem 0 !important;
+    padding-left: 2rem !important;
+    list-style-type: disc !important;
+}
+
+/* Numbered Lists */
+.initiative-create-container .slate-editable ol {
+    display: block !important;
+    margin: 1rem 0 !important;
+    padding-left: 2rem !important;
+    list-style-type: decimal !important;
+}
+
+/* List Items */
+.initiative-create-container .slate-editable li {
+    display: list-item !important;
+    margin: 0.5rem 0 !important;
+    line-height: 1.6 !important;
+    color: #2d3748 !important;
+    list-style: inherit !important;
+}
+
+/* Blockquote */
+.initiative-create-container .slate-editable blockquote {
+    display: block !important;
+    border-left: 4px solid #1B8B8A !important;
+    margin: 1.5rem 0 !important;
+    padding: 1rem 1.5rem !important;
+    background-color: #f7fafc !important;
+    font-style: italic !important;
+    color: #4a5568 !important;
+    font-size: 1.125rem !important;
+    border-radius: 0 8px 8px 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    position: relative !important;
+}
+
+.initiative-create-container .slate-editable blockquote::before {
+    content: '"' !important;
+    font-size: 3rem !important;
+    color: #1B8B8A !important;
+    line-height: 0 !important;
+    position: absolute !important;
+    top: 0.5rem !important;
+    left: 1rem !important;
+    opacity: 0.3 !important;
+}
+
+/* Nested Lists стилове */
+.initiative-create-container .slate-editable ul ul {
+    list-style-type: circle !important;
+    margin: 0.5rem 0 !important;
+}
+
+.initiative-create-container .slate-editable ul ul ul {
+    list-style-type: square !important;
+}
+
+.initiative-create-container .slate-editable ol ol {
+    list-style-type: lower-alpha !important;
+    margin: 0.5rem 0 !important;
+}
+
+.initiative-create-container .slate-editable ol ol ol {
+    list-style-type: lower-roman !important;
+}
+
+/* Комбинирани стилове */
+.initiative-create-container .slate-editable strong em,
+.initiative-create-container .slate-editable em strong {
+    font-weight: 700 !important;
+    font-style: italic !important;
+    color: #1a202c !important;
+}
+
+.initiative-create-container .slate-editable strong u,
+.initiative-create-container .slate-editable u strong {
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    text-decoration-color: #1B8B8A !important;
+}
+
+.initiative-create-container .slate-editable em u,
+.initiative-create-container .slate-editable u em {
+    font-style: italic !important;
+    text-decoration: underline !important;
+    text-decoration-color: #1B8B8A !important;
+}
+
+/* Стилове за елементи в списъци */
+.initiative-create-container .slate-editable li strong {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+}
+
+.initiative-create-container .slate-editable li em {
+    font-style: italic !important;
+    color: #4a5568 !important;
+}
+
+.initiative-create-container .slate-editable li u {
+    text-decoration: underline !important;
+    text-decoration-color: #1B8B8A !important;
+}
+
+/* Стилове за елементи в blockquote */
+.initiative-create-container .slate-editable blockquote strong {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+}
+
+.initiative-create-container .slate-editable blockquote em {
+    font-style: italic !important;
+    color: #4a5568 !important;
+}
+
+.initiative-create-container .slate-editable blockquote u {
+    text-decoration: underline !important;
+    text-decoration-color: #1B8B8A !important;
+}
+
+/* Fix за span елементи в Slate */
+.initiative-create-container .slate-editable span[data-slate-string] {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    font-weight: inherit !important;
+    font-style: inherit !important;
+    text-decoration: inherit !important;
+}
+
+/* Responsive стилове за малки екрани */
+@media (max-width: 768px) {
+    .initiative-create-container .slate-editable blockquote {
+        font-size: 1rem !important;
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .initiative-create-container .slate-editable blockquote::before {
+        font-size: 2rem !important;
+        top: 0.25rem !important;
+        left: 0.5rem !important;
+    }
+    
+    .initiative-create-container .slate-editable ul,
+    .initiative-create-container .slate-editable ol {
+        padding-left: 1.5rem !important;
+    }
+}
 
 /* 🎯 Responsive за location header */
 @media (max-width: 768px) {
