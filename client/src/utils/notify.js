@@ -1,9 +1,29 @@
+/* eslint-disable default-case */
 /* eslint-disable no-duplicate-case */
 /* eslint-disable no-fallthrough */
 import { toast } from 'react-toastify';
 import { Trans } from 'react-i18next';
 
-export const notify = (key, error) => {
+export const notify = (key, error, customMessage = null) => {
+  // 🆕 ДОБАВЕНО: Ако има customMessage, използваме него директно
+  if (customMessage) {
+    switch (key) {
+      case 'success':
+        toast.success(customMessage, { role: 'alert' });
+        return;
+      case 'error':
+        toast.error(customMessage, { role: 'alert' });
+        return;
+      case 'warning':
+        toast.warning(customMessage, { role: 'alert' });
+        return;
+      case 'info':
+        toast.info(customMessage, { role: 'alert' });
+        return;
+    }
+  }
+
+  // 🔄 ОСТАНАЛАТА ЛОГИКА ОСТАВА СЪЩАТА
   // eslint-disable-next-line default-case
   switch (key) {
     case 'success-data':

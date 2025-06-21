@@ -287,7 +287,7 @@
   background: rgba(220, 38, 38, 0.05);
 }
 
-.error-message {
+/* .error-message {
   color: var(--initiative-danger);
   font-size: 0.875rem;
   margin-top: 0.5rem;
@@ -295,12 +295,12 @@
   align-items: center;
   gap: 0.5rem;
   font-weight: 500;
-}
+} */
 
-.error-message::before {
+/* .error-message::before {
   content: "⚠️";
   font-size: 1rem;
-}
+} */
 
 /* ✅ Success States */
 .form-group-initiative.success input,
@@ -1577,6 +1577,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .initiative-progress-section {
@@ -2612,14 +2613,6 @@
   height: 16px;
 }
 
-/* ⚠️ ERROR STATES */
-.error-message {
-  color: #dc2626;
-  font-size: 12px;
-  margin-top: 4px;
-  font-weight: 500;
-}
-
 /* ✅ SUCCESS STATES */
 .initiative-contact-summary-item.filled {
   border-color: #10b981;
@@ -3438,6 +3431,75 @@
     background: #ccc;
     cursor: not-allowed;
 }
+.form-group-initiative .error {
+    border-color: var(--initiative-danger) !important;
+    box-shadow: 0 0 0 1px var(--initiative-danger) !important;
+}
+
+.error-message {
+    color: var(--initiative-danger);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.error-message::before {
+    content: "⚠️";
+    font-size: 0.75rem;
+}
+.section-error-indicator {
+    color: var(--initiative-danger);
+    font-size: 0.875rem;
+    margin-left: 0.5rem;
+}
+
+.sections-error {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #fed7d7;
+    border: 1px solid var(--initiative-danger);
+    border-radius: 0.375rem;
+}
+
+.slate-editor-container.error {
+    border-color: var(--initiative-danger) !important;
+}
+
+.slate-editor-container.error .slate-editable {
+    border-color: var(--initiative-danger) !important;
+}
+.checkbox-grid.error {
+    border: 2px solid var(--initiative-danger);
+    border-radius: 0.375rem;
+    padding: 1rem;
+    background-color: #fed7d7;
+}
+
+.budget-input-group .budget-input.error,
+.budget-input-group .currency-select.error {
+    border-color: var(--initiative-danger) !important;
+}
+
+.custom-audience-textarea.error {
+    border-color: var(--initiative-danger) !important;
+}
+.checkbox-grid.error {
+    border: 2px solid var(--initiative-danger);
+    border-radius: 0.375rem;
+    padding: 1rem;
+    background-color: #fed7d7;
+}
+
+.budget-input-group .budget-input.error,
+.budget-input-group .currency-select.error {
+    border-color: var(--initiative-danger) !important;
+}
+
+.custom-audience-textarea.error {
+    border-color: var(--initiative-danger) !important;
+}
 /* 📱 TABLET */
 @media (max-width: 968px) {
   .initiative-create-container {
@@ -4083,7 +4145,431 @@
     color: #10b981;
     flex-shrink: 0;
 }
+/* Partners грешки */
+.initiative-form-group-partner .error {
+    border-color: #e53e3e !important;
+    box-shadow: 0 0 0 1px #e53e3e !important;
+    background-color: #fed7d7;
+}
 
+.initiative-form-group-partner .error-message {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 500;
+}
+
+.initiative-form-group-partner .error-message::before {
+    content: "⚠️";
+    font-size: 0.75rem;
+}
+
+/* Sponsors грешки */
+.initiative-form-group-sponsor .error {
+    border-color: #e53e3e !important;
+    box-shadow: 0 0 0 1px #e53e3e !important;
+    background-color: #fed7d7;
+}
+
+.initiative-form-group-sponsor .error-message {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 500;
+}
+
+.initiative-form-group-sponsor .error-message::before {
+    content: "⚠️";
+    font-size: 0.75rem;
+}
+
+/* Amount input group грешки */
+.initiative-amount-input-group input.error {
+    border-color: #e53e3e !important;
+    background-color: #fed7d7;
+}
+
+/* Partner/Sponsor card headers с грешки */
+.initiative-partner-card .section-error-indicator,
+.initiative-sponsor-card .section-error-indicator {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-left: 0.5rem;
+}
+
+/* Partner/Sponsor cards с грешки */
+.initiative-partner-card:has(.error-message) {
+    border-left: 4px solid #e53e3e;
+    background-color: #fef2f2;
+}
+
+.initiative-sponsor-card:has(.error-message) {
+    border-left: 4px solid #e53e3e;
+    background-color: #fef2f2;
+}
+
+/* Focus states за partners/sponsors error полета */
+.initiative-form-group-partner .error:focus,
+.initiative-form-group-sponsor .error:focus {
+    border-color: #e53e3e !important;
+    box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.2) !important;
+    outline: none;
+}
+.document-error-indicator {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.document-edit-input.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 1px #e53e3e;
+}
+
+/* 🎯 Gallery warning indicators */
+.gallery-input.warning {
+    border-color: #d69e2e;
+    box-shadow: 0 0 0 1px #d69e2e;
+}
+
+.warning-message {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #eca006;
+    margin-top: 4px;
+}
+/* 🎯 KPI error indicators */
+.kpi-error-indicator {
+    margin-left: 8px;
+    font-size: 14px;
+    color: #e53e3e;
+}
+
+.kpi-item .error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 1px #e53e3e;
+}
+
+.kpi-fields .error-message {
+    color: #e53e3e;
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 🎯 Slate editor error states */
+.slate-editor-container.error {
+    border: 2px solid #e53e3e;
+    border-radius: 6px;
+}
+
+.slate-editor-container.error .slate-editable {
+    border-color: transparent;
+}
+
+/* 🎯 Error message под Slate редакторите */
+.expected-results-section .error-message,
+.progress-report-section .error-message {
+    color: #e53e3e;
+    font-size: 13px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background-color: #fed7d7;
+    border-radius: 4px;
+    border-left: 4px solid #e53e3e;
+}
+/* 🎯 Tags styling */
+.tag-input.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 1px #e53e3e;
+}
+
+.tag-item.error {
+    background-color: #fed7d7;
+    border-color: #e53e3e;
+    position: relative;
+}
+
+.tag-error-tooltip {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    background: #e53e3e;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.tags-warning {
+    color: #d69e2e;
+    font-weight: 500;
+}
+
+.add-tag-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 🎯 FAQ styling */
+.faq-error-indicator {
+    margin-left: 8px;
+    font-size: 14px;
+    color: #e53e3e;
+}
+
+.faq-question-field input.error,
+.faq-answer-field textarea.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 1px #e53e3e;
+}
+
+.character-count {
+    font-size: 11px;
+    color: #666;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.character-count .warning {
+    color: #d69e2e;
+    font-weight: 500;
+}
+
+.faq-fields .error-message {
+    color: #e53e3e;
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 🎯 FAQ fields spacing */
+.faq-question-field,
+.faq-answer-field {
+    margin-bottom: 16px;
+}
+
+.faq-question-field:last-child,
+.faq-answer-field:last-child {
+    margin-bottom: 0;
+}
+.field-help {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
+}
+
+.field-help code {
+    background: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-family: monospace;
+}
+/* 🎯 Location header styling */
+.location-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.location-status {
+    flex: 1;
+}
+
+.current-location {
+    font-size: 13px;
+    color: #1B8B8A;
+    font-weight: 500;
+    background: #e6fffa;
+    padding: 4px 8px;
+    border-radius: 12px;
+    border: 1px solid #1B8B8A;
+}
+
+/* 🎯 Clear location button */
+.btn-clear-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fed7d7;
+    color: #e53e3e;
+    border: 1px solid #e53e3e;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-clear-location:hover {
+    background: #e53e3e;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-clear-location:active {
+    transform: translateY(0);
+}
+
+.btn-clear-location svg {
+    font-size: 10px;
+}
+
+/* 🎯 Responsive за location header */
+@media (max-width: 768px) {
+    /* .location-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .btn-clear-location {
+        align-self: flex-end;
+    } */
+}
+/* 🎯 Timeline section helpers */
+.milestones-section .section-help {
+    background: #fff7ed;
+    border-left: 3px solid #f59e0b;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 16px;
+    font-size: 12px;
+}
+
+.timeline-preview .section-help {
+    background: #f0f9ff;
+    border-left: 3px solid #0ea5e9;
+    padding: 6px 10px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 12px;
+    font-size: 11px;
+}
+
+/* 🎯 Character counter за milestones */
+.milestone-description-field .character-count {
+    font-size: 11px;
+    color: #666;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.milestone-description-field .character-count.warning {
+    color: #d69e2e;
+}
+
+/* 🎯 Date field styling */
+input[type="date"].error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 1px #e53e3e;
+}
+
+/* 🎯 Helper за date полетата */
+.form-group-initiative input[type="date"] + .field-help {
+    margin-top: 6px;
+    padding: 4px 6px;
+    background: #f8f9fa;
+    border-radius: 3px;
+    font-size: 11px;
+}
+/* 🎯 Slate editor character counter */
+.character-count.slate-counter {
+    font-size: 11px;
+    color: #666;
+    text-align: right;
+    margin-top: 6px;
+    padding: 4px 8px;
+    background: #f8f9fa;
+    border-radius: 3px;
+    border: 1px solid #e2e8f0;
+}
+
+.character-count.slate-counter.warning {
+    color: #d69e2e;
+    background: #fef3c7;
+    border-color: #d69e2e;
+}
+
+.character-count.slate-counter.error {
+    color: #e53e3e;
+    background: #fed7d7;
+    border-color: #e53e3e;
+}
+
+/* 🎯 Styling за различните Slate counters */
+.form-group-initiative .slate-counter {
+    margin-top: 8px;
+}
+
+.expected-results-section .slate-counter,
+.progress-report-section .slate-counter {
+    margin-top: 6px;
+    font-size: 10px;
+}
+/* 🎯 Additional section helpers */
+.tags-section .section-help,
+.related-initiatives-section .section-help,
+.faq-section .section-help {
+    background: #f6ffed;
+    border-left: 3px solid #52c41a;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 16px;
+    font-size: 12px;
+}
+
+/* 🎯 FAQ specific styling */
+.faq-question-field .field-help,
+.faq-answer-field .field-help {
+    background: #f0f9ff;
+    border-left: 2px solid #0ea5e9;
+    padding: 4px 8px;
+    border-radius: 0 3px 3px 0;
+    margin-bottom: 6px;
+    font-size: 11px;
+}
+
+/* 🎯 FAQ character counters */
+.faq-answer-field .character-count {
+    font-size: 11px;
+    color: #666;
+    text-align: right;
+    margin-top: 4px;
+    padding: 2px 4px;
+    background: #f8f9fa;
+    border-radius: 3px;
+}
+
+.faq-answer-field .character-count.warning {
+    color: #d69e2e;
+    background: #fef3c7;
+}
+
+.faq-answer-field .character-count.error {
+    color: #e53e3e;
+    background: #fed7d7;
+}
 /* 📱 MOBILE */
 @media (max-width: 768px) {
   .initiative-create-container {

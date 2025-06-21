@@ -37,9 +37,13 @@ import {
     processInitiativeImageChanges
 } from '../../utils/initiative-firebase-utils';
 import { faFileAlt, faFileArchive, faFileExcel, faFileImage, faFilePowerpoint, faFileWord } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
+import { useRealTimeValidation } from './useRealTimeValidation';
+import { validateInitiativeForm } from '../Initiatives/CreateIniciative/Utils/initiativeValidation';
 
 const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { createInitiative, saveDraftInitiative } = useInitiativeContext();
     const { userEmail } = useAuthContext();
     const STORAGE_KEY = 'initiative_draft';
@@ -142,15 +146,31 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const [editingDocument, setEditingDocument] = useState(null);
     const autoSaveRef = useRef(null);
     const fileInputRefs = useRef({});
-
+    useRealTimeValidation(values, setErrors);
     // 🏷️ GENERATE SLUG
     const generateSlug = useCallback((title) => {
         return title
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-')
-            .trim();
+      .toLowerCase()
+        // Заменяме кирилица с латиница (основни букви)
+        .replace(/а/g, 'a').replace(/б/g, 'b').replace(/в/g, 'v')
+        .replace(/г/g, 'g').replace(/д/g, 'd').replace(/е/g, 'e')
+        .replace(/ж/g, 'zh').replace(/з/g, 'z').replace(/и/g, 'i')
+        .replace(/й/g, 'y').replace(/к/g, 'k').replace(/л/g, 'l')
+        .replace(/м/g, 'm').replace(/н/g, 'n').replace(/о/g, 'o')
+        .replace(/п/g, 'p').replace(/р/g, 'r').replace(/с/g, 's')
+        .replace(/т/g, 't').replace(/у/g, 'u').replace(/ф/g, 'f')
+        .replace(/х/g, 'h').replace(/ц/g, 'ts').replace(/ч/g, 'ch')
+        .replace(/ш/g, 'sh').replace(/щ/g, 'sht').replace(/ъ/g, 'a')
+        .replace(/ь/g, 'y').replace(/ю/g, 'yu').replace(/я/g, 'ya')
+        // Премахваме всички символи които не са a-z, 0-9 или интервали
+        .replace(/[^a-z0-9\s]/g, '')
+        // Заменяме интервали с тирета
+        .replace(/\s+/g, '-')
+        // Премахваме множествени тирета
+        .replace(/-+/g, '-')
+        // Премахваме тирета от началото и края
+        .replace(/^-+|-+$/g, '')
+        .trim();
     }, []);
 
     // 🆔 GENERATE ID
@@ -248,7 +268,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             clearTimeout(autoSaveRef.current);
         }
         autoSaveRef.current = setTimeout(async () => {
-            const currentValues = { ...values, [name]: value }; // Включваме новата стойност
+            const currentValues = { ...values, [name]: value };
 
             // 💾 Запазваме в localStorage винаги
             saveToLocalStorage(currentValues);
@@ -499,7 +519,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                     fileType: file.name.split('.').pop(),
                     fileSize: formatFileSize(file.size),
                     downloadUrl: uploadedUrl,
-                    originalName: file.name, // ⬅️ Запазваме за download attr
+                    originalName: file.name,
                     image: {
                         src: '',
                         alt: `${file.name} document`
@@ -581,8 +601,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             return { ...prev, downloadMaterials: updatedMaterials };
         });
     }, []);
-    // 🆕 DYNAMIC CONTENT MANAGEMENT
 
+    // 🆕 DYNAMIC CONTENT MANAGEMENT
     // Partners
     const addPartner = useCallback(() => {
         const newPartner = {
@@ -692,14 +712,43 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     }, []);
 
     // Tags
-    const addTag = useCallback((tag) => {
-        if (tag.trim() && !values.tags.includes(tag.trim())) {
-            setValues(prev => ({
-                ...prev,
-                tags: [...prev.tags, tag.trim()]
-            }));
-        }
-    }, [values.tags]);
+   const addTag = useCallback((tag) => {
+    const trimmedTag = tag.trim();
+    
+    // Проверки преди добавяне
+    if (!trimmedTag) {
+        notify('warning', t('validation.tag-min-length'));
+        return;
+    }
+    
+    if (trimmedTag.length < 2) {
+        notify('warning', t('validation.tag-min-length'));
+        return;
+    }
+    
+    if (trimmedTag.length > 30) {
+        notify('warning', t('validation.tag-max-length'));
+        return;
+    }
+    
+    if (values.tags.length >= 20) {
+        notify('warning', t('validation.tags-max-count'));
+        return;
+    }
+    
+    if (values.tags.includes(trimmedTag)) {
+        notify('warning', t('validation.tag-already-exists'));
+        return;
+    }
+    
+    setValues(prev => ({
+        ...prev,
+        tags: [...prev.tags, trimmedTag]
+    }));
+    
+    // Success feedback
+    notify('success', t('validation.tag-added-success', { tag: trimmedTag }));
+}, [values.tags, t]);
 
     const removeTag = useCallback((index) => {
         setValues(prev => ({
@@ -795,7 +844,6 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         });
     }, []);
 
-    // В useCreateInitiative.js - ПЪЛЕН handleMainImageUpload с debug
     const handleMainImageUpload = useCallback(async (e) => {
 
         // Директно достъп до файловете
@@ -1639,80 +1687,14 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     }, []);
 
     // ✅ FORM VALIDATION с новите утилити
-    const validateForm = useCallback(() => {
-        const newErrors = {};
-        // 🕒 Timeline validation
-        if (values.startDate && values.endDate) {
-            if (new Date(values.startDate) >= new Date(values.endDate)) {
-                newErrors.endDate = 'Крайната дата трябва да е след началната';
-            }
-        }
-        // Basic Info validation
-        if (!values.title?.trim()) newErrors.title = 'Title is required';
-        if (!values.shortDescription?.trim()) newErrors.shortDescription = 'Short description is required';
+   const validateForm = useCallback(() => {
+    const newErrors = validateInitiativeForm(values, t);
+    console.log('🔍 Validation errors:', newErrors);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+}, [values, t]);
 
-        // Slate.js валидация с новите утилити
-        if (!validateEditorField('detailedDescription', values.detailedDescription)) {
-            newErrors.detailedDescription = 'Detailed description is required';
-        }
-
-        if (!values.category?.trim() && !values.customCategory?.trim()) {
-            newErrors.category = 'Category is required';
-        }
-
-        // Timeline validation
-        if (values.startDate && values.endDate) {
-            if (new Date(values.startDate) >= new Date(values.endDate)) {
-                newErrors.endDate = 'End date must be after start date';
-            }
-        }
-
-        // Budget validation
-        if (values.expectedBudget && isNaN(Number(values.expectedBudget))) {
-            newErrors.expectedBudget = 'Budget must be a valid number';
-        }
-
-        // Partners validation
-        if (!values.partners || values.partners.length === 0) {
-            newErrors.partners = 'At least one partner is required';
-        } else {
-            values.partners.forEach((partner, index) => {
-                if (!partner.name?.trim()) {
-                    newErrors[`partners[${index}].name`] = 'Partner name is required';
-                }
-            });
-        }
-
-        // Contact validation
-        if (values.responsible.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.responsible.email)) {
-            newErrors['responsible.email'] = 'Invalid email format';
-        }
-        // Milestone validation
-        values.milestones.forEach((milestone, index) => {
-            if (milestone.date) {
-                const milestoneDate = new Date(milestone.date);
-                const startDate = new Date(values.startDate);
-                const endDate = new Date(values.endDate);
-
-                if (values.startDate && milestoneDate < startDate) {
-                    newErrors[`milestones[${index}].date`] = 'Етапът не може да е преди началната дата';
-                }
-
-                if (values.endDate && milestoneDate > endDate) {
-                    newErrors[`milestones[${index}].date`] = 'Етапът не може да е след крайната дата';
-                }
-            }
-
-            if (milestone.date && !milestone.description.trim()) {
-                newErrors[`milestones[${index}].description`] = 'Описанието на етапа е задължително';
-            }
-        });
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    }, [values]);
     // localStorage utility функции
-
     const loadFromLocalStorage = useCallback(() => {
         try {
             const savedData = localStorage.getItem(STORAGE_KEY);
@@ -1798,7 +1780,72 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         e.preventDefault();
 
         if (!validateForm()) {
-            notify('error', 'Please fix the errors before submitting');
+            // 🚨 Показваме конкретната грешка от първото поле
+            const errorEntries = Object.entries(errors);
+
+            if (errorEntries.length > 0) {
+                const [fieldName, errorMessage] = errorEntries[0];
+
+                // 🆕 Използваме custom message
+                notify('error', null, errorMessage);
+
+                // 🎯 ПОПРАВЕНО: Smart скролване до полето с грешка
+                let errorElement = null;
+
+                // Специална логика за sections грешки
+                if (fieldName.startsWith('sections[')) {
+                    // За sections използваме data атрибути или класове
+                    const sectionMatch = fieldName.match(/sections\[(\d+)\]/);
+                    if (sectionMatch) {
+                        const sectionIndex = parseInt(sectionMatch[1], 10);
+
+                        // Търсим секцията по index
+                        errorElement = document.querySelector(`.section-item:nth-child(${sectionIndex + 1})`);
+
+                        // Ако не намерим по клас, търсим във sections контейнера
+                        if (!errorElement) {
+                            const sectionsContainer = document.querySelector('.sections-list');
+                            if (sectionsContainer) {
+                                const sectionItems = sectionsContainer.querySelectorAll('.section-item');
+                                errorElement = sectionItems[sectionIndex];
+                            }
+                        }
+                    }
+                } else {
+                    // За обикновени полета - escape-ваме специалните символи
+                    const escapedFieldName = fieldName.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+
+                    try {
+                        errorElement = document.querySelector(`[name="${escapedFieldName}"], #${escapedFieldName}`);
+                    } catch (e) {
+                        // Ако още има проблем, опитваме без escape
+                        try {
+                            errorElement = document.querySelector(`[name="${fieldName}"], #${fieldName}`);
+                        } catch (e2) {
+                            // Ако и това не работи, търсим по по-прост начин
+                            const baseName = fieldName.split('[')[0].split('.')[0];
+                            errorElement = document.querySelector(`[name="${baseName}"], #${baseName}`);
+                        }
+                    }
+                }
+
+                // Скролваме до елемента ако го намерим
+                if (errorElement) {
+                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Focus само ако е input/textarea
+                    if (errorElement.tagName === 'INPUT' || errorElement.tagName === 'TEXTAREA') {
+                        errorElement.focus();
+                    }
+                } else {
+                    // Fallback - скролваме нагоре
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } else {
+                // Fallback ако няма errors (не трябва да се случи)
+                notify('error', null, 'Моля поправете грешките във формата');
+            }
+
             return;
         }
 
@@ -1809,17 +1856,17 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             submissionData.updatedAt = new Date().toISOString();
             delete submissionData.timestamp;
             const handler = onSubmitHandler || createInitiative;
-            // 🔧 ПРОМЕНЕНО: Пращаме само данните, не файловете
             await handler(submissionData);
+
             // ✅ При успешно изпращане, изчистваме localStorage
             clearLocalStorage();
-            notify('success', 'Initiative created successfully!');
+            notify('success', null, 'Инициативата е създадена успешно!');
             navigate('/initiatives');
         } catch (error) {
             console.error('Submission error:', error);
-            notify('error', 'Failed to create initiative');
+            notify('error', null, 'Грешка при създаване на инициативата');
         }
-    }, [values, validateForm, onSubmitHandler, createInitiative, navigate, convertFormToHtml]);
+    }, [values, validateForm, errors, onSubmitHandler, createInitiative, navigate, convertFormToHtml, clearLocalStorage]);
 
     // В useCreateInitiative.js - в return statement добави:
     return {
