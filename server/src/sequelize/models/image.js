@@ -6,9 +6,13 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             const imageableModels = [
                 { model: 'section', connection: 'section' },
-                { model: 'publishedContent', connection: 'publishedContent' },
                 { model: 'downloadMaterial', connection: 'downloadMaterial' },
-                { model: 'initiative', connection: 'initiative' },
+                { model: 'initiative', connection: 'initiative_main' },
+                { model: 'initiative', connection: 'initiative_gallery' },
+                { model: 'story', connection: 'story' },
+                { model: 'publication', connection: 'publication' },
+                { model: 'project', connection: 'project_main' },
+                { model: 'project', connection: 'project_logo' },
             ];
 
             imageableModels.forEach(({ model, connection }) => {
@@ -46,6 +50,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'image_link_connection',
             },
+            isUploading: {
+                type: DataTypes.BOOLEAN,
+                allowNull: true,
+                defaultValue: false,
+                field: 'is_uploading',
+            },
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -56,6 +66,8 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: 'image',
+            timestamps: true,
+            underscored: true,
         }
     );
     return Image;

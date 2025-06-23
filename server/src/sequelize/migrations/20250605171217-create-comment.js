@@ -25,10 +25,6 @@ module.exports = {
             commentable_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
                 onDelete: 'CASCADE',
             },
             comment_link_connection: {
@@ -49,15 +45,15 @@ module.exports = {
                 defaultValue: [],
                 allowNull: false,
             },
-            createdAt: {
-                type: Sequelize.DATE,
+            created_at: {
                 allowNull: false,
-                defaultValue: Sequelize.NOW,
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
-            updatedAt: {
-                type: Sequelize.DATE,
+            updated_at: {
                 allowNull: false,
-                defaultValue: Sequelize.NOW,
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
 

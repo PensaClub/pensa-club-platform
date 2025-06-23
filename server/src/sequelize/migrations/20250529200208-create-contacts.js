@@ -4,10 +4,10 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('contacts', {
             id: {
-                allowNull: false,
-                autoIncrement: true,
-                primaryKey: true,
                 type: Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
             },
             name: {
                 type: Sequelize.STRING,
@@ -34,25 +34,37 @@ module.exports = {
                 allowNull: false,
                 defaultValue: false,
             },
-            initiative_id: {
+            is_team_member: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
+            },
+            role: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            contactable_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
-                onDelete: 'CASCADE',
-                onUpdate: 'CASCADE',
             },
-            createdAt: {
+            contact_link_connection: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            created_at: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
-            updatedAt: {
+            updated_at: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
+
+        await queryInterface.addIndex('contacts', ['contactable_id']);
+        await queryInterface.addIndex('contacts', ['contact_link_connection']);
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('contacts');

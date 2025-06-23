@@ -11,47 +11,52 @@ module.exports = {
             },
             title_slug: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             title: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             description: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             file_type: {
                 type: Sequelize.ENUM('pdf', 'docx'),
-                allowNull: false,
+                allowNull: true,
             },
             file_size: {
-                type: Sequelize.DECIMAL(10, 2),
-                allowNull: false,
+                type: Sequelize.DataTypes.STRING,
+                allowNull: true,
             },
             download_url: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: true,
             },
-            initiative_id: {
+            downloadable_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
                 onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
             },
-            createdAt: {
+            download_link_connection: {
+                type: Sequelize.STRING,
                 allowNull: false,
-                type: Sequelize.DATE,
             },
-            updatedAt: {
+            created_at: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+            },
+            updated_at: {
+                allowNull: false,
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
+
+        await queryInterface.addIndex('downloadMaterials', ['downloadable_id']);
+        await queryInterface.addIndex('downloadMaterials', ['download_link_connection']);
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('downloadMaterials');
