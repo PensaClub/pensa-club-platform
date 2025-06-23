@@ -1619,7 +1619,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
                                             className={errors.startDate ? 'error' : ''}
-                                            min={new Date().toISOString().split('T')[0]}
+                                            // min={new Date().toISOString().split('T')[0]}
                                         />
                                         <div className="field-help">
                                             {t('initiatives.create.start-date-help')}
@@ -4017,7 +4017,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                     className="floating-btn create"
                     onClick={onSubmit}
                     title="Създай инициатива"
-                    disabled={isUploading}
+                    // disabled={isUploading}
                 >
                     <FontAwesomeIcon icon={faCheckCircle} />
                 </button>

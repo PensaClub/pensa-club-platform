@@ -63,18 +63,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'section_link_connection',
             },
-            createdAt: {
-                type: DataTypes.DATEONLY,
-                allowNull: false,
-            },
-            updatedAt: {
-                type: DataTypes.DATEONLY,
-                allowNull: false,
-            },
         },
         {
             sequelize,
             modelName: 'section',
+            timestamps: true,
+            underscored: true,
         }
     );
     return section;

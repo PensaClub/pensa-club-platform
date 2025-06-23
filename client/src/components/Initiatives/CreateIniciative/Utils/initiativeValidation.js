@@ -9,7 +9,7 @@ import { getSlateTextLength } from "./slateUtils.js";
  */
 export const validateInitiativeForm = (values, t) => {
     const newErrors = {};
-
+console.log('Validating initiative form with values:', newErrors);
     // 🎯 BASIC INFO валидации
     // Title
     if (!values.title?.trim()) {

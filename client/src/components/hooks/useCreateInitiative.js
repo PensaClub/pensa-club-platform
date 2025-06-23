@@ -150,33 +150,34 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     // 🏷️ GENERATE SLUG
     const generateSlug = useCallback((title) => {
         return title
-      .toLowerCase()
-        // Заменяме кирилица с латиница (основни букви)
-        .replace(/а/g, 'a').replace(/б/g, 'b').replace(/в/g, 'v')
-        .replace(/г/g, 'g').replace(/д/g, 'd').replace(/е/g, 'e')
-        .replace(/ж/g, 'zh').replace(/з/g, 'z').replace(/и/g, 'i')
-        .replace(/й/g, 'y').replace(/к/g, 'k').replace(/л/g, 'l')
-        .replace(/м/g, 'm').replace(/н/g, 'n').replace(/о/g, 'o')
-        .replace(/п/g, 'p').replace(/р/g, 'r').replace(/с/g, 's')
-        .replace(/т/g, 't').replace(/у/g, 'u').replace(/ф/g, 'f')
-        .replace(/х/g, 'h').replace(/ц/g, 'ts').replace(/ч/g, 'ch')
-        .replace(/ш/g, 'sh').replace(/щ/g, 'sht').replace(/ъ/g, 'a')
-        .replace(/ь/g, 'y').replace(/ю/g, 'yu').replace(/я/g, 'ya')
-        // Премахваме всички символи които не са a-z, 0-9 или интервали
-        .replace(/[^a-z0-9\s]/g, '')
-        // Заменяме интервали с тирета
-        .replace(/\s+/g, '-')
-        // Премахваме множествени тирета
-        .replace(/-+/g, '-')
-        // Премахваме тирета от началото и края
-        .replace(/^-+|-+$/g, '')
-        .trim();
+            .toLowerCase()
+            // Заменяме кирилица с латиница (основни букви)
+            .replace(/а/g, 'a').replace(/б/g, 'b').replace(/в/g, 'v')
+            .replace(/г/g, 'g').replace(/д/g, 'd').replace(/е/g, 'e')
+            .replace(/ж/g, 'zh').replace(/з/g, 'z').replace(/и/g, 'i')
+            .replace(/й/g, 'y').replace(/к/g, 'k').replace(/л/g, 'l')
+            .replace(/м/g, 'm').replace(/н/g, 'n').replace(/о/g, 'o')
+            .replace(/п/g, 'p').replace(/р/g, 'r').replace(/с/g, 's')
+            .replace(/т/g, 't').replace(/у/g, 'u').replace(/ф/g, 'f')
+            .replace(/х/g, 'h').replace(/ц/g, 'ts').replace(/ч/g, 'ch')
+            .replace(/ш/g, 'sh').replace(/щ/g, 'sht').replace(/ъ/g, 'a')
+            .replace(/ь/g, 'y').replace(/ю/g, 'yu').replace(/я/g, 'ya')
+            // Премахваме всички символи които не са a-z, 0-9 или интервали
+            .replace(/[^a-z0-9\s]/g, '')
+            // Заменяме интервали с тирета
+            .replace(/\s+/g, '-')
+            // Премахваме множествени тирета
+            .replace(/-+/g, '-')
+            // Премахваме тирета от началото и края
+            .replace(/^-+|-+$/g, '')
+            .trim();
     }, []);
 
     // 🆔 GENERATE ID
     const generateId = useCallback(() => {
-        return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        return Date.now() + Math.floor(Math.random() * 1000);
     }, []);
+
     const saveToLocalStorage = useCallback((data) => {
         try {
             const dataToSave = {
@@ -188,10 +189,18 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
         } catch (error) {
             console.error('❌ Error saving to localStorage:', error);
-            notify('warning', 'Не може да се запази чернова в браузъра');
+            notify('localstorage-save-failed');
         }
     }, []);
-
+    // 🕒 TIMELINE HELPER FUNCTIONS
+    const calculateDuration = useCallback((startDate, endDate) => {
+        if (!startDate || !endDate) return 0;
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const diffTime = Math.abs(end - start);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
+    }, []);
     // ⚡ HANDLE INPUT CHANGES
     const onChangeHandler = useCallback((e, isEditor = false, customData = null) => {
         let name, value;
@@ -219,6 +228,19 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 title: value,
                 slug: generateSlug(value)
             }));
+        } else if (name === 'startDate' || name === 'endDate') {
+            setValues(prev => {
+                const updatedValues = { ...prev, [name]: value };
+
+                // 🔧 АВТОМАТИЧНО изчисли duration
+                if (updatedValues.startDate && updatedValues.endDate) {
+                    updatedValues.duration = calculateDuration(updatedValues.startDate, updatedValues.endDate);
+                } else {
+                    updatedValues.duration = '';
+                }
+
+                return updatedValues;
+            });
         } else {
             setValues(prev => {
                 const updatedValues = { ...prev };
@@ -270,23 +292,30 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         autoSaveRef.current = setTimeout(async () => {
             const currentValues = { ...values, [name]: value };
 
-            // 💾 Запазваме в localStorage винаги
             saveToLocalStorage(currentValues);
 
-            // 🗄️ Опитваме да запазим и в базата данни
             if (userEmail) {
                 try {
-                    await saveDraftInitiative({ ...currentValues, userEmail });
+                    // 🔧 ПОПРАВКА: Използвай пълната convertFormToHtml функция
+                    const tempValues = { ...currentValues };
+
+                    // Временно създаваме обект със същата структура за convertFormToHtml
+                    const tempFormData = {
+                        ...tempValues
+                    };
+
+                    // Използваме пълната convertFormToHtml логика
+                    const convertedData = convertFormToHtml.call(null, tempFormData);
+
+                    await saveDraftInitiative({ ...convertedData, userEmail });
                     console.log('🔄 Auto-saved to both localStorage and database');
                 } catch (error) {
                     console.error('Auto-save to database failed:', error);
                     console.log('🔄 Auto-saved to localStorage only');
                 }
-            } else {
-                console.log('🔄 Auto-saved to localStorage only (no user)');
             }
         }, 30000);
-    }, [values, errors, generateSlug, saveDraftInitiative, userEmail, saveToLocalStorage]);
+    }, [values, errors, generateSlug, saveDraftInitiative, userEmail, saveToLocalStorage, calculateDuration]);
 
     // 🎯 HANDLE BLUR (за валидация)
     const onBlurHandler = useCallback((e, isEditor = false, customData = null) => {
@@ -336,15 +365,6 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             });
         }
     }, [errors]);
-    // 🕒 TIMELINE HELPER FUNCTIONS
-    const calculateDuration = useCallback((startDate, endDate) => {
-        if (!startDate || !endDate) return 0;
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        const diffTime = Math.abs(end - start);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays;
-    }, []);
 
     const formatDate = useCallback((dateString) => {
         if (!dateString) return '';
@@ -364,7 +384,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         const file = files[0];
 
         if (!allowedImageTypes.includes(file.type)) {
-            notify('error', 'Невалиден тип файл за лого');
+            notify('invalid-file-type');
             return;
         }
 
@@ -386,10 +406,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             setValues(prev => ({ ...prev, logo: uploadedUrl }));
             setMediaFiles(prev => ({ ...prev, logo: file }));
 
-            notify('success', 'Logo uploaded successfully');
+            notify('logo-upload-success');
         } catch (error) {
             console.error('Logo upload error:', error);
-            notify('error', 'Failed to upload logo');
+            notify('logo-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -399,7 +419,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     // 🖼️ PARTNER LOGO UPLOAD
     const handlePartnerLogoUpload = useCallback(async (file, partnerIndex) => {
         if (!file || !allowedImageTypes.includes(file.type)) {
-            notify('error', 'Невалиден тип файл');
+            notify('invalid-file-type');
             return;
         }
 
@@ -431,10 +451,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 partnerLogos: { ...prev.partnerLogos, [partnerIndex]: file }
             }));
 
-            notify('success', 'Partner logo uploaded successfully');
+            notify('partner-logo-upload-success');
         } catch (error) {
             console.error('Partner logo upload error:', error);
-            notify('error', 'Failed to upload partner logo');
+           notify('partner-logo-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -444,7 +464,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     // 🎯 SPONSOR LOGO UPLOAD
     const handleSponsorLogoUpload = useCallback(async (file, sponsorIndex) => {
         if (!file || !allowedImageTypes.includes(file.type)) {
-            notify('error', 'Невалиден тип файл');
+            notify('invalid-file-type');
             return;
         }
 
@@ -476,10 +496,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 sponsorLogos: { ...prev.sponsorLogos, [sponsorIndex]: file }
             }));
 
-            notify('success', 'Sponsor logo uploaded successfully');
+            notify('sponsor-logo-upload-success');
         } catch (error) {
             console.error('Sponsor logo upload error:', error);
-            notify('error', 'Failed to upload sponsor logo');
+            notify('sponsor-logo-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -546,7 +566,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
         } catch (error) {
             console.error('Document upload error:', error);
-            notify('error', 'Failed to upload documents');
+            notify('documents-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -557,7 +577,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             // За PDF - отваря в нов tab
             if (docFile.fileType.toLowerCase() === 'pdf') {
                 window.open(docFile.downloadUrl, '_blank');
-                notify('info', 'Opening PDF');
+                notify('opening-pdf');
+
                 return;
             }
 
@@ -575,7 +596,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 window.open(docFile.downloadUrl, '_blank');
             }, 1000);
 
-            notify('success', `Downloading/Opening ${docFile.originalName}`);
+            notify('success', null, `Downloading/Opening ${docFile.originalName}`);
         } catch (error) {
             console.error('Download error:', error);
             // Fallback
@@ -712,43 +733,43 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     }, []);
 
     // Tags
-   const addTag = useCallback((tag) => {
-    const trimmedTag = tag.trim();
-    
-    // Проверки преди добавяне
-    if (!trimmedTag) {
-        notify('warning', t('validation.tag-min-length'));
-        return;
-    }
-    
-    if (trimmedTag.length < 2) {
-        notify('warning', t('validation.tag-min-length'));
-        return;
-    }
-    
-    if (trimmedTag.length > 30) {
-        notify('warning', t('validation.tag-max-length'));
-        return;
-    }
-    
-    if (values.tags.length >= 20) {
-        notify('warning', t('validation.tags-max-count'));
-        return;
-    }
-    
-    if (values.tags.includes(trimmedTag)) {
-        notify('warning', t('validation.tag-already-exists'));
-        return;
-    }
-    
-    setValues(prev => ({
-        ...prev,
-        tags: [...prev.tags, trimmedTag]
-    }));
-    
-    // Success feedback
-    notify('success', t('validation.tag-added-success', { tag: trimmedTag }));
-}, [values.tags, t]);
+    const addTag = useCallback((tag) => {
+        const trimmedTag = tag.trim();
+
+        // Проверки преди добавяне
+        if (!trimmedTag) {
+            notify('warning', t('validation.tag-min-length'));
+            return;
+        }
+
+        if (trimmedTag.length < 2) {
+            notify('warning', t('validation.tag-min-length'));
+            return;
+        }
+
+        if (trimmedTag.length > 30) {
+            notify('warning', t('validation.tag-max-length'));
+            return;
+        }
+
+        if (values.tags.length >= 20) {
+            notify('warning', t('validation.tags-max-count'));
+            return;
+        }
+
+        if (values.tags.includes(trimmedTag)) {
+            notify('warning', t('validation.tag-already-exists'));
+            return;
+        }
+
+        setValues(prev => ({
+            ...prev,
+            tags: [...prev.tags, trimmedTag]
+        }));
+
+        // Success feedback
+        notify('success', t('validation.tag-added-success', { tag: trimmedTag }));
+    }, [values.tags, t]);
 
     const removeTag = useCallback((index) => {
         setValues(prev => ({
@@ -969,7 +990,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
             if (validUploads.length === 0) {
 
-                notify('error', 'Нито една снимка не се качи');
+                notify('no-images-uploaded');
                 return;
             }
 
@@ -1039,14 +1060,15 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             });
 
             if (validUploads.length < fileArray.length) {
-                notify('warning', `Качени ${validUploads.length} от ${fileArray.length} снимки`);
+                notify('warning', null, `Качени ${validUploads.length} от ${fileArray.length} снимки`);
             } else {
-                notify('success', `Качени всички ${validUploads.length} снимки`);
+                notify('success', null, `Качени всички ${validUploads.length} снимки`);
+
             }
 
         } catch (error) {
             console.error('❌ Upload error:', error);
-            notify('error', 'Грешка при качване на снимки');
+            notify('images-upload-error');
 
             // При грешка махаме неуспешните снимки
             setValues(prev => {
@@ -1121,7 +1143,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
         } catch (error) {
             console.error('Грешка при качване във Firebase:', error);
-            notify('error', 'Някои снимки не се качиха');
+            notify('some-images-failed');
         }
     }, []);
 
@@ -1235,10 +1257,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             };
             setValues(prev => ({ ...prev, sections: updatedSections }));
 
-            notify('success', 'Всички снимки са изтрити');
+            notify('all-images-deleted');
         } catch (error) {
             console.error('Грешка при изтриване на снимки:', error);
-            notify('error', 'Грешка при изтриване на снимки');
+            notify('images-delete-error');
         }
     }, [values.sections]);
     // 🆕 ДОБАВЕНО: Clear main image gallery
@@ -1268,10 +1290,11 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 }
             }));
 
-            notify('success', 'Всички снимки са изтрити');
+            notify('all-images-deleted');
+
         } catch (error) {
             console.error('Грешка при изтриване на снимки:', error);
-            notify('error', 'Грешка при изтриване на снимки');
+            notify('images-delete-error');
         }
     }, [values.mainImage.gallery]);
 
@@ -1356,7 +1379,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             }
         }
 
-        notify('success', 'Документът е премахнат');
+        notify('document-removed');
     }, [values.downloadMaterials]);
 
     //Additional Gallery Management:
@@ -1386,10 +1409,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
                 await Promise.all(deletePromises);
 
-                notify('success', 'Всички снимки са премахнати');
+                notify('all-images-removed');
             } catch (error) {
                 console.error('❌ Error deleting gallery images from Firebase:', error);
-                notify('error', 'Грешка при изтриване на снимки');
+                notify('images-delete-error');
             }
         }
     }, [values.gallery]);
@@ -1438,14 +1461,14 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             }
         }
 
-        notify('success', 'Снимката е премахната');
+        notify('image-removed');
     }, [values.gallery]);
 
     // 📷 CONTACT IMAGE UPLOAD - добави в hook-а
     const handleContactImageUpload = useCallback(async (e) => {
         const file = e.target.files[0];
         if (!file || !allowedImageTypes.includes(file.type)) {
-            notify('error', 'Невалиден тип файл за снимка');
+           notify('invalid-image-file-type');
             return;
         }
 
@@ -1477,10 +1500,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 contactImage: file
             }));
 
-            notify('success', 'Contact image uploaded successfully');
+            notify('contact-image-upload-success');
         } catch (error) {
             console.error('Contact image upload error:', error);
-            notify('error', 'Failed to upload contact image');
+            notify('contact-image-upload-failed');notify('contact-image-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -1517,14 +1540,14 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             contactImage: null
         }));
 
-        notify('success', 'Contact image removed');
+        notify('contact-image-removed');
     }, [values.contact?.image]);
 
     //Media Upload 
     const removeLogo = useCallback(() => {
         setValues(prev => ({ ...prev, logo: null }));
         setMediaFiles(prev => ({ ...prev, logo: null }));
-        notify('success', 'Logo removed');
+        notify('logo-removed');
     }, []);
     const getFileIcon = useCallback((fileType) => {
         const iconMap = {
@@ -1587,7 +1610,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         });
 
         if (newImages.length === 0) {
-            notify('error', 'Няма валидни изображения за качване');
+            notify('no-valid-images');
+
             return;
         }
 
@@ -1667,14 +1691,14 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             });
 
             if (validUploads.length < newImages.length) {
-                notify('warning', `Качени ${validUploads.length} от ${newImages.length} снимки`);
+                notify('warning', null, `Качени ${validUploads.length} от ${newImages.length} снимки`);
             } else {
-                notify('success', `Качени всички ${validUploads.length} снимки в галерията`);
+               notify('success', null, `Качени всички ${validUploads.length} снимки в галерията`);
             }
 
         } catch (error) {
             console.error('❌ Gallery upload error:', error);
-            notify('error', 'Грешка при качване на снимки в галерията');
+            notify('gallery-upload-error');
 
             // При грешка махаме неуспешните снимки
             setValues(prev => ({
@@ -1687,12 +1711,12 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     }, []);
 
     // ✅ FORM VALIDATION с новите утилити
-   const validateForm = useCallback(() => {
-    const newErrors = validateInitiativeForm(values, t);
-    console.log('🔍 Validation errors:', newErrors);
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-}, [values, t]);
+    const validateForm = useCallback(() => {
+        const newErrors = validateInitiativeForm(values, t);
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    }, [values, t]);
 
     // localStorage utility функции
     const loadFromLocalStorage = useCallback(() => {
@@ -1737,43 +1761,169 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             console.error('❌ Error clearing localStorage:', error);
         }
     }, []);
-    // 💾 SAVE DRAFT
-    const saveDraft = useCallback(async () => {
-        try {
-            // Запазваме в localStorage
-            saveToLocalStorage(values);
-
-            // Опитваме да запазим и в базата данни
-            if (userEmail) {
-                await saveDraftInitiative({ ...values, userEmail });
-                notify('success', 'Черновата е запазена в профила и браузъра');
-            } else {
-                notify('success', 'Черновата е запазена в браузъра');
-            }
-        } catch (error) {
-            console.error('Save draft error:', error);
-            notify('warning', 'Черновата е запазена само в браузъра');
-        }
-    }, [values, saveDraftInitiative, userEmail, saveToLocalStorage]);
 
     // 📤 HTML CONVERSION за submission
     const convertFormToHtml = useCallback(() => {
-        const htmlValues = { ...values };
+        try {
+            const htmlValues = { ...values };
 
-        // Конвертиране на всички редактори в HTML с новите утилити
-        htmlValues.detailedDescription = convertEditorToHtml('detailedDescription', values.detailedDescription);
-        htmlValues.expectedResults = convertEditorToHtml('expectedResults', values.expectedResults);
-        htmlValues.progressReport = convertEditorToHtml('progressReport', values.progressReport);
-        htmlValues.mainImage.alt = convertEditorToHtml('mainImage.alt', values.mainImage.alt);
+            // Премахни id полета
+            if (htmlValues.additionalContacts) {
+                htmlValues.additionalContacts = htmlValues.additionalContacts.map(contact => {
+                    const { id, ...contactWithoutId } = contact;
+                    return contactWithoutId;
+                });
+            }
 
-        // Конвертиране на секциите
-        htmlValues.sections = values.sections.map(section => ({
-            ...section,
-            content: convertEditorToHtml('sections[].content', section.content)
-        }));
+            if (htmlValues.sponsors) {
+                htmlValues.sponsors = htmlValues.sponsors.map(sponsor => {
+                    const { id, ...sponsorWithoutId } = sponsor;
+                    return sponsorWithoutId;
+                });
+            }
 
-        return htmlValues;
+            // Безопасно конвертиране на редактори
+            try {
+                htmlValues.detailedDescription = convertEditorToHtml('detailedDescription', values.detailedDescription);
+            } catch (error) {
+                htmlValues.detailedDescription = '';
+            }
+
+            try {
+                htmlValues.expectedResults = convertEditorToHtml('expectedResults', values.expectedResults);
+            } catch (error) {
+                htmlValues.expectedResults = '';
+            }
+
+            try {
+                htmlValues.progressReport = convertEditorToHtml('progressReport', values.progressReport);
+            } catch (error) {
+                htmlValues.progressReport = '';
+            }
+
+            // Безопасна проверка на mainImage структурата
+            if (!htmlValues.mainImage) {
+                htmlValues.mainImage = { src: '', alt: '', caption: '', gallery: [] };
+            }
+
+            // Безопасна конвертация на mainImage.alt
+            try {
+                if (htmlValues.mainImage.alt && typeof htmlValues.mainImage.alt !== 'string') {
+                    htmlValues.mainImage.alt = convertEditorToHtml('mainImage.alt', htmlValues.mainImage.alt);
+                }
+            } catch (altError) {
+                htmlValues.mainImage.alt = '';
+            }
+
+            // Безопасна конвертация на секции
+            try {
+                if (htmlValues.sections && Array.isArray(htmlValues.sections)) {
+                    htmlValues.sections = htmlValues.sections.map((section, index) => {
+                        try {
+                            return {
+                                ...section,
+                                content: convertEditorToHtml('sections[].content', section.content)
+                            };
+                        } catch (sectionError) {
+                            return {
+                                ...section,
+                                content: ''
+                            };
+                        }
+                    });
+                } else {
+                    htmlValues.sections = [];
+                }
+            } catch (sectionsError) {
+                htmlValues.sections = [];
+            }
+
+            // Конвертиране на дати
+            const convertDateToISO = (dateString) => {
+                if (!dateString || dateString.trim() === '') return null;
+                if (typeof dateString === 'string' && dateString.includes('T')) return dateString;
+                if (typeof dateString === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+                    return new Date(dateString + 'T00:00:00.000Z').toISOString();
+                }
+                return null;
+            };
+
+            htmlValues.startDate = convertDateToISO(htmlValues.startDate);
+            htmlValues.endDate = convertDateToISO(htmlValues.endDate);
+
+            if (htmlValues.milestones && htmlValues.milestones.length > 0) {
+                htmlValues.milestones = htmlValues.milestones.map(milestone => ({
+                    ...milestone,
+                    date: convertDateToISO(milestone.date)
+                }));
+            }
+
+            // Почисти празни стрингове
+            const cleanEmptyFields = (obj) => {
+                if (Array.isArray(obj)) {
+                    return obj.map(item => cleanEmptyFields(item));
+                }
+
+                if (obj !== null && typeof obj === 'object') {
+                    const cleaned = {};
+                    for (const [key, value] of Object.entries(obj)) {
+                        cleaned[key] = cleanEmptyFields(value);
+                    }
+                    return cleaned;
+                }
+
+                // Ако е празен стринг, върни null
+                if (typeof obj === 'string' && obj.trim() === '') {
+                    return null;
+                }
+
+                return obj;
+            };
+
+            const finalValues = cleanEmptyFields(htmlValues);
+            return finalValues;
+
+        } catch (error) {
+            // Върни поне основните данни без конвертация
+            return {
+                ...values,
+                detailedDescription: '',
+                expectedResults: '',
+                progressReport: '',
+                sections: values.sections?.map(s => ({ ...s, content: '' })) || []
+            };
+        }
     }, [values]);
+
+    const saveDraft = useCallback(async () => {
+        try {
+            saveToLocalStorage(values);
+
+            if (userEmail) {
+                let convertedData;
+                try {
+                    convertedData = convertFormToHtml();
+                } catch (conversionError) {
+                    notify('data-processing-error');
+                    return;
+                }
+
+                try {
+                    const dataToSave = { ...convertedData, userEmail };
+                    const result = await saveDraftInitiative(dataToSave);
+                    notify('draft-saved-both');
+                    return result;
+                } catch (saveError) {
+                   notify('error', null, `Грешка при запазване: ${saveError.message}`);
+                }
+            } else {
+                notify('draft-saved-browser');
+
+            }
+        } catch (fatalError) {
+           notify('draft-saved-browser-only');
+        }
+    }, [values, saveDraftInitiative, userEmail, saveToLocalStorage]);
 
     // 💾 FORM SUBMISSION - ОБНОВЕНО
     const onSubmit = useCallback(async (e) => {
@@ -1782,7 +1932,6 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         if (!validateForm()) {
             // 🚨 Показваме конкретната грешка от първото поле
             const errorEntries = Object.entries(errors);
-
             if (errorEntries.length > 0) {
                 const [fieldName, errorMessage] = errorEntries[0];
 
@@ -1863,6 +2012,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             notify('success', null, 'Инициативата е създадена успешно!');
             navigate('/initiatives');
         } catch (error) {
+            console.log('Form errors:', error);
+
             console.error('Submission error:', error);
             notify('error', null, 'Грешка при създаване на инициативата');
         }

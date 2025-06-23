@@ -3,8 +3,23 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Contact extends Model {
         static associate(models) {
-            Contact.belongsTo(models.initiative, {
-                foreignKey: 'initiativeId',
+            const contactableModels = [
+                { model: 'initiative', connection: 'initiative_contact' },
+                { model: 'initiative', connection: 'initiative_responsible' },
+                { model: 'initiative', connection: 'initiative_additional' },
+                { model: 'project', connection: 'project' },
+                { model: 'story', connection: 'story' },
+                { model: 'publication', connection: 'publication' },
+            ];
+
+            contactableModels.forEach(({ model, connection }) => {
+                Contact.belongsTo(models[model], {
+                    foreignKey: 'contactableId',
+                    constraints: false,
+                    scope: {
+                        contact_link_connection: connection,
+                    },
+                });
             });
         }
     }
@@ -42,19 +57,32 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: false,
                 field: 'is_main_contact',
             },
-            initiativeId: {
+            isTeamMember: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
+                field: 'is_team_member',
+            },
+            role: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            contactableId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
-                field: 'initiative_id',
+                field: 'contactable_id',
+            },
+            contactLinkConnection: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                field: 'contact_link_connection',
             },
         },
         {
             sequelize,
             modelName: 'contact',
+            timestamps: true,
+            underscored: true,
         }
     );
     return Contact;

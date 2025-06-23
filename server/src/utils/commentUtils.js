@@ -1,3 +1,46 @@
+const { comment, user_account, user_details } = require('../sequelize/models');
+
+const getCommentConfig = (commentableId, commentLinkConnection) => ({
+    where: {
+        commentable_id: commentableId,
+        comment_link_connection: commentLinkConnection,
+    },
+    attributes: ['id', 'content', 'userId', 'createdAt', 'updatedAt', 'likes', 'parentId'],
+    include: [
+        {
+            model: user_account,
+            as: 'user',
+            attributes: ['id', 'email'],
+            include: [
+                {
+                    model: user_details,
+                    as: 'details',
+                    attributes: ['username', 'firstName', 'lastName', 'imageURL'],
+                },
+            ],
+        },
+        {
+            model: comment,
+            as: 'replies',
+            attributes: ['id', 'content', 'userId', 'createdAt', 'updatedAt', 'likes', 'parentId'],
+            include: [
+                {
+                    model: user_account,
+                    as: 'user',
+                    attributes: ['id', 'email'],
+                    include: [
+                        {
+                            model: user_details,
+                            as: 'details',
+                            attributes: ['username', 'firstName', 'lastName', 'imageURL'],
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+});
+
 const transformComment = (comment) => {
     const user = comment.user;
     const userDetails = user?.details;
@@ -20,4 +63,4 @@ const transformComment = (comment) => {
     return transformedComment;
 };
 
-module.exports = transformComment;
+module.exports = { transformComment, getCommentConfig };

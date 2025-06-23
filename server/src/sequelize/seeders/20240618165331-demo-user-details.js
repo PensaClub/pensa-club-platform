@@ -39,9 +39,9 @@ module.exports = {
         });
 
         // Add basic details for all comment users
-        const commentUserDetails = commentUsers.map((user) => ({
+        const commentUserDetails = commentUsers.map((user, index) => ({
             phone_number: '0888123456',
-            username: 'DemoUser',
+            username: `DemoUser${index + 1}`,
             first_name: 'Demo',
             last_name: 'User',
             region: 'София',

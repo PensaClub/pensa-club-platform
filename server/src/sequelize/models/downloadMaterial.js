@@ -4,7 +4,43 @@ module.exports = (sequelize, DataTypes) => {
     class DownloadMaterial extends Model {
         static associate(models) {
             DownloadMaterial.belongsTo(models.initiative, {
-                foreignKey: 'initiativeId',
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'initiative_materials',
+                },
+            });
+
+            DownloadMaterial.belongsTo(models.initiative, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'initiative_documents',
+                },
+            });
+
+            DownloadMaterial.belongsTo(models.project, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'project',
+                },
+            });
+
+            DownloadMaterial.belongsTo(models.story, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'story',
+                },
+            });
+
+            DownloadMaterial.belongsTo(models.publication, {
+                foreignKey: 'downloadableId',
+                constraints: false,
+                scope: {
+                    download_link_connection: 'publication',
+                },
             });
 
             DownloadMaterial.hasOne(models.image, {
@@ -27,49 +63,49 @@ module.exports = (sequelize, DataTypes) => {
             },
             titleSlug: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'title_slug',
             },
             title: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             description: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             fileType: {
                 type: DataTypes.ENUM('pdf', 'docx'),
-                allowNull: false,
+                allowNull: true,
                 field: 'file_type',
             },
             fileSize: {
-                type: DataTypes.DECIMAL(10, 2),
-                allowNull: false,
+                type: DataTypes.STRING,
+                allowNull: true,
                 field: 'file_size',
-                get() {
-                    const size = this.getDataValue('fileSize');
-                    return size ? `${size} MB` : null;
-                },
             },
             downloadUrl: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'download_url',
             },
-            initiativeId: {
+            downloadableId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'initiatives',
-                    key: 'id',
-                },
-                field: 'initiative_id',
+                field: 'downloadable_id',
+            },
+            downloadLinkConnection: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                field: 'download_link_connection',
             },
         },
         {
             sequelize,
             modelName: 'downloadMaterial',
+            tableName: 'downloadMaterials',
+            timestamps: true,
+            underscored: true,
         }
     );
     return DownloadMaterial;
