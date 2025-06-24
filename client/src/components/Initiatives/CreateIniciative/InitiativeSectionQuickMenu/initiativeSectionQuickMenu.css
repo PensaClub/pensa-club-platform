@@ -1,0 +1,405 @@
+/* Initiative Section Quick Menu - Нов дизайн за инициативи */
+
+.initiative-quick-menu {
+  position: absolute; /* 🔧 ПОПРАВЕНО: absolute вместо fixed */
+  left: -60px; /* 🔧 ПОПРАВЕНО: позиционираме вляво от секцията */
+  top: 10; /* 🔧 ПОПРАВЕНО: започва от върха на секцията */
+  z-index: 9999;
+  background: linear-gradient(145deg, #ffffff, #f0f4f8);
+  border: 2px solid #20b2aa;
+  border-radius: 20px;
+  padding: 1.5rem 0rem;
+  box-shadow: 
+    0 15px 35px rgba(32, 178, 170, 0.15),
+    0 5px 15px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  animation: slideInLeft 0.4s ease-out;
+  transition: all 0.3s ease; /* 🔧 ДОБАВЕНО: плавни преходи */
+}
+
+.initiative-quick-menu::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(145deg, #20b2aa, #17a2b8, #dc2626);
+  border-radius: 22px;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+.initiative-quick-menu-header {
+  text-align: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(32, 178, 170, 0.2);
+}
+
+.menu-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #20b2aa, #17a2b8);
+  -webkit-background-clip: text;
+  /* -webkit-text-fill-color: transparent; */
+  background-clip: text;
+}
+
+.initiative-quick-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.initiative-quick-btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 16px;
+  background: linear-gradient(145deg, #ffffff, #f7fafc);
+  box-shadow: 
+    4px 4px 8px rgba(32, 178, 170, 0.1),
+    -4px -4px 8px rgba(255, 255, 255, 0.8),
+    inset 0 0 0 1px rgba(32, 178, 170, 0.1);
+  overflow: hidden;
+}
+
+.initiative-quick-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.initiative-quick-btn:hover::before {
+  left: 100%;
+}
+
+.initiative-quick-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 
+    6px 6px 16px rgba(32, 178, 170, 0.2),
+    -6px -6px 16px rgba(255, 255, 255, 0.9),
+    inset 0 0 0 2px rgba(32, 178, 170, 0.3);
+}
+
+.initiative-quick-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 
+    2px 2px 4px rgba(32, 178, 170, 0.2),
+    -2px -2px 4px rgba(255, 255, 255, 0.8),
+    inset 2px 2px 4px rgba(32, 178, 170, 0.1);
+}
+
+.initiative-quick-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.1),
+    -2px -2px 4px rgba(255, 255, 255, 0.6);
+}
+
+/* Специфични стилове за различните бутони */
+.add-btn-initiative {
+  color: #20b2aa;
+  background: linear-gradient(145deg, #e6fffa, #b2f5ea);
+  border: 1px solid rgba(32, 178, 170, 0.3);
+}
+
+.add-btn-initiative:hover {
+  color: #ffffff;
+  background: linear-gradient(145deg, #20b2aa, #17a2b8);
+  box-shadow: 
+    0 8px 20px rgba(32, 178, 170, 0.4),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.move-btn-initiative {
+  color: #4299e1;
+  background: linear-gradient(145deg, #ebf8ff, #bee3f8);
+  border: 1px solid rgba(66, 153, 225, 0.3);
+}
+
+.move-btn-initiative:hover {
+  color: #ffffff;
+  background: linear-gradient(145deg, #4299e1, #3182ce);
+  box-shadow: 
+    0 8px 20px rgba(66, 153, 225, 0.4),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+.down-btn-initiative {
+  color: #4299e1;
+  background: linear-gradient(145deg, #ebf8ff, #bee3f8);
+  border: 1px solid rgba(66, 153, 225, 0.3);
+}
+
+.down-btn-initiative:hover {
+  color: #ffffff;
+  background: linear-gradient(145deg, #4299e1, #3182ce);
+  box-shadow: 
+    0 8px 20px rgba(66, 153, 225, 0.4),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+.up-btn-initiative {
+  color: #4299e1;
+  background: linear-gradient(145deg, #ebf8ff, #bee3f8);
+  border: 1px solid rgba(66, 153, 225, 0.3);
+}
+
+.up-btn-initiative:hover {
+  color: #ffffff;
+  background: linear-gradient(145deg, #4299e1, #3182ce);
+  box-shadow: 
+    0 8px 20px rgba(66, 153, 225, 0.4),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+.delete-btn-initiative {
+  color: #dc2626;
+  background: linear-gradient(145deg, #fef2f2, #fecaca);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.delete-btn-initiative:hover {
+  color: #ffffff;
+  background: linear-gradient(145deg, #dc2626, #b91c1c);
+  box-shadow: 
+    0 8px 20px rgba(220, 38, 38, 0.4),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Tooltip стилове */
+.btn-tooltip {
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(45, 55, 72, 0.95);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.btn-tooltip::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid rgba(45, 55, 72, 0.95);
+}
+
+.initiative-quick-btn:hover .btn-tooltip {
+  opacity: 1;
+  visibility: visible;
+  left: 65px;
+}
+
+/* Индикатор на менюто */
+.menu-indicator {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid rgba(32, 178, 170, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.indicator-line {
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, #20b2aa, #17a2b8);
+  border-radius: 2px;
+  position: relative;
+}
+
+.indicator-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #20b2aa;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.2);
+  animation: pulse 2s infinite;
+}
+
+/* Анимации */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(32, 178, 170, 0.1);
+  }
+}
+
+/* 🔧 ДОБАВЕНО: Стилове за родителския контейнер */
+.section-item {
+  position: relative; /* 🔧 ВАЖНО: за да работи absolute позицията на менюто */
+  border: 2px solid var(--initiative-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: white;
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1600px) {
+  .initiative-quick-menu {
+    left: -150px;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .initiative-quick-menu {
+    left: -140px;
+    padding: 1.25rem 0.75rem;
+  }
+  
+  .initiative-quick-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .initiative-quick-menu {
+    left: -130px;
+  }
+}
+
+@media screen and (max-width: 968px) {
+  .initiative-quick-menu {
+    position: fixed; /* 🔧 На мобил се връщаме към fixed */
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    flex-direction: row;
+    padding: 1rem 1.5rem;
+    border-radius: 25px;
+    min-width: auto;
+    animation: slideInLeft 0.4s ease-out;
+  }
+  
+  .initiative-quick-buttons {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  
+  .initiative-quick-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+  
+  .menu-indicator {
+    display: none;
+  }
+  
+  .initiative-quick-menu-header {
+    display: none;
+  }
+  
+  .btn-tooltip {
+    left: 50%;
+    top: -45px;
+    transform: translateX(-50%);
+  }
+  
+  .btn-tooltip::before {
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba(45, 55, 72, 0.95);
+    border-bottom: none;
+  }
+  
+  .initiative-quick-btn:hover .btn-tooltip {
+    left: 50%;
+    top: -50px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .initiative-quick-menu {
+    bottom: 100px;
+    left: 10px;
+    right: 10px;
+    top: auto;
+    transform: none;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .initiative-quick-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+  
+  .btn-tooltip {
+    font-size: 0.7rem;
+    padding: 0.375rem 0.5rem;
+  }
+}
+
+/* Hover ефекти за цялото меню */
+.initiative-quick-menu:hover {
+  box-shadow: 
+    0 20px 40px rgba(32, 178, 170, 0.2),
+    0 8px 20px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Плавни преходи */
+.initiative-quick-menu * {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

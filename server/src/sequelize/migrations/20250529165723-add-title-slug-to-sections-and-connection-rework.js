@@ -49,7 +49,6 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: false,
         });
-
         await queryInterface.changeColumn('sections', 'title', {
             type: Sequelize.TEXT,
             allowNull: true,

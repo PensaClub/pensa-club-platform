@@ -6,10 +6,10 @@ import { notify } from "../../utils/notify";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "./UserContext";
 import { initiativeServiceFactory } from "../Services/initiativeServiceFactory";
-import mockData from '../Initiatives/data/mockInitiatives.json';
 import projectsData from '../Initiatives/data/mockProjects.json';
 import { useMockApplications } from "../hooks/useMockApplications";
-
+import storiesData from '../Initiatives/data/mockStories.json';
+import publicationsData from '../Initiatives/data/mockPublications.json';
 export const InitiativeContext = createContext();
 
 export const InitiativeProvider = ({ children }) => {
@@ -111,6 +111,122 @@ export const InitiativeProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, [initiatives.length, initiativesLoaded, hasMore, currentPage, initiativeService, showErrorAndSetTimeouts]);
+
+  const createInitiative = useCallback(async (initiativeData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.createInitiative(initiativeData);
+
+      // Добавям новата инициатива в локалното състояние
+      setInitiatives(prev => [response.data || response, ...prev]);
+
+      notify('success', 'Initiative created successfully!');
+      return response;
+    } catch (error) {
+      console.error('Error creating initiative:', error);
+      notify('error', 'Failed to create initiative');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const saveDraftInitiative = useCallback(async (draftData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      const response = await initiativeService.saveDraftInitiative(draftData);
+      notify('success', 'Draft saved successfully!');
+      return response;
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      notify('error', 'Failed to save draft');
+      throw error;
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const getDraftInitiative = useCallback(async (userId) => {
+    try {
+      const response = await initiativeService.getDraftInitiative(userId);
+      return response.data || response;
+    } catch (error) {
+      console.error('Error loading draft:', error);
+      return null;
+    }
+  }, [initiativeService]);
+
+  const deleteDraftInitiative = useCallback(async (draftId) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      await initiativeService.deleteDraftInitiative(draftId);
+      notify('success', 'Draft deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting draft:', error);
+      notify('error', 'Failed to delete draft');
+      throw error;
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const updateInitiative = useCallback(async (id, initiativeData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.updateInitiative(id, initiativeData);
+
+      // Обновявам инициативата в локалното състояние
+      setInitiatives(prev => prev.map(init =>
+        init.id === id ? (response.data || response) : init
+      ));
+
+      notify('success', 'Initiative updated successfully!');
+      return response;
+    } catch (error) {
+      console.error('Error updating initiative:', error);
+      notify('error', 'Failed to update initiative');
+      throw error;  
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const deleteInitiative = useCallback(async (id) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await initiativeService.deleteInitiative(id);
+
+      // Премахвам инициативата от локалното състояние
+      setInitiatives(prev => prev.filter(init => init.id !== id));
+
+      notify('success', 'Initiative deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting initiative:', error);
+      notify('error', 'Failed to delete initiative');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
 
   const loadMoreInitiatives = useCallback(async () => {
     if (!hasMore || isLoading) return;
@@ -286,7 +402,7 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [comments]);
 
-const addComment = useCallback(async (initiativeId, content, parentId = null) => {
+  const addComment = useCallback(async (initiativeId, content, parentId = null) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
@@ -327,9 +443,9 @@ const addComment = useCallback(async (initiativeId, content, parentId = null) =>
       // ✅ АКО ID-то е дублирано, създаваме локален уникален ID
       if (parentId && newComment.id === parentId) {
         console.warn('🐛 API bug: Reply has same ID as parent. Creating unique local ID.');
-        
+
         const uniqueLocalId = `${newComment.id}_${Date.now()}`;
-        
+
         newComment = {
           ...newComment,
           id: uniqueLocalId,
@@ -358,14 +474,14 @@ const addComment = useCallback(async (initiativeId, content, parentId = null) =>
           const updatedComments = currentComments.map(comment => {
             if (comment.id === parentId) {
               const existingReplies = comment.replies || [];
-              
+
               // Проверка за дублиране
               const now = Date.now();
               const isDuplicate = existingReplies.some(reply => {
                 const timeDiff = now - (reply.localTimestamp || 0);
                 const contentMatch = reply.content === newComment.content && timeDiff < 5000;
                 const idMatch = reply.id === newComment.id;
-                
+
                 return contentMatch || idMatch;
               });
 
@@ -390,14 +506,14 @@ const addComment = useCallback(async (initiativeId, content, parentId = null) =>
         } else {
           // Това е нов основен коментар
           const existingComments = prev[initiativeId] || [];
-          
+
           // Проверяваме за дублиране на основни коментари
           const now = Date.now();
           const isDuplicate = existingComments.some(comment => {
             const timeDiff = now - (comment.localTimestamp || 0);
             const contentMatch = comment.content === newComment.content && timeDiff < 5000;
             const idMatch = comment.id === newComment.id;
-            
+
             return contentMatch || idMatch;
           });
 
@@ -421,9 +537,9 @@ const addComment = useCallback(async (initiativeId, content, parentId = null) =>
       notify('error', 'Failed to add comment');
       throw error;
     }
-}, [isAuthentication, initiativeService, initiatives]);
+  }, [isAuthentication, initiativeService, initiatives]);
 
-const updateComment = useCallback(async (initiativeId, commentId, newContent) => {
+  const updateComment = useCallback(async (initiativeId, commentId, newContent) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
@@ -467,9 +583,9 @@ const updateComment = useCallback(async (initiativeId, commentId, newContent) =>
       notify('error', 'Failed to update comment');
       throw error;
     }
-}, [isAuthentication, initiativeService]);
+  }, [isAuthentication, initiativeService]);
 
-const deleteComment = useCallback(async (initiativeId, commentId) => {
+  const deleteComment = useCallback(async (initiativeId, commentId) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
@@ -507,9 +623,9 @@ const deleteComment = useCallback(async (initiativeId, commentId) => {
       notify('error', 'Failed to delete comment');
       throw error;
     }
-}, [isAuthentication, initiativeService]);
+  }, [isAuthentication, initiativeService]);
 
-const likeComment = useCallback(async (initiativeId, commentId) => {
+  const likeComment = useCallback(async (initiativeId, commentId) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
@@ -517,7 +633,7 @@ const likeComment = useCallback(async (initiativeId, commentId) => {
 
       // Ако е локално генериран ID, използваме originalId за API-то
       let apiCommentId = commentId;
-      
+
       // Проверяваме дали е локално генериран ID (съдържа underscore)
       if (typeof commentId === 'string' && commentId.includes('_')) {
         // Извличаме оригиналния ID
@@ -535,7 +651,7 @@ const likeComment = useCallback(async (initiativeId, commentId) => {
           if (comment.id === commentId) {
             return { ...comment, ...updatedData };
           }
-          
+
           // Проверяваме в replies
           if (comment.replies && comment.replies.length > 0) {
             const updatedReplies = comment.replies.map(reply => {
@@ -544,13 +660,13 @@ const likeComment = useCallback(async (initiativeId, commentId) => {
               }
               return reply;
             });
-            
+
             // Само ако има промяна в replies, обновяваме коментара
             if (JSON.stringify(updatedReplies) !== JSON.stringify(comment.replies)) {
               return { ...comment, replies: updatedReplies };
             }
           }
-          
+
           return comment;
         });
 
@@ -566,7 +682,7 @@ const likeComment = useCallback(async (initiativeId, commentId) => {
       notify('error', 'Failed to like comment');
       throw error;
     }
-}, [isAuthentication, initiativeService]);
+  }, [isAuthentication, initiativeService]);
 
   // Projects functions да ги ...
   const getMockProjects = useCallback(async () => {
@@ -1013,6 +1129,309 @@ const likeComment = useCallback(async (initiativeId, commentId) => {
     }
   }, [onProjectApplicationSubmit, addApplication]);
 
+  //STORIES AND PUBLICATIONS
+
+  //Stories functions
+  const getStoryBySlug = useCallback(async (slug) => {
+    try {
+      setIsLoading(true);
+
+      const story = storiesData.stories.find(story => story.slug === slug || story.titleSlug === slug);
+
+      if (!story) {
+        throw new Error(`Story not found with slug: ${slug}`);
+      }
+      if (story.comments && Array.isArray(story.comments)) {
+        const processedComments = story.comments
+          .filter(comment => !comment.parentId)
+          .map(comment => {
+            const replies = story.comments
+              .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
+              .map(reply => ({
+                ...reply,
+                id: reply.id === comment.id ? generateId() : reply.id
+              }));
+            return {
+              ...comment,
+              replies: replies
+            };
+          });
+
+        setComments(prev => ({
+          ...prev,
+          [`story-${story.id}`]: processedComments,
+          [`story-${story.slug}`]: processedComments
+        }));
+      }
+
+      return story;
+    } catch (e) {
+      console.error('Error fetching story by slug:', e);
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [generateId]);
+
+  const getPublicationBySlug = useCallback(async (slug) => {
+    try {
+      setIsLoading(true);
+
+      // Търсим в mock данните
+      const publication = publicationsData.publications.find(pub =>
+        pub.slug === slug || pub.titleSlug === slug
+      );
+
+      if (!publication) {
+        throw new Error(`Publication not found with slug: ${slug}`);
+      }
+
+      // Обработваме коментарите ако има
+      if (publication.comments && Array.isArray(publication.comments)) {
+        const processedComments = publication.comments
+          .filter(comment => !comment.parentId)
+          .map(comment => {
+            const replies = publication.comments
+              .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
+              .map(reply => ({
+                ...reply,
+                id: reply.id === comment.id ? generateId() : reply.id
+              }));
+
+            return {
+              ...comment,
+              replies: replies
+            };
+          });
+
+        setComments(prev => ({
+          ...prev,
+          [`publication-${publication.id}`]: processedComments,
+          [`publication-${publication.slug}`]: processedComments
+        }));
+      }
+
+      return publication;
+    } catch (e) {
+      console.error('Error fetching publication by slug:', e);
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [generateId]);
+
+  // Функции за коментари на stories
+  const getStoryComments = useCallback(async (storyId) => {
+    try {
+      const storyKey = `story-${storyId}`;
+      if (comments[storyKey]) {
+        return comments[storyKey];
+      }
+
+      setCommentsLoading(true);
+      const story = storiesData.stories.find(story =>
+        story.id === storyId || story.slug === storyId
+      );
+
+      if (!story) {
+        throw new Error('Story not found');
+      }
+
+      const storyComments = Array.isArray(story.comments) ? story.comments : [];
+      setComments(prev => ({
+        ...prev,
+        [storyKey]: storyComments
+      }));
+
+      return storyComments;
+    } catch (error) {
+      console.error('Error getting story comments:', error);
+      notify('error', 'Failed to load comments');
+      return [];
+    } finally {
+      setCommentsLoading(false);
+    }
+  }, [comments]);
+
+  const addStoryComment = useCallback(async (storyId, content, parentId = null) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const newComment = {
+        id: parentId ? `${generateId()}_${Date.now()}` : generateId(),
+        userId: userEmail,
+        userEmail: userEmail,
+        userName: getUserDisplayName(),
+        userAvatar: profileData?.avatar || null,
+        content: content,
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        likes: [],
+        likesCount: 0,
+        replies: [],
+        ...(parentId && { parentId })
+      };
+
+      const storyKey = `story-${storyId}`;
+
+      setComments(prev => {
+        const currentComments = prev[storyKey] || [];
+
+        if (parentId) {
+          // Това е reply
+          const updatedComments = currentComments.map(comment => {
+            if (comment.id === parentId) {
+              return {
+                ...comment,
+                replies: [...(comment.replies || []), newComment]
+              };
+            }
+            return comment;
+          });
+
+          return {
+            ...prev,
+            [storyKey]: updatedComments
+          };
+        } else {
+          // Това е нов основен коментар
+          return {
+            ...prev,
+            [storyKey]: [newComment, ...currentComments]
+          };
+        }
+      });
+
+      notify('success', 'Comment added successfully');
+      return newComment;
+    } catch (error) {
+      console.error('Error adding story comment:', error);
+      notify('error', 'Failed to add comment');
+      throw error;
+    }
+  }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar]);
+
+  // Функции за коментари на publications
+  const getPublicationComments = useCallback(async (publicationId) => {
+    try {
+      const pubKey = `publication-${publicationId}`;
+      if (comments[pubKey]) {
+        return comments[pubKey];
+      }
+
+      setCommentsLoading(true);
+      const publication = publicationsData.publications.find(pub =>
+        pub.id === publicationId || pub.slug === publicationId
+      );
+
+      if (!publication) {
+        throw new Error('Publication not found');
+      }
+
+      const pubComments = Array.isArray(publication.comments) ? publication.comments : [];
+      setComments(prev => ({
+        ...prev,
+        [pubKey]: pubComments
+      }));
+
+      return pubComments;
+    } catch (error) {
+      console.error('Error getting publication comments:', error);
+      notify('error', 'Failed to load comments');
+      return [];
+    } finally {
+      setCommentsLoading(false);
+    }
+  }, [comments]);
+
+  const addPublicationComment = useCallback(async (publicationId, content, parentId = null) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const newComment = {
+        id: parentId ? `${generateId()}_${Date.now()}` : generateId(),
+        userId: userEmail,
+        userEmail: userEmail,
+        userName: getUserDisplayName(),
+        userAvatar: profileData?.avatar || null,
+        content: content,
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        likes: [],
+        likesCount: 0,
+        replies: [],
+        ...(parentId && { parentId })
+      };
+
+      const pubKey = `publication-${publicationId}`;
+
+      setComments(prev => {
+        const currentComments = prev[pubKey] || [];
+
+        if (parentId) {
+          // Това е reply
+          const updatedComments = currentComments.map(comment => {
+            if (comment.id === parentId) {
+              return {
+                ...comment,
+                replies: [...(comment.replies || []), newComment]
+              };
+            }
+            return comment;
+          });
+
+          return {
+            ...prev,
+            [pubKey]: updatedComments
+          };
+        } else {
+          // Това е нов основен коментар
+          return {
+            ...prev,
+            [pubKey]: [newComment, ...currentComments]
+          };
+        }
+      });
+
+      notify('success', 'Comment added successfully');
+      return newComment;
+    } catch (error) {
+      console.error('Error adding publication comment:', error);
+      notify('error', 'Failed to add comment');
+      throw error;
+    }
+  }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar]);
+
+  // Функция за зареждане на свързани stories/publications
+  const getRelatedContent = useCallback(async (contentType, contentId) => {
+    try {
+      if (contentType === 'story') {
+        const story = storiesData.stories.find(s => s.id === contentId);
+        if (!story || !story.relatedStories) return [];
+
+        return storiesData.stories.filter(s =>
+          story.relatedStories.includes(s.id)
+        );
+      } else if (contentType === 'publication') {
+        const publication = publicationsData.publications.find(p => p.id === contentId);
+        if (!publication || !publication.relatedPublications) return [];
+
+        return publicationsData.publications.filter(p =>
+          publication.relatedPublications.includes(p.id)
+        );
+      }
+
+      return [];
+    } catch (error) {
+      console.error('Error getting related content:', error);
+      return [];
+    }
+  }, []);
+
   const contextService = {
     // Existing initiative functions
     getAllInitiatives,
@@ -1026,7 +1445,12 @@ const likeComment = useCallback(async (initiativeId, commentId) => {
     initiativesLoaded,
     loadUserBookmarks,
     clearBookmarks,
-
+    createInitiative,
+    saveDraftInitiative,
+    getDraftInitiative,
+    deleteDraftInitiative,
+    updateInitiative,
+    deleteInitiative,
     // Comments functions
     getComments,
     addComment,
@@ -1067,6 +1491,18 @@ const likeComment = useCallback(async (initiativeId, commentId) => {
     updateApplicationStatus, // За админи  
     deleteApplication, // За админи
 
+    //Stories functions
+    getStoryBySlug,
+    getStoryComments,
+    addStoryComment,
+
+    // Publications functions
+    getPublicationBySlug,
+    getPublicationComments,
+    addPublicationComment,
+
+    // Related content
+    getRelatedContent,
   };
 
   return (
