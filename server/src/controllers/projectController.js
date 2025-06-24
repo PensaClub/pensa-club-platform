@@ -16,6 +16,7 @@ const {
     sponsor,
     partner,
     milestone,
+    user_details,
 } = require('../sequelize/models');
 const customError = require('../utils/customError');
 const { transformProject, projectConfig } = require('../utils/projectUtils');
@@ -46,9 +47,14 @@ projectController.get('/single/:id', async (req, res, next) => {
         const param = req.params.id;
         let foundProject;
         if (isNaN(Number(param))) {
-            foundProject = await project.findOne({ where: { slug: param } });
+            foundProject = await project.findOne({
+                where: { slug: param },
+                include: projectConfig,
+            });
         } else {
-            foundProject = await project.findByPk(Number(param));
+            foundProject = await project.findByPk(Number(param), {
+                include: projectConfig,
+            });
         }
 
         if (!foundProject) {
@@ -133,7 +139,6 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
             });
         }
 
-        // If not applied, check if project is accepting applications
         if (existing.applicationStatus !== 'open') {
             return res.status(400).json({
                 success: false,
@@ -141,7 +146,6 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
             });
         }
 
-        // Check if application deadline has passed
         if (existing.applicationDeadline && new Date(existing.applicationDeadline) < new Date()) {
             return res.status(400).json({
                 success: false,
@@ -149,7 +153,6 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
             });
         }
 
-        // Check if max participants reached
         if (existing.maxParticipants && existing.currentParticipants >= existing.maxParticipants) {
             return res.status(400).json({
                 success: false,
@@ -157,7 +160,6 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
             });
         }
 
-        // Add the application
         await existing.addAppliedBy(userId);
         await existing.increment('currentParticipants');
         return res.status(201).json({
@@ -771,6 +773,74 @@ projectController.delete('/:id', isAuth, async (req, res, next) => {
 
         return res.status(200).json({
             message: 'Project and all associated data deleted successfully',
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+projectController.get('/:projectId/applications', async (req, res, next) => {
+    try {
+        const { projectId } = req.params;
+        let whereClause;
+
+        if (isNaN(Number(projectId))) {
+            whereClause = { slug: projectId };
+        } else {
+            whereClause = { id: Number(projectId) };
+        }
+
+        const foundProject = await project.findOne({
+            where: whereClause,
+            include: [
+                {
+                    model: user_account,
+                    as: 'appliedBy',
+                    attributes: ['id', 'email'],
+                    include: [
+                        {
+                            model: user_details,
+                            as: 'details',
+                            attributes: ['id', 'firstName'],
+                            required: false,
+                        },
+                    ],
+                },
+            ],
+        });
+
+        if (!foundProject) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        // TODO
+        // Check if the current user is the project creator or has admin rights
+        // if (Number(foundProject.creatorId) !== Number(req.user.userId) && req.user.role !== 'admin') {
+        //     return res.status(403).json({
+        //         message: 'Unauthorized to view project applications',
+        //     });
+        // }
+
+        // Transform the applications data
+        const applications =
+            foundProject.appliedBy?.map((user) => ({
+                id: user.id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phone: user.phone,
+                age: user.details?.age || null,
+                city: user.details?.city || null,
+                region: user.details?.region || null,
+                avatar: user.details?.avatar || null,
+                appliedAt: user.project_applications?.createdAt || null,
+            })) || [];
+
+        return res.status(200).json({
+            projectId: foundProject.id,
+            projectTitle: foundProject.title,
+            totalApplications: applications.length,
+            applications: applications,
         });
     } catch (err) {
         next(err);

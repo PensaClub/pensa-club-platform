@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true,
             },
             name: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             amount: {
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             type: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             visible: {
@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             website: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             sponsorableId: {

@@ -10,15 +10,15 @@ module.exports = {
                 type: Sequelize.INTEGER,
             },
             title_slug: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             title: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             description: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             file_type: {
@@ -26,11 +26,11 @@ module.exports = {
                 allowNull: true,
             },
             file_size: {
-                type: Sequelize.DataTypes.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             download_url: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             downloadable_id: {
