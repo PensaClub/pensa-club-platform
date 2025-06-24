@@ -4,7 +4,7 @@ const projectConfig = [
     {
         model: user_account,
         as: 'creator',
-        attributes: ['email'],
+        attributes: ['id', 'email'],
     },
     {
         model: initiative,
@@ -20,7 +20,7 @@ const projectConfig = [
             {
                 model: image,
                 as: 'image',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -34,7 +34,7 @@ const projectConfig = [
             {
                 model: image,
                 as: 'image',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -49,7 +49,7 @@ const projectConfig = [
             {
                 model: image,
                 as: 'sectionImages',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -58,13 +58,7 @@ const projectConfig = [
         model: image,
         as: 'mainImage',
         required: false,
-        attributes: ['id', 'src', 'alt', 'caption'],
-    },
-    {
-        model: image,
-        as: 'logo',
-        required: false,
-        attributes: ['id', 'src', 'alt', 'caption'],
+        attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
     },
     {
         model: downloadMaterial,
@@ -75,7 +69,7 @@ const projectConfig = [
             {
                 model: image,
                 as: 'image',
-                attributes: ['id', 'src', 'alt', 'caption'],
+                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
                 required: false,
             },
         ],
@@ -84,7 +78,7 @@ const projectConfig = [
         model: contact,
         as: 'team',
         required: false,
-        attributes: ['id', 'name', 'role', 'email', 'phone'],
+        attributes: ['id', 'name', 'role', 'email', 'phone', 'image'],
         where: {
             is_team_member: true,
         },
@@ -93,36 +87,20 @@ const projectConfig = [
         model: contact,
         as: 'contact',
         required: false,
-        attributes: ['id', 'name', 'role', 'email', 'phone'],
+        attributes: ['id', 'name', 'role', 'email', 'phone', 'image'],
         contact: null,
     },
     {
         model: sponsor,
         as: 'sponsors',
         required: false,
-        attributes: ['id', 'name', 'website', 'amount', 'currency', 'sponsorshipType', 'isVisible'],
-        include: [
-            {
-                model: image,
-                as: 'logo',
-                attributes: ['id', 'src', 'alt', 'caption'],
-                required: false,
-            },
-        ],
+        attributes: ['id', 'name', 'website', 'amount', 'currency', 'type', 'visible', 'logo'],
     },
     {
         model: partner,
         as: 'partners',
         required: false,
-        attributes: ['id', 'name', 'website', 'description', 'partnershipType', 'isVisible'],
-        include: [
-            {
-                model: image,
-                as: 'logo',
-                attributes: ['id', 'src', 'alt', 'caption'],
-                required: false,
-            },
-        ],
+        attributes: ['id', 'name', 'website', 'description', 'type', 'visible', 'logo'],
     },
     {
         model: milestone,
@@ -140,6 +118,7 @@ const transformProject = (project) => {
 
     if (projectData.creator) {
         projectData.userEmail = projectData.creator.email;
+        delete projectData.creator;
         delete projectData.creatorId;
     }
 
@@ -151,30 +130,6 @@ const transformProject = (project) => {
         delete projectData.initiatives;
     }
 
-    // Transform budget fields into a single budget object
-    projectData.budget = {
-        total: projectData.budgetTotal,
-        currency: projectData.budgetCurrency,
-        funded: projectData.budgetFunded,
-        goal: projectData.budgetGoal,
-    };
-    delete projectData.budgetTotal;
-    delete projectData.budgetCurrency;
-    delete projectData.budgetFunded;
-    delete projectData.budgetGoal;
-
-    // Transform timeline fields into a single timeline object
-    projectData.timeline = {
-        startDate: projectData.startDate,
-        endDate: projectData.endDate,
-        estimatedDuration: projectData.estimatedDuration,
-        milestones: projectData.milestones || [],
-    };
-    delete projectData.startDate;
-    delete projectData.endDate;
-    delete projectData.estimatedDuration;
-    delete projectData.milestones;
-
     // Transform sections
     if (projectData.sections) {
         projectData.sections = projectData.sections.map((section) => {
@@ -182,7 +137,7 @@ const transformProject = (project) => {
                 const { sectionImages, ...singleSection } = section;
                 return {
                     ...singleSection,
-                    image: sectionImages,
+                    images: sectionImages,
                 };
             }
             return section;

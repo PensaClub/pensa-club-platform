@@ -175,16 +175,16 @@ module.exports = (sequelize, DataTypes) => {
 
             // Basic info
             slug: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: false,
                 unique: true,
             },
             title: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: false,
             },
             shortDescription: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: false,
                 field: 'short_description',
             },
@@ -198,7 +198,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             customCategory: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'custom_category',
             },
@@ -238,10 +238,24 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATE,
                 allowNull: true,
                 field: 'end_date',
+                get() {
+                    const value = this.getDataValue('endDate');
+                    return value === '' ? null : value;
+                },
+                set(value) {
+                    this.setDataValue('endDate', value === '' ? null : value);
+                },
             },
             timestamp: {
                 type: DataTypes.DATE,
                 allowNull: true,
+                get() {
+                    const value = this.getDataValue('timestamp');
+                    return value === '' ? null : value;
+                },
+                set(value) {
+                    this.setDataValue('timestamp', value === '' ? null : value);
+                },
             },
             duration: {
                 type: DataTypes.STRING,
@@ -267,7 +281,7 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'target_audience',
             },
             customAudience: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'custom_audience',
             },

@@ -19,16 +19,16 @@ module.exports = {
                 onDelete: 'CASCADE',
             },
             slug: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: false,
                 unique: true,
             },
             title: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: false,
             },
             short_description: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: false,
             },
             detailed_description: {
@@ -40,7 +40,7 @@ module.exports = {
                 allowNull: true,
             },
             custom_category: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             priority: {
@@ -95,7 +95,7 @@ module.exports = {
                 defaultValue: [],
             },
             custom_audience: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             expected_budget: {

@@ -62,16 +62,16 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true,
             },
             titleSlug: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'title_slug',
             },
             title: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             description: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             fileType: {
@@ -80,12 +80,12 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'file_type',
             },
             fileSize: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'file_size',
             },
             downloadUrl: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'download_url',
             },

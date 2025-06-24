@@ -10,11 +10,11 @@ module.exports = {
                 allowNull: false,
             },
             name: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             position: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             email: {
@@ -26,7 +26,7 @@ module.exports = {
                 allowNull: true,
             },
             image: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             is_main_contact: {
@@ -40,7 +40,7 @@ module.exports = {
                 defaultValue: false,
             },
             role: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             contactable_id: {

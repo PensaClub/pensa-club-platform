@@ -32,11 +32,11 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true,
             },
             name: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             position: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             email: {
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             image: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             isMainContact: {
@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'is_team_member',
             },
             role: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             contactableId: {

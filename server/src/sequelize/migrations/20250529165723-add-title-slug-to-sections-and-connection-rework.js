@@ -7,7 +7,7 @@ module.exports = {
 
         if (!tableDesc.title_slug) {
             await queryInterface.addColumn('sections', 'title_slug', {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             });
         }
@@ -49,6 +49,11 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: false,
         });
+
+        await queryInterface.changeColumn('sections', 'title', {
+            type: Sequelize.TEXT,
+            allowNull: true,
+        });
     },
 
     async down(queryInterface, Sequelize) {
@@ -61,6 +66,11 @@ module.exports = {
             allowNull: true,
         });
         await queryInterface.changeColumn('sections', 'title_slug', {
+            type: Sequelize.TEXT,
+            allowNull: true,
+        });
+
+        await queryInterface.changeColumn('sections', 'title', {
             type: Sequelize.STRING,
             allowNull: true,
         });

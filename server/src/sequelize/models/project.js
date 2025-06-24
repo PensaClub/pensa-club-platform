@@ -48,15 +48,6 @@ module.exports = (sequelize, DataTypes) => {
                 },
             });
 
-            project.hasOne(models.image, {
-                as: 'logo',
-                foreignKey: 'imageableId',
-                constraints: false,
-                scope: {
-                    image_link_connection: 'project_logo',
-                },
-            });
-
             project.hasMany(models.comment, {
                 as: 'comments',
                 foreignKey: 'commentableId',
@@ -142,16 +133,16 @@ module.exports = (sequelize, DataTypes) => {
             },
             slug: {
                 type: DataTypes.STRING,
-                allowNull: true,
+                allowNull: false,
                 unique: true,
             },
             title: {
                 type: DataTypes.STRING,
-                allowNull: true,
+                allowNull: false,
             },
             shortDescription: {
                 type: DataTypes.STRING,
-                allowNull: true,
+                allowNull: false,
                 field: 'short_description',
             },
             fullDescription: {
@@ -173,46 +164,41 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
 
-            // Budget fields
-            budgetTotal: {
-                type: DataTypes.DECIMAL(10, 2),
+            // Budget fields - JSONB structure:
+            // {
+            //   total: number,
+            //   currency: string,
+            //   funded: number,
+            //   goal: number
+            // }
+            budget: {
+                type: DataTypes.JSONB,
                 allowNull: true,
-                field: 'budget_total',
-            },
-            budgetCurrency: {
-                type: DataTypes.STRING,
-                allowNull: true,
-                field: 'budget_currency',
-            },
-            budgetFunded: {
-                type: DataTypes.DECIMAL(10, 2),
-                allowNull: true,
-                field: 'budget_funded',
-            },
-            budgetGoal: {
-                type: DataTypes.DECIMAL(10, 2),
-                allowNull: true,
-                field: 'budget_goal',
+                defaultValue: null,
             },
 
-            // Timeline fields
-            startDate: {
-                type: DataTypes.DATE,
+            // Timeline fields - JSONB structure:
+            // {
+            //   startDate: string (ISO date),
+            //   endDate: string (ISO date),
+            //   estimatedDuration: string
+            // }
+            timeline: {
+                type: DataTypes.JSONB,
                 allowNull: true,
-                field: 'start_date',
-            },
-            endDate: {
-                type: DataTypes.DATE,
-                allowNull: true,
-                field: 'end_date',
-            },
-            estimatedDuration: {
-                type: DataTypes.STRING,
-                allowNull: true,
-                field: 'estimated_duration',
+                defaultValue: null,
             },
 
-            // Location fields
+            // Location fields - JSONB structure:
+            // [
+            //   {
+            //     address: string,
+            //     coordinates: {
+            //       lat: number,
+            //       lng: number
+            //     }
+            //   }
+            // ]
             location: {
                 type: DataTypes.JSONB,
                 allowNull: true,
@@ -256,6 +242,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 field: 'comments_enabled',
                 defaultValue: true,
+            },
+            logo: {
+                type: DataTypes.TEXT,
+                allowNull: true,
             },
         },
         {

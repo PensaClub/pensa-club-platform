@@ -10,7 +10,7 @@ module.exports = {
                 primaryKey: true,
             },
             name: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             amount: {
@@ -22,7 +22,7 @@ module.exports = {
                 allowNull: true,
             },
             type: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             visible: {
@@ -34,7 +34,7 @@ module.exports = {
                 allowNull: true,
             },
             website: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true,
             },
             sponsorable_id: {

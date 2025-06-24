@@ -20,16 +20,16 @@ module.exports = {
             },
             slug: {
                 type: Sequelize.STRING,
-                allowNull: true,
+                allowNull: false,
                 unique: true,
             },
             title: {
                 type: Sequelize.STRING,
-                allowNull: true,
+                allowNull: false,
             },
             short_description: {
                 type: Sequelize.STRING,
-                allowNull: true,
+                allowNull: false,
             },
             full_description: {
                 type: Sequelize.TEXT,
@@ -48,38 +48,23 @@ module.exports = {
                 type: Sequelize.ENUM('low', 'medium', 'high'),
                 allowNull: true,
             },
-            budget_total: {
-                type: Sequelize.DECIMAL(10, 2),
+            budget: {
+                type: Sequelize.JSONB,
                 allowNull: true,
+                defaultValue: null,
+                comment: 'JSONB structure: { total: number, currency: string, funded: number, goal: number }',
             },
-            budget_currency: {
-                type: Sequelize.STRING,
+            timeline: {
+                type: Sequelize.JSONB,
                 allowNull: true,
-            },
-            budget_funded: {
-                type: Sequelize.DECIMAL(10, 2),
-                allowNull: true,
-            },
-            budget_goal: {
-                type: Sequelize.DECIMAL(10, 2),
-                allowNull: true,
-            },
-            start_date: {
-                type: Sequelize.DATE,
-                allowNull: true,
-            },
-            end_date: {
-                type: Sequelize.DATE,
-                allowNull: true,
-            },
-            estimated_duration: {
-                type: Sequelize.STRING,
-                allowNull: true,
+                defaultValue: null,
+                comment: 'JSONB structure: { startDate: string, endDate: string, estimatedDuration: string }',
             },
             location: {
                 type: Sequelize.JSONB,
                 allowNull: true,
                 defaultValue: [],
+                comment: 'JSONB structure: [{ address: string, coordinates: { lat: number, lng: number } }]',
             },
             application_status: {
                 type: Sequelize.ENUM('open', 'closed'),
@@ -110,6 +95,10 @@ module.exports = {
                 type: Sequelize.BOOLEAN,
                 allowNull: true,
                 defaultValue: true,
+            },
+            logo: {
+                type: Sequelize.TEXT,
+                allowNull: true,
             },
             created_at: {
                 allowNull: false,
