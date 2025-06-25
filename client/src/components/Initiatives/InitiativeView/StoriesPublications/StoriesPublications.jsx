@@ -35,12 +35,12 @@ import { truncateText } from '../../../../utils/truncateText';
     }
 
     return (
-      <section className="stories-publications">
+      <section id="stories" className="stories-publications">
         <h2 className="section-title">
           {t('initiatives.storiesPublications.title')}
         </h2>
         
-        <div className="stories-grid">
+        <div className="stories-grid" >
           {visibleItems.map((item, index) => (
             <article key={item.id || index} className="story-card">
               {item.image && (

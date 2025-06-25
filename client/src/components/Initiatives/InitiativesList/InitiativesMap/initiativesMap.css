@@ -28,8 +28,8 @@
   align-items: center;
   gap: 8px;
   background: none;
-  border: 1px solid #dc2626;
-  color: #dc2626;
+  border: 1px solid var(--orange);
+  color: var(--orange);
   padding: 8px 16px;
   border-radius: 20px;
   cursor: pointer;
@@ -39,7 +39,7 @@
 }
 
 .hide-map-btn:hover {
-  background: #dc2626;
+  background: var(--orange);
   color: white;
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
@@ -35,7 +36,7 @@ export const InitiativeProvider = ({ children }) => {
   });
 
   //Проектите
-  const [projects, setProjects] = useState([]);
+   const [projects, setProjects] = useState([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
 
@@ -62,7 +63,7 @@ export const InitiativeProvider = ({ children }) => {
     setTimeout(() => {
       setErrorMessage('');
       setIsLoading(false);
-    }, 3000);
+    }, 1000);
   }, []);
 
   // Helper functions
@@ -243,7 +244,7 @@ export const InitiativeProvider = ({ children }) => {
 
   const getInitiativeById = useCallback(async (id) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.getInitiativeById(id);
       const initiative = response.data || response;
 
@@ -703,64 +704,82 @@ export const InitiativeProvider = ({ children }) => {
 
     try {
       setIsLoading(true);
-      const response = await getMockProjects();
-      setProjects(response.data);
+      const response = await initiativeService.getAllProjects();
+      
+      const projectsData = response.data || response;
+      setProjects(projectsData);
       setProjectsLoaded(true);
-      return response;
+      
+      return { data: projectsData };
     } catch (e) {
       console.error('Error fetching projects:', e);
-      notify('error', e);
+      notify('error', e.message || 'Failed to fetch projects');
       showErrorAndSetTimeouts(e.message);
+      return { data: [] };
     } finally {
       setIsLoading(false);
     }
-  }, [projects.length, projectsLoaded, getMockProjects, showErrorAndSetTimeouts]);
+  }, [projects.length, projectsLoaded, initiativeService, showErrorAndSetTimeouts]);
 
-  const getProjectById = useCallback(async (id) => {
+ const getProjectById = useCallback(async (id) => {
     try {
       setIsLoading(true);
-
-      if (!projectsData || !projectsData.projects) {
-        console.error('Липсват данни за проектите:', projectsData);
-        throw new Error('Projects data not available');
-      }
-
-      // Търси проекта по id или slug - уверете се, че типовете съвпадат  
-      const project = projectsData.projects.find(proj => {
-        const idMatch = String(proj.id) === String(id);
-        const slugMatch = String(proj.slug) === String(id);
-
-        return idMatch || slugMatch;
-      });
-
+      
+      const response = await initiativeService.getProjectById(id);
+      const project = response.data || response;
+      
       if (!project) {
         throw new Error(`Project not found with id/slug: ${id}`);
       }
 
       setCurrentProject(project);
+      
+      // Обработваме коментарите ако има
+      if (project.comments && Array.isArray(project.comments)) {
+        const processedComments = project.comments
+          .filter(comment => !comment.parentId)
+          .map(comment => {
+            const replies = project.comments
+              .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
+              .map(reply => ({
+                ...reply,
+                id: reply.id === comment.id ? generateId() : reply.id
+              }));
+            
+            return {
+              ...comment,
+              replies: replies
+            };
+          });
+
+        setComments(prev => ({
+          ...prev,
+          [`project-${project.id}`]: processedComments,
+          [`project-${project.slug}`]: processedComments
+        }));
+      }
+      
       return project;
     } catch (e) {
       console.error('Error fetching project by ID:', e);
-      notify('error', e.message || e);
+      notify('error', e.message || 'Failed to fetch project');
       showErrorAndSetTimeouts(e.message);
-      throw e; // Важно: хвърли грешката отново за да се обработи от компонента
+      throw e;
     } finally {
       setIsLoading(false);
     }
-  }, [showErrorAndSetTimeouts]);
+  }, [initiativeService, showErrorAndSetTimeouts, generateId]);
 
-  const getProjectsByInitiative = useCallback(async (initiativeId) => {
+    const getProjectsByInitiative = useCallback(async (initiativeId) => {
     try {
-      const allProjects = await getMockProjects();
-      const initiativeProjects = allProjects.data.filter(
-        project => project.initiativeId === parseInt(initiativeId)
-      );
-      return { data: initiativeProjects };
+      const response = await initiativeService.getProjectsByInitiative(initiativeId);
+      return response;
     } catch (e) {
       console.error('Error fetching projects by initiative:', e);
+      notify('error', e.message || 'Failed to fetch initiative projects');
       throw e;
     }
-  }, [getMockProjects]);
+  }, [initiativeService]);
 
   // Project comments (similar to initiative comments)
   const getProjectComments = useCallback(async (projectId) => {
