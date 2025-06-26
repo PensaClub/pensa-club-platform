@@ -129,6 +129,7 @@
 
 /* ⏰ TIMELINE SECTION */
 .timeline-section {
+  margin-top: 10rem;
   margin-bottom: 4rem;
 }
 
@@ -388,7 +389,7 @@
 .kpis-preview h3,
 .expected-results-preview h3,
 .progress-report-preview h3 {
-  color: #1B8B8A;
+ color: rgb(30, 41, 59);
   margin: 0 0 1.5rem 0;
   font-size: 1.3rem;
   font-weight: 600;
@@ -505,8 +506,13 @@
 }
 
 .faq-answer {
-  color: #6b7280;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  opacity: 0;
+  max-height: 0;
+  padding: 0;
   margin: 0;
+    color: #6b7280;
   line-height: 1.6;
 }
 
@@ -646,10 +652,11 @@
 /* === SLATE.JS CONTENT СТИЛОВЕ === */
 
 /* Wrapper клас */
-.slate-content {
+.results-content.slate-content,.report-content.slate-content {
     max-width: 100%;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    border-top: 4px solid #E26020;
 }
 
 /* Параграфи */

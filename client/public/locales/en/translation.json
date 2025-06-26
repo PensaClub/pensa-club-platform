@@ -1405,6 +1405,7 @@
     },
     "map": {
       "projectsIn": "projects in",
+      "projectsOne": "project in",
       "cities": "cities",
       "hideMap": "Hide Map",
       "initiatives": "initiatives",

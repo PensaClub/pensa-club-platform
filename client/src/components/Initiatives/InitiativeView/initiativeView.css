@@ -1,13 +1,236 @@
-.initiative-view {
-  min-height: 100vh;
-  background: #ffffff;
+.initiative-view .detailed-content[data-editor="slate"],
+.initiative-view .results-content[data-editor="slate"], 
+.initiative-view .report-content[data-editor="slate"],
+.initiative-view .section-text[data-editor="slate"],
+.initiative-view .slate-content[data-editor="slate"] {
+  
+  /* Base reset за всички елементи в slate контейнера */
+  * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    font-weight: inherit !important;
+    text-decoration: inherit !important;
+  }
+  
+  /* Reset специално за span елементите на slate */
+  span[data-slate-string],
+  span[data-slate-string="true"] {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    font-weight: inherit !important;
+    text-decoration: inherit !important;
+    font-style: inherit !important;
+  }
+  
+  /* === ПАРАГРАФИ === */
+  .slate-paragraph {
+    display: block !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    margin: 1rem 0 !important;
+    color: #2d3748 !important;
+    font-weight: 400 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  
+  /* === ЗАГЛАВИЯ === */
+  .slate-heading-1 {
+    display: block !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    margin: 2rem 0 1.5rem 0 !important;
+    color: black !important;
+    border-bottom: 2px solid #f0f0f0 !important;
+    padding-bottom: 0.5rem !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  
+  .slate-heading-2 {
+    display: block !important;
+    font-size: 2rem !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    margin: 1.5rem 0 1rem 0 !important;
+    color: #1B8B8A !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding-bottom: 0.3rem !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  
+  .slate-heading-3 {
+    display: block !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    margin: 1.25rem 0 0.75rem 0 !important;
+    color: #1B8B8A !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  
+  .slate-heading-4 {
+    display: block !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    margin: 1rem 0 0.5rem 0 !important;
+    color: #4a5568 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  
+  .slate-heading-5 {
+    display: block !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    margin: 0.875rem 0 0.5rem 0 !important;
+    color: #4a5568 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  
+  .slate-heading-6 {
+    display: block !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    margin: 0.75rem 0 0.25rem 0 !important;
+    color: #718096 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  
+  /* === ТЕКСТОВИ СТИЛОВЕ === */
+  .slate-paragraph strong,
+  .slate-heading-1 strong,
+  .slate-heading-2 strong,
+  .slate-heading-3 strong,
+  .slate-heading-4 strong,
+  .slate-heading-5 strong,
+  .slate-heading-6 strong,
+  .slate-list-item strong,
+  .slate-blockquote strong,
+  span[data-slate-string] strong {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+  }
+  
+  .slate-paragraph em,
+  .slate-heading-1 em,
+  .slate-heading-2 em,
+  .slate-heading-3 em,
+  .slate-heading-4 em,
+  .slate-heading-5 em,
+  .slate-heading-6 em,
+  .slate-list-item em,
+  .slate-blockquote em,
+  span[data-slate-string] em {
+    font-style: italic !important;
+    color: #4a5568 !important;
+  }
+  
+  .slate-paragraph u,
+  .slate-heading-1 u,
+  .slate-heading-2 u,
+  .slate-heading-3 u,
+  .slate-heading-4 u,
+  .slate-heading-5 u,
+  .slate-heading-6 u,
+  .slate-list-item u,
+  .slate-blockquote u,
+  span[data-slate-string] u {
+    text-decoration: underline !important;
+    text-decoration-color: #1B8B8A !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 2px !important;
+  }
+  
+  /* Комбинирани стилове (bold + italic) */
+  .slate-paragraph strong em,
+  .slate-heading-1 strong em,
+  .slate-heading-2 strong em,
+  .slate-heading-3 strong em,
+  .slate-list-item strong em,
+  .slate-blockquote strong em,
+  span[data-slate-string] strong em {
+    font-weight: 700 !important;
+    font-style: italic !important;
+    color: #1a202c !important;
+  }
+  
+  /* === СПИСЪЦИ === */
+  .slate-bulleted-list,
+  .slate-numbered-list {
+    display: block !important;
+    margin: 1rem 0 !important;
+    padding-left: 2rem !important;
+  }
+  
+  .slate-bulleted-list .slate-list-item {
+    display: list-item !important;
+    list-style-type: disc !important;
+    margin: 0.5rem 0 !important;
+    line-height: 1.6 !important;
+    color: #2d3748 !important;
+  }
+  
+  .slate-numbered-list .slate-list-item {
+    display: list-item !important;
+    list-style-type: decimal !important;
+    margin: 0.5rem 0 !important;
+    line-height: 1.6 !important;
+    color: #2d3748 !important;
+  }
+  
+  /* Вложени списъци */
+  .slate-bulleted-list .slate-bulleted-list .slate-list-item {
+    list-style-type: circle !important;
+  }
+  
+  .slate-bulleted-list .slate-bulleted-list .slate-bulleted-list .slate-list-item {
+    list-style-type: square !important;
+  }
+  
+  /* === BLOCKQUOTE === */
+  .slate-blockquote {
+    display: block !important;
+    border-left: 4px solid #1B8B8A !important;
+    margin: 1.5rem 0 !important;
+    padding: 1rem 1.5rem !important;
+    background-color: #f7fafc !important;
+    font-style: italic !important;
+    color: #4a5568 !important;
+    font-size: 1.125rem !important;
+    border-radius: 0 8px 8px 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    position: relative !important;
+  }
+  
+  .slate-blockquote::before {
+    content: '"' !important;
+    font-size: 3rem !important;
+    color: #1B8B8A !important;
+    line-height: 0 !important;
+    position: absolute !important;
+    top: 0.5rem !important;
+    left: 1rem !important;
+    opacity: 0.3 !important;
+  }
 }
 
+.initiative-view {
+  min-height: 100vh;
+  background: rgb(248, 249, 250);
+}
 
 .initiative-hero {
   margin-top: 80px;
   background: #f8f9fa;
-  border-bottom: 3px solid #E26020;
+  border-bottom: 3px solid var(--orange);
   border-radius: 0 0 20px 20px;
   overflow: hidden;
 }
@@ -111,7 +334,7 @@
 .section-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #1a202c;
+  color: #1e293b;
   margin: 0 0 2.5rem 0;
   text-align: center;
   position: relative;
@@ -158,7 +381,7 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.content-section:nth-child(even) .section-content {
+.content-section:nth-child(even) .section-content-initiative {
   order: 2;
 }
 
@@ -166,12 +389,13 @@
   order: 1;
 }
 
-.section-content {
+.section-content-initiative {
   padding: 1rem;
 }
 
 .section-heading {
-  font-size: 1.5rem;
+  text-indent: initial;
+  font-size: 2rem;
   font-weight: 600;
   color: #1B8B8A;
   margin: 0 0 1rem 0;
@@ -593,6 +817,7 @@
 
 /* ⏰ TIMELINE SECTION */
 .timeline-section {
+  margin-top: 10rem;
   margin-bottom: 4rem;
 }
 
@@ -863,7 +1088,7 @@
 .kpis-preview h3,
 .expected-results-preview h3,
 .progress-report-preview h3 {
-  color: #1B8B8A;
+  color: rgb(30, 41, 59);
   margin: 0 0 1.5rem 0;
   font-size: 1.3rem;
   font-weight: 600;
@@ -980,9 +1205,12 @@
   max-height: 0;
   padding: 0;
   margin: 0;
+    color: #6b7280;
+  line-height: 1.6;
 }
 
 .faq-answer.show {
+  font-size: 1rem;
   opacity: 1;
   max-height: 200px; /* adjust as needed */
   padding: 1rem 0 0 0;
@@ -1168,7 +1396,10 @@
   -ms-overflow-style: none;
   gap: 0.5rem;
 }
-
+.initiative-sticky-nav .container {
+  max-width: 1500px;
+  margin: 0 auto;
+}
 .sticky-nav-links::-webkit-scrollbar {
   display: none;
 }
@@ -1183,7 +1414,7 @@
   white-space: nowrap;
   border-bottom: 3px solid transparent;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  font-size: 1rem;
   min-width: fit-content;
   justify-content: center;
 }
@@ -1198,7 +1429,15 @@
   border-bottom-color:  #dc2626;
   font-weight: 600;
 }
-
+.results-content.slate-content,.report-content.slate-content {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    border-top: 4px solid #E26020;
+}
+.organization-title-h3{
+  display: flex;
+}
 /* 📱 RESPONSIVE DESIGN FOR NEW SECTIONS */
 @media (max-width: 992px) {
   .detailed-description-section {
@@ -1293,7 +1532,7 @@
     gap: 2rem;
   }
 
-  .content-section:nth-child(even) .section-content,
+  .content-section:nth-child(even) .section-content-initiative,
   .content-section:nth-child(even) .section-image {
     order: unset;
   }

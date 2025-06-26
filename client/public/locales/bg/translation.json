@@ -1401,6 +1401,7 @@
     },
     "map": {
       "projectsIn": "проекта в",
+      "projectsOne": "проект в",
       "cities": "града",
       "hideMap": "Скрий картата",
       "initiatives": "инициативи",

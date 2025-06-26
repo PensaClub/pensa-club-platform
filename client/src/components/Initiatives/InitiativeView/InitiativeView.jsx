@@ -35,7 +35,7 @@ export const InitiativeView = () => {
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
     const [activeSection, setActiveSection] = useState('detailed-description');
     const sectionsRef = useRef(new Map()); 
-
+console.log('Initiative KPIs:', initiative?.kpis);
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -379,7 +379,7 @@ export const InitiativeView = () => {
                         <div className="sections-grid">
                             {initiative.sections.map((section, index) => (
                                 <div key={`section-${section.id || section.titleSlug || index}`} className="content-section">
-                                    <div className="section-content">
+                                    <div className="section-content-initiative">
                                         <h3 className="section-heading">{section.title}</h3>
                                         <div className="section-text slate-content" data-editor="slate">
                                             {/* Умна проверка за типа на съдържанието */}
@@ -875,7 +875,7 @@ export const InitiativeView = () => {
                         {/* Organization */}
                         {initiative.organization?.name && (
                             <div className="organization-preview">
-                                <h3>
+                                <h3 className='organization-title-h3'>
                                     <FontAwesomeIcon icon={faBuilding} />
                                     Организация
                                 </h3>

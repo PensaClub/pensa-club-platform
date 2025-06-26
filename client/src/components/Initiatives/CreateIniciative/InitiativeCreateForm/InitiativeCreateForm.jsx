@@ -1445,9 +1445,9 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                                                             };
                                                                             setValues(prev => ({ ...prev, sections: updatedSections }));
                                                                         }}
-                                                                        onPaste={(e) => handleCleanPaste(e, (newValue) => {
-                                                                            setValues(prev => ({ ...prev, title: newValue }));
-                                                                        }, values.title, 500)}
+                                                                        // onPaste={(e) => handleCleanPaste(e, (newValue) => {
+                                                                        //     setValues(prev => ({ ...prev, title: newValue }));
+                                                                        // }, values.title, 500)}
                                                                         placeholder="Въведете заглавие..."
                                                                         className={errors[`sections[${index}].title`] ? 'error' : ''}
                                                                     />
