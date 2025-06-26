@@ -157,6 +157,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         }
         return sectionEditorsRef.current[index];
     };
+
     useEffect(() => {
         if (location.state?.formData) {
             setValues(location.state.formData);
@@ -219,9 +220,9 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         );
 
         if (confirmed) {
+            
             clearLocalStorage();
 
-            // 🔧 ПОПРАВЕНО: Използвай functional update и force re-render
             setValues(prev => {
 
                 const freshDefaults = {
@@ -288,17 +289,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     const handleIgnorePrompt = () => {
         setShowLocalStoragePrompt(false);
     };
-
-    // 🧹 Cleanup при unmount
-    useEffect(() => {
-        return () => {
-
-            if (values.title?.trim()) {
-                saveToLocalStorage(values);
-            }
-        };
-    }, [values, saveToLocalStorage]);
-
+   
     // 🎯 Handle Slate.js changes
     const handleSlateChange = useCallback((fieldName) => (value) => {
         // Използваме functional update за да избегнем dependencies
@@ -1049,6 +1040,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                         </div>
                                         <div className={`slate-editor-container ${errors.detailedDescription ? 'error' : ''}`}>
                                             <Slate
+                                                key={`detailed-desc-${values.title || 'empty'}`} // 🔧 ДОБАВИ key за re-render
                                                 editor={detailedDescriptionEditor}
                                                 initialValue={values.detailedDescription}
                                                 onChange={handleSlateChange('detailedDescription')}
@@ -1153,7 +1145,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                     </div>
 
                                     {/* Location Map - ЗАМЕНЕНО */}
-                                    <div className="form-group-initiative">
+                                    <div className="form-group-initiative" key={`location-${values.title || 'empty'}`}>
                                         <label>
                                             <FontAwesomeIcon icon={faMapMarkerAlt} />
                                             Местоположение
@@ -1220,6 +1212,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                                 notify('info', t('initiatives.create.location-cleared'));
                                             }}
                                         />
+
                                         <div className="field-help">
                                             {t('initiatives.create.location-help')}
                                         </div>
@@ -1619,7 +1612,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
                                             className={errors.startDate ? 'error' : ''}
-                                            // min={new Date().toISOString().split('T')[0]}
+                                        // min={new Date().toISOString().split('T')[0]}
                                         />
                                         <div className="field-help">
                                             {t('initiatives.create.start-date-help')}
@@ -4017,7 +4010,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                     className="floating-btn create"
                     onClick={onSubmit}
                     title="Създай инициатива"
-                    // disabled={isUploading}
+                // disabled={isUploading}
                 >
                     <FontAwesomeIcon icon={faCheckCircle} />
                 </button>

@@ -192,6 +192,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             notify('localstorage-save-failed');
         }
     }, []);
+    
     // 🕒 TIMELINE HELPER FUNCTIONS
     const calculateDuration = useCallback((startDate, endDate) => {
         if (!startDate || !endDate) return 0;
@@ -308,10 +309,9 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                     const convertedData = convertFormToHtml.call(null, tempFormData);
 
                     await saveDraftInitiative({ ...convertedData, userEmail });
-                    console.log('🔄 Auto-saved to both localStorage and database');
                 } catch (error) {
-                    console.error('Auto-save to database failed:', error);
-                    console.log('🔄 Auto-saved to localStorage only');
+                    // console.error('Auto-save to database failed:', error);
+                    // console.log('🔄 Auto-saved to localStorage only');
                 }
             }
         }, 30000);
@@ -1750,6 +1750,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             return null;
         }
     }, []);
+    
     const clearLocalStorage = useCallback(() => {
         try {
             localStorage.removeItem(STORAGE_KEY);
