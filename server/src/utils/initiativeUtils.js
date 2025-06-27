@@ -13,8 +13,7 @@ const initiativeConfig = [
     },
     {
         model: image,
-        as: 'gallery',
-        required: false,
+        as: 'mainImageGallery',
         attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
     },
     {
@@ -129,13 +128,9 @@ const transformInitiative = (initiative) => {
         delete initiativeData.creatorId;
     }
 
-    // Transform main image and gallery
-    if (initiativeData.mainImage || initiativeData.gallery) {
-        initiativeData.mainImage = {
-            ...initiativeData.mainImage,
-            gallery: initiativeData.gallery || [],
-        };
-        delete initiativeData.gallery;
+    if (initiativeData.mainImage && initiativeData.mainImageGallery) {
+        initiativeData.mainImage.gallery = initiativeData.mainImageGallery;
+        delete initiativeData.mainImageGallery;
     }
 
     // Transform sections

@@ -20,16 +20,15 @@ module.exports = {
             },
             slug: {
                 type: Sequelize.TEXT,
-                allowNull: false,
-                unique: true,
+                allowNull: true,
             },
             title: {
                 type: Sequelize.TEXT,
-                allowNull: false,
+                allowNull: true,
             },
             short_description: {
                 type: Sequelize.TEXT,
-                allowNull: false,
+                allowNull: true,
             },
             detailed_description: {
                 type: Sequelize.TEXT,
@@ -65,7 +64,7 @@ module.exports = {
             },
             start_date: {
                 type: Sequelize.DATE,
-                allowNull: false,
+                allowNull: true,
             },
             end_date: {
                 type: Sequelize.DATE,
@@ -173,6 +172,11 @@ module.exports = {
                 type: Sequelize.BOOLEAN,
                 allowNull: false,
                 defaultValue: true,
+            },
+            gallery: {
+                type: Sequelize.JSONB,
+                allowNull: true,
+                defaultValue: [],
             },
             created_at: {
                 allowNull: false,
