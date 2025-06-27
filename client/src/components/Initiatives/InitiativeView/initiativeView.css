@@ -1438,6 +1438,75 @@
 .organization-title-h3{
   display: flex;
 }
+/* Image Slider интеграция */
+.image-slider-container {
+    margin: 20px 0;
+}
+
+.hero-slider .slider-container {
+    height: 400px;
+    padding-bottom: 0;
+}
+
+.section-slider .slider-container {
+    height: 300px;
+    padding-bottom: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.gallery-slider-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.gallery-slider-container .slider-container {
+    height: 500px;
+    padding-bottom: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-captions {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.gallery-caption-item {
+    margin: 8px 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.single-image,
+.single-gallery-item {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.single-image img,
+.single-gallery-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-caption,
+.gallery-caption {
+    margin-top: 10px;
+    font-style: italic;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.section-images {
+    margin-top: 20px;
+}
+
 /* 📱 RESPONSIVE DESIGN FOR NEW SECTIONS */
 @media (max-width: 992px) {
   .detailed-description-section {
@@ -1488,6 +1557,17 @@
     height: 45px;
     font-size: 1.1rem;
   }
+      .hero-slider .slider-container {
+        height: 250px;
+    }
+    
+    .section-slider .slider-container {
+        height: 200px;
+    }
+    
+    .gallery-slider-container .slider-container {
+        height: 300px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1508,6 +1588,17 @@
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
   }
+    .hero-slider .slider-container {
+        height: 200px;
+    }
+    
+    .section-slider .slider-container {
+        height: 150px;
+    }
+    
+    .gallery-slider-container .slider-container {
+        height: 250px;
+    }
 }
 /* Responsive Design */
 @media (max-width: 992px) {

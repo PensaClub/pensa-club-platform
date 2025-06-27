@@ -37,6 +37,21 @@ const ImageSlider = ({ images, alt, onSlideChange, onImageClick, initialIndex = 
     setCurrentIndex(slideIndex);
   };
 
+  // Функция за получаване на src - работи и с URL strings и с обекти
+  const getImageSrc = (image) => {
+    return typeof image === 'string' ? image : image.src;
+  };
+
+  // Функция за получаване на alt text
+  const getImageAlt = (image, index) => {
+    if (typeof image === 'string') {
+      return `${alt} - ${t('articles.slider.slide')} ${index + 1}`;
+    }
+    return image.alt || `${alt} - ${t('articles.slider.slide')} ${index + 1}`;
+  };
+
+  const currentImage = images[currentIndex];
+
   return (
     <div className="slider-container">
       <div className="slider-main">
@@ -45,12 +60,12 @@ const ImageSlider = ({ images, alt, onSlideChange, onImageClick, initialIndex = 
         </button>
         <div 
           className="slider-image-container" 
-          onClick={onImageClick ? onImageClick : undefined}
+          onClick={onImageClick ? () => onImageClick(currentIndex) : undefined}
           style={onImageClick ? { cursor: 'pointer' } : {}}
         >
           <img
-            src={images[currentIndex]}
-            alt={`${alt} - ${t('articles.slider.slide')} ${currentIndex + 1}`}
+            src={getImageSrc(currentImage)}
+            alt={getImageAlt(currentImage, currentIndex)}
             className="slider-image"
           />
         </div>
@@ -68,9 +83,17 @@ const ImageSlider = ({ images, alt, onSlideChange, onImageClick, initialIndex = 
           />
         ))}
       </div>
+      
       <div className="slider-counter">
         {currentIndex + 1}/{images.length}
       </div>
+
+      {/* Показваме caption ако има (само за обекти) */}
+      {typeof currentImage === 'object' && currentImage.caption && (
+        <div className="slider-caption">
+          {currentImage.caption}
+        </div>
+      )}
     </div>
   );
 };

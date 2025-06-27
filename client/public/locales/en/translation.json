@@ -1386,7 +1386,64 @@
       "email": "Email",
       "emailTo": "email to",
       "additionalContacts": "Additional contacts",
-      "comments": "Comments"
+      "comments": "Comments",
+       "navigation": {
+        "description": "Description",
+        "sections": "Sections",
+        "publications": "Publications",
+        "projects": "Projects", 
+        "timeline": "Timeline",
+        "audience": "Audience",
+        "results": "Results",
+        "partners": "Partners",
+        "contact": "Contact",
+        "faq": "FAQ",
+        "comments": "Comments"
+      },
+      "sectionTitles": {
+        "detailedDescription": "Detailed Description",
+        "gallery": "Gallery",
+        "timeline": "Timeline",
+        "targetScope": "Target Audience & Scope",
+        "progressResults": "Progress & Results", 
+        "partnersSponsors": "Partners & Sponsors",
+        "organizationInfo": "Organization & Contacts",
+        "tags": "Tags",
+        "faq": "Frequently Asked Questions"
+      },
+      "timeline": {
+        "startDate": "Start:",
+        "endDate": "End:",
+        "milestones": "Key Milestones"
+      },
+      "targetScope": {
+        "targetAge": "Target Age:",
+        "targetAudience": "Target Audience:",
+        "customAudience": "Additional Target Audience:",
+        "expectedBudget": "Expected Budget:",
+        "fundingSources": "Funding Sources:"
+      },
+      "progressResults": {
+        "kpis": "Key Performance Indicators (KPIs)",
+        "target": "Target:",
+        "expectedResults": "Expected Results",
+        "progressReport": "Progress Report"
+      },
+      "partnersSponsors": {
+        "partners": "Partners",
+        "sponsors": "Sponsors", 
+        "visitWebsite": "Visit Website"
+      },
+      "organization": {
+        "responsiblePerson": "Responsible Person",
+        "organization": "Organization",
+        "socialMedia": "Social Media"
+      },
+      "placeholders": {
+        "noMainImage": "No main image",
+        "noImages": "No images",
+        "noContent": "No content"
+      }
     },
     "projects": {
       "statusActive": "Active",

@@ -11,6 +11,7 @@ import { ContactSection } from './ContactSection/ContactSection';
 import { Comments } from './Comments/Comments';
 import { truncateText } from '../../../utils/truncateText';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
+import ImageSlider from '../../Articles/ArticleView/ImageSlider/ImageSlider';
 // Import вашите съществуващи утилити
 import { getDescriptionParts, handleSmoothScroll, renderSlateContent } from '../../../utils/slateRenderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,8 +35,8 @@ export const InitiativeView = () => {
     const { trackInitiative } = useAnalytics();
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
     const [activeSection, setActiveSection] = useState('detailed-description');
-    const sectionsRef = useRef(new Map()); 
-console.log('Initiative KPIs:', initiative?.kpis);
+    const sectionsRef = useRef(new Map());
+
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -48,7 +49,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
             setIsLoading(true);
             try {
                 const data = await getInitiativeById(slug);
-                console.log('Fetched initiative:', data);
+
                 setInitiative(data);
                 if (data) {
                     trackInitiative(data.id, data.title);
@@ -66,10 +67,10 @@ console.log('Initiative KPIs:', initiative?.kpis);
         }
     }, [slug, getInitiativeById]);
 
-     useEffect(() => {
+    useEffect(() => {
         const observerOptions = {
             root: null,
-            rootMargin: '-20% 0px -60% 0px', 
+            rootMargin: '-20% 0px -60% 0px',
             threshold: 0.1
         };
 
@@ -85,8 +86,8 @@ console.log('Initiative KPIs:', initiative?.kpis);
         const observer = new IntersectionObserver(observerCallback, observerOptions);
 
         const sectionIds = [
-            'detailed-description','sections', 'stories', 'projects','projects-grid','timeline','target-scope',
-            'progress-results','partners-sponsors','contact','faq', 'comments'
+            'detailed-description', 'sections', 'stories', 'projects', 'projects-grid', 'timeline', 'target-scope',
+            'progress-results', 'partners-sponsors', 'contact', 'faq', 'comments'
         ];
 
         sectionIds.forEach(id => {
@@ -105,6 +106,29 @@ console.log('Initiative KPIs:', initiative?.kpis);
         };
     }, [initiative]);
 
+    // Функция за рендериране на снимки с или без slider
+    const renderImages = (images, className = "") => {
+        if (!images || images.length === 0) return null;
+
+        if (images.length === 1) {
+            // Една снимка = обикновен img
+            return (
+                <img
+                    src={images[0].src}
+                    alt={images[0].alt}
+                    className={className}
+                />
+            );
+        } else {
+            // Повече снимки = slider
+            return (
+                <div className={`image-slider-container ${className}`}>
+                    <ImageSlider images={images} />
+                </div>
+            );
+        }
+    };
+
     const toggleFaq = (index) => {
         setOpenFaqIndex(openFaqIndex === index ? null : index);
     };
@@ -114,7 +138,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
         const targetElement = document.getElementById(targetId);
 
         if (targetElement) {
-            setActiveSection(targetId); 
+            setActiveSection(targetId);
             targetElement.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
@@ -219,7 +243,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'detailed-description' ? 'active' : ''}`}
                             >
-                                Описание
+                                {t('initiatives.view.navigation.description')}
                             </a>
                         )}
 
@@ -229,7 +253,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'sections' ? 'active' : ''}`}
                             >
-                                Секции
+                                {t('initiatives.view.navigation.sections')}
                             </a>
                         )}
                         {((initiative.stories && initiative.stories.length > 0) || (initiative.publications && initiative.publications.length > 0)) && (
@@ -238,7 +262,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${(activeSection === 'stories') ? 'active' : ''}`}
                             >
-                                Публикации
+                                {t('initiatives.view.navigation.publications')}
                             </a>
                         )}
                         {initiative.projects?.length > 0 && (
@@ -247,7 +271,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${(activeSection === 'projects' || activeSection === 'projects-grid') ? 'active' : ''}`}
                             >
-                                Проекти
+                                {t('initiatives.view.navigation.projects')}
                             </a>
                         )}
 
@@ -257,7 +281,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'timeline' ? 'active' : ''}`}
                             >
-                                График
+                                {t('initiatives.view.navigation.timeline')}
                             </a>
                         )}
 
@@ -267,7 +291,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'target-scope' ? 'active' : ''}`}
                             >
-                                Аудитория
+                                {t('initiatives.view.navigation.audience')}
                             </a>
                         )}
 
@@ -277,7 +301,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'progress-results' ? 'active' : ''}`}
                             >
-                                Резултати
+                                {t('initiatives.view.navigation.results')}
                             </a>
                         )}
 
@@ -287,16 +311,16 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'partners-sponsors' ? 'active' : ''}`}
                             >
-                                Партньори
+                                {t('initiatives.view.navigation.partners')}
                             </a>
                         )}
-                        
+
                         <a
                             href="#contact"
                             onClick={handleSmoothScroll}
                             className={`sticky-nav-link ${activeSection === 'contact' ? 'active' : ''}`}
                         >
-                            Контакт
+                            {t('initiatives.view.navigation.contact')}
                         </a>
 
                         {initiative.faq?.length > 0 && (
@@ -305,7 +329,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'faq' ? 'active' : ''}`}
                             >
-                                FAQ
+                                {t('initiatives.view.navigation.faq')}
                             </a>
                         )}
 
@@ -315,7 +339,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'comments' ? 'active' : ''}`}
                             >
-                                Коментари
+                                {t('initiatives.view.navigation.comments')}
                             </a>
                         )}
                     </div>
@@ -328,12 +352,12 @@ console.log('Initiative KPIs:', initiative?.kpis);
                 {/* 📖 NEW: Detailed Description */}
                 {initiative.detailedDescription && (
                     <section id="detailed-description" className="detailed-description-section">
-                        <h2 className="section-title">Подробно описание</h2>
+                        <h2 className="section-title">{t('initiatives.view.sectionTitles.detailedDescription')}</h2>
                         <div className="detailed-content slate-content" data-editor="slate">
                             {(() => {
                                 // Ако няма съдържание
                                 if (!initiative.detailedDescription) {
-                                    return <p>Няма съдържание</p>;
+                                    return <p>{t('initiatives.view.placeholders.noContent')}</p>
                                 }
 
                                 // Ако е string (HTML или обикновен текст)
@@ -386,7 +410,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                             {(() => {
                                                 // Ако няма съдържание
                                                 if (!section.content) {
-                                                    return <p>Няма съдържание</p>;
+                                                    return <p>{t('initiatives.view.placeholders.noContent')}</p>;
                                                 }
 
                                                 // Ако е string (HTML или обикновен текст)
@@ -421,12 +445,9 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                     </div>
 
                                     {/* Поддръжка за нови images структури */}
-                                    {section.images && section.images.length > 0 && (
+                                    {section.images?.length > 0 && (
                                         <div className="section-image">
-                                            <img
-                                                src={section.images[0].src}
-                                                alt={section.images[0].alt || section.title}
-                                            />
+                                            {renderImages(section.images, "section-slider")}
                                         </div>
                                     )}
                                     {/* Fallback за стари image структури */}
@@ -447,7 +468,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                 {/* 🖼️ NEW: Gallery */}
                 {initiative.gallery?.length > 0 && (
                     <section id="gallery" className="gallery-section">
-                        <h2 className="section-title">Галерия</h2>
+                        <h2 className="section-title">{t('initiatives.view.sectionTitles.gallery')}</h2>
                         <div className="gallery-grid">
                             {initiative.gallery.map((image, index) => (
                                 <div key={index} className="gallery-item">
@@ -524,7 +545,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 onClick={() => setShowMap(true)}
                                 className="show-map-btn"
                             >
-                                🗺️ {t('initiatives.view.showMap', 'Покажи картата')}
+                                🗺️ {t('initiatives.view.showMap')}
                             </button>
                         )}
 
@@ -557,7 +578,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                     <section id="timeline" className="timeline-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faCalendar} />
-                            Времева линия
+                            {t('initiatives.view.sectionTitles.timeline')}
                         </h2>
 
                         <div className="timeline-content">
@@ -565,12 +586,12 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                 <div className="timeline-dates">
                                     {initiative.startDate && (
                                         <div className="timeline-date">
-                                            <strong>Начало:</strong> {new Date(initiative.startDate).toLocaleDateString('bg-BG')}
+                                            <strong>{t('initiatives.view.timeline.startDate')}</strong> {new Date(initiative.startDate).toLocaleDateString('bg-BG')}
                                         </div>
                                     )}
                                     {initiative.endDate && (
                                         <div className="timeline-date">
-                                            <strong>Край:</strong> {new Date(initiative.endDate).toLocaleDateString('bg-BG')}
+                                            <strong>{t('initiatives.view.timeline.endDate')}</strong> {new Date(initiative.endDate).toLocaleDateString('bg-BG')}
                                         </div>
                                     )}
                                 </div>
@@ -578,7 +599,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
 
                             {initiative.milestones?.length > 0 && (
                                 <div className="milestones-preview">
-                                    <h3>Ключови етапи</h3>
+                                    <h3>{t('initiatives.view.timeline.milestones')}</h3>
                                     <div className="milestones-list">
                                         {initiative.milestones.map((milestone, index) => (
                                             <div key={index} className="milestone-preview-item">
@@ -602,13 +623,13 @@ console.log('Initiative KPIs:', initiative?.kpis);
                     <section id="target-scope" className="target-scope-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faBullseye} />
-                            Целева група и обхват
+                            {t('initiatives.view.sectionTitles.targetScope')}
                         </h2>
 
                         <div className="target-scope-content">
                             {initiative.targetAge?.length > 0 && (
                                 <div className="target-item">
-                                    <h4>Целева възраст:</h4>
+                                    <h4>{t('initiatives.view.targetScope.targetAge')}</h4>
                                     <div className="target-tags">
                                         {initiative.targetAge.map((age, index) => (
                                             <span key={index} className="target-tag age-tag">{age}</span>
@@ -619,7 +640,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
 
                             {initiative.targetAudience?.length > 0 && (
                                 <div className="target-item">
-                                    <h4>Целева аудитория:</h4>
+                                    <h4>{t('initiatives.view.targetScope.targetAudience')}</h4>
                                     <div className="target-tags">
                                         {initiative.targetAudience.map((audience, index) => (
                                             <span key={index} className="target-tag audience-tag">{audience}</span>
@@ -630,14 +651,14 @@ console.log('Initiative KPIs:', initiative?.kpis);
 
                             {initiative.customAudience && (
                                 <div className="target-item">
-                                    <h4>Допълнителна целева аудитория:</h4>
+                                    <h4>{t('initiatives.view.targetScope.customAudience')}</h4>
                                     <p className="custom-audience-text">{initiative.customAudience}</p>
                                 </div>
                             )}
 
                             {initiative.expectedBudget && (
                                 <div className="target-item">
-                                    <h4>Очакван бюджет:</h4>
+                                    <h4>{t('initiatives.view.targetScope.expectedBudget')}</h4>
                                     <div className="budget-display">
                                         <FontAwesomeIcon icon={faMoneyBillWave} />
                                         {parseInt(initiative.expectedBudget).toLocaleString()} {initiative.currency || 'BGN'}
@@ -647,7 +668,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
 
                             {initiative.fundingSources?.length > 0 && (
                                 <div className="target-item">
-                                    <h4>Източници на финансиране:</h4>
+                                    <h4>{t('initiatives.view.targetScope.fundingSources')}</h4>
                                     <div className="target-tags">
                                         {initiative.fundingSources.map((source, index) => (
                                             <span key={index} className="target-tag funding-tag">{source}</span>
@@ -663,17 +684,17 @@ console.log('Initiative KPIs:', initiative?.kpis);
                     <section id="progress-results" className="progress-results-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faTrophy} />
-                            Прогрес и резултати
+                            {t('initiatives.view.sectionTitles.progressResults')}
                         </h2>
 
                         {initiative.kpis?.length > 0 && (
                             <div className="kpis-preview">
-                                <h3>Ключови показатели (KPIs)</h3>
+                                <h3>{t('initiatives.view.progressResults.kpis')}</h3>
                                 <div className="kpis-grid">
                                     {initiative.kpis.map((kpi, index) => (
                                         <div key={index} className="kpi-preview-card">
                                             <h4>{kpi.name}</h4>
-                                            <div className="kpi-target">Цел: {kpi.target}</div>
+                                            <div className="kpi-target">{t('initiatives.view.progressResults.target')} {kpi.target}</div>
                                         </div>
                                     ))}
                                 </div>
@@ -682,12 +703,12 @@ console.log('Initiative KPIs:', initiative?.kpis);
 
                         {initiative.expectedResults && (
                             <div className="expected-results-preview">
-                                <h3>Очаквани резултати</h3>
+                                <h3>{t('initiatives.view.progressResults.expectedResults')}</h3>
                                 <div className="results-content slate-content" data-editor="slate">
                                     {(() => {
                                         // Ако няма съдържание
                                         if (!initiative.expectedResults) {
-                                            return <p>Няма съдържание</p>;
+                                            return <p>{t('initiatives.view.placeholders.noContent')}</p>
                                         }
 
                                         // Ако е string (HTML или обикновен текст)
@@ -724,12 +745,12 @@ console.log('Initiative KPIs:', initiative?.kpis);
 
                         {initiative.progressReport && (
                             <div className="progress-report-preview">
-                                <h3>Отчет за напредъка</h3>
+                                <h3>{t('initiatives.view.progressResults.progressReport')}</h3>
                                 <div className="report-content slate-content" data-editor="slate">
                                     {(() => {
                                         // Ако няма съдържание
                                         if (!initiative.progressReport) {
-                                            return <p>Няма съдържание</p>;
+                                            return <p>{t('initiatives.view.placeholders.noContent')}</p>
                                         }
 
                                         // Ако е string (HTML или обикновен текст)
@@ -771,12 +792,12 @@ console.log('Initiative KPIs:', initiative?.kpis);
                     <section id="partners-sponsors" className="partners-sponsors-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faHandshake} />
-                            Партньори и спонсори
+                            {t('initiatives.view.sectionTitles.partnersSponsors')}
                         </h2>
 
                         {initiative.partners?.length > 0 && (
                             <div className="partners-preview">
-                                <h3>Партньори</h3>
+                                <h3>{t('initiatives.view.partnersSponsors.partners')}</h3>
                                 <div className="partners-grid">
                                     {initiative.partners.filter(partner => partner.visible !== false).map((partner, index) => (
                                         <div key={index} className="partner-preview-card">
@@ -793,7 +814,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                                 )}
                                                 {partner.website && (
                                                     <a href={partner.website} target="_blank" rel="noopener noreferrer" className="partner-website">
-                                                        Посети сайта
+                                                        {t('initiatives.view.partnersSponsors.visitWebsite')}
                                                     </a>
                                                 )}
                                             </div>
@@ -805,7 +826,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
 
                         {initiative.sponsors?.length > 0 && (
                             <div className="sponsors-preview">
-                                <h3>Спонсори</h3>
+                                <h3>{t('initiatives.view.partnersSponsors.sponsors')}</h3>
                                 <div className="sponsors-grid">
                                     {initiative.sponsors.filter(sponsor => sponsor.visible !== false).map((sponsor, index) => (
                                         <div key={index} className="sponsor-preview-card">
@@ -824,7 +845,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                                                 )}
                                                 {sponsor.website && (
                                                     <a href={sponsor.website} target="_blank" rel="noopener noreferrer" className="sponsor-website">
-                                                        Посети сайта
+                                                        {t('initiatives.view.partnersSponsors.visitWebsite')}
                                                     </a>
                                                 )}
                                             </div>
@@ -839,12 +860,12 @@ console.log('Initiative KPIs:', initiative?.kpis);
                 {/* 🏢 NEW: Organization Information */}
                 {(initiative.responsible?.name || initiative.organization?.name || Object.values(initiative.socialMedia || {}).some(link => link)) && (
                     <section className="organization-contact-section">
-                        <h2 className="section-title">Организация и отговорни лица</h2>
+                        {t('initiatives.view.sectionTitles.organizationInfo')}
 
                         {/* Responsible Person */}
                         {initiative.responsible?.name && (
                             <div className="responsible-preview">
-                                <h3>Отговорно лице</h3>
+                                <h3>{t('initiatives.view.organization.responsiblePerson')}</h3>
                                 <div className="responsible-info">
                                     <h4>{initiative.responsible.name}</h4>
                                     {initiative.responsible.position && (
@@ -877,7 +898,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                             <div className="organization-preview">
                                 <h3 className='organization-title-h3'>
                                     <FontAwesomeIcon icon={faBuilding} />
-                                    Организация
+                                    {t('initiatives.view.organization.organization')}
                                 </h3>
                                 <div className="organization-info">
                                     <h4>{initiative.organization.name}</h4>
@@ -898,7 +919,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                         {/* Social Media */}
                         {Object.values(initiative.socialMedia || {}).some(link => link) && (
                             <div className="social-media-preview">
-                                <h3>Социални мрежи</h3>
+                                <h3>{t('initiatives.view.organization.socialMedia')}</h3>
                                 <div className="social-links">
                                     {initiative.socialMedia?.facebook && (
                                         <a href={initiative.socialMedia.facebook} target="_blank" rel="noopener noreferrer" className="social-link facebook">
@@ -937,7 +958,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                     <section className="tags-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faTag} />
-                            Тагове
+                            <h2 className="section-title">{t('initiatives.view.sectionTitles.tags')}</h2>   
                         </h2>
                         <div className="tags-display">
                             {initiative.tags.map((tag, index) => (
@@ -952,7 +973,7 @@ console.log('Initiative KPIs:', initiative?.kpis);
                     <section id="faq" className="faq-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faQuestionCircle} />
-                            Често задавани въпроси
+                            <h2 className="section-title">{t('initiatives.view.sectionTitles.faq')}</h2>
                         </h2>
                         <div className="faq-list">
                             {initiative.faq.map((faqItem, index) => (

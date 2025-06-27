@@ -1382,8 +1382,66 @@
       "email": "Имейл",
       "emailTo": "изпрати имейл до",
       "additionalContacts": "Допълнителни контакти",
-      "comments": "Коментари"
+      "comments": "Коментари",
+      "navigation": {
+        "description": "Описание",
+        "sections": "Секции",
+        "publications": "Публикации", 
+        "projects": "Проекти",
+        "timeline": "График",
+        "audience": "Аудитория",
+        "results": "Резултати",
+        "partners": "Партньори",
+        "contact": "Контакт",
+        "faq": "FAQ",
+        "comments": "Коментари"
+      },
+           "sectionTitles": {
+        "detailedDescription": "Подробно описание",
+        "gallery": "Галерия",
+        "timeline": "Времева линия",
+        "targetScope": "Целева група и обхват",
+        "progressResults": "Прогрес и резултати",
+        "partnersSponsors": "Партньори и спонсори",
+        "organizationInfo": "Организация и отговорни лица",
+        "tags": "Тагове",
+        "faq": "Често задавани въпроси"
+      },
+      "timeline": {
+        "startDate": "Начало:",
+        "endDate": "Край:",
+        "milestones": "Ключови етапи"
+      },
+      "targetScope": {
+        "targetAge": "Целева възраст:",
+        "targetAudience": "Целева аудитория:",
+        "customAudience": "Допълнителна целева аудитория:",
+        "expectedBudget": "Очакван бюджет:",
+        "fundingSources": "Източници на финансиране:"
+      },
+       "progressResults": {
+        "kpis": "Ключови показатели (KPIs)",
+        "target": "Цел:",
+        "expectedResults": "Очаквани резултати",
+        "progressReport": "Отчет за напредъка"
+      },
+      "partnersSponsors": {
+        "partners": "Партньори",
+        "sponsors": "Спонсори",
+        "visitWebsite": "Посети сайта"
+      },
+      "organization": {
+        "responsiblePerson": "Отговорно лице",
+        "organization": "Организация",
+        "socialMedia": "Социални мрежи"
+      },
+      "placeholders": {
+        "noMainImage": "Няма главно изображение",
+        "noImages": "Няма изображения",
+        "noContent": "Няма съдържание"
+      }
     },
+    
     "projects": {
       "statusActive": "Активен",
       "statusInProgress": "В процес",
