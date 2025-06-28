@@ -28,6 +28,18 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'user_id',
                 otherKey: 'initiative_id',
             });
+
+            user_account.belongsToMany(models.project, {
+                through: 'project_bookmarks',
+                as: 'bookmarkedProjects',
+                foreignKey: 'user_id',
+                otherKey: 'project_id',
+            });
+
+            user_account.hasMany(models.project_application, {
+                foreignKey: 'userId',
+                as: 'projectApplications',
+            });
         }
     }
 

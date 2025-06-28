@@ -105,10 +105,15 @@ module.exports = (sequelize, DataTypes) => {
             });
 
             project.belongsToMany(models.user_account, {
-                through: 'project_applications',
-                as: 'appliedBy',
+                through: 'project_bookmarks',
+                as: 'bookmarkedBy',
                 foreignKey: 'project_id',
                 otherKey: 'user_id',
+            });
+
+            project.hasMany(models.project_application, {
+                foreignKey: 'projectId',
+                as: 'applications',
             });
         }
     }

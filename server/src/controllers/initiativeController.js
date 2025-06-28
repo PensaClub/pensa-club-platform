@@ -2,24 +2,164 @@ const initiativeController = require('express').Router();
 const { where, Op } = require('sequelize');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
-const {
-    initiative,
-    image,
-    project,
-    downloadMaterial,
-    story,
-    publication,
-    contact,
-    section,
-    user_account,
-    comment,
-    sponsor,
-    partner,
-} = require('../sequelize/models');
+const { initiative, image, downloadMaterial, contact, section, user_account, comment, sponsor, partner } = require('../sequelize/models');
 const customError = require('../utils/customError');
 const { transformInitiative, initiativeConfig } = require('../utils/initiativeUtils');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { InitiativeSchema, UpdateInitiativeSchema } = require('../schemas/initiatives.schema');
+
+// ========================================
+// ENDPOINTS
+// ========================================
+
+initiativeController.post('/create', isAuth, async (req, res, next) => {
+    const initiativeData = { ...req.body, isDraft: false };
+    return createInitiative(initiativeData, req, res, next);
+});
+
+initiativeController.post('/draft/save/:id?', isAuth, async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            const initiativeData = { ...req.body, isDraft: true };
+            return createInitiative(initiativeData, req, res, next);
+        }
+
+        return updateInitiative(req.body, req, res, next, true);
+    } catch (err) {
+        next(err);
+    }
+});
+
+initiativeController.get('/draft/:id', async (req, res, next) => {
+    return getSingleInitiativeByDraftStatus(true, req, res, next);
+});
+
+initiativeController.get('/single/:id', async (req, res, next) => {
+    return getSingleInitiativeByDraftStatus(false, req, res, next);
+});
+
+initiativeController.get('/drafts', async (req, res, next) => {
+    return getInitiativesByDraftStatus(true, req, res, next);
+});
+
+initiativeController.get('/all', async (req, res, next) => {
+    return getInitiativesByDraftStatus(false, req, res, next);
+});
+
+initiativeController.delete('/draft/:draftId', isAuth, async (req, res, next) => {
+    return deleteInitiativeByDraftStatus(true, req, res, next);
+});
+
+initiativeController.delete('/:id', isAuth, async (req, res, next) => {
+    return deleteInitiativeByDraftStatus(false, req, res, next);
+});
+
+initiativeController.put('/:id', isAuth, async (req, res, next) => {
+    return updateInitiative(req.body, req, res, next, false);
+});
+
+initiativeController.patch('/:id', isAuth, async (req, res, next) => {
+    return updateInitiative(req.body, req, res, next, false);
+});
+
+initiativeController.post('/bookmark/:initiativeId', isAuth, async (req, res, next) => {
+    try {
+        const userId = req.user.userId;
+        const param = req.params.initiativeId;
+        const initiativeId = parseInt(param);
+
+        let existing;
+        if (isNaN(initiativeId)) {
+            existing = await initiative.findOne({
+                where: {
+                    slug: param,
+                    isDraft: false,
+                },
+                include: [
+                    {
+                        model: user_account,
+                        as: 'bookmarkedBy',
+                        where: { id: userId },
+                        required: false,
+                    },
+                ],
+            });
+        } else {
+            existing = await initiative.findOne({
+                where: {
+                    id: initiativeId,
+                    isDraft: false,
+                },
+                include: [
+                    {
+                        model: user_account,
+                        as: 'bookmarkedBy',
+                        where: { id: userId },
+                        required: false,
+                    },
+                ],
+            });
+        }
+
+        if (!existing) {
+            return res.status(404).json({ error: 'Published initiative not found' });
+        }
+
+        if (existing.bookmarkedBy?.length > 0) {
+            await existing.removeBookmarkedBy(userId);
+            return res.status(200).json({ message: 'Bookmark successfully removed.', bookmarked: false });
+        } else {
+            await existing.addBookmarkedBy(userId);
+            return res.status(201).json({ message: 'Bookmark successfully added.', bookmarked: true });
+        }
+    } catch (err) {
+        next(err);
+    }
+});
+
+initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
+    try {
+        const { email } = req.params;
+
+        const user = await user_account.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        const initiatives = await user.getBookmarkedInitiatives({
+            where: { isDraft: false },
+            include: initiativeConfig,
+            order: [['id', 'ASC']],
+            through: { attributes: [] },
+        });
+
+        if (initiatives.length === 0) {
+            return res.status(200).json({
+                message: 'No bookmarked initiatives found.',
+                data: [],
+            });
+        }
+
+        const initiativesWithComments = await Promise.all(
+            initiatives.map(async (initiative) => {
+                const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
+                const transformed = transformInitiative(initiative);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
+
+        return res.status(200).json(initiativesWithComments);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// ========================================
+// FUNCTIONS
+// ========================================
 
 const getSingleInitiativeByDraftStatus = async (isDraft, req, res, next) => {
     try {
@@ -117,7 +257,7 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
                 where: {
                     imageableId: foundInitiative.id,
                     imageLinkConnection: {
-                        [Op.in]: ['initiative_main', 'initiative_gallery'],
+                        [Op.in]: ['initiative_main', 'initiative_main_gallery'],
                     },
                 },
                 transaction: t,
@@ -213,74 +353,6 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
     }
 };
 
-initiativeController.post('/create', isAuth, async (req, res, next) => {
-    const initiativeData = { ...req.body, isDraft: false };
-    return createInitiative(initiativeData, req, res, next);
-});
-
-initiativeController.post('/draft/save', isAuth, async (req, res, next) => {
-    const initiativeData = { ...req.body, isDraft: true };
-    return createInitiative(initiativeData, req, res, next);
-});
-
-initiativeController.get('/draft/:id', async (req, res, next) => {
-    return getSingleInitiativeByDraftStatus(true, req, res, next);
-});
-
-initiativeController.get('/single/:id', async (req, res, next) => {
-    return getSingleInitiativeByDraftStatus(false, req, res, next);
-});
-
-initiativeController.delete('/draft/:draftId', isAuth, async (req, res, next) => {
-    return deleteInitiativeByDraftStatus(true, req, res, next);
-});
-
-initiativeController.delete('/:id', isAuth, async (req, res, next) => {
-    return deleteInitiativeByDraftStatus(false, req, res, next);
-});
-
-initiativeController.put('/:id', isAuth, async (req, res, next) => {
-    return initiativeController.patch('/:id', isAuth, req, res, next);
-});
-
-initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
-    try {
-        const { email } = req.params;
-
-        const user = await user_account.findOne({ where: { email } });
-        if (!user) {
-            return res.status(404).json({ error: 'User not found.' });
-        }
-
-        const initiatives = await user.getBookmarkedInitiatives({
-            where: { isDraft: false },
-            include: initiativeConfig,
-            order: [['id', 'ASC']],
-            through: { attributes: [] },
-        });
-
-        if (initiatives.length === 0) {
-            return res.status(200).json({
-                message: 'No bookmarked initiatives found.',
-                data: [],
-            });
-        }
-
-        const initiativesWithComments = await Promise.all(
-            initiatives.map(async (initiative) => {
-                const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
-                const transformed = transformInitiative(initiative);
-                transformed.comments = comments.map((comment) => transformComment(comment));
-                return transformed;
-            })
-        );
-
-        return res.status(200).json(initiativesWithComments);
-    } catch (err) {
-        next(err);
-    }
-});
-
 const getInitiativesByDraftStatus = async (isDraft, req, res, next) => {
     try {
         const { page, limit } = req.query;
@@ -366,65 +438,6 @@ const getInitiativesByDraftStatus = async (isDraft, req, res, next) => {
     }
 };
 
-initiativeController.get('/all', async (req, res, next) => {
-    return getInitiativesByDraftStatus(false, req, res, next);
-});
-
-initiativeController.post('/bookmark/:initiativeId', isAuth, async (req, res, next) => {
-    try {
-        const userId = req.user.userId;
-        const param = req.params.initiativeId;
-        const initiativeId = parseInt(param);
-
-        let existing;
-        if (isNaN(initiativeId)) {
-            existing = await initiative.findOne({
-                where: {
-                    slug: param,
-                    isDraft: false,
-                },
-                include: [
-                    {
-                        model: user_account,
-                        as: 'bookmarkedBy',
-                        where: { id: userId },
-                        required: false,
-                    },
-                ],
-            });
-        } else {
-            existing = await initiative.findOne({
-                where: {
-                    id: initiativeId,
-                    isDraft: false,
-                },
-                include: [
-                    {
-                        model: user_account,
-                        as: 'bookmarkedBy',
-                        where: { id: userId },
-                        required: false,
-                    },
-                ],
-            });
-        }
-
-        if (!existing) {
-            return res.status(404).json({ error: 'Published initiative not found' });
-        }
-
-        if (existing.bookmarkedBy?.length > 0) {
-            await existing.removeBookmarkedBy(userId);
-            return res.status(200).json({ message: 'Bookmark successfully removed.', bookmarked: false });
-        } else {
-            await existing.addBookmarkedBy(userId);
-            return res.status(201).json({ message: 'Bookmark successfully added.', bookmarked: true });
-        }
-    } catch (err) {
-        next(err);
-    }
-});
-
 const createInitiative = async (initiativeData, req, res, next) => {
     try {
         const result = await initiative.sequelize.transaction(async (t) => {
@@ -437,7 +450,7 @@ const createInitiative = async (initiativeData, req, res, next) => {
             );
 
             if (initiativeData.mainImage) {
-                const { gallery, ...mainImageData } = initiativeData.mainImage;
+                const { gallery: mainImageGallery, ...mainImageData } = initiativeData.mainImage;
 
                 await image.create(
                     {
@@ -448,14 +461,14 @@ const createInitiative = async (initiativeData, req, res, next) => {
                     { transaction: t }
                 );
 
-                if (gallery?.length > 0) {
+                if (mainImageGallery?.length > 0) {
                     await Promise.all(
-                        gallery.map((imageData) =>
+                        mainImageGallery.map((imageData) =>
                             image.create(
                                 {
                                     ...imageData,
                                     imageableId: newInitiative.id,
-                                    imageLinkConnection: 'initiative_gallery',
+                                    imageLinkConnection: 'initiative_main_gallery',
                                 },
                                 { transaction: t }
                             )
@@ -634,7 +647,7 @@ const createInitiative = async (initiativeData, req, res, next) => {
     }
 };
 
-initiativeController.patch('/:id', isAuth, async (req, res, next) => {
+const updateInitiative = async (initiativeData, req, res, next, isDraft = false) => {
     try {
         const param = req.params.id;
         const initiativeId = parseInt(param);
@@ -643,7 +656,10 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
             let foundInitiative;
             if (isNaN(initiativeId)) {
                 foundInitiative = await initiative.findOne({
-                    where: { slug: param },
+                    where: {
+                        slug: param,
+                        isDraft: isDraft,
+                    },
                     include: [
                         ...initiativeConfig,
                         {
@@ -656,6 +672,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 });
             } else {
                 foundInitiative = await initiative.findByPk(initiativeId, {
+                    where: { isDraft: isDraft },
                     include: [
                         ...initiativeConfig,
                         {
@@ -670,27 +687,27 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
 
             if (!foundInitiative) {
                 throw new customError({
-                    message: 'Initiative not found',
+                    message: `Initiative not found${isDraft ? ' or not a draft' : ''}`,
                     statusCode: 404,
                 });
             }
 
             if (Number(foundInitiative.creator.id) !== Number(req.user.userId)) {
                 throw new customError({
-                    message: 'Unauthorized to update this initiative',
+                    message: `Unauthorized to update this ${isDraft ? 'draft ' : ''}initiative`,
                     statusCode: 403,
                 });
             }
 
-            await foundInitiative.update(req.body, { transaction: t });
+            await foundInitiative.update({ ...initiativeData, isDraft: isDraft }, { transaction: t });
 
-            if (req.body.mainImage) {
-                const { gallery, ...mainImageData } = req.body.mainImage;
+            if (initiativeData.mainImage) {
+                const { gallery: mainImageGallery, ...mainImageData } = initiativeData.mainImage;
 
                 await image.destroy({
                     where: {
                         imageableId: foundInitiative.id,
-                        imageLinkConnection: ['initiative_main', 'initiative_gallery'],
+                        imageLinkConnection: ['initiative_main', 'initiative_main_gallery'],
                     },
                     transaction: t,
                 });
@@ -704,14 +721,14 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     { transaction: t }
                 );
 
-                if (gallery?.length > 0) {
+                if (mainImageGallery?.length > 0) {
                     await Promise.all(
-                        gallery.map((imageData) =>
+                        mainImageGallery.map((imageData) =>
                             image.create(
                                 {
                                     ...imageData,
                                     imageableId: foundInitiative.id,
-                                    imageLinkConnection: 'initiative_gallery',
+                                    imageLinkConnection: 'initiative_main_gallery',
                                 },
                                 { transaction: t }
                             )
@@ -720,7 +737,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 }
             }
 
-            if (req.body.contact) {
+            if (initiativeData.contact) {
                 await contact.destroy({
                     where: {
                         contactableId: foundInitiative.id,
@@ -730,7 +747,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 });
                 await contact.create(
                     {
-                        ...req.body.contact,
+                        ...initiativeData.contact,
                         contactableId: foundInitiative.id,
                         contactLinkConnection: 'initiative_contact',
                         isMainContact: true,
@@ -739,7 +756,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 );
             }
 
-            if (req.body.additionalContacts) {
+            if (initiativeData.additionalContacts) {
                 await contact.destroy({
                     where: {
                         contactableId: foundInitiative.id,
@@ -747,9 +764,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.additionalContacts.length > 0) {
+                if (initiativeData.additionalContacts.length > 0) {
                     await Promise.all(
-                        req.body.additionalContacts.map((contactData) =>
+                        initiativeData.additionalContacts.map((contactData) =>
                             contact.create(
                                 {
                                     ...contactData,
@@ -764,7 +781,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 }
             }
 
-            if (req.body.responsible) {
+            if (initiativeData.responsible) {
                 await contact.destroy({
                     where: {
                         contactableId: foundInitiative.id,
@@ -774,7 +791,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 });
                 await contact.create(
                     {
-                        ...req.body.responsible,
+                        ...initiativeData.responsible,
                         contactableId: foundInitiative.id,
                         contactLinkConnection: 'initiative_responsible',
                     },
@@ -782,7 +799,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 );
             }
 
-            if (req.body.sections) {
+            if (initiativeData.sections) {
                 await section.destroy({
                     where: {
                         sectionableId: foundInitiative.id,
@@ -790,9 +807,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.sections.length > 0) {
+                if (initiativeData.sections.length > 0) {
                     await Promise.all(
-                        req.body.sections.map(async (sectionData) => {
+                        initiativeData.sections.map(async (sectionData) => {
                             const { images: sectionImages, ...sectionFields } = sectionData;
                             const createdSection = await section.create(
                                 {
@@ -822,7 +839,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 }
             }
 
-            if (req.body.sponsors) {
+            if (initiativeData.sponsors) {
                 await sponsor.destroy({
                     where: {
                         sponsorableId: foundInitiative.id,
@@ -830,9 +847,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.sponsors.length > 0) {
+                if (initiativeData.sponsors.length > 0) {
                     await Promise.all(
-                        req.body.sponsors.map(async (sponsorData) => {
+                        initiativeData.sponsors.map(async (sponsorData) => {
                             const { id: sponsorId, ...sponsorFields } = sponsorData;
                             await sponsor.create(
                                 {
@@ -847,7 +864,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 }
             }
 
-            if (req.body.partners) {
+            if (initiativeData.partners) {
                 await partner.destroy({
                     where: {
                         partnerableId: foundInitiative.id,
@@ -855,9 +872,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.partners.length > 0) {
+                if (initiativeData.partners.length > 0) {
                     await Promise.all(
-                        req.body.partners.map(async (partnerData) => {
+                        initiativeData.partners.map(async (partnerData) => {
                             const { id: partnerId, ...partnerFields } = partnerData;
                             await partner.create(
                                 {
@@ -872,7 +889,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 }
             }
 
-            if (req.body.downloadMaterials) {
+            if (initiativeData.downloadMaterials) {
                 await downloadMaterial.destroy({
                     where: {
                         downloadableId: foundInitiative.id,
@@ -880,9 +897,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.downloadMaterials.length > 0) {
+                if (initiativeData.downloadMaterials.length > 0) {
                     await Promise.all(
-                        req.body.downloadMaterials.map(async (materialData) => {
+                        initiativeData.downloadMaterials.map(async (materialData) => {
                             const { image: materialImage, ...materialFields } = materialData;
                             const createdMaterial = await downloadMaterial.create(
                                 {
@@ -908,7 +925,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 }
             }
 
-            if (req.body.documents) {
+            if (initiativeData.documents) {
                 await downloadMaterial.destroy({
                     where: {
                         downloadableId: foundInitiative.id,
@@ -916,9 +933,9 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.documents.length > 0) {
+                if (initiativeData.documents.length > 0) {
                     await Promise.all(
-                        req.body.documents.map(async (documentData) => {
+                        initiativeData.documents.map(async (documentData) => {
                             const { image: documentImage, ...documentFields } = documentData;
                             const createdDocument = await downloadMaterial.create(
                                 {
@@ -944,7 +961,7 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
                 }
             }
 
-            const updatedInitiative = await initiative.findByPk(param, {
+            const updatedInitiative = await initiative.findByPk(foundInitiative.id, {
                 include: initiativeConfig,
                 transaction: t,
             });
@@ -957,6 +974,6 @@ initiativeController.patch('/:id', isAuth, async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-});
+};
 
 module.exports = initiativeController;

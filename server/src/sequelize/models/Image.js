@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
                 { model: 'section', connection: 'section' },
                 { model: 'downloadMaterial', connection: 'downloadMaterial' },
                 { model: 'initiative', connection: 'initiative_main' },
-                { model: 'initiative', connection: 'initiative_gallery' },
+                { model: 'initiative', connection: 'initiative_main_gallery' },
                 { model: 'story', connection: 'story' },
                 { model: 'publication', connection: 'publication' },
                 { model: 'project', connection: 'project_main' },
