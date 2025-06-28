@@ -1090,15 +1090,15 @@
 .initiative-view .section-text[data-editor="slate"],
 .initiative-view .slate-content[data-editor="slate"] {
   
-  /* Base reset за всички елементи в slate контейнера */
-  * {
+  /* * {
     font-family: inherit !important;
     font-size: inherit !important;
     line-height: inherit !important;
     color: inherit !important;
     font-weight: inherit !important;
     text-decoration: inherit !important;
-  }
+  } */
+  
   
   /* Reset специално за span елементите на slate */
   span[data-slate-string],

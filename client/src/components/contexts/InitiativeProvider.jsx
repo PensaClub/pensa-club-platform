@@ -11,6 +11,7 @@ import projectsData from '../Initiatives/data/mockProjects.json';
 import { useMockApplications } from "../hooks/useMockApplications";
 import storiesData from '../Initiatives/data/mockStories.json';
 import publicationsData from '../Initiatives/data/mockPublications.json';
+import { draftLocalStorage } from "../Initiatives/CreateIniciative/Utils/draftLocalStorage";
 export const InitiativeContext = createContext();
 
 export const InitiativeProvider = ({ children }) => {
@@ -45,6 +46,7 @@ export const InitiativeProvider = ({ children }) => {
   const [commentsLoading, setCommentsLoading] = useState(false);
 
   const { isAuthentication, userEmail, username, profileData, onProjectApplicationSubmit } = useAuthContext();
+
   const {
     getApplicationsByProject,
     addApplication,
@@ -53,6 +55,11 @@ export const InitiativeProvider = ({ children }) => {
     deleteApplication
   } = useMockApplications();
   const [recentApplications, setRecentApplications] = useState([]);
+  // Draft states
+  const [drafts, setDrafts] = useState([]);
+  const [draftsLoaded, setDraftsLoaded] = useState(false);
+  const [draftsHasMore, setDraftsHasMore] = useState(true);
+  const [draftsCurrentPage, setDraftsCurrentPage] = useState(1);
   const navigate = useNavigate();
 
   const initiativeService = initiativeServiceFactory();
@@ -74,6 +81,156 @@ export const InitiativeProvider = ({ children }) => {
   const getUserDisplayName = useCallback(() => {
     return username || profileData?.details?.firstName || userEmail?.split('@')[0] || 'User';
   }, [username, profileData?.details?.firstName, userEmail]);
+  // Draft functions
+  const getAllDrafts = useCallback(async (page = 1, forceRefresh = false) => {
+    if (page === 1 && drafts.length > 0 && draftsLoaded && !forceRefresh) {
+      return { data: drafts, hasMore: draftsHasMore, currentPage: draftsCurrentPage };
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.getAllDrafts(page, 6);
+
+      const responseData = {
+        data: response.data || response,
+        hasMore: response.hasMore !== undefined ? response.hasMore : (response.data || response).length === 6,
+        totalCount: response.totalCount || (response.data || response).length,
+        currentPage: page
+      };
+
+      if (page === 1) {
+        setDrafts(responseData.data);
+      } else {
+        setDrafts(prev => [...prev, ...responseData.data]);
+      }
+
+      setDraftsHasMore(responseData.hasMore);
+      setDraftsCurrentPage(responseData.currentPage);
+      setDraftsLoaded(true);
+
+      return responseData;
+    } catch (e) {
+      console.error('Error fetching drafts:', e);
+      notify('error', e.message || 'Failed to fetch drafts');
+      showErrorAndSetTimeouts(e.message);
+      return { data: [], hasMore: false, currentPage: page };
+    } finally {
+      setIsLoading(false);
+    }
+  }, [drafts.length, draftsLoaded, draftsHasMore, draftsCurrentPage, initiativeService, showErrorAndSetTimeouts]);
+
+  const updateDraftInitiative = useCallback(async (id, draftData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.updateDraftInitiative(id, draftData);
+
+      // Обновяваме draft-а в локалното състояние
+      setDrafts(prev => prev.map(draft =>
+        draft.id === id ? (response.data || response) : draft
+      ));
+
+      notify('success', 'Draft updated successfully!');
+      return response;
+    } catch (error) {
+      console.error('Error updating draft:', error);
+      notify('error', 'Failed to update draft');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
+  // Функция за изтриване на draft с пълна синхронизация
+  const deleteDraftWithSync = useCallback(async (identifier, draftObject = null, fromLocalStorage = false) => {
+    if (!isAuthentication && !fromLocalStorage) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      
+      // 1. Ако изтриваме от localStorage
+      if (fromLocalStorage) {
+        const localDraft = draftLocalStorage.getDraft();
+        if (localDraft) {
+          // Проверяваме дали има такъв draft на сървъра
+          try {
+            const serverDraftId = localDraft.data.id || localDraft.data.slug;
+            if (serverDraftId) {
+              // Опитваме се да изтрием и от сървъра
+              await initiativeService.deleteDraftInitiative(serverDraftId);
+              
+              // Премахваме от локалното състояние
+              setDrafts(prev => prev.filter(draft => 
+                draft.id !== serverDraftId && 
+                draft.slug !== serverDraftId
+              ));
+            }
+          } catch (error) {
+            console.warn('Draft not found on server or already deleted:', error);
+          }
+        }
+        
+        // Изтриваме от localStorage
+        draftLocalStorage.clearDraft();
+        notify('success', 'Draft cleared from local storage!');
+      } 
+      // 2. Ако изтриваме от сървъра
+      else {
+        // Изпращаме заявката към сървъра
+        await initiativeService.deleteDraftInitiative(identifier);
+
+        // Обновяваме локалното състояние
+        if (draftObject) {
+          setDrafts(prev => prev.filter(draft => draft.id !== draftObject.id));
+        } else {
+          setDrafts(prev => prev.filter(draft => 
+            draft.id !== identifier && 
+            draft.slug !== identifier &&
+            draft.id.toString() !== identifier.toString()
+          ));
+        }
+
+        // Проверяваме дали трябва да изтрием и от localStorage
+        if (draftLocalStorage.isDraftMatching(identifier)) {
+          draftLocalStorage.clearDraft();
+          console.log('Synchronized: Removed matching draft from localStorage');
+        }
+
+        notify('success', 'Draft deleted successfully!');
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Error deleting draft:', error);
+      notify('error', fromLocalStorage ? 'Failed to clear draft' : 'Failed to delete draft');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
+// В InitiativeProvider.js
+  const deleteDraftInitiative = useCallback(async (identifier, draftObject = null) => {
+    return deleteDraftWithSync(identifier, draftObject, false);
+  }, [deleteDraftWithSync]);
+
+  const clearLocalStorageDraft = useCallback(async () => {
+    return deleteDraftWithSync(null, null, true);
+  }, [deleteDraftWithSync]);
+  
+  const invalidateDraftsCache = useCallback(() => {
+    setDraftsLoaded(false);
+    setDrafts([]);
+    setDraftsCurrentPage(1);
+    setDraftsHasMore(true);
+  }, []);
 
   const getAllInitiatives = useCallback(async (page = 1, forceRefresh = false) => {
     if (page === 1 && initiatives.length > 0 && initiativesLoaded && !forceRefresh) {
@@ -163,22 +320,6 @@ export const InitiativeProvider = ({ children }) => {
       return null;
     }
   }, [initiativeService]);
-
-  const deleteDraftInitiative = useCallback(async (draftId) => {
-    if (!isAuthentication) {
-      notify('error', 'Authentication required');
-      return;
-    }
-
-    try {
-      await initiativeService.deleteDraftInitiative(draftId);
-      notify('success', 'Draft deleted successfully!');
-    } catch (error) {
-      console.error('Error deleting draft:', error);
-      notify('error', 'Failed to delete draft');
-      throw error;
-    }
-  }, [isAuthentication, initiativeService]);
 
   const updateInitiative = useCallback(async (id, initiativeData) => {
     if (!isAuthentication) {
@@ -1453,6 +1594,16 @@ export const InitiativeProvider = ({ children }) => {
 
   const contextService = {
     // Existing initiative functions
+      // Draft functions
+    getAllDrafts,
+    updateDraftInitiative,
+    deleteDraftInitiative,
+    clearLocalStorageDraft,
+    invalidateDraftsCache,
+    drafts,
+    draftsLoaded,
+    draftsHasMore,
+    draftsCurrentPage,
     getAllInitiatives,
     loadMoreInitiatives,
     invalidateInitiativesCache,
@@ -1467,7 +1618,7 @@ export const InitiativeProvider = ({ children }) => {
     createInitiative,
     saveDraftInitiative,
     getDraftInitiative,
-    deleteDraftInitiative,
+
     updateInitiative,
     deleteInitiative,
     // Comments functions

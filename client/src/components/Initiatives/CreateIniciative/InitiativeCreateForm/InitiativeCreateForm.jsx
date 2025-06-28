@@ -145,7 +145,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
-    const { getAllInitiatives } = useInitiativeContext();
+    const { getAllInitiatives,clearLocalStorageDraft } = useInitiativeContext();
     const navigate = useNavigate();
     const location = useLocation();
     const [localStorageChecked, setLocalStorageChecked] = useState(false);
@@ -214,17 +214,18 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     };
 
     // 🗑️ Функция за изтриване на draft
-    const handleClearDraft = () => {
-        const confirmed = window.confirm(
-            'Сигурни ли сте, че искате да изтриете черновата и всички данни от формата?'
-        );
+   const handleClearDraft = async () => { // Добавяме async
+    const confirmed = window.confirm(
+        'Сигурни ли сте, че искате да изтриете черновата и всички данни от формата?'
+    );
 
-        if (confirmed) {
-            
-            clearLocalStorage();
+    if (confirmed) {
+        try {
+            // ЗАМЕНЯМЕ clearLocalStorage() с новата синхронизирана функция
+            await clearLocalStorageDraft();
 
+            // Изчистваме формата
             setValues(prev => {
-
                 const freshDefaults = {
                     title: '',
                     slug: '',
@@ -281,9 +282,17 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             });
 
             setShowLocalStoragePrompt(false);
-            notify('info', 'Черновата и данните от формата са изтрити');
+            
+            // Notify вече се извиква от clearLocalStorageDraft
+            // notify('info', 'Черновата и данните от формата са изтрити');
+        } catch (error) {
+            console.error('Error clearing draft:', error);
+            // Ако има грешка, все пак изчистваме локалната форма
+            setShowLocalStoragePrompt(false);
+            notify('warning', 'Черновата е изчистена локално, но може да има проблем със сървъра');
         }
-    };
+    }
+};
 
     // 📝 Функция за игнориране на prompt-а
     const handleIgnorePrompt = () => {
@@ -867,7 +876,8 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                 <LocalStorageStatus
                     hasLocalStorageDraft={hasLocalStorageDraft}
                     localStorageTimestamp={localStorageTimestamp}
-                    onClearDraft={handleClearDraft}
+                   
+                     onClearDraft={handleClearDraft}
                     onLoadDraft={handleLoadDraft}
                     onIgnore={handleIgnorePrompt}
                     autoLoaded={true}

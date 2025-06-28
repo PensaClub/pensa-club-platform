@@ -54,6 +54,7 @@ import { AllArticles } from "../Articles/AllArticles/AllArticles";
 import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
 import { changeLanguage } from "i18next";
 import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCreateForm/InitiativeCreateForm";
+import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -214,7 +215,8 @@ export const Profile = () => {
     setSubMenuStates({
       ads: false,
       users: false,
-      suggest: false
+      suggest: false,
+      initiatives: false
     });
     navigate('/profile/data');
   };
@@ -623,13 +625,19 @@ export const Profile = () => {
                           Нова инициатива
                         </NavLink>
                       </li>
+                      <li>
+                        <NavLink to="initiative-drafts" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Чернови
+                        </NavLink>
+                      </li>
                       {/* <li>
                         <NavLink to="/initiative-preview" className={({ isActive }) => isActive ? 'active' : ''}>
                           <CircleIcon className="icon" />
                           Preview инициатива
                         </NavLink>
                       </li> */} {/* Na nejno mqsto може да добавяте и други подсекции свързани с инициативи */}
-                    </ul> 
+                    </ul>
                   </li>
                 </ul>
               </div>
@@ -708,6 +716,7 @@ export const Profile = () => {
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
+            <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             {/* <Route path="initiative-preview" element={<ManagementGuard><InitiativePreviewPage /></ManagementGuard>}  /> */}
             <Route path="article-edit/:id" element={<ManagementGuard><EditArticle /></ManagementGuard>} />
             <Route path="pending-announcements" element={<ManagementGuard><PendingAnnouncements setAdsCount={setAdsCount} /></ManagementGuard>} />

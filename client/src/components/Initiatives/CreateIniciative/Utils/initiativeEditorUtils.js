@@ -26,6 +26,7 @@ export const createSlateEditorState = (html = '') => {
 };
 
 // Конвертиране на Slate в HTML
+// utils/initiativeEditorUtils.js
 export const convertSlateToHtml = (value) => {
   if (!value || !Array.isArray(value)) return '';
   
@@ -58,6 +59,22 @@ export const convertSlateToHtml = (value) => {
           `<li>${item.children.map(child => child.text).join('')}</li>`
         ).join('');
         return `<ol>${items}</ol>`;
+      }
+      // ДОБАВЯМЕ ОБРАБОТКА НА BLOCKQUOTE
+      if (node.type === 'block-quote') {
+        const text = node.children.map(child => {
+          if (child.children) {
+            return child.children.map(c => {
+              let content = c.text || '';
+              if (c.bold) content = `<strong>${content}</strong>`;
+              if (c.italic) content = `<em>${content}</em>`;
+              if (c.underline) content = `<u>${content}</u>`;
+              return content;
+            }).join('');
+          }
+          return child.text || '';
+        }).join('');
+        return `<blockquote>${text}</blockquote>`;
       }
       return `<p>${node.children?.map(child => child.text).join('') || ''}</p>`;
     })

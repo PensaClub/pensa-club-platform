@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './initiativeCard.css';
@@ -8,8 +9,7 @@ import { BookmarkIcon, ViewIcon } from '../../Icons/InitiativeIcons';
 
 export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, index }) => {
   const { t } = useTranslation();
-  const { getViewCount, loadInitiativeViewCounts } = useAnalytics(); // ПРОМЕНИ loadArticleViewCounts → loadInitiativeViewCounts
-
+  const { getViewCount, loadInitiativeViewCounts } = useAnalytics(); 
   useEffect(() => {
     if (initiative) {
       loadInitiativeViewCounts([initiative.id]); 
@@ -46,10 +46,10 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
 
       {/* Main Image */}
       <div className="init-card-image-wrapper">
-        <Link to={`/initiatives/${initiative.slug}`}>
+        <Link to={`/initiatives/${initiative?.slug}`}>
           <img
-            src={initiative.mainImage.src}
-            alt={initiative.mainImage.alt}
+            src={initiative.mainImage?.src}
+            alt={initiative.mainImage?.alt}
             className="init-card-image"
           />
         </Link>
@@ -59,24 +59,24 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
         
         {/* Category Badge */}
         <div className="init-category-badge">
-          {initiative.category.toUpperCase()}
+          {initiative?.category?.toUpperCase()||''}
         </div>
       </div>
 
       {/* Card Content */}
       <div className="init-card-content">
         {/* Title */}
-        <Link to={`/initiatives/${initiative.slug}`} className="init-title-link">
-          <h3 className="init-card-title">{initiative.title}</h3>
+        <Link to={`/initiatives/${initiative?.slug}`} className="init-title-link">
+          <h3 className="init-card-title">{initiative?.title}</h3>
         </Link>
 
         {/* Description */}
         <p className="init-card-description">
-          {truncateText(initiative.shortDescription)}
+          {truncateText(initiative?.shortDescription)}
         </p>
 
         {/* Read More Link */}
-        <Link to={`/initiatives/${initiative.slug}`} className="init-read-more">
+        <Link to={`/initiatives/${initiative?.slug}`} className="init-read-more">
           <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -87,7 +87,7 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
       {/* View Counter */}
       <div className="init-view-counter">
         <ViewIcon />
-        <span>{getViewCount(initiative.id, 'initiative')}</span> {/* ДОБАВИ 'initiative' като втори параметър */}
+        <span>{getViewCount(initiative?.id, 'initiative')}</span> {/* ДОБАВИ 'initiative' като втори параметър */}
       </div>
     </div>
   );

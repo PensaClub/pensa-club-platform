@@ -9,12 +9,21 @@ export const initiativeServiceFactory = (token) => {
     createInitiative: async (initiativeData) => {
       return requester.post(`${apiUrl}/initiatives/create`, initiativeData);
     },
+    // Draft endpoints
     saveDraftInitiative: async (draftData) => {
       return requester.post(`${apiUrl}/initiatives/draft/save`, draftData);
     },
 
-    getDraftInitiative: async (userId) => {
-      return requester.get(`${apiUrl}/initiatives/draft/${userId}`);
+    updateDraftInitiative: async (id, draftData) => {
+      return requester.put(`${apiUrl}/initiatives/draft/save/${id}`, draftData);
+    },
+
+    getAllDrafts: async (page = 1, limit = 6) => {
+      return requester.get(`${apiUrl}/initiatives/drafts?page=${page}&limit=${limit}`);
+    },
+
+    getDraftById: async (id) => {
+      return requester.get(`${apiUrl}/initiatives/draft/${id}`);
     },
 
     deleteDraftInitiative: async (draftId) => {

@@ -314,15 +314,14 @@ export const InitiativeView = () => {
                                 {t('initiatives.view.navigation.partners')}
                             </a>
                         )}
-
-                        <a
-                            href="#contact"
-                            onClick={handleSmoothScroll}
-                            className={`sticky-nav-link ${activeSection === 'contact' ? 'active' : ''}`}
-                        >
-                            {t('initiatives.view.navigation.contact')}
-                        </a>
-
+                        {(initiative.contact?.name !== "") && (
+                            <a href="#contact"
+                                onClick={handleSmoothScroll}
+                                className={`sticky-nav-link ${activeSection === 'contact' ? 'active' : ''}`}
+                            >
+                                {t('initiatives.view.navigation.contact')}
+                            </a>
+                        )}
                         {initiative.faq?.length > 0 && (
                             <a
                                 href="#faq"
@@ -958,7 +957,7 @@ export const InitiativeView = () => {
                     <section className="tags-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faTag} />
-                            <h2 className="section-title">{t('initiatives.view.sectionTitles.tags')}</h2>   
+                            <h2 className="section-title">{t('initiatives.view.sectionTitles.tags')}</h2>
                         </h2>
                         <div className="tags-display">
                             {initiative.tags.map((tag, index) => (

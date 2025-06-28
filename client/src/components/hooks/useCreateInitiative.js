@@ -297,7 +297,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
             if (userEmail) {
                 try {
-                    // 🔧 ПОПРАВКА: Използвай пълната convertFormToHtml функция
+                  
                     const tempValues = { ...currentValues };
 
                     // Временно създаваме обект със същата структура за convertFormToHtml
