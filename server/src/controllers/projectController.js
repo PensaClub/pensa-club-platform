@@ -16,6 +16,8 @@ const {
     sponsor,
     partner,
     milestone,
+    user_details,
+    project_application,
 } = require('../sequelize/models');
 const customError = require('../utils/customError');
 const { transformProject, projectConfig } = require('../utils/projectUtils');
@@ -46,9 +48,14 @@ projectController.get('/single/:id', async (req, res, next) => {
         const param = req.params.id;
         let foundProject;
         if (isNaN(Number(param))) {
-            foundProject = await project.findOne({ where: { slug: param } });
+            foundProject = await project.findOne({
+                where: { slug: param },
+                include: projectConfig,
+            });
         } else {
-            foundProject = await project.findByPk(Number(param));
+            foundProject = await project.findByPk(Number(param), {
+                include: projectConfig,
+            });
         }
 
         if (!foundProject) {
@@ -108,25 +115,26 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
             whereClause = { id: Number(projectId) };
         }
 
-        const existing = await project.findOne({
+        const foundProject = await project.findOne({
             where: whereClause,
-            include: [
-                {
-                    model: user_account,
-                    as: 'appliedBy',
-                    where: { id: userId },
-                    required: false,
-                },
-            ],
         });
 
-        if (!existing) {
+        if (!foundProject) {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        if (existing.appliedBy?.length > 0) {
-            await existing.removeAppliedBy(userId);
-            await existing.decrement('currentParticipants');
+        // Check if user already applied
+        const existingApplication = await project_application.findOne({
+            where: {
+                projectId: foundProject.id,
+                userId: userId,
+            },
+        });
+
+        if (existingApplication) {
+            // Remove application
+            await existingApplication.destroy();
+            await foundProject.decrement('currentParticipants');
             return res.status(200).json({
                 message: 'Application successfully removed.',
                 applied: false,
@@ -134,7 +142,7 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
         }
 
         // If not applied, check if project is accepting applications
-        if (existing.applicationStatus !== 'open') {
+        if (foundProject.applicationStatus !== 'open') {
             return res.status(400).json({
                 success: false,
                 message: 'This project is not currently accepting applications',
@@ -142,7 +150,7 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
         }
 
         // Check if application deadline has passed
-        if (existing.applicationDeadline && new Date(existing.applicationDeadline) < new Date()) {
+        if (foundProject.applicationDeadline && new Date(foundProject.applicationDeadline) < new Date()) {
             return res.status(400).json({
                 success: false,
                 message: 'Application deadline has passed',
@@ -150,16 +158,28 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
         }
 
         // Check if max participants reached
-        if (existing.maxParticipants && existing.currentParticipants >= existing.maxParticipants) {
+        if (foundProject.maxParticipants && foundProject.currentParticipants >= foundProject.maxParticipants) {
             return res.status(400).json({
                 success: false,
                 message: 'Maximum number of participants reached',
             });
         }
 
-        // Add the application
-        await existing.addAppliedBy(userId);
-        await existing.increment('currentParticipants');
+        // Create new application
+        const applicationData = {
+            projectId: foundProject.id,
+            userId: userId,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            phone: req.body.phone || '',
+            isAnonymous: req.body.isAnonymous || false,
+            appliedAt: new Date(),
+        };
+
+        await project_application.create(applicationData);
+        await foundProject.increment('currentParticipants');
+
         return res.status(201).json({
             message: 'Application successfully submitted.',
             applied: true,
@@ -772,6 +792,105 @@ projectController.delete('/:id', isAuth, async (req, res, next) => {
         return res.status(200).json({
             message: 'Project and all associated data deleted successfully',
         });
+    } catch (err) {
+        next(err);
+    }
+});
+
+projectController.get('/:projectId/applications', isAuth, async (req, res, next) => {
+    try {
+        const { projectId } = req.params;
+        let whereClause;
+
+        if (isNaN(Number(projectId))) {
+            whereClause = { slug: projectId };
+        } else {
+            whereClause = { id: Number(projectId) };
+        }
+
+        const foundProject = await project.findOne({
+            where: whereClause,
+        });
+
+        if (!foundProject) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        // Check if the current user is the project creator or has admin rights
+        if (Number(foundProject.creatorId) !== Number(req.user.userId) && req.user.role !== 'admin') {
+            return res.status(403).json({
+                message: 'Unauthorized to view project applications',
+            });
+        }
+
+        // Get applications for this project
+        const applications = await project_application.findAll({
+            where: { projectId: foundProject.id },
+            order: [['appliedAt', 'DESC']],
+        });
+
+        // Transform to match frontend expectations
+        const transformedApplications = applications.map((app) => ({
+            id: app.id,
+            firstName: app.firstName,
+            lastName: app.lastName,
+            email: app.email,
+            phone: app.phone,
+            isAnonymous: app.isAnonymous,
+            appliedAt: app.appliedAt,
+            projectId: foundProject.slug,
+        }));
+
+        return res.status(200).json(transformedApplications);
+    } catch (err) {
+        next(err);
+    }
+});
+
+projectController.post('/bookmark/:projectId', isAuth, async (req, res, next) => {
+    try {
+        const userId = req.user.userId;
+        const param = req.params.projectId;
+        const projectId = parseInt(param);
+
+        let existing;
+        if (isNaN(projectId)) {
+            existing = await project.findOne({
+                where: { slug: param },
+                include: [
+                    {
+                        model: user_account,
+                        as: 'bookmarkedBy',
+                        where: { id: userId },
+                        required: false,
+                    },
+                ],
+            });
+        } else {
+            existing = await project.findOne({
+                where: { id: projectId },
+                include: [
+                    {
+                        model: user_account,
+                        as: 'bookmarkedBy',
+                        where: { id: userId },
+                        required: false,
+                    },
+                ],
+            });
+        }
+
+        if (!existing) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        if (existing.bookmarkedBy?.length > 0) {
+            await existing.removeBookmarkedBy(userId);
+            return res.status(200).json({ message: 'Bookmark successfully removed.', bookmarked: false });
+        } else {
+            await existing.addBookmarkedBy(userId);
+            return res.status(201).json({ message: 'Bookmark successfully added.', bookmarked: true });
+        }
     } catch (err) {
         next(err);
     }

@@ -87,22 +87,11 @@ module.exports = (sequelize, DataTypes) => {
             });
 
             initiative.hasMany(models.image, {
-                as: 'gallery',
+                as: 'mainImageGallery',
                 foreignKey: 'imageableId',
                 constraints: false,
                 scope: {
-                    image_link_connection: 'initiative_gallery',
-                },
-            });
-
-            initiative.hasMany(models.image, {
-                as: 'allImages',
-                foreignKey: 'imageableId',
-                constraints: false,
-                scope: {
-                    image_link_connection: {
-                        [Op.in]: ['initiative_main', 'initiative_logo', 'initiative_gallery'],
-                    },
+                    image_link_connection: 'initiative_main_gallery',
                 },
             });
 
@@ -175,17 +164,16 @@ module.exports = (sequelize, DataTypes) => {
 
             // Basic info
             slug: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                unique: true,
+                type: DataTypes.TEXT,
+                allowNull: true,
             },
             title: {
                 type: DataTypes.TEXT,
-                allowNull: false,
+                allowNull: true,
             },
             shortDescription: {
                 type: DataTypes.TEXT,
-                allowNull: false,
+                allowNull: true,
                 field: 'short_description',
             },
             detailedDescription: {
@@ -231,7 +219,7 @@ module.exports = (sequelize, DataTypes) => {
             // Dates and milestones
             startDate: {
                 type: DataTypes.DATE,
-                allowNull: false,
+                allowNull: true,
                 field: 'start_date',
             },
             endDate: {
@@ -376,6 +364,11 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: true,
                 field: 'is_draft',
+            },
+            gallery: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
             },
         },
         {

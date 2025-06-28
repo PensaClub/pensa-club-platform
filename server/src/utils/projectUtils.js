@@ -78,7 +78,7 @@ const projectConfig = [
         model: contact,
         as: 'team',
         required: false,
-        attributes: ['id', 'name', 'role', 'email', 'phone'],
+        attributes: ['id', 'name', 'role', 'email', 'phone', 'image'],
         where: {
             is_team_member: true,
         },
@@ -87,7 +87,7 @@ const projectConfig = [
         model: contact,
         as: 'contact',
         required: false,
-        attributes: ['id', 'name', 'role', 'email', 'phone'],
+        attributes: ['id', 'name', 'role', 'email', 'phone', 'image'],
         contact: null,
     },
     {

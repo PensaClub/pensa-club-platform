@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
                 { model: 'section', connection: 'section' },
                 { model: 'downloadMaterial', connection: 'downloadMaterial' },
                 { model: 'initiative', connection: 'initiative_main' },
-                { model: 'initiative', connection: 'initiative_gallery' },
+                { model: 'initiative', connection: 'initiative_main_gallery' },
                 { model: 'story', connection: 'story' },
                 { model: 'publication', connection: 'publication' },
                 { model: 'project', connection: 'project_main' },
@@ -29,15 +29,15 @@ module.exports = (sequelize, DataTypes) => {
     Image.init(
         {
             src: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             alt: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             caption: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             imageableId: {

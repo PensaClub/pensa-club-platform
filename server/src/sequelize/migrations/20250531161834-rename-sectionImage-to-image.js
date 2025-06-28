@@ -57,6 +57,21 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             });
+
+            await queryInterface.changeColumn('images', 'src', {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            });
+
+            await queryInterface.changeColumn('images', 'alt', {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            });
+
+            await queryInterface.changeColumn('images', 'caption', {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            });
         }
     },
 
@@ -100,6 +115,21 @@ module.exports = {
         await queryInterface.removeColumn('images', 'imageable_id');
         await queryInterface.removeColumn('images', 'image_link_connection');
         await queryInterface.removeColumn('images', 'is_uploading');
+
+        await queryInterface.changeColumn('images', 'src', {
+            type: Sequelize.STRING,
+            allowNull: true,
+        });
+
+        await queryInterface.changeColumn('images', 'alt', {
+            type: Sequelize.STRING,
+            allowNull: true,
+        });
+
+        await queryInterface.changeColumn('images', 'caption', {
+            type: Sequelize.STRING,
+            allowNull: true,
+        });
 
         await queryInterface.renameTable('images', 'sectionImages');
     },

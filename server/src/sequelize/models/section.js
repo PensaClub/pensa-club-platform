@@ -37,12 +37,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             titleSlug: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
                 field: 'title_slug',
             },
             title: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             content: {

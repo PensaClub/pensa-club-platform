@@ -1,8 +1,8 @@
 const commentController = require('express').Router();
 const isAuth = require('../middlewares/isAuth');
-const { comment, user_account, user_details, initiative } = require('../sequelize/models');
+const { comment, user_account, user_details } = require('../sequelize/models');
 const customError = require('../utils/customError');
-const transformComment = require('../utils/commentUtils');
+const { transformComment } = require('../utils/commentUtils');
 
 const commentConfig = [
     {
@@ -97,7 +97,6 @@ commentController.post('/create', isAuth, async (req, res, next) => {
 commentController.post('/like/:id', isAuth, async (req, res, next) => {
     try {
         const { id } = req.params;
-        const userEmail = req.user.email;
 
         const userDetails = await user_details.findOne({
             where: { userId: req.user.userId },

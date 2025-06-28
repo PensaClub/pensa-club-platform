@@ -13,22 +13,13 @@ const initiativeConfig = [
     },
     {
         model: image,
-        as: 'gallery',
-        required: false,
+        as: 'mainImageGallery',
         attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
     },
     {
         model: project,
         as: 'projects',
-        attributes: ['id', 'slug', 'title', 'shortDescription', 'status', 'location'],
-        include: [
-            {
-                model: image,
-                as: 'mainImage',
-                attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
-                required: false,
-            },
-        ],
+        attributes: ['id', 'slug', 'title', 'shortDescription', 'status', 'location', 'logo'],
     },
     {
         model: downloadMaterial,
@@ -127,8 +118,8 @@ const initiativeConfig = [
 const transformInitiative = (initiative) => {
     const plainInitiative = initiative.get({ plain: true });
 
-    // Remove junction table data
-    const { initiativeBookmarks, initiative_projects, initiative_stories, initiative_publications, ...initiativeData } = plainInitiative;
+    // Remove junction table data and isDraft flag
+    const { initiativeBookmarks, initiative_projects, initiative_stories, initiative_publications, isDraft, ...initiativeData } = plainInitiative;
 
     // Add userEmail from creator and remove creator object
     if (initiativeData.creator) {
@@ -137,13 +128,9 @@ const transformInitiative = (initiative) => {
         delete initiativeData.creatorId;
     }
 
-    // Transform main image and gallery
-    if (initiativeData.mainImage || initiativeData.gallery) {
-        initiativeData.mainImage = {
-            ...initiativeData.mainImage,
-            gallery: initiativeData.gallery || [],
-        };
-        delete initiativeData.gallery;
+    if (initiativeData.mainImage && initiativeData.mainImageGallery) {
+        initiativeData.mainImage.gallery = initiativeData.mainImageGallery;
+        delete initiativeData.mainImageGallery;
     }
 
     // Transform sections
@@ -164,7 +151,22 @@ const transformInitiative = (initiative) => {
     if (initiativeData.projects) {
         initiativeData.projects = initiativeData.projects.map((project) => {
             const { initiative_projects, ...cleanProject } = project;
-            return cleanProject;
+
+            let coordinates = { lat: null, lng: null };
+            if (cleanProject.location && Array.isArray(cleanProject.location) && cleanProject.location.length > 0) {
+                coordinates = cleanProject.location[0].coordinates;
+            }
+
+            return {
+                titleSlug: cleanProject.slug,
+                slug: cleanProject.slug,
+                title: cleanProject.title,
+                description: cleanProject.shortDescription,
+                status: cleanProject.status,
+                image: cleanProject.logo,
+                link: `/projects/${cleanProject.slug}`,
+                coordinates: coordinates,
+            };
         });
     }
 
