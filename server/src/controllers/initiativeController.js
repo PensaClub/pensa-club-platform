@@ -3,18 +3,23 @@ const { where, Op } = require('sequelize');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
 const { initiative, image, downloadMaterial, contact, section, user_account, comment, sponsor, partner } = require('../sequelize/models');
-const customError = require('../utils/customError');
+const CustomError = require('../utils/customError');
 const { transformInitiative, initiativeConfig } = require('../utils/initiativeUtils');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
-const { InitiativeSchema, UpdateInitiativeSchema } = require('../schemas/initiatives.schema');
+const { InitiativeSchema, UpdateInitiativeSchema, PaginationQuerySchema } = require('../schemas/initiatives.schema');
 
 // ========================================
 // ENDPOINTS
 // ========================================
 
 initiativeController.post('/create', isAuth, async (req, res, next) => {
-    const initiativeData = { ...req.body, isDraft: false };
-    return createInitiative(initiativeData, req, res, next);
+    try {
+        const validatedData = InitiativeSchema.parse(req.body);
+        const initiativeData = { ...validatedData, isDraft: false };
+        return createInitiative(initiativeData, req, res, next);
+    } catch (err) {
+        next(err);
+    }
 });
 
 initiativeController.post('/draft/save/:id?', isAuth, async (req, res, next) => {
@@ -22,11 +27,13 @@ initiativeController.post('/draft/save/:id?', isAuth, async (req, res, next) => 
         const { id } = req.params;
 
         if (!id) {
-            const initiativeData = { ...req.body, isDraft: true };
+            const validatedData = InitiativeSchema.parse(req.body);
+            const initiativeData = { ...validatedData, isDraft: true };
             return createInitiative(initiativeData, req, res, next);
         }
 
-        return updateInitiative(req.body, req, res, next, true);
+        const validatedData = UpdateInitiativeSchema.parse(req.body);
+        return updateInitiative(validatedData, req, res, next, true);
     } catch (err) {
         next(err);
     }
@@ -48,7 +55,7 @@ initiativeController.get('/all', async (req, res, next) => {
     return getInitiativesByDraftStatus(false, req, res, next);
 });
 
-initiativeController.delete('/draft/:draftId', isAuth, async (req, res, next) => {
+initiativeController.delete('/draft/:id', isAuth, async (req, res, next) => {
     return deleteInitiativeByDraftStatus(true, req, res, next);
 });
 
@@ -57,17 +64,18 @@ initiativeController.delete('/:id', isAuth, async (req, res, next) => {
 });
 
 initiativeController.put('/:id', isAuth, async (req, res, next) => {
-    return updateInitiative(req.body, req, res, next, false);
+    try {
+        const validatedData = UpdateInitiativeSchema.parse(req.body);
+        return updateInitiative(validatedData, req, res, next, false);
+    } catch (err) {
+        next(err);
+    }
 });
 
-initiativeController.patch('/:id', isAuth, async (req, res, next) => {
-    return updateInitiative(req.body, req, res, next, false);
-});
-
-initiativeController.post('/bookmark/:initiativeId', isAuth, async (req, res, next) => {
+initiativeController.post('/bookmark/:id', isAuth, async (req, res, next) => {
     try {
         const userId = req.user.userId;
-        const param = req.params.initiativeId;
+        const param = req.params.id;
         const initiativeId = parseInt(param);
 
         let existing;
@@ -157,6 +165,48 @@ initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
     }
 });
 
+initiativeController.patch('/toggle-draft:id/', isAuth, async (req, res, next) => {
+    try {
+        const param = req.params.id;
+        const initiativeId = parseInt(param);
+
+        const result = await initiative.sequelize.transaction(async (t) => {
+            let foundInitiative;
+            if (isNaN(initiativeId)) {
+                foundInitiative = await initiative.findOne({
+                    where: { slug: param },
+                    transaction: t,
+                });
+            } else {
+                foundInitiative = await initiative.findByPk(initiativeId, {
+                    transaction: t,
+                });
+            }
+
+            if (!foundInitiative) {
+                throw new CustomError({
+                    message: 'Initiative not found',
+                    statusCode: 404,
+                });
+            }
+
+            await foundInitiative.update({ isDraft: !foundInitiative.isDraft }, { transaction: t });
+
+            const updatedInitiative = await initiative.findByPk(foundInitiative.id, {
+                include: initiativeConfig,
+                transaction: t,
+            });
+
+            return updatedInitiative;
+        });
+
+        const transformedResponse = transformInitiative(result);
+        return res.status(200).json(transformedResponse);
+    } catch (err) {
+        next(err);
+    }
+});
+
 // ========================================
 // FUNCTIONS
 // ========================================
@@ -186,7 +236,7 @@ const getSingleInitiativeByDraftStatus = async (isDraft, req, res, next) => {
         }
 
         if (!foundInitiative) {
-            throw new customError({
+            throw new CustomError({
                 message: `Initiative not found${isDraft ? ' or not a draft' : ''}`,
                 statusCode: 404,
             });
@@ -240,14 +290,14 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
             }
 
             if (!foundInitiative) {
-                throw new customError({
+                throw new CustomError({
                     message: `Initiative not found${isDraft ? ' or not a draft' : ''}`,
                     statusCode: 404,
                 });
             }
 
             if (Number(foundInitiative.creator.id) !== Number(req.user.userId)) {
-                throw new customError({
+                throw new CustomError({
                     message: 'Unauthorized to delete this initiative',
                     statusCode: 403,
                 });
@@ -355,27 +405,7 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
 
 const getInitiativesByDraftStatus = async (isDraft, req, res, next) => {
     try {
-        const { page, limit } = req.query;
-
-        const parsedPage = page ? parseInt(page) : 1;
-        const parsedLimit = limit ? parseInt(limit) : 6;
-
-        if (page && isNaN(parsedPage)) {
-            throw new customError({
-                message: 'Pagination page must be a number',
-                statusCode: 400,
-            });
-        }
-
-        if (limit && isNaN(parsedLimit)) {
-            throw new customError({
-                message: 'Pagination limit must be a number',
-                statusCode: 400,
-            });
-        }
-
-        const pageNumber = Math.max(1, parsedPage);
-        const limitNumber = Math.max(1, parsedLimit);
+        const { page, limit } = PaginationQuerySchema.parse(req.query);
 
         const totalCount = await initiative.count({
             distinct: true,
@@ -384,14 +414,14 @@ const getInitiativesByDraftStatus = async (isDraft, req, res, next) => {
             },
         });
 
-        const totalPages = Math.ceil(totalCount / limitNumber);
+        const totalPages = Math.ceil(totalCount / limit);
 
         if (totalCount === 0) {
             return res.status(200).json({
                 data: [],
                 pagination: {
                     page: 1,
-                    limit: limitNumber,
+                    limit: limit,
                     totalInitiatives: 0,
                     totalPages: 0,
                     hasNextPage: false,
@@ -400,15 +430,15 @@ const getInitiativesByDraftStatus = async (isDraft, req, res, next) => {
             });
         }
 
-        const actualPage = Math.min(pageNumber, totalPages);
-        const offset = (actualPage - 1) * limitNumber;
+        const actualPage = Math.min(page, totalPages);
+        const offset = (actualPage - 1) * limit;
 
         const initiatives = await initiative.findAll({
             where: {
                 isDraft: isDraft,
             },
             include: initiativeConfig,
-            limit: limitNumber,
+            limit: limit,
             offset: offset,
             order: [['id', 'ASC']],
         });
@@ -426,7 +456,7 @@ const getInitiativesByDraftStatus = async (isDraft, req, res, next) => {
             data: initiativesWithComments,
             pagination: {
                 page: actualPage,
-                limit: limitNumber,
+                limit: limit,
                 totalInitiatives: totalCount,
                 totalPages,
                 hasNextPage: actualPage < totalPages,
@@ -519,7 +549,7 @@ const createInitiative = async (initiativeData, req, res, next) => {
             if (initiativeData.sections?.length > 0) {
                 await Promise.all(
                     initiativeData.sections.map(async (sectionData) => {
-                        const { images: sectionImages, ...sectionFields } = sectionData;
+                        const { id: sectionId, images: sectionImages, ...sectionFields } = sectionData;
                         const createdSection = await section.create(
                             {
                                 ...sectionFields,
@@ -531,16 +561,17 @@ const createInitiative = async (initiativeData, req, res, next) => {
 
                         if (sectionImages && Array.isArray(sectionImages)) {
                             await Promise.all(
-                                sectionImages.map((imageData) =>
-                                    image.create(
+                                sectionImages.map((imageData) => {
+                                    const { id: imageId, ...imageFields } = imageData;
+                                    return image.create(
                                         {
-                                            ...imageData,
+                                            ...imageFields,
                                             imageableId: createdSection.id,
                                             imageLinkConnection: 'section',
                                         },
                                         { transaction: t }
-                                    )
-                                )
+                                    );
+                                })
                             );
                         }
                     })
@@ -582,7 +613,7 @@ const createInitiative = async (initiativeData, req, res, next) => {
             if (initiativeData.downloadMaterials?.length > 0) {
                 await Promise.all(
                     initiativeData.downloadMaterials.map(async (materialData) => {
-                        const { image: materialImage, ...materialFields } = materialData;
+                        const { id: materialId, image: materialImage, ...materialFields } = materialData;
                         const createdMaterial = await downloadMaterial.create(
                             {
                                 ...materialFields,
@@ -593,9 +624,10 @@ const createInitiative = async (initiativeData, req, res, next) => {
                         );
 
                         if (materialImage) {
+                            const { id: imageId, ...imageFields } = materialImage;
                             await image.create(
                                 {
-                                    ...materialImage,
+                                    ...imageFields,
                                     imageableId: createdMaterial.id,
                                     imageLinkConnection: 'downloadMaterial',
                                 },
@@ -609,7 +641,7 @@ const createInitiative = async (initiativeData, req, res, next) => {
             if (initiativeData.documents?.length > 0) {
                 await Promise.all(
                     initiativeData.documents.map(async (documentData) => {
-                        const { image: documentImage, ...documentFields } = documentData;
+                        const { id: documentId, image: documentImage, ...documentFields } = documentData;
                         const createdDocument = await downloadMaterial.create(
                             {
                                 ...documentFields,
@@ -620,9 +652,10 @@ const createInitiative = async (initiativeData, req, res, next) => {
                         );
 
                         if (documentImage) {
+                            const { id: imageId, ...imageFields } = documentImage;
                             await image.create(
                                 {
-                                    ...documentImage,
+                                    ...imageFields,
                                     imageableId: createdDocument.id,
                                     imageLinkConnection: 'downloadMaterial',
                                 },
@@ -686,14 +719,14 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
             }
 
             if (!foundInitiative) {
-                throw new customError({
+                throw new CustomError({
                     message: `Initiative not found${isDraft ? ' or not a draft' : ''}`,
                     statusCode: 404,
                 });
             }
 
             if (Number(foundInitiative.creator.id) !== Number(req.user.userId)) {
-                throw new customError({
+                throw new CustomError({
                     message: `Unauthorized to update this ${isDraft ? 'draft ' : ''}initiative`,
                     statusCode: 403,
                 });
@@ -810,7 +843,7 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                 if (initiativeData.sections.length > 0) {
                     await Promise.all(
                         initiativeData.sections.map(async (sectionData) => {
-                            const { images: sectionImages, ...sectionFields } = sectionData;
+                            const { id: sectionId, images: sectionImages, ...sectionFields } = sectionData;
                             const createdSection = await section.create(
                                 {
                                     ...sectionFields,
@@ -822,16 +855,17 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
 
                             if (sectionImages && Array.isArray(sectionImages)) {
                                 await Promise.all(
-                                    sectionImages.map((imageData) =>
-                                        image.create(
+                                    sectionImages.map((imageData) => {
+                                        const { id: imageId, ...imageFields } = imageData;
+                                        return image.create(
                                             {
-                                                ...imageData,
+                                                ...imageFields,
                                                 imageableId: createdSection.id,
                                                 imageLinkConnection: 'section',
                                             },
                                             { transaction: t }
-                                        )
-                                    )
+                                        );
+                                    })
                                 );
                             }
                         })
@@ -900,7 +934,7 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                 if (initiativeData.downloadMaterials.length > 0) {
                     await Promise.all(
                         initiativeData.downloadMaterials.map(async (materialData) => {
-                            const { image: materialImage, ...materialFields } = materialData;
+                            const { id: materialId, image: materialImage, ...materialFields } = materialData;
                             const createdMaterial = await downloadMaterial.create(
                                 {
                                     ...materialFields,
@@ -911,9 +945,10 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                             );
 
                             if (materialImage) {
+                                const { id: imageId, ...imageFields } = materialImage;
                                 await image.create(
                                     {
-                                        ...materialImage,
+                                        ...imageFields,
                                         imageableId: createdMaterial.id,
                                         imageLinkConnection: 'downloadMaterial',
                                     },
@@ -936,7 +971,7 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                 if (initiativeData.documents.length > 0) {
                     await Promise.all(
                         initiativeData.documents.map(async (documentData) => {
-                            const { image: documentImage, ...documentFields } = documentData;
+                            const { id: documentId, image: documentImage, ...documentFields } = documentData;
                             const createdDocument = await downloadMaterial.create(
                                 {
                                     ...documentFields,
@@ -947,9 +982,10 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                             );
 
                             if (documentImage) {
+                                const { id: imageId, ...imageFields } = documentImage;
                                 await image.create(
                                     {
-                                        ...documentImage,
+                                        ...imageFields,
                                         imageableId: createdDocument.id,
                                         imageLinkConnection: 'downloadMaterial',
                                     },
