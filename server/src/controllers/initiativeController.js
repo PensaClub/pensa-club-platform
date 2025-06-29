@@ -79,22 +79,23 @@ initiativeController.post('/bookmark/:id', isAuth, async (req, res, next) => {
         const initiativeId = parseInt(param);
 
         let existing;
-        if (isNaN(initiativeId)) {
-            existing = await initiative.findOne({
-                where: {
-                    slug: param,
-                    isDraft: false,
+
+        existing = await initiative.findOne({
+            where: {
+                slug: param,
+                isDraft: false,
+            },
+            include: [
+                {
+                    model: user_account,
+                    as: 'bookmarkedBy',
+                    where: { id: userId },
+                    required: false,
                 },
-                include: [
-                    {
-                        model: user_account,
-                        as: 'bookmarkedBy',
-                        where: { id: userId },
-                        required: false,
-                    },
-                ],
-            });
-        } else {
+            ],
+        });
+
+        if (!existing && !isNaN(initiativeId)) {
             existing = await initiative.findOne({
                 where: {
                     id: initiativeId,
@@ -165,19 +166,20 @@ initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
     }
 });
 
-initiativeController.patch('/toggle-draft:id/', isAuth, async (req, res, next) => {
+initiativeController.patch('/toggle-draft/:id', isAuth, async (req, res, next) => {
     try {
         const param = req.params.id;
         const initiativeId = parseInt(param);
 
         const result = await initiative.sequelize.transaction(async (t) => {
             let foundInitiative;
-            if (isNaN(initiativeId)) {
-                foundInitiative = await initiative.findOne({
-                    where: { slug: param },
-                    transaction: t,
-                });
-            } else {
+
+            foundInitiative = await initiative.findOne({
+                where: { slug: param },
+                transaction: t,
+            });
+
+            if (!foundInitiative && !isNaN(initiativeId)) {
                 foundInitiative = await initiative.findByPk(initiativeId, {
                     transaction: t,
                 });
@@ -217,15 +219,16 @@ const getSingleInitiativeByDraftStatus = async (isDraft, req, res, next) => {
         const initiativeId = parseInt(param);
 
         let foundInitiative;
-        if (isNaN(initiativeId)) {
-            foundInitiative = await initiative.findOne({
-                where: {
-                    slug: param,
-                    isDraft: isDraft,
-                },
-                include: initiativeConfig,
-            });
-        } else {
+
+        foundInitiative = await initiative.findOne({
+            where: {
+                slug: param,
+                isDraft: isDraft,
+            },
+            include: initiativeConfig,
+        });
+
+        if (!foundInitiative && !isNaN(initiativeId)) {
             foundInitiative = await initiative.findOne({
                 where: {
                     id: initiativeId,
@@ -260,22 +263,23 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
 
         await initiative.sequelize.transaction(async (t) => {
             let foundInitiative;
-            if (isNaN(initiativeId)) {
-                foundInitiative = await initiative.findOne({
-                    where: {
-                        slug: param,
-                        isDraft: isDraft,
+
+            foundInitiative = await initiative.findOne({
+                where: {
+                    slug: param,
+                    isDraft: isDraft,
+                },
+                include: [
+                    {
+                        model: user_account,
+                        as: 'creator',
+                        attributes: ['id', 'email'],
                     },
-                    include: [
-                        {
-                            model: user_account,
-                            as: 'creator',
-                            attributes: ['id', 'email'],
-                        },
-                    ],
-                    transaction: t,
-                });
-            } else {
+                ],
+                transaction: t,
+            });
+
+            if (!foundInitiative && !isNaN(initiativeId)) {
                 foundInitiative = await initiative.findByPk(initiativeId, {
                     where: { isDraft: isDraft },
                     include: [
@@ -687,23 +691,24 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
 
         const result = await initiative.sequelize.transaction(async (t) => {
             let foundInitiative;
-            if (isNaN(initiativeId)) {
-                foundInitiative = await initiative.findOne({
-                    where: {
-                        slug: param,
-                        isDraft: isDraft,
+
+            foundInitiative = await initiative.findOne({
+                where: {
+                    slug: param,
+                    isDraft: isDraft,
+                },
+                include: [
+                    ...initiativeConfig,
+                    {
+                        model: user_account,
+                        as: 'creator',
+                        attributes: ['id', 'email'],
                     },
-                    include: [
-                        ...initiativeConfig,
-                        {
-                            model: user_account,
-                            as: 'creator',
-                            attributes: ['id', 'email'],
-                        },
-                    ],
-                    transaction: t,
-                });
-            } else {
+                ],
+                transaction: t,
+            });
+
+            if (!foundInitiative && !isNaN(initiativeId)) {
                 foundInitiative = await initiative.findByPk(initiativeId, {
                     where: { isDraft: isDraft },
                     include: [
