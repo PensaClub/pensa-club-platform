@@ -15,7 +15,7 @@ export const initiativeServiceFactory = (token) => {
     },
 
     updateDraftInitiative: async (id, draftData) => {
-      return requester.put(`${apiUrl}/initiatives/draft/save/${id}`, draftData);
+      return requester.post(`${apiUrl}/initiatives/draft/save/${id}`, draftData);
     },
 
     getAllDrafts: async (page = 1, limit = 6) => {

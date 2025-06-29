@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // DraftInitiatives/DraftInitiatives.jsx
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -20,59 +20,77 @@ const DraftInitiatives = () => {
   const {
     getAllDrafts,
     deleteDraftInitiative,
-    drafts,
-    draftsLoaded,
-    draftsHasMore,
-    draftsCurrentPage,
     isLoading
   } = useInitiativeContext();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [allDrafts, setAllDrafts] = useState([]);
+  const [isLoadingAll, setIsLoadingAll] = useState(true);
+  const hasLoadedRef = useRef(false);
   const itemsPerPage = 6;
 
   useEffect(() => {
-    if (!draftsLoaded) {
-      loadDrafts();
-    }
-  }, [draftsLoaded]);
+    if (hasLoadedRef.current) return;
+    
+    const loadAllDrafts = async () => {
+      hasLoadedRef.current = true;
+      setIsLoadingAll(true);
+      
+      try {
+        // Зареждаме първа страница
+        const firstResponse = await getAllDrafts(1, true);
+        const totalPagesFromServer = firstResponse.pagination?.totalPages || 1;
+        
+        let allResults = [...(firstResponse.data || [])];
+        
+        // Зареждаме останалите страници
+        for (let page = 2; page <= totalPagesFromServer; page++) {
+          const response = await getAllDrafts(page, false);
+          if (response.data && response.data.length > 0) {
+            allResults = [...allResults, ...response.data];
+          }
+        }
+        
+        setAllDrafts(allResults);
+      } catch (error) {
+        console.error('Error loading drafts:', error);
+      } finally {
+        setIsLoadingAll(false);
+      }
+    };
 
-  const loadDrafts = async () => {
-    try {
-      await getAllDrafts(1, true);
-    } catch (error) {
-      console.error('Error loading drafts:', error);
-    }
-  };
+    loadAllDrafts();
+  }, []);
 
   // Филтрираме черновите според търсенето
   const filteredDrafts = useMemo(() => {
-    if (!searchTerm.trim()) return drafts;
+    if (!searchTerm.trim()) return allDrafts;
     
-    return drafts.filter(draft => 
+    return allDrafts.filter(draft => 
       draft.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       draft.shortDescription?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [drafts, searchTerm]);
+  }, [allDrafts, searchTerm]);
 
   // Пагинация на филтрираните резултати
   const paginatedDrafts = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return filteredDrafts.slice(startIndex, endIndex);
-  }, [filteredDrafts, currentPage, itemsPerPage]);
+  }, [filteredDrafts, currentPage]);
 
   // Изчисляваме общия брой страници
   useEffect(() => {
-    const totalPages = Math.ceil(filteredDrafts.length / itemsPerPage);
-    setTotalPages(totalPages);
+    const newTotalPages = Math.ceil(filteredDrafts.length / itemsPerPage);
+    setTotalPages(newTotalPages);
     
     // Ако сме на страница която вече не съществува, отиваме на първа
-    if (currentPage > totalPages && totalPages > 0) {
+    if (currentPage > newTotalPages && newTotalPages > 0) {
       setCurrentPage(1);
     }
-  }, [filteredDrafts.length, currentPage, itemsPerPage]);
+  }, [filteredDrafts.length]);
 
   const handleSearch = (term) => {
     setSearchTerm(term);
@@ -83,18 +101,22 @@ const DraftInitiatives = () => {
     navigate(`/profile/initiative-create?draftId=${draftId}`);
   };
 
- const handleDelete = async (draft) => { 
-  if (window.confirm('Сигурни ли сте, че искате да изтриете тази чернова?')) {
-    try {
-      // Използваме slug ако има, иначе id
-      const identifier = draft.slug || draft.id;
-      console.log('Deleting draft with identifier:', identifier);
-      await deleteDraftInitiative(identifier,draft);
-    } catch (error) {
-      console.error('Error deleting draft:', error);
+  const handleDelete = async (draft) => { 
+    if (window.confirm('Сигурни ли сте, че искате да изтриете тази чернова?')) {
+      try {
+        // Използваме slug ако има, иначе id
+        const identifier = draft.slug || draft.id;
+        console.log('Deleting draft with identifier:', identifier);
+        await deleteDraftInitiative(identifier, draft);
+        
+        // Премахваме от локалния state
+        setAllDrafts(prev => prev.filter(d => d.id !== draft.id));
+      } catch (error) {
+        console.error('Error deleting draft:', error);
+      }
     }
-  }
-};
+  };
+
   const handleCreateNew = () => {
     navigate('/profile/initiative-create');
   };
@@ -104,7 +126,7 @@ const DraftInitiatives = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (isLoading && !draftsLoaded) {
+  if (isLoadingAll || isLoading) {
     return <Loader />;
   }
 
@@ -138,7 +160,7 @@ const DraftInitiatives = () => {
         
         <div className="draft-stats">
           <span className="draft-count">
-            {filteredDrafts.length} от {drafts.length} чернови
+            {filteredDrafts.length} от {allDrafts.length} чернови
           </span>
         </div>
       </div>

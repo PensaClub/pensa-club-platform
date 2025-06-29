@@ -124,6 +124,8 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         clearLocalStorage,
         setHasLocalStorageDraft,
         setLocalStorageTimestamp,
+         draftId, 
+    setDraftId,
     } = useCreateInitiative(initialValues, onSubmitHandler);
 
     // 🎯 Local state
@@ -165,40 +167,53 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     }, [location.state]);
 
     // 📂 При mount - проверяваме за localStorage draft
-    useEffect(() => {
-        // Ако има initialValues (edit mode), не зареждай от localStorage
-        if (initialValues && Object.keys(initialValues).length > 0) {
-            setLocalStorageChecked(true);
-            return;
+// В useCreateInitiative.js - обновете СЪЩЕСТВУВАЩИЯ useEffect:
+
+useEffect(() => {
+    // Ако има initialValues (edit mode), проверете за draft ID
+    if (initialValues && Object.keys(initialValues).length > 0) {
+        // 🆕 Проверяваме за draft ID
+        if (initialValues.id) {
+            setDraftId(initialValues.id);
+            console.log('📝 Loaded draft ID from initial values:', initialValues.id);
         }
-
-        // Ако вече сме проверили localStorage, не го правим отново
-        if (localStorageChecked) {
-            return;
-        }
-
-        const savedDraft = loadFromLocalStorage();
-        if (savedDraft) {
-            // 🔧 АВТОМАТИЧНО зареждаме данните
-            setValues(prev => ({
-                ...prev,
-                ...savedDraft.data
-            }));
-
-            setHasLocalStorageDraft(true);
-            setLocalStorageTimestamp(savedDraft.timestamp);
-            setShowLocalStoragePrompt(true);
-
-            console.log('🔄 Auto-loaded draft from localStorage');
-
-            // Показваме notification след кратко забавяне
-            setTimeout(() => {
-                notify('success', `Възстановена е чернова от ${savedDraft.timestamp.toLocaleString('bg-BG')}`);
-            }, 500);
-        }
-
         setLocalStorageChecked(true);
-    }, [initialValues, loadFromLocalStorage, setValues, setHasLocalStorageDraft, setLocalStorageTimestamp, localStorageChecked]);
+        return;
+    }
+
+    // Ако вече сме проверили localStorage, не го правим отново
+    if (localStorageChecked) {
+        return;
+    }
+
+    const savedDraft = loadFromLocalStorage();
+    if (savedDraft) {
+        // 🔧 АВТОМАТИЧНО зареждаме данните
+        setValues(prev => ({
+            ...prev,
+            ...savedDraft.data
+        }));
+
+        // 🆕 Възстановяваме draft ID от localStorage ако има
+        if (savedDraft.data?.draftId) {
+            setDraftId(savedDraft.data.draftId);
+            console.log('📋 Restored draft ID from localStorage:', savedDraft.data.draftId);
+        }
+
+        setHasLocalStorageDraft(true);
+        setLocalStorageTimestamp(savedDraft.timestamp);
+        setShowLocalStoragePrompt(true);
+
+        console.log('🔄 Auto-loaded draft from localStorage');
+
+        // Показваме notification след кратко забавяне
+        setTimeout(() => {
+            notify('success', `Възстановена е чернова от ${savedDraft.timestamp.toLocaleString('bg-BG')}`);
+        }, 500);
+    }
+
+    setLocalStorageChecked(true);
+}, [initialValues, loadFromLocalStorage, setValues, setHasLocalStorageDraft, setLocalStorageTimestamp, localStorageChecked]);
 
     // 🔧 Функция за зареждане на draft (за бутона)
     const handleLoadDraft = () => {
@@ -504,7 +519,6 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
 
     // 🎯 Render Slate element
     const renderElement = (props) => {
-        console.log('🎨 renderElement called with type:', props.element.type);
 
         switch (props.element.type) {
             case 'block-quote':
@@ -512,7 +526,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             case 'bulleted-list':
                 return <ul {...props.attributes}>{props.children}</ul>;
             case 'heading-one':
-                console.log('🚀 Rendering H1 element');
+
                 return (
                     <h1
                         {...props.attributes}
@@ -533,7 +547,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                     </h1>
                 );
             case 'heading-two':
-                console.log('🚀 Rendering H2 element');
+
                 return (
                     <h2
                         {...props.attributes}
@@ -576,7 +590,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             case 'numbered-list':
                 return <ol {...props.attributes}>{props.children}</ol>;
             default:
-                console.log('📝 Rendering default paragraph');
+
                 return (
                     <p
                         {...props.attributes}

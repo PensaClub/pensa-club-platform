@@ -44,7 +44,7 @@ import { validateInitiativeForm } from '../Initiatives/CreateIniciative/Utils/in
 const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { createInitiative, saveDraftInitiative } = useInitiativeContext();
+    const { createInitiative, saveDraftInitiative, updateDraftInitiative } = useInitiativeContext();
     const { userEmail } = useAuthContext();
     const STORAGE_KEY = 'initiative_draft';
     const STORAGE_TIMESTAMP_KEY = 'initiative_draft_timestamp';
@@ -133,7 +133,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const [errors, setErrors] = useState({});
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
-
+    const [draftId, setDraftId] = useState(null);
     // 📁 MEDIA FILES STATE
     const [mediaFiles, setMediaFiles] = useState({
         logo: null,
@@ -182,6 +182,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         try {
             const dataToSave = {
                 ...data,
+                draftId: draftId,
                 timestamp: new Date().toISOString()
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
@@ -191,8 +192,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             console.error('❌ Error saving to localStorage:', error);
             notify('localstorage-save-failed');
         }
-    }, []);
-    
+    }, [draftId]);
+
     // 🕒 TIMELINE HELPER FUNCTIONS
     const calculateDuration = useCallback((startDate, endDate) => {
         if (!startDate || !endDate) return 0;
@@ -297,21 +298,24 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
             if (userEmail) {
                 try {
-                  
                     const tempValues = { ...currentValues };
-
-                    // Временно създаваме обект със същата структура за convertFormToHtml
-                    const tempFormData = {
-                        ...tempValues
-                    };
-
-                    // Използваме пълната convertFormToHtml логика
+                    const tempFormData = { ...tempValues };
                     const convertedData = convertFormToHtml.call(null, tempFormData);
 
-                    await saveDraftInitiative({ ...convertedData, userEmail });
+                    // Използваме същата логика като saveDraft
+                    if (draftId) {
+                        await updateDraftInitiative(draftId, { ...convertedData, userEmail });
+                        console.log('🔄 Auto-saved to existing draft:', draftId);
+                    } else {
+                        const result = await saveDraftInitiative({ ...convertedData, userEmail });
+                        const newDraftId = result?.data?.id || result?.id;
+                        if (newDraftId) {
+                            setDraftId(newDraftId);
+                            console.log('✅ Auto-saved new draft with ID:', newDraftId);
+                        }
+                    }
                 } catch (error) {
-                    // console.error('Auto-save to database failed:', error);
-                    // console.log('🔄 Auto-saved to localStorage only');
+                    console.log('🔄 Auto-saved to localStorage only');
                 }
             }
         }, 30000);
@@ -454,7 +458,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             notify('partner-logo-upload-success');
         } catch (error) {
             console.error('Partner logo upload error:', error);
-           notify('partner-logo-upload-failed');
+            notify('partner-logo-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -1468,7 +1472,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const handleContactImageUpload = useCallback(async (e) => {
         const file = e.target.files[0];
         if (!file || !allowedImageTypes.includes(file.type)) {
-           notify('invalid-image-file-type');
+            notify('invalid-image-file-type');
             return;
         }
 
@@ -1503,7 +1507,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             notify('contact-image-upload-success');
         } catch (error) {
             console.error('Contact image upload error:', error);
-            notify('contact-image-upload-failed');notify('contact-image-upload-failed');
+            notify('contact-image-upload-failed'); notify('contact-image-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -1693,7 +1697,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             if (validUploads.length < newImages.length) {
                 notify('warning', null, `Качени ${validUploads.length} от ${newImages.length} снимки`);
             } else {
-               notify('success', null, `Качени всички ${validUploads.length} снимки в галерията`);
+                notify('success', null, `Качени всички ${validUploads.length} снимки в галерията`);
             }
 
         } catch (error) {
@@ -1726,6 +1730,11 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
             if (savedData && timestamp) {
                 const parsedData = JSON.parse(savedData);
+                if (parsedData.draftId) {
+                    setDraftId(parsedData.draftId);
+                    console.log('📋 Restored draft ID from localStorage:', parsedData.draftId);
+                }
+
                 const saveTime = new Date(timestamp);
                 const now = new Date();
                 const hoursDiff = (now - saveTime) / (1000 * 60 * 60);
@@ -1750,7 +1759,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             return null;
         }
     }, []);
-    
+
     const clearLocalStorage = useCallback(() => {
         try {
             localStorage.removeItem(STORAGE_KEY);
@@ -1911,20 +1920,37 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
                 try {
                     const dataToSave = { ...convertedData, userEmail };
-                    const result = await saveDraftInitiative(dataToSave);
+                    let result;
+
+                    // Проверяваме дали вече имаме draft ID
+                    if (draftId) {
+                        // Ако имаме ID, използваме update
+                        result = await updateDraftInitiative(draftId, dataToSave);
+                        console.log('🔄 Updated existing draft:', draftId);
+                    } else {
+                        // Ако нямаме ID, създаваме нова чернова
+                        result = await saveDraftInitiative(dataToSave);
+
+                        // Запазваме ID-то на новосъздадената чернова
+                        const newDraftId = result?.data?.id || result?.id;
+                        if (newDraftId) {
+                            setDraftId(newDraftId);
+                            console.log('✅ Created new draft with ID:', newDraftId);
+                        }
+                    }
+
                     notify('draft-saved-both');
                     return result;
                 } catch (saveError) {
-                   notify('error', null, `Грешка при запазване: ${saveError.message}`);
+                    notify('error', null, `Грешка при запазване: ${saveError.message}`);
                 }
             } else {
                 notify('draft-saved-browser');
-
             }
         } catch (fatalError) {
-           notify('draft-saved-browser-only');
+            notify('draft-saved-browser-only');
         }
-    }, [values, saveDraftInitiative, userEmail, saveToLocalStorage]);
+    }, [values, saveDraftInitiative, updateDraftInitiative, userEmail, saveToLocalStorage, convertFormToHtml, draftId]);
 
     // 💾 FORM SUBMISSION - ОБНОВЕНО
     const onSubmit = useCallback(async (e) => {
@@ -2007,7 +2033,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             delete submissionData.timestamp;
             const handler = onSubmitHandler || createInitiative;
             await handler(submissionData);
-
+            setDraftId(null);
             // ✅ При успешно изпращане, изчистваме localStorage
             clearLocalStorage();
             notify('success', null, 'Инициативата е създадена успешно!');
@@ -2054,6 +2080,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         removeFAQ,
         addTag,
         removeTag,
+        draftId,
+        setDraftId,
 
         // SECTIONS HANDLERS
         addSection,

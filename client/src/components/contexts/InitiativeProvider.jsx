@@ -82,42 +82,61 @@ export const InitiativeProvider = ({ children }) => {
     return username || profileData?.details?.firstName || userEmail?.split('@')[0] || 'User';
   }, [username, profileData?.details?.firstName, userEmail]);
   // Draft functions
-  const getAllDrafts = useCallback(async (page = 1, forceRefresh = false) => {
+ const getAllDrafts = useCallback(async (page = 1, forceRefresh = false) => {
     if (page === 1 && drafts.length > 0 && draftsLoaded && !forceRefresh) {
-      return { data: drafts, hasMore: draftsHasMore, currentPage: draftsCurrentPage };
+        return { 
+            data: drafts, 
+            hasMore: draftsHasMore, 
+            currentPage: draftsCurrentPage,
+            pagination: {
+                totalPages: Math.ceil(drafts.length / 6),
+                totalInitiatives: drafts.length
+            }
+        };
     }
 
     try {
-      setIsLoading(true);
-      const response = await initiativeService.getAllDrafts(page, 6);
+        setIsLoading(true);
+        const response = await initiativeService.getAllDrafts(page, 6);
+        
+        // ВАЖНО: Вземаме pagination от response
+        const responseData = {
+            data: response.data || [],
+            pagination: response.pagination, // Вземаме целия pagination обект
+            hasMore: response.pagination?.hasNextPage || false,
+            totalCount: response.pagination?.totalInitiatives || 0,
+            currentPage: response.pagination?.page || page
+        };
 
-      const responseData = {
-        data: response.data || response,
-        hasMore: response.hasMore !== undefined ? response.hasMore : (response.data || response).length === 6,
-        totalCount: response.totalCount || (response.data || response).length,
-        currentPage: page
-      };
+        if (page === 1) {
+            setDrafts(responseData.data);
+        } else {
+            setDrafts(prev => [...prev, ...responseData.data]);
+        }
 
-      if (page === 1) {
-        setDrafts(responseData.data);
-      } else {
-        setDrafts(prev => [...prev, ...responseData.data]);
-      }
+        setDraftsHasMore(responseData.hasMore);
+        setDraftsCurrentPage(responseData.currentPage);
+        setDraftsLoaded(true);
 
-      setDraftsHasMore(responseData.hasMore);
-      setDraftsCurrentPage(responseData.currentPage);
-      setDraftsLoaded(true);
-
-      return responseData;
+        return responseData;
     } catch (e) {
-      console.error('Error fetching drafts:', e);
-      notify('error', e.message || 'Failed to fetch drafts');
-      showErrorAndSetTimeouts(e.message);
-      return { data: [], hasMore: false, currentPage: page };
+        console.error('Error fetching drafts:', e);
+        return { 
+            data: [], 
+            hasMore: false, 
+            currentPage: page,
+            pagination: { totalPages: 0, totalInitiatives: 0 }
+        };
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  }, [drafts.length, draftsLoaded, draftsHasMore, draftsCurrentPage, initiativeService, showErrorAndSetTimeouts]);
+}, [drafts.length, draftsLoaded, draftsHasMore, draftsCurrentPage, initiativeService]);
+
+// const loadMoreDrafts = useCallback(async () => {
+//     if (!draftsHasMore || isLoading) return;
+//     const nextPage = draftsCurrentPage + 1;
+//     await getAllDrafts(nextPage);
+// }, [draftsHasMore, isLoading, draftsCurrentPage, getAllDrafts]);
 
   const updateDraftInitiative = useCallback(async (id, draftData) => {
     if (!isAuthentication) {
@@ -1599,6 +1618,7 @@ export const InitiativeProvider = ({ children }) => {
     updateDraftInitiative,
     deleteDraftInitiative,
     clearLocalStorageDraft,
+    // loadMoreDrafts,
     invalidateDraftsCache,
     drafts,
     draftsLoaded,
