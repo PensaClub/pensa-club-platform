@@ -20,8 +20,7 @@ module.exports = {
             },
             slug: {
                 type: Sequelize.TEXT,
-                allowNull: false,
-                unique: true,
+                allowNull: true,
             },
             title: {
                 type: Sequelize.TEXT,

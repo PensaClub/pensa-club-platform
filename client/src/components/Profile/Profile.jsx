@@ -55,6 +55,7 @@ import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
 import { changeLanguage } from "i18next";
 import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCreateForm/InitiativeCreateForm";
 import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
+import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -110,7 +111,7 @@ export const Profile = () => {
       "/profile/articles": "Статии",
       "/profile/article-create": "Нова статия",
       "/profile/initiative-create": "Нова  инициатива",
-
+      "/profile/initiative": "Инициативи"
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -715,6 +716,7 @@ export const Profile = () => {
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             {/* <Route path="initiative-preview" element={<ManagementGuard><InitiativePreviewPage /></ManagementGuard>}  /> */}

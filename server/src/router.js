@@ -12,7 +12,6 @@ const initiativeController = require('./controllers/initiativeController');
 const commentController = require('./controllers/commentController');
 const publicationController = require('./controllers/publicationController');
 const projectController = require('./controllers/projectController');
-const applicationController = require('./controllers/applicationController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -25,7 +24,6 @@ router.use('/initiatives', initiativeController);
 router.use('/comments', commentController);
 router.use('/projects', projectController);
 router.use('/publications', publicationController);
-router.use('/applications', applicationController);
 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);

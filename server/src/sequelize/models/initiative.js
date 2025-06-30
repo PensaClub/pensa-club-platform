@@ -165,8 +165,7 @@ module.exports = (sequelize, DataTypes) => {
             // Basic info
             slug: {
                 type: DataTypes.TEXT,
-                allowNull: false,
-                unique: true,
+                allowNull: true,
             },
             title: {
                 type: DataTypes.TEXT,
