@@ -25,7 +25,10 @@ export const initiativeServiceFactory = (token) => {
     getDraftById: async (id) => {
       return requester.get(`${apiUrl}/initiatives/draft/${id}`);
     },
-
+    toggleDraftStatus: async (identifier) => {
+     
+      return requester.patch(`${apiUrl}/initiatives/toggle-draft/${identifier}`);
+    },
     deleteDraftInitiative: async (draftId) => {
       return requester.del(`${apiUrl}/initiatives/draft/${draftId}`);
     },

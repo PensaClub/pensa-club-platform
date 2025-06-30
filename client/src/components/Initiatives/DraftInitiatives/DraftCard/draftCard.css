@@ -200,7 +200,23 @@
   background: linear-gradient(135deg, #ff5252, #e53e3e);
   transform: translateY(-1px);
 }
+.publish-btn {
+  background-color: #1B8B8A;
+  color: white;
+}
 
+.publish-btn:hover {
+  background-color: #157574;
+}
+
+.floating-btn.publish {
+  background-color: #1B8B8A;
+}
+
+.floating-btn.publish:hover {
+  background-color: #157574;
+  transform: scale(1.1);
+}
 @media (max-width: 768px) {
   .draft-card-header {
     height: 140px;

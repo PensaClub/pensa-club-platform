@@ -138,6 +138,39 @@ export const InitiativeProvider = ({ children }) => {
 //     await getAllDrafts(nextPage);
 // }, [draftsHasMore, isLoading, draftsCurrentPage, getAllDrafts]);
 
+const toggleDraftStatus = useCallback(async (identifier) => {
+  if (!isAuthentication) {
+    notify('error', 'Authentication required');
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+    const response = await initiativeService.toggleDraftStatus(identifier);
+    
+    // Ако е успешно публикувана, премахваме от drafts списъка
+    const publishedInitiative = response.data || response;
+    if (!publishedInitiative.isDraft) {
+      setDrafts(prev => prev.filter(draft => 
+        draft.id !== publishedInitiative.id && 
+        draft.slug !== publishedInitiative.slug
+      ));
+      
+      notify('success', 'Инициативата е публикувана успешно!');
+      
+      navigate(`/initiatives/${publishedInitiative.slug || publishedInitiative.id}`);
+    }
+    
+    return publishedInitiative;
+  } catch (error) {
+    console.error('Error toggling draft status:', error);
+    notify('error', 'Failed to publish draft');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [isAuthentication, initiativeService, navigate]);
+
   const updateDraftInitiative = useCallback(async (id, draftData) => {
     if (!isAuthentication) {
       notify('error', 'Authentication required');
@@ -163,6 +196,19 @@ export const InitiativeProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
+
+const getDraftById = useCallback(async (id) => {
+    try {
+        setIsLoading(true);
+        const response = await initiativeService.getDraftById(id);
+        return response.data || response;
+    } catch (error) {
+        console.error('Error fetching draft by ID:', error);
+        throw error;
+    } finally {
+        setIsLoading(false);
+    }
+}, [initiativeService]);
 
   // Функция за изтриване на draft с пълна синхронизация
   const deleteDraftWithSync = useCallback(async (identifier, draftObject = null, fromLocalStorage = false) => {
@@ -429,11 +475,11 @@ export const InitiativeProvider = ({ children }) => {
       });
 
       if (initiative.comments && Array.isArray(initiative.comments)) {
-        // ПОПРАВКА: Филтрираме дублирани IDs и разделяме comments от replies
+
         const processedComments = initiative.comments
           .filter(comment => !comment.parentId) // Само главни коментари
           .map(comment => {
-            // Намираме replies за този коментар
+            
             const replies = initiative.comments
               .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
               .map(reply => ({
@@ -1618,6 +1664,8 @@ export const InitiativeProvider = ({ children }) => {
     updateDraftInitiative,
     deleteDraftInitiative,
     clearLocalStorageDraft,
+    getDraftById,
+    toggleDraftStatus,
     // loadMoreDrafts,
     invalidateDraftsCache,
     drafts,

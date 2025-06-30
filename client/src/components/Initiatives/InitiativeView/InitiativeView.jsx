@@ -391,7 +391,7 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* EXISTING: Sections - остават същите, но с подобрена Slate.js поддръжка */}
+                {/* EXISTING: Sections -*/}
 
                 {initiative.sections && Array.isArray(initiative.sections) && initiative.sections.length > 0 && (
                     <section id="sections" className="initiative-sections">
@@ -400,12 +400,20 @@ export const InitiativeView = () => {
                         </h2>
 
                         <div className="sections-grid">
-                            {initiative.sections.map((section, index) => (
-                                <div key={`section-${section.id || section.titleSlug || index}`} className="content-section">
-                                    <div className="section-content-initiative">
-                                        <h3 className="section-heading">{section.title}</h3>
-                                        <div className="section-text slate-content" data-editor="slate">
-                                            {/* Умна проверка за типа на съдържанието */}
+                            {initiative.sections.map((section, index) => {
+                                // Проверка дали има снимки
+                                const hasImages = (section.images && section.images.length > 0) ||
+                                    (section.image && Array.isArray(section.image) && section.image.length > 0);
+
+                                return (
+                                    <div
+                                        key={`section-${section.id || section.titleSlug || index}`}
+                                        className={`content-section ${!hasImages ? 'no-image' : ''}`}
+                                    >
+                                        <div className="section-content-initiative">
+                                            <h3 className="section-heading">{section.title}</h3>
+                                            <div className="section-text slate-content" data-editor="slate">
+                                                {/* Умна проверка за типа на съдържанието */}
                                             {(() => {
                                                 // Ако няма съдържание
                                                 if (!section.content) {
@@ -440,26 +448,27 @@ export const InitiativeView = () => {
                                                 // Fallback
                                                 return <p>{String(section.content)}</p>;
                                             })()}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Поддръжка за нови images структури */}
-                                    {section.images?.length > 0 && (
-                                        <div className="section-image">
-                                            {renderImages(section.images, "section-slider")}
-                                        </div>
-                                    )}
-                                    {/* Fallback за стари image структури */}
-                                    {!section.images && section.image && Array.isArray(section.image) && section.image.length > 0 && (
-                                        <div className="section-image">
-                                            <img
-                                                src={section.image[0].src}
-                                                alt={section.image[0].alt || section.title}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
+                                        {/* Поддръжка за нови images структури */}
+                                        {section.images?.length > 0 && (
+                                            <div className="section-image">
+                                                {renderImages(section.images, "section-slider")}
+                                            </div>
+                                        )}
+                                        {/* Fallback за стари image структури */}
+                                        {!section.images && section.image && Array.isArray(section.image) && section.image.length > 0 && (
+                                            <div className="section-image">
+                                                <img
+                                                    src={section.image[0].src}
+                                                    alt={section.image[0].alt || section.title}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </section>
                 )}

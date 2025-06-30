@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 // hooks/useCreateInitiative.js
-import { useState, useCallback, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // 🔥 Firebase imports
 import {
@@ -40,17 +40,18 @@ import { faFileAlt, faFileArchive, faFileExcel, faFileImage, faFilePowerpoint, f
 import { useTranslation } from 'react-i18next';
 import { useRealTimeValidation } from './useRealTimeValidation';
 import { validateInitiativeForm } from '../Initiatives/CreateIniciative/Utils/initiativeValidation';
+import { htmlToSlate, isHtmlContent } from '../Initiatives/CreateIniciative/Utils/htmlToSlate';
 
 const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { createInitiative, saveDraftInitiative, updateDraftInitiative } = useInitiativeContext();
+    const { createInitiative, saveDraftInitiative, updateDraftInitiative, getDraftById, toggleDraftStatus } = useInitiativeContext();
     const { userEmail } = useAuthContext();
     const STORAGE_KEY = 'initiative_draft';
     const STORAGE_TIMESTAMP_KEY = 'initiative_draft_timestamp';
     const [hasLocalStorageDraft, setHasLocalStorageDraft] = useState(false);
     const [localStorageTimestamp, setLocalStorageTimestamp] = useState(null);
-    // DEFAULT VALUES - със правилните редактори и ВСИЧКИ структури
+   const location = useLocation();
     const defaultValues = useMemo(() => ({
         // СЪЩЕСТВУВАЩИ ПОЛЕТА
         title: '',
@@ -147,6 +148,61 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const autoSaveRef = useRef(null);
     const fileInputRefs = useRef({});
     useRealTimeValidation(values, setErrors);
+
+    useEffect(() => {
+    const loadDraftFromUrl = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const draftIdFromUrl = urlParams.get('draftId');
+        
+        if (draftIdFromUrl && !initialValues ) {
+            try {
+                // setIsLoading(true);
+                const draftData = await getDraftById(draftIdFromUrl);
+                
+                if (draftData) {
+                   
+                    const processedData = { ...draftData };
+
+                    if (isHtmlContent(processedData.detailedDescription)) {
+                        processedData.detailedDescription = htmlToSlate(processedData.detailedDescription);
+                    }
+
+                    if (isHtmlContent(processedData.expectedResults)) {
+                        processedData.expectedResults = htmlToSlate(processedData.expectedResults);
+                    }
+
+                    if (isHtmlContent(processedData.progressReport)) {
+                        processedData.progressReport = htmlToSlate(processedData.progressReport);
+                    }
+
+                    if (processedData.sections && Array.isArray(processedData.sections)) {
+                        processedData.sections = processedData.sections.map(section => {
+                            if (isHtmlContent(section.content)) {
+                                return {
+                                    ...section,
+                                    content: htmlToSlate(section.content)
+                                };
+                            }
+                            return section;
+                        });
+                    }
+                    
+                    setValues(processedData);
+                    setDraftId(draftIdFromUrl);
+                    notify('success', 'Черновата е заредена за редактиране');
+                }
+            } catch (error) {
+                console.error('Error loading draft:', error);
+                notify('error', 'Грешка при зареждане на черновата');
+            } finally {
+                // setIsLoading(false);
+            }
+        }
+    };
+    
+    loadDraftFromUrl();
+}, [location.search]);
+
     // 🏷️ GENERATE SLUG
     const generateSlug = useCallback((title) => {
         return title
@@ -1952,6 +2008,30 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         }
     }, [values, saveDraftInitiative, updateDraftInitiative, userEmail, saveToLocalStorage, convertFormToHtml, draftId]);
 
+ const publishDraft = useCallback(async () => {
+        if (!draftId) {
+            notify('error', 'Няма draft за публикуване');
+            return;
+        }
+
+        try {
+            // Първо запазваме последните промени
+            await saveDraft();
+
+            // След това публикуваме
+            const result = await toggleDraftStatus(draftId);
+
+            // Изчистваме localStorage
+            clearLocalStorage();
+            setDraftId(null);
+
+            return result;
+        } catch (error) {
+            console.error('Error publishing draft:', error);
+            throw error;
+        }
+    }, [draftId, saveDraft, toggleDraftStatus, clearLocalStorage]);
+
     // 💾 FORM SUBMISSION - ОБНОВЕНО
     const onSubmit = useCallback(async (e) => {
         e.preventDefault();
@@ -2082,6 +2162,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         removeTag,
         draftId,
         setDraftId,
+        publishDraft,
+        getDraftById,
 
         // SECTIONS HANDLERS
         addSection,

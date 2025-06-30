@@ -1608,6 +1608,56 @@
     color: #1e293b !important;
     margin: 1.25rem 0 0.75rem 0 !important;
 }
+/* Секции без снимки - центриран текст */
+.content-section.no-image {
+  grid-template-columns: 1fr;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.content-section.no-image .section-content-initiative {
+  padding: 3rem 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
+
+.content-section.no-image .section-heading {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.content-section.no-image .section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(135deg, #1B8B8A, #E26020);
+  border-radius: 2px;
+}
+
+.content-section.no-image .section-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* Анимация при hover */
+.content-section.no-image:hover .section-content-initiative {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
 /* 📱 RESPONSIVE DESIGN FOR NEW SECTIONS */
 @media (max-width: 992px) {
   .detailed-description-section {
@@ -1636,7 +1686,17 @@
   .sticky-nav-links {
     padding: 0.5rem 0.5rem;
   }
+    .content-section.no-image .section-content-initiative {
+    padding: 2rem 1.5rem;
+  }
   
+  .content-section.no-image .section-heading {
+    font-size: 1.8rem;
+  }
+  
+  .content-section.no-image .section-text {
+    font-size: 1rem;
+  }
   .sticky-nav-link {
     padding: 0.5rem 0.75rem;
     font-size: 0.85rem;
@@ -1675,7 +1735,13 @@
   .detailed-description-section {
     padding: 1.5rem 1rem;
   }
-
+  .content-section.no-image .section-content-initiative {
+    padding: 1.5rem 1rem;
+  }
+  
+  .content-section.no-image .section-heading {
+    font-size: 1.5rem;
+  }
   .timeline-content,
   .target-scope-content {
     padding: 1.5rem;

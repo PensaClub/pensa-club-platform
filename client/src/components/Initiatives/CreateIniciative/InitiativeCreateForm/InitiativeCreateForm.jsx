@@ -52,6 +52,7 @@ import { LocalStorageStatus } from '../LocalStorageStatus/LocalStorageStatus';
 import SlateErrorBoundary from '../SlateErrorBoundary/SlateErrorBoundary';
 import { getSlateTextLength } from '../Utils/slateUtils.js';
 import { handleCleanPaste } from '../../../../utils/textPasteUtils.js';
+import { htmlToSlate, isHtmlContent } from '../Utils/htmlToSlate.js';
 
 const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
 
@@ -124,8 +125,10 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         clearLocalStorage,
         setHasLocalStorageDraft,
         setLocalStorageTimestamp,
-         draftId, 
-    setDraftId,
+        publishDraft,
+        getDraftById,
+        draftId,
+        setDraftId,
     } = useCreateInitiative(initialValues, onSubmitHandler);
 
     // 🎯 Local state
@@ -147,7 +150,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
-    const { getAllInitiatives,clearLocalStorageDraft } = useInitiativeContext();
+    const { getAllInitiatives, clearLocalStorageDraft } = useInitiativeContext();
     const navigate = useNavigate();
     const location = useLocation();
     const [localStorageChecked, setLocalStorageChecked] = useState(false);
@@ -167,53 +170,53 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     }, [location.state]);
 
     // 📂 При mount - проверяваме за localStorage draft
-// В useCreateInitiative.js - обновете СЪЩЕСТВУВАЩИЯ useEffect:
+    // В useCreateInitiative.js - обновете СЪЩЕСТВУВАЩИЯ useEffect:
 
-useEffect(() => {
-    // Ако има initialValues (edit mode), проверете за draft ID
-    if (initialValues && Object.keys(initialValues).length > 0) {
-        // 🆕 Проверяваме за draft ID
-        if (initialValues.id) {
-            setDraftId(initialValues.id);
-            console.log('📝 Loaded draft ID from initial values:', initialValues.id);
+    useEffect(() => {
+        // Ако има initialValues (edit mode), проверете за draft ID
+        if (initialValues && Object.keys(initialValues).length > 0) {
+            // 🆕 Проверяваме за draft ID
+            if (initialValues.id) {
+                setDraftId(initialValues.id);
+                console.log('📝 Loaded draft ID from initial values:', initialValues.id);
+            }
+            setLocalStorageChecked(true);
+            return;
         }
+
+        // Ако вече сме проверили localStorage, не го правим отново
+        if (localStorageChecked) {
+            return;
+        }
+
+        const savedDraft = loadFromLocalStorage();
+        if (savedDraft) {
+            // 🔧 АВТОМАТИЧНО зареждаме данните
+            setValues(prev => ({
+                ...prev,
+                ...savedDraft.data
+            }));
+
+            // 🆕 Възстановяваме draft ID от localStorage ако има
+            if (savedDraft.data?.draftId) {
+                setDraftId(savedDraft.data.draftId);
+                console.log('📋 Restored draft ID from localStorage:', savedDraft.data.draftId);
+            }
+
+            setHasLocalStorageDraft(true);
+            setLocalStorageTimestamp(savedDraft.timestamp);
+            setShowLocalStoragePrompt(true);
+
+            console.log('🔄 Auto-loaded draft from localStorage');
+
+            // Показваме notification след кратко забавяне
+            setTimeout(() => {
+                notify('success', `Възстановена е чернова от ${savedDraft.timestamp.toLocaleString('bg-BG')}`);
+            }, 500);
+        }
+
         setLocalStorageChecked(true);
-        return;
-    }
-
-    // Ако вече сме проверили localStorage, не го правим отново
-    if (localStorageChecked) {
-        return;
-    }
-
-    const savedDraft = loadFromLocalStorage();
-    if (savedDraft) {
-        // 🔧 АВТОМАТИЧНО зареждаме данните
-        setValues(prev => ({
-            ...prev,
-            ...savedDraft.data
-        }));
-
-        // 🆕 Възстановяваме draft ID от localStorage ако има
-        if (savedDraft.data?.draftId) {
-            setDraftId(savedDraft.data.draftId);
-            console.log('📋 Restored draft ID from localStorage:', savedDraft.data.draftId);
-        }
-
-        setHasLocalStorageDraft(true);
-        setLocalStorageTimestamp(savedDraft.timestamp);
-        setShowLocalStoragePrompt(true);
-
-        console.log('🔄 Auto-loaded draft from localStorage');
-
-        // Показваме notification след кратко забавяне
-        setTimeout(() => {
-            notify('success', `Възстановена е чернова от ${savedDraft.timestamp.toLocaleString('bg-BG')}`);
-        }, 500);
-    }
-
-    setLocalStorageChecked(true);
-}, [initialValues, loadFromLocalStorage, setValues, setHasLocalStorageDraft, setLocalStorageTimestamp, localStorageChecked]);
+    }, [initialValues, loadFromLocalStorage, setValues, setHasLocalStorageDraft, setLocalStorageTimestamp, localStorageChecked]);
 
     // 🔧 Функция за зареждане на draft (за бутона)
     const handleLoadDraft = () => {
@@ -229,91 +232,91 @@ useEffect(() => {
     };
 
     // 🗑️ Функция за изтриване на draft
-   const handleClearDraft = async () => { // Добавяме async
-    const confirmed = window.confirm(
-        'Сигурни ли сте, че искате да изтриете черновата и всички данни от формата?'
-    );
+    const handleClearDraft = async () => { // Добавяме async
+        const confirmed = window.confirm(
+            'Сигурни ли сте, че искате да изтриете черновата и всички данни от формата?'
+        );
 
-    if (confirmed) {
-        try {
-            // ЗАМЕНЯМЕ clearLocalStorage() с новата синхронизирана функция
-            await clearLocalStorageDraft();
+        if (confirmed) {
+            try {
+                // ЗАМЕНЯМЕ clearLocalStorage() с новата синхронизирана функция
+                await clearLocalStorageDraft();
 
-            // Изчистваме формата
-            setValues(prev => {
-                const freshDefaults = {
-                    title: '',
-                    slug: '',
-                    shortDescription: '',
-                    mainImage: {
-                        src: '',
-                        alt: '',
-                        caption: '',
+                // Изчистваме формата
+                setValues(prev => {
+                    const freshDefaults = {
+                        title: '',
+                        slug: '',
+                        shortDescription: '',
+                        mainImage: {
+                            src: '',
+                            alt: '',
+                            caption: '',
+                            gallery: []
+                        },
+                        category: '',
+                        location: { address: '', coordinates: { lat: null, lng: null } },
+                        status: 'active',
+                        campaignStatus: 'open',
+                        commentsEnabled: true,
+                        contact: { name: '', position: '', email: '', phone: '', image: '' },
+                        additionalContacts: [],
+                        sections: [],
+                        downloadMaterials: [],
+                        projects: [],
+                        stories: [],
+                        publications: [],
+                        detailedDescription: createSlateEditorState(),
+                        customCategory: '',
+                        priority: 'Medium',
+                        startDate: '',
+                        endDate: '',
+                        duration: '',
+                        milestones: [],
+                        targetAge: [],
+                        targetAudience: [],
+                        customAudience: '',
+                        expectedBudget: '',
+                        currency: 'BGN',
+                        fundingSources: [],
+                        partners: [],
+                        sponsors: [],
+                        logo: null,
+                        responsible: { name: '', position: '', email: '', phone: '' },
+                        organization: { name: '', address: '', website: '' },
+                        socialMedia: { facebook: '', instagram: '', linkedin: '', twitter: '' },
+                        kpis: [],
+                        expectedResults: createSlateEditorState(),
+                        progressReport: createSlateEditorState(),
+                        impactMetrics: [],
+                        testimonials: [],
+                        tags: [],
+                        relatedInitiatives: [],
+                        faq: [],
                         gallery: []
-                    },
-                    category: '',
-                    location: { address: '', coordinates: { lat: null, lng: null } },
-                    status: 'active',
-                    campaignStatus: 'open',
-                    commentsEnabled: true,
-                    contact: { name: '', position: '', email: '', phone: '', image: '' },
-                    additionalContacts: [],
-                    sections: [],
-                    downloadMaterials: [],
-                    projects: [],
-                    stories: [],
-                    publications: [],
-                    detailedDescription: createSlateEditorState(),
-                    customCategory: '',
-                    priority: 'Medium',
-                    startDate: '',
-                    endDate: '',
-                    duration: '',
-                    milestones: [],
-                    targetAge: [],
-                    targetAudience: [],
-                    customAudience: '',
-                    expectedBudget: '',
-                    currency: 'BGN',
-                    fundingSources: [],
-                    partners: [],
-                    sponsors: [],
-                    logo: null,
-                    responsible: { name: '', position: '', email: '', phone: '' },
-                    organization: { name: '', address: '', website: '' },
-                    socialMedia: { facebook: '', instagram: '', linkedin: '', twitter: '' },
-                    kpis: [],
-                    expectedResults: createSlateEditorState(),
-                    progressReport: createSlateEditorState(),
-                    impactMetrics: [],
-                    testimonials: [],
-                    tags: [],
-                    relatedInitiatives: [],
-                    faq: [],
-                    gallery: []
-                };
+                    };
 
-                return freshDefaults;
-            });
+                    return freshDefaults;
+                });
 
-            setShowLocalStoragePrompt(false);
-            
-            // Notify вече се извиква от clearLocalStorageDraft
-            // notify('info', 'Черновата и данните от формата са изтрити');
-        } catch (error) {
-            console.error('Error clearing draft:', error);
-            // Ако има грешка, все пак изчистваме локалната форма
-            setShowLocalStoragePrompt(false);
-            notify('warning', 'Черновата е изчистена локално, но може да има проблем със сървъра');
+                setShowLocalStoragePrompt(false);
+
+                // Notify вече се извиква от clearLocalStorageDraft
+                // notify('info', 'Черновата и данните от формата са изтрити');
+            } catch (error) {
+                console.error('Error clearing draft:', error);
+                // Ако има грешка, все пак изчистваме локалната форма
+                setShowLocalStoragePrompt(false);
+                notify('warning', 'Черновата е изчистена локално, но може да има проблем със сървъра');
+            }
         }
-    }
-};
+    };
 
     // 📝 Функция за игнориране на prompt-а
     const handleIgnorePrompt = () => {
         setShowLocalStoragePrompt(false);
     };
-   
+
     // 🎯 Handle Slate.js changes
     const handleSlateChange = useCallback((fieldName) => (value) => {
         // Използваме functional update за да избегнем dependencies
@@ -890,8 +893,8 @@ useEffect(() => {
                 <LocalStorageStatus
                     hasLocalStorageDraft={hasLocalStorageDraft}
                     localStorageTimestamp={localStorageTimestamp}
-                   
-                     onClearDraft={handleClearDraft}
+
+                    onClearDraft={handleClearDraft}
                     onLoadDraft={handleLoadDraft}
                     onIgnore={handleIgnorePrompt}
                     autoLoaded={true}
@@ -4029,15 +4032,33 @@ useEffect(() => {
                 >
                     <FontAwesomeIcon icon={faEye} />
                 </button>
-                <button
-                    type="button"
-                    className="floating-btn create"
-                    onClick={onSubmit}
-                    title="Създай инициатива"
-                // disabled={isUploading}
-                >
-                    <FontAwesomeIcon icon={faCheckCircle} />
-                </button>
+                {draftId ? (
+                    // Ако редактираме draft, показваме бутон за публикуване
+                    <button
+                        type="button"
+                        className="floating-btn publish"
+                        onClick={async () => {
+                            try {
+                                await publishDraft();
+                            } catch (error) {
+                                console.error('Error publishing:', error);
+                            }
+                        }}
+                        title="Публикувай инициативата"
+                    >
+                        <FontAwesomeIcon icon={faShare} />
+                    </button>
+                ) : (
+                    // Ако създаваме нова, показваме стандартния бутон
+                    <button
+                        type="button"
+                        className="floating-btn create"
+                        onClick={onSubmit}
+                        title="Създай инициатива"
+                    >
+                        <FontAwesomeIcon icon={faCheckCircle} />
+                    </button>
+                )}
             </div>
 
             {/* 📜 Scroll to Top */}

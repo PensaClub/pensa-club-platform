@@ -20,6 +20,7 @@ const DraftInitiatives = () => {
   const {
     getAllDrafts,
     deleteDraftInitiative,
+    toggleDraftStatus,
     isLoading
   } = useInitiativeContext();
 
@@ -33,18 +34,18 @@ const DraftInitiatives = () => {
 
   useEffect(() => {
     if (hasLoadedRef.current) return;
-    
+
     const loadAllDrafts = async () => {
       hasLoadedRef.current = true;
       setIsLoadingAll(true);
-      
+
       try {
         // Зареждаме първа страница
         const firstResponse = await getAllDrafts(1, true);
         const totalPagesFromServer = firstResponse.pagination?.totalPages || 1;
-        
+
         let allResults = [...(firstResponse.data || [])];
-        
+
         // Зареждаме останалите страници
         for (let page = 2; page <= totalPagesFromServer; page++) {
           const response = await getAllDrafts(page, false);
@@ -52,7 +53,7 @@ const DraftInitiatives = () => {
             allResults = [...allResults, ...response.data];
           }
         }
-        
+
         setAllDrafts(allResults);
       } catch (error) {
         console.error('Error loading drafts:', error);
@@ -67,8 +68,8 @@ const DraftInitiatives = () => {
   // Филтрираме черновите според търсенето
   const filteredDrafts = useMemo(() => {
     if (!searchTerm.trim()) return allDrafts;
-    
-    return allDrafts.filter(draft => 
+
+    return allDrafts.filter(draft =>
       draft.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       draft.shortDescription?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -85,7 +86,7 @@ const DraftInitiatives = () => {
   useEffect(() => {
     const newTotalPages = Math.ceil(filteredDrafts.length / itemsPerPage);
     setTotalPages(newTotalPages);
-    
+
     // Ако сме на страница която вече не съществува, отиваме на първа
     if (currentPage > newTotalPages && newTotalPages > 0) {
       setCurrentPage(1);
@@ -96,19 +97,31 @@ const DraftInitiatives = () => {
     setSearchTerm(term);
     setCurrentPage(1); // Reset към първа страница при търсене
   };
+  const handlePublish = async (draft) => {
+    if (window.confirm('Сигурни ли сте, че искате да публикувате тази чернова?')) {
+      try {
+        const identifier = draft.slug || draft.id;
+        await toggleDraftStatus(identifier);
 
+        // Премахваме от локалния state
+        setAllDrafts(prev => prev.filter(d => d.id !== draft.id));
+      } catch (error) {
+        console.error('Error publishing draft:', error);
+      }
+    }
+  };
   const handleEdit = (draftId) => {
     navigate(`/profile/initiative-create?draftId=${draftId}`);
   };
 
-  const handleDelete = async (draft) => { 
+  const handleDelete = async (draft) => {
     if (window.confirm('Сигурни ли сте, че искате да изтриете тази чернова?')) {
       try {
         // Използваме slug ако има, иначе id
         const identifier = draft.slug || draft.id;
         console.log('Deleting draft with identifier:', identifier);
         await deleteDraftInitiative(identifier, draft);
-        
+
         // Премахваме от локалния state
         setAllDrafts(prev => prev.filter(d => d.id !== draft.id));
       } catch (error) {
@@ -142,8 +155,8 @@ const DraftInitiatives = () => {
             Управлявайте вашите чернови и ги превърнете в пълноценни инициативи
           </p>
         </div>
-        
-        <button 
+
+        <button
           className="create-new-draft-btn"
           onClick={handleCreateNew}
         >
@@ -153,11 +166,11 @@ const DraftInitiatives = () => {
       </div>
 
       <div className="draft-controls">
-        <DraftSearchBar 
+        <DraftSearchBar
           onSearch={handleSearch}
           placeholder="Търси сред черновите..."
         />
-        
+
         <div className="draft-stats">
           <span className="draft-count">
             {filteredDrafts.length} от {allDrafts.length} чернови
@@ -178,7 +191,7 @@ const DraftInitiatives = () => {
               <FontAwesomeIcon icon={faFileText} className="empty-icon" />
               <h3>Все още няма чернови</h3>
               <p>Започнете със създаването на първата си инициатива</p>
-              <button 
+              <button
                 className="create-first-draft-btn"
                 onClick={handleCreateNew}
               >
@@ -193,10 +206,11 @@ const DraftInitiatives = () => {
           <div className="drafts-grid">
             {paginatedDrafts.map((draft) => (
               <DraftCard
-                key={draft.id}
+                key={draft.slug || draft.id}
                 draft={draft}
                 onEdit={handleEdit}
                 onDelete={() => handleDelete(draft)}
+                 onPublish={handlePublish}
               />
             ))}
           </div>

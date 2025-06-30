@@ -6,11 +6,12 @@ import {
     faCalendarAlt,
     faFileText,
     faImage,
-    faMapMarkerAlt
+    faMapMarkerAlt,
+    faShare
 } from '@fortawesome/free-solid-svg-icons';
 import './draftCard.css';
 
-const DraftCard = ({ draft, onEdit, onDelete }) => {
+const DraftCard = ({ draft, onEdit, onDelete, onPublish }) => {
     const formatDate = (dateString) => {
         if (!dateString) return 'Неизвестна дата';
         return new Date(dateString).toLocaleDateString('bg-BG', {
@@ -92,7 +93,14 @@ const DraftCard = ({ draft, onEdit, onDelete }) => {
                     <FontAwesomeIcon icon={faEdit} />
                     Редактирай
                 </button>
-
+                <button
+                    className="draft-action-btn publish-btn"
+                    onClick={() => onPublish(draft)}
+                    title="Публикувай"
+                >
+                    <FontAwesomeIcon icon={faShare} />
+                    Публикувай
+                </button>
                 <button
                     className="draft-action-btn delete-btn"
                     onClick={onDelete}
