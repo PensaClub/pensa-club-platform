@@ -1,7 +1,7 @@
 const initiativeController = require('express').Router();
 const { where, Op } = require('sequelize');
 const isAuth = require('../middlewares/isAuth');
-const rbac = require('../middlewares/rbac');
+const { checkPermission } = require('../middlewares/rbac');
 const { initiative, image, downloadMaterial, contact, section, user_account, comment, sponsor, partner } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
 const { transformInitiative, initiativeConfig } = require('../utils/initiativeUtils');
@@ -12,7 +12,7 @@ const { InitiativeSchema, UpdateInitiativeSchema, PaginationQuerySchema } = requ
 // ENDPOINTS
 // ========================================
 
-initiativeController.post('/create', isAuth, async (req, res, next) => {
+initiativeController.post('/create', isAuth, checkPermission('initiative', 'create'), async (req, res, next) => {
     try {
         const validatedData = InitiativeSchema.parse(req.body);
         const initiativeData = { ...validatedData, isDraft: false };
@@ -22,7 +22,7 @@ initiativeController.post('/create', isAuth, async (req, res, next) => {
     }
 });
 
-initiativeController.post('/draft/save/:id?', isAuth, async (req, res, next) => {
+initiativeController.post('/draft/save/:id?', isAuth, checkPermission('initiative', 'draft', 'create'), async (req, res, next) => {
     try {
         const { id } = req.params;
 
@@ -39,31 +39,31 @@ initiativeController.post('/draft/save/:id?', isAuth, async (req, res, next) => 
     }
 });
 
-initiativeController.get('/draft/:id', async (req, res, next) => {
+initiativeController.get('/draft/:id', checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
     return getSingleInitiativeByDraftStatus(true, req, res, next);
 });
 
-initiativeController.get('/single/:id', async (req, res, next) => {
+initiativeController.get('/single/:id', checkPermission('initiative', 'read'), async (req, res, next) => {
     return getSingleInitiativeByDraftStatus(false, req, res, next);
 });
 
-initiativeController.get('/drafts', async (req, res, next) => {
+initiativeController.get('/drafts', checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
     return getInitiativesByDraftStatus(true, req, res, next);
 });
 
-initiativeController.get('/all', async (req, res, next) => {
+initiativeController.get('/all', checkPermission('initiative', 'read'), async (req, res, next) => {
     return getInitiativesByDraftStatus(false, req, res, next);
 });
 
-initiativeController.delete('/draft/:id', isAuth, async (req, res, next) => {
+initiativeController.delete('/draft/:id', isAuth, checkPermission('initiative', 'draft', 'delete'), async (req, res, next) => {
     return deleteInitiativeByDraftStatus(true, req, res, next);
 });
 
-initiativeController.delete('/:id', isAuth, async (req, res, next) => {
+initiativeController.delete('/:id', isAuth, checkPermission('initiative', 'delete'), async (req, res, next) => {
     return deleteInitiativeByDraftStatus(false, req, res, next);
 });
 
-initiativeController.put('/:id', isAuth, async (req, res, next) => {
+initiativeController.put('/:id', isAuth, checkPermission('initiative', 'update'), async (req, res, next) => {
     try {
         const validatedData = UpdateInitiativeSchema.parse(req.body);
         return updateInitiative(validatedData, req, res, next, false);
@@ -72,7 +72,7 @@ initiativeController.put('/:id', isAuth, async (req, res, next) => {
     }
 });
 
-initiativeController.post('/bookmark/:id', isAuth, async (req, res, next) => {
+initiativeController.post('/bookmark/:id', isAuth, checkPermission('initiative', 'read'), async (req, res, next) => {
     try {
         const userId = req.user.userId;
         const param = req.params.id;
@@ -128,7 +128,7 @@ initiativeController.post('/bookmark/:id', isAuth, async (req, res, next) => {
     }
 });
 
-initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
+initiativeController.get('/user-initiatives/:email', checkPermission('initiative', 'read'), async (req, res, next) => {
     try {
         const { email } = req.params;
 
@@ -166,7 +166,7 @@ initiativeController.get('/user-initiatives/:email', async (req, res, next) => {
     }
 });
 
-initiativeController.patch('/toggle-draft/:id', isAuth, async (req, res, next) => {
+initiativeController.patch('/toggle-draft/:id', isAuth, checkPermission('initiative', 'update'), async (req, res, next) => {
     try {
         const param = req.params.id;
         const initiativeId = parseInt(param);
@@ -192,18 +192,23 @@ initiativeController.patch('/toggle-draft/:id', isAuth, async (req, res, next) =
                 });
             }
 
+            const wasDraft = foundInitiative.isDraft;
             await foundInitiative.update({ isDraft: !foundInitiative.isDraft }, { transaction: t });
 
-            const updatedInitiative = await initiative.findByPk(foundInitiative.id, {
-                include: initiativeConfig,
-                transaction: t,
-            });
-
-            return updatedInitiative;
+            return {
+                slug: foundInitiative.slug,
+                wasDraft: wasDraft,
+                isNowDraft: !wasDraft,
+            };
         });
 
-        const transformedResponse = transformInitiative(result);
-        return res.status(200).json(transformedResponse);
+        const statusMessage = result.wasDraft
+            ? `Initiative with slug '${result.slug}' has been changed from draft to published.`
+            : `Initiative with slug '${result.slug}' has been changed from published to draft.`;
+
+        return res.status(200).json({
+            message: statusMessage,
+        });
     } catch (err) {
         next(err);
     }
