@@ -154,7 +154,7 @@ initiativeController.get('/user-initiatives/:email', checkPermission('initiative
         const initiativesWithComments = await Promise.all(
             initiatives.map(async (initiative) => {
                 const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
-                const transformed = transformInitiative(initiative);
+                const transformed = await transformInitiative(initiative);
                 transformed.comments = comments.map((comment) => transformComment(comment));
                 return transformed;
             })
@@ -252,10 +252,10 @@ const getSingleInitiativeByDraftStatus = async (isDraft, req, res, next) => {
 
         const comments = await comment.findAll(getCommentConfig(foundInitiative.id, 'initiative'));
 
-        const transformedInitiative = transformInitiative(foundInitiative);
-        transformedInitiative.comments = comments.map((comment) => transformComment(comment));
+        const transformed = await transformInitiative(foundInitiative);
+        transformed.comments = comments.map((comment) => transformComment(comment));
 
-        return res.status(200).json(transformedInitiative);
+        return res.status(200).json(transformed);
     } catch (err) {
         next(err);
     }
@@ -312,6 +312,14 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
                 });
             }
 
+            // Delete related initiatives (both directions)
+            await initiative.sequelize.models.initiative_relations.destroy({
+                where: {
+                    [Op.or]: [{ initiative_id: foundInitiative.id }, { related_initiative_id: foundInitiative.id }],
+                },
+                transaction: t,
+            });
+
             await image.destroy({
                 where: {
                     imageableId: foundInitiative.id,
@@ -339,13 +347,6 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
 
             await initiative.sequelize.models.initiative_bookmarks.destroy({
                 where: { initiative_id: foundInitiative.id },
-                transaction: t,
-            });
-
-            await initiative.sequelize.models.initiative_relations.destroy({
-                where: {
-                    [Op.or]: [{ initiative_id: foundInitiative.id }, { related_initiative_id: foundInitiative.id }],
-                },
                 transaction: t,
             });
 
@@ -452,17 +453,17 @@ const getInitiativesByDraftStatus = async (isDraft, req, res, next) => {
             order: [['id', 'ASC']],
         });
 
-        const initiativesWithComments = await Promise.all(
+        const transformedList = await Promise.all(
             initiatives.map(async (initiative) => {
                 const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
-                const transformed = transformInitiative(initiative);
+                const transformed = await transformInitiative(initiative);
                 transformed.comments = comments.map((comment) => transformComment(comment));
                 return transformed;
             })
         );
 
         return res.status(200).json({
-            data: initiativesWithComments,
+            data: transformedList,
             pagination: {
                 page: actualPage,
                 limit: limit,
@@ -675,6 +676,21 @@ const createInitiative = async (initiativeData, req, res, next) => {
                 );
             }
 
+            // Handle related initiatives
+            if (initiativeData.relatedInitiatives?.length > 0) {
+                await Promise.all(
+                    initiativeData.relatedInitiatives.map((relatedInitiativeId) =>
+                        initiative.sequelize.models.initiative_relations.create(
+                            {
+                                initiative_id: newInitiative.id,
+                                related_initiative_id: relatedInitiativeId,
+                            },
+                            { transaction: t }
+                        )
+                    )
+                );
+            }
+
             const completeInitiative = await initiative.findByPk(newInitiative.id, {
                 include: initiativeConfig,
                 transaction: t,
@@ -682,7 +698,7 @@ const createInitiative = async (initiativeData, req, res, next) => {
             return completeInitiative;
         });
 
-        const transformedResponse = transformInitiative(result);
+        const transformedResponse = await transformInitiative(result);
         return res.status(201).json(transformedResponse);
     } catch (err) {
         next(err);
@@ -1007,6 +1023,30 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                 }
             }
 
+            // Handle related initiatives
+            if (initiativeData.relatedInitiatives !== undefined) {
+                // Delete existing relations
+                await initiative.sequelize.models.initiative_relations.destroy({
+                    where: { initiative_id: foundInitiative.id },
+                    transaction: t,
+                });
+
+                // Create new relations
+                if (initiativeData.relatedInitiatives.length > 0) {
+                    await Promise.all(
+                        initiativeData.relatedInitiatives.map((relatedInitiativeId) =>
+                            initiative.sequelize.models.initiative_relations.create(
+                                {
+                                    initiative_id: foundInitiative.id,
+                                    related_initiative_id: relatedInitiativeId,
+                                },
+                                { transaction: t }
+                            )
+                        )
+                    );
+                }
+            }
+
             const updatedInitiative = await initiative.findByPk(foundInitiative.id, {
                 include: initiativeConfig,
                 transaction: t,
@@ -1015,7 +1055,7 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
             return updatedInitiative;
         });
 
-        const transformedResponse = transformInitiative(result);
+        const transformedResponse = await transformInitiative(result);
         return res.status(200).json(transformedResponse);
     } catch (err) {
         next(err);

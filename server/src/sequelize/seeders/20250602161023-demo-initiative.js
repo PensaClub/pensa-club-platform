@@ -550,9 +550,24 @@ module.exports = {
             ],
             { returning: true }
         );
+
+        // Add related initiatives (self-reference for demo)
+        await queryInterface.bulkInsert(
+            'initiative_relations',
+            [
+                {
+                    initiative_id: initiatives[0].id,
+                    related_initiative_id: initiatives[0].id,
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            ],
+            { returning: true }
+        );
     },
 
     async down(queryInterface, Sequelize) {
+        await queryInterface.bulkDelete('initiative_relations', null, {});
         await queryInterface.bulkDelete('comments', null, {});
         await queryInterface.bulkDelete('contacts', null, {});
         await queryInterface.bulkDelete('images', null, {});

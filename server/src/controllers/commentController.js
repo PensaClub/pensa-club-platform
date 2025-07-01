@@ -1,7 +1,7 @@
 const commentController = require('express').Router();
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
-const { comment, user_account, user_details, initiative } = require('../sequelize/models');
+const { comment, user_account, user_details, initiative, project } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
 const { transformComment } = require('../utils/commentUtils');
 const { CreateCommentSchema, UpdateCommentSchema, CommentIdSchema } = require('../schemas/comments.schema');
@@ -309,6 +309,48 @@ commentController.get('/all/initiative/:id', checkPermission('comments', 'read')
 
         return res.status(200).json({
             initiativeSlug: foundInitiative.slug,
+            comments: transformedComments,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+commentController.get('/all/project/:id', checkPermission('comments', 'read'), async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const projectId = parseInt(id);
+
+        let foundProject;
+
+        foundProject = await project.findOne({
+            where: { slug: id },
+        });
+
+        if (!foundProject && !isNaN(projectId)) {
+            foundProject = await project.findByPk(projectId);
+        }
+
+        if (!foundProject) {
+            throw new CustomError({
+                message: 'Project not found',
+                statusCode: 404,
+            });
+        }
+
+        const comments = await comment.findAll({
+            where: {
+                commentableId: foundProject.id,
+                commentsLinkConnection: 'project',
+            },
+            include: commentConfig,
+            order: [['createdAt', 'DESC']],
+        });
+
+        const transformedComments = comments.map((comment) => transformComment(comment));
+
+        return res.status(200).json({
+            projectSlug: foundProject.slug,
             comments: transformedComments,
         });
     } catch (err) {

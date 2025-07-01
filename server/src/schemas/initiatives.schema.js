@@ -271,6 +271,15 @@ const BaseInitiativeSchema = z
         partners: z.array(PartnerSchema).nullable().optional(),
         downloadMaterials: z.array(DownloadMaterialSchema).nullable().optional(),
         documents: z.array(DownloadMaterialSchema).nullable().optional(),
+        relatedInitiatives: z
+            .array(z.union([z.string(), z.number()]))
+            .transform((val) => {
+                if (!val) return [];
+                return val.map((id) => (typeof id === 'string' ? parseInt(id, 10) : id));
+            })
+            .refine((val) => val.every((id) => !isNaN(id) && id > 0), 'All initiative IDs must be valid positive numbers')
+            .nullable()
+            .optional(),
     })
     .refine(
         (data) => {

@@ -896,4 +896,41 @@ projectController.post('/bookmark/:projectId', isAuth, async (req, res, next) =>
     }
 });
 
+projectController.get('/user-projects/:email', async (req, res, next) => {
+    try {
+        const { email } = req.params;
+
+        const user = await user_account.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        const projects = await user.getBookmarkedProjects({
+            include: projectConfig,
+            order: [['id', 'ASC']],
+            through: { attributes: [] },
+        });
+
+        if (projects.length === 0) {
+            return res.status(200).json({
+                message: 'No bookmarked projects found.',
+                data: [],
+            });
+        }
+
+        const projectsWithComments = await Promise.all(
+            projects.map(async (project) => {
+                const comments = await comment.findAll(getCommentConfig(project.id, 'project'));
+                const transformed = await transformProject(project);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
+
+        return res.status(200).json(projectsWithComments);
+    } catch (err) {
+        next(err);
+    }
+});
+
 module.exports = projectController;
