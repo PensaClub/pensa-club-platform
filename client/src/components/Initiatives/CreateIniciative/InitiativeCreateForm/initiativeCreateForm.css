@@ -4593,7 +4593,15 @@
     font-style: inherit !important;
     text-decoration: inherit !important;
 }
+.floating-btn.new-draft {
+    background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
+}
 
+.floating-btn.new-draft:hover {
+    background: linear-gradient(135deg, #2f855a 0%, #38a169 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(56, 161, 105, 0.3);
+}
 /* Responsive стилове за малки екрани */
 @media (max-width: 768px) {
     .initiative-create-container .slate-editable blockquote {

@@ -308,7 +308,7 @@ const getDraftById = useCallback(async (id) => {
 
       const responseData = {
         data: response.data || response,
-        hasMore: response.hasMore !== undefined ? response.hasMore : (response.data || response).length === 6,
+        hasMore: response.pagination?.hasNextPage || false,
         totalCount: response.totalCount || (response.data || response).length,
         currentPage: page
       };

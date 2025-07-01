@@ -66,7 +66,56 @@
     border-color: #dc2626;
     transform: translateY(-1px);
 }
+/* LocalStorageStatus.css - добави към съществуващите стилове */
+.storage-action-btn.new {
+    display: flex;
+    gap: 0.2rem;
+    align-items: center;
+    background: linear-gradient(135deg, #2d3748 0%, #44536d 100%);
+    color: white;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
 
+.storage-action-btn.new:hover {
+    background: linear-gradient(135deg, #06a756 0%, #064d27 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+}
+
+.storage-action-btn.new svg {
+    font-size: 0.875rem;
+}
+
+/* Auto-loaded state styling */
+.local-storage-status.auto-loaded {
+    background: linear-gradient(135deg, #e6fffa 0%, #ebf8ff 100%);
+    border-color: #38a169;
+}
+
+.local-storage-status.auto-loaded .storage-status-icon {
+    color: #38a169;
+}
+
+.storage-status-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+    color: #718096;
+    font-size: 0.813rem;
+}
+
+.storage-status-timer svg {
+    font-size: 0.875rem;
+}
+
+.timer-text {
+    white-space: nowrap;
+}
 @keyframes slideIn {
     from {
         opacity: 0;

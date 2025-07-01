@@ -2008,6 +2008,46 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         }
     }, [values, saveDraftInitiative, updateDraftInitiative, userEmail, saveToLocalStorage, convertFormToHtml, draftId]);
 
+    const startNewDraft = useCallback(async () => {
+    try {
+        // Ако има несъхранени промени, първо ги запазваме
+        if (draftId && userEmail) {
+            const convertedData = convertFormToHtml();
+            const dataToSave = { ...convertedData, userEmail };
+            await updateDraftInitiative(draftId, dataToSave);
+            notify('info', 'Текущата чернова е запазена');
+        }
+
+        // Изчистваме draftId
+        setDraftId(null);
+        
+        // Изчистваме localStorage
+        clearLocalStorage();
+        
+        // Изчистваме формата до defaultValues
+        setValues(defaultValues);
+        
+        // Изчистваме грешките
+        setErrors({});
+        
+        // Изчистваме media files
+        setMediaFiles({
+            logo: null,
+            mainImage: [],
+            gallery: [],
+            documents: [],
+            partnerLogos: {},
+            sponsorLogos: {}
+        });
+
+        notify('success', 'Готови сте да започнете нова чернова!');
+        
+    } catch (error) {
+        console.error('Error starting new draft:', error);
+        notify('error', 'Грешка при започване на нова чернова');
+    }
+}, [draftId, userEmail, saveDraft, clearLocalStorage, defaultValues]);
+
  const publishDraft = useCallback(async () => {
         if (!draftId) {
             notify('error', 'Няма draft за публикуване');
@@ -2141,6 +2181,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         onSubmit,
         validateForm,
         saveDraft,
+        startNewDraft,
         convertFormToHtml,
 
         // 🔧 ДОБАВЕНО: Firebase image handlers

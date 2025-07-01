@@ -129,6 +129,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         getDraftById,
         draftId,
         setDraftId,
+        startNewDraft
     } = useCreateInitiative(initialValues, onSubmitHandler);
 
     // 🎯 Local state
@@ -230,6 +231,21 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             notify('success', 'Черновата е заредена успешно!');
         }
     };
+
+    const handleStartNewDraft = async () => {
+    const confirmed = window.confirm(
+        'Сигурни ли сте, че искате да започнете нова чернова? ' +
+        'Текущата чернова ще бъде запазена.'
+    );
+    
+    if (confirmed) {
+        await startNewDraft(); // Използваме функцията от hook-а
+        setShowLocalStoragePrompt(false);
+        
+        // Скролваме до началото на формата
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
 
     // 🗑️ Функция за изтриване на draft
     const handleClearDraft = async () => { // Добавяме async
@@ -893,7 +909,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                 <LocalStorageStatus
                     hasLocalStorageDraft={hasLocalStorageDraft}
                     localStorageTimestamp={localStorageTimestamp}
-
+onStartNew={handleStartNewDraft}
                     onClearDraft={handleClearDraft}
                     onLoadDraft={handleLoadDraft}
                     onIgnore={handleIgnorePrompt}
@@ -4016,6 +4032,16 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
 
             {/*  Floating Actions */}
             <div className="floating-actions">
+                  {draftId && (
+        <button
+            type="button"
+            className="floating-btn new-draft"
+            onClick={handleStartNewDraft}
+            title="Започни нова чернова"
+        >
+            <FontAwesomeIcon icon={faPlus} />
+        </button>
+    )}
                 <button
                     type="button"
                     className="floating-btn draft"

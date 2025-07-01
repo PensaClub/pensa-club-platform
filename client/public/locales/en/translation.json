@@ -1265,6 +1265,45 @@
       "faq-answer-help": "Detailed answer to the question (10-5000 characters)",
       "close-to-limit": "close to limit"
     },
+    "admin": {
+      "title": "Initiatives Management",
+      "published": "Published",
+      "drafts": "Drafts",
+      "initiatives": "initiatives",
+      "searchPlaceholder": "Search by title, author or keywords...",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "publish": "Publish",
+      "loading": "Loading...",
+      "loadMore": "Load more",
+      "noItemsFound": "No found",
+      "tryChangingCriteria": "Try changing the search or filter criteria",
+      "unknownAuthor": "Unknown author",
+      "statusDraft": "Draft",
+      "statusActive": "Active",
+      "statusCompleted": "Completed",
+      "statusPaused": "Paused",
+      "statusUnknown": "Unknown",
+      "confirmDeleteDraft": "Are you sure you want to delete this draft?",
+      "confirmDeleteInitiative": "Are you sure you want to delete this initiative? This action is irreversible!",
+      "confirmPublishDraft": "Are you sure you want to publish this draft?",
+      "draftDeletedSuccess": "Draft deleted successfully",
+      "initiativeDeletedSuccess": "Initiative deleted successfully",
+      "draftPublishedSuccess": "Draft published successfully!",
+      "deleteError": "Error deleting",
+      "publishError": "Error publishing",
+      "filters": {
+        "allStatuses": "All statuses",
+        "active": "Active",
+        "completed": "Completed",
+        "paused": "Paused",
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "lastUpdated": "Last updated",
+        "byTitle": "By title"
+      }
+    },
     "categories": {
       "environment": "Environment",
       "education": "Education",
@@ -1387,11 +1426,11 @@
       "emailTo": "email to",
       "additionalContacts": "Additional contacts",
       "comments": "Comments",
-       "navigation": {
+      "navigation": {
         "description": "Description",
         "sections": "Sections",
         "publications": "Publications",
-        "projects": "Projects", 
+        "projects": "Projects",
         "timeline": "Timeline",
         "audience": "Audience",
         "results": "Results",
@@ -1405,7 +1444,7 @@
         "gallery": "Gallery",
         "timeline": "Timeline",
         "targetScope": "Target Audience & Scope",
-        "progressResults": "Progress & Results", 
+        "progressResults": "Progress & Results",
         "partnersSponsors": "Partners & Sponsors",
         "organizationInfo": "Organization & Contacts",
         "tags": "Tags",
@@ -1431,7 +1470,7 @@
       },
       "partnersSponsors": {
         "partners": "Partners",
-        "sponsors": "Sponsors", 
+        "sponsors": "Sponsors",
         "visitWebsite": "Visit Website"
       },
       "organization": {

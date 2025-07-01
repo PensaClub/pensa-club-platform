@@ -1,6 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import './localStorageStatus.css';
 import { useTranslation } from 'react-i18next';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export const LocalStorageStatus = ({ 
     hasLocalStorageDraft, 
@@ -8,6 +10,7 @@ export const LocalStorageStatus = ({
     onClearDraft,
     onLoadDraft,
     onIgnore,
+    onStartNew,
     autoLoaded = false
 }) => {
     const { t } = useTranslation();
@@ -84,13 +87,12 @@ export const LocalStorageStatus = ({
                         </button>
                         {autoLoaded && onIgnore && (
                             <button 
-                                type="button" 
-                                className="btn-ignore-draft"
-                                onClick={handleIgnore}
-                                title={t('localStorage.hideTooltip')}
-                            >
-                                ✕ {t('localStorage.hide')}
-                            </button>
+                        className="storage-action-btn new"
+                        onClick={onStartNew}
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                        Нова чернова
+                    </button>
                         )}
                     </div>
                 </div>
