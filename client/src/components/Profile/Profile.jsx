@@ -56,6 +56,7 @@ import { changeLanguage } from "i18next";
 import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCreateForm/InitiativeCreateForm";
 import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
 import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
+import { BookmarkedItems } from "./BookmarkedItems/BookmarkedItems";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -111,7 +112,9 @@ export const Profile = () => {
       "/profile/articles": "Статии",
       "/profile/article-create": "Нова статия",
       "/profile/initiative-create": "Нова  инициатива",
-      "/profile/initiative": "Инициативи"
+      "/profile/initiative": "Инициативи",
+      "/profile/bookmarks": "Запазени"
+
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -130,7 +133,11 @@ export const Profile = () => {
     "/profile/admin-suggest-users",
     "/profile/suggest-resolved-users",
     "/profile/messages",
-    "/profile/subscription-admin"
+    "/profile/subscription-admin",
+    "/profile/initiative",
+    "/profile/initiative-create",
+    "/profile/article-create",
+    "/profile/articles"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -457,6 +464,18 @@ export const Profile = () => {
                     <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
+                 <li>
+                  <NavLink
+                    to="bookmarks"
+                    className={({ isActive }) => isActive ? 'active' : ''}
+                  >
+                    <span className="link-content">
+                      <ChatIcon className="icon" />
+                      {t("profile.bookmarks")}
+                    </span>
+                    {/* <ArrowIcon className="icon-arrow" /> */}
+                  </NavLink>
+                </li>
               </ul>
             </div>
 
@@ -711,6 +730,7 @@ export const Profile = () => {
             <Route path="announced" element={<ProfileAnnounced />} profileData={profileData} />
             <Route path="interestOptions" element={<ProfileInterests />} />
             <Route path="messages" element={<ProfileMessages />} />
+            <Route path="bookmarks" element={<BookmarkedItems />} />
 
             {/* Management routes (Admin & Moderator) */}
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />

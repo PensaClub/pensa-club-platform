@@ -229,6 +229,7 @@
   },
   "profile": {
     "main": "Profile Dashboard",
+    "bookmarks": "My Bookmarks",
     "select_all": "Select all",
     "clear": "Clear",
     "selected": "selected",
@@ -1717,7 +1718,6 @@
     "clearDraftTooltip": "Delete the draft",
     "hideTooltip": "Hide the message",
     "newDraft": "New Draft"
-
   },
   "validation": {
     "title-required": "Title is required",
@@ -1772,7 +1772,7 @@
     "slug-min-length": "URL slug must be at least 3 characters",
     "slug-max-length": "URL slug must be maximum 100 characters"
   },
-    "drafts": {
+  "drafts": {
     "unknownDate": "Unknown date",
     "noDescription": "No description",
     "draftAlt": "Draft",
@@ -1781,9 +1781,9 @@
     "created": "Created",
     "completionProgress": "Completion progress",
     "edit": "Edit",
-    "publish": "Publish", 
+    "publish": "Publish",
     "delete": "Delete",
-        "title": "Initiative Drafts",
+    "title": "Initiative Drafts",
     "subtitle": "Manage your drafts and turn them into full initiatives",
     "newInitiative": "New Initiative",
     "searchPlaceholder": "Search among drafts...",
@@ -1796,6 +1796,27 @@
     "noDraftsTitle": "No drafts yet",
     "noDraftsText": "Start by creating your first initiative",
     "createInitiative": "Create Initiative"
-   
+  },
+  "bookmarks": {
+    "title": "My Bookmarks",
+    "searchPlaceholder": "Search bookmarks...",
+    "tabs": {
+      "all": "All",
+      "initiatives": "Initiatives",
+      "projects": "Projects"
+    },
+    "type": {
+      "initiative": "Initiative",
+      "project": "Project"
+    },
+    "empty": {
+      "title": "No bookmarks yet",
+      "description": "Start adding initiatives and projects to your bookmarks",
+      "exploreButton": "Explore initiatives"
+    },
+    "viewDetails": "View details",
+    "readMore": "Read more",
+    "unbookmark": "Remove bookmark",
+    "bookmarkedOn": "Bookmarked"
   }
 }

@@ -58,9 +58,9 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
         <div className={`init-color-bar ${getColorClass(index)}`}></div>
         
         {/* Category Badge */}
-        <div className="init-category-badge">
+        {initiative?.category &&(<div className="init-category-badge">
           {initiative?.category?.toUpperCase()||''}
-        </div>
+        </div>)}
       </div>
 
       {/* Card Content */}

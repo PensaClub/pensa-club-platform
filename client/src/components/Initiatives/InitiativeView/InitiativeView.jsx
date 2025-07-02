@@ -132,6 +132,7 @@ export const InitiativeView = () => {
     const toggleFaq = (index) => {
         setOpenFaqIndex(openFaqIndex === index ? null : index);
     };
+    
     const handleSmoothScroll = (e) => {
         e.preventDefault();
         const targetId = e.currentTarget.getAttribute('href').substring(1);
