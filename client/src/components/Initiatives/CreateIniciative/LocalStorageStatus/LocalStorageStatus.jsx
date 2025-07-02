@@ -91,7 +91,7 @@ export const LocalStorageStatus = ({
                         onClick={onStartNew}
                     >
                         <FontAwesomeIcon icon={faPlus} />
-                        Нова чернова
+                        {t('localStorage.newDraft')}
                     </button>
                         )}
                     </div>

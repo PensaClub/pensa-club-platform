@@ -45,13 +45,13 @@ import { htmlToSlate, isHtmlContent } from '../Initiatives/CreateIniciative/Util
 const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { createInitiative, saveDraftInitiative, updateDraftInitiative, getDraftById, toggleDraftStatus } = useInitiativeContext();
+    const { createInitiative, saveDraftInitiative, updateDraftInitiative, getDraftById, toggleDraftStatus, updateInitiative, getInitiativeById } = useInitiativeContext();
     const { userEmail } = useAuthContext();
     const STORAGE_KEY = 'initiative_draft';
     const STORAGE_TIMESTAMP_KEY = 'initiative_draft_timestamp';
     const [hasLocalStorageDraft, setHasLocalStorageDraft] = useState(false);
     const [localStorageTimestamp, setLocalStorageTimestamp] = useState(null);
-   const location = useLocation();
+    const location = useLocation();
     const defaultValues = useMemo(() => ({
         // СЪЩЕСТВУВАЩИ ПОЛЕТА
         title: '',
@@ -135,6 +135,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [draftId, setDraftId] = useState(null);
+    const [editId, setEditId] = useState(null);
     // 📁 MEDIA FILES STATE
     const [mediaFiles, setMediaFiles] = useState({
         logo: null,
@@ -150,58 +151,100 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     useRealTimeValidation(values, setErrors);
 
     useEffect(() => {
-    const loadDraftFromUrl = async () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const draftIdFromUrl = urlParams.get('draftId');
-        
-        if (draftIdFromUrl && !initialValues ) {
-            try {
-                // setIsLoading(true);
-                const draftData = await getDraftById(draftIdFromUrl);
-                
-                if (draftData) {
-                   
-                    const processedData = { ...draftData };
+        const loadDraftFromUrl = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const draftIdFromUrl = urlParams.get('draftId');
 
-                    if (isHtmlContent(processedData.detailedDescription)) {
-                        processedData.detailedDescription = htmlToSlate(processedData.detailedDescription);
-                    }
+            const editIdFromUrl = urlParams.get('editId');
+            const mode = urlParams.get('mode');
 
-                    if (isHtmlContent(processedData.expectedResults)) {
-                        processedData.expectedResults = htmlToSlate(processedData.expectedResults);
-                    }
+            if (draftIdFromUrl && !initialValues) {
+                try {
+                    // setIsLoading(true);
+                    const draftData = await getDraftById(draftIdFromUrl);
 
-                    if (isHtmlContent(processedData.progressReport)) {
-                        processedData.progressReport = htmlToSlate(processedData.progressReport);
-                    }
+                    if (draftData) {
 
-                    if (processedData.sections && Array.isArray(processedData.sections)) {
-                        processedData.sections = processedData.sections.map(section => {
-                            if (isHtmlContent(section.content)) {
-                                return {
-                                    ...section,
-                                    content: htmlToSlate(section.content)
-                                };
-                            }
-                            return section;
-                        });
+                        const processedData = { ...draftData };
+
+                        if (isHtmlContent(processedData.detailedDescription)) {
+                            processedData.detailedDescription = htmlToSlate(processedData.detailedDescription);
+                        }
+
+                        if (isHtmlContent(processedData.expectedResults)) {
+                            processedData.expectedResults = htmlToSlate(processedData.expectedResults);
+                        }
+
+                        if (isHtmlContent(processedData.progressReport)) {
+                            processedData.progressReport = htmlToSlate(processedData.progressReport);
+                        }
+
+                        if (processedData.sections && Array.isArray(processedData.sections)) {
+                            processedData.sections = processedData.sections.map(section => {
+                                if (isHtmlContent(section.content)) {
+                                    return {
+                                        ...section,
+                                        content: htmlToSlate(section.content)
+                                    };
+                                }
+                                return section;
+                            });
+                        }
+
+                        setValues(processedData);
+                        setDraftId(draftIdFromUrl);
+                        notify('success', 'Черновата е заредена за редактиране');
                     }
-                    
-                    setValues(processedData);
-                    setDraftId(draftIdFromUrl);
-                    notify('success', 'Черновата е заредена за редактиране');
+                } catch (error) {
+                    console.error('Error loading draft:', error);
+                    notify('error', 'Грешка при зареждане на черновата');
+                } finally {
+                    // setIsLoading(false);
                 }
-            } catch (error) {
-                console.error('Error loading draft:', error);
-                notify('error', 'Грешка при зареждане на черновата');
-            } finally {
-                // setIsLoading(false);
+            } else if (editIdFromUrl && mode === 'edit') { // 🆕 За готови инициативи
+                try {
+
+                    const initiativeData = await getInitiativeById(editIdFromUrl);
+
+                    if (initiativeData) {
+                        // Конвертираме HTML към Slate формат ако е нужно
+                        const processedData = { ...initiativeData };
+
+                        if (isHtmlContent(processedData.detailedDescription)) {
+                            processedData.detailedDescription = htmlToSlate(processedData.detailedDescription);
+                        }
+                        if (isHtmlContent(processedData.expectedResults)) {
+                            processedData.expectedResults = htmlToSlate(processedData.expectedResults);
+                        }
+
+                        if (isHtmlContent(processedData.progressReport)) {
+                            processedData.progressReport = htmlToSlate(processedData.progressReport);
+                        }
+
+                        if (processedData.sections && Array.isArray(processedData.sections)) {
+                            processedData.sections = processedData.sections.map(section => {
+                                if (isHtmlContent(section.content)) {
+                                    return {
+                                        ...section,
+                                        content: htmlToSlate(section.content)
+                                    };
+                                }
+                                return section;
+                            });
+                        }
+
+                        setValues(processedData);
+                        notify('success', 'Инициативата е заредена за редактиране');
+                    }
+                } catch (error) {
+                    console.error('Error loading initiative for edit:', error);
+                    notify('error', 'Грешка при зареждане на инициативата');
+                }
             }
-        }
-    };
-    
-    loadDraftFromUrl();
-}, [location.search]);
+        };
+
+        loadDraftFromUrl();
+    }, [location.search]);
 
     // 🏷️ GENERATE SLUG
     const generateSlug = useCallback((title) => {
@@ -361,17 +404,17 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                     // Използваме същата логика като saveDraft
                     if (draftId) {
                         await updateDraftInitiative(draftId, { ...convertedData, userEmail });
-                        console.log('🔄 Auto-saved to existing draft:', draftId);
+                     
                     } else {
                         const result = await saveDraftInitiative({ ...convertedData, userEmail });
                         const newDraftId = result?.data?.id || result?.id;
                         if (newDraftId) {
                             setDraftId(newDraftId);
-                            console.log('✅ Auto-saved new draft with ID:', newDraftId);
+                       
                         }
                     }
                 } catch (error) {
-                    console.log('🔄 Auto-saved to localStorage only');
+                 
                 }
             }
         }, 30000);
@@ -1788,7 +1831,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 const parsedData = JSON.parse(savedData);
                 if (parsedData.draftId) {
                     setDraftId(parsedData.draftId);
-                    console.log('📋 Restored draft ID from localStorage:', parsedData.draftId);
+                
                 }
 
                 const saveTime = new Date(timestamp);
@@ -1982,7 +2025,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                     if (draftId) {
                         // Ако имаме ID, използваме update
                         result = await updateDraftInitiative(draftId, dataToSave);
-                        console.log('🔄 Updated existing draft:', draftId);
+                   
                     } else {
                         // Ако нямаме ID, създаваме нова чернова
                         result = await saveDraftInitiative(dataToSave);
@@ -1991,7 +2034,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                         const newDraftId = result?.data?.id || result?.id;
                         if (newDraftId) {
                             setDraftId(newDraftId);
-                            console.log('✅ Created new draft with ID:', newDraftId);
+                      
                         }
                     }
 
@@ -2009,46 +2052,46 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     }, [values, saveDraftInitiative, updateDraftInitiative, userEmail, saveToLocalStorage, convertFormToHtml, draftId]);
 
     const startNewDraft = useCallback(async () => {
-    try {
-        // Ако има несъхранени промени, първо ги запазваме
-        if (draftId && userEmail) {
-            const convertedData = convertFormToHtml();
-            const dataToSave = { ...convertedData, userEmail };
-            await updateDraftInitiative(draftId, dataToSave);
-            notify('info', 'Текущата чернова е запазена');
+        try {
+            // Ако има несъхранени промени, първо ги запазваме
+            if (draftId && userEmail) {
+                const convertedData = convertFormToHtml();
+                const dataToSave = { ...convertedData, userEmail };
+                await updateDraftInitiative(draftId, dataToSave);
+                notify('info', 'Текущата чернова е запазена');
+            }
+
+            // Изчистваме draftId
+            setDraftId(null);
+
+            // Изчистваме localStorage
+            clearLocalStorage();
+
+            // Изчистваме формата до defaultValues
+            setValues(defaultValues);
+
+            // Изчистваме грешките
+            setErrors({});
+
+            // Изчистваме media files
+            setMediaFiles({
+                logo: null,
+                mainImage: [],
+                gallery: [],
+                documents: [],
+                partnerLogos: {},
+                sponsorLogos: {}
+            });
+
+            notify('success', 'Готови сте да започнете нова чернова!');
+
+        } catch (error) {
+            console.error('Error starting new draft:', error);
+            notify('error', 'Грешка при започване на нова чернова');
         }
+    }, [draftId, userEmail, saveDraft, clearLocalStorage, defaultValues]);
 
-        // Изчистваме draftId
-        setDraftId(null);
-        
-        // Изчистваме localStorage
-        clearLocalStorage();
-        
-        // Изчистваме формата до defaultValues
-        setValues(defaultValues);
-        
-        // Изчистваме грешките
-        setErrors({});
-        
-        // Изчистваме media files
-        setMediaFiles({
-            logo: null,
-            mainImage: [],
-            gallery: [],
-            documents: [],
-            partnerLogos: {},
-            sponsorLogos: {}
-        });
-
-        notify('success', 'Готови сте да започнете нова чернова!');
-        
-    } catch (error) {
-        console.error('Error starting new draft:', error);
-        notify('error', 'Грешка при започване на нова чернова');
-    }
-}, [draftId, userEmail, saveDraft, clearLocalStorage, defaultValues]);
-
- const publishDraft = useCallback(async () => {
+    const publishDraft = useCallback(async () => {
         if (!draftId) {
             notify('error', 'Няма draft за публикуване');
             return;
@@ -2082,23 +2125,17 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             if (errorEntries.length > 0) {
                 const [fieldName, errorMessage] = errorEntries[0];
 
-                // 🆕 Използваме custom message
                 notify('error', null, errorMessage);
-
-                // 🎯 ПОПРАВЕНО: Smart скролване до полето с грешка
                 let errorElement = null;
 
-                // Специална логика за sections грешки
                 if (fieldName.startsWith('sections[')) {
-                    // За sections използваме data атрибути или класове
+
                     const sectionMatch = fieldName.match(/sections\[(\d+)\]/);
                     if (sectionMatch) {
                         const sectionIndex = parseInt(sectionMatch[1], 10);
 
-                        // Търсим секцията по index
                         errorElement = document.querySelector(`.section-item:nth-child(${sectionIndex + 1})`);
 
-                        // Ако не намерим по клас, търсим във sections контейнера
                         if (!errorElement) {
                             const sectionsContainer = document.querySelector('.sections-list');
                             if (sectionsContainer) {
@@ -2148,19 +2185,31 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         try {
             // 🔧 ВАЖНО: Не пращаме mediaFiles, само data-та с URL адресите
             const submissionData = convertFormToHtml();
-            submissionData.createdAt = new Date().toISOString();
             submissionData.updatedAt = new Date().toISOString();
-            delete submissionData.timestamp;
-            const handler = onSubmitHandler || createInitiative;
-            await handler(submissionData);
-            setDraftId(null);
-            // ✅ При успешно изпращане, изчистваме localStorage
-            clearLocalStorage();
-            notify('success', null, 'Инициативата е създадена успешно!');
-            navigate('/initiatives');
-        } catch (error) {
-            console.log('Form errors:', error);
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const editIdFromUrl = urlParams.get('editId');
+            const mode = urlParams.get('mode');
+            if (mode === 'edit' && editIdFromUrl) {
+                // Редактираме съществуваща инициатива
+                await updateInitiative(editIdFromUrl, submissionData);
+                setEditId(null);
+                notify('success', 'Инициативата е обновена успешно!');
+                navigate(`/initiatives/${submissionData.slug || editIdFromUrl}`);
+            } else {
+                // Създаваме нова инициатива (съществуваща логика)
+                submissionData.createdAt = new Date().toISOString();
+                delete submissionData.timestamp;
+
+                const handler = onSubmitHandler || createInitiative;
+                await handler(submissionData);
+
+                setDraftId(null);
+                clearLocalStorage();
+                notify('success', 'Инициативата е създадена успешно!');
+                navigate('/initiatives');
+            }
+        } catch (error) {
             console.error('Submission error:', error);
             notify('error', null, 'Грешка при създаване на инициативата');
         }
@@ -2173,7 +2222,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         mediaFiles,
         isUploading,
         uploadProgress,
-
+        editId,
+        setEditId,
         // Event handlers
         onChangeHandler,
         onBlurHandler,

@@ -7,26 +7,40 @@ function errorHandler(error, req, res, next) {
     let message = `Something went wrong! ${error}`;
     let statusCode = error.statusCode || 500;
     let details = error.details;
+
     if (error instanceof CustomError) {
         message = error.message;
         statusCode = error.statusCode;
         details = error.details;
     } else if (error instanceof ZodError) {
         statusCode = 400;
-        const formatted = error.format();
-        const flattened = flattenZodErrors(formatted);
+        message = 'Validation failed';
+        details = error.errors.map((err) => {
+            let currentValue = req.body;
+            for (const pathItem of err.path) {
+                if (currentValue && typeof currentValue === 'object') {
+                    currentValue = currentValue[pathItem];
+                } else {
+                    currentValue = undefined;
+                    break;
+                }
+            }
 
-        const firstError = Object.values(flattened)[0];
-        if (Array.isArray(firstError) && firstError.length > 0) {
-            message = firstError[0];
-        } else {
-            message = 'Validation error(s)';
-        }
+            return {
+                field: err.path.join('.'),
+                message: err.message,
+                currentValue: currentValue,
+                code: err.code,
+            };
+        });
     } else if (error instanceof UniqueConstraintError) {
         const fieldErrors = error.errors.map((err) => ({
             field: err.path,
             value: err.value,
-            message: `${err.path.charAt(0).toUpperCase() + err.path.slice(1)} '${err.value}' is already taken.`,
+            message:
+                err.path === 'slug'
+                    ? 'This URL address is already taken'
+                    : `${err.path.charAt(0).toUpperCase() + err.path.slice(1)} '${err.value}' is already taken.`,
         }));
         message = 'Unique constraint violation.';
         details = fieldErrors;
@@ -51,10 +65,10 @@ function errorHandler(error, req, res, next) {
         message = 'Your session has expired. Please log in again.';
         statusCode = 401;
     }
-    error.details
-        ? console.log(`Error: ${req.method} >> ${req.baseUrl}`, message, error.details)
-        : console.log(`Error: ${req.method} >> ${req.baseUrl}`, message);
-    res.status(statusCode).json({ message, statusCode, details });
+
+    console.log(`Error: ${req.method} >> ${req.baseUrl}${req.path} >> Message: ${message} >> Status Code: ${statusCode} >> Details:`, details);
+
+    return res.status(statusCode).json({ message, statusCode, details });
 }
 
 const dbErrors = {
@@ -68,17 +82,5 @@ const dbErrors = {
     42501: { message: 'Permission denied', statusCode: 403 },
     '22P02': { message: 'Invalid text representation', statusCode: 400 },
 };
-
-function flattenZodErrors(formatted, path = [], acc = {}) {
-    for (const [key, value] of Object.entries(formatted)) {
-        if (key === '_errors' && value.length > 0) {
-            const joinedPath = path.join('.');
-            acc[joinedPath] = value;
-        } else if (typeof value === 'object' && value !== null) {
-            flattenZodErrors(value, [...path, key], acc);
-        }
-    }
-    return acc;
-}
 
 module.exports = errorHandler;

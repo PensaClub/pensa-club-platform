@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -24,8 +25,8 @@ export const ProjectView = () => {
         getProjectComments,
         getProjectApplications,
         applyToProject,
-        isBookmarked,
-        toggleBookmark,
+        isBookmarkedProject,
+        toggleBookmarkProjects,
         recentApplications
     } = useInitiativeContext();
 
@@ -43,7 +44,6 @@ export const ProjectView = () => {
         }
     }, [slug]);
 
-    // Зареждаме броя коментари за навигацията
     useEffect(() => {
         if (currentProject?.id && commentsCount === 0) {
             loadCommentsCount();
@@ -58,7 +58,6 @@ export const ProjectView = () => {
         }
     }, [currentProject?.id]);
 
-    // Reset when project changes
     useEffect(() => {
         applicationsLoadedRef.current = false;
     }, [currentProject?.id]);
@@ -112,7 +111,7 @@ export const ProjectView = () => {
     const loadCommentsCount = async () => {
         if (currentProject?.id) {
             try {
-                const projectComments = await getProjectComments(currentProject.id);
+                const projectComments = await getProjectComments(currentProject.id || currentProject.slug);;
                 setCommentsCount(projectComments.length);
             } catch (error) {
                 console.error('Error loading comments count:', error);
@@ -160,7 +159,7 @@ export const ProjectView = () => {
         if (!content) {
             return <p>Няма съдържание</p>;
         }
-        
+
         // Ако е string (HTML или обикновен текст)
         if (typeof content === 'string') {
             // Ако изглежда като HTML
@@ -170,12 +169,12 @@ export const ProjectView = () => {
             // Ако е обикновен текст
             return <p>{content}</p>;
         }
-        
+
         // Ако е Slate.js структура (array)
         if (Array.isArray(content)) {
             return renderSlateContent(content);
         }
-        
+
         // Ако е обект, опитай се да го обработиш като Slate.js
         if (typeof content === 'object') {
             try {
@@ -185,7 +184,7 @@ export const ProjectView = () => {
                 return <p>{JSON.stringify(content)}</p>;
             }
         }
-        
+
         // Fallback
         return <p>{String(content)}</p>;
     };
@@ -258,7 +257,7 @@ export const ProjectView = () => {
                                 </div>
 
                                 <h1 className="project-view-title">{currentProject.title}</h1>
-                                
+
                                 {/* ЗАЩИТЕНА ПРОВЕРКА ЗА ОПИСАНИЕ */}
                                 {(currentProject.fullDescription || currentProject.shortDescription) && (
                                     <div className="project-view-description">
@@ -273,19 +272,19 @@ export const ProjectView = () => {
                                             <span className="project-view-meta-value">{currentProject.category}</span>
                                         </div>
                                     )}
-                                    
+
                                     {/* ЗАЩИТЕНА ПРОВЕРКА ЗА LOCATION */}
                                     {currentProject.location && (
                                         <div className="project-view-meta-item">
                                             <span className="project-view-meta-label">{t('projectView.meta.location')}:</span>
                                             <span className="project-view-meta-value">
-                                                {Array.isArray(currentProject.location) 
-                                                    ? currentProject.location[0]?.address 
+                                                {Array.isArray(currentProject.location)
+                                                    ? currentProject.location[0]?.address
                                                     : currentProject.location.address}
                                             </span>
                                         </div>
                                     )}
-                                    
+
                                     {/* ЗАЩИТЕНА ПРОВЕРКА ЗА PARTICIPANTS */}
                                     {(currentProject.currentParticipants !== undefined || currentProject.maxParticipants !== undefined) && (
                                         <div className="project-view-meta-item">
@@ -307,10 +306,10 @@ export const ProjectView = () => {
                                         </button>
                                     )}
 
-                                    {isBookmarked && (
+                                    {isBookmarkedProject && (
                                         <button
-                                            className={`project-view-btn-bookmark ${isBookmarked(currentProject.id) ? 'bookmarked' : ''}`}
-                                            onClick={() => toggleBookmark(currentProject.id)}
+                                            className={`project-view-btn-bookmark ${isBookmarkedProject(currentProject.id) ? 'bookmarked' : ''}`}
+                                            onClick={() => toggleBookmarkProjects(currentProject.id)}
                                         >
                                             <BookmarkIcon />
                                             {t('projectView.buttons.bookmark')}
@@ -330,14 +329,14 @@ export const ProjectView = () => {
                                             <div className="project-view-stats-label">{t('projectView.stats.funded')}</div>
                                         </div>
                                     )}
-                                    
+
                                     {currentProject.timeline?.estimatedDuration && (
                                         <div className="project-view-stats-item">
                                             <div className="project-view-stats-number">{currentProject.timeline.estimatedDuration}</div>
                                             <div className="project-view-stats-label">{t('projectView.stats.duration')}</div>
                                         </div>
                                     )}
-                                    
+
                                     {currentProject.team?.length && (
                                         <div className="project-view-stats-item">
                                             <div className="project-view-stats-number">{currentProject.team.length}</div>
@@ -419,7 +418,7 @@ export const ProjectView = () => {
                                         {renderContent(section.content)}
                                     </div>
                                 </div>
-                                
+
                                 {/* ЗАЩИТЕНА ПРОВЕРКА ЗА SECTION IMAGE */}
                                 {(section.image?.src || (section.images && section.images.length > 0)) && (
                                     <div className="project-view-section-image">
@@ -494,7 +493,7 @@ export const ProjectView = () => {
                     {/* Comments Section */}
                     <section id="comments" className="project-view-section project-view-comments-section">
                         <Comments
-                            entityId={currentProject.id}
+                            entityId={currentProject.id || currentProject.slug}
                             entityType="project"
                             commentsEnabled={currentProject.commentsEnabled}
                             onCommentsChange={handleCommentsChange}

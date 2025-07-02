@@ -1715,7 +1715,9 @@
     "hide": "Hide",
     "loadDraftTooltip": "Load the draft",
     "clearDraftTooltip": "Delete the draft",
-    "hideTooltip": "Hide the message"
+    "hideTooltip": "Hide the message",
+    "newDraft": "New Draft"
+
   },
   "validation": {
     "title-required": "Title is required",
@@ -1769,5 +1771,31 @@
     "slug-format": "URL slug can only contain lowercase English letters, numbers and hyphens",
     "slug-min-length": "URL slug must be at least 3 characters",
     "slug-max-length": "URL slug must be maximum 100 characters"
+  },
+    "drafts": {
+    "unknownDate": "Unknown date",
+    "noDescription": "No description",
+    "draftAlt": "Draft",
+    "statusDraft": "Draft",
+    "unnamedInitiative": "Unnamed initiative",
+    "created": "Created",
+    "completionProgress": "Completion progress",
+    "edit": "Edit",
+    "publish": "Publish", 
+    "delete": "Delete",
+        "title": "Initiative Drafts",
+    "subtitle": "Manage your drafts and turn them into full initiatives",
+    "newInitiative": "New Initiative",
+    "searchPlaceholder": "Search among drafts...",
+    "of": "of",
+    "draftsCount": "drafts",
+    "confirmPublish": "Are you sure you want to publish this draft?",
+    "confirmDelete": "Are you sure you want to delete this draft?",
+    "noResultsTitle": "No drafts found",
+    "noResultsText": "No drafts match the search \"{{searchTerm}}\"",
+    "noDraftsTitle": "No drafts yet",
+    "noDraftsText": "Start by creating your first initiative",
+    "createInitiative": "Create Initiative"
+   
   }
 }

@@ -35,9 +35,22 @@ export const InitiativeProvider = ({ children }) => {
     }
     return [];
   });
+  const [bookMarkedProjects, setBookmarkedProjects] = useState(() => {
+    try {
+      const saved = localStorage.getItem('bookMarkedProjects');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+
+        return parsed;
+      }
+    } catch (error) {
+      console.error("Error loading bookmarks from localStorage:", error);
+    }
+    return [];
+  });
 
   //Проектите
-   const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
 
@@ -72,7 +85,14 @@ export const InitiativeProvider = ({ children }) => {
       setIsLoading(false);
     }, 1000);
   }, []);
+  useEffect(() => {
+    localStorage.setItem('bookMarkedProjects', JSON.stringify(bookMarkedProjects));
+  }, [bookMarkedProjects]);
 
+  // Същото правете и за bookmarkedInitiatives ако липсва:
+  useEffect(() => {
+    localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
+  }, [bookmarkedInitiatives]);
   // Helper functions
   const generateId = useCallback(() => {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -82,94 +102,88 @@ export const InitiativeProvider = ({ children }) => {
     return username || profileData?.details?.firstName || userEmail?.split('@')[0] || 'User';
   }, [username, profileData?.details?.firstName, userEmail]);
   // Draft functions
- const getAllDrafts = useCallback(async (page = 1, forceRefresh = false) => {
+  const getAllDrafts = useCallback(async (page = 1, forceRefresh = false) => {
     if (page === 1 && drafts.length > 0 && draftsLoaded && !forceRefresh) {
-        return { 
-            data: drafts, 
-            hasMore: draftsHasMore, 
-            currentPage: draftsCurrentPage,
-            pagination: {
-                totalPages: Math.ceil(drafts.length / 6),
-                totalInitiatives: drafts.length
-            }
-        };
+      return {
+        data: drafts,
+        hasMore: draftsHasMore,
+        currentPage: draftsCurrentPage,
+        pagination: {
+          totalPages: Math.ceil(drafts.length / 6),
+          totalInitiatives: drafts.length
+        }
+      };
     }
 
     try {
-        setIsLoading(true);
-        const response = await initiativeService.getAllDrafts(page, 6);
-        
-        // ВАЖНО: Вземаме pagination от response
-        const responseData = {
-            data: response.data || [],
-            pagination: response.pagination, // Вземаме целия pagination обект
-            hasMore: response.pagination?.hasNextPage || false,
-            totalCount: response.pagination?.totalInitiatives || 0,
-            currentPage: response.pagination?.page || page
-        };
+      setIsLoading(true);
+      const response = await initiativeService.getAllDrafts(page, 6);
 
-        if (page === 1) {
-            setDrafts(responseData.data);
-        } else {
-            setDrafts(prev => [...prev, ...responseData.data]);
-        }
+      // ВАЖНО: Вземаме pagination от response
+      const responseData = {
+        data: response.data || [],
+        pagination: response.pagination, // Вземаме целия pagination обект
+        hasMore: response.pagination?.hasNextPage || false,
+        totalCount: response.pagination?.totalInitiatives || 0,
+        currentPage: response.pagination?.page || page
+      };
 
-        setDraftsHasMore(responseData.hasMore);
-        setDraftsCurrentPage(responseData.currentPage);
-        setDraftsLoaded(true);
+      if (page === 1) {
+        setDrafts(responseData.data);
+      } else {
+        setDrafts(prev => [...prev, ...responseData.data]);
+      }
 
-        return responseData;
+      setDraftsHasMore(responseData.hasMore);
+      setDraftsCurrentPage(responseData.currentPage);
+      setDraftsLoaded(true);
+
+      return responseData;
     } catch (e) {
-        console.error('Error fetching drafts:', e);
-        return { 
-            data: [], 
-            hasMore: false, 
-            currentPage: page,
-            pagination: { totalPages: 0, totalInitiatives: 0 }
-        };
+      console.error('Error fetching drafts:', e);
+      return {
+        data: [],
+        hasMore: false,
+        currentPage: page,
+        pagination: { totalPages: 0, totalInitiatives: 0 }
+      };
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
-}, [drafts.length, draftsLoaded, draftsHasMore, draftsCurrentPage, initiativeService]);
+  }, [drafts.length, draftsLoaded, draftsHasMore, draftsCurrentPage, initiativeService]);
 
-// const loadMoreDrafts = useCallback(async () => {
-//     if (!draftsHasMore || isLoading) return;
-//     const nextPage = draftsCurrentPage + 1;
-//     await getAllDrafts(nextPage);
-// }, [draftsHasMore, isLoading, draftsCurrentPage, getAllDrafts]);
-
-const toggleDraftStatus = useCallback(async (identifier) => {
-  if (!isAuthentication) {
-    notify('error', 'Authentication required');
-    return;
-  }
-
-  try {
-    setIsLoading(true);
-    const response = await initiativeService.toggleDraftStatus(identifier);
-    
-    // Ако е успешно публикувана, премахваме от drafts списъка
-    const publishedInitiative = response.data || response;
-    if (!publishedInitiative.isDraft) {
-      setDrafts(prev => prev.filter(draft => 
-        draft.id !== publishedInitiative.id && 
-        draft.slug !== publishedInitiative.slug
-      ));
-      
-      notify('success', 'Инициативата е публикувана успешно!');
-      
-      navigate(`/initiatives/${publishedInitiative.slug || publishedInitiative.id}`);
+  const toggleDraftStatus = useCallback(async (identifier) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
     }
-    
-    return publishedInitiative;
-  } catch (error) {
-    console.error('Error toggling draft status:', error);
-    notify('error', 'Failed to publish draft');
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, [isAuthentication, initiativeService, navigate]);
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.toggleDraftStatus(identifier);
+
+      // Ако е успешно публикувана, премахваме от drafts списъка
+      const publishedInitiative = response.data || response;
+      if (!publishedInitiative.isDraft) {
+        setDrafts(prev => prev.filter(draft =>
+          draft.id !== publishedInitiative.id &&
+          draft.slug !== publishedInitiative.slug
+        ));
+
+        notify('success', 'Инициативата е публикувана успешно!');
+
+        navigate(`/initiatives/${publishedInitiative.slug || publishedInitiative.id}`);
+      }
+
+      return publishedInitiative;
+    } catch (error) {
+      console.error('Error toggling draft status:', error);
+      notify('error', 'Failed to publish draft');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService, navigate]);
 
   const updateDraftInitiative = useCallback(async (id, draftData) => {
     if (!isAuthentication) {
@@ -197,18 +211,18 @@ const toggleDraftStatus = useCallback(async (identifier) => {
     }
   }, [isAuthentication, initiativeService]);
 
-const getDraftById = useCallback(async (id) => {
+  const getDraftById = useCallback(async (id) => {
     try {
-        setIsLoading(true);
-        const response = await initiativeService.getDraftById(id);
-        return response.data || response;
+      setIsLoading(true);
+      const response = await initiativeService.getDraftById(id);
+      return response.data || response;
     } catch (error) {
-        console.error('Error fetching draft by ID:', error);
-        throw error;
+      console.error('Error fetching draft by ID:', error);
+      throw error;
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
-}, [initiativeService]);
+  }, [initiativeService]);
 
   // Функция за изтриване на draft с пълна синхронизация
   const deleteDraftWithSync = useCallback(async (identifier, draftObject = null, fromLocalStorage = false) => {
@@ -219,7 +233,7 @@ const getDraftById = useCallback(async (id) => {
 
     try {
       setIsLoading(true);
-      
+
       // 1. Ако изтриваме от localStorage
       if (fromLocalStorage) {
         const localDraft = draftLocalStorage.getDraft();
@@ -230,10 +244,10 @@ const getDraftById = useCallback(async (id) => {
             if (serverDraftId) {
               // Опитваме се да изтрием и от сървъра
               await initiativeService.deleteDraftInitiative(serverDraftId);
-              
+
               // Премахваме от локалното състояние
-              setDrafts(prev => prev.filter(draft => 
-                draft.id !== serverDraftId && 
+              setDrafts(prev => prev.filter(draft =>
+                draft.id !== serverDraftId &&
                 draft.slug !== serverDraftId
               ));
             }
@@ -241,11 +255,11 @@ const getDraftById = useCallback(async (id) => {
             console.warn('Draft not found on server or already deleted:', error);
           }
         }
-        
+
         // Изтриваме от localStorage
         draftLocalStorage.clearDraft();
         notify('success', 'Draft cleared from local storage!');
-      } 
+      }
       // 2. Ако изтриваме от сървъра
       else {
         // Изпращаме заявката към сървъра
@@ -255,8 +269,8 @@ const getDraftById = useCallback(async (id) => {
         if (draftObject) {
           setDrafts(prev => prev.filter(draft => draft.id !== draftObject.id));
         } else {
-          setDrafts(prev => prev.filter(draft => 
-            draft.id !== identifier && 
+          setDrafts(prev => prev.filter(draft =>
+            draft.id !== identifier &&
             draft.slug !== identifier &&
             draft.id.toString() !== identifier.toString()
           ));
@@ -270,7 +284,7 @@ const getDraftById = useCallback(async (id) => {
 
         notify('success', 'Draft deleted successfully!');
       }
-      
+
       return true;
     } catch (error) {
       console.error('Error deleting draft:', error);
@@ -281,7 +295,7 @@ const getDraftById = useCallback(async (id) => {
     }
   }, [isAuthentication, initiativeService]);
 
-// В InitiativeProvider.js
+  // В InitiativeProvider.js
   const deleteDraftInitiative = useCallback(async (identifier, draftObject = null) => {
     return deleteDraftWithSync(identifier, draftObject, false);
   }, [deleteDraftWithSync]);
@@ -289,7 +303,7 @@ const getDraftById = useCallback(async (id) => {
   const clearLocalStorageDraft = useCallback(async () => {
     return deleteDraftWithSync(null, null, true);
   }, [deleteDraftWithSync]);
-  
+
   const invalidateDraftsCache = useCallback(() => {
     setDraftsLoaded(false);
     setDrafts([]);
@@ -406,7 +420,7 @@ const getDraftById = useCallback(async (id) => {
     } catch (error) {
       console.error('Error updating initiative:', error);
       notify('error', 'Failed to update initiative');
-      throw error;  
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -479,7 +493,7 @@ const getDraftById = useCallback(async (id) => {
         const processedComments = initiative.comments
           .filter(comment => !comment.parentId) // Само главни коментари
           .map(comment => {
-            
+
             const replies = initiative.comments
               .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
               .map(reply => ({
@@ -550,11 +564,59 @@ const getDraftById = useCallback(async (id) => {
     }
   }, [isAuthentication, bookmarkedInitiatives, initiativeService]);
 
+  const toggleBookmarkProjects = useCallback(async (projectId) => {
+    if (!isAuthentication) {
+      notify('error', 'Please login to bookmark projects');
+      return;
+    }
+
+    const previousBookmarks = [...bookMarkedProjects];
+    const wasBookmarked = previousBookmarks.includes(projectId);
+
+    try {
+      // Първо обновяваме локално за моментален UI update
+      setBookmarkedProjects(prev => {
+        const newBookmarks = wasBookmarked
+          ? prev.filter(id => id !== projectId)
+          : [...prev, projectId];
+
+        // Записваме веднага в localStorage
+        localStorage.setItem('bookMarkedProjects', JSON.stringify(newBookmarks));
+        return newBookmarks;
+      });
+
+      // След това правим API заявката
+      const response = await initiativeService.toggleBookmarkProject(projectId);
+      const apiResponse = response.data || response;
+
+      // Ако API върне различен резултат, синхронизираме
+      if (apiResponse.bookmarked !== !wasBookmarked) {
+        setBookmarkedProjects(prev => {
+          const syncedBookmarks = apiResponse.bookmarked
+            ? [...prev.filter(id => id !== projectId), projectId]
+            : prev.filter(id => id !== projectId);
+
+          localStorage.setItem('bookMarkedProjects', JSON.stringify(syncedBookmarks));
+          return syncedBookmarks;
+        });
+      }
+
+      notify('success', apiResponse.message || 'Bookmark updated');
+
+    } catch (error) {
+      // Rollback при грешка
+      setBookmarkedProjects(previousBookmarks);
+      localStorage.setItem('bookMarkedProjects', JSON.stringify(previousBookmarks));
+      console.error('Error toggling bookmark:', error);
+      notify('error', 'Failed to update bookmark');
+    }
+  }, [isAuthentication, bookMarkedProjects, initiativeService]);
+
   const loadUserBookmarks = useCallback(async () => {
     if (!isAuthentication || !userEmail) return;
 
     try {
-      const response = await initiativeService.getUserInitiatives(userEmail);
+      const response = await initiativeService.getAllBookmarkedInitiatives(userEmail);
       const userInitiatives = response.data || response;
 
       // Извлечи ID-тата на букмаркнатите инициативи
@@ -564,50 +626,99 @@ const getDraftById = useCallback(async (id) => {
 
     } catch (error) {
       console.error('Error loading user bookmarks:', error);
-      setBookmarksLoaded(true); // Маркирай като заредени дори при грешка
+      setBookmarksLoaded(true); 
     }
   }, [isAuthentication, userEmail, initiativeService]);
+  const loadProjectBookmarks = useCallback(async () => {
+    if (!isAuthentication || !userEmail) return;
+
+    try {
+      // Трябва да имате endpoint за това или да адаптирате съществуващ
+      const response = await initiativeService.getAllBookmarkedProjects(userEmail);
+      const userProjects = response.data || response;
+
+      const bookmarkIds = userProjects.map(project => project.id);
+      setBookmarkedProjects(bookmarkIds);
+      localStorage.setItem('bookMarkedProjects', JSON.stringify(bookmarkIds));
+
+    } catch (error) {
+      console.error('Error loading project bookmarks:', error);
+    }
+  }, [isAuthentication, userEmail, initiativeService]);
+
+  // Добавете в useEffect за зареждане при login:
+  useEffect(() => {
+    if (isAuthentication && userEmail) {
+      loadUserBookmarks(); // за инициативи
+      loadProjectBookmarks(); // за проекти
+    } else {
+      clearBookmarks();
+      setBookmarkedProjects([]); // изчистваме и проектите
+      localStorage.removeItem('bookMarkedProjects');
+    }
+  }, [isAuthentication, userEmail]);
 
   const clearBookmarks = useCallback(() => {
     setBookmarkedInitiatives([]);
     setBookmarksLoaded(false);
   }, []);
 
-  useEffect(() => {
-    if (isAuthentication && userEmail) {
-      loadUserBookmarks();
-    } else {
-      clearBookmarks();
-    }
-  }, [isAuthentication, userEmail, clearBookmarks]);
-
+  // ПОПРАВЕНА getComments функция:
   const getComments = useCallback(async (initiativeId) => {
     try {
-      // Проверяваме дали вече имаме коментарите в кеша
-      if (comments[initiativeId]) {
-        return comments[initiativeId];
-      }
-
       setCommentsLoading(true);
 
-      // Коментарите идват с инициативата от getInitiativeById
-      // Ако не са заредени, връщаме празен array
-      const cachedComments = comments[initiativeId] || [];
-      console.log('Cached comments:', cachedComments);
+      const response = await initiativeService.getInitiativeComments(initiativeId);
+
+      // Извличаме правилно данните
+      let commentsData = [];
+      if (Array.isArray(response)) {
+        commentsData = response;
+      } else if (response.data && Array.isArray(response.data)) {
+        commentsData = response.data;
+      } else if (response.comments && Array.isArray(response.comments)) {
+        commentsData = response.comments;
+      }
+
+      // Обработваме коментарите
+      const processedComments = commentsData
+        .filter(comment => !comment.parentId) // Само главни коментари
+        .map(comment => {
+          // Сортираме replies по дата ВЪЗХОДЯЩО (най-старите първи)
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: comment.replies.sort((a, b) =>
+                new Date(a.createdAt) - new Date(b.createdAt)
+              )
+            };
+          }
+          return comment;
+        })
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Главните - най-новите първи
+
       setComments(prev => ({
         ...prev,
-        [initiativeId]: cachedComments
+        [initiativeId]: processedComments
       }));
 
-      return cachedComments;
+      return processedComments;
     } catch (error) {
       console.error('Error getting comments:', error);
       notify('error', 'Failed to load comments');
+
+      setComments(prev => ({
+        ...prev,
+        [initiativeId]: []
+      }));
+
       return [];
     } finally {
       setCommentsLoading(false);
     }
-  }, [comments]);
+  }, []);
+
+  // В InitiativeProvider.js - обновете addComment функцията:
 
   const addComment = useCallback(async (initiativeId, content, parentId = null) => {
     try {
@@ -615,222 +726,33 @@ const getDraftById = useCallback(async (id) => {
         throw new Error('Authentication required');
       }
 
-      // Намираме numeric ID за API-то
-      let commentableId = initiativeId;
-      let initiative = null;
-
-      if (typeof initiativeId === 'string') {
-        if (Number.isFinite(Number(initiativeId))) {
-          commentableId = Number(initiativeId);
-        } else {
-          // Ако е slug, търсим инициативата
-          initiative = initiatives.find(init => init.slug === initiativeId);
-          if (initiative && initiative.id) {
-            commentableId = initiative.id;
-          } else {
-            throw new Error(`Cannot find initiative: ${initiativeId}`);
-          }
-        }
-      }
-
       const commentData = {
         content: content,
-        commentableId: commentableId,
+        commentableId: Number(initiativeId), // Уверяваме се че е число
         commentsLinkConnection: 'initiative',
-        ...(parentId && { parentId })
+        ...(parentId && { parentId: Number(parentId) }) // И parentId да е число
       };
 
-      console.log('Sending to API:', commentData);
-
       const response = await initiativeService.createComment(commentData);
-      let newComment = response.data || response;
+      const newComment = response.data || response;
 
-      console.log('Received from API:', newComment);
-
-      // ✅ АКО ID-то е дублирано, създаваме локален уникален ID
-      if (parentId && newComment.id === parentId) {
-        console.warn('🐛 API bug: Reply has same ID as parent. Creating unique local ID.');
-
-        const uniqueLocalId = `${newComment.id}_${Date.now()}`;
-
-        newComment = {
-          ...newComment,
-          id: uniqueLocalId,
-          originalId: newComment.id,
-          content: content,
-          isLocalGenerated: true,
-          localTimestamp: Date.now(),
-          replies: [] // ✅ ФОРСИРАМЕ празни replies за новия reply
-        };
-      } else {
-        // ✅ КЛЮЧОВА ПОПРАВКА: Премахваме replies от новия коментар
-        newComment = {
-          ...newComment,
-          content: content,
-          localTimestamp: Date.now(),
-          replies: [] // ✅ Новият reply няма собствени replies
-        };
-      }
-
-      // Обновяваме локалното състояние
-      setComments(prev => {
-        const currentComments = prev[initiativeId] || [];
-
-        if (parentId) {
-          // Това е reply
-          const updatedComments = currentComments.map(comment => {
-            if (comment.id === parentId) {
-              const existingReplies = comment.replies || [];
-
-              // Проверка за дублиране
-              const now = Date.now();
-              const isDuplicate = existingReplies.some(reply => {
-                const timeDiff = now - (reply.localTimestamp || 0);
-                const contentMatch = reply.content === newComment.content && timeDiff < 5000;
-                const idMatch = reply.id === newComment.id;
-
-                return contentMatch || idMatch;
-              });
-
-              if (isDuplicate) {
-                console.warn('Duplicate reply detected, skipping');
-                return comment;
-              }
-
-              console.log('Adding new reply to comment:', parentId);
-              return {
-                ...comment,
-                replies: [...existingReplies, newComment] // ✅ newComment вече няма replies
-              };
-            }
-            return comment;
-          });
-
-          return {
-            ...prev,
-            [initiativeId]: updatedComments
-          };
-        } else {
-          // Това е нов основен коментар
-          const existingComments = prev[initiativeId] || [];
-
-          // Проверяваме за дублиране на основни коментари
-          const now = Date.now();
-          const isDuplicate = existingComments.some(comment => {
-            const timeDiff = now - (comment.localTimestamp || 0);
-            const contentMatch = comment.content === newComment.content && timeDiff < 5000;
-            const idMatch = comment.id === newComment.id;
-
-            return contentMatch || idMatch;
-          });
-
-          if (isDuplicate) {
-            console.warn('Duplicate comment detected, not adding');
-            return prev;
-          }
-
-          console.log('Adding new main comment');
-          return {
-            ...prev,
-            [initiativeId]: [newComment, ...existingComments]
-          };
-        }
-      });
+      // Добавяме малко забавяне преди презареждане
+      setTimeout(async () => {
+        await getComments(initiativeId);
+      }, 10);
 
       notify('success', 'Comment added successfully');
       return newComment;
     } catch (error) {
-      console.error('Error adding comment:', error);
-      notify('error', 'Failed to add comment');
+      console.error('Error adding comment - full error:', error);
+      console.error('Error response:', error.response);
+
+      // По-подробна грешка
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to add comment';
+      notify('error', errorMessage);
       throw error;
     }
-  }, [isAuthentication, initiativeService, initiatives]);
-
-  const updateComment = useCallback(async (initiativeId, commentId, newContent) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
-
-      // Използваме originalId ако е локално генериран
-      let apiCommentId = commentId;
-      if (typeof commentId === 'string' && commentId.includes('_')) {
-        apiCommentId = commentId.split('_')[0];
-      }
-
-      const response = await initiativeService.updateComment(apiCommentId, { content: newContent });
-      const updatedComment = response.data || response;
-
-      // Обновяваме локалното състояние с локалния ID
-      setComments(prev => {
-        const currentComments = prev[initiativeId] || [];
-        const updatedComments = currentComments.map(comment => {
-          if (comment.id === commentId) {
-            return { ...updatedComment, id: commentId }; // Запазваме локалния ID
-          }
-          if (comment.replies) {
-            const updatedReplies = comment.replies.map(reply =>
-              reply.id === commentId ? { ...updatedComment, id: commentId } : reply
-            );
-            return { ...comment, replies: updatedReplies };
-          }
-          return comment;
-        });
-
-        return {
-          ...prev,
-          [initiativeId]: updatedComments
-        };
-      });
-
-      notify('success', 'Comment updated successfully');
-      return { ...updatedComment, id: commentId };
-    } catch (error) {
-      console.error('Error updating comment:', error);
-      notify('error', 'Failed to update comment');
-      throw error;
-    }
-  }, [isAuthentication, initiativeService]);
-
-  const deleteComment = useCallback(async (initiativeId, commentId) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
-
-      // Използваме originalId ако е локално генериран
-      let apiCommentId = commentId;
-      if (typeof commentId === 'string' && commentId.includes('_')) {
-        apiCommentId = commentId.split('_')[0];
-      }
-
-      await initiativeService.deleteComment(apiCommentId);
-
-      setComments(prev => {
-        const currentComments = prev[initiativeId] || [];
-        const updatedComments = currentComments.filter(comment => {
-          if (comment.id === commentId) {
-            return false;
-          }
-          if (comment.replies) {
-            comment.replies = comment.replies.filter(reply => reply.id !== commentId);
-          }
-          return true;
-        });
-
-        return {
-          ...prev,
-          [initiativeId]: updatedComments
-        };
-      });
-
-      notify('success', 'Comment deleted successfully');
-    } catch (error) {
-      console.error('Error deleting comment:', error);
-      notify('error', 'Failed to delete comment');
-      throw error;
-    }
-  }, [isAuthentication, initiativeService]);
+  }, [isAuthentication, initiativeService, getComments]);
 
   const likeComment = useCallback(async (initiativeId, commentId) => {
     try {
@@ -838,70 +760,77 @@ const getDraftById = useCallback(async (id) => {
         throw new Error('Authentication required');
       }
 
-      // Ако е локално генериран ID, използваме originalId за API-то
-      let apiCommentId = commentId;
+      const response = await initiativeService.likeComment(commentId);
+      console.log('Like response:', response);
 
-      // Проверяваме дали е локално генериран ID (съдържа underscore)
-      if (typeof commentId === 'string' && commentId.includes('_')) {
-        // Извличаме оригиналния ID
-        apiCommentId = commentId.split('_')[0];
-        console.log('Using original ID for API:', apiCommentId);
+      // API-то връща директно обекта, не в data property
+      const likeData = response.data || response;
+
+      // Презареждаме коментарите
+      setTimeout(async () => {
+        await getComments(initiativeId);
+      }, 30);
+
+      // Проверяваме дали потребителят вече е харесал
+      if (likeData.isLiked === false && likeData.likes?.includes(userEmail)) {
+        notify('info', 'Вече сте харесали този коментар');
+      } else {
+        notify('success', 'Успешно харесахте коментара');
       }
 
-      const response = await initiativeService.likeComment(apiCommentId);
-      const updatedData = response.data || response;
-
-      setComments(prev => {
-        const currentComments = prev[initiativeId] || [];
-        const updatedComments = currentComments.map(comment => {
-          // Проверяваме дали е главен коментар
-          if (comment.id === commentId) {
-            return { ...comment, ...updatedData };
-          }
-
-          // Проверяваме в replies
-          if (comment.replies && comment.replies.length > 0) {
-            const updatedReplies = comment.replies.map(reply => {
-              if (reply.id === commentId) {
-                return { ...reply, ...updatedData };
-              }
-              return reply;
-            });
-
-            // Само ако има промяна в replies, обновяваме коментара
-            if (JSON.stringify(updatedReplies) !== JSON.stringify(comment.replies)) {
-              return { ...comment, replies: updatedReplies };
-            }
-          }
-
-          return comment;
-        });
-
-        return {
-          ...prev,
-          [initiativeId]: updatedComments
-        };
-      });
-
-      return updatedData;
+      return likeData;
     } catch (error) {
-      console.error('Error liking comment:', error);
-      notify('error', 'Failed to like comment');
+      console.error('Error in likeComment - full error:', error);
+      console.error('Error response:', error.response);
+
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to like comment';
+      notify('error', `Like error: ${errorMessage}`);
+
+      // Не хвърляме грешката нагоре
+      return null;
+    }
+  }, [isAuthentication, initiativeService, getComments, userEmail]);
+
+  const updateComment = useCallback(async (initiativeId, commentId, newContent) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      // Просто изпращаме към сървъра
+      const response = await initiativeService.updateComment(commentId, { content: newContent });
+
+      // След успех, презареждаме всички коментари за да сме сигурни че имаме актуална информация
+      await getComments(initiativeId);
+
+      notify('success', 'Comment updated successfully');
+      return response.data || response;
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      notify('error', 'Failed to update comment');
       throw error;
     }
-  }, [isAuthentication, initiativeService]);
+  }, [isAuthentication, initiativeService, getComments]);
 
-  // Projects functions да ги ...
-  const getMockProjects = useCallback(async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          data: projectsData.projects,
-          totalCount: projectsData.projects.length
-        });
-      }, 200);
-    });
-  }, []);
+  const deleteComment = useCallback(async (initiativeId, commentId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      // Просто изпращаме към сървъра
+      await initiativeService.deleteComment(commentId);
+
+      // Презареждаме коментарите
+      await getComments(initiativeId);
+
+      notify('success', 'Comment deleted successfully');
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      notify('error', 'Failed to delete comment');
+      throw error;
+    }
+  }, [isAuthentication, initiativeService, getComments]);
 
   const getAllProjects = useCallback(async (forceRefresh = false) => {
     if (projects.length > 0 && projectsLoaded && !forceRefresh) {
@@ -911,11 +840,11 @@ const getDraftById = useCallback(async (id) => {
     try {
       setIsLoading(true);
       const response = await initiativeService.getAllProjects();
-      
+
       const projectsData = response.data || response;
       setProjects(projectsData);
       setProjectsLoaded(true);
-      
+
       return { data: projectsData };
     } catch (e) {
       console.error('Error fetching projects:', e);
@@ -927,19 +856,19 @@ const getDraftById = useCallback(async (id) => {
     }
   }, [projects.length, projectsLoaded, initiativeService, showErrorAndSetTimeouts]);
 
- const getProjectById = useCallback(async (id) => {
+  const getProjectById = useCallback(async (id) => {
     try {
       setIsLoading(true);
-      
+
       const response = await initiativeService.getProjectById(id);
       const project = response.data || response;
-      
+
       if (!project) {
         throw new Error(`Project not found with id/slug: ${id}`);
       }
 
       setCurrentProject(project);
-      
+
       // Обработваме коментарите ако има
       if (project.comments && Array.isArray(project.comments)) {
         const processedComments = project.comments
@@ -951,7 +880,7 @@ const getDraftById = useCallback(async (id) => {
                 ...reply,
                 id: reply.id === comment.id ? generateId() : reply.id
               }));
-            
+
             return {
               ...comment,
               replies: replies
@@ -964,7 +893,7 @@ const getDraftById = useCallback(async (id) => {
           [`project-${project.slug}`]: processedComments
         }));
       }
-      
+
       return project;
     } catch (e) {
       console.error('Error fetching project by ID:', e);
@@ -976,7 +905,7 @@ const getDraftById = useCallback(async (id) => {
     }
   }, [initiativeService, showErrorAndSetTimeouts, generateId]);
 
-    const getProjectsByInitiative = useCallback(async (initiativeId) => {
+  const getProjectsByInitiative = useCallback(async (initiativeId) => {
     try {
       const response = await initiativeService.getProjectsByInitiative(initiativeId);
       return response;
@@ -988,70 +917,88 @@ const getDraftById = useCallback(async (id) => {
   }, [initiativeService]);
 
   // Project comments (similar to initiative comments)
+  // getProjectComments:
   const getProjectComments = useCallback(async (projectId) => {
     try {
-      if (comments[`project-${projectId}`]) {
-        return comments[`project-${projectId}`];
-      }
-
       setCommentsLoading(true);
-      const project = projectsData.projects.find(proj =>
-        proj.id === projectId || proj.slug === projectId
-      );
 
-      if (!project) {
-        throw new Error('Project not found');
+      const response = await initiativeService.getProjectComments(projectId);
+
+      let commentsData = [];
+      if (Array.isArray(response)) {
+        commentsData = response;
+      } else if (response.data && Array.isArray(response.data)) {
+        commentsData = response.data;
+      } else if (response.comments && Array.isArray(response.comments)) {
+        commentsData = response.comments;
       }
 
-      const projectComments = Array.isArray(project.comments) ? project.comments : [];
+      const processedComments = commentsData
+        .filter(comment => !comment.parentId)
+        .map(comment => {
+          // Сортираме replies по дата ВЪЗХОДЯЩО
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: comment.replies.sort((a, b) =>
+                new Date(a.createdAt) - new Date(b.createdAt)
+              )
+            };
+          }
+          return comment;
+        })
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
       setComments(prev => ({
         ...prev,
-        [`project-${projectId}`]: projectComments
+        [`project-${projectId}`]: processedComments
       }));
 
-      return projectComments;
+      return processedComments;
     } catch (error) {
       console.error('Error getting project comments:', error);
       notify('error', 'Failed to load comments');
+
+      setComments(prev => ({
+        ...prev,
+        [`project-${projectId}`]: []
+      }));
+
       return [];
     } finally {
       setCommentsLoading(false);
     }
-  }, [comments]);
+  }, []);
 
-  const addProjectComment = useCallback(async (projectId, content) => {
+  const addProjectComment = useCallback(async (projectId, content, parentId = null) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
       }
 
-      const newComment = {
-        id: generateId(),
-        userId: userEmail,
-        userEmail: userEmail,
-        userName: getUserDisplayName(),
-        userAvatar: profileData?.avatar || null,
+      const commentData = {
         content: content,
-        createdAt: new Date().toISOString(),
-        updatedAt: null,
-        likes: [],
-        likesCount: 0,
-        replies: []
+        commentableId: Number(projectId),
+        commentsLinkConnection: 'project', // За проекти
+        ...(parentId && { parentId: Number(parentId) })
       };
 
-      setComments(prev => ({
-        ...prev,
-        [`project-${projectId}`]: [newComment, ...(prev[`project-${projectId}`] || [])]
-      }));
+      const response = await initiativeService.createComment(commentData);
+      const newComment = response.data || response;
+
+      // Презареждаме коментарите от сървъра след кратка пауза
+      setTimeout(async () => {
+        await getProjectComments(projectId);
+      }, 10);
 
       notify('success', 'Comment added successfully');
       return newComment;
     } catch (error) {
       console.error('Error adding project comment:', error);
-      notify('error', 'Failed to add comment');
+      notify('error', error.response?.data?.message || 'Failed to add comment');
       throw error;
     }
-  }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar]);
+  }, [isAuthentication, initiativeService, getProjectComments]);
 
   const updateProjectComment = useCallback(async (projectId, commentId, newContent) => {
     try {
@@ -1059,32 +1006,17 @@ const getDraftById = useCallback(async (id) => {
         throw new Error('Authentication required');
       }
 
-      const projectKey = `project-${projectId}`;
-      const updatedComments = (comments[projectKey] || []).map(comment => {
-        if (comment.id === commentId) {
-          return {
-            ...comment,
-            content: newContent,
-            updatedAt: new Date().toISOString()
-          };
-        }
-        return comment;
-      });
+      const response = await initiativeService.updateComment(commentId, { content: newContent });
+      await getProjectComments(projectId);
 
-      setComments(prev => ({
-        ...prev,
-        [projectKey]: updatedComments
-      }));
-
-      const updatedComment = updatedComments.find(c => c.id === commentId);
       notify('success', 'Comment updated successfully');
-      return updatedComment;
+      return response.data || response;
     } catch (error) {
       console.error('Error updating project comment:', error);
       notify('error', 'Failed to update comment');
       throw error;
     }
-  }, [isAuthentication, comments]);
+  }, [isAuthentication, initiativeService, getProjectComments]);
 
   const deleteProjectComment = useCallback(async (projectId, commentId) => {
     try {
@@ -1092,11 +1024,8 @@ const getDraftById = useCallback(async (id) => {
         throw new Error('Authentication required');
       }
 
-      const projectKey = `project-${projectId}`;
-      setComments(prev => ({
-        ...prev,
-        [projectKey]: (prev[projectKey] || []).filter(comment => comment.id !== commentId)
-      }));
+      await initiativeService.deleteComment(commentId);
+      await getProjectComments(projectId);
 
       notify('success', 'Comment deleted successfully');
     } catch (error) {
@@ -1104,7 +1033,7 @@ const getDraftById = useCallback(async (id) => {
       notify('error', 'Failed to delete comment');
       throw error;
     }
-  }, [isAuthentication])
+  }, [isAuthentication, initiativeService, getProjectComments]);
 
   const likeProjectComment = useCallback(async (projectId, commentId) => {
     try {
@@ -1112,193 +1041,180 @@ const getDraftById = useCallback(async (id) => {
         throw new Error('Authentication required');
       }
 
-      const projectKey = `project-${projectId}`;
-      const updatedComments = (comments[projectKey] || []).map(comment => {
-        if (comment.id === commentId) {
-          const isLiked = (comment.likes || []).includes(userEmail);
-          return {
-            ...comment,
-            likes: isLiked
-              ? (comment.likes || []).filter(email => email !== userEmail)
-              : [...(comment.likes || []), userEmail],
-            likesCount: isLiked
-              ? (comment.likesCount || 0) - 1
-              : (comment.likesCount || 0) + 1
-          };
-        }
-        return comment;
-      });
+      const response = await initiativeService.likeComment(commentId);
+      const updatedCommentData = response.data || response;
 
-      setComments(prev => ({
-        ...prev,
-        [projectKey]: updatedComments
-      }));
+      // Презареждаме коментарите от сървъра
+      setTimeout(async () => {
+        await getProjectComments(projectId);
+      }, 200);
 
-      return updatedComments.find(c => c.id === commentId);
+      notify('success', 'Успешно харесахте коментара');
+      return updatedCommentData;
     } catch (error) {
-      console.error('Error liking project comment:', error);
+      console.error('Error in likeProjectComment:', error);
       notify('error', 'Failed to like comment');
-      throw error;
+      return null;
     }
-  }, [isAuthentication, userEmail, comments]);
+  }, [isAuthentication, initiativeService, getProjectComments]);
 
-  const addProjectReply = useCallback(async (projectId, parentCommentId, content) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
+  // const addProjectReply = useCallback(async (projectId, parentCommentId, content) => {
+  //   try {
+  //     if (!isAuthentication) {
+  //       throw new Error('Authentication required');
+  //     }
 
-      const newReply = {
-        id: generateId(),
-        userId: userEmail,
-        userEmail: userEmail,
-        userName: getUserDisplayName(),
-        userAvatar: profileData?.avatar || null,
-        content: content,
-        createdAt: new Date().toISOString(),
-        updatedAt: null,
-        likes: [],
-        likesCount: 0,
-        parentId: parentCommentId
-      };
+  //     const newReply = {
+  //       id: generateId(),
+  //       userId: userEmail,
+  //       userEmail: userEmail,
+  //       userName: getUserDisplayName(),
+  //       userAvatar: profileData?.avatar || null,
+  //       content: content,
+  //       createdAt: new Date().toISOString(),
+  //       updatedAt: null,
+  //       likes: [],
+  //       likesCount: 0,
+  //       parentId: parentCommentId
+  //     };
 
-      const projectKey = `project-${projectId}`;
-      const updatedComments = (comments[projectKey] || []).map(comment => {
-        if (comment.id === parentCommentId) {
-          return {
-            ...comment,
-            replies: [...(comment.replies || []), newReply] // ← Ред 354 вероятно е тук
-          };
-        }
-        return comment;
-      });
+  //     const projectKey = `project-${projectId}`;
+  //     const updatedComments = (comments[projectKey] || []).map(comment => {
+  //       if (comment.id === parentCommentId) {
+  //         return {
+  //           ...comment,
+  //           replies: [...(comment.replies || []), newReply] // ← Ред 354 вероятно е тук
+  //         };
+  //       }
+  //       return comment;
+  //     });
 
-      setComments(prev => ({
-        ...prev,
-        [projectKey]: updatedComments
-      }));
+  //     setComments(prev => ({
+  //       ...prev,
+  //       [projectKey]: updatedComments
+  //     }));
 
-      notify('success', 'Reply added successfully');
-      return newReply;
-    } catch (error) {
-      console.error('Error adding project reply:', error);
-      notify('error', 'Failed to add reply');
-      throw error;
-    }
-  }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar, comments]);
+  //     notify('success', 'Reply added successfully');
+  //     return newReply;
+  //   } catch (error) {
+  //     console.error('Error adding project reply:', error);
+  //     notify('error', 'Failed to add reply');
+  //     throw error;
+  //   }
+  // }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar, comments]);
 
-  const likeProjectReply = useCallback(async (projectId, commentId, replyId) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
+  // const likeProjectReply = useCallback(async (projectId, commentId, replyId) => {
+  //   try {
+  //     if (!isAuthentication) {
+  //       throw new Error('Authentication required');
+  //     }
 
-      const projectKey = `project-${projectId}`;
-      const updatedComments = (comments[projectKey] || []).map(comment => {
-        if (comment.id === commentId) {
-          const updatedReplies = (comment.replies || []).map(reply => {
-            if (reply.id === replyId) {
-              const isLiked = (reply.likes || []).includes(userEmail);
-              return {
-                ...reply,
-                likes: isLiked
-                  ? (reply.likes || []).filter(email => email !== userEmail)
-                  : [...(reply.likes || []), userEmail],
-                likesCount: isLiked
-                  ? (reply.likesCount || 0) - 1
-                  : (reply.likesCount || 0) + 1
-              };
-            }
-            return reply;
-          });
+  //     const projectKey = `project-${projectId}`;
+  //     const updatedComments = (comments[projectKey] || []).map(comment => {
+  //       if (comment.id === commentId) {
+  //         const updatedReplies = (comment.replies || []).map(reply => {
+  //           if (reply.id === replyId) {
+  //             const isLiked = (reply.likes || []).includes(userEmail);
+  //             return {
+  //               ...reply,
+  //               likes: isLiked
+  //                 ? (reply.likes || []).filter(email => email !== userEmail)
+  //                 : [...(reply.likes || []), userEmail],
+  //               likesCount: isLiked
+  //                 ? (reply.likesCount || 0) - 1
+  //                 : (reply.likesCount || 0) + 1
+  //             };
+  //           }
+  //           return reply;
+  //         });
 
-          return {
-            ...comment,
-            replies: updatedReplies
-          };
-        }
-        return comment;
-      });
+  //         return {
+  //           ...comment,
+  //           replies: updatedReplies
+  //         };
+  //       }
+  //       return comment;
+  //     });
 
-      setComments(prev => ({
-        ...prev,
-        [projectKey]: updatedComments
-      }));
+  //     setComments(prev => ({
+  //       ...prev,
+  //       [projectKey]: updatedComments
+  //     }));
 
-      return updatedComments.find(c => c.id === commentId);
-    } catch (error) {
-      console.error('Error liking project reply:', error);
-      notify('error', 'Failed to like reply');
-      throw error;
-    }
-  }, [isAuthentication, userEmail, comments]);
+  //     return updatedComments.find(c => c.id === commentId);
+  //   } catch (error) {
+  //     console.error('Error liking project reply:', error);
+  //     notify('error', 'Failed to like reply');
+  //     throw error;
+  //   }
+  // }, [isAuthentication, userEmail, comments]);
 
-  // UPDATE PROJECT REPLY
-  const updateProjectReply = useCallback(async (projectId, commentId, replyId, newContent) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
+  // // UPDATE PROJECT REPLY
+  // const updateProjectReply = useCallback(async (projectId, commentId, replyId, newContent) => {
+  //   try {
+  //     if (!isAuthentication) {
+  //       throw new Error('Authentication required');
+  //     }
 
-      const projectKey = `project-${projectId}`;
-      const updatedComments = (comments[projectKey] || []).map(comment => {
-        if (comment.id === commentId) {
-          const updatedReplies = (comment.replies || []).map(reply => {
-            if (reply.id === replyId) {
-              return {
-                ...reply,
-                content: newContent,
-                updatedAt: new Date().toISOString()
-              };
-            }
-            return reply;
-          });
-          return { ...comment, replies: updatedReplies };
-        }
-        return comment;
-      });
+  //     const projectKey = `project-${projectId}`;
+  //     const updatedComments = (comments[projectKey] || []).map(comment => {
+  //       if (comment.id === commentId) {
+  //         const updatedReplies = (comment.replies || []).map(reply => {
+  //           if (reply.id === replyId) {
+  //             return {
+  //               ...reply,
+  //               content: newContent,
+  //               updatedAt: new Date().toISOString()
+  //             };
+  //           }
+  //           return reply;
+  //         });
+  //         return { ...comment, replies: updatedReplies };
+  //       }
+  //       return comment;
+  //     });
 
-      setComments(prev => ({ ...prev, [projectKey]: updatedComments }));
+  //     setComments(prev => ({ ...prev, [projectKey]: updatedComments }));
 
-      const updatedComment = updatedComments.find(c => c.id === commentId);
-      notify('success', 'Reply updated successfully');
-      return updatedComment;
-    } catch (error) {
-      console.error('Error updating project reply:', error);
-      notify('error', 'Failed to update reply');
-      throw error;
-    }
-  }, [isAuthentication, comments]);
+  //     const updatedComment = updatedComments.find(c => c.id === commentId);
+  //     notify('success', 'Reply updated successfully');
+  //     return updatedComment;
+  //   } catch (error) {
+  //     console.error('Error updating project reply:', error);
+  //     notify('error', 'Failed to update reply');
+  //     throw error;
+  //   }
+  // }, [isAuthentication, comments]);
 
-  // DELETE PROJECT REPLY
-  const deleteProjectReply = useCallback(async (projectId, commentId, replyId) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
+  // // DELETE PROJECT REPLY
+  // const deleteProjectReply = useCallback(async (projectId, commentId, replyId) => {
+  //   try {
+  //     if (!isAuthentication) {
+  //       throw new Error('Authentication required');
+  //     }
 
-      const projectKey = `project-${projectId}`;
-      const updatedComments = (comments[projectKey] || []).map(comment => {
-        if (comment.id === commentId) {
-          return {
-            ...comment,
-            replies: (comment.replies || []).filter(reply => reply.id !== replyId)
-          };
-        }
-        return comment;
-      });
+  //     const projectKey = `project-${projectId}`;
+  //     const updatedComments = (comments[projectKey] || []).map(comment => {
+  //       if (comment.id === commentId) {
+  //         return {
+  //           ...comment,
+  //           replies: (comment.replies || []).filter(reply => reply.id !== replyId)
+  //         };
+  //       }
+  //       return comment;
+  //     });
 
-      setComments(prev => ({ ...prev, [projectKey]: updatedComments }));
+  //     setComments(prev => ({ ...prev, [projectKey]: updatedComments }));
 
-      const updatedComment = updatedComments.find(c => c.id === commentId);
-      notify('success', 'Reply deleted successfully');
-      return updatedComment;
-    } catch (error) {
-      console.error('Error deleting project reply:', error);
-      notify('error', 'Failed to delete reply');
-      throw error;
-    }
-  }, [isAuthentication, comments]);
+  //     const updatedComment = updatedComments.find(c => c.id === commentId);
+  //     notify('success', 'Reply deleted successfully');
+  //     return updatedComment;
+  //   } catch (error) {
+  //     console.error('Error deleting project reply:', error);
+  //     notify('error', 'Failed to delete reply');
+  //     throw error;
+  //   }
+  // }, [isAuthentication, comments]);
 
   // Функция за зареждане на кандидатури за проект
   const getProjectApplications = useCallback(async (projectId) => {
@@ -1659,7 +1575,7 @@ const getDraftById = useCallback(async (id) => {
 
   const contextService = {
     // Existing initiative functions
-      // Draft functions
+    // Draft functions
     getAllDrafts,
     updateDraftInitiative,
     deleteDraftInitiative,
@@ -1703,7 +1619,10 @@ const getDraftById = useCallback(async (id) => {
     toggleBookmark,
     isBookmarked: (id) => bookmarkedInitiatives.includes(id),
     hasBookmarks: bookmarkedInitiatives.length > 0,
-
+    bookMarkedProjects,
+    toggleBookmarkProjects,
+    isBookmarkedProject: (id) => bookMarkedProjects.includes(id),
+    hasBookmarksProjects: bookMarkedProjects.length > 0,
     // Project functions
     getAllProjects,
     getProjectById,
@@ -1718,10 +1637,10 @@ const getDraftById = useCallback(async (id) => {
     updateProjectComment,
     deleteProjectComment,
     likeProjectComment,
-    addProjectReply,
-    likeProjectReply,
-    updateProjectReply,
-    deleteProjectReply,
+    // addProjectReply,
+    // likeProjectReply,
+    // updateProjectReply,
+    // deleteProjectReply,
     getProjectApplications,
     recentApplications,
     applyToProject,

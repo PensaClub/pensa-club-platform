@@ -97,8 +97,9 @@ const DraftInitiatives = () => {
     setSearchTerm(term);
     setCurrentPage(1); // Reset към първа страница при търсене
   };
+
   const handlePublish = async (draft) => {
-    if (window.confirm('Сигурни ли сте, че искате да публикувате тази чернова?')) {
+    if (window.confirm(t('drafts.confirmPublish'))) {
       try {
         const identifier = draft.slug || draft.id;
         await toggleDraftStatus(identifier);
@@ -110,12 +111,13 @@ const DraftInitiatives = () => {
       }
     }
   };
+
   const handleEdit = (draftId) => {
     navigate(`/profile/initiative-create?draftId=${draftId}`);
   };
 
   const handleDelete = async (draft) => {
-    if (window.confirm('Сигурни ли сте, че искате да изтриете тази чернова?')) {
+    if (window.confirm(t('drafts.confirmDelete'))) {
       try {
         // Използваме slug ако има, иначе id
         const identifier = draft.slug || draft.id;
@@ -149,10 +151,10 @@ const DraftInitiatives = () => {
         <div className="draft-title-section">
           <h1 className="draft-main-title">
             <FontAwesomeIcon icon={faFileText} className="title-icon" />
-            Чернови на инициативи
+            {t('drafts.title')}
           </h1>
           <p className="draft-subtitle">
-            Управлявайте вашите чернови и ги превърнете в пълноценни инициативи
+            {t('drafts.subtitle')}
           </p>
         </div>
 
@@ -161,19 +163,19 @@ const DraftInitiatives = () => {
           onClick={handleCreateNew}
         >
           <FontAwesomeIcon icon={faPlus} />
-          Нова инициатива
+          {t('drafts.newInitiative')}
         </button>
       </div>
 
       <div className="draft-controls">
         <DraftSearchBar
           onSearch={handleSearch}
-          placeholder="Търси сред черновите..."
+          placeholder={t('drafts.searchPlaceholder')}
         />
 
         <div className="draft-stats">
           <span className="draft-count">
-            {filteredDrafts.length} от {allDrafts.length} чернови
+            {filteredDrafts.length} {t('drafts.of')} {allDrafts.length} {t('drafts.draftsCount')}
           </span>
         </div>
       </div>
@@ -183,20 +185,20 @@ const DraftInitiatives = () => {
           {searchTerm ? (
             <div className="no-search-results">
               <FontAwesomeIcon icon={faFileText} className="empty-icon" />
-              <h3>Не са намерени чернови</h3>
-              <p>Няма чернови които отговарят на търсенето "{searchTerm}"</p>
+              <h3>{t('drafts.noResultsTitle')}</h3>
+              <p>{t('drafts.noResultsText', { searchTerm })}</p>
             </div>
           ) : (
             <div className="no-drafts">
               <FontAwesomeIcon icon={faFileText} className="empty-icon" />
-              <h3>Все още няма чернови</h3>
-              <p>Започнете със създаването на първата си инициатива</p>
+              <h3>{t('drafts.noDraftsTitle')}</h3>
+              <p>{t('drafts.noDraftsText')}</p>
               <button
                 className="create-first-draft-btn"
                 onClick={handleCreateNew}
               >
                 <FontAwesomeIcon icon={faPlus} />
-                Създай инициатива
+                {t('drafts.createInitiative')}
               </button>
             </div>
           )}
@@ -210,7 +212,7 @@ const DraftInitiatives = () => {
                 draft={draft}
                 onEdit={handleEdit}
                 onDelete={() => handleDelete(draft)}
-                 onPublish={handlePublish}
+                onPublish={handlePublish}
               />
             ))}
           </div>

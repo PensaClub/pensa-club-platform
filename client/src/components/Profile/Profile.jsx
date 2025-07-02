@@ -719,6 +719,8 @@ export const Profile = () => {
             <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
+            {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}
+
             {/* <Route path="initiative-preview" element={<ManagementGuard><InitiativePreviewPage /></ManagementGuard>}  /> */}
             <Route path="article-edit/:id" element={<ManagementGuard><EditArticle /></ManagementGuard>} />
             <Route path="pending-announcements" element={<ManagementGuard><PendingAnnouncements setAdsCount={setAdsCount} /></ManagementGuard>} />

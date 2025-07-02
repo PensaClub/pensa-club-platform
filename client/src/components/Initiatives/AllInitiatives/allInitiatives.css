@@ -3,6 +3,7 @@
   padding: 2rem;
   background-color: #f7fafc;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .initiatives-grid-admin {
@@ -10,6 +11,7 @@
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 1.5rem;
   animation: fadeIn 0.5s ease-out;
+  overflow: visible;
 }
 
 @keyframes fadeIn {
@@ -26,11 +28,13 @@
 .initiative-card-admin {
   background: #ffffff;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 2px 8px rgba(45, 55, 72, 0.08);
   border: 1px solid #e2e8f0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  width: 100%;
+  max-width: 100%;
 }
 
 .initiative-card-admin:hover {
@@ -44,6 +48,7 @@
   height: 180px;
   overflow: hidden;
   background: #f7fafc;
+  border-radius: 12px 12px 0 0;
 }
 
 .card-image-admin {
@@ -61,6 +66,7 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
+  z-index: 10;
 }
 
 .status-badge {
@@ -120,6 +126,10 @@
   font-size: 0.875rem;
   line-height: 1.5;
   margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-meta-admin {
@@ -143,18 +153,22 @@
   width: 14px;
   height: 14px;
   color: #a0aec0;
+  flex-shrink: 0;
 }
 
 .card-footer-admin {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  overflow: visible;
+  position: relative;
 }
 
 .card-stats-admin {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  flex: 1;
 }
 
 .stat-badge-admin {
@@ -164,6 +178,7 @@
   font-size: 0.75rem;
   font-weight: 500;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .priority-badge-admin {
@@ -171,6 +186,7 @@
   font-size: 0.75rem;
   font-weight: 500;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .priority-badge-admin.high {
@@ -190,6 +206,9 @@
 
 .card-actions-admin {
   position: relative;
+  z-index: 100;
+  flex-shrink: 0;
+  margin-left: 1rem;
 }
 
 .action-menu-btn {
@@ -202,6 +221,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
 }
 
 .action-menu-btn:hover {
@@ -215,18 +236,30 @@
   color: #718096;
 }
 
+/* 🔧 КРИТИЧНО: Подобрено dropdown позициониране */
 .action-dropdown {
   position: absolute;
   right: 0;
+  top: auto;
   bottom: 100%;
   margin-bottom: 0.5rem;
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(45, 55, 72, 0.1);
-  overflow: hidden;
-  z-index: 10;
+  box-shadow: 0 8px 25px rgba(45, 55, 72, 0.15);
+  overflow: visible;
+  z-index: 1000;
   min-width: 180px;
+  max-width: 220px;
+  pointer-events: auto;
+}
+
+/* 🔧 За карти в долната част на екрана - отваря dropdown нагоре */
+.initiative-card-admin:nth-last-child(-n+2) .action-dropdown {
+  bottom: auto;
+  top: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
 }
 
 .dropdown-item {
@@ -242,6 +275,18 @@
   color: #4a5568;
   cursor: pointer;
   transition: all 0.2s ease;
+  pointer-events: auto;
+  white-space: nowrap;
+}
+
+.dropdown-item:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.dropdown-item:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .dropdown-item:hover {
@@ -251,6 +296,7 @@
 .dropdown-item svg {
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
 }
 
 .dropdown-item.view:hover {
@@ -266,6 +312,11 @@
 .dropdown-item.delete:hover {
   color: #dc2626;
   background: rgba(220, 38, 38, 0.05);
+}
+
+.dropdown-item.publish:hover {
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.05);
 }
 
 .load-more-container-admin {
@@ -337,8 +388,24 @@
   margin: 0 0 0.5rem;
 }
 
-/* Responsive design */
+/* 🔧 РЕСПОНСИВЕН ДИЗАЙН */
+@media (max-width: 1200px) {
+  .initiatives-grid-admin {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .initiatives-grid-admin {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+}
+
 @media (max-width: 768px) {
+  .profile-content-admin {
+    padding: initial !important;
+  }
   .all-initiatives-admin {
     padding: 1rem;
   }
@@ -348,22 +415,94 @@
     gap: 1rem;
   }
 
-  .card-meta-admin {
-    font-size: 0.75rem;
+  .initiative-card-admin {
+    max-width: 100%;
+    margin: 0 auto;
   }
 
+  .card-header-admin {
+    height: 160px;
+  }
+
+  .card-body-admin {
+    padding: 1.25rem;
+  }
+
+  .card-footer-admin {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .card-stats-admin {
+    justify-content: center;
+  }
+
+  .card-actions-admin {
+    margin-left: 0;
+    align-self: center;
+  }
+
+  /* 🔧 КРИТИЧНО: Мобилно dropdown позициониране */
   .action-dropdown {
-    right: auto;
-    left: 0;
+    position: fixed;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 2rem !important;
+    top: auto !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    width: calc(100vw - 2rem);
+    max-width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(45, 55, 72, 0.2);
+  }
+
+  .dropdown-item {
+    padding: 1rem;
+    font-size: 0.9375rem;
+    justify-content: center;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
+  .all-initiatives-admin {
+    padding: 0.75rem;
+  }
+
+  .initiatives-grid-admin {
+    gap: 0.75rem;
+  }
+
   .card-header-admin {
     height: 140px;
   }
 
   .card-body-admin {
     padding: 1rem;
+  }
+
+  .card-title-admin {
+    font-size: 1rem;
+  }
+
+  .card-description-admin {
+    font-size: 0.8125rem;
+  }
+
+  .meta-item-admin {
+    font-size: 0.6875rem;
+  }
+
+  .action-dropdown {
+    width: calc(100vw - 1rem);
+    max-width: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .initiatives-grid-admin {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2rem;
   }
 }

@@ -1,4 +1,6 @@
-// Comments/Comments.jsx
+/* eslint-disable react-hooks/exhaustive-deps */
+// Comments/Comments.jsx - заменете с тази актуализирана версия:
+
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './comments.css';
@@ -23,23 +25,26 @@ export const Comments = ({
         // Project functions  
         getProjectComments, addProjectComment, updateProjectComment, deleteProjectComment, likeProjectComment,
         commentsLoading,
-        comments // ← Директно от контекста
+        comments
     } = useInitiativeContext();
 
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
 
+    // Определяме ID и ключ според типа
     const targetId = initiativeId || entityId;
     const isProject = entityType === 'project';
+    const commentsKey = isProject ? `project-${targetId}` : targetId;
 
+    // Избираме правилните функции според типа
     const fetchComments = isProject ? getProjectComments : getComments;
     const submitComment = isProject ? addProjectComment : addComment;
     const updateCommentFunc = isProject ? updateProjectComment : updateComment;
     const deleteCommentFunc = isProject ? deleteProjectComment : deleteComment;
     const likeCommentFunc = isProject ? likeProjectComment : likeComment;
 
-    // Вземаме коментарите директно от контекста
-    const currentComments = comments[targetId] || [];
+    // Вземаме коментарите с правилния ключ
+    const currentComments = comments[commentsKey] || [];
 
     useEffect(() => {
         if (!commentsEnabled || !targetId) return;
@@ -74,9 +79,13 @@ export const Comments = ({
     // Уведомяваме родителя за промяна в броя коментари
     useEffect(() => {
         if (onCommentsChange) {
-            onCommentsChange(currentComments.length);
+            // Броим всички коментари (главни + replies)
+            const totalCount = currentComments.reduce((sum, comment) => {
+                return sum + 1 + (comment.replies?.length || 0);
+            }, 0);
+            onCommentsChange(totalCount);
         }
-    }, [currentComments.length, onCommentsChange]);
+    }, [currentComments, onCommentsChange]);
 
     if (!commentsEnabled) {
         return (
@@ -98,7 +107,8 @@ export const Comments = ({
         <section className="initiative-comments-section" id="comments">
             <div className="initiative-comments-header">
                 <h2 className="initiative-comments-section-title">
-                    {t('comments.title')} ({currentComments.length})
+                    {t('comments.title')} ({currentComments.reduce((sum, comment) => 
+                        sum + 1 + (comment.replies?.length || 0), 0)})
                 </h2>
 
                 {isAuthentication && (
@@ -141,20 +151,18 @@ export const Comments = ({
                             <p>{t('comments.noComments')}</p>
                         </div>
                     ) : (
-                        currentComments
-                            .filter(comment => comment && comment.id)
-                            .map(comment => (
-                                <CommentItem
-                                    key={comment.id}
-                                    comment={comment}
-                                    entityId={targetId}
-                                    entityType={entityType}
-                                    updateCommentFunc={updateCommentFunc}
-                                    deleteCommentFunc={deleteCommentFunc}
-                                    likeCommentFunc={likeCommentFunc}
-                                    addCommentFunc={submitComment}
-                                />
-                            ))
+                        currentComments.map(comment => (
+                            <CommentItem
+                                key={comment.id}
+                                comment={comment}
+                                entityId={targetId}
+                                entityType={entityType}
+                                updateCommentFunc={updateCommentFunc}
+                                deleteCommentFunc={deleteCommentFunc}
+                                likeCommentFunc={likeCommentFunc}
+                                addCommentFunc={submitComment}
+                            />
+                        ))
                     )}
                 </div>
             )}
