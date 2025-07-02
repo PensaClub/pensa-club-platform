@@ -23,8 +23,8 @@ module.exports = {
                         goal: 50000,
                     }),
                     timeline: JSON.stringify({
-                        startDate: '2024-05-20T00:00:00Z',
-                        endDate: '2024-06-20T23:59:59Z',
+                        startDate: new Date().toISOString(),
+                        endDate: new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
                         estimatedDuration: '12 месеца',
                     }),
                     location: JSON.stringify([
@@ -37,14 +37,14 @@ module.exports = {
                         },
                     ]),
                     application_status: 'open',
-                    application_deadline: new Date('2024-06-30T23:59:59Z'),
+                    application_deadline: new Date(Date.now() + 2 * 30 * 24 * 60 * 60 * 1000),
                     max_participants: 50,
                     current_participants: 23,
                     participant_requirements: ['Възраст над 55 години', 'Основни компютърни умения', 'Желание за активно участие в общността'],
                     tags: ['дигитализация', 'възрастни', 'общност', 'платформа'],
                     comments_enabled: true,
                     logo: 'https://cdn-icons-png.flaticon.com/512/471/471662.png',
-                    created_at: new Date('2025-05-15T10:00:00Z'),
+                    created_at: new Date(),
                     updated_at: new Date(),
                 },
                 {
@@ -64,8 +64,8 @@ module.exports = {
                         goal: 45000,
                     }),
                     timeline: JSON.stringify({
-                        startDate: '2024-05-25T00:00:00Z',
-                        endDate: '2024-06-25T23:59:59Z',
+                        startDate: new Date(Date.now() + 1 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+                        endDate: new Date(Date.now() + 8 * 30 * 24 * 60 * 60 * 1000).toISOString(),
                         estimatedDuration: '12 месеца',
                     }),
                     location: JSON.stringify([
@@ -78,13 +78,14 @@ module.exports = {
                         },
                     ]),
                     application_status: 'open',
+                    application_deadline: new Date(Date.now() + 3 * 30 * 24 * 60 * 60 * 1000),
                     max_participants: 25,
                     current_participants: 8,
                     participant_requirements: ['Възраст над 55 години', 'Творчески опит', 'Готовност за участие в събития'],
                     tags: ['изкуство', 'галерия', 'творчество', 'култура'],
                     comments_enabled: true,
                     logo: 'https://cdn-icons-png.flaticon.com/512/3075/3075977.png',
-                    created_at: new Date('2025-06-01T00:00:00Z'),
+                    created_at: new Date(),
                     updated_at: new Date(),
                 },
             ],
@@ -218,8 +219,8 @@ module.exports = {
                     comment_link_connection: 'project',
                     parent_id: null,
                     likes: ['valeri@example.com'],
-                    created_at: new Date('2024-03-20T10:30:00Z'),
-                    updated_at: new Date('2024-03-20T10:30:00Z'),
+                    created_at: new Date(),
+                    updated_at: new Date(),
                 },
                 {
                     content: 'Отлична идея за галерията! Как мога да се включа като художник?',
@@ -254,8 +255,8 @@ module.exports = {
                 comment_link_connection: 'project',
                 parent_id: parentComments[0].id,
                 likes: Sequelize.literal('ARRAY[]::text[]'),
-                created_at: new Date('2024-03-20T11:15:00Z'),
-                updated_at: new Date('2024-03-20T11:15:00Z'),
+                created_at: new Date(),
+                updated_at: new Date(),
             },
             {
                 content: 'Благодаря за интереса! Можете да изпратите портфолио на имейла в контактите.',
@@ -481,7 +482,7 @@ module.exports = {
         await queryInterface.bulkInsert('milestones', [
             {
                 title: 'Проектиране и дизайн',
-                due_date: new Date('2024-05-25T23:59:59Z'),
+                due_date: new Date(Date.now() + 1 * 30 * 24 * 60 * 60 * 1000),
                 status: 'completed',
                 project_id: projects[0].id,
                 created_at: new Date(),
@@ -489,7 +490,7 @@ module.exports = {
             },
             {
                 title: 'Разработка на основни функции',
-                due_date: new Date('2024-06-10T23:59:59Z'),
+                due_date: new Date(Date.now() + 2 * 30 * 24 * 60 * 60 * 1000),
                 status: 'in-progress',
                 project_id: projects[0].id,
                 created_at: new Date(),
@@ -500,7 +501,7 @@ module.exports = {
 
     async down(queryInterface, Sequelize) {
         await queryInterface.bulkDelete('projects', {
-            slug: ['digital-literacy-workshops', 'senior-art-gallery'],
+            slug: ['pensa-digital-platform', 'senior-art-gallery'],
         });
     },
 };

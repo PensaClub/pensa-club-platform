@@ -305,13 +305,6 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
                 });
             }
 
-            if (Number(foundInitiative.creator.id) !== Number(req.user.userId)) {
-                throw new CustomError({
-                    message: 'Unauthorized to delete this initiative',
-                    statusCode: 403,
-                });
-            }
-
             // Delete related initiatives (both directions)
             await initiative.sequelize.models.initiative_relations.destroy({
                 where: {
@@ -748,13 +741,6 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                 throw new CustomError({
                     message: `Initiative not found${isDraft ? ' or not a draft' : ''}`,
                     statusCode: 404,
-                });
-            }
-
-            if (Number(foundInitiative.creator.id) !== Number(req.user.userId)) {
-                throw new CustomError({
-                    message: `Unauthorized to update this ${isDraft ? 'draft ' : ''}initiative`,
-                    statusCode: 403,
                 });
             }
 
