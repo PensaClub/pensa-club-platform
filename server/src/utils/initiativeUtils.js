@@ -1,4 +1,5 @@
-const { image, project, downloadMaterial, story, publication, contact, section, sponsor, partner, user_account } = require('../sequelize/models');
+const { image, project, downloadMaterial, story, publication, contact, section, sponsor, partner, user_account, initiative } = require('../sequelize/models');
+const { Op } = require('sequelize');
 
 const initiativeConfig = [
     {
@@ -113,13 +114,38 @@ const initiativeConfig = [
         required: false,
         attributes: ['id', 'name', 'website', 'description', 'type', 'visible', 'logo'],
     },
+    {
+        model: initiative,
+        as: 'relatedInitiatives',
+        required: false,
+        attributes: ['id'],
+        through: { attributes: [] },
+    },
 ];
 
-const transformInitiative = (initiative) => {
+async function attachRelatedInitiatives(initiativeObj) {
+    const id = initiativeObj.id;
+    const relations = await initiative.sequelize.models.initiative_relations.findAll({
+        where: {
+            [Op.or]: [{ initiative_id: id }, { related_initiative_id: id }],
+        },
+        attributes: ['initiative_id', 'related_initiative_id'],
+    });
+    const relatedIds = new Set();
+    relations.forEach((r) => {
+        if (r.initiative_id !== id) relatedIds.add(r.initiative_id);
+        if (r.related_initiative_id !== id) relatedIds.add(r.related_initiative_id);
+    });
+    initiativeObj.relatedInitiatives = Array.from(relatedIds);
+    return initiativeObj;
+}
+
+async function transformInitiative(initiative) {
     const plainInitiative = initiative.get({ plain: true });
 
     // Remove junction table data and isDraft flag
-    const { initiativeBookmarks, initiative_projects, initiative_stories, initiative_publications, isDraft, ...initiativeData } = plainInitiative;
+    const { initiativeBookmarks, initiative_projects, initiative_stories, initiative_publications, initiative_relations, isDraft, ...initiativeData } =
+        plainInitiative;
 
     // Add userEmail from creator and remove creator object
     if (initiativeData.creator) {
@@ -184,7 +210,16 @@ const transformInitiative = (initiative) => {
         });
     }
 
+    if (initiativeData.relatedInitiatives) {
+        initiativeData.relatedInitiatives = initiativeData.relatedInitiatives.map((relatedInitiative) => {
+            const { initiative_relations, ...cleanRelatedInitiative } = relatedInitiative;
+            return cleanRelatedInitiative.id;
+        });
+    }
+
+    await attachRelatedInitiatives(initiativeData);
+
     return initiativeData;
-};
+}
 
 module.exports = { transformInitiative, initiativeConfig };

@@ -1,8 +1,10 @@
 const commentController = require('express').Router();
 const isAuth = require('../middlewares/isAuth');
-const { comment, user_account, user_details } = require('../sequelize/models');
-const customError = require('../utils/customError');
+const { checkPermission } = require('../middlewares/rbac');
+const { comment, user_account, user_details, initiative, project } = require('../sequelize/models');
+const CustomError = require('../utils/customError');
 const { transformComment } = require('../utils/commentUtils');
+const { CreateCommentSchema, UpdateCommentSchema, CommentIdSchema } = require('../schemas/comments.schema');
 
 const commentConfig = [
     {
@@ -35,9 +37,10 @@ const commentConfig = [
     },
 ];
 
-commentController.post('/create', isAuth, async (req, res, next) => {
+commentController.post('/create', isAuth, checkPermission('comments', 'create'), async (req, res, next) => {
     try {
-        const { content, commentableId, commentsLinkConnection, parentId, slug } = req.body;
+        const validatedData = CreateCommentSchema.parse(req.body);
+        const { content, commentableId, commentsLinkConnection, parentId, slug } = validatedData;
 
         let finalCommentableId = commentableId;
 
@@ -73,7 +76,7 @@ commentController.post('/create', isAuth, async (req, res, next) => {
             });
 
             if (!parentComment) {
-                throw new customError({
+                throw new CustomError({
                     message: 'Parent comment not found',
                     statusCode: 404,
                 });
@@ -94,16 +97,16 @@ commentController.post('/create', isAuth, async (req, res, next) => {
     }
 });
 
-commentController.post('/like/:id', isAuth, async (req, res, next) => {
+commentController.post('/like/:id', isAuth, checkPermission('comments', 'like'), async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const { id } = CommentIdSchema.parse(req.params);
 
         const userDetails = await user_details.findOne({
-            where: { userId: req.user.userId },
+            where: { user_accounts_id: req.user.userId },
         });
 
         if (!userDetails) {
-            throw new customError({
+            throw new CustomError({
                 message: 'User details not found',
                 statusCode: 404,
             });
@@ -116,7 +119,7 @@ commentController.post('/like/:id', isAuth, async (req, res, next) => {
         });
 
         if (!commentToLike) {
-            throw new customError({
+            throw new CustomError({
                 message: 'Comment not found',
                 statusCode: 404,
             });
@@ -146,16 +149,16 @@ commentController.post('/like/:id', isAuth, async (req, res, next) => {
     }
 });
 
-commentController.get('/single/:id', async (req, res, next) => {
+commentController.get('/single/:id', checkPermission('comments', 'read'), async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const { id } = CommentIdSchema.parse(req.params);
 
         const foundComment = await comment.findByPk(id, {
             include: commentConfig,
         });
 
         if (!foundComment) {
-            throw new customError({
+            throw new CustomError({
                 message: 'Comment not found',
                 statusCode: 404,
             });
@@ -168,24 +171,29 @@ commentController.get('/single/:id', async (req, res, next) => {
     }
 });
 
-commentController.delete('/:id', isAuth, async (req, res, next) => {
+commentController.delete('/:id', isAuth, checkPermission('comments', 'delete'), async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const { id } = CommentIdSchema.parse(req.params);
         const userId = req.user.userId;
+        const userRole = req.user.role;
 
         const commentToDelete = await comment.findByPk(id, {
             include: commentConfig,
         });
 
         if (!commentToDelete) {
-            throw new customError({
+            throw new CustomError({
                 message: 'Comment not found',
                 statusCode: 404,
             });
         }
 
-        if (Number(commentToDelete.userId) !== Number(userId)) {
-            throw new customError({
+        // Check if user can delete this comment
+        const canDeleteAll = ['admin', 'moderator'].includes(userRole);
+        const isOwnComment = Number(commentToDelete.userId) === Number(userId);
+
+        if (!canDeleteAll && !isOwnComment) {
+            throw new CustomError({
                 message: 'Not authorized to delete this comment',
                 statusCode: 403,
             });
@@ -213,32 +221,30 @@ commentController.delete('/:id', isAuth, async (req, res, next) => {
     }
 });
 
-commentController.patch('/:id', isAuth, async (req, res, next) => {
+commentController.patch('/:id', isAuth, checkPermission('comments', 'update'), async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const { content } = req.body;
+        const { id } = CommentIdSchema.parse(req.params);
+        const { content } = UpdateCommentSchema.parse(req.body);
         const userId = req.user.userId;
-
-        if (!content || typeof content !== 'string' || content.trim().length === 0) {
-            throw new customError({
-                message: 'Comment content is required',
-                statusCode: 400,
-            });
-        }
+        const userRole = req.user.role;
 
         const commentToUpdate = await comment.findByPk(id, {
             include: commentConfig,
         });
 
         if (!commentToUpdate) {
-            throw new customError({
+            throw new CustomError({
                 message: 'Comment not found',
                 statusCode: 404,
             });
         }
 
-        if (Number(commentToUpdate.userId) !== Number(userId)) {
-            throw new customError({
+        // Check if user can update this comment
+        const canUpdateAll = ['admin', 'moderator'].includes(userRole);
+        const isOwnComment = Number(commentToUpdate.userId) === Number(userId);
+
+        if (!canUpdateAll && !isOwnComment) {
+            throw new CustomError({
                 message: 'Not authorized to update this comment',
                 statusCode: 403,
             });
@@ -262,6 +268,90 @@ commentController.patch('/:id', isAuth, async (req, res, next) => {
         return res.status(200).json({
             ...transformedComment,
             isEdited: true,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+commentController.get('/all/initiative/:id', checkPermission('comments', 'read'), async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const initiativeId = parseInt(id);
+
+        let foundInitiative;
+
+        foundInitiative = await initiative.findOne({
+            where: { slug: id },
+        });
+
+        if (!foundInitiative && !isNaN(initiativeId)) {
+            foundInitiative = await initiative.findByPk(initiativeId);
+        }
+
+        if (!foundInitiative) {
+            throw new CustomError({
+                message: 'Initiative not found',
+                statusCode: 404,
+            });
+        }
+
+        const comments = await comment.findAll({
+            where: {
+                commentableId: foundInitiative.id,
+                commentsLinkConnection: 'initiative',
+            },
+            include: commentConfig,
+            order: [['createdAt', 'DESC']],
+        });
+
+        const transformedComments = comments.map((comment) => transformComment(comment));
+
+        return res.status(200).json({
+            initiativeSlug: foundInitiative.slug,
+            comments: transformedComments,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+commentController.get('/all/project/:id', checkPermission('comments', 'read'), async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const projectId = parseInt(id);
+
+        let foundProject;
+
+        foundProject = await project.findOne({
+            where: { slug: id },
+        });
+
+        if (!foundProject && !isNaN(projectId)) {
+            foundProject = await project.findByPk(projectId);
+        }
+
+        if (!foundProject) {
+            throw new CustomError({
+                message: 'Project not found',
+                statusCode: 404,
+            });
+        }
+
+        const comments = await comment.findAll({
+            where: {
+                commentableId: foundProject.id,
+                commentsLinkConnection: 'project',
+            },
+            include: commentConfig,
+            order: [['createdAt', 'DESC']],
+        });
+
+        const transformedComments = comments.map((comment) => transformComment(comment));
+
+        return res.status(200).json({
+            projectSlug: foundProject.slug,
+            comments: transformedComments,
         });
     } catch (err) {
         next(err);
