@@ -1,8 +1,9 @@
  // Skeleton loader component
 import './bookmarkedItems.css';
-
-   export const SkeletonCard = () => (
-        <div className="bookmarked-card skeleton">
+export const SkeletonCard = ({ viewMode = 'grid' }) => (
+    <div className={`bookmarked-card skeleton ${viewMode}`}>
+        {viewMode === 'list' && <div className="skeleton-image"></div>}
+        <div className="bookmarked-card-content-wrapper">
             <div className="bookmarked-card-header">
                 <div className="skeleton-badge"></div>
             </div>
@@ -12,4 +13,5 @@ import './bookmarkedItems.css';
                 <div className="skeleton-meta"></div>
             </div>
         </div>
-    );
+    </div>
+);

@@ -13,7 +13,9 @@ import {
     faCalendar,
     faFilter,
     faTimes,
-    faSearch
+    faSearch,
+    faThList,
+    faThLarge
 } from '@fortawesome/free-solid-svg-icons';
 import './bookmarkedItems.css';
 import { SkeletonCard } from './SkeletonCard';
@@ -35,6 +37,7 @@ export const BookmarkedItems = () => {
 
     const [activeTab, setActiveTab] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
+     const [viewMode, setViewMode] = useState('grid')
     const [bookmarkedItemsData, setBookmarkedItemsData] = useState({
         initiatives: [],
         projects: []
@@ -151,7 +154,7 @@ const extractCityAndCountry = (fullAddress) => {
     const filteredItems = getFilteredItems();
     const totalCount = bookmarkedInitiatives.length + bookMarkedProjects.length;
 
-    return (
+  return (
         <div className="bookmarked-items-container">
             {/* Header */}
             <div className="bookmarked-header">
@@ -182,36 +185,56 @@ const extractCityAndCountry = (fullAddress) => {
                 </div>
             </div>
 
-            {/* Filter Tabs */}
-            <div className="bookmarked-tabs">
-                <button
-                    className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('all')}
-                >
-                    <FontAwesomeIcon icon={faFilter} />
-                    {t('bookmarks.tabs.all')} ({totalCount})
-                </button>
-                <button
-                    className={`tab-button ${activeTab === 'initiatives' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('initiatives')}
-                >
-                    <FontAwesomeIcon icon={faUsers} />
-                    {t('bookmarks.tabs.initiatives')} ({bookmarkedInitiatives.length})
-                </button>
-                <button
-                    className={`tab-button ${activeTab === 'projects' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('projects')}
-                >
-                    <FontAwesomeIcon icon={faMapMarkerAlt} />
-                    {t('bookmarks.tabs.projects')} ({bookMarkedProjects.length})
-                </button>
+            {/* Filter Tabs with View Switcher */}
+            <div className="bookmarked-tabs-container">
+                <div className="bookmarked-tabs">
+                    <button
+                        className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('all')}
+                    >
+                        <FontAwesomeIcon icon={faFilter} />
+                        {t('bookmarks.tabs.all')} ({totalCount})
+                    </button>
+                    <button
+                        className={`tab-button ${activeTab === 'initiatives' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('initiatives')}
+                    >
+                        <FontAwesomeIcon icon={faUsers} />
+                        {t('bookmarks.tabs.initiatives')} ({bookmarkedInitiatives.length})
+                    </button>
+                    <button
+                        className={`tab-button ${activeTab === 'projects' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('projects')}
+                    >
+                        <FontAwesomeIcon icon={faMapMarkerAlt} />
+                        {t('bookmarks.tabs.projects')} ({bookMarkedProjects.length})
+                    </button>
+                </div>
+
+                {/* View Mode Switcher */}
+                <div className="view-mode-switcher">
+                    <button
+                        className={`view-mode-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                        onClick={() => setViewMode('grid')}
+                        title={t('bookmarks.viewMode.grid')}
+                    >
+                        <FontAwesomeIcon icon={faThLarge} />
+                    </button>
+                    <button
+                        className={`view-mode-btn ${viewMode === 'list' ? 'active' : ''}`}
+                        onClick={() => setViewMode('list')}
+                        title={t('bookmarks.viewMode.list')}
+                    >
+                        <FontAwesomeIcon icon={faThList} />
+                    </button>
+                </div>
             </div>
 
             {/* Content */}
             <div className="bookmarked-content">
                 {isLoadingData ? (
-                    <div className="bookmarked-grid">
-                        {[1, 2, 3, 4].map(i => <SkeletonCard key={i} />)}
+                    <div className={`bookmarked-${viewMode}`}>
+                        {[1, 2, 3, 4].map(i => <SkeletonCard key={i} viewMode={viewMode} />)}
                     </div>
                 ) : filteredItems.length === 0 ? (
                     <div className="empty-state">
@@ -223,24 +246,10 @@ const extractCityAndCountry = (fullAddress) => {
                         </Link>
                     </div>
                 ) : (
-                    <div className="bookmarked-grid">
+                    <div className={`bookmarked-${viewMode}`}>
                         {filteredItems.map(item => (
-                            <div key={`${item.type}-${item.id}`} className="bookmarked-card">
-                                {/* Type Badge */}
-                                <div className="bookmarked-card-header">
-                                    <span className={`type-badge ${item.type}`}>
-                                        {item.type === 'initiative' ? t('bookmarks.type.initiative') : t('bookmarks.type.project')}
-                                    </span>
-                                    <button
-                                        className="unbookmark-button"
-                                        onClick={() => handleUnbookmark(item.id, item.type)}
-                                        title={t('bookmarks.unbookmark')}
-                                    >
-                                        <FontAwesomeIcon icon={faTrash} />
-                                    </button>
-                                </div>
-
-                                {/* Card Image */}
+                            <div key={`${item.type}-${item.id}`} className={`bookmarked-card ${viewMode}`}>
+                                {/* Card Image - позицията се променя според viewMode */}
                                 {item.mainImage?.src && (
                                     <div className="bookmarked-card-image">
                                         <img 
@@ -262,62 +271,79 @@ const extractCityAndCountry = (fullAddress) => {
                                     </div>
                                 )}
 
-                                {/* Card Content */}
-                                <div className="bookmarked-card-content">
-                                    <h3 className="card-title">
-                                        <Link 
-                                            to={item.type === 'initiative' 
-                                                ? `/initiatives/${item.slug || item.id}` 
-                                                : `/projects/${item.slug || item.id}`}
+                                {/* Card Content Wrapper - за list view */}
+                                <div className="bookmarked-card-content-wrapper">
+                                    {/* Type Badge */}
+                                    <div className="bookmarked-card-header">
+                                        <span className={`type-badge ${item.type}`}>
+                                            {item.type === 'initiative' ? t('bookmarks.type.initiative') : t('bookmarks.type.project')}
+                                        </span>
+                                        <button
+                                            className="unbookmark-button"
+                                            onClick={() => handleUnbookmark(item.id, item.type)}
+                                            title={t('bookmarks.unbookmark')}
                                         >
-                                            {item.title}
-                                        </Link>
-                                    </h3>
-
-                                    <p className="card-description">
-                                        {item.shortDescription || item.description}
-                                    </p>
-
-                                    {/* Meta Information */}
-                                    <div className="card-meta">
-                                        {item.location?.address && (
-                                            <div className="meta-item">
-                                                <FontAwesomeIcon icon={faMapMarkerAlt} />
-                                                <span>{extractCityAndCountry(item.location.address)}</span>
-                                            </div>
-                                        )}
-
-                                        {item.startDate && (
-                                            <div className="meta-item">
-                                                <FontAwesomeIcon icon={faCalendar} />
-                                                <span>{new Date(item.startDate).toLocaleDateString()}</span>
-                                            </div>
-                                        )}
-
-                                        {item.status && (
-                                            <div className="meta-item">
-                                                <span className={`status-badge-bookmarks ${item.status}`}>
-                                                    {item.status}
-                                                </span>
-                                            </div>
-                                        )}
+                                            <FontAwesomeIcon icon={faTrash} />
+                                        </button>
                                     </div>
 
-                                    {/* Action Footer */}
-                                    <div className="card-footer">
-                                        <Link 
-                                            to={item.type === 'initiative' 
-                                                ? `/initiatives/${item.slug || item.id}` 
-                                                : `/projects/${item.slug || item.id}`}
-                                            className="read-more-link"
-                                        >
-                                            {t('bookmarks.readMore')} →
-                                        </Link>
+                                    {/* Card Content */}
+                                    <div className="bookmarked-card-content">
+                                        <h3 className="card-title">
+                                            <Link 
+                                                to={item.type === 'initiative' 
+                                                    ? `/initiatives/${item.slug || item.id}` 
+                                                    : `/projects/${item.slug || item.id}`}
+                                            >
+                                                {item.title}
+                                            </Link>
+                                        </h3>
 
-                                        <span className="bookmarked-date">
-                                            <FontAwesomeIcon icon={faClock} />
-                                            {t('bookmarks.bookmarkedOn')}
-                                        </span>
+                                        <p className="card-description">
+                                            {item.shortDescription || item.description}
+                                        </p>
+
+                                        {/* Meta Information */}
+                                        <div className="card-meta">
+                                            {item.location?.address && (
+                                                <div className="meta-item">
+                                                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                                    <span>{extractCityAndCountry(item.location.address)}</span>
+                                                </div>
+                                            )}
+
+                                            {item.startDate && (
+                                                <div className="meta-item">
+                                                    <FontAwesomeIcon icon={faCalendar} />
+                                                    <span>{new Date(item.startDate).toLocaleDateString()}</span>
+                                                </div>
+                                            )}
+
+                                            {item.status && (
+                                                <div className="meta-item">
+                                                    <span className={`status-badge-bookmarks ${item.status}`}>
+                                                        {item.status}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Action Footer */}
+                                        <div className="card-footer">
+                                            <Link 
+                                                to={item.type === 'initiative' 
+                                                    ? `/initiatives/${item.slug || item.id}` 
+                                                    : `/projects/${item.slug || item.id}`}
+                                                className="read-more-link"
+                                            >
+                                                {t('bookmarks.readMore')} →
+                                            </Link>
+
+                                            <span className="bookmarked-date">
+                                                <FontAwesomeIcon icon={faClock} />
+                                                {t('bookmarks.bookmarkedOn')}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

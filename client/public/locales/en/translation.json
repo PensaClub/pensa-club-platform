@@ -1814,9 +1814,14 @@
       "description": "Start adding initiatives and projects to your bookmarks",
       "exploreButton": "Explore initiatives"
     },
+ 
     "viewDetails": "View details",
     "readMore": "Read more",
     "unbookmark": "Remove bookmark",
-    "bookmarkedOn": "Bookmarked"
+    "bookmarkedOn": "Bookmarked",
+    "viewMode": {
+      "grid": "Grid view",
+      "list": "List view"
+    }
   }
 }

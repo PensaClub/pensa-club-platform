@@ -546,3 +546,119 @@
     }
 
 }
+/* Tabs container with view switcher */
+.bookmarked-tabs-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #e1e8ed;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* View Mode Switcher */
+.view-mode-switcher {
+    display: flex;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+}
+
+.view-mode-btn {
+    background: none;
+    border: 1px solid #e1e8ed;
+    color: #657786;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.view-mode-btn:hover {
+    background: #f8fafb;
+    border-color: #4A90E2;
+    color: #4A90E2;
+}
+
+.view-mode-btn.active {
+    background: #4A90E2;
+    color: white;
+    border-color: #4A90E2;
+}
+
+/* List View Styles */
+.bookmarked-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.bookmarked-card.list {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    min-height: 250px;
+}
+
+.bookmarked-card.list .bookmarked-card-image {
+    width: 300px;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.bookmarked-card.list .bookmarked-card-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.bookmarked-card.list .bookmarked-card-header {
+    border-radius: 0 16px 0 0;
+}
+
+.bookmarked-card.list .card-description {
+    -webkit-line-clamp: 4;
+}
+
+/* Responsive for list view */
+@media (max-width: 768px) {
+    .bookmarked-tabs-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .view-mode-switcher {
+        justify-content: flex-end;
+        padding-bottom: 0;
+    }
+    
+    .bookmarked-card.list {
+        flex-direction: column;
+        min-height: auto;
+    }
+    
+    .bookmarked-card.list .bookmarked-card-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .bookmarked-card.list .bookmarked-card-header {
+        border-radius: 0;
+    }
+}
+
+/* Update skeleton for list view */
+.skeleton.list {
+    display: flex;
+    flex-direction: row;
+    height: 250px;
+}
+
+.skeleton.list .skeleton-image {
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
