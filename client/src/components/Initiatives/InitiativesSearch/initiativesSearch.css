@@ -151,11 +151,32 @@
   font-weight: 600;
   transition: all 0.2s ease;
   text-indent: initial;
+    position: relative;
+  overflow: hidden;
+}
+.show-map-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+.show-map-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  border-color: #f3f4f6;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.show-map-btn:hover {
-  background: #f3f4f6;
-  border-color: #374151;
+.show-map-btn:hover::before {
+  left: 100%;
 }
 
 .show-map-btn.active {
