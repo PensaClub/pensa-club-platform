@@ -3,28 +3,43 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class user_account extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
         static associate(models) {
             user_account.hasOne(models.user_details, {
-                foreignKey: 'userAccountsId', // Foreign key in user_details table
-                sourceKey: 'id', // Primary key in user_accounts table
+                foreignKey: 'userAccountsId',
+                sourceKey: 'id',
                 as: 'details',
             });
+
             user_account.hasMany(models.user_ads, {
-                foreignKey: 'userId', // Foreign key in user_details table
-                sourceKey: 'id', // Primary key in user_accounts table
+                foreignKey: 'userId',
+                sourceKey: 'id',
                 as: 'ads',
             });
+
             user_account.hasMany(models.refreshToken, {
-                foreignKey: 'userId', // Foreign key in refreshToken table
-                sourceKey: 'id', // Primary key in user_accounts table
+                foreignKey: 'userId',
+                sourceKey: 'id',
                 as: 'refreshTokens',
             });
-            // define association here
+
+            user_account.belongsToMany(models.initiative, {
+                through: 'initiative_bookmarks',
+                as: 'bookmarkedInitiatives',
+                foreignKey: 'user_id',
+                otherKey: 'initiative_id',
+            });
+
+            user_account.belongsToMany(models.project, {
+                through: 'project_bookmarks',
+                as: 'bookmarkedProjects',
+                foreignKey: 'user_id',
+                otherKey: 'project_id',
+            });
+
+            user_account.hasMany(models.project_application, {
+                foreignKey: 'userId',
+                as: 'projectApplications',
+            });
         }
     }
 

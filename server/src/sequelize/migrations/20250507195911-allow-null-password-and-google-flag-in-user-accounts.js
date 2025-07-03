@@ -3,11 +3,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.addColumn('user_accounts', 'is_google_user', {
-            type: Sequelize.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-        });
+        const table = await queryInterface.describeTable('user_accounts');
+        if (!table.is_google_user) {
+            await queryInterface.addColumn('user_accounts', 'is_google_user', {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
+            });
+        } else {
+            console.log('Column "is_google_user" already exists in "user_accounts". Skipping addColumn.');
+        }
 
         await queryInterface.changeColumn('user_accounts', 'password', {
             type: Sequelize.STRING,
@@ -21,6 +26,9 @@ module.exports = {
             allowNull: false,
         });
 
-        await queryInterface.removeColumn('user_accounts', 'is_google_user');
+        const table = await queryInterface.describeTable('user_accounts');
+        if (table.is_google_user) {
+            await queryInterface.removeColumn('user_accounts', 'is_google_user');
+        }
     },
 };

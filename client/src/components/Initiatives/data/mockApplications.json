@@ -1,0 +1,84 @@
+{
+  "applications": [
+    {
+      "id": "app-1",
+      "firstName": "Мария",
+      "lastName": "Георгиева",
+      "email": "maria.georgieva@example.com",
+      "phone": "+359 888 123 456",
+      "isAnonymous": false,
+      "appliedAt": "2024-03-20T14:30:00Z",
+      "projectId": "pensa-digital-platform"
+    },
+    {
+      "id": "app-2",
+      "firstName": "Анонимен",
+      "lastName": "Потребител",
+      "email": "anonymous@example.com",
+      "phone": "",
+      "isAnonymous": true,
+      "appliedAt": "2024-03-19T10:15:00Z",
+      "projectId": "pensa-digital-platform"
+    },
+    {
+      "id": "app-3",
+      "firstName": "Георги",
+      "lastName": "Петров",
+      "email": "georgi.petrov@example.com",
+      "phone": "+359 888 987 654",
+      "isAnonymous": false,
+      "appliedAt": "2024-03-18T16:45:00Z",
+      "projectId": "pensa-digital-platform"
+    },
+    {
+      "id": "app-4",
+      "firstName": "Елена",
+      "lastName": "Иванова",
+      "email": "elena.ivanova@example.com",
+      "phone": "+359 888 555 777",
+      "isAnonymous": false,
+      "appliedAt": "2024-03-17T09:20:00Z",
+      "projectId": "pensa-digital-platform"
+    },
+    {
+      "id": "app-5",
+      "firstName": "Анонимен",
+      "lastName": "Потребител",
+      "email": "anonymous2@example.com",
+      "phone": "",
+      "isAnonymous": true,
+      "appliedAt": "2024-03-16T13:10:00Z",
+      "projectId": "pensa-digital-platform"
+    },
+    {
+      "id": "app-6",
+      "firstName": "Димитър",
+      "lastName": "Колев",
+      "email": "dimitar.kolev@example.com",
+      "phone": "+359 888 444 333",
+      "isAnonymous": false,
+      "appliedAt": "2024-03-15T11:25:00Z",
+      "projectId": "pensa-bosch-partnership"
+    },
+    {
+      "id": "app-7",
+      "firstName": "Стоянка",
+      "lastName": "Николова",
+      "email": "stoyanka.nikolova@example.com",
+      "phone": "+359 888 666 555",
+      "isAnonymous": false,
+      "appliedAt": "2024-03-14T08:40:00Z",
+      "projectId": "pensa-intergenerational-bridge"
+    },
+    {
+      "id": "app-8",
+      "firstName": "Анонимен",
+      "lastName": "Потребител",
+      "email": "anonymous3@example.com",
+      "phone": "",
+      "isAnonymous": true,
+      "appliedAt": "2024-03-13T15:55:00Z",
+      "projectId": "pensa-digital-platform"
+    }
+  ]
+}

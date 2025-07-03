@@ -1,0 +1,590 @@
+{
+  "projects": [
+    {
+      "id": "pensa-digital-platform",
+      "slug": "pensa-digital-platform",
+      "initiativeId": 1,
+      "initiativeSlug": "pensa-club-digital-community",
+      "title": "Дигитална платформа Pensa Club",
+      "shortDescription": "Разработка на уеб платформа за свързване на възрастни хора с общи интереси.",
+      "fullDescription": "Детайлно описание на проекта за създаване на иновативна дигитална платформа която ще свързва възрастни хора с общи интереси, ще предоставя инструменти за комуникация и ще насърчава активното участие в общността.",
+      "mainImage": {
+        "src": "https://activatedinsights.com/wp-content/uploads/2015/06/Older-couple-using-laptop-mb.jpg",
+        "alt": "Възрастна двойка използва лаптоп"
+      },
+      "category": "Дигитализация",
+      "status": "in-progress",
+      "priority": "high",
+      "budget": {
+        "total": 50000,
+        "currency": "BGN",
+        "funded": 32000,
+        "fundingGoal": 50000
+      },
+      "timeline": {
+        "startDate": "2024-01-15T00:00:00Z",
+        "endDate": "2024-12-31T23:59:59Z",
+        "estimatedDuration": "12 месеца",
+        "milestones": [
+          {
+            "id": 1,
+            "title": "Проектиране и дизайн",
+            "dueDate": "2024-03-31T23:59:59Z",
+            "status": "completed"
+          },
+          {
+            "id": 2,
+            "title": "Разработка на основни функции",
+            "dueDate": "2024-06-30T23:59:59Z",
+            "status": "in-progress"
+          }
+        ]
+      },
+      "location": {
+        "address": "София, България",
+        "coordinates": {
+          "lat": 42.6951,
+          "lng": 23.3274
+        }
+      },
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-03-20T14:30:00Z",
+      "applicationStatus": "open",
+      "applicationDeadline": "2024-06-30T23:59:59Z",
+      "maxParticipants": 50,
+      "currentParticipants": 23,
+      "participantRequirements": [
+        "Възраст над 55 години",
+        "Основни компютърни умения",
+        "Желание за активно участие в общността"
+      ],
+      "commentsEnabled": true,
+      "comments": [
+        {
+          "id": "project-comment-1",
+          "userId": "maria@example.com",
+          "userEmail": "maria@example.com",
+          "userName": "Мария Стоянова",
+          "userAvatar": null,
+          "content": "Много се интересувам от този проект! Как мога да кандидатствам?",
+          "createdAt": "2024-03-20T10:30:00Z",
+          "updatedAt": null,
+          "likes": ["valeri@example.com"],
+          "likesCount": 1,
+          "replies": [
+            {
+              "id": "project-reply-1",
+              "userId": "valeri@example.com",
+              "userEmail": "valeri@example.com",
+              "userName": "Валери Кекевски",
+              "userAvatar": null,
+              "content": "Здравейте Мария! Можете да кандидатствате чрез формуляра в секция 'Кандидатстване'.",
+              "createdAt": "2024-03-20T11:15:00Z",
+              "updatedAt": null,
+              "likes": [],
+              "likesCount": 0,
+              "parentId": "project-comment-1"
+            }
+          ]
+        }
+      ],
+      "commentsCount": 1,
+      "publications": [
+        {
+          "titleSlug": "platform-tech-specs",
+          "title": "Техническа спецификация на платформата",
+          "description": "Детайлно описание на техническите изисквания и архитектура на платформата.",
+          "image": {
+            "src": "/images/publications/tech-specs.jpg",
+            "alt": "Техническа документация"
+          },
+          "publishedAt": "2024-02-20T10:00:00Z",
+          "author": "Инженерен екип",
+          "link": "/publications/platform-tech-specs",
+          "fileType": "pdf",
+          "fileSize": "2.1 MB"
+        }
+      ],
+      "sections": [
+        {
+          "titleSlug": "overview",
+          "title": "Общ преглед на проекта",
+          "content": "Проектът за дигитална платформа Pensa Club има за цел да създаде иновативно решение за свързване на възрастни хора с общи интереси и потребности.",
+          "image": {
+            "src": "https://media.azpm.org/master/image/2018/5/21/spot/teeniors_2.jpg",
+            "alt": "Преглед на платформата"
+          }
+        },
+        {
+          "titleSlug": "features",
+          "title": "Основни функционалности",
+          "content": "Платформата ще включва профили на потребители, системи за съобщения, календар с събития, форуми за дискусии и мобилно приложение.",
+          "image": {
+            "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBL-h0PBWZaJ8g36hYPBo8_OF3KFsyZHoMYQ&s",
+            "alt": "Функционалности на платформата"
+          }
+        }
+      ],
+      "downloadMaterials": [
+        {
+          "id": "project-presentation",
+          "title": "Презентация на проекта",
+          "description": "Пълна презентация с всички аспекти на проекта за дигитална платформа.",
+          "fileType": "pdf",
+          "fileSize": "3.2 MB",
+          "downloadUrl": "/downloads/platform-presentation.pdf",
+          "image": {
+            "src": "/images/projects/presentation-cover.jpg",
+            "alt": "Корица на презентацията"
+          }
+        }
+      ],
+      "team": [
+        {
+          "name": "Валери Кекевски",
+          "position": "Ръководител проект",
+          "email": "valeri.kekevski@pensaclub.bg",
+          "phone": "+359 888 123 456",
+          "image": "/images/team/valeri-kekevski.jpg",
+          "role": "project-manager"
+        },
+        {
+          "name": "Мария Иванова",
+          "position": "UX Дизайнер",
+          "email": "maria.ivanova@pensaclub.bg",
+          "phone": "+359 888 123 457",
+          "image": "/images/team/maria-ivanova.jpg",
+          "role": "designer"
+        }
+      ],
+      "contact": {
+        "name": "Валери Кекевски",
+        "position": "Ръководител проект",
+        "email": "valeri.kekevski@pensaclub.bg",
+        "phone": "+359 888 123 456",
+        "image": "/images/contacts/valeri-kekevski.jpg"
+      },
+      "tags": ["дигитализация", "възрастни", "общност", "платформа"]
+    },
+
+    {
+      "id": "pensa-bosch-partnership",
+      "slug": "pensa-bosch-partnership",
+      "initiativeId": 1,
+      "initiativeSlug": "pensa-club-digital-community",
+      "title": "Партньорство с Роберт Бош",
+      "shortDescription": "Установяване на партньорство с Фондация Роберт Бош за създаване на Алумни клуб.",
+      "fullDescription": "Проект за изграждане на стратегическо партньорство с Фондация Роберт Бош за създаване на Алумни клуб на пенсионираните служители. Това партньорство ще съчетае експертизата на двете организации за създаване на иновативни програми за възрастни хора.",
+      "mainImage": {
+        "src": "https://www.spot.uz/media/img/2022/08/hxj2CB16611736277606_l.jpg",
+        "alt": "Партньорство с Роберт Бош"
+      },
+      "category": "Партньорство",
+      "status": "planned",
+      "priority": "medium",
+      "budget": {
+        "total": 25000,
+        "currency": "BGN",
+        "funded": 0,
+        "fundingGoal": 25000
+      },
+      "timeline": {
+        "startDate": "2024-06-01T00:00:00Z",
+        "endDate": "2024-12-31T23:59:59Z",
+        "estimatedDuration": "7 месеца"
+      },
+      "location": {
+        "address": "София, България",
+        "coordinates": {
+          "lat": 42.7025,
+          "lng": 23.3156
+        }
+      },
+      "createdAt": "2024-02-01T10:00:00Z",
+      "updatedAt": "2024-03-15T14:30:00Z",
+      "applicationStatus": "planned",
+      "applicationDeadline": "2024-05-31T23:59:59Z",
+      "maxParticipants": 100,
+      "currentParticipants": 0,
+      "participantRequirements": [
+        "Бивши служители на Роберт Бош",
+        "Възраст над 50 години"
+      ],
+      "commentsEnabled": true,
+      "comments": [],
+      "commentsCount": 0,
+      "publications": [
+        {
+          "id": "bosch-partnership-proposal",
+          "title": "Предложение за партньорство",
+          "description": "Официално предложение за партньорство с Фондация Роберт Бош.",
+          "image": {
+            "src": "/images/publications/bosch-proposal.jpg",
+            "alt": "Предложение за партньорство"
+          },
+          "publishedAt": "2024-02-15T10:00:00Z",
+          "author": "Валери Кекевски",
+          "link": "/publications/bosch-partnership-proposal",
+          "fileType": "pdf",
+          "fileSize": "1.8 MB"
+        }
+      ],
+      "sections": [
+        {
+          "titleSlug": "partnership-vision",
+          "title": "Визия за партньорството",
+          "content": "Създаване на дългосрочно стратегическо партньорство които ще обедини експертизата на двете организации за максимален социален ефект.",
+          "image": {
+            "src": "/images/projects/partnership-vision.jpg",
+            "alt": "Визия за партньорството"
+          }
+        }
+      ],
+      "downloadMaterials": [],
+      "team": [
+        {
+          "name": "Валери Кекевски",
+          "position": "Ръководител проект",
+          "email": "valeri.kekevski@pensaclub.bg",
+          "phone": "+359 888 123 456",
+          "image": "/images/team/valeri-kekevski.jpg",
+          "role": "project-manager"
+        }
+      ],
+      "contact": {
+        "name": "Валери Кекевски",
+        "position": "Ръководител проект",
+        "email": "valeri.kekevski@pensaclub.bg",
+        "phone": "+359 888 123 456",
+        "image": "/images/contacts/valeri-kekevski.jpg"
+      },
+      "tags": ["партньорство", "роберт-бош", "алумни"]
+    },
+
+    {
+      "id": "pensa-intergenerational-bridge",
+      "slug": "pensa-intergenerational-bridge",
+      "initiativeId": 1,
+      "initiativeSlug": "pensa-club-digital-community",
+      "title": "Междупоколенчески мост",
+      "shortDescription": "Програма за свързване на възрастни хора с младежи чрез технологии.",
+      "fullDescription": "Иновативна програма която свързва възрастни хора с млади доброволци за взаимно обучение и подкрепа. Младежите помагат на възрастните с технологиите, а възрастните споделят своя житейски опит и мъдрост.",
+      "mainImage": {
+        "src": "https://media.azpm.org/master/image/2018/5/21/spot/teeniors_2.jpg",
+        "alt": "Младежи и възрастни работят заедно"
+      },
+      "category": "Образование",
+      "status": "active",
+      "priority": "high",
+      "budget": {
+        "total": 15000,
+        "currency": "BGN",
+        "funded": 12000,
+        "fundingGoal": 15000
+      },
+      "timeline": {
+        "startDate": "2024-03-01T00:00:00Z",
+        "endDate": "2024-08-31T23:59:59Z",
+        "estimatedDuration": "6 месеца"
+      },
+      "location": {
+        "address": "София, България",
+        "coordinates": {
+          "lat": 42.6913,
+          "lng": 23.3298
+        }
+      },
+      "createdAt": "2024-02-15T10:00:00Z",
+      "updatedAt": "2024-03-25T14:30:00Z",
+      "applicationStatus": "open",
+      "applicationDeadline": "2024-07-31T23:59:59Z",
+      "maxParticipants": 60,
+      "currentParticipants": 45,
+      "participantRequirements": [
+        "Възраст над 55 години или под 30 години",
+        "Желание за учене и споделяне"
+      ],
+      "commentsEnabled": true,
+      "comments": [
+        {
+          "id": "bridge-comment-1",
+          "userId": "stefan@example.com",
+          "userEmail": "stefan@example.com",
+          "userName": "Стефан Младенов",
+          "userAvatar": null,
+          "content": "Страхотна програма! Научих толкова много от баба Мария за готвене, а тя вече прави видео разговори с внуците си!",
+          "createdAt": "2024-03-25T15:30:00Z",
+          "updatedAt": null,
+          "likes": ["maria@example.com"],
+          "likesCount": 1,
+          "replies": []
+        }
+      ],
+      "commentsCount": 1,
+      "publications": [],
+      "sections": [
+        {
+          "titleSlug": "how-it-works",
+          "title": "Как работи програмата",
+          "content": "Създаваме двойки от млади и възрастни участници които се срещат редовно за взаимно обучение и споделяне на опит.",
+          "image": {
+            "src": "/images/projects/bridge-how-it-works.jpg",
+            "alt": "Как работи програмата"
+          }
+        }
+      ],
+      "downloadMaterials": [],
+      "team": [
+        {
+          "name": "Елена Петрова",
+          "position": "Координатор програма",
+          "email": "elena.petrova@pensaclub.bg",
+          "phone": "+359 888 123 458",
+          "image": "/images/team/elena-petrova.jpg",
+          "role": "coordinator"
+        }
+      ],
+      "contact": {
+        "name": "Елена Петрова",
+        "position": "Координатор програма",
+        "email": "elena.petrova@pensaclub.bg",
+        "phone": "+359 888 123 458",
+        "image": "/images/contacts/elena-petrova.jpg"
+      },
+      "tags": ["младежи", "възрастни", "технологии", "обучение"]
+    },
+
+    {
+      "id": "health-community-gardens",
+      "slug": "health-community-gardens",
+      "initiativeId": 2,
+      "initiativeSlug": "healthy-aging-program",
+      "title": "Общностни градини",
+      "shortDescription": "Създаване на градини за възрастни хора за физическа активност и социализация.",
+      "fullDescription": "Проект за създаване на общностни градини които служат като места за физическа активност, социализация и здравословно хранене за възрастни хора. Градините включват зони за отглеждане на зеленчуци, релакс зони и места за групови активности.",
+      "mainImage": {
+        "src": "/images/projects/community-gardens.jpg",
+        "alt": "Общностни градини за възрастни"
+      },
+      "category": "Здраве",
+      "status": "active",
+      "priority": "medium",
+      "budget": {
+        "total": 20000,
+        "currency": "BGN",
+        "funded": 18000,
+        "fundingGoal": 20000
+      },
+      "timeline": {
+        "startDate": "2024-03-15T00:00:00Z",
+        "endDate": "2024-10-31T23:59:59Z",
+        "estimatedDuration": "8 месеца"
+      },
+      "location": {
+        "address": "Пловдив, България",
+        "coordinates": {
+          "lat": 42.1398,
+          "lng": 24.7512
+        }
+      },
+      "createdAt": "2024-02-20T10:00:00Z",
+      "updatedAt": "2024-03-28T14:30:00Z",
+      "applicationStatus": "open",
+      "applicationDeadline": "2024-09-30T23:59:59Z",
+      "maxParticipants": 40,
+      "currentParticipants": 32,
+      "participantRequirements": [
+        "Възраст над 60 години",
+        "Интерес към градинарство",
+        "Възможност за редовно участие"
+      ],
+      "commentsEnabled": true,
+      "comments": [
+        {
+          "id": "garden-comment-1",
+          "userId": "ivan@example.com",
+          "userEmail": "ivan@example.com",
+          "userName": "Иван Георгиев",
+          "userAvatar": null,
+          "content": "Градината изглежда прекрасно! Кога ще засаждаме летните зеленчуци?",
+          "createdAt": "2024-03-28T16:00:00Z",
+          "updatedAt": null,
+          "likes": [],
+          "likesCount": 0,
+          "replies": [
+            {
+              "id": "garden-reply-1",
+              "userId": "elena@example.com",
+              "userEmail": "elena@example.com",
+              "userName": "Д-р Елена Иванова",
+              "userAvatar": null,
+              "content": "Здравейте Иване! Планираме засаждането за началото на май когато времето се затопли.",
+              "createdAt": "2024-03-28T17:15:00Z",
+              "updatedAt": null,
+              "likes": ["ivan@example.com"],
+              "likesCount": 1,
+              "parentId": "garden-comment-1"
+            }
+          ]
+        }
+      ],
+      "commentsCount": 1,
+      "publications": [
+        {
+          "id": "gardening-health-benefits",
+          "title": "Ползите от градинарството за здравето",
+          "description": "Научно изследване за ползите от градинарската дейност за физическото и психическото здраве.",
+          "image": {
+            "src": "/images/publications/gardening-benefits.jpg",
+            "alt": "Ползи от градинарството"
+          },
+          "publishedAt": "2024-03-01T10:00:00Z",
+          "author": "Д-р Елена Иванова",
+          "link": "/publications/gardening-health-benefits",
+          "fileType": "pdf",
+          "fileSize": "1.5 MB"
+        }
+      ],
+      "sections": [
+        {
+          "titleSlug": "garden-design",
+          "title": "Дизайн на градината",
+          "content": "Градината е проектирана с различни зони - за отглеждане на зеленчуци, релакс, социализация и физически упражнения.",
+          "image": {
+            "src": "/images/projects/garden-design.jpg",
+            "alt": "Дизайн на градината"
+          }
+        },
+        {
+          "titleSlug": "health-benefits",
+          "title": "Ползи за здравето",
+          "content": "Работата в градината подобрява мобилността, силата и баланса, а също така намалява стреса и подобрява настроението.",
+          "image": {
+            "src": "/images/projects/garden-health.jpg",
+            "alt": "Ползи за здравето"
+          }
+        }
+      ],
+      "downloadMaterials": [
+        {
+          "id": "garden-plan",
+          "title": "План на градината",
+          "description": "Детайлен план с разпределението на зоните и растенията в градината.",
+          "fileType": "pdf",
+          "fileSize": "2.8 MB",
+          "downloadUrl": "/downloads/garden-plan.pdf",
+          "image": {
+            "src": "/images/projects/garden-plan-cover.jpg",
+            "alt": "План на градината"
+          }
+        }
+      ],
+      "team": [
+        {
+          "name": "Д-р Елена Иванова",
+          "position": "Координатор програма",
+          "email": "elena.ivanova@healthyaging.bg",
+          "phone": "+359 888 765 432",
+          "image": "/images/team/elena-ivanova.jpg",
+          "role": "coordinator"
+        },
+        {
+          "name": "Георги Садовника",
+          "position": "Експерт градинарство",
+          "email": "georgi.sadovnik@healthyaging.bg",
+          "phone": "+359 888 765 433",
+          "image": "/images/team/georgi-sadovnik.jpg",
+          "role": "expert"
+        }
+      ],
+      "contact": {
+        "name": "Д-р Елена Иванова",
+        "position": "Координатор програма",
+        "email": "elena.ivanova@healthyaging.bg",
+        "phone": "+359 888 765 432",
+        "image": "/images/contacts/elena-ivanova.jpg"
+      },
+      "tags": ["градинарство", "здраве", "социализация", "пловдив"]
+    },
+
+    {
+      "id": "health-fitness-centers",
+      "slug": "health-fitness-centers",
+      "initiativeId": 2,
+      "initiativeSlug": "healthy-aging-program",
+      "title": "Фитнес центрове за възрастни",
+      "shortDescription": "Специализирани фитнес центрове с оборудване за възрастни хора.",
+      "fullDescription": "Проект за създаване на специализирани фитнес центрове с адаптирано оборудване и програми за възрастни хора. Центровете ще предлагат персонализирани тренировки, групови класове и здравни консултации.",
+      "mainImage": {
+        "src": "/images/projects/fitness-centers.jpg",
+        "alt": "Фитнес център за възрастни"
+      },
+      "category": "Здраве",
+      "status": "planned",
+      "priority": "low",
+      "budget": {
+        "total": 80000,
+        "currency": "BGN",
+        "funded": 15000,
+        "fundingGoal": 80000
+      },
+      "timeline": {
+        "startDate": "2024-09-01T00:00:00Z",
+        "endDate": "2025-06-30T23:59:59Z",
+        "estimatedDuration": "10 месеца"
+      },
+      "location": {
+        "address": "Пловдив, България",
+        "coordinates": {
+          "lat": 42.1311,
+          "lng": 24.7389
+        }
+      },
+      "createdAt": "2024-03-01T10:00:00Z",
+      "updatedAt": "2024-03-30T14:30:00Z",
+      "applicationStatus": "planned",
+      "applicationDeadline": "2024-08-31T23:59:59Z",
+      "maxParticipants": 200,
+      "currentParticipants": 0,
+      "participantRequirements": [
+        "Възраст над 65 години",
+        "Медицинско разрешение за спорт",
+        "Желание за активен начин на живот"
+      ],
+      "commentsEnabled": true,
+      "comments": [],
+      "commentsCount": 0,
+      "publications": [],
+      "sections": [
+        {
+          "titleSlug": "center-concept",
+          "title": "Концепция на центъра",
+          "content": "Фитнес центърът ще бъде оборудван със специални машини за възрастни, ще има басейн с топла вода и зони за рехабилитация.",
+          "image": {
+            "src": "/images/projects/fitness-concept.jpg",
+            "alt": "Концепция на фитнес центъра"
+          }
+        }
+      ],
+      "downloadMaterials": [],
+      "team": [
+        {
+          "name": "Д-р Елена Иванова",
+          "position": "Координатор програма",
+          "email": "elena.ivanova@healthyaging.bg",
+          "phone": "+359 888 765 432",
+          "image": "/images/team/elena-ivanova.jpg",
+          "role": "coordinator"
+        }
+      ],
+      "contact": {
+        "name": "Д-р Елена Иванова",
+        "position": "Координатор програма",
+        "email": "elena.ivanova@healthyaging.bg",
+        "phone": "+359 888 765 432",
+        "image": "/images/contacts/elena-ivanova.jpg"
+      },
+      "tags": ["фитнес", "възрастни", "здраве", "упражнения"]
+    }
+  ]
+}

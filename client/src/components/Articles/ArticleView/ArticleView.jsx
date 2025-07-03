@@ -67,7 +67,7 @@ const ArticleView = () => {
 
     return () => {
       window.removeEventListener('popstate', handlePopState);
-  
+
       document.body.style.overflow = 'auto';
     };
   }, [isModalOpen]);

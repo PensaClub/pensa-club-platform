@@ -591,11 +591,13 @@
 /* Модификации за слайдера в модалния прозорец */
 .image-modal-content-view .slider-container {
   height: 100%;
+  max-height: 100vh;
   padding-bottom: 0;
 }
 
 .image-modal-content .slider-image {
   object-fit: contain;
+  object-position: top;
 }
 @media (min-width: 1200px) {
   .article-main-image,

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, NavLink } from "react-router-dom";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { ProfileData } from "./ProfileData";
@@ -53,6 +53,12 @@ import ArticleCreateForm from "../Articles/ArticleCreateForm/ArticleCreateForm";
 import { AllArticles } from "../Articles/AllArticles/AllArticles";
 import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
 import { changeLanguage } from "i18next";
+import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCreateForm/InitiativeCreateForm";
+import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
+import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
+import { BookmarkedItems } from "./BookmarkedItems/BookmarkedItems";
+import { ApplicationsAdmin } from "../Initiatives/ApplicationsAdmin/ApplicationsAdmin";
+// import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
   const location = useLocation();
@@ -72,6 +78,7 @@ export const Profile = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
   const sideMenuRef = useRef(null);
+  const [profileCommunityOpen, setProfileCommunityOpen] = useState(false);
   // Модернизирано управление на състоянията на подменютата
   const [subMenuStates, setSubMenuStates] = useState({
     ads: false,
@@ -79,7 +86,12 @@ export const Profile = () => {
     suggest: false,
     articles: false
   });
-
+  const [applicationsStats, setApplicationsStats] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0
+  });
   // Получаваме текущата секция от URL-а с обект за съпоставяне
   const getCurrentSection = () => {
     const path = location.pathname;
@@ -105,6 +117,11 @@ export const Profile = () => {
       "/profile/subscription-admin": t("admin.ads_subscription"),
       "/profile/articles": "Статии",
       "/profile/article-create": "Нова статия",
+      "/profile/initiative-create": "Нова  инициатива",
+      "/profile/initiative": "Инициативи",
+      "/profile/bookmarks": "Запазени",
+      "/profile/applications-admin": "Кандидатури",
+
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -123,7 +140,12 @@ export const Profile = () => {
     "/profile/admin-suggest-users",
     "/profile/suggest-resolved-users",
     "/profile/messages",
-    "/profile/subscription-admin"
+    "/profile/subscription-admin",
+    "/profile/initiative",
+    "/profile/initiative-create",
+    "/profile/article-create",
+    "/profile/articles",
+    "/profile/applications-admin"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -187,6 +209,9 @@ export const Profile = () => {
       [menuName]: !prev[menuName]
     }));
   };
+  const toggleProfileCommunity = () => {
+    setProfileCommunityOpen(!profileCommunityOpen);
+  };
 
   const getProfileImage = (gender) => {
     switch (gender) {
@@ -206,7 +231,8 @@ export const Profile = () => {
     setSubMenuStates({
       ads: false,
       users: false,
-      suggest: false
+      suggest: false,
+      initiatives: false
     });
     navigate('/profile/data');
   };
@@ -225,11 +251,12 @@ export const Profile = () => {
         <button onClick={toggleMenu} className="menu-toggle" data-testid="menu-toggle">
           <MenuIcon />
         </button>
-        <Link to="/" className="logo-link">
-          <img src="/images/homePage/logo-2.png" alt="Logo" className="logo-site-profile" />
-        </Link>
-        <h2>Pensa Club</h2>
-
+        <div className="header-left">
+          <Link to="/" className="logo-link">
+            <img src="/images/homePage/logo-2.png" alt="Logo" className="logo-site-profile" />
+          </Link>
+          <h2>Pensa Club</h2>
+        </div>
         <div className="search-container">
           <SearchIconProfile className="-profile" />
           <input type="text" placeholder={t('profile.search_placeholder')} className="search-input" />
@@ -277,7 +304,6 @@ export const Profile = () => {
                     </span>
                   </NavLink>
 
-                  {/* Добавен линк за статии */}
                   <NavLink to="/articles" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <ForumIcon className="menu-icon" />
@@ -285,20 +311,66 @@ export const Profile = () => {
                     </span>
                   </NavLink>
 
-                  <NavLink to="/craigslist?reset=true" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <ForumIcon className="menu-icon" />
-                      {t("header.craigslist")}
-                    </span>
-                  </NavLink>
+                  {/* Общност dropdown */}
+                  <div className="profile-dropdown-container">
+                    <button
+                      className={`dropdown-item profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
+                      onClick={toggleProfileCommunity}
+                    >
+                      <span className="link-content">
+                        <UsersIcon className="menu-icon" />
+                        {t("header.craigslist")}
+                        <svg
+                          className={`profile-dropdown-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
+                          width="12"
+                          height="6"
+                          viewBox="0 0 12 6"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                    </button>
 
-                  {/* Добавен линк за общност */}
-                  <NavLink to="/map" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <UsersIcon className="menu-icon" />
-                      {t("header.map")}
-                    </span>
-                  </NavLink>
+                    <div className={`profile-dropdown-content ${profileCommunityOpen ? 'active' : ''}`}>
+                      <NavLink
+                        to="/craigslist?reset=true"
+                        className="profile-dropdown-item"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <ForumIcon className="menu-icon" />
+                        {t("header.craigslist")}
+                      </NavLink>
+
+                      <NavLink
+                        to="/initiatives"
+                        className="profile-dropdown-item"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <DashboardIcon className="menu-icon" />
+                        {t("header.initiatives")}
+                      </NavLink>
+
+                      <NavLink
+                        to="/map"
+                        className="profile-dropdown-item"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <UsersIcon className="menu-icon" />
+                        {t("header.map")}
+                      </NavLink>
+                    </div>
+                  </div>
 
                   <NavLink to="/ad/create" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
@@ -400,6 +472,18 @@ export const Profile = () => {
                     <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    to="bookmarks"
+                    className={({ isActive }) => isActive ? 'active' : ''}
+                  >
+                    <span className="link-content">
+                      <ChatIcon className="icon" />
+                      {t("profile.bookmarks")}
+                    </span>
+                    {/* <ArrowIcon className="icon-arrow" /> */}
+                  </NavLink>
+                </li>
               </ul>
             </div>
 
@@ -447,6 +531,7 @@ export const Profile = () => {
                   </li>
 
                   {isAdmin && (
+                    <>
                     <li>
                       <NavLink
                         to="users-statistic"
@@ -477,8 +562,23 @@ export const Profile = () => {
                             {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
                           </NavLink>
                         </li>
+
                       </ul>
-                    </li>
+                  
+                    </li>                    
+    <li>
+                        <NavLink
+                          to="applications-admin"
+                          className={({ isActive }) => isActive ? 'active' : ''}
+                        >
+                          <span className="link-content">
+                            <UsersIcon className="icon" />
+                            Кандидатури {applicationsStats.total > 0 && <>- {applicationsStats.total}</>}
+                          </span>
+                          {/* <ArrowIcon className="icon-arrow" /> */}
+                        </NavLink>
+                      </li>
+                      </>
                   )}
 
                   <li>
@@ -546,6 +646,41 @@ export const Profile = () => {
                         </NavLink>
                       </li>
                       {/* Тук може да добавяте и други подсекции свързани с публикации */}
+                    </ul>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="initiatives"
+                      onClick={() => toggleSubMenu('initiatives')}
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <DashboardIcon className="icon" />
+                        Инициативи
+                      </span>
+                      <span className={`arrow-icon ${subMenuStates.initiatives ? 'rotated' : ''}`}>
+                        {subMenuStates.initiatives ? <DownArrowIcon /> : <ArrowIcon />}
+                      </span>
+                    </NavLink>
+                    <ul className={`sub-menu ${subMenuStates.initiatives ? 'expanded' : ''}`}>
+                      <li>
+                        <NavLink to="initiative-create" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Нова инициатива
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="initiative-drafts" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Чернови
+                        </NavLink>
+                      </li>
+                      {/* <li>
+                        <NavLink to="/initiative-preview" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Preview инициатива
+                        </NavLink>
+                      </li> */} {/* Na nejno mqsto може да добавяте и други подсекции свързани с инициативи */}
                     </ul>
                   </li>
                 </ul>
@@ -619,11 +754,18 @@ export const Profile = () => {
             <Route path="announced" element={<ProfileAnnounced />} profileData={profileData} />
             <Route path="interestOptions" element={<ProfileInterests />} />
             <Route path="messages" element={<ProfileMessages />} />
+            <Route path="bookmarks" element={<BookmarkedItems />} />
 
             {/* Management routes (Admin & Moderator) */}
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
+            <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
+            <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
+            {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}
+
+            {/* <Route path="initiative-preview" element={<ManagementGuard><InitiativePreviewPage /></ManagementGuard>}  /> */}
             <Route path="article-edit/:id" element={<ManagementGuard><EditArticle /></ManagementGuard>} />
             <Route path="pending-announcements" element={<ManagementGuard><PendingAnnouncements setAdsCount={setAdsCount} /></ManagementGuard>} />
             <Route path="approved-announcements" element={<ManagementGuard><ApprovedAnnouncements setApprovedCount={setApprovedCount} /></ManagementGuard>} />
@@ -634,6 +776,7 @@ export const Profile = () => {
 
             {/* Admin-only routes */}
             <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
+            <Route path="applications-admin" element={<ManagementGuard><ApplicationsAdmin setApplicationsStats={setApplicationsStats} /></ManagementGuard>} />
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
           </Routes>

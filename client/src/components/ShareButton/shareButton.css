@@ -1,0 +1,314 @@
+.share-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: 2px solid #e2e8f0;
+  border-radius: 25px;
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.share-btn:hover {
+ border-color: #1B8B8A;
+    color: #1B8B8A;
+    transform: translateY(-1px);  
+}
+
+.share-btn:active {
+  transform: translateY(1px);
+}
+
+.share-btn.copied {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #16a34a;
+}
+
+.share-icon {
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.share-btn:hover .share-icon {
+  transform: scale(1.1);
+}
+
+.share-text {
+  white-space: nowrap;
+}
+
+.share-dropdown-arrow {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+  margin-left: 0.25rem;
+}
+
+.share-dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.share-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: slideDown 0.2s ease-out;
+}
+
+.share-dropdown-content {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 0.5rem;
+  min-width: 220px;
+}
+
+.share-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.share-option:hover {
+  background: #f9fafb;
+  color: #111827;
+}
+
+.share-option:active {
+  background: #f3f4f6;
+}
+
+.share-option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.share-option:hover .share-option-icon {
+  transform: scale(1.1);
+}
+
+.share-option-text {
+  flex: 1;
+}
+
+/* Platform specific hover effects */
+.share-option[data-platform="clipboard"]:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.share-option[data-platform="viber"]:hover {
+  background: #f3f0ff;
+  color: #665CAC;
+}
+
+.share-option[data-platform="telegram"]:hover {
+  background: #eff6ff;
+  color: #37BBFE;
+}
+
+.share-option[data-platform="instagram"]:hover {
+  background: #fdf2f8;
+  color: #C21975;
+}
+
+.share-option[data-platform="email"]:hover {
+  background: #f0fdf4;
+  color: #4A90E2;
+}
+
+/* Toast Notification */
+.share-toast {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  animation: slideInRight 0.3s ease-out;
+}
+
+.share-toast.instagram {
+  max-width: 350px;
+}
+
+.share-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  color: #16a34a;
+  font-weight: 500;
+  max-width: 300px;
+}
+
+.share-toast-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.share-toast-text {
+  font-size: 0.875rem;
+}
+
+.share-toast.instagram .share-toast-text {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .share-dropdown {
+    left: 0;
+    right: 0;
+    transform: none;
+    margin: 0 1rem;
+  }
+  
+  .share-dropdown-content {
+    min-width: auto;
+  }
+  
+  .share-toast {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+  }
+  
+  .share-toast-content {
+    padding: 0.875rem 1.25rem;
+  }
+  
+  .share-btn {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    min-width: 100px;
+  }
+
+  .share-option {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Accessibility */
+.share-btn:focus,
+.share-option:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .share-dropdown-content {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .share-option {
+    color: #e5e7eb;
+  }
+  
+  .share-option:hover {
+    background: #374151;
+    color: #f9fafb;
+  }
+  
+  .share-toast-content {
+    background: #1f2937;
+    border-color: #374151;
+    color: #10b981;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .share-btn,
+  .share-icon,
+  .share-dropdown-arrow,
+  .share-dropdown,
+  .share-toast,
+  .share-option-icon {
+    transition: none;
+    animation: none;
+  }
+  
+  .share-dropdown {
+    animation: none;
+  }
+  
+  .share-toast {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .share-btn {
+    border-width: 2px;
+  }
+  
+  .share-dropdown-content {
+    border-width: 2px;
+  }
+}
