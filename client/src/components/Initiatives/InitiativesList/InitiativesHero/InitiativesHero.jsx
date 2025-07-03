@@ -13,53 +13,39 @@ export const InitiativesHero = () => {
     uniqueCities: 0
   });
 
-  useEffect(() => {
-    if (initiatives.length > 0) {
-      // Брой инициативи
+useEffect(() => {
+  const fetchAllStats = async () => {
+    if (initiatives.length === 0) return;
+    
+    try {
+      // Статистики от инициативи
       const totalInitiatives = initiatives.length;
       
       // Уникални градове
       const cities = new Set();
       initiatives.forEach(initiative => {
-        // if (initiative.city) {
-        //   cities.add(initiative.city);
-        // }
-        // Или ако е в location обект:
-        if (initiative.location?.address) {
+        if (initiative.location.address ) {
           cities.add(initiative.location.address);
         }
       });
       const uniqueCities = cities.size;
       
-      setStats(prev => ({
-        ...prev,
+      // Участници от API
+      const applications = await getAllApplications();
+      const totalParticipants = applications.length;
+      
+      setStats({
         totalInitiatives,
+        totalParticipants,
         uniqueCities
-      }));
+      });
+    } catch (error) {
+      console.error('Error fetching stats:', error);
     }
-  }, [initiatives]);
+  };
 
-useEffect(() => {
-    const fetchParticipants = async () => {
-      try {
-        const applications = await getAllApplications();
-
-        const totalParticipants = applications.length;
-        
-        // Или ако искаме уникални участници:
-        // const uniqueParticipants = new Set(applications.map(app => app.userId)).size;
-        
-        setStats(prev => ({
-          ...prev,
-          totalParticipants
-        }));
-      } catch (error) {
-        console.error('Error fetching participants:', error);
-      }
-    };
-
-    fetchParticipants();
-  }, []);
+  fetchAllStats();
+}, [initiatives]); // Само initiatives като dependency
 
   return (
     <div className="initiatives-hero">
