@@ -1973,7 +1973,7 @@
         "lastName": "Last Name",
         "email": "Email Address",
         "phone": "Phone",
-        "project": "Project",
+        "projectId": "Project",
         "appliedAt": "Applied At",
         "isAnonymous": "Anonymous Application"
       },
@@ -1982,7 +1982,7 @@
         "lastName": "Applicant's last name",
         "email": "Contact email address",
         "phone": "Phone number (if provided)",
-        "project": "Project ID they applied for",
+        "projectId": "Project ID they applied for",
         "appliedAt": "Date and time of application",
         "isAnonymous": "Whether the application is anonymous"
       }
