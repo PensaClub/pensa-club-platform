@@ -1,0 +1,241 @@
+/* DraftInitiatives/DraftCard/draftCard.css */
+.draft-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.draft-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(32, 178, 170, 0.15);
+}
+
+.draft-card-header {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.draft-image {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.draft-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.draft-card:hover .draft-image img {
+  transform: scale(1.05);
+}
+
+.draft-image-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(32, 178, 170, 0.9);
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.draft-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 48px;
+  color: #adb5bd;
+}
+
+.draft-status-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.draft-card-content {
+  padding: 20px;
+}
+
+.draft-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 12px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.draft-description {
+  color: #6c757d;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.draft-meta {
+  margin-bottom: 15px;
+}
+
+.draft-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #8e9ba7;
+  margin-bottom: 5px;
+}
+
+.draft-meta-item svg {
+  width: 12px;
+  height: 12px;
+  color: #20b2aa;
+}
+
+.draft-progress {
+  margin-bottom: 15px;
+}
+
+.progress-label {
+  font-size: 12px;
+  color: #6c757d;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #20b2aa, #17a2b8);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 11px;
+  color: #20b2aa;
+  font-weight: 600;
+}
+
+.draft-card-actions {
+  padding: 15px 20px;
+  border-top: 1px solid #f8f9fa;
+  background: #fafbfc;
+  display: flex;
+  gap: 10px;
+}
+
+.draft-action-btn {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #20b2aa, #17a2b8);
+  color: white;
+}
+
+.edit-btn:hover {
+  background: linear-gradient(135deg, #1a9d94, #138a9f);
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  color: white;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #ff5252, #e53e3e);
+  transform: translateY(-1px);
+}
+.publish-btn {
+  background-color: #1B8B8A;
+  color: white;
+}
+
+.publish-btn:hover {
+  background-color: #157574;
+}
+
+.floating-btn.publish {
+  background-color: #1B8B8A;
+}
+
+.floating-btn.publish:hover {
+  background-color: #157574;
+  transform: scale(1.1);
+}
+@media (max-width: 768px) {
+  .draft-card-header {
+    height: 140px;
+  }
+  
+  .draft-card-content {
+    padding: 15px;
+  }
+  
+  .draft-title {
+    font-size: 16px;
+  }
+  
+  .draft-card-actions {
+    padding: 12px 15px;
+    flex-direction: column;
+  }
+  
+  .draft-action-btn {
+    padding: 12px 15px;
+  }
+}

@@ -1,5 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import './localStorageStatus.css';
 import { useTranslation } from 'react-i18next';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export const LocalStorageStatus = ({ 
     hasLocalStorageDraft, 
@@ -7,14 +10,30 @@ export const LocalStorageStatus = ({
     onClearDraft,
     onLoadDraft,
     onIgnore,
+    onStartNew,
     autoLoaded = false
 }) => {
     const { t } = useTranslation();
+    const { clearLocalStorageDraft } = useInitiativeContext();
     
     if (!hasLocalStorageDraft) return null;
     
-    const handleClearDraft = () => {
-        onClearDraft();
+    const handleClearDraft = async () => {
+        try {
+            // Използваме новата функция която изтрива и от сървъра
+            await clearLocalStorageDraft();
+            
+            // Извикваме оригиналния callback ако има
+            if (onClearDraft) {
+                onClearDraft();
+            }
+        } catch (error) {
+            console.error('Error clearing draft:', error);
+            // Ако има грешка, все пак извикваме оригиналния callback
+            if (onClearDraft) {
+                onClearDraft();
+            }
+        }
     };
 
     const handleLoadDraft = () => {
@@ -68,13 +87,12 @@ export const LocalStorageStatus = ({
                         </button>
                         {autoLoaded && onIgnore && (
                             <button 
-                                type="button" 
-                                className="btn-ignore-draft"
-                                onClick={handleIgnore}
-                                title={t('localStorage.hideTooltip')}
-                            >
-                                ✕ {t('localStorage.hide')}
-                            </button>
+                        className="storage-action-btn new"
+                        onClick={onStartNew}
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                        {t('localStorage.newDraft')}
+                    </button>
                         )}
                     </div>
                 </div>

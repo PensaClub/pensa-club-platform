@@ -66,7 +66,7 @@ export const InitiativesMap = ({ initiatives, onHide }) => {
         <div className="initiatives-map-container">
             <div className="map-header">
                 <h2 className="map-title">
-                    {initiatives.length} {t('initiatives.map.projectsIn')} {initiatives.length > 1 ? t('initiatives.map.locations') : t('initiatives.map.location')}
+                    {initiatives.length} {initiatives.length > 1 ?t('initiatives.map.projectsIn'):t('initiatives.map.projectsOne')} {initiatives.length > 1 ? t('initiatives.map.locations') : t('initiatives.map.location')}
                 </h2>
                 <button className="hide-map-btn" onClick={onHide}>
                     ⊗ {t('initiatives.map.hideMap')}

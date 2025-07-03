@@ -54,6 +54,10 @@ import { AllArticles } from "../Articles/AllArticles/AllArticles";
 import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
 import { changeLanguage } from "i18next";
 import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCreateForm/InitiativeCreateForm";
+import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
+import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
+import { BookmarkedItems } from "./BookmarkedItems/BookmarkedItems";
+import { ApplicationsAdmin } from "../Initiatives/ApplicationsAdmin/ApplicationsAdmin";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -82,7 +86,12 @@ export const Profile = () => {
     suggest: false,
     articles: false
   });
-
+  const [applicationsStats, setApplicationsStats] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0
+  });
   // Получаваме текущата секция от URL-а с обект за съпоставяне
   const getCurrentSection = () => {
     const path = location.pathname;
@@ -109,6 +118,9 @@ export const Profile = () => {
       "/profile/articles": "Статии",
       "/profile/article-create": "Нова статия",
       "/profile/initiative-create": "Нова  инициатива",
+      "/profile/initiative": "Инициативи",
+      "/profile/bookmarks": "Запазени",
+      "/profile/applications-admin": "Кандидатури",
 
     };
 
@@ -128,7 +140,12 @@ export const Profile = () => {
     "/profile/admin-suggest-users",
     "/profile/suggest-resolved-users",
     "/profile/messages",
-    "/profile/subscription-admin"
+    "/profile/subscription-admin",
+    "/profile/initiative",
+    "/profile/initiative-create",
+    "/profile/article-create",
+    "/profile/articles",
+    "/profile/applications-admin"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -214,7 +231,8 @@ export const Profile = () => {
     setSubMenuStates({
       ads: false,
       users: false,
-      suggest: false
+      suggest: false,
+      initiatives: false
     });
     navigate('/profile/data');
   };
@@ -454,6 +472,18 @@ export const Profile = () => {
                     <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    to="bookmarks"
+                    className={({ isActive }) => isActive ? 'active' : ''}
+                  >
+                    <span className="link-content">
+                      <ChatIcon className="icon" />
+                      {t("profile.bookmarks")}
+                    </span>
+                    {/* <ArrowIcon className="icon-arrow" /> */}
+                  </NavLink>
+                </li>
               </ul>
             </div>
 
@@ -501,6 +531,7 @@ export const Profile = () => {
                   </li>
 
                   {isAdmin && (
+                    <>
                     <li>
                       <NavLink
                         to="users-statistic"
@@ -531,8 +562,23 @@ export const Profile = () => {
                             {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
                           </NavLink>
                         </li>
+
                       </ul>
-                    </li>
+                  
+                    </li>                    
+    <li>
+                        <NavLink
+                          to="applications-admin"
+                          className={({ isActive }) => isActive ? 'active' : ''}
+                        >
+                          <span className="link-content">
+                            <UsersIcon className="icon" />
+                            Кандидатури {applicationsStats.total > 0 && <>- {applicationsStats.total}</>}
+                          </span>
+                          {/* <ArrowIcon className="icon-arrow" /> */}
+                        </NavLink>
+                      </li>
+                      </>
                   )}
 
                   <li>
@@ -623,13 +669,19 @@ export const Profile = () => {
                           Нова инициатива
                         </NavLink>
                       </li>
+                      <li>
+                        <NavLink to="initiative-drafts" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Чернови
+                        </NavLink>
+                      </li>
                       {/* <li>
                         <NavLink to="/initiative-preview" className={({ isActive }) => isActive ? 'active' : ''}>
                           <CircleIcon className="icon" />
                           Preview инициатива
                         </NavLink>
                       </li> */} {/* Na nejno mqsto може да добавяте и други подсекции свързани с инициативи */}
-                    </ul> 
+                    </ul>
                   </li>
                 </ul>
               </div>
@@ -702,12 +754,17 @@ export const Profile = () => {
             <Route path="announced" element={<ProfileAnnounced />} profileData={profileData} />
             <Route path="interestOptions" element={<ProfileInterests />} />
             <Route path="messages" element={<ProfileMessages />} />
+            <Route path="bookmarks" element={<BookmarkedItems />} />
 
             {/* Management routes (Admin & Moderator) */}
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
+            <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
+            {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}
+
             {/* <Route path="initiative-preview" element={<ManagementGuard><InitiativePreviewPage /></ManagementGuard>}  /> */}
             <Route path="article-edit/:id" element={<ManagementGuard><EditArticle /></ManagementGuard>} />
             <Route path="pending-announcements" element={<ManagementGuard><PendingAnnouncements setAdsCount={setAdsCount} /></ManagementGuard>} />
@@ -719,6 +776,7 @@ export const Profile = () => {
 
             {/* Admin-only routes */}
             <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
+            <Route path="applications-admin" element={<ManagementGuard><ApplicationsAdmin setApplicationsStats={setApplicationsStats} /></ManagementGuard>} />
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
           </Routes>

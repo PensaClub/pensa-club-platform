@@ -13,7 +13,7 @@ export const Header = ({ additionalClasses }) => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthentication, isFinish, profileData } = useContext(UserContext);
-  const { bookmarkedInitiatives, hasBookmarks } = useInitiativeContext();
+  const { bookmarkedInitiatives, hasBookmarks, hasBookmarksProjects, bookMarkedProjects  } = useInitiativeContext();
   const [isModalOpen, setModalOpen] = useState(false);
   const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
   const profileRef = useRef(null);
@@ -178,11 +178,11 @@ export const Header = ({ additionalClasses }) => {
             )}
           </button>
           {/* Bookmark иконка - само за desktop */}
-          {hasBookmarks && isAuthentication && (
+          {(hasBookmarks || hasBookmarksProjects) && isAuthentication && (
             <div className="bookmark-header-section desktop-bookmark">
-              <Link to="/bookmarks" className="bookmark-header-button">
+              <Link to="profile/bookmarks" className="bookmark-header-button">
                 <BookmarkIconHeader />
-                <span className="bookmark-count">{bookmarkedInitiatives.length}</span>
+                <span className="bookmark-count">{bookmarkedInitiatives.length + bookMarkedProjects.length}</span>
               </Link>
             </div>
           )}
@@ -220,12 +220,12 @@ export const Header = ({ additionalClasses }) => {
               <div className="dropdown-menu-links">
                 {/* В mobile-menu-links, преди mobile-menu-divider */}
 
-                {hasBookmarks && isAuthentication && (
-                  <Link to="/bookmarks" className="mobile-nav-item" onClick={toggleMobileMenu}>
+                {(hasBookmarks || hasBookmarksProjects) && isAuthentication && (
+                  <Link to="profile/bookmarks" className="mobile-nav-item" onClick={toggleMobileMenu}>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M19 21L12 16L5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21Z" fill="currentColor" />
                     </svg>
-                    За четене ({bookmarkedInitiatives.length})
+                    За четене ({bookmarkedInitiatives.length + bookMarkedProjects.length})
                   </Link>
                 )}
                 {!isAuthentication ? (

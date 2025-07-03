@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +10,10 @@ import { BookmarkIcon } from '../../Icons/InitiativeIcons';
 import { StoriesPublications } from '../StoriesPublications/StoriesPublications';
 import { Comments } from '../Comments/Comments';
 import { ApplicationForm } from '../ApplicationForm/ApplicationForm';
+// Добави import за утилитите
+import { renderSlateContent } from '../../../../utils/slateRenderer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
 
 export const ProjectView = () => {
     const { slug } = useParams();
@@ -20,26 +25,33 @@ export const ProjectView = () => {
         getProjectComments,
         getProjectApplications,
         applyToProject,
-        isBookmarked,
-        toggleBookmark,
-        recentApplications
+        isBookmarkedProject,
+        toggleBookmarkProjects,
+        recentApplications,
+        hasUserAppliedToProject
     } = useInitiativeContext();
 
     const { isAuthentication, profileData } = useAuthContext();
     const [activeSection, setActiveSection] = useState('overview');
     const [commentsCount, setCommentsCount] = useState(0);
     const applicationsLoadedRef = useRef(false);
+    const isDeadlinePassed = useCallback(() => {
+        if (!currentProject?.applicationDeadline) return false;
 
+        const deadline = new Date(currentProject.applicationDeadline);
+        const now = new Date();
+        return now > deadline;
+    }, [currentProject?.applicationDeadline]);
     // Проверяваме дали потребителят вече е кандидатствал
-    const hasUserApplied = recentApplications?.some(app => app.email === profileData?.email);
+    const hasUserApplied = hasUserAppliedToProject(currentProject?.id);
+    const deadlinePassed = isDeadlinePassed();
 
     useEffect(() => {
         if (slug) {
             getProjectById(slug);
         }
-    }, [slug, getProjectById]);
+    }, [slug]);
 
-    // Зареждаме броя коментари за навигацията
     useEffect(() => {
         if (currentProject?.id && commentsCount === 0) {
             loadCommentsCount();
@@ -54,7 +66,6 @@ export const ProjectView = () => {
         }
     }, [currentProject?.id]);
 
-    // Reset when project changes
     useEffect(() => {
         applicationsLoadedRef.current = false;
     }, [currentProject?.id]);
@@ -103,12 +114,12 @@ export const ProjectView = () => {
             navLinks.removeEventListener('mouseup', handleMouseUp);
             navLinks.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [currentProject?.id]);
+    }, []);
 
     const loadCommentsCount = async () => {
         if (currentProject?.id) {
             try {
-                const projectComments = await getProjectComments(currentProject.id);
+                const projectComments = await getProjectComments(currentProject.id || currentProject.slug);;
                 setCommentsCount(projectComments.length);
             } catch (error) {
                 console.error('Error loading comments count:', error);
@@ -124,7 +135,11 @@ export const ProjectView = () => {
     const handleApplicationSubmit = async (applicationData) => {
         try {
             const result = await applyToProject(currentProject.id, applicationData);
-            console.log('Application submitted successfully:', result);
+
+            if (result.success) {
+
+                // console.log('Application submitted successfully:', result);
+            }
         } catch (error) {
             console.error('Application failed:', error);
         }
@@ -132,8 +147,7 @@ export const ProjectView = () => {
 
     const scrollToApplicationForm = () => {
         if (!isAuthentication) {
-            // Ако не е логнат, можем да го пренасочим към login или да покажем съобщение
-            alert(t('projectView.messages.loginRequired')); // Можеш да добавиш този превод
+            alert(t('projectView.messages.loginRequired'));
             return;
         }
 
@@ -152,23 +166,68 @@ export const ProjectView = () => {
         }
     };
 
+    // ФУНКЦИЯ ЗА РЕНДЕРИРАНЕ НА СЪДЪРЖАНИЕ
+    const renderContent = (content) => {
+        if (!content) {
+            return <p>Няма съдържание</p>;
+        }
+
+        // Ако е string (HTML или обикновен текст)
+        if (typeof content === 'string') {
+            // Ако изглежда като HTML
+            if (content.includes('<') && content.includes('>')) {
+                return <div dangerouslySetInnerHTML={{ __html: content }} />;
+            }
+            // Ако е обикновен текст
+            return <p>{content}</p>;
+        }
+
+        // Ако е Slate.js структура (array)
+        if (Array.isArray(content)) {
+            return renderSlateContent(content);
+        }
+
+        // Ако е обект, опитай се да го обработиш като Slate.js
+        if (typeof content === 'object') {
+            try {
+                return renderSlateContent(content);
+            } catch (error) {
+                console.warn('Failed to render content as Slate:', error);
+                return <p>{JSON.stringify(content)}</p>;
+            }
+        }
+
+        // Fallback
+        return <p>{String(content)}</p>;
+    };
+
     if (isLoading || !currentProject) {
         return <div className="project-view-loading">{t('projectView.loading')}</div>;
     }
 
-    const canApply = currentProject.applicationStatus === 'open' &&
-        currentProject.currentParticipants < currentProject.maxParticipants;
+    // ЗАЩИТЕНИ ПРОВЕРКИ
+    const canApply = currentProject?.applicationStatus === 'open' &&
+        (currentProject.currentParticipants || 0) < (currentProject.maxParticipants || Infinity) &&
+        !deadlinePassed
 
     return (
         <div className="project-view-container">
             {/* Hero Section */}
             <section className="project-view-hero">
                 <div className="project-view-hero-background">
-                    <img
-                        src={currentProject.mainImage.src}
-                        alt={currentProject.mainImage.alt}
-                        className="project-view-hero-image"
-                    />
+                    {/* ПОПРАВЕНА ПРОВЕРКА ЗА MAIN IMAGE */}
+                    {currentProject.mainImage?.src ? (
+                        <img
+                            src={currentProject.mainImage.src}
+                            alt={currentProject.mainImage.alt || currentProject.title}
+                            className="project-view-hero-image"
+                        />
+                    ) : (
+                        <div className="project-view-hero-placeholder">
+                            <FontAwesomeIcon icon={faImage} size="4x" />
+                            <p>Няма главно изображение</p>
+                        </div>
+                    )}
                     <div className="project-view-hero-overlay"></div>
                 </div>
 
@@ -180,85 +239,145 @@ export const ProjectView = () => {
                                 {t('projectView.breadcrumb.initiatives')}
                             </Link>
                             <span className="project-view-breadcrumb-separator">›</span>
-                            <Link
-                                to={`/initiatives/${currentProject.initiativeSlug}`}
-                                className="project-view-breadcrumb-link"
-                            >
-                                {t('projectView.breadcrumb.backToInitiative')}
-                            </Link>
-                            <span className="project-view-breadcrumb-separator">›</span>
+                            {/* ЗАЩИТЕНА ПРОВЕРКА ЗА INITIATIVE SLUG */}
+                            {currentProject.initiativeSlug && (
+                                <>
+                                    <Link
+                                        to={`/initiatives/${currentProject.initiativeSlug}`}
+                                        className="project-view-breadcrumb-link"
+                                    >
+                                        {t('projectView.breadcrumb.backToInitiative')}
+                                    </Link>
+                                    <span className="project-view-breadcrumb-separator">›</span>
+                                </>
+                            )}
                             <span className="project-view-breadcrumb-current">{currentProject.title}</span>
                         </div>
 
                         <div className="project-view-hero-main">
                             <div className="project-view-hero-text">
                                 <div className="project-view-badges">
-                                    <span className={`project-view-status ${currentProject.status}`}>
-                                        {t(`projectView.status.${currentProject.status}`)}
-                                    </span>
-                                    <span className={`project-view-priority ${currentProject.priority}`}>
-                                        {t(`projectView.priority.${currentProject.priority}`)} {t('projectView.priorityLabel')}
-                                    </span>
+                                    {currentProject.status && (
+                                        <span className={`project-view-status ${currentProject.status}`}>
+                                            {t(`projectView.status.${currentProject.status}`)}
+                                        </span>
+                                    )}
+                                    {currentProject.priority && (
+                                        <span className={`project-view-priority ${currentProject.priority}`}>
+                                            {t(`projectView.priority.${currentProject.priority}`)} {t('projectView.priorityLabel')}
+                                        </span>
+                                    )}
                                 </div>
 
                                 <h1 className="project-view-title">{currentProject.title}</h1>
-                                <p className="project-view-description">{currentProject.fullDescription}</p>
+
+                                {/* ЗАЩИТЕНА ПРОВЕРКА ЗА ОПИСАНИЕ */}
+                                {(currentProject.fullDescription || currentProject.shortDescription) && (
+                                    <div className="project-view-description">
+                                        {renderContent(currentProject.fullDescription || currentProject.shortDescription)}
+                                    </div>
+                                )}
 
                                 <div className="project-view-meta">
-                                    <div className="project-view-meta-item">
-                                        <span className="project-view-meta-label">{t('projectView.meta.category')}:</span>
-                                        <span className="project-view-meta-value">{currentProject.category}</span>
-                                    </div>
-                                    <div className="project-view-meta-item">
-                                        <span className="project-view-meta-label">{t('projectView.meta.location')}:</span>
-                                        <span className="project-view-meta-value">{currentProject.location.address}</span>
-                                    </div>
-                                    <div className="project-view-meta-item">
-                                        <span className="project-view-meta-label">{t('projectView.meta.participants')}:</span>
-                                        <span className="project-view-meta-value">
-                                            {currentProject.currentParticipants} / {currentProject.maxParticipants}
-                                        </span>
-                                    </div>
+                                    {currentProject.category && (
+                                        <div className="project-view-meta-item">
+                                            <span className="project-view-meta-label">{t('projectView.meta.category')}:</span>
+                                            <span className="project-view-meta-value">{currentProject.category}</span>
+                                        </div>
+                                    )}
+
+                                    {/* ЗАЩИТЕНА ПРОВЕРКА ЗА LOCATION */}
+                                    {currentProject.location && (
+                                        <div className="project-view-meta-item">
+                                            <span className="project-view-meta-label">{t('projectView.meta.location')}:</span>
+                                            <span className="project-view-meta-value">
+                                                {Array.isArray(currentProject.location)
+                                                    ? currentProject.location[0]?.address
+                                                    : currentProject.location.address}
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {/* ЗАЩИТЕНА ПРОВЕРКА ЗА PARTICIPANTS */}
+                                    {(currentProject.currentParticipants !== undefined || currentProject.maxParticipants !== undefined) && (
+                                        <div className="project-view-meta-item">
+                                            <span className="project-view-meta-label">{t('projectView.meta.participants')}:</span>
+                                            <span className="project-view-meta-value">
+                                                {currentProject.currentParticipants || 0} / {currentProject.maxParticipants || '∞'}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="project-view-actions">
-                                    {isAuthentication && canApply && (
+                                    {isAuthentication && (
                                         <button
-                                            className="project-view-btn-apply"
+                                            className={`project-view-btn-apply ${hasUserApplied ? 'applied' : ''} ${deadlinePassed ? 'deadline-passed' : ''}`}
                                             onClick={scrollToApplicationForm}
+                                            disabled={hasUserApplied || deadlinePassed || !canApply}
                                         >
-                                            {hasUserApplied ? t('projectView.buttons.alreadyApplied') : t('projectView.buttons.apply')}
+                                            {hasUserApplied
+                                                ? t('projectView.buttons.alreadyApplied')
+                                                : deadlinePassed
+                                                    ? t('projectView.buttons.deadlinePassed')
+                                                    : t('projectView.buttons.apply')
+                                            }
                                         </button>
                                     )}
 
-                                    <button
-                                        className={`project-view-btn-bookmark ${isBookmarked(currentProject.id) ? 'bookmarked' : ''}`}
-                                        onClick={() => toggleBookmark(currentProject.id)}
-                                    >
-                                        <BookmarkIcon />
-                                        {t('projectView.buttons.bookmark')}
-                                    </button>
+                                    {isBookmarkedProject && (
+                                        <button
+                                            className={`project-view-btn-bookmark ${isBookmarkedProject(currentProject.id) ? 'bookmarked' : ''}`}
+                                            onClick={() => toggleBookmarkProjects(currentProject.id)}
+                                        >
+                                            <BookmarkIcon />
+                                            {t('projectView.buttons.bookmark')}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
 
-                            <div className="project-view-stats-card">
-                                <div className="project-view-stats-item">
-                                    <div className="project-view-stats-number">
-                                        {Math.round((currentProject.budget.funded / currentProject.budget.total) * 100)}%
-                                    </div>
-                                    <div className="project-view-stats-label">{t('projectView.stats.funded')}</div>
+                            {/* ЗАЩИТЕНА ПРОВЕРКА ЗА STATS */}
+                            {(currentProject.budget || currentProject.timeline || currentProject.team) && (
+                                <div className="project-view-stats-card">
+                                    {currentProject.budget?.funded && currentProject.budget?.total && (
+                                        <div className="project-view-stats-item">
+                                            <div className="project-view-stats-number">
+                                                {Math.round((currentProject.budget.funded / currentProject.budget.total) * 100)}%
+                                            </div>
+                                            <div className="project-view-stats-label">{t('projectView.stats.funded')}</div>
+                                        </div>
+                                    )}
+
+                                    {currentProject.timeline?.estimatedDuration && (
+                                        <div className="project-view-stats-item">
+                                            <div className="project-view-stats-number">{currentProject.timeline.estimatedDuration}</div>
+                                            <div className="project-view-stats-label">{t('projectView.stats.duration')}</div>
+                                        </div>
+                                    )}
+
+                                    {currentProject.team?.length && (
+                                        <div className="project-view-stats-item">
+                                            <div className="project-view-stats-number">{currentProject.team.length}</div>
+                                            <div className="project-view-stats-label">{t('projectView.stats.team')}</div>
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="project-view-stats-item">
-                                    <div className="project-view-stats-number">{currentProject.timeline.estimatedDuration}</div>
-                                    <div className="project-view-stats-label">{t('projectView.stats.duration')}</div>
-                                </div>
-                                <div className="project-view-stats-item">
-                                    <div className="project-view-stats-number">{currentProject.team.length}</div>
-                                    <div className="project-view-stats-label">{t('projectView.stats.team')}</div>
-                                </div>
-                            </div>
+                            )}
                         </div>
+
                     </div>
+                    {/* Показваме deadline информация ако има */}
+                    {currentProject?.applicationDeadline && !hasUserApplied && (
+                        <div className="project-view-deadline-info">
+                            <span className={`deadline-status ${deadlinePassed ? 'passed' : 'active'}`}>
+                                {deadlinePassed
+                                    ? `Крайният срок изтече: ${new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}`
+                                    : `Краен срок: ${new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}`
+                                }
+                            </span>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -285,12 +404,14 @@ export const ProjectView = () => {
                             </button>
                         )}
 
-                        <button
-                            className={`project-view-nav-link ${activeSection === 'team' ? 'active' : ''}`}
-                            onClick={() => scrollToSection('team')}
-                        >
-                            {t('projectView.navigation.team')}
-                        </button>
+                        {currentProject.team?.length > 0 && (
+                            <button
+                                className={`project-view-nav-link ${activeSection === 'team' ? 'active' : ''}`}
+                                onClick={() => scrollToSection('team')}
+                            >
+                                {t('projectView.navigation.team')}
+                            </button>
+                        )}
 
                         {isAuthentication && (
                             <button
@@ -324,16 +445,20 @@ export const ProjectView = () => {
                             <div className="project-view-section-content">
                                 <div className="project-view-section-text">
                                     <h2 className="project-view-section-title">{section.title}</h2>
-                                    <div className="project-view-section-description">
-                                        {section.content}
+                                    <div className="project-view-section-description slate-content" data-editor="slate">
+                                        {renderContent(section.content)}
                                     </div>
                                 </div>
-                                <div className="project-view-section-image">
-                                    <img
-                                        src={section.image.src}
-                                        alt={section.image.alt}
-                                    />
-                                </div>
+
+                                {/* ЗАЩИТЕНА ПРОВЕРКА ЗА SECTION IMAGE */}
+                                {(section.image?.src || (section.images && section.images.length > 0)) && (
+                                    <div className="project-view-section-image">
+                                        <img
+                                            src={section.image?.src || section.images[0]?.src}
+                                            alt={section.image?.alt || section.images[0]?.alt || section.title}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </section>
                     ))}
@@ -351,33 +476,43 @@ export const ProjectView = () => {
                     )}
 
                     {/* Team Section */}
-                    <section id="team" className="project-view-section project-view-team-section">
-                        <h2 className="project-view-section-title">{t('projectView.sections.team')}</h2>
-                        <div className="project-view-team-grid">
-                            {currentProject.team.map((member, index) => (
-                                <div key={index} className="project-view-team-member">
-                                    <div className="project-view-member-image">
-                                        <img src={member.image} alt={member.name} />
-                                    </div>
-                                    <div className="project-view-member-info">
-                                        <h3 className="project-view-member-name">{member.name}</h3>
-                                        <p className="project-view-member-position">{member.position}</p>
-                                        <div className="project-view-member-contact">
-                                            <a href={`mailto:${member.email}`} className="project-view-contact-link">
-                                                {member.email}
-                                            </a>
-                                            <a href={`tel:${member.phone}`} className="project-view-contact-link">
-                                                {member.phone}
-                                            </a>
+                    {currentProject.team?.length > 0 && (
+                        <section id="team" className="project-view-section project-view-team-section">
+                            <h2 className="project-view-section-title">{t('projectView.sections.team')}</h2>
+                            <div className="project-view-team-grid">
+                                {currentProject.team.map((member, index) => (
+                                    <div key={index} className="project-view-team-member">
+                                        {member.image && (
+                                            <div className="project-view-member-image">
+                                                <img src={member.image} alt={member.name} />
+                                            </div>
+                                        )}
+                                        <div className="project-view-member-info">
+                                            <h3 className="project-view-member-name">{member.name}</h3>
+                                            {member.position && (
+                                                <p className="project-view-member-position">{member.position}</p>
+                                            )}
+                                            <div className="project-view-member-contact">
+                                                {member.email && (
+                                                    <a href={`mailto:${member.email}`} className="project-view-contact-link">
+                                                        {member.email}
+                                                    </a>
+                                                )}
+                                                {member.phone && (
+                                                    <a href={`tel:${member.phone}`} className="project-view-contact-link">
+                                                        {member.phone}
+                                                    </a>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* Application Form Section - Винаги видима */}
-                    {isAuthentication && (
+                    {isAuthentication && !deadlinePassed && (
                         <section id="application-form" className="project-view-section">
                             <ApplicationForm
                                 project={currentProject}
@@ -385,11 +520,19 @@ export const ProjectView = () => {
                             />
                         </section>
                     )}
-
+                    {/* Или показваме съобщение ако deadline е изминал */}
+                    {isAuthentication && deadlinePassed && (
+                        <section id="application-form" className="project-view-section">
+                            <div className="application-deadline-message">
+                                <h3>Кандидатстването е затворено</h3>
+                                <p>Крайният срок за кандидатстване за този проект е изминал на {new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}.</p>
+                            </div>
+                        </section>
+                    )}
                     {/* Comments Section */}
                     <section id="comments" className="project-view-section project-view-comments-section">
                         <Comments
-                            entityId={currentProject.id}
+                            entityId={currentProject.id || currentProject.slug}
                             entityType="project"
                             commentsEnabled={currentProject.commentsEnabled}
                             onCommentsChange={handleCommentsChange}

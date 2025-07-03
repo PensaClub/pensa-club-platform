@@ -7,24 +7,37 @@ import { getSlateTextLength } from "./slateUtils.js";
  * @param {Function} t - Translation function
  * @returns {Object} - Validation errors object
  */
+const isHtmlString = (value) => {
+    return typeof value === 'string' && (value.includes('<') || value.includes('&'));
+};
+
 export const validateInitiativeForm = (values, t) => {
     const newErrors = {};
-console.log('Validating initiative form with values:', newErrors);
-    // 🎯 BASIC INFO валидации
-    // Title
+
+    // 🎯 ЗАДЪЛЖИТЕЛНИ ПОЛЕТА - само 3
+
+    // Title - ЗАДЪЛЖИТЕЛНО
     if (!values.title?.trim()) {
         newErrors.title = t('validation.title-required');
     } else if (values.title.trim().length < 3) {
         newErrors.title = t('validation.title-min-length');
     }
 
-    // Short Description  
+    // Short Description - ЗАДЪЛЖИТЕЛНО
     if (!values.shortDescription?.trim()) {
         newErrors.shortDescription = t('validation.description-required');
     } else if (values.shortDescription.trim().length < 10) {
         newErrors.shortDescription = t('validation.description-min-length');
     }
-    // Slug (URL адрес)
+
+    // Main Image - ЗАДЪЛЖИТЕЛНО
+    if (!values.mainImage?.src?.trim()) {
+        newErrors.mainImage = t('validation.image-required');
+    }
+
+    // 🎯 ОПЦИОНАЛНИ ПОЛЕТА - валидация само ако са попълнени
+
+    // Slug (URL адрес) - ЗАДЪЛЖИТЕЛНО
     if (!values.slug?.trim()) {
         newErrors.slug = t('validation.slug-required');
     } else {
@@ -51,63 +64,59 @@ console.log('Validating initiative form with values:', newErrors);
             newErrors.slug = 'URL адресът не може да съдържа два тирета подред';
         }
     }
-    // Location
-    const hasAddress = values.location?.address?.trim();
-    const hasCoordinates = values.location?.coordinates?.lat && values.location?.coordinates?.lng;
-
-    if (!hasAddress && !hasCoordinates) {
-        newErrors.location = t('validation.location-required');
-    }
-
-    // Main Image
-    if (!values.mainImage?.src?.trim()) {
-        newErrors.mainImage = t('validation.image-required');
-    }
-
-    // 🎯 SECTIONS валидации
-    if (!values.sections || values.sections.length === 0) {
-        newErrors.sections = t('validation.sections-required');
-    } else {
+    // 🎯 SECTIONS валидации - вече не са задължителни
+    if (values.sections && values.sections.length > 0) {
         values.sections.forEach((section, index) => {
             if (!section.title?.trim()) {
                 newErrors[`sections[${index}].title`] = t('validation.section-title-required');
             }
 
-            const hasContent = section.content &&
-                section.content.length > 0 &&
-                section.content.some(node => {
-                    if (node.children) {
-                        return node.children.some(child => child.text?.trim());
-                    }
-                    return node.text?.trim();
-                });
+            // Проверка за HTML или Slate формат
+            if (isHtmlString(section.content)) {
+                // Ако е HTML стринг
+                const div = document.createElement('div');
+                div.innerHTML = section.content;
+                const textContent = div.textContent || div.innerText || '';
 
-            if (!hasContent) {
-                newErrors[`sections[${index}].content`] = t('validation.section-content-required');
-            } else {
-                const textContent = section.content
-                    .map(node => {
-                        if (node.children) {
-                            return node.children.map(child => child.text || '').join(' ');
-                        }
-                        return node.text || '';
-                    })
-                    .join(' ')
-                    .trim();
-
-                if (textContent.length < 10) {
+                if (!textContent.trim()) {
+                    newErrors[`sections[${index}].content`] = t('validation.section-content-required');
+                } else if (textContent.trim().length < 10) {
                     newErrors[`sections[${index}].content`] = t('validation.section-content-min-length');
                 }
+            } else if (Array.isArray(section.content)) {
+                // Ако е Slate формат
+                const hasContent = section.content.length > 0 &&
+                    section.content.some(node => {
+                        if (node.children) {
+                            return node.children.some(child => child.text?.trim());
+                        }
+                        return node.text?.trim();
+                    });
+
+                if (!hasContent) {
+                    newErrors[`sections[${index}].content`] = t('validation.section-content-required');
+                } else {
+                    const textContent = section.content
+                        .map(node => {
+                            if (node.children) {
+                                return node.children.map(child => child.text || '').join(' ');
+                            }
+                            return node.text || '';
+                        })
+                        .join(' ')
+                        .trim();
+
+                    if (textContent.length < 10) {
+                        newErrors[`sections[${index}].content`] = t('validation.section-content-min-length');
+                    }
+                }
+            } else if (!section.content) {
+                newErrors[`sections[${index}].content`] = t('validation.section-content-required');
             }
         });
     }
 
-    // 🎯 TIMELINE валидации
-    // Start Date
-    if (!values.startDate?.trim()) {
-        newErrors.startDate = t('validation.start-date-required');
-    }
-
+    // 🎯 TIMELINE валидации - опционални
     // Timeline validation
     if (values.startDate && values.endDate) {
         if (new Date(values.startDate) >= new Date(values.endDate)) {
@@ -144,12 +153,6 @@ console.log('Validating initiative form with values:', newErrors);
                 }
             }
         });
-    }
-
-    // 🎯 TARGET SCOPE валидации
-    // Target Age
-    if (!values.targetAge || values.targetAge.length === 0) {
-        newErrors.targetAge = t('validation.target-age-required');
     }
 
     // Custom Audience
@@ -256,9 +259,9 @@ console.log('Validating initiative form with values:', newErrors);
                 newErrors[`partners[${index}].website`] = t('validation.invalid-url');
             }
             // 🆕 Description - максимум 10000 символа
-        if (partner.description?.trim() && partner.description.trim().length > 10000) {
-            newErrors[`partners[${index}].description`] = t('validation.partner-description-max-length');
-        }
+            if (partner.description?.trim() && partner.description.trim().length > 10000) {
+                newErrors[`partners[${index}].description`] = t('validation.partner-description-max-length');
+            }
         });
     }
 
@@ -284,10 +287,10 @@ console.log('Validating initiative form with values:', newErrors);
             if (sponsor.website?.trim() && !urlRegex.test(sponsor.website)) {
                 newErrors[`sponsors[${index}].website`] = t('validation.invalid-url');
             }
-                   // 🆕 Description - максимум 1000 символа
-        if (sponsor.description?.trim() && sponsor.description.trim().length > 10000) {
-            newErrors[`sponsor[${index}].description`] = t('validation.sponsor-description-max-length');
-        }
+            // 🆕 Description - максимум 1000 символа
+            if (sponsor.description?.trim() && sponsor.description.trim().length > 10000) {
+                newErrors[`sponsor[${index}].description`] = t('validation.sponsor-description-max-length');
+            }
         });
     }
 
@@ -419,28 +422,30 @@ console.log('Validating initiative form with values:', newErrors);
             }
         });
     }
+
+    // Detailed Description - максимум символи
     if (values.detailedDescription && !isSlateEmpty(values.detailedDescription)) {
-    const textLength = getSlateTextLength(values.detailedDescription);
-    if (textLength > 50000) {
-        newErrors.detailedDescription = t('initiatives.create.detailed-description-limit');
+        const textLength = getSlateTextLength(values.detailedDescription);
+        if (textLength > 50000) {
+            newErrors.detailedDescription = t('initiatives.create.detailed-description-limit');
+        }
     }
-}
 
-// Expected Results - максимум 6000 символа  
-if (values.expectedResults && !isSlateEmpty(values.expectedResults))  {
-    const textLength = getSlateTextLength(values.expectedResults);
-    if (textLength > 10000) {
-        newErrors.expectedResults = t('initiatives.create.expected-results-limit');
+    // Expected Results - максимум символа  
+    if (values.expectedResults && !isSlateEmpty(values.expectedResults)) {
+        const textLength = getSlateTextLength(values.expectedResults);
+        if (textLength > 10000) {
+            newErrors.expectedResults = t('initiatives.create.expected-results-limit');
+        }
     }
-}
 
-// Progress Report - максимум 6000 символа 
-if (values.progressReport && !isSlateEmpty(values.progressReport)) {
-    const textLength = getSlateTextLength(values.progressReport);
-    if (textLength > 10000) {
-        newErrors.progressReport = t('initiatives.create.progress-report-limit');
+    // Progress Report - максимум символа 
+    if (values.progressReport && !isSlateEmpty(values.progressReport)) {
+        const textLength = getSlateTextLength(values.progressReport);
+        if (textLength > 10000) {
+            newErrors.progressReport = t('initiatives.create.progress-report-limit');
+        }
     }
-}
 
     return newErrors;
 };

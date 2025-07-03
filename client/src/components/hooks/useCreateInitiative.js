@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 // hooks/useCreateInitiative.js
-import { useState, useCallback, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // 🔥 Firebase imports
 import {
@@ -40,17 +40,18 @@ import { faFileAlt, faFileArchive, faFileExcel, faFileImage, faFilePowerpoint, f
 import { useTranslation } from 'react-i18next';
 import { useRealTimeValidation } from './useRealTimeValidation';
 import { validateInitiativeForm } from '../Initiatives/CreateIniciative/Utils/initiativeValidation';
+import { htmlToSlate, isHtmlContent } from '../Initiatives/CreateIniciative/Utils/htmlToSlate';
 
 const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { createInitiative, saveDraftInitiative } = useInitiativeContext();
+    const { createInitiative, saveDraftInitiative, updateDraftInitiative, getDraftById, toggleDraftStatus, updateInitiative, getInitiativeById } = useInitiativeContext();
     const { userEmail } = useAuthContext();
     const STORAGE_KEY = 'initiative_draft';
     const STORAGE_TIMESTAMP_KEY = 'initiative_draft_timestamp';
     const [hasLocalStorageDraft, setHasLocalStorageDraft] = useState(false);
     const [localStorageTimestamp, setLocalStorageTimestamp] = useState(null);
-    // DEFAULT VALUES - със правилните редактори и ВСИЧКИ структури
+    const location = useLocation();
     const defaultValues = useMemo(() => ({
         // СЪЩЕСТВУВАЩИ ПОЛЕТА
         title: '',
@@ -133,7 +134,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const [errors, setErrors] = useState({});
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
-
+    const [draftId, setDraftId] = useState(null);
+    const [editId, setEditId] = useState(null);
     // 📁 MEDIA FILES STATE
     const [mediaFiles, setMediaFiles] = useState({
         logo: null,
@@ -147,6 +149,103 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const autoSaveRef = useRef(null);
     const fileInputRefs = useRef({});
     useRealTimeValidation(values, setErrors);
+
+    useEffect(() => {
+        const loadDraftFromUrl = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const draftIdFromUrl = urlParams.get('draftId');
+
+            const editIdFromUrl = urlParams.get('editId');
+            const mode = urlParams.get('mode');
+
+            if (draftIdFromUrl && !initialValues) {
+                try {
+                    // setIsLoading(true);
+                    const draftData = await getDraftById(draftIdFromUrl);
+
+                    if (draftData) {
+
+                        const processedData = { ...draftData };
+
+                        if (isHtmlContent(processedData.detailedDescription)) {
+                            processedData.detailedDescription = htmlToSlate(processedData.detailedDescription);
+                        }
+
+                        if (isHtmlContent(processedData.expectedResults)) {
+                            processedData.expectedResults = htmlToSlate(processedData.expectedResults);
+                        }
+
+                        if (isHtmlContent(processedData.progressReport)) {
+                            processedData.progressReport = htmlToSlate(processedData.progressReport);
+                        }
+
+                        if (processedData.sections && Array.isArray(processedData.sections)) {
+                            processedData.sections = processedData.sections.map(section => {
+                                if (isHtmlContent(section.content)) {
+                                    return {
+                                        ...section,
+                                        content: htmlToSlate(section.content)
+                                    };
+                                }
+                                return section;
+                            });
+                        }
+
+                        setValues(processedData);
+                        setDraftId(draftIdFromUrl);
+                        notify('success', 'Черновата е заредена за редактиране');
+                    }
+                } catch (error) {
+                    console.error('Error loading draft:', error);
+                    notify('error', 'Грешка при зареждане на черновата');
+                } finally {
+                    // setIsLoading(false);
+                }
+            } else if (editIdFromUrl && mode === 'edit') { // 🆕 За готови инициативи
+                try {
+
+                    const initiativeData = await getInitiativeById(editIdFromUrl);
+
+                    if (initiativeData) {
+                        // Конвертираме HTML към Slate формат ако е нужно
+                        const processedData = { ...initiativeData };
+
+                        if (isHtmlContent(processedData.detailedDescription)) {
+                            processedData.detailedDescription = htmlToSlate(processedData.detailedDescription);
+                        }
+                        if (isHtmlContent(processedData.expectedResults)) {
+                            processedData.expectedResults = htmlToSlate(processedData.expectedResults);
+                        }
+
+                        if (isHtmlContent(processedData.progressReport)) {
+                            processedData.progressReport = htmlToSlate(processedData.progressReport);
+                        }
+
+                        if (processedData.sections && Array.isArray(processedData.sections)) {
+                            processedData.sections = processedData.sections.map(section => {
+                                if (isHtmlContent(section.content)) {
+                                    return {
+                                        ...section,
+                                        content: htmlToSlate(section.content)
+                                    };
+                                }
+                                return section;
+                            });
+                        }
+
+                        setValues(processedData);
+                        notify('success', 'Инициативата е заредена за редактиране');
+                    }
+                } catch (error) {
+                    console.error('Error loading initiative for edit:', error);
+                    notify('error', 'Грешка при зареждане на инициативата');
+                }
+            }
+        };
+
+        loadDraftFromUrl();
+    }, [location.search]);
+
     // 🏷️ GENERATE SLUG
     const generateSlug = useCallback((title) => {
         return title
@@ -182,6 +281,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         try {
             const dataToSave = {
                 ...data,
+                draftId: draftId,
                 timestamp: new Date().toISOString()
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
@@ -191,7 +291,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             console.error('❌ Error saving to localStorage:', error);
             notify('localstorage-save-failed');
         }
-    }, []);
+    }, [draftId]);
+
     // 🕒 TIMELINE HELPER FUNCTIONS
     const calculateDuration = useCallback((startDate, endDate) => {
         if (!startDate || !endDate) return 0;
@@ -296,22 +397,24 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
             if (userEmail) {
                 try {
-                    // 🔧 ПОПРАВКА: Използвай пълната convertFormToHtml функция
                     const tempValues = { ...currentValues };
-
-                    // Временно създаваме обект със същата структура за convertFormToHtml
-                    const tempFormData = {
-                        ...tempValues
-                    };
-
-                    // Използваме пълната convertFormToHtml логика
+                    const tempFormData = { ...tempValues };
                     const convertedData = convertFormToHtml.call(null, tempFormData);
 
-                    await saveDraftInitiative({ ...convertedData, userEmail });
-                    console.log('🔄 Auto-saved to both localStorage and database');
+                    // Използваме същата логика като saveDraft
+                    if (draftId) {
+                        await updateDraftInitiative(draftId, { ...convertedData, userEmail });
+                     
+                    } else {
+                        const result = await saveDraftInitiative({ ...convertedData, userEmail });
+                        const newDraftId = result?.data?.id || result?.id;
+                        if (newDraftId) {
+                            setDraftId(newDraftId);
+                       
+                        }
+                    }
                 } catch (error) {
-                    console.error('Auto-save to database failed:', error);
-                    console.log('🔄 Auto-saved to localStorage only');
+                 
                 }
             }
         }, 30000);
@@ -454,7 +557,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             notify('partner-logo-upload-success');
         } catch (error) {
             console.error('Partner logo upload error:', error);
-           notify('partner-logo-upload-failed');
+            notify('partner-logo-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -1468,7 +1571,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const handleContactImageUpload = useCallback(async (e) => {
         const file = e.target.files[0];
         if (!file || !allowedImageTypes.includes(file.type)) {
-           notify('invalid-image-file-type');
+            notify('invalid-image-file-type');
             return;
         }
 
@@ -1503,7 +1606,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             notify('contact-image-upload-success');
         } catch (error) {
             console.error('Contact image upload error:', error);
-            notify('contact-image-upload-failed');notify('contact-image-upload-failed');
+            notify('contact-image-upload-failed'); notify('contact-image-upload-failed');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -1693,7 +1796,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             if (validUploads.length < newImages.length) {
                 notify('warning', null, `Качени ${validUploads.length} от ${newImages.length} снимки`);
             } else {
-               notify('success', null, `Качени всички ${validUploads.length} снимки в галерията`);
+                notify('success', null, `Качени всички ${validUploads.length} снимки в галерията`);
             }
 
         } catch (error) {
@@ -1726,6 +1829,11 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
             if (savedData && timestamp) {
                 const parsedData = JSON.parse(savedData);
+                if (parsedData.draftId) {
+                    setDraftId(parsedData.draftId);
+                
+                }
+
                 const saveTime = new Date(timestamp);
                 const now = new Date();
                 const hoursDiff = (now - saveTime) / (1000 * 60 * 60);
@@ -1750,6 +1858,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             return null;
         }
     }, []);
+
     const clearLocalStorage = useCallback(() => {
         try {
             localStorage.removeItem(STORAGE_KEY);
@@ -1910,20 +2019,101 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
 
                 try {
                     const dataToSave = { ...convertedData, userEmail };
-                    const result = await saveDraftInitiative(dataToSave);
+                    let result;
+
+                    // Проверяваме дали вече имаме draft ID
+                    if (draftId) {
+                        // Ако имаме ID, използваме update
+                        result = await updateDraftInitiative(draftId, dataToSave);
+                   
+                    } else {
+                        // Ако нямаме ID, създаваме нова чернова
+                        result = await saveDraftInitiative(dataToSave);
+
+                        // Запазваме ID-то на новосъздадената чернова
+                        const newDraftId = result?.data?.id || result?.id;
+                        if (newDraftId) {
+                            setDraftId(newDraftId);
+                      
+                        }
+                    }
+
                     notify('draft-saved-both');
                     return result;
                 } catch (saveError) {
-                   notify('error', null, `Грешка при запазване: ${saveError.message}`);
+                    notify('error', null, `Грешка при запазване: ${saveError.message}`);
                 }
             } else {
                 notify('draft-saved-browser');
-
             }
         } catch (fatalError) {
-           notify('draft-saved-browser-only');
+            notify('draft-saved-browser-only');
         }
-    }, [values, saveDraftInitiative, userEmail, saveToLocalStorage]);
+    }, [values, saveDraftInitiative, updateDraftInitiative, userEmail, saveToLocalStorage, convertFormToHtml, draftId]);
+
+    const startNewDraft = useCallback(async () => {
+        try {
+            // Ако има несъхранени промени, първо ги запазваме
+            if (draftId && userEmail) {
+                const convertedData = convertFormToHtml();
+                const dataToSave = { ...convertedData, userEmail };
+                await updateDraftInitiative(draftId, dataToSave);
+                notify('info', 'Текущата чернова е запазена');
+            }
+
+            // Изчистваме draftId
+            setDraftId(null);
+
+            // Изчистваме localStorage
+            clearLocalStorage();
+
+            // Изчистваме формата до defaultValues
+            setValues(defaultValues);
+
+            // Изчистваме грешките
+            setErrors({});
+
+            // Изчистваме media files
+            setMediaFiles({
+                logo: null,
+                mainImage: [],
+                gallery: [],
+                documents: [],
+                partnerLogos: {},
+                sponsorLogos: {}
+            });
+
+            notify('success', 'Готови сте да започнете нова чернова!');
+
+        } catch (error) {
+            console.error('Error starting new draft:', error);
+            notify('error', 'Грешка при започване на нова чернова');
+        }
+    }, [draftId, userEmail, saveDraft, clearLocalStorage, defaultValues]);
+
+    const publishDraft = useCallback(async () => {
+        if (!draftId) {
+            notify('error', 'Няма draft за публикуване');
+            return;
+        }
+
+        try {
+            // Първо запазваме последните промени
+            await saveDraft();
+
+            // След това публикуваме
+            const result = await toggleDraftStatus(draftId);
+
+            // Изчистваме localStorage
+            clearLocalStorage();
+            setDraftId(null);
+
+            return result;
+        } catch (error) {
+            console.error('Error publishing draft:', error);
+            throw error;
+        }
+    }, [draftId, saveDraft, toggleDraftStatus, clearLocalStorage]);
 
     // 💾 FORM SUBMISSION - ОБНОВЕНО
     const onSubmit = useCallback(async (e) => {
@@ -1935,23 +2125,17 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             if (errorEntries.length > 0) {
                 const [fieldName, errorMessage] = errorEntries[0];
 
-                // 🆕 Използваме custom message
                 notify('error', null, errorMessage);
-
-                // 🎯 ПОПРАВЕНО: Smart скролване до полето с грешка
                 let errorElement = null;
 
-                // Специална логика за sections грешки
                 if (fieldName.startsWith('sections[')) {
-                    // За sections използваме data атрибути или класове
+
                     const sectionMatch = fieldName.match(/sections\[(\d+)\]/);
                     if (sectionMatch) {
                         const sectionIndex = parseInt(sectionMatch[1], 10);
 
-                        // Търсим секцията по index
                         errorElement = document.querySelector(`.section-item:nth-child(${sectionIndex + 1})`);
 
-                        // Ако не намерим по клас, търсим във sections контейнера
                         if (!errorElement) {
                             const sectionsContainer = document.querySelector('.sections-list');
                             if (sectionsContainer) {
@@ -2001,19 +2185,31 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         try {
             // 🔧 ВАЖНО: Не пращаме mediaFiles, само data-та с URL адресите
             const submissionData = convertFormToHtml();
-            submissionData.createdAt = new Date().toISOString();
             submissionData.updatedAt = new Date().toISOString();
-            delete submissionData.timestamp;
-            const handler = onSubmitHandler || createInitiative;
-            await handler(submissionData);
 
-            // ✅ При успешно изпращане, изчистваме localStorage
-            clearLocalStorage();
-            notify('success', null, 'Инициативата е създадена успешно!');
-            navigate('/initiatives');
+            const urlParams = new URLSearchParams(window.location.search);
+            const editIdFromUrl = urlParams.get('editId');
+            const mode = urlParams.get('mode');
+            if (mode === 'edit' && editIdFromUrl) {
+                // Редактираме съществуваща инициатива
+                await updateInitiative(editIdFromUrl, submissionData);
+                setEditId(null);
+                notify('success', 'Инициативата е обновена успешно!');
+                navigate(`/initiatives/${submissionData.slug || editIdFromUrl}`);
+            } else {
+                // Създаваме нова инициатива (съществуваща логика)
+                submissionData.createdAt = new Date().toISOString();
+                delete submissionData.timestamp;
+
+                const handler = onSubmitHandler || createInitiative;
+                await handler(submissionData);
+
+                setDraftId(null);
+                clearLocalStorage();
+                notify('success', 'Инициативата е създадена успешно!');
+                navigate('/initiatives');
+            }
         } catch (error) {
-            console.log('Form errors:', error);
-
             console.error('Submission error:', error);
             notify('error', null, 'Грешка при създаване на инициативата');
         }
@@ -2026,7 +2222,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         mediaFiles,
         isUploading,
         uploadProgress,
-
+        editId,
+        setEditId,
         // Event handlers
         onChangeHandler,
         onBlurHandler,
@@ -2034,6 +2231,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         onSubmit,
         validateForm,
         saveDraft,
+        startNewDraft,
         convertFormToHtml,
 
         // 🔧 ДОБАВЕНО: Firebase image handlers
@@ -2053,6 +2251,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         removeFAQ,
         addTag,
         removeTag,
+        draftId,
+        setDraftId,
+        publishDraft,
+        getDraftById,
 
         // SECTIONS HANDLERS
         addSection,

@@ -217,6 +217,7 @@
   },
   "profile": {
     "main": "Профил панел",
+    "bookmarks": "Мойте Oтметки",
     "select_all": "Изберете всички",
     "clear": "Изчистете",
     "selected": "избрани",
@@ -615,7 +616,7 @@
     "google-login-error": "Възникна проблем при входа с Google. Моля, опитайте отново.",
     "google-register-error": "Възникна проблем при регистрацията с Google. Моля, опитайте отново.",
     "google-user-exists": "Имате вече регистриран профил с този Google акаунт. Ще ви пренасочим към входа.",
-     "invalid-file-type": "Невалиден тип файл",
+    "invalid-file-type": "Невалиден тип файл",
     "logo-upload-success": "Логото е качено успешно",
     "logo-upload-failed": "Неуспешно качване на лого",
     "partner-logo-upload-success": "Логото на партньора е качено успешно",
@@ -1248,18 +1249,57 @@
       "end-date-help": "Планираната дата на завършване (опционална) - ако не знаете точно, може да я оставите празна",
       "milestones-help": "Добавете ключови етапи и важни дати в развитието на инициативата",
       "timeline-preview-help": "Визуализация на времевата линия с всички етапи подредени хронологично",
-         "characters": "символа",
+      "characters": "символа",
       "detailed-description-limit": "Подробното описание не може да бъде повече от 50000 символа",
       "expected-results-limit": "Очакваните резултати не могат да бъдат повече от 10000 символа",
       "progress-report-limit": "Отчетът за прогрес не може да бъде повече от 10000 символа",
       "partners-report-limit": "Описанието за партньорите не може да бъде повече от 10000 символа",
-       "sponsor-description-max-length": "Описанието на спонсора не може да бъде повече от 10000 символа",
-             "tags-help": "Добавете ключови думи които помагат за намиране на инициативата (максимум 20 тага, 2-30 символа всеки)",
+      "sponsor-description-max-length": "Описанието на спонсора не може да бъде повече от 10000 символа",
+      "tags-help": "Добавете ключови думи които помагат за намиране на инициативата (максимум 20 тага, 2-30 символа всеки)",
       "related-initiatives-help": "Свържете тази инициатива с други подобни проекти за по-добра навигация",
       "faq-help": "Добавете често задавани въпроси и отговори за да помогнете на потребителите",
       "faq-question-help": "Кратък и ясен въпрос (5-200 символа)",
       "faq-answer-help": "Подробен отговор на въпроса (10-5000 символа)",
-       "close-to-limit": "близо до лимита"
+      "close-to-limit": "близо до лимита"
+    },
+    "admin": {
+      "title": "Управление на инициативи",
+      "published": "Публикувани",
+      "drafts": "Чернови",
+      "initiatives": "инициативи",
+      "searchPlaceholder": "Търси по заглавие, автор или ключови думи...",
+      "view": "Преглед",
+      "edit": "Редактирай",
+      "delete": "Изтрий",
+      "publish": "Публикувай",
+      "loading": "Зареждане...",
+      "loadMore": "Зареди още",
+      "noItemsFound": "Няма намерени",
+      "tryChangingCriteria": "Опитайте да промените критериите за търсене или филтриране",
+      "unknownAuthor": "Неизвестен автор",
+      "statusDraft": "Чернова",
+      "statusActive": "Активна",
+      "statusCompleted": "Завършена",
+      "statusPaused": "Паузирана",
+      "statusUnknown": "Неизвестен",
+      "confirmDeleteDraft": "Сигурни ли сте, че искате да изтриете тази чернова?",
+      "confirmDeleteInitiative": "Сигурни ли сте, че искате да изтриете тази инициатива? Това действие е необратимо!",
+      "confirmPublishDraft": "Сигурни ли сте, че искате да публикувате тази чернова?",
+      "draftDeletedSuccess": "Черновата е изтрита успешно",
+      "initiativeDeletedSuccess": "Инициативата е изтрита успешно",
+      "draftPublishedSuccess": "Черновата е публикувана успешно!",
+      "deleteError": "Грешка при изтриване",
+      "publishError": "Грешка при публикуване",
+      "filters": {
+        "allStatuses": "Всички статуси",
+        "active": "Активни",
+        "completed": "Завършени",
+        "paused": "Паузирани",
+        "newest": "Най-нови",
+        "oldest": "Най-стари",
+        "lastUpdated": "Последно обновени",
+        "byTitle": "По заглавие"
+      }
     },
     "categories": {
       "environment": "Околна среда",
@@ -1382,7 +1422,64 @@
       "email": "Имейл",
       "emailTo": "изпрати имейл до",
       "additionalContacts": "Допълнителни контакти",
-      "comments": "Коментари"
+      "comments": "Коментари",
+      "navigation": {
+        "description": "Описание",
+        "sections": "Секции",
+        "publications": "Публикации",
+        "projects": "Проекти",
+        "timeline": "График",
+        "audience": "Аудитория",
+        "results": "Резултати",
+        "partners": "Партньори",
+        "contact": "Контакт",
+        "faq": "FAQ",
+        "comments": "Коментари"
+      },
+      "sectionTitles": {
+        "detailedDescription": "Подробно описание",
+        "gallery": "Галерия",
+        "timeline": "Времева линия",
+        "targetScope": "Целева група и обхват",
+        "progressResults": "Прогрес и резултати",
+        "partnersSponsors": "Партньори и спонсори",
+        "organizationInfo": "Организация и отговорни лица",
+        "tags": "Тагове",
+        "faq": "Често задавани въпроси"
+      },
+      "timeline": {
+        "startDate": "Начало:",
+        "endDate": "Край:",
+        "milestones": "Ключови етапи"
+      },
+      "targetScope": {
+        "targetAge": "Целева възраст:",
+        "targetAudience": "Целева аудитория:",
+        "customAudience": "Допълнителна целева аудитория:",
+        "expectedBudget": "Очакван бюджет:",
+        "fundingSources": "Източници на финансиране:"
+      },
+      "progressResults": {
+        "kpis": "Ключови показатели (KPIs)",
+        "target": "Цел:",
+        "expectedResults": "Очаквани резултати",
+        "progressReport": "Отчет за напредъка"
+      },
+      "partnersSponsors": {
+        "partners": "Партньори",
+        "sponsors": "Спонсори",
+        "visitWebsite": "Посети сайта"
+      },
+      "organization": {
+        "responsiblePerson": "Отговорно лице",
+        "organization": "Организация",
+        "socialMedia": "Социални мрежи"
+      },
+      "placeholders": {
+        "noMainImage": "Няма главно изображение",
+        "noImages": "Няма изображения",
+        "noContent": "Няма съдържание"
+      }
     },
     "projects": {
       "statusActive": "Активен",
@@ -1401,6 +1498,7 @@
     },
     "map": {
       "projectsIn": "проекта в",
+      "projectsOne": "проект в",
       "cities": "града",
       "hideMap": "Скрий картата",
       "initiatives": "инициативи",
@@ -1478,6 +1576,7 @@
     },
     "buttons": {
       "apply": "Кандидатствай",
+      "deadlinePassed": "Крайният срок е изминал",
       "alreadyApplied": "Вече сте кандидатствали",
       "bookmark": "Запази"
     },
@@ -1615,7 +1714,8 @@
     "hide": "Скрий",
     "loadDraftTooltip": "Зареди черновата",
     "clearDraftTooltip": "Изтрий черновата",
-    "hideTooltip": "Скрий съобщението"
+    "hideTooltip": "Скрий съобщението",
+    "newDraft": "Нова черновa"
   },
   "validation": {
     "title-required": "Заглавието е задължително",
@@ -1669,6 +1769,326 @@
     "slug-format": "URL адресът може да съдържа само малки английски букви, цифри и тирета",
     "slug-min-length": "URL адресът трябва да бъде поне 3 символа",
     "slug-max-length": "URL адресът трябва да бъде максимум 100 символа"
-    
+  },
+  "drafts": {
+    "unknownDate": "Неизвестна дата",
+    "noDescription": "Няма описание",
+    "draftAlt": "Чернова",
+    "statusDraft": "Чернова",
+    "unnamedInitiative": "Неназована инициатива",
+    "created": "Създадена",
+    "completionProgress": "Прогрес на попълване",
+    "edit": "Редактирай",
+    "publish": "Публикувай",
+    "delete": "Изтрий",
+    "title": "Чернови на инициативи",
+    "subtitle": "Управлявайте вашите чернови и ги превърнете в пълноценни инициативи",
+    "newInitiative": "Нова инициатива",
+    "searchPlaceholder": "Търси сред черновите...",
+    "of": "от",
+    "draftsCount": "чернови",
+    "confirmPublish": "Сигурни ли сте, че искате да публикувате тази чернова?",
+    "confirmDelete": "Сигурни ли сте, че искате да изтриете тази чернова?",
+    "noResultsTitle": "Не са намерени чернови",
+    "noResultsText": "Няма чернови които отговарят на търсенето \"{{searchTerm}}\"",
+    "noDraftsTitle": "Все още няма чернови",
+    "noDraftsText": "Започнете със създаването на първата си инициатива",
+    "createInitiative": "Създай инициатива"
+  },
+  "bookmarks": {
+    "title": "Моите отметки",
+    "searchPlaceholder": "Търсене в отметките...",
+    "tabs": {
+      "all": "Всички",
+      "initiatives": "Инициативи",
+      "projects": "Проекти"
+    },
+    "type": {
+      "initiative": "Инициатива",
+      "project": "Проект"
+    },
+    "empty": {
+      "title": "Нямате отметки",
+      "description": "Започнете да добавяте инициативи и проекти към вашите отметки",
+      "exploreButton": "Разгледайте инициативи"
+    },
+    "viewMode": {
+      "grid": "Решетка",
+      "list": "Списък"
+    },
+    "viewDetails": "Виж детайли",
+    "readMore": "Прочетете повече",
+    "unbookmark": "Премахни от отметки",
+    "bookmarkedOn": "Добавено"
+  },
+  "applications": {
+    "title": "Управление на кандидатури",
+    "subtitle": "Общо кандидатури: {{count}}",
+    "loading": "Зарежда данни...",
+    "comingSoon": "Скоро ще бъде готово",
+    "loadedData": "Заредени {{count}} кандидатури от базата данни",
+    "tabs": {
+      "list": "Списък",
+      "statistics": "Статистики",
+      "export": "Експорт",
+      "communication": "Комуникация"
+    },
+    "actions": {
+      "refresh": "Обнови",
+      "view": "Преглед",
+      "contact": "Свържи се",
+      "delete": "Изтрий",
+      "export": "Експортирай",
+      "sendEmail": "Изпрати email"
+    },
+    "stats": {
+      "total": "Общо кандидатури",
+      "thisWeek": "Тази седмица",
+      "thisMonth": "Този месец",
+      "projects": "Активни проекти"
+    },
+    "list": {
+      "title": "Списък с кандидатури",
+      "count": "{{count}} кандидатури",
+      "loading": "Зарежда списъка...",
+      "viewTable": "Таблица",
+      "viewCards": "Карти",
+      "empty": {
+        "title": "Няма кандидатури",
+        "description": "Все още няма постъпили кандидатури за проектите."
+      }
+    },
+    "table": {
+      "name": "Име",
+      "email": "Email",
+      "phone": "Телефон",
+      "project": "Проект",
+      "date": "Дата",
+      "actions": "Действия",
+      "noPhone": "Няма"
+    },
+    "email": {
+      "subject": "Относно кандидатурата ви за проект {{projectId}}",
+      "body": "Здравейте {{name}},\n\nОтносно вашата кандидатура за проект {{projectId}}...\n\nПоздрави,\nПенса Клуб екипа"
+    },
+    "filters": {
+      "searchPlaceholder": "Търси по име, email или проект...",
+      "allProjects": "Всички проекти",
+      "allTime": "Всички времена",
+      "today": "Днес",
+      "thisWeek": "Тази седмица",
+      "thisMonth": "Този месец",
+      "customRange": "Избери период",
+      "advanced": "Разширени",
+      "clear": "Изчисти",
+      "sortBy": "Сортирай по",
+      "sortByDate": "Дата",
+      "sortByName": "Име",
+      "sortByEmail": "Email",
+      "sortByProject": "Проект",
+      "desc": "Низходящо",
+      "asc": "Възходящо",
+      "customDateRange": "Персонализиран период",
+      "startDate": "Начална дата",
+      "endDate": "Крайна дата"
+    },
+    "details": {
+      "close": "Затвори",
+      "appliedOn": "Кандидатствал на",
+      "applicationInfo": "Информация за кандидатурата",
+      "copyEmail": "Копирай email",
+      "copyPhone": "Копирай телефон",
+      "viewProject": "Виж проект",
+      "anonymous": "Анонимна кандидатура",
+      "yes": "Да",
+      "no": "Не",
+      "applicationHistory": "История на кандидатствания",
+      "loadingHistory": "Зарежда история...",
+      "moreApplications": "и още {{count}} кандидатури",
+      "userProfile": "Потребителски профил",
+      "totalApplications": "Общо кандидатури",
+      "profileStatus": "Статус на профил",
+      "hasProfile": "Има профил",
+      "noProfile": "Няма профил"
+    },
+    "statistics": {
+      "thisMonth": "Този месец",
+      "avgPerDay": "Средно на ден",
+      "peakHour": "Пиков час",
+      "topProject": "Топ проект",
+      "dailyActivity": "Дневна активност (последните 30 дни)",
+      "projectsDistribution": "Разпределение по проекти",
+      "topProjects": "Топ 6 проекта",
+      "hourlyActivity": "Активност по часове",
+      "weeklyTrend": "Седмична тенденция",
+      "applications": "кандидатури",
+      "quickInsights": "Бързи анализи",
+      "insight1": "Най-популярният проект е \"{{project}}\" с {{count}} кандидатури",
+      "insight2": "Най-активният час е {{hour}} с {{count}} кандидатури",
+      "insight3": "Средно {{avg}} кандидатури на ден през последния месец",
+      "noData": "Няма данни",
+      "viewTopProject": "Виж топ проекта"
+    },
+    "export": {
+      "title": "Експорт на данни",
+      "exportPDF": "Експорт PDF",
+      "generatedOn": "Генериран на",
+      "totalRecords": "Общо записи",
+      "page": "Страница", 
+      "of": "от",
+      "subtitle": "Изтеглете кандидатурите в CSV или JSON формат",
+      "recordsToExport": "Записи за експорт",
+      "selectedColumns": "Избрани колони",
+      "uniqueProjects": "Уникални проекти",
+      "ofTotal": "от общо",
+      "dataSource": "Източник на данни",
+      "allData": "Всички данни",
+      "allDataDescription": "Експортирай всички {{count}} кандидатури",
+      "filteredData": "Филтрирани данни",
+      "filteredDataDescription": "Експортирай само {{count}} филтрирани кандидатури",
+      "columnSelection": "Избор на колони",
+      "selectAll": "Избери всички",
+      "deselectAll": "Премахни всички",
+      "formatSettings": "Настройки на формата",
+      "dateFormat": "Формат на дата",
+      "separator": "Разделител",
+      "comma": "Запетая",
+      "semicolon": "Точка и запетая",
+      "tab": "Tab",
+      "exportCSV": "Експорт CSV",
+      "exportJSON": "Експорт JSON",
+      "exporting": "Експортира...",
+      "noColumnsSelected": "Моля изберете поне една колона за експорт",
+      "noDataToExport": "Няма данни за експорт",
+      "exportError": "Грешка при експорт на данните",
+      "lastExport": "Последен експорт",
+      "exportedRecords": "{{records}} записа, {{columns}} колони на {{time}}",
+      "yes": "Да",
+      "no": "Не",
+      "columns": {
+        "firstName": "Име",
+        "lastName": "Фамилия",
+        "email": "Email адрес",
+        "phone": "Телефон",
+        "project": "Проект",
+        "appliedAt": "Дата на кандидатстване",
+        "anonymous": "Анонимна кандидатура"
+      },
+      "columnsDesc": {
+        "firstName": "Първото име на кандидата",
+        "lastName": "Фамилията на кандидата",
+        "email": "Email адресът за контакт",
+        "phone": "Телефонен номер (ако е предоставен)",
+        "project": "ID на проекта за който е кандидатствал",
+        "appliedAt": "Дата и час на кандидатстване",
+        "anonymous": "Дали кандидатурата е анонимна"
+      }
+    },
+    "communication": {
+      "title": "Имейл комуникация",
+      "subtitle": "Изпращайте индивидуални или масови имейли до кандидати",
+      "totalRecipients": "Общо получатели",
+      "selectedRecipients": "Избрани",
+      "uniqueProjects": "Проекти",
+      "sentToday": "Изпратени днес",
+      "individualMode": "Индивидуален имейл",
+      "bulkMode": "Масов имейл",
+      "selectRecipient": "Избери получател",
+      "chooseRecipient": "Изберете получател...",
+      "selectRecipients": "Избери получатели",
+      "selectTemplate": "Избери имейл шаблон",
+      "useCustomTemplate": "Използвай персонализиран шаблон",
+      "subject": "Тема",
+      "content": "Съдържание",
+      "subjectPlaceholder": "Въведете тема на имейла...",
+      "contentPlaceholder": "Въведете съдържание на имейла...",
+      "selectAll": "Избери всички",
+      "deselectAll": "Премахни всички",
+      "selectProject": "Избери проект",
+      "preview": "Преглед",
+      "sendEmail": "Изпрати имейл",
+      "sendBulkEmails": "Изпрати до {{count}} получатели",
+      "sending": "Изпраща се...",
+      "emailSent": "Имейлът е изпратен успешно!",
+      "bulkEmailsSent": "Масовите имейли са изпратени до {{count}} получатели",
+      "noRecipientsSelected": "Няма избрани получатели",
+      "sendError": "Грешка при изпращане на имейл",
+      "bulkError": "{{success}} имейла изпратени успешно, {{errors}} неуспешни",
+      "emailPreview": "Преглед на имейл",
+      "close": "Затвори",
+      "availableVariables": "Налични променливи",
+      "companyName": "Initiative Platform",
+      "statusUpdated": "Статусът на кандидатурата е актуализиран",
+      "nextSteps": "Скоро ще се свържем с вас със следващите стъпки",
+      "defaultLocation": "Нашия офис / Онлайн среща",
+      "defaultReason": "След внимателно разглеждане",
+      "additionalInfo": "Допълнителна информация ще бъде предоставена",
+      "templates": {
+        "welcome": {
+          "name": "Приветствен имейл",
+          "description": "Изпратете приветствено съобщение до нови кандидати",
+          "subject": "Добре дошли в {{companyName}} - Кандидатурата е получена",
+          "content": "Уважаеми {{firstName}} {{lastName}},\n\nБлагодарим ви за кандидатурата ви за {{projectId}}. Получихме вашата кандидатура и ще я разгледаме внимателно.\n\nОценяваме интереса ви да се присъедините към нашата инициатива.\n\nС уважение,\nЕкипът на {{companyName}}"
+        },
+        "interview_invitation": {
+          "name": "Покана за интервю",
+          "description": "Поканете кандидатите за интервю"
+        },
+        "status_update": {
+          "name": "Актуализация на статус",
+          "description": "Уведомете кандидатите за промени в статуса на кандидатурата",
+          "subject": "Актуализация на статуса - {{projectId}}",
+          "content": "Уважаеми {{firstName}} {{lastName}},\n\nИскаме да ви уведомим за статуса на вашата кандидатура за {{projectId}}.\n\nСтатус: {{status}}\n\n{{nextSteps}}\n\nС уважение,\nЕкипът на {{companyName}}"
+        },
+        "interview": {
+          "name": "Покана за интервю",
+          "description": "Поканете кандидатите за интервю",
+          "subject": "Покана за интервю - {{projectId}}",
+          "content": "Уважаеми {{firstName}} {{lastName}},\n\nИмаме удоволствието да ви поканим на интервю относно вашата кандидатура за {{projectId}}.\n\nДата: {{date}}\nЧас: {{time}}\nМясто: {{location}}\n\nМоля, потвърдете присъствието си.\n\nС уважение,\nЕкипът на {{companyName}}"
+        },
+        "rejection": {
+          "name": "Отхвърляне на кандидатура",
+          "description": "Учтиво отклонете кандидатура",
+          "subject": "Актуализация на кандидатурата - {{projectId}}",
+          "content": "Уважаеми {{firstName}} {{lastName}},\n\nБлагодарим ви за интереса ви към {{projectId}}.\n\n{{reason}}, решихме да продължим с други кандидати.\n\nНасърчаваме ви да кандидатствате за бъдещи възможности.\n\nС уважение,\nЕкипът на {{companyName}}"
+        },
+        "follow_up": {
+          "name": "Последващ имейл",
+          "description": "Изпратете последваща информация до кандидатите",
+          "subject": "Последваща информация: Кандидатура за {{projectId}}",
+          "content": "Уважаеми {{firstName}} {{lastName}},\n\nИскаме да ви дадем последваща информация относно вашата кандидатура за {{projectId}}.\n\n{{additionalInfo}}\n\nАко имате въпроси, не се колебайте да се свържете с нас.\n\nС уважение,\nЕкипът на {{companyName}}"
+        }
+      }
+    }
+  },
+  "projectDetails": {
+    "close": "Затвори",
+    "loading": "Зарежда проект...",
+    "loadError": "Грешка при зареждане на проекта",
+    "errorTitle": "Грешка при зареждане",
+    "retry": "Опитай отново",
+    "noData": "Няма данни за проекта",
+    "noDataDescription": "Проектът не съществува или няма достъп до информацията.",
+    "applicationsCount": "{{count}} кандидатури",
+    "projectInfo": "Информация за проекта",
+    "projectId": "ID на проект",
+    "copyId": "Копирай ID",
+    "status": "Статус",
+    "category": "Категория",
+    "participants": "Участници",
+    "description": "Описание",
+    "timeline": "График",
+    "startDate": "Начална дата",
+    "endDate": "Крайна дата",
+    "team": "Екип",
+    "moreMembers": "още членове",
+    "anonymousMember": "Анонимен член",
+    "viewProject": "Виж проекта",
+    "statusTypes": {
+      "active": "Активен",
+      "pending": "В очакване",
+      "completed": "Завършен",
+      "cancelled": "Отменен"
+    }
   }
 }

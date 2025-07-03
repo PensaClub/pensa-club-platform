@@ -1,6 +1,7 @@
 import { truncateText } from '../../../../utils/truncateText';
 import './projectCard.css';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export const ProjectCard = ({ project }) => {
   const { t } = useTranslation();
@@ -19,17 +20,23 @@ export const ProjectCard = ({ project }) => {
     switch (status) {
       case 'active': return t('initiatives.projects.statusActive');
       case 'in-progress': return t('initiatives.projects.statusInProgress');
-      case 'planned': return t('initiatives.projects.statusPlanned', );
+      case 'planned': return t('initiatives.projects.statusPlanned');
       case 'completed': return t('initiatives.projects.statusCompleted');
       default: return status;
     }
   };
 
+  const projectLink = `/projects/${project.slug}`;
+
   return (
     <div className="project-card">
-      {project.image && (
+      {/* ПОПРАВКА: project.mainImage.src вместо project.image */}
+      {project?.image && project?.image && (
         <div className="project-image">
-          <img src={project.image} alt={project.title} />
+          <img 
+            src={project?.image} 
+            alt={ project.title} 
+          />
           <div 
             className="project-status-badge" 
             style={{ backgroundColor: getStatusColor(project.status) }}
@@ -41,19 +48,21 @@ export const ProjectCard = ({ project }) => {
       
       <div className="project-content">
         <h3 className="project-title">
-          <a href={project.link} className="project-link">
+     
+          <Link to={projectLink} className="project-link">
             {project.title}
-          </a>
+          </Link>
         </h3>
         
         <p className="project-description">
-          {truncateText(project.description,80)}
+
+          {truncateText(project.description, 80)}
         </p>
-        
-        <a href={project.link} className="project-read-more">
+
+        <Link to={project.link} className="project-read-more">
           <span className="project-arrow">→</span>
           {t('initiatives.projects.learnMore')}
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -1,0 +1,919 @@
+.applications-communication-container {
+  padding: 0;
+}
+
+/* Header */
+.applications-communication-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.applications-communication-header-main {
+  flex: 1;
+}
+
+.applications-communication-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 8px 0;
+}
+
+.applications-communication-title-icon {
+  font-size: 1.6rem;
+}
+
+.applications-communication-subtitle {
+  color: #718096;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.applications-communication-refresh-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #f7fafc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.applications-communication-refresh-btn:hover {
+  background: #edf2f7;
+  transform: scale(1.05);
+}
+
+/* Stats */
+.applications-communication-stats {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.applications-communication-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.applications-communication-stat-card {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.applications-communication-stat-card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.applications-communication-stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: white;
+}
+
+.applications-communication-stat-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  color: white;
+}
+
+/* Mode Selection */
+.applications-communication-mode-selection {
+  margin-bottom: 32px;
+}
+
+.applications-communication-mode-buttons {
+  display: flex;
+  gap: 8px;
+  background: white;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.applications-communication-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #718096;
+  flex: 1;
+  justify-content: center;
+}
+
+.applications-communication-mode-btn.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.applications-communication-mode-btn:hover:not(.active) {
+  background: #f7fafc;
+  color: #2d3748;
+}
+
+.applications-communication-mode-icon {
+  font-size: 1.2rem;
+}
+
+/* Content */
+.applications-communication-content {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 32px;
+}
+
+.applications-communication-section {
+  margin-bottom: 32px;
+}
+
+.applications-communication-section:last-child {
+  margin-bottom: 0;
+}
+
+.applications-communication-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.applications-communication-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+}
+
+.applications-communication-section-icon {
+  font-size: 1.3rem;
+}
+
+/* Recipient Selection */
+.applications-communication-recipient-select {
+  margin-bottom: 20px;
+}
+
+.applications-communication-recipient-dropdown {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  font-size: 0.95rem;
+  color: #2d3748;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.applications-communication-recipient-dropdown:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.applications-communication-recipient-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.applications-communication-select-btn {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f7fafc;
+  color: #718096;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.applications-communication-select-btn:hover {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+  color: #2d3748;
+}
+
+/* Project Groups */
+.applications-communication-project-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.applications-communication-project-group {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  background: #f7fafc;
+}
+
+.applications-communication-project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.applications-communication-project-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.applications-communication-project-count {
+  background: #e2e8f0;
+  color: #718096;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.applications-communication-project-select-btn {
+  padding: 6px 12px;
+  border: 1px solid #667eea;
+  border-radius: 6px;
+  background: white;
+  color: #667eea;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.applications-communication-project-select-btn:hover {
+  background: #667eea;
+  color: white;
+}
+
+/* Recipients Grid */
+.applications-communication-recipients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.applications-communication-recipient-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.applications-communication-recipient-option:hover {
+  border-color: #cbd5e0;
+  background: #f7fafc;
+}
+
+.applications-communication-recipient-option:has(.applications-communication-recipient-checkbox:checked) {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+.applications-communication-recipient-checkbox {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: #667eea;
+  flex-shrink: 0;
+}
+
+.applications-communication-recipient-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.applications-communication-recipient-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.applications-communication-recipient-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.applications-communication-recipient-name {
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 2px;
+  font-size: 0.9rem;
+}
+
+.applications-communication-recipient-email {
+  font-size: 0.8rem;
+  color: #718096;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Template Selection */
+.applications-communication-template-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.applications-communication-template-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.applications-communication-custom-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+}
+
+.applications-communication-custom-toggle input {
+  display: none;
+}
+
+.applications-communication-toggle-slider {
+  width: 48px;
+  height: 28px;
+  background: #e2e8f0;
+  border-radius: 14px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.applications-communication-toggle-slider::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.applications-communication-custom-toggle input:checked + .applications-communication-toggle-slider {
+  background: #667eea;
+}
+
+.applications-communication-custom-toggle input:checked + .applications-communication-toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.applications-communication-toggle-label {
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.applications-communication-template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.applications-communication-template-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.applications-communication-template-option:hover {
+  border-color: #cbd5e0;
+  background: #f7fafc;
+}
+
+.applications-communication-template-option:has(.applications-communication-template-radio:checked) {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+.applications-communication-template-radio {
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  accent-color: #667eea;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.applications-communication-template-card {
+  flex: 1;
+}
+
+.applications-communication-template-name {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+}
+
+.applications-communication-template-description {
+  font-size: 0.85rem;
+  color: #718096;
+  line-height: 1.4;
+}
+
+/* Custom Template */
+.applications-communication-custom-template {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.applications-communication-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.applications-communication-form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.applications-communication-form-input {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #2d3748;
+  transition: all 0.2s ease;
+}
+
+.applications-communication-form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.applications-communication-form-textarea {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #2d3748;
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.applications-communication-form-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Actions */
+.applications-communication-actions {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.applications-communication-actions-info {
+  flex: 1;
+}
+
+.applications-communication-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #38a169;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #f0fff4;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #9ae6b4;
+}
+
+.applications-communication-success-icon {
+  font-size: 1rem;
+}
+
+.applications-communication-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e53e3e;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #fff5f5;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #feb2b2;
+}
+
+.applications-communication-error-icon {
+  font-size: 1rem;
+}
+
+.applications-communication-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d69e2e;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #fffbeb;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #f6e05e;
+}
+
+.applications-communication-warning-icon {
+  font-size: 1rem;
+}
+
+.applications-communication-actions-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.applications-communication-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.applications-communication-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.applications-communication-btn.primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.applications-communication-btn.primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.applications-communication-btn.secondary {
+  background: #f7fafc;
+  color: #2d3748;
+  border: 2px solid #e2e8f0;
+}
+
+.applications-communication-btn.secondary:hover:not(:disabled) {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+}
+
+.applications-communication-btn-icon {
+  font-size: 1rem;
+}
+
+/* Preview Modal */
+.applications-communication-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: applications-communication-fade-in 0.2s ease;
+}
+
+@keyframes applications-communication-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.applications-communication-preview-modal {
+  background: white;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: applications-communication-slide-up 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes applications-communication-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.applications-communication-preview-header {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.applications-communication-preview-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.applications-communication-preview-icon {
+  font-size: 1.5rem;
+}
+
+.applications-communication-preview-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.applications-communication-preview-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.applications-communication-preview-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.applications-communication-preview-field {
+  margin-bottom: 24px;
+}
+
+.applications-communication-preview-field:last-child {
+  margin-bottom: 0;
+}
+
+.applications-communication-preview-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.applications-communication-preview-value {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  color: #2d3748;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.applications-communication-preview-value.content {
+  white-space: pre-wrap;
+  min-height: 120px;
+}
+
+.applications-communication-preview-variables {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.applications-communication-preview-variables-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 12px 0;
+}
+
+.applications-communication-preview-variables-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.applications-communication-preview-variable {
+  background: #edf2f7;
+  color: #2d3748;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-family: 'Courier New', monospace;
+  border: 1px solid #e2e8f0;
+}
+
+.applications-communication-preview-footer {
+  padding: 20px 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  background: #f7fafc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .applications-communication-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .applications-communication-stat-number {
+    font-size: 1.6rem;
+  }
+  
+  .applications-communication-mode-buttons {
+    flex-direction: column;
+  }
+  
+  .applications-communication-content {
+    padding: 20px;
+  }
+  
+  .applications-communication-template-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .applications-communication-recipients-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .applications-communication-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .applications-communication-actions-buttons {
+    justify-content: stretch;
+  }
+  
+  .applications-communication-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .applications-communication-section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .applications-communication-recipient-actions {
+    justify-content: stretch;
+  }
+  
+  .applications-communication-select-btn {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .applications-communication-preview-overlay {
+    padding: 12px;
+  }
+  
+  .applications-communication-preview-modal {
+    max-height: 95vh;
+  }
+  
+  .applications-communication-preview-header {
+    padding: 20px;
+  }
+  
+  .applications-communication-preview-content {
+    padding: 20px;
+  }
+  
+  .applications-communication-preview-footer {
+    padding: 16px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .applications-communication-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .applications-communication-content {
+    padding: 16px;
+  }
+  
+  .applications-communication-actions {
+    padding: 16px;
+  }
+  
+  .applications-communication-actions-buttons {
+    flex-direction: column;
+  }
+  
+  .applications-communication-project-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .applications-communication-project-select-btn {
+    width: 100%;
+  }
+}

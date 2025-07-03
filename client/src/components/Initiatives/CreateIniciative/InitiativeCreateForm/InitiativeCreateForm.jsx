@@ -52,6 +52,7 @@ import { LocalStorageStatus } from '../LocalStorageStatus/LocalStorageStatus';
 import SlateErrorBoundary from '../SlateErrorBoundary/SlateErrorBoundary';
 import { getSlateTextLength } from '../Utils/slateUtils.js';
 import { handleCleanPaste } from '../../../../utils/textPasteUtils.js';
+import { htmlToSlate, isHtmlContent } from '../Utils/htmlToSlate.js';
 
 const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
 
@@ -124,6 +125,11 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         clearLocalStorage,
         setHasLocalStorageDraft,
         setLocalStorageTimestamp,
+        publishDraft,
+        getDraftById,
+        draftId,
+        setDraftId,
+        startNewDraft
     } = useCreateInitiative(initialValues, onSubmitHandler);
 
     // 🎯 Local state
@@ -145,7 +151,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
-    const { getAllInitiatives } = useInitiativeContext();
+    const { getAllInitiatives, clearLocalStorageDraft } = useInitiativeContext();
     const navigate = useNavigate();
     const location = useLocation();
     const [localStorageChecked, setLocalStorageChecked] = useState(false);
@@ -157,6 +163,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         }
         return sectionEditorsRef.current[index];
     };
+
     useEffect(() => {
         if (location.state?.formData) {
             setValues(location.state.formData);
@@ -164,9 +171,15 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     }, [location.state]);
 
     // 📂 При mount - проверяваме за localStorage draft
+    // В useCreateInitiative.js - обновете СЪЩЕСТВУВАЩИЯ useEffect:
+
     useEffect(() => {
-        // Ако има initialValues (edit mode), не зареждай от localStorage
+        // Ако има initialValues (edit mode), проверете за draft ID
         if (initialValues && Object.keys(initialValues).length > 0) {
+            // 🆕 Проверяваме за draft ID
+            if (initialValues.id) {
+                setDraftId(initialValues.id);
+            }
             setLocalStorageChecked(true);
             return;
         }
@@ -184,11 +197,14 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                 ...savedDraft.data
             }));
 
+            // 🆕 Възстановяваме draft ID от localStorage ако има
+            if (savedDraft.data?.draftId) {
+                setDraftId(savedDraft.data.draftId);
+            }
+
             setHasLocalStorageDraft(true);
             setLocalStorageTimestamp(savedDraft.timestamp);
             setShowLocalStoragePrompt(true);
-
-            console.log('🔄 Auto-loaded draft from localStorage');
 
             // Показваме notification след кратко забавяне
             setTimeout(() => {
@@ -212,75 +228,99 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         }
     };
 
+    const handleStartNewDraft = async () => {
+        const confirmed = window.confirm(
+            'Сигурни ли сте, че искате да започнете нова чернова? ' +
+            'Текущата чернова ще бъде запазена.'
+        );
+
+        if (confirmed) {
+            await startNewDraft(); // Използваме функцията от hook-а
+            setShowLocalStoragePrompt(false);
+
+            // Скролваме до началото на формата
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
     // 🗑️ Функция за изтриване на draft
-    const handleClearDraft = () => {
+    const handleClearDraft = async () => { // Добавяме async
         const confirmed = window.confirm(
             'Сигурни ли сте, че искате да изтриете черновата и всички данни от формата?'
         );
 
         if (confirmed) {
-            clearLocalStorage();
+            try {
+                // ЗАМЕНЯМЕ clearLocalStorage() с новата синхронизирана функция
+                await clearLocalStorageDraft();
 
-            // 🔧 ПОПРАВЕНО: Използвай functional update и force re-render
-            setValues(prev => {
-
-                const freshDefaults = {
-                    title: '',
-                    slug: '',
-                    shortDescription: '',
-                    mainImage: {
-                        src: '',
-                        alt: '',
-                        caption: '',
+                // Изчистваме формата
+                setValues(prev => {
+                    const freshDefaults = {
+                        title: '',
+                        slug: '',
+                        shortDescription: '',
+                        mainImage: {
+                            src: '',
+                            alt: '',
+                            caption: '',
+                            gallery: []
+                        },
+                        category: '',
+                        location: { address: '', coordinates: { lat: null, lng: null } },
+                        status: 'active',
+                        campaignStatus: 'open',
+                        commentsEnabled: true,
+                        contact: { name: '', position: '', email: '', phone: '', image: '' },
+                        additionalContacts: [],
+                        sections: [],
+                        downloadMaterials: [],
+                        projects: [],
+                        stories: [],
+                        publications: [],
+                        detailedDescription: createSlateEditorState(),
+                        customCategory: '',
+                        priority: 'Medium',
+                        startDate: '',
+                        endDate: '',
+                        duration: '',
+                        milestones: [],
+                        targetAge: [],
+                        targetAudience: [],
+                        customAudience: '',
+                        expectedBudget: '',
+                        currency: 'BGN',
+                        fundingSources: [],
+                        partners: [],
+                        sponsors: [],
+                        logo: null,
+                        responsible: { name: '', position: '', email: '', phone: '' },
+                        organization: { name: '', address: '', website: '' },
+                        socialMedia: { facebook: '', instagram: '', linkedin: '', twitter: '' },
+                        kpis: [],
+                        expectedResults: createSlateEditorState(),
+                        progressReport: createSlateEditorState(),
+                        impactMetrics: [],
+                        testimonials: [],
+                        tags: [],
+                        relatedInitiatives: [],
+                        faq: [],
                         gallery: []
-                    },
-                    category: '',
-                    location: { address: '', coordinates: { lat: null, lng: null } },
-                    status: 'active',
-                    campaignStatus: 'open',
-                    commentsEnabled: true,
-                    contact: { name: '', position: '', email: '', phone: '', image: '' },
-                    additionalContacts: [],
-                    sections: [],
-                    downloadMaterials: [],
-                    projects: [],
-                    stories: [],
-                    publications: [],
-                    detailedDescription: createSlateEditorState(),
-                    customCategory: '',
-                    priority: 'Medium',
-                    startDate: '',
-                    endDate: '',
-                    duration: '',
-                    milestones: [],
-                    targetAge: [],
-                    targetAudience: [],
-                    customAudience: '',
-                    expectedBudget: '',
-                    currency: 'BGN',
-                    fundingSources: [],
-                    partners: [],
-                    sponsors: [],
-                    logo: null,
-                    responsible: { name: '', position: '', email: '', phone: '' },
-                    organization: { name: '', address: '', website: '' },
-                    socialMedia: { facebook: '', instagram: '', linkedin: '', twitter: '' },
-                    kpis: [],
-                    expectedResults: createSlateEditorState(),
-                    progressReport: createSlateEditorState(),
-                    impactMetrics: [],
-                    testimonials: [],
-                    tags: [],
-                    relatedInitiatives: [],
-                    faq: [],
-                    gallery: []
-                };
+                    };
 
-                return freshDefaults;
-            });
+                    return freshDefaults;
+                });
 
-            setShowLocalStoragePrompt(false);
-            notify('info', 'Черновата и данните от формата са изтрити');
+                setShowLocalStoragePrompt(false);
+
+                // Notify вече се извиква от clearLocalStorageDraft
+                // notify('info', 'Черновата и данните от формата са изтрити');
+            } catch (error) {
+                console.error('Error clearing draft:', error);
+                // Ако има грешка, все пак изчистваме локалната форма
+                setShowLocalStoragePrompt(false);
+                notify('warning', 'Черновата е изчистена локално, но може да има проблем със сървъра');
+            }
         }
     };
 
@@ -288,16 +328,6 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
     const handleIgnorePrompt = () => {
         setShowLocalStoragePrompt(false);
     };
-
-    // 🧹 Cleanup при unmount
-    useEffect(() => {
-        return () => {
-
-            if (values.title?.trim()) {
-                saveToLocalStorage(values);
-            }
-        };
-    }, [values, saveToLocalStorage]);
 
     // 🎯 Handle Slate.js changes
     const handleSlateChange = useCallback((fieldName) => (value) => {
@@ -504,7 +534,6 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
 
     // 🎯 Render Slate element
     const renderElement = (props) => {
-        console.log('🎨 renderElement called with type:', props.element.type);
 
         switch (props.element.type) {
             case 'block-quote':
@@ -512,7 +541,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             case 'bulleted-list':
                 return <ul {...props.attributes}>{props.children}</ul>;
             case 'heading-one':
-                console.log('🚀 Rendering H1 element');
+
                 return (
                     <h1
                         {...props.attributes}
@@ -533,7 +562,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                     </h1>
                 );
             case 'heading-two':
-                console.log('🚀 Rendering H2 element');
+
                 return (
                     <h2
                         {...props.attributes}
@@ -576,7 +605,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             case 'numbered-list':
                 return <ol {...props.attributes}>{props.children}</ol>;
             default:
-                console.log('📝 Rendering default paragraph');
+
                 return (
                     <p
                         {...props.attributes}
@@ -876,6 +905,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                 <LocalStorageStatus
                     hasLocalStorageDraft={hasLocalStorageDraft}
                     localStorageTimestamp={localStorageTimestamp}
+                    onStartNew={handleStartNewDraft}
                     onClearDraft={handleClearDraft}
                     onLoadDraft={handleLoadDraft}
                     onIgnore={handleIgnorePrompt}
@@ -1049,6 +1079,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                         </div>
                                         <div className={`slate-editor-container ${errors.detailedDescription ? 'error' : ''}`}>
                                             <Slate
+                                                key={`detailed-desc-${values.title || 'empty'}`} // 🔧 ДОБАВИ key за re-render
                                                 editor={detailedDescriptionEditor}
                                                 initialValue={values.detailedDescription}
                                                 onChange={handleSlateChange('detailedDescription')}
@@ -1153,7 +1184,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                     </div>
 
                                     {/* Location Map - ЗАМЕНЕНО */}
-                                    <div className="form-group-initiative">
+                                    <div className="form-group-initiative" key={`location-${values.title || 'empty'}`}>
                                         <label>
                                             <FontAwesomeIcon icon={faMapMarkerAlt} />
                                             Местоположение
@@ -1220,6 +1251,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                                 notify('info', t('initiatives.create.location-cleared'));
                                             }}
                                         />
+
                                         <div className="field-help">
                                             {t('initiatives.create.location-help')}
                                         </div>
@@ -1445,9 +1477,9 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                                                             };
                                                                             setValues(prev => ({ ...prev, sections: updatedSections }));
                                                                         }}
-                                                                        onPaste={(e) => handleCleanPaste(e, (newValue) => {
-                                                                            setValues(prev => ({ ...prev, title: newValue }));
-                                                                        }, values.title, 500)}
+                                                                        // onPaste={(e) => handleCleanPaste(e, (newValue) => {
+                                                                        //     setValues(prev => ({ ...prev, title: newValue }));
+                                                                        // }, values.title, 500)}
                                                                         placeholder="Въведете заглавие..."
                                                                         className={errors[`sections[${index}].title`] ? 'error' : ''}
                                                                     />
@@ -1619,7 +1651,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                             onChange={onChangeHandler}
                                             onBlur={onBlurHandler}
                                             className={errors.startDate ? 'error' : ''}
-                                            // min={new Date().toISOString().split('T')[0]}
+                                        // min={new Date().toISOString().split('T')[0]}
                                         />
                                         <div className="field-help">
                                             {t('initiatives.create.start-date-help')}
@@ -3996,6 +4028,16 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
 
             {/*  Floating Actions */}
             <div className="floating-actions">
+                {draftId && (
+                    <button
+                        type="button"
+                        className="floating-btn new-draft"
+                        onClick={handleStartNewDraft}
+                        title="Започни нова чернова"
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                )}
                 <button
                     type="button"
                     className="floating-btn draft"
@@ -4012,15 +4054,33 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                 >
                     <FontAwesomeIcon icon={faEye} />
                 </button>
-                <button
-                    type="button"
-                    className="floating-btn create"
-                    onClick={onSubmit}
-                    title="Създай инициатива"
-                    // disabled={isUploading}
-                >
-                    <FontAwesomeIcon icon={faCheckCircle} />
-                </button>
+                {draftId ? (
+                    // Ако редактираме draft, показваме бутон за публикуване
+                    <button
+                        type="button"
+                        className="floating-btn publish"
+                        onClick={async () => {
+                            try {
+                                await publishDraft();
+                            } catch (error) {
+                                console.error('Error publishing:', error);
+                            }
+                        }}
+                        title="Публикувай инициативата"
+                    >
+                        <FontAwesomeIcon icon={faShare} />
+                    </button>
+                ) : (
+                    // Ако създаваме нова, показваме стандартния бутон
+                    <button
+                        type="button"
+                        className="floating-btn create"
+                        onClick={onSubmit}
+                        title="Създай инициатива"
+                    >
+                        <FontAwesomeIcon icon={faCheckCircle} />
+                    </button>
+                )}
             </div>
 
             {/* 📜 Scroll to Top */}
