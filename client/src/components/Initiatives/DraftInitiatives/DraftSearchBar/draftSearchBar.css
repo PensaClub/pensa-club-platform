@@ -1,30 +1,39 @@
 /* DraftSearchBar/draftSearchBar.css */
 .draft-search-container {
   margin-bottom: 30px;
+  max-width: 700px;
+  width: 100%;
 }
 
 .draft-search-input-wrapper {
   position: relative;
-  max-width: 500px;
+  max-width: 800px;
   width: 100%;
 }
 
+
 .draft-search-input {
   width: 100%;
-  padding: 15px 20px 15px 50px;
-  border: 2px solid #e0e0e0;
-  border-radius: 25px;
+  padding: 18px 20px 18px 55px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
   font-size: 16px;
-  background: white;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .draft-search-input:focus {
   outline: none;
-  border-color: #20b2aa;
-  box-shadow: 0 4px 20px rgba(32, 178, 170, 0.2);
-  transform: translateY(-1px);
+  border-color: rgba(0, 186, 150, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 12px 40px rgba(0, 186, 150, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px) scale(1.02);
 }
 
 .search-icon {
@@ -32,11 +41,14 @@
   left: 18px;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
-  font-size: 16px;
-  z-index: 2;
+  transition: all 0.3s ease;
+  color: #666;
 }
 
+.draft-search-input:focus + .search-icon {
+  color: #00ba96;
+  transform: translateY(-50%) scale(1.1) rotate(5deg);
+}
 .clear-search-btn {
   position: absolute;
   right: 15px;
@@ -49,6 +61,7 @@
   padding: 5px;
   border-radius: 50%;
   transition: all 0.3s ease;
+  text-indent: initial;
 }
 
 .clear-search-btn:hover {
