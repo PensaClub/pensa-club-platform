@@ -179,7 +179,6 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             // 🆕 Проверяваме за draft ID
             if (initialValues.id) {
                 setDraftId(initialValues.id);
-                console.log('📝 Loaded draft ID from initial values:', initialValues.id);
             }
             setLocalStorageChecked(true);
             return;
@@ -201,14 +200,11 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
             // 🆕 Възстановяваме draft ID от localStorage ако има
             if (savedDraft.data?.draftId) {
                 setDraftId(savedDraft.data.draftId);
-                console.log('📋 Restored draft ID from localStorage:', savedDraft.data.draftId);
             }
 
             setHasLocalStorageDraft(true);
             setLocalStorageTimestamp(savedDraft.timestamp);
             setShowLocalStoragePrompt(true);
-
-            console.log('🔄 Auto-loaded draft from localStorage');
 
             // Показваме notification след кратко забавяне
             setTimeout(() => {

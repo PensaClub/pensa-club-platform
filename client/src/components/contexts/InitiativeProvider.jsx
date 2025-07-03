@@ -7,8 +7,6 @@ import { notify } from "../../utils/notify";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "./UserContext";
 import { initiativeServiceFactory } from "../Services/initiativeServiceFactory";
-import projectsData from '../Initiatives/data/mockProjects.json';
-import { useMockApplications } from "../hooks/useMockApplications";
 import storiesData from '../Initiatives/data/mockStories.json';
 import publicationsData from '../Initiatives/data/mockPublications.json';
 import { draftLocalStorage } from "../Initiatives/CreateIniciative/Utils/draftLocalStorage";
@@ -22,6 +20,8 @@ export const InitiativeProvider = ({ children }) => {
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [initiativesLoaded, setInitiativesLoaded] = useState(false);
+  //Отметките (bookmarks)
+  const [bookmarksLoaded, setBookmarksLoaded] = useState(false);
   const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState(() => {
     try {
       const saved = localStorage.getItem('bookmarkedInitiatives');
@@ -54,20 +54,31 @@ export const InitiativeProvider = ({ children }) => {
   const [projectsLoaded, setProjectsLoaded] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
 
-  const [bookmarksLoaded, setBookmarksLoaded] = useState(false);
+  //komentari
   const [comments, setComments] = useState({});
   const [commentsLoading, setCommentsLoading] = useState(false);
 
   const { isAuthentication, userEmail, username, profileData, onProjectApplicationSubmit } = useAuthContext();
 
-  const {
-    getApplicationsByProject,
-    addApplication,
-    getAllApplications,
-    updateApplicationStatus,
-    deleteApplication
-  } = useMockApplications();
+  // const {
+  //   getApplicationsByProject,
+  //   addApplication,
+  //   getAllApplications,
+  //   updateApplicationStatus,
+  //   deleteApplication
+  // } = useMockApplications();
+  // НОВИ STATES ЗА APPLICATIONS
   const [recentApplications, setRecentApplications] = useState([]);
+  const [userApplications, setUserApplications] = useState(() => {
+    try {
+      const saved = localStorage.getItem('appliedProjects');
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error("Error loading user applications from localStorage:", error);
+      return [];
+    }
+  });
+
   // Draft states
   const [drafts, setDrafts] = useState([]);
   const [draftsLoaded, setDraftsLoaded] = useState(false);
@@ -85,6 +96,7 @@ export const InitiativeProvider = ({ children }) => {
       setIsLoading(false);
     }, 1000);
   }, []);
+
   useEffect(() => {
     localStorage.setItem('bookMarkedProjects', JSON.stringify(bookMarkedProjects));
   }, [bookMarkedProjects]);
@@ -93,6 +105,14 @@ export const InitiativeProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
   }, [bookmarkedInitiatives]);
+
+  // Изчистваме localStorage при logout
+  useEffect(() => {
+    if (!isAuthentication) {
+      setUserApplications([]);
+      localStorage.removeItem('appliedProjects');
+    }
+  }, [isAuthentication]);
   // Helper functions
   const generateId = useCallback(() => {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -101,6 +121,158 @@ export const InitiativeProvider = ({ children }) => {
   const getUserDisplayName = useCallback(() => {
     return username || profileData?.details?.firstName || userEmail?.split('@')[0] || 'User';
   }, [username, profileData?.details?.firstName, userEmail]);
+  
+  // =================
+  // APPLICATION FUNCTIONS 
+  // =================
+
+  // Проверка дали потребителят е кандидатствал за проект
+  const hasUserAppliedToProject = useCallback((projectId) => {
+    if (!isAuthentication || !userEmail || !projectId) return false;
+
+    return userApplications.some(app =>
+      String(app.projectId) === String(projectId) &&
+      app.email === userEmail
+    );
+  }, [userApplications, isAuthentication, userEmail]);
+
+  // Зареждане на кандидатури за конкретен проект
+  const getProjectApplications = useCallback(async (projectId) => {
+    if (!projectId) return [];
+
+    try {
+      const response = await initiativeService.getProjectApplications(projectId);
+      const applications = response.data || response;
+      setRecentApplications(applications);
+      return applications;
+    } catch (error) {
+      console.error('Error loading project applications:', error);
+      setRecentApplications([]);
+      return [];
+    }
+  }, [initiativeService]);
+
+const applyToProject = useCallback(async (projectId, applicationData) => {
+  if (!projectId || !applicationData) {
+    notify('error', 'Missing project ID or application data');
+    return;
+  }
+
+  if (!isAuthentication) {
+    notify('error', 'Authentication required');
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+
+    // API заявка към сървъра
+    const response = await initiativeService.applyToProject(projectId, applicationData);
+    
+    // Записваме в localStorage за кеширане
+    const appliedProjects = JSON.parse(localStorage.getItem('appliedProjects') || '[]');
+    const newApplication = {
+      projectId: Number(projectId),
+      email: userEmail,
+      timestamp: Date.now(),
+      applicationId: response.id || response.application?.id,
+      applicationData: applicationData
+    };
+    
+    appliedProjects.push(newApplication);
+    localStorage.setItem('appliedProjects', JSON.stringify(appliedProjects));
+
+    // Обновяваме локалното състояние
+    setUserApplications(prev => {
+      const updated = [...prev, newApplication];
+      return updated;
+    });
+
+    // Презареждаме кандидатурите за проекта
+    await getProjectApplications(projectId);
+
+    notify('application-success');
+    return {
+      success: true,
+      message: response.message || 'Кандидатурата е изпратена успешно',
+      application: response.application || response
+    };
+
+  } catch (error) {
+    console.error('Error applying to project:', error);
+    
+    // Специална обработка за deadline грешка
+    if (error.message === 'Application deadline has passed') {
+      notify('error', 'Крайният срок за кандидатстване е изминал');
+    } else {
+      notify('error', error.message || 'Failed to submit application');
+    }
+    
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [initiativeService, userEmail, isAuthentication, getProjectApplications]);
+  // Зареждане на всички кандидатури (за админи)
+  const getAllApplications = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.getAllApplications();
+      return response.data || response;
+    } catch (error) {
+      console.error('Error loading all applications:', error);
+      notify('error', 'Failed to load applications');
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  }, [initiativeService]);
+
+  // Обновяване на статуса на кандидатура (за админи)
+  const updateApplicationStatus = useCallback(async (applicationId, status) => {
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.updateApplicationStatus(applicationId, status);
+
+      // Обновяваме локалното състояние ако е нужно
+      setRecentApplications(prev =>
+        prev.map(app =>
+          app.id === applicationId ? { ...app, status } : app
+        )
+      );
+
+      notify('success', 'Application status updated successfully');
+      return response.data || response;
+    } catch (error) {
+      console.error('Error updating application status:', error);
+      notify('error', 'Failed to update application status');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [initiativeService]);
+
+  // Изтриване на кандидатура (за админи)
+  const deleteApplication = useCallback(async (applicationId) => {
+    try {
+      setIsLoading(true);
+      await initiativeService.deleteApplication(applicationId);
+
+      // Премахваме от локалното състояние
+      setRecentApplications(prev =>
+        prev.filter(app => app.id !== applicationId)
+      );
+
+      notify('success', 'Application deleted successfully');
+    } catch (error) {
+      console.error('Error deleting application:', error);
+      notify('error', 'Failed to delete application');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [initiativeService]);
+
   // Draft functions
   const getAllDrafts = useCallback(async (page = 1, forceRefresh = false) => {
     if (page === 1 && drafts.length > 0 && draftsLoaded && !forceRefresh) {
@@ -279,7 +451,6 @@ export const InitiativeProvider = ({ children }) => {
         // Проверяваме дали трябва да изтрием и от localStorage
         if (draftLocalStorage.isDraftMatching(identifier)) {
           draftLocalStorage.clearDraft();
-          console.log('Synchronized: Removed matching draft from localStorage');
         }
 
         notify('success', 'Draft deleted successfully!');
@@ -626,7 +797,7 @@ export const InitiativeProvider = ({ children }) => {
 
     } catch (error) {
       console.error('Error loading user bookmarks:', error);
-      setBookmarksLoaded(true); 
+      setBookmarksLoaded(true);
     }
   }, [isAuthentication, userEmail, initiativeService]);
   const loadProjectBookmarks = useCallback(async () => {
@@ -761,7 +932,6 @@ export const InitiativeProvider = ({ children }) => {
       }
 
       const response = await initiativeService.likeComment(commentId);
-      console.log('Like response:', response);
 
       // API-то връща директно обекта, не в data property
       const likeData = response.data || response;
@@ -1058,220 +1228,7 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [isAuthentication, initiativeService, getProjectComments]);
 
-  // const addProjectReply = useCallback(async (projectId, parentCommentId, content) => {
-  //   try {
-  //     if (!isAuthentication) {
-  //       throw new Error('Authentication required');
-  //     }
-
-  //     const newReply = {
-  //       id: generateId(),
-  //       userId: userEmail,
-  //       userEmail: userEmail,
-  //       userName: getUserDisplayName(),
-  //       userAvatar: profileData?.avatar || null,
-  //       content: content,
-  //       createdAt: new Date().toISOString(),
-  //       updatedAt: null,
-  //       likes: [],
-  //       likesCount: 0,
-  //       parentId: parentCommentId
-  //     };
-
-  //     const projectKey = `project-${projectId}`;
-  //     const updatedComments = (comments[projectKey] || []).map(comment => {
-  //       if (comment.id === parentCommentId) {
-  //         return {
-  //           ...comment,
-  //           replies: [...(comment.replies || []), newReply] // ← Ред 354 вероятно е тук
-  //         };
-  //       }
-  //       return comment;
-  //     });
-
-  //     setComments(prev => ({
-  //       ...prev,
-  //       [projectKey]: updatedComments
-  //     }));
-
-  //     notify('success', 'Reply added successfully');
-  //     return newReply;
-  //   } catch (error) {
-  //     console.error('Error adding project reply:', error);
-  //     notify('error', 'Failed to add reply');
-  //     throw error;
-  //   }
-  // }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar, comments]);
-
-  // const likeProjectReply = useCallback(async (projectId, commentId, replyId) => {
-  //   try {
-  //     if (!isAuthentication) {
-  //       throw new Error('Authentication required');
-  //     }
-
-  //     const projectKey = `project-${projectId}`;
-  //     const updatedComments = (comments[projectKey] || []).map(comment => {
-  //       if (comment.id === commentId) {
-  //         const updatedReplies = (comment.replies || []).map(reply => {
-  //           if (reply.id === replyId) {
-  //             const isLiked = (reply.likes || []).includes(userEmail);
-  //             return {
-  //               ...reply,
-  //               likes: isLiked
-  //                 ? (reply.likes || []).filter(email => email !== userEmail)
-  //                 : [...(reply.likes || []), userEmail],
-  //               likesCount: isLiked
-  //                 ? (reply.likesCount || 0) - 1
-  //                 : (reply.likesCount || 0) + 1
-  //             };
-  //           }
-  //           return reply;
-  //         });
-
-  //         return {
-  //           ...comment,
-  //           replies: updatedReplies
-  //         };
-  //       }
-  //       return comment;
-  //     });
-
-  //     setComments(prev => ({
-  //       ...prev,
-  //       [projectKey]: updatedComments
-  //     }));
-
-  //     return updatedComments.find(c => c.id === commentId);
-  //   } catch (error) {
-  //     console.error('Error liking project reply:', error);
-  //     notify('error', 'Failed to like reply');
-  //     throw error;
-  //   }
-  // }, [isAuthentication, userEmail, comments]);
-
-  // // UPDATE PROJECT REPLY
-  // const updateProjectReply = useCallback(async (projectId, commentId, replyId, newContent) => {
-  //   try {
-  //     if (!isAuthentication) {
-  //       throw new Error('Authentication required');
-  //     }
-
-  //     const projectKey = `project-${projectId}`;
-  //     const updatedComments = (comments[projectKey] || []).map(comment => {
-  //       if (comment.id === commentId) {
-  //         const updatedReplies = (comment.replies || []).map(reply => {
-  //           if (reply.id === replyId) {
-  //             return {
-  //               ...reply,
-  //               content: newContent,
-  //               updatedAt: new Date().toISOString()
-  //             };
-  //           }
-  //           return reply;
-  //         });
-  //         return { ...comment, replies: updatedReplies };
-  //       }
-  //       return comment;
-  //     });
-
-  //     setComments(prev => ({ ...prev, [projectKey]: updatedComments }));
-
-  //     const updatedComment = updatedComments.find(c => c.id === commentId);
-  //     notify('success', 'Reply updated successfully');
-  //     return updatedComment;
-  //   } catch (error) {
-  //     console.error('Error updating project reply:', error);
-  //     notify('error', 'Failed to update reply');
-  //     throw error;
-  //   }
-  // }, [isAuthentication, comments]);
-
-  // // DELETE PROJECT REPLY
-  // const deleteProjectReply = useCallback(async (projectId, commentId, replyId) => {
-  //   try {
-  //     if (!isAuthentication) {
-  //       throw new Error('Authentication required');
-  //     }
-
-  //     const projectKey = `project-${projectId}`;
-  //     const updatedComments = (comments[projectKey] || []).map(comment => {
-  //       if (comment.id === commentId) {
-  //         return {
-  //           ...comment,
-  //           replies: (comment.replies || []).filter(reply => reply.id !== replyId)
-  //         };
-  //       }
-  //       return comment;
-  //     });
-
-  //     setComments(prev => ({ ...prev, [projectKey]: updatedComments }));
-
-  //     const updatedComment = updatedComments.find(c => c.id === commentId);
-  //     notify('success', 'Reply deleted successfully');
-  //     return updatedComment;
-  //   } catch (error) {
-  //     console.error('Error deleting project reply:', error);
-  //     notify('error', 'Failed to delete reply');
-  //     throw error;
-  //   }
-  // }, [isAuthentication, comments]);
-
-  // Функция за зареждане на кандидатури за проект
-  const getProjectApplications = useCallback(async (projectId) => {
-    if (!projectId) return;
-
-    try {
-      const projectApplications = await getApplicationsByProject(projectId);
-      setRecentApplications(projectApplications);
-      return projectApplications;
-    } catch (error) {
-      console.error('Error loading project applications:', error);
-      setRecentApplications([]);
-      return [];
-    }
-  }, [getApplicationsByProject]);
-
-  // Функция за добавяне на нова кандидатура
-  const applyToProject = useCallback(async (projectId, applicationData) => {
-    if (!projectId || !applicationData) return;
-
-    try {
-      setIsLoading(true);
-
-      // 1. Изпращаме заявката към сървъра чрез UserContext (за уведомления)
-      const response = await onProjectApplicationSubmit({
-        projectId,
-        ...applicationData
-      });
-
-      // 2. Ако заявката е успешна, обновяваме данните чрез хука
-      if (response.success) {
-        const newApplication = await addApplication({
-          ...applicationData,
-          projectId
-        });
-
-        // Обновяваме локалното състояние за текущия проект
-        setRecentApplications(prev => {
-          const filtered = prev.filter(app => app.id !== newApplication.id);
-          return [newApplication, ...filtered.slice(0, 4)];
-        });
-
-        return { success: true, application: newApplication };
-      }
-
-      return response;
-
-    } catch (error) {
-      console.error('Error applying to project:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [onProjectApplicationSubmit, addApplication]);
-
   //STORIES AND PUBLICATIONS
-
   //Stories functions
   const getStoryBySlug = useCallback(async (slug) => {
     try {
@@ -1637,16 +1594,15 @@ export const InitiativeProvider = ({ children }) => {
     updateProjectComment,
     deleteProjectComment,
     likeProjectComment,
-    // addProjectReply,
-    // likeProjectReply,
-    // updateProjectReply,
-    // deleteProjectReply,
+    //Application functions
     getProjectApplications,
     recentApplications,
     applyToProject,
-    getAllApplications, // За админи
+    hasUserAppliedToProject,
+    userApplications,
+    getAllApplications,     // За админи
     updateApplicationStatus, // За админи  
-    deleteApplication, // За админи
+    deleteApplication,      // За админи
 
     //Stories functions
     getStoryBySlug,

@@ -1580,6 +1580,7 @@
     },
     "buttons": {
       "apply": "Apply",
+      "deadlinePassed": "Application deadline has passed",
       "alreadyApplied": "You have already applied",
       "bookmark": "Bookmark"
     },
@@ -1814,7 +1815,6 @@
       "description": "Start adding initiatives and projects to your bookmarks",
       "exploreButton": "Explore initiatives"
     },
- 
     "viewDetails": "View details",
     "readMore": "Read more",
     "unbookmark": "Remove bookmark",
@@ -1822,6 +1822,276 @@
     "viewMode": {
       "grid": "Grid view",
       "list": "List view"
+    }
+  },
+  "applications": {
+    "title": "Applications Management",
+    "subtitle": "Total applications: {{count}}",
+    "loading": "Loading data...",
+    "comingSoon": "Coming soon",
+    "loadedData": "Loaded {{count}} applications from database",
+    "tabs": {
+      "list": "List",
+      "statistics": "Statistics",
+      "export": "Export",
+      "communication": "Communication"
+    },
+    "actions": {
+      "refresh": "Refresh",
+      "view": "View",
+      "contact": "Contact",
+      "delete": "Delete",
+      "export": "Export",
+      "sendEmail": "Send email"
+    },
+    "stats": {
+      "total": "Total Applications",
+      "thisWeek": "This Week",
+      "thisMonth": "This Month",
+      "projects": "Active Projects"
+    },
+    "list": {
+      "title": "Applications List",
+      "count": "{{count}} applications",
+      "loading": "Loading list...",
+      "viewTable": "Table",
+      "viewCards": "Cards",
+      "empty": {
+        "title": "No Applications",
+        "description": "No applications have been submitted for the projects yet."
+      }
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "project": "Project",
+      "date": "Date",
+      "actions": "Actions",
+      "noPhone": "None"
+    },
+    "email": {
+      "subject": "Regarding your application for project {{projectId}}",
+      "body": "Hello {{name}},\n\nRegarding your application for project {{projectId}}...\n\nBest regards,\nPensa Club Team"
+    },
+    "filters": {
+      "searchPlaceholder": "Search by name, email or project...",
+      "allProjects": "All Projects",
+      "allTime": "All Time",
+      "today": "Today",
+      "thisWeek": "This Week",
+      "thisMonth": "This Month",
+      "customRange": "Custom Range",
+      "advanced": "Advanced",
+      "clear": "Clear",
+      "sortBy": "Sort By",
+      "sortByDate": "Date",
+      "sortByName": "Name",
+      "sortByEmail": "Email",
+      "sortByProject": "Project",
+      "desc": "Descending",
+      "asc": "Ascending",
+      "customDateRange": "Custom Date Range",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    },
+    "details": {
+      "close": "Close",
+      "appliedOn": "Applied on",
+      "applicationInfo": "Application Information",
+      "copyEmail": "Copy email",
+      "copyPhone": "Copy phone",
+      "viewProject": "View project",
+      "anonymous": "Anonymous Application",
+      "yes": "Yes",
+      "no": "No",
+      "applicationHistory": "Application History",
+      "loadingHistory": "Loading history...",
+      "moreApplications": "and {{count}} more applications",
+      "userProfile": "User Profile",
+      "totalApplications": "Total Applications",
+      "profileStatus": "Profile Status",
+      "hasProfile": "Has Profile",
+      "noProfile": "No Profile"
+    },
+    "statistics": {
+      "thisMonth": "This Month",
+      "avgPerDay": "Average per Day",
+      "peakHour": "Peak Hour",
+      "topProject": "Top Project",
+      "dailyActivity": "Daily Activity (Last 30 Days)",
+      "projectsDistribution": "Projects Distribution",
+      "topProjects": "Top 6 Projects",
+      "hourlyActivity": "Hourly Activity",
+      "weeklyTrend": "Weekly Trend",
+      "applications": "applications",
+      "quickInsights": "Quick Insights",
+      "insight1": "Most popular project is \"{{project}}\" with {{count}} applications",
+      "insight2": "Most active hour is {{hour}} with {{count}} applications",
+      "insight3": "Average {{avg}} applications per day in the last month",
+      "noData": "No Data",
+      "viewTopProject": "View Top Project"
+    },
+    "export": {
+      "title": "Data Export",
+        "exportPDF": "Export PDF",
+      "generatedOn": "Generated on",
+      "totalRecords": "Total records", 
+      "page": "Page",
+      "of": "of",
+      "subtitle": "Download applications in CSV or JSON format",
+      "recordsToExport": "Records to Export",
+      "selectedColumns": "Selected Columns",
+      "uniqueProjects": "Unique Projects",
+      "ofTotal": "of total",
+      "dataSource": "Data Source",
+      "allData": "All Data",
+      "allDataDescription": "Export all {{count}} applications",
+      "filteredData": "Filtered Data",
+      "filteredDataDescription": "Export only {{count}} filtered applications",
+      "columnSelection": "Column Selection",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "formatSettings": "Format Settings",
+      "dateFormat": "Date Format",
+      "separator": "Separator",
+      "comma": "Comma",
+      "semicolon": "Semicolon",
+      "tab": "Tab",
+      "exportCSV": "Export CSV",
+      "exportJSON": "Export JSON",
+      "exporting": "Exporting...",
+      "noColumnsSelected": "Please select at least one column to export",
+      "noDataToExport": "No data to export",
+      "exportError": "Error exporting data",
+      "lastExport": "Last Export",
+      "exportedRecords": "{{records}} records, {{columns}} columns on {{time}}",
+      "yes": "Yes",
+      "no": "No",
+      "columns": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email Address",
+        "phone": "Phone",
+        "project": "Project",
+        "appliedAt": "Applied At",
+        "anonymous": "Anonymous Application"
+      },
+      "columnsDesc": {
+        "firstName": "Applicant's first name",
+        "lastName": "Applicant's last name",
+        "email": "Contact email address",
+        "phone": "Phone number (if provided)",
+        "project": "Project ID they applied for",
+        "appliedAt": "Date and time of application",
+        "anonymous": "Whether the application is anonymous"
+      }
+    },
+    "communication": {
+      "title": "Email Communication",
+      "subtitle": "Send individual or bulk emails to candidates",
+      "totalRecipients": "Total Recipients",
+      "selectedRecipients": "Selected",
+      "uniqueProjects": "Projects",
+      "sentToday": "Sent Today",
+      "individualMode": "Individual Email",
+      "bulkMode": "Bulk Email",
+      "selectRecipient": "Select Recipient",
+      "chooseRecipient": "Choose a recipient...",
+      "selectRecipients": "Select Recipients",
+      "selectTemplate": "Select Email Template",
+      "useCustomTemplate": "Use Custom Template",
+      "subject": "Subject",
+      "content": "Content",
+      "subjectPlaceholder": "Enter email subject...",
+      "contentPlaceholder": "Enter email content...",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "selectProject": "Select Project",
+      "preview": "Preview",
+      "sendEmail": "Send Email",
+      "sendBulkEmails": "Send to {{count}} recipients",
+      "sending": "Sending...",
+      "emailSent": "Email sent successfully!",
+      "bulkEmailsSent": "Bulk emails sent to {{count}} recipients",
+      "noRecipientsSelected": "No recipients selected",
+      "sendError": "Failed to send email",
+      "bulkError": "{{success}} emails sent successfully, {{errors}} failed",
+      "emailPreview": "Email Preview",
+      "close": "Close",
+      "availableVariables": "Available Variables",
+      "companyName": "Initiative Platform",
+      "statusUpdated": "Application status updated",
+      "nextSteps": "We will contact you soon with next steps",
+      "defaultLocation": "Our office / Online meeting",
+      "defaultReason": "After careful consideration",
+      "additionalInfo": "Additional information will be provided",
+      "templates": {
+        "welcome": {
+          "name": "Welcome Email",
+          "description": "Send a welcome message to new applicants",
+          "subject": "Welcome to {{companyName}} - Application Received",
+          "content": "Dear {{firstName}} {{lastName}},\n\nThank you for your application to {{projectId}}. We have received your application and will review it carefully.\n\nWe appreciate your interest in joining our initiative.\n\nBest regards,\n{{companyName}} Team"
+        },
+        "status_update": {
+          "name": "Status Update",
+          "description": "Notify candidates about application status changes",
+          "subject": "Application Status Update - {{projectId}}",
+          "content": "Dear {{firstName}} {{lastName}},\n\nWe wanted to update you on the status of your application for {{projectId}}.\n\nStatus: {{status}}\n\n{{nextSteps}}\n\nBest regards,\n{{companyName}} Team"
+        },
+        "interview_invitation": {
+           "name": "Interview Invitation",
+          "description": "Invite candidates for an interview"
+        },
+        "interview": {
+          "name": "Interview Invitation",
+          "description": "Invite candidates for an interview",
+          "subject": "Interview Invitation - {{projectId}}",
+          "content": "Dear {{firstName}} {{lastName}},\n\nWe are pleased to invite you for an interview regarding your application for {{projectId}}.\n\nDate: {{date}}\nTime: {{time}}\nLocation: {{location}}\n\nPlease confirm your attendance.\n\nBest regards,\n{{companyName}} Team"
+        },
+        "rejection": {
+          "name": "Application Rejection",
+          "description": "Politely decline an application",
+          "subject": "Application Update - {{projectId}}",
+          "content": "Dear {{firstName}} {{lastName}},\n\nThank you for your interest in {{projectId}}.\n\n{{reason}}, we have decided to move forward with other candidates.\n\nWe encourage you to apply for future opportunities.\n\nBest regards,\n{{companyName}} Team"
+        },
+        "follow_up": {
+          "name": "Follow-up Email",
+          "description": "Send follow-up information to candidates",
+          "subject": "Follow-up: {{projectId}} Application",
+          "content": "Dear {{firstName}} {{lastName}},\n\nWe wanted to follow up on your application for {{projectId}}.\n\n{{additionalInfo}}\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\n{{companyName}} Team"
+        }
+      }
+    }
+  },
+  "projectDetails": {
+    "close": "Close",
+    "loading": "Loading project...",
+    "loadError": "Error loading project",
+    "errorTitle": "Loading Error",
+    "retry": "Try Again",
+    "noData": "No project data",
+    "noDataDescription": "Project doesn't exist or no access to information.",
+    "applicationsCount": "{{count}} applications",
+    "projectInfo": "Project Information",
+    "projectId": "Project ID",
+    "copyId": "Copy ID",
+    "status": "Status",
+    "category": "Category",
+    "participants": "Participants",
+    "description": "Description",
+    "timeline": "Timeline",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "team": "Team",
+    "moreMembers": "more members",
+    "anonymousMember": "Anonymous Member",
+    "viewProject": "View Project",
+    "statusTypes": {
+      "active": "Active",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
     }
   }
 }

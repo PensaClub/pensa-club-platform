@@ -335,22 +335,27 @@ export const UserProvider = ({ children }) => {
 const onProjectApplicationSubmit = async (applicationData) => {
   setIsLoading(true);
   try {
-    // Временно закоментирано до готовност на endpoint
-    // const response = await userService.applyToProject(applicationData);
+    // Активираме реалния endpoint
+    const response = await userService.applyToProject(applicationData);
     
-    // Mock response за тестване
-    const mockResponse = {
-      success: true,
-      message: 'Кандидатурата е изпратена успешно',
-      application: {
-        id: `app-${Date.now()}`,
-        ...applicationData,
-        status: 'pending'
-      }
+    // Записваме в localStorage за кеширане
+    const appliedProjects = JSON.parse(localStorage.getItem('appliedProjects') || '[]');
+    const newApplication = {
+      projectId: applicationData.projectId,
+      email: isAuth.email,
+      timestamp: Date.now(),
+      applicationId: response.id || response.application?.id
     };
     
+    appliedProjects.push(newApplication);
+    localStorage.setItem('appliedProjects', JSON.stringify(appliedProjects));
+    
     notify('application-success');
-    return mockResponse;
+    return {
+      success: true,
+      message: response.message || 'Кандидатурата е изпратена успешно',
+      application: response.application || response
+    };
   } catch (error) {
     notify('error', error);
     showErrorAndSetTimeouts(`Error submitting application: ${error.message}`);

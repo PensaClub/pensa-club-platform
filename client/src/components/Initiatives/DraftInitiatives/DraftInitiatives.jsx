@@ -121,7 +121,6 @@ const DraftInitiatives = () => {
       try {
         // Използваме slug ако има, иначе id
         const identifier = draft.slug || draft.id;
-        console.log('Deleting draft with identifier:', identifier);
         await deleteDraftInitiative(identifier, draft);
 
         // Премахваме от локалния state

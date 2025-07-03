@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -49,21 +50,20 @@ export const BookmarkedItems = () => {
             behavior: 'smooth'
         });
     }, []);
-    // Зареждаме данните за bookmarked items
+
     useEffect(() => {
         const loadBookmarkedData = async () => {
-            setIsLoadingData(true);
-            
-            // Зареждаме инициативи
+            setIsLoadingData(true);           
+          
             const initiativesData = [];
             for (const id of bookmarkedInitiatives) {
                 try {
-                    // Първо проверяваме дали вече имаме данните
+          
                     const existingInitiative = initiatives.find(init => init.id === id);
                     if (existingInitiative) {
                         initiativesData.push(existingInitiative);
                     } else {
-                        // Ако не, зареждаме от API
+                  
                         const data = await getInitiativeById(id);
                         if (data) initiativesData.push(data);
                     }
@@ -72,16 +72,15 @@ export const BookmarkedItems = () => {
                 }
             }
 
-            // Зареждаме проекти
             const projectsData = [];
             for (const id of bookMarkedProjects) {
                 try {
-                    // Първо проверяваме дали вече имаме данните
+
                     const existingProject = projects.find(proj => proj.id === id);
                     if (existingProject) {
                         projectsData.push(existingProject);
                     } else {
-                        // Ако не, зареждаме от API
+                  
                         const data = await getProjectById(id);
                         if (data) projectsData.push(data);
                     }
@@ -100,7 +99,6 @@ export const BookmarkedItems = () => {
         loadBookmarkedData();
     }, [bookmarkedInitiatives, bookMarkedProjects]);
 
-    // Филтриране на елементи според търсенето
     const getFilteredItems = () => {
         let items = [];
 
@@ -118,7 +116,6 @@ export const BookmarkedItems = () => {
             }))];
         }
 
-        // Филтриране по търсене
         if (searchTerm) {
             items = items.filter(item => 
                 item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -139,15 +136,12 @@ export const BookmarkedItems = () => {
 const extractCityAndCountry = (fullAddress) => {
     if (!fullAddress) return '';
     
-    // Разделяме адреса по запетаи
     const parts = fullAddress.split(',').map(part => part.trim());
     
-    // Ако има поне 2 части, взимаме последните 2 (обикновено град и държава)
     if (parts.length >= 2) {
         return parts.slice(-2).join(', ');
     }
     
-    // Ако има само 1 част, връщаме я
     return parts[0] || fullAddress;
 };
 

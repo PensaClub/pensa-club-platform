@@ -57,6 +57,7 @@ import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCrea
 import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
 import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
 import { BookmarkedItems } from "./BookmarkedItems/BookmarkedItems";
+import { ApplicationsAdmin } from "../Initiatives/ApplicationsAdmin/ApplicationsAdmin";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -85,7 +86,12 @@ export const Profile = () => {
     suggest: false,
     articles: false
   });
-
+  const [applicationsStats, setApplicationsStats] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0
+  });
   // Получаваме текущата секция от URL-а с обект за съпоставяне
   const getCurrentSection = () => {
     const path = location.pathname;
@@ -113,7 +119,8 @@ export const Profile = () => {
       "/profile/article-create": "Нова статия",
       "/profile/initiative-create": "Нова  инициатива",
       "/profile/initiative": "Инициативи",
-      "/profile/bookmarks": "Запазени"
+      "/profile/bookmarks": "Запазени",
+      "/profile/applications-admin": "Кандидатури",
 
     };
 
@@ -137,7 +144,8 @@ export const Profile = () => {
     "/profile/initiative",
     "/profile/initiative-create",
     "/profile/article-create",
-    "/profile/articles"
+    "/profile/articles",
+    "/profile/applications-admin"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -464,7 +472,7 @@ export const Profile = () => {
                     <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
-                 <li>
+                <li>
                   <NavLink
                     to="bookmarks"
                     className={({ isActive }) => isActive ? 'active' : ''}
@@ -523,6 +531,7 @@ export const Profile = () => {
                   </li>
 
                   {isAdmin && (
+                    <>
                     <li>
                       <NavLink
                         to="users-statistic"
@@ -553,8 +562,23 @@ export const Profile = () => {
                             {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
                           </NavLink>
                         </li>
+
                       </ul>
-                    </li>
+                  
+                    </li>                    
+    <li>
+                        <NavLink
+                          to="applications-admin"
+                          className={({ isActive }) => isActive ? 'active' : ''}
+                        >
+                          <span className="link-content">
+                            <UsersIcon className="icon" />
+                            Кандидатури {applicationsStats.total > 0 && <>- {applicationsStats.total}</>}
+                          </span>
+                          {/* <ArrowIcon className="icon-arrow" /> */}
+                        </NavLink>
+                      </li>
+                      </>
                   )}
 
                   <li>
@@ -752,6 +776,7 @@ export const Profile = () => {
 
             {/* Admin-only routes */}
             <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
+            <Route path="applications-admin" element={<ManagementGuard><ApplicationsAdmin setApplicationsStats={setApplicationsStats} /></ManagementGuard>} />
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
           </Routes>

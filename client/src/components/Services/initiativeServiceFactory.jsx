@@ -109,47 +109,24 @@ export const initiativeServiceFactory = (token) => {
       return requester.get(`${apiUrl}/projects/initiative/${initiativeId}`);
     },
 
-    applyToProject: async (projectId, applicationData) => {
-      return requester.post(`${apiUrl}/projects/${projectId}/apply`, applicationData);
-    },
     toggleBookmarkProject: async (projectId) => {
-      return requester.post(`${apiUrl}/initiatives/bookmark/${projectId}`);
+      return requester.post(`${apiUrl}/projects/bookmark/${projectId}`);
     },
     getAllBookmarkedProjects: async (email) => {
       return requester.get(`${apiUrl}/projects/user-projects/${email}`);
     },
-    // // Project comments
-    // getProjectComments: async (projectId) => {
-    //   return requester.get(`${apiUrl}/projects/${projectId}/comments`);
-    // },
+ 
+     // Project applications endpoints
+    applyToProject: async (projectId, applicationData) => {
+      return requester.post(`${apiUrl}/projects/${projectId}/apply`, applicationData);
+    },
 
-    // addProjectComment: async (projectId, commentData) => {
-    //   return requester.post(`${apiUrl}/projects/${projectId}/comments`, commentData);
-    // },
-
-    // updateProjectComment: async (projectId, commentId, commentData) => {
-    //   return requester.put(`${apiUrl}/projects/${projectId}/comments/${commentId}`, commentData);
-    // },
-
-    // deleteProjectComment: async (projectId, commentId) => {
-    //   return requester.del(`${apiUrl}/projects/${projectId}/comments/${commentId}`);
-    // },
-
-    // likeProjectComment: async (projectId, commentId) => {
-    //   return requester.post(`${apiUrl}/projects/${projectId}/comments/${commentId}/like`);
-    // },
-
-    // Project applications endpoints
     getProjectApplications: async (projectId) => {
       return requester.get(`${apiUrl}/projects/${projectId}/applications`);
     },
 
     getAllApplications: async () => {
       return requester.get(`${apiUrl}/applications/all`);
-    },
-
-    getApplicationById: async (applicationId) => {
-      return requester.get(`${apiUrl}/applications/${applicationId}`);
     },
 
     updateApplicationStatus: async (applicationId, status) => {

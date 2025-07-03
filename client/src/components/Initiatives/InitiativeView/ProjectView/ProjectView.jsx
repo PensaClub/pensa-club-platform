@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -27,16 +27,24 @@ export const ProjectView = () => {
         applyToProject,
         isBookmarkedProject,
         toggleBookmarkProjects,
-        recentApplications
+        recentApplications,
+        hasUserAppliedToProject
     } = useInitiativeContext();
 
     const { isAuthentication, profileData } = useAuthContext();
     const [activeSection, setActiveSection] = useState('overview');
     const [commentsCount, setCommentsCount] = useState(0);
     const applicationsLoadedRef = useRef(false);
+    const isDeadlinePassed = useCallback(() => {
+        if (!currentProject?.applicationDeadline) return false;
 
+        const deadline = new Date(currentProject.applicationDeadline);
+        const now = new Date();
+        return now > deadline;
+    }, [currentProject?.applicationDeadline]);
     // Проверяваме дали потребителят вече е кандидатствал
-    const hasUserApplied = recentApplications?.some(app => app.email === profileData?.email);
+    const hasUserApplied = hasUserAppliedToProject(currentProject?.id);
+    const deadlinePassed = isDeadlinePassed();
 
     useEffect(() => {
         if (slug) {
@@ -127,7 +135,11 @@ export const ProjectView = () => {
     const handleApplicationSubmit = async (applicationData) => {
         try {
             const result = await applyToProject(currentProject.id, applicationData);
-            console.log('Application submitted successfully:', result);
+
+            if (result.success) {
+
+                // console.log('Application submitted successfully:', result);
+            }
         } catch (error) {
             console.error('Application failed:', error);
         }
@@ -194,8 +206,9 @@ export const ProjectView = () => {
     }
 
     // ЗАЩИТЕНИ ПРОВЕРКИ
-    const canApply = currentProject.applicationStatus === 'open' &&
-        (currentProject.currentParticipants || 0) < (currentProject.maxParticipants || Infinity);
+    const canApply = currentProject?.applicationStatus === 'open' &&
+        (currentProject.currentParticipants || 0) < (currentProject.maxParticipants || Infinity) &&
+        !deadlinePassed
 
     return (
         <div className="project-view-container">
@@ -297,12 +310,18 @@ export const ProjectView = () => {
                                 </div>
 
                                 <div className="project-view-actions">
-                                    {isAuthentication && canApply && (
+                                    {isAuthentication && (
                                         <button
-                                            className="project-view-btn-apply"
+                                            className={`project-view-btn-apply ${hasUserApplied ? 'applied' : ''} ${deadlinePassed ? 'deadline-passed' : ''}`}
                                             onClick={scrollToApplicationForm}
+                                            disabled={hasUserApplied || deadlinePassed || !canApply}
                                         >
-                                            {hasUserApplied ? t('projectView.buttons.alreadyApplied') : t('projectView.buttons.apply')}
+                                            {hasUserApplied
+                                                ? t('projectView.buttons.alreadyApplied')
+                                                : deadlinePassed
+                                                    ? t('projectView.buttons.deadlinePassed')
+                                                    : t('projectView.buttons.apply')
+                                            }
                                         </button>
                                     )}
 
@@ -346,7 +365,19 @@ export const ProjectView = () => {
                                 </div>
                             )}
                         </div>
+
                     </div>
+                    {/* Показваме deadline информация ако има */}
+                    {currentProject?.applicationDeadline && !hasUserApplied && (
+                        <div className="project-view-deadline-info">
+                            <span className={`deadline-status ${deadlinePassed ? 'passed' : 'active'}`}>
+                                {deadlinePassed
+                                    ? `Крайният срок изтече: ${new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}`
+                                    : `Краен срок: ${new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}`
+                                }
+                            </span>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -481,7 +512,7 @@ export const ProjectView = () => {
                     )}
 
                     {/* Application Form Section - Винаги видима */}
-                    {isAuthentication && (
+                    {isAuthentication && !deadlinePassed && (
                         <section id="application-form" className="project-view-section">
                             <ApplicationForm
                                 project={currentProject}
@@ -489,7 +520,15 @@ export const ProjectView = () => {
                             />
                         </section>
                     )}
-
+                    {/* Или показваме съобщение ако deadline е изминал */}
+                    {isAuthentication && deadlinePassed && (
+                        <section id="application-form" className="project-view-section">
+                            <div className="application-deadline-message">
+                                <h3>Кандидатстването е затворено</h3>
+                                <p>Крайният срок за кандидатстване за този проект е изминал на {new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}.</p>
+                            </div>
+                        </section>
+                    )}
                     {/* Comments Section */}
                     <section id="comments" className="project-view-section project-view-comments-section">
                         <Comments

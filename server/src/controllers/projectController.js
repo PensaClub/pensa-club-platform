@@ -1,14 +1,12 @@
 const projectController = require('express').Router();
 const { where, Op } = require('sequelize');
 const isAuth = require('../middlewares/isAuth');
-const rbac = require('../middlewares/rbac');
+const { checkPermission } = require('../middlewares/rbac');
+const { ProjectSchema, UpdateProjectSchema, ProjectApplicationSchema, PaginationQuerySchema } = require('../schemas/projects.schema');
 const {
     project,
     image,
-    initiative,
     downloadMaterial,
-    story,
-    publication,
     contact,
     section,
     user_account,
@@ -16,14 +14,17 @@ const {
     sponsor,
     partner,
     milestone,
-    user_details,
     project_application,
 } = require('../sequelize/models');
 const customError = require('../utils/customError');
 const { transformProject, projectConfig } = require('../utils/projectUtils');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 
-projectController.get('/all', async (req, res, next) => {
+// ========================================
+// ENDPOINTS
+// ========================================
+
+projectController.get('/all', checkPermission('projects', 'read'), async (req, res, next) => {
     try {
         const projects = await project.findAll({
             include: projectConfig,
@@ -43,7 +44,7 @@ projectController.get('/all', async (req, res, next) => {
     }
 });
 
-projectController.get('/single/:id', async (req, res, next) => {
+projectController.get('/single/:id', checkPermission('projects', 'read'), async (req, res, next) => {
     try {
         const param = req.params.id;
         let foundProject;
@@ -73,7 +74,7 @@ projectController.get('/single/:id', async (req, res, next) => {
     }
 });
 
-projectController.get('/initiative/:initiativeId', async (req, res, next) => {
+projectController.get('/initiative/:initiativeId', checkPermission('projects', 'read'), async (req, res, next) => {
     try {
         const param = req.params.initiativeId;
         let whereClause;
@@ -103,8 +104,11 @@ projectController.get('/initiative/:initiativeId', async (req, res, next) => {
     }
 });
 
-projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
+projectController.post('/:projectId/apply', isAuth, checkPermission('projects', 'read'), async (req, res, next) => {
     try {
+        // Validate application data
+        const validatedData = ProjectApplicationSchema.parse(req.body);
+
         const userId = req.user.userId;
         const { projectId } = req.params;
         let whereClause;
@@ -169,11 +173,7 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
         const applicationData = {
             projectId: foundProject.id,
             userId: userId,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            phone: req.body.phone || '',
-            isAnonymous: req.body.isAnonymous || false,
+            ...validatedData,
             appliedAt: new Date(),
         };
 
@@ -189,22 +189,25 @@ projectController.post('/:projectId/apply', isAuth, async (req, res, next) => {
     }
 });
 
-projectController.post('/create', isAuth, async (req, res, next) => {
+projectController.post('/create', isAuth, checkPermission('projects', 'create'), async (req, res, next) => {
     try {
+        // Validate project data
+        const validatedData = ProjectSchema.parse(req.body);
+
         const result = await project.sequelize.transaction(async (t) => {
             const newProject = await project.create(
                 {
                     creatorId: req.user.userId,
-                    ...req.body,
+                    ...validatedData,
                 },
                 { transaction: t }
             );
 
             // Create main image if provided
-            if (req.body.mainImage) {
+            if (validatedData.mainImage) {
                 await image.create(
                     {
-                        ...req.body.mainImage,
+                        ...validatedData.mainImage,
                         imageableId: newProject.id,
                         imageLinkConnection: 'project_main',
                     },
@@ -213,9 +216,9 @@ projectController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create team contacts
-            if (req.body.team?.length > 0) {
+            if (validatedData.team?.length > 0) {
                 await Promise.all(
-                    req.body.team.map((contactData) =>
+                    validatedData.team.map((contactData) =>
                         contact.create(
                             {
                                 ...contactData,
@@ -230,10 +233,10 @@ projectController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create main contact
-            if (req.body.contact) {
+            if (validatedData.contact) {
                 await contact.create(
                     {
-                        ...req.body.contact,
+                        ...validatedData.contact,
                         contactableId: newProject.id,
                         contactLinkConnection: 'project',
                         isTeamMember: false,
@@ -243,9 +246,9 @@ projectController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create sections with their images
-            if (req.body.sections?.length > 0) {
+            if (validatedData.sections?.length > 0) {
                 await Promise.all(
-                    req.body.sections.map(async (sectionData) => {
+                    validatedData.sections.map(async (sectionData) => {
                         const { images: sectionImages, ...sectionFields } = sectionData;
                         const createdSection = await section.create(
                             {
@@ -275,9 +278,9 @@ projectController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create sponsors
-            if (req.body.sponsors?.length > 0) {
+            if (validatedData.sponsors?.length > 0) {
                 await Promise.all(
-                    req.body.sponsors.map(async (sponsorData) => {
+                    validatedData.sponsors.map(async (sponsorData) => {
                         const { id: sponsorId, ...sponsorFields } = sponsorData;
                         await sponsor.create(
                             {
@@ -292,9 +295,9 @@ projectController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create partners
-            if (req.body.partners?.length > 0) {
+            if (validatedData.partners?.length > 0) {
                 await Promise.all(
-                    req.body.partners.map(async (partnerData) => {
+                    validatedData.partners.map(async (partnerData) => {
                         const { id: partnerId, ...partnerFields } = partnerData;
                         await partner.create(
                             {
@@ -309,9 +312,9 @@ projectController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create download materials
-            if (req.body.downloadMaterials?.length > 0) {
+            if (validatedData.downloadMaterials?.length > 0) {
                 await Promise.all(
-                    req.body.downloadMaterials.map(async (materialData) => {
+                    validatedData.downloadMaterials.map(async (materialData) => {
                         const { image: materialImage, ...materialFields } = materialData;
                         const createdMaterial = await downloadMaterial.create(
                             {
@@ -337,9 +340,9 @@ projectController.post('/create', isAuth, async (req, res, next) => {
             }
 
             // Create milestones
-            if (req.body.milestones?.length > 0) {
+            if (validatedData.milestones?.length > 0) {
                 await Promise.all(
-                    req.body.milestones.map((milestoneData) =>
+                    validatedData.milestones.map((milestoneData) =>
                         milestone.create(
                             {
                                 ...milestoneData,
@@ -365,8 +368,11 @@ projectController.post('/create', isAuth, async (req, res, next) => {
     }
 });
 
-projectController.patch('/:id', isAuth, async (req, res, next) => {
+projectController.patch('/:id', isAuth, checkPermission('projects', 'update'), async (req, res, next) => {
     try {
+        // Validate update data
+        const validatedData = UpdateProjectSchema.parse(req.body);
+
         const param = req.params.id;
         const projectId = parseInt(param);
 
@@ -406,17 +412,10 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
                 });
             }
 
-            if (Number(foundProject.creator.id) !== Number(req.user.userId)) {
-                throw new customError({
-                    message: 'Unauthorized to update this project',
-                    statusCode: 403,
-                });
-            }
-
-            await foundProject.update(req.body, { transaction: t });
+            await foundProject.update(validatedData, { transaction: t });
 
             // Update main image if provided
-            if (req.body.mainImage) {
+            if (validatedData.mainImage) {
                 // Delete existing main image
                 await image.destroy({
                     where: {
@@ -429,7 +428,7 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
                 // Create new main image
                 await image.create(
                     {
-                        ...req.body.mainImage,
+                        ...validatedData.mainImage,
                         imageableId: foundProject.id,
                         imageLinkConnection: 'project_main',
                     },
@@ -438,7 +437,7 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
             }
 
             // Update team contacts if provided
-            if (req.body.team) {
+            if (validatedData.team !== undefined) {
                 await contact.destroy({
                     where: {
                         contactableId: foundProject.id,
@@ -447,9 +446,9 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.team.length > 0) {
+                if (validatedData.team?.length > 0) {
                     await Promise.all(
-                        req.body.team.map((contactData) =>
+                        validatedData.team.map((contactData) =>
                             contact.create(
                                 {
                                     ...contactData,
@@ -465,7 +464,7 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
             }
 
             // Update main contact if provided
-            if (req.body.contact) {
+            if (validatedData.contact !== undefined) {
                 await contact.destroy({
                     where: {
                         contactableId: foundProject.id,
@@ -474,19 +473,21 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                await contact.create(
-                    {
-                        ...req.body.contact,
-                        contactableId: foundProject.id,
-                        contactLinkConnection: 'project',
-                        isTeamMember: false,
-                    },
-                    { transaction: t }
-                );
+                if (validatedData.contact) {
+                    await contact.create(
+                        {
+                            ...validatedData.contact,
+                            contactableId: foundProject.id,
+                            contactLinkConnection: 'project',
+                            isTeamMember: false,
+                        },
+                        { transaction: t }
+                    );
+                }
             }
 
             // Update sections if provided
-            if (req.body.sections) {
+            if (validatedData.sections !== undefined) {
                 await section.destroy({
                     where: {
                         sectionableId: foundProject.id,
@@ -494,9 +495,9 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.sections.length > 0) {
+                if (validatedData.sections?.length > 0) {
                     await Promise.all(
-                        req.body.sections.map(async (sectionData) => {
+                        validatedData.sections.map(async (sectionData) => {
                             const { images: sectionImages, ...sectionFields } = sectionData;
                             const createdSection = await section.create(
                                 {
@@ -527,7 +528,7 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
             }
 
             // Update sponsors if provided
-            if (req.body.sponsors) {
+            if (validatedData.sponsors !== undefined) {
                 await sponsor.destroy({
                     where: {
                         sponsorableId: foundProject.id,
@@ -535,9 +536,9 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.sponsors.length > 0) {
+                if (validatedData.sponsors?.length > 0) {
                     await Promise.all(
-                        req.body.sponsors.map(async (sponsorData) => {
+                        validatedData.sponsors.map(async (sponsorData) => {
                             const { id: sponsorId, ...sponsorFields } = sponsorData;
                             await sponsor.create(
                                 {
@@ -553,7 +554,7 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
             }
 
             // Update partners if provided
-            if (req.body.partners) {
+            if (validatedData.partners !== undefined) {
                 await partner.destroy({
                     where: {
                         partnerableId: foundProject.id,
@@ -561,9 +562,9 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.partners.length > 0) {
+                if (validatedData.partners?.length > 0) {
                     await Promise.all(
-                        req.body.partners.map(async (partnerData) => {
+                        validatedData.partners.map(async (partnerData) => {
                             const { id: partnerId, ...partnerFields } = partnerData;
                             await partner.create(
                                 {
@@ -579,7 +580,7 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
             }
 
             // Update download materials if provided
-            if (req.body.downloadMaterials) {
+            if (validatedData.downloadMaterials !== undefined) {
                 await downloadMaterial.destroy({
                     where: {
                         downloadableId: foundProject.id,
@@ -587,9 +588,9 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
                     },
                     transaction: t,
                 });
-                if (req.body.downloadMaterials.length > 0) {
+                if (validatedData.downloadMaterials?.length > 0) {
                     await Promise.all(
-                        req.body.downloadMaterials.map(async (materialData) => {
+                        validatedData.downloadMaterials.map(async (materialData) => {
                             const { image: materialImage, ...materialFields } = materialData;
                             const createdMaterial = await downloadMaterial.create(
                                 {
@@ -616,16 +617,16 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
             }
 
             // Update milestones if provided
-            if (req.body.milestones) {
+            if (validatedData.milestones !== undefined) {
                 await milestone.destroy({
                     where: {
                         projectId: foundProject.id,
                     },
                     transaction: t,
                 });
-                if (req.body.milestones.length > 0) {
+                if (validatedData.milestones?.length > 0) {
                     await Promise.all(
-                        req.body.milestones.map((milestoneData) =>
+                        validatedData.milestones.map((milestoneData) =>
                             milestone.create(
                                 {
                                     ...milestoneData,
@@ -653,7 +654,7 @@ projectController.patch('/:id', isAuth, async (req, res, next) => {
     }
 });
 
-projectController.delete('/:id', isAuth, async (req, res, next) => {
+projectController.delete('/:id', isAuth, checkPermission('projects', 'delete'), async (req, res, next) => {
     try {
         const param = req.params.id;
         const projectId = parseInt(param);
@@ -689,13 +690,6 @@ projectController.delete('/:id', isAuth, async (req, res, next) => {
                 throw new customError({
                     message: 'Project not found',
                     statusCode: 404,
-                });
-            }
-
-            if (Number(foundProject.creator.id) !== Number(req.user.userId)) {
-                throw new customError({
-                    message: 'Unauthorized to delete this project',
-                    statusCode: 403,
                 });
             }
 
@@ -797,7 +791,7 @@ projectController.delete('/:id', isAuth, async (req, res, next) => {
     }
 });
 
-projectController.get('/:projectId/applications', isAuth, async (req, res, next) => {
+projectController.get('/:projectId/applications', isAuth, checkPermission('projects', 'read'), async (req, res, next) => {
     try {
         const { projectId } = req.params;
         let whereClause;
@@ -847,7 +841,7 @@ projectController.get('/:projectId/applications', isAuth, async (req, res, next)
     }
 });
 
-projectController.post('/bookmark/:projectId', isAuth, async (req, res, next) => {
+projectController.post('/bookmark/:projectId', isAuth, checkPermission('projects', 'read'), async (req, res, next) => {
     try {
         const userId = req.user.userId;
         const param = req.params.projectId;
@@ -896,7 +890,7 @@ projectController.post('/bookmark/:projectId', isAuth, async (req, res, next) =>
     }
 });
 
-projectController.get('/user-projects/:email', async (req, res, next) => {
+projectController.get('/user-projects/:email', checkPermission('projects', 'read'), async (req, res, next) => {
     try {
         const { email } = req.params;
 
