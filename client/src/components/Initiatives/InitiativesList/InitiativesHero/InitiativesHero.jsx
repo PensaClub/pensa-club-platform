@@ -1,9 +1,65 @@
-import React from 'react';
+
 import './initiativesHero.css';
 import { useTranslation } from 'react-i18next';
+import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
+import { useEffect, useState } from 'react';
 
 export const InitiativesHero = () => {
   const { t } = useTranslation();
+  const { initiatives, getAllApplications } = useInitiativeContext();
+  const [stats, setStats] = useState({
+    totalInitiatives: 0,
+    totalParticipants: 0,
+    uniqueCities: 0
+  });
+
+  useEffect(() => {
+    if (initiatives.length > 0) {
+      // Брой инициативи
+      const totalInitiatives = initiatives.length;
+      
+      // Уникални градове
+      const cities = new Set();
+      initiatives.forEach(initiative => {
+        // if (initiative.city) {
+        //   cities.add(initiative.city);
+        // }
+        // Или ако е в location обект:
+        if (initiative.location?.address) {
+          cities.add(initiative.location.address);
+        }
+      });
+      const uniqueCities = cities.size;
+      
+      setStats(prev => ({
+        ...prev,
+        totalInitiatives,
+        uniqueCities
+      }));
+    }
+  }, [initiatives]);
+
+useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const applications = await getAllApplications();
+
+        const totalParticipants = applications.length;
+        
+        // Или ако искаме уникални участници:
+        // const uniqueParticipants = new Set(applications.map(app => app.userId)).size;
+        
+        setStats(prev => ({
+          ...prev,
+          totalParticipants
+        }));
+      } catch (error) {
+        console.error('Error fetching participants:', error);
+      }
+    };
+
+    fetchParticipants();
+  }, []);
 
   return (
     <div className="initiatives-hero">
@@ -47,15 +103,15 @@ export const InitiativesHero = () => {
           
           <div className="initiatives-hero-stats">
             <div className="hero-stat-item">
-              <span className="stat-number">7</span>
+              <span className="stat-number">{stats.totalInitiatives}</span>
               <span className="stat-label-view">{t('initiatives.hero.activeInitiatives')}</span>
             </div>
             <div className="hero-stat-item">
-              <span className="stat-number">150+</span>
+              <span className="stat-number">{stats.totalParticipants}+</span>
               <span className="stat-label-view">{t('initiatives.hero.participants')}</span>
             </div>
             <div className="hero-stat-item">
-              <span className="stat-number">5</span>
+              <span className="stat-number">{stats.uniqueCities}</span>
               <span className="stat-label-view">{t('initiatives.hero.cities')}</span>
             </div>
           </div>
