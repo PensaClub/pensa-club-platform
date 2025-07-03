@@ -1975,7 +1975,7 @@
         "phone": "Phone",
         "project": "Project",
         "appliedAt": "Applied At",
-        "anonymous": "Anonymous Application"
+        "isAnonymous": "Anonymous Application"
       },
       "columnsDesc": {
         "firstName": "Applicant's first name",
@@ -1984,7 +1984,7 @@
         "phone": "Phone number (if provided)",
         "project": "Project ID they applied for",
         "appliedAt": "Date and time of application",
-        "anonymous": "Whether the application is anonymous"
+        "isAnonymous": "Whether the application is anonymous"
       }
     },
     "communication": {
