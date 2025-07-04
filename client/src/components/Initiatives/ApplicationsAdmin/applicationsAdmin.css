@@ -103,7 +103,7 @@
   transform: translateY(-2px);
 }
 
-.stat-icon {
+.stat-icon-apply {
   font-size: 2rem;
   width: 48px;
   height: 48px;
@@ -112,6 +112,7 @@
   justify-content: center;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 12px;
+  text-indent: initial;
 }
 
 .stat-content {

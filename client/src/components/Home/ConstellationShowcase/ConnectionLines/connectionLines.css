@@ -1,0 +1,21 @@
+.connection-lines {
+  pointer-events: none;
+}
+
+.connection-line {
+  transition: all 0.3s ease;
+}
+
+.connection.highlighted .connection-line {
+  stroke-width: 2;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.connection-flow {
+  animation: flow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes flow-pulse {
+  0%, 100% { stroke-width: 2; opacity: 0.8; }
+  50% { stroke-width: 4; opacity: 1; }
+}

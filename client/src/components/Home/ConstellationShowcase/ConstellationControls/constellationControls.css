@@ -1,0 +1,126 @@
+.constellation-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease 0.3s;
+}
+
+.constellation-controls.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.controls-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.filter-buttons-stars {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem;
+  border-radius: 50px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #64748b;
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s ease;
+}
+
+.filter-btn:hover::before {
+  left: 100%;
+}
+
+.filter-btn:hover {
+  color: #1e293b;
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #1B8B8A, #17a2b8);
+  color: white;
+  box-shadow: 0 4px 15px rgba(27, 139, 138, 0.3);
+  transform: translateY(-2px);
+}
+
+.filter-icon {
+  font-size: 1.2rem;
+}
+
+.filter-label {
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.controls-hint {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-buttons-stars {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .filter-btn {
+    padding: 0.6rem 1rem;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .filter-label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-buttons-stars {
+    flex-direction: column;
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .filter-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}

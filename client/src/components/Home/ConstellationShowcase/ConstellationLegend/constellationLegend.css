@@ -1,0 +1,134 @@
+.constellation-legend {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 3rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease 0.5s;
+}
+
+.constellation-legend.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.legend-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.legend-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #1B8B8A, #E26020);
+  border-radius: 2px;
+}
+
+.legend-items-stars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.legend-item-stars{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+}
+
+.legend-item-stars:hover {
+  background: rgba(241, 245, 249, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.legend-node-demo {
+  flex-shrink: 0;
+}
+
+.demo-pulse {
+  animation: demo-pulse 2s ease-in-out infinite;
+}
+
+@keyframes demo-pulse {
+  0%, 100% { stroke-opacity: 0.3; }
+  50% { stroke-opacity: 0.6; }
+}
+
+.legend-info {
+  flex: 1;
+}
+
+.legend-type {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.3rem;
+}
+
+.legend-description {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.legend-note {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border-radius: 12px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.note-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .constellation-legend {
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .legend-items-stars {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .legend-item-stars {
+    padding: 0.8rem;
+  }
+
+  .legend-note {
+    padding: 0.8rem 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+}
