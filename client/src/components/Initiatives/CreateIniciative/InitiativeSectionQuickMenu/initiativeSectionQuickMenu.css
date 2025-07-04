@@ -1,9 +1,9 @@
-/* Initiative Section Quick Menu - Нов дизайн за инициативи */
+
 
 .initiative-quick-menu {
-  position: absolute; /* 🔧 ПОПРАВЕНО: absolute вместо fixed */
-  left: -60px; /* 🔧 ПОПРАВЕНО: позиционираме вляво от секцията */
-  top: 10; /* 🔧 ПОПРАВЕНО: започва от върха на секцията */
+  position: absolute; 
+  left: -60px; 
+  top: 10; 
   z-index: 9999;
   background: linear-gradient(145deg, #ffffff, #f0f4f8);
   border: 2px solid #20b2aa;
@@ -15,7 +15,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   animation: slideInLeft 0.4s ease-out;
-  transition: all 0.3s ease; /* 🔧 ДОБАВЕНО: плавни преходи */
+  transition: all 0.3s ease; 
 }
 
 .initiative-quick-menu::before {
@@ -316,26 +316,26 @@
 
 @media screen and (max-width: 968px) {
   .initiative-quick-menu {
-    position: fixed; /* 🔧 На мобил се връщаме към fixed */
+    position: fixed; 
     top: 50%;
-    left: 10px;
+    left: 0px;
     transform: translateY(-50%);
     flex-direction: row;
-    padding: 1rem 1.5rem;
+    padding: initial;
     border-radius: 25px;
     min-width: auto;
     animation: slideInLeft 0.4s ease-out;
   }
   
   .initiative-quick-buttons {
-    flex-direction: row;
+    flex-direction: column;
     gap: 0.5rem;
   }
   
   .initiative-quick-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 14px;
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
   }
   
   .menu-indicator {
@@ -370,18 +370,18 @@
 
 @media screen and (max-width: 640px) {
   .initiative-quick-menu {
-    bottom: 100px;
-    left: 10px;
-    right: 10px;
-    top: auto;
+    /* bottom: 100px; */
+    left: 0px;
+    /* right: 10px;
+    top: auto; */
     transform: none;
     justify-content: center;
-    padding: 0.75rem 1rem;
+    padding: 0.45rem 0.5rem;
   }
   
   .initiative-quick-btn {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     font-size: 12px;
   }
   

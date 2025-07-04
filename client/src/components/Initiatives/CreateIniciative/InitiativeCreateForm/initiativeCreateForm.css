@@ -213,6 +213,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .form-section-title {
@@ -782,6 +784,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .dynamic-content-item {
@@ -4762,6 +4766,12 @@ input[type="date"].error {
     margin: 0.5rem;
     border-radius: 12px;
   }
+.btn-initiative{
+  max-width: 200px;
+  width: 100%;
+justify-content: center;
+margin: 0 auto;
+}
 
   .initiative-form-header {
     padding: 1rem;
