@@ -143,7 +143,8 @@ export const ApplicationsAdmin = ({ setApplicationsStats }) => {
                 {/* Quick Stats */}
                 <div className="quick-stats">
                     <div className="stat-card primary">
-                        <div className="stat-icon">👥</div>
+                        <div className="stat-icon-apply
+                        ">👥</div>
                         <div className="stat-content">
                             <div className="stat-number">{stats.total}</div>
                             <div className="stat-label">{t('applications.stats.total')}</div>
@@ -151,7 +152,8 @@ export const ApplicationsAdmin = ({ setApplicationsStats }) => {
                     </div>
 
                     <div className="stat-card success">
-                        <div className="stat-icon">📅</div>
+                        <div className="stat-icon-apply
+                        ">📅</div>
                         <div className="stat-content">
                             <div className="stat-number">{stats.thisWeek}</div>
                             <div className="stat-label">{t('applications.stats.thisWeek')}</div>
@@ -159,7 +161,8 @@ export const ApplicationsAdmin = ({ setApplicationsStats }) => {
                     </div>
 
                     <div className="stat-card warning">
-                        <div className="stat-icon">📆</div>
+                        <div className="stat-icon-apply
+                        ">📆</div>
                         <div className="stat-content">
                             <div className="stat-number">{stats.thisMonth}</div>
                             <div className="stat-label">{t('applications.stats.thisMonth')}</div>
@@ -167,7 +170,8 @@ export const ApplicationsAdmin = ({ setApplicationsStats }) => {
                     </div>
 
                     <div className="stat-card info">
-                        <div className="stat-icon">🚀</div>
+                        <div className="stat-icon-apply
+                        ">🚀</div>
                         <div className="stat-content">
                             <div className="stat-number">{stats.projects}</div>
                             <div className="stat-label">{t('applications.stats.projects')}</div>
