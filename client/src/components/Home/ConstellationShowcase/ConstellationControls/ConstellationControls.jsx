@@ -21,7 +21,7 @@ export const ConstellationControls = ({ activeFilter, setActiveFilter, isVisible
         {filters.map((filter) => (
           <button
             key={filter.id}
-            className={`filter-btn ${activeFilter === filter.id ? 'active' : ''}`}
+            className={`filter-btn-controls ${activeFilter === filter.id ? 'active' : ''}`}
             onClick={() => setActiveFilter(filter.id)}
           >
             <span className="filter-icon">{filter.icon}</span>
