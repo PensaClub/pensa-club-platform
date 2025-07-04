@@ -32,13 +32,13 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-.filter-btn {
+.filter-btn-controls {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: transparent;
-  border: none;
-  padding: 0.8rem 1.5rem;
+  background-color: var(--chart-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -46,9 +46,11 @@
   color: #64748b;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-speed);
 }
 
-.filter-btn::before {
+.filter-btn-controls::before {
   content: '';
   position: absolute;
   top: 0;
@@ -59,16 +61,16 @@
   transition: left 0.6s ease;
 }
 
-.filter-btn:hover::before {
+.filter-btn-controls:hover::before {
   left: 100%;
 }
 
-.filter-btn:hover {
+.filter-btn-controls:hover {
   color: #1e293b;
   transform: translateY(-2px);
 }
 
-.filter-btn.active {
+.filter-btn-controls.active {
   background: linear-gradient(135deg, #1B8B8A, #17a2b8);
   color: white;
   box-shadow: 0 4px 15px rgba(27, 139, 138, 0.3);
@@ -119,8 +121,8 @@
     max-width: 250px;
   }
 
-  .filter-btn {
-    justify-content: center;
+  .filter-btn-controls {
+    justify-content: left;
     width: 100%;
   }
 }

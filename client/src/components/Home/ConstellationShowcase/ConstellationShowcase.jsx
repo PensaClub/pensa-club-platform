@@ -53,7 +53,7 @@ export const ConstellationShowcase = () => {
     const transformToConstellationData = (initiatives) => {
         const nodes = [];
         const connections = [];
-        const initiativeNodeIds = []; 
+        const initiativeNodeIds = [];
         let nodeId = 0;
 
         // Предефиниран pattern за съзвездие
@@ -109,7 +109,7 @@ export const ConstellationShowcase = () => {
         // И после в transformToConstellationData:
         const constellationPattern = getConstellationPattern();
 
-        initiatives.slice(0,6).forEach((initiative, initIndex) => {  // Променено на 9
+        initiatives.slice(0, 6).forEach((initiative, initIndex) => {  // Променено на 9
             // Main initiative node (централна звезда)
             const pos = constellationPattern[initIndex % constellationPattern.length];
             const initiativeNode = {
@@ -119,8 +119,8 @@ export const ConstellationShowcase = () => {
                 description: initiative.shortDescription,
                 image: initiative.mainImage?.src,
                 slug: initiative.slug,
-                x: pos.x,  
-                y: pos.y,  
+                x: pos.x,
+                y: pos.y,
                 size: 'large',
                 color: '#1B8B8A',
                 pulse: true,
@@ -131,14 +131,14 @@ export const ConstellationShowcase = () => {
 
             // Projects around initiative (планети)
             if (initiative.projects && initiative.projects.length > 0) {
-                initiative.projects.slice(0, 3).forEach((project, projIndex) => {
+                initiative.projects.slice(0, 2).forEach((project, projIndex) => {
                     const angle = (projIndex * 45 - 45) * (Math.PI / 180);
                     const getProjectRadius = (index) => {
                         const radiusMap = {
-                            0: 160,  
-                            1: 160,    
-                            2: 100,  
-                            3: 200,  
+                            0: 160,
+                            1: -160,
+                            2: 100,
+                            3: 200,
                         };
                         return radiusMap[index] || 120 + index * 30;
                     };
@@ -158,7 +158,7 @@ export const ConstellationShowcase = () => {
                         size: 'medium',
                         color: '#E26020',
                         parentId: initiativeNode.id,
-                        isFake: project.isFake || false // Добавяме isFake флага
+                        isFake: project.isFake || false 
                     };
                     nodes.push(projectNode);
 
