@@ -21,7 +21,7 @@ export const ConstellationShowcase = () => {
         if (initiatives.length === 0) {
             getAllInitiatives();
         }
-    }, [initiatives.length]);
+    }, []);
 
     useEffect(() => {
         // Комбинираме реалните и фалшивите инициативи
