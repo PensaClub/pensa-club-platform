@@ -1,0 +1,85 @@
+.constellation-node {
+  transition: all 0.3s ease;
+  opacity: 1;
+transform: scale(1);
+
+}
+
+.constellation-node.animate-in {
+  opacity: 1;
+  transform: scale(1);
+   animation: node-appear 0.8s ease-out;
+}
+@keyframes node-appear {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* .constellation-node.hovered {
+  transform: scale(1.1);
+} */
+.constellation-node.hovered .main-circle {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 12px currentColor);
+}
+.constellation-node.hovered .glow-ring {
+  stroke-opacity: 0.8;
+  transform: scale(1.1);
+}
+.main-circle {
+  transition: all 0.3s ease;
+  
+}
+
+.constellation-node:hover .main-circle {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.glow-ring {
+  transition: all 0.3s ease;
+}
+
+.glow-ring.pulse {
+    
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    stroke-opacity: 0.3; 
+    transform: scale(1); 
+  }
+  50% { 
+    stroke-opacity: 0.6; 
+    transform: scale(1.1); 
+  }
+}
+
+.comet-tail {
+  animation: comet-move 3s ease-in-out infinite;
+}
+
+@keyframes comet-move {
+  0%, 100% { transform: translateX(0); opacity: 0.6; }
+  50% { transform: translateX(-10px); opacity: 0.3; }
+}
+
+.interaction-area {
+  cursor: pointer;
+}
+
+.node-tooltip {
+  pointer-events: none;
+  animation: tooltip-in 0.2s ease-out;
+}
+
+@keyframes tooltip-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -56,6 +56,35 @@
       "noInitiatives": "No initiatives available",
       "noProjects": "No projects available",
       "noStories": "No stories available"
+    },
+    "constellation": {
+      "title": "Universe of Possibilities", 
+      "subtitle": "Explore our galaxy of initiatives, projects and stories",
+      "initiative": "Initiative",
+      "project": "Project",
+      "story": "Story", 
+      "clickToExplore": "Click to explore",
+      "exploreUniverse": "Explore the entire universe",
+      "controls": {
+        "title": "Filter the cosmos",
+        "all": "All",
+        "initiatives": "Initiatives", 
+        "projects": "Projects",
+        "stories": "Stories",
+        "hint": "Hover over stars for more information"
+      },
+      "legend": {
+        "title": "Navigation Compass",
+        "initiative": "Central stars - main initiatives",
+        "project": "Planets - connected projects", 
+        "story": "Comets - inspiring stories",
+        "note": "Click on any star to explore its story"
+      },
+      "types": {
+        "initiative": "Initiative",
+        "project": "Project", 
+        "story": "Story"
+      }
     }
   },
   "hero": {
