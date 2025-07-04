@@ -3516,6 +3516,7 @@
     border-right: none;
     border-bottom: 2px solid var(--initiative-border);
     padding: 1rem;
+    overflow-x: auto;
   }
 
   .sidebar-nav {
