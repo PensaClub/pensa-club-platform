@@ -40,6 +40,51 @@
       "subtitle": "An interactive journey into the world of digital literacy",
       "readMore": "Read more",
       "viewAllArticles": "All articles"
+    },
+    "showcase": {
+      "title": "Initiatives, Projects & Stories",
+      "subtitle": "Discover how we create change in the community through innovative projects and inspiring stories",
+      "initiatives": "Initiatives",
+      "projects": "Projects", 
+      "stories": "Stories",
+      "initiative": "Initiative",
+      "project": "Project",
+      "story": "Story",
+      "learnMore": "Learn more",
+      "viewAll": "View all",
+      "noDescription": "No description available",
+      "noInitiatives": "No initiatives available",
+      "noProjects": "No projects available",
+      "noStories": "No stories available"
+    },
+    "constellation": {
+      "title": "Universe of Possibilities", 
+      "subtitle": "Explore our galaxy of initiatives, projects and stories",
+      "initiative": "Initiative",
+      "project": "Project",
+      "story": "Story", 
+      "clickToExplore": "Click to explore",
+      "exploreUniverse": "Explore the entire universe",
+      "controls": {
+        "title": "Filter the cosmos",
+        "all": "All",
+        "initiatives": "Initiatives", 
+        "projects": "Projects",
+        "stories": "Stories",
+        "hint": "Hover over stars for more information"
+      },
+      "legend": {
+        "title": "Navigation Compass",
+        "initiative": "Central stars - main initiatives",
+        "project": "Planets - connected projects", 
+        "story": "Comets - inspiring stories",
+        "note": "Click on any star to explore its story"
+      },
+      "types": {
+        "initiative": "Initiative",
+        "project": "Project", 
+        "story": "Story"
+      }
     }
   },
   "hero": {
@@ -2094,6 +2139,14 @@
       "pending": "Pending",
       "completed": "Completed",
       "cancelled": "Cancelled"
+    }
+  },
+  "projects": {
+    "status": {
+      "active": "Active",
+      "planned": "Planned",
+      "in-progress": "In Progress",
+      "completed": "Completed"
     }
   }
 }
