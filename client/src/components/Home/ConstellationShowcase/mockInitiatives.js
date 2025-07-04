@@ -45,51 +45,51 @@ export const mockInitiatives = [
     mainImage: { src: "/images/stars/stars-2.jpg" },
     isFake: true,
     projects: [
-      {
-        id: 21,
-        title: "Таблети за всяко дете",
-        description: "Раздаване на 1000 таблета",
-        slug: "tableti-deca",
-        status: "in-progress",
-        image: "/images/stars/stars-2.jpg",
-        isFake: true
-      },
-      {
-        id: 22,
-        title: "Виртуални учители",
-        description: "Онлайн уроци от най-добрите",
-        slug: "virtualni-uchiteli",
-        status: "active",
-        image: "/images/stars/stars-8.gif",
-        isFake: true
-      },
-      {
-        id: 23,
-        title: "Интернет във всяко училище",
-        description: "Високоскоростен интернет достъп",
-        slug: "internet-uchilishta",
-        status: "completed",
-        image: "/images/stars/stars-2.jpg",
-        isFake: true
-      }
+    //   {
+    //     id: 21,
+    //     title: "Таблети за всяко дете",
+    //     description: "Раздаване на 1000 таблета",
+    //     slug: "tableti-deca",
+    //     status: "in-progress",
+    //     image: "/images/stars/stars-2.jpg",
+    //     isFake: true
+    //   },
+    //   {
+    //     id: 22,
+    //     title: "Виртуални учители",
+    //     description: "Онлайн уроци от най-добрите",
+    //     slug: "virtualni-uchiteli",
+    //     status: "active",
+    //     image: "/images/stars/stars-8.gif",
+    //     isFake: true
+    //   },
+    //   {
+    //     id: 23,
+    //     title: "Интернет във всяко училище",
+    //     description: "Високоскоростен интернет достъп",
+    //     slug: "internet-uchilishta",
+    //     status: "completed",
+    //     image: "/images/stars/stars-2.jpg",
+    //     isFake: true
+    //   }
     ],
     stories: [
-      {
-        id: 201,
-        title: "Мария от Родопите учи програмиране",
-        excerpt: "Как технологията промени живота на едно дете",
-        slug: "maria-programirane",
-        image: "/images/stars/stars-1.jpg",
-        isFake: true
-      },
-      {
-        id: 202,
-        title: "Учителят който обедини 5 села",
-        excerpt: "Виртуални класове свързват отдалечени общности",
-        slug: "uchitel-5-sela",
-        image: "/images/stars/stars-9.jpg",
-        isFake: true
-      }
+    //   {
+    //     id: 201,
+    //     title: "Мария от Родопите учи програмиране",
+    //     excerpt: "Как технологията промени живота на едно дете",
+    //     slug: "maria-programirane",
+    //     image: "/images/stars/stars-1.jpg",
+    //     isFake: true
+    //   },
+    //   {
+    //     id: 202,
+    //     title: "Учителят който обедини 5 села",
+    //     excerpt: "Виртуални класове свързват отдалечени общности",
+    //     slug: "uchitel-5-sela",
+    //     image: "/images/stars/stars-9.jpg",
+    //     isFake: true
+    //   }
     ]
   },
   {
@@ -185,33 +185,33 @@ export const mockInitiatives = [
     mainImage: { src: "/images/stars/stars-6.webp" },
     isFake: true,
     projects: [
-      {
-        id: 61,
-        title: "Таблет за баба",
-        description: "Опростен интерфейс за възрастни",
-        slug: "tablet-baba",
-        status: "in-progress",
-        image: "/images/stars/stars-3.webp",
-        isFake: true
-      },
-      {
-        id: 62,
-        title: "Видео връзка с внуците",
-        description: "Лесни видео разговори",
-        slug: "video-vnuci",
-        status: "active",
-        image: "/images/stars/stars-9.jpg",
-        isFake: true
-      },
-      {
-        id: 63,
-        title: "Онлайн пенсионерски клуб",
-        description: "Виртуални срещи и игри",
-        slug: "online-klub",
-        status: "active",
-        image: "/images/stars/stars-6.webp",
-        isFake: true
-      }
+    //   {
+    //     id: 61,
+    //     title: "Таблет за баба",
+    //     description: "Опростен интерфейс за възрастни",
+    //     slug: "tablet-baba",
+    //     status: "in-progress",
+    //     image: "/images/stars/stars-3.webp",
+    //     isFake: true
+    //   },
+    //   {
+    //     id: 62,
+    //     title: "Видео връзка с внуците",
+    //     description: "Лесни видео разговори",
+    //     slug: "video-vnuci",
+    //     status: "active",
+    //     image: "/images/stars/stars-9.jpg",
+    //     isFake: true
+    //   },
+    //   {
+    //     id: 63,
+    //     title: "Онлайн пенсионерски клуб",
+    //     description: "Виртуални срещи и игри",
+    //     slug: "online-klub",
+    //     status: "active",
+    //     image: "/images/stars/stars-6.webp",
+    //     isFake: true
+    //   }
     ],
     stories: []
   }

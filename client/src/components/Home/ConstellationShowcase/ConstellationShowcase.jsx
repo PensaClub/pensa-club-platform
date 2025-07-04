@@ -19,7 +19,7 @@ export const ConstellationShowcase = () => {
 
     useEffect(() => {
         if (initiatives.length === 0) {
-            getAllInitiatives();
+            // getAllInitiatives();
         }
     }, []);
 
@@ -109,7 +109,7 @@ export const ConstellationShowcase = () => {
         // И после в transformToConstellationData:
         const constellationPattern = getConstellationPattern();
 
-        initiatives.slice(0,7).forEach((initiative, initIndex) => {  // Променено на 9
+        initiatives.slice(0,6).forEach((initiative, initIndex) => {  // Променено на 9
             // Main initiative node (централна звезда)
             const pos = constellationPattern[initIndex % constellationPattern.length];
             const initiativeNode = {
