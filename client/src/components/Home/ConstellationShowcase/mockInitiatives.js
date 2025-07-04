@@ -51,7 +51,7 @@ export const mockInitiatives = [
         description: "Раздаване на 1000 таблета",
         slug: "tableti-deca",
         status: "in-progress",
-        image: "/images/stars/stars-2.png",
+        image: "/images/stars/stars-2.jpg",
         isFake: true
       },
       {
