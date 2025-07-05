@@ -1,5 +1,5 @@
 const applicationController = require('express').Router();
-const { getAllApplications, getApplicationById, getApplicationsByProjectId } = require('../utils/applicationUtils');
+const { getAllApplications, getApplicationById } = require('../utils/applicationUtils');
 const { sendProjectEmail } = require('../utils/zohoEmails');
 const { project } = require('../sequelize/models');
 const { frontend_base_url } = require('../config/envConfig');
@@ -67,64 +67,6 @@ applicationController.delete('/:applicationId', async (req, res, next) => {
     }
 });
 
-applicationController.post('/project/:projectId/send-mass-email', async (req, res, next) => {
-    try {
-        const { projectId } = req.params;
-        const { subject, message } = req.body;
-
-        if (!subject || !message) {
-            return res.status(400).json({
-                message: 'Subject and message are required',
-            });
-        }
-
-        let foundProject = await project.findOne({ where: { slug: projectId } });
-
-        if (!foundProject && !isNaN(projectId)) {
-            foundProject = await project.findByPk(projectId);
-        }
-
-        if (!foundProject) {
-            return res.status(404).json({ message: 'Project not found' });
-        }
-
-        const projectLink = `${frontend_base_url}/projects/${foundProject.slug}`;
-
-        const applications = await getApplicationsByProjectId(projectId);
-
-        if (applications.length === 0) {
-            return res.status(404).json({
-                message: 'No applications found for this project',
-            });
-        }
-
-        const emailAddresses = applications.filter((app) => app.email && !app.isAnonymous).map((app) => app.email);
-
-        if (emailAddresses.length === 0) {
-            return res.status(400).json({
-                message: 'No valid email addresses found among applications',
-            });
-        }
-
-        await sendProjectEmail({
-            projectTitle: foundProject.title,
-            projectDescription: foundProject.shortDescription || foundProject.fullDescription || '',
-            projectLink,
-            subject,
-            message,
-            toAddresses: emailAddresses,
-        });
-
-        return res.status(200).json({
-            message: `Mass email sent successfully to ${emailAddresses.length} applicants`,
-            sentTo: emailAddresses.length,
-            totalApplications: applications.length,
-        });
-    } catch (err) {
-        next(err);
-    }
-});
-
 applicationController.post('/send-personalized-emails', async (req, res, next) => {
     try {
         const { recipients = [], metadata = {} } = req.body;
@@ -137,7 +79,6 @@ applicationController.post('/send-personalized-emails', async (req, res, next) =
 
         for (const recipient of recipients) {
             try {
-                // Always fetch the application by applicationId
                 let projectData = null;
                 let projectLink = null;
                 let projectId = null;
@@ -147,26 +88,33 @@ applicationController.post('/send-personalized-emails', async (req, res, next) =
                     if (application && application.projectId) {
                         projectId = application.projectId;
 
-                        // Fetch the project by ID
                         let foundProject = await project.findByPk(projectId);
                         if (foundProject) {
+                            let locationAddress = '';
+                            if (Array.isArray(foundProject.location) && foundProject.location.length > 0) {
+                                locationAddress = foundProject.location[0].address || '';
+                            }
+
                             projectData = {
                                 title: foundProject.title,
                                 description: foundProject.shortDescription || foundProject.fullDescription || '',
+                                category: foundProject.category,
+                                applicationDeadline: foundProject.applicationDeadline,
+                                currentParticipants: foundProject.currentParticipants,
+                                maxParticipants: foundProject.maxParticipants,
+                                status: foundProject.status,
+                                location: locationAddress,
+                                link: `${frontend_base_url}/projects/${foundProject.slug}`,
                             };
-                            projectLink = `${frontend_base_url}/projects/${foundProject.slug}`;
                         }
                     }
                 }
 
-                // Send email using the new sendProjectEmail function
                 await sendProjectEmail({
                     to: recipient.email,
                     subject: recipient.subject,
                     message: recipient.message,
-                    projectTitle: projectData?.title,
-                    projectDescription: projectData?.description,
-                    projectLink: projectLink,
+                    ...projectData,
                 });
 
                 results.push({

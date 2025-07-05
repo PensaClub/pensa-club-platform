@@ -15,16 +15,7 @@ const getApplicationById = async (applicationId) => {
     return await project_application.findByPk(applicationId, applicationsConfig);
 };
 
-const getApplicationsByProjectId = async (projectId) => {
-    return await project_application.findAll({
-        ...applicationsConfig,
-        where: { projectId },
-        order: [['appliedAt', 'DESC']],
-    });
-};
-
 module.exports = {
     getAllApplications,
     getApplicationById,
-    getApplicationsByProjectId,
 };

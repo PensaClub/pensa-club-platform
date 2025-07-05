@@ -168,7 +168,20 @@ async function getZohoAccessToken() {
     }
 }
 
-async function sendProjectEmail({ to, subject, message, projectTitle, projectDescription, projectLink }) {
+async function sendProjectEmail({
+    to,
+    subject,
+    message,
+    title,
+    description,
+    category,
+    applicationDeadline,
+    currentParticipants,
+    maxParticipants,
+    status,
+    location,
+    link,
+}) {
     const formattedSubject = `[Project Update] ${subject}`;
     const formattedBody = `
         <html>
@@ -238,15 +251,7 @@ async function sendProjectEmail({ to, subject, message, projectTitle, projectDes
                             line-height: 1.6;
                             margin-bottom: 18px;
                         ">
-                            <p style="margin: 0 0 12px 0;"><strong>Уважаеми участници,</strong></p>
-                            <p style="margin: 0 0 12px 0;">
-                                <span>
-                                    Благодарим ви, че проявихте интерес към нашия проект <strong>„${projectTitle}“</strong>!
-                                </span>
-                            </p>
-                            <p style="margin: 0 0 12px 0;">
-                                ${message}
-                            </p>
+                            ${message}
                         </div>
 
                         <!-- Project Info -->
@@ -266,14 +271,21 @@ async function sendProjectEmail({ to, subject, message, projectTitle, projectDes
                                 📋 Информация за проекта
                             </h3>
                             <p style="color: #222; font-size: 15px; margin: 0; line-height: 1.5;">
-                                <strong>Проект:</strong> ${projectTitle}<br>
-                                <strong>Описание:</strong> ${projectDescription}<br>
+                                <strong>Проект:</strong> ${title || ''}<br>
+                                <strong>Описание:</strong> ${description || ''}<br>
+                                <strong>Категория:</strong> ${category || '—'}<br>
+                                <strong>Краен срок за кандидатстване:</strong> ${
+                                    applicationDeadline ? new Date(applicationDeadline).toLocaleDateString('bg-BG') : '—'
+                                }<br>
+                                <strong>Участници:</strong> ${currentParticipants || 0} / ${maxParticipants || '—'}<br>
+                                <strong>Статус:</strong> ${status || '—'}<br>
+                                <strong>Локация:</strong> ${location || '—'}
                             </p>
                         </div>
 
                         <!-- CTA -->
                         <div style="text-align: center; margin: 18px 0;">
-                            <a href="${projectLink}" style="
+                            <a href="${link}" style="
                                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                                 color: white;
                                 padding: 10px 22px;
