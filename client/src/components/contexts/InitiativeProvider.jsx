@@ -59,14 +59,6 @@ export const InitiativeProvider = ({ children }) => {
   const [commentsLoading, setCommentsLoading] = useState(false);
 
   const { isAuthentication, userEmail, username, profileData, onProjectApplicationSubmit } = useAuthContext();
-
-  // const {
-  //   getApplicationsByProject,
-  //   addApplication,
-  //   getAllApplications,
-  //   updateApplicationStatus,
-  //   deleteApplication
-  // } = useMockApplications();
   // НОВИ STATES ЗА APPLICATIONS
   const [recentApplications, setRecentApplications] = useState([]);
   const [userApplications, setUserApplications] = useState(() => {
@@ -273,6 +265,46 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
     }
   }, [initiativeService]);
 
+  const sendApplicationEmails = useCallback(async (recipientsData, templateType = null) => {
+  if (!isAuthentication) {
+    notify('error', 'Authentication required');
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+
+    const emailData = {
+      emails:recipientsData
+    };
+
+    const response = await initiativeService.sendPersonalizedEmails(emailData);
+
+    if (templateType && (templateType === 'rejection' || templateType === 'interview_invitation')) {
+      for (const recipient of recipientsData) {
+        const newStatus = templateType === 'rejection' ? 'rejected' : 'approved';
+        
+        try {
+          await updateApplicationStatus(recipient.applicationId, newStatus);
+        } catch (error) {
+          console.error(`Failed to update status for application ${recipient.applicationId}:`, error);
+        }
+      }
+    }
+
+    const successCount = response.summary?.successfullySent || response.results?.filter(r => r.sent).length || 0;
+    notify('success', `Successfully sent ${successCount} email(s)!`);
+    
+    return response;
+
+  } catch (error) {
+    console.error('Error sending emails:', error);
+    notify('error', error.message || 'Failed to send emails');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [isAuthentication, initiativeService, updateApplicationStatus]);
   // Draft functions
   const getAllDrafts = useCallback(async (page = 1, forceRefresh = false) => {
     if (page === 1 && drafts.length > 0 && draftsLoaded && !forceRefresh) {
@@ -1602,7 +1634,8 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
     userApplications,
     getAllApplications,     // За админи
     updateApplicationStatus, // За админи  
-    deleteApplication,      // За админи
+    deleteApplication, // За админи 
+    sendApplicationEmails,     // За админи
 
     //Stories functions
     getStoryBySlug,
