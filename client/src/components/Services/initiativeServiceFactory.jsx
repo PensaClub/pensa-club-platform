@@ -115,8 +115,8 @@ export const initiativeServiceFactory = (token) => {
     getAllBookmarkedProjects: async (email) => {
       return requester.get(`${apiUrl}/projects/user-projects/${email}`);
     },
- 
-     // Project applications endpoints
+
+    // Project applications endpoints
     applyToProject: async (projectId, applicationData) => {
       return requester.post(`${apiUrl}/projects/${projectId}/apply`, applicationData);
     },
@@ -135,6 +135,10 @@ export const initiativeServiceFactory = (token) => {
 
     deleteApplication: async (applicationId) => {
       return requester.del(`${apiUrl}/applications/${applicationId}`);
+    },
+  
+    sendPersonalizedEmails: async (emailData) => {
+      return requester.post(`${apiUrl}/applications/send-personalized-emails`, emailData);
     },
   };
 };

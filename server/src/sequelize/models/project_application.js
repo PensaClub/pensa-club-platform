@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'is_anonymous',
             },
             status: {
-                type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+                type: DataTypes.ENUM('pending', 'approved', 'rejected', 'interview'),
                 allowNull: false,
                 defaultValue: 'pending',
             },
