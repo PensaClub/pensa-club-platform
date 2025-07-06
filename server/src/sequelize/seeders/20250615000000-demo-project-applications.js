@@ -4,7 +4,7 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
         //ПРОМЕНИ ИМЕЙЛИТЕ ЗА ТЕСТВАНЕ - МАКСИМУМ 2 ИМЕЙЛА !!
-        const demoEmails = ['borislaviliev47@gmail.com', 'borislaviliev47@gmail.com'];
+        const demoEmails = ['kolev93@abv.bg', 'atm0sphar3zlalz@gmail.com'];
 
         const projects = await queryInterface.sequelize.query(`SELECT id FROM projects WHERE slug IN ('pensa-digital-platform', 'senior-art-gallery')`, {
             type: queryInterface.sequelize.QueryTypes.SELECT,

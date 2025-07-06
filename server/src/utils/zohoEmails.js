@@ -192,35 +192,32 @@ async function sendProjectEmail({
             <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #f5f7fa; color: #222;">
                 <div style="max-width: 800px; margin: 0 auto; background: #ffffff;">
                     <!-- Header Table for Email Compatibility -->
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: linear-gradient(to right, #FF7A3D, #FF965B); border-radius: 12px 12px 0 0;">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: linear-gradient(to right, #FF7A3D, #FF965B); border-radius: 32px 32px 0 0; padding-bottom: 16px;">
                         <tr>
-                            <td align="center" style="padding: 32px 24px 0 24px;">
-                                <!-- Circle with Rocket -->
-                                <table border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
-                                    <tr>
-                                        <td align="center" valign="middle" style="
-                                            background: rgba(255,255,255,0.15);
-                                            border: none;
-                                            border-radius: 50%;
-                                            width: 80px;
-                                            height: 80px;
-                                            text-align: center;
-                                            vertical-align: middle;
-                                            padding-bottom: 5px;
-                                            background-clip: padding-box;
-                                            box-shadow: 0 0 0 0 transparent;
-                                        ">
-                                            <span style="font-size: 40px; line-height: 80px; display: inline-block; width: 80px; height: 80px; margin-top: -2px;">🚀</span>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <td align="center" style="padding: 24px 24px 0 24px;">
+                                <div style="
+                                    background: #fff;
+                                    border-radius: 50%;
+                                    width: 120px;
+                                    height: 120px;
+                                    margin-bottom: 12px;
+                                    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+                                    text-align: center;
+                                    line-height: 120px;
+                                ">
+                                    <img src="https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/email-logo%2Fpensa_logo_green.jpg?alt=media&token=36390c4b-0a60-4bc6-86e2-1405973b5395"
+                                         alt="Logo"
+                                         width="80"
+                                         height="80"
+                                         style="vertical-align: middle;" />
+                                </div>
                                 <!-- Pensa Club -->
                                 <div style="color: #fff; font-size: 28px; font-weight: 700; margin: 8px 0 4px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
                                     Pensa Club
                                 </div>
                                 <!-- Subtitle -->
                                 <div style="color: rgba(255,255,255,0.9); font-size: 16px; font-weight: 400; margin: 0 0 12px 0; text-align: center;">
-                                    Социална платформа 
+                                    Социална платформа
                                 </div>
                             </td>
                         </tr>
@@ -274,8 +271,9 @@ async function sendProjectEmail({
                                 <strong>Проект:</strong> ${title || ''}<br>
                                 <strong>Описание:</strong> ${description || ''}<br>
                                 <strong>Категория:</strong> ${category || '—'}<br>
-                                <strong>Краен срок за кандидатстване:</strong> ${applicationDeadline ? new Date(applicationDeadline).toLocaleDateString('bg-BG') : '—'
-        }<br>
+                                <strong>Краен срок за кандидатстване:</strong> ${
+                                    applicationDeadline ? new Date(applicationDeadline).toLocaleDateString('bg-BG') : '—'
+                                }<br>
                                 <strong>Участници:</strong> ${currentParticipants || 0} / ${maxParticipants || '—'}<br>
                                 <strong>Статус:</strong> ${status || '—'}<br>
                                 <strong>Локация:</strong> ${location || '—'}
