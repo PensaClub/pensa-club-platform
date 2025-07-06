@@ -57,6 +57,13 @@ const permissions = {
     userDetails: {
         read: ['admin', 'moderator', 'user', 'limited'],
     },
+    application: {
+        create: ['admin', 'moderator', 'user'],
+        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        update: ['admin', 'moderator', 'user'],
+        delete: ['admin', 'moderator', 'user'],
+        sendEmails: ['admin', 'moderator'],
+    },
 };
 
 module.exports = permissions;
