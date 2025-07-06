@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { bg, enUS } from 'date-fns/locale';
 import './ApplicationsCommunication.css';
+import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 
 export const ApplicationsCommunication = ({
     applications,
@@ -11,7 +13,7 @@ export const ApplicationsCommunication = ({
 }) => {
     const { t, i18n } = useTranslation();
     const currentLocale = i18n.language === 'bg' ? bg : enUS;
-
+    const { sendApplicationEmails, getAllProjects, projects } = useInitiativeContext();
     const [communicationMode, setCommunicationMode] = useState('individual'); // 'individual' or 'bulk'
     const [selectedTemplate, setSelectedTemplate] = useState('welcome');
     const [selectedRecipients, setSelectedRecipients] = useState([]);
@@ -71,6 +73,18 @@ export const ApplicationsCommunication = ({
         ).length
     };
 
+    useEffect(() => {
+
+        if (projects.length === 0) {
+            getAllProjects();
+        }
+    }, []);
+
+    const getProjectName = (projectId) => {
+        const project = projects.find(p => p.id === projectId);
+        return project?.title || `Project ${projectId}`;
+    };
+
     // Функции за управление на получатели
     const handleRecipientToggle = (applicationId) => {
         setSelectedRecipients(prev =>
@@ -111,11 +125,14 @@ export const ApplicationsCommunication = ({
 
     // Функция за заместване на променливи
     const replaceVariables = (template, application) => {
+        const projectName = getProjectName(application.projectId);
+
         return template
             .replace(/\{\{firstName\}\}/g, application.firstName || '')
             .replace(/\{\{lastName\}\}/g, application.lastName || '')
-            .replace(/\{\{projectId\}\}/g, application.projectId || '')
+            .replace(/\{\{projectId\}\}/g, projectName || '')
             .replace(/\{\{email\}\}/g, application.email || '')
+            .replace(/\{\{projectName\}\}/g, projectName)
             .replace(/\{\{companyName\}\}/g, t('applications.communication.companyName'))
             .replace(/\{\{date\}\}/g, format(new Date(), 'dd.MM.yyyy', { locale: currentLocale }))
             .replace(/\{\{time\}\}/g, format(new Date(), 'HH:mm', { locale: currentLocale }))
@@ -127,24 +144,15 @@ export const ApplicationsCommunication = ({
     };
 
     // Функция за изпращане на email
-    const sendEmail = async (application, subject, content) => {
-        // Симулация на изпращане на email
-        // В реалния проект трябва да се интегрира с email API
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (Math.random() > 0.1) { // 90% успех
-                    resolve({
-                        success: true,
-                        recipientEmail: application.email,
-                        timestamp: new Date().toISOString()
-                    });
-                } else {
-                    reject(new Error(t('applications.communication.sendError')));
-                }
-            }, 1000 + Math.random() * 2000);
-        });
+    const prepareEmailData = (application, subject, content) => {
+        return {
+            applicationId: application.id,
+            projectId: application.projectId,
+            email: application.email,
+            subject: subject,
+            message: content
+        };
     };
-
     // Функция за изпращане на единичен email
     const sendIndividualEmail = async () => {
         if (!selectedApplication) return;
@@ -156,16 +164,29 @@ export const ApplicationsCommunication = ({
             const subject = replaceVariables(template.subject, selectedApplication);
             const content = replaceVariables(template.content, selectedApplication);
 
-            const result = await sendEmail(selectedApplication, subject, content);
+            // Подготвяме данните за един получател
+            const emailData = prepareEmailData(selectedApplication, subject, content);
+
+            // Изпращаме
+            const result = await sendApplicationEmails([emailData], selectedTemplate);
 
             setSendStatus(prev => ({
                 ...prev,
                 isSending: false,
                 success: true,
-                sentEmails: [...prev.sentEmails, result]
+                sentEmails: [...prev.sentEmails, {
+                    recipientEmail: selectedApplication.email,
+                    timestamp: new Date().toISOString()
+                }]
             }));
 
-            // Изчистване на формата след успех
+            // Опресняваме списъка
+            if (onRefresh) {
+                setTimeout(() => {
+                    onRefresh();
+                }, 1000);
+            }
+
             setTimeout(() => {
                 setSendStatus(prev => ({ ...prev, success: false }));
             }, 5000);
@@ -178,72 +199,91 @@ export const ApplicationsCommunication = ({
             }));
         }
     };
-
     // Функция за bulk изпращане
     const sendBulkEmails = async () => {
         if (selectedRecipients.length === 0) return;
 
         setSendStatus(prev => ({ ...prev, isSending: true, error: null, sentEmails: [] }));
 
-        const recipientApplications = workingApplications.filter(app =>
-            selectedRecipients.includes(app.id)
-        );
+        try {
+            const recipientApplications = workingApplications.filter(app =>
+                selectedRecipients.includes(app.id)
+            );
 
-        const template = customTemplate.useCustom ? customTemplate : emailTemplates[selectedTemplate];
-        let successCount = 0;
-        let errorCount = 0;
-        const results = [];
+            const template = customTemplate.useCustom ? customTemplate : emailTemplates[selectedTemplate];
 
-        for (const application of recipientApplications) {
-            try {
-                const subject = replaceVariables(template.subject, application);
-                const content = replaceVariables(template.content, application);
+            // Подготвяме персонализирани данни за всеки получател
+            const recipientsData = recipientApplications.map(app => {
+                const personalizedSubject = replaceVariables(template.subject, app);
+                const personalizedContent = replaceVariables(template.content, app);
 
-                const result = await sendEmail(application, subject, content);
-                results.push(result);
-                successCount++;
-            } catch (error) {
-                errorCount++;
-                console.error(`Failed to send email to ${application.email}:`, error);
+                return prepareEmailData(app, personalizedSubject, personalizedContent);
+            });
+
+            // Изпращаме всички персонализирани имейли
+            const result = await sendApplicationEmails(recipientsData, selectedTemplate);
+
+            // Обработваме резултата
+            const successfulEmails = result.results?.filter(r => r.sent) || [];
+
+            setSendStatus(prev => ({
+                ...prev,
+                isSending: false,
+                success: true,
+                error: result.summary?.failed > 0
+                    ? t('applications.communication.bulkError', {
+                        success: result.summary.successfullySent,
+                        errors: result.summary.failed
+                    })
+                    : null,
+                sentEmails: successfulEmails.map(r => ({
+                    recipientEmail: r.email,
+                    timestamp: new Date().toISOString()
+                }))
+            }));
+
+            // Опресняваме списъка
+            if (onRefresh) {
+                setTimeout(() => {
+                    onRefresh();
+                }, 1000);
             }
-        }
 
-        setSendStatus(prev => ({
-            ...prev,
-            isSending: false,
-            success: successCount > 0,
-            error: errorCount > 0 ? t('applications.communication.bulkError', {
-                success: successCount,
-                errors: errorCount
-            }) : null,
-            sentEmails: [...prev.sentEmails, ...results]
-        }));
+            // Изчистваме selections след успех
+            if (result.summary?.successfullySent > 0) {
+                setTimeout(() => {
+                    setSelectedRecipients([]);
+                    setSendStatus(prev => ({ ...prev, success: false, error: null }));
+                }, 5000);
+            }
 
-        // Изчистване на selections след успех
-        if (successCount > 0) {
-            setTimeout(() => {
-                setSelectedRecipients([]);
-                setSendStatus(prev => ({ ...prev, success: false, error: null }));
-            }, 5000);
+        } catch (error) {
+            setSendStatus(prev => ({
+                ...prev,
+                isSending: false,
+                success: false,
+                error: error.message || 'Failed to send emails'
+            }));
         }
     };
 
     // Preview функция
     const generatePreview = () => {
-        const testApplication = workingApplications[0] || {
+        const testApplication = selectedApplication || workingApplications[0] || {
             firstName: 'John',
             lastName: 'Doe',
             email: 'john.doe@example.com',
-            projectId: 'Sample Project'
+            projectId: 'Sample Project',
+            id: 1
         };
 
         const template = customTemplate.useCustom ? customTemplate : emailTemplates[selectedTemplate];
         return {
             subject: replaceVariables(template.subject, testApplication),
-            content: replaceVariables(template.content, testApplication)
+            content: replaceVariables(template.content, testApplication),
+            recipient: testApplication
         };
     };
-
     return (
         <div className="applications-communication-container">
             {/* Header */}
@@ -327,20 +367,20 @@ export const ApplicationsCommunication = ({
 
                             <div className="applications-communication-recipient-select">
                                 <select
-    value={selectedApplication?.email || ''}
-    onChange={(e) => {
-        const app = workingApplications.find(a => a.email === e.target.value);
-        setSelectedApplication(app);
-    }}
-    className="applications-communication-recipient-dropdown"
->
-    <option value="">{t('applications.communication.chooseRecipient')}</option>
-    {workingApplications.map(app => (
-        <option key={app.email} value={app.email}>
-            {app.firstName} {app.lastName} - {app.projectId}
-        </option>
-    ))}
-</select>
+                                    value={selectedApplication?.id || ''}  // ✅ Използваме id
+                                    onChange={(e) => {
+                                        const app = workingApplications.find(a => a.id === parseInt(e.target.value)); // ✅ Търсим по id
+                                        setSelectedApplication(app);
+                                    }}
+                                    className="applications-communication-recipient-dropdown"
+                                >
+                                    <option value="">{t('applications.communication.chooseRecipient')}</option>
+                                    {workingApplications.map(app => (
+                                        <option key={app.id} value={app.id}>
+                                            {app.firstName} {app.lastName} - {app.email} - Project ID: {app.projectId}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
 
@@ -688,6 +728,15 @@ export const ApplicationsCommunication = ({
                         </div>
 
                         <div className="applications-communication-preview-content">
+                            <div className="applications-communication-preview-field">
+                                <label className="applications-communication-preview-label">
+                                    {t('applications.communication.recipient')}:
+                                </label>
+                                <div className="applications-communication-preview-value">
+                                    {generatePreview().recipient.firstName} {generatePreview().recipient.lastName}
+                                    ({generatePreview().recipient.email})
+                                </div>
+                            </div>
                             <div className="applications-communication-preview-field">
                                 <label className="applications-communication-preview-label">
                                     {t('applications.communication.subject')}:

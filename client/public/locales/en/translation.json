@@ -45,7 +45,7 @@
       "title": "Initiatives, Projects & Stories",
       "subtitle": "Discover how we create change in the community through innovative projects and inspiring stories",
       "initiatives": "Initiatives",
-      "projects": "Projects", 
+      "projects": "Projects",
       "stories": "Stories",
       "initiative": "Initiative",
       "project": "Project",
@@ -58,17 +58,17 @@
       "noStories": "No stories available"
     },
     "constellation": {
-      "title": "Universe of Possibilities", 
+      "title": "Universe of Possibilities",
       "subtitle": "Explore our galaxy of initiatives, projects and stories",
       "initiative": "Initiative",
       "project": "Project",
-      "story": "Story", 
+      "story": "Story",
       "clickToExplore": "Click to explore",
       "exploreUniverse": "Explore the entire universe",
       "controls": {
         "title": "Filter the cosmos",
         "all": "All",
-        "initiatives": "Initiatives", 
+        "initiatives": "Initiatives",
         "projects": "Projects",
         "stories": "Stories",
         "hint": "Hover over stars for more information"
@@ -76,13 +76,13 @@
       "legend": {
         "title": "Navigation Compass",
         "initiative": "Central stars - main initiatives",
-        "project": "Planets - connected projects", 
+        "project": "Planets - connected projects",
         "story": "Comets - inspiring stories",
         "note": "Click on any star to explore its story"
       },
       "types": {
         "initiative": "Initiative",
-        "project": "Project", 
+        "project": "Project",
         "story": "Story"
       }
     }
@@ -1979,9 +1979,9 @@
     },
     "export": {
       "title": "Data Export",
-        "exportPDF": "Export PDF",
+      "exportPDF": "Export PDF",
       "generatedOn": "Generated on",
-      "totalRecords": "Total records", 
+      "totalRecords": "Total records",
       "page": "Page",
       "of": "of",
       "subtitle": "Download applications in CSV or JSON format",
@@ -2087,7 +2087,7 @@
           "content": "Dear {{firstName}} {{lastName}},\n\nWe wanted to update you on the status of your application for {{projectId}}.\n\nStatus: {{status}}\n\n{{nextSteps}}\n\nBest regards,\n{{companyName}} Team"
         },
         "interview_invitation": {
-           "name": "Interview Invitation",
+          "name": "Interview Invitation",
           "description": "Invite candidates for an interview"
         },
         "interview": {
@@ -2102,11 +2102,13 @@
           "subject": "Application Update - {{projectId}}",
           "content": "Dear {{firstName}} {{lastName}},\n\nThank you for your interest in {{projectId}}.\n\n{{reason}}, we have decided to move forward with other candidates.\n\nWe encourage you to apply for future opportunities.\n\nBest regards,\n{{companyName}} Team"
         },
-        "follow_up": {
-          "name": "Follow-up Email",
-          "description": "Send follow-up information to candidates",
+        "followUp": {
           "subject": "Follow-up: {{projectId}} Application",
           "content": "Dear {{firstName}} {{lastName}},\n\nWe wanted to follow up on your application for {{projectId}}.\n\n{{additionalInfo}}\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\n{{companyName}} Team"
+        },
+        "follow_up": {
+          "name": "Follow-up Email",
+          "description": "Send follow-up information to candidates"
         }
       }
     }
