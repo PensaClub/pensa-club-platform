@@ -3,8 +3,11 @@ const { getAllApplications, getApplicationById } = require('../utils/application
 const { sendProjectEmail } = require('../utils/zohoEmails');
 const { project } = require('../sequelize/models');
 const { frontend_base_url } = require('../config/envConfig');
+const { checkPermission } = require('../middlewares/rbac');
+const isAuth = require('../middlewares/isAuth');
+const { UpdateApplicationSchema, SendEmailsSchema } = require('../schemas/applications.schema');
 
-applicationController.get('/all', async (req, res, next) => {
+applicationController.get('/all', checkPermission('application', 'read'), async (req, res, next) => {
     try {
         const applications = await getAllApplications();
         return res.status(200).json(applications);
@@ -13,7 +16,7 @@ applicationController.get('/all', async (req, res, next) => {
     }
 });
 
-applicationController.get('/:applicationId', async (req, res, next) => {
+applicationController.get('/:applicationId', checkPermission('application', 'read'), async (req, res, next) => {
     try {
         const { applicationId } = req.params;
         const application = await getApplicationById(applicationId);
@@ -28,15 +31,21 @@ applicationController.get('/:applicationId', async (req, res, next) => {
     }
 });
 
-applicationController.patch('/:applicationId/status', async (req, res, next) => {
+applicationController.patch('/:applicationId/status', isAuth, checkPermission('application', 'update'), async (req, res, next) => {
     try {
         const { applicationId } = req.params;
-        const { status } = req.body;
+        const { status } = UpdateApplicationSchema.parse({ status: req.body.status });
+        const userId = req.user.userId;
+        const userRole = req.user.role;
 
         const application = await getApplicationById(applicationId);
 
         if (!application) {
             return res.status(404).json({ message: 'Application not found' });
+        }
+
+        if (userRole !== 'admin' && userRole !== 'moderator' && application.userId !== userId) {
+            return res.status(403).json({ message: 'Access denied - you can only modify your own applications' });
         }
 
         await application.update({ status });
@@ -48,13 +57,20 @@ applicationController.patch('/:applicationId/status', async (req, res, next) => 
     }
 });
 
-applicationController.delete('/:applicationId', async (req, res, next) => {
+applicationController.delete('/:applicationId', isAuth, checkPermission('application', 'delete'), async (req, res, next) => {
     try {
         const { applicationId } = req.params;
+        const userId = req.user.userId;
+        const userRole = req.user.role;
+
         const application = await getApplicationById(applicationId);
 
         if (!application) {
             return res.status(404).json({ message: 'Application not found' });
+        }
+
+        if (userRole !== 'admin' && userRole !== 'moderator' && application.userId !== userId) {
+            return res.status(403).json({ message: 'Access denied - you can only delete your own applications' });
         }
 
         await application.destroy();
@@ -67,20 +83,20 @@ applicationController.delete('/:applicationId', async (req, res, next) => {
     }
 });
 
-applicationController.post('/send-personalized-emails', async (req, res, next) => {
+applicationController.post('/send-personalized-emails', isAuth, checkPermission('application', 'sendEmails'), async (req, res, next) => {
     try {
-        const { recipients = [], metadata = {} } = req.body;
-        if (!Array.isArray(recipients) || recipients.length === 0) {
-            return res.status(400).json({ success: false, message: 'No recipients provided.' });
+        const { emails } = SendEmailsSchema.parse(req.body);
+
+        if (!Array.isArray(emails) || emails.length === 0) {
+            return res.status(400).json({ success: false, message: 'No emails provided.' });
         }
 
         const results = [];
         let sentCount = 0;
 
-        for (const recipient of recipients) {
+        for (const recipient of emails) {
             try {
                 let projectData = null;
-                let projectLink = null;
                 let projectId = null;
 
                 if (recipient.applicationId) {
@@ -140,12 +156,12 @@ applicationController.post('/send-personalized-emails', async (req, res, next) =
 
         return res.status(200).json({
             success: true,
-            message: `Successfully sent ${sentCount} out of ${recipients.length} emails`,
+            message: `Successfully sent ${sentCount} out of ${emails.length} emails`,
             results,
             summary: {
-                totalRequested: recipients.length,
+                totalRequested: emails.length,
                 successfullySent: sentCount,
-                failed: recipients.length - sentCount,
+                failed: emails.length - sentCount,
             },
         });
     } catch (err) {
