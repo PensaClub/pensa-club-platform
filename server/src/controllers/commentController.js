@@ -1,66 +1,37 @@
 const commentController = require('express').Router();
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
-const { comment, user_account, user_details, initiative, project } = require('../sequelize/models');
+const { comment, user_details, initiative, project, publication, story } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
-const { transformComment } = require('../utils/commentUtils');
+const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { CreateCommentSchema, UpdateCommentSchema, CommentIdSchema } = require('../schemas/comments.schema');
 
-const commentConfig = [
-    {
-        model: user_account,
-        as: 'user',
-        include: [
-            {
-                model: user_details,
-                as: 'details',
-                attributes: ['username', 'firstName', 'lastName', 'imageURL'],
-            },
-        ],
-    },
-    {
-        model: comment,
-        as: 'replies',
-        include: [
-            {
-                model: user_account,
-                as: 'user',
-                include: [
-                    {
-                        model: user_details,
-                        as: 'details',
-                        attributes: ['username', 'firstName', 'lastName', 'imageURL'],
-                    },
-                ],
-            },
-        ],
-    },
-];
+const modelMap = {
+    initiative,
+    project,
+    publication,
+    story,
+};
 
 commentController.post('/create', isAuth, checkPermission('comments', 'create'), async (req, res, next) => {
     try {
         const validatedData = CreateCommentSchema.parse(req.body);
-        const { content, commentableId, commentsLinkConnection, parentId, slug } = validatedData;
+        const { content, commentableId, commentsLinkConnection, parentId } = validatedData;
 
-        let finalCommentableId = commentableId;
+        let finalCommentableId = null;
+        const model = modelMap[commentsLinkConnection];
 
-        if (slug) {
-            const initiative = await initiative.findOne({
-                where: { slug: slug },
-            });
+        let foundEntity = await model.findOne({ where: { slug: commentableId } });
 
-            if (initiative) {
-                finalCommentableId = initiative.id;
-            }
-        } else if (typeof commentableId === 'string') {
-            const initiative = await initiative.findOne({
-                where: { slug: commentableId },
-            });
-
-            if (initiative) {
-                finalCommentableId = initiative.id;
-            }
+        if (!foundEntity && !isNaN(Number(commentableId))) {
+            foundEntity = await model.findByPk(Number(commentableId));
         }
+
+        if (!foundEntity) {
+            throw new CustomError({ message: `No ${commentsLinkConnection} found for identifier: ${commentableId}`, statusCode: 404 });
+        }
+
+        finalCommentableId = foundEntity.id;
 
         const newComment = await comment.create({
             content,
@@ -71,25 +42,15 @@ commentController.post('/create', isAuth, checkPermission('comments', 'create'),
         });
 
         if (parentId) {
-            const parentComment = await comment.findByPk(parentId, {
-                include: commentConfig,
-            });
-
+            const parentComment = await comment.findByPk(parentId, getCommentConfig());
             if (!parentComment) {
-                throw new CustomError({
-                    message: 'Parent comment not found',
-                    statusCode: 404,
-                });
+                throw new CustomError({ message: 'Parent comment not found', statusCode: 404 });
             }
-
             const transformedParent = transformComment(parentComment);
             return res.status(201).json(transformedParent);
         }
 
-        const completeComment = await comment.findByPk(newComment.id, {
-            include: commentConfig,
-        });
-
+        const completeComment = await comment.findByPk(newComment.id, getCommentConfig());
         const transformedComment = transformComment(completeComment);
         return res.status(201).json(transformedComment);
     } catch (err) {
@@ -114,9 +75,7 @@ commentController.post('/like/:id', isAuth, checkPermission('comments', 'like'),
 
         const userName = `${userDetails.firstName} ${userDetails.lastName}`;
 
-        const commentToLike = await comment.findByPk(id, {
-            include: commentConfig,
-        });
+        const commentToLike = await comment.findByPk(id, getCommentConfig());
 
         if (!commentToLike) {
             throw new CustomError({
@@ -133,9 +92,7 @@ commentController.post('/like/:id', isAuth, checkPermission('comments', 'like'),
 
         await commentToLike.update({ likes: updatedLikes });
 
-        const updatedComment = await comment.findByPk(id, {
-            include: commentConfig,
-        });
+        const updatedComment = await comment.findByPk(id, getCommentConfig());
 
         const transformedComment = transformComment(updatedComment);
         const response = {
@@ -153,15 +110,10 @@ commentController.get('/single/:id', checkPermission('comments', 'read'), async 
     try {
         const { id } = CommentIdSchema.parse(req.params);
 
-        const foundComment = await comment.findByPk(id, {
-            include: commentConfig,
-        });
+        const foundComment = await comment.findByPk(id, getCommentConfig());
 
         if (!foundComment) {
-            throw new CustomError({
-                message: 'Comment not found',
-                statusCode: 404,
-            });
+            throw new CustomError({ message: 'Comment not found', statusCode: 404 });
         }
 
         const transformedComment = transformComment(foundComment);
@@ -174,12 +126,11 @@ commentController.get('/single/:id', checkPermission('comments', 'read'), async 
 commentController.delete('/:id', isAuth, checkPermission('comments', 'delete'), async (req, res, next) => {
     try {
         const { id } = CommentIdSchema.parse(req.params);
+
         const userId = req.user.userId;
         const userRole = req.user.role;
 
-        const commentToDelete = await comment.findByPk(id, {
-            include: commentConfig,
-        });
+        const commentToDelete = await comment.findByPk(id, getCommentConfig());
 
         if (!commentToDelete) {
             throw new CustomError({
@@ -204,9 +155,7 @@ commentController.delete('/:id', isAuth, checkPermission('comments', 'delete'), 
             return res.status(200).json({ message: 'Reply deleted successfully' });
         }
 
-        const parentComment = await comment.findByPk(commentToDelete.parentId, {
-            include: commentConfig,
-        });
+        const parentComment = await comment.findByPk(commentToDelete.parentId, getCommentConfig());
 
         await commentToDelete.destroy();
 
@@ -225,12 +174,11 @@ commentController.patch('/:id', isAuth, checkPermission('comments', 'update'), a
     try {
         const { id } = CommentIdSchema.parse(req.params);
         const { content } = UpdateCommentSchema.parse(req.body);
+
         const userId = req.user.userId;
         const userRole = req.user.role;
 
-        const commentToUpdate = await comment.findByPk(id, {
-            include: commentConfig,
-        });
+        const commentToUpdate = await comment.findByPk(id, getCommentConfig());
 
         if (!commentToUpdate) {
             throw new CustomError({
@@ -260,11 +208,10 @@ commentController.patch('/:id', isAuth, checkPermission('comments', 'update'), a
 
         await commentToUpdate.update({ content });
 
-        const updatedComment = await comment.findByPk(id, {
-            include: commentConfig,
-        });
+        const updatedComment = await comment.findByPk(id, getCommentConfig());
 
         const transformedComment = transformComment(updatedComment);
+
         return res.status(200).json({
             ...transformedComment,
             isEdited: true,
@@ -277,35 +224,18 @@ commentController.patch('/:id', isAuth, checkPermission('comments', 'update'), a
 commentController.get('/all/initiative/:id', checkPermission('comments', 'read'), async (req, res, next) => {
     try {
         const { id } = req.params;
-        const initiativeId = parseInt(id);
 
-        let foundInitiative;
+        let foundInitiative = await initiative.findOne({ where: { slug: id } });
 
-        foundInitiative = await initiative.findOne({
-            where: { slug: id },
-        });
-
-        if (!foundInitiative && !isNaN(initiativeId)) {
-            foundInitiative = await initiative.findByPk(initiativeId);
+        if (!foundInitiative && !isNaN(Number(id))) {
+            foundInitiative = await initiative.findByPk(Number(id));
         }
-
         if (!foundInitiative) {
-            throw new CustomError({
-                message: 'Initiative not found',
-                statusCode: 404,
-            });
+            throw new CustomError({ message: 'Initiative not found', statusCode: 404 });
         }
+        const comments = await comment.findAll(getCommentConfig(foundInitiative.id, 'initiative'));
 
-        const comments = await comment.findAll({
-            where: {
-                commentableId: foundInitiative.id,
-                commentsLinkConnection: 'initiative',
-            },
-            include: commentConfig,
-            order: [['createdAt', 'DESC']],
-        });
-
-        const transformedComments = comments.map((comment) => transformComment(comment));
+        const transformedComments = comments.map(transformComment);
 
         return res.status(200).json({
             initiativeSlug: foundInitiative.slug,
@@ -319,38 +249,48 @@ commentController.get('/all/initiative/:id', checkPermission('comments', 'read')
 commentController.get('/all/project/:id', checkPermission('comments', 'read'), async (req, res, next) => {
     try {
         const { id } = req.params;
-        const projectId = parseInt(id);
 
-        let foundProject;
+        let foundProject = await project.findOne({ where: { slug: id } });
 
-        foundProject = await project.findOne({
-            where: { slug: id },
-        });
-
-        if (!foundProject && !isNaN(projectId)) {
-            foundProject = await project.findByPk(projectId);
+        if (!foundProject && !isNaN(Number(id))) {
+            foundProject = await project.findByPk(Number(id));
         }
-
         if (!foundProject) {
-            throw new CustomError({
-                message: 'Project not found',
-                statusCode: 404,
-            });
+            throw new CustomError({ message: 'Project not found', statusCode: 404 });
         }
+        const comments = await comment.findAll(getCommentConfig(foundProject.id, 'project'));
 
-        const comments = await comment.findAll({
-            where: {
-                commentableId: foundProject.id,
-                commentsLinkConnection: 'project',
-            },
-            include: commentConfig,
-            order: [['createdAt', 'DESC']],
-        });
-
-        const transformedComments = comments.map((comment) => transformComment(comment));
+        const transformedComments = comments.map(transformComment);
 
         return res.status(200).json({
             projectSlug: foundProject.slug,
+            comments: transformedComments,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+commentController.get('/all/publication/:id', checkPermission('comments', 'read'), async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        let foundPublication = await publication.findOne({ where: { slug: id } });
+
+        if (!foundPublication && !isNaN(Number(id))) {
+            foundPublication = await publication.findByPk(Number(id));
+        }
+
+        if (!foundPublication) {
+            throw new CustomError({ message: 'Publication not found', statusCode: 404 });
+        }
+
+        const comments = await comment.findAll(getCommentConfig(foundPublication.id, 'publication'));
+
+        const transformedComments = comments.map(transformComment);
+
+        return res.status(200).json({
+            publicationSlug: foundPublication.slug,
             comments: transformedComments,
         });
     } catch (err) {
