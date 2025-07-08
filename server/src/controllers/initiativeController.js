@@ -39,7 +39,8 @@ initiativeController.post('/draft/save/:id?', isAuth, checkPermission('initiativ
     }
 });
 
-initiativeController.get('/draft/:id', checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
+// Add isAuth for draft endpoints
+initiativeController.get('/draft/:id', isAuth, checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
     return getSingleInitiativeByDraftStatus(true, req, res, next);
 });
 
@@ -47,7 +48,7 @@ initiativeController.get('/single/:id', checkPermission('initiative', 'read'), a
     return getSingleInitiativeByDraftStatus(false, req, res, next);
 });
 
-initiativeController.get('/drafts', checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
+initiativeController.get('/drafts', isAuth, checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
     return getInitiativesByDraftStatus(true, req, res, next);
 });
 

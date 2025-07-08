@@ -46,6 +46,7 @@ module.exports = {
                     logo: 'https://cdn-icons-png.flaticon.com/512/471/471662.png',
                     created_at: new Date(),
                     updated_at: new Date(),
+                    is_draft: false,
                 },
                 {
                     slug: 'senior-art-gallery',
@@ -87,6 +88,7 @@ module.exports = {
                     logo: 'https://cdn-icons-png.flaticon.com/512/3075/3075977.png',
                     created_at: new Date(),
                     updated_at: new Date(),
+                    is_draft: true,
                 },
             ],
             { returning: true }
