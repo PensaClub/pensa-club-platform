@@ -97,6 +97,9 @@ export const initiativeServiceFactory = (token) => {
     },
 
     // Project endpoints
+    createProject: async (projectData) => {
+      return requester.post(`${apiUrl}/projects/create`, projectData);
+    },
     getAllProjects: async () => {
       return requester.get(`${apiUrl}/projects/all`);
     },
@@ -108,7 +111,31 @@ export const initiativeServiceFactory = (token) => {
     getProjectsByInitiative: async (initiativeId) => {
       return requester.get(`${apiUrl}/projects/initiative/${initiativeId}`);
     },
+    // Project Draft endpoints
+    saveDraftProject: async (draftData) => {
+      return requester.post(`${apiUrl}/projects/draft/save`, draftData);
+    },
 
+    updateDraftProject: async (id, draftData) => {
+      return requester.post(`${apiUrl}/projects/draft/save/${id}`, draftData);
+    },
+
+    getDraftProjectById: async (id) => {
+      return requester.get(`${apiUrl}/projects/draft/${id}`);
+    },
+
+    deleteDraftProject: async (draftId) => {
+      return requester.del(`${apiUrl}/projects/draft/${draftId}`);
+    },
+
+    toggleProjectDraftStatus: async (identifier) => {
+      return requester.patch(`${apiUrl}/projects/toggle-draft/${identifier}`);
+    },
+
+    getAllProjectDrafts: async (page = 1, limit = 6) => {
+      return requester.get(`${apiUrl}/projects/drafts?page=${page}&limit=${limit}`);
+    },
+    //bookmark-project
     toggleBookmarkProject: async (projectId) => {
       return requester.post(`${apiUrl}/projects/bookmark/${projectId}`);
     },
@@ -136,7 +163,7 @@ export const initiativeServiceFactory = (token) => {
     deleteApplication: async (applicationId) => {
       return requester.del(`${apiUrl}/applications/${applicationId}`);
     },
-  
+
     sendPersonalizedEmails: async (emailData) => {
       return requester.post(`${apiUrl}/applications/send-personalized-emails`, emailData);
     },
