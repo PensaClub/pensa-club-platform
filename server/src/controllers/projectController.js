@@ -19,6 +19,7 @@ const {
 const CustomError = require('../utils/customError');
 const { transformProject, projectConfig } = require('../utils/projectUtils');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
+const { findBySlugOrId } = require('../utils/modelLookup');
 
 // ========================================
 // ENDPOINTS
@@ -87,21 +88,9 @@ projectController.put('/:id', isAuth, checkPermission('projects', 'update'), asy
 projectController.patch('/toggle-draft/:id', isAuth, checkPermission('projects', 'update'), async (req, res, next) => {
     try {
         const param = req.params.id;
-        const projectId = parseInt(param);
 
         const result = await project.sequelize.transaction(async (t) => {
-            let foundProject;
-
-            foundProject = await project.findOne({
-                where: { slug: param },
-                transaction: t,
-            });
-
-            if (!foundProject && !isNaN(projectId)) {
-                foundProject = await project.findByPk(projectId, {
-                    transaction: t,
-                });
-            }
+            const foundProject = await findBySlugOrId(project, param, { transaction: t });
 
             if (!foundProject) {
                 throw new CustomError({
@@ -169,16 +158,9 @@ projectController.post('/:projectId/apply', isAuth, checkPermission('projects', 
 
         const userId = req.user.userId;
         const { projectId } = req.params;
-        let whereClause;
 
-        if (isNaN(Number(projectId))) {
-            whereClause = { slug: projectId, isDraft: false };
-        } else {
-            whereClause = { id: Number(projectId), isDraft: false };
-        }
-
-        const foundProject = await project.findOne({
-            where: whereClause,
+        const foundProject = await findBySlugOrId(project, projectId, {
+            where: { isDraft: false },
         });
 
         if (!foundProject) {
@@ -251,34 +233,18 @@ projectController.post('/bookmark/:projectId', isAuth, checkPermission('projects
     try {
         const userId = req.user.userId;
         const param = req.params.projectId;
-        const projectId = parseInt(param);
 
-        let existing;
-        if (isNaN(projectId)) {
-            existing = await project.findOne({
-                where: { slug: param, isDraft: false },
-                include: [
-                    {
-                        model: user_account,
-                        as: 'bookmarkedBy',
-                        where: { id: userId },
-                        required: false,
-                    },
-                ],
-            });
-        } else {
-            existing = await project.findOne({
-                where: { id: projectId, isDraft: false },
-                include: [
-                    {
-                        model: user_account,
-                        as: 'bookmarkedBy',
-                        where: { id: userId },
-                        required: false,
-                    },
-                ],
-            });
-        }
+        const existing = await findBySlugOrId(project, param, {
+            where: { isDraft: false },
+            include: [
+                {
+                    model: user_account,
+                    as: 'bookmarkedBy',
+                    where: { id: userId },
+                    required: false,
+                },
+            ],
+        });
 
         if (!existing) {
             return res.status(404).json({ error: 'Project not found' });
@@ -337,17 +303,8 @@ projectController.get('/user-projects/:email', checkPermission('projects', 'read
 projectController.get('/:projectId/applications', isAuth, checkPermission('projects', 'read'), async (req, res, next) => {
     try {
         const { projectId } = req.params;
-        let whereClause;
 
-        if (isNaN(Number(projectId))) {
-            whereClause = { slug: projectId };
-        } else {
-            whereClause = { id: Number(projectId) };
-        }
-
-        const foundProject = await project.findOne({
-            where: whereClause,
-        });
+        const foundProject = await findBySlugOrId(project, projectId);
 
         if (!foundProject) {
             return res.status(404).json({ message: 'Project not found' });
@@ -391,27 +348,11 @@ projectController.get('/:projectId/applications', isAuth, checkPermission('proje
 const getSingleProjectByDraftStatus = async (isDraft, req, res, next) => {
     try {
         const param = req.params.id;
-        const projectId = parseInt(param);
 
-        let foundProject;
-
-        foundProject = await project.findOne({
-            where: {
-                slug: param,
-                isDraft: isDraft,
-            },
+        const foundProject = await findBySlugOrId(project, param, {
+            where: { isDraft: isDraft },
             include: projectConfig,
         });
-
-        if (!foundProject && !isNaN(projectId)) {
-            foundProject = await project.findOne({
-                where: {
-                    id: projectId,
-                    isDraft: isDraft,
-                },
-                include: projectConfig,
-            });
-        }
 
         if (!foundProject) {
             throw new CustomError({
@@ -434,38 +375,19 @@ const getSingleProjectByDraftStatus = async (isDraft, req, res, next) => {
 const deleteProjectByDraftStatus = async (isDraft, req, res, next) => {
     try {
         const param = req.params.id;
-        const projectId = parseInt(param);
 
         await project.sequelize.transaction(async (t) => {
-            let foundProject;
-            if (isNaN(projectId)) {
-                foundProject = await project.findOne({
-                    where: {
-                        slug: param,
-                        isDraft: isDraft,
+            const foundProject = await findBySlugOrId(project, param, {
+                where: { isDraft: isDraft },
+                include: [
+                    {
+                        model: user_account,
+                        as: 'creator',
+                        attributes: ['id', 'email'],
                     },
-                    include: [
-                        {
-                            model: user_account,
-                            as: 'creator',
-                            attributes: ['id', 'email'],
-                        },
-                    ],
-                    transaction: t,
-                });
-            } else {
-                foundProject = await project.findByPk(projectId, {
-                    where: { isDraft: isDraft },
-                    include: [
-                        {
-                            model: user_account,
-                            as: 'creator',
-                            attributes: ['id', 'email'],
-                        },
-                    ],
-                    transaction: t,
-                });
-            }
+                ],
+                transaction: t,
+            });
 
             if (!foundProject) {
                 throw new CustomError({
@@ -820,16 +742,10 @@ const createProject = async (projectData, req, res, next) => {
 const updateProject = async (projectData, req, res, next, isDraft = false) => {
     try {
         const param = req.params.id;
-        const projectId = parseInt(param);
 
         const result = await project.sequelize.transaction(async (t) => {
-            let foundProject;
-
-            foundProject = await project.findOne({
-                where: {
-                    slug: param,
-                    isDraft: isDraft,
-                },
+            const foundProject = await findBySlugOrId(project, param, {
+                where: { isDraft: isDraft },
                 include: [
                     ...projectConfig,
                     {
@@ -840,21 +756,6 @@ const updateProject = async (projectData, req, res, next, isDraft = false) => {
                 ],
                 transaction: t,
             });
-
-            if (!foundProject && !isNaN(projectId)) {
-                foundProject = await project.findByPk(projectId, {
-                    where: { isDraft: isDraft },
-                    include: [
-                        ...projectConfig,
-                        {
-                            model: user_account,
-                            as: 'creator',
-                            attributes: ['id', 'email'],
-                        },
-                    ],
-                    transaction: t,
-                });
-            }
 
             if (!foundProject) {
                 throw new CustomError({

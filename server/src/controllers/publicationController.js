@@ -1,6 +1,7 @@
 const publicationController = require('express').Router();
 const { publication, section, image } = require('../sequelize/models');
 const { publicationConfig, transformPublication } = require('../utils/publicationUtils');
+const { findBySlugOrId } = require('../utils/modelLookup');
 
 publicationController.post('/create', async (req, res, next) => {
     try {
@@ -73,14 +74,15 @@ publicationController.post('/create', async (req, res, next) => {
 publicationController.get('/single/:param', async (req, res, next) => {
     try {
         const { param } = req.params;
-        let pub = await publication.findOne({
-            where: { slug: param },
+
+        const pub = await findBySlugOrId(publication, param, {
             include: publicationConfig,
         });
-        if (!pub && !isNaN(Number(param))) {
-            pub = await publication.findByPk(Number(param), { include: publicationConfig });
+
+        if (!pub) {
+            return res.status(404).json({ success: false, message: 'Publication not found' });
         }
-        if (!pub) return res.status(404).json({ success: false, message: 'Publication not found' });
+
         return res.status(200).json({ success: true, data: pub });
     } catch (err) {
         next(err);
@@ -91,12 +93,13 @@ publicationController.get('/single/:param', async (req, res, next) => {
 publicationController.put('/:idOrSlug', async (req, res, next) => {
     try {
         const { idOrSlug } = req.params;
-        const pub = await publication.findOne({
-            where: {
-                [sequelize.Op.or]: [{ id: isNaN(Number(idOrSlug)) ? undefined : Number(idOrSlug) }, { slug: idOrSlug }],
-            },
-        });
-        if (!pub) return res.status(404).json({ success: false, message: 'Publication not found' });
+
+        const pub = await findBySlugOrId(publication, idOrSlug);
+
+        if (!pub) {
+            return res.status(404).json({ success: false, message: 'Publication not found' });
+        }
+
         await pub.update(req.body);
         return res.status(200).json({ success: true, data: pub });
     } catch (err) {
@@ -108,12 +111,13 @@ publicationController.put('/:idOrSlug', async (req, res, next) => {
 publicationController.delete('/:idOrSlug', async (req, res, next) => {
     try {
         const { idOrSlug } = req.params;
-        const pub = await publication.findOne({
-            where: {
-                [sequelize.Op.or]: [{ id: isNaN(Number(idOrSlug)) ? undefined : Number(idOrSlug) }, { slug: idOrSlug }],
-            },
-        });
-        if (!pub) return res.status(404).json({ success: false, message: 'Publication not found' });
+
+        const pub = await findBySlugOrId(publication, idOrSlug);
+
+        if (!pub) {
+            return res.status(404).json({ success: false, message: 'Publication not found' });
+        }
+
         await pub.destroy();
         return res.status(200).json({ success: true, message: 'Publication deleted' });
     } catch (err) {

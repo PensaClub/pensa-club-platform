@@ -163,6 +163,7 @@ const BaseInitiativeSchema = z
         commentsEnabled: z.boolean().nullable().optional(),
         isDraft: z.boolean().nullable().optional(),
         gallery: z.array(z.any()).nullable().optional(),
+        projects: z.array(z.string()).optional(),
 
         mainImage: MainImageSchema,
 

@@ -5,6 +5,7 @@ const { comment, user_details, initiative, project, publication, story } = requi
 const CustomError = require('../utils/customError');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { CreateCommentSchema, UpdateCommentSchema, CommentIdSchema } = require('../schemas/comments.schema');
+const { findBySlugOrId } = require('../utils/modelLookup');
 
 const modelMap = {
     initiative,
@@ -21,11 +22,7 @@ commentController.post('/create', isAuth, checkPermission('comments', 'create'),
         let finalCommentableId = null;
         const model = modelMap[commentsLinkConnection];
 
-        let foundEntity = await model.findOne({ where: { slug: commentableId } });
-
-        if (!foundEntity && !isNaN(Number(commentableId))) {
-            foundEntity = await model.findByPk(Number(commentableId));
-        }
+        let foundEntity = await findBySlugOrId(model, commentableId);
 
         if (!foundEntity) {
             throw new CustomError({ message: `No ${commentsLinkConnection} found for identifier: ${commentableId}`, statusCode: 404 });
@@ -225,11 +222,8 @@ commentController.get('/all/initiative/:id', checkPermission('comments', 'read')
     try {
         const { id } = req.params;
 
-        let foundInitiative = await initiative.findOne({ where: { slug: id } });
+        let foundInitiative = await findBySlugOrId(initiative, id);
 
-        if (!foundInitiative && !isNaN(Number(id))) {
-            foundInitiative = await initiative.findByPk(Number(id));
-        }
         if (!foundInitiative) {
             throw new CustomError({ message: 'Initiative not found', statusCode: 404 });
         }
@@ -250,11 +244,8 @@ commentController.get('/all/project/:id', checkPermission('comments', 'read'), a
     try {
         const { id } = req.params;
 
-        let foundProject = await project.findOne({ where: { slug: id } });
+        let foundProject = await findBySlugOrId(project, id);
 
-        if (!foundProject && !isNaN(Number(id))) {
-            foundProject = await project.findByPk(Number(id));
-        }
         if (!foundProject) {
             throw new CustomError({ message: 'Project not found', statusCode: 404 });
         }
@@ -275,11 +266,7 @@ commentController.get('/all/publication/:id', checkPermission('comments', 'read'
     try {
         const { id } = req.params;
 
-        let foundPublication = await publication.findOne({ where: { slug: id } });
-
-        if (!foundPublication && !isNaN(Number(id))) {
-            foundPublication = await publication.findByPk(Number(id));
-        }
+        let foundPublication = await findBySlugOrId(publication, id);
 
         if (!foundPublication) {
             throw new CustomError({ message: 'Publication not found', statusCode: 404 });
