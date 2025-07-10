@@ -52,7 +52,10 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
     updateProject,
     getProjectById,
     getAllInitiatives,
-    initiatives
+    toggleProjectDraftStatus,
+    initiatives,
+    updateInitiativeWithProject,
+    getAllProjectDrafts
   } = useInitiativeContext();
   const { userEmail } = useAuthContext();
   const STORAGE_KEY = 'project_draft';
@@ -194,79 +197,227 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
   }, [getAllInitiatives, initiatives]);
 
   // Load draft from URL
-  useEffect(() => {
-    const loadDraftFromUrl = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const draftIdFromUrl = urlParams.get('draftId');
-      const editIdFromUrl = urlParams.get('editId');
-      const mode = urlParams.get('mode');
+ // Load draft from URL
+useEffect(() => {
+  const loadDraftFromUrl = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const draftIdFromUrl = urlParams.get('draftId');
+    const editIdFromUrl = urlParams.get('editId');
+    const mode = urlParams.get('mode');
 
-      if (draftIdFromUrl && !initialValues) {
-        try {
-          const draftData = await getDraftProjectById(draftIdFromUrl);
-          if (draftData) {
-            const processedData = { ...draftData };
-
-            if (isHtmlContent(processedData.fullDescription)) {
+    if (draftIdFromUrl && !initialValues) {
+      try {
+        const draftData = await getDraftProjectById(draftIdFromUrl);
+        if (draftData) {
+          const processedData = { ...draftData };
+console.log('🗺️ Original location data:', processedData.location);
+      
+          if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
+            try {
               processedData.fullDescription = htmlToSlate(processedData.fullDescription);
+            } catch (error) {
+              console.error('❌ Error converting fullDescription:', error);
+              processedData.fullDescription = createSlateEditorState();
             }
+          } else {
+            processedData.fullDescription = createSlateEditorState();
+          }
 
-            if (processedData.sections && Array.isArray(processedData.sections)) {
-              processedData.sections = processedData.sections.map(section => {
-                if (isHtmlContent(section.content)) {
+          // sections[].content - съдържанието на секциите (Slate редактор)
+          if (processedData.sections && Array.isArray(processedData.sections)) {
+            processedData.sections = processedData.sections.map(section => {
+              if (section.content && typeof section.content === 'string') {
+                try {
                   return {
                     ...section,
                     content: htmlToSlate(section.content)
                   };
-                }
-                return section;
-              });
-            }
-
-            setValues(processedData);
-            setDraftId(draftIdFromUrl);
-            notify('success', 'Черновата е заредена за редактиране');
-          }
-        } catch (error) {
-          console.error('Error loading draft:', error);
-          notify('error', 'Грешка при зареждане на черновата');
-        }
-      } else if (editIdFromUrl && mode === 'edit') {
-        try {
-          const projectData = await getProjectById(editIdFromUrl);
-          if (projectData) {
-            const processedData = { ...projectData };
-
-            if (isHtmlContent(processedData.fullDescription)) {
-              processedData.fullDescription = htmlToSlate(processedData.fullDescription);
-            }
-
-            if (processedData.sections && Array.isArray(processedData.sections)) {
-              processedData.sections = processedData.sections.map(section => {
-                if (isHtmlContent(section.content)) {
+                } catch (error) {
+                  console.error('❌ Error converting section content:', error);
                   return {
                     ...section,
-                    content: htmlToSlate(section.content)
+                    content: createSlateEditorState()
                   };
                 }
-                return section;
-              });
-            }
-
-            setValues(processedData);
-            setEditId(editIdFromUrl);
-            notify('success', 'Проектът е зареден за редактиране');
+              } else {
+                return {
+                  ...section,
+                  content: createSlateEditorState()
+                };
+              }
+            });
           }
-        } catch (error) {
-          console.error('Error loading project for edit:', error);
-          notify('error', 'Грешка при зареждане на проекта');
+
+          // 🔧 ОСТАНАЛИТЕ полета остават както са (strings)
+          // title, shortDescription, tags, etc. - НЕ се конвертират
+
+          setValues(processedData);
+          setDraftId(draftIdFromUrl);
+          notify('success', 'Черновата е заредена за редактиране');
         }
+      } catch (error) {
+        console.error('Error loading draft:', error);
+        notify('error', 'Грешка при зареждане на черновата');
       }
-    };
+    } else if (editIdFromUrl && mode === 'edit') {
+      try {
+        const projectData = await getProjectById(editIdFromUrl);
+        if (projectData) {
+          const processedData = { ...projectData };
 
-    loadDraftFromUrl();
-  }, [location.search]);
+          // 🎯 КОНВЕРТИРАНЕ НА SLATE ПОЛЕТАТА ОТ HTML КЪМ SLATE
+          // fullDescription
+          if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
+            try {
+              processedData.fullDescription = htmlToSlate(processedData.fullDescription);
+            } catch (error) {
+              console.error('❌ Error converting fullDescription:', error);
+              processedData.fullDescription = createSlateEditorState();
+            }
+          } else {
+            processedData.fullDescription = createSlateEditorState();
+          }
 
+          // sections[].content
+          if (processedData.sections && Array.isArray(processedData.sections)) {
+            processedData.sections = processedData.sections.map(section => {
+              if (section.content && typeof section.content === 'string') {
+                try {
+                  return {
+                    ...section,
+                    content: htmlToSlate(section.content)
+                  };
+                } catch (error) {
+                  console.error('❌ Error converting section content:', error);
+                  return {
+                    ...section,
+                    content: createSlateEditorState()
+                  };
+                }
+              } else {
+                return {
+                  ...section,
+                  content: createSlateEditorState()
+                };
+              }
+            });
+          }
+
+          setValues(processedData);
+          setEditId(editIdFromUrl);
+          notify('success', 'Проектът е зареден за редактиране');
+        }
+      } catch (error) {
+        console.error('Error loading project for edit:', error);
+        notify('error', 'Грешка при зареждане на проекта');
+      }
+    }
+  };
+
+  loadDraftFromUrl();
+}, [location.search]);
+
+// Auto-load latest draft
+useEffect(() => {
+  const autoLoadLatestDraft = async () => {
+    // Ако има initialValues (edit mode), не зареждаме чернова
+    if (initialValues && Object.keys(initialValues).length > 0) {
+      return;
+    }
+
+    // Ако вече има URL параметри за draft/edit, не зареждаме автоматично
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('draftId') || urlParams.get('editId')) {
+      return;
+    }
+
+    try {
+      console.log('🔍 Looking for latest project draft...');
+      
+      const draftsResponse = await getAllProjectDrafts(1, true);
+      const drafts = draftsResponse.data || [];
+      
+      if (drafts.length > 0) {
+        const latestDraft = drafts[0];
+        console.log('📄 Found latest draft:', latestDraft.title);
+        
+        const processedData = { ...latestDraft };
+        
+        // 🎯 КОНВЕРТИРАНЕ НА SLATE ПОЛЕТАТА ОТ HTML КЪМ SLATE
+        // fullDescription - основното описание (има Slate редактор)
+        if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
+          try {
+            processedData.fullDescription = htmlToSlate(processedData.fullDescription);
+            console.log('✅ Converted fullDescription from HTML to Slate');
+          } catch (error) {
+            console.error('❌ Error converting fullDescription:', error);
+            processedData.fullDescription = createSlateEditorState();
+          }
+        } else {
+          processedData.fullDescription = createSlateEditorState();
+        }
+
+        // sections[].content - съдържанието на секциите (има Slate редактор)
+        if (processedData.sections && Array.isArray(processedData.sections)) {
+          processedData.sections = processedData.sections.map(section => {
+            if (section.content && typeof section.content === 'string') {
+              try {
+                return {
+                  ...section,
+                  content: htmlToSlate(section.content)
+                };
+              } catch (error) {
+                console.error('❌ Error converting section content:', error);
+                return {
+                  ...section,
+                  content: createSlateEditorState()
+                };
+              }
+            } else {
+              return {
+                ...section,
+                content: createSlateEditorState()
+              };
+            }
+          });
+          console.log('✅ Converted sections content from HTML to Slate');
+        }
+ if (processedData.location) {
+          if (!Array.isArray(processedData.location)) {
+            processedData.location = [processedData.location];
+          }
+          
+          processedData.location = processedData.location.map(loc => ({
+            address: loc.address || '',
+            coordinates: {
+              lat: loc.coordinates?.lat || null,
+              lng: loc.coordinates?.lng || null
+            }
+          }));
+        } else {
+          processedData.location = [{
+            address: '',
+            coordinates: { lat: null, lng: null }
+          }];
+        }
+        // 🔧 ОСТАНАЛИТЕ полета остават както са (strings)
+        // title, shortDescription, tags, etc. - НЕ се конвертират
+
+        setValues(processedData);
+        setDraftId(latestDraft.id);
+        
+        console.log('✅ Latest draft loaded successfully');
+        notify('info', t('projects.create.continuingWork', { title: latestDraft.title }));
+      } else {
+        console.log('📝 No drafts found, starting with clean form');
+      }
+    } catch (error) {
+      console.error('❌ Error loading latest draft:', error);
+    }
+  };
+
+  autoLoadLatestDraft();
+}, [initialValues, setValues, setDraftId, t]);
   // 🏷️ GENERATE SLUG
   const generateSlug = useCallback((title) => {
     return title
@@ -1504,6 +1655,49 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
         }));
       }
 
+      // 🔢 CONVERT NUMERIC FIELDS FROM STRINGS TO NUMBERS
+      // Budget fields
+      if (htmlValues.budget) {
+        if (htmlValues.budget.goal && htmlValues.budget.goal.toString().trim()) {
+          htmlValues.budget.goal = Number(htmlValues.budget.goal);
+        } else {
+          htmlValues.budget.goal = null;
+        }
+
+        if (htmlValues.budget.total && htmlValues.budget.total.toString().trim()) {
+          htmlValues.budget.total = Number(htmlValues.budget.total);
+        } else {
+          htmlValues.budget.total = null;
+        }
+
+        if (htmlValues.budget.funded && htmlValues.budget.funded.toString().trim()) {
+          htmlValues.budget.funded = Number(htmlValues.budget.funded);
+        } else {
+          htmlValues.budget.funded = null;
+        }
+      }
+
+      // Application fields
+      if (htmlValues.maxParticipants && htmlValues.maxParticipants.toString().trim()) {
+        htmlValues.maxParticipants = Number(htmlValues.maxParticipants);
+      } else {
+        htmlValues.maxParticipants = null;
+      }
+
+      if (htmlValues.currentParticipants && htmlValues.currentParticipants.toString().trim()) {
+        htmlValues.currentParticipants = Number(htmlValues.currentParticipants);
+      } else {
+        htmlValues.currentParticipants = null;
+      }
+
+      // Sponsors amounts
+      if (htmlValues.sponsors && htmlValues.sponsors.length > 0) {
+        htmlValues.sponsors = htmlValues.sponsors.map(sponsor => ({
+          ...sponsor,
+          amount: sponsor.amount && sponsor.amount.toString().trim() ? Number(sponsor.amount) : null
+        }));
+      }
+
       // Clean empty fields
       const cleanEmptyFields = (obj) => {
         if (Array.isArray(obj)) {
@@ -2042,102 +2236,102 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
   }, []);
 
   // Contact image upload
-const handleContactImageUpload = useCallback(async (file) => {
-  if (!file) return;
+  const handleContactImageUpload = useCallback(async (file) => {
+    if (!file) return;
 
-  try {
-    // Create blob URL for immediate preview
-    const blobUrl = URL.createObjectURL(file);
+    try {
+      // Create blob URL for immediate preview
+      const blobUrl = URL.createObjectURL(file);
 
-    // Update UI immediately
-    setValues(prev => ({
-      ...prev,
-      contact: {
-        ...prev.contact,
-        image: blobUrl,
-        imageUploading: true
-      }
-    }));
+      // Update UI immediately
+      setValues(prev => ({
+        ...prev,
+        contact: {
+          ...prev.contact,
+          image: blobUrl,
+          imageUploading: true
+        }
+      }));
 
-    // Compress and upload
-    const compressedFile = await compressImage(file, {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 500 // Contact image size
-    });
-
-    const uploadedUrl = await uploadFileWithProgress(
-      compressedFile,
-      'projects/contact-images',
-      (progress) => {
-        // Optional: handle progress
-      }
-    );
-
-    // Update with Firebase URL
-    setValues(prev => ({
-      ...prev,
-      contact: {
-        ...prev.contact,
-        image: uploadedUrl,
-        imageUploading: false
-      }
-    }));
-
-    // Clean up blob URL
-    URL.revokeObjectURL(blobUrl);
-
-    notify('success', 'Снимката е качена успешно!');
-    return uploadedUrl;
-
-  } catch (error) {
-    console.error('Error uploading contact image:', error);
-    notify('error', 'Грешка при качване на снимката');
-
-    // Reset uploading state
-    setValues(prev => ({
-      ...prev,
-      contact: {
-        ...prev.contact,
-        image: '',
-        imageUploading: false
-      }
-    }));
-  }
-}, []);
-
-// Remove contact image
-const removeContactImage = useCallback(async () => {
-  setValues(prev => {
-    const imageToDelete = prev.contact?.image;
-
-    // Remove image URL
-    const updatedContact = {
-      ...prev.contact,
-      image: ''
-    };
-
-    // Delete from Firebase if needed
-    if (imageToDelete && !imageToDelete.startsWith('blob:')) {
-      deleteSingleImage(imageToDelete).catch(error => {
-        console.error('Error deleting contact image from Firebase:', error);
+      // Compress and upload
+      const compressedFile = await compressImage(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 500 // Contact image size
       });
-    }
 
-    // Clean up blob URL if needed
-    if (imageToDelete?.startsWith('blob:')) {
-      try {
-        URL.revokeObjectURL(imageToDelete);
-      } catch (e) {
-        console.warn('Could not revoke blob URL:', e);
+      const uploadedUrl = await uploadFileWithProgress(
+        compressedFile,
+        'projects/contact-images',
+        (progress) => {
+          // Optional: handle progress
+        }
+      );
+
+      // Update with Firebase URL
+      setValues(prev => ({
+        ...prev,
+        contact: {
+          ...prev.contact,
+          image: uploadedUrl,
+          imageUploading: false
+        }
+      }));
+
+      // Clean up blob URL
+      URL.revokeObjectURL(blobUrl);
+
+      notify('success', 'Снимката е качена успешно!');
+      return uploadedUrl;
+
+    } catch (error) {
+      console.error('Error uploading contact image:', error);
+      notify('error', 'Грешка при качване на снимката');
+
+      // Reset uploading state
+      setValues(prev => ({
+        ...prev,
+        contact: {
+          ...prev.contact,
+          image: '',
+          imageUploading: false
+        }
+      }));
+    }
+  }, []);
+
+  // Remove contact image
+  const removeContactImage = useCallback(async () => {
+    setValues(prev => {
+      const imageToDelete = prev.contact?.image;
+
+      // Remove image URL
+      const updatedContact = {
+        ...prev.contact,
+        image: ''
+      };
+
+      // Delete from Firebase if needed
+      if (imageToDelete && !imageToDelete.startsWith('blob:')) {
+        deleteSingleImage(imageToDelete).catch(error => {
+          console.error('Error deleting contact image from Firebase:', error);
+        });
       }
-    }
 
-    return { 
-      ...prev, 
-      contact: updatedContact 
-    };
-  });
-}, []);
+      // Clean up blob URL if needed
+      if (imageToDelete?.startsWith('blob:')) {
+        try {
+          URL.revokeObjectURL(imageToDelete);
+        } catch (e) {
+          console.warn('Could not revoke blob URL:', e);
+        }
+      }
+
+      return {
+        ...prev,
+        contact: updatedContact
+      };
+    });
+  }, []);
 
   // Start new draft
   const startNewDraft = useCallback(async () => {
@@ -2172,6 +2366,31 @@ const removeContactImage = useCallback(async () => {
   }, [draftId, userEmail, convertFormToHtml, updateDraftProject, clearLocalStorage, defaultValues]);
 
   // Publish draft
+  // В useCreateProject.js - намери publishDraft функцията:
+ const resetForm = useCallback(() => {
+    console.log('🧹 Resetting form to default state...');
+
+    setValues(defaultValues);
+
+    setErrors({});
+
+    setMediaFiles({
+      logo: null,
+      mainImage: [],
+      gallery: [],
+      documents: [],
+      partnerLogos: {},
+      sponsorLogos: {},
+      teamImages: {}
+    });
+
+    setDraftId(null);
+    setEditId(null);
+
+    clearLocalStorage();
+
+  }, [defaultValues, clearLocalStorage]);
+
   const publishDraft = useCallback(async () => {
     if (!draftId) {
       notify('error', 'Няма чернова за публикуване');
@@ -2179,17 +2398,87 @@ const removeContactImage = useCallback(async () => {
     }
 
     try {
+      // Първо запазваме последните промени
       await saveDraft();
-      const result = await toggleDraftProjectStatus(draftId);
-      clearLocalStorage();
-      setDraftId(null);
+
+      // 🆕 ДОБАВЕНО: Ако е свързан с инициатива, обновяваме я ПРЕДИ публикуване
+      if (values.initiativeId) {
+
+        try {
+          // Конвертираме данните както при обикновено submission
+          const projectData = convertFormToHtml();
+
+          // Конвертираме initiativeId към number ако е string
+          const initiativeId = typeof values.initiativeId === 'string'
+            ? parseInt(values.initiativeId, 10)
+            : values.initiativeId;
+
+          await updateInitiativeWithProject(initiativeId, projectData);
+        } catch (updateError) {
+          console.error('❌ Failed to update initiative:', updateError);
+          // Показваме warning но продължаваме с публикуването
+          notify('warning', 'Инициативата не беше обновена, но проектът ще бъде публикуван');
+        }
+      } else {
+        console.log('📝 Project is standalone (no initiativeId)');
+      }
+
+      // След това публикуваме чрез toggle draft status
+      const result = await toggleProjectDraftStatus(draftId);
+
+      resetForm();
+      // clearLocalStorage();
+      // setDraftId(null);
+
       return result;
     } catch (error) {
       console.error('Error publishing draft:', error);
       throw error;
     }
-  }, [draftId, saveDraft, toggleDraftProjectStatus, clearLocalStorage]);
+  }, [draftId, saveDraft, values.initiativeId, convertFormToHtml, updateInitiativeWithProject, toggleProjectDraftStatus, clearLocalStorage]);
 
+const handleStartNewProject = useCallback(async () => {
+  const confirmed = window.confirm(
+   t('projects.create.confirmStartNew') + ' ' +
+    t('projects.create.currentWorkWillBeSaved')
+  );
+
+  if (!confirmed) return;
+
+  try {
+    
+    // 1. ЗАПАЗВАМЕ текущата работа преди да изчистим
+    if (values.title?.trim() || draftId) {
+      await saveDraft();
+    }
+
+    resetForm();
+
+    // 3. ГЕНЕРИРАМЕ нов ID за новата чернова
+    setDraftId(null);
+
+    // 4. ИЗВЕСТЯВАМЕ потребителя
+    notify('success', t('projects.create.currentWorkSaved'));
+    
+    // 5. ОПЦИОНАЛНО: Скролваме до началото
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (error) {
+    console.error('❌ Error saving before new project:', error);
+    
+    // Ако save-ът се провали, питаме дали да продължим
+    const continueAnyway = window.confirm(
+        t('projects.create.errorSavingWork') + ' ' +
+      t('projects.create.continueAnyway')
+    );
+    
+    if (continueAnyway) {
+      resetForm();
+      setDraftId(null);
+      notify('warning', t('projects.create.newProjectStarted'));
+    }
+  }
+}, [values.title, draftId, saveDraft, resetForm, setDraftId]);
   // 💾 FORM SUBMISSION
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -2244,19 +2533,56 @@ const removeContactImage = useCallback(async () => {
       const mode = urlParams.get('mode');
 
       if (mode === 'edit' && editIdFromUrl) {
+
         await updateProject(editIdFromUrl, submissionData);
+
+        // 🆕 ДОБАВЕНО: Ако проектът е свързан с инициатива, обновяваме я
+        if (submissionData.initiativeId) {
+          try {
+            const initiativeId = typeof submissionData.initiativeId === 'string'
+              ? parseInt(submissionData.initiativeId, 10)
+              : submissionData.initiativeId;
+
+            await updateInitiativeWithProject(initiativeId, submissionData);
+            console.log('✅ Initiative updated successfully after project edit');
+          } catch (updateError) {
+            notify('warning', 'Проектът е обновен, но инициативата не беше обновена');
+          }
+        }
+        resetForm();
         setEditId(null);
         notify('success', 'Проектът е обновен успешно!');
         navigate(`/projects/${submissionData.slug || editIdFromUrl}`);
       } else {
+        // 🆕 СЪЗДАВАНЕ НА НОВ ПРОЕКТ
         submissionData.createdAt = new Date().toISOString();
         delete submissionData.timestamp;
 
+        console.log('🆕 Creating new project...');
         const handler = onSubmitHandler || createProject;
-        await handler(submissionData);
+        const createdProject = await handler(submissionData);
 
+        // 🆕 ДОБАВЕНО: Ако новият проект е свързан с инициатива, обновяваме я
+        if (submissionData.initiativeId) {
+          try {
+            const initiativeId = typeof submissionData.initiativeId === 'string'
+              ? parseInt(submissionData.initiativeId, 10)
+              : submissionData.initiativeId;
+
+            console.log('📞 Updating initiative with new project...');
+
+            // Използваме данните от създадения проект ако са налични
+            const projectToAdd = createdProject?.data || createdProject || submissionData;
+            await updateInitiativeWithProject(initiativeId, projectToAdd);
+            console.log('✅ Initiative updated successfully with new project');
+          } catch (updateError) {
+            console.error('❌ Failed to update initiative with new project:', updateError);
+            notify('warning', 'Проектът е създаден, но инициативата не беше обновена');
+          }
+        }
+        resetForm();
         setDraftId(null);
-        clearLocalStorage();
+        // clearLocalStorage();
         notify('success', 'Проектът е създаден успешно!');
         navigate('/projects');
       }
@@ -2264,7 +2590,7 @@ const removeContactImage = useCallback(async () => {
       console.error('Submission error:', error);
       notify('error', 'Грешка при създаване на проекта');
     }
-  }, [values, validateForm, errors, onSubmitHandler, createProject, navigate, convertFormToHtml, clearLocalStorage]);
+  }, [values, validateForm, errors, onSubmitHandler, createProject, updateProject, navigate, convertFormToHtml, clearLocalStorage, updateInitiativeWithProject]);
 
   return {
     values,
@@ -2275,6 +2601,7 @@ const removeContactImage = useCallback(async () => {
     editId,
     setEditId,
     setValues,
+    handleStartNewProject,
     // Event handlers
     onChangeHandler,
     onBlurHandler,
@@ -2353,9 +2680,9 @@ const removeContactImage = useCallback(async () => {
     removeLogo,               // 🆕
     clearAllGallery,          // 🆕
     clearAllDocuments,        // 🆕
-//Contact
- handleContactImageUpload,
-  removeContactImage,
+    //Contact
+    handleContactImageUpload,
+    removeContactImage,
     // Utils
     availableInitiatives
   };

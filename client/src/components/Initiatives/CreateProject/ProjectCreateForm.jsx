@@ -60,6 +60,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
         values,
         errors,
         isLoading,
+        handleStartNewProject,
         isUploading,
         uploadProgress,
         setValues,
@@ -763,16 +764,25 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                                             {t('projects.create.location')}
                                         </label>
                                         <LocationPicker
-                                            initialPosition={values.location[0]?.coordinates}
-                                            initialAddress={values.location[0]?.address}
+                                            key={`location-${values.location?.[0]?.coordinates?.lat || 'empty'}-${values.location?.[0]?.coordinates?.lng || 'empty'}`}
+                                            initialPosition={
+                                                values.location?.[0]?.coordinates?.lat != null && values.location?.[0]?.coordinates?.lng != null
+                                                    ? {
+                                                        lat: values.location[0].coordinates.lat,
+                                                        lng: values.location[0].coordinates.lng
+                                                    }
+                                                    : undefined  // ВАЖНО: undefined вместо null
+                                            }
+                                            initialAddress={values.location?.[0]?.address || ''}
                                             onLocationChange={(locationData) => {
+                                                console.log('📍 Location changed:', locationData);
                                                 setValues(prev => ({
                                                     ...prev,
                                                     location: [{
-                                                        address: locationData.address,
+                                                        address: locationData.address || '',
                                                         coordinates: {
-                                                            lat: locationData.lat,
-                                                            lng: locationData.lng
+                                                            lat: locationData.lat || null,
+                                                            lng: locationData.lng || null
                                                         }
                                                     }]
                                                 }));
@@ -1094,6 +1104,17 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
 
             {/* Floating Actions */}
             <div className="project-floating-actions">
+                {(draftId || values.title?.trim()) && (
+                    <button
+                        type="button"
+                        className="project-floating-btn new-project"
+                        onClick={handleStartNewProject}
+                        title={t('projects.create.startNewProject')}
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                )}
+
                 <button
                     type="button"
                     className="project-floating-btn draft"

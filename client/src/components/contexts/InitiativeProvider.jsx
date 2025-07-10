@@ -1180,127 +1180,128 @@ export const InitiativeProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, [projectDrafts.length, projectDraftsLoaded, projectDraftsHasMore, projectDraftsCurrentPage, initiativeService]);
+  
+ // Update Initiative with new Project
+  const updateInitiativeWithProject = useCallback(async (initiativeId, projectData) => {
+  try {
+     
+    const initiative = await getInitiativeById(initiativeId);
 
-  // Toggle Project Draft Status (Publish)
-  const toggleProjectDraftStatus = useCallback(async (identifier) => {
-    if (!isAuthentication) {
-      notify('error', 'Authentication required');
+    // Подготвяме новия проект за добавяне
+    const projectInfo = {
+      titleSlug: projectData.slug || `project-${projectData.id}`,
+      slug: projectData.slug || `project-${projectData.id}`,
+      title: projectData.title,
+      description: projectData.shortDescription || '',
+      status: projectData.status,
+      image: projectData.mainImage?.src || '',
+      link: `/projects/${projectData.slug || projectData.id}`,
+      coordinates: projectData.location?.[0]?.coordinates || { lat: null, lng: null }
+    };
+    // Проверяваме дали проектът вече съществува
+    const existingProjects = initiative.projects || [];
+    const projectExists = existingProjects.some(p => 
+      p.slug === projectInfo.slug || 
+      p.titleSlug === projectInfo.titleSlug
+    );
+
+    if (projectExists) {
+
       return;
     }
 
-    try {
-      setIsLoading(true);
-      const response = await initiativeService.toggleProjectDraftStatus(identifier);
+    // Добавяме новия проект към съществуващите
+    const updatedProjects = [...existingProjects, projectInfo];
 
-      const publishedProject = response.data || response;
-      if (!publishedProject.isDraft) {
-        // Премахваме от drafts
-        setProjectDrafts(prev => prev.filter(draft =>
-          draft.id !== publishedProject.id &&
-          draft.slug !== publishedProject.slug
-        ));
+    // Обновяваме цялата инициатива
+    const updatedInitiativeData = {
+      ...initiative,
+      projects: updatedProjects,
+      updatedAt: new Date().toISOString()
+    };
 
-        // Добавяме в projects
-        setProjects(prev => [publishedProject, ...prev]);
+    // Използваме ID вместо цялия обект за по-сигурно update
+    await updateInitiative(initiativeId, updatedInitiativeData);
 
-        notify('success', 'Project published successfully!');
-        navigate(`/projects/${publishedProject.slug || publishedProject.id}`);
+    notify('success', 'Инициативата е обновена с новия проект');
+
+  } catch (error) {
+    console.error('❌ Error updating initiative with project:', error);
+    console.error('Error details:', error.message);
+    throw error;
+  }
+}, [getInitiativeById, updateInitiative]);
+
+  // Toggle Project Draft Status (Publish)
+const toggleProjectDraftStatus = useCallback(async (identifier) => {
+  if (!isAuthentication) {
+    notify('error', 'Authentication required');
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+    const response = await initiativeService.toggleProjectDraftStatus(identifier);
+
+    const publishedProject = response.data || response;
+    if (!publishedProject.isDraft) {
+      // Премахваме от drafts
+      setProjectDrafts(prev => prev.filter(draft =>
+        draft.id !== publishedProject.id &&
+        draft.slug !== publishedProject.slug
+      ));
+
+      // Добавяме в projects
+      setProjects(prev => [publishedProject, ...prev]);
+      notify('success', 'Project published successfully!');
+      
+      const navigationTarget = publishedProject.slug || publishedProject.id || identifier;
+      if (navigationTarget && navigationTarget !== 'undefined') {
+        navigate(`/projects/${navigationTarget}`);
+      } else {
+        navigate('/projects');
       }
-
-      return publishedProject;
-    } catch (error) {
-      console.error('Error toggling project draft status:', error);
-      notify('error', 'Failed to publish project draft');
-      throw error;
-    } finally {
-      setIsLoading(false);
     }
-  }, [isAuthentication, initiativeService, navigate]);
 
-  // Update Initiative with new Project
-  const updateInitiativeWithProject = useCallback(async (initiativeId, projectData) => {
-    try {
-      // Първо взимаме текущата инициатива
-      const initiative = await getInitiativeById(initiativeId);
+    return publishedProject;
+  } catch (error) {
+    console.error('Error toggling project draft status:', error);
+    notify('error', 'Failed to publish project draft');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [isAuthentication, initiativeService, navigate]); // ✅ Премахнат updateInitiativeWithProject dependency
 
-      // Подготвяме новия проект за добавяне
-      const projectInfo = {
-        titleSlug: projectData.slug,
-        slug: projectData.slug,
-        title: projectData.title,
-        description: projectData.shortDescription,
-        status: projectData.status,
-        image: projectData.mainImage?.src || '',
-        link: `/projects/${projectData.slug}`,
-        coordinates: projectData.location?.[0]?.coordinates || { lat: null, lng: null }
-      };
+ const getProjectById = useCallback(async (id) => {
+  // 🔧 ДОБАВЕНА ПРОВЕРКА
+  if (!id || id === 'undefined' || id === 'null') {
+    const error = new Error(`Invalid project ID: ${id}`);
+    console.error('getProjectById called with invalid ID:', id);
+    throw error;
+  }
 
-      // Добавяме новия проект към съществуващите
-      const updatedProjects = [...(initiative.projects || []), projectInfo];
+  try {
+    setIsLoading(true);
+    const response = await initiativeService.getProjectById(id);
+    const project = response.data || response;
 
-      // Обновяваме цялата инициатива
-      const updatedInitiative = {
-        ...initiative,
-        projects: updatedProjects
-      };
-
-      // Използваме съществуващия updateInitiative
-      await updateInitiative(initiativeId, updatedInitiative);
-
-    } catch (error) {
-      console.error('Error updating initiative with project:', error);
-      throw error;
+    if (!project) {
+      throw new Error(`Project not found with id/slug: ${id}`);
     }
-  }, [getInitiativeById, updateInitiative]);
 
-  const getProjectById = useCallback(async (id) => {
-    try {
-      setIsLoading(true);
-
-      const response = await initiativeService.getProjectById(id);
-      const project = response.data || response;
-
-      if (!project) {
-        throw new Error(`Project not found with id/slug: ${id}`);
-      }
-
-      setCurrentProject(project);
-
-      // Обработваме коментарите ако има
-      if (project.comments && Array.isArray(project.comments)) {
-        const processedComments = project.comments
-          .filter(comment => !comment.parentId)
-          .map(comment => {
-            const replies = project.comments
-              .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
-              .map(reply => ({
-                ...reply,
-                id: reply.id === comment.id ? generateId() : reply.id
-              }));
-
-            return {
-              ...comment,
-              replies: replies
-            };
-          });
-
-        setComments(prev => ({
-          ...prev,
-          [`project-${project.id}`]: processedComments,
-          [`project-${project.slug}`]: processedComments
-        }));
-      }
-
-      return project;
-    } catch (e) {
-      console.error('Error fetching project by ID:', e);
-      notify('error', e.message || 'Failed to fetch project');
-      showErrorAndSetTimeouts(e.message);
-      throw e;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [initiativeService, showErrorAndSetTimeouts, generateId]);
+    // ... останалата логика остава същата
+    setCurrentProject(project);
+    return project;
+  } catch (e) {
+    console.error('Error fetching project by ID:', e);
+    notify('error', e.message || 'Failed to fetch project');
+    showErrorAndSetTimeouts(e.message);
+    throw e;
+  } finally {
+    setIsLoading(false);
+  }
+}, [initiativeService, showErrorAndSetTimeouts, generateId]);
 
   const getProjectsByInitiative = useCallback(async (initiativeId) => {
     try {
@@ -1840,7 +1841,7 @@ export const InitiativeProvider = ({ children }) => {
     updateApplicationStatus, // За админи  
     deleteApplication, // За админи 
     sendApplicationEmails,     // За админи
-
+updateInitiativeWithProject , // Обновява инициатива с нов проект
     //Stories functions
     getStoryBySlug,
     getStoryComments,

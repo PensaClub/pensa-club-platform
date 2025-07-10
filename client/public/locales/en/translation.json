@@ -2393,7 +2393,16 @@
   "contactAdditionalInfoPlaceholder": "Additional contact information (working hours, preferred contact method, etc.)",
   "contactSummary": "Contact Information Summary",
   "contact-image-help": "Recommended size: 400x400px. Maximum size: 2MB. Supported formats: JPG, PNG, WebP.",
-  "contact-additional-help": "Share additional information such as working hours, preferred contact method, or other useful information."
+  "contact-additional-help": "Share additional information such as working hours, preferred contact method, or other useful information.",
+     "confirmStartNew": "Are you sure you want to start a new project?",
+      "currentWorkWillBeSaved": "Current work will be saved as a draft.",
+      "startNewProject": "Start New Project",
+      "currentWorkSaved": "Starting new project! Previous work has been saved.",
+      "errorSavingWork": "Error saving current work.",
+      "continueAnyway": "Do you want to continue starting a new project? (current work may be lost)",
+      "newProjectStarted": "New project started (previous work may not be saved)",
+      "continuingWork": "Continuing work on \"{title}\"",
+      "noDraftsFound": "No drafts found, starting with clean form"
     },
     "applicationStatus": {
       "open": "Open for Applications",
