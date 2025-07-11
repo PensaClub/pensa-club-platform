@@ -944,35 +944,20 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
             }
 
             if (initiativeData.projects !== undefined) {
-                const currentLinks = await initiative.sequelize.models.initiative_projects.findAll({
+                await initiative.sequelize.models.initiative_projects.destroy({
                     where: { initiative_id: foundInitiative.id },
                     transaction: t,
                 });
-                const currentProjectIds = new Set(currentLinks.map((link) => link.project_id));
 
-                const desiredProjectIds = new Set();
-                for (const proj of initiativeData.projects) {
-                    const param = proj.id ?? proj.slug;
-                    if (!param) throw new Error('Each project must have an id or slug');
-                    const foundProject = await findBySlugOrId(initiative.sequelize.models.project, param, { transaction: t });
-                    if (!foundProject) throw new Error(`Project not found for ${JSON.stringify(param)}`);
-                    desiredProjectIds.add(foundProject.id);
+                if (initiativeData.projects.length > 0) {
+                    const linkData = initiativeData.projects.map((project) => {
+                        return {
+                            initiative_id: foundInitiative.id,
+                            project_id: project.id,
+                        };
+                    });
 
-                    if (!currentProjectIds.has(foundProject.id)) {
-                        await initiative.sequelize.models.initiative_projects.create(
-                            {
-                                initiative_id: foundInitiative.id,
-                                project_id: foundProject.id,
-                            },
-                            { transaction: t }
-                        );
-                    }
-                }
-
-                for (const link of currentLinks) {
-                    if (!desiredProjectIds.has(link.project_id)) {
-                        await link.destroy({ transaction: t });
-                    }
+                    await initiative.sequelize.models.initiative_projects.bulkCreate(linkData, { transaction: t });
                 }
             }
 
