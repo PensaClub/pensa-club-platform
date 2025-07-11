@@ -175,7 +175,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
 
             setShowLocalStoragePrompt(true);
             setTimeout(() => {
-                notify('success', `Възстановена е чернова от ${savedDraft.timestamp.toLocaleString('bg-BG')}`);
+                t('projects.create.draftRestoredFrom', { date: savedDraft.timestamp.toLocaleString('bg-BG') })
             }, 500);
         }
 
@@ -203,11 +203,14 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
     };
 
     const toggleBlock = (editor, format) => {
+    try {
         const isActive = isBlockActive(editor, format);
         const isList = ['numbered-list', 'bulleted-list'].includes(format);
 
+        // Премахваме списъци ако превключваме към друг формат
         Transforms.unwrapNodes(editor, {
-            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && ['numbered-list', 'bulleted-list'].includes(n.type),
+            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && 
+                ['numbered-list', 'bulleted-list'].includes(n.type),
             split: true,
         });
 
@@ -217,11 +220,15 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
 
         Transforms.setNodes(editor, newProperties);
 
+        // Ако е списък, обвиваме в съответния wrapper
         if (!isActive && isList) {
             const block = { type: format, children: [] };
             Transforms.wrapNodes(editor, block);
         }
-    };
+    } catch (error) {
+        console.error('❌ Error toggling block:', error);
+    }
+};
 
     const isMarkActive = (editor, format) => {
         const marks = Editor.marks(editor);
@@ -330,24 +337,91 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
     );
 
     // 🎯 Render Slate element
-    const renderElement = (props) => {
-        switch (props.element.type) {
-            case 'block-quote':
-                return <blockquote {...props.attributes}>{props.children}</blockquote>;
-            case 'bulleted-list':
-                return <ul {...props.attributes}>{props.children}</ul>;
-            case 'heading-one':
-                return <h1 {...props.attributes}>{props.children}</h1>;
-            case 'heading-two':
-                return <h2 {...props.attributes}>{props.children}</h2>;
-            case 'list-item':
-                return <li {...props.attributes}>{props.children}</li>;
-            case 'numbered-list':
-                return <ol {...props.attributes}>{props.children}</ol>;
-            default:
-                return <p {...props.attributes}>{props.children}</p>;
-        }
-    };
+   // В ProjectCreateForm.jsx - замени renderElement функцията
+const renderElement = (props) => {
+    switch (props.element.type) {
+        case 'block-quote':
+            return <blockquote {...props.attributes}>{props.children}</blockquote>;
+        case 'bulleted-list':
+            return <ul {...props.attributes}>{props.children}</ul>;
+        case 'heading-one':
+            return (
+                <h1
+                    {...props.attributes}
+                    style={{
+                        fontSize: '2rem',
+                        fontWeight: '700',
+                        lineHeight: '1.3',
+                        margin: '1rem 0 0.5rem 0',
+                        color: '#1B8B8A',
+                        border: 'none',
+                        background: 'transparent',
+                        padding: '0',
+                        boxShadow: 'none',
+                        borderRadius: '0'
+                    }}
+                >
+                    {props.children}
+                </h1>
+            );
+        case 'heading-two':
+            return (
+                <h2
+                    {...props.attributes}
+                    style={{
+                        fontSize: '1.5rem',
+                        fontWeight: '600',
+                        lineHeight: '1.4',
+                        margin: '0.75rem 0 0.5rem 0',
+                        color: '#1B8B8A',
+                        border: 'none',
+                        background: 'transparent',
+                        padding: '0',
+                        boxShadow: 'none',
+                        borderRadius: '0'
+                    }}
+                >
+                    {props.children}
+                </h2>
+            );
+        case 'heading-three':
+            return (
+                <h3
+                    {...props.attributes}
+                    style={{
+                        fontSize: '1.25rem',
+                        fontWeight: '600',
+                        lineHeight: '1.4',
+                        margin: '0.5rem 0 0.25rem 0',
+                        color: '#2d3748',
+                        border: 'none',
+                        background: 'transparent',
+                        padding: '0'
+                    }}
+                >
+                    {props.children}
+                </h3>
+            );
+        case 'list-item':
+            return <li {...props.attributes}>{props.children}</li>;
+        case 'numbered-list':
+            return <ol {...props.attributes}>{props.children}</ol>;
+        default:
+            return (
+                <p
+                    {...props.attributes}
+                    style={{
+                        fontSize: '1rem',
+                        lineHeight: '1.6',
+                        margin: '0.5rem 0',
+                        color: '#2d3748'
+                    }}
+                >
+                    {props.children}
+                </p>
+            );
+    }
+};
 
     // 🎯 Render Slate leaf
     const renderLeaf = (props) => {
@@ -430,13 +504,13 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                 ...savedDraft.data
             }));
             setShowLocalStoragePrompt(false);
-            notify('success', 'Черновата е заредена успешно!');
+           notify('success', t('projects.create.draftLoadedSuccessfully'));
         }
     };
 
     const handleClearDraft = async () => {
         const confirmed = window.confirm(
-            'Сигурни ли сте, че искате да изтриете черновата?'
+            t('projects.create.confirmDeleteDraft')
         );
 
         if (confirmed) {
@@ -452,7 +526,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
 
     const handlePreview = () => {
         if (!values.title?.trim()) {
-            notify('warning', 'Въведете заглавие преди preview');
+            notify('warning', t('projects.create.enterTitleForPreview'));
             return;
         }
 
@@ -489,8 +563,8 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
             {/* 📊 Progress Bar */}
             <div className="project-form-progress-container">
                 <div className="project-progress-header">
-                    <h3>Прогрес на формата</h3>
-                    <span className="project-progress-percentage">{calculateProgress()}% завършено</span>
+                    <h3>{t('projects.create.formProgress')}</h3>
+                    <span className="project-progress-percentage">{calculateProgress()}% {t('projects.create.completed')}</span>
                 </div>
 
                 <div className="project-progress-bar">
@@ -507,22 +581,22 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                         return (
                             <>
                                 <div className={`project-progress-section ${breakdown.basicInfo ? 'complete' : 'incomplete'}`}>
-                                    ✅ Основна информация
+                                    ✅ {t('projects.create.basicInfoProgress')}
                                 </div>
                                 <div className={`project-progress-section ${breakdown.budget ? 'complete' : 'incomplete'}`}>
-                                    💰 Бюджет и график
+                                    💰 {t('projects.create.budgetProgress')}
                                 </div>
                                 <div className={`project-progress-section ${breakdown.application ? 'complete' : 'incomplete'}`}>
-                                    📝 Кандидатстване
+                                    📝 {t('projects.create.applicationProgress')}
                                 </div>
                                 <div className={`project-progress-section ${breakdown.sections ? 'complete' : 'incomplete'}`}>
-                                    📄 Секции
+                                    📄 {t('projects.create.sectionsProgress')}
                                 </div>
                                 <div className={`project-progress-section ${breakdown.team ? 'complete' : 'incomplete'}`}>
-                                    👥 Екип
+                                    👥 {t('projects.create.teamProgress')}
                                 </div>
                                 <div className={`project-progress-section ${breakdown.media ? 'complete' : 'incomplete'}`}>
-                                    🖼️ Медия
+                                    🖼️ {t('projects.create.mediaProgress')}
                                 </div>
                             </>
                         );
@@ -614,7 +688,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                                                 }}
                                                 disabled={!values.title}
                                             >
-                                                Генерирай
+                                                {t('projects.create.generate')}
                                             </button>
                                         </div>
                                         <div className="project-field-help">
@@ -690,7 +764,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                                                 <div className="project-upload-method">
                                                     <label className="project-upload-btn">
                                                         <FontAwesomeIcon icon={faUpload} />
-                                                        Качи снимки
+                                                        {t('projects.create.uploadImages')}
                                                         <input
                                                             type="file"
                                                             accept="image/*"
@@ -708,7 +782,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                                                         onClick={() => setShowUrlInput(!showUrlInput)}
                                                     >
                                                         <FontAwesomeIcon icon={faLink} />
-                                                        Добави URL
+                                                        {t('projects.create.addUrl')}
                                                     </button>
                                                 </div>
                                             </div>
@@ -722,7 +796,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                                                         onChange={(e) => setMainImageUrl(e.target.value)}
                                                     />
                                                     <button type="button" onClick={handleMainImageUrl}>
-                                                        Добави
+                                                        {t('projects.create.add')}
                                                     </button>
                                                 </div>
                                             )}
@@ -805,13 +879,13 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                                             onChange={onChangeHandler}
                                         >
                                             <option value="">{t('projects.create.selectCategory')}</option>
-                                            <option value="Дигитализация">Дигитализация</option>
-                                            <option value="Образование">Образование</option>
-                                            <option value="Здравеопазване">Здравеопазване</option>
-                                            <option value="Околна среда">Околна среда</option>
-                                            <option value="Социални дейности">Социални дейности</option>
-                                            <option value="Култура">Култура</option>
-                                            <option value="Спорт">Спорт</option>
+                                            <option value="Дигитализация">{t('projects.categories.digitalization')}</option>
+                                            <option value="Образование">{t('projects.categories.education')}</option>
+                                            <option value="Здравеопазване">{t('projects.categories.healthcare')}</option>
+                                            <option value="Околна среда">{t('projects.categories.environment')}</option>
+                                            <option value="Социални дейности">{t('projects.categories.social')}</option>
+                                            <option value="Култура">{t('projects.categories.culture')}</option>
+                                            <option value="Спорт">{t('projects.categories.sports')}</option>
                                         </select>
                                     </div>
 
@@ -947,7 +1021,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                                                                 target="_blank"
                                                                 className="project-view-initiative-link"
                                                             >
-                                                                Виж инициативата →
+                                                                {t('projects.create.viewInitiative')} →
                                                             </Link>
                                                         </div>
                                                     ) : null;
@@ -1136,7 +1210,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                         type="button"
                         className="project-floating-btn publish"
                         onClick={publishDraft}
-                        title="Публикувай проекта"
+                        title={t('projects.create.publishProject')}
                     >
                         <FontAwesomeIcon icon={faShare} />
                     </button>
@@ -1145,7 +1219,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                         type="button"
                         className="project-floating-btn create"
                         onClick={onSubmit}
-                        title="Създай проект"
+                        title={t('projects.create.createProject')}
                     >
                         <FontAwesomeIcon icon={faCheckCircle} />
                     </button>

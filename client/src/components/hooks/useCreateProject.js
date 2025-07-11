@@ -39,6 +39,7 @@ import { useTranslation } from 'react-i18next';
 import { useRealTimeValidation } from './useRealTimeValidation';
 import { htmlToSlate, isHtmlContent } from '../Initiatives/CreateIniciative/Utils/htmlToSlate';
 import { validateProjectForm } from '../Initiatives/CreateProject/utils/validateProjectForm';
+import { slateToHtml } from '../../utils/slateToHtml';
 
 const useCreateProject = (initialValues, onSubmitHandler) => {
   const navigate = useNavigate();
@@ -1584,152 +1585,170 @@ useEffect(() => {
   }, []);
 
   // 📤 HTML CONVERSION
-  const convertFormToHtml = useCallback(() => {
+  // В useCreateProject.js - обнови convertFormToHtml функцията
+const convertFormToHtml = useCallback(() => {
     try {
-      const htmlValues = { ...values };
+        const htmlValues = { ...values };
 
-      // Remove ID fields
-      if (htmlValues.sponsors) {
-        htmlValues.sponsors = htmlValues.sponsors.map(sponsor => {
-          const { id, ...sponsorWithoutId } = sponsor;
-          return sponsorWithoutId;
-        });
-      }
+        // Remove ID fields
+        if (htmlValues.sponsors) {
+            htmlValues.sponsors = htmlValues.sponsors.map(sponsor => {
+                const { id, ...sponsorWithoutId } = sponsor;
+                return sponsorWithoutId;
+            });
+        }
 
-      if (htmlValues.team) {
-        htmlValues.team = htmlValues.team.map(member => {
-          const { id, ...memberWithoutId } = member;
-          return memberWithoutId;
-        });
-      }
+        if (htmlValues.team) {
+            htmlValues.team = htmlValues.team.map(member => {
+                const { id, ...memberWithoutId } = member;
+                return memberWithoutId;
+            });
+        }
 
-      // Convert editors to HTML
-      try {
-        htmlValues.fullDescription = convertEditorToHtml('fullDescription', values.fullDescription);
-      } catch (error) {
-        htmlValues.fullDescription = '';
-      }
-
-      // Convert sections
-      try {
-        if (htmlValues.sections && Array.isArray(htmlValues.sections)) {
-          htmlValues.sections = htmlValues.sections.map((section) => {
-            try {
-              return {
-                ...section,
-                content: convertEditorToHtml('sections[].content', section.content)
-              };
-            } catch (sectionError) {
-              return {
-                ...section,
-                content: ''
-              };
+        // 🆕 ПРАВИЛНО конвертиране на fullDescription
+        try {
+            if (!isSlateEmpty(values.fullDescription)) {
+                htmlValues.fullDescription = slateToHtml(values.fullDescription);
+                console.log('✅ Converted fullDescription:', htmlValues.fullDescription);
+            } else {
+                htmlValues.fullDescription = '';
             }
-          });
+        } catch (error) {
+            console.error('❌ Error converting fullDescription:', error);
+            htmlValues.fullDescription = '';
+        }
+
+        // 🆕 ПРАВИЛНО конвертиране на sections
+        try {
+            if (htmlValues.sections && Array.isArray(htmlValues.sections)) {
+                htmlValues.sections = htmlValues.sections.map((section, index) => {
+                    try {
+                        if (!isSlateEmpty(section.content)) {
+                            const convertedContent = slateToHtml(section.content);
+                            console.log(`✅ Converted section ${index} content:`, convertedContent);
+                            return {
+                                ...section,
+                                content: convertedContent
+                            };
+                        }
+                        
+                        return {
+                            ...section,
+                            content: ''
+                        };
+                    } catch (sectionError) {
+                        console.error(`❌ Error converting section ${index}:`, sectionError);
+                        return {
+                            ...section,
+                            content: ''
+                        };
+                    }
+                });
+            } else {
+                htmlValues.sections = [];
+            }
+        } catch (sectionsError) {
+            console.error('❌ Error converting sections:', sectionsError);
+            htmlValues.sections = [];
+        }
+
+        // Останалата логика остава същата...
+        // Convert dates
+        const convertDateToISO = (dateString) => {
+            if (!dateString || dateString.trim() === '') return null;
+            if (typeof dateString === 'string' && dateString.includes('T')) return dateString;
+            if (typeof dateString === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+                return new Date(dateString + 'T00:00:00.000Z').toISOString();
+            }
+            return null;
+        };
+
+        if (htmlValues.timeline) {
+            htmlValues.timeline.startDate = convertDateToISO(htmlValues.timeline.startDate);
+            htmlValues.timeline.endDate = convertDateToISO(htmlValues.timeline.endDate);
+        }
+
+        if (htmlValues.milestones && htmlValues.milestones.length > 0) {
+            htmlValues.milestones = htmlValues.milestones.map(milestone => ({
+                ...milestone,
+                date: convertDateToISO(milestone.date)
+            }));
+        }
+
+        // Convert numeric fields
+        if (htmlValues.budget) {
+            if (htmlValues.budget.goal && htmlValues.budget.goal.toString().trim()) {
+                htmlValues.budget.goal = Number(htmlValues.budget.goal);
+            } else {
+                htmlValues.budget.goal = null;
+            }
+
+            if (htmlValues.budget.total && htmlValues.budget.total.toString().trim()) {
+                htmlValues.budget.total = Number(htmlValues.budget.total);
+            } else {
+                htmlValues.budget.total = null;
+            }
+
+            if (htmlValues.budget.funded && htmlValues.budget.funded.toString().trim()) {
+                htmlValues.budget.funded = Number(htmlValues.budget.funded);
+            } else {
+                htmlValues.budget.funded = null;
+            }
+        }
+
+        // Application fields
+        if (htmlValues.maxParticipants && htmlValues.maxParticipants.toString().trim()) {
+            htmlValues.maxParticipants = Number(htmlValues.maxParticipants);
         } else {
-          htmlValues.sections = [];
+            htmlValues.maxParticipants = null;
         }
-      } catch (sectionsError) {
-        htmlValues.sections = [];
-      }
 
-      // Convert dates
-      const convertDateToISO = (dateString) => {
-        if (!dateString || dateString.trim() === '') return null;
-        if (typeof dateString === 'string' && dateString.includes('T')) return dateString;
-        if (typeof dateString === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-          return new Date(dateString + 'T00:00:00.000Z').toISOString();
-        }
-        return null;
-      };
-
-      if (htmlValues.timeline) {
-        htmlValues.timeline.startDate = convertDateToISO(htmlValues.timeline.startDate);
-        htmlValues.timeline.endDate = convertDateToISO(htmlValues.timeline.endDate);
-      }
-
-      if (htmlValues.milestones && htmlValues.milestones.length > 0) {
-        htmlValues.milestones = htmlValues.milestones.map(milestone => ({
-          ...milestone,
-          date: convertDateToISO(milestone.date)
-        }));
-      }
-
-      // 🔢 CONVERT NUMERIC FIELDS FROM STRINGS TO NUMBERS
-      // Budget fields
-      if (htmlValues.budget) {
-        if (htmlValues.budget.goal && htmlValues.budget.goal.toString().trim()) {
-          htmlValues.budget.goal = Number(htmlValues.budget.goal);
+        if (htmlValues.currentParticipants && htmlValues.currentParticipants.toString().trim()) {
+            htmlValues.currentParticipants = Number(htmlValues.currentParticipants);
         } else {
-          htmlValues.budget.goal = null;
+            htmlValues.currentParticipants = null;
         }
 
-        if (htmlValues.budget.total && htmlValues.budget.total.toString().trim()) {
-          htmlValues.budget.total = Number(htmlValues.budget.total);
-        } else {
-          htmlValues.budget.total = null;
+        // Sponsors amounts
+        if (htmlValues.sponsors && htmlValues.sponsors.length > 0) {
+            htmlValues.sponsors = htmlValues.sponsors.map(sponsor => ({
+                ...sponsor,
+                amount: sponsor.amount && sponsor.amount.toString().trim() ? Number(sponsor.amount) : null
+            }));
         }
 
-        if (htmlValues.budget.funded && htmlValues.budget.funded.toString().trim()) {
-          htmlValues.budget.funded = Number(htmlValues.budget.funded);
-        } else {
-          htmlValues.budget.funded = null;
-        }
-      }
+        // Clean empty fields
+        const cleanEmptyFields = (obj) => {
+            if (Array.isArray(obj)) {
+                return obj.map(item => cleanEmptyFields(item));
+            }
 
-      // Application fields
-      if (htmlValues.maxParticipants && htmlValues.maxParticipants.toString().trim()) {
-        htmlValues.maxParticipants = Number(htmlValues.maxParticipants);
-      } else {
-        htmlValues.maxParticipants = null;
-      }
+            if (obj !== null && typeof obj === 'object') {
+                const cleaned = {};
+                for (const [key, value] of Object.entries(obj)) {
+                    cleaned[key] = cleanEmptyFields(value);
+                }
+                return cleaned;
+            }
 
-      if (htmlValues.currentParticipants && htmlValues.currentParticipants.toString().trim()) {
-        htmlValues.currentParticipants = Number(htmlValues.currentParticipants);
-      } else {
-        htmlValues.currentParticipants = null;
-      }
+            if (typeof obj === 'string' && obj.trim() === '') {
+                return null;
+            }
 
-      // Sponsors amounts
-      if (htmlValues.sponsors && htmlValues.sponsors.length > 0) {
-        htmlValues.sponsors = htmlValues.sponsors.map(sponsor => ({
-          ...sponsor,
-          amount: sponsor.amount && sponsor.amount.toString().trim() ? Number(sponsor.amount) : null
-        }));
-      }
+            return obj;
+        };
 
-      // Clean empty fields
-      const cleanEmptyFields = (obj) => {
-        if (Array.isArray(obj)) {
-          return obj.map(item => cleanEmptyFields(item));
-        }
-
-        if (obj !== null && typeof obj === 'object') {
-          const cleaned = {};
-          for (const [key, value] of Object.entries(obj)) {
-            cleaned[key] = cleanEmptyFields(value);
-          }
-          return cleaned;
-        }
-
-        if (typeof obj === 'string' && obj.trim() === '') {
-          return null;
-        }
-
-        return obj;
-      };
-
-      return cleanEmptyFields(htmlValues);
+        return cleanEmptyFields(htmlValues);
 
     } catch (error) {
-      console.error('Error converting form to HTML:', error);
-      return {
-        ...values,
-        fullDescription: '',
-        sections: values.sections?.map(s => ({ ...s, content: '' })) || []
-      };
+        console.error('❌ Error converting form to HTML:', error);
+        return {
+            ...values,
+            fullDescription: '',
+            sections: values.sections?.map(s => ({ ...s, content: '' })) || []
+        };
     }
-  }, [values]);
+}, [values]);
 
   // Save draft
   const saveDraft = useCallback(async () => {

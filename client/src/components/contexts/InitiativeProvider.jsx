@@ -615,7 +615,7 @@ export const InitiativeProvider = ({ children }) => {
 
     try {
       setIsLoading(true);
-      const response = await initiativeService.updateInitiative(id, initiativeData);
+      const response = await initiativeService.updateInitiative(id);
 
       // Обновявам инициативата в локалното състояние
       setInitiatives(prev => prev.map(init =>

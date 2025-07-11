@@ -1,4 +1,4 @@
-/* projectCreateForm.css - Updated with unique project classes */
+/* projectCreateForm.css - Updated with Slate styles and responsive design */
 
 /* ======================= */
 /* CONTAINER & LAYOUT */
@@ -7,6 +7,7 @@
     min-height: 100vh;
     background: #ffffff;
     padding: 2rem 0;
+    text-indent: initial;
 }
 
 .project-form-header {
@@ -127,6 +128,8 @@
     padding: 1.5rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid #f1f5f9;
+    overflow-x: auto;
+    
 }
 
 .project-sidebar-nav-item {
@@ -218,6 +221,10 @@
     color: #3b82f6;
 }
 
+.project-form-section-content {
+    /* No specific styles needed - content container */
+}
+
 /* ======================= */
 /* FORM ELEMENTS */
 /* ======================= */
@@ -226,7 +233,7 @@
 }
 
 .project-form-group label {
-    /* display: block; */
+    display: flex;
     font-weight: 600;
     color: #334155;
     margin-bottom: 0.5rem;
@@ -244,8 +251,8 @@
 .project-form-group input[type="url"],
 .project-form-group input[type="number"],
 .project-form-group input[type="date"],
-.project-form-group textarea
-,.project-form-group select {
+.project-form-group textarea,
+.project-form-group select {
     width: 100%;
     padding: 0.875rem 1rem;
     border: 2px solid #e2e8f0;
@@ -288,6 +295,15 @@
     line-height: 1.5;
 }
 
+.project-editor-help {
+    background: #f0f9ff;
+    border-left: 3px solid #0ea5e9;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 16px;
+    font-size: 12px;
+}
+
 .project-error-message {
     font-size: 0.875rem;
     color: #ef4444;
@@ -295,6 +311,11 @@
     display: flex;
     align-items: center;
     gap: 0.25rem;
+}
+
+.project-error-message::before {
+    content: "⚠️";
+    font-size: 0.75rem;
 }
 
 /* Slug Input Group */
@@ -396,6 +417,13 @@
     font-size: 1rem;
     line-height: 1.6;
     color: #334155;
+    outline: none;
+}
+
+.project-slate-editable:empty::before {
+    content: attr(placeholder);
+    color: #9ca3af;
+    pointer-events: none;
 }
 
 .project-character-count {
@@ -411,6 +439,276 @@
 
 .project-character-count.error {
     color: #ef4444;
+}
+
+.project-slate-counter {
+    font-size: 11px;
+    color: #666;
+    text-align: right;
+    margin-top: 6px;
+    padding: 4px 8px;
+    background: #f8f9fa;
+    border-radius: 3px;
+    border: 1px solid #e2e8f0;
+}
+
+.project-slate-counter.warning {
+    color: #d69e2e;
+    background: #fef3c7;
+    border-color: #d69e2e;
+}
+
+.project-slate-counter.error {
+    color: #e53e3e;
+    background: #fed7d7;
+    border-color: #e53e3e;
+}
+
+/* ============================= */
+/* 🎯 SLATE EDITOR CONTENT STYLES */
+/* ============================= */
+
+/* Bold/Strong elements */
+.project-create-container .project-slate-editable strong,
+.project-create-container .project-slate-editable b {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+}
+
+/* Italic/Em elements */
+.project-create-container .project-slate-editable em,
+.project-create-container .project-slate-editable i {
+    font-style: italic !important;
+    color: #4a5568 !important;
+}
+
+/* Underline elements */
+.project-create-container .project-slate-editable u {
+    text-decoration: underline !important;
+    text-decoration-color: #3b82f6 !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 2px !important;
+}
+
+/* Bulleted Lists */
+.project-create-container .project-slate-editable ul {
+    display: block !important;
+    margin: 1rem 0 !important;
+    padding-left: 2rem !important;
+    list-style-type: disc !important;
+}
+
+/* Numbered Lists */
+.project-create-container .project-slate-editable ol {
+    display: block !important;
+    margin: 1rem 0 !important;
+    padding-left: 2rem !important;
+    list-style-type: decimal !important;
+}
+
+/* List Items */
+.project-create-container .project-slate-editable li {
+    display: list-item !important;
+    margin: 0.5rem 0 !important;
+    line-height: 1.6 !important;
+    color: #2d3748 !important;
+    list-style: inherit !important;
+}
+
+/* Blockquote */
+.project-create-container .project-slate-editable blockquote {
+    display: block !important;
+    border-left: 4px solid #3b82f6 !important;
+    margin: 1.5rem 0 !important;
+    padding: 1rem 1.5rem !important;
+    background-color: #f0f9ff !important;
+    font-style: italic !important;
+    color: #4a5568 !important;
+    font-size: 1.125rem !important;
+    border-radius: 0 8px 8px 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    position: relative !important;
+}
+
+.project-create-container .project-slate-editable blockquote::before {
+    content: '"' !important;
+    font-size: 3rem !important;
+    color: #3b82f6 !important;
+    line-height: 0 !important;
+    position: absolute !important;
+    top: 0.5rem !important;
+    left: 1rem !important;
+    opacity: 0.3 !important;
+}
+
+/* H1 Headings */
+.project-create-container .project-slate-editable h1 {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    margin: 1rem 0 0.5rem 0 !important;
+    color: #1e293b !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: auto !important;
+}
+
+/* H2 Headings */
+.project-create-container .project-slate-editable h2 {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    margin: 0.75rem 0 0.5rem 0 !important;
+    color: #1e293b !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: auto !important;
+}
+
+/* H3 Headings */
+.project-create-container .project-slate-editable h3 {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    margin: 0.5rem 0 0.25rem 0 !important;
+    color: #2d3748 !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* Paragraphs */
+.project-create-container .project-slate-editable p {
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.6 !important;
+    margin: 0.5rem 0 !important;
+    color: #2d3748 !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* Nested Lists styles */
+.project-create-container .project-slate-editable ul ul {
+    list-style-type: circle !important;
+    margin: 0.5rem 0 !important;
+}
+
+.project-create-container .project-slate-editable ul ul ul {
+    list-style-type: square !important;
+}
+
+.project-create-container .project-slate-editable ol ol {
+    list-style-type: lower-alpha !important;
+    margin: 0.5rem 0 !important;
+}
+
+.project-create-container .project-slate-editable ol ol ol {
+    list-style-type: lower-roman !important;
+}
+
+/* Combined styles */
+.project-create-container .project-slate-editable strong em,
+.project-create-container .project-slate-editable em strong {
+    font-weight: 700 !important;
+    font-style: italic !important;
+    color: #1a202c !important;
+}
+
+.project-create-container .project-slate-editable strong u,
+.project-create-container .project-slate-editable u strong {
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    text-decoration-color: #3b82f6 !important;
+}
+
+.project-create-container .project-slate-editable em u,
+.project-create-container .project-slate-editable u em {
+    font-style: italic !important;
+    text-decoration: underline !important;
+    text-decoration-color: #3b82f6 !important;
+}
+
+/* Styles for elements in lists */
+.project-create-container .project-slate-editable li strong {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+}
+
+.project-create-container .project-slate-editable li em {
+    font-style: italic !important;
+    color: #4a5568 !important;
+}
+
+.project-create-container .project-slate-editable li u {
+    text-decoration: underline !important;
+    text-decoration-color: #3b82f6 !important;
+}
+
+/* Styles for elements in blockquote */
+.project-create-container .project-slate-editable blockquote strong {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+}
+
+.project-create-container .project-slate-editable blockquote em {
+    font-style: italic !important;
+    color: #4a5568 !important;
+}
+
+.project-create-container .project-slate-editable blockquote u {
+    text-decoration: underline !important;
+    text-decoration-color: #3b82f6 !important;
+}
+
+/* Fix for span elements in Slate */
+.project-create-container .project-slate-editable span[data-slate-string] {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    font-weight: inherit !important;
+    font-style: inherit !important;
+    text-decoration: inherit !important;
+}
+
+/* Reset any unwanted styles */
+.project-create-container .project-slate-editable * {
+    all: unset;
+    display: revert !important;
+    box-sizing: border-box !important;
+}
+
+/* Specific overrides for main content elements */
+.project-create-container .project-slate-editable h1,
+.project-create-container .project-slate-editable h2,
+.project-create-container .project-slate-editable h3 {
+    display: block !important;
+    font-family: inherit !important;
+    cursor: text !important;
+}
+
+.project-create-container .project-slate-editable p {
+    display: block !important;
+    font-family: inherit !important;
+    cursor: text !important;
 }
 
 /* ======================= */
@@ -429,6 +727,10 @@
     margin-bottom: 1rem;
 }
 
+.project-upload-method {
+    flex: 1;
+}
+
 .project-upload-btn {
     display: inline-flex;
     align-items: center;
@@ -441,6 +743,8 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    width: 100%;
+    justify-content: center;
 }
 
 .project-upload-btn:hover {
@@ -485,10 +789,11 @@
 /* COMMENTS TOGGLE */
 /* ======================= */
 .project-comments-enabled-section {
-    background: #f8f9fa;
-    padding: 1.5rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 2px solid #0ea5e9;
     border-radius: 12px;
-    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    margin-top: 0.5rem;
 }
 
 .project-comments-enabled-header {
@@ -498,7 +803,7 @@
 .project-comments-enabled-label {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #1e293b;
+    color: #0c4a6e;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -507,7 +812,9 @@
 
 .project-comments-enabled-description {
     font-size: 0.875rem;
-    color: #64748b;
+    color: #0369a1;
+    line-height: 1.4;
+    font-style: italic;
 }
 
 .project-comments-toggle-container {
@@ -537,10 +844,12 @@
     background: #e2e8f0;
     border-radius: 24px;
     transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .project-comments-toggle-input:checked + .project-comments-toggle-slider {
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
 .project-comments-toggle-thumb {
@@ -563,13 +872,24 @@
 }
 
 .project-comments-toggle-icon {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    color: #64748b;
+    transition: all 0.3s ease;
+}
+
+.project-comments-toggle-input:checked + .project-comments-toggle-slider .project-comments-toggle-icon {
+    color: #10b981;
 }
 
 .project-comments-toggle-text {
     margin-left: 0.5rem;
     font-weight: 500;
     color: #334155;
+    transition: all 0.3s ease;
+}
+
+.project-comments-toggle-input:checked ~ .project-comments-toggle-text {
+    color: #059669;
 }
 
 /* ======================= */
@@ -730,6 +1050,17 @@
     color: white;
 }
 
+.project-floating-btn.new-project {
+    background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
+    color: white;
+}
+
+.project-floating-btn.new-project:hover {
+    background: linear-gradient(135deg, #2f855a 0%, #38a169 100%);
+    transform: scale(1.1);
+    box-shadow: 0 4px 20px rgba(56, 161, 105, 0.3);
+}
+
 /* ======================= */
 /* FORM ROW */
 /* ======================= */
@@ -737,138 +1068,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-}
- 
-/* ======================= */
-/* RESPONSIVE DESIGN */
-/* ======================= */
-@media (max-width: 1200px) {
-    .project-form-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .project-form-sidebar {
-        position: static;
-        margin-bottom: 2rem;
-    }
-
-    .project-sidebar-nav {
-        display: flex;
-        overflow-x: auto;
-        padding: 1rem;
-        gap: 1rem;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .project-sidebar-nav::-webkit-scrollbar {
-        display: none;
-    }
-
-    .project-sidebar-nav-item {
-        white-space: nowrap;
-        margin: 0;
-        flex-shrink: 0;
-    }
-
-    .project-sidebar-nav-item.active::before {
-        display: none;
-    }
-}
-
-@media (max-width: 768px) {
-    .project-form-header {
-        margin-bottom: 2rem;
-    }
-
-    .project-form-title {
-        font-size: 2rem;
-    }
-
-    .project-form-section-card {
-        padding: 1.5rem;
-    }
-
-    .project-form-section-title {
-        font-size: 1.5rem;
-    }
-
-    .project-upload-methods {
-        flex-direction: column;
-    }
-
-    .project-upload-btn {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .project-form-row {
-        grid-template-columns: 1fr;
-    }
-
-    .project-progress-sections {
-        font-size: 0.75rem;
-    }
-
-    .project-progress-section {
-        padding: 0.4rem 0.8rem;
-    }
-
-    .project-floating-actions {
-        right: 1rem;
-        bottom: 1rem;
-    }
-
-    .project-floating-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .project-create-container {
-        padding: 1rem 0;
-    }
-
-    .project-form-progress-container {
-        padding: 0 1rem;
-    }
-
-    .project-form-layout {
-        padding: 0 1rem;
-    }
-
-    .project-form-section-card {
-        padding: 1.25rem;
-        border-radius: 12px;
-    }
-
-    .project-slate-toolbar {
-        padding: 0.5rem;
-        gap: 0.25rem;
-    }
-
-    .project-slate-btn {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.8rem;
-        min-width: 32px;
-    }
-
-    .project-slate-editable {
-        padding: 1rem;
-        min-height: 150px;
-    }
-
-    .project-form-navigation {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .project-btn-project {
-        width: 100%;
-        justify-content: center;
-    }
 }
 
 /* ======================= */
@@ -915,3 +1114,376 @@
 .project-gap-1 { gap: 0.5rem; }
 .project-gap-2 { gap: 1rem; }
 .project-gap-3 { gap: 1.5rem; }
+
+/* ======================= */
+/* 📱 RESPONSIVE DESIGN */
+/* ======================= */
+
+/* 💻 DESKTOP */
+@media (max-width: 1200px) {
+    .project-form-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .project-form-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+
+    .project-sidebar-nav {
+        display: flex;
+        overflow-x: auto;
+        padding: 1rem;
+        gap: 1rem;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .project-sidebar-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .project-sidebar-nav-item {
+        white-space: nowrap;
+        margin: 0;
+        flex-shrink: 0;
+        min-width: 150px;
+        text-align: center;
+    }
+
+    .project-sidebar-nav-item.active::before {
+        display: none;
+    }
+
+    .project-form-section-card {
+        padding: 2rem;
+    }
+}
+
+/* 🎨 TABLET */
+@media (max-width: 968px) {
+    .project-create-container {
+        padding: 1rem 0;
+    }
+
+    .project-form-header {
+        margin-bottom: 2rem;
+    }
+
+    .project-form-title {
+        font-size: 2rem;
+    }
+
+    .project-form-section-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+
+    .project-form-section-title {
+        font-size: 1.5rem;
+    }
+
+    .project-upload-methods {
+        flex-direction: column;
+    }
+
+    .project-upload-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .project-form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .project-progress-sections {
+        font-size: 0.75rem;
+    }
+
+    .project-progress-section {
+        padding: 0.4rem 0.8rem;
+    }
+
+    .project-floating-actions {
+        right: 1rem;
+        bottom: 1rem;
+    }
+
+    .project-floating-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.1rem;
+    }
+
+    .project-slate-toolbar {
+        padding: 0.5rem;
+        gap: 0.25rem;
+    }
+
+    .project-slate-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+        min-width: 32px;
+    }
+
+    .project-slate-editable {
+        padding: 1rem;
+        min-height: 150px;
+    }
+
+    /* Responsive Slate content */
+    .project-create-container .project-slate-editable blockquote {
+        font-size: 1rem !important;
+        padding: 0.75rem 1rem !important;
+    }
+   
+    .project-create-container .project-slate-editable blockquote::before {
+        font-size: 2rem !important;
+        top: 0.25rem !important;
+        left: 0.5rem !important;
+    }
+    
+    .project-create-container .project-slate-editable ul,
+    .project-create-container .project-slate-editable ol {
+        padding-left: 1.5rem !important;
+    }
+
+    .project-create-container .project-slate-editable h1 {
+        font-size: 1.75rem !important;
+    }
+
+    .project-create-container .project-slate-editable h2 {
+        font-size: 1.35rem !important;
+    }
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+    .project-form-progress-container {
+        padding: 0 1rem;
+    }
+
+    .project-form-layout {
+        padding: 0 1rem;
+    }
+
+    .project-form-section-card {
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .project-form-navigation {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .project-btn-project {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .project-sidebar-nav-item {
+        min-width: 120px;
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .project-progress-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .project-upload-methods {
+        gap: 0.75rem;
+    }
+
+    .project-form-section-title {
+        font-size: 1.35rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .project-comments-toggle-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .project-initiative-preview-card {
+        padding: 1rem;
+    }
+
+    /* Mobile Slate content adjustments */
+    .project-create-container .project-slate-editable h1 {
+        font-size: 1.5rem !important;
+    }
+
+    .project-create-container .project-slate-editable h2 {
+        font-size: 1.25rem !important;
+    }
+
+    .project-create-container .project-slate-editable h3 {
+        font-size: 1.1rem !important;
+    }
+}
+
+/* 📱 SMALL MOBILE */
+@media (max-width: 480px) {
+    .project-create-container {
+        padding: 0.5rem 0;
+    }
+
+    .project-form-progress-container {
+        padding: 0 0.75rem;
+    }
+
+    .project-form-layout {
+        padding: 0 0.75rem;
+    }
+
+    .project-form-section-card {
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    .project-form-title {
+        font-size: 1.75rem;
+    }
+
+    .project-floating-actions {
+        right: 0.75rem;
+        bottom: 0.75rem;
+    }
+
+    .project-floating-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+    }
+
+    .project-slate-toolbar {
+        padding: 0.375rem;
+        gap: 0.125rem;
+    }
+
+    .project-slate-btn {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.75rem;
+        min-width: 28px;
+    }
+
+    .project-slate-editable {
+        padding: 0.75rem;
+        min-height: 120px;
+    }
+
+    .project-progress-sections {
+        gap: 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    .project-progress-section {
+        padding: 0.3rem 0.6rem;
+    }
+
+    /* Extra small mobile Slate adjustments */
+    .project-create-container .project-slate-editable h1 {
+        font-size: 1.35rem !important;
+    }
+
+    .project-create-container .project-slate-editable h2 {
+        font-size: 1.15rem !important;
+    }
+
+    .project-create-container .project-slate-editable h3 {
+        font-size: 1rem !important;
+    }
+
+    .project-create-container .project-slate-editable blockquote {
+        font-size: 0.95rem !important;
+        padding: 0.5rem 0.75rem !important;
+        margin: 1rem 0 !important;
+    }
+   
+    .project-create-container .project-slate-editable blockquote::before {
+        font-size: 1.5rem !important;
+        top: 0.15rem !important;
+        left: 0.375rem !important;
+    }
+    
+    .project-create-container .project-slate-editable ul,
+    .project-create-container .project-slate-editable ol {
+        padding-left: 1.25rem !important;
+    }
+
+    .project-sidebar-nav-item {
+        min-width: 100px;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* 🔄 LANDSCAPE FIX */
+@media (max-height: 500px) and (orientation: landscape) {
+    .project-form-content {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .project-floating-actions {
+        bottom: 0.5rem;
+        right: 0.5rem;
+    }
+
+    .project-floating-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ======================= */
+/* ACCESSIBILITY */
+/* ======================= */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for better accessibility */
+.project-form-group input:focus,
+.project-form-group textarea:focus,
+.project-form-group select:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.project-btn-project:focus,
+.project-upload-btn:focus,
+.project-floating-btn:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .project-form-section-card {
+        border: 2px solid #000;
+    }
+    
+    .project-slate-editor-container {
+        border: 2px solid #000;
+    }
+    
+    .project-btn-project {
+        border: 2px solid #000;
+    }
+}
