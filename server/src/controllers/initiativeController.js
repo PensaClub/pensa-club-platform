@@ -944,30 +944,35 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
             }
 
             if (initiativeData.projects !== undefined) {
-                // Remove old project relations
-                await initiative.sequelize.models.initiative_projects.destroy({
+                const currentLinks = await initiative.sequelize.models.initiative_projects.findAll({
                     where: { initiative_id: foundInitiative.id },
                     transaction: t,
                 });
+                const currentProjectIds = new Set(currentLinks.map((link) => link.project_id));
 
-                // Add new project relations
-                if (initiativeData.projects.length > 0) {
-                    await Promise.all(
-                        initiativeData.projects.map(async (slug) => {
-                            const foundProject = await initiative.sequelize.models.project.findOne({
-                                where: { slug },
-                                transaction: t,
-                            });
-                            if (!foundProject) throw new Error(`Project with slug ${slug} not found`);
-                            return initiative.sequelize.models.initiative_projects.create(
-                                {
-                                    initiative_id: foundInitiative.id,
-                                    project_id: foundProject.id,
-                                },
-                                { transaction: t }
-                            );
-                        })
-                    );
+                const desiredProjectIds = new Set();
+                for (const proj of initiativeData.projects) {
+                    const param = proj.id ?? proj.slug;
+                    if (!param) throw new Error('Each project must have an id or slug');
+                    const foundProject = await findBySlugOrId(initiative.sequelize.models.project, param, { transaction: t });
+                    if (!foundProject) throw new Error(`Project not found for ${JSON.stringify(param)}`);
+                    desiredProjectIds.add(foundProject.id);
+
+                    if (!currentProjectIds.has(foundProject.id)) {
+                        await initiative.sequelize.models.initiative_projects.create(
+                            {
+                                initiative_id: foundInitiative.id,
+                                project_id: foundProject.id,
+                            },
+                            { transaction: t }
+                        );
+                    }
+                }
+
+                for (const link of currentLinks) {
+                    if (!desiredProjectIds.has(link.project_id)) {
+                        await link.destroy({ transaction: t });
+                    }
                 }
             }
 

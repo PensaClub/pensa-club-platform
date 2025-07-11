@@ -163,7 +163,16 @@ const BaseInitiativeSchema = z
         commentsEnabled: z.boolean().nullable().optional(),
         isDraft: z.boolean().nullable().optional(),
         gallery: z.array(z.any()).nullable().optional(),
-        projects: z.array(z.string()).optional(),
+        projects: z
+            .array(
+                z
+                    .object({
+                        id: z.union([z.string(), z.number()]).optional(),
+                        slug: z.string().optional(),
+                    })
+                    .refine((obj) => !!obj.id || !!obj.slug, { message: 'Each project must have either an id or a slug' })
+            )
+            .optional(),
 
         mainImage: MainImageSchema,
 
