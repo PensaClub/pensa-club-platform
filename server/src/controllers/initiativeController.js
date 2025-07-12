@@ -950,12 +950,34 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                 });
 
                 if (initiativeData.projects.length > 0) {
-                    const linkData = initiativeData.projects.map((project) => {
-                        return {
-                            initiative_id: foundInitiative.id,
-                            project_id: project.id,
-                        };
-                    });
+                    const resolvedIds = [];
+                    for (const project of initiativeData.projects) {
+                        let projectId = project.id;
+                        if (!projectId && project.slug) {
+                            const foundProject = await findBySlugOrId(initiative.sequelize.models.project, project.slug, { transaction: t });
+                            if (!foundProject) {
+                                throw new CustomError({
+                                    message: `Project with slug "${project.slug}" not found`,
+                                    statusCode: 404,
+                                    details: { slug: project.slug },
+                                });
+                            }
+                            projectId = foundProject.id;
+                        }
+                        if (!projectId) {
+                            throw new CustomError({
+                                message: 'Each project must have an id or a slug that exists',
+                                statusCode: 400,
+                                details: { project },
+                            });
+                        }
+                        resolvedIds.push(projectId);
+                    }
+
+                    const linkData = resolvedIds.map((projectId) => ({
+                        initiative_id: foundInitiative.id,
+                        project_id: projectId,
+                    }));
 
                     await initiative.sequelize.models.initiative_projects.bulkCreate(linkData, { transaction: t });
                 }
