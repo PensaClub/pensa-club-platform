@@ -165,13 +165,24 @@ const BaseInitiativeSchema = z
         gallery: z.array(z.any()).nullable().optional(),
         projects: z
             .array(
-                z
-                    .object({
-                        id: z.union([z.string(), z.number()]).optional(),
-                        slug: z.string().optional(),
-                    })
-                    .refine((obj) => !!obj.id || !!obj.slug, { message: 'Each project must have either an id or a slug' })
+                z.object({
+                    titleSlug: z.string().min(1, 'Project title slug is required'),
+                    slug: z.string().min(1, 'Project slug is required'),
+                    title: z.string().min(1, 'Project title is required'),
+                    description: z.string().min(1, 'Project description is required'),
+                    status: z.enum(['in-progress', 'active', 'planned', 'completed']).nullable().optional(),
+                    image: z.string().url('Invalid image URL').nullable().optional(),
+                    link: z.string().nullable().optional(),
+                    coordinates: z
+                        .object({
+                            lat: z.number().nullable().optional(),
+                            lng: z.number().nullable().optional(),
+                        })
+                        .nullable()
+                        .optional(),
+                })
             )
+            .nullable()
             .optional(),
 
         mainImage: MainImageSchema,

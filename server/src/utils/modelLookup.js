@@ -1,11 +1,11 @@
 // modelLookup.js
 module.exports.findBySlugOrId = async (Model, param, options = {}) => {
-    let entity = null;
-    if (typeof param === 'string' && isNaN(Number(param))) {
-        entity = await Model.findOne({ where: { slug: param }, ...options });
+    let where = {};
+    if (!isNaN(Number(param))) {
+        where.id = Number(param);
+    } else {
+        where.slug = param;
     }
-    if (!entity && !isNaN(Number(param))) {
-        entity = await Model.findByPk(Number(param), options);
-    }
-    return entity;
+    where = { ...where, ...(options.where || {}) };
+    return Model.findOne({ ...options, where });
 };

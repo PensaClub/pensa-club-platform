@@ -8,6 +8,7 @@ const { transformInitiative, initiativeConfig } = require('../utils/initiativeUt
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { InitiativeSchema, UpdateInitiativeSchema, PaginationQuerySchema } = require('../schemas/initiatives.schema');
 const { findBySlugOrId } = require('../utils/modelLookup');
+const { manageInitiativeProjects, updateInitiativeProjectLinks } = require('../utils/projectManagementUtils');
 
 // ========================================
 // ENDPOINTS
@@ -615,6 +616,11 @@ const createInitiative = async (initiativeData, req, res, next) => {
                 );
             }
 
+            if (initiativeData.projects?.length > 0) {
+                const resolvedProjectIds = await manageInitiativeProjects(initiativeData.projects, newInitiative.id, req.user.userId, t);
+                await updateInitiativeProjectLinks(newInitiative.id, resolvedProjectIds, t);
+            }
+
             const completeInitiative = await initiative.findByPk(newInitiative.id, {
                 include: initiativeConfig,
                 transaction: t,
@@ -944,43 +950,8 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
             }
 
             if (initiativeData.projects !== undefined) {
-                await initiative.sequelize.models.initiative_projects.destroy({
-                    where: { initiative_id: foundInitiative.id },
-                    transaction: t,
-                });
-
-                if (initiativeData.projects.length > 0) {
-                    const resolvedIds = [];
-                    for (const project of initiativeData.projects) {
-                        let projectId = project.id;
-                        if (!projectId && project.slug) {
-                            const foundProject = await findBySlugOrId(initiative.sequelize.models.project, project.slug, { transaction: t });
-                            if (!foundProject) {
-                                throw new CustomError({
-                                    message: `Project with slug "${project.slug}" not found`,
-                                    statusCode: 404,
-                                    details: { slug: project.slug },
-                                });
-                            }
-                            projectId = foundProject.id;
-                        }
-                        if (!projectId) {
-                            throw new CustomError({
-                                message: 'Each project must have an id or a slug that exists',
-                                statusCode: 400,
-                                details: { project },
-                            });
-                        }
-                        resolvedIds.push(projectId);
-                    }
-
-                    const linkData = resolvedIds.map((projectId) => ({
-                        initiative_id: foundInitiative.id,
-                        project_id: projectId,
-                    }));
-
-                    await initiative.sequelize.models.initiative_projects.bulkCreate(linkData, { transaction: t });
-                }
+                const resolvedProjectIds = await manageInitiativeProjects(initiativeData.projects, foundInitiative.id, req.user.userId, t);
+                await updateInitiativeProjectLinks(foundInitiative.id, resolvedProjectIds, t);
             }
 
             const updatedInitiative = await initiative.findByPk(foundInitiative.id, {

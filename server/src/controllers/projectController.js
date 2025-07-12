@@ -29,7 +29,15 @@ projectController.post('/create', isAuth, checkPermission('projects', 'create'),
     try {
         const validatedData = ProjectSchema.parse(req.body);
         const projectData = { ...validatedData, isDraft: false };
-        return createProject(projectData, req, res, next);
+
+        const existing = await project.findOne({ where: { slug: projectData.slug } });
+
+        if (existing) {
+            req.params.id = existing.dataValues.id;
+            return updateProject(projectData, req, res, next, false);
+        } else {
+            return createProject(projectData, req, res, next);
+        }
     } catch (err) {
         next(err);
     }
@@ -504,9 +512,14 @@ const getProjectsByDraftStatus = async (isDraft, req, res, next) => {
 
         const totalCount = await project.count({
             distinct: true,
-            where: {
-                isDraft: isDraft,
-            },
+            where: { isDraft: isDraft },
+            include: [
+                {
+                    model: section,
+                    as: 'sections',
+                    required: true,
+                },
+            ],
         });
 
         const totalPages = Math.ceil(totalCount / limit);
@@ -529,10 +542,15 @@ const getProjectsByDraftStatus = async (isDraft, req, res, next) => {
         const offset = (actualPage - 1) * limit;
 
         const projects = await project.findAll({
-            where: {
-                isDraft: isDraft,
-            },
-            include: projectConfig,
+            where: { isDraft: isDraft },
+            include: [
+                {
+                    model: section,
+                    as: 'sections',
+                    required: true,
+                },
+                ...projectConfig.filter((cfg) => cfg.as !== 'sections'),
+            ],
             limit: limit,
             offset: offset,
             order: [['id', 'ASC']],
@@ -756,7 +774,6 @@ const updateProject = async (projectData, req, res, next, isDraft = false) => {
                 ],
                 transaction: t,
             });
-
             if (!foundProject) {
                 throw new CustomError({
                     message: `Project not found${isDraft ? ' or not a draft' : ''}`,
