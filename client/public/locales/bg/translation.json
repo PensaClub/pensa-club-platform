@@ -2234,9 +2234,9 @@
       "spotsAvailable": "свободни места",
       "noRequirements": "Няма добавени изисквания",
       "requirementsDescription": "Добавете изисквания които участниците трябва да изпълняват",
-      "addFirstRequirement": "Добави първо изискване",
+      "addFirstRequirement": "Добави изискване",
       "requirementNumber": "Изискване {{number}}",
-      "requirementPlaceholder": "Въведете изискване към участниците...",
+      "requirementPlaceholder": "Въведете изискване ...",
       "requirementsPreview": "Преглед на изискванията",
       "addSection": "Добави секция",
       "sections-help": "Организирайте съдържанието на проекта в логически секции за по-лесно четене",
@@ -2417,20 +2417,20 @@
       "publishProject": "Публикувай проекта",
       "createProject": "Създай проект",
       "slug-help": "URL адресът ще се използва в линка към проекта",
-"short-description-help": "Кратко описание за списъците с проекти", 
-"full-description-help": "Подробно описание с форматиране",
-"location-help": "Изберете локацията на проекта"
-
+      "short-description-help": "Кратко описание за списъците с проекти",
+      "full-description-help": "Подробно описание с форматиране",
+      "location-help": "Изберете локацията на проекта",
+      "selectedInitiative": "Избрана инициатива"
     },
     "categories": {
-    "digitalization": "Дигитализация",
-    "education": "Образование", 
-    "healthcare": "Здравеопазване",
-    "environment": "Околна среда",
-    "social": "Социални дейности",
-    "culture": "Култура",
-    "sports": "Спорт"
-  },
+      "digitalization": "Дигитализация",
+      "education": "Образование",
+      "healthcare": "Здравеопазване",
+      "environment": "Околна среда",
+      "social": "Социални дейности",
+      "culture": "Култура",
+      "sports": "Спорт"
+    },
     "applicationStatus": {
       "open": "Отворено за кандидатстване",
       "closed": "Затворено за кандидатстване",

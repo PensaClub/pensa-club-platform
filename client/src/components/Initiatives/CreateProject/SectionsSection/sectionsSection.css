@@ -217,6 +217,7 @@
     margin-bottom: 0.75rem;
     font-size: 1rem;
     align-items: center;
+    gap: 0.5rem;
 }
 
 .project-sections-title-input {
@@ -1210,7 +1211,10 @@ button.project-sections-upload-btn:active {
        .project-sections-images-upload {
         padding: 1rem;
     }
-    
+    .project-sections-section-header{
+        flex-direction: column;
+        gap: 1rem;
+    }
     .project-sections-images-preview {
         padding: 1rem;
         margin-top: 1rem;
@@ -1218,7 +1222,7 @@ button.project-sections-upload-btn:active {
     
     .project-sections-upload-btn,
     .project-sections-clear-btn {
-        padding: 0.875rem 1.25rem !important;
+        padding: 0.6rem 1.25rem !important;
         font-size: 0.9rem !important;
     }
     
@@ -1238,5 +1242,73 @@ button.project-sections-upload-btn:active {
     
     .project-sections-toolbar-divider {
         display: none;
+    }
+    .project-sections-section-header {
+        padding: 1rem;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    .project-sections-form-btn{
+        padding: 0.575rem 1rem;
+        font-size: 0.9rem;
+    }
+    .project-sections-help p {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+    .project-sections-status-complete{
+        font-size: 0.9rem;
+    }
+    .project-sections-move-btn{
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
+    .project-sections-remove-btn {
+        /* width: 25px;
+        height: 25px; */
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    .project-sections-item-actions{
+        justify-content: space-between;
+    }
+    .project-sections-item-content {
+        padding: 1rem;
+    }
+    .project-sections-slate-editable {
+        padding: 0 0.5rem;
+        min-height: 120px;
+    }
+    .project-sections-form-group label{
+        
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+    .project-sections-images-upload,.project-sections-images-preview {
+        padding: 0.5rem;
+    }
+    .project-sections-form-group label {
+        font-size: 0.9rem;
+        padding: 0.5rem ;
+    }
+    .project-sections-summary h4, .project-sections-item-title h4{
+        font-size: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+    .project-sections-images-preview h5 {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        text-align: left;
+    }
+    .project-sections-item-header{
+        padding: 1rem;
+    }
+    .project-sections-stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    .project-sections-stat{
+        padding: 1rem;
     }
 }

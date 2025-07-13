@@ -599,7 +599,24 @@
     .project-partners-section-card {
         padding: 1.5rem;
     }
-    
+    .project-partners-form-btn.primary {
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+    }
+    .project-partners-item-type {
+        font-size: 0.8rem;
+    }
+    .project-partners-logo-upload label{
+        font-size: 0.8rem;
+        font-style: italic;
+        text-align: center;
+    }
+    .project-partners-form-input {
+        font-size: 0.9rem !important;
+    }
+    .project-partners-empty-content p {
+        font-size: 0.8rem;
+    }
     .project-partners-section-header {
         padding: 1.5rem;
         margin: -1.5rem -1.5rem 1.5rem -1.5rem;
@@ -616,6 +633,23 @@
     .project-partners-form-btn {
         width: 100%;
         justify-content: center;
+    }
+    .project-partners-remove-btn {
+       padding: 0.5rem 0.7rem;
+       font-size: 0.8rem;
+    }
+    .project-partners-item-info h4 {
+        font-size: 1rem;
+    }
+    .project-partners-error-message {
+        font-size: 0.8rem;
+    }
+    .error {
+        font-size: 0.8rem !important;
+    }
+    .project-partners-form-group label {
+margin-top: 1rem;
+        
     }
 }
 

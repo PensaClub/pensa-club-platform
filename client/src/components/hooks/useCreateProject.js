@@ -195,7 +195,7 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
     };
 
     loadInitiatives();
-  }, [getAllInitiatives, initiatives]);
+  }, [initiatives]);
 
   // Load draft from URL
  // Load draft from URL
@@ -340,11 +340,9 @@ useEffect(() => {
       
       if (drafts.length > 0) {
         const latestDraft = drafts[0];
-        console.log('📄 Found latest draft:', latestDraft.title);
         
         const processedData = { ...latestDraft };
-        
-        // 🎯 КОНВЕРТИРАНЕ НА SLATE ПОЛЕТАТА ОТ HTML КЪМ SLATE
+
         // fullDescription - основното описание (има Slate редактор)
         if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
           try {
@@ -381,7 +379,7 @@ useEffect(() => {
               };
             }
           });
-          console.log('✅ Converted sections content from HTML to Slate');
+    
         }
  if (processedData.location) {
           if (!Array.isArray(processedData.location)) {
@@ -418,7 +416,7 @@ useEffect(() => {
   };
 
   autoLoadLatestDraft();
-}, [initialValues, setValues, setDraftId, t]);
+}, [initialValues, setValues, setDraftId]);
   // 🏷️ GENERATE SLUG
   const generateSlug = useCallback((title) => {
     return title

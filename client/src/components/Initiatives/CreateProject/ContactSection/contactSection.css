@@ -522,7 +522,9 @@
         text-align: center;
         gap: 1rem;
     }
-    
+     .project-contact-section-card {
+        padding: 0.5rem;
+    }
     .project-contact-section-title {
         font-size: 1.5rem;
     }

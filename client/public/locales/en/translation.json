@@ -2237,9 +2237,9 @@
       "spotsAvailable": "spots available",
       "noRequirements": "No requirements added",
       "requirementsDescription": "Add requirements that participants must meet",
-      "addFirstRequirement": "Add First Requirement",
+      "addFirstRequirement": "Add Requirement",
       "requirementNumber": "Requirement {{number}}",
-      "requirementPlaceholder": "Enter participant requirement...",
+      "requirementPlaceholder": "Enter requirement...",
       "requirementsPreview": "Requirements Preview",
       "addSection": "Add Section",
       "sections-help": "Organize your project content into logical sections for easier reading",
@@ -2422,7 +2422,8 @@
       "slug-help": "URL slug will be used in the project link",
 "short-description-help": "Short description for project listings",
 "full-description-help": "Detailed description with formatting", 
-"location-help": "Choose the project location"
+"location-help": "Choose the project location",
+"selectedInitiative": "Selected Initiative"
     },
     "categories": {
       "digitalization": "Digitalization",

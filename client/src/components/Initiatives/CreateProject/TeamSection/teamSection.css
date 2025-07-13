@@ -18,6 +18,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -83,7 +84,8 @@
 
 .project-team-empty-icon {
     font-size: 4rem;
-    color: #10b981; /* само иконата зелена */
+    color: #10b981;
+    /* само иконата зелена */
     margin-bottom: 1.5rem;
 }
 
@@ -125,12 +127,14 @@
     left: 0;
     right: 0;
     height: 5px;
-    background: linear-gradient(90deg, #10b981 0%, #059669 50%, #047857 100%); /* само accent line */
+    background: linear-gradient(90deg, #10b981 0%, #059669 50%, #047857 100%);
+    /* само accent line */
 }
 
 .project-team-member-card:hover {
     transform: translateY(-3px);
-    border-color: #10b981; /* само border при hover */
+    border-color: #10b981;
+    /* само border при hover */
     box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
 }
 
@@ -155,9 +159,13 @@
 }
 
 .project-team-member-role {
+    display: flex;
     color: #64748b;
     font-weight: 500;
     font-size: 0.95rem;
+    gap: 0.5rem;
+    align-items: baseline;
+
 }
 
 .project-team-member-actions {
@@ -221,7 +229,8 @@
 
 .project-team-form-input:focus {
     outline: none;
-    border-color: #10b981; /* само focus зелен */
+    border-color: #10b981;
+    /* само focus зелен */
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
@@ -252,7 +261,8 @@
     margin: 0 auto 1rem auto;
     position: relative;
     transition: all 0.3s ease;
-    cursor: pointer; /* 🆕 clickable */
+    cursor: pointer;
+    /* 🆕 clickable */
 }
 
 .project-team-image-preview:hover {
@@ -281,7 +291,8 @@
     display: flex;
     width: 100%;
     padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%); /* само бутона зелен */
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    /* само бутона зелен */
     color: white;
     border: none;
     border-radius: 12px;
@@ -293,6 +304,7 @@
     text-decoration: none;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
 }
 
 .project-team-image-upload-btn:hover {
@@ -416,7 +428,8 @@
     display: block;
     font-size: 2rem;
     font-weight: 800;
-    color: #10b981; /* само стойностите зелени */
+    color: #10b981;
+    /* само стойностите зелени */
 }
 
 /* Contact Info Display */
@@ -449,7 +462,8 @@
 }
 
 .project-team-contact-icon {
-    color: #10b981; /* само иконите зелени */
+    color: #10b981;
+    /* само иконите зелени */
     width: 16px;
 }
 
@@ -502,22 +516,22 @@
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
-    
+
     .project-team-member-header {
         flex-direction: column;
         gap: 1rem;
         align-items: stretch;
     }
-    
+
     .project-team-member-actions {
         justify-content: center;
     }
-    
+
     .project-team-summary-stats {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
-    
+
     .project-team-section-header {
         flex-direction: column;
         gap: 1rem;
@@ -529,23 +543,54 @@
     .project-team-section-card {
         padding: 1.5rem;
     }
-    
+
     .project-team-section-header {
         padding: 1.5rem;
         margin: -1.5rem -1.5rem 1.5rem -1.5rem;
     }
-    
+
     .project-team-member-content {
         padding: 1.5rem;
     }
-    
+
     .project-team-summary-stats {
         grid-template-columns: 1fr;
     }
-    
+
     .project-team-form-btn {
         width: 100%;
         justify-content: center;
+    }
+
+    .project-team-member-info h4 {
+        font-size: 0.9rem;
+        margin: 0 0 0.7rem 0;
+        align-items: baseline;
+
+    }
+.project-team-remove-btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+    }
+    input[type="text"],
+    input[type="url"],
+    textarea {
+        font-size: 0.8rem;
+        width: 100%;
+    }
+    .project-team-form-input {
+        font-size: 0.7rem;
+    }
+    .project-team-form-group label {
+        /* font-size: 0.8rem; */
+        gap: 0.5rem;
+    }
+    .project-team-contact-item:last-child {
+        margin-bottom: 0.5rem;
+        font-size: 0.7rem;
+    }
+    .project-team-stat-value {
+        font-size: 1.5rem;
     }
 }
 
@@ -562,6 +607,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -577,6 +623,7 @@
         opacity: 1;
         transform: scale(1);
     }
+
     to {
         opacity: 0;
         transform: scale(0.9);
@@ -616,6 +663,11 @@
 }
 
 @keyframes projectTeamSpin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
