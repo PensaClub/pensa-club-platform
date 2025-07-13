@@ -1078,6 +1078,7 @@ const renderElement = (props) => {
                                 removeSectionImage={removeSectionImage}
                                 updateSectionImageAlt={updateSectionImageAlt}
                                 clearSectionImages={clearSectionImages}
+                                updateSectionImageCaption={updateSectionImageCaption} 
                             />
                         )}
 
