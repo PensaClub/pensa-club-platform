@@ -13,6 +13,7 @@ const commentController = require('./controllers/commentController');
 const publicationController = require('./controllers/publicationController');
 const projectController = require('./controllers/projectController');
 const applicationController = require('./controllers/applicationController');
+const storyController = require('./controllers/storyController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -26,6 +27,7 @@ router.use('/comments', commentController);
 router.use('/projects', projectController);
 router.use('/publications', publicationController);
 router.use('/applications', applicationController);
+router.use('/stories', storyController);
 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);

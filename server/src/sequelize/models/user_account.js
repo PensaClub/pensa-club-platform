@@ -43,6 +43,13 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'publications',
             });
 
+            // Stories created by user
+            user_account.hasMany(models.story, {
+                foreignKey: 'creatorId',
+                sourceKey: 'id',
+                as: 'stories',
+            });
+
             // Bookmarked initiatives
             user_account.belongsToMany(models.initiative, {
                 through: 'initiative_bookmarks',
@@ -67,12 +74,28 @@ module.exports = (sequelize, DataTypes) => {
                 otherKey: 'publication_id',
             });
 
+            // Bookmarked stories
+            user_account.belongsToMany(models.story, {
+                through: 'story_bookmarks',
+                as: 'bookmarkedStories',
+                foreignKey: 'user_id',
+                otherKey: 'story_id',
+            });
+
             // Liked publications
             user_account.belongsToMany(models.publication, {
                 through: 'publication_likes',
                 as: 'likedPublications',
                 foreignKey: 'user_id',
                 otherKey: 'publication_id',
+            });
+
+            // Liked stories
+            user_account.belongsToMany(models.story, {
+                through: 'story_likes',
+                as: 'likedStories',
+                foreignKey: 'user_id',
+                otherKey: 'story_id',
             });
 
             user_account.hasMany(models.project_application, {
