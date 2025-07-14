@@ -9,14 +9,9 @@ const CreateCommentSchema = z
             .max(1000, 'Comment content must not exceed 1000 characters')
             .refine((content) => content.trim().length > 0, 'Comment content cannot be empty'),
 
-        commentableId: z.union([z.string(), z.number()]).optional(),
+        commentableId: z.union([z.string(), z.number()]),
 
-        commentsLinkConnection: z
-            .string()
-            .min(1, 'Comments link connection is required')
-            .refine((val) => ['initiative', 'project'].includes(val), {
-                message: 'Invalid comments link connection. Must be one of: initiative, project',
-            }),
+        commentsLinkConnection: z.enum(['initiative', 'project', 'publication', 'story']),
 
         parentId: z
             .union([z.string(), z.number(), z.null()])

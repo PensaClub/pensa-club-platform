@@ -1,45 +1,62 @@
 const { comment, user_account, user_details } = require('../sequelize/models');
 
-const getCommentConfig = (commentableId, commentLinkConnection) => ({
-    where: {
-        commentable_id: commentableId,
-        comment_link_connection: commentLinkConnection,
+const userDetailsAttributes = ['username', 'firstName', 'lastName', 'imageURL'];
+const userAccountAttributes = ['id', 'email'];
+const commentAttributes = ['id', 'content', 'userId', 'createdAt', 'updatedAt', 'likes', 'parentId'];
+
+const replyInclude = [
+    {
+        model: user_account,
+        as: 'user',
+        attributes: userAccountAttributes,
+        include: [
+            {
+                model: user_details,
+                as: 'details',
+                attributes: userDetailsAttributes,
+            },
+        ],
     },
-    attributes: ['id', 'content', 'userId', 'createdAt', 'updatedAt', 'likes', 'parentId'],
-    include: [
-        {
-            model: user_account,
-            as: 'user',
-            attributes: ['id', 'email'],
-            include: [
-                {
-                    model: user_details,
-                    as: 'details',
-                    attributes: ['username', 'firstName', 'lastName', 'imageURL'],
-                },
-            ],
-        },
-        {
-            model: comment,
-            as: 'replies',
-            attributes: ['id', 'content', 'userId', 'createdAt', 'updatedAt', 'likes', 'parentId'],
-            include: [
-                {
-                    model: user_account,
-                    as: 'user',
-                    attributes: ['id', 'email'],
-                    include: [
-                        {
-                            model: user_details,
-                            as: 'details',
-                            attributes: ['username', 'firstName', 'lastName', 'imageURL'],
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
-});
+];
+
+const mainInclude = [
+    {
+        model: user_account,
+        as: 'user',
+        attributes: userAccountAttributes,
+        include: [
+            {
+                model: user_details,
+                as: 'details',
+                attributes: userDetailsAttributes,
+            },
+        ],
+    },
+    {
+        model: comment,
+        as: 'replies',
+        attributes: commentAttributes,
+        include: replyInclude,
+    },
+];
+
+const getCommentConfig = (commentableId, commentLinkConnection) => {
+    if (commentableId && commentLinkConnection) {
+        return {
+            where: {
+                commentable_id: commentableId,
+                comment_link_connection: commentLinkConnection,
+            },
+            attributes: commentAttributes,
+            include: mainInclude,
+        };
+    }
+
+    return {
+        attributes: commentAttributes,
+        include: mainInclude,
+    };
+};
 
 const transformComment = (comment) => {
     const user = comment.user;
