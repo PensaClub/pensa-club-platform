@@ -109,9 +109,11 @@ export const initiativeServiceFactory = (token) => {
     getProjectById: async (id) => {
       return requester.get(`${apiUrl}/projects/single/${id}`);
     },
-
-    getProjectsByInitiative: async (initiativeId) => {
-      return requester.get(`${apiUrl}/projects/initiative/${initiativeId}`);
+    deleteProject: async (identifier) => {
+      return requester.del(`${apiUrl}/projects/${identifier}`);
+    },
+    getProjectsByInitiative: async (projectId) => {
+      return requester.get(`${apiUrl}/projects/initiative/${projectId}`);
     },
     // Project Draft endpoints
     saveDraftProject: async (draftData) => {

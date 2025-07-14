@@ -1115,6 +1115,34 @@ const invalidateProjectDraftsCache = useCallback(() => {
     }
   }, [isAuthentication, initiativeService]);
 
+  const deleteProject = useCallback(async (identifier) => {
+  if (!isAuthentication) {
+    notify('error', 'Authentication required');
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+    
+    await initiativeService.deleteProject(identifier);
+
+    // Премахваме от локалното състояние
+    setProjects(prev => prev.filter(project => 
+      project.id !== identifier && 
+      project.slug !== identifier &&
+      project.id.toString() !== identifier.toString()
+    ));
+
+    notify('success', 'Project deleted successfully!');
+  } catch (error) {
+    console.error('Error deleting published project:', error);
+    notify('error', 'Failed to delete project');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [isAuthentication, initiativeService]);
+
   // Save Project Draft
   const saveDraftProject = useCallback(async (draftData) => {
     if (!isAuthentication) {
@@ -1932,6 +1960,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
     getProjectById,
     getProjectsByInitiative,
     projects,
+    deleteProject,
     currentProject,
     projectsLoaded,
     updateProject,
