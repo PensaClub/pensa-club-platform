@@ -245,8 +245,16 @@
   .selected-location {
     padding: 0.75rem 1rem;
   }
-  
+
   .location-map-wrapper {
     height: 250px;
+  }
+}
+@media (max-width: 480px) {
+  .location-search-input {
+    font-size: 0.9rem!important;
+  }
+  .location-details  p{
+    font-size: 0.8rem;
   }
 }

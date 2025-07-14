@@ -185,33 +185,33 @@ export const mockInitiatives = [
     mainImage: { src: "/images/stars/stars-6.webp" },
     isFake: true,
     projects: [
-    //   {
-    //     id: 61,
-    //     title: "Таблет за баба",
-    //     description: "Опростен интерфейс за възрастни",
-    //     slug: "tablet-baba",
-    //     status: "in-progress",
-    //     image: "/images/stars/stars-3.webp",
-    //     isFake: true
-    //   },
-    //   {
-    //     id: 62,
-    //     title: "Видео връзка с внуците",
-    //     description: "Лесни видео разговори",
-    //     slug: "video-vnuci",
-    //     status: "active",
-    //     image: "/images/stars/stars-9.jpg",
-    //     isFake: true
-    //   },
-    //   {
-    //     id: 63,
-    //     title: "Онлайн пенсионерски клуб",
-    //     description: "Виртуални срещи и игри",
-    //     slug: "online-klub",
-    //     status: "active",
-    //     image: "/images/stars/stars-6.webp",
-    //     isFake: true
-    //   }
+      {
+        id: 61,
+        title: "Таблет за баба",
+        description: "Опростен интерфейс за възрастни",
+        slug: "tablet-baba",
+        status: "in-progress",
+        image: "/images/stars/stars-3.webp",
+        isFake: true
+      },
+      {
+        id: 62,
+        title: "Видео връзка с внуците",
+        description: "Лесни видео разговори",
+        slug: "video-vnuci",
+        status: "active",
+        image: "/images/stars/stars-9.jpg",
+        isFake: true
+      },
+      {
+        id: 63,
+        title: "Онлайн пенсионерски клуб",
+        description: "Виртуални срещи и игри",
+        slug: "online-klub",
+        status: "active",
+        image: "/images/stars/stars-6.webp",
+        isFake: true
+      }
     ],
     stories: []
   }

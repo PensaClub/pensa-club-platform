@@ -1,0 +1,673 @@
+/* ======================= */
+/* TEAM SECTION */
+/* ======================= */
+
+/* Team Section Container */
+.project-team-section-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    animation: projectTeamFadeInUp 0.5s ease;
+}
+
+@keyframes projectTeamFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Team Section Header - само тук зелено */
+.project-team-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2.5rem;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-bottom: 2px solid #34d399;
+    border-radius: 16px 16px 0 0;
+    margin: -2.5rem -2.5rem 2rem -2.5rem;
+}
+
+.project-team-section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #065f46;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Team Help - минимално зелено */
+.project-team-help {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    margin-bottom: 3rem;
+}
+
+.project-team-help p {
+    margin: 0;
+    color: #64748b;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+/* Empty State */
+.project-team-empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    background: #fafafa;
+    border-radius: 20px;
+    border: 3px dashed #d1d5db;
+    margin: 2rem 0;
+}
+
+.project-team-empty-content {
+    text-align: center;
+    max-width: 500px;
+    padding: 2rem;
+}
+
+.project-team-empty-icon {
+    font-size: 4rem;
+    color: #10b981;
+    /* само иконата зелена */
+    margin-bottom: 1.5rem;
+}
+
+.project-team-empty-content h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #374151;
+    margin: 0 0 1rem 0;
+}
+
+.project-team-empty-content p {
+    font-size: 1.1rem;
+    color: #6b7280;
+    margin: 0 0 2rem 0;
+    line-height: 1.6;
+}
+
+/* Team Members List */
+.project-team-members-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+/* Team Member Card - неутрални цветове */
+.project-team-member-card {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.project-team-member-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #10b981 0%, #059669 50%, #047857 100%);
+    /* само accent line */
+}
+
+.project-team-member-card:hover {
+    transform: translateY(-3px);
+    border-color: #10b981;
+    /* само border при hover */
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+}
+
+/* Team Member Header */
+.project-team-member-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem 1rem 2rem;
+    background: #f8fafc;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.project-team-member-info h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.project-team-member-role {
+    display: flex;
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.95rem;
+    gap: 0.5rem;
+    align-items: baseline;
+
+}
+
+.project-team-member-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.project-team-remove-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #dc2626;
+    border: 2px solid #fca5a5;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-team-remove-btn:hover {
+    background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+/* Team Member Content */
+.project-team-member-content {
+    padding: 2rem;
+}
+
+.project-team-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.project-team-form-group:last-child {
+    margin-bottom: 0;
+}
+
+.project-team-form-group label {
+    display: flex;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.project-team-form-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: white;
+    color: #374151;
+    transition: all 0.3s ease;
+}
+
+.project-team-form-input:focus {
+    outline: none;
+    border-color: #10b981;
+    /* само focus зелен */
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.project-team-form-input.error {
+    border-color: #ef4444;
+}
+
+.project-team-form-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.project-team-form-input::placeholder {
+    color: #9ca3af;
+}
+
+/* Team Image Upload */
+.project-team-image-upload {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.project-team-image-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #e2e8f0;
+    margin: 0 auto 1rem auto;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    /* 🆕 clickable */
+}
+
+.project-team-image-preview:hover {
+    border-color: #10b981;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+}
+
+.project-team-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project-team-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 2rem;
+}
+
+.project-team-image-upload-btn {
+    display: flex;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    /* само бутона зелен */
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.project-team-image-upload-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Team Field Help */
+.project-team-field-help {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+}
+
+/* Team Error Messages */
+.project-team-error-message {
+    font-size: 0.875rem;
+    color: #ef4444;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.project-team-error-indicator {
+    color: #ef4444;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+/* Team Form Buttons */
+.project-team-form-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: inherit;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.project-team-form-btn.primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+.project-team-form-btn.primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
+.project-team-form-btn.secondary {
+    background: #f8fafc;
+    color: #374151;
+    border: 2px solid #e2e8f0;
+}
+
+.project-team-form-btn.secondary:hover:not(:disabled) {
+    background: #f1f5f9;
+    border-color: #10b981;
+    transform: translateY(-1px);
+}
+
+/* Team Summary - само accent зелено */
+.project-team-summary {
+    background: #f8fafc;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 2px solid #e2e8f0;
+    margin-top: 3rem;
+}
+
+.project-team-summary h4 {
+    margin: 0 0 1.5rem 0;
+    color: #1e293b;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.project-team-summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.project-team-stat {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.project-team-stat:hover {
+    border-color: #10b981;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1);
+}
+
+.project-team-stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.project-team-stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #10b981;
+    /* само стойностите зелени */
+}
+
+/* Contact Info Display */
+.project-team-contact-info {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border: 1px solid #e2e8f0;
+}
+
+.project-team-contact-info h5 {
+    margin: 0 0 0.75rem 0;
+    color: #374151;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.project-team-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.project-team-contact-item:last-child {
+    margin-bottom: 0;
+}
+
+.project-team-contact-icon {
+    color: #10b981;
+    /* само иконите зелени */
+    width: 16px;
+}
+
+/* Image Overlay за remove button */
+.project-team-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+}
+
+.project-team-image-preview:hover .project-team-image-overlay {
+    opacity: 1;
+}
+
+.project-team-image-remove-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.project-team-image-remove-btn:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transform: scale(1.1);
+}
+
+/* ======================= */
+/* RESPONSIVE DESIGN */
+/* ======================= */
+
+@media (max-width: 768px) {
+    .project-team-members-list {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .project-team-member-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .project-team-member-actions {
+        justify-content: center;
+    }
+
+    .project-team-summary-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .project-team-section-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-team-section-card {
+        padding: 1.5rem;
+    }
+
+    .project-team-section-header {
+        padding: 1.5rem;
+        margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    }
+
+    .project-team-member-content {
+        padding: 1.5rem;
+    }
+
+    .project-team-summary-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .project-team-form-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .project-team-member-info h4 {
+        font-size: 0.9rem;
+        margin: 0 0 0.7rem 0;
+        align-items: baseline;
+
+    }
+.project-team-remove-btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+    }
+    input[type="text"],
+    input[type="url"],
+    textarea {
+        font-size: 0.8rem;
+        width: 100%;
+    }
+    .project-team-form-input {
+        font-size: 0.7rem;
+    }
+    .project-team-form-group label {
+        /* font-size: 0.8rem; */
+        gap: 0.5rem;
+    }
+    .project-team-contact-item:last-child {
+        margin-bottom: 0.5rem;
+        font-size: 0.7rem;
+    }
+    .project-team-stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* ======================= */
+/* ANIMATIONS */
+/* ======================= */
+
+.project-team-member-card {
+    animation: projectTeamMemberFadeIn 0.5s ease forwards;
+}
+
+@keyframes projectTeamMemberFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.project-team-member-card.removing {
+    animation: projectTeamMemberFadeOut 0.3s ease forwards;
+}
+
+@keyframes projectTeamMemberFadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+/* ======================= */
+/* LOADING STATES */
+/* ======================= */
+
+.project-team-member-card.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.project-team-image-uploading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    backdrop-filter: blur(4px);
+}
+
+.project-team-uploading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #e2e8f0;
+    border-top: 3px solid #10b981;
+    border-radius: 50%;
+    animation: projectTeamSpin 1s linear infinite;
+}
+
+@keyframes projectTeamSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

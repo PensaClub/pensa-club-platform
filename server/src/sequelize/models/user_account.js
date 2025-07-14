@@ -22,6 +22,28 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'refreshTokens',
             });
 
+            // Initiatives created by user
+            user_account.hasMany(models.initiative, {
+                foreignKey: 'creatorId',
+                sourceKey: 'id',
+                as: 'initiatives',
+            });
+
+            // Projects created by user
+            user_account.hasMany(models.project, {
+                foreignKey: 'creatorId',
+                sourceKey: 'id',
+                as: 'projects',
+            });
+
+            // Publications created by user
+            user_account.hasMany(models.publication, {
+                foreignKey: 'creatorId',
+                sourceKey: 'id',
+                as: 'publications',
+            });
+
+            // Bookmarked initiatives
             user_account.belongsToMany(models.initiative, {
                 through: 'initiative_bookmarks',
                 as: 'bookmarkedInitiatives',
@@ -29,11 +51,28 @@ module.exports = (sequelize, DataTypes) => {
                 otherKey: 'initiative_id',
             });
 
+            // Bookmarked projects
             user_account.belongsToMany(models.project, {
                 through: 'project_bookmarks',
                 as: 'bookmarkedProjects',
                 foreignKey: 'user_id',
                 otherKey: 'project_id',
+            });
+
+            // Bookmarked publications
+            user_account.belongsToMany(models.publication, {
+                through: 'publication_bookmarks',
+                as: 'bookmarkedPublications',
+                foreignKey: 'user_id',
+                otherKey: 'publication_id',
+            });
+
+            // Liked publications
+            user_account.belongsToMany(models.publication, {
+                through: 'publication_likes',
+                as: 'likedPublications',
+                foreignKey: 'user_id',
+                otherKey: 'publication_id',
             });
 
             user_account.hasMany(models.project_application, {

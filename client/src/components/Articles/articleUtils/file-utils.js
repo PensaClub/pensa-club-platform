@@ -62,7 +62,9 @@ export const allowedDocumentTypes = [
 
 // Качване на документ без компресиране
 export const uploadDocumentWithProgress = (file, path, onProgress) => {
-  const fileRef = ref(firebaseStorage, `${path}/${v4()}`);
+  // Просто използвай оригиналното име
+  const fileName = file.name;
+  const fileRef = ref(firebaseStorage, `${path}/${fileName}`);
   const uploadTask = uploadBytesResumable(fileRef, file);
   
   return new Promise((resolve, reject) => {

@@ -163,6 +163,27 @@ const BaseInitiativeSchema = z
         commentsEnabled: z.boolean().nullable().optional(),
         isDraft: z.boolean().nullable().optional(),
         gallery: z.array(z.any()).nullable().optional(),
+        projects: z
+            .array(
+                z.object({
+                    titleSlug: z.string().min(1, 'Project title slug is required'),
+                    slug: z.string().min(1, 'Project slug is required'),
+                    title: z.string().min(1, 'Project title is required'),
+                    description: z.string().min(1, 'Project description is required'),
+                    status: z.enum(['in-progress', 'active', 'planned', 'completed']).nullable().optional(),
+                    image: z.string().url('Invalid image URL').nullable().optional(),
+                    link: z.string().nullable().optional(),
+                    coordinates: z
+                        .object({
+                            lat: z.number().nullable().optional(),
+                            lng: z.number().nullable().optional(),
+                        })
+                        .nullable()
+                        .optional(),
+                })
+            )
+            .nullable()
+            .optional(),
 
         mainImage: MainImageSchema,
 

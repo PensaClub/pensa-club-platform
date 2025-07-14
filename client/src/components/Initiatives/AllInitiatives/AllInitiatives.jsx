@@ -1,5 +1,5 @@
 // components/AdminDashboard/AllInitiatives/AllInitiatives.js
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { InitiativesSearchAdmin } from './InitiativesSearchAdmin/InitiativesSearchAdmin';
 import './allInitiatives.css';
 import { useTranslation } from 'react-i18next';
