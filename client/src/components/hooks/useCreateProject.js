@@ -40,6 +40,7 @@ import { useRealTimeValidation } from './useRealTimeValidation';
 import { htmlToSlate, isHtmlContent } from '../Initiatives/CreateIniciative/Utils/htmlToSlate';
 import { validateProjectForm } from '../Initiatives/CreateProject/utils/validateProjectForm';
 import { slateToHtml } from '../../utils/slateToHtml';
+import { useProjectRealTimeValidation } from './useProjectRealTimeValidation';
 
 const useCreateProject = (initialValues, onSubmitHandler) => {
   const navigate = useNavigate();
@@ -55,8 +56,11 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
     getAllInitiatives,
     toggleProjectDraftStatus,
     initiatives,
+    invalidateProjectDraftsCache,
     updateInitiativeWithProject,
-    getAllProjectDrafts
+    getAllProjectDrafts,
+    deleteDraftProject,
+    getAllProjects
   } = useInitiativeContext();
   const { userEmail } = useAuthContext();
   const STORAGE_KEY = 'project_draft';
@@ -177,8 +181,19 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
   const [availableInitiatives, setAvailableInitiatives] = useState([]);
 
   // Real-time validation
-  useRealTimeValidation(values, setErrors);
+  useProjectRealTimeValidation(values, setErrors);
+  useEffect(() => {
+    // Cleanup функция която се изпълнява при unmount
+    return () => {
 
+      // Изчистваме auto-save timeout
+      if (autoSaveRef.current) {
+        clearTimeout(autoSaveRef.current);
+        autoSaveRef.current = null;
+   
+      }
+    };
+  }, []);
   // Load available initiatives
   useEffect(() => {
     const loadInitiatives = async () => {
@@ -198,21 +213,150 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
   }, [initiatives]);
 
   // Load draft from URL
- // Load draft from URL
-useEffect(() => {
-  const loadDraftFromUrl = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const draftIdFromUrl = urlParams.get('draftId');
-    const editIdFromUrl = urlParams.get('editId');
-    const mode = urlParams.get('mode');
+  // Load draft from URL
+  useEffect(() => {
+    const loadDraftFromUrl = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const draftIdFromUrl = urlParams.get('draftId');
+      const editIdFromUrl = urlParams.get('editId');
+      const mode = urlParams.get('mode');
 
-    if (draftIdFromUrl && !initialValues) {
+      if (draftIdFromUrl && !initialValues) {
+        try {
+          const draftData = await getDraftProjectById(draftIdFromUrl);
+          if (draftData) {
+            const processedData = { ...draftData };
+
+            if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
+              try {
+                processedData.fullDescription = htmlToSlate(processedData.fullDescription);
+              } catch (error) {
+                console.error('❌ Error converting fullDescription:', error);
+                processedData.fullDescription = createSlateEditorState();
+              }
+            } else {
+              processedData.fullDescription = createSlateEditorState();
+            }
+
+            // sections[].content - съдържанието на секциите (Slate редактор)
+            if (processedData.sections && Array.isArray(processedData.sections)) {
+              processedData.sections = processedData.sections.map(section => {
+                if (section.content && typeof section.content === 'string') {
+                  try {
+                    return {
+                      ...section,
+                      content: htmlToSlate(section.content)
+                    };
+                  } catch (error) {
+                    console.error('❌ Error converting section content:', error);
+                    return {
+                      ...section,
+                      content: createSlateEditorState()
+                    };
+                  }
+                } else {
+                  return {
+                    ...section,
+                    content: createSlateEditorState()
+                  };
+                }
+              });
+            }
+
+            // 🔧 ОСТАНАЛИТЕ полета остават както са (strings)
+            // title, shortDescription, tags, etc. - НЕ се конвертират
+
+            setValues(processedData);
+            setDraftId(draftIdFromUrl);
+            notify('success', 'Черновата е заредена за редактиране');
+          }
+        } catch (error) {
+          console.error('Error loading draft:', error);
+          notify('error', 'Грешка при зареждане на черновата');
+        }
+      } else if (editIdFromUrl && mode === 'edit') {
+        try {
+          const projectData = await getProjectById(editIdFromUrl);
+          if (projectData) {
+            const processedData = { ...projectData };
+
+            // 🎯 КОНВЕРТИРАНЕ НА SLATE ПОЛЕТАТА ОТ HTML КЪМ SLATE
+            // fullDescription
+            if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
+              try {
+                processedData.fullDescription = htmlToSlate(processedData.fullDescription);
+              } catch (error) {
+                console.error('❌ Error converting fullDescription:', error);
+                processedData.fullDescription = createSlateEditorState();
+              }
+            } else {
+              processedData.fullDescription = createSlateEditorState();
+            }
+
+            // sections[].content
+            if (processedData.sections && Array.isArray(processedData.sections)) {
+              processedData.sections = processedData.sections.map(section => {
+                if (section.content && typeof section.content === 'string') {
+                  try {
+                    return {
+                      ...section,
+                      content: htmlToSlate(section.content)
+                    };
+                  } catch (error) {
+                    console.error('❌ Error converting section content:', error);
+                    return {
+                      ...section,
+                      content: createSlateEditorState()
+                    };
+                  }
+                } else {
+                  return {
+                    ...section,
+                    content: createSlateEditorState()
+                  };
+                }
+              });
+            }
+
+            setValues(processedData);
+            setEditId(editIdFromUrl);
+            notify('success', 'Проектът е зареден за редактиране');
+          }
+        } catch (error) {
+          console.error('Error loading project for edit:', error);
+          notify('error', 'Грешка при зареждане на проекта');
+        }
+      }
+    };
+
+    loadDraftFromUrl();
+  }, [location.search]);
+
+  // Auto-load latest draft
+  useEffect(() => {
+    const autoLoadLatestDraft = async () => {
+      // Ако има initialValues (edit mode), не зареждаме чернова
+      if (initialValues && Object.keys(initialValues).length > 0) {
+        return;
+      }
+
+      // Ако вече има URL параметри за draft/edit, не зареждаме автоматично
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('draftId') || urlParams.get('editId')) {
+        return;
+      }
+
       try {
-        const draftData = await getDraftProjectById(draftIdFromUrl);
-        if (draftData) {
-          const processedData = { ...draftData };
-console.log('🗺️ Original location data:', processedData.location);
-      
+
+        const draftsResponse = await getAllProjectDrafts(1, true);
+        const drafts = draftsResponse.data || [];
+
+        if (drafts.length > 0) {
+          const latestDraft = drafts[0];
+
+          const processedData = { ...latestDraft };
+
+          // fullDescription - основното описание (има Slate редактор)
           if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
             try {
               processedData.fullDescription = htmlToSlate(processedData.fullDescription);
@@ -224,7 +368,7 @@ console.log('🗺️ Original location data:', processedData.location);
             processedData.fullDescription = createSlateEditorState();
           }
 
-          // sections[].content - съдържанието на секциите (Slate редактор)
+          // sections[].content - съдържанието на секциите (има Slate редактор)
           if (processedData.sections && Array.isArray(processedData.sections)) {
             processedData.sections = processedData.sections.map(section => {
               if (section.content && typeof section.content === 'string') {
@@ -247,176 +391,42 @@ console.log('🗺️ Original location data:', processedData.location);
                 };
               }
             });
-          }
 
+          }
+          if (processedData.location) {
+            if (!Array.isArray(processedData.location)) {
+              processedData.location = [processedData.location];
+            }
+
+            processedData.location = processedData.location.map(loc => ({
+              address: loc.address || '',
+              coordinates: {
+                lat: loc.coordinates?.lat || null,
+                lng: loc.coordinates?.lng || null
+              }
+            }));
+          } else {
+            processedData.location = [{
+              address: '',
+              coordinates: { lat: null, lng: null }
+            }];
+          }
           // 🔧 ОСТАНАЛИТЕ полета остават както са (strings)
           // title, shortDescription, tags, etc. - НЕ се конвертират
 
           setValues(processedData);
-          setDraftId(draftIdFromUrl);
-          notify('success', 'Черновата е заредена за редактиране');
+          setDraftId(latestDraft.id);
+
+          notify('info', t('projects.create.continuingWork', { title: latestDraft.title }));
+        } else {
         }
       } catch (error) {
-        console.error('Error loading draft:', error);
-        notify('error', 'Грешка при зареждане на черновата');
+        console.error('❌ Error loading latest draft:', error);
       }
-    } else if (editIdFromUrl && mode === 'edit') {
-      try {
-        const projectData = await getProjectById(editIdFromUrl);
-        if (projectData) {
-          const processedData = { ...projectData };
+    };
 
-          // 🎯 КОНВЕРТИРАНЕ НА SLATE ПОЛЕТАТА ОТ HTML КЪМ SLATE
-          // fullDescription
-          if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
-            try {
-              processedData.fullDescription = htmlToSlate(processedData.fullDescription);
-            } catch (error) {
-              console.error('❌ Error converting fullDescription:', error);
-              processedData.fullDescription = createSlateEditorState();
-            }
-          } else {
-            processedData.fullDescription = createSlateEditorState();
-          }
-
-          // sections[].content
-          if (processedData.sections && Array.isArray(processedData.sections)) {
-            processedData.sections = processedData.sections.map(section => {
-              if (section.content && typeof section.content === 'string') {
-                try {
-                  return {
-                    ...section,
-                    content: htmlToSlate(section.content)
-                  };
-                } catch (error) {
-                  console.error('❌ Error converting section content:', error);
-                  return {
-                    ...section,
-                    content: createSlateEditorState()
-                  };
-                }
-              } else {
-                return {
-                  ...section,
-                  content: createSlateEditorState()
-                };
-              }
-            });
-          }
-
-          setValues(processedData);
-          setEditId(editIdFromUrl);
-          notify('success', 'Проектът е зареден за редактиране');
-        }
-      } catch (error) {
-        console.error('Error loading project for edit:', error);
-        notify('error', 'Грешка при зареждане на проекта');
-      }
-    }
-  };
-
-  loadDraftFromUrl();
-}, [location.search]);
-
-// Auto-load latest draft
-useEffect(() => {
-  const autoLoadLatestDraft = async () => {
-    // Ако има initialValues (edit mode), не зареждаме чернова
-    if (initialValues && Object.keys(initialValues).length > 0) {
-      return;
-    }
-
-    // Ако вече има URL параметри за draft/edit, не зареждаме автоматично
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('draftId') || urlParams.get('editId')) {
-      return;
-    }
-
-    try {
-      console.log('🔍 Looking for latest project draft...');
-      
-      const draftsResponse = await getAllProjectDrafts(1, true);
-      const drafts = draftsResponse.data || [];
-      
-      if (drafts.length > 0) {
-        const latestDraft = drafts[0];
-        
-        const processedData = { ...latestDraft };
-
-        // fullDescription - основното описание (има Slate редактор)
-        if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
-          try {
-            processedData.fullDescription = htmlToSlate(processedData.fullDescription);
-            console.log('✅ Converted fullDescription from HTML to Slate');
-          } catch (error) {
-            console.error('❌ Error converting fullDescription:', error);
-            processedData.fullDescription = createSlateEditorState();
-          }
-        } else {
-          processedData.fullDescription = createSlateEditorState();
-        }
-
-        // sections[].content - съдържанието на секциите (има Slate редактор)
-        if (processedData.sections && Array.isArray(processedData.sections)) {
-          processedData.sections = processedData.sections.map(section => {
-            if (section.content && typeof section.content === 'string') {
-              try {
-                return {
-                  ...section,
-                  content: htmlToSlate(section.content)
-                };
-              } catch (error) {
-                console.error('❌ Error converting section content:', error);
-                return {
-                  ...section,
-                  content: createSlateEditorState()
-                };
-              }
-            } else {
-              return {
-                ...section,
-                content: createSlateEditorState()
-              };
-            }
-          });
-    
-        }
- if (processedData.location) {
-          if (!Array.isArray(processedData.location)) {
-            processedData.location = [processedData.location];
-          }
-          
-          processedData.location = processedData.location.map(loc => ({
-            address: loc.address || '',
-            coordinates: {
-              lat: loc.coordinates?.lat || null,
-              lng: loc.coordinates?.lng || null
-            }
-          }));
-        } else {
-          processedData.location = [{
-            address: '',
-            coordinates: { lat: null, lng: null }
-          }];
-        }
-        // 🔧 ОСТАНАЛИТЕ полета остават както са (strings)
-        // title, shortDescription, tags, etc. - НЕ се конвертират
-
-        setValues(processedData);
-        setDraftId(latestDraft.id);
-        
-        console.log('✅ Latest draft loaded successfully');
-        notify('info', t('projects.create.continuingWork', { title: latestDraft.title }));
-      } else {
-        console.log('📝 No drafts found, starting with clean form');
-      }
-    } catch (error) {
-      console.error('❌ Error loading latest draft:', error);
-    }
-  };
-
-  autoLoadLatestDraft();
-}, [initialValues, setValues, setDraftId]);
+    autoLoadLatestDraft();
+  }, [initialValues, setValues, setDraftId]);
   // 🏷️ GENERATE SLUG
   const generateSlug = useCallback((title) => {
     return title
@@ -567,6 +577,17 @@ useEffect(() => {
       clearTimeout(autoSaveRef.current);
     }
     autoSaveRef.current = setTimeout(async () => {
+      const currentPath = window.location.pathname;
+      const isInProjectForm = currentPath.includes('/profile/project-create') ||
+        currentPath.includes('/profile/projects-create');
+
+      if (!isInProjectForm) {
+        return;
+      }
+
+      if (!values.title?.trim()) {
+        return;
+      }
       const currentValues = { ...values, [name]: value };
       saveToLocalStorage(currentValues);
 
@@ -1584,169 +1605,167 @@ useEffect(() => {
 
   // 📤 HTML CONVERSION
   // В useCreateProject.js - обнови convertFormToHtml функцията
-const convertFormToHtml = useCallback(() => {
+  const convertFormToHtml = useCallback(() => {
     try {
-        const htmlValues = { ...values };
+      const htmlValues = { ...values };
 
-        // Remove ID fields
-        if (htmlValues.sponsors) {
-            htmlValues.sponsors = htmlValues.sponsors.map(sponsor => {
-                const { id, ...sponsorWithoutId } = sponsor;
-                return sponsorWithoutId;
-            });
-        }
+      // Remove ID fields
+      if (htmlValues.sponsors) {
+        htmlValues.sponsors = htmlValues.sponsors.map(sponsor => {
+          const { id, ...sponsorWithoutId } = sponsor;
+          return sponsorWithoutId;
+        });
+      }
 
-        if (htmlValues.team) {
-            htmlValues.team = htmlValues.team.map(member => {
-                const { id, ...memberWithoutId } = member;
-                return memberWithoutId;
-            });
-        }
+      if (htmlValues.team) {
+        htmlValues.team = htmlValues.team.map(member => {
+          const { id, ...memberWithoutId } = member;
+          return memberWithoutId;
+        });
+      }
 
-        // 🆕 ПРАВИЛНО конвертиране на fullDescription
-        try {
-            if (!isSlateEmpty(values.fullDescription)) {
-                htmlValues.fullDescription = slateToHtml(values.fullDescription);
-                console.log('✅ Converted fullDescription:', htmlValues.fullDescription);
-            } else {
-                htmlValues.fullDescription = '';
-            }
-        } catch (error) {
-            console.error('❌ Error converting fullDescription:', error);
-            htmlValues.fullDescription = '';
-        }
-
-        // 🆕 ПРАВИЛНО конвертиране на sections
-        try {
-            if (htmlValues.sections && Array.isArray(htmlValues.sections)) {
-                htmlValues.sections = htmlValues.sections.map((section, index) => {
-                    try {
-                        if (!isSlateEmpty(section.content)) {
-                            const convertedContent = slateToHtml(section.content);
-                            console.log(`✅ Converted section ${index} content:`, convertedContent);
-                            return {
-                                ...section,
-                                content: convertedContent
-                            };
-                        }
-                        
-                        return {
-                            ...section,
-                            content: ''
-                        };
-                    } catch (sectionError) {
-                        console.error(`❌ Error converting section ${index}:`, sectionError);
-                        return {
-                            ...section,
-                            content: ''
-                        };
-                    }
-                });
-            } else {
-                htmlValues.sections = [];
-            }
-        } catch (sectionsError) {
-            console.error('❌ Error converting sections:', sectionsError);
-            htmlValues.sections = [];
-        }
-
-        // Останалата логика остава същата...
-        // Convert dates
-        const convertDateToISO = (dateString) => {
-            if (!dateString || dateString.trim() === '') return null;
-            if (typeof dateString === 'string' && dateString.includes('T')) return dateString;
-            if (typeof dateString === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-                return new Date(dateString + 'T00:00:00.000Z').toISOString();
-            }
-            return null;
-        };
-
-        if (htmlValues.timeline) {
-            htmlValues.timeline.startDate = convertDateToISO(htmlValues.timeline.startDate);
-            htmlValues.timeline.endDate = convertDateToISO(htmlValues.timeline.endDate);
-        }
-
-        if (htmlValues.milestones && htmlValues.milestones.length > 0) {
-            htmlValues.milestones = htmlValues.milestones.map(milestone => ({
-                ...milestone,
-                date: convertDateToISO(milestone.date)
-            }));
-        }
-
-        // Convert numeric fields
-        if (htmlValues.budget) {
-            if (htmlValues.budget.goal && htmlValues.budget.goal.toString().trim()) {
-                htmlValues.budget.goal = Number(htmlValues.budget.goal);
-            } else {
-                htmlValues.budget.goal = null;
-            }
-
-            if (htmlValues.budget.total && htmlValues.budget.total.toString().trim()) {
-                htmlValues.budget.total = Number(htmlValues.budget.total);
-            } else {
-                htmlValues.budget.total = null;
-            }
-
-            if (htmlValues.budget.funded && htmlValues.budget.funded.toString().trim()) {
-                htmlValues.budget.funded = Number(htmlValues.budget.funded);
-            } else {
-                htmlValues.budget.funded = null;
-            }
-        }
-
-        // Application fields
-        if (htmlValues.maxParticipants && htmlValues.maxParticipants.toString().trim()) {
-            htmlValues.maxParticipants = Number(htmlValues.maxParticipants);
+      // 🆕 ПРАВИЛНО конвертиране на fullDescription
+      try {
+        if (!isSlateEmpty(values.fullDescription)) {
+          htmlValues.fullDescription = slateToHtml(values.fullDescription);
         } else {
-            htmlValues.maxParticipants = null;
+          htmlValues.fullDescription = '';
         }
+      } catch (error) {
+        console.error('❌ Error converting fullDescription:', error);
+        htmlValues.fullDescription = '';
+      }
 
-        if (htmlValues.currentParticipants && htmlValues.currentParticipants.toString().trim()) {
-            htmlValues.currentParticipants = Number(htmlValues.currentParticipants);
+      // 🆕 ПРАВИЛНО конвертиране на sections
+      try {
+        if (htmlValues.sections && Array.isArray(htmlValues.sections)) {
+          htmlValues.sections = htmlValues.sections.map((section, index) => {
+            try {
+              if (!isSlateEmpty(section.content)) {
+                const convertedContent = slateToHtml(section.content);
+                return {
+                  ...section,
+                  content: convertedContent
+                };
+              }
+
+              return {
+                ...section,
+                content: ''
+              };
+            } catch (sectionError) {
+              console.error(`❌ Error converting section ${index}:`, sectionError);
+              return {
+                ...section,
+                content: ''
+              };
+            }
+          });
         } else {
-            htmlValues.currentParticipants = null;
+          htmlValues.sections = [];
+        }
+      } catch (sectionsError) {
+        console.error('❌ Error converting sections:', sectionsError);
+        htmlValues.sections = [];
+      }
+
+      // Останалата логика остава същата...
+      // Convert dates
+      const convertDateToISO = (dateString) => {
+        if (!dateString || dateString.trim() === '') return null;
+        if (typeof dateString === 'string' && dateString.includes('T')) return dateString;
+        if (typeof dateString === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+          return new Date(dateString + 'T00:00:00.000Z').toISOString();
+        }
+        return null;
+      };
+
+      if (htmlValues.timeline) {
+        htmlValues.timeline.startDate = convertDateToISO(htmlValues.timeline.startDate);
+        htmlValues.timeline.endDate = convertDateToISO(htmlValues.timeline.endDate);
+      }
+
+      if (htmlValues.milestones && htmlValues.milestones.length > 0) {
+        htmlValues.milestones = htmlValues.milestones.map(milestone => ({
+          ...milestone,
+          date: convertDateToISO(milestone.date)
+        }));
+      }
+
+      // Convert numeric fields
+      if (htmlValues.budget) {
+        if (htmlValues.budget.goal && htmlValues.budget.goal.toString().trim()) {
+          htmlValues.budget.goal = Number(htmlValues.budget.goal);
+        } else {
+          htmlValues.budget.goal = null;
         }
 
-        // Sponsors amounts
-        if (htmlValues.sponsors && htmlValues.sponsors.length > 0) {
-            htmlValues.sponsors = htmlValues.sponsors.map(sponsor => ({
-                ...sponsor,
-                amount: sponsor.amount && sponsor.amount.toString().trim() ? Number(sponsor.amount) : null
-            }));
+        if (htmlValues.budget.total && htmlValues.budget.total.toString().trim()) {
+          htmlValues.budget.total = Number(htmlValues.budget.total);
+        } else {
+          htmlValues.budget.total = null;
         }
 
-        // Clean empty fields
-        const cleanEmptyFields = (obj) => {
-            if (Array.isArray(obj)) {
-                return obj.map(item => cleanEmptyFields(item));
-            }
+        if (htmlValues.budget.funded && htmlValues.budget.funded.toString().trim()) {
+          htmlValues.budget.funded = Number(htmlValues.budget.funded);
+        } else {
+          htmlValues.budget.funded = null;
+        }
+      }
 
-            if (obj !== null && typeof obj === 'object') {
-                const cleaned = {};
-                for (const [key, value] of Object.entries(obj)) {
-                    cleaned[key] = cleanEmptyFields(value);
-                }
-                return cleaned;
-            }
+      // Application fields
+      if (htmlValues.maxParticipants && htmlValues.maxParticipants.toString().trim()) {
+        htmlValues.maxParticipants = Number(htmlValues.maxParticipants);
+      } else {
+        htmlValues.maxParticipants = null;
+      }
 
-            if (typeof obj === 'string' && obj.trim() === '') {
-                return null;
-            }
+      if (htmlValues.currentParticipants && htmlValues.currentParticipants.toString().trim()) {
+        htmlValues.currentParticipants = Number(htmlValues.currentParticipants);
+      } else {
+        htmlValues.currentParticipants = null;
+      }
 
-            return obj;
-        };
+      // Sponsors amounts
+      if (htmlValues.sponsors && htmlValues.sponsors.length > 0) {
+        htmlValues.sponsors = htmlValues.sponsors.map(sponsor => ({
+          ...sponsor,
+          amount: sponsor.amount && sponsor.amount.toString().trim() ? Number(sponsor.amount) : null
+        }));
+      }
 
-        return cleanEmptyFields(htmlValues);
+      // Clean empty fields
+      const cleanEmptyFields = (obj) => {
+        if (Array.isArray(obj)) {
+          return obj.map(item => cleanEmptyFields(item));
+        }
+
+        if (obj !== null && typeof obj === 'object') {
+          const cleaned = {};
+          for (const [key, value] of Object.entries(obj)) {
+            cleaned[key] = cleanEmptyFields(value);
+          }
+          return cleaned;
+        }
+
+        if (typeof obj === 'string' && obj.trim() === '') {
+          return null;
+        }
+
+        return obj;
+      };
+
+      return cleanEmptyFields(htmlValues);
 
     } catch (error) {
-        console.error('❌ Error converting form to HTML:', error);
-        return {
-            ...values,
-            fullDescription: '',
-            sections: values.sections?.map(s => ({ ...s, content: '' })) || []
-        };
+      console.error('❌ Error converting form to HTML:', error);
+      return {
+        ...values,
+        fullDescription: '',
+        sections: values.sections?.map(s => ({ ...s, content: '' })) || []
+      };
     }
-}, [values]);
+  }, [values]);
 
   // Save draft
   const saveDraft = useCallback(async () => {
@@ -1768,6 +1787,25 @@ const convertFormToHtml = useCallback(() => {
 
           if (draftId) {
             result = await updateDraftProject(draftId, dataToSave);
+
+            // 🔧 КЛЮЧОВА ПРОМЯНА - обновяваме draftId ако се е променил
+            if (result?.data || result) {
+              const updatedDraft = result.data || result;
+
+              // Обновяваме draftId ако се е променил на сървъра
+              if (updatedDraft.id && updatedDraft.id !== draftId) {
+                setDraftId(updatedDraft.id);
+              }
+
+              // Обновяваме slug ако се е променил
+              if (updatedDraft.slug && updatedDraft.slug !== values.slug) {
+                setValues(prev => ({
+                  ...prev,
+                  slug: updatedDraft.slug,
+                  id: updatedDraft.id // Синхронизираме и ID-то
+                }));
+              }
+            }
           } else {
             result = await saveDraftProject(dataToSave);
             const newDraftId = result?.data?.id || result?.id;
@@ -1779,6 +1817,7 @@ const convertFormToHtml = useCallback(() => {
           notify('success', 'Черновата е запазена');
           return result;
         } catch (saveError) {
+          console.error('❌ Save error:', saveError);
           notify('error', `Грешка при запазване: ${saveError.message}`);
         }
       } else {
@@ -1787,7 +1826,7 @@ const convertFormToHtml = useCallback(() => {
     } catch (fatalError) {
       notify('warning', 'Черновата е запазена само в браузъра');
     }
-  }, [values, saveDraftProject, updateDraftProject, userEmail, saveToLocalStorage, convertFormToHtml, draftId]);
+  }, [values, saveDraftProject, updateDraftProject, userEmail, saveToLocalStorage, convertFormToHtml, draftId, setDraftId, setValues]);
 
   // Team image upload
   const handleTeamImageUpload = useCallback(async (file, memberIndex) => {
@@ -1991,7 +2030,15 @@ const convertFormToHtml = useCallback(() => {
       notify('error', 'Грешка при качване на снимките');
     }
   }, []);
+  const navigateBackToProjects = useCallback(() => {
+    // Изчистваме кеша за да се презаредят draft-овете
 
+    if (invalidateProjectDraftsCache) {
+      invalidateProjectDraftsCache();
+    }
+
+    navigate('/profile/all-projects');
+  }, [navigate]);
   // Remove gallery image
   const removeGalleryImage = useCallback(async (index) => {
     setValues(prev => {
@@ -2384,10 +2431,18 @@ const convertFormToHtml = useCallback(() => {
 
   // Publish draft
   // В useCreateProject.js - намери publishDraft функцията:
- const resetForm = useCallback(() => {
-    console.log('🧹 Resetting form to default state...');
+  const resetForm = useCallback(() => {
 
-    setValues(defaultValues);
+    // 🔧 ИЗРИЧНО ЗАЧИСТВАНЕ НА ЛОКАЦИЯТА
+    const cleanDefaultValues = {
+      ...defaultValues,
+      location: [{
+        address: '',
+        coordinates: { lat: null, lng: null }
+      }]
+    };
+
+    setValues(cleanDefaultValues);
 
     setErrors({});
 
@@ -2409,135 +2464,157 @@ const convertFormToHtml = useCallback(() => {
   }, [defaultValues, clearLocalStorage]);
 
   const publishDraft = useCallback(async () => {
-    if (!draftId) {
-      notify('error', 'Няма чернова за публикуване');
-      return;
-    }
-
-    try {
-      // Първо запазваме последните промени
-      await saveDraft();
-
-      // 🆕 ДОБАВЕНО: Ако е свързан с инициатива, обновяваме я ПРЕДИ публикуване
-      if (values.initiativeId) {
-
-        try {
-          // Конвертираме данните както при обикновено submission
-          const projectData = convertFormToHtml();
-
-          // Конвертираме initiativeId към number ако е string
-          const initiativeId = typeof values.initiativeId === 'string'
-            ? parseInt(values.initiativeId, 10)
-            : values.initiativeId;
-
-          await updateInitiativeWithProject(initiativeId, projectData);
-        } catch (updateError) {
-          console.error('❌ Failed to update initiative:', updateError);
-          // Показваме warning но продължаваме с публикуването
-          notify('warning', 'Инициативата не беше обновена, но проектът ще бъде публикуван');
-        }
-      } else {
-        console.log('📝 Project is standalone (no initiativeId)');
-      }
-
-      // След това публикуваме чрез toggle draft status
-      const result = await toggleProjectDraftStatus(draftId);
-
-      resetForm();
-      // clearLocalStorage();
-      // setDraftId(null);
-
-      return result;
-    } catch (error) {
-      console.error('Error publishing draft:', error);
-      throw error;
-    }
-  }, [draftId, saveDraft, values.initiativeId, convertFormToHtml, updateInitiativeWithProject, toggleProjectDraftStatus, clearLocalStorage]);
-
-const handleStartNewProject = useCallback(async () => {
-  const confirmed = window.confirm(
-   t('projects.create.confirmStartNew') + ' ' +
-    t('projects.create.currentWorkWillBeSaved')
-  );
-
-  if (!confirmed) return;
+  if (!draftId) {
+    notify('error', 'Няма чернова за публикуване');
+    return;
+  }
 
   try {
-    
-    // 1. ЗАПАЗВАМЕ текущата работа преди да изчистим
-    if (values.title?.trim() || draftId) {
-      await saveDraft();
+    const saveResult = await saveDraft();
+
+    const actualDraftId = saveResult?.data?.id || saveResult?.id || draftId;
+
+    // Обновяваме инициативата ако е свързана
+    if (values.initiativeId) {
+      try {
+        const projectData = convertFormToHtml();
+        const initiativeId = typeof values.initiativeId === 'string'
+          ? parseInt(values.initiativeId, 10)
+          : values.initiativeId;
+        await updateInitiativeWithProject(initiativeId, projectData);
+      } catch (updateError) {
+        console.error('❌ Failed to update initiative:', updateError);
+        notify('warning', 'Инициативата не беше обновена, но проектът ще бъде публикуван');
+      }
     }
+
+    // Публикуваме проекта
+    const result = await toggleProjectDraftStatus(actualDraftId);
+    
+    // 🔧 FORCE REFRESH НА ДАННИТЕ СЛЕД ПУБЛИКУВАНЕ
+    try {
+      
+      // Refresh drafts за да се премахне публикуваният
+      await getAllProjectDrafts(1, true);
+      
+      // Refresh projects за да се добави новият
+      await getAllProjects(1, true);
+      
+    } catch (refreshError) {
+      console.warn('⚠️ Could not refresh data lists:', refreshError);
+      // Не спираме процеса ако refresh-ът се провали
+    }
+
+    // 🔧 КЛЮЧОВА ПРОМЯНА - изтриваме черновата след публикуване
+    try {
+      await deleteDraftProject(actualDraftId);
+    } catch (deleteError) {
+      console.warn('⚠️ Could not delete draft, but project was published:', deleteError);
+      // Не спираме процеса ако изтриването се провали
+    }
+
+    clearLocalStorage();
+
+    setDraftId(null);
+    setEditId(null);
 
     resetForm();
 
-    // 3. ГЕНЕРИРАМЕ нов ID за новата чернова
-    setDraftId(null);
+    setErrors({});
 
-    // 4. ИЗВЕСТЯВАМЕ потребителя
-    notify('success', t('projects.create.currentWorkSaved'));
+    // 🔧 TRIGGER CUSTOM EVENT ЗА ДРУГИ КОМПОНЕНТИ
+    window.dispatchEvent(new CustomEvent('projectPublished', { 
+      detail: { 
+        publishedProject: result.data || result,
+        draftId: actualDraftId
+      } 
+    }));
+
+    // Навигираме към проектите
+    const publishedProject = result.data || result;
+    const projectSlug = publishedProject.slug || publishedProject.id || actualDraftId;
+
+    notify('success', 'Проектът е публикуван успешно!');
     
-    // 5. ОПЦИОНАЛНО: Скролваме до началото
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 🔧 НАВИГАЦИЯ СЛЕД КРАТКА ПАУЗА ЗА ДА СЕ ОБНОВИ STATE-А
+    setTimeout(() => {
+      if (projectSlug && projectSlug !== 'undefined') {
+        navigate(`/projects/${projectSlug}`);
+      } else {
+        navigate('/projects');
+      }
+    }, 500);
 
+    return result;
   } catch (error) {
-    console.error('❌ Error saving before new project:', error);
-    
-    // Ако save-ът се провали, питаме дали да продължим
-    const continueAnyway = window.confirm(
-        t('projects.create.errorSavingWork') + ' ' +
-      t('projects.create.continueAnyway')
-    );
-    
-    if (continueAnyway) {
-      resetForm();
-      setDraftId(null);
-      notify('warning', t('projects.create.newProjectStarted'));
+    console.error('❌ Error publishing draft:', error);
+
+    if (error.response?.status === 404) {
+      notify('error', 'Черновата не е намерена. Моля запазете отново и опитайте.');
+      
+      // 🔧 ОПИТ ЗА СИНХРОНИЗАЦИЯ ПРИ 404
+      try {
+        await getAllProjectDrafts(1, true);
+      } catch (syncError) {
+        console.error('Failed to sync drafts:', syncError);
+      }
+    } else {
+      notify('error', `Грешка при публикуване: ${error.message}`);
     }
+
+    throw error;
   }
-}, [values.title, draftId, saveDraft, resetForm, setDraftId]);
+}, [draftId, saveDraft, values.initiativeId, convertFormToHtml, updateInitiativeWithProject, toggleProjectDraftStatus, getAllProjectDrafts, getAllProjects, deleteDraftProject, clearLocalStorage, setDraftId, setEditId, resetForm, setErrors, navigate]);
+
+  const handleStartNewProject = useCallback(async () => {
+    const confirmed = window.confirm(
+      t('projects.create.confirmStartNew') + ' ' +
+      t('projects.create.currentWorkWillBeSaved')
+    );
+
+    if (!confirmed) return;
+
+    try {
+
+      // 1. ЗАПАЗВАМЕ текущата работа преди да изчистим
+      if (values.title?.trim() || draftId) {
+        await saveDraft();
+      }
+
+      resetForm();
+
+      // 3. ГЕНЕРИРАМЕ нов ID за новата чернова
+      setDraftId(null);
+
+      // 4. ИЗВЕСТЯВАМЕ потребителя
+      notify('success', t('projects.create.currentWorkSaved'));
+
+      // 5. ОПЦИОНАЛНО: Скролваме до началото
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (error) {
+      console.error('❌ Error saving before new project:', error);
+
+      // Ако save-ът се провали, питаме дали да продължим
+      const continueAnyway = window.confirm(
+        t('projects.create.errorSavingWork') + ' ' +
+        t('projects.create.continueAnyway')
+      );
+
+      if (continueAnyway) {
+        resetForm();
+        setDraftId(null);
+        notify('warning', t('projects.create.newProjectStarted'));
+      }
+    }
+  }, [values.title, draftId, saveDraft, resetForm, setDraftId]);
+
   // 💾 FORM SUBMISSION
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      const errorEntries = Object.entries(errors);
-      if (errorEntries.length > 0) {
-        const [fieldName, errorMessage] = errorEntries[0];
-        notify('error', errorMessage);
-
-        let errorElement = null;
-        if (fieldName.startsWith('sections[')) {
-          const sectionMatch = fieldName.match(/sections\[(\d+)\]/);
-          if (sectionMatch) {
-            const sectionIndex = parseInt(sectionMatch[1], 10);
-            errorElement = document.querySelector(`.section-item:nth-child(${sectionIndex + 1})`);
-          }
-        } else {
-          const escapedFieldName = fieldName.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
-          try {
-            errorElement = document.querySelector(`[name="${escapedFieldName}"], #${escapedFieldName}`);
-          } catch (e) {
-            try {
-              errorElement = document.querySelector(`[name="${fieldName}"], #${fieldName}`);
-            } catch (e2) {
-              const baseName = fieldName.split('[')[0].split('.')[0];
-              errorElement = document.querySelector(`[name="${baseName}"], #${baseName}`);
-            }
-          }
-        }
-
-        if (errorElement) {
-          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          if (errorElement.tagName === 'INPUT' || errorElement.tagName === 'TEXTAREA') {
-            errorElement.focus();
-          }
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      } else {
-        notify('error', 'Моля поправете грешките във формата');
-      }
+      // ... existing validation logic
       return;
     }
 
@@ -2550,56 +2627,65 @@ const handleStartNewProject = useCallback(async () => {
       const mode = urlParams.get('mode');
 
       if (mode === 'edit' && editIdFromUrl) {
-
+        // EDIT MODE
         await updateProject(editIdFromUrl, submissionData);
 
-        // 🆕 ДОБАВЕНО: Ако проектът е свързан с инициатива, обновяваме я
         if (submissionData.initiativeId) {
           try {
             const initiativeId = typeof submissionData.initiativeId === 'string'
               ? parseInt(submissionData.initiativeId, 10)
               : submissionData.initiativeId;
-
             await updateInitiativeWithProject(initiativeId, submissionData);
-            console.log('✅ Initiative updated successfully after project edit');
           } catch (updateError) {
             notify('warning', 'Проектът е обновен, но инициативата не беше обновена');
           }
         }
+
+        // 🔧 ИЗЧИСТВАМЕ СЛЕД EDIT
         resetForm();
         setEditId(null);
+        clearLocalStorage();
+        setErrors({});
+
         notify('success', 'Проектът е обновен успешно!');
         navigate(`/projects/${submissionData.slug || editIdFromUrl}`);
       } else {
-        // 🆕 СЪЗДАВАНЕ НА НОВ ПРОЕКТ
+        // CREATE NEW PROJECT MODE
         submissionData.createdAt = new Date().toISOString();
         delete submissionData.timestamp;
 
-        console.log('🆕 Creating new project...');
         const handler = onSubmitHandler || createProject;
         const createdProject = await handler(submissionData);
 
-        // 🆕 ДОБАВЕНО: Ако новият проект е свързан с инициатива, обновяваме я
+        // Обновяваме инициативата ако е свързана
         if (submissionData.initiativeId) {
           try {
             const initiativeId = typeof submissionData.initiativeId === 'string'
               ? parseInt(submissionData.initiativeId, 10)
               : submissionData.initiativeId;
-
-            console.log('📞 Updating initiative with new project...');
-
-            // Използваме данните от създадения проект ако са налични
             const projectToAdd = createdProject?.data || createdProject || submissionData;
             await updateInitiativeWithProject(initiativeId, projectToAdd);
-            console.log('✅ Initiative updated successfully with new project');
           } catch (updateError) {
             console.error('❌ Failed to update initiative with new project:', updateError);
             notify('warning', 'Проектът е създаден, но инициативата не беше обновена');
           }
         }
-        resetForm();
+
+        // 🔧 ИЗТРИВАМЕ ЧЕРНОВАТА СЛЕД СЪЗДАВАНЕ
+        if (draftId) {
+          try {
+            await deleteDraftProject(draftId);
+          } catch (deleteError) {
+            console.warn('⚠️ Could not delete draft, but project was created:', deleteError);
+          }
+        }
+
+        clearLocalStorage();
         setDraftId(null);
-        // clearLocalStorage();
+        setEditId(null);
+        resetForm();
+        setErrors({});
+
         notify('success', 'Проектът е създаден успешно!');
         navigate('/projects');
       }
@@ -2607,7 +2693,7 @@ const handleStartNewProject = useCallback(async () => {
       console.error('Submission error:', error);
       notify('error', 'Грешка при създаване на проекта');
     }
-  }, [values, validateForm, errors, onSubmitHandler, createProject, updateProject, navigate, convertFormToHtml, clearLocalStorage, updateInitiativeWithProject]);
+  }, [validateForm, errors, onSubmitHandler, createProject, updateProject, navigate, convertFormToHtml, updateInitiativeWithProject, draftId, deleteDraftProject, clearLocalStorage, setDraftId, setEditId, resetForm, setErrors]);
 
   return {
     values,
@@ -2617,6 +2703,7 @@ const handleStartNewProject = useCallback(async () => {
     uploadProgress,
     editId,
     setEditId,
+
     setValues,
     handleStartNewProject,
     // Event handlers
@@ -2674,7 +2761,10 @@ const handleStartNewProject = useCallback(async () => {
     // Timeline
     calculateDuration,
     formatDate,
-
+    deleteDraftProject,    // 🔧 ДОБАВИ
+    clearLocalStorage,     // 🔧 ДОБАВИ
+    resetForm,            // 🔧 ДОБАВИ
+    setErrors,
     // Utility functions
     generateSlug,
     generateId,

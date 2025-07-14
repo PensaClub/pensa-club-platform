@@ -1,0 +1,159 @@
+/* ProjectsSearchAdmin.css - Уникални класове */
+.projects-search-admin-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.projects-search-admin-search-section {
+  margin-bottom: 2rem;
+}
+
+.projects-search-admin-input-wrapper {
+  position: relative;
+  max-width: 500px;
+}
+
+.projects-search-admin-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+  z-index: 2;
+}
+
+.projects-search-admin-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+  color: #1e293b;
+}
+
+.projects-search-admin-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.projects-search-admin-input::placeholder {
+  color: #94a3b8;
+}
+
+.projects-search-admin-clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.projects-search-admin-clear-btn:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.projects-search-admin-clear-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.projects-search-admin-filters-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.projects-search-admin-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.projects-search-admin-filter-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.projects-search-admin-filter-select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.projects-search-admin-filter-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.projects-search-admin-filter-select:hover {
+  border-color: #cbd5e1;
+}
+
+.projects-search-admin-results-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.projects-search-admin-results-count {
+  font-size: 0.9375rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .projects-search-admin-container {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .projects-search-admin-filters-section {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .projects-search-admin-input-wrapper {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .projects-search-admin-container {
+    padding: 1.25rem;
+  }
+
+  .projects-search-admin-results-summary {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+}

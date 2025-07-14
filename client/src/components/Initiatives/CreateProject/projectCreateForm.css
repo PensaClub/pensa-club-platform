@@ -1172,7 +1172,15 @@
 .project-gap-3 {
     gap: 1.5rem;
 }
+.project-floating-btn.update {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+}
 
+.project-floating-btn.update:hover {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  transform: translateY(-2px);
+}
 /* ======================= */
 /* 📱 RESPONSIVE DESIGN */
 /* ======================= */

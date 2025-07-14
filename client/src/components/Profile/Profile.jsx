@@ -59,6 +59,7 @@ import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
 import { BookmarkedItems } from "./BookmarkedItems/BookmarkedItems";
 import { ApplicationsAdmin } from "../Initiatives/ApplicationsAdmin/ApplicationsAdmin";
 import ProjectCreateForm from "../Initiatives/CreateProject/ProjectCreateForm";
+import { AllProjects } from "../Initiatives/CreateProject/AllProjects/AllProjects";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -86,9 +87,9 @@ export const Profile = () => {
     users: false,
     suggest: false,
     articles: false,
-    initiatives: false, 
+    initiatives: false,
     projects: false,
-        community: false,
+    community: false,
     messages: false,
     applications: false
   });
@@ -156,7 +157,7 @@ export const Profile = () => {
     "/profile/applications-admin",
     "/profile/initiative-preview",
     "/profile/projects",
-    
+
     "/profile/applications-admin"
   ];
 
@@ -807,6 +808,8 @@ export const Profile = () => {
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="projects" element={<ManagementGuard><AllProjects /></ManagementGuard>} />
+
             <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
             <Route path="projects-create" element={<ManagementGuard><ProjectCreateForm /></ManagementGuard>} />

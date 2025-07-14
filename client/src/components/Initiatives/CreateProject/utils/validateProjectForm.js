@@ -112,19 +112,19 @@ export const validateProjectForm = (values, t) => {
     }
   }
 
-  // Application validation
-  if (values.applicationDeadline) {
-    const deadline = new Date(values.applicationDeadline);
-    const today = new Date();
+  // // Application validation
+  // if (values.applicationDeadline) {
+  //   const deadline = new Date(values.applicationDeadline);
+  //   const today = new Date();
     
-    if (deadline < today) {
-      newErrors.applicationDeadline = t('projects.validation.application-deadline-future');
-    }
+  //   if (deadline < today) {
+  //     newErrors.applicationDeadline = t('projects.validation.application-deadline-future');
+  //   }
     
-    if (values.timeline?.startDate && deadline > new Date(values.timeline.startDate)) {
-      newErrors.applicationDeadline = t('projects.validation.deadline-before-start');
-    }
-  }
+  //   if (values.timeline?.startDate && deadline > new Date(values.timeline.startDate)) {
+  //     newErrors.applicationDeadline = t('projects.validation.deadline-before-start');
+  //   }
+  // }
 
   // Max participants validation
   if (values.maxParticipants) {

@@ -100,10 +100,12 @@ export const initiativeServiceFactory = (token) => {
     createProject: async (projectData) => {
       return requester.post(`${apiUrl}/projects/create`, projectData);
     },
-    getAllProjects: async () => {
-      return requester.get(`${apiUrl}/projects/all`);
+    getAllProjects: async (page = 1, limit = 6) => {
+      return requester.get(`${apiUrl}/projects/all?page=${page}&limit=${limit}`);
     },
-
+    updateProject: async (identifier, projectData) => {
+      return requester.put(`${apiUrl}/projects/${identifier}`, projectData);
+    },
     getProjectById: async (id) => {
       return requester.get(`${apiUrl}/projects/single/${id}`);
     },

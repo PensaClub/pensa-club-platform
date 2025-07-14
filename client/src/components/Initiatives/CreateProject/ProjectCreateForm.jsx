@@ -71,6 +71,8 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
         saveDraft,
         publishDraft,
         draftId,
+          editId,        // 🔧 ДОБАВЯМЕ editId
+  setEditId,   
         saveToLocalStorage,
         loadFromLocalStorage,
         clearLocalStorage,
@@ -1178,54 +1180,72 @@ const renderElement = (props) => {
             </div>
 
             {/* Floating Actions */}
-            <div className="project-floating-actions">
-                {(draftId || values.title?.trim()) && (
-                    <button
-                        type="button"
-                        className="project-floating-btn new-project"
-                        onClick={handleStartNewProject}
-                        title={t('projects.create.startNewProject')}
-                    >
-                        <FontAwesomeIcon icon={faPlus} />
-                    </button>
-                )}
+<div className="project-floating-actions">
+  {(draftId || editId || values.title?.trim()) && (
+    <button
+      type="button"
+      className="project-floating-btn new-project"
+      onClick={handleStartNewProject}
+      title={t('projects.create.startNewProject')}
+    >
+      <FontAwesomeIcon icon={faPlus} />
+    </button>
+  )}
 
-                <button
-                    type="button"
-                    className="project-floating-btn draft"
-                    onClick={saveDraft}
-                    title={t('projects.create.saveDraft')}
-                >
-                    <FontAwesomeIcon icon={faSave} />
-                </button>
-                <button
-                    type="button"
-                    className="project-floating-btn preview"
-                    onClick={handlePreview}
-                    title={t('projects.create.preview')}
-                >
-                    <FontAwesomeIcon icon={faEye} />
-                </button>
-                {draftId ? (
-                    <button
-                        type="button"
-                        className="project-floating-btn publish"
-                        onClick={publishDraft}
-                        title={t('projects.create.publishProject')}
-                    >
-                        <FontAwesomeIcon icon={faShare} />
-                    </button>
-                ) : (
-                    <button
-                        type="button"
-                        className="project-floating-btn create"
-                        onClick={onSubmit}
-                        title={t('projects.create.createProject')}
-                    >
-                        <FontAwesomeIcon icon={faCheckCircle} />
-                    </button>
-                )}
-            </div>
+  {/* Save/Update Draft button - показва се само когато НЕ е в edit mode */}
+  {!editId && (
+    <button
+      type="button"
+      className="project-floating-btn draft"
+      onClick={saveDraft}
+      title={draftId ? t('projects.create.updateDraft') : t('projects.create.saveDraft')}
+    >
+      <FontAwesomeIcon icon={faSave} />
+    </button>
+  )}
+  
+  <button
+    type="button"
+    className="project-floating-btn preview"
+    onClick={handlePreview}
+    title={t('projects.create.preview')}
+  >
+    <FontAwesomeIcon icon={faEye} />
+  </button>
+  
+  {/* 🔧 ГЛАВНАТА ЛОГИКА ТУК */}
+  {draftId && !editId ? (
+    // DRAFT MODE - може да публикува draft
+    <button
+      type="button"
+      className="project-floating-btn publish"
+      onClick={publishDraft}
+      title={t('projects.create.publishProject')}
+    >
+      <FontAwesomeIcon icon={faShare} />
+    </button>
+  ) : editId ? (
+    // EDIT MODE - обновява съществуващ проект
+    <button
+      type="button"
+      className="project-floating-btn update"
+      onClick={onSubmit}
+      title={t('projects.create.updateProject')}
+    >
+      <FontAwesomeIcon icon={faEdit} />
+    </button>
+  ) : (
+    // NEW PROJECT MODE - създава нов проект
+    <button
+      type="button"
+      className="project-floating-btn create"
+      onClick={onSubmit}
+      title={t('projects.create.createProject')}
+    >
+      <FontAwesomeIcon icon={faCheckCircle} />
+    </button>
+  )}
+</div>
 
             {/* 📜 Scroll to Top */}
             <ScrollToTop />
