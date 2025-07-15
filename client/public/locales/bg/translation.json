@@ -1617,7 +1617,8 @@
     "meta": {
       "category": "Категория",
       "location": "Локация",
-      "participants": "Участници"
+      "participants": "Участници",
+      "timeline": "Времева линия"
     },
     "buttons": {
       "apply": "Кандидатствай",
@@ -1634,15 +1635,58 @@
       "publications": "Публикации",
       "team": "Екип",
       "applications": "Кандидатстване",
-      "comments": "Коментари"
+      "comments": "Коментари",
+      "contact": "Контакт",
+      "downloadMaterials": "Файлове",
+       "budget": "Бюджет",
+       "sponsorsPartners": "Пaртньори",
+       "milestones": "Етапи"
     },
     "sections": {
       "publications": "Публикации",
-      "team": "Екип"
+      "team": "Екип",
+      "contact": "Контакт",
+       "downloadMaterials": "Материали за сваляне",
+        "budget": "Бюджет",
+        "sponsorsPartners": "Спонсори и партньори",
+         "milestones": "Етапи на проекта"
     },
     "messages": {
       "loginRequired": "Моля влезте в профила си за да кандидатствате за този проект."
-    }
+    },
+    "contact": {
+        "projectContact": "Контакт за проекта",
+        "email": "Имейл",
+        "phone": "Телефон",
+        "availableForQuestions": "На разположение за въпроси"
+      },
+      "downloadMaterials": {
+        "download": "Свали"
+      },
+      "budget": {
+        "goal": "Цел",
+        "funded": "Финансирано",
+        "remaining": "Остава",
+        "progress": "Прогрес на финансирането",
+        "fullyFunded": "Проектът е напълно финансиран!",
+        "seekingFunding": "Търси допълнително финансиране"
+      },
+       "sponsorsPartners": {
+        "sponsors": "Спонсори",
+        "partners": "Партньори",
+        "visitWebsite": "Посети сайта"
+      },
+       "milestones": {
+        "status": {
+          "completed": "Завършен",
+          "in-progress": "В процес",
+          "upcoming": "Предстоящ",
+          "overdue": "Просрочен"
+        },
+        "completed": "Завършени",
+        "inProgress": "В процес",
+        "upcoming": "Предстоящи"
+      }
   },
   "applicationForm": {
     "dateLocale": "bg-BG",
@@ -2570,5 +2614,11 @@
       "contact-additional-info-max-length": "Допълнителната информация не може да надвишава 1000 символа",
       "contact-image-size-too-large": "Снимката е твърде голяма (максимум 2MB)"
     }
-  }
+  },
+    "location": {
+      "unknownCity": "Неизвестен град",
+      "unknownLocation": "Неизвестно местоположение", 
+      "defaultCountry": "България",
+      "loading": "Зарежда..."
+    }
 }

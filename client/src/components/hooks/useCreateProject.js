@@ -2620,6 +2620,9 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
 
     try {
       const submissionData = convertFormToHtml();
+        console.log('📋 Documents to submit:', submissionData.downloadMaterials);
+        console.log('🖼️ Gallery to submit:', submissionData.gallery);
+        console.log('📄 Full submission data:', submissionData);
       submissionData.updatedAt = new Date().toISOString();
 
       const urlParams = new URLSearchParams(window.location.search);
