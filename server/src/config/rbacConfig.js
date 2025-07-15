@@ -29,6 +29,12 @@ const permissions = {
         read: ['admin', 'moderator', 'user', 'guest', 'limited'],
         update: ['admin', 'moderator'],
         delete: ['admin', 'moderator'],
+        draft: {
+            read: ['admin', 'moderator'],
+            create: ['admin', 'moderator'],
+            update: ['admin', 'moderator'],
+            delete: ['admin', 'moderator'],
+        },
     },
     // For initiatives, projects, etc
     comments: {

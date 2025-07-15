@@ -58,6 +58,8 @@ import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
 import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
 import { BookmarkedItems } from "./BookmarkedItems/BookmarkedItems";
 import { ApplicationsAdmin } from "../Initiatives/ApplicationsAdmin/ApplicationsAdmin";
+import ProjectCreateForm from "../Initiatives/CreateProject/ProjectCreateForm";
+import { AllProjects } from "../Initiatives/CreateProject/AllProjects/AllProjects";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -84,7 +86,12 @@ export const Profile = () => {
     ads: false,
     users: false,
     suggest: false,
-    articles: false
+    articles: false,
+    initiatives: false,
+    projects: false,
+    community: false,
+    messages: false,
+    applications: false
   });
   const [applicationsStats, setApplicationsStats] = useState({
     total: 0,
@@ -121,6 +128,8 @@ export const Profile = () => {
       "/profile/initiative": "Инициативи",
       "/profile/bookmarks": "Запазени",
       "/profile/applications-admin": "Кандидатури",
+      "/profile/initiative-preview": "Преглед на инициатива",
+      "/profile/projects": "Проекти",
 
     };
 
@@ -145,6 +154,10 @@ export const Profile = () => {
     "/profile/initiative-create",
     "/profile/article-create",
     "/profile/articles",
+    "/profile/applications-admin",
+    "/profile/initiative-preview",
+    "/profile/projects",
+
     "/profile/applications-admin"
   ];
 
@@ -532,41 +545,41 @@ export const Profile = () => {
 
                   {isAdmin && (
                     <>
-                    <li>
-                      <NavLink
-                        to="users-statistic"
-                        onClick={() => toggleSubMenu('users')}
-                        className={({ isActive }) => isActive ? 'active' : ''}
-                      >
-                        <span className="link-content">
-                          <AnalyticsIcon className="icon" />
-                          {t("admin.users")}
-                        </span>
-                        <span className={`arrow-icon ${subMenuStates.users ? 'rotated' : ''}`}>
-                          {subMenuStates.users ?
-                            <DownArrowIcon /> :
-                            <ArrowIcon />
-                          }
-                        </span>
-                      </NavLink>
-                      <ul className={`sub-menu ${subMenuStates.users ? 'expanded' : ''}`}>
-                        <li>
-                          <NavLink to="users-admin" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <CircleIcon className="icon" />
-                            {t("profile.all_users")} {allUsers >= 1 && <>- {allUsers}</>}
-                          </NavLink>
-                        </li>
-                        <li>
-                          <NavLink to="users-unfinished" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <CircleIcon className="icon" />
-                            {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
-                          </NavLink>
-                        </li>
+                      <li>
+                        <NavLink
+                          to="users-statistic"
+                          onClick={() => toggleSubMenu('users')}
+                          className={({ isActive }) => isActive ? 'active' : ''}
+                        >
+                          <span className="link-content">
+                            <AnalyticsIcon className="icon" />
+                            {t("admin.users")}
+                          </span>
+                          <span className={`arrow-icon ${subMenuStates.users ? 'rotated' : ''}`}>
+                            {subMenuStates.users ?
+                              <DownArrowIcon /> :
+                              <ArrowIcon />
+                            }
+                          </span>
+                        </NavLink>
+                        <ul className={`sub-menu ${subMenuStates.users ? 'expanded' : ''}`}>
+                          <li>
+                            <NavLink to="users-admin" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("profile.all_users")} {allUsers >= 1 && <>- {allUsers}</>}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="users-unfinished" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
+                            </NavLink>
+                          </li>
 
-                      </ul>
-                  
-                    </li>                    
-    <li>
+                        </ul>
+
+                      </li>
+                      <li>
                         <NavLink
                           to="applications-admin"
                           className={({ isActive }) => isActive ? 'active' : ''}
@@ -578,7 +591,7 @@ export const Profile = () => {
                           {/* <ArrowIcon className="icon-arrow" /> */}
                         </NavLink>
                       </li>
-                      </>
+                    </>
                   )}
 
                   <li>
@@ -683,6 +696,41 @@ export const Profile = () => {
                       </li> */} {/* Na nejno mqsto може да добавяте и други подсекции свързани с инициативи */}
                     </ul>
                   </li>
+                  <li>
+                    <NavLink
+                      to="projects"
+                      onClick={() => toggleSubMenu('projects')}
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <DashboardIcon className="icon" />
+                        Проекти
+                      </span>
+                      <span className={`arrow-icon ${subMenuStates.projects ? 'rotated' : ''}`}>
+                        {subMenuStates.projects ? <DownArrowIcon /> : <ArrowIcon />}
+                      </span>
+                    </NavLink>
+                    <ul className={`sub-menu ${subMenuStates.projects ? 'expanded' : ''}`}>
+                      <li>
+                        <NavLink to="projects-create" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Нов проект
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="projects-drafts" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Чернови
+                        </NavLink>
+                      </li>
+                      {/* <li>
+                        <NavLink to="/initiative-preview" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Preview инициатива
+                        </NavLink>
+                      </li> */} {/* Na nejno mqsto може да добавяте и други подсекции свързани с инициативи */}
+                    </ul>
+                  </li>
                 </ul>
               </div>
             )}
@@ -760,8 +808,12 @@ export const Profile = () => {
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="projects" element={<ManagementGuard><AllProjects /></ManagementGuard>} />
+
             <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
+            <Route path="projects-create" element={<ManagementGuard><ProjectCreateForm /></ManagementGuard>} />
+
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}
 

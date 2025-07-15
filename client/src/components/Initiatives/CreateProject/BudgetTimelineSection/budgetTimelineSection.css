@@ -1,0 +1,910 @@
+/* ======================= */
+/* BUDGET & TIMELINE SECTION - IMPROVED */
+/* ======================= */
+
+/* Section Styling */
+.project-budget-section,
+.project-timeline-section,
+.project-milestones-section {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.project-budget-section h3,
+.project-timeline-section h3,
+.project-milestones-section h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Budget Input Group - Enhanced */
+/* .project-budget-input-group {
+    display: flex;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+} */
+
+/* .project-budget-input-group:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+} */
+/* 
+.project-budget-input-group input {
+    flex: 1;
+    border: none;
+    padding: 1rem 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+    background: transparent;
+} */
+
+/* .project-budget-input-group input:focus {
+    outline: none;
+    box-shadow: none;
+    border: none;
+} */
+
+.project-currency-select {
+    padding: 1rem 1.25rem;
+    border: none;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 80px;
+    text-align: center;
+}
+
+.project-currency-select:focus {
+    outline: none;
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+}
+
+.project-currency-display {
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    color: white;
+    font-weight: 600;
+    min-width: 80px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Budget Progress - Stunning Design */
+.project-budget-progress {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 2px solid #86efac;
+    margin-top: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-budget-progress::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.project-budget-progress h4 {
+    margin: 0 0 1.5rem 0;
+    color: #064e3b;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.project-funding-bar {
+    height: 16px;
+    background: #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.project-funding-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981 0%, #059669 50%, #047857 100%);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.project-funding-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+            transparent 25%,
+            rgba(255, 255, 255, 0.2) 25%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 50%,
+            transparent 75%,
+            rgba(255, 255, 255, 0.2) 75%);
+    background-size: 20px 20px;
+    animation: progress-shine 2s linear infinite;
+}
+
+@keyframes progress-shine {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.project-funding-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.1rem;
+    color: #064e3b;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 1rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.project-funding-percentage {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+/* Duration Display - Beautiful */
+.project-duration-display {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 2px solid #93c5fd;
+    margin-top: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-duration-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.project-form-group-budget input[type="date"] {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #ffffff;
+    font-family: inherit;
+}
+
+.project-form-group-budget {
+    margin-bottom: 2rem;
+}
+
+.project-form-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.project-duration-display h4 {
+    margin: 0 0 1rem 0;
+    color: #1e40af;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.project-duration-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Milestones Header */
+.project-dynamic-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fefbff 0%, #f3e8ff 100%);
+    border-radius: 12px;
+    border: 2px solid #c4b5fd;
+}
+
+.project-dynamic-section-header h3 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #581c87;
+    font-weight: 800;
+}
+
+/* Empty State */
+.project-empty-milestones {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: 16px;
+    border: 3px dashed #d1d5db;
+    margin: 2rem 0;
+}
+
+.project-empty-milestones p {
+    margin: 0 0 2rem 0;
+    color: #6b7280;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Milestone Items - Premium Design */
+.project-milestone-item {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-milestone-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.project-milestone-item:hover {
+    transform: translateY(-2px);
+    border-color: #8b5cf6;
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+}
+
+.project-milestone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.project-milestone-header h5 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #1e293b;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.project-remove-milestone-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #dc2626;
+    border: 2px solid #fca5a5;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-remove-milestone-btn:hover {
+    background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+/* Form Fields in Milestones */
+.project-milestone-fields {
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    gap: 2rem;
+    align-items: start;
+}
+
+.project-milestone-description-field {
+    grid-column: 1 / -1;
+}
+
+.project-milestone-title-field label,
+.project-milestone-date-field label,
+.project-milestone-description-field label {
+    display: block;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.project-milestone-fields input,
+.project-milestone-fields textarea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.project-milestone-fields input:focus,
+.project-milestone-fields textarea:focus {
+    outline: none;
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* Timeline Preview - Epic Design */
+.project-timeline-preview {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    padding: 3rem;
+    border-radius: 20px;
+    border: 3px solid #cbd5e1;
+    margin-top: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-timeline-preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+}
+
+.project-timeline-preview h4 {
+    margin: 0 0 2.5rem 0;
+    color: #1e293b;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.project-timeline-visual {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    overflow-x: auto;
+    padding: 2rem 0;
+    min-height: 120px;
+}
+
+.project-timeline-point {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    min-width: 140px;
+    text-align: center;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.project-timeline-point:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: -1rem;
+    width: 2rem;
+    height: 4px;
+    background: linear-gradient(90deg, #cbd5e1 0%, #94a3b8 100%);
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.project-timeline-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #3b82f6;
+    border: 4px solid #ffffff;
+    box-shadow: 0 0 0 3px #3b82f6, 0 4px 12px rgba(59, 130, 246, 0.3);
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.project-milestone-dot {
+    background: #10b981;
+    box-shadow: 0 0 0 3px #10b981, 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.project-timeline-start .project-timeline-dot {
+    background: #059669;
+    box-shadow: 0 0 0 3px #059669, 0 4px 12px rgba(5, 150, 105, 0.4);
+    transform: scale(1.2);
+}
+
+.project-timeline-end .project-timeline-dot {
+    background: #dc2626;
+    box-shadow: 0 0 0 3px #dc2626, 0 4px 12px rgba(220, 38, 38, 0.4);
+    transform: scale(1.2);
+}
+
+.project-timeline-date {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 600;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 2px solid #e2e8f0;
+}
+
+.project-timeline-label {
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-weight: 700;
+    max-width: 120px;
+    word-wrap: break-word;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.75rem;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+/* Budget Input Group - Fixed Layout */
+.project-budget-input-group {
+    display: flex;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    min-height: 56px;
+}
+
+.project-budget-input-group:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.project-budget-input-group input {
+    flex: 3;
+    /* 🔧 По-дълго поле за сумата */
+    border: none;
+    padding: 1rem 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+    background: transparent;
+    min-width: 0;
+    /* За правилно flex поведение */
+}
+
+.project-budget-input-group input:focus {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+/* Currency Select - Fixed Colors and Width */
+.project-budget-currency-select {
+    flex: 0 0 90px;
+    padding: 1rem 0.75rem;
+    border: none;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+
+
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.project-budget-currency-select:focus {
+    outline: none;
+    background: linear-gradient(135deg, #1e293b 0%, #374151 100%);
+
+}
+
+/* Currency Select Options - Fixed */
+.project-budget-currency-select option {
+    background: #ffffff;
+    /* 🔧 Бял фон за опциите */
+    color: #1e293b;
+    /* 🔧 Тъмен текст за опциите */
+    padding: 0.5rem;
+    font-weight: 600;
+}
+
+/* When selected option */
+.project-budget-currency-select option:checked {
+    background: #3b82f6;
+    color: #ffffff;
+}
+
+/* Currency Display - Also Fixed */
+.project-currency-display {
+    flex: 0 0 90px;
+    padding: 1rem 0.75rem;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    color: #ffffff;
+    font-weight: 600;
+    text-align: center;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover states for better UX */
+.project-budget-currency-select:hover {
+    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+}
+
+/* Focus states for accessibility */
+.project-budget-currency-select:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* ======================= */
+/* PROJECT FORM BUTTONS */
+/* ======================= */
+
+.project-form-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: inherit;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.project-form-btn:focus {
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.project-form-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Primary Button */
+.project-form-btn.primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+}
+
+.project-form-btn.primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+}
+
+.project-form-btn.primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Secondary Button */
+.project-form-btn.secondary {
+    background: #ffffff;
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.project-form-btn.secondary:hover:not(:disabled) {
+    background: #f8fafc;
+    border-color: #3b82f6;
+    color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.project-form-btn.secondary:active:not(:disabled) {
+    transform: translateY(0);
+    background: #f1f5f9;
+}
+
+/* Accent Button */
+.project-form-btn.accent {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+.project-form-btn.accent:hover:not(:disabled) {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
+.project-form-btn.accent:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Danger/Remove Button */
+.project-form-btn.danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+}
+
+.project-form-btn.danger:hover:not(:disabled) {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+}
+
+.project-form-btn.danger:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Button Sizes */
+.project-form-btn.small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.project-form-btn.large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* Button with icon adjustments */
+.project-form-btn svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}
+
+.project-form-btn.large svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.project-form-btn.small svg {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+
+/* Special styling for buttons in milestone header */
+.project-milestone-header .project-form-btn {
+    min-width: auto;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.project-form-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+}
+
+.project-dynamic-section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.project-dynamic-section-header .project-form-btn {
+    width: 100%;
+}
+
+/* Empty state buttons */
+.project-empty-milestones .project-form-btn {
+    min-width: 200px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 980px) {
+    .project-form-row {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+
+@media (max-width: 768px) {
+    .project-budget-input-group {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .project-budget-currency-select,
+    .project-currency-display {
+        flex: none;
+        width: 100%;
+        text-align: center;
+    }
+
+    .project-budget-input-group input {
+        flex: none;
+    }
+}
+
+/* Additional styling for better visual hierarchy */
+.project-budget-input-group input::placeholder {
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.project-budget-input-group input[type="number"]::-webkit-outer-spin-button,
+.project-budget-input-group input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.project-budget-input-group input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .project-milestone-fields {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .project-timeline-visual {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .project-timeline-point:not(:last-child)::after {
+        display: none;
+    }
+
+    /* .project-budget-input-group {
+        flex-direction: column;
+    }
+     */
+    /* .project-currency-select {
+        width: 100%;
+    } */
+}
+
+@media (max-width: 480px) {
+    .project-budget-input-group input {
+        width: 80%;
+    }
+    .project-budget-section h3{
+        font-size: 1.2rem;
+        justify-content: center;
+    }
+    .project-budget-section{
+        padding: 1rem;
+    }
+    .project-timeline-section,.project-milestones-section{
+        padding: 1rem;
+    }
+    .project-dynamic-section-header h3 {
+        font-size: 1.2rem;
+    }
+    .project-form-btn {
+        padding: 0.75rem 0.75rem;
+        font-size: 0.9rem;
+    }
+    .project-duration-value {
+        font-size: 1.5rem;
+    }
+    .project-milestone-item {
+        padding: 1rem;
+    }
+    .project-remove-milestone-btn {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.8rem;
+    }
+    .project-error-message {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .project-timeline-preview{
+        padding: 1rem;
+    }
+    .project-timeline-preview h4 {
+        font-size: 1.1rem;
+        margin: initial;
+    }
+    .project-timeline-label {
+        font-size: 0.9rem;
+    }
+    .project-milestone-header h5 {
+        font-size: 1.2rem;
+    }
+    .project-budget-progress h4 {
+        font-size: 1rem;
+        text-indent: initial;
+    }
+    .project-budget-progress {
+        padding: 1rem;text-indent: initial;
+    }
+    .project-funding-stats span{
+        font-size: 0.8rem;
+    }
+    .project-form-group-budget label{
+        font-size: 0.9rem;
+    }
+    .project-budget-currency-select {
+        font-size: 0.9rem;
+        padding: 0.8rem 0.7rem;
+    }
+    .project-currency-display {
+        font-size: 0.9rem;
+        padding: 0.8rem 0.7rem;
+    }
+    .project-duration-display{
+        padding: 0.8rem 0.7rem;
+
+    }
+    .project-duration-display h4 {
+        font-size: 1rem;
+    }
+}

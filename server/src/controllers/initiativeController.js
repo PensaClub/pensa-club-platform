@@ -7,6 +7,8 @@ const CustomError = require('../utils/customError');
 const { transformInitiative, initiativeConfig } = require('../utils/initiativeUtils');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { InitiativeSchema, UpdateInitiativeSchema, PaginationQuerySchema } = require('../schemas/initiatives.schema');
+const { findBySlugOrId } = require('../utils/modelLookup');
+const { manageInitiativeProjects, updateInitiativeProjectLinks } = require('../utils/projectManagementUtils');
 
 // ========================================
 // ENDPOINTS
@@ -39,7 +41,8 @@ initiativeController.post('/draft/save/:id?', isAuth, checkPermission('initiativ
     }
 });
 
-initiativeController.get('/draft/:id', checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
+// Add isAuth for draft endpoints
+initiativeController.get('/draft/:id', isAuth, checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
     return getSingleInitiativeByDraftStatus(true, req, res, next);
 });
 
@@ -47,7 +50,7 @@ initiativeController.get('/single/:id', checkPermission('initiative', 'read'), a
     return getSingleInitiativeByDraftStatus(false, req, res, next);
 });
 
-initiativeController.get('/drafts', checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
+initiativeController.get('/drafts', isAuth, checkPermission('initiative', 'draft', 'read'), async (req, res, next) => {
     return getInitiativesByDraftStatus(true, req, res, next);
 });
 
@@ -76,15 +79,9 @@ initiativeController.post('/bookmark/:id', isAuth, checkPermission('initiative',
     try {
         const userId = req.user.userId;
         const param = req.params.id;
-        const initiativeId = parseInt(param);
 
-        let existing;
-
-        existing = await initiative.findOne({
-            where: {
-                slug: param,
-                isDraft: false,
-            },
+        const existing = await findBySlugOrId(initiative, param, {
+            where: { isDraft: false },
             include: [
                 {
                     model: user_account,
@@ -94,23 +91,6 @@ initiativeController.post('/bookmark/:id', isAuth, checkPermission('initiative',
                 },
             ],
         });
-
-        if (!existing && !isNaN(initiativeId)) {
-            existing = await initiative.findOne({
-                where: {
-                    id: initiativeId,
-                    isDraft: false,
-                },
-                include: [
-                    {
-                        model: user_account,
-                        as: 'bookmarkedBy',
-                        where: { id: userId },
-                        required: false,
-                    },
-                ],
-            });
-        }
 
         if (!existing) {
             return res.status(404).json({ error: 'Published initiative not found' });
@@ -169,21 +149,9 @@ initiativeController.get('/user-initiatives/:email', checkPermission('initiative
 initiativeController.patch('/toggle-draft/:id', isAuth, checkPermission('initiative', 'update'), async (req, res, next) => {
     try {
         const param = req.params.id;
-        const initiativeId = parseInt(param);
 
         const result = await initiative.sequelize.transaction(async (t) => {
-            let foundInitiative;
-
-            foundInitiative = await initiative.findOne({
-                where: { slug: param },
-                transaction: t,
-            });
-
-            if (!foundInitiative && !isNaN(initiativeId)) {
-                foundInitiative = await initiative.findByPk(initiativeId, {
-                    transaction: t,
-                });
-            }
+            const foundInitiative = await findBySlugOrId(initiative, param, { transaction: t });
 
             if (!foundInitiative) {
                 throw new CustomError({
@@ -221,27 +189,11 @@ initiativeController.patch('/toggle-draft/:id', isAuth, checkPermission('initiat
 const getSingleInitiativeByDraftStatus = async (isDraft, req, res, next) => {
     try {
         const param = req.params.id;
-        const initiativeId = parseInt(param);
 
-        let foundInitiative;
-
-        foundInitiative = await initiative.findOne({
-            where: {
-                slug: param,
-                isDraft: isDraft,
-            },
+        const foundInitiative = await findBySlugOrId(initiative, param, {
+            where: { isDraft: isDraft },
             include: initiativeConfig,
         });
-
-        if (!foundInitiative && !isNaN(initiativeId)) {
-            foundInitiative = await initiative.findOne({
-                where: {
-                    id: initiativeId,
-                    isDraft: isDraft,
-                },
-                include: initiativeConfig,
-            });
-        }
 
         if (!foundInitiative) {
             throw new CustomError({
@@ -264,16 +216,10 @@ const getSingleInitiativeByDraftStatus = async (isDraft, req, res, next) => {
 const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
     try {
         const param = req.params.id;
-        const initiativeId = parseInt(param);
 
         await initiative.sequelize.transaction(async (t) => {
-            let foundInitiative;
-
-            foundInitiative = await initiative.findOne({
-                where: {
-                    slug: param,
-                    isDraft: isDraft,
-                },
+            const foundInitiative = await findBySlugOrId(initiative, param, {
+                where: { isDraft: isDraft },
                 include: [
                     {
                         model: user_account,
@@ -283,20 +229,6 @@ const deleteInitiativeByDraftStatus = async (isDraft, req, res, next) => {
                 ],
                 transaction: t,
             });
-
-            if (!foundInitiative && !isNaN(initiativeId)) {
-                foundInitiative = await initiative.findByPk(initiativeId, {
-                    where: { isDraft: isDraft },
-                    include: [
-                        {
-                            model: user_account,
-                            as: 'creator',
-                            attributes: ['id', 'email'],
-                        },
-                    ],
-                    transaction: t,
-                });
-            }
 
             if (!foundInitiative) {
                 throw new CustomError({
@@ -684,6 +616,11 @@ const createInitiative = async (initiativeData, req, res, next) => {
                 );
             }
 
+            if (initiativeData.projects?.length > 0) {
+                const resolvedProjectIds = await manageInitiativeProjects(initiativeData.projects, newInitiative.id, req.user.userId, t);
+                await updateInitiativeProjectLinks(newInitiative.id, resolvedProjectIds, t);
+            }
+
             const completeInitiative = await initiative.findByPk(newInitiative.id, {
                 include: initiativeConfig,
                 transaction: t,
@@ -701,16 +638,10 @@ const createInitiative = async (initiativeData, req, res, next) => {
 const updateInitiative = async (initiativeData, req, res, next, isDraft = false) => {
     try {
         const param = req.params.id;
-        const initiativeId = parseInt(param);
 
         const result = await initiative.sequelize.transaction(async (t) => {
-            let foundInitiative;
-
-            foundInitiative = await initiative.findOne({
-                where: {
-                    slug: param,
-                    isDraft: isDraft,
-                },
+            const foundInitiative = await findBySlugOrId(initiative, param, {
+                where: { isDraft: isDraft },
                 include: [
                     ...initiativeConfig,
                     {
@@ -721,21 +652,6 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                 ],
                 transaction: t,
             });
-
-            if (!foundInitiative && !isNaN(initiativeId)) {
-                foundInitiative = await initiative.findByPk(initiativeId, {
-                    where: { isDraft: isDraft },
-                    include: [
-                        ...initiativeConfig,
-                        {
-                            model: user_account,
-                            as: 'creator',
-                            attributes: ['id', 'email'],
-                        },
-                    ],
-                    transaction: t,
-                });
-            }
 
             if (!foundInitiative) {
                 throw new CustomError({
@@ -1031,6 +947,11 @@ const updateInitiative = async (initiativeData, req, res, next, isDraft = false)
                         )
                     );
                 }
+            }
+
+            if (initiativeData.projects !== undefined) {
+                const resolvedProjectIds = await manageInitiativeProjects(initiativeData.projects, foundInitiative.id, req.user.userId, t);
+                await updateInitiativeProjectLinks(foundInitiative.id, resolvedProjectIds, t);
             }
 
             const updatedInitiative = await initiative.findByPk(foundInitiative.id, {

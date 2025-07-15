@@ -43,7 +43,7 @@ const projectConfig = [
     {
         model: section,
         as: 'sections',
-        required: true,
+        required: false,
         attributes: ['id', 'titleSlug', 'title', 'content'],
         include: [
             {

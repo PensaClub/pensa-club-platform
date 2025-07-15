@@ -3,6 +3,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class publication extends Model {
         static associate(models) {
+            publication.belongsTo(models.user_account, {
+                foreignKey: 'creatorId',
+                as: 'creator',
+            });
+
             publication.belongsToMany(models.initiative, {
                 through: 'initiative_publications',
                 as: 'initiatives',
@@ -15,6 +20,27 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'projects',
                 foreignKey: 'publication_id',
                 otherKey: 'project_id',
+            });
+
+            publication.belongsToMany(models.publication, {
+                through: 'related_publications',
+                as: 'relatedPublications',
+                foreignKey: 'publication_id',
+                otherKey: 'related_publication_id',
+            });
+
+            publication.belongsToMany(models.user_account, {
+                through: 'publication_bookmarks',
+                as: 'bookmarkedBy',
+                foreignKey: 'publication_id',
+                otherKey: 'user_id',
+            });
+
+            publication.belongsToMany(models.user_account, {
+                through: 'publication_likes',
+                as: 'likedBy',
+                foreignKey: 'publication_id',
+                otherKey: 'user_id',
             });
 
             publication.hasMany(models.section, {
@@ -43,13 +69,6 @@ module.exports = (sequelize, DataTypes) => {
                 },
                 as: 'comments',
             });
-
-            publication.belongsToMany(models.publication, {
-                through: 'related_publications',
-                as: 'relatedPublications',
-                foreignKey: 'publication_id',
-                otherKey: 'related_publication_id',
-            });
         }
     }
     publication.init(
@@ -59,6 +78,16 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true,
                 allowNull: false,
+            },
+            creatorId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'user_accounts',
+                    key: 'id',
+                },
+                field: 'creator_id',
+                onDelete: 'CASCADE',
             },
             slug: {
                 type: DataTypes.STRING,
@@ -133,6 +162,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: true,
                 field: 'comments_enabled',
+            },
+            isDraft: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: true,
+                field: 'is_draft',
             },
         },
         {
