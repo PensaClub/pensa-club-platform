@@ -33,9 +33,15 @@
   <script type="text/javascript">
   (function() {
     var isBot = /bot|googlebot|crawler|spider|robot|crawling|facebookexternalhit/i.test(navigator.userAgent);
+    
     if (isBot) {
+      console.log('Bot detected:', navigator.userAgent);
+      
+      // Опитайте Rendertron
       var xhr = new XMLHttpRequest();
       xhr.open('GET', 'https://render-tron.appspot.com/render/https://www.pensa.club' + window.location.pathname);
+      xhr.timeout = 5000; // 5 секунди timeout
+      
       xhr.onload = function() {
         if (xhr.status === 200) {
           document.open();
@@ -43,6 +49,12 @@
           document.close();
         }
       };
+      
+      xhr.onerror = function() {
+        console.log('Rendertron failed, using default page');
+        // Fallback - поне да покаже основната страница
+      };
+      
       xhr.send();
     }
   })();
