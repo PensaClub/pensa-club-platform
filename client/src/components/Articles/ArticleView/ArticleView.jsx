@@ -264,12 +264,7 @@ const ArticleView = () => {
       });
     }
   }, [article]);
-useEffect(() => {
-  if (article) {
-    // Сигнал към prerender.io, че страницата е готова
-    window.prerenderReady = true;
-  }
-}, [article]);
+
   const shareOnFacebook = (e) => {
     e.preventDefault();
     const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
