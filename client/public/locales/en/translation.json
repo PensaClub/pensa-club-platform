@@ -1621,7 +1621,9 @@
     "meta": {
       "category": "Category",
       "location": "Location",
-      "participants": "Participants"
+      "participants": "Participants",
+      "timeline": "Timeline"
+
     },
     "buttons": {
       "apply": "Apply",
@@ -1638,15 +1640,46 @@
       "publications": "Publications",
       "team": "Team",
       "applications": "Applications",
-      "comments": "Comments"
+      "comments": "Comments",
+       "contact": "Contact",
+       "downloadMaterials": "Files",
+       "budget": "Budget",
+       "sponsorsPartners": "Partners"
+
     },
     "sections": {
       "publications": "Publications",
-      "team": "Team"
+      "team": "Team",
+       "contact": "Contact",
+       "downloadMaterials": "Download Materials",
+       "budget": "Budget & Funding",
+        "sponsorsPartners": "Sponsors & Partners"
     },
     "messages": {
       "loginRequired": "Please log in to apply for this project."
-    }
+    },
+    "contact": {
+        "projectContact": "Project Contact",
+        "email": "Email",
+        "phone": "Phone",
+        "availableForQuestions": "Available for questions"
+      },
+       "downloadMaterials": {
+        "download": "Download"
+      },
+      "budget": {
+        "goal": "Goal",
+        "funded": "Funded",
+        "remaining": "Remaining",
+        "progress": "Funding Progress",
+        "fullyFunded": "Project is fully funded!",
+        "seekingFunding": "Seeking additional funding"
+      },
+       "sponsorsPartners": {
+        "sponsors": "Sponsors",
+        "partners": "Partners",
+        "visitWebsite": "Visit Website"
+      }
   },
   "applicationForm": {
     "dateLocale": "en-US",
@@ -2573,5 +2606,11 @@
       "contact-additional-info-max-length": "Additional information cannot exceed 1000 characters",
       "contact-image-size-too-large": "Image is too large (maximum 2MB)"
     }
-  }
+  },
+   "location": {
+      "unknownCity": "Unknown city",
+      "unknownLocation": "Unknown location",
+      "defaultCountry": "Bulgaria",
+      "loading": "Loading..."
+    }
 }
