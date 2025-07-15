@@ -27,14 +27,14 @@ const ContactSchema = z.object({
 
 const SectionSchema = z.object({
     titleSlug: z.string().nullable().optional(),
-    title: z.string().min(1, 'Section title is required').nullable().optional(),
+    title: z.string().nullable().optional(),
     content: z.any().nullable().optional(),
     order: z.number().nullable().optional(),
     images: z.array(ImageSchema).nullable().optional(),
 });
 
 const SponsorSchema = z.object({
-    name: z.string().min(1, 'Sponsor name is required').nullable().optional(),
+    name: z.string().nullable().optional(),
     amount: z
         .union([z.string(), z.number(), z.null()])
         .transform((val) => {
@@ -59,7 +59,7 @@ const SponsorSchema = z.object({
 });
 
 const PartnerSchema = z.object({
-    name: z.string().min(1, 'Partner name is required').nullable().optional(),
+    name: z.string().nullable().optional(),
     description: z.string().max(10000, 'Description too long').nullable().optional(),
     website: z.string().url('Invalid website URL').nullable().optional(),
     type: z.string().nullable().optional(),
@@ -69,7 +69,7 @@ const PartnerSchema = z.object({
 
 const DownloadMaterialSchema = z.object({
     titleSlug: z.string().nullable().optional(),
-    title: z.string().min(1, 'Document title is required').nullable().optional(),
+    title: z.string().nullable().optional(),
     description: z.string().nullable().optional(),
     fileType: z.enum(['pdf', 'docx']).nullable().optional(),
     fileSize: z.string().nullable().optional(),
@@ -78,7 +78,7 @@ const DownloadMaterialSchema = z.object({
 });
 
 const MilestoneSchema = z.object({
-    date: z.string().min(1, 'Milestone date is required').nullable().optional(),
+    date: z.string().nullable().optional(),
     description: z.string().min(5, 'Milestone description must be at least 5 characters').nullable().optional(),
 });
 
@@ -118,7 +118,7 @@ const TagsSchema = z
 
 const MainImageSchema = z
     .object({
-        src: z.string().min(1, 'Main image is required').nullable().optional(),
+        src: z.string().nullable().optional(),
         alt: z.string().nullable().optional(),
         caption: z.string().nullable().optional(),
         gallery: z.array(ImageSchema).nullable().optional(),

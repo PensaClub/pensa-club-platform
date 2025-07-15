@@ -27,13 +27,13 @@ const BaseStorySchema = z
         readTime: z.string().max(20, 'Read time too long').nullable().optional(),
 
         // Author information
-        author: z.string().min(1, 'Author name is required').max(100, 'Author name too long').nullable().optional(),
+        author: z.string().nullable().optional(),
         authorEmail: z.string().email('Invalid author email').nullable().optional(),
         authorImage: z.string().url('Invalid author image URL').nullable().optional(),
 
         // Content
         tags: TagsSchema,
-        sections: z.array(SectionSchema).max(50, 'Maximum 50 sections allowed').nullable().optional(),
+        sections: z.array(SectionSchema).nullable().optional(),
         mainImage: MainImageSchema,
 
         // Related content

@@ -159,7 +159,7 @@ const BaseProjectSchema = z
         contact: ContactSchema.nullable().optional(),
         team: z.array(ContactSchema).nullable().optional(),
 
-        sections: z.array(SectionSchema).min(1, 'At least one section is required').nullable().optional(),
+        sections: z.array(SectionSchema).nullable().optional(),
 
         sponsors: z.array(SponsorSchema).nullable().optional(),
         partners: z.array(PartnerSchema).nullable().optional(),
@@ -185,7 +185,7 @@ const BaseProjectSchema = z
 
 const ProjectSchema = BaseProjectSchema.refine(
     (data) => {
-        const requiredFields = ['slug', 'title', 'shortDescription'];
+        const requiredFields = ['slug', 'title'];
         return requiredFields.every((field) => data[field] !== undefined && data[field] !== null && data[field] !== '');
     },
     {

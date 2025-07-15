@@ -17,7 +17,7 @@ const storyConfig = [
         include: [
             {
                 model: image,
-                as: 'image',
+                as: 'sectionImages',
             },
         ],
     },
@@ -32,7 +32,7 @@ const storyConfig = [
     {
         model: story,
         as: 'relatedStories',
-        attributes: ['id', 'slug', 'title', 'shortDescription', 'image'],
+        attributes: ['id', 'slug', 'title', 'shortDescription'],
     },
 ];
 
@@ -54,11 +54,11 @@ const transformStory = async (storyData) => {
     // Transform sections
     if (cleanStoryData.sections) {
         cleanStoryData.sections = cleanStoryData.sections.map((section) => {
-            if (section.image) {
-                const { image, ...singleSection } = section;
+            if (section.sectionImages) {
+                const { sectionImages, ...singleSection } = section;
                 return {
                     ...singleSection,
-                    images: [image],
+                    images: sectionImages,
                 };
             }
             return section;
