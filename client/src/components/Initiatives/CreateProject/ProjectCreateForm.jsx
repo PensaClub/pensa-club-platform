@@ -532,7 +532,7 @@ const renderElement = (props) => {
             return;
         }
 
-        navigate('/project-preview', {
+        navigate('/profile/project-preview', {
             state: { previewData: values }
         });
     };

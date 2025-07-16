@@ -1144,22 +1144,43 @@ const invalidateProjectDraftsCache = useCallback(() => {
 }, [isAuthentication, initiativeService]);
 
   // Save Project Draft
-  const saveDraftProject = useCallback(async (draftData) => {
+
+const saveDraftProject = useCallback(async (draftData) => {
     if (!isAuthentication) {
-      notify('error', 'Authentication required');
-      return;
+        notify('error', 'Authentication required');
+        return;
     }
 
     try {
-      const response = await initiativeService.saveDraftProject(draftData);
-      notify('success', 'Project draft saved successfully!');
-      return response;
+        const response = await initiativeService.saveDraftProject(draftData);
+        const savedDraft = response.data || response;
+
+        setProjectDrafts(prev => {
+            // Проверяваме дали черновата вече съществува (update)
+            const existingIndex = prev.findIndex(draft => 
+                draft.id === savedDraft.id || 
+                draft.slug === savedDraft.slug
+            );
+            
+            if (existingIndex !== -1) {
+                // Обновяваме съществуваща чернова
+                const updated = [...prev];
+                updated[existingIndex] = savedDraft;
+                return updated;
+            } else {
+                // Добавяме нова чернова в началото
+                return [savedDraft, ...prev];
+            }
+        });
+        
+        notify('success', 'Project draft saved successfully!');
+        return response;
     } catch (error) {
-      console.error('Error saving project draft:', error);
-      notify('error', 'Failed to save project draft');
-      throw error;
+        console.error('Error saving project draft:', error);
+        notify('error', 'Failed to save project draft');
+        throw error;
     }
-  }, [isAuthentication, initiativeService]);
+}, [isAuthentication, initiativeService]);
 // Delete draft project
 
 const deleteDraftProject = useCallback(async (draftId) => {
@@ -1191,42 +1212,40 @@ const deleteDraftProject = useCallback(async (draftId) => {
 }, [isAuthentication, initiativeService]);
 
   // Update Project Draft
+
 const updateDraftProject = useCallback(async (id, draftData) => {
-  if (!isAuthentication) {
-    notify('error', 'Authentication required');
-    return;
-  }
+    if (!isAuthentication) {
+        notify('error', 'Authentication required');
+        return;
+    }
 
-  try {
-    setIsLoading(true);
-    
-    const response = await initiativeService.updateDraftProject(id, draftData);
-    const updatedDraft = response.data || response;
-    
-    // 🔧 КЛЮЧОВА ПРОМЯНА - обновява локалния state
-    setProjectDrafts(prev => {
-      const updated = prev.map(draft => {
-        // Проверява по ID, slug и дори по title за сигурност
-        if (draft.id === id || 
-            draft.id === updatedDraft.id || 
-            draft.slug === id ||
-            draft.slug === updatedDraft.slug) {
-          return updatedDraft;
-        }
-        return draft;
-      });
-      return updated;
-    });
+    try {
+        setIsLoading(true);
+        
+        const response = await initiativeService.updateDraftProject(id, draftData);
+        const updatedDraft = response.data || response;
+        
+        setProjectDrafts(prev => {
+            return prev.map(draft => {
+                if (draft.id === id || 
+                    draft.id === updatedDraft.id || 
+                    draft.slug === id ||
+                    draft.slug === updatedDraft.slug) {
+                    return updatedDraft;
+                }
+                return draft;
+            });
+        });
 
-    notify('success', 'Project draft updated successfully!');
-    return response;
-  } catch (error) {
-    console.error('Error updating project draft:', error);
-    notify('error', 'Failed to update project draft');
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
+        notify('success', 'Project draft updated successfully!');
+        return response;
+    } catch (error) {
+        console.error('Error updating project draft:', error);
+        notify('error', 'Failed to update project draft');
+        throw error;
+    } finally {
+        setIsLoading(false);
+    }
 }, [isAuthentication, initiativeService]);
 
   // Get All Project Drafts
