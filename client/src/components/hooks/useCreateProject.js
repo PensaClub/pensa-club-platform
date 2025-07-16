@@ -209,17 +209,14 @@ useEffect(() => {
     try {
       // Проверяваме дали вече има инициативи от context-а
       if (initiatives && initiatives.length > 0) {
-        console.log('📋 Using initiatives from context:', initiatives.length);
         setAvailableInitiatives(initiatives);
         return;
       }
 
       // Ако няма инициативи в context-а, правим заявка
-      console.log('📋 Loading initiatives from API...');
       const response = await getAllInitiatives(1, true);
       const loadedInitiatives = response.data || [];
       
-      console.log('📋 Loaded initiatives:', loadedInitiatives.length);
       setAvailableInitiatives(loadedInitiatives);
       
     } catch (error) {
@@ -234,7 +231,6 @@ useEffect(() => {
 // Ако initiatives се промени СЛЕД първоначалното зареждане, обновяваме
 useEffect(() => {
   if (hasTriedToLoadInitiatives.current && initiatives && initiatives.length > 0) {
-    console.log('📋 Updating initiatives from context change');
     setAvailableInitiatives(initiatives);
   }
 }, [initiatives]);
@@ -1727,14 +1723,6 @@ useEffect(() => {
         // Конвертираме размера към string
         const fileSize = document.size ? String(document.size) : null;
 
-        console.log('📄 Converting document:', {
-          originalType: document.type,
-          convertedType: fileType,
-          originalSize: document.size,
-          convertedSize: fileSize,
-          title: title
-        });
-
         return {
           id: null, // Сървърът ще генерира ID
           titleSlug: titleSlug,
@@ -1747,7 +1735,6 @@ useEffect(() => {
         };
       });
 
-      console.log('📋 Final downloadMaterials:', htmlValues.downloadMaterials);
     }
 
     // 🆕 ТРАНСФОРМАЦИЯ НА ГАЛЕРИЯТА ЗА СЪРВЪРА (ако е нужно)
@@ -2760,9 +2747,6 @@ useEffect(() => {
 
     try {
       const submissionData = convertFormToHtml();
-      console.log('📋 Documents to submit:', submissionData.downloadMaterials);
-      console.log('🖼️ Gallery to submit:', submissionData.gallery);
-      console.log('📄 Full submission data:', submissionData);
       submissionData.updatedAt = new Date().toISOString();
 
       const urlParams = new URLSearchParams(window.location.search);
