@@ -195,22 +195,22 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
     };
   }, []);
   // Load available initiatives
-  useEffect(() => {
-    const loadInitiatives = async () => {
-      try {
-        if (initiatives.length === 0) {
-          const response = await getAllInitiatives(1, true);
-          setAvailableInitiatives(response.data || []);
-        } else {
-          setAvailableInitiatives(initiatives);
-        }
-      } catch (error) {
-        console.error('Error loading initiatives:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const loadInitiatives = async () => {
+  //     try {
+  //       if (initiatives.length === 0) {
+  //         const response = await getAllInitiatives(1, true);
+  //         setAvailableInitiatives(response.data || []);
+  //       } else {
+  //         setAvailableInitiatives(initiatives);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error loading initiatives:', error);
+  //     }
+  //   };
 
-    loadInitiatives();
-  }, [initiatives]);
+  //   loadInitiatives();
+  // }, [initiatives]);
 
   // Load draft from URL
   // Load draft from URL
