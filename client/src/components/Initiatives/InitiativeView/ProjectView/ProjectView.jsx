@@ -18,6 +18,7 @@ import { getLocationFromCoordinates } from '../../../../utils/getLocationFromCoo
 import { ProjectBudget } from '../ProjectBudget/ProjectBudget';
 import { SponsorsPartners } from '../SponsorsPartners/SponsorsPartners';
 import { Milestones } from '../Milestones/Milestones';
+import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 
 export const ProjectView = () => {
     const { slug } = useParams();
@@ -878,6 +879,7 @@ export const ProjectView = () => {
                         </section>
                     </div>
                 </div>
+                <ScrollToTop />
             </div>
         </>
     );
