@@ -179,6 +179,7 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
   const autoSaveRef = useRef(null);
   const fileInputRefs = useRef({});
   const [availableInitiatives, setAvailableInitiatives] = useState([]);
+  const hasTriedToLoadInitiatives = useRef(false);
 
   // Real-time validation
   useProjectRealTimeValidation(values, setErrors);
@@ -190,29 +191,49 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
       if (autoSaveRef.current) {
         clearTimeout(autoSaveRef.current);
         autoSaveRef.current = null;
-   
+
       }
     };
   }, []);
-  // Load available initiatives
-  // useEffect(() => {
-  //   const loadInitiatives = async () => {
-  //     try {
-  //       if (initiatives.length === 0) {
-  //         const response = await getAllInitiatives(1, true);
-  //         setAvailableInitiatives(response.data || []);
-  //       } else {
-  //         setAvailableInitiatives(initiatives);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error loading initiatives:', error);
-  //     }
-  //   };
 
-  //   loadInitiatives();
-  // }, [initiatives]);
+useEffect(() => {
+  const loadInitiatives = async () => {
+    // Ако вече сме опитали да заредим, не опитваме отново
+    if (hasTriedToLoadInitiatives.current) {
+      return;
+    }
 
-  // Load draft from URL
+    // Маркираме че започваме заявка
+    hasTriedToLoadInitiatives.current = true;
+
+    try {
+      // Проверяваме дали вече има инициативи от context-а
+      if (initiatives && initiatives.length > 0) {
+        setAvailableInitiatives(initiatives);
+        return;
+      }
+
+      // Ако няма инициативи в context-а, правим заявка
+      const response = await getAllInitiatives(1, true);
+      const loadedInitiatives = response.data || [];
+      
+      setAvailableInitiatives(loadedInitiatives);
+      
+    } catch (error) {
+      console.error('❌ Error loading initiatives:', error);
+      setAvailableInitiatives([]); 
+    }
+  };
+
+  loadInitiatives();
+}, []);
+
+// Ако initiatives се промени СЛЕД първоначалното зареждане, обновяваме
+useEffect(() => {
+  if (hasTriedToLoadInitiatives.current && initiatives && initiatives.length > 0) {
+    setAvailableInitiatives(initiatives);
+  }
+}, [initiatives]);
   // Load draft from URL
   useEffect(() => {
     const loadDraftFromUrl = async () => {
@@ -1608,7 +1629,67 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
   const convertFormToHtml = useCallback(() => {
     try {
       const htmlValues = { ...values };
+ // Helper функция за конвертиране на MIME type към enum
+    const convertMimeTypeToEnum = (mimeType, fileName) => {
+      if (!mimeType && fileName) {
+        // Ако няма mimeType, извличаме от разширението
+        const extension = fileName.split('.').pop().toLowerCase();
+        switch (extension) {
+          case 'pdf': return 'pdf';
+          case 'docx': return 'docx';
+          case 'doc': return 'doc';
+          case 'xlsx': return 'xlsx';
+          case 'xls': return 'xls';
+          case 'pptx': return 'pptx';
+          case 'ppt': return 'ppt';
+          case 'txt': return 'txt';
+          case 'csv': return 'csv';
+          default: return null;
+        }
+      }
 
+      // Конвертираме MIME type към enum
+      switch (mimeType) {
+        case 'application/pdf':
+          return 'pdf';
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+          return 'docx';
+        case 'application/msword':
+          return 'doc';
+        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+          return 'xlsx';
+        case 'application/vnd.ms-excel':
+          return 'xls';
+        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+          return 'pptx';
+        case 'application/vnd.ms-powerpoint':
+          return 'ppt';
+        case 'text/plain':
+          return 'txt';
+        case 'text/csv':
+          return 'csv';
+        case 'application/rtf':
+          return 'rtf';
+        default:
+          // Ако не разпознаваме MIME type-а, опитваме се от името на файла
+          if (fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            switch (extension) {
+              case 'pdf': return 'pdf';
+              case 'docx': return 'docx';
+              case 'doc': return 'doc';
+              case 'xlsx': return 'xlsx';
+              case 'xls': return 'xls';
+              case 'pptx': return 'pptx';
+              case 'ppt': return 'ppt';
+              case 'txt': return 'txt';
+              case 'csv': return 'csv';
+              default: return 'pdf'; // Fallback към pdf
+            }
+          }
+          return 'pdf'; // Default fallback
+      }
+    };
       // Remove ID fields
       if (htmlValues.sponsors) {
         htmlValues.sponsors = htmlValues.sponsors.map(sponsor => {
@@ -1623,6 +1704,52 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
           return memberWithoutId;
         });
       }
+      // 🔧 ПРАВИЛНА ТРАНСФОРМАЦИЯ НА ДОКУМЕНТИТЕ
+    if (htmlValues.downloadMaterials && Array.isArray(htmlValues.downloadMaterials)) {
+      htmlValues.downloadMaterials = htmlValues.downloadMaterials.map((document, index) => {
+        const title = document.name || document.filename || `Document ${index + 1}`;
+        const titleSlug = generateSlug ? generateSlug(title) : title
+          .toLowerCase()
+          .replace(/\.[^/.]+$/, '')
+          .replace(/[^a-z0-9\s]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .trim() || `document-${Date.now()}`;
+
+        // Конвертираме MIME type към enum
+        const fileType = convertMimeTypeToEnum(document.type, document.name || document.filename);
+        
+        // Конвертираме размера към string
+        const fileSize = document.size ? String(document.size) : null;
+
+        return {
+          id: null, // Сървърът ще генерира ID
+          titleSlug: titleSlug,
+          title: title,
+          description: null,
+          fileType: fileType, // Конвертиран enum
+          fileSize: fileSize, // Конвертиран string
+          downloadUrl: document.url || document.src || null,
+          image: null
+        };
+      });
+
+    }
+
+    // 🆕 ТРАНСФОРМАЦИЯ НА ГАЛЕРИЯТА ЗА СЪРВЪРА (ако е нужно)
+    if (htmlValues.gallery && Array.isArray(htmlValues.gallery)) {
+      htmlValues.gallery = htmlValues.gallery.map((image, index) => {
+        return {
+          src: image.src || image.url,
+          alt: image.alt || `Gallery image ${index + 1}`,
+          caption: image.caption || '',
+          name: image.name || `Image ${index + 1}`,
+          size: image.size || null,
+          type: image.type || null
+        };
+      });
+    }
 
       // 🆕 ПРАВИЛНО конвертиране на fullDescription
       try {
@@ -1669,7 +1796,6 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
         htmlValues.sections = [];
       }
 
-      // Останалата логика остава същата...
       // Convert dates
       const convertDateToISO = (dateString) => {
         if (!dateString || dateString.trim() === '') return null;
@@ -1762,7 +1888,8 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
       return {
         ...values,
         fullDescription: '',
-        sections: values.sections?.map(s => ({ ...s, content: '' })) || []
+        sections: values.sections?.map(s => ({ ...s, content: '' })) || [],
+        downloadMaterials: []
       };
     }
   }, [values]);
@@ -2464,107 +2591,107 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
   }, [defaultValues, clearLocalStorage]);
 
   const publishDraft = useCallback(async () => {
-  if (!draftId) {
-    notify('error', 'Няма чернова за публикуване');
-    return;
-  }
-
-  try {
-    const saveResult = await saveDraft();
-
-    const actualDraftId = saveResult?.data?.id || saveResult?.id || draftId;
-
-    // Обновяваме инициативата ако е свързана
-    if (values.initiativeId) {
-      try {
-        const projectData = convertFormToHtml();
-        const initiativeId = typeof values.initiativeId === 'string'
-          ? parseInt(values.initiativeId, 10)
-          : values.initiativeId;
-        await updateInitiativeWithProject(initiativeId, projectData);
-      } catch (updateError) {
-        console.error('❌ Failed to update initiative:', updateError);
-        notify('warning', 'Инициативата не беше обновена, но проектът ще бъде публикуван');
-      }
+    if (!draftId) {
+      notify('error', 'Няма чернова за публикуване');
+      return;
     }
 
-    // Публикуваме проекта
-    const result = await toggleProjectDraftStatus(actualDraftId);
-    
-    // 🔧 FORCE REFRESH НА ДАННИТЕ СЛЕД ПУБЛИКУВАНЕ
     try {
-      
-      // Refresh drafts за да се премахне публикуваният
-      await getAllProjectDrafts(1, true);
-      
-      // Refresh projects за да се добави новият
-      await getAllProjects(1, true);
-      
-    } catch (refreshError) {
-      console.warn('⚠️ Could not refresh data lists:', refreshError);
-      // Не спираме процеса ако refresh-ът се провали
-    }
+      const saveResult = await saveDraft();
 
-    // 🔧 КЛЮЧОВА ПРОМЯНА - изтриваме черновата след публикуване
-    try {
-      await deleteDraftProject(actualDraftId);
-    } catch (deleteError) {
-      console.warn('⚠️ Could not delete draft, but project was published:', deleteError);
-      // Не спираме процеса ако изтриването се провали
-    }
+      const actualDraftId = saveResult?.data?.id || saveResult?.id || draftId;
 
-    clearLocalStorage();
-
-    setDraftId(null);
-    setEditId(null);
-
-    resetForm();
-
-    setErrors({});
-
-    // 🔧 TRIGGER CUSTOM EVENT ЗА ДРУГИ КОМПОНЕНТИ
-    window.dispatchEvent(new CustomEvent('projectPublished', { 
-      detail: { 
-        publishedProject: result.data || result,
-        draftId: actualDraftId
-      } 
-    }));
-
-    // Навигираме към проектите
-    const publishedProject = result.data || result;
-    const projectSlug = publishedProject.slug || publishedProject.id || actualDraftId;
-
-    notify('success', 'Проектът е публикуван успешно!');
-    
-    // 🔧 НАВИГАЦИЯ СЛЕД КРАТКА ПАУЗА ЗА ДА СЕ ОБНОВИ STATE-А
-    setTimeout(() => {
-      if (projectSlug && projectSlug !== 'undefined') {
-        navigate(`/projects/${projectSlug}`);
-      } else {
-        navigate('/projects');
+      // Обновяваме инициативата ако е свързана
+      if (values.initiativeId) {
+        try {
+          const projectData = convertFormToHtml();
+          const initiativeId = typeof values.initiativeId === 'string'
+            ? parseInt(values.initiativeId, 10)
+            : values.initiativeId;
+          await updateInitiativeWithProject(initiativeId, projectData);
+        } catch (updateError) {
+          console.error('❌ Failed to update initiative:', updateError);
+          notify('warning', 'Инициативата не беше обновена, но проектът ще бъде публикуван');
+        }
       }
-    }, 500);
 
-    return result;
-  } catch (error) {
-    console.error('❌ Error publishing draft:', error);
+      // Публикуваме проекта
+      const result = await toggleProjectDraftStatus(actualDraftId);
 
-    if (error.response?.status === 404) {
-      notify('error', 'Черновата не е намерена. Моля запазете отново и опитайте.');
-      
-      // 🔧 ОПИТ ЗА СИНХРОНИЗАЦИЯ ПРИ 404
+      // 🔧 FORCE REFRESH НА ДАННИТЕ СЛЕД ПУБЛИКУВАНЕ
       try {
+
+        // Refresh drafts за да се премахне публикуваният
         await getAllProjectDrafts(1, true);
-      } catch (syncError) {
-        console.error('Failed to sync drafts:', syncError);
-      }
-    } else {
-      notify('error', `Грешка при публикуване: ${error.message}`);
-    }
 
-    throw error;
-  }
-}, [draftId, saveDraft, values.initiativeId, convertFormToHtml, updateInitiativeWithProject, toggleProjectDraftStatus, getAllProjectDrafts, getAllProjects, deleteDraftProject, clearLocalStorage, setDraftId, setEditId, resetForm, setErrors, navigate]);
+        // Refresh projects за да се добави новият
+        await getAllProjects(1, true);
+
+      } catch (refreshError) {
+        console.warn('⚠️ Could not refresh data lists:', refreshError);
+        // Не спираме процеса ако refresh-ът се провали
+      }
+
+      // 🔧 КЛЮЧОВА ПРОМЯНА - изтриваме черновата след публикуване
+      try {
+        await deleteDraftProject(actualDraftId);
+      } catch (deleteError) {
+        console.warn('⚠️ Could not delete draft, but project was published:', deleteError);
+        // Не спираме процеса ако изтриването се провали
+      }
+
+      clearLocalStorage();
+
+      setDraftId(null);
+      setEditId(null);
+
+      resetForm();
+
+      setErrors({});
+
+      // 🔧 TRIGGER CUSTOM EVENT ЗА ДРУГИ КОМПОНЕНТИ
+      window.dispatchEvent(new CustomEvent('projectPublished', {
+        detail: {
+          publishedProject: result.data || result,
+          draftId: actualDraftId
+        }
+      }));
+
+      // Навигираме към проектите
+      const publishedProject = result.data || result;
+      const projectSlug = publishedProject.slug || publishedProject.id || actualDraftId;
+
+      notify('success', 'Проектът е публикуван успешно!');
+
+      // 🔧 НАВИГАЦИЯ СЛЕД КРАТКА ПАУЗА ЗА ДА СЕ ОБНОВИ STATE-А
+      setTimeout(() => {
+        if (projectSlug && projectSlug !== 'undefined') {
+          navigate(`/projects/${projectSlug}`);
+        } else {
+          navigate('/projects');
+        }
+      }, 500);
+
+      return result;
+    } catch (error) {
+      console.error('❌ Error publishing draft:', error);
+
+      if (error.response?.status === 404) {
+        notify('error', 'Черновата не е намерена. Моля запазете отново и опитайте.');
+
+        // 🔧 ОПИТ ЗА СИНХРОНИЗАЦИЯ ПРИ 404
+        try {
+          await getAllProjectDrafts(1, true);
+        } catch (syncError) {
+          console.error('Failed to sync drafts:', syncError);
+        }
+      } else {
+        notify('error', `Грешка при публикуване: ${error.message}`);
+      }
+
+      throw error;
+    }
+  }, [draftId, saveDraft, values.initiativeId, convertFormToHtml, updateInitiativeWithProject, toggleProjectDraftStatus, getAllProjectDrafts, getAllProjects, deleteDraftProject, clearLocalStorage, setDraftId, setEditId, resetForm, setErrors, navigate]);
 
   const handleStartNewProject = useCallback(async () => {
     const confirmed = window.confirm(
@@ -2620,9 +2747,6 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
 
     try {
       const submissionData = convertFormToHtml();
-        console.log('📋 Documents to submit:', submissionData.downloadMaterials);
-        console.log('🖼️ Gallery to submit:', submissionData.gallery);
-        console.log('📄 Full submission data:', submissionData);
       submissionData.updatedAt = new Date().toISOString();
 
       const urlParams = new URLSearchParams(window.location.search);
