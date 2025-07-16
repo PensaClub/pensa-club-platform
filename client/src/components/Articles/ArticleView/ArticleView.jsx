@@ -430,16 +430,24 @@ const getMetaImage = () => {
 };
   return (
     <>
-    {article && (
-  <Helmet>
-    <title>{article.title} | Pensa Club</title>
-    <meta property="og:title" content={article.title} />
-    <meta property="og:description" content={article.summary?.replace(/<[^>]*>/g, '').substring(0, 160)} />
-    <meta property="og:image" content={article.mainImage?.sources?.[0] || 'https://www.pensa.club/default-og-image.jpg'} />
-    <meta property="og:url" content={`https://www.pensa.club/articles/${article.slug}`} />
-    <meta property="og:type" content="article" />
-  </Helmet>
-)}
+    <Helmet>
+      <title>{article?.title || 'Pensa Club'}</title>
+      <meta name="description" content={article?.summary?.replace(/<[^>]*>/g, '').substring(0, 160) || 'Статии за пенсионери в България'} />
+      
+      {/* Open Graph метаданни */}
+      <meta property="og:title" content={article?.title || 'Pensa Club'} />
+      <meta property="og:description" content={article?.summary?.replace(/<[^>]*>/g, '').substring(0, 160) || 'Статии за пенсионери в България'} />
+      <meta property="og:image" content={getMetaImage()} />
+      <meta property="og:url" content={currentUrl} />
+      <meta property="og:type" content="article" />
+      <meta property="og:site_name" content="Pensa Club" />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={article?.title || 'Pensa Club'} />
+      <meta name="twitter:description" content={article?.summary?.replace(/<[^>]*>/g, '').substring(0, 160)} />
+      <meta name="twitter:image" content={getMetaImage()} />
+    </Helmet>
     <div className="article-main">
       <div className="articles-hero-view">
         <div className="hero-content-view">
