@@ -12,6 +12,7 @@ const {
     ShortDescriptionSchema,
     TagsSchema,
     MainImageSchema,
+    ImageSchema,
     PaginationQuerySchema,
 } = require('./common.schema');
 
@@ -155,6 +156,7 @@ const BaseProjectSchema = z
 
         // Related entities
         mainImage: MainImageSchema,
+        gallery: z.array(ImageSchema).nullable().optional(),
 
         contact: ContactSchema.nullable().optional(),
         team: z.array(ContactSchema).nullable().optional(),

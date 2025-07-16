@@ -8,6 +8,21 @@ const ImageSchema = z.object({
     src: z.string().nullable().optional(),
     alt: z.string().nullable().optional(),
     caption: z.string().nullable().optional(),
+    name: z.string().nullable().optional(),
+    size: z
+        .union([z.string(), z.number(), z.null()])
+        .transform((val) => {
+            if (val === null || val === undefined) return null;
+            if (typeof val === 'string') {
+                const num = parseInt(val, 10);
+                return isNaN(num) ? null : num;
+            }
+            return val;
+        })
+        .refine((val) => val === null || (typeof val === 'number' && val >= 0), 'Size must be a valid non-negative number')
+        .nullable()
+        .optional(),
+    type: z.string().nullable().optional(),
 });
 
 const ContactSchema = z.object({
@@ -71,7 +86,7 @@ const DownloadMaterialSchema = z.object({
     titleSlug: z.string().nullable().optional(),
     title: z.string().nullable().optional(),
     description: z.string().nullable().optional(),
-    fileType: z.enum(['pdf', 'docx']).nullable().optional(),
+    fileType: z.enum(['pdf', 'docx', 'xlsx', 'xls', 'csv', 'pptx', 'ppt', 'jpg', 'jpeg', 'png', 'gif', 'webp']).nullable().optional(),
     fileSize: z.string().nullable().optional(),
     downloadUrl: z.string().nullable().optional(),
     image: ImageSchema.nullable().optional(),

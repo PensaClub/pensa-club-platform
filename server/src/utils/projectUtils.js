@@ -61,6 +61,12 @@ const projectConfig = [
         attributes: ['id', 'src', 'alt', 'caption', 'isUploading'],
     },
     {
+        model: image,
+        as: 'gallery',
+        required: false,
+        attributes: ['id', 'src', 'alt', 'caption', 'isUploading', 'name', 'size', 'type'],
+    },
+    {
         model: downloadMaterial,
         as: 'downloadMaterials',
         required: false,

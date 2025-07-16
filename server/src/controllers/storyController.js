@@ -44,6 +44,7 @@ storyController.post('/draft/save/:id?', isAuth, checkPermission('stories', 'dra
 });
 
 storyController.get('/draft/:id', isAuth, checkPermission('stories', 'draft', 'read'), async (req, res, next) => {
+    console.log('asd');
     return getSingleStoryByDraftStatus(true, req, res, next);
 });
 

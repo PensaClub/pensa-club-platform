@@ -604,6 +604,22 @@ const createProject = async (projectData, req, res, next) => {
                 );
             }
 
+            // Create gallery images
+            if (projectData.gallery?.length > 0) {
+                await Promise.all(
+                    projectData.gallery.map((imageData) =>
+                        image.create(
+                            {
+                                ...imageData,
+                                imageableId: newProject.id,
+                                imageLinkConnection: 'project_gallery',
+                            },
+                            { transaction: t }
+                        )
+                    )
+                );
+            }
+
             // Create team contacts
             if (projectData.team?.length > 0) {
                 await Promise.all(
@@ -803,6 +819,31 @@ const updateProject = async (projectData, req, res, next, isDraft = false) => {
                     },
                     { transaction: t }
                 );
+            }
+
+            // Update gallery images
+            if (projectData.gallery !== undefined) {
+                await image.destroy({
+                    where: {
+                        imageableId: foundProject.id,
+                        imageLinkConnection: 'project_gallery',
+                    },
+                    transaction: t,
+                });
+                if (projectData.gallery?.length > 0) {
+                    await Promise.all(
+                        projectData.gallery.map((imageData) =>
+                            image.create(
+                                {
+                                    ...imageData,
+                                    imageableId: foundProject.id,
+                                    imageLinkConnection: 'project_gallery',
+                                },
+                                { transaction: t }
+                            )
+                        )
+                    );
+                }
             }
 
             // Update team contacts if provided

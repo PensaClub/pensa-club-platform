@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
                 { model: 'publication', connection: 'publication' },
                 { model: 'project', connection: 'project_main' },
                 { model: 'project', connection: 'project_logo' },
+                { model: 'project', connection: 'project_gallery' },
             ];
 
             imageableModels.forEach(({ model, connection }) => {
@@ -61,6 +62,18 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true,
                 allowNull: false,
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            size: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+            },
+            type: {
+                type: DataTypes.STRING,
+                allowNull: true,
             },
         },
         {

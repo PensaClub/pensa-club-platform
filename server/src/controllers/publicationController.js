@@ -316,7 +316,7 @@ const deletePublicationByDraftStatus = async (isDraft, req, res, next) => {
             }
 
             // Delete related publications (both directions)
-            await publication.sequelize.models.publication_relations.destroy({
+            await publication.sequelize.models.related_publications.destroy({
                 where: {
                     [Op.or]: [{ publication_id: foundPublication.id }, { related_publication_id: foundPublication.id }],
                 },
@@ -492,7 +492,7 @@ const createPublication = async (publicationData, req, res, next) => {
             if (publicationData.relatedPublications?.length > 0) {
                 await Promise.all(
                     publicationData.relatedPublications.map((relatedPublicationId) =>
-                        publication.sequelize.models.publication_relations.create(
+                        publication.sequelize.models.related_publications.create(
                             {
                                 publication_id: newPublication.id,
                                 related_publication_id: relatedPublicationId,
@@ -608,7 +608,7 @@ const updatePublication = async (publicationData, req, res, next, isDraft = fals
             // Handle related publications
             if (publicationData.relatedPublications !== undefined) {
                 // Delete existing relations
-                await publication.sequelize.models.publication_relations.destroy({
+                await publication.sequelize.models.related_publications.destroy({
                     where: { publication_id: foundPublication.id },
                     transaction: t,
                 });
@@ -617,7 +617,7 @@ const updatePublication = async (publicationData, req, res, next, isDraft = fals
                 if (publicationData.relatedPublications.length > 0) {
                     await Promise.all(
                         publicationData.relatedPublications.map((relatedPublicationId) =>
-                            publication.sequelize.models.publication_relations.create(
+                            publication.sequelize.models.related_publications.create(
                                 {
                                     publication_id: foundPublication.id,
                                     related_publication_id: relatedPublicationId,
