@@ -273,6 +273,19 @@
     }
   },
   "profile": {
+     "skills": "Skills",
+  "workOptions": "Work Options", 
+  "interestOptions": "Interests",
+  "newArticle": "New Article",
+  "newInitiative": "New Initiative",
+  "initiatives": "Initiatives", 
+  "applications": "Applications",
+  "initiativePreview": "Initiative Preview", 
+  "projects": "Projects",
+  "projectCreate": "Create Project",
+  "projectPreview": "Project Preview", 
+  "drafts": "Drafts",
+  "newProject": "New Project",
     "main": "Profile Dashboard",
     "bookmarks": "My Bookmarks",
     "select_all": "Select all",
@@ -1623,7 +1636,6 @@
       "location": "Location",
       "participants": "Participants",
       "timeline": "Timeline"
-
     },
     "buttons": {
       "apply": "Apply",
@@ -1641,45 +1653,44 @@
       "team": "Team",
       "applications": "Applications",
       "comments": "Comments",
-       "contact": "Contact",
-       "downloadMaterials": "Files",
-       "budget": "Budget",
-       "sponsorsPartners": "Partners"
-
+      "contact": "Contact",
+      "downloadMaterials": "Files",
+      "budget": "Budget",
+      "sponsorsPartners": "Partners"
     },
     "sections": {
       "publications": "Publications",
       "team": "Team",
-       "contact": "Contact",
-       "downloadMaterials": "Download Materials",
-       "budget": "Budget & Funding",
-        "sponsorsPartners": "Sponsors & Partners"
+      "contact": "Contact",
+      "downloadMaterials": "Download Materials",
+      "budget": "Budget & Funding",
+      "sponsorsPartners": "Sponsors & Partners"
     },
     "messages": {
       "loginRequired": "Please log in to apply for this project."
     },
     "contact": {
-        "projectContact": "Project Contact",
-        "email": "Email",
-        "phone": "Phone",
-        "availableForQuestions": "Available for questions"
-      },
-       "downloadMaterials": {
-        "download": "Download"
-      },
-      "budget": {
-        "goal": "Goal",
-        "funded": "Funded",
-        "remaining": "Remaining",
-        "progress": "Funding Progress",
-        "fullyFunded": "Project is fully funded!",
-        "seekingFunding": "Seeking additional funding"
-      },
-       "sponsorsPartners": {
-        "sponsors": "Sponsors",
-        "partners": "Partners",
-        "visitWebsite": "Visit Website"
-      }
+      "projectContact": "Project Contact",
+      "email": "Email",
+      "phone": "Phone",
+      "availableForQuestions": "Available for questions"
+    },
+    "downloadMaterials": {
+      "download": "Download"
+    },
+    "budget": {
+      "goal": "Goal",
+      "funded": "Funded",
+      "remaining": "Remaining",
+      "progress": "Funding Progress",
+      "fullyFunded": "Project is fully funded!",
+      "seekingFunding": "Seeking additional funding"
+    },
+    "sponsorsPartners": {
+      "sponsors": "Sponsors",
+      "partners": "Partners",
+      "visitWebsite": "Visit Website"
+    }
   },
   "applicationForm": {
     "dateLocale": "en-US",
@@ -2183,6 +2194,19 @@
       "in-progress": "In Progress",
       "completed": "Completed"
     },
+    "preview": {
+      "title": "Project Preview",
+      "description": "Project preview before publishing",
+      "previewMode": "Preview Mode",
+      "previewDescription": "This is how your project will look when published",
+      "backToForm": "Back to Form",
+      "editProject": "Edit",
+      "publishProject": "Publish",
+      "noDataError": "No data for preview",
+      "noDraftError": "No draft to publish",
+      "publishedSuccessfully": "Project published successfully!",
+      "publishError": "Error publishing project"
+    },
     "admin": {
       "title": "Project Management",
       "subtitle": "View and manage all projects and drafts",
@@ -2510,10 +2534,10 @@
       "publishProject": "Publish Project",
       "createProject": "Create Project",
       "slug-help": "URL slug will be used in the project link",
-"short-description-help": "Short description for project listings",
-"full-description-help": "Detailed description with formatting", 
-"location-help": "Choose the project location",
-"selectedInitiative": "Selected Initiative"
+      "short-description-help": "Short description for project listings",
+      "full-description-help": "Detailed description with formatting",
+      "location-help": "Choose the project location",
+      "selectedInitiative": "Selected Initiative"
     },
     "categories": {
       "digitalization": "Digitalization",
@@ -2607,10 +2631,10 @@
       "contact-image-size-too-large": "Image is too large (maximum 2MB)"
     }
   },
-   "location": {
-      "unknownCity": "Unknown city",
-      "unknownLocation": "Unknown location",
-      "defaultCountry": "Bulgaria",
-      "loading": "Loading..."
-    }
+  "location": {
+    "unknownCity": "Unknown city",
+    "unknownLocation": "Unknown location",
+    "defaultCountry": "Bulgaria",
+    "loading": "Loading..."
+  }
 }

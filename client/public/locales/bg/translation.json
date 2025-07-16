@@ -216,6 +216,21 @@
     }
   },
   "profile": {
+    "skills": "Умения", 
+  "workOptions": "Работни възможности",
+  "interestOptions": "Интереси", 
+
+  "newArticle": "Нова статия",
+  "newInitiative": "Нова инициатива", 
+  "initiatives": "Инициативи",
+
+  "applications": "Кандидатури",
+  "initiativePreview": "Преглед на инициатива",
+  "projects": "Проекти", 
+  "projectCreate": "Създаване на проект",
+  "projectPreview": "Преглед на проект",
+  "drafts": "Чернови",
+  "newProject": "Нов проект",
     "main": "Профил панел",
     "bookmarks": "Мойте Oтметки",
     "select_all": "Изберете всички",
@@ -1638,55 +1653,55 @@
       "comments": "Коментари",
       "contact": "Контакт",
       "downloadMaterials": "Файлове",
-       "budget": "Бюджет",
-       "sponsorsPartners": "Пaртньори",
-       "milestones": "Етапи"
+      "budget": "Бюджет",
+      "sponsorsPartners": "Пaртньори",
+      "milestones": "Етапи"
     },
     "sections": {
       "publications": "Публикации",
       "team": "Екип",
       "contact": "Контакт",
-       "downloadMaterials": "Материали за сваляне",
-        "budget": "Бюджет",
-        "sponsorsPartners": "Спонсори и партньори",
-         "milestones": "Етапи на проекта"
+      "downloadMaterials": "Материали за сваляне",
+      "budget": "Бюджет",
+      "sponsorsPartners": "Спонсори и партньори",
+      "milestones": "Етапи на проекта"
     },
     "messages": {
       "loginRequired": "Моля влезте в профила си за да кандидатствате за този проект."
     },
     "contact": {
-        "projectContact": "Контакт за проекта",
-        "email": "Имейл",
-        "phone": "Телефон",
-        "availableForQuestions": "На разположение за въпроси"
+      "projectContact": "Контакт за проекта",
+      "email": "Имейл",
+      "phone": "Телефон",
+      "availableForQuestions": "На разположение за въпроси"
+    },
+    "downloadMaterials": {
+      "download": "Свали"
+    },
+    "budget": {
+      "goal": "Цел",
+      "funded": "Финансирано",
+      "remaining": "Остава",
+      "progress": "Прогрес на финансирането",
+      "fullyFunded": "Проектът е напълно финансиран!",
+      "seekingFunding": "Търси допълнително финансиране"
+    },
+    "sponsorsPartners": {
+      "sponsors": "Спонсори",
+      "partners": "Партньори",
+      "visitWebsite": "Посети сайта"
+    },
+    "milestones": {
+      "status": {
+        "completed": "Завършен",
+        "in-progress": "В процес",
+        "upcoming": "Предстоящ",
+        "overdue": "Просрочен"
       },
-      "downloadMaterials": {
-        "download": "Свали"
-      },
-      "budget": {
-        "goal": "Цел",
-        "funded": "Финансирано",
-        "remaining": "Остава",
-        "progress": "Прогрес на финансирането",
-        "fullyFunded": "Проектът е напълно финансиран!",
-        "seekingFunding": "Търси допълнително финансиране"
-      },
-       "sponsorsPartners": {
-        "sponsors": "Спонсори",
-        "partners": "Партньори",
-        "visitWebsite": "Посети сайта"
-      },
-       "milestones": {
-        "status": {
-          "completed": "Завършен",
-          "in-progress": "В процес",
-          "upcoming": "Предстоящ",
-          "overdue": "Просрочен"
-        },
-        "completed": "Завършени",
-        "inProgress": "В процес",
-        "upcoming": "Предстоящи"
-      }
+      "completed": "Завършени",
+      "inProgress": "В процес",
+      "upcoming": "Предстоящи"
+    }
   },
   "applicationForm": {
     "dateLocale": "bg-BG",
@@ -2191,7 +2206,46 @@
       "in-progress": "В процес",
       "completed": "Завършен"
     },
-     "admin": {
+    "drafts": {
+    "title": "Чернови на проекти",
+    "subtitle": "Управлявайте и редактирайте вашите чернови на проекти",
+    "newProject": "Нов проект",
+    "refresh": "Обнови",
+    "totalDrafts": "Общо чернови",
+    "readyToPublish": "Готови за публикуване",
+    "oldDrafts": "Стари чернови",
+    "loading": "Зареждане на чернови...",
+    "noDrafts": "Няма чернови",
+    "noDraftsDescription": "Все още нямате създадени чернови на проекти",
+    "createFirst": "Създайте първия си проект",
+    "completion": "Завършеност",
+    "edit": "Редактиране",
+    "preview": "Преглед",
+    "delete": "Изтриване",
+    "publish": "Публикуване",
+    "confirmDelete": "Потвърди изтриването",
+    "completeMore": "Завършете повече за да публикувате",
+    "loadMore": "Зареди още",
+    "untitled": "Без заглавие",
+    "deleteSuccess": "Черновата е изтрита успешно",
+    "deleteError": "Грешка при изтриване на черновата",
+    "publishSuccess": "Проектът е публикуван успешно",
+    "publishError": "Грешка при публикуване на проекта"
+  },
+    "preview": {
+      "title": "Преглед на проект",
+      "description": "Преглед на проект преди публикуване",
+      "previewMode": "Режим на преглед",
+      "previewDescription": "Това е как ще изглежда проектът ви когато бъде публикуван",
+      "backToForm": "Назад към формата",
+      "editProject": "Редактиране",
+      "publishProject": "Публикуване",
+      "noDataError": "Няма данни за преглед",
+      "noDraftError": "Няма чернова за публикуване",
+      "publishedSuccessfully": "Проектът е публикуван успешно!",
+      "publishError": "Грешка при публикуване на проекта"
+    },
+    "admin": {
       "title": "Управление на проекти",
       "subtitle": "Преглед и управление на всички проекти и чернови",
       "totalProjects": "Общо проекти",
@@ -2615,10 +2669,11 @@
       "contact-image-size-too-large": "Снимката е твърде голяма (максимум 2MB)"
     }
   },
-    "location": {
-      "unknownCity": "Неизвестен град",
-      "unknownLocation": "Неизвестно местоположение", 
-      "defaultCountry": "България",
-      "loading": "Зарежда..."
-    }
+  "location": {
+    "unknownCity": "Неизвестен град",
+    "unknownLocation": "Неизвестно местоположение",
+    "defaultCountry": "България",
+    "loading": "Зарежда..."
+  }
+
 }
