@@ -48,6 +48,15 @@ module.exports = (sequelize, DataTypes) => {
                 },
             });
 
+            project.hasMany(models.image, {
+                as: 'gallery',
+                foreignKey: 'imageableId',
+                constraints: false,
+                scope: {
+                    image_link_connection: 'project_gallery',
+                },
+            });
+
             project.hasMany(models.comment, {
                 as: 'comments',
                 foreignKey: 'commentableId',

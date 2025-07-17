@@ -36,6 +36,30 @@ const permissions = {
             delete: ['admin', 'moderator'],
         },
     },
+    publications: {
+        create: ['admin', 'moderator'],
+        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        update: ['admin', 'moderator'],
+        delete: ['admin', 'moderator'],
+        draft: {
+            read: ['admin', 'moderator'],
+            create: ['admin', 'moderator'],
+            update: ['admin', 'moderator'],
+            delete: ['admin', 'moderator'],
+        },
+    },
+    stories: {
+        create: ['admin', 'moderator'],
+        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        update: ['admin', 'moderator'],
+        delete: ['admin', 'moderator'],
+        draft: {
+            read: ['admin', 'moderator'],
+            create: ['admin', 'moderator'],
+            update: ['admin', 'moderator'],
+            delete: ['admin', 'moderator'],
+        },
+    },
     // For initiatives, projects, etc
     comments: {
         create: ['admin', 'moderator', 'user'],

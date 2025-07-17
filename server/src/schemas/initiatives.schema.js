@@ -83,7 +83,7 @@ const BaseInitiativeSchema = z
         campaignStatus: z.enum(['open', 'closed']).nullable().optional(),
 
         // Dates and milestones
-        startDate: z.string().min(1, 'Start date is required').nullable().optional(),
+        startDate: z.string().nullable().optional(),
         endDate: z.string().nullable().optional(),
         timestamp: z
             .union([z.string(), z.date(), z.null()])
@@ -102,7 +102,7 @@ const BaseInitiativeSchema = z
         milestones: z.array(MilestoneSchema).nullable().optional(),
 
         // Target audience
-        targetAge: z.array(z.string()).min(1, 'Target age is required').nullable().optional(),
+        targetAge: z.array(z.string()).nullable().optional(),
         targetAudience: z.array(z.string()).nullable().optional(),
         customAudience: z.string().min(5, 'Custom audience must be at least 5 characters').nullable().optional(),
 
@@ -166,10 +166,10 @@ const BaseInitiativeSchema = z
         projects: z
             .array(
                 z.object({
-                    titleSlug: z.string().min(1, 'Project title slug is required'),
-                    slug: z.string().min(1, 'Project slug is required'),
-                    title: z.string().min(1, 'Project title is required'),
-                    description: z.string().min(1, 'Project description is required'),
+                    titleSlug: z.string().nullable().optional(),
+                    slug: z.string().nullable().optional(),
+                    title: z.string().nullable().optional(),
+                    description: z.string().nullable().optional(),
                     status: z.enum(['in-progress', 'active', 'planned', 'completed']).nullable().optional(),
                     image: z.string().url('Invalid image URL').nullable().optional(),
                     link: z.string().nullable().optional(),
@@ -191,7 +191,7 @@ const BaseInitiativeSchema = z
         additionalContacts: z.array(ContactSchema).nullable().optional(),
         responsible: ContactSchema.nullable().optional(),
 
-        sections: z.array(SectionSchema).min(1, 'At least one section is required').nullable().optional(),
+        sections: z.array(SectionSchema).nullable().optional(),
 
         sponsors: z.array(SponsorSchema).nullable().optional(),
         partners: z.array(PartnerSchema).nullable().optional(),

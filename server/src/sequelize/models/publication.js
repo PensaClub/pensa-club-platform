@@ -96,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             titleSlug: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'title_slug',
             },
             title: {
@@ -110,7 +110,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             publishedAt: {
                 type: DataTypes.DATE,
-                allowNull: false,
+                allowNull: true,
                 field: 'published_at',
             },
             readTime: {
@@ -120,21 +120,21 @@ module.exports = (sequelize, DataTypes) => {
             },
             category: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             fileType: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'file_type',
             },
             fileSize: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'file_size',
             },
             downloadUrl: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 field: 'download_url',
             },
             tags: {

@@ -75,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             fileType: {
-                type: DataTypes.ENUM('pdf', 'docx'),
+                type: DataTypes.STRING,
                 allowNull: true,
                 field: 'file_type',
             },
