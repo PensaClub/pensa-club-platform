@@ -1,0 +1,259 @@
+/* Milestones Component */
+.milestones-component {
+    width: 100%;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.milestones-timeline {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.milestone-item {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.milestone-item:last-child {
+    margin-bottom: 0;
+}
+
+.milestone-timeline-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.milestone-dot {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 3px solid white;
+}
+
+.milestone-icon {
+    font-size: 1.2rem;
+    color: white;
+}
+
+.milestone-line {
+    width: 3px;
+    height: 40px;
+    background: linear-gradient(to bottom, #e2e8f0, #f1f5f9);
+    margin-top: 0.5rem;
+    position: relative;
+}
+
+.milestone-content {
+    flex: 1;
+    padding-top: 0.5rem;
+}
+
+.milestone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.8rem;
+    gap: 1rem;
+}
+
+.milestone-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1.3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.milestone-status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(100, 116, 139, 0.1);
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    white-space: nowrap;
+}
+
+.milestone-status.completed {
+    background: rgba(5, 150, 105, 0.1);
+    border-color: rgba(5, 150, 105, 0.2);
+    color: #059669;
+}
+
+.milestone-status.in-progress {
+    background: rgba(27, 139, 138, 0.1);
+    border-color: rgba(27, 139, 138, 0.2);
+    color: #1B8B8A;
+}
+
+.milestone-status.upcoming {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.milestone-status.overdue {
+    background: rgba(220, 38, 38, 0.1);
+    border-color: rgba(220, 38, 38, 0.2);
+    color: #dc2626;
+}
+
+.milestone-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.milestone-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.date-icon {
+    font-size: 1rem;
+}
+
+.date-text {
+    font-weight: 500;
+}
+
+.milestone-description {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.4;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Milestones Summary */
+.milestones-summary {
+    border-top: 2px solid #f1f5f9;
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+.summary-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+.summary-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    text-align: center;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e293b;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .milestones-component {
+        padding: 1.5rem;
+    }
+    
+    .milestone-item {
+        gap: 1rem;
+    }
+    
+    .milestone-dot {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .milestone-icon {
+        font-size: 1rem;
+    }
+    
+    .milestone-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .milestone-title {
+        font-size: 1.1rem;
+    }
+    
+    .summary-stats {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .summary-stat {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .milestones-component {
+        padding: 1rem;
+    }
+    
+    .milestone-dot {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .milestone-icon {
+        font-size: 0.9rem;
+    }
+    
+    .milestone-title {
+        font-size: 1rem;
+    }
+    
+    .milestone-date {
+        font-size: 0.8rem;
+    }
+    
+    .milestone-description {
+        font-size: 0.85rem;
+    }
+}

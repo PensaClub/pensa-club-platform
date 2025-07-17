@@ -58,6 +58,10 @@ import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
 import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
 import { BookmarkedItems } from "./BookmarkedItems/BookmarkedItems";
 import { ApplicationsAdmin } from "../Initiatives/ApplicationsAdmin/ApplicationsAdmin";
+import ProjectCreateForm from "../Initiatives/CreateProject/ProjectCreateForm";
+import { AllProjects } from "../Initiatives/CreateProject/AllProjects/AllProjects";
+import ProjectPreview from "../Initiatives/CreateProject/ProjectPreview/ProjectPreview";
+import DraftProjects from "../Initiatives/CreateProject/DraftProjects/DraftProjects";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -84,7 +88,12 @@ export const Profile = () => {
     ads: false,
     users: false,
     suggest: false,
-    articles: false
+    articles: false,
+    initiatives: false,
+    projects: false,
+    community: false,
+    messages: false,
+    applications: false
   });
   const [applicationsStats, setApplicationsStats] = useState({
     total: 0,
@@ -102,9 +111,9 @@ export const Profile = () => {
       "/profile/password": t("profile.password"),
       "/profile/announced": t("profile.announced"),
       "/profile/messages": t("profile.messages"),
-      "/profile/skills": "Skills",
-      "/profile/workOptions": "Work Options",
-      "/profile/interestOptions": "Interests",
+      "/profile/skills": t("profile.skills"),
+      "/profile/workOptions": t("profile.workOptions"),
+      "/profile/interestOptions": t("profile.interestOptions"),
       "/profile/ads-admin": t("profile.ads-statistic"),
       "/profile/pending-announcements": t("profile.pending_announcements"),
       "/profile/approved-announcements": t("profile.approved_announcements"),
@@ -115,12 +124,16 @@ export const Profile = () => {
       "/profile/admin-suggest-users": t("admin.admin-suggest-users"),
       "/profile/suggest-resolved-users": t("admin.suggest_resolved_users"),
       "/profile/subscription-admin": t("admin.ads_subscription"),
-      "/profile/articles": "Статии",
-      "/profile/article-create": "Нова статия",
-      "/profile/initiative-create": "Нова  инициатива",
-      "/profile/initiative": "Инициативи",
-      "/profile/bookmarks": "Запазени",
-      "/profile/applications-admin": "Кандидатури",
+      "/profile/articles": t("profile.articles"),
+      "/profile/article-create": t("profile.newArticle"),
+      "/profile/initiative-create": t("profile.newInitiative"),
+      "/profile/initiative": t("profile.initiatives"),
+      "/profile/bookmarks": t("profile.bookmarks"),
+      "/profile/applications-admin": t("profile.applications"),
+      "/profile/initiative-preview": t("profile.initiativePreview"),
+      "/profile/projects": t("profile.projects"),
+      "/profile/project-create": t("profile.projectCreate"),
+      "/profile/project-preview": t("profile.projectPreview")
 
     };
 
@@ -145,6 +158,12 @@ export const Profile = () => {
     "/profile/initiative-create",
     "/profile/article-create",
     "/profile/articles",
+    "/profile/applications-admin",
+    "/profile/initiative-preview",
+    "/profile/projects",
+    "/profile/project-create",
+    "/profile/project-preview",
+
     "/profile/applications-admin"
   ];
 
@@ -532,53 +551,53 @@ export const Profile = () => {
 
                   {isAdmin && (
                     <>
-                    <li>
-                      <NavLink
-                        to="users-statistic"
-                        onClick={() => toggleSubMenu('users')}
-                        className={({ isActive }) => isActive ? 'active' : ''}
-                      >
-                        <span className="link-content">
-                          <AnalyticsIcon className="icon" />
-                          {t("admin.users")}
-                        </span>
-                        <span className={`arrow-icon ${subMenuStates.users ? 'rotated' : ''}`}>
-                          {subMenuStates.users ?
-                            <DownArrowIcon /> :
-                            <ArrowIcon />
-                          }
-                        </span>
-                      </NavLink>
-                      <ul className={`sub-menu ${subMenuStates.users ? 'expanded' : ''}`}>
-                        <li>
-                          <NavLink to="users-admin" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <CircleIcon className="icon" />
-                            {t("profile.all_users")} {allUsers >= 1 && <>- {allUsers}</>}
-                          </NavLink>
-                        </li>
-                        <li>
-                          <NavLink to="users-unfinished" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <CircleIcon className="icon" />
-                            {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
-                          </NavLink>
-                        </li>
+                      <li>
+                        <NavLink
+                          to="users-statistic"
+                          onClick={() => toggleSubMenu('users')}
+                          className={({ isActive }) => isActive ? 'active' : ''}
+                        >
+                          <span className="link-content">
+                            <AnalyticsIcon className="icon" />
+                            {t("admin.users")}
+                          </span>
+                          <span className={`arrow-icon ${subMenuStates.users ? 'rotated' : ''}`}>
+                            {subMenuStates.users ?
+                              <DownArrowIcon /> :
+                              <ArrowIcon />
+                            }
+                          </span>
+                        </NavLink>
+                        <ul className={`sub-menu ${subMenuStates.users ? 'expanded' : ''}`}>
+                          <li>
+                            <NavLink to="users-admin" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("profile.all_users")} {allUsers >= 1 && <>- {allUsers}</>}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="users-unfinished" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.unfinished_users")} {unfinishedUsers >= 1 && <>- {unfinishedUsers}</>}
+                            </NavLink>
+                          </li>
 
-                      </ul>
-                  
-                    </li>                    
-    <li>
+                        </ul>
+
+                      </li>
+                      <li>
                         <NavLink
                           to="applications-admin"
                           className={({ isActive }) => isActive ? 'active' : ''}
                         >
                           <span className="link-content">
                             <UsersIcon className="icon" />
-                            Кандидатури {applicationsStats.total > 0 && <>- {applicationsStats.total}</>}
+                            {t("profile.applications")} {applicationsStats.total > 0 && <>- {applicationsStats.total}</>}
                           </span>
                           {/* <ArrowIcon className="icon-arrow" /> */}
                         </NavLink>
                       </li>
-                      </>
+                    </>
                   )}
 
                   <li>
@@ -656,7 +675,7 @@ export const Profile = () => {
                     >
                       <span className="link-content">
                         <DashboardIcon className="icon" />
-                        Инициативи
+                        {t("profile.initiatives")}
                       </span>
                       <span className={`arrow-icon ${subMenuStates.initiatives ? 'rotated' : ''}`}>
                         {subMenuStates.initiatives ? <DownArrowIcon /> : <ArrowIcon />}
@@ -666,13 +685,48 @@ export const Profile = () => {
                       <li>
                         <NavLink to="initiative-create" className={({ isActive }) => isActive ? 'active' : ''}>
                           <CircleIcon className="icon" />
-                          Нова инициатива
+                          {t("profile.newInitiative")}
                         </NavLink>
                       </li>
                       <li>
                         <NavLink to="initiative-drafts" className={({ isActive }) => isActive ? 'active' : ''}>
                           <CircleIcon className="icon" />
-                          Чернови
+                          {t("profile.drafts")}
+                        </NavLink>
+                      </li>
+                      {/* <li>
+                        <NavLink to="/initiative-preview" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          Preview инициатива
+                        </NavLink>
+                      </li> */} {/* Na nejno mqsto може да добавяте и други подсекции свързани с инициативи */}
+                    </ul>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="projects"
+                      onClick={() => toggleSubMenu('projects')}
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <DashboardIcon className="icon" />
+                        {t("profile.projects")}
+                      </span>
+                      <span className={`arrow-icon ${subMenuStates.projects ? 'rotated' : ''}`}>
+                        {subMenuStates.projects ? <DownArrowIcon /> : <ArrowIcon />}
+                      </span>
+                    </NavLink>
+                    <ul className={`sub-menu ${subMenuStates.projects ? 'expanded' : ''}`}>
+                      <li>
+                        <NavLink to="projects-create" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("profile.newProject")}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="projects-drafts" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("profile.drafts")}
                         </NavLink>
                       </li>
                       {/* <li>
@@ -760,8 +814,13 @@ export const Profile = () => {
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="projects" element={<ManagementGuard><AllProjects /></ManagementGuard>} />
+            <Route path="projects-drafts" element={<ManagementGuard><DraftProjects /></ManagementGuard>} />
             <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
+            <Route path="projects-create" element={<ManagementGuard><ProjectCreateForm /></ManagementGuard>} />
+            <Route path="project-preview" element={<ManagementGuard><ProjectPreview /></ManagementGuard>} />
+
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}
 

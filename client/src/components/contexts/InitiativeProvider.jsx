@@ -77,9 +77,14 @@ export const InitiativeProvider = ({ children }) => {
   const [draftsHasMore, setDraftsHasMore] = useState(true);
   const [draftsCurrentPage, setDraftsCurrentPage] = useState(1);
   const navigate = useNavigate();
-
+  // Project Draft states
+  const [projectDrafts, setProjectDrafts] = useState([]);
+  const [projectDraftsLoaded, setProjectDraftsLoaded] = useState(false);
+  const [projectDraftsHasMore, setProjectDraftsHasMore] = useState(true);
+  const [projectDraftsCurrentPage, setProjectDraftsCurrentPage] = useState(1);
   const initiativeService = initiativeServiceFactory();
-
+  const [projectsHasMore, setProjectsHasMore] = useState(true);
+  const [projectsCurrentPage, setProjectsCurrentPage] = useState(1);
   const showErrorAndSetTimeouts = useCallback((error) => {
     setErrorMessage(error);
     setIsLoading(false);
@@ -113,7 +118,7 @@ export const InitiativeProvider = ({ children }) => {
   const getUserDisplayName = useCallback(() => {
     return username || profileData?.details?.firstName || userEmail?.split('@')[0] || 'User';
   }, [username, profileData?.details?.firstName, userEmail]);
-  
+
   // =================
   // APPLICATION FUNCTIONS 
   // =================
@@ -144,67 +149,67 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [initiativeService]);
 
-const applyToProject = useCallback(async (projectId, applicationData) => {
-  if (!projectId || !applicationData) {
-    notify('error', 'Missing project ID or application data');
-    return;
-  }
-
-  if (!isAuthentication) {
-    notify('error', 'Authentication required');
-    return;
-  }
-
-  try {
-    setIsLoading(true);
-
-    // API заявка към сървъра
-    const response = await initiativeService.applyToProject(projectId, applicationData);
-    
-    // Записваме в localStorage за кеширане
-    const appliedProjects = JSON.parse(localStorage.getItem('appliedProjects') || '[]');
-    const newApplication = {
-      projectId: Number(projectId),
-      email: userEmail,
-      timestamp: Date.now(),
-      applicationId: response.id || response.application?.id,
-      applicationData: applicationData
-    };
-    
-    appliedProjects.push(newApplication);
-    localStorage.setItem('appliedProjects', JSON.stringify(appliedProjects));
-
-    // Обновяваме локалното състояние
-    setUserApplications(prev => {
-      const updated = [...prev, newApplication];
-      return updated;
-    });
-
-    // Презареждаме кандидатурите за проекта
-    await getProjectApplications(projectId);
-
-    notify('application-success');
-    return {
-      success: true,
-      message: response.message || 'Кандидатурата е изпратена успешно',
-      application: response.application || response
-    };
-
-  } catch (error) {
-    console.error('Error applying to project:', error);
-    
-    // Специална обработка за deadline грешка
-    if (error.message === 'Application deadline has passed') {
-      notify('error', 'Крайният срок за кандидатстване е изминал');
-    } else {
-      notify('error', error.message || 'Failed to submit application');
+  const applyToProject = useCallback(async (projectId, applicationData) => {
+    if (!projectId || !applicationData) {
+      notify('error', 'Missing project ID or application data');
+      return;
     }
-    
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, [initiativeService, userEmail, isAuthentication, getProjectApplications]);
+
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      // API заявка към сървъра
+      const response = await initiativeService.applyToProject(projectId, applicationData);
+
+      // Записваме в localStorage за кеширане
+      const appliedProjects = JSON.parse(localStorage.getItem('appliedProjects') || '[]');
+      const newApplication = {
+        projectId: Number(projectId),
+        email: userEmail,
+        timestamp: Date.now(),
+        applicationId: response.id || response.application?.id,
+        applicationData: applicationData
+      };
+
+      appliedProjects.push(newApplication);
+      localStorage.setItem('appliedProjects', JSON.stringify(appliedProjects));
+
+      // Обновяваме локалното състояние
+      setUserApplications(prev => {
+        const updated = [...prev, newApplication];
+        return updated;
+      });
+
+      // Презареждаме кандидатурите за проекта
+      await getProjectApplications(projectId);
+
+      notify('application-success');
+      return {
+        success: true,
+        message: response.message || 'Кандидатурата е изпратена успешно',
+        application: response.application || response
+      };
+
+    } catch (error) {
+      console.error('Error applying to project:', error);
+
+      // Специална обработка за deadline грешка
+      if (error.message === 'Application deadline has passed') {
+        notify('error', 'Крайният срок за кандидатстване е изминал');
+      } else {
+        notify('error', error.message || 'Failed to submit application');
+      }
+
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [initiativeService, userEmail, isAuthentication, getProjectApplications]);
   // Зареждане на всички кандидатури (за админи)
   const getAllApplications = useCallback(async () => {
     try {
@@ -266,45 +271,45 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
   }, [initiativeService]);
 
   const sendApplicationEmails = useCallback(async (recipientsData, templateType = null) => {
-  if (!isAuthentication) {
-    notify('error', 'Authentication required');
-    return;
-  }
-
-  try {
-    setIsLoading(true);
-
-    const emailData = {
-      emails:recipientsData
-    };
-
-    const response = await initiativeService.sendPersonalizedEmails(emailData);
-
-    if (templateType && (templateType === 'rejection' || templateType === 'interview_invitation')) {
-      for (const recipient of recipientsData) {
-        const newStatus = templateType === 'rejection' ? 'rejected' : 'approved';
-        
-        try {
-          await updateApplicationStatus(recipient.applicationId, newStatus);
-        } catch (error) {
-          console.error(`Failed to update status for application ${recipient.applicationId}:`, error);
-        }
-      }
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
     }
 
-    const successCount = response.summary?.successfullySent || response.results?.filter(r => r.sent).length || 0;
-    notify('success', `Successfully sent ${successCount} email(s)!`);
-    
-    return response;
+    try {
+      setIsLoading(true);
 
-  } catch (error) {
-    console.error('Error sending emails:', error);
-    notify('error', error.message || 'Failed to send emails');
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, [isAuthentication, initiativeService, updateApplicationStatus]);
+      const emailData = {
+        emails: recipientsData
+      };
+
+      const response = await initiativeService.sendPersonalizedEmails(emailData);
+
+      if (templateType && (templateType === 'rejection' || templateType === 'interview_invitation')) {
+        for (const recipient of recipientsData) {
+          const newStatus = templateType === 'rejection' ? 'rejected' : 'approved';
+
+          try {
+            await updateApplicationStatus(recipient.applicationId, newStatus);
+          } catch (error) {
+            console.error(`Failed to update status for application ${recipient.applicationId}:`, error);
+          }
+        }
+      }
+
+      const successCount = response.summary?.successfullySent || response.results?.filter(r => r.sent).length || 0;
+      notify('success', `Successfully sent ${successCount} email(s)!`);
+
+      return response;
+
+    } catch (error) {
+      console.error('Error sending emails:', error);
+      notify('error', error.message || 'Failed to send emails');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService, updateApplicationStatus]);
   // Draft functions
   const getAllDrafts = useCallback(async (page = 1, forceRefresh = false) => {
     if (page === 1 && drafts.length > 0 && draftsLoaded && !forceRefresh) {
@@ -592,7 +597,12 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
       throw error;
     }
   }, [isAuthentication, initiativeService]);
-
+const invalidateProjectDraftsCache = useCallback(() => {
+  setProjectDraftsLoaded(false);
+  setProjectDrafts([]);
+  setProjectDraftsCurrentPage(1);
+  setProjectDraftsHasMore(true);
+}, []);
   const getDraftInitiative = useCallback(async (userId) => {
     try {
       const response = await initiativeService.getDraftInitiative(userId);
@@ -1034,34 +1044,401 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
     }
   }, [isAuthentication, initiativeService, getComments]);
 
-  const getAllProjects = useCallback(async (forceRefresh = false) => {
-    if (projects.length > 0 && projectsLoaded && !forceRefresh) {
-      return { data: projects };
+  // В InitiativeProvider.js - поправи getAllProjects функцията
+  const getAllProjects = useCallback(async (page = 1, forceRefresh = false) => {
+    if (page === 1 && projects.length > 0 && projectsLoaded && !forceRefresh) {
+      return {
+        data: projects,
+        hasMore: projectsHasMore,
+        currentPage: projectsCurrentPage
+      };
     }
 
     try {
       setIsLoading(true);
-      const response = await initiativeService.getAllProjects();
+      const response = await initiativeService.getAllProjects(page, 6); // Добавяме page и limit
 
-      const projectsData = response.data || response;
-      setProjects(projectsData);
+      const responseData = {
+        data: response.data || response,
+        hasMore: response.pagination?.hasNextPage || false,
+        totalCount: response.pagination?.totalProjects || 0,
+        currentPage: response.pagination?.page || page
+      };
+
+      if (page === 1) {
+        setProjects(responseData.data);
+      } else {
+        setProjects(prev => [...prev, ...responseData.data]);
+      }
+
+      setProjectsHasMore(responseData.hasMore);
+      setProjectsCurrentPage(responseData.currentPage);
       setProjectsLoaded(true);
 
-      return { data: projectsData };
+      return responseData;
     } catch (e) {
       console.error('Error fetching projects:', e);
       notify('error', e.message || 'Failed to fetch projects');
       showErrorAndSetTimeouts(e.message);
-      return { data: [] };
+      return { data: [], hasMore: false, currentPage: page };
     } finally {
       setIsLoading(false);
     }
-  }, [projects.length, projectsLoaded, initiativeService, showErrorAndSetTimeouts]);
+  }, [projects.length, projectsLoaded, projectsHasMore, projectsCurrentPage, initiativeService, showErrorAndSetTimeouts]);
 
-  const getProjectById = useCallback(async (id) => {
+  const createProject = useCallback(async (projectData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
     try {
       setIsLoading(true);
+      const response = await initiativeService.createProject(projectData);
 
+      // Добавяме в projects списъка
+      setProjects(prev => [response.data || response, ...prev]);
+
+      // Ако е свързан с инициатива, обновяваме я
+      if (projectData.initiativeId) {
+        await updateInitiativeWithProject(projectData.initiativeId, response.data || response);
+      }
+
+      notify('success', 'Project created successfully!');
+      return response;
+    } catch (error) {
+      console.error('Error creating project:', error);
+      notify('error', 'Failed to create project');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const deleteProject = useCallback(async (identifier) => {
+  if (!isAuthentication) {
+    notify('error', 'Authentication required');
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+    
+    await initiativeService.deleteProject(identifier);
+
+    // Премахваме от локалното състояние
+    setProjects(prev => prev.filter(project => 
+      project.id !== identifier && 
+      project.slug !== identifier &&
+      project.id.toString() !== identifier.toString()
+    ));
+
+    notify('success', 'Project deleted successfully!');
+  } catch (error) {
+    console.error('Error deleting published project:', error);
+    notify('error', 'Failed to delete project');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [isAuthentication, initiativeService]);
+
+  // Save Project Draft
+
+const saveDraftProject = useCallback(async (draftData) => {
+    if (!isAuthentication) {
+        notify('error', 'Authentication required');
+        return;
+    }
+
+    try {
+        const response = await initiativeService.saveDraftProject(draftData);
+        const savedDraft = response.data || response;
+
+        setProjectDrafts(prev => {
+            // Проверяваме дали черновата вече съществува (update)
+            const existingIndex = prev.findIndex(draft => 
+                draft.id === savedDraft.id || 
+                draft.slug === savedDraft.slug
+            );
+            
+            if (existingIndex !== -1) {
+                // Обновяваме съществуваща чернова
+                const updated = [...prev];
+                updated[existingIndex] = savedDraft;
+                return updated;
+            } else {
+                // Добавяме нова чернова в началото
+                return [savedDraft, ...prev];
+            }
+        });
+        
+        notify('success', 'Project draft saved successfully!');
+        return response;
+    } catch (error) {
+        console.error('Error saving project draft:', error);
+        notify('error', 'Failed to save project draft');
+        throw error;
+    }
+}, [isAuthentication, initiativeService]);
+// Delete draft project
+
+const deleteDraftProject = useCallback(async (draftId) => {
+  if (!isAuthentication) {
+    notify('error', 'Authentication required');
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+    
+    await initiativeService.deleteDraftProject(draftId);
+
+    // Премахваме от локалното състояние
+    setProjectDrafts(prev => prev.filter(draft => 
+      draft.id !== draftId && 
+      draft.slug !== draftId &&
+      draft.id.toString() !== draftId.toString()
+    ));
+
+    notify('success', 'Project draft deleted successfully!');
+  } catch (error) {
+    console.error('Error deleting draft project:', error);
+    notify('error', 'Failed to delete project draft');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [isAuthentication, initiativeService]);
+
+  // Update Project Draft
+
+const updateDraftProject = useCallback(async (id, draftData) => {
+    if (!isAuthentication) {
+        notify('error', 'Authentication required');
+        return;
+    }
+
+    try {
+        setIsLoading(true);
+        
+        const response = await initiativeService.updateDraftProject(id, draftData);
+        const updatedDraft = response.data || response;
+        
+        setProjectDrafts(prev => {
+            return prev.map(draft => {
+                if (draft.id === id || 
+                    draft.id === updatedDraft.id || 
+                    draft.slug === id ||
+                    draft.slug === updatedDraft.slug) {
+                    return updatedDraft;
+                }
+                return draft;
+            });
+        });
+
+        notify('success', 'Project draft updated successfully!');
+        return response;
+    } catch (error) {
+        console.error('Error updating project draft:', error);
+        notify('error', 'Failed to update project draft');
+        throw error;
+    } finally {
+        setIsLoading(false);
+    }
+}, [isAuthentication, initiativeService]);
+
+  // Get All Project Drafts
+  const getAllProjectDrafts = useCallback(async (page = 1, forceRefresh = false) => {
+    if (page === 1 && projectDrafts.length > 0 && projectDraftsLoaded && !forceRefresh) {
+      return {
+        data: projectDrafts,
+        hasMore: projectDraftsHasMore,
+        currentPage: projectDraftsCurrentPage
+      };
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.getAllProjectDrafts(page, 6);
+
+      const responseData = {
+        data: response.data || [],
+        pagination: response.pagination,
+        hasMore: response.pagination?.hasNextPage || false,
+        totalCount: response.pagination?.totalProjects || 0,
+        currentPage: response.pagination?.page || page
+      };
+
+      if (page === 1) {
+        setProjectDrafts(responseData.data);
+      } else {
+        setProjectDrafts(prev => [...prev, ...responseData.data]);
+      }
+
+      setProjectDraftsHasMore(responseData.hasMore);
+      setProjectDraftsCurrentPage(responseData.currentPage);
+      setProjectDraftsLoaded(true);
+
+      return responseData;
+    } catch (e) {
+      console.error('Error fetching project drafts:', e);
+      return {
+        data: [],
+        hasMore: false,
+        currentPage: page
+      };
+    } finally {
+      setIsLoading(false);
+    }
+  }, [projectDrafts.length, projectDraftsLoaded, projectDraftsHasMore, projectDraftsCurrentPage, initiativeService]);
+// Get draft project by ID
+const getDraftProjectById = useCallback(async (id) => {
+  try {
+    setIsLoading(true);
+    const response = await initiativeService.getDraftProjectById(id);
+    return response.data || response;
+  } catch (error) {
+    console.error('Error fetching draft project by ID:', error);
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [initiativeService]);
+  // Update Initiative with new Project
+  const updateInitiativeWithProject = useCallback(async (initiativeId, projectData) => {
+    try {
+
+      const initiative = await getInitiativeById(initiativeId);
+
+      // Подготвяме новия проект за добавяне
+      const projectInfo = {
+        titleSlug: projectData.slug || `project-${projectData.id}`,
+        slug: projectData.slug || `project-${projectData.id}`,
+        title: projectData.title,
+        description: projectData.shortDescription || '',
+        status: projectData.status,
+        image: projectData.mainImage?.src || '',
+        link: `/projects/${projectData.slug || projectData.id}`,
+        coordinates: projectData.location?.[0]?.coordinates || { lat: null, lng: null }
+      };
+      // Проверяваме дали проектът вече съществува
+      const existingProjects = initiative.projects || [];
+      const projectExists = existingProjects.some(p =>
+        p.slug === projectInfo.slug ||
+        p.titleSlug === projectInfo.titleSlug
+      );
+
+      if (projectExists) {
+
+        return;
+      }
+
+      // Добавяме новия проект към съществуващите
+      const updatedProjects = [...existingProjects, projectInfo];
+
+      // Обновяваме цялата инициатива
+      const updatedInitiativeData = {
+        ...initiative,
+        projects: updatedProjects,
+        updatedAt: new Date().toISOString()
+      };
+
+      // Използваме ID вместо цялия обект за по-сигурно update
+      await updateInitiative(initiativeId, updatedInitiativeData);
+
+      notify('success', 'Инициативата е обновена с новия проект');
+
+    } catch (error) {
+      console.error('❌ Error updating initiative with project:', error);
+      console.error('Error details:', error.message);
+      throw error;
+    }
+  }, [getInitiativeById, updateInitiative]);
+
+  // Toggle Project Draft Status (Publish)
+const toggleProjectDraftStatus = useCallback(async (identifier) => {
+  if (!isAuthentication) {
+    notify('error', 'Authentication required');
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+    const response = await initiativeService.toggleProjectDraftStatus(identifier);
+
+    const publishedProject = response.data || response;
+    if (!publishedProject.isDraft) {
+      // 🔧 ПОПРАВЕН ФИЛТЪР - включва и identifier-а
+      setProjectDrafts(prev => prev.filter(draft =>
+        draft.id !== publishedProject.id &&
+        draft.slug !== publishedProject.slug &&
+        draft.id !== identifier &&                    // 🔧 ДОБАВЕНО
+        draft.slug !== identifier &&                  // 🔧 ДОБАВЕНО
+        draft.id.toString() !== identifier.toString() // 🔧 ДОБАВЕНО за сигурност
+      ));
+
+      // Добавяме в projects
+      setProjects(prev => [publishedProject, ...prev]);
+      notify('success', 'Project published successfully!');
+
+      const navigationTarget = publishedProject.slug || publishedProject.id || identifier;
+      if (navigationTarget && navigationTarget !== 'undefined') {
+        navigate(`/projects/${navigationTarget}`);
+      } else {
+        navigate('/projects');
+      }
+    }
+
+    return publishedProject;
+  } catch (error) {
+    console.error('Error toggling project draft status:', error);
+    notify('error', 'Failed to publish project draft');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [isAuthentication, initiativeService, navigate]);
+  
+  // ✅ Премахнат updateInitiativeWithProject dependency
+  const updateProject = useCallback(async (identifier, projectData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await initiativeService.updateProject(identifier, projectData);
+
+      // Обновяваме в локалното състояние
+      setProjects(prev => prev.map(project =>
+        (project.id === identifier || project.slug === identifier)
+          ? (response.data || response)
+          : project
+      ));
+
+      notify('success', 'Проектът е обновен успешно!');
+      return response;
+    } catch (error) {
+      console.error('Error updating project:', error);
+      notify('error', 'Грешка при обновяване на проекта');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, initiativeService]);
+
+  const getProjectById = useCallback(async (id) => {
+    // 🔧 ДОБАВЕНА ПРОВЕРКА
+    if (!id || id === 'undefined' || id === 'null') {
+      const error = new Error(`Invalid project ID: ${id}`);
+      console.error('getProjectById called with invalid ID:', id);
+      throw error;
+    }
+
+    try {
+      setIsLoading(true);
       const response = await initiativeService.getProjectById(id);
       const project = response.data || response;
 
@@ -1069,33 +1446,8 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
         throw new Error(`Project not found with id/slug: ${id}`);
       }
 
+      // ... останалата логика остава същата
       setCurrentProject(project);
-
-      // Обработваме коментарите ако има
-      if (project.comments && Array.isArray(project.comments)) {
-        const processedComments = project.comments
-          .filter(comment => !comment.parentId)
-          .map(comment => {
-            const replies = project.comments
-              .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
-              .map(reply => ({
-                ...reply,
-                id: reply.id === comment.id ? generateId() : reply.id
-              }));
-
-            return {
-              ...comment,
-              replies: replies
-            };
-          });
-
-        setComments(prev => ({
-          ...prev,
-          [`project-${project.id}`]: processedComments,
-          [`project-${project.slug}`]: processedComments
-        }));
-      }
-
       return project;
     } catch (e) {
       console.error('Error fetching project by ID:', e);
@@ -1613,19 +1965,34 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
     isBookmarkedProject: (id) => bookMarkedProjects.includes(id),
     hasBookmarksProjects: bookMarkedProjects.length > 0,
     // Project functions
+    createProject,
+    saveDraftProject,
+    updateDraftProject,
+    getAllProjectDrafts,
+    getDraftProjectById,
+    toggleProjectDraftStatus,
+    projectDrafts,
+    projectDraftsLoaded,
+    projectDraftsHasMore,
+    projectDraftsCurrentPage,
     getAllProjects,
     getProjectById,
     getProjectsByInitiative,
     projects,
+    deleteProject,
     currentProject,
     projectsLoaded,
-
+    updateProject,
+    deleteDraftProject,
     // Project comments
     getProjectComments,
     addProjectComment,
     updateProjectComment,
     deleteProjectComment,
     likeProjectComment,
+    projectsHasMore,
+    projectsCurrentPage,
+
     //Application functions
     getProjectApplications,
     recentApplications,
@@ -1636,7 +2003,7 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
     updateApplicationStatus, // За админи  
     deleteApplication, // За админи 
     sendApplicationEmails,     // За админи
-
+    updateInitiativeWithProject, // Обновява инициатива с нов проект
     //Stories functions
     getStoryBySlug,
     getStoryComments,
@@ -1646,7 +2013,7 @@ const applyToProject = useCallback(async (projectId, applicationData) => {
     getPublicationBySlug,
     getPublicationComments,
     addPublicationComment,
-
+invalidateProjectDraftsCache,
     // Related content
     getRelatedContent,
   };
