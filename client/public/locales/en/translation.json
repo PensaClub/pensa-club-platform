@@ -1473,7 +1473,8 @@
       "description": "Discover and participate in initiatives that build bridges between generations and strengthen our community",
       "activeInitiatives": "Active Initiatives",
       "participants": "Participants",
-      "cities": "Cities"
+      "cities": "Cities",
+      "mainTitle": "ADULTS MAKE A CHANGE"
     },
     "view": {
       "notFound": "Initiative not found",

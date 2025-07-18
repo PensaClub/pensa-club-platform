@@ -81,7 +81,7 @@ useEffect(() => {
         {/* Дясна секция - главно съдържание */}
         <div className="hero-content-panel">
           <h1 className="hero-main-title">
-            {t('initiatives.hero.mainTitle', 'ВЪЗРАСТНИ ПРАВЯТ ПРОМЯНА')}
+            {t('initiatives.hero.mainTitle')}
           </h1>
           <p className="initiatives-hero-description">
             {t('initiatives.hero.description')}
