@@ -425,16 +425,21 @@ header.scrolled + .header-line {
 .mobile-nav-item svg {
   width: 16px;
   height: 16px;
+  
 }
-
+.mobile-nav-item.mobile-dropdown-toggle>svg {
+  width: 16px;
+  height: 16px;
+  color: var(--orange);
+}
 .mobile-nav-item:hover {
   background-color: rgba(226, 96, 32, 0.1);
   color: var(--orange);
 }
 
 .mobile-nav-item.active {
-  background-color: rgba(27, 109, 77, 0.1);
-  color: var(--green);
+  /* background-color: rgba(27, 109, 77, 0.1); */
+  color: #333333;
   font-weight: 600;
 }
 
@@ -489,6 +494,7 @@ header.scrolled + .header-line {
 .mobile-dropdown-arrow {
   transition: transform 0.3s ease;
   margin-left: auto;
+  color: var(--orange)!important;
 }
 
 .mobile-dropdown-arrow.rotated {
@@ -533,9 +539,10 @@ header.scrolled + .header-line {
 }
 
 .mobile-dropdown-item.active {
-  background-color: rgba(27, 109, 77, 0.1);
-  color: var(--green);
-  font-weight: 600;
+  background-color: var(--orange);
+  color: var(--white);
+  width: 90%;
+  font-weight: 500;
 }
 
 .bookmark-header-section {

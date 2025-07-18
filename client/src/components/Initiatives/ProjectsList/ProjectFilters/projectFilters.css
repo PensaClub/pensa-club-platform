@@ -65,7 +65,7 @@
 }
 
 .label-text {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--neutral-700);
 }
@@ -122,10 +122,11 @@
   box-shadow: var(--shadow-md);
 }
 
-.btn-icon {
+.btn-icon-filters {
   font-size: 1rem;
   position: relative;
   z-index: 1;
+  text-indent: initial;
 }
 
 .btn-text {
@@ -446,7 +447,7 @@
   position: relative;
   width: 48px;
   height: 28px;
-  background: var(--neutral-300);
+  background: var(--neutral-500);
   border-radius: 14px;
   transition: background-color 0.3s ease;
   flex-shrink: 0;
@@ -571,5 +572,26 @@
   
   .clear-filters-btn {
     align-self: flex-end;
+  }
+}
+@media (max-width: 359px) {
+.toggle-text {
+    font-size: 1.2rem;
+  }
+  .select-trigger span{
+    font-size: 0.8rem;
+  }
+  .toggle-arrow {
+    width: 30px;
+    height: 30px;
+  }
+  .toggle-label span {
+    font-size: 0.9rem;
+  }
+  .toggle-switches {
+    padding: 14px 8px;
+  }
+  .toggle-switch {
+    gap: 30px;
   }
 }

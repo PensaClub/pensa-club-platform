@@ -14,7 +14,7 @@ export const Header = ({ additionalClasses }) => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthentication, isFinish, profileData } = useContext(UserContext);
-  const { bookmarkedInitiatives, hasBookmarks, hasBookmarksProjects, bookMarkedProjects  } = useInitiativeContext();
+  const { bookmarkedInitiatives, hasBookmarks, hasBookmarksProjects, bookMarkedProjects } = useInitiativeContext();
   const [isModalOpen, setModalOpen] = useState(false);
   const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
   const profileRef = useRef(null);
@@ -143,12 +143,21 @@ export const Header = ({ additionalClasses }) => {
                   </svg>
                   {t("header.initiatives")}
                 </Link>
+                  <Link
+                  to="/projects"
+                  className="dropdown-link">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+                  </svg>
+                  {t("header.projects")}
+                </Link>
                 <Link to="/map" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor" />
                   </svg>
                   {t("header.map")}
                 </Link>
+              
                 {/* <Link to="/community" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 12.75C13.63 12.75 15.07 13.14 16.24 13.65C17.32 14.13 18 15.21 18 16.38V18H6V16.39C6 15.21 6.68 14.13 7.76 13.66C8.93 13.14 10.37 12.75 12 12.75ZM4 13H8V11H4V13ZM16 13H20V11H16V13ZM12 10.5C10.34 10.5 9 9.16 9 7.5C9 5.84 10.34 4.5 12 4.5C13.66 4.5 15 5.84 15 7.5C15 9.16 13.66 10.5 12 10.5ZM21 9.75C21 11.16 19.16 12 18 12C18.84 12 20 10.84 20 9.75C20 8.66 18.84 7.5 18 7.5C19.16 7.5 21 8.36 21 9.75ZM3 9.75C3 8.36 4.84 7.5 6 7.5C5.16 7.5 4 8.66 4 9.75C4 10.84 5.16 12 6 12C4.84 12 3 11.16 3 9.75Z" fill="currentColor" />
@@ -164,7 +173,7 @@ export const Header = ({ additionalClasses }) => {
             >
               {t("header.ad-create")}
             </NavLink>
-             <LanguageSwitcher />
+            <LanguageSwitcher />
           </nav>
 
           {/* Бутон за мобилното меню */}
@@ -374,7 +383,16 @@ export const Header = ({ additionalClasses }) => {
                   </svg>
                   {t("header.initiatives")}
                 </NavLink>
-
+                <NavLink
+                  to="/projects"
+                  className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
+                  onClick={toggleMobileMenu}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+                  </svg>
+                  {t("header.projects")}
+                </NavLink>
                 <NavLink
                   to="/map"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
@@ -399,8 +417,8 @@ export const Header = ({ additionalClasses }) => {
               {t("header.ad-create")}
             </NavLink>
 
-            <div className="mobile-menu-divider"></div>
-<LanguageSwitcher isMobile={true} onMobileMenuToggle={toggleMobileMenu} />
+            {/* <div className="mobile-menu-divider"></div> */}
+            <LanguageSwitcher isMobile={true} onMobileMenuToggle={toggleMobileMenu} />
             {!isAuthentication ? (
               <>
                 <Link to="/sign-up?view=login" className="mobile-nav-item" onClick={toggleMobileMenu}>
