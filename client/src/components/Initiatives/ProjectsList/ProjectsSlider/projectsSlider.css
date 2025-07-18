@@ -92,6 +92,7 @@
 .proj-slider-track {
   display: flex;
   transition: none;
+  width: 100%;
 }
 
 .proj-slider-track.transitioning {
@@ -101,6 +102,7 @@
 .proj-slider-slide {
   flex-shrink: 0;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 /* ===== SLIDER PROJECT CARD ===== */
@@ -110,11 +112,12 @@
   border: 1px solid rgba(226, 228, 240, 0.8);
   overflow: hidden;
   transition: all 0.3s ease;
-  height: 380px;
+  min-height: 380px; /* Променено от height на min-height */
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   position: relative;
+  width: 100%;
 }
 
 .proj-slider-project-card::before {
@@ -145,6 +148,7 @@
   height: 160px;
   overflow: hidden;
   border-radius: 16px 16px 0 0;
+  flex-shrink: 0;
 }
 
 .proj-slider-card-image {
@@ -249,12 +253,14 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow: hidden;
 }
 
 .proj-slider-card-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .proj-meta-items {
@@ -283,13 +289,17 @@
 .proj-slider-card-title {
   font-size: 1.125rem;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.4;
   color: var(--primary-dark);
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  flex-shrink: 0;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .proj-slider-card-description {
@@ -311,6 +321,7 @@
   margin-top: auto;
   padding-top: 12px;
   border-top: 1px solid var(--neutral-200);
+  flex-shrink: 0;
 }
 
 .proj-quick-stat {
@@ -338,6 +349,7 @@
   padding: 16px 18px;
   background: linear-gradient(135deg, var(--neutral-50), #fff);
   border-top: 1px solid rgba(226, 228, 240, 0.6);
+  flex-shrink: 0;
 }
 
 .proj-slider-view-btn {
@@ -467,18 +479,85 @@
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 1024px) {
+
+/* Desktop - 1200px and up */
+@media (min-width: 1200px) {
   .proj-slider-slide {
+    width: 33.333333%; /* 3 slides */
+    padding: 20px;
+  }
+  
+  .proj-slider-project-card {
+    min-height: 380px; /* Променено */
+  }
+  
+  .proj-slider-nav {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .proj-slider-nav.prev {
+    left: -26px;
+  }
+  
+  .proj-slider-nav.next {
+    right: -26px;
+  }
+}
+
+/* Laptop - 1024px to 1199px */
+@media (max-width: 1199px) and (min-width: 1024px) {
+  .proj-slider-slide {
+    width: 33.333333%; /* 3 slides */
+    padding: 18px;
+  }
+  
+  .proj-slider-project-card {
+    min-height: 370px; /* Променено */
+  }
+  
+  .proj-slider-nav {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .proj-slider-nav.prev {
+    left: -24px;
+  }
+  
+  .proj-slider-nav.next {
+    right: -24px;
+  }
+  
+  .proj-slider-nav svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Tablet - 768px to 1023px */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .proj-slider-slide {
+    width: 50%; /* 2 slides */
     padding: 16px;
   }
   
   .proj-slider-project-card {
-    height: 360px;
+    min-height: 360px; /* Променено */
+  }
+  
+  .proj-slider-card-header {
+    height: 150px;
   }
   
   .proj-slider-nav {
     width: 44px;
     height: 44px;
+  }
+  
+  .proj-slider-nav svg {
+    width: 18px;
+    height: 18px;
   }
   
   .proj-slider-nav.prev {
@@ -488,55 +567,97 @@
   .proj-slider-nav.next {
     right: -22px;
   }
+  
+  .proj-slider-dots {
+    gap: 8px;
+    padding: 18px 20px 14px;
+  }
+  
+  .proj-slider-dot {
+    width: 8px;
+    height: 8px;
+  }
 }
 
-@media (max-width: 768px) {
+/* Mobile Large - 481px to 767px */
+@media (max-width: 767px) and (min-width: 481px) {
   .proj-slider-slide {
+    width: 100%; /* 1 slide */
     padding: 12px;
   }
   
   .proj-slider-project-card {
-    height: 340px;
+    min-height: 340px; /* Променено */
   }
   
   .proj-slider-card-header {
     height: 140px;
   }
   
+  .proj-slider-card-content {
+    padding: 16px;
+    gap: 10px;
+  }
+  
+  .proj-slider-card-actions {
+    padding: 14px 16px;
+  }
+  
   .proj-slider-nav {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
   }
   
   .proj-slider-nav svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
   
   .proj-slider-nav.prev {
-    left: -18px;
+    left: -20px;
   }
   
   .proj-slider-nav.next {
-    right: -18px;
+    right: -20px;
   }
   
   .proj-slider-dots {
-    padding: 16px 20px 12px;
+    gap: 6px;
+    padding: 16px 18px 12px;
+  }
+  
+  .proj-slider-dot {
+    width: 7px;
+    height: 7px;
   }
   
   .proj-quick-stat {
     font-size: 0.75rem;
   }
+  
+  .proj-meta-items {
+    gap: 8px;
+  }
+  
+  .proj-slider-quick-stats {
+    gap: 12px;
+  }
+
+  .proj-slider-card-title {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 }
 
+/* Mobile Small - 320px to 480px */
 @media (max-width: 480px) {
   .proj-slider-slide {
+    width: 100%; /* 1 slide */
     padding: 8px;
   }
   
   .proj-slider-project-card {
-    height: 320px;
+    min-height: 320px; /* Променено */
   }
   
   .proj-slider-card-header {
@@ -545,7 +666,7 @@
   
   .proj-slider-card-content {
     padding: 14px;
-    gap: 10px;
+    gap: 8px;
   }
   
   .proj-slider-card-actions {
@@ -567,15 +688,114 @@
     height: 16px;
   }
   
+  /* Hide navigation arrows on very small screens */
+  .proj-slider-nav {
+    display: none;
+  }
+  
+  .proj-slider-dots {
+    gap: 5px;
+    padding: 14px 16px 10px;
+  }
+  
+  .proj-slider-dot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .proj-slider-dot.active {
+    transform: scale(1.5);
+  }
+  
   .proj-meta-items {
-    gap: 8px;
+    gap: 6px;
   }
   
   .proj-slider-quick-stats {
-    gap: 12px;
+    gap: 10px;
   }
+  
+  .proj-quick-stat {
+    font-size: 0.7rem;
+  }
+  
+  .proj-slider-card-title {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .proj-slider-card-description {
+    font-size: 0.8rem;
+  }
+  
+  .proj-placeholder-icon {
+    font-size: 2rem;
+  }
+  
+  .proj-overlay-icon {
+    font-size: 1.5rem;
+  }
+  
+  .proj-overlay-text {
+    font-size: 0.8rem;
+  }
+}
 
-  .proj-slider-nav {
-    display: none;
+/* Extra Small Mobile - below 360px */
+@media (max-width: 359px) {
+  .proj-slider-slide {
+    padding: 6px;
+  }
+  .proj-slider-project-card {
+    min-height: 300px; /* Променено */
+  }
+  
+  .proj-slider-card-header {
+    height: 100px;
+  }
+  
+  .proj-slider-card-content {
+    padding: 12px;
+    gap: 6px;
+  }
+  
+  .proj-slider-card-actions {
+    padding: 10px 12px;
+  }
+  
+  .proj-slider-view-btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .proj-slider-dots {
+    padding: 12px 14px 8px;
+  }
+  
+  .proj-slider-dot {
+    width: 5px;
+    height: 5px;
+    padding: 0px;
+  }
+  
+  .proj-slider-card-title {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .proj-slider-card-description {
+    font-size: 0.75rem;
+  }
+  .proj-slider-status-badge span {
+    font-size: 0.75rem;
+  }
+  .proj-meta-item.category span{
+    font-size: 0.8rem;
+  }
+  .proj-meta-item.date span{
+    font-size: 0.8rem;
+  }
+  .proj-quick-stat span{
+    font-size: 0.9rem;
   }
 }

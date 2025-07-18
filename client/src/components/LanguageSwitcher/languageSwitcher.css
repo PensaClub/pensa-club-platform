@@ -29,7 +29,7 @@
 }
 
 .current-lang-code {
-  font-size: 13px;
+  font-size: 16px;
   letter-spacing: 0.5px;
 }
 
@@ -121,8 +121,8 @@
 
 /* Mobile Language Switcher */
 .mobile-language-switcher-new {
-  padding: 20px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  /* border-top: 1px solid rgba(0, 0, 0, 0.1); */
   margin-top: auto;
 }
 
@@ -167,8 +167,8 @@
   transform: rotate(180deg);
 }
 .mobile-lang-header svg {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   color: var(--orange);
 }
 
@@ -176,9 +176,12 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  /* padding: 8px 5px; */
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
 }
 .mobile-lang-options.open {
   max-height: 200px;
@@ -188,7 +191,7 @@
   align-items: center;
   gap: 15px;
   color: #333333;
-  padding: 12px 20px;
+  padding: 8px 20px;
   background: none;
   border: none;
   cursor: pointer;
