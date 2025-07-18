@@ -65,6 +65,7 @@ import DraftProjects from "../Initiatives/CreateProject/DraftProjects/DraftProje
 import { LanguageSwitcherAdmin } from "../LanguageSwitcher/LanguageSwitcherAdmin";
 import { ProfessionalAvatarBuilder } from "../AvatarDemo/ProfessionalAvatarBuilder";
 import ArticlePreviewPage from "../Articles/ArticleCreateForm/ArticlePreviewPage";
+import { AllPublications } from "../Initiatives/CreatePublication/AllPublications/AllPublications";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -94,6 +95,7 @@ export const Profile = () => {
     articles: false,
     initiatives: false,
     projects: false,
+    publications: false,
     community: false,
     messages: false,
     applications: false
@@ -136,7 +138,9 @@ export const Profile = () => {
       "/profile/initiative-preview": t("profile.initiativePreview"),
       "/profile/projects": t("profile.projects"),
       "/profile/project-create": t("profile.projectCreate"),
-      "/profile/project-preview": t("profile.projectPreview")
+      "/profile/project-preview": t("profile.projectPreview"),
+      "/profile/publications": t("profile.publications"),
+      "/profile/publication-create": t("profile.publicationCreate")
 
     };
 
@@ -167,7 +171,8 @@ export const Profile = () => {
     "/profile/project-create",
     "/profile/project-preview",
     "/profile/article-preview",
-
+    "/profile/publications",
+    "/profile/publication-create",
     "/profile/applications-admin"
   ];
 
@@ -797,6 +802,35 @@ export const Profile = () => {
                       </li> */} {/* Na nejno mqsto може да добавяте и други подсекции свързани с инициативи */}
                     </ul>
                   </li>
+                  <li>
+                    <NavLink
+                      to="publications"
+                      onClick={() => toggleSubMenu('publications')}
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <DashboardIcon className="icon" />
+                        {t("profile.publications")}
+                      </span>
+                      <span className={`arrow-icon ${subMenuStates.publications ? 'rotated' : ''}`}>
+                        {subMenuStates.publications ? <DownArrowIcon /> : <ArrowIcon />}
+                      </span>
+                    </NavLink>
+                    <ul className={`sub-menu ${subMenuStates.publications ? 'expanded' : ''}`}>
+                      <li>
+                        <NavLink to="publication-create" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("profile.newPublication")}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="publication-drafts" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("profile.drafts")}
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
             )}
@@ -885,6 +919,9 @@ export const Profile = () => {
             <Route path="projects-create" element={<ManagementGuard><ProjectCreateForm /></ManagementGuard>} />
             <Route path="project-preview" element={<ManagementGuard><ProjectPreview /></ManagementGuard>} />
             <Route path="article-preview" element={<ManagementGuard><ArticlePreviewPage /></ManagementGuard>} />
+            <Route path="publications" element={<ManagementGuard><AllPublications /></ManagementGuard>} />
+            <Route path="publication-create" element={<ManagementGuard><div>Publication Create Form (to be implemented)</div></ManagementGuard>} />
+            <Route path="publication-drafts" element={<ManagementGuard><div>Publication Drafts (to be implemented)</div></ManagementGuard>} />
 
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}

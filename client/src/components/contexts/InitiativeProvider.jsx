@@ -7,6 +7,7 @@ import { notify } from "../../utils/notify.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "./UserContext";
 import { initiativeServiceFactory } from "../Services/initiativeServiceFactory";
+import { initiativeServiceFactory as storyPubServiceFactory } from "../Services/StoryPubServiceFactory";
 import storiesData from '../Initiatives/data/mockStories.json';
 import publicationsData from '../Initiatives/data/mockPublications.json';
 import { draftLocalStorage } from "../Initiatives/CreateIniciative/Utils/draftLocalStorage";
@@ -54,6 +55,13 @@ export const InitiativeProvider = ({ children }) => {
   const [projectsLoaded, setProjectsLoaded] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
 
+  //Publications (Temporary - will replace mock data later)
+  const [publicationsTemporary, setPublicationsTemporary] = useState([]);
+  const [publicationsTemporaryLoaded, setPublicationsTemporaryLoaded] = useState(false);
+  const [currentPublicationTemporary, setCurrentPublicationTemporary] = useState(null);
+  const [publicationsTemporaryHasMore, setPublicationsTemporaryHasMore] = useState(true);
+  const [publicationsTemporaryCurrentPage, setPublicationsTemporaryCurrentPage] = useState(1);
+
   //komentari
   const [comments, setComments] = useState({});
   const [commentsLoading, setCommentsLoading] = useState(false);
@@ -83,6 +91,7 @@ export const InitiativeProvider = ({ children }) => {
   const [projectDraftsHasMore, setProjectDraftsHasMore] = useState(true);
   const [projectDraftsCurrentPage, setProjectDraftsCurrentPage] = useState(1);
   const initiativeService = initiativeServiceFactory();
+  const storyPubService = storyPubServiceFactory();
   const [projectsHasMore, setProjectsHasMore] = useState(true);
   const [projectsCurrentPage, setProjectsCurrentPage] = useState(1);
   const location = useLocation();
@@ -121,7 +130,7 @@ export const InitiativeProvider = ({ children }) => {
   }, [username, profileData?.details?.firstName, userEmail]);
 
   // =================
-  // APPLICATION FUNCTIONS 
+  // APPLICATION FUNCTIONS
   // =================
 
   // Проверка дали потребителят е кандидатствал за проект
@@ -932,7 +941,7 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, []);
 
-  // В InitiativeProvider.js - обновете addComment функцията:
+  // В InitiativeProvider.js - обнове addComment функцията:
 
   const addComment = useCallback(async (initiativeId, content, parentId = null) => {
     try {
@@ -1034,7 +1043,7 @@ export const InitiativeProvider = ({ children }) => {
 
     // След това проверяваме дали има права да трие коментара
     const canDelete = isAdmin || isModerator || (userEmail === commentUserEmail);
-    
+
     if (!canDelete) {
       throw new Error('Unauthorized to delete this comment');
     }
@@ -1127,7 +1136,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
 
       await initiativeService.deleteProject(identifier);
 
@@ -1144,7 +1153,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to delete project');
       throw error;
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
@@ -1195,7 +1204,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
 
       await initiativeService.deleteDraftProject(draftId);
 
@@ -1212,7 +1221,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to delete project draft');
       throw error;
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
@@ -1225,7 +1234,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
 
       const response = await initiativeService.updateDraftProject(id, draftData);
       const updatedDraft = response.data || response;
@@ -1249,7 +1258,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to update project draft');
       throw error;
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
@@ -1369,7 +1378,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       const response = await initiativeService.toggleProjectDraftStatus(identifier);
 
       const publishedProject = response.data || response;
@@ -1401,7 +1410,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to publish project draft');
       throw error;
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   }, [isAuthentication, initiativeService, navigate]);
 
@@ -1413,7 +1422,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      // setIsLoading(true); 
+      // setIsLoading(true);
       const response = await initiativeService.updateProject(identifier, projectData);
 
       // Обновяваме в локалното състояние
@@ -1617,6 +1626,228 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [isAuthentication, initiativeService, getProjectComments]);
 
+  // =================
+  // PUBLICATION FUNCTIONS (TEMPORARY - will replace mock data later)
+  // =================
+
+  const getAllPublicationsTemporary = useCallback(async (page = 1, forceRefresh = false) => {
+    if (page === 1 && publicationsTemporary.length > 0 && publicationsTemporaryLoaded && !forceRefresh) {
+      return {
+        data: publicationsTemporary,
+        hasMore: publicationsTemporaryHasMore,
+        currentPage: publicationsTemporaryCurrentPage
+      };
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await storyPubService.getAllPublications(page, 6);
+
+      const responseData = {
+        data: response.data || response,
+        hasMore: response.pagination?.hasNextPage || false,
+        totalCount: response.pagination?.totalPublications || 0,
+        currentPage: response.pagination?.page || page
+      };
+
+      if (page === 1) {
+        setPublicationsTemporary(responseData.data);
+      } else {
+        setPublicationsTemporary(prev => [...prev, ...responseData.data]);
+      }
+
+      setPublicationsTemporaryHasMore(responseData.hasMore);
+      setPublicationsTemporaryCurrentPage(responseData.currentPage);
+      setPublicationsTemporaryLoaded(true);
+
+      return responseData;
+    } catch (e) {
+      console.error('Error fetching publications:', e);
+      notify('error', e.message || 'Failed to fetch publications');
+      showErrorAndSetTimeouts(e.message);
+      return { data: [], hasMore: false, currentPage: page };
+    } finally {
+      setIsLoading(false);
+    }
+  }, [publicationsTemporary.length, publicationsTemporaryLoaded, publicationsTemporaryHasMore, publicationsTemporaryCurrentPage, storyPubService, showErrorAndSetTimeouts]);
+
+  const getPublicationByIdTemporary = useCallback(async (id) => {
+    if (!id || id === 'undefined' || id === 'null') {
+      const error = new Error(`Invalid publication ID: ${id}`);
+      console.error('getPublicationByIdTemporary called with invalid ID:', id);
+      throw error;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await storyPubService.getPublicationBySlug(id);
+      const publication = response.data || response;
+
+      if (!publication) {
+        throw new Error(`Publication not found with id/slug: ${id}`);
+      }
+
+      setCurrentPublicationTemporary(publication);
+      return publication;
+    } catch (e) {
+      console.error('Error fetching publication by ID:', e);
+      notify('error', e.message || 'Failed to fetch publication');
+      showErrorAndSetTimeouts(e.message);
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [storyPubService, showErrorAndSetTimeouts]);
+
+  const getPublicationsByInitiativeTemporary = useCallback(async (initiativeId) => {
+    try {
+      const response = await storyPubService.getPublicationsByInitiative(initiativeId);
+      return response;
+    } catch (e) {
+      console.error('Error fetching publications by initiative:', e);
+      notify('error', e.message || 'Failed to fetch initiative publications');
+      throw e;
+    }
+  }, [storyPubService]);
+
+  // Publication comments (Temporary)
+  const getPublicationCommentsTemporary = useCallback(async (publicationId) => {
+    try {
+      setCommentsLoading(true);
+
+      const response = await storyPubService.getPublicationComments(publicationId);
+
+      let commentsData = [];
+      if (Array.isArray(response)) {
+        commentsData = response;
+      } else if (response.data && Array.isArray(response.data)) {
+        commentsData = response.data;
+      } else if (response.comments && Array.isArray(response.comments)) {
+        commentsData = response.comments;
+      }
+
+      const processedComments = commentsData
+        .filter(comment => !comment.parentId)
+        .map(comment => {
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: comment.replies.sort((a, b) =>
+                new Date(a.createdAt) - new Date(b.createdAt)
+              )
+            };
+          }
+          return comment;
+        })
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      setComments(prev => ({
+        ...prev,
+        [`publication-temp-${publicationId}`]: processedComments
+      }));
+
+      return processedComments;
+    } catch (error) {
+      console.error('Error getting publication comments:', error);
+      notify('error', 'Failed to load comments');
+
+      setComments(prev => ({
+        ...prev,
+        [`publication-temp-${publicationId}`]: []
+      }));
+
+      return [];
+    } finally {
+      setCommentsLoading(false);
+    }
+  }, []);
+
+  const addPublicationCommentTemporary = useCallback(async (publicationId, content, parentId = null) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const commentData = {
+        content: content,
+        commentableId: Number(publicationId),
+        commentsLinkConnection: 'publication',
+        ...(parentId && { parentId: Number(parentId) })
+      };
+
+      const response = await storyPubService.addPublicationComment(publicationId, commentData);
+      const newComment = response.data || response;
+
+      setTimeout(async () => {
+        await getPublicationCommentsTemporary(publicationId);
+      }, 10);
+
+      notify('success', 'Comment added successfully');
+      return newComment;
+    } catch (error) {
+      console.error('Error adding publication comment:', error);
+      notify('error', error.response?.data?.message || 'Failed to add comment');
+      throw error;
+    }
+  }, [isAuthentication, storyPubService, getPublicationCommentsTemporary]);
+
+  const updatePublicationCommentTemporary = useCallback(async (publicationId, commentId, newContent) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await storyPubService.updatePublicationComment(publicationId, commentId, { content: newContent });
+      await getPublicationCommentsTemporary(publicationId);
+
+      notify('success', 'Comment updated successfully');
+      return response.data || response;
+    } catch (error) {
+      console.error('Error updating publication comment:', error);
+      notify('error', 'Failed to update comment');
+      throw error;
+    }
+  }, [isAuthentication, storyPubService, getPublicationCommentsTemporary]);
+
+  const deletePublicationCommentTemporary = useCallback(async (publicationId, commentId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      await storyPubService.deletePublicationComment(publicationId, commentId);
+      await getPublicationCommentsTemporary(publicationId);
+
+      notify('success', 'Comment deleted successfully');
+    } catch (error) {
+      console.error('Error deleting publication comment:', error);
+      notify('error', 'Failed to delete comment');
+      throw error;
+    }
+  }, [isAuthentication, storyPubService, getPublicationCommentsTemporary]);
+
+  const likePublicationCommentTemporary = useCallback(async (publicationId, commentId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await storyPubService.likePublicationComment(publicationId, commentId);
+      const updatedCommentData = response.data || response;
+
+      setTimeout(async () => {
+        await getPublicationCommentsTemporary(publicationId);
+      }, 200);
+
+      notify('success', 'Успешно харесахте коментара');
+      return updatedCommentData;
+    } catch (error) {
+      console.error('Error in likePublicationCommentTemporary:', error);
+      notify('error', 'Failed to like comment');
+      return null;
+    }
+  }, [isAuthentication, storyPubService, getPublicationCommentsTemporary]);
+
   //STORIES AND PUBLICATIONS
   //Stories functions
   const getStoryBySlug = useCallback(async (slug) => {
@@ -1703,7 +1934,7 @@ export const InitiativeProvider = ({ children }) => {
       console.error('Error fetching publication by slug:', e);
       throw e;
     } finally {
-      // setIsLoading(false);  
+      // setIsLoading(false);
     }
   }, [generateId]);
 
@@ -2005,8 +2236,8 @@ export const InitiativeProvider = ({ children }) => {
     hasUserAppliedToProject,
     userApplications,
     getAllApplications,     // За админи
-    updateApplicationStatus, // За админи  
-    deleteApplication, // За админи 
+    updateApplicationStatus, // За админи
+    deleteApplication, // За админи
     sendApplicationEmails,     // За админи
     updateInitiativeWithProject, // Обновява инициатива с нов проект
     //Stories functions
@@ -2019,6 +2250,24 @@ export const InitiativeProvider = ({ children }) => {
     getPublicationComments,
     addPublicationComment,
     invalidateProjectDraftsCache,
+
+    // Publication functions (Temporary - will replace mock data later)
+    getAllPublicationsTemporary,
+    getPublicationByIdTemporary,
+    getPublicationsByInitiativeTemporary,
+    publicationsTemporary,
+    currentPublicationTemporary,
+    publicationsTemporaryLoaded,
+    publicationsTemporaryHasMore,
+    publicationsTemporaryCurrentPage,
+
+    // Publication comments (Temporary)
+    getPublicationCommentsTemporary,
+    addPublicationCommentTemporary,
+    updatePublicationCommentTemporary,
+    deletePublicationCommentTemporary,
+    likePublicationCommentTemporary,
+
     // Related content
     getRelatedContent,
   };
