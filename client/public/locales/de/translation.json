@@ -1454,7 +1454,9 @@
             "description": "Entdecken und beteiligen Sie sich an Initiativen, die Brücken zwischen den Generationen bauen und unsere Gemeinschaft stärken",
             "activeInitiatives": "Aktive Initiativen",
             "participants": "Teilnehmer",
-            "cities": "Städte"
+            "cities": "Städte",
+        "mainTitle": "Gemeinschaft von Gleichgesinnten"
+
         },
         "view": {
             "notFound": "Initiative nicht gefunden",
