@@ -273,19 +273,19 @@
     }
   },
   "profile": {
-     "skills": "Skills",
-  "workOptions": "Work Options", 
-  "interestOptions": "Interests",
-  "newArticle": "New Article",
-  "newInitiative": "New Initiative",
-  "initiatives": "Initiatives", 
-  "applications": "Applications",
-  "initiativePreview": "Initiative Preview", 
-  "projects": "Projects",
-  "projectCreate": "Create Project",
-  "projectPreview": "Project Preview", 
-  "drafts": "Drafts",
-  "newProject": "New Project",
+    "skills": "Skills",
+    "workOptions": "Work Options",
+    "interestOptions": "Interests",
+    "newArticle": "New Article",
+    "newInitiative": "New Initiative",
+    "initiatives": "Initiatives",
+    "applications": "Applications",
+    "initiativePreview": "Initiative Preview",
+    "projects": "Projects",
+    "projectCreate": "Create Project",
+    "projectPreview": "Project Preview",
+    "drafts": "Drafts",
+    "newProject": "New Project",
     "main": "Profile Dashboard",
     "bookmarks": "My Bookmarks",
     "select_all": "Select all",
@@ -2193,6 +2193,89 @@
       "planned": "Planned",
       "in-progress": "In Progress",
       "completed": "Completed"
+    },
+    "list": {
+      "badge": "Projects",
+      "title": "Our Projects",
+      "subtitle": "Innovative solutions and initiatives to improve digital literacy",
+      "featured": "Featured Project",
+      "latest": "Latest Projects",
+      "allProjects": "All Projects",
+      "noSearchResults": "No search results found",
+      "noProjects": "No projects yet",
+      "emptySubtitle": "We'll be adding new projects soon. Check back regularly!"
+    },
+    "stats": {
+      "total": {
+        "singular": "project total",
+        "plural": "projects total"
+      },
+      "active": {
+        "singular": "active project",
+        "plural": "active projects"
+      },
+      "completed": {
+        "singular": "completed project",
+        "plural": "completed projects"
+      },
+      "canApply": {
+        "singular": "project open for applications",
+        "plural": "projects open for applications"
+      }
+    },
+    "card": {
+      "budget": "Budget",
+      "participants": "Participants",
+      "location": "Location",
+      "progress": "Progress",
+      "partOf": "Part of",
+      "initiative": " initiative",
+      "viewMore": "View More",
+      "addBookmark": "Add to bookmarks",
+      "removeBookmark": "Remove from bookmarks",
+      "noLocation": "No location specified",
+      "independentProject": "Independent Project"
+    },
+    "search": {
+      "placeholder": "Search projects...",
+      "clear": "Clear search"
+    },
+    "filters": {
+      "quickFilters": "Quick Filters",
+      "quickActive": "Active",
+      "quickCanApply": "Can Apply",
+      "quickHighPriority": "High Priority",
+      "quickRecent": "Recent",
+      "advancedFilters": "Advanced Filters",
+      "clearAll": "Clear All",
+      "category": "Category",
+      "status": "Status",
+      "priority": "Priority",
+      "sortBy": "Sort By",
+      "canApplyOnly": "Only with open applications",
+      "allCategories": "All Categories",
+      "allStatuses": "All Statuses",
+      "allPriorities": "All Priorities",
+      "allProjects": "All Projects",
+      "linkedToInitiative": "Linked to Initiative",
+      "standalone": "Standalone"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "priority": "By Priority",
+      "status": "By Status",
+      "deadline": "By Deadline",
+      "budget": "By Budget"
+    },
+    "slider": {
+      "noProjects": "No projects to display",
+      "previous": "Previous",
+      "next": "Next",
+      "viewProject": "View Project",
+      "viewMore": "View More",
+      "setAsFeatured": "Set as Featured",
+      "goToSlide": "Go to slide {{number}}"
     },
     "preview": {
       "title": "Project Preview",
