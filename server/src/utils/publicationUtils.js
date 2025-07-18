@@ -17,7 +17,7 @@ const publicationConfig = [
         include: [
             {
                 model: image,
-                as: 'image',
+                as: 'sectionImages',
             },
         ],
     },
@@ -32,7 +32,7 @@ const publicationConfig = [
     {
         model: publication,
         as: 'relatedPublications',
-        attributes: ['id', 'slug', 'title', 'shortDescription', 'image'],
+        attributes: ['id', 'slug', 'title', 'shortDescription'],
     },
 ];
 
@@ -54,11 +54,11 @@ const transformPublication = async (pub) => {
     // Transform sections
     if (publicationData.sections) {
         publicationData.sections = publicationData.sections.map((section) => {
-            if (section.image) {
-                const { image, ...singleSection } = section;
+            if (section.sectionImages) {
+                const { sectionImages, ...singleSection } = section;
                 return {
                     ...singleSection,
-                    images: [image],
+                    images: sectionImages,
                 };
             }
             return section;

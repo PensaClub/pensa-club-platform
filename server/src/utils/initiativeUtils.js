@@ -73,7 +73,7 @@ const initiativeConfig = [
     {
         model: contact,
         as: 'contact',
-        required: true,
+        required: false,
         attributes: ['id', 'name', 'position', 'email', 'phone', 'image'],
     },
     {
@@ -91,7 +91,7 @@ const initiativeConfig = [
     {
         model: section,
         as: 'sections',
-        required: true,
+        required: false,
         attributes: ['id', 'titleSlug', 'title', 'content'],
         include: [
             {

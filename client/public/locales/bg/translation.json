@@ -216,21 +216,19 @@
     }
   },
   "profile": {
-    "skills": "Умения", 
-  "workOptions": "Работни възможности",
-  "interestOptions": "Интереси", 
-
-  "newArticle": "Нова статия",
-  "newInitiative": "Нова инициатива", 
-  "initiatives": "Инициативи",
-
-  "applications": "Кандидатури",
-  "initiativePreview": "Преглед на инициатива",
-  "projects": "Проекти", 
-  "projectCreate": "Създаване на проект",
-  "projectPreview": "Преглед на проект",
-  "drafts": "Чернови",
-  "newProject": "Нов проект",
+    "skills": "Умения",
+    "workOptions": "Работни възможности",
+    "interestOptions": "Интереси",
+    "newArticle": "Нова статия",
+    "newInitiative": "Нова инициатива",
+    "initiatives": "Инициативи",
+    "applications": "Кандидатури",
+    "initiativePreview": "Преглед на инициатива",
+    "projects": "Проекти",
+    "projectCreate": "Създаване на проект",
+    "projectPreview": "Преглед на проект",
+    "drafts": "Чернови",
+    "newProject": "Нов проект",
     "main": "Профил панел",
     "bookmarks": "Мойте Oтметки",
     "select_all": "Изберете всички",
@@ -2200,38 +2198,122 @@
     }
   },
   "projects": {
+    "list": {
+      "badge": "Проекти",
+      "title": "Нашите проекти",
+      "subtitle": "Иновативни решения и инициативи за подобряване на дигиталната грамотност",
+      "featured": "Препоръчан проект",
+      "latest": "Най-нови проекти",
+      "allProjects": "Всички проекти",
+      "noSearchResults": "Няма намерени резултати",
+      "noProjects": "Все още няма проекти",
+      "emptySubtitle": "Скоро ще добавим нови проекти. Проверявайте редовно!"
+    },
+    "stats": {
+      "total": {
+        "singular": "проект общо",
+        "plural": "проекта общо"
+      },
+      "active": {
+        "singular": "активен проект",
+        "plural": "активни проекта"
+      },
+      "completed": {
+        "singular": "завършен проект",
+        "plural": "завършени проекта"
+      },
+      "canApply": {
+        "singular": "проект за кандидатстване",
+        "plural": "проекта за кандидатстване"
+      }
+    },
     "status": {
       "active": "Активен",
       "planned": "Планиран",
       "in-progress": "В процес",
-      "completed": "Завършен"
+      "completed": "Завършен",
+      "inProgress": "В процес"
+    },
+    "card": {
+      "budget": "Бюджет",
+      "participants": "Участници",
+      "location": "Местоположение",
+      "progress": "Прогрес",
+      "partOf": "Част от",
+      "initiative": " инициатива",
+      "viewMore": "Виж повече",
+      "addBookmark": "Добави към запазени",
+      "removeBookmark": "Премахни от запазени",
+      "noLocation": "Няма местоположение",
+      "independentProject": "Самостоятелен проект"
+    },
+    "search": {
+      "placeholder": "Търси проекти...",
+      "clear": "Изчисти търсенето"
+    },
+    "filters": {
+      "quickFilters": "Бързи филтри",
+      "quickActive": "Активни",
+      "quickCanApply": "Мога да кандидатствам",
+      "quickHighPriority": "Висок приоритет",
+      "quickRecent": "Най-нови",
+      "advancedFilters": "Разширени филтри",
+      "clearAll": "Изчисти всички",
+      "category": "Категория",
+      "status": "Статус",
+      "priority": "Приоритет",
+      "sortBy": "Сортирай по",
+      "canApplyOnly": "Само с отворени кандидатури",
+      "allCategories": "Всички категории",
+      "allStatuses": "Всички статуси",
+      "allPriorities": "Всички приоритети",
+      "allProjects": "Всички проекти",
+      "linkedToInitiative": "Свързани с инициатива",
+      "standalone": "Самостоятелни"
+    },
+    "sort": {
+      "newest": "Най-нови първо",
+      "oldest": "Най-стари първо",
+      "priority": "По приоритет",
+      "status": "По статус",
+      "deadline": "По краен срок",
+      "budget": "По бюджет"
+    },
+    "slider": {
+      "noProjects": "Няма проекти за показване",
+      "previous": "Предишен",
+      "next": "Следващ",
+      "viewProject": "Виж проекта",
+      "viewMore": "Виж повече",
+      "setAsFeatured": "Задай като препоръчан",
+      "goToSlide": "Отиди към слайд {{number}}"
     },
     "drafts": {
-    "title": "Чернови на проекти",
-    "subtitle": "Управлявайте и редактирайте вашите чернови на проекти",
-    "newProject": "Нов проект",
-    "refresh": "Обнови",
-    "totalDrafts": "Общо чернови",
-    "readyToPublish": "Готови за публикуване",
-    "oldDrafts": "Стари чернови",
-    "loading": "Зареждане на чернови...",
-    "noDrafts": "Няма чернови",
-    "noDraftsDescription": "Все още нямате създадени чернови на проекти",
-    "createFirst": "Създайте първия си проект",
-    "completion": "Завършеност",
-    "edit": "Редактиране",
-    "preview": "Преглед",
-    "delete": "Изтриване",
-    "publish": "Публикуване",
-    "confirmDelete": "Потвърди изтриването",
-    "completeMore": "Завършете повече за да публикувате",
-    "loadMore": "Зареди още",
-    "untitled": "Без заглавие",
-    "deleteSuccess": "Черновата е изтрита успешно",
-    "deleteError": "Грешка при изтриване на черновата",
-    "publishSuccess": "Проектът е публикуван успешно",
-    "publishError": "Грешка при публикуване на проекта"
-  },
+      "title": "Чернови на проекти",
+      "subtitle": "Управлявайте и редактирайте вашите чернови на проекти",
+      "newProject": "Нов проект",
+      "refresh": "Обнови",
+      "totalDrafts": "Общо чернови",
+      "readyToPublish": "Готови за публикуване",
+      "oldDrafts": "Стари чернови",
+      "loading": "Зареждане на чернови...",
+      "noDrafts": "Няма чернови",
+      "noDraftsDescription": "Все още нямате създадени чернови на проекти",
+      "createFirst": "Създайте първия си проект",
+      "completion": "Завършеност",
+      "edit": "Редактиране",
+      "preview": "Преглед",
+      "delete": "Изтриване",
+      "publish": "Публикуване",
+      "confirmDelete": "Потвърди изтриването",
+      "completeMore": "Завършете повече за да публикувате",
+      "loadMore": "Зареди още",
+      "untitled": "Без заглавие",
+      "deleteSuccess": "Черновата е изтрита успешно",
+      "deleteError": "Грешка при изтриване на черновата",
+      "publishSuccess": "Проектът е публикуван успешно",
+      "publishError": "Грешка при публикуване на проекта"
+    },
     "preview": {
       "title": "Преглед на проект",
       "description": "Преглед на проект преди публикуване",
@@ -2675,5 +2757,4 @@
     "defaultCountry": "България",
     "loading": "Зарежда..."
   }
-
 }

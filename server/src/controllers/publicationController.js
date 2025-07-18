@@ -7,6 +7,7 @@ const CustomError = require('../utils/customError');
 const { publicationConfig, transformPublication } = require('../utils/publicationUtils');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { findBySlugOrId } = require('../utils/modelLookup');
+const { PublicationSchema, UpdatePublicationSchema } = require('../schemas/publications.schema');
 
 // ========================================
 // ENDPOINTS
@@ -14,7 +15,8 @@ const { findBySlugOrId } = require('../utils/modelLookup');
 
 publicationController.post('/create', isAuth, checkPermission('publications', 'create'), async (req, res, next) => {
     try {
-        const publicationData = { ...req.body, isDraft: false };
+        const validationResult = PublicationSchema.safeParse(req.body);
+        const publicationData = { ...validationResult.data, isDraft: false };
         return createPublication(publicationData, req, res, next);
     } catch (err) {
         next(err);
@@ -24,13 +26,14 @@ publicationController.post('/create', isAuth, checkPermission('publications', 'c
 publicationController.post('/draft/save/:id?', isAuth, checkPermission('publications', 'draft', 'create'), async (req, res, next) => {
     try {
         const { id } = req.params;
-
+        const validationResult = UpdatePublicationSchema.safeParse(req.body);
+      
         if (!id) {
-            const publicationData = { ...req.body, isDraft: true };
+            const publicationData = { ...validationResult.data, isDraft: true };
             return createPublication(publicationData, req, res, next);
         }
 
-        return updatePublication(req.body, req, res, next, true);
+        return updatePublication(validationResult.data, req, res, next, true);
     } catch (err) {
         next(err);
     }
@@ -62,7 +65,8 @@ publicationController.delete('/:id', isAuth, checkPermission('publications', 'de
 
 publicationController.put('/:id', isAuth, checkPermission('publications', 'update'), async (req, res, next) => {
     try {
-        return updatePublication(req.body, req, res, next, false);
+        const validationResult = UpdatePublicationSchema.safeParse(req.body);
+        return updatePublication(validationResult.data, req, res, next, false);
     } catch (err) {
         next(err);
     }
@@ -310,7 +314,7 @@ const deletePublicationByDraftStatus = async (isDraft, req, res, next) => {
             }
 
             // Delete related publications (both directions)
-            await publication.sequelize.models.publication_relations.destroy({
+            await publication.sequelize.models.related_publications.destroy({
                 where: {
                     [Op.or]: [{ publication_id: foundPublication.id }, { related_publication_id: foundPublication.id }],
                 },
@@ -486,7 +490,7 @@ const createPublication = async (publicationData, req, res, next) => {
             if (publicationData.relatedPublications?.length > 0) {
                 await Promise.all(
                     publicationData.relatedPublications.map((relatedPublicationId) =>
-                        publication.sequelize.models.publication_relations.create(
+                        publication.sequelize.models.related_publications.create(
                             {
                                 publication_id: newPublication.id,
                                 related_publication_id: relatedPublicationId,
@@ -602,7 +606,7 @@ const updatePublication = async (publicationData, req, res, next, isDraft = fals
             // Handle related publications
             if (publicationData.relatedPublications !== undefined) {
                 // Delete existing relations
-                await publication.sequelize.models.publication_relations.destroy({
+                await publication.sequelize.models.related_publications.destroy({
                     where: { publication_id: foundPublication.id },
                     transaction: t,
                 });
@@ -611,7 +615,7 @@ const updatePublication = async (publicationData, req, res, next, isDraft = fals
                 if (publicationData.relatedPublications.length > 0) {
                     await Promise.all(
                         publicationData.relatedPublications.map((relatedPublicationId) =>
-                            publication.sequelize.models.publication_relations.create(
+                            publication.sequelize.models.related_publications.create(
                                 {
                                     publication_id: foundPublication.id,
                                     related_publication_id: relatedPublicationId,
