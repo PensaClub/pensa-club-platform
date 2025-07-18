@@ -10,19 +10,19 @@ export const ErrorPageBase = ({ errorCode, errorDesc }) => {
       case '404':
         return { 
           icon: '🔍', 
-          title: 'Страницата не е намерена',
+          title: t('error-page.404-title'),
           color: '#3B82F6'
         };
       case '500':
         return { 
           icon: '⚡', 
-          title: 'Сървърна грешка',
+          title: t('error-page.500-title'),
           color: '#EF4444'
         };
       default:
         return { 
           icon: '⚠️', 
-          title: 'Възникна грешка',
+          title: t('error-page.general-title'),
           color: '#F59E0B'
         };
     }
@@ -97,7 +97,7 @@ export const ErrorPageBase = ({ errorCode, errorDesc }) => {
           
           <div className="error-footer">
             <div className="error-footer-content">
-              <p>Моля, опитайте отново или се свържете с нас</p>
+              <p>{t('error-page.footer-message')}</p>
               <div className="error-footer-actions">
                 <button className="refresh-btn" onClick={() => window.location.reload()}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -105,7 +105,7 @@ export const ErrorPageBase = ({ errorCode, errorDesc }) => {
                     <polyline points="1 20 1 14 7 14"/>
                     <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
                   </svg>
-                  Обнови
+                  {t('error-page.refresh')}
                 </button>
               </div>
             </div>

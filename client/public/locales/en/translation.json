@@ -10,7 +10,9 @@
     "home": "Home",
     "articles": "Articles",
     "welcome": "Welcome",
-    "initiatives": "Initiatives"
+    "initiatives": "Initiatives",
+    "projects": "Projects"
+
   },
   "footer": {
     "site-map": "Site Map",
@@ -196,8 +198,13 @@
     "home": "Home",
     "map": "Map",
     "craigslist": "Community",
-    "404-desc": "The page you are trying to reach does not excist",
-    "500-desc": "Internal Server Error"
+    "404-desc": "This page does not exist",
+    "500-desc": "The server cannot process the request",
+    "404-title": "Page not found",
+    "500-title": "Server error",
+    "general-title": "An error occurred",
+    "footer-message": "Please try again or contact us",
+    "refresh": "Refresh"
   },
   "map": {
     "welcome": "Welcome to Pensa Club! Find local mutual aid announcements using our Map - Post an ad or offer - Browse and participate in local initiatives",

@@ -1315,7 +1315,14 @@
         flex-direction: column;
         gap: 40px;
     }
+.keyword-tag {
+        display: none;
+    }
 
+    .connecting-lines,
+    .right-connecting-lines {
+        display: none;
+    }
     .floating-keywords,
     .hero-visual {
         flex: none;
@@ -1507,5 +1514,27 @@
 
     .featured-project-name {
         font-size: 1.5rem;
+    }
+}
+@media (max-width: 359px) {
+    .stat-number-projects {
+        font-size: 1.25rem;
+    }
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    .featured-project-title {
+        font-size: 1.5rem;
+    }
+    .featured-status-badge,.featured-priority-badge{
+        font-size: 0.75rem;
+            padding: 10px 8px;
+
+    }
+    .featured-detail-value {
+        font-size: 1rem;
+    }
+    .featured-initiative-link span{
+        font-size: 0.875rem;
     }
 }

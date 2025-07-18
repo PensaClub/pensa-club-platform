@@ -9,7 +9,8 @@
         "login": "Anmelden",
         "register": "Registrieren",
         "logout": "Abmelden",
-        "home": "Startseite"
+        "home": "Startseite",
+        "projects": "Projekte"
     },
     "footer": {
         "site-map": "Sitemap",
@@ -2754,6 +2755,11 @@
         "map": "Karte",
         "craigslist": "Gemeinschaft",
         "404-desc": "Diese Seite existiert nicht",
-        "500-desc": "Der Server kann die Anfrage nicht verarbeiten"
+        "500-desc": "Der Server kann die Anfrage nicht verarbeiten",
+        "404-title": "Seite nicht gefunden",
+        "500-title": "Server-Fehler",
+        "general-title": "Ein Fehler ist aufgetreten",
+        "footer-message": "Bitte versuchen Sie es erneut oder kontaktieren Sie uns",
+        "refresh": "Aktualisieren"
     }
 }

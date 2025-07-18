@@ -153,7 +153,7 @@ const ProjectFilters = ({
                                 className={`quick-filter-btn ${isActive ? 'active' : ''}`}
                                 onClick={() => handleQuickFilter(filter.key)}
                             >
-                                <span className="btn-icon">{filter.icon}</span>
+                                <span className="btn-icon-filters">{filter.icon}</span>
                                 <span className="btn-text">{filter.label}</span>
                             </button>
                         );

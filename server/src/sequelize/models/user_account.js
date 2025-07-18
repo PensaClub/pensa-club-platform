@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'user_id',
                 otherKey: 'publication_id',
             });
-          
+
             // Bookmarked stories
             user_account.belongsToMany(models.story, {
                 through: 'story_bookmarks',
