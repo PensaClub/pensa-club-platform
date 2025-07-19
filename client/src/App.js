@@ -54,6 +54,7 @@ import { PublicationView } from './components/Initiatives/InitiativeView/StoryPu
 import { InitiativePreviewPage } from './components/Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage.jsx';
 import { initGA } from './components/Services/analyticsService.js';
 import { AnalyticsProvider } from './components/contexts/AnalyticsContext.jsx';
+import EliteMembershipPage from './components/EliteMembershipPage/EliteMembershipPage.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -164,6 +165,7 @@ function App() {
                                   <Route path="/publications/:slug" element={<PublicationView />} />
                                   <Route path="/projects/:slug" element={<ProjectView />} />
                                   <Route path="/articles/:slug" element={<ArticleView />} />
+                                  <Route path="/elite-membership" element={<EliteMembershipPage />} />
 
                                   <Route element={<AuthGuard />}>
                                     <Route path="/initiative-preview" element={<InitiativePreviewPage />} />

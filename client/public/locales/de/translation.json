@@ -2772,5 +2772,139 @@
         "general-title": "Ein Fehler ist aufgetreten",
         "footer-message": "Bitte versuchen Sie es erneut oder kontaktieren Sie uns",
         "refresh": "Aktualisieren"
+    },
+     "eliteCard": {
+    "badge": "ELITE",
+    "brand": "Pensa Elite",
+    "subtitle": "KARTE",
+    "cardHolder": "EXKLUSIVES MITGLIED",
+    "features": {
+      "exclusive": {
+        "highlight": "Exklusiver",
+        "text": "Zugang zu Premium-Inhalten"
+      },
+      "priority": {
+        "highlight": "Prioritäts",
+        "text": "Support 24/7"
+      },
+      "premium": {
+        "highlight": "Premium",
+        "text": "Tools und Funktionen"
+      }
+    },
+    "cta": {
+      "text": "Elite-Mitglied werden"
     }
+  },
+  "eliteMembership": {
+    "meta": {
+      "title": "Pensa Elite Mitgliedschaft - Exklusive Mitgliedschaft",
+      "description": "Werden Sie Teil der exklusiven Pensa Elite Mitglieder-Gemeinschaft mit Premium-Privilegien und besonderen Vorteilen.",
+      "keywords": "Elite Mitgliedschaft, Premium-Karte, exklusive Privilegien, Senioren"
+    },
+    "hero": {
+      "subtitle": "Die exklusive Mitgliedschaft für ausgewählte Pensa Club Mitglieder mit einzigartigen Privilegien und besonderem Zugang."
+    },
+    "comingSoon": {
+      "title": "Demnächst",
+      "subtitle": "Wir bereiten etwas Besonderes vor"
+    },
+    "notice": {
+      "title": "In Entwicklung",
+      "text": "Wir arbeiten derzeit intensiv daran, Ihnen das beste Elite Mitgliedschaftsprogramm anzubieten. Wir bereiten außergewöhnliche Privilegien, Partnerschaften und Dienstleistungen speziell für Sie vor.",
+      "timeline": "Demnächst - Herbst 2025"
+    },
+    "benefits": {
+      "title": "Exklusive Vorteile",
+      "subtitle": "Entdecken Sie die einzigartigen Privilegien, die Sie als Elite-Mitglied erwarten",
+      "exclusive": {
+        "title": "Exklusiver Zugang",
+        "description": "Zugang zu besonderen Veranstaltungen, Kursen und Inhalten nur für Elite-Mitglieder"
+      },
+      "priority": {
+        "title": "Prioritäts-Support",
+        "description": "24/7 persönlicher Support mit vorrangiger Betreuung und schneller Antwort"
+      },
+      "premium": {
+        "title": "Premium-Dienste",
+        "description": "Kostenlose Beratungen, personalisierte Empfehlungen und spezielle Rabatte"
+      },
+      "personalized": {
+        "title": "Personalisierter Service",
+        "description": "Individueller Ansatz für Ihre Bedürfnisse"
+      },
+      "special": {
+        "title": "Besondere Veranstaltungen",
+        "description": "Einladungen zu exklusiven Elite-Veranstaltungen, Seminaren und Treffen"
+      },
+      "secure": {
+        "title": "Sicherheit und Datenschutz",
+        "description": "Höchste Sicherheitsstufe und Schutz Ihrer persönlichen Daten"
+      }
+    },
+    "locations": {
+      "title": "Wo Sie die Karte verwenden können",
+      "subtitle": "Unsere Elite-Karte bietet Ihnen Privilegien an ausgewählten Standorten im ganzen Land",
+      "healthcare": {
+        "category": "Gesundheitswesen",
+        "place1": "Private Kliniken und Krankenhäuser",
+        "place2": "Spezialisierte Medizinzentren",
+        "place3": "Zahnarztpraxen",
+        "place4": "Rehabilitationszentren"
+      },
+      "culture": {
+        "category": "Kultur und Unterhaltung",
+        "place1": "Theater und Opern",
+        "place2": "Museen und Galerien",
+        "place3": "Kinos und Kulturzentren",
+        "place4": "Bibliotheken und Lesesäle"
+      },
+      "shopping": {
+        "category": "Einkaufen und Dienstleistungen",
+        "place1": "Ausgewählte Geschäfte und Boutiquen",
+        "place2": "Restaurants und Cafés",
+        "place3": "Kosmetiksalons",
+        "place4": "Reiseagenturen"
+      },
+      "recreation": {
+        "category": "Erholung und Sport",
+        "place1": "SPA- und Wellness-Zentren",
+        "place2": "Fitnessstudios",
+        "place3": "Parks und Gärten",
+        "place4": "Hotels und Resorts"
+      }
+    },
+    "requirements": {
+      "title": "Bewerbungsvoraussetzungen",
+      "subtitle": "Um Elite-Mitglied zu werden, müssen Sie die folgenden Kriterien erfüllen",
+      "age": "Alter über 55 Jahre",
+      "membership": "Aktive Pensa Club Mitgliedschaft für mindestens 1 Monat",
+      "activity": "Aktive Teilnahme an der Gemeinschaft und Initiativen",
+      "recommendation": "Empfehlung von einem bestehenden Elite-Mitglied oder Administrator"
+    },
+    "application": {
+      "title": "Bewerbungsprozess",
+      "subtitle": "Drei einfache Schritte zu Ihrer Elite-Mitgliedschaft",
+      "steps": {
+        "step1": {
+          "title": "Antrag einreichen",
+          "description": "Füllen Sie das Online-Formular mit Ihren Daten und Ihrer Motivation für die Elite-Mitgliedschaft aus"
+        },
+        "step2": {
+          "title": "Prüfung und Bewertung",
+          "description": "Unser Team wird Ihren Antrag prüfen und sich für weitere Informationen mit Ihnen in Verbindung setzen"
+        },
+        "step3": {
+          "title": "Genehmigung und Aktivierung",
+          "description": "Bei Genehmigung erhalten Sie Ihre Elite-Karte und Zugang zu allen Privilegien"
+        }
+      },
+      "comingSoon": "Bewerbungen werden bald verfügbar sein",
+      "notify": {
+        "text": "Möchten Sie benachrichtigt werden, wenn wir starten?",
+        "link": "Kontaktieren Sie uns"
+      }
+    },
+    "backToHome": "Zurück zur Startseite"
+  }
 }

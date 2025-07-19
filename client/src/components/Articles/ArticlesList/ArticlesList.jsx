@@ -12,7 +12,8 @@ import { useArticleContext } from '../../contexts/ArticleContext';
 import { createEditorState } from '../articleUtils/editor';
 import { useLocation } from 'react-router-dom';
 import { filterArticles } from '../articleUtils/search';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import EliteCardPromo from './ClubCardPromo/EliteCardPromo/EliteCardPromo';
 
 const ArticlesList = () => {
   const { t } = useTranslation();
@@ -28,19 +29,76 @@ const ArticlesList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [currentPromoIndex, setCurrentPromoIndex] = useState(0);
+  const PROMO_SWITCH_INTERVAL = 1;
 
-  // Функция за трансформиране на статиите от сървъра в подходящия формат за компонентите
+  // Функция за изчисляване на текущия индекс на рекламата спрямо часовника
+  const calculateCurrentPromoIndex = () => {
+    const now = new Date();
+    const totalMinutes = now.getHours() * 60 + now.getMinutes();
+    const cyclesSinceStart = Math.floor(totalMinutes / PROMO_SWITCH_INTERVAL);
+    return cyclesSinceStart % 2; // Алтернира между 0 и 1
+  };
+
+  // Функция за изчисляване на милисекундите до следващата смяна
+  const getTimeToNextSwitch = () => {
+    const now = new Date();
+    const currentMinutes = now.getMinutes();
+    const currentSeconds = now.getSeconds();
+    const currentMilliseconds = now.getMilliseconds();
+
+    // Намирам следващия 17-минутен интервал (0, 17, 34, 51)
+    const intervals = [];
+    for (let i = 0; i < 60; i += PROMO_SWITCH_INTERVAL) {
+      intervals.push(i);
+    }
+    let nextInterval = intervals.find(interval => interval > currentMinutes);
+
+    // Ако няма по-голям интервал в този час, следващият е в следващия час
+    if (!nextInterval) {
+      nextInterval = 60;
+    }
+
+    // Изчислявам колко милисекунди до следващата смяна
+    const minutesToNext = nextInterval - currentMinutes;
+    const secondsToNext = 60 - currentSeconds;
+    const millisecondsToNext = 1000 - currentMilliseconds;
+
+    return (minutesToNext - 1) * 60 * 1000 + secondsToNext * 1000 + millisecondsToNext;
+  };
+
+  useEffect(() => {
+
+    setCurrentPromoIndex(calculateCurrentPromoIndex());
+
+    const timeToNextSwitch = getTimeToNextSwitch();
+
+    const initialTimeout = setTimeout(() => {
+      setCurrentPromoIndex(calculateCurrentPromoIndex());
+
+      const regularInterval = setInterval(() => {
+        setCurrentPromoIndex(calculateCurrentPromoIndex());
+      }, PROMO_SWITCH_INTERVAL * 60 * 1000);
+
+      return () => clearInterval(regularInterval);
+    }, timeToNextSwitch);
+
+    return () => {
+      clearTimeout(initialTimeout);
+    };
+  }, [PROMO_SWITCH_INTERVAL]);
+
   const transformServerArticles = (articlesFromServer) => {
-    // Съществуващата функция остава непроменена
+
     return articlesFromServer.map(article => {
-      // Копираме основните полета
+
       const transformedArticle = {
         ...article,
 
         summary: typeof article.summary === 'string' ? article.summary : article.summary,
         mainImage: {
           ...article.mainImage,
-    
+
           alt: typeof article.mainImage.alt === 'string' ? article.mainImage.alt : article.mainImage.alt
         }
       };
@@ -56,10 +114,10 @@ const ArticlesList = () => {
           // Трансформираме sectionImages към формата, който компонентът очаква
           const image = Array.isArray(section.sectionImages)
             ? section.sectionImages.map(img => ({
-                src: img.src,
-                alt: typeof img.alt === 'string' ? createEditorState(img.alt) : img.alt,
-                caption: typeof img.caption === 'string' ? createEditorState(img.caption) : img.caption
-              }))
+              src: img.src,
+              alt: typeof img.alt === 'string' ? createEditorState(img.alt) : img.alt,
+              caption: typeof img.caption === 'string' ? createEditorState(img.caption) : img.caption
+            }))
             : [];
 
           return {
@@ -90,10 +148,8 @@ const ArticlesList = () => {
         const query = new URLSearchParams(location.search);
         const shouldRefresh = query.get('refresh') === 'true';
 
-        // Опитваме да вземем статиите от контекста/сървъра
         let articlesData;
 
-        // Проверяваме дали вече имаме заредени статии в контекста
         if (articlesLoaded && contextArticles.length > 0 && !shouldRefresh) {
 
           articlesData = contextArticles;
@@ -101,7 +157,6 @@ const ArticlesList = () => {
 
           articlesData = await getAllArticles(shouldRefresh);
 
-          // Изчистваме URL-a от refresh параметъра ако е необходимо
           if (shouldRefresh) {
             window.history.replaceState({}, document.title, '/articles');
           }
@@ -206,7 +261,13 @@ const ArticlesList = () => {
       });
     }
   };
-
+  const renderPromoComponent = () => {
+    if (currentPromoIndex === 0) {
+      return <EliteCardPromo autoAnimate={true} showParticles={true} />;
+    } else {
+      return <ClubCardPromo autoAnimate={true} showParticles={true} />;
+    }
+  };
   return (
     <div className="articles-list-container">
       <div className="articles-hero">
@@ -220,7 +281,7 @@ const ArticlesList = () => {
 
       <div className="articles-content-with-sidebar">
         <div className="sidebar-promo">
-          <ClubCardPromo />
+          {renderPromoComponent()}
         </div>
 
         <div className="articles-main-content">
