@@ -112,7 +112,7 @@
   border: 1px solid rgba(226, 228, 240, 0.8);
   overflow: hidden;
   transition: all 0.3s ease;
-  min-height: 380px; /* Променено от height на min-height */
+  min-height: 470px; /* Променено от height на min-height */
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -488,7 +488,7 @@
   }
   
   .proj-slider-project-card {
-    min-height: 380px; /* Променено */
+    min-height: 470px; /* Променено */
   }
   
   .proj-slider-nav {
@@ -513,7 +513,7 @@
   }
   
   .proj-slider-project-card {
-    min-height: 370px; /* Променено */
+    min-height: 470px; /* Променено */
   }
   
   .proj-slider-nav {
@@ -543,7 +543,7 @@
   }
   
   .proj-slider-project-card {
-    min-height: 360px; /* Променено */
+    min-height: 480px; /* Променено */
   }
   
   .proj-slider-card-header {

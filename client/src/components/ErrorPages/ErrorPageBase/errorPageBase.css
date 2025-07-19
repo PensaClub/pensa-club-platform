@@ -176,7 +176,7 @@
 }
 
 .error-code {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 900;
   font-family: 'Courier New', monospace;
   text-shadow: 0 0 20px currentColor;
@@ -387,7 +387,7 @@
   }
   
   .error-code {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
   }
   
   .error-title {

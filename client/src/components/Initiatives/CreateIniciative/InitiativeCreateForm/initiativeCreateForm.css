@@ -5179,3 +5179,6 @@ margin: 0 auto;
     padding: 1rem;
   }
 }
+.project-floating-actions svg{
+  color: white;
+}

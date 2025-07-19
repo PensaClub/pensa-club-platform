@@ -85,13 +85,14 @@ export const InitiativeProvider = ({ children }) => {
   const initiativeService = initiativeServiceFactory();
   const [projectsHasMore, setProjectsHasMore] = useState(true);
   const [projectsCurrentPage, setProjectsCurrentPage] = useState(1);
+
   const showErrorAndSetTimeouts = useCallback((error) => {
     setErrorMessage(error);
     setIsLoading(false);
     setTimeout(() => {
       setErrorMessage('');
       setIsLoading(false);
-    }, 1000);
+    }, 10);
   }, []);
 
   useEffect(() => {
@@ -161,7 +162,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
 
       // API заявка към сървъра
       const response = await initiativeService.applyToProject(projectId, applicationData);
@@ -207,13 +208,13 @@ export const InitiativeProvider = ({ children }) => {
 
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [initiativeService, userEmail, isAuthentication, getProjectApplications]);
   // Зареждане на всички кандидатури (за админи)
   const getAllApplications = useCallback(async () => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.getAllApplications();
       return response.data || response;
     } catch (error) {
@@ -221,7 +222,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to load applications');
       return [];
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [initiativeService]);
 
@@ -252,7 +253,7 @@ export const InitiativeProvider = ({ children }) => {
   // Изтриване на кандидатура (за админи)
   const deleteApplication = useCallback(async (applicationId) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       await initiativeService.deleteApplication(applicationId);
 
       // Премахваме от локалното състояние
@@ -266,7 +267,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to delete application');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [initiativeService]);
 
@@ -277,7 +278,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
 
       const emailData = {
         emails: recipientsData
@@ -307,7 +308,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', error.message || 'Failed to send emails');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [isAuthentication, initiativeService, updateApplicationStatus]);
   // Draft functions
@@ -325,7 +326,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.getAllDrafts(page, 6);
 
       // ВАЖНО: Вземаме pagination от response
@@ -357,7 +358,7 @@ export const InitiativeProvider = ({ children }) => {
         pagination: { totalPages: 0, totalInitiatives: 0 }
       };
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [drafts.length, draftsLoaded, draftsHasMore, draftsCurrentPage, initiativeService]);
 
@@ -368,7 +369,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.toggleDraftStatus(identifier);
 
       // Ако е успешно публикувана, премахваме от drafts списъка
@@ -390,7 +391,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to publish draft');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [isAuthentication, initiativeService, navigate]);
 
@@ -401,7 +402,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.updateDraftInitiative(id, draftData);
 
       // Обновяваме draft-а в локалното състояние
@@ -416,20 +417,20 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to update draft');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
   const getDraftById = useCallback(async (id) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.getDraftById(id);
       return response.data || response;
     } catch (error) {
       console.error('Error fetching draft by ID:', error);
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [initiativeService]);
 
@@ -441,7 +442,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
 
       // 1. Ако изтриваме от localStorage
       if (fromLocalStorage) {
@@ -499,7 +500,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', fromLocalStorage ? 'Failed to clear draft' : 'Failed to delete draft');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
@@ -525,7 +526,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.getAllInitiatives(page, 6);
 
       const responseData = {
@@ -553,7 +554,7 @@ export const InitiativeProvider = ({ children }) => {
       // В случай на грешка, връщаме празни данни
       return { data: [], hasMore: false, currentPage: page };
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [initiatives.length, initiativesLoaded, hasMore, currentPage, initiativeService, showErrorAndSetTimeouts]);
 
@@ -564,7 +565,7 @@ export const InitiativeProvider = ({ children }) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.createInitiative(initiativeData);
 
       // Добавям новата инициатива в локалното състояние
@@ -577,7 +578,7 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to create initiative');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
@@ -620,7 +621,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.updateInitiative(id, initiativeData);
 
       // Обновявам инициативата в локалното състояние
@@ -635,7 +636,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
       notify('error', 'Failed to update initiative');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
@@ -646,7 +647,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       await initiativeService.deleteInitiative(id);
 
       // Премахвам инициативата от локалното състояние
@@ -658,7 +659,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
       notify('error', 'Failed to delete initiative');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
@@ -732,7 +733,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
       console.error('Error fetching initiative by ID:', e);
       throw e;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [generateId]);
 
@@ -1055,7 +1056,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.getAllProjects(page, 6); // Добавяме page и limit
 
       const responseData = {
@@ -1082,7 +1083,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
       showErrorAndSetTimeouts(e.message);
       return { data: [], hasMore: false, currentPage: page };
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [projects.length, projectsLoaded, projectsHasMore, projectsCurrentPage, initiativeService, showErrorAndSetTimeouts]);
 
@@ -1122,7 +1123,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
   }
 
   try {
-    setIsLoading(true);
+    // setIsLoading(true);
     
     await initiativeService.deleteProject(identifier);
 
@@ -1139,7 +1140,7 @@ const invalidateProjectDraftsCache = useCallback(() => {
     notify('error', 'Failed to delete project');
     throw error;
   } finally {
-    setIsLoading(false);
+    // setIsLoading(false);
   }
 }, [isAuthentication, initiativeService]);
 
@@ -1190,7 +1191,7 @@ const deleteDraftProject = useCallback(async (draftId) => {
   }
 
   try {
-    setIsLoading(true);
+    // setIsLoading(true);
     
     await initiativeService.deleteDraftProject(draftId);
 
@@ -1207,7 +1208,7 @@ const deleteDraftProject = useCallback(async (draftId) => {
     notify('error', 'Failed to delete project draft');
     throw error;
   } finally {
-    setIsLoading(false);
+    // setIsLoading(false);
   }
 }, [isAuthentication, initiativeService]);
 
@@ -1220,8 +1221,8 @@ const updateDraftProject = useCallback(async (id, draftData) => {
     }
 
     try {
-        setIsLoading(true);
-        
+        // setIsLoading(true);
+
         const response = await initiativeService.updateDraftProject(id, draftData);
         const updatedDraft = response.data || response;
         
@@ -1244,7 +1245,7 @@ const updateDraftProject = useCallback(async (id, draftData) => {
         notify('error', 'Failed to update project draft');
         throw error;
     } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
     }
 }, [isAuthentication, initiativeService]);
 
@@ -1259,7 +1260,7 @@ const updateDraftProject = useCallback(async (id, draftData) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.getAllProjectDrafts(page, 6);
 
       const responseData = {
@@ -1289,20 +1290,20 @@ const updateDraftProject = useCallback(async (id, draftData) => {
         currentPage: page
       };
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [projectDrafts.length, projectDraftsLoaded, projectDraftsHasMore, projectDraftsCurrentPage, initiativeService]);
 // Get draft project by ID
 const getDraftProjectById = useCallback(async (id) => {
   try {
-    setIsLoading(true);
+    // setIsLoading(true);
     const response = await initiativeService.getDraftProjectById(id);
     return response.data || response;
   } catch (error) {
     console.error('Error fetching draft project by ID:', error);
     throw error;
   } finally {
-    setIsLoading(false);
+    // setIsLoading(false);
   }
 }, [initiativeService]);
   // Update Initiative with new Project
@@ -1364,7 +1365,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
   }
 
   try {
-    setIsLoading(true);
+    // setIsLoading(true);
     const response = await initiativeService.toggleProjectDraftStatus(identifier);
 
     const publishedProject = response.data || response;
@@ -1396,7 +1397,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
     notify('error', 'Failed to publish project draft');
     throw error;
   } finally {
-    setIsLoading(false);
+    // setIsLoading(false);
   }
 }, [isAuthentication, initiativeService, navigate]);
   
@@ -1408,7 +1409,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true); 
       const response = await initiativeService.updateProject(identifier, projectData);
 
       // Обновяваме в локалното състояние
@@ -1425,7 +1426,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
       notify('error', 'Грешка при обновяване на проекта');
       throw error;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [isAuthentication, initiativeService]);
 
@@ -1438,7 +1439,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await initiativeService.getProjectById(id);
       const project = response.data || response;
 
@@ -1455,7 +1456,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
       showErrorAndSetTimeouts(e.message);
       throw e;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [initiativeService, showErrorAndSetTimeouts, generateId]);
 
@@ -1616,7 +1617,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
   //Stories functions
   const getStoryBySlug = useCallback(async (slug) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
 
       const story = storiesData.stories.find(story => story.slug === slug || story.titleSlug === slug);
 
@@ -1651,13 +1652,13 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
       console.error('Error fetching story by slug:', e);
       throw e;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [generateId]);
 
   const getPublicationBySlug = useCallback(async (slug) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
 
       // Търсим в mock данните
       const publication = publicationsData.publications.find(pub =>
@@ -1698,7 +1699,7 @@ const toggleProjectDraftStatus = useCallback(async (identifier) => {
       console.error('Error fetching publication by slug:', e);
       throw e;
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);  
     }
   }, [generateId]);
 

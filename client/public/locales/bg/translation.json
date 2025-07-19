@@ -1620,6 +1620,13 @@
       "initiatives": "Инициативи",
       "backToInitiative": "Връщане към инициативата"
     },
+    "gallery": {
+            "title": "Галерия",
+            "noImages": "Няма изображения",
+            "image": "изображение",
+            "images": "изображения", 
+            "viewImage": "Преглед"
+        },
     "status": {
       "active": "Активен",
       "in-progress": "В процес",
@@ -1660,7 +1667,8 @@
       "downloadMaterials": "Файлове",
       "budget": "Бюджет",
       "sponsorsPartners": "Пaртньори",
-      "milestones": "Етапи"
+      "milestones": "Етапи",
+      "gallery": "Галерия"
     },
     "sections": {
       "publications": "Публикации",
@@ -1669,7 +1677,8 @@
       "downloadMaterials": "Материали за сваляне",
       "budget": "Бюджет",
       "sponsorsPartners": "Спонсори и партньори",
-      "milestones": "Етапи на проекта"
+      "milestones": "Етапи на проекта",
+      "gallery": "Галерия"
     },
     "messages": {
       "loginRequired": "Моля влезте в профила си за да кандидатствате за този проект."

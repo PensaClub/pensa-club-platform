@@ -517,7 +517,7 @@ const getProjectsByDraftStatus = async (isDraft, req, res, next) => {
                 {
                     model: section,
                     as: 'sections',
-                    required: true,
+                    required: false,
                 },
             ],
         });

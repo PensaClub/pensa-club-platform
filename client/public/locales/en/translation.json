@@ -1625,6 +1625,13 @@
       "initiatives": "Initiatives",
       "backToInitiative": "Back to Initiative"
     },
+      "gallery": {
+            "title": "Gallery",
+            "noImages": "No images available",
+            "image": "image",
+            "images": "images", 
+            "viewImage": "View Image"
+        },
     "status": {
       "active": "Active",
       "in-progress": "In Progress",
@@ -1664,7 +1671,8 @@
       "contact": "Contact",
       "downloadMaterials": "Files",
       "budget": "Budget",
-      "sponsorsPartners": "Partners"
+      "sponsorsPartners": "Partners",
+        "gallery": "Gallery"
     },
     "sections": {
       "publications": "Publications",
@@ -1672,7 +1680,8 @@
       "contact": "Contact",
       "downloadMaterials": "Download Materials",
       "budget": "Budget & Funding",
-      "sponsorsPartners": "Sponsors & Partners"
+      "sponsorsPartners": "Sponsors & Partners",
+      "gallery": "Gallery"
     },
     "messages": {
       "loginRequired": "Please log in to apply for this project."

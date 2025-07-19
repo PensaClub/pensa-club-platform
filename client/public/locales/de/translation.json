@@ -1607,6 +1607,13 @@
             "initiatives": "Initiativen",
             "backToInitiative": "Zurück zur Initiative"
         },
+         "gallery": {
+            "title": "Galerie",
+            "noImages": "Keine Bilder verfügbar",
+            "image": "Bild",
+            "images": "Bilder", 
+            "viewImage": "Bild anzeigen"
+        },
         "status": {
             "active": "Aktiv",
             "in-progress": "In Bearbeitung",
@@ -1647,7 +1654,8 @@
             "downloadMaterials": "Dateien",
             "budget": "Budget",
             "sponsorsPartners": "Partner",
-            "milestones": "Meilensteine"
+            "milestones": "Meilensteine",
+            "gallery": "Galerie"
         },
         "sections": {
             "publications": "Publikationen",
@@ -1656,7 +1664,8 @@
             "downloadMaterials": "Download-Materialien",
             "budget": "Budget",
             "sponsorsPartners": "Sponsoren und Partner",
-            "milestones": "Projektmeilensteine"
+            "milestones": "Projektmeilensteine",
+            "gallery": "Galerie"
         },
         "messages": {
             "loginRequired": "Bitte melden Sie sich an, um sich für dieses Projekt zu bewerben."

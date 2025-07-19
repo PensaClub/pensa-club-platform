@@ -468,7 +468,19 @@
     color: var(--proj-accent-light);
     text-decoration: underline;
 }
+.button-link {
+    background: none;
+    border: none;
+    /* color: inherit; */
+    font: inherit;
+    cursor: pointer;
+    /* text-decoration: underline; */
+    padding: 0;
+}
 
+.button-link:hover {
+    opacity: 0.8;
+}
 .proj-card__initiative-link strong {
-    color: inherit;
+    /* color: inherit; */
 }
