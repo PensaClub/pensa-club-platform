@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { Loader } from "../Loader/Loader";
 import { notify } from "../../utils/notify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "./UserContext";
 import { articleServiceFactory } from "../Services/articleServiceFactory";
 import { deleteFileFromStorage } from "../Articles/articleUtils/file-delete-utils";
@@ -15,7 +15,7 @@ export const ArticleProvider = ({ children }) => {
   const [articlesLoaded, setArticlesLoaded] = useState(false);
   const { isAdmin } = useAuthContext();
   const navigate = useNavigate();
-  
+   const location = useLocation();
   const articleService = articleServiceFactory();
 
   const showErrorAndSetTimeouts = (error) => {
@@ -232,11 +232,13 @@ export const ArticleProvider = ({ children }) => {
     isLoading,
     articlesLoaded,
   };
+  const pagesWithLazyLoading = ['/articles'];
 
+   const shouldShowLoader = isLoading && !pagesWithLazyLoading.includes(location.pathname);
   return (
     <ArticleContext.Provider value={contextService}>
       {children}
-      {isLoading && <Loader />}
+      {shouldShowLoader && <Loader />}
     </ArticleContext.Provider>
   );
 };
