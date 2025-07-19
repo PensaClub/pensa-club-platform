@@ -94,7 +94,7 @@ const ClubCardPromo = () => {
 
       <h3 className="promo-title">
         <span className="brand">Pensa</span>
-        <span className="card-text">Club Card</span>
+        <span className="card-text">Elite Card</span>
       </h3>
 
       <div className="card-image-wrapper">
@@ -105,7 +105,7 @@ const ClubCardPromo = () => {
         >
           <img
             src="/images/pensa-club-card.png"
-            alt="Pensa Club Card"
+            alt="Pensa Elite Card"
             className="card-image"
           />
           <div className="card-reflection"></div>
@@ -137,7 +137,7 @@ const ClubCardPromo = () => {
         </div>
       </div>
 
-      <Link to="/club-card" className="join-us-wrapper">
+      <Link to="/elite-membership" className="join-us-wrapper">
         <div className="join-us-text">
           <span className="join-text">{t('articles.articleClubCard.joinUs')}</span>
           <span className="join-arrow">→</span>
