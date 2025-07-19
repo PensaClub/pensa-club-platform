@@ -19,6 +19,7 @@ import { ProjectBudget } from '../ProjectBudget/ProjectBudget';
 import { SponsorsPartners } from '../SponsorsPartners/SponsorsPartners';
 import { Milestones } from '../Milestones/Milestones';
 import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
+import ProjectGallery from '../ProjectGallery/ProjectGallery';
 
 export const ProjectView = () => {
     const { slug } = useParams();
@@ -636,7 +637,16 @@ export const ProjectView = () => {
                                 </div>
                             </section>
                         ))}
-
+                        {/* Gallery Section */}
+                        {currentProject.gallery?.length > 0 && (
+                            <section id="gallery" className="project-view-section project-view-gallery-section">
+                                <h2 className="project-view-section-title">{t('projectView.sections.gallery')}</h2>
+                                <ProjectGallery
+                                    gallery={currentProject.gallery}
+                                    title={t('projectView.gallery.title')}
+                                />
+                            </section>
+                        )}
                         {/* Publications */}
                         {currentProject.publications?.length > 0 && (
                             <section id="publications" className="project-view-section project-view-publications-section">

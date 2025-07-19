@@ -1557,10 +1557,13 @@
 
 /* 📊 Enhanced Progress Bar Styles */
 .initiative-progress-header {
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+    padding: 0 1rem;
+
 }
 
 .initiative-progress-header h3 {
@@ -1582,6 +1585,8 @@
   gap: 0.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+    padding: 0 1rem;
+
 }
 
 .initiative-progress-section {
@@ -4906,10 +4911,13 @@ margin: 0 auto;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+    padding: 0 1rem;
   }
 
   .initiative-progress-sections {
     gap: 0.25rem;
+    padding: 0 0.5rem;
+
   }
 
   .initiative-progress-section {
@@ -5170,4 +5178,7 @@ margin: 0 auto;
   .faq-item {
     padding: 1rem;
   }
+}
+.project-floating-actions svg{
+  color: white;
 }

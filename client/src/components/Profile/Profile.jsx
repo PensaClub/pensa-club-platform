@@ -316,14 +316,14 @@ export const Profile = () => {
                   </div>
                 </div>
                 <div className="dropdown-links">
-                  <NavLink to="/" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                  <NavLink to="/" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <DashboardIcon className="menu-icon" />
                       {t("header.home")}
                     </span>
                   </NavLink>
 
-                  <NavLink to="/articles" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                  <NavLink to="/articles" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <ForumIcon className="menu-icon" />
                       {t("header.articles")}
@@ -333,7 +333,7 @@ export const Profile = () => {
                   {/* Общност dropdown */}
                   <div className="profile-dropdown-container">
                     <button
-                      className={`dropdown-item profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
+                      className={`dropdown-item-new-profile profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
                       onClick={toggleProfileCommunity}
                     >
                       <span className="link-content">
@@ -355,7 +355,7 @@ export const Profile = () => {
                     <div className={`profile-dropdown-content ${profileCommunityOpen ? 'active' : ''}`}>
                       <NavLink
                         to="/craigslist?reset=true"
-                        className="profile-dropdown-item"
+                        className="profile-dropdown-item-new-profile"
                         onClick={() => {
                           setProfileMenuOpen(false);
                           setProfileCommunityOpen(false);
@@ -367,7 +367,7 @@ export const Profile = () => {
 
                       <NavLink
                         to="/initiatives"
-                        className="profile-dropdown-item"
+                        className="profile-dropdown-item-new-profile"
                         onClick={() => {
                           setProfileMenuOpen(false);
                           setProfileCommunityOpen(false);
@@ -376,10 +376,27 @@ export const Profile = () => {
                         <DashboardIcon className="menu-icon" />
                         {t("header.initiatives")}
                       </NavLink>
+                      <NavLink
+                        to="/projects"
+                        className="profile-dropdown-item-new-profile"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <svg className="menu-icon" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="rgb(198, 198, 198)">
+                          <path d="M7.25 6a.75.75 0 00-.75.75v7.5a.75.75 0 001.5 0v-7.5A.75.75 0 007.25 6zM12 6a.75.75 0 00-.75.75v4.5a.75.75 0 001.5 0v-4.5A.75.75 0 0012 6zm4 .75a.75.75 0 011.5 0v9.5a.75.75 0 01-1.5 0v-9.5z" />
+                          <path
+                            fillRule="evenodd"
+                            d="M3.75 2A1.75 1.75 0 002 3.75v16.5c0 .966.784 1.75 1.75 1.75h16.5A1.75 1.75 0 0022 20.25V3.75A1.75 1.75 0 0020.25 2H3.75zM3.5 3.75a.25.25 0 01.25-.25h16.5a.25.25 0 01.25.25v16.5a.25.25 0 01-.25.25H3.75a.25.25 0 01-.25-.25V3.75z"
+                          />
+                        </svg>
 
+                        {t("header.projects")}
+                      </NavLink>
                       <NavLink
                         to="/map"
-                        className="profile-dropdown-item"
+                        className="profile-dropdown-item-new-profile"
                         onClick={() => {
                           setProfileMenuOpen(false);
                           setProfileCommunityOpen(false);
@@ -391,14 +408,14 @@ export const Profile = () => {
                     </div>
                   </div>
 
-                  <NavLink to="/ad/create" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                  <NavLink to="/ad/create" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <JobsAdsIcon className="menu-icon" />
                       {t("header.ad-create")}
                     </span>
                   </NavLink>
 
-                  <NavLink to="/logout" className="dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                  <NavLink to="/logout" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <LogoutIcon className="menu-icon" />
                       {t("header.logout")}

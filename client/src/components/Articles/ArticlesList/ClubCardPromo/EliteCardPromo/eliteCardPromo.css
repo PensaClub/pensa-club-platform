@@ -1,0 +1,756 @@
+/* ======================= */
+/* PENSA ELITE CARD PROMO */
+/* ======================= */
+
+.elite-card-promo {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  padding: 35px 28px;
+  border-radius: 28px;
+  margin: 40px auto;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 100%);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(220, 38, 38, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+
+.elite-card-promo.animated {
+  animation: eliteCardFloat 8s ease-in-out infinite;
+}
+
+.elite-card-promo:hover {
+  transform: translateY(-10px) rotateX(5deg);
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(220, 38, 38, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Mystical Background Effects */
+.elite-background {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.neural-network {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(139, 69, 19, 0.08) 0%, transparent 50%);
+  opacity: 0.7;
+  animation: neuralPulse 6s ease-in-out infinite;
+}
+
+.geometric-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(90deg, rgba(220, 38, 38, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(220, 38, 38, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+  animation: gridShift 20s linear infinite;
+}
+
+.elite-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(220, 38, 38, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
+}
+
+.particle-1 {
+  top: 15%;
+  left: 10%;
+  animation: particleFloat 12s ease-in-out infinite;
+}
+
+.particle-2 {
+  top: 60%;
+  right: 15%;
+  animation: particleFloat 15s ease-in-out infinite 2s;
+}
+
+.particle-3 {
+  bottom: 20%;
+  left: 20%;
+  animation: particleFloat 10s ease-in-out infinite 4s;
+}
+
+.particle-4 {
+  top: 40%;
+  right: 30%;
+  animation: particleFloat 14s ease-in-out infinite 1s;
+}
+
+.particle-5 {
+  bottom: 40%;
+  left: 70%;
+  animation: particleFloat 11s ease-in-out infinite 3s;
+}
+
+/* Mystical Lines */
+.elite-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.elite-line {
+  position: absolute;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(220, 38, 38, 0.6) 20%, 
+    rgba(220, 38, 38, 0.9) 50%, 
+    rgba(220, 38, 38, 0.6) 80%, 
+    transparent 100%);
+  height: 1px;
+  width: 100%;
+  opacity: 0;
+  animation: lineReveal 4s ease-in-out infinite;
+}
+
+.line-1 {
+  top: 25%;
+  animation-delay: 0s;
+}
+
+.line-2 {
+  top: 50%;
+  animation-delay: 1.5s;
+}
+
+.line-3 {
+  bottom: 25%;
+  animation-delay: 3s;
+}
+
+/* Elite Status Indicator */
+.elite-status {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #dc2626, #f87171);
+  box-shadow: 
+    0 0 10px rgba(220, 38, 38, 0.6),
+    0 0 20px rgba(220, 38, 38, 0.3);
+  animation: elitePulse 3s ease-in-out infinite;
+}
+
+.elite-status::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.3) 0%, transparent 70%);
+  animation: eliteRipple 3s ease-in-out infinite;
+}
+
+/* VIP Badge */
+.vip-badge {
+  position: absolute;
+  top: -8px;
+  left: 30px;
+  background: linear-gradient(135deg, #1f2937, #374151);
+  padding: 12px 20px 8px;
+  border-radius: 0 0 16px 16px;
+  transform: translateY(-100%);
+  animation: vipSlideIn 0.8s 0.5s forwards;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.vip-text {
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
+}
+
+/* Elite Title */
+.elite-title {
+  text-align: center;
+  margin-bottom: 30px;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: eliteFadeIn 0.8s 0.3s forwards;
+  margin-top: 1rem;
+}
+
+.elite-brand {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, 
+    #ffffff 0%, 
+    #e5e7eb 25%, 
+    #dc2626 50%, 
+    #991b1b 75%, 
+    #ffffff 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  animation: eliteTextShine 4s ease-in-out infinite;
+  text-shadow: 0 0 30px rgba(220, 38, 38, 0.3);
+}
+
+.elite-subtitle {
+  font-size: 32px;
+  font-weight: 900;
+  color: #f8fafc;
+  letter-spacing: -1px;
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Elite Card Visual */
+.elite-card-visual {
+  position: relative;
+  height: 160px;
+  margin: 30px 0;
+  perspective: 1000px;
+}
+
+.elite-card-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+  opacity: 0;
+  animation: eliteFadeIn 1s 0.6s forwards;
+}
+
+.elite-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    #111827 0%, 
+    #1f2937 25%, 
+    #374151 50%, 
+    #111827 100%);
+  border-radius: 20px;
+  border: 2px solid rgba(220, 38, 38, 0.2);
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.elite-card-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(220, 38, 38, 0.2) 50%,
+    transparent 100%
+  );
+  animation: eliteCardScan 6s ease-in-out infinite;
+}
+
+.elite-card-promo:hover .elite-card-container {
+  transform: rotateY(10deg) rotateX(5deg);
+}
+
+.card-chip {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 35px;
+  height: 28px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+}
+
+.card-chip::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  background: #1f2937;
+  border-radius: 2px;
+}
+
+.card-number {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e5e7eb;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(229, 231, 235, 0.3);
+}
+
+.card-logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #dc2626;
+  text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+}
+
+.card-holder {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-size: 12px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Elite Features */
+.elite-features {
+  margin: 30px 0;
+  opacity: 0;
+  animation: eliteFadeIn 1s 0.8s forwards;
+}
+
+.elite-feature {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 8px 0;
+  transition: all 0.3s ease;
+  border-left: 2px solid transparent;
+  padding-left: 8px;
+}
+
+.elite-feature:hover {
+  border-left-color: #dc2626;
+  transform: translateX(8px);
+  background: rgba(220, 38, 38, 0.05);
+  border-radius: 0 8px 8px 0;
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-indent: initial;
+}
+
+.feature-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.elite-feature:hover .feature-icon::before {
+  transform: translateX(100%);
+}
+
+.exclusive {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.priority {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.premium {
+  background: linear-gradient(135deg, #0891b2, #06b6d4);
+  box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+}
+
+.feature-icon span {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.feature-text {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  color: #e5e7eb;
+  line-height: 1.4;
+}
+
+.feature-highlight {
+  color: #dc2626;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(220, 38, 38, 0.3);
+}
+
+/* Elite CTA */
+.elite-cta {
+  position: relative;
+  display: block;
+  margin-top: 35px;
+  padding: 18px 0;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #1f2937 100%);
+  border: 2px solid rgba(220, 38, 38, 0.3);
+  color: white;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+  animation: eliteFadeIn 1s 1s forwards;
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.elite-cta:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: #dc2626;
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 50%, #dc2626 100%);
+  box-shadow: 
+    0 15px 40px rgba(220, 38, 38, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.elite-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+}
+
+.elite-cta:hover::before {
+  transform: translateX(100%);
+}
+
+.cta-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.cta-text {
+  margin-right: 12px;
+}
+
+.cta-arrow {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.elite-cta:hover .cta-arrow {
+  transform: translateX(8px) scale(1.2);
+  animation: eliteArrowPulse 1s ease infinite;
+}
+
+/* Holographic Border Effect */
+.elite-card-promo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: linear-gradient(45deg, 
+    transparent, 
+    rgba(220, 38, 38, 0.5), 
+    transparent, 
+    rgba(59, 130, 246, 0.3), 
+    transparent, 
+    rgba(220, 38, 38, 0.5), 
+    transparent);
+  background-size: 400% 400%;
+  border-radius: 28px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: holographicBorder 8s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.elite-card-promo:hover::before {
+  opacity: 1;
+}
+
+/* ======================= */
+/* ANIMATIONS */
+/* ======================= */
+
+@keyframes eliteCardFloat {
+  0%, 100% {
+    transform: translateY(0) rotateX(0);
+  }
+  50% {
+    transform: translateY(-8px) rotateX(2deg);
+  }
+}
+
+@keyframes eliteFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes eliteTextShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes neuralPulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes gridShift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(40px, 40px);
+  }
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.8;
+  }
+  33% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 1;
+  }
+  66% {
+    transform: translateY(-10px) translateX(-15px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes lineReveal {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  25% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  75% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+}
+
+@keyframes elitePulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px rgba(220, 38, 38, 0.6),
+      0 0 20px rgba(220, 38, 38, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 20px rgba(220, 38, 38, 0.8),
+      0 0 40px rgba(220, 38, 38, 0.5);
+  }
+}
+
+@keyframes eliteRipple {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes vipSlideIn {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes eliteCardScan {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: -100%;
+  }
+}
+
+@keyframes eliteArrowPulse {
+  0%, 100% {
+    transform: translateX(8px) scale(1.2);
+  }
+  50% {
+    transform: translateX(12px) scale(1.3);
+  }
+}
+
+@keyframes holographicBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ======================= */
+/* RESPONSIVE DESIGN */
+/* ======================= */
+
+@media (max-width: 992px) {
+  .elite-card-promo {
+    max-width: 280px;
+    padding: 30px 25px;
+  }
+  
+  .elite-brand {
+    font-size: 24px;
+  }
+  
+  .elite-subtitle {
+    font-size: 28px;
+  }
+  
+  .elite-card-visual {
+    height: 140px;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 992px) {
+  .elite-card-promo {
+    max-width: 100%;
+    width: 100%;
+    padding: 25px 20px;
+  }
+  
+  .elite-card-visual {
+    height: 150px;
+  }
+  
+  .elite-features {
+    margin: 25px 0;
+  }
+  
+  .elite-feature {
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .elite-card-promo {
+    max-width: 100%;
+    padding: 20px 15px;
+  }
+  
+  .elite-card-visual {
+    height: 130px;
+  }
+  
+  .elite-subtitle {
+    font-size: 26px;
+  }
+  
+  .elite-brand {
+    font-size: 22px;
+  }
+  
+  .feature-text {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 993px) {
+  .elite-card-promo {
+    max-width: 320px;
+  }
+}

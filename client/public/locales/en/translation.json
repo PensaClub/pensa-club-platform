@@ -1473,7 +1473,8 @@
       "description": "Discover and participate in initiatives that build bridges between generations and strengthen our community",
       "activeInitiatives": "Active Initiatives",
       "participants": "Participants",
-      "cities": "Cities"
+      "cities": "Cities",
+      "mainTitle": "ADULTS MAKE A CHANGE"
     },
     "view": {
       "notFound": "Initiative not found",
@@ -1624,6 +1625,13 @@
       "initiatives": "Initiatives",
       "backToInitiative": "Back to Initiative"
     },
+      "gallery": {
+            "title": "Gallery",
+            "noImages": "No images available",
+            "image": "image",
+            "images": "images", 
+            "viewImage": "View Image"
+        },
     "status": {
       "active": "Active",
       "in-progress": "In Progress",
@@ -1663,7 +1671,8 @@
       "contact": "Contact",
       "downloadMaterials": "Files",
       "budget": "Budget",
-      "sponsorsPartners": "Partners"
+      "sponsorsPartners": "Partners",
+        "gallery": "Gallery"
     },
     "sections": {
       "publications": "Publications",
@@ -1671,7 +1680,8 @@
       "contact": "Contact",
       "downloadMaterials": "Download Materials",
       "budget": "Budget & Funding",
-      "sponsorsPartners": "Sponsors & Partners"
+      "sponsorsPartners": "Sponsors & Partners",
+      "gallery": "Gallery"
     },
     "messages": {
       "loginRequired": "Please log in to apply for this project."
@@ -2726,5 +2736,139 @@
     "unknownLocation": "Unknown location",
     "defaultCountry": "Bulgaria",
     "loading": "Loading..."
+  },
+   "eliteCard": {
+    "badge": "ELITE",
+    "brand": "Pensa Elite",
+    "subtitle": "CARD",
+    "cardHolder": "EXCLUSIVE MEMBER",
+    "features": {
+      "exclusive": {
+        "highlight": "Exclusive",
+        "text": "access to premium content"
+      },
+      "priority": {
+        "highlight": "Priority",
+        "text": "support 24/7"
+      },
+      "premium": {
+        "highlight": "Premium",
+        "text": "tools and features"
+      }
+    },
+    "cta": {
+      "text": "Become Elite Member"
+    }
+  },
+  "eliteMembership": {
+    "meta": {
+      "title": "Pensa Elite Membership - Exclusive Membership",
+      "description": "Become part of the exclusive Pensa Elite members community with premium privileges and special benefits.",
+      "keywords": "Elite membership, premium card, exclusive privileges, seniors"
+    },
+    "hero": {
+      "subtitle": "The exclusive membership for selected Pensa Club members with unique privileges and special access."
+    },
+    "comingSoon": {
+      "title": "Coming Soon",
+      "subtitle": "We're preparing something special"
+    },
+    "notice": {
+      "title": "Under Development",
+      "text": "We are currently working hard to provide you with the best Elite Membership program. We are preparing exceptional privileges, partnerships and services especially for you.",
+      "timeline": "Coming Soon - Fall 2025"
+    },
+    "benefits": {
+      "title": "Exclusive Benefits",
+      "subtitle": "Discover the unique privileges that await you as an Elite member",
+      "exclusive": {
+        "title": "Exclusive Access",
+        "description": "Access to special events, courses and content available only to Elite members"
+      },
+      "priority": {
+        "title": "Priority Support",
+        "description": "24/7 personal support with priority service and quick response"
+      },
+      "premium": {
+        "title": "Premium Services",
+        "description": "Free consultations, personalized recommendations and special discounts"
+      },
+      "personalized": {
+        "title": "Personalized Service",
+        "description": "Individual approach tailored to your needs"
+      },
+      "special": {
+        "title": "Special Events",
+        "description": "Invitations to exclusive Elite events, seminars and meetings"
+      },
+      "secure": {
+        "title": "Security and Privacy",
+        "description": "Highest level of security and protection of your personal data"
+      }
+    },
+    "locations": {
+      "title": "Where you can use the card",
+      "subtitle": "Our Elite card provides you with privileges at selected locations throughout the country",
+      "healthcare": {
+        "category": "Healthcare",
+        "place1": "Private clinics and hospitals",
+        "place2": "Specialized medical centers",
+        "place3": "Dental offices",
+        "place4": "Rehabilitation centers"
+      },
+      "culture": {
+        "category": "Culture and Entertainment",
+        "place1": "Theaters and operas",
+        "place2": "Museums and galleries",
+        "place3": "Cinemas and cultural centers",
+        "place4": "Libraries and reading rooms"
+      },
+      "shopping": {
+        "category": "Shopping and Services",
+        "place1": "Selected stores and boutiques",
+        "place2": "Restaurants and cafes",
+        "place3": "Beauty salons",
+        "place4": "Travel agencies"
+      },
+      "recreation": {
+        "category": "Recreation and Sports",
+        "place1": "SPA and wellness centers",
+        "place2": "Fitness gyms",
+        "place3": "Parks and gardens",
+        "place4": "Hotels and resorts"
+      }
+    },
+    "requirements": {
+      "title": "Application Requirements",
+      "subtitle": "To become an Elite member, you must meet the following criteria",
+      "age": "Age over 55 years",
+      "membership": "Active Pensa Club membership for at least 1 month",
+      "activity": "Active participation in community and initiatives",
+      "recommendation": "Recommendation from existing Elite member or administrator"
+    },
+    "application": {
+      "title": "Application Process",
+      "subtitle": "Three easy steps to your Elite membership",
+      "steps": {
+        "step1": {
+          "title": "Submit Application",
+          "description": "Fill out the online form with your details and motivation for Elite membership"
+        },
+        "step2": {
+          "title": "Review and Assessment",
+          "description": "Our team will review your application and contact you for additional information"
+        },
+        "step3": {
+          "title": "Approval and Activation",
+          "description": "Upon approval, you will receive your Elite card and access to all privileges"
+        }
+      },
+      "comingSoon": "Applications will be available soon",
+      "notify": {
+        "text": "Want to be notified when we launch?",
+        "link": "Contact us"
+      }
+    },
+    "backToHome": "Back to Home"
   }
 }
