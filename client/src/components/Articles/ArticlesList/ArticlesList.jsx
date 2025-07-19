@@ -265,7 +265,7 @@ const ArticlesList = () => {
     if (currentPromoIndex === 0) {
       return <EliteCardPromo autoAnimate={true} showParticles={true} />;
     } else {
-      return <ClubCardPromo autoAnimate={true} showParticles={true} />;
+      return <ClubCardPromo />;
     }
   };
   return (

@@ -14,20 +14,20 @@ export const EliteCardPromo = ({
 
   // Intersection Observer за анимация при влизане в viewport
   useEffect(() => {
-    if (!autoAnimate || !cardRef.current) return;
+  if (!autoAnimate || !cardRef.current) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          cardRef.current.classList.add('animated');
-        }
-      },
-      { threshold: 0.3 }
-    );
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting && entry.target) {
+        entry.target.classList.add('animated');
+      }
+    },
+    { threshold: 0.3 }
+  );
 
-    observer.observe(cardRef.current);
-    return () => observer.disconnect();
-  }, [autoAnimate]);
+  observer.observe(cardRef.current);
+  return () => observer.disconnect();
+}, [autoAnimate]);
 
   // Mouse tracking за sparkle ефект
   const handleMouseMove = (e) => {
