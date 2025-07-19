@@ -25,8 +25,7 @@ const ProjectsList = () => {
         getAllProjects,
         projects: contextProjects,
         projectsLoaded,
-        projectsHasMore,
-        projectsCurrentPage
+
     } = useInitiativeContext();
 
     // State management
@@ -53,7 +52,7 @@ const ProjectsList = () => {
 
     useEffect(() => {
         const fetchProjects = async () => {
-            // Предотвратяваме duplicate заявки
+        
             if (isFetchingRef.current) return;
 
             try {

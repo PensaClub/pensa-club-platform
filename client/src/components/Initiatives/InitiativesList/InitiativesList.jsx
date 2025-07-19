@@ -8,7 +8,7 @@ import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { InitiativesHero } from './InitiativesHero/InitiativesHero';
 
-export const InitiativesList = () => {
+const InitiativesList = () => {
   const { t } = useTranslation();
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
   // const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
@@ -156,3 +156,4 @@ export const InitiativesList = () => {
     </div>
   );
 };
+export default InitiativesList;

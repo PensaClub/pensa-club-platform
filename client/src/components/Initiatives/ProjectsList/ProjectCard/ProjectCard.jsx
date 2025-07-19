@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { getLocationFromCoordinates } from '../../../../utils/getLocationFromCoordinates';
@@ -10,7 +10,7 @@ const ProjectCard = ({ project, featured = false }) => {
     const { t } = useTranslation();
     const { toggleBookmarkProjects, isBookmarkedProject } = useInitiativeContext();
     const [locationText, setLocationText] = useState('');
-
+    const navigate = useNavigate();
     const isBookmarked = isBookmarkedProject(project.id);
 
     const handleBookmark = (e) => {
@@ -66,7 +66,11 @@ const ProjectCard = ({ project, featured = false }) => {
         };
         return priorityMap[priority] || priorityMap.medium;
     };
-
+ const handleInitiativeClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        navigate(`/initiatives/${project.initiativeSlug}`);
+    };
     const statusInfo = getStatusInfo(project.status);
     const priorityInfo = getPriorityInfo(project.priority);
     const progressPercentage = getProgressPercentage();
@@ -188,21 +192,20 @@ const ProjectCard = ({ project, featured = false }) => {
                     {/* Initiative Link - винаги се показва */}
                     <div className="proj-card__initiative">
                         <span className="proj-card__initiative-text">
-                            {project.initiativeSlug ? (
-                                <>
-                                    {t('projects.card.partOf')}
-                                    <Link
-                                        to={`/initiatives/${project.initiativeSlug}`}
-                                        className="proj-card__initiative-link"
-                                        onClick={(e) => e.stopPropagation()} 
-                                    >
-                                        <strong>{project.initiativeTitle || t('projects.card.initiative')}</strong>
-                                    </Link>
-                                </>
-                            ) : (
-                                <>{t('projects.card.independentProject')}</>
-                            )}
-                        </span>
+                        {project.initiativeSlug ? (
+                            <>
+                                {t('projects.card.partOf')}
+                                <button
+                                    onClick={handleInitiativeClick}
+                                    className="proj-card__initiative-link button-link"
+                                >
+                                    <strong>{project.initiativeTitle || t('projects.card.initiative')}</strong>
+                                </button>
+                            </>
+                        ) : (
+                            <>{t('projects.card.independentProject')}</>
+                        )}
+                    </span>
                     </div>
                     {/* Priority */}
                     {project.priority && (

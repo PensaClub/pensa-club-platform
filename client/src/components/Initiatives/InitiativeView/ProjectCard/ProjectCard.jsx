@@ -30,7 +30,6 @@ export const ProjectCard = ({ project }) => {
 
   return (
     <div className="project-card">
-      {/* ПОПРАВКА: project.mainImage.src вместо project.image */}
       {project?.image && project?.image && (
         <div className="project-image">
           <img 

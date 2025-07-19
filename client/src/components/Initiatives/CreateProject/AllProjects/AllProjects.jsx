@@ -243,12 +243,14 @@ export const AllProjects = () => {
         switch (item.status) {
             case 'active':
                 return <span className="all-projects-status-badge active">{t('projects.admin.statusActive')}</span>;
-            case 'planning':
+            case 'planned':
                 return <span className="all-projects-status-badge planning">{t('projects.admin.statusPlanning')}</span>;
             case 'completed':
                 return <span className="all-projects-status-badge completed">{t('projects.admin.statusCompleted')}</span>;
             case 'paused':
                 return <span className="all-projects-status-badge paused">{t('projects.admin.statusPaused')}</span>;
+            case 'in-progress':
+                return <span className="all-projects-status-badge in-progress">{t('projects.status.in-progress')}</span>;
             default:
                 return <span className="all-projects-status-badge default">{t('projects.admin.statusUnknown')}</span>;
         }

@@ -1,0 +1,630 @@
+/* ======================= */
+/* PENSA ELITE CLUB PAGE */
+/* ======================= */
+
+.pec-main-wrapper {
+  background: #ffffff;
+  min-height: 100vh;
+  margin-top: 80px;
+}
+
+/* Hero Section */
+.pec-hero-section {
+  position: relative;
+  padding: 80px 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  overflow: hidden;
+}
+
+.pec-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.pec-pattern-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+  opacity: 0.6;
+}
+
+.pec-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(220, 38, 38, 0.05) 50%,
+    transparent 70%
+  );
+}
+
+.pec-hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.pec-brand-logo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.pec-logo-circle {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 900;
+  color: white;
+  box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.pec-sparkle-icon {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 24px;
+}
+
+.pec-main-title {
+  margin-bottom: 1.5rem;
+}
+
+.pec-title-primary {
+  display: block;
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, #e5e7eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  letter-spacing: -2px;
+  margin-bottom: 0.5rem;
+}
+
+.pec-title-secondary {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #dc2626;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.pec-hero-description {
+  font-size: 1.25rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Coming Soon Badge */
+.pec-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, #1f2937, #374151);
+  padding: 1.5rem 2rem;
+  border-radius: 20px;
+  border: 2px solid rgba(220, 38, 38, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.pec-badge-emoji {
+  font-size: 2rem;
+}
+
+.pec-badge-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 0.25rem;
+}
+
+.pec-badge-subtext {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* Update Notice */
+.pec-notice-section {
+  padding: 3rem 0;
+  background: #f8fafc;
+}
+
+.pec-notification-card {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  border-left: 4px solid #dc2626;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.pec-notice-emoji {
+  font-size: 3rem;
+  color: #dc2626;
+}
+
+.pec-notice-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.pec-notice-message {
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.pec-timeline-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Section Headers */
+.pec-section-intro {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.pec-section-heading {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+.pec-section-desc {
+  font-size: 1.125rem;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Benefits Section */
+.pec-benefits-section {
+  padding: 5rem 0;
+  background: white;
+}
+
+.pec-benefits-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.pec-benefit-item {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.pec-benefit-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  border-color: #dc2626;
+}
+
+.pec-benefit-emoji {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.pec-benefit-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.pec-benefit-text {
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Locations Section */
+.pec-locations-section {
+  padding: 5rem 0;
+  background: #f8fafc;
+}
+
+.pec-locations-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.pec-location-group {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.pec-group-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #dc2626;
+}
+
+.pec-places-collection {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pec-place-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.pec-place-entry:last-child {
+  border-bottom: none;
+}
+
+.pec-location-pin {
+  color: #dc2626;
+}
+
+.pec-place-label {
+  color: #374151;
+  font-weight: 500;
+}
+
+/* Requirements Section */
+.pec-requirements-section {
+  padding: 5rem 0;
+  background: white;
+}
+
+.pec-requirements-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.pec-criteria-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.pec-criteria-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.pec-checkmark-circle {
+  width: 24px;
+  height: 24px;
+  background: #dc2626;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+  text-indent: initial;
+}
+
+.pec-criteria-label {
+  color: #374151;
+  font-weight: 500;
+}
+
+/* Elite Card Preview */
+.pec-card-showcase {
+  display: flex;
+  justify-content: center;
+}
+
+.pec-membership-card {
+  width: 350px;
+  height: 220px;
+  perspective: 1000px;
+}
+
+.pec-card-design {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1f2937, #374151);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.pec-card-chip-element {
+  width: 40px;
+  height: 30px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.pec-card-brand {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #dc2626;
+}
+
+.pec-card-digits {
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+  color: #e5e7eb;
+  letter-spacing: 2px;
+  margin: 2rem 0 1rem 0;
+}
+
+.pec-cardholder-name {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pec-expiry-date {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+/* Application Section */
+.pec-application-section {
+  padding: 5rem 0;
+  background: #f8fafc;
+}
+
+.pec-application-wrapper {
+  background: white;
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.pec-application-intro {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pec-application-heading {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.pec-application-desc {
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.pec-process-steps {
+  margin-bottom: 3rem;
+}
+
+.pec-single-step {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.pec-single-step:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.pec-step-counter {
+  width: 40px;
+  height: 40px;
+  background: #dc2626;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+  text-indent: initial;
+}
+
+.pec-step-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.pec-step-details {
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.pec-cta-section {
+  text-align: center;
+}
+
+.pec-apply-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: #9ca3af;
+  color: #6b7280;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  margin-bottom: 1.5rem;
+}
+
+.pec-notification-area {
+  padding-top: 1.5rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.pec-notify-message {
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.pec-notify-cta {
+  color: #dc2626;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pec-notify-cta:hover {
+  text-decoration: underline;
+}
+
+/* Back to Home */
+.pec-footer-section {
+  padding: 2rem 0;
+  background: white;
+  border-top: 1px solid #f3f4f6;
+}
+
+.pec-home-navigation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.pec-home-navigation:hover {
+  color: #dc2626;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pec-title-primary {
+    font-size: 2.5rem;
+  }
+  
+  .pec-title-secondary {
+    font-size: 1.8rem;
+  }
+  
+  .pec-hero-description {
+    font-size: 1rem;
+  }
+  
+  .pec-status-badge {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .pec-notification-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .pec-requirements-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .pec-membership-card {
+    width: 300px;
+    height: 190px;
+  }
+  
+  .pec-application-wrapper {
+    padding: 2rem;
+  }
+  
+  .pec-single-step {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pec-hero-section {
+    padding: 60px 0;
+  }
+  .pec-apply-button{
+    flex-direction: column;
+  }
+  .pec-section-heading {
+    font-size: 2rem;
+  }
+  
+  .pec-section-intro {
+    flex-direction: column;
+  }
+  
+  .pec-benefit-item {
+    padding: 2rem;
+  }
+  
+  .pec-membership-card {
+    width: 280px;
+    height: 170px;
+  }
+}

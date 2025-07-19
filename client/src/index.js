@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
     <I18nextProvider i18n={i18n}>
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true }}>
     <App />
     </BrowserRouter>
     </I18nextProvider>
