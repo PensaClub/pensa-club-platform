@@ -2870,5 +2870,11 @@
       }
     },
     "backToHome": "Back to Home"
+  },
+    "loading": {
+    "articles": "Loading articles...",
+    "initiatives": "Loading initiatives...", 
+    "projects": "Loading projects...",
+    "page": "Loading..."
   }
 }

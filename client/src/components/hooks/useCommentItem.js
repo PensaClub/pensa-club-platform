@@ -14,7 +14,7 @@ export const useCommentItem = (
     likeCommentFunc,
     addCommentFunc
 ) => {
-    const { isAuthentication, userEmail } = useAuthContext();
+    const { isAuthentication, userEmail,isAdmin, isModerator } = useAuthContext();
     
     const [isEditing, setIsEditing] = useState(false);
     const [showReplyForm, setShowReplyForm] = useState(false);
@@ -25,6 +25,7 @@ export const useCommentItem = (
     const isOwner = isAuthentication && userEmail === comment.userEmail;
     const isLiked = isAuthentication && (comment.likes || []).includes(userEmail);
     const hasReplies = comment.replies && comment.replies.length > 0;
+    const isAdminOrModerator = isAdmin || isModerator;
 
     const handleLike = async () => {
         if (!isAuthentication) return;
@@ -49,7 +50,7 @@ export const useCommentItem = (
 
     const handleDelete = async () => {
         try {
-            await deleteCommentFunc(entityId, comment.id);
+            await deleteCommentFunc(entityId, comment.id,comment.userEmail);
         } catch (error) {
             console.error('Error deleting comment:', error);
         }
@@ -57,7 +58,7 @@ export const useCommentItem = (
 
     const handleReply = async (content) => {
         try {
-            await addCommentFunc(entityId, content, comment.id);
+            await addCommentFunc(entityId, content, comment.id,);
             setShowReplyForm(false);
             setShowReplies(true);
         } catch (error) {
@@ -105,6 +106,7 @@ export const useCommentItem = (
         handleStartEdit,
         handleCancelEdit,
         toggleReplies,
-        toggleReplyForm
+        toggleReplyForm,
+        isAdminOrModerator
     };
 };
