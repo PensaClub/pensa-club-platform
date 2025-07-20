@@ -126,7 +126,7 @@ p, a {
 body {
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 0.05rem;
-  text-indent: 0.3rem;
+  /* text-indent: 0.3rem; */
 
   background: var(--bg-white);
   min-height: 100vh;
@@ -146,7 +146,7 @@ button, input, textarea {
   font-family: inherit;
   font-weight: 500;
   letter-spacing: inherit;
-  text-indent: inherit;
+  /* text-indent: inherit; */
   font-size: inherit;
 }
 

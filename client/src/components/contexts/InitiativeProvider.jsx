@@ -58,7 +58,7 @@ export const InitiativeProvider = ({ children }) => {
   const [comments, setComments] = useState({});
   const [commentsLoading, setCommentsLoading] = useState(false);
 
-  const { isAuthentication, userEmail, username, profileData, onProjectApplicationSubmit } = useAuthContext();
+  const { isAuthentication, userEmail, username, profileData,isAdmin, isModerator } = useAuthContext();
   // НОВИ STATES ЗА APPLICATIONS
   const [recentApplications, setRecentApplications] = useState([]);
   const [userApplications, setUserApplications] = useState(() => {
@@ -1025,25 +1025,29 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [isAuthentication, initiativeService, getComments]);
 
-  const deleteComment = useCallback(async (initiativeId, commentId) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
-
-      // Просто изпращаме към сървъра
-      await initiativeService.deleteComment(commentId);
-
-      // Презареждаме коментарите
-      await getComments(initiativeId);
-
-      notify('success', 'Comment deleted successfully');
-    } catch (error) {
-      console.error('Error deleting comment:', error);
-      notify('error', 'Failed to delete comment');
-      throw error;
+ const deleteComment = useCallback(async (initiativeId, commentId, commentUserEmail) => {
+  try {
+    // Първо проверяваме дали потребителят е authenticated
+    if (!isAuthentication) {
+      throw new Error('Authentication required');
     }
-  }, [isAuthentication, initiativeService, getComments]);
+
+    // След това проверяваме дали има права да трие коментара
+    const canDelete = isAdmin || isModerator || (userEmail === commentUserEmail);
+    
+    if (!canDelete) {
+      throw new Error('Unauthorized to delete this comment');
+    }
+
+    await initiativeService.deleteComment(commentId);
+    await getComments(initiativeId);
+    notify('success', 'Comment deleted successfully');
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    notify('error', 'Failed to delete comment');
+    throw error;
+  }
+}, [isAuthentication, isAdmin, isModerator, initiativeService, getComments]);
 
   // В InitiativeProvider.js - поправи getAllProjects функцията
   const getAllProjects = useCallback(async (page = 1, forceRefresh = false) => {

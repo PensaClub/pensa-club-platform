@@ -1,0 +1,256 @@
+/* Desktop Language Switcher */
+.admin-language-switcher {
+  position: relative;
+  margin-left: 1rem;
+}
+
+.admin-lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.admin-lang-toggle:hover {
+  background: var(--orange);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(226, 96, 32, 0.3);
+}
+
+.admin-current-lang-flag {
+  font-size: 16px;
+}
+
+.admin-current-lang-code {
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+
+.admin-lang-dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.admin-lang-dropdown-arrow.admin-rotated {
+  transform: rotate(180deg);
+}
+
+.admin-lang-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1001;
+}
+
+.admin-lang-dropdown.admin-active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.admin-lang-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+}
+
+.admin-lang-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.admin-lang-option:hover {
+  background: rgba(226, 96, 32, 0.1);
+  color: var(--orange);
+}
+
+.admin-lang-option.admin-current {
+  background: var(--bg-blue-text);
+  color: white;
+}
+
+.admin-lang-option.admin-current:hover {
+  background: var(--orange);
+}
+
+.admin-lang-flag {
+  font-size: 18px;
+}
+
+.admin-lang-name {
+  flex: 1;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.admin-lang-code {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+}
+
+/* Mobile Language Switcher */
+.admin-mobile-language-switcher {
+  padding: 10px 0;
+  margin-top: auto;
+}
+
+.admin-mobile-lang-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px 15px;
+  color: var(--gray);
+  font-weight: 600;
+  font-size: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.admin-mobile-lang-header:hover {
+  color: var(--orange);
+}
+
+.admin-mobile-lang-header svg:first-child {
+  width: 20px;
+  height: 20px;
+  color: var(--orange);
+}
+
+.admin-mobile-current-lang {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray);
+}
+
+.admin-mobile-lang-dropdown-arrow {
+  width: 12px;
+  height: 6px;
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.admin-mobile-lang-dropdown-arrow.admin-rotated {
+  transform: rotate(180deg);
+}
+
+.admin-mobile-lang-header svg {
+  width: 16px;
+  height: 16px;
+  color: var(--orange);
+}
+
+.admin-mobile-lang-options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.admin-mobile-lang-options.admin-open {
+  max-height: 200px;
+}
+
+.admin-mobile-lang-option {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+  color: #333333;
+  padding: 8px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  border-radius: 8px;
+  margin: 0 10px;
+}
+
+.admin-mobile-lang-option:hover {
+  background: rgba(226, 96, 32, 0.1);
+  color: var(--orange);
+}
+
+.admin-mobile-lang-option.admin-active {
+  background: var(--orange);
+  color: white;
+  text-align: center;
+  align-items: baseline;
+}
+
+.admin-mobile-lang-option .admin-lang-flag {
+  font-size: 20px;
+}
+
+.admin-mobile-lang-option .admin-lang-name {
+  flex: 1;
+  font-size: 16px;
+}
+
+.admin-check-icon-lng {
+  width: 18px;
+  height: 18px;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .admin-language-switcher {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-lang-toggle {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+  
+  .admin-mobile-lang-header {
+    padding: 0px 20px 0 11px;
+    font-size: 14px;
+  }
+  
+  .admin-current-lang-code {
+    font-size: 12px;
+  }
+}

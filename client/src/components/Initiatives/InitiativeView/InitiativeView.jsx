@@ -967,7 +967,7 @@ export const InitiativeView = () => {
                     <section className="tags-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faTag} />
-                            <h2 className="section-title">{t('initiatives.view.sectionTitles.tags')}</h2>
+                            {t('initiatives.view.sectionTitles.tags')}
                         </h2>
                         <div className="tags-display">
                             {initiative.tags.map((tag, index) => (
@@ -982,7 +982,7 @@ export const InitiativeView = () => {
                     <section id="faq" className="faq-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faQuestionCircle} />
-                            <h2 className="section-title">{t('initiatives.view.sectionTitles.faq')}</h2>
+                            {t('initiatives.view.sectionTitles.faq')}
                         </h2>
                         <div className="faq-list">
                             {initiative.faq.map((faqItem, index) => (

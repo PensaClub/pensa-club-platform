@@ -1,21 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import './initiativesList.css';
 import { useTranslation } from 'react-i18next';
 import { InitiativeCard } from './InitiativeCard/InitiativeCard';
 import { InitiativesSearch } from '../InitiativesSearch/InitiativesSearch';
-import { InitiativesMap } from './InitiativesMap/InitiativesMap'; // Нов импорт
+import { InitiativesMap } from './InitiativesMap/InitiativesMap';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { InitiativesHero } from './InitiativesHero/InitiativesHero';
+import { SkeletonCardInitiative } from './SkeletonCardInitiative/SkeletonCardInitiative';
 
 const InitiativesList = () => {
   const { t } = useTranslation();
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
-  // const [bookmarkedInitiatives, setBookmarkedInitiatives] = useState([]);
   const { toggleBookmark, bookmarkedInitiatives } = useInitiativeContext();
-
   const [isFiltering, setIsFiltering] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // НОВО!
 
   const {
     initiatives,
@@ -26,25 +27,22 @@ const InitiativesList = () => {
   } = useInitiativeContext();
 
   useEffect(() => {
+    getAllInitiatives(1);
+  }, []);
+
+  useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-
   }, []);
 
-  // // Зареждане на bookmarks от localStorage
-  // useEffect(() => {
-  //   const saved = localStorage.getItem('bookmarkedInitiatives');
-  //   if (saved) {
-  //     setBookmarkedInitiatives(JSON.parse(saved));
-  //   }
-  // }, []);
-
-  // // Запазване на bookmarks в localStorage
-  // useEffect(() => {
-  //   localStorage.setItem('bookmarkedInitiatives', JSON.stringify(bookmarkedInitiatives));
-  // }, [bookmarkedInitiatives]);
+  // Когато инициативите се заредят, спираме initial load
+  useEffect(() => {
+    if (initiatives.length > 0) {
+      setIsInitialLoad(false);
+    }
+  }, [initiatives]);
 
   const handleBookmarkToggle = (initiativeId) => {
     toggleBookmark(initiativeId);
@@ -55,7 +53,6 @@ const InitiativesList = () => {
     setIsFiltering(filtered.length !== initiatives.length);
   };
 
-  // Нова функция за управление на картата
   const handleMapToggle = (mapVisible) => {
     setShowMap(mapVisible);
   };
@@ -67,42 +64,25 @@ const InitiativesList = () => {
   };
 
   useEffect(() => {
-    getAllInitiatives(1);
-  }, []);
-
-  useEffect(() => {
     if (!isFiltering) {
       setFilteredInitiatives(initiatives);
     }
   }, [initiatives, isFiltering]);
-
-  if (isLoading && initiatives.length === 0) {
-    return (
-      <div className="initiatives-loading-wrapper">
-        <div className="initiatives-loading-spinner"></div>
-        <p>{t('initiatives.initiativesList.loading')}</p>
-      </div>
-    );
-  }
 
   const displayedInitiatives = isFiltering ? filteredInitiatives : initiatives;
 
   return (
     <div className="initiatives-list-container">
       <InitiativesHero />
-        <div className="initiatives-before-container">
-
-          {/* Search & Filters */}
-          <InitiativesSearch
-            initiatives={initiatives}
-            onFilter={handleFilter}
-            onMapToggle={handleMapToggle} // Нов prop
-            showMap={showMap} // Нов prop
-          />
-        </div>
+      <div className="initiatives-before-container">
+        <InitiativesSearch
+          initiatives={initiatives}
+          onFilter={handleFilter}
+          onMapToggle={handleMapToggle}
+          showMap={showMap}
+        />
+      </div>
       <div className="initiatives-main-container">
-
-        {/* Map Section - показва се само ако showMap е true */}
         {showMap && (
           <InitiativesMap
             initiatives={displayedInitiatives}
@@ -110,45 +90,54 @@ const InitiativesList = () => {
           />
         )}
 
-        {/* Initiatives Grid - скрива се когато картата е показана */}
-        {!showMap && displayedInitiatives.length > 0 ? (
+        {!showMap && (
           <>
-            <div className="initiatives-cards-grid">
-              {displayedInitiatives.map((initiative, index) => (
-                <InitiativeCard
-                  key={initiative.id}
-                  initiative={initiative}
-                  index={index}
-                  isBookmarked={bookmarkedInitiatives.includes(initiative.id)}
-                  onBookmarkToggle={handleBookmarkToggle}
-                />
-              ))}
-            </div>
+            {/* Skeleton loading state - ПРОМЕНЕНО УСЛОВИЕ */}
+            {isInitialLoad && initiatives.length === 0 ? (
+              <div className="initiatives-cards-grid">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <SkeletonCardInitiative key={index} />
+                ))}
+              </div>
+            ) : displayedInitiatives.length > 0 ? (
+              <>
+                <div className="initiatives-cards-grid">
+                  {displayedInitiatives.map((initiative, index) => (
+                    <InitiativeCard
+                      key={initiative.id}
+                      initiative={initiative}
+                      index={index}
+                      isBookmarked={bookmarkedInitiatives.includes(initiative.id)}
+                      onBookmarkToggle={handleBookmarkToggle}
+                    />
+                  ))}
+                </div>
 
-            {/* Load More Button - показва се само ако няма активни филтри и има още данни */}
-            {!isFiltering && hasMore && (
-              <div className="initiatives-load-more-section">
-                <button
-                  className="initiatives-load-more-button"
-                  onClick={handleLoadMore}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="initiatives-load-more-spinner"></div>
-                      {t('initiatives.initiativesList.loading')}
-                    </>
-                  ) : (
-                    t('initiatives.initiativesList.loadMore')
-                  )}
-                </button>
+                {!isFiltering && hasMore && (
+                  <div className="initiatives-load-more-section">
+                    <button
+                      className="initiatives-load-more-button"
+                      onClick={handleLoadMore}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <>
+                          <div className="initiatives-load-more-spinner"></div>
+                          {t('initiatives.initiativesList.loading')}
+                        </>
+                      ) : (
+                        t('initiatives.initiativesList.loadMore')
+                      )}
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : !isInitialLoad && (
+              <div className="initiatives-no-results">
+                <p>{t('initiatives.initiativesList.noResults')}</p>
               </div>
             )}
           </>
-        ) : !showMap && displayedInitiatives.length === 0 && (
-          <div className="initiatives-no-results">
-            <p>{t('initiatives.initiativesList.noResults')}</p>
-          </div>
         )}
 
         <ScrollToTop />
@@ -156,4 +145,5 @@ const InitiativesList = () => {
     </div>
   );
 };
+
 export default InitiativesList;
