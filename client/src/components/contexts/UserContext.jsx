@@ -75,22 +75,40 @@ export const UserProvider = ({ children }) => {
       localStorage.removeItem('auth');
     }
   };
-  const onRegisterSubmit = async (data) => {
-    setIsLoading(true);
-    try {
-      const response = await userService.register(data);
-      handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
-      setProfileData(response.user);
-      setIsAdmin(response.user.role === 'admin');
-      navigate('/profile/profile-form');
-      notify('success-register');
-    } catch (error) {
-      notify(error.message === 'User already exists with this email.' ? 'user-already-exists' : 'error');
-      showErrorAndSetTimeouts(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const onRegisterSubmit = async (data) => {
+  setIsLoading(true);
+  try {
+    const response = await userService.register(data);
+    handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
+    
+    // Добавяме default снимка след регистрацията
+    const defaultImage = "data:image/svg+xml;base64," + btoa(`
+      <svg width="150" height="150" xmlns="http://www.w3.org/2000/svg">
+        <rect width="150" height="150" fill="#cccccc"/>
+        <text x="75" y="80" font-family="Arial" font-size="40" fill="#666" text-anchor="middle">User</text>
+      </svg>
+    `);
+    
+    const userWithDefaults = {
+      ...response.user, 
+      details: {
+        ...(response.user.details || {}),
+        imageURL: response.user.details?.imageURL || defaultImage
+      }
+
+    };
+    
+    setProfileData(userWithDefaults);
+    setIsAdmin(response.user.role === 'admin');
+    navigate('/profile/profile-form');
+    notify('success-register');
+  } catch (error) {
+    notify(error.message === 'User already exists with this email.' ? 'user-already-exists' : 'error');
+    showErrorAndSetTimeouts(error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const onLoginSubmit = async (data) => {
     setIsLoading(true);

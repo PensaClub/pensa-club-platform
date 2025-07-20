@@ -59,7 +59,7 @@ export const StoriesPublications = ({ stories = [], publications = [], showInPro
       
       <div className={gridClass}>
         {visibleItems.map((item, index) => (
-          <article key={item.id || index} className={cardClass}>
+          <article key={`${item.id}-${index}`|| index} className={cardClass}>
             {item.image && (
               <div className={imageClass}>
                 <img src={item.image.src} alt={item.image.alt} />

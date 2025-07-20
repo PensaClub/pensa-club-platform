@@ -6,11 +6,11 @@ import { formatDistanceToNow } from 'date-fns';
 import { bg, enUS } from 'date-fns/locale';
 import './commentItem.css';
 
-export const CommentItem = ({ 
-    comment, 
+export const CommentItem = ({
+    comment,
     entityId,
     entityType = 'initiative',
-    isReply = false, 
+    isReply = false,
     parentCommentId = null,
     // Основни функции
     updateCommentFunc,
@@ -19,7 +19,7 @@ export const CommentItem = ({
     addCommentFunc
 }) => {
     const { t, i18n } = useTranslation();
-    
+
     const {
         isEditing,
         showReplyForm,
@@ -37,11 +37,12 @@ export const CommentItem = ({
         handleStartEdit,
         handleCancelEdit,
         toggleReplies,
-        toggleReplyForm
+        toggleReplyForm,
+        isAdminOrModerator
     } = useCommentItem(
-        comment, 
-        entityId, 
-        isReply, 
+        comment,
+        entityId,
+        isReply,
         parentCommentId,
         entityType,
         updateCommentFunc,
@@ -112,14 +113,14 @@ export const CommentItem = ({
                                 autoFocus
                             />
                             <div className="initiative-edit-actions">
-                                <button 
+                                <button
                                     onClick={handleEdit}
                                     className="initiative-save-btn"
                                     disabled={!editContent.trim()}
                                 >
                                     {t('comments.item.save')}
                                 </button>
-                                <button 
+                                <button
                                     onClick={handleCancelEdit}
                                     className="initiative-cancel-btn"
                                 >
@@ -138,8 +139,8 @@ export const CommentItem = ({
 
                 <div className="initiative-comment-meta">
                     <span className="initiative-comment-time">{timeAgo}</span>
-                    
-                    <button 
+
+                    <button
                         onClick={handleLike}
                         className={`initiative-like-btn ${isLiked ? 'liked' : ''}`}
                         disabled={!isAuthentication}
@@ -149,7 +150,7 @@ export const CommentItem = ({
                     </button>
 
                     {!isReply && isAuthentication && (
-                        <button 
+                        <button
                             onClick={handleShowReplyForm}
                             className="initiative-reply-btn"
                         >
@@ -159,13 +160,13 @@ export const CommentItem = ({
 
                     {isOwner && (
                         <>
-                            <button 
+                            <button
                                 onClick={handleStartEdit}
                                 className="initiative-edit-btn"
                             >
                                 {t('comments.item.edit')}
                             </button>
-                            <button 
+                            <button
                                 onClick={handleDeleteWithConfirm}
                                 className="initiative-delete-btn"
                             >
@@ -174,12 +175,21 @@ export const CommentItem = ({
                         </>
                     )}
 
+                    {isAdminOrModerator && (
+                    <button
+                        onClick={handleDeleteWithConfirm}
+                        className="initiative-delete-btn"
+                    >
+                        {t('comments.item.delete')}
+                    </button>
+
+                    )}
                     {hasReplies && (
-                        <button 
+                        <button
                             onClick={toggleReplies}
                             className="initiative-show-replies-btn"
                         >
-                            {showReplies 
+                            {showReplies
                                 ? t('comments.item.hideReplies', { count: (comment.replies || []).length })
                                 : t('comments.item.showReplies', { count: (comment.replies || []).length })
                             }
@@ -188,7 +198,7 @@ export const CommentItem = ({
                 </div>
 
                 {showReplyForm && CommentForm && (
-                    <CommentForm 
+                    <CommentForm
                         onSubmit={handleReply}
                         onCancel={toggleReplyForm}
                         placeholder={t('comments.item.replyPlaceholder', { name: comment.userName })}
@@ -199,7 +209,7 @@ export const CommentItem = ({
                 {showReplies && hasReplies && (
                     <div className="initiative-replies-list">
                         {(comment.replies || []).map(reply => (
-                            <CommentItem 
+                            <CommentItem
                                 key={reply.id}
                                 comment={reply}
                                 entityId={entityId}

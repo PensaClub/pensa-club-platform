@@ -55,6 +55,7 @@ import { InitiativePreviewPage } from './components/Initiatives/CreateIniciative
 import { initGA } from './components/Services/analyticsService.js';
 import { AnalyticsProvider } from './components/contexts/AnalyticsContext.jsx';
 import EliteMembershipPage from './components/EliteMembershipPage/EliteMembershipPage.jsx';
+import { useTranslation } from 'react-i18next';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -62,23 +63,24 @@ const InitiativesList = lazy(() => import('./components/Initiatives/InitiativesL
 const ProjectsList = lazy(() => import('./components/Initiatives/ProjectsList/ProjectsList.jsx'));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
-const LazyLoadingFallback = ({ type = 'page' }) => (
-  <div className="lazy-loading-container">
-    <div className="lazy-loading-content">
-      <div className="lazy-spinner">
-        <div className="lazy-spinner-circle"></div>
-        <div className="lazy-spinner-circle"></div>
-        <div className="lazy-spinner-circle"></div>
+const LazyLoadingFallback = ({ type = 'page' }) => {
+  const { t } = useTranslation();
+  
+  return (
+    <div className="lazy-loading-container">
+      <div className="lazy-loading-content">
+        <div className="lazy-spinner">
+          <div className="lazy-spinner-circle"></div>
+          <div className="lazy-spinner-circle"></div>
+          <div className="lazy-spinner-circle"></div>
+        </div>
+        <p className="lazy-loading-text">
+          {t(`loading.${type}`)}
+        </p>
       </div>
-      <p className="lazy-loading-text">
-        {type === 'articles' && 'Зареждане на статии...'}
-        {type === 'initiatives' && 'Зареждане на инициативи...'}
-        {type === 'projects' && 'Зареждане на проекти...'}
-        {type === 'page' && 'Зареждане...'}
-      </p>
     </div>
-  </div>
-);
+  );
+};
 
 function App() {
   const location = useLocation();
