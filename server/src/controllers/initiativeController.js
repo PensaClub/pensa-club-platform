@@ -4,7 +4,7 @@ const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const { initiative, image, downloadMaterial, contact, section, user_account, comment, sponsor, partner } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
-const { transformInitiative, initiativeConfig } = require('../utils/initiativeUtils');
+const { transformInitiative, transformInitiativeListItem, initiativeConfig } = require('../utils/initiativeUtils');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { InitiativeSchema, UpdateInitiativeSchema, PaginationQuerySchema } = require('../schemas/initiatives.schema');
 const { findBySlugOrId } = require('../utils/modelLookup');
@@ -380,10 +380,14 @@ const getInitiativesByDraftStatus = async (isDraft, req, res, next) => {
 
         const transformedList = await Promise.all(
             initiatives.map(async (initiative) => {
-                const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
-                const transformed = await transformInitiative(initiative);
-                transformed.comments = comments.map((comment) => transformComment(comment));
-                return transformed;
+                if (isDraft) {
+                    const comments = await comment.findAll(getCommentConfig(initiative.id, 'initiative'));
+                    const transformed = await transformInitiative(initiative);
+                    transformed.comments = comments.map((comment) => transformComment(comment));
+                    return transformed;
+                } else {
+                    return transformInitiativeListItem(initiative);
+                }
             })
         );
 
