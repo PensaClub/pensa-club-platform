@@ -13,32 +13,84 @@ export const ProfessionalAvatarBuilder = () => {
     avatarStyle: 'Circle',
     topType: 'LongHairStraight',
     hairColor: 'BrownDark',
+    hatColor: 'Blue01',
     accessoriesType: 'Prescription02',
     facialHairType: 'Blank',
     facialHairColor: 'BrownDark',
-    clotheType: 'Hoodie',
-    clotheColor: 'Black',
+    clotheType: 'BlazerShirt',
+    clotheColor: 'Blue01',
+    graphicType: 'Bat', // За GraphicShirt
     eyeType: 'Default',
     eyebrowType: 'Default',
     mouthType: 'Default',
     skinColor: 'Light'
   });
 
+  // Прически и шапки
   const topTypes = [
     { value: 'NoHair', label: t('avatar.hair.noHair') },
-    { value: 'LongHairStraight', label: t('avatar.hair.longStraight') },
-    { value: 'LongHairCurly', label: t('avatar.hair.longCurly') },
+    { value: 'Eyepatch', label: t('avatar.hair.eyepatch') },
+    { value: 'Hat', label: t('avatar.hair.hat') },
+    { value: 'Hijab', label: t('avatar.hair.hijab') },
+    { value: 'Turban', label: t('avatar.hair.turban') },
+    { value: 'WinterHat1', label: t('avatar.hair.winterHat1') },
+    { value: 'WinterHat2', label: t('avatar.hair.winterHat2') },
+    { value: 'WinterHat3', label: t('avatar.hair.winterHat3') },
+    { value: 'WinterHat4', label: t('avatar.hair.winterHat4') },
+    { value: 'LongHairBigHair', label: t('avatar.hair.longBigHair') },
     { value: 'LongHairBob', label: t('avatar.hair.bob') },
     { value: 'LongHairBun', label: t('avatar.hair.bun') },
+    { value: 'LongHairCurly', label: t('avatar.hair.longCurly') },
     { value: 'LongHairCurvy', label: t('avatar.hair.curvy') },
     { value: 'LongHairDreads', label: t('avatar.hair.dreads') },
     { value: 'LongHairFrida', label: t('avatar.hair.frida') },
-    { value: 'ShortHairShortFlat', label: t('avatar.hair.shortFlat') },
+    { value: 'LongHairFro', label: t('avatar.hair.fro') },
+    { value: 'LongHairFroBand', label: t('avatar.hair.froBand') },
+    { value: 'LongHairNotTooLong', label: t('avatar.hair.notTooLong') },
+    { value: 'LongHairShavedSides', label: t('avatar.hair.shavedSides') },
+    { value: 'LongHairMiaWallace', label: t('avatar.hair.miaWallace') },
+    { value: 'LongHairStraight', label: t('avatar.hair.longStraight') },
+    { value: 'LongHairStraight2', label: t('avatar.hair.longStraight2') },
+    { value: 'LongHairStraightStrand', label: t('avatar.hair.straightStrand') },
+    { value: 'ShortHairDreads01', label: t('avatar.hair.shortDreads1') },
+    { value: 'ShortHairDreads02', label: t('avatar.hair.shortDreads2') },
+    { value: 'ShortHairFrizzle', label: t('avatar.hair.frizzle') },
+    { value: 'ShortHairShaggyMullet', label: t('avatar.hair.shaggyMullet') },
     { value: 'ShortHairShortCurly', label: t('avatar.hair.shortCurly') },
+    { value: 'ShortHairShortFlat', label: t('avatar.hair.shortFlat') },
+    { value: 'ShortHairShortRound', label: t('avatar.hair.shortRound') },
     { value: 'ShortHairShortWaved', label: t('avatar.hair.shortWaved') },
     { value: 'ShortHairSides', label: t('avatar.hair.sides') },
     { value: 'ShortHairTheCaesar', label: t('avatar.hair.caesar') },
-    { value: 'ShortHairDreads01', label: t('avatar.hair.shortDreads') }
+    { value: 'ShortHairTheCaesarSidePart', label: t('avatar.hair.caesarSidePart') }
+  ];
+
+  // Дрехи
+  const clotheTypes = [
+    { value: 'BlazerShirt', label: t('avatar.clothes.blazerShirt') },
+    { value: 'BlazerSweater', label: t('avatar.clothes.blazerSweater') },
+    { value: 'CollarSweater', label: t('avatar.clothes.collarSweater') },
+    { value: 'GraphicShirt', label: t('avatar.clothes.graphicShirt') },
+    { value: 'Hoodie', label: t('avatar.clothes.hoodie') },
+    { value: 'Overall', label: t('avatar.clothes.overall') },
+    { value: 'ShirtCrewNeck', label: t('avatar.clothes.shirtCrewNeck') },
+    { value: 'ShirtScoopNeck', label: t('avatar.clothes.shirtScoopNeck') },
+    { value: 'ShirtVNeck', label: t('avatar.clothes.shirtVNeck') }
+  ];
+
+  // Графики за GraphicShirt
+  const graphicTypes = [
+    { value: 'Bat', label: t('avatar.graphics.bat') },
+    { value: 'Cumbia', label: t('avatar.graphics.cumbia') },
+    { value: 'Deer', label: t('avatar.graphics.deer') },
+    { value: 'Diamond', label: t('avatar.graphics.diamond') },
+    { value: 'Hola', label: t('avatar.graphics.hola') },
+    { value: 'Pizza', label: t('avatar.graphics.pizza') },
+    { value: 'Resist', label: t('avatar.graphics.resist') },
+    { value: 'Selena', label: t('avatar.graphics.selena') },
+    { value: 'Bear', label: t('avatar.graphics.bear') },
+    { value: 'SkullOutline', label: t('avatar.graphics.skullOutline') },
+    { value: 'Skull', label: t('avatar.graphics.skull') }
   ];
 
   const accessoriesTypes = [
@@ -51,6 +103,7 @@ export const ProfessionalAvatarBuilder = () => {
     { value: 'Wayfarers', label: t('avatar.accessories.wayfarers') }
   ];
 
+  // Повече варианти за брада
   const facialHairTypes = [
     { value: 'Blank', label: t('avatar.beard.none') },
     { value: 'BeardMedium', label: t('avatar.beard.medium') },
@@ -69,7 +122,10 @@ export const ProfessionalAvatarBuilder = () => {
     { value: 'Surprised', label: t('avatar.eyes.surprised') },
     { value: 'Cry', label: t('avatar.eyes.cry') },
     { value: 'Close', label: t('avatar.eyes.close') },
-    { value: 'Squint', label: t('avatar.eyes.squint') }
+    { value: 'Squint', label: t('avatar.eyes.squint') },
+    { value: 'Dizzy', label: t('avatar.eyes.dizzy') },
+    { value: 'EyeRoll', label: t('avatar.eyes.eyeRoll') },
+    { value: 'Side', label: t('avatar.eyes.side') }
   ];
 
   const mouthTypes = [
@@ -96,6 +152,7 @@ export const ProfessionalAvatarBuilder = () => {
     { value: 'Black', label: t('avatar.skin.black'), color: '#614335' }
   ];
 
+  // Цветове за коса/шапки
   const hairColors = [
     { value: 'Black', label: t('avatar.hairColors.black'), color: '#000000' },
     { value: 'Brown', label: t('avatar.hairColors.brown'), color: '#8B4513' },
@@ -106,7 +163,29 @@ export const ProfessionalAvatarBuilder = () => {
     { value: 'Auburn', label: t('avatar.hairColors.auburn'), color: '#A52A2A' },
     { value: 'PastelPink', label: t('avatar.hairColors.pastelPink'), color: '#FFB6C1' },
     { value: 'Blue', label: t('avatar.hairColors.blue'), color: '#4169E1' },
-    { value: 'Platinum', label: t('avatar.hairColors.platinum'), color: '#E5E4E2' }
+    { value: 'Platinum', label: t('avatar.hairColors.platinum'), color: '#E5E4E2' },
+    { value: 'Gray', label: t('avatar.hairColors.gray'), color: '#808080' },
+    { value: 'SilverGray', label: t('avatar.hairColors.silverGray'), color: '#C0C0C0' },
+    { value: 'White', label: t('avatar.hairColors.white'), color: '#FFFFFF' }
+  ];
+
+  // Цветове за дрехи
+  const clotheColors = [
+    { value: 'Black', label: t('avatar.clotheColors.black'), color: '#000000' },
+    { value: 'Blue01', label: t('avatar.clotheColors.blue1'), color: '#3C4F5C' },
+    { value: 'Blue02', label: t('avatar.clotheColors.blue2'), color: '#5199E4' },
+    { value: 'Blue03', label: t('avatar.clotheColors.blue3'), color: '#25557C' },
+    { value: 'Gray01', label: t('avatar.clotheColors.gray1'), color: '#E6E6FA' },
+    { value: 'Gray02', label: t('avatar.clotheColors.gray2'), color: '#929598' },
+    { value: 'Heather', label: t('avatar.clotheColors.heather'), color: '#3C4F5C' },
+    { value: 'PastelBlue', label: t('avatar.clotheColors.pastelBlue'), color: '#B1E2FF' },
+    { value: 'PastelGreen', label: t('avatar.clotheColors.pastelGreen'), color: '#A7FFC4' },
+    { value: 'PastelOrange', label: t('avatar.clotheColors.pastelOrange'), color: '#FFDEB5' },
+    { value: 'PastelRed', label: t('avatar.clotheColors.pastelRed'), color: '#FFBABA' },
+    { value: 'PastelYellow', label: t('avatar.clotheColors.pastelYellow'), color: '#180011ff' },
+    { value: 'Pink', label: t('avatar.clotheColors.pink'), color: '#FF488E' },
+    { value: 'Red', label: t('avatar.clotheColors.red'), color: '#FF5A5A' },
+    { value: 'White', label: t('avatar.clotheColors.white'), color: '#FFFFFF' }
   ];
 
   const generateAvatarURL = () => {
@@ -114,7 +193,6 @@ export const ProfessionalAvatarBuilder = () => {
       avatarStyle: config.avatarStyle,
       topType: config.topType,
       accessoriesType: config.accessoriesType,
-      hairColor: config.hairColor,
       facialHairType: config.facialHairType,
       facialHairColor: config.facialHairColor,
       clotheType: config.clotheType,
@@ -124,6 +202,20 @@ export const ProfessionalAvatarBuilder = () => {
       mouthType: config.mouthType,
       skinColor: config.skinColor
     });
+
+    // За шапки използваме hatColor, за коса - hairColor
+    const hatTypes = ['Hat', 'Hijab', 'Turban', 'WinterHat1', 'WinterHat2', 'WinterHat3', 'WinterHat4'];
+    if (hatTypes.includes(config.topType)) {
+      params.append('hatColor', config.hatColor);
+    } else if (!isNoColorHairType(config.topType)) {
+      // Само ако прическата поддържа цветове
+      params.append('hairColor', config.hairColor);
+    }
+
+    // За GraphicShirt добавяме graphicType
+    if (config.clotheType === 'GraphicShirt') {
+      params.append('graphicType', config.graphicType);
+    }
 
     return `https://avataaars.io/?${params.toString()}`;
   };
@@ -146,35 +238,96 @@ export const ProfessionalAvatarBuilder = () => {
   };
 
   const handleRandomize = () => {
+    const newTopType = topTypes[Math.floor(Math.random() * topTypes.length)].value;
+    const newClotheType = clotheTypes[Math.floor(Math.random() * clotheTypes.length)].value;
+    
     setConfig({
       ...config,
-      topType: topTypes[Math.floor(Math.random() * topTypes.length)].value,
+      topType: newTopType,
+      hairColor: hairColors[Math.floor(Math.random() * hairColors.length)].value,
+      hatColor: hairColors[Math.floor(Math.random() * hairColors.length)].value,
       accessoriesType: accessoriesTypes[Math.floor(Math.random() * accessoriesTypes.length)].value,
       facialHairType: facialHairTypes[Math.floor(Math.random() * facialHairTypes.length)].value,
+      facialHairColor: hairColors[Math.floor(Math.random() * hairColors.length)].value,
+      clotheType: newClotheType,
+      clotheColor: clotheColors[Math.floor(Math.random() * clotheColors.length)].value,
+      graphicType: graphicTypes[Math.floor(Math.random() * graphicTypes.length)].value,
       eyeType: eyeTypes[Math.floor(Math.random() * eyeTypes.length)].value,
       mouthType: mouthTypes[Math.floor(Math.random() * mouthTypes.length)].value,
-      skinColor: skinColors[Math.floor(Math.random() * skinColors.length)].value,
-      hairColor: hairColors[Math.floor(Math.random() * hairColors.length)].value
+      skinColor: skinColors[Math.floor(Math.random() * skinColors.length)].value
     });
   };
 
-  const getHairIcon = (type) => {
+  const getTopIcon = (type) => {
     switch (type) {
       case 'NoHair': return '🦲';
-      case 'LongHairStraight': return '👩‍🦱';
-      case 'LongHairCurly': return '👩‍🦲';
+      case 'Eyepatch': return '🏴‍☠️';
+      case 'Hat': return '🎩';
+      case 'Hijab': return '🧕';
+      case 'Turban': return '👳';
+      case 'WinterHat1': return '🎿';
+      case 'WinterHat2': return '❄️';
+      case 'WinterHat3': return '🧢';
+      case 'WinterHat4': return '👒';
+      case 'LongHairBigHair': return '👩‍🦱';
       case 'LongHairBob': return '💇‍♀️';
       case 'LongHairBun': return '👰';
+      case 'LongHairCurly': return '👩‍🦱';
       case 'LongHairCurvy': return '🧝‍♀️';
       case 'LongHairDreads': return '🧑‍🎤';
       case 'LongHairFrida': return '👸';
-      case 'ShortHairShortFlat': return '👨‍💼';
+      case 'LongHairFro': return '✊';
+      case 'LongHairFroBand': return '🎵';
+      case 'LongHairNotTooLong': return '👩';
+      case 'LongHairShavedSides': return '🤘';
+      case 'LongHairMiaWallace': return '🖤';
+      case 'LongHairStraight': return '👱‍♀️';
+      case 'LongHairStraight2': return '👩‍🦳';
+      case 'LongHairStraightStrand': return '💁‍♀️';
+      case 'ShortHairDreads01': return '🎸';
+      case 'ShortHairDreads02': return '🎤';
+      case 'ShortHairFrizzle': return '⚡';
+      case 'ShortHairShaggyMullet': return '🤟';
       case 'ShortHairShortCurly': return '👨‍🦱';
+      case 'ShortHairShortFlat': return '👨‍💼';
+      case 'ShortHairShortRound': return '👶';
       case 'ShortHairShortWaved': return '🧑‍💻';
       case 'ShortHairSides': return '👨‍🚀';
       case 'ShortHairTheCaesar': return '🏛️';
-      case 'ShortHairDreads01': return '🎸';
+      case 'ShortHairTheCaesarSidePart': return '👑';
       default: return '💇';
+    }
+  };
+
+  const getClotheIcon = (type) => {
+    switch (type) {
+      case 'BlazerShirt': return '🤵';
+      case 'BlazerSweater': return '👔';
+      case 'CollarSweater': return '🧥';
+      case 'GraphicShirt': return '👕';
+      case 'Hoodie': return '👘';
+      case 'Overall': return '🦺';
+      case 'ShirtCrewNeck': return '👚';
+      case 'ShirtScoopNeck': return '👗';
+      case 'ShirtVNeck': return '🎽';
+      default: return '👕';
+    }
+  };
+
+  const getGraphicIcon = (type) => {
+    switch (type) {
+      case 'Bat': return '🦇';
+      case 'Cumbia': return '🎵';
+      case 'Deer': return '🦌';
+      case 'Diamond': return '💎';
+      case 'Hola': return '👋';
+      case 'Pizza': return '🍕';
+      case 'Resist': return '✊';
+      case 'Selena': return '🌹';
+      case 'Bear': return '🐻';
+      case 'SkullOutline': return '💀';
+      case 'Skull': return '☠️';
+      default: return '🎨';
     }
   };
 
@@ -188,6 +341,9 @@ export const ProfessionalAvatarBuilder = () => {
       case 'Cry': return '😢';
       case 'Close': return '😴';
       case 'Squint': return '😑';
+      case 'Dizzy': return '😵';
+      case 'EyeRoll': return '🙄';
+      case 'Side': return '👀';
       default: return '👁️';
     }
   };
@@ -232,6 +388,20 @@ export const ProfessionalAvatarBuilder = () => {
       case 'MoustacheMagnum': return '👨‍✈️';
       default: return '😊';
     }
+  };
+
+  const isHatType = (topType) => {
+    const hatTypes = ['Hat', 'Hijab', 'Turban', 'WinterHat1', 'WinterHat2', 'WinterHat3', 'WinterHat4'];
+    return hatTypes.includes(topType);
+  };
+
+  const isNoColorHairType = (topType) => {
+    const noColorTypes = ['NoHair', 'Eyepatch'];
+    return noColorTypes.includes(topType);
+  };
+
+  const shouldShowHairColors = () => {
+    return !isNoColorHairType(config.topType);
   };
 
   return (
@@ -300,7 +470,7 @@ export const ProfessionalAvatarBuilder = () => {
         {/* Дясна страна - Контроли */}
         <div className="avatar-controls-panel">
           <div className="controls-scroll">
-            {/* Прическа - сега със същия стил като другите */}
+            {/* Прическа/Шапка */}
             <div className="control-section">
               <h3>💇‍♀️ {t('avatar.hair.title')}</h3>
               <div className="control-grid-with-labels">
@@ -311,22 +481,85 @@ export const ProfessionalAvatarBuilder = () => {
                       onClick={() => setConfig({ ...config, topType: type.value })}
                       aria-label={type.label}
                     >
-                      {getHairIcon(type.value)}
+                      {getTopIcon(type.value)}
                     </button>
                     <span className="control-label">{type.label}</span>
                   </div>
                 ))}
               </div>
 
+              {shouldShowHairColors() && (
+                <div className="color-section-compact">
+                  <h4>{isHatType(config.topType) ? t('avatar.hatColor') : t('avatar.hairColor')}</h4>
+                  <div className="color-dots-grid">
+                    {hairColors.map(color => (
+                      <button
+                        key={color.value}
+                        className={`color-dot ${
+                          (isHatType(config.topType) ? config.hatColor : config.hairColor) === color.value ? 'active' : ''
+                        }`}
+                        style={{ backgroundColor: color.color }}
+                        onClick={() => 
+                          isHatType(config.topType) 
+                            ? setConfig({ ...config, hatColor: color.value })
+                            : setConfig({ ...config, hairColor: color.value })
+                        }
+                        title={color.label}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Дрехи */}
+            <div className="control-section">
+              <h3>👕 {t('avatar.clothes.title')}</h3>
+              <div className="control-grid-with-labels">
+                {clotheTypes.map(type => (
+                  <div key={type.value} className="control-item">
+                    <button
+                      className={`control-btn-icon ${config.clotheType === type.value ? 'active' : ''}`}
+                      onClick={() => setConfig({ ...config, clotheType: type.value })}
+                      aria-label={type.label}
+                    >
+                      {getClotheIcon(type.value)}
+                    </button>
+                    <span className="control-label">{type.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Графики за GraphicShirt */}
+              {config.clotheType === 'GraphicShirt' && (
+                <div className="color-section-compact">
+                  <h4>{t('avatar.graphics.title')}</h4>
+                  <div className="control-grid-with-labels">
+                    {graphicTypes.map(type => (
+                      <div key={type.value} className="control-item">
+                        <button
+                          className={`control-btn-icon ${config.graphicType === type.value ? 'active' : ''}`}
+                          onClick={() => setConfig({ ...config, graphicType: type.value })}
+                          aria-label={type.label}
+                        >
+                          {getGraphicIcon(type.value)}
+                        </button>
+                        <span className="control-label">{type.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="color-section-compact">
-                <h4>{t('avatar.hairColor')}</h4>
+                <h4>{t('avatar.clotheColor')}</h4>
                 <div className="color-dots-grid">
-                  {hairColors.map(color => (
+                  {clotheColors.map(color => (
                     <button
                       key={color.value}
-                      className={`color-dot ${config.hairColor === color.value ? 'active' : ''}`}
+                      className={`color-dot ${config.clotheColor === color.value ? 'active' : ''}`}
                       style={{ backgroundColor: color.color }}
-                      onClick={() => setConfig({ ...config, hairColor: color.value })}
+                      onClick={() => setConfig({ ...config, clotheColor: color.value })}
                       title={color.label}
                     />
                   ))}
@@ -408,6 +641,24 @@ export const ProfessionalAvatarBuilder = () => {
                   </div>
                 ))}
               </div>
+
+              {/* Цветове за брадата */}
+              {config.facialHairType !== 'Blank' && (
+                <div className="color-section-compact">
+                  <h4>{t('avatar.beardColor')}</h4>
+                  <div className="color-dots-grid">
+                    {hairColors.map(color => (
+                      <button
+                        key={color.value}
+                        className={`color-dot ${config.facialHairColor === color.value ? 'active' : ''}`}
+                        style={{ backgroundColor: color.color }}
+                        onClick={() => setConfig({ ...config, facialHairColor: color.value })}
+                        title={color.label}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Кожа */}

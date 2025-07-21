@@ -2877,6 +2877,7 @@
     "projects": "Loading projects...",
     "page": "Loading..."
   },
+ 
   "avatar": {
     "title": "Create Your Avatar",
     "subtitle": "Personalize your profile with a unique avatar",
@@ -2884,6 +2885,8 @@
     "noBackground": "No Background",
     "withBackground": "With Background",
     "hairColor": "Hair Color",
+    "hatColor": "Hat Color",
+    "clotheColor": "Clothes Color",
     "skinColor": "Skin Color",
     "random": "Random",
     "save": "Save",
@@ -2891,21 +2894,42 @@
     "saveSuccess": "Avatar saved successfully!",
     "saveError": "Error saving avatar",
     "hair": {
-      "title": "Hairstyle",
+      "title": "Hairstyles & Hats",
       "noHair": "No Hair",
-      "longStraight": "Long Straight",
-      "longCurly": "Long Curly",
+      "eyepatch": "Eyepatch",
+      "hat": "Hat",
+      "hijab": "Hijab",
+      "turban": "Turban",
+      "winterHat1": "Winter Hat 1",
+      "winterHat2": "Winter Hat 2",
+      "winterHat3": "Winter Hat 3",
+      "winterHat4": "Winter Hat 4",
+      "longBigHair": "Long Big Hair",
       "bob": "Bob Cut",
       "bun": "Bun",
+      "longCurly": "Long Curly",
       "curvy": "Curvy",
       "dreads": "Dreadlocks",
       "frida": "Frida",
-      "shortFlat": "Short Flat",
+      "fro": "Afro",
+      "froBand": "Afro with Band",
+      "notTooLong": "Not Too Long",
+      "shavedSides": "Shaved Sides",
+      "miaWallace": "Mia Wallace",
+      "longStraight": "Long Straight",
+      "longStraight2": "Long Straight 2",
+      "straightStrand": "Straight Strand",
+      "shortDreads1": "Short Dreads 1",
+      "shortDreads2": "Short Dreads 2",
+      "frizzle": "Frizzle",
+      "shaggyMullet": "Shaggy Mullet",
       "shortCurly": "Short Curly",
+      "shortFlat": "Short Flat",
+      "shortRound": "Short Round",
       "shortWaved": "Short Waved",
       "sides": "Sides",
       "caesar": "Caesar",
-      "shortDreads": "Short Dreads"
+      "caesarSidePart": "Caesar Side Part"
     },
     "hairColors": {
       "black": "Black",
@@ -2917,7 +2941,39 @@
       "auburn": "Auburn",
       "pastelPink": "Pastel Pink",
       "blue": "Blue",
-      "platinum": "Platinum"
+      "platinum": "Platinum",
+      "gray": "Gray",
+      "silverGray": "Silver Gray",
+      "white": "White"
+    },
+    "clothes": {
+      "title": "Clothes",
+      "blazerShirt": "Blazer & Shirt",
+      "blazerSweater": "Blazer & Sweater",
+      "collarSweater": "Collar Sweater",
+      "graphicShirt": "Graphic Shirt",
+      "hoodie": "Hoodie",
+      "overall": "Overall",
+      "shirtCrewNeck": "Crew Neck Shirt",
+      "shirtScoopNeck": "Scoop Neck Shirt",
+      "shirtVNeck": "V-Neck Shirt"
+    },
+    "clotheColors": {
+      "black": "Black",
+      "blue1": "Blue 1",
+      "blue2": "Blue 2",
+      "blue3": "Blue 3",
+      "gray1": "Gray 1",
+      "gray2": "Gray 2",
+      "heather": "Heather",
+      "pastelBlue": "Pastel Blue",
+      "pastelGreen": "Pastel Green",
+      "pastelOrange": "Pastel Orange",
+      "pastelRed": "Pastel Red",
+      "pastelYellow": "Pastel Yellow",
+      "pink": "Pink",
+      "red": "Red",
+      "white": "White"
     },
     "eyes": {
       "title": "Eyes",
@@ -2929,7 +2985,10 @@
       "surprised": "Surprised",
       "cry": "Cry",
       "close": "Close",
-      "squint": "Squint"
+      "squint": "Squint",
+      "dizzy": "Dizzy",
+      "eyeRoll": "Eye Roll",
+      "side": "Side"
     },
     "mouth": {
       "title": "Mouth",
@@ -2972,6 +3031,23 @@
       "brown": "Brown",
       "darkBrown": "Dark Brown",
       "black": "Black"
+    },
+        "beardColor": "Beard Color",
+    "graphics": {
+      "title": "Graphics",
+      "bat": "Bat",
+      "cumbia": "Cumbia",
+      "deer": "Deer",
+      "diamond": "Diamond",
+      "hola": "Hello",
+      "pizza": "Pizza",
+      "resist": "Resist",
+      "selena": "Selena",
+      "bear": "Bear",
+      "skullOutline": "Skull Outline",
+      "skull": "Skull"
     }
+
   }
+
 }

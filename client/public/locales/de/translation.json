@@ -2913,6 +2913,7 @@
     "projects": "Projekte werden geladen...",
     "page": "Wird geladen..."
   },
+ 
   "avatar": {
     "title": "Erstelle deinen Avatar",
     "subtitle": "Personalisiere dein Profil mit einem einzigartigen Avatar",
@@ -2920,6 +2921,8 @@
     "noBackground": "Ohne Hintergrund",
     "withBackground": "Mit Hintergrund",
     "hairColor": "Haarfarbe",
+    "hatColor": "Hutfarbe",
+    "clotheColor": "Kleidungsfarbe",
     "skinColor": "Hautfarbe",
     "random": "Zufällig",
     "save": "Speichern",
@@ -2927,21 +2930,42 @@
     "saveSuccess": "Avatar erfolgreich gespeichert!",
     "saveError": "Fehler beim Speichern des Avatars",
     "hair": {
-      "title": "Frisur",
+      "title": "Frisuren & Hüte",
       "noHair": "Keine Haare",
-      "longStraight": "Lang Glatt",
-      "longCurly": "Lang Lockig",
+      "eyepatch": "Augenklappe",
+      "hat": "Hut",
+      "hijab": "Hijab",
+      "turban": "Turban",
+      "winterHat1": "Wintermütze 1",
+      "winterHat2": "Wintermütze 2", 
+      "winterHat3": "Wintermütze 3",
+      "winterHat4": "Wintermütze 4",
+      "longBigHair": "Lang Voluminös",
       "bob": "Bob-Frisur",
       "bun": "Dutt",
+      "longCurly": "Lang Lockig",
       "curvy": "Wellig",
       "dreads": "Dreadlocks",
       "frida": "Frida",
-      "shortFlat": "Kurz Glatt",
+      "fro": "Afro",
+      "froBand": "Afro mit Band",
+      "notTooLong": "Nicht zu lang",
+      "shavedSides": "Rasierte Seiten",
+      "miaWallace": "Mia Wallace",
+      "longStraight": "Lang Glatt",
+      "longStraight2": "Lang Glatt 2",
+      "straightStrand": "Glatte Strähne",
+      "shortDreads1": "Kurze Dreads 1",
+      "shortDreads2": "Kurze Dreads 2",
+      "frizzle": "Kraus",
+      "shaggyMullet": "Shaggy Mullet",
       "shortCurly": "Kurz Lockig",
+      "shortFlat": "Kurz Glatt",
+      "shortRound": "Kurz Rund",
       "shortWaved": "Kurz Wellig",
       "sides": "Seiten",
       "caesar": "Caesar",
-      "shortDreads": "Kurze Dreads"
+      "caesarSidePart": "Caesar Seitenscheitel"
     },
     "hairColors": {
       "black": "Schwarz",
@@ -2953,7 +2977,39 @@
       "auburn": "Kastanienbraun",
       "pastelPink": "Pastellrosa",
       "blue": "Blau",
-      "platinum": "Platinum"
+      "platinum": "Platinum",
+      "gray": "Grau",
+      "silverGray": "Silbergrau",
+      "white": "Weiß"
+    },
+    "clothes": {
+      "title": "Kleidung",
+      "blazerShirt": "Blazer & Hemd",
+      "blazerSweater": "Blazer & Pullover",
+      "collarSweater": "Kragen-Pullover",
+      "graphicShirt": "Grafik-Shirt",
+      "hoodie": "Kapuzenpullover",
+      "overall": "Overall",
+      "shirtCrewNeck": "Rundhals-Shirt",
+      "shirtScoopNeck": "U-Ausschnitt-Shirt",
+      "shirtVNeck": "V-Ausschnitt-Shirt"
+    },
+    "clotheColors": {
+      "black": "Schwarz",
+      "blue1": "Blau 1",
+      "blue2": "Blau 2",
+      "blue3": "Blau 3",
+      "gray1": "Grau 1",
+      "gray2": "Grau 2",
+      "heather": "Meliert",
+      "pastelBlue": "Pastellblau",
+      "pastelGreen": "Pastellgrün",
+      "pastelOrange": "Pastellorange",
+      "pastelRed": "Pastellrot",
+      "pastelYellow": "Pastellgelb",
+      "pink": "Rosa",
+      "red": "Rot",
+      "white": "Weiß"
     },
     "eyes": {
       "title": "Augen",
@@ -2965,7 +3021,10 @@
       "surprised": "Überrascht",
       "cry": "Weinen",
       "close": "Geschlossen",
-      "squint": "Zusammengekniffen"
+      "squint": "Zusammengekniffen",
+      "dizzy": "Schwindelig",
+      "eyeRoll": "Augen Verdrehen",
+      "side": "Seitlich"
     },
     "mouth": {
       "title": "Mund",
@@ -3008,6 +3067,22 @@
       "brown": "Braun",
       "darkBrown": "Dunkelbraun",
       "black": "Schwarz"
+    },
+    "beardColor": "Bartfarbe",
+    "graphics": {
+      "title": "Grafiken",
+      "bat": "Fledermaus",
+      "cumbia": "Cumbia",
+      "deer": "Hirsch", 
+      "diamond": "Diamant",
+      "hola": "Hallo",
+      "pizza": "Pizza",
+      "resist": "Widerstand",
+      "selena": "Selena",
+      "bear": "Bär",
+      "skullOutline": "Schädel Umriss",
+      "skull": "Schädel"
     }
   }
+
 }
