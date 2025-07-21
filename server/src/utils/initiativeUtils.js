@@ -222,4 +222,32 @@ async function transformInitiative(initiative) {
     return initiativeData;
 }
 
-module.exports = { transformInitiative, initiativeConfig };
+function transformInitiativeListItem(initiative) {
+    const plain = initiative.get({ plain: true });
+
+    let mainImage = null;
+    if (plain.mainImage) {
+        mainImage = {
+            src: plain.mainImage.src,
+            alt: plain.mainImage.alt,
+        };
+    }
+
+    return {
+        id: plain.id,
+        slug: plain.slug,
+        title: plain.title,
+        shortDescription: plain.shortDescription,
+        category: plain.category,
+        status: plain.status,
+        mainImage,
+        location: plain.location,
+        applicationStatus: plain.applicationStatus,
+        createdAt: plain.createdAt,
+        updatedAt: plain.updatedAt,
+        publishedAt: plain.publishedAt,
+        currentParticipants: plain.currentParticipants,
+    };
+}
+
+module.exports = { transformInitiative, transformInitiativeListItem, initiativeConfig };

@@ -206,6 +206,8 @@ const BaseInitiativeSchema = z
             .refine((val) => val.every((id) => !isNaN(id) && id > 0), 'All initiative IDs must be valid positive numbers')
             .nullable()
             .optional(),
+
+        publishedAt: z.union([z.string().datetime(), z.null()]).optional(),
     })
     .refine(
         (data) => {
