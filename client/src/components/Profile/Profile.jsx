@@ -434,7 +434,6 @@ export const Profile = () => {
       </header>
 
       <div className="profile-container">
-        {/* Странично меню, стилизирано като в админския панел */}
         <nav className={`side-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`} ref={sideMenuRef}>
           <div className="menu-content">
             <div className="menu-header">
@@ -522,7 +521,6 @@ export const Profile = () => {
                       <ChatIcon className="icon" />
                       {t("profile.bookmarks")}
                     </span>
-                    {/* <ArrowIcon className="icon-arrow" /> */}
                   </NavLink>
                 </li>
               </ul>
