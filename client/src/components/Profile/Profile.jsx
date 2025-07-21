@@ -63,6 +63,7 @@ import { AllProjects } from "../Initiatives/CreateProject/AllProjects/AllProject
 import ProjectPreview from "../Initiatives/CreateProject/ProjectPreview/ProjectPreview";
 import DraftProjects from "../Initiatives/CreateProject/DraftProjects/DraftProjects";
 import { LanguageSwitcherAdmin } from "../LanguageSwitcher/LanguageSwitcherAdmin";
+import { ProfessionalAvatarBuilder } from "../AvatarDemo/ProfessionalAvatarBuilder";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -310,8 +311,8 @@ export const Profile = () => {
                     alt="User"
                     className="dropdown-profile-image"
                     onError={(e) => {
-                  e.target.src = "/images/homePage/user-it.png";
-                }}
+                      e.target.src = "/images/homePage/user-it.png";
+                    }}
                   />
                   <div className="dropdown-username">
                     {profileData?.details?.username || profileData?.email}
@@ -416,10 +417,10 @@ export const Profile = () => {
                       {t("header.ad-create")}
                     </span>
                   </NavLink>
-<LanguageSwitcherAdmin isMobile={true}  onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}/>
+                  <LanguageSwitcherAdmin isMobile={true} onClick={() => {
+                    setProfileMenuOpen(false);
+                    setProfileCommunityOpen(false);
+                  }} />
                   <NavLink to="/logout" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <LogoutIcon className="menu-icon" />
@@ -520,6 +521,15 @@ export const Profile = () => {
                     <span className="link-content">
                       <ChatIcon className="icon" />
                       {t("profile.bookmarks")}
+                    </span>
+                  </NavLink>
+                   <NavLink
+                    to="avatars"
+                    className={({ isActive }) => isActive ? 'active' : ''}
+                  >
+                    <span className="link-content">
+                      <ChatIcon className="icon" />
+                      Аватар
                     </span>
                   </NavLink>
                 </li>
@@ -768,8 +778,8 @@ export const Profile = () => {
                   alt={t('profile.profile_image')}
                   className="side-menu-profile-image"
                   onError={(e) => {
-                  e.target.src = "/images/homePage/user-it.png";
-                }}
+                    e.target.src = "/images/homePage/user-it.png";
+                  }}
                 />
                 <div className="side-menu-profile-info">
                   <span className="side-menu-profile-name">
@@ -832,6 +842,7 @@ export const Profile = () => {
             <Route path="interestOptions" element={<ProfileInterests />} />
             <Route path="messages" element={<ProfileMessages />} />
             <Route path="bookmarks" element={<BookmarkedItems />} />
+            <Route path="avatars" element={<ProfessionalAvatarBuilder />} />
 
             {/* Management routes (Admin & Moderator) */}
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />

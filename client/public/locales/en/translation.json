@@ -2876,5 +2876,102 @@
     "initiatives": "Loading initiatives...", 
     "projects": "Loading projects...",
     "page": "Loading..."
+  },
+  "avatar": {
+    "title": "Create Your Avatar",
+    "subtitle": "Personalize your profile with a unique avatar",
+    "backgroundStyle": "Avatar Style",
+    "noBackground": "No Background",
+    "withBackground": "With Background",
+    "hairColor": "Hair Color",
+    "skinColor": "Skin Color",
+    "random": "Random",
+    "save": "Save",
+    "saving": "Saving",
+    "saveSuccess": "Avatar saved successfully!",
+    "saveError": "Error saving avatar",
+    "hair": {
+      "title": "Hairstyle",
+      "noHair": "No Hair",
+      "longStraight": "Long Straight",
+      "longCurly": "Long Curly",
+      "bob": "Bob Cut",
+      "bun": "Bun",
+      "curvy": "Curvy",
+      "dreads": "Dreadlocks",
+      "frida": "Frida",
+      "shortFlat": "Short Flat",
+      "shortCurly": "Short Curly",
+      "shortWaved": "Short Waved",
+      "sides": "Sides",
+      "caesar": "Caesar",
+      "shortDreads": "Short Dreads"
+    },
+    "hairColors": {
+      "black": "Black",
+      "brown": "Brown",
+      "darkBrown": "Dark Brown",
+      "blonde": "Blonde",
+      "goldenBlonde": "Golden Blonde",
+      "red": "Red",
+      "auburn": "Auburn",
+      "pastelPink": "Pastel Pink",
+      "blue": "Blue",
+      "platinum": "Platinum"
+    },
+    "eyes": {
+      "title": "Eyes",
+      "normal": "Normal",
+      "happy": "Happy",
+      "hearts": "Hearts",
+      "wink": "Wink",
+      "winkWacky": "Wink Wacky",
+      "surprised": "Surprised",
+      "cry": "Cry",
+      "close": "Close",
+      "squint": "Squint"
+    },
+    "mouth": {
+      "title": "Mouth",
+      "normal": "Normal",
+      "smile": "Smile",
+      "serious": "Serious",
+      "eating": "Eating",
+      "concerned": "Concerned",
+      "disbelief": "Disbelief",
+      "grimace": "Grimace",
+      "sad": "Sad",
+      "scream": "Scream",
+      "tongue": "Tongue",
+      "twinkle": "Twinkle",
+      "vomit": "Vomit"
+    },
+    "accessories": {
+      "title": "Glasses",
+      "none": "No Glasses",
+      "kurt": "Kurt",
+      "prescription1": "Prescription 1",
+      "prescription2": "Prescription 2",
+      "round": "Round",
+      "sunglasses": "Sunglasses",
+      "wayfarers": "Wayfarers"
+    },
+    "beard": {
+      "title": "Beard",
+      "none": "No Beard",
+      "medium": "Medium Beard",
+      "light": "Light Beard",
+      "majestic": "Majestic",
+      "moustacheFancy": "Fancy Moustache",
+      "moustacheMagnum": "Magnum Moustache"
+    },
+    "skin": {
+      "light": "Light",
+      "tanned": "Tanned",
+      "yellow": "Yellow",
+      "brown": "Brown",
+      "darkBrown": "Dark Brown",
+      "black": "Black"
+    }
   }
 }

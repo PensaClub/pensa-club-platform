@@ -2912,6 +2912,105 @@
     "initiatives": "Зареждане на инициативи...",
     "projects": "Зареждане на проекти...", 
     "page": "Зареждане..."
+  },
+  
+  "avatar": {
+    "title": "Създай своя аватар",
+    "subtitle": "Персонализирай своя профил с уникален аватар",
+    "backgroundStyle": "Стил на аватара",
+    "noBackground": "Без фон",
+    "withBackground": "С фон",
+    "hairColor": "Цвят на косата",
+    "skinColor": "Цвят на кожата",
+    "random": "Случаен",
+    "save": "Запази",
+    "saving": "Запазва",
+    "saveSuccess": "Аватарът е запазен успешно!",
+    "saveError": "Грешка при запазване на аватара",
+    "hair": {
+      "title": "Прическа",
+      "noHair": "Без коса",
+      "longStraight": "Дълга права",
+      "longCurly": "Дълга къдрава", 
+      "bob": "Боб прическа",
+      "bun": "Кок",
+      "curvy": "Вълниста",
+      "dreads": "Дредове",
+      "frida": "Фрида",
+      "shortFlat": "Къса права",
+      "shortCurly": "Къса къдрава",
+      "shortWaved": "Къса вълниста",
+      "sides": "Странични",
+      "caesar": "Цезар",
+      "shortDreads": "Къси дредове"
+    },
+    "hairColors": {
+      "black": "Черна",
+      "brown": "Кафява",
+      "darkBrown": "Тъмно кафява",
+      "blonde": "Руса",
+      "goldenBlonde": "Златисто руса",
+      "red": "Червена",
+      "auburn": "Кестенява",
+      "pastelPink": "Пастелно розова",
+      "blue": "Синя",
+      "platinum": "Платинена"
+    },
+    "eyes": {
+      "title": "Очи",
+      "normal": "Нормални",
+      "happy": "Щастливи",
+      "hearts": "Сърчица",
+      "wink": "Подмигване",
+      "winkWacky": "Луди подмигащи",
+      "surprised": "Изненадани",
+      "cry": "Плачещи",
+      "close": "Затворени",
+      "squint": "Присвити"
+    },
+    "mouth": {
+      "title": "Уста",
+      "normal": "Нормална",
+      "smile": "Усмивка",
+      "serious": "Сериозна",
+      "eating": "Ядене",
+      "concerned": "Загрижена",
+      "disbelief": "Недоверие",
+      "grimace": "Гримаса",
+      "sad": "Тъжна",
+      "scream": "Вик",
+      "tongue": "Език",
+      "twinkle": "Искряща",
+      "vomit": "Гадене"
+    },
+    "accessories": {
+      "title": "Очила",
+      "none": "Без очила",
+      "kurt": "Курт",
+      "prescription1": "Диоптрични 1",
+      "prescription2": "Диоптрични 2",
+      "round": "Кръгли",
+      "sunglasses": "Слънчеви",
+      "wayfarers": "Уейфаърс"
+    },
+    "beard": {
+      "title": "Брада",
+      "none": "Без брада",
+      "medium": "Средна брада",
+      "light": "Лека брада",
+      "majestic": "Величествена",
+      "moustacheFancy": "Елегантни мустаци",
+      "moustacheMagnum": "Магнум мустаци"
+    },
+    "skin": {
+      "light": "Светла",
+      "tanned": "Тъмна",
+      "yellow": "Жълтеникава",
+      "brown": "Кафява",
+      "darkBrown": "Тъмно кафява",
+      "black": "Черна"
+    }
   }
+
  
 }
