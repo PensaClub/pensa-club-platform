@@ -19,8 +19,15 @@ import {
     faCheckCircle,
     faSearch,
     faCheck,
-    faCommentDots
+    faCommentDots,
+
 } from '@fortawesome/free-solid-svg-icons';
+import {
+    faFacebookF,
+    faInstagram,
+    faLinkedinIn,
+    faTwitter
+} from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 // 🎨 Styles
@@ -1392,7 +1399,77 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                             </div>
 
                         )}
+                        {/* 🏷️ TAGS SECTION */}
+                        <div className="form-group-initiative">
+                            <label className="basic-info-tags-label">
+                                🏷️ {t('initiatives.create.tags')}
+                                <span className="basic-info-tags-description">{t('initiatives.create.tagsDescription')}</span>
+                            </label>
+                            <div className="basic-info-tags-help">
+                                {t('initiatives.create.tags-help')}
+                            </div>
+                            <div className="basic-info-tags-input-container">
+                                <input
+                                    type="text"
+                                    value={newTag}
+                                    onChange={(e) => setNewTag(e.target.value)}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            if (newTag.trim()) {
+                                                addTag(newTag.trim());
+                                                setNewTag('');
+                                            }
+                                        }
+                                    }}
+                                    placeholder={t('initiatives.create.tagPlaceholder')}
+                                    className="basic-info-tags-input"
+                                    maxLength={30}
+                                />
+                                <button
+                                    type="button"
+                                    className="basic-info-tags-add-btn"
+                                    onClick={() => {
+                                        if (newTag.trim()) {
+                                            addTag(newTag.trim());
+                                            setNewTag('');
+                                        }
+                                    }}
+                                    disabled={values.tags.length >= 20}
+                                >
+                                    <FontAwesomeIcon icon={faPlus} />
+                                    {t('initiatives.create.addTag')}
+                                </button>
+                            </div>
+                            {values.tags.length > 0 && (
+                                <div className="basic-info-tags-display">
+                                    <div className="basic-info-tags-list">
+                                        {values.tags.map((tag, index) => (
+                                            <div key={index} className="basic-info-tag-item">
+                                                <span className="basic-info-tag-text">{tag}</span>
+                                                <button
+                                                    type="button"
+                                                    className="basic-info-tag-remove-btn"
+                                                    onClick={() => removeTag(index)}
+                                                    title={t('initiatives.create.removeTag')}
+                                                >
+                                                    <FontAwesomeIcon icon={faTimes} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
+                            <div className="basic-info-tags-info">
+                                <small>
+                                    {t('initiatives.create.tagsCount', { count: values.tags.length })}
+                                    {values.tags.length >= 18 && (
+                                        <span className="basic-info-tags-warning"> - {t('initiatives.create.close-to-limit')} (20)</span>
+                                    )}
+                                </small>
+                            </div>
+                        </div>
                         {/* 🎯 SECTION: SECTIONS  */}
                         {activeSection === 'sections' && (
                             <div className="form-section-card">
@@ -3361,7 +3438,127 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                     </div>
 
                                     {/* 📱 SOCIAL MEDIA - остава същo */}
-                                    {/* ... останалия код за social media остава същия ... */}
+                                    {/* 📱 SOCIAL MEDIA */}
+                                    <div className="initiative-social-media-section">
+                                        <div className="initiative-contacts-section-header">
+                                            <h3>📱 {t('initiatives.create.socialMedia')}</h3>
+                                            <p className="initiative-section-description">{t('initiatives.create.socialMediaDescription')}</p>
+                                        </div>
+
+                                        <div className="initiative-social-media-grid">
+                                            {/* Facebook */}
+                                            <div className="initiative-social-media-item">
+                                                <div className="initiative-social-media-icon facebook">
+                                                    <FontAwesomeIcon icon={faFacebookF} />
+                                                </div>
+                                                <div className="initiative-form-group-social">
+                                                    <label>{t('initiatives.create.facebook')}</label>
+                                                    <input
+                                                        type="url"
+                                                        value={values.socialMedia?.facebook || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                socialMedia: {
+                                                                    ...prev.socialMedia,
+                                                                    facebook: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="https://facebook.com/your-page"
+                                                        className={errors['socialMedia.facebook'] ? 'error' : ''}
+                                                    />
+                                                    {errors['socialMedia.facebook'] && (
+                                                        <div className="error-message">{errors['socialMedia.facebook']}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Instagram */}
+                                            <div className="initiative-social-media-item">
+                                                <div className="initiative-social-media-icon instagram">
+                                                    <FontAwesomeIcon icon={faInstagram} />
+                                                </div>
+                                                <div className="initiative-form-group-social">
+                                                    <label>{t('initiatives.create.instagram')}</label>
+                                                    <input
+                                                        type="url"
+                                                        value={values.socialMedia?.instagram || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                socialMedia: {
+                                                                    ...prev.socialMedia,
+                                                                    instagram: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="https://instagram.com/your-profile"
+                                                        className={errors['socialMedia.instagram'] ? 'error' : ''}
+                                                    />
+                                                    {errors['socialMedia.instagram'] && (
+                                                        <div className="error-message">{errors['socialMedia.instagram']}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* LinkedIn */}
+                                            <div className="initiative-social-media-item">
+                                                <div className="initiative-social-media-icon linkedin">
+                                                    <FontAwesomeIcon icon={faLinkedinIn} />
+                                                </div>
+                                                <div className="initiative-form-group-social">
+                                                    <label>{t('initiatives.create.linkedin')}</label>
+                                                    <input
+                                                        type="url"
+                                                        value={values.socialMedia?.linkedin || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                socialMedia: {
+                                                                    ...prev.socialMedia,
+                                                                    linkedin: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="https://linkedin.com/company/your-company"
+                                                        className={errors['socialMedia.linkedin'] ? 'error' : ''}
+                                                    />
+                                                    {errors['socialMedia.linkedin'] && (
+                                                        <div className="error-message">{errors['socialMedia.linkedin']}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Twitter */}
+                                            <div className="initiative-social-media-item">
+                                                <div className="initiative-social-media-icon twitter">
+                                                    <FontAwesomeIcon icon={faTwitter} />
+                                                </div>
+                                                <div className="initiative-form-group-social">
+                                                    <label>{t('initiatives.create.twitter')}</label>
+                                                    <input
+                                                        type="url"
+                                                        value={values.socialMedia?.twitter || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                socialMedia: {
+                                                                    ...prev.socialMedia,
+                                                                    twitter: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="https://twitter.com/your-profile"
+                                                        className={errors['socialMedia.twitter'] ? 'error' : ''}
+                                                    />
+                                                    {errors['socialMedia.twitter'] && (
+                                                        <div className="error-message">{errors['socialMedia.twitter']}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     {/* 📞 ADDITIONAL CONTACTS */}
                                     <div className="initiative-additional-contacts-section">
