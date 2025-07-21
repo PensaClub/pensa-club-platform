@@ -198,6 +198,13 @@ header > a:nth-child(1):hover {
   border: 2px solid var(--orange);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+.profile-image-header {
+ width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
 
 .profile-toggle:hover .profile-image-header {
   transform: scale(1.05);
