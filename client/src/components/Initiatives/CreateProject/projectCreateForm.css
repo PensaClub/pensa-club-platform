@@ -104,7 +104,7 @@
 /* FORM LAYOUT */
 /* ======================= */
 .project-form-layout {
-    max-width: 1400px;
+    max-width: 1500px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 280px 1fr;

@@ -1083,6 +1083,10 @@
     },
     "initiatives": {
         "create": {
+            "facebook": "Facebook",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter", 
             "newTitle": "Neue Initiative",
             "editTitle": "Initiative bearbeiten",
             "subtitle": "Erstellen Sie eine bedeutsame Initiative, die einen Unterschied in der Gesellschaft macht",
