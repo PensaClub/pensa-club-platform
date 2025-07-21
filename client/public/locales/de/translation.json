@@ -2906,5 +2906,11 @@
       }
     },
     "backToHome": "Zurück zur Startseite"
+  },
+   "loading": {
+    "articles": "Artikel werden geladen...",
+    "initiatives": "Initiativen werden geladen...",
+    "projects": "Projekte werden geladen...",
+    "page": "Wird geladen..."
   }
 }

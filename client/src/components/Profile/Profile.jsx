@@ -62,6 +62,7 @@ import ProjectCreateForm from "../Initiatives/CreateProject/ProjectCreateForm";
 import { AllProjects } from "../Initiatives/CreateProject/AllProjects/AllProjects";
 import ProjectPreview from "../Initiatives/CreateProject/ProjectPreview/ProjectPreview";
 import DraftProjects from "../Initiatives/CreateProject/DraftProjects/DraftProjects";
+import { LanguageSwitcherAdmin } from "../LanguageSwitcher/LanguageSwitcherAdmin";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -283,23 +284,21 @@ export const Profile = () => {
 
         <div className="header-right">
           {/* Заменена камбанка с бутон за смяна на езика */}
-          <button className="language-toggle" onClick={() => changeLanguage(currentLanguage !== "bg" ? "bg" : "en")}>
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-              <path d="M12.87 15.07L10.33 12.56L10.36 12.53C12.1 10.59 13.34 8.36 14.07 6H17V4H10V2H8V4H1V6H12.17C11.5 7.92 10.44 9.75 9 11.35C8.07 10.32 7.3 9.19 6.69 8H4.69C5.42 9.63 6.42 11.17 7.67 12.56L2.58 17.58L4 19L9 14L12.11 17.11L12.87 15.07ZM18.5 10H16.5L12 22H14L15.12 19H19.87L21 22H23L18.5 10ZM15.88 17L17.5 12.67L19.12 17H15.88Z" fill="currentColor" />
-            </svg>
-            <span className="language-indicator">{currentLanguage === "bg" ? "BG" : "EN"}</span>
-          </button>
+          <LanguageSwitcherAdmin />
 
           <div className="profile-menu" ref={profileMenuRef}>
             <button className="profile-button" onClick={toggleProfileMenu}>
               <img
-                src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)}
+                src={profileData?.details?.imageURL || "/images/homePage/user-it.png"}
                 alt="User"
                 className="profile-image"
+                onError={(e) => {
+                  e.target.src = "/images/homePage/user-it.png";
+                }}
               />
             </button>
             <span className="profile-name">
-              {profileData?.details?.username || profileData?.email}
+              {profileData?.details?.username || profileData?.email?.split('@')[0] || profileData?.email}
             </span>
 
             {/* Падащото меню с добавени линкове */}
@@ -307,9 +306,12 @@ export const Profile = () => {
               <div className="profile-dropdown-new">
                 <div className="dropdown-header">
                   <img
-                    src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)}
+                    src={profileData?.details?.imageURL || "/images/homePage/user-it.png"}
                     alt="User"
                     className="dropdown-profile-image"
+                    onError={(e) => {
+                  e.target.src = "/images/homePage/user-it.png";
+                }}
                   />
                   <div className="dropdown-username">
                     {profileData?.details?.username || profileData?.email}
@@ -414,7 +416,10 @@ export const Profile = () => {
                       {t("header.ad-create")}
                     </span>
                   </NavLink>
-
+<LanguageSwitcherAdmin isMobile={true}  onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}/>
                   <NavLink to="/logout" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <LogoutIcon className="menu-icon" />
@@ -429,7 +434,6 @@ export const Profile = () => {
       </header>
 
       <div className="profile-container">
-        {/* Странично меню, стилизирано като в админския панел */}
         <nav className={`side-menu ${menuOpen ? 'open' : ''} ${!isFinish ? 'disabled' : ''}`} ref={sideMenuRef}>
           <div className="menu-content">
             <div className="menu-header">
@@ -517,7 +521,6 @@ export const Profile = () => {
                       <ChatIcon className="icon" />
                       {t("profile.bookmarks")}
                     </span>
-                    {/* <ArrowIcon className="icon-arrow" /> */}
                   </NavLink>
                 </li>
               </ul>
@@ -761,9 +764,12 @@ export const Profile = () => {
             <div className="side-menu-profile">
               <div className="admin-profile-side-menu">
                 <img
-                  src={profileData?.details?.imageURL || getProfileImage(profileData?.details?.gender)}
+                  src={profileData?.details?.imageURL || "./images/homePage/user-it.png"}
                   alt={t('profile.profile_image')}
                   className="side-menu-profile-image"
+                  onError={(e) => {
+                  e.target.src = "/images/homePage/user-it.png";
+                }}
                 />
                 <div className="side-menu-profile-info">
                   <span className="side-menu-profile-name">

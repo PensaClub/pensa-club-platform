@@ -331,6 +331,7 @@
 }
 
 .section-title {
+  display: flex;
   font-size: 2rem;
   font-weight: 700;
   color: #1e293b;
@@ -351,7 +352,10 @@
   background: linear-gradient(135deg, #1B8B8A, #E26020);
   border-radius: 2px;
 }
-
+.section-title svg {
+  margin-right: 0.5rem;
+  /* color: #1B8B8A; */
+}
 /* Sections */
 .initiative-sections {
   margin-bottom: 4rem;
