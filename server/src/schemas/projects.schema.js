@@ -14,6 +14,7 @@ const {
     MainImageSchema,
     ImageSchema,
     PaginationQuerySchema,
+    LocationSchema,
 } = require('./common.schema');
 
 // Project-specific schemas
@@ -55,29 +56,6 @@ const TimelineSchema = z
         {
             message: 'End date must be after start date',
             path: ['endDate'],
-        }
-    );
-
-const LocationSchema = z
-    .array(
-        z.object({
-            address: z.string().nullable().optional(),
-            coordinates: z
-                .object({
-                    lat: z.number().nullable().optional(),
-                    lng: z.number().nullable().optional(),
-                })
-                .nullable()
-                .optional(),
-        })
-    )
-    .refine(
-        (locations) => {
-            if (!locations || locations.length === 0) return true;
-            return locations.every((location) => location.address || (location.coordinates?.lat && location.coordinates?.lng));
-        },
-        {
-            message: 'Each location must have either address or coordinates',
         }
     );
 
