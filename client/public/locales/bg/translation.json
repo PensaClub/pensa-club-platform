@@ -2233,6 +2233,18 @@
       "noProjects": "Все още няма проекти",
       "emptySubtitle": "Скоро ще добавим нови проекти. Проверявайте редовно!"
     },
+    "hero": {
+      "keywords": {
+        "innovation": "Иновации",
+        "technology": "Технологии", 
+        "future": "Бъдеще",
+        "development": "Развитие",
+        "causes": "Каузи",
+        "health": "Здраве",
+        "society": "Общество",
+        "culture": "Култура"
+      }
+    },
     "stats": {
       "total": {
         "singular": "проект общо",
@@ -2257,6 +2269,11 @@
       "in-progress": "В процес",
       "completed": "Завършен",
       "inProgress": "В процес"
+    },
+    "loadMore": {
+      "button": "Покажи още проекти",
+      "loading": "Зареждане...",
+      "info": "Показани {{displayed}} проекта (страница {{page}})"
     },
     "card": {
       "budget": "Бюджет",

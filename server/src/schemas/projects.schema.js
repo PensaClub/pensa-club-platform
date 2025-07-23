@@ -14,6 +14,7 @@ const {
     MainImageSchema,
     ImageSchema,
     PaginationQuerySchema,
+    LocationSchema,
 } = require('./common.schema');
 
 // Project-specific schemas
@@ -58,29 +59,6 @@ const TimelineSchema = z
         }
     );
 
-const LocationSchema = z
-    .array(
-        z.object({
-            address: z.string().nullable().optional(),
-            coordinates: z
-                .object({
-                    lat: z.number().nullable().optional(),
-                    lng: z.number().nullable().optional(),
-                })
-                .nullable()
-                .optional(),
-        })
-    )
-    .refine(
-        (locations) => {
-            if (!locations || locations.length === 0) return true;
-            return locations.every((location) => location.address || (location.coordinates?.lat && location.coordinates?.lng));
-        },
-        {
-            message: 'Each location must have either address or coordinates',
-        }
-    );
-
 // Base schema with all fields optional for flexibility
 const BaseProjectSchema = z
     .object({
@@ -110,7 +88,7 @@ const BaseProjectSchema = z
         timeline: TimelineSchema.nullable().optional(),
 
         // Location
-        location: LocationSchema.nullable().optional(),
+        location: z.array(LocationSchema).nullable().optional(),
 
         // Application fields
         applicationStatus: z.enum(['open', 'closed']).nullable().optional(),

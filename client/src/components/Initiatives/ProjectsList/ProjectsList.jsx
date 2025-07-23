@@ -13,7 +13,6 @@ import ProjectsSlider from './ProjectsSlider/ProjectsSlider';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 
 import './projectsList.css';
-import Pagination from '../../Articles/Pagination/Pagination';
 import { formatLocation } from '../../../utils/formatLocation';
 
 const ProjectsList = () => {
@@ -25,7 +24,9 @@ const ProjectsList = () => {
         getAllProjects,
         projects: contextProjects,
         projectsLoaded,
-
+        projectsHasMore,          // Добавих това
+        projectsCurrentPage,      // Добавих това
+        isLoading: contextLoading // Добавих това
     } = useInitiativeContext();
 
     // State management
@@ -34,8 +35,6 @@ const ProjectsList = () => {
     const [sliderProjects, setSliderProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [isSearchActive, setIsSearchActive] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [projectsPerPage] = useState(9);
     const [searchTerm, setSearchTerm] = useState('');
     const isFetchingRef = useRef(false);
 
@@ -50,9 +49,9 @@ const ProjectsList = () => {
 
     const [sortBy, setSortBy] = useState('newest');
 
+    // Initial load
     useEffect(() => {
         const fetchProjects = async () => {
-        
             if (isFetchingRef.current) return;
 
             try {
@@ -63,11 +62,12 @@ const ProjectsList = () => {
                 const shouldRefresh = query.get('refresh') === 'true';
 
                 let projectsData;
+
                 if (projectsLoaded && contextProjects.length > 0 && !shouldRefresh) {
                     projectsData = contextProjects;
                 } else {
-                    const response = await getAllProjects(1, shouldRefresh);
-                    projectsData = response.data || [];
+                    await getAllProjects(1, shouldRefresh);
+                    projectsData = contextProjects;
 
                     if (shouldRefresh) {
                         window.history.replaceState({}, document.title, '/projects');
@@ -75,6 +75,7 @@ const ProjectsList = () => {
                 }
 
                 processProjects(projectsData);
+
             } catch (error) {
                 console.error("Error loading projects:", error);
                 setAllProjects([]);
@@ -88,6 +89,13 @@ const ProjectsList = () => {
 
         fetchProjects();
     }, [projectsLoaded, location.search]);
+
+    // Update projects when context changes
+    useEffect(() => {
+        if (contextProjects.length > 0) {
+            processProjects(contextProjects);
+        }
+    }, [contextProjects]);
 
     // Process projects for featured/slider
     const processProjects = useCallback((projects) => {
@@ -108,72 +116,64 @@ const ProjectsList = () => {
         setSliderProjects(sortedProjects.slice(1, 7)); // Show 6 in slider
     }, []);
 
+    // Handle Load More - СЪЩИЯ ПОДХОД КАТО В ADMIN
+    const handleLoadMore = useCallback(() => {
+        if (projectsHasMore && !contextLoading) {
+            getAllProjects(projectsCurrentPage + 1);
+        }
+    }, [projectsHasMore, contextLoading, projectsCurrentPage, getAllProjects]);
+
     // Handle search
     const handleSearch = useCallback((searchTerm) => {
-
         setSearchTerm(searchTerm);
-
-        if (!searchTerm.trim()) {
-            setIsSearchActive(false);
-            setFilteredProjects([]);
-            setCurrentPage(1);
-            return;
-        }
-
-        const results = allProjects.filter(project =>
-            project.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            project.shortDescription?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            project.category?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-
-        setFilteredProjects(results);
-        setIsSearchActive(true);
-        setCurrentPage(1);
-    }, [allProjects]);
+        applySearchAndFilters(allProjects, searchTerm, activeFilters, sortBy);
+    }, [allProjects, activeFilters, sortBy]);
 
     // Handle filters
     const handleFiltersChange = useCallback((newFilters) => {
         setActiveFilters(newFilters);
-        setCurrentPage(1);
+        applySearchAndFilters(allProjects, searchTerm, newFilters, sortBy);
+    }, [allProjects, searchTerm, sortBy]);
 
-        applyFilters(newFilters, sortBy);
-    }, [sortBy]);
+    // Handle sort
+    const handleSort = useCallback((sortOption) => {
+        setSortBy(sortOption);
+        applySearchAndFilters(allProjects, searchTerm, activeFilters, sortOption);
+    }, [allProjects, searchTerm, activeFilters]);
 
-    const applyFilters = useCallback((filters, currentSort) => {
+    // Combined search and filter function
+    const applySearchAndFilters = useCallback((projects, search, filters, currentSort) => {
+        let filtered = [...projects];
 
-        let filtered = [...allProjects];
+        // Apply search
+        if (search && search.trim()) {
+            filtered = filtered.filter(project =>
+                project.title?.toLowerCase().includes(search.toLowerCase()) ||
+                project.shortDescription?.toLowerCase().includes(search.toLowerCase()) ||
+                project.category?.toLowerCase().includes(search.toLowerCase())
+            );
+        }
 
-        // Филтър по категория
+        // Apply filters
         if (filters.category) {
-            filtered = filtered.filter(project =>
-                project.category === filters.category
-            );
+            filtered = filtered.filter(project => project.category === filters.category);
         }
 
-        // Филтър по статус
         if (filters.status) {
-            filtered = filtered.filter(project =>
-                project.status === filters.status
-            );
+            filtered = filtered.filter(project => project.status === filters.status);
         }
 
-        // Филтър по приоритет
         if (filters.priority) {
-            filtered = filtered.filter(project =>
-                project.priority === filters.priority
-            );
+            filtered = filtered.filter(project => project.priority === filters.priority);
         }
 
-        // Филтър "Мога да кандидатствам"
         if (filters.canApply) {
             filtered = filtered.filter(project => {
-                // Провери дали има отворени кандидатури
                 if (!project.applicationDeadline) return false;
                 return new Date(project.applicationDeadline) > new Date();
             });
         }
 
-        // Филтър по инициатива
         if (filters.initiative === 'linked') {
             filtered = filtered.filter(project =>
                 project.initiativeId || project.initiativeSlug
@@ -184,12 +184,12 @@ const ProjectsList = () => {
             );
         }
 
-        // Приложи сортиране
+        // Apply sorting
         filtered = applySorting(filtered, currentSort);
 
         setFilteredProjects(filtered);
-        setIsSearchActive(filtered.length !== allProjects.length || Object.values(filters).some(f => f));
-    }, [allProjects]);
+        setIsSearchActive(search.trim() || Object.values(filters).some(f => f));
+    }, []);
 
     const applySorting = useCallback((projects, sortOption) => {
         const sorted = [...projects];
@@ -227,28 +227,24 @@ const ProjectsList = () => {
                 return sorted;
         }
     }, []);
+
     const getStatLabel = (count, type) => {
         const isPlural = count !== 1;
         return t(`projects.stats.${type}.${isPlural ? 'plural' : 'singular'}`);
     };
-    // Handle sort
-    const handleSort = useCallback((sortOption) => {
-        setSortBy(sortOption);
-        applyFilters(activeFilters, sortOption);
-    }, [activeFilters, applyFilters]);
 
     // Get displayed projects
     const displayedProjects = isSearchActive ? filteredProjects : allProjects;
-    const indexOfLastProject = currentPage * projectsPerPage;
-    const indexOfFirstProject = indexOfLastProject - projectsPerPage;
-    const currentProjects = displayedProjects.slice(indexOfFirstProject, indexOfLastProject);
-    const totalPages = Math.ceil(displayedProjects.length / projectsPerPage);
+
+    // ПОКАЗВАЙ БУТОНА САМО КОГАТО НЕ СЕ ТЪРСИ/ФИЛТРИРА И ИМА ОЩЕ ПРОЕКТИ
+    const hasMoreProjects = !isSearchActive && projectsHasMore;
 
     useEffect(() => {
         if (allProjects.length > 0) {
-            applyFilters(activeFilters, sortBy);
+            applySearchAndFilters(allProjects, searchTerm, activeFilters, sortBy);
         }
-    }, [allProjects, applyFilters, activeFilters, sortBy]);
+    }, [allProjects, applySearchAndFilters, searchTerm, activeFilters, sortBy]);
+
     // Handle slider click
     const handleSlideClick = useCallback((project) => {
         setFeaturedProject(project);
@@ -267,6 +263,7 @@ const ProjectsList = () => {
             });
         }, 100);
     }, [featuredProject, sliderProjects]);
+
     const getStatusInfo = (status) => {
         const statusMap = {
             planned: { color: '#64748b', icon: '📋' },
@@ -276,6 +273,7 @@ const ProjectsList = () => {
         };
         return statusMap[status] || statusMap.planned;
     };
+
     const formatDate = (dateString) => {
         if (!dateString) return null;
         return new Date(dateString).toLocaleDateString('bg-BG', {
@@ -284,6 +282,7 @@ const ProjectsList = () => {
             year: 'numeric'
         });
     };
+
     // Calculate stats
     const stats = {
         total: allProjects.length,
@@ -291,6 +290,7 @@ const ProjectsList = () => {
         completed: allProjects.filter(p => p.status === 'completed').length,
         canApply: allProjects.filter(p => p.applicationDeadline && new Date(p.applicationDeadline) > new Date()).length
     };
+
     const getPageTitle = () => {
         if (searchTerm) {
             return `${t('projects.meta.searchResults')} "${searchTerm}" | Pensa Club`;
@@ -345,7 +345,7 @@ const ProjectsList = () => {
             "name": "Проекти за пенсионери",
             "description": getPageDescription(),
             "url": "https://www.pensa.club/projects",
-            "numberOfItems": isSearchActive ? filteredProjects.length : allProjects.length,
+            "numberOfItems": isSearchActive ? filteredProjects.length : stats.total,
             "itemListElement": projectsToShow.map((project, index) => ({
                 "@type": "ListItem",
                 "position": index + 1,
@@ -427,10 +427,10 @@ const ProjectsList = () => {
                                     />
                                 </svg>
                             </div>
-                            <div className="keyword-tag">Иновации</div>
-                            <div className="keyword-tag">Технологии</div>
-                            <div className="keyword-tag">Бъдеще</div>
-                            <div className="keyword-tag">Развитие</div>
+                            <div className="keyword-tag">{t('projects.hero.keywords.innovation')}</div>
+                            <div className="keyword-tag">{t('projects.hero.keywords.technology')}</div>
+                            <div className="keyword-tag">{t('projects.hero.keywords.future')}</div>
+                            <div className="keyword-tag">{t('projects.hero.keywords.development')}</div>
                         </div>
 
                         {/* СРЕДАТА: Hero content */}
@@ -469,17 +469,17 @@ const ProjectsList = () => {
                                 </svg>
                             </div>
                             <div className="right-floating-keywords">
-                                <div className="keyword-tag">Каузи</div>
-                                <div className="keyword-tag">Здраве</div>
-                                <div className="keyword-tag">Общество</div>
-                                <div className="keyword-tag">Култура</div>
+                                <div className="keyword-tag">{t('projects.hero.keywords.causes')}</div>
+                                <div className="keyword-tag">{t('projects.hero.keywords.health')}</div>
+                                <div className="keyword-tag">{t('projects.hero.keywords.society')}</div>
+                                <div className="keyword-tag">{t('projects.hero.keywords.culture')}</div>
                             </div>
                         </div>
                     </div>
                 </section>
+
                 {/* Stats Section */}
                 <section className="projects-stats">
-
                     <div className="stats-container">
                         <div className="stat-card">
                             <div className="stat-icon">📊</div>
@@ -672,7 +672,6 @@ const ProjectsList = () => {
                             <h2 className="section-title">{t('projects.list.allProjects')}</h2>
                             <div className="controls-right">
                                 <ProjectSearch onSearch={handleSearch} />
-
                             </div>
                         </div>
 
@@ -685,6 +684,7 @@ const ProjectsList = () => {
                             />
                         </div>
                     </section>
+
                     {/* Search Results Info */}
                     {isSearchActive && (
                         <section className="proj-search-results">
@@ -706,11 +706,12 @@ const ProjectsList = () => {
                             </div>
                         </section>
                     )}
+
                     {/* Projects Grid */}
                     <section className="projects-grid-section">
-                        {currentProjects.length > 0 ? (
+                        {displayedProjects.length > 0 ? (
                             <div className="projects-grid">
-                                {currentProjects.map(project => (
+                                {displayedProjects.map(project => (
                                     <ProjectCard
                                         key={project.id}
                                         project={project}
@@ -733,15 +734,42 @@ const ProjectsList = () => {
                         )}
                     </section>
 
-                    {/* Pagination */}
-                    {totalPages > 1 && (
-                        <section className="pagination-section">
-                            <Pagination
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={setCurrentPage}
-                            />
+                    {/* Load More Section */}
+                    {hasMoreProjects && !contextLoading && (
+                        <section className="projects-list-load-more-section">
+                            <button
+                                type="button"
+                                className="projects-list-load-more-btn"
+                                onClick={handleLoadMore}
+                                disabled={contextLoading}
+                            >
+                                {contextLoading ? (
+                                    <>
+                                        <div className="projects-list-load-more-spinner"></div>
+                                        {t('projects.loadMore.loading')}
+                                    </>
+                                ) : (
+                                    <>
+                                        {t('projects.loadMore.button')}
+                                        <span className="projects-list-load-more-arrow">↓</span>
+                                    </>
+                                )}
+                            </button>
+                            <div className="projects-list-load-more-info">
+                                {t('projects.loadMore.info', {
+                                    displayed: displayedProjects.length,
+                                    page: projectsCurrentPage
+                                })}
+                            </div>
                         </section>
+                    )}
+
+                    {/* Loading indicator */}
+                    {contextLoading && (
+                        <div className="projects-list-loading-container">
+                            <div className="projects-list-loading-spinner"></div>
+                            <p>{t('projects.loadMore.loading')}</p>
+                        </div>
                     )}
                 </div>
 

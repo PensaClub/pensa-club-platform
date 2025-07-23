@@ -1084,9 +1084,9 @@
     "initiatives": {
         "create": {
             "facebook": "Facebook",
-      "instagram": "Instagram",
-      "linkedin": "LinkedIn",
-      "twitter": "Twitter", 
+            "instagram": "Instagram",
+            "linkedin": "LinkedIn",
+            "twitter": "Twitter",
             "newTitle": "Neue Initiative",
             "editTitle": "Initiative bearbeiten",
             "subtitle": "Erstellen Sie eine bedeutsame Initiative, die einen Unterschied in der Gesellschaft macht",
@@ -1459,8 +1459,7 @@
             "activeInitiatives": "Aktive Initiativen",
             "participants": "Teilnehmer",
             "cities": "Städte",
-        "mainTitle": "Gemeinschaft von Gleichgesinnten"
-
+            "mainTitle": "Gemeinschaft von Gleichgesinnten"
         },
         "view": {
             "notFound": "Initiative nicht gefunden",
@@ -1611,11 +1610,11 @@
             "initiatives": "Initiativen",
             "backToInitiative": "Zurück zur Initiative"
         },
-         "gallery": {
+        "gallery": {
             "title": "Galerie",
             "noImages": "Keine Bilder verfügbar",
             "image": "Bild",
-            "images": "Bilder", 
+            "images": "Bilder",
             "viewImage": "Bild anzeigen"
         },
         "status": {
@@ -2216,6 +2215,23 @@
             "noProjects": "Noch keine Projekte",
             "emptySubtitle": "Wir werden bald neue Projekte hinzufügen. Schauen Sie regelmäßig vorbei!"
         },
+        "loadMore": {
+            "button": "Mehr Projekte laden",
+            "loading": "Wird geladen...",
+            "info": "{{displayed}} Projekte angezeigt (Seite {{page}})"
+        },
+        "hero": {
+            "keywords": {
+                "innovation": "Innovation",
+                "technology": "Technologie",
+                "future": "Zukunft",
+                "development": "Entwicklung",
+                "causes": "Anliegen",
+                "health": "Gesundheit",
+                "society": "Gesellschaft",
+                "culture": "Kultur"
+            }
+        },
         "stats": {
             "total": {
                 "singular": "Projekt insgesamt",
@@ -2777,316 +2793,314 @@
         "footer-message": "Bitte versuchen Sie es erneut oder kontaktieren Sie uns",
         "refresh": "Aktualisieren"
     },
-     "eliteCard": {
-    "badge": "ELITE",
-    "brand": "Pensa Elite",
-    "subtitle": "KARTE",
-    "cardHolder": "EXKLUSIVES MITGLIED",
-    "features": {
-      "exclusive": {
-        "highlight": "Exklusiver",
-        "text": "Zugang zu Premium-Inhalten"
-      },
-      "priority": {
-        "highlight": "Prioritäts",
-        "text": "Support 24/7"
-      },
-      "premium": {
-        "highlight": "Premium",
-        "text": "Tools und Funktionen"
-      }
-    },
-    "cta": {
-      "text": "Elite-Mitglied werden"
-    }
-  },
-  "eliteMembership": {
-    "meta": {
-      "title": "Pensa Elite Mitgliedschaft - Exklusive Mitgliedschaft",
-      "description": "Werden Sie Teil der exklusiven Pensa Elite Mitglieder-Gemeinschaft mit Premium-Privilegien und besonderen Vorteilen.",
-      "keywords": "Elite Mitgliedschaft, Premium-Karte, exklusive Privilegien, Senioren"
-    },
-    "hero": {
-      "subtitle": "Die exklusive Mitgliedschaft für ausgewählte Pensa Club Mitglieder mit einzigartigen Privilegien und besonderem Zugang."
-    },
-    "comingSoon": {
-      "title": "Demnächst",
-      "subtitle": "Wir bereiten etwas Besonderes vor"
-    },
-    "notice": {
-      "title": "In Entwicklung",
-      "text": "Wir arbeiten derzeit intensiv daran, Ihnen das beste Elite Mitgliedschaftsprogramm anzubieten. Wir bereiten außergewöhnliche Privilegien, Partnerschaften und Dienstleistungen speziell für Sie vor.",
-      "timeline": "Demnächst - Herbst 2025"
-    },
-    "benefits": {
-      "title": "Exklusive Vorteile",
-      "subtitle": "Entdecken Sie die einzigartigen Privilegien, die Sie als Elite-Mitglied erwarten",
-      "exclusive": {
-        "title": "Exklusiver Zugang",
-        "description": "Zugang zu besonderen Veranstaltungen, Kursen und Inhalten nur für Elite-Mitglieder"
-      },
-      "priority": {
-        "title": "Prioritäts-Support",
-        "description": "24/7 persönlicher Support mit vorrangiger Betreuung und schneller Antwort"
-      },
-      "premium": {
-        "title": "Premium-Dienste",
-        "description": "Kostenlose Beratungen, personalisierte Empfehlungen und spezielle Rabatte"
-      },
-      "personalized": {
-        "title": "Personalisierter Service",
-        "description": "Individueller Ansatz für Ihre Bedürfnisse"
-      },
-      "special": {
-        "title": "Besondere Veranstaltungen",
-        "description": "Einladungen zu exklusiven Elite-Veranstaltungen, Seminaren und Treffen"
-      },
-      "secure": {
-        "title": "Sicherheit und Datenschutz",
-        "description": "Höchste Sicherheitsstufe und Schutz Ihrer persönlichen Daten"
-      }
-    },
-    "locations": {
-      "title": "Wo Sie die Karte verwenden können",
-      "subtitle": "Unsere Elite-Karte bietet Ihnen Privilegien an ausgewählten Standorten im ganzen Land",
-      "healthcare": {
-        "category": "Gesundheitswesen",
-        "place1": "Private Kliniken und Krankenhäuser",
-        "place2": "Spezialisierte Medizinzentren",
-        "place3": "Zahnarztpraxen",
-        "place4": "Rehabilitationszentren"
-      },
-      "culture": {
-        "category": "Kultur und Unterhaltung",
-        "place1": "Theater und Opern",
-        "place2": "Museen und Galerien",
-        "place3": "Kinos und Kulturzentren",
-        "place4": "Bibliotheken und Lesesäle"
-      },
-      "shopping": {
-        "category": "Einkaufen und Dienstleistungen",
-        "place1": "Ausgewählte Geschäfte und Boutiquen",
-        "place2": "Restaurants und Cafés",
-        "place3": "Kosmetiksalons",
-        "place4": "Reiseagenturen"
-      },
-      "recreation": {
-        "category": "Erholung und Sport",
-        "place1": "SPA- und Wellness-Zentren",
-        "place2": "Fitnessstudios",
-        "place3": "Parks und Gärten",
-        "place4": "Hotels und Resorts"
-      }
-    },
-    "requirements": {
-      "title": "Bewerbungsvoraussetzungen",
-      "subtitle": "Um Elite-Mitglied zu werden, müssen Sie die folgenden Kriterien erfüllen",
-      "age": "Alter über 55 Jahre",
-      "membership": "Aktive Pensa Club Mitgliedschaft für mindestens 1 Monat",
-      "activity": "Aktive Teilnahme an der Gemeinschaft und Initiativen",
-      "recommendation": "Empfehlung von einem bestehenden Elite-Mitglied oder Administrator"
-    },
-    "application": {
-      "title": "Bewerbungsprozess",
-      "subtitle": "Drei einfache Schritte zu Ihrer Elite-Mitgliedschaft",
-      "steps": {
-        "step1": {
-          "title": "Antrag einreichen",
-          "description": "Füllen Sie das Online-Formular mit Ihren Daten und Ihrer Motivation für die Elite-Mitgliedschaft aus"
+    "eliteCard": {
+        "badge": "ELITE",
+        "brand": "Pensa Elite",
+        "subtitle": "KARTE",
+        "cardHolder": "EXKLUSIVES MITGLIED",
+        "features": {
+            "exclusive": {
+                "highlight": "Exklusiver",
+                "text": "Zugang zu Premium-Inhalten"
+            },
+            "priority": {
+                "highlight": "Prioritäts",
+                "text": "Support 24/7"
+            },
+            "premium": {
+                "highlight": "Premium",
+                "text": "Tools und Funktionen"
+            }
         },
-        "step2": {
-          "title": "Prüfung und Bewertung",
-          "description": "Unser Team wird Ihren Antrag prüfen und sich für weitere Informationen mit Ihnen in Verbindung setzen"
-        },
-        "step3": {
-          "title": "Genehmigung und Aktivierung",
-          "description": "Bei Genehmigung erhalten Sie Ihre Elite-Karte und Zugang zu allen Privilegien"
+        "cta": {
+            "text": "Elite-Mitglied werden"
         }
-      },
-      "comingSoon": "Bewerbungen werden bald verfügbar sein",
-      "notify": {
-        "text": "Möchten Sie benachrichtigt werden, wenn wir starten?",
-        "link": "Kontaktieren Sie uns"
-      }
     },
-    "backToHome": "Zurück zur Startseite"
-  },
-   "loading": {
-    "articles": "Artikel werden geladen...",
-    "initiatives": "Initiativen werden geladen...",
-    "projects": "Projekte werden geladen...",
-    "page": "Wird geladen..."
-  },
- 
-  "avatar": {
-    "title": "Erstelle deinen Avatar",
-    "subtitle": "Personalisiere dein Profil mit einem einzigartigen Avatar",
-    "backgroundStyle": "Avatar-Stil",
-    "noBackground": "Ohne Hintergrund",
-    "withBackground": "Mit Hintergrund",
-    "hairColor": "Haarfarbe",
-    "hatColor": "Hutfarbe",
-    "clotheColor": "Kleidungsfarbe",
-    "skinColor": "Hautfarbe",
-    "random": "Zufällig",
-    "save": "Speichern",
-    "saving": "Speichern",
-    "saveSuccess": "Avatar erfolgreich gespeichert!",
-    "saveError": "Fehler beim Speichern des Avatars",
-    "hair": {
-      "title": "Frisuren & Hüte",
-      "noHair": "Keine Haare",
-      "eyepatch": "Augenklappe",
-      "hat": "Hut",
-      "hijab": "Hijab",
-      "turban": "Turban",
-      "winterHat1": "Wintermütze 1",
-      "winterHat2": "Wintermütze 2", 
-      "winterHat3": "Wintermütze 3",
-      "winterHat4": "Wintermütze 4",
-      "longBigHair": "Lang Voluminös",
-      "bob": "Bob-Frisur",
-      "bun": "Dutt",
-      "longCurly": "Lang Lockig",
-      "curvy": "Wellig",
-      "dreads": "Dreadlocks",
-      "frida": "Frida",
-      "fro": "Afro",
-      "froBand": "Afro mit Band",
-      "notTooLong": "Nicht zu lang",
-      "shavedSides": "Rasierte Seiten",
-      "miaWallace": "Mia Wallace",
-      "longStraight": "Lang Glatt",
-      "longStraight2": "Lang Glatt 2",
-      "straightStrand": "Glatte Strähne",
-      "shortDreads1": "Kurze Dreads 1",
-      "shortDreads2": "Kurze Dreads 2",
-      "frizzle": "Kraus",
-      "shaggyMullet": "Shaggy Mullet",
-      "shortCurly": "Kurz Lockig",
-      "shortFlat": "Kurz Glatt",
-      "shortRound": "Kurz Rund",
-      "shortWaved": "Kurz Wellig",
-      "sides": "Seiten",
-      "caesar": "Caesar",
-      "caesarSidePart": "Caesar Seitenscheitel"
+    "eliteMembership": {
+        "meta": {
+            "title": "Pensa Elite Mitgliedschaft - Exklusive Mitgliedschaft",
+            "description": "Werden Sie Teil der exklusiven Pensa Elite Mitglieder-Gemeinschaft mit Premium-Privilegien und besonderen Vorteilen.",
+            "keywords": "Elite Mitgliedschaft, Premium-Karte, exklusive Privilegien, Senioren"
+        },
+        "hero": {
+            "subtitle": "Die exklusive Mitgliedschaft für ausgewählte Pensa Club Mitglieder mit einzigartigen Privilegien und besonderem Zugang."
+        },
+        "comingSoon": {
+            "title": "Demnächst",
+            "subtitle": "Wir bereiten etwas Besonderes vor"
+        },
+        "notice": {
+            "title": "In Entwicklung",
+            "text": "Wir arbeiten derzeit intensiv daran, Ihnen das beste Elite Mitgliedschaftsprogramm anzubieten. Wir bereiten außergewöhnliche Privilegien, Partnerschaften und Dienstleistungen speziell für Sie vor.",
+            "timeline": "Demnächst - Herbst 2025"
+        },
+        "benefits": {
+            "title": "Exklusive Vorteile",
+            "subtitle": "Entdecken Sie die einzigartigen Privilegien, die Sie als Elite-Mitglied erwarten",
+            "exclusive": {
+                "title": "Exklusiver Zugang",
+                "description": "Zugang zu besonderen Veranstaltungen, Kursen und Inhalten nur für Elite-Mitglieder"
+            },
+            "priority": {
+                "title": "Prioritäts-Support",
+                "description": "24/7 persönlicher Support mit vorrangiger Betreuung und schneller Antwort"
+            },
+            "premium": {
+                "title": "Premium-Dienste",
+                "description": "Kostenlose Beratungen, personalisierte Empfehlungen und spezielle Rabatte"
+            },
+            "personalized": {
+                "title": "Personalisierter Service",
+                "description": "Individueller Ansatz für Ihre Bedürfnisse"
+            },
+            "special": {
+                "title": "Besondere Veranstaltungen",
+                "description": "Einladungen zu exklusiven Elite-Veranstaltungen, Seminaren und Treffen"
+            },
+            "secure": {
+                "title": "Sicherheit und Datenschutz",
+                "description": "Höchste Sicherheitsstufe und Schutz Ihrer persönlichen Daten"
+            }
+        },
+        "locations": {
+            "title": "Wo Sie die Karte verwenden können",
+            "subtitle": "Unsere Elite-Karte bietet Ihnen Privilegien an ausgewählten Standorten im ganzen Land",
+            "healthcare": {
+                "category": "Gesundheitswesen",
+                "place1": "Private Kliniken und Krankenhäuser",
+                "place2": "Spezialisierte Medizinzentren",
+                "place3": "Zahnarztpraxen",
+                "place4": "Rehabilitationszentren"
+            },
+            "culture": {
+                "category": "Kultur und Unterhaltung",
+                "place1": "Theater und Opern",
+                "place2": "Museen und Galerien",
+                "place3": "Kinos und Kulturzentren",
+                "place4": "Bibliotheken und Lesesäle"
+            },
+            "shopping": {
+                "category": "Einkaufen und Dienstleistungen",
+                "place1": "Ausgewählte Geschäfte und Boutiquen",
+                "place2": "Restaurants und Cafés",
+                "place3": "Kosmetiksalons",
+                "place4": "Reiseagenturen"
+            },
+            "recreation": {
+                "category": "Erholung und Sport",
+                "place1": "SPA- und Wellness-Zentren",
+                "place2": "Fitnessstudios",
+                "place3": "Parks und Gärten",
+                "place4": "Hotels und Resorts"
+            }
+        },
+        "requirements": {
+            "title": "Bewerbungsvoraussetzungen",
+            "subtitle": "Um Elite-Mitglied zu werden, müssen Sie die folgenden Kriterien erfüllen",
+            "age": "Alter über 55 Jahre",
+            "membership": "Aktive Pensa Club Mitgliedschaft für mindestens 1 Monat",
+            "activity": "Aktive Teilnahme an der Gemeinschaft und Initiativen",
+            "recommendation": "Empfehlung von einem bestehenden Elite-Mitglied oder Administrator"
+        },
+        "application": {
+            "title": "Bewerbungsprozess",
+            "subtitle": "Drei einfache Schritte zu Ihrer Elite-Mitgliedschaft",
+            "steps": {
+                "step1": {
+                    "title": "Antrag einreichen",
+                    "description": "Füllen Sie das Online-Formular mit Ihren Daten und Ihrer Motivation für die Elite-Mitgliedschaft aus"
+                },
+                "step2": {
+                    "title": "Prüfung und Bewertung",
+                    "description": "Unser Team wird Ihren Antrag prüfen und sich für weitere Informationen mit Ihnen in Verbindung setzen"
+                },
+                "step3": {
+                    "title": "Genehmigung und Aktivierung",
+                    "description": "Bei Genehmigung erhalten Sie Ihre Elite-Karte und Zugang zu allen Privilegien"
+                }
+            },
+            "comingSoon": "Bewerbungen werden bald verfügbar sein",
+            "notify": {
+                "text": "Möchten Sie benachrichtigt werden, wenn wir starten?",
+                "link": "Kontaktieren Sie uns"
+            }
+        },
+        "backToHome": "Zurück zur Startseite"
     },
-    "hairColors": {
-      "black": "Schwarz",
-      "brown": "Braun",
-      "darkBrown": "Dunkelbraun",
-      "blonde": "Blond",
-      "goldenBlonde": "Golden Blond",
-      "red": "Rot",
-      "auburn": "Kastanienbraun",
-      "pastelPink": "Pastellrosa",
-      "blue": "Blau",
-      "platinum": "Platinum",
-      "gray": "Grau",
-      "silverGray": "Silbergrau",
-      "white": "Weiß"
+    "loading": {
+        "articles": "Artikel werden geladen...",
+        "initiatives": "Initiativen werden geladen...",
+        "projects": "Projekte werden geladen...",
+        "page": "Wird geladen..."
     },
-    "clothes": {
-      "title": "Kleidung",
-      "blazerShirt": "Blazer & Hemd",
-      "blazerSweater": "Blazer & Pullover",
-      "collarSweater": "Kragen-Pullover",
-      "graphicShirt": "Grafik-Shirt",
-      "hoodie": "Kapuzenpullover",
-      "overall": "Overall",
-      "shirtCrewNeck": "Rundhals-Shirt",
-      "shirtScoopNeck": "U-Ausschnitt-Shirt",
-      "shirtVNeck": "V-Ausschnitt-Shirt"
-    },
-    "clotheColors": {
-      "black": "Schwarz",
-      "blue1": "Blau 1",
-      "blue2": "Blau 2",
-      "blue3": "Blau 3",
-      "gray1": "Grau 1",
-      "gray2": "Grau 2",
-      "heather": "Meliert",
-      "pastelBlue": "Pastellblau",
-      "pastelGreen": "Pastellgrün",
-      "pastelOrange": "Pastellorange",
-      "pastelRed": "Pastellrot",
-      "pastelYellow": "Pastellgelb",
-      "pink": "Rosa",
-      "red": "Rot",
-      "white": "Weiß"
-    },
-    "eyes": {
-      "title": "Augen",
-      "normal": "Normal",
-      "happy": "Glücklich",
-      "hearts": "Herzchen",
-      "wink": "Zwinkern",
-      "winkWacky": "Verrückt Zwinkern",
-      "surprised": "Überrascht",
-      "cry": "Weinen",
-      "close": "Geschlossen",
-      "squint": "Zusammengekniffen",
-      "dizzy": "Schwindelig",
-      "eyeRoll": "Augen Verdrehen",
-      "side": "Seitlich"
-    },
-    "mouth": {
-      "title": "Mund",
-      "normal": "Normal",
-      "smile": "Lächeln",
-      "serious": "Ernst",
-      "eating": "Essen",
-      "concerned": "Besorgt",
-      "disbelief": "Unglaube",
-      "grimace": "Grimasse",
-      "sad": "Traurig",
-      "scream": "Schrei",
-      "tongue": "Zunge",
-      "twinkle": "Funkeln",
-      "vomit": "Erbrechen"
-    },
-    "accessories": {
-      "title": "Brille",
-      "none": "Keine Brille",
-      "kurt": "Kurt",
-      "prescription1": "Sehbrille 1",
-      "prescription2": "Sehbrille 2",
-      "round": "Rund",
-      "sunglasses": "Sonnenbrille",
-      "wayfarers": "Wayfarers"
-    },
-    "beard": {
-      "title": "Bart",
-      "none": "Kein Bart",
-      "medium": "Mittlerer Bart",
-      "light": "Leichter Bart",
-      "majestic": "Majestätisch",
-      "moustacheFancy": "Eleganter Schnurrbart",
-      "moustacheMagnum": "Magnum Schnurrbart"
-    },
-    "skin": {
-      "light": "Hell",
-      "tanned": "Gebräunt",
-      "yellow": "Gelblich",
-      "brown": "Braun",
-      "darkBrown": "Dunkelbraun",
-      "black": "Schwarz"
-    },
-    "beardColor": "Bartfarbe",
-    "graphics": {
-      "title": "Grafiken",
-      "bat": "Fledermaus",
-      "cumbia": "Cumbia",
-      "deer": "Hirsch", 
-      "diamond": "Diamant",
-      "hola": "Hallo",
-      "pizza": "Pizza",
-      "resist": "Widerstand",
-      "selena": "Selena",
-      "bear": "Bär",
-      "skullOutline": "Schädel Umriss",
-      "skull": "Schädel"
+    "avatar": {
+        "title": "Erstelle deinen Avatar",
+        "subtitle": "Personalisiere dein Profil mit einem einzigartigen Avatar",
+        "backgroundStyle": "Avatar-Stil",
+        "noBackground": "Ohne Hintergrund",
+        "withBackground": "Mit Hintergrund",
+        "hairColor": "Haarfarbe",
+        "hatColor": "Hutfarbe",
+        "clotheColor": "Kleidungsfarbe",
+        "skinColor": "Hautfarbe",
+        "random": "Zufällig",
+        "save": "Speichern",
+        "saving": "Speichern",
+        "saveSuccess": "Avatar erfolgreich gespeichert!",
+        "saveError": "Fehler beim Speichern des Avatars",
+        "hair": {
+            "title": "Frisuren & Hüte",
+            "noHair": "Keine Haare",
+            "eyepatch": "Augenklappe",
+            "hat": "Hut",
+            "hijab": "Hijab",
+            "turban": "Turban",
+            "winterHat1": "Wintermütze 1",
+            "winterHat2": "Wintermütze 2",
+            "winterHat3": "Wintermütze 3",
+            "winterHat4": "Wintermütze 4",
+            "longBigHair": "Lang Voluminös",
+            "bob": "Bob-Frisur",
+            "bun": "Dutt",
+            "longCurly": "Lang Lockig",
+            "curvy": "Wellig",
+            "dreads": "Dreadlocks",
+            "frida": "Frida",
+            "fro": "Afro",
+            "froBand": "Afro mit Band",
+            "notTooLong": "Nicht zu lang",
+            "shavedSides": "Rasierte Seiten",
+            "miaWallace": "Mia Wallace",
+            "longStraight": "Lang Glatt",
+            "longStraight2": "Lang Glatt 2",
+            "straightStrand": "Glatte Strähne",
+            "shortDreads1": "Kurze Dreads 1",
+            "shortDreads2": "Kurze Dreads 2",
+            "frizzle": "Kraus",
+            "shaggyMullet": "Shaggy Mullet",
+            "shortCurly": "Kurz Lockig",
+            "shortFlat": "Kurz Glatt",
+            "shortRound": "Kurz Rund",
+            "shortWaved": "Kurz Wellig",
+            "sides": "Seiten",
+            "caesar": "Caesar",
+            "caesarSidePart": "Caesar Seitenscheitel"
+        },
+        "hairColors": {
+            "black": "Schwarz",
+            "brown": "Braun",
+            "darkBrown": "Dunkelbraun",
+            "blonde": "Blond",
+            "goldenBlonde": "Golden Blond",
+            "red": "Rot",
+            "auburn": "Kastanienbraun",
+            "pastelPink": "Pastellrosa",
+            "blue": "Blau",
+            "platinum": "Platinum",
+            "gray": "Grau",
+            "silverGray": "Silbergrau",
+            "white": "Weiß"
+        },
+        "clothes": {
+            "title": "Kleidung",
+            "blazerShirt": "Blazer & Hemd",
+            "blazerSweater": "Blazer & Pullover",
+            "collarSweater": "Kragen-Pullover",
+            "graphicShirt": "Grafik-Shirt",
+            "hoodie": "Kapuzenpullover",
+            "overall": "Overall",
+            "shirtCrewNeck": "Rundhals-Shirt",
+            "shirtScoopNeck": "U-Ausschnitt-Shirt",
+            "shirtVNeck": "V-Ausschnitt-Shirt"
+        },
+        "clotheColors": {
+            "black": "Schwarz",
+            "blue1": "Blau 1",
+            "blue2": "Blau 2",
+            "blue3": "Blau 3",
+            "gray1": "Grau 1",
+            "gray2": "Grau 2",
+            "heather": "Meliert",
+            "pastelBlue": "Pastellblau",
+            "pastelGreen": "Pastellgrün",
+            "pastelOrange": "Pastellorange",
+            "pastelRed": "Pastellrot",
+            "pastelYellow": "Pastellgelb",
+            "pink": "Rosa",
+            "red": "Rot",
+            "white": "Weiß"
+        },
+        "eyes": {
+            "title": "Augen",
+            "normal": "Normal",
+            "happy": "Glücklich",
+            "hearts": "Herzchen",
+            "wink": "Zwinkern",
+            "winkWacky": "Verrückt Zwinkern",
+            "surprised": "Überrascht",
+            "cry": "Weinen",
+            "close": "Geschlossen",
+            "squint": "Zusammengekniffen",
+            "dizzy": "Schwindelig",
+            "eyeRoll": "Augen Verdrehen",
+            "side": "Seitlich"
+        },
+        "mouth": {
+            "title": "Mund",
+            "normal": "Normal",
+            "smile": "Lächeln",
+            "serious": "Ernst",
+            "eating": "Essen",
+            "concerned": "Besorgt",
+            "disbelief": "Unglaube",
+            "grimace": "Grimasse",
+            "sad": "Traurig",
+            "scream": "Schrei",
+            "tongue": "Zunge",
+            "twinkle": "Funkeln",
+            "vomit": "Erbrechen"
+        },
+        "accessories": {
+            "title": "Brille",
+            "none": "Keine Brille",
+            "kurt": "Kurt",
+            "prescription1": "Sehbrille 1",
+            "prescription2": "Sehbrille 2",
+            "round": "Rund",
+            "sunglasses": "Sonnenbrille",
+            "wayfarers": "Wayfarers"
+        },
+        "beard": {
+            "title": "Bart",
+            "none": "Kein Bart",
+            "medium": "Mittlerer Bart",
+            "light": "Leichter Bart",
+            "majestic": "Majestätisch",
+            "moustacheFancy": "Eleganter Schnurrbart",
+            "moustacheMagnum": "Magnum Schnurrbart"
+        },
+        "skin": {
+            "light": "Hell",
+            "tanned": "Gebräunt",
+            "yellow": "Gelblich",
+            "brown": "Braun",
+            "darkBrown": "Dunkelbraun",
+            "black": "Schwarz"
+        },
+        "beardColor": "Bartfarbe",
+        "graphics": {
+            "title": "Grafiken",
+            "bat": "Fledermaus",
+            "cumbia": "Cumbia",
+            "deer": "Hirsch",
+            "diamond": "Diamant",
+            "hola": "Hallo",
+            "pizza": "Pizza",
+            "resist": "Widerstand",
+            "selena": "Selena",
+            "bear": "Bär",
+            "skullOutline": "Schädel Umriss",
+            "skull": "Schädel"
+        }
     }
-  }
-
 }

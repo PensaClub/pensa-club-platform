@@ -1,7 +1,7 @@
 const commentController = require('express').Router();
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
-const { comment, user_details, initiative, project, publication, story } = require('../sequelize/models');
+const { comment, user_account, initiative, project, publication, story } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { CreateCommentSchema, UpdateCommentSchema, CommentIdSchema } = require('../schemas/comments.schema');
@@ -59,18 +59,9 @@ commentController.post('/like/:id', isAuth, checkPermission('comments', 'like'),
     try {
         const { id } = CommentIdSchema.parse(req.params);
 
-        const userDetails = await user_details.findOne({
-            where: { user_accounts_id: req.user.userId },
-        });
+        const user = await user_account.findByPk(req.user.userId);
 
-        if (!userDetails) {
-            throw new CustomError({
-                message: 'User details not found',
-                statusCode: 404,
-            });
-        }
-
-        const userName = `${userDetails.firstName} ${userDetails.lastName}`;
+        const userName = user.email;
 
         const commentToLike = await comment.findByPk(id, getCommentConfig());
 

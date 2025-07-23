@@ -141,6 +141,45 @@ const MainImageSchema = z
     .nullable()
     .optional();
 
+const LocationSchema = z
+    .object({
+        address: z.preprocess((val) => (typeof val === 'string' && val.trim() === '' ? null : val), z.string().nullable().optional()),
+        coordinates: z.preprocess(
+            (val) => {
+                if (val == null) return null;
+                if (typeof val === 'string') {
+                    try {
+                        val = JSON.parse(val);
+                    } catch {
+                        return null;
+                    }
+                }
+                return val;
+            },
+            z
+                .object({
+                    lat: z.preprocess((v) => {
+                        if (v === '' || v === null || v === undefined) return null;
+                        if (typeof v === 'string' && v.trim() === '') return null;
+                        if (typeof v === 'string' && !isNaN(Number(v))) return Number(v);
+                        if (typeof v === 'number') return v;
+                        return null;
+                    }, z.number().nullable().optional()),
+                    lng: z.preprocess((v) => {
+                        if (v === '' || v === null || v === undefined) return null;
+                        if (typeof v === 'string' && v.trim() === '') return null;
+                        if (typeof v === 'string' && !isNaN(Number(v))) return Number(v);
+                        if (typeof v === 'number') return v;
+                        return null;
+                    }, z.number().nullable().optional()),
+                })
+                .nullable()
+                .optional()
+        ),
+    })
+    .nullable()
+    .optional();
+
 // ========================================
 // COMMON UTILITY SCHEMAS
 // ========================================
@@ -172,6 +211,7 @@ module.exports = {
     DownloadMaterialSchema,
     MilestoneSchema,
     SocialMediaSchema,
+    LocationSchema,
 
     // Common validation schemas
     SlugSchema,

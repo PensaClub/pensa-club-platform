@@ -2215,6 +2215,23 @@
       "in-progress": "In Progress",
       "completed": "Completed"
     },
+    "loadMore": {
+      "button": "Load More Projects",
+      "loading": "Loading...",
+      "info": "Showing {{displayed}} projects (page {{page}})"
+    },
+    "hero": {
+      "keywords": {
+        "innovation": "Innovation",
+        "technology": "Technology",
+        "future": "Future", 
+        "development": "Development",
+        "causes": "Causes",
+        "health": "Health",
+        "society": "Society",
+        "culture": "Culture"
+      }
+    },
     "list": {
       "badge": "Projects",
       "title": "Our Projects",

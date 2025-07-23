@@ -62,11 +62,15 @@ const transformComment = (comment) => {
     const user = comment.user;
     const userDetails = user?.details;
 
+    const getEmailName = (email) => (email ? email.split('@')[0] : '');
+
+    const userName = userDetails ? `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() || getEmailName(user.email) : getEmailName(user.email);
+
     const transformedComment = {
         id: comment.id,
         userId: user.id,
         userEmail: user.email,
-        userName: `${userDetails.firstName} ${userDetails.lastName}`,
+        userName: userName,
         userAvatar: userDetails?.imageURL || null,
         content: comment.content,
         createdAt: comment.createdAt,

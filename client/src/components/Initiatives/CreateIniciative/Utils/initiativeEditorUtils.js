@@ -86,6 +86,17 @@ export const isSlateEmpty = (value) => {
   if (!value || !Array.isArray(value)) return true;
   
   return value.every(node => {
+    // Text node - проверяваме дали има текст
+    if ('text' in node) {
+      return !node.text || node.text.trim() === '';
+    }
+    
+    // Element node с type - ако има type, не е празен
+    if (node.type) {
+      return false;
+    }
+    
+    // Стария код за children
     if (!node.children || node.children.length === 0) return true;
     return node.children.every(child => !child.text || child.text.trim() === '');
   });

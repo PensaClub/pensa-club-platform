@@ -13,6 +13,7 @@ const {
     TagsSchema,
     MainImageSchema,
     PaginationQuerySchema,
+    LocationSchema,
 } = require('./common.schema');
 
 // Initiative-specific schemas
@@ -55,28 +56,7 @@ const BaseInitiativeSchema = z
         priority: z.enum(['Low', 'Medium', 'High']).nullable().optional(),
 
         // Location
-        location: z
-            .object({
-                address: z.string().nullable().optional(),
-                coordinates: z
-                    .object({
-                        lat: z.number().nullable().optional(),
-                        lng: z.number().nullable().optional(),
-                    })
-                    .nullable()
-                    .optional(),
-            })
-            .refine(
-                (data) => {
-                    if (!data) return true; // Allow null/undefined
-                    return data.address || (data.coordinates?.lat && data.coordinates?.lng);
-                },
-                {
-                    message: 'Location is required (either address or coordinates)',
-                }
-            )
-            .nullable()
-            .optional(),
+        location: LocationSchema,
 
         // Status and campaign
         status: z.enum(['in-progress', 'active', 'planned', 'completed']).nullable().optional(),
@@ -206,6 +186,8 @@ const BaseInitiativeSchema = z
             .refine((val) => val.every((id) => !isNaN(id) && id > 0), 'All initiative IDs must be valid positive numbers')
             .nullable()
             .optional(),
+
+        publishedAt: z.union([z.string().datetime(), z.null()]).optional(),
     })
     .refine(
         (data) => {

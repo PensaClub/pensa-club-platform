@@ -279,7 +279,7 @@
 .filter-group:nth-child(4) .custom-select { z-index: 1001; }
 .filters-grid .filter-group:nth-last-child(-n+2) .select-dropdown {
   top: auto;
-  bottom: 100%;
+  /* bottom: 100%; */
   margin-top: 0;
   margin-bottom: 4px;
 }

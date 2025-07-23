@@ -371,6 +371,11 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: [],
             },
+            publishedAt: {
+                type: DataTypes.DATE,
+                allowNull: true,
+                field: 'published_at',
+            },
         },
         {
             sequelize,
