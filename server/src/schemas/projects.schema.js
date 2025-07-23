@@ -88,7 +88,7 @@ const BaseProjectSchema = z
         timeline: TimelineSchema.nullable().optional(),
 
         // Location
-        location: LocationSchema.nullable().optional(),
+        location: z.array(LocationSchema).nullable().optional(),
 
         // Application fields
         applicationStatus: z.enum(['open', 'closed']).nullable().optional(),
