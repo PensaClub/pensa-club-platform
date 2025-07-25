@@ -1,4 +1,4 @@
-import { isEditorEmpty } from './editor';
+import { isEditorEmpty } from "./article-utils";
 
 /**
  * Валидира отделно поле на статия
@@ -24,17 +24,17 @@ export const validateArticleField = (name, value, t) => {
       error = !value.trim() ? t("articles.validation.author_required") : "";
       break;
     case "summary":
-      error = isEditorEmpty(value) ? t("articles.validation.summary_required") : "";
+      error = isEditorEmpty(value) ? t("articles.validation.summary_required") : "";  // ПРОМЕНЕНО
       break;
     case "mainImage.alt":
-      error = isEditorEmpty(value) ? t("articles.validation.image_alt_required") : "";
+      error = isEditorEmpty(value) ? t("articles.validation.image_alt_required") : "";  // ПРОМЕНЕНО
       break;
     default:
       if (name.startsWith("sections")) {
         const field = name.split(".").pop();
         if (field === "title" && !value.trim()) {
           error = t("articles.validation.section_title_required");
-        } else if (field === "content" && isEditorEmpty(value)) {
+        } else if (field === "content" && isEditorEmpty(value)) {  // ПРОМЕНЕНО
           error = t("articles.validation.section_content_required");
         }
       }
@@ -65,7 +65,7 @@ export const validateArticleForm = (values, t) => {
       errors[`sections[${index}].title`] = t("articles.validation.section_title_required");
     }
 
-    if (isEditorEmpty(section.content)) {
+    if (isEditorEmpty(section.content)) {  // ПРОМЕНЕНО
       errors[`sections[${index}].content`] = t("articles.validation.section_content_required");
     }
   });

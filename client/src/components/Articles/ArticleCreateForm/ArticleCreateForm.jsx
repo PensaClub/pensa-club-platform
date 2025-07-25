@@ -1,17 +1,20 @@
-
-import React, { useState, useRef, useMemo, useEffect, useReducer, forwardRef, useImperativeHandle } from "react";
+import React, { useState, useRef, useMemo, useEffect, useReducer, forwardRef, useImperativeHandle, useCallback, memo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faPlus, faMinus, faImage, faVideo, faSliders,
     faUpload, faEye, faSave, faTimes, faCloudUploadAlt,
-    faEdit
+    faEdit, faBold, faItalic, faUnderline, faListUl,
+    faListOl, faQuoteLeft
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import "./articleCreateForm.css";
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
+// 🎯 Slate.js imports
+import { Slate, Editable, withReact } from 'slate-react';
+import { withHistory } from 'slate-history';
+import { createEditor, Editor, Transforms, Element as SlateElement, Node } from 'slate';
+
 import { useArticleContext } from "../../contexts/ArticleContext";
-import { createEditorState } from "../articleUtils/editor";
 import ScrollToTop from "../../ScrollToTop/ScrollToTop";
 import { ImageAltEditModal } from "../ArticleCreateForm/ImageAltEditModal/ImageAltEditModal";
 import VideoThumbnailGenerator from "../ArticleCreateForm/VideoThumbnailGenerator/VideoThumbnailGenerator";
@@ -19,6 +22,374 @@ import { SectionQuickMenu } from "../ArticleCreateForm/SectionQuickMenu/SectionQ
 import ArticlePreview from "./ArticlePreview/ArticlePreview";
 import { useCreateArticle } from "../../hooks/useCreateArticle";
 import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
+
+// 🎯 Slate utility functions
+const createSlateEditorState = () => {
+    return [
+        {
+            type: 'paragraph',
+            children: [{ text: '' }],
+        },
+    ];
+};
+
+const isValidSlateValue = (value) => {
+    if (!Array.isArray(value) || value.length === 0) {
+        return false;
+    }
+    
+    return value.every(node => {
+        if (!node || typeof node !== 'object') return false;
+        if (!node.children || !Array.isArray(node.children)) return false;
+        
+        return node.children.length > 0 && 
+               node.children.some(child => child.hasOwnProperty('text'));
+    });
+};
+
+const normalizeSlateValue = (value) => {
+    if (!isValidSlateValue(value)) {
+        return [{ type: 'paragraph', children: [{ text: '' }] }];
+    }
+    
+    return value.map(node => ({
+        ...node,
+        children: node.children.length > 0 ? node.children : [{ text: '' }]
+    }));
+};
+
+const convertSlateToHtml = (slateValue) => {
+    console.log('🔄 convertSlateToHtml извикана с:', slateValue);
+    
+    if (!isValidSlateValue(slateValue)) {
+        console.log('❌ Празен или невалиден slateValue');
+        return '';
+    }
+    
+    const serialize = (node) => {
+        if (typeof node === 'string') return node;
+        if (!node || !node.children) return '';
+        
+        const children = node.children?.map(n => serialize(n)).join('') || '';
+        
+        switch (node.type) {
+            case 'heading-one':
+                return `<h1>${children}</h1>`;
+            case 'heading-two':
+                return `<h2>${children}</h2>`;
+            case 'block-quote':
+                return `<blockquote>${children}</blockquote>`;
+            case 'bulleted-list':
+                return `<ul>${children}</ul>`;
+            case 'numbered-list':
+                return `<ol>${children}</ol>`;
+            case 'list-item':
+                return `<li>${children}</li>`;
+            case 'paragraph':
+            default:
+                let text = children;
+                if (node.bold) text = `<strong>${text}</strong>`;
+                if (node.italic) text = `<em>${text}</em>`;
+                if (node.underline) text = `<u>${text}</u>`;
+                return node.type === 'paragraph' ? `<p>${text}</p>` : text;
+        }
+    };
+    
+    try {
+        const result = slateValue.map(serialize).join('');
+        console.log('✅ convertSlateToHtml резултат:', result);
+        
+        const textOnly = result.replace(/<[^>]*>/g, '').trim();
+        if (!textOnly) {
+            console.log('❌ Няма реален текст след премахване на таговете');
+            return '';
+        }
+        
+        return result;
+    } catch (error) {
+        console.error('Грешка при конвертиране на Slate в HTML:', error);
+        return '';
+    }
+};
+
+// Мемоизирани Slate компоненти
+const MemoizedSlateEditor = memo(({ 
+    editor, 
+    value, 
+    onChange, 
+    onBlur, 
+    placeholder, 
+    className = "slate-editable",
+    toolbarSize = "normal"
+}) => {
+    console.log('🔄 MemoizedSlateEditor render за:', placeholder?.substring(0, 20));
+    
+    // Състояние за проследяване на selection промени
+    const [selection, setSelection] = useState(editor.selection);
+    
+    // Effect за проследяване на selection промени
+    useEffect(() => {
+        const { onChange: originalOnChange } = editor;
+        
+        editor.onChange = () => {
+            originalOnChange();
+            setSelection(editor.selection);
+        };
+        
+        return () => {
+            editor.onChange = originalOnChange;
+        };
+    }, [editor]);
+
+    // Toolbar functions
+    const toggleMark = useCallback((format) => {
+        const marks = Editor.marks(editor);
+        const isActive = marks ? marks[format] === true : false;
+        
+        if (isActive) {
+            Editor.removeMark(editor, format);
+        } else {
+            Editor.addMark(editor, format, true);
+        }
+        
+        // Принудително обновяване на selection state
+        setSelection(editor.selection);
+    }, [editor]);
+
+    const toggleBlock = useCallback((format) => {
+        const { selection } = editor;
+        if (!selection) return;
+
+        const [match] = Array.from(
+            Editor.nodes(editor, {
+                at: Editor.unhangRange(editor, selection),
+                match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
+            })
+        );
+        
+        const isActive = !!match;
+        const isList = ['numbered-list', 'bulleted-list'].includes(format);
+
+        Transforms.unwrapNodes(editor, {
+            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && ['numbered-list', 'bulleted-list'].includes(n.type),
+            split: true,
+        });
+
+        let newProperties;
+        if (isActive) {
+            newProperties = { type: 'paragraph' };
+        } else if (isList) {
+            newProperties = { type: 'list-item' };
+        } else {
+            newProperties = { type: format };
+        }
+
+        Transforms.setNodes(editor, newProperties);
+
+        if (!isActive && isList) {
+            const block = { type: format, children: [] };
+            Transforms.wrapNodes(editor, block);
+        }
+        
+        // Принудително обновяване на selection state
+        setSelection(editor.selection);
+    }, [editor]);
+
+    // Функции за проверка на активно състояние (зависят от selection state)
+    const isMarkActive = useCallback((format) => {
+        const marks = Editor.marks(editor);
+        return marks ? marks[format] === true : false;
+    }, [editor, selection]); // Добавяме selection като dependency
+
+    const isBlockActive = useCallback((format) => {
+        const { selection } = editor;
+        if (!selection) return false;
+
+        const [match] = Array.from(
+            Editor.nodes(editor, {
+                at: Editor.unhangRange(editor, selection),
+                match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
+            })
+        );
+
+        return !!match;
+    }, [editor, selection]); // Добавяме selection като dependency
+
+    // Memoized render functions
+    const renderElement = useCallback((props) => {
+        switch (props.element.type) {
+            case 'block-quote':
+                return <blockquote {...props.attributes}>{props.children}</blockquote>;
+            case 'bulleted-list':
+                return <ul {...props.attributes}>{props.children}</ul>;
+            case 'heading-one':
+                return <h1 {...props.attributes}>{props.children}</h1>;
+            case 'heading-two':
+                return <h2 {...props.attributes}>{props.children}</h2>;
+            case 'list-item':
+                return <li {...props.attributes}>{props.children}</li>;
+            case 'numbered-list':
+                return <ol {...props.attributes}>{props.children}</ol>;
+            default:
+                return <p {...props.attributes}>{props.children}</p>;
+        }
+    }, []);
+
+    const renderLeaf = useCallback((props) => {
+        let { children } = props;
+
+        if (props.leaf.bold) {
+            children = <strong>{children}</strong>;
+        }
+
+        if (props.leaf.italic) {
+            children = <em>{children}</em>;
+        }
+
+        if (props.leaf.underline) {
+            children = <u>{children}</u>;
+        }
+
+        return <span {...props.attributes}>{children}</span>;
+    }, []);
+
+    const renderToolbar = useCallback((isSmall = false) => (
+        <div className={`slate-toolbar ${isSmall ? 'slate-toolbar-small' : ''}`}>
+            <button
+                type="button"
+                onMouseDown={(e) => {
+                    e.preventDefault();
+                    toggleMark('bold');
+                }}
+                className={`slate-btn ${isMarkActive('bold') ? 'active' : ''}`}
+            >
+                <FontAwesomeIcon icon={faBold} />
+            </button>
+
+            <button
+                type="button"
+                onMouseDown={(e) => {
+                    e.preventDefault();
+                    toggleMark('italic');
+                }}
+                className={`slate-btn ${isMarkActive('italic') ? 'active' : ''}`}
+            >
+                <FontAwesomeIcon icon={faItalic} />
+            </button>
+
+            <button
+                type="button"
+                onMouseDown={(e) => {
+                    e.preventDefault();
+                    toggleMark('underline');
+                }}
+                className={`slate-btn ${isMarkActive('underline') ? 'active' : ''}`}
+            >
+                <FontAwesomeIcon icon={faUnderline} />
+            </button>
+
+            {!isSmall && (
+                <>
+                    <div className="toolbar-divider"></div>
+
+                    <button
+                        type="button"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            toggleBlock('paragraph');
+                        }}
+                        className={`slate-btn ${isBlockActive('paragraph') ? 'active' : ''}`}
+                    >
+                        Normal
+                    </button>
+
+                    <button
+                        type="button"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            toggleBlock('heading-one');
+                        }}
+                        className={`slate-btn ${isBlockActive('heading-one') ? 'active' : ''}`}
+                    >
+                        H1
+                    </button>
+
+                    <button
+                        type="button"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            toggleBlock('heading-two');
+                        }}
+                        className={`slate-btn ${isBlockActive('heading-two') ? 'active' : ''}`}
+                    >
+                        H2
+                    </button>
+
+                    <button
+                        type="button"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            toggleBlock('bulleted-list');
+                        }}
+                        className={`slate-btn ${isBlockActive('bulleted-list') ? 'active' : ''}`}
+                    >
+                        <FontAwesomeIcon icon={faListUl} />
+                    </button>
+
+                    <button
+                        type="button"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            toggleBlock('numbered-list');
+                        }}
+                        className={`slate-btn ${isBlockActive('numbered-list') ? 'active' : ''}`}
+                    >
+                        <FontAwesomeIcon icon={faListOl} />
+                    </button>
+
+                    <button
+                        type="button"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            toggleBlock('block-quote');
+                        }}
+                        className={`slate-btn ${isBlockActive('block-quote') ? 'active' : ''}`}
+                    >
+                        <FontAwesomeIcon icon={faQuoteLeft} />
+                    </button>
+                </>
+            )}
+        </div>
+    ), [toggleMark, toggleBlock, isMarkActive, isBlockActive, toolbarSize]);
+
+    return (
+        <Slate
+            editor={editor}
+            initialValue={normalizeSlateValue(value)}
+            onChange={onChange}
+        >
+            {renderToolbar(toolbarSize === "small")}
+            <Editable
+                className={className}
+                placeholder={placeholder}
+                renderElement={renderElement}
+                renderLeaf={renderLeaf}
+                onBlur={onBlur}
+            />
+        </Slate>
+    );
+}, (prevProps, nextProps) => {
+    // Custom comparison function
+    return (
+        prevProps.value === nextProps.value &&
+        prevProps.onChange === nextProps.onChange &&
+        prevProps.onBlur === nextProps.onBlur &&
+        prevProps.placeholder === nextProps.placeholder &&
+        prevProps.className === nextProps.className &&
+        prevProps.toolbarSize === nextProps.toolbarSize &&
+        prevProps.editor === nextProps.editor
+    );
+});
 
 const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubmitHandler, isEditMode }, ref) => {
     const { t, i18n } = useTranslation();
@@ -32,17 +403,32 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         image: null
     });
 
-    // Използваме propInitialValues (ако има такива) или дефолтните стойности
-    const defaultValues = {
+    console.log('🔄 ArticleCreateForm RENDER');
+
+    // Slate editors
+    const summaryEditor = useMemo(() => withHistory(withReact(createEditor())), []);
+    const mainImageAltEditor = useMemo(() => withHistory(withReact(createEditor())), []);
+    const sectionEditorsRef = useRef({});
+
+    const getSectionEditor = useCallback((index, field) => {
+        const key = `${index}-${field}`;
+        if (!sectionEditorsRef.current[key]) {
+            sectionEditorsRef.current[key] = withHistory(withReact(createEditor()));
+        }
+        return sectionEditorsRef.current[key];
+    }, []);
+
+    // Мемоизирани default values
+    const defaultValues = useMemo(() => ({
         title: "",
         slug: "",
         author: "",
         publishDate: new Date().toISOString().split('T')[0],
-        summary: createEditorState(),
+        summary: createSlateEditorState(),
         mainImage: {
             type: "image",
             sources: [],
-            alt: createEditorState(),
+            alt: createSlateEditorState(),
             thumbnail: "",
             videoUrl: "",
             subtitles: [],
@@ -51,7 +437,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         sections: [
             {
                 title: "",
-                content: createEditorState(),
+                content: createSlateEditorState(),
                 image: [],
                 order: 1,
             },
@@ -59,35 +445,34 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         tags: [],
         previousArticle: null,
         nextArticle: null,
-    };
+    }), []);
 
-    // Използваме пропнатите стойности, ако има такива
-    const actualInitialValues = propInitialValues || defaultValues;
+    // Мемоизирани initial values
+    const actualInitialValues = useMemo(() => {
+        if (!propInitialValues) return defaultValues;
 
-    // Определяме правилния onSubmitHandler
-    const submitHandler = onSubmitHandler || createArticle;
-
-    // Подготвяме началните mediaFiles според наличните изображения от initialValues
-    const preparedMediaFiles = useMemo(() => {
-        const mediaFiles = {
-            mainImage: [],
-            sectionImages: {}
+        return {
+            ...defaultValues,
+            ...propInitialValues,
+            summary: normalizeSlateValue(propInitialValues.summary || defaultValues.summary),
+            mainImage: {
+                ...defaultValues.mainImage,
+                ...propInitialValues.mainImage,
+                alt: normalizeSlateValue(propInitialValues.mainImage?.alt || defaultValues.mainImage.alt),
+            },
+            sections: (propInitialValues.sections || defaultValues.sections).map((section, index) => ({
+                ...defaultValues.sections[0],
+                ...section,
+                content: normalizeSlateValue(section.content || defaultValues.sections[0].content),
+                order: index + 1,
+            })),
         };
+    }, [propInitialValues, defaultValues]);
 
-        // Ако редактираме статия със съществуващи изображения в секциите
-        if (actualInitialValues && actualInitialValues.sections) {
-            actualInitialValues.sections.forEach((section, index) => {
-                if (Array.isArray(section.image) && section.image.length > 0) {
-                    // Имаме изображения в тази секция - добавяме празен масив
-                    // Това ще ни помогне да знаем, че секцията има изображения
-                    mediaFiles.sectionImages[index] = [];
-                }
-            });
-        }
+    // Мемоизиран submit handler
+    const submitHandler = useMemo(() => onSubmitHandler || createArticle, [onSubmitHandler, createArticle]);
 
-        return mediaFiles;
-    }, []);
-
+    // Hook за създаване на статия
     const {
         values,
         errors,
@@ -111,7 +496,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         updateImageInfo,
         removeTag,
         mediaFiles,
-        convertEditorToHtml,
         uploadThumbnailFile,
         updateImageAlt,
     } = useCreateArticle(actualInitialValues, submitHandler);
@@ -129,6 +513,59 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
     const videoUrlInputRef = useRef(null);
 
+    // КЛЮЧОВО: Стабилни handler функции с useRef
+    const stableHandlersRef = useRef({});
+    const valuesRef = useRef(values);
+    valuesRef.current = values; // Винаги актуални values
+
+    // Helper функция за взимане на стойност по path
+    const getValueByPath = useCallback((obj, path) => {
+        if (path === 'summary') return obj.summary;
+        if (path === 'mainImage.alt') return obj.mainImage.alt;
+        
+        const matches = path.match(/sections\[(\d+)\]\.(\w+)/);
+        if (matches) {
+            const sectionIndex = parseInt(matches[1], 10);
+            const field = matches[2];
+            return obj.sections[sectionIndex]?.[field];
+        }
+        
+        return null;
+    }, []);
+
+    // Създаваме стабилни onChange handlers
+    const getStableChangeHandler = useCallback((fieldName) => {
+        if (!stableHandlersRef.current[fieldName]) {
+            stableHandlersRef.current[fieldName] = (value) => {
+                console.log('📝 Slate change:', fieldName, Date.now());
+                onChangeHandler(null, true, { name: fieldName, value });
+            };
+        }
+        return stableHandlersRef.current[fieldName];
+    }, [onChangeHandler]);
+
+    // Създаваме стабилни onBlur handlers
+    const getStableBlurHandler = useCallback((fieldName) => {
+        const blurKey = `${fieldName}_blur`;
+        if (!stableHandlersRef.current[blurKey]) {
+            stableHandlersRef.current[blurKey] = () => {
+                console.log('🔍 Slate blur:', fieldName, Date.now());
+                // Използваме valuesRef за актуални стойности
+                const currentValue = getValueByPath(valuesRef.current, fieldName);
+                onBlurHandler(null, true, { name: fieldName, value: currentValue });
+            };
+        }
+        return stableHandlersRef.current[blurKey];
+    }, [onBlurHandler, getValueByPath]);
+
+    // Почистваме handlers при unmount
+    useEffect(() => {
+        return () => {
+            stableHandlersRef.current = {};
+        };
+    }, []);
+
+    // Мемоизирани preview URLs
     const videoPreviewUrl = useMemo(() => {
         if (mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && mediaFiles.mainImage[0]) {
             try {
@@ -141,29 +578,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         return null;
     }, [mediaFiles.mainImage]);
 
-    const handleAddImageUrl = () => {
-        if (handleMainImageUrl(imageUrl)) {
-            setImageUrl("");
-        }
-    };
-
-    const openAltEditModal = (sectionIndex, imageIndex, image) => {
-        // Копираме изображението за да избегнем проблеми с референции
-        setCurrentEditingImage({
-            sectionIndex,
-            imageIndex,
-            image: { ...image }
-        });
-        setIsAltModalOpen(true);
-    };
-
-    // Функция за запазване на промените в ALT текста
-    const handleSaveImageInfo = (altEditorState, captionEditorState) => {
-        const { sectionIndex, imageIndex } = currentEditingImage;
-        updateImageInfo(sectionIndex, imageIndex, altEditorState, captionEditorState);
-    };
-
-    // Кеширане на blob URL-и за изображения в слайдера
     const mainImagePreviewUrls = useMemo(() => {
         if (mediaFiles.mainImage && mediaFiles.mainImage.length > 0) {
             return mediaFiles.mainImage.map(file => {
@@ -178,11 +592,8 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         return [];
     }, [mediaFiles.mainImage]);
 
-    // Кеширане на blob URL-и за изображения в секциите
     const sectionImagePreviewUrls = useMemo(() => {
         const urls = {};
-
-        // 1. Обработка на файлове от mediaFiles.sectionImages
         if (mediaFiles.sectionImages) {
             Object.entries(mediaFiles.sectionImages).forEach(([index, file]) => {
                 try {
@@ -198,238 +609,163 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                 }
             });
         }
-
         return urls;
     }, [mediaFiles.sectionImages]);
 
-    // ВАЖНО: Почистване на blob URL-и при размонтиране на компонента
+    // Cleanup URLs
     useEffect(() => {
         return () => {
-            // Освобождаване на видео URL
             if (videoPreviewUrl) {
                 URL.revokeObjectURL(videoPreviewUrl);
             }
-
-            // Освобождаване на URL-и на основни изображения
             mainImagePreviewUrls.forEach(url => {
                 if (url) URL.revokeObjectURL(url);
             });
-
-            // Освобождаване на URL-и на секционни изображения
             Object.values(sectionImagePreviewUrls).forEach(url => {
                 if (url) URL.revokeObjectURL(url);
             });
         };
     }, [videoPreviewUrl, mainImagePreviewUrls, sectionImagePreviewUrls]);
 
-    const handleEditorChange = (editorState, name) => {
-        onChangeHandler(null, true, { name, value: editorState });
-    };
-
-    const handleEditorBlur = (name, editorState) => {
-        onBlurHandler(null, true, { name, value: editorState });
-    };
-
-    const moveSectionUp = (index) => {
+    // Мемоизирани callback-и
+    const moveSectionUp = useCallback((index) => {
         if (index <= 0) return;
-
-        // Създаваме ново копие на масива със секции
         const updatedSections = [...values.sections];
-
-        // Запазваме текущата секция и тази над нея
         const currentSection = { ...updatedSections[index] };
         const prevSection = { ...updatedSections[index - 1] };
-
-        // Разменяме ги
         updatedSections[index - 1] = currentSection;
         updatedSections[index] = prevSection;
-
-        // Актуализираме order свойството
         updatedSections.forEach((section, idx) => {
             section.order = idx + 1;
         });
-
-        // Правим директен update на секциите в стейта
         onChangeHandler(null, true, { name: "sections", value: updatedSections });
-
-        // ВАЖНО! Разменяме медия файловете също
         swapSectionsMedia(index, index - 1);
-
-        // Актуализираме активната секция
         setActiveSection(index - 1);
-    };
+    }, [values.sections, onChangeHandler, swapSectionsMedia]);
 
-    const moveSectionDown = (index) => {
+    const moveSectionDown = useCallback((index) => {
         if (index >= values.sections.length - 1) return;
-
-        // Създаваме ново копие на масива със секции
         const updatedSections = [...values.sections];
-
-        // Запазваме текущата секция и тази под нея
         const currentSection = { ...updatedSections[index] };
         const nextSection = { ...updatedSections[index + 1] };
-
-        // Разменяме ги
         updatedSections[index + 1] = currentSection;
         updatedSections[index] = nextSection;
-
-        // Актуализираме order свойството
         updatedSections.forEach((section, idx) => {
             section.order = idx + 1;
         });
-
-        // Правим директен update на секциите в стейта
         onChangeHandler(null, true, { name: "sections", value: updatedSections });
-
-        // ВАЖНО! Разменяме медия файловете също
         swapSectionsMedia(index, index + 1);
-
-        // Актуализираме активната секция
         setActiveSection(index + 1);
-    };
+    }, [values.sections, onChangeHandler, swapSectionsMedia]);
 
-    const handleTagAdd = (e) => {
+    const handleTagAdd = useCallback((e) => {
         e.preventDefault();
         if (newTag.trim()) {
             addTag(newTag.trim());
             setNewTag("");
         }
-    };
+    }, [newTag, addTag]);
 
-    const handlePreviewToggle = () => {
+    const handlePreviewToggle = useCallback(() => {
         setPreviewMode(!previewMode);
-    };
+    }, [previewMode]);
 
-    const [expandedImageUrl, setExpandedImageUrl] = useState(null);
+    const handleAddImageUrl = useCallback(() => {
+        if (handleMainImageUrl(imageUrl)) {
+            setImageUrl("");
+        }
+    }, [imageUrl, handleMainImageUrl]);
 
-    const handleImageClick = (url) => {
-        setExpandedImageUrl(url);
-    };
+    const openAltEditModal = useCallback((sectionIndex, imageIndex, image) => {
+        setCurrentEditingImage({
+            sectionIndex,
+            imageIndex,
+            image: { ...image }
+        });
+        setIsAltModalOpen(true);
+    }, []);
 
-    const closeExpandedImage = () => {
-        setExpandedImageUrl(null);
-    };
+    const handleSaveImageInfo = useCallback((altEditorState, captionEditorState) => {
+        try {
+            console.log('handleSaveImageInfo извикана с:', { altEditorState, captionEditorState });
+            
+            const { sectionIndex, imageIndex } = currentEditingImage;
+            
+            console.log('Ще обнови изображение на позиция:', { sectionIndex, imageIndex });
+            
+            const normalizedAlt = normalizeSlateValue(altEditorState);
+            const normalizedCaption = normalizeSlateValue(captionEditorState);
+            
+            console.log('Нормализирани стойности:', { normalizedAlt, normalizedCaption });
+            
+            updateImageInfo(sectionIndex, imageIndex, normalizedAlt, normalizedCaption);
+            
+            setIsAltModalOpen(false);
+            setCurrentEditingImage({
+                sectionIndex: null,
+                imageIndex: null,
+                image: null
+            });
+            
+            console.log('Модалът трябва да се затвори сега');
+            
+        } catch (error) {
+            console.error('Грешка при запазване на image info:', error);
+            setIsAltModalOpen(false);
+        }
+    }, [currentEditingImage, updateImageInfo]);
 
-    // Функция за обработка на видео файлове
-    const handleVideoFile = (files) => {
+    const handleVideoFile = useCallback((files) => {
         if (!files || files.length === 0) return;
-
-        const videoFile = files[0]; // Вземаме само първия файл за видео
+        const videoFile = files[0];
         if (videoFile) {
-            // Проверка за видео формат
             if (!/video\/(mp4|webm|ogg)/.test(videoFile.type)) {
                 alert(t('articles.createForm.invalidVideoFormat'));
                 return;
             }
-
-            // Проверка за размер на файла (100MB = 104857600 bytes)
             if (videoFile.size > 104857600) {
                 alert(t('articles.createForm.videoSizeExceeded'));
                 return;
             }
-
-            // Подаваме директно за обработка
             handleMainImageFiles([videoFile]);
-
-            // Добавяме форсирано обновяване, но сега използваме useReducer версията
             setTimeout(() => forceUpdate(), 100);
         }
-    };
+    }, [t, handleMainImageFiles, forceUpdate]);
 
-    // Функция за добавяне на външно видео от URL
-    const handleAddVideoUrl = () => {
+    const handleAddVideoUrl = useCallback(() => {
         if (!values.mainImage.videoUrl) return;
-
-        // Проверка на URL формата (опростена)
         const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
         const vimeoRegex = /^(https?:\/\/)?(www\.)?vimeo\.com\/.+$/;
-
         if (!youtubeRegex.test(values.mainImage.videoUrl) && !vimeoRegex.test(values.mainImage.videoUrl)) {
             alert(t('articles.createForm.invalidVideoUrl'));
             return;
         }
-
-        // Генерираме thumbnail URL ако е YouTube
         let thumbnailUrl = "";
         if (youtubeRegex.test(values.mainImage.videoUrl)) {
-            // Опит да извлечем видео ID
             let videoId = "";
             if (values.mainImage.videoUrl.includes("youtube.com/watch?v=")) {
                 videoId = values.mainImage.videoUrl.split("v=")[1]?.split("&")[0];
             } else if (values.mainImage.videoUrl.includes("youtu.be/")) {
                 videoId = values.mainImage.videoUrl.split("youtu.be/")[1]?.split("?")[0];
             }
-
             if (videoId) {
                 thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                // Ако има thumbnail, сетваме го автоматично
                 onChangeHandler({ target: { name: "mainImage.thumbnail", value: thumbnailUrl } });
             }
         }
-
-        // Уведомяваме потребителя, че външното видео е добавено
         alert(t('articles.createForm.videoAddedSuccess'));
-
-        // Принуждаваме компонента да се преизрисува с useReducer версията
         forceUpdate();
-    };
+    }, [values.mainImage.videoUrl, t, onChangeHandler, forceUpdate]);
 
-    // Общи настройки за редактора
-    const editorToolbarOptions = {
-        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'link', 'emoji', 'history'],
-        inline: {
-            options: ['bold', 'italic', 'underline', 'strikethrough'],
-            className: 'editor-toolbar-inline',
-        },
-          fontSize: {
-             options: [12, 14, 16, 18, 20, 24, 28, 32, 36],
-            className: 'editor-toolbar-fontsize',
-            dropdownClassName: 'editor-fontsize-dropdown',
-            inDropdown: true,
-        },
-        
-        blockType: {
-            options: ['Normal', 'H2', 'H3', 'H4', 'Blockquote'],
-            className: 'editor-toolbar-block',
-        },
-      
-        list: {
-            options: ['unordered', 'ordered'],
-        },
-        textAlign: {
-            inDropdown: true,
-        },
-        link: {
-            inDropdown: false,
-            showOpenOptionOnHover: true,
-        },
-        emoji: {
-            emojis: [
-                '😀', '😁', '😂', '😃', '😉', '😋', '😎', '😍', '😮', '🙂', '🙃', '🤑', '🤔', '🤗', '🤐',
-                '🤡', '🤥', '🤨', '🤩', '🤪', '🤫', '🤬', '🤭', '🧐', '🤯', '😴', '😌', '😛', '😜', '😝'
-            ],
-        },
-    };
+    const [expandedImageUrl, setExpandedImageUrl] = useState(null);
 
-    // Опростени настройки за малки полета (alt текст)
-    const minimalEditorToolbarOptions = {
-        options: ['inline', 'link','fontSize'],
-        inline: {
-            options: ['bold', 'italic', 'underline'],
-            className: 'editor-toolbar-inline-small',
-        },
-        fontSize: {
-             options: [12, 14, 16, 18, 20, 24, 28, 32, 36],
-            className: 'editor-toolbar-fontsize',
-            dropdownClassName: 'editor-fontsize-dropdown',
-            inDropdown: true,
-            defaultSize: 16,
-        },
-        link: {
-            inDropdown: false,
-            showOpenOptionOnHover: true,
-        },
-    };
+    const handleImageClick = useCallback((url) => {
+        setExpandedImageUrl(url);
+    }, []);
+
+    const closeExpandedImage = useCallback(() => {
+        setExpandedImageUrl(null);
+    }, []);
 
     if (previewMode) {
         return (
@@ -437,12 +773,11 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                 article={values}
                 onBack={handlePreviewToggle}
                 mediaFiles={mediaFiles}
-                convertEditorToHtml={convertEditorToHtml}
+                convertEditorToHtml={convertSlateToHtml}
             />
         );
     }
 
-    // Определяме текстовете според режима (създаване или редактиране)
     const formTitle = isEditMode
         ? t('articles.editArticle.edit_article')
         : t('articles.createForm.createNewArticle');
@@ -453,7 +788,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
     return (
         <div className="article-create-container">
-            {/* Постоянно фиксирано меню - ще се показва винаги */}
             <SectionQuickMenu
                 sectionIndex={activeSection !== null ? activeSection : 0}
                 totalSections={values.sections.length}
@@ -527,17 +861,14 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
                         <div className="form-group-article">
                             <label htmlFor="summary">{t('articles.createForm.summary')} <span className="required">*</span></label>
-                            <div className={errors.summary ? "editor-container error" : "editor-container"}>
-                                <Editor
-                                    editorState={values.summary}
-                                    onEditorStateChange={(editorState) => handleEditorChange(editorState, "summary")}
-                                    onBlur={() => handleEditorBlur("summary", values.summary)}
-                                    toolbar={editorToolbarOptions}
+                            <div className={errors.summary ? "slate-editor-container error" : "slate-editor-container"}>
+                                <MemoizedSlateEditor
+                                    editor={summaryEditor}
+                                    value={values.summary}
+                                    onChange={getStableChangeHandler('summary')}
+                                    onBlur={getStableBlurHandler('summary')}
                                     placeholder={t('articles.createForm.summaryPlaceholder')}
-                                    wrapperClassName="editor-wrapper"
-                                    editorClassName="editor-main"
-                                    toolbarClassName="editor-toolbar"
-                                    key={i18n.language}
+                                    toolbarSize="normal"
                                 />
                             </div>
                             {errors.summary && <div className="error-message">{errors.summary}</div>}
@@ -578,23 +909,20 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                 <>
                                     <div className="form-group-article">
                                         <label htmlFor="mainImageAlt">{t('articles.createForm.altText')} <span className="required">*</span></label>
-                                        <div className={errors["mainImage.alt"] ? "editor-container error" : "editor-container"}>
-                                            <Editor
-                                                editorState={values.mainImage.alt}
-                                                onEditorStateChange={(editorState) => handleEditorChange(editorState, "mainImage.alt")}
-                                                onBlur={() => handleEditorBlur("mainImage.alt", values.mainImage.alt)}
-                                                toolbar={minimalEditorToolbarOptions}
+                                        <div className={errors["mainImage.alt"] ? "slate-editor-container error" : "slate-editor-container"}>
+                                            <MemoizedSlateEditor
+                                                editor={mainImageAltEditor}
+                                                value={values.mainImage.alt}
+                                                onChange={getStableChangeHandler('mainImage.alt')}
+                                                onBlur={getStableBlurHandler('mainImage.alt')}
                                                 placeholder={t('articles.createForm.imageDescriptionPlaceholder')}
-                                                wrapperClassName="editor-wrapper-small"
-                                                editorClassName="editor-main-small"
-                                                toolbarClassName="editor-toolbar-small"
-                                                key={i18n.language}
+                                                className="slate-editable slate-editable-small"
+                                                toolbarSize="small"
                                             />
                                         </div>
                                         {errors["mainImage.alt"] && <div className="error-message">{errors["mainImage.alt"]}</div>}
                                     </div>
 
-                                    {/* Нова секция за добавяне чрез URL */}
                                     <div className="form-group-article">
                                         <label>{t('articles.createForm.addViaUrl')}</label>
                                         <div className="image-url-input">
@@ -638,10 +966,8 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                         />
                                     </div>
 
-                                    {/* Предпреглед на всички изображения - файлове и URL-и */}
                                     {(mediaFiles.mainImage.length > 0 || values.mainImage.sources.length > 0) && (
                                         <div className="media-preview-container">
-                                            {/* Показване на файловете */}
                                             {mediaFiles.mainImage.map((file, index) => (
                                                 <div key={`file-${index}`} className="image-preview-item">
                                                     <img
@@ -659,7 +985,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                                 </div>
                                             ))}
 
-                                            {/* Показване на URL адресите */}
                                             {values.mainImage.sources.map((url, index) => (
                                                 <div key={`url-${index}`} className="image-preview-item">
                                                     <img
@@ -681,22 +1006,19 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                 </>
                             )}
 
-                            {/* Раздел за видео, показва се само когато типът е видео */}
                             {values.mainImage.type === "video" && (
                                 <>
                                     <div className="form-group-article">
                                         <label htmlFor="mainImageAlt">{t('articles.createForm.videoTitle')} <span className="required">*</span></label>
-                                        <div className={errors["mainImage.alt"] ? "editor-container error" : "editor-container"}>
-                                            <Editor
-                                                editorState={values.mainImage.alt}
-                                                onEditorStateChange={(editorState) => handleEditorChange(editorState, "mainImage.alt")}
-                                                onBlur={() => handleEditorBlur("mainImage.alt", values.mainImage.alt)}
-                                                toolbar={minimalEditorToolbarOptions}
+                                        <div className={errors["mainImage.alt"] ? "slate-editor-container error" : "slate-editor-container"}>
+                                            <MemoizedSlateEditor
+                                                editor={mainImageAltEditor}
+                                                value={values.mainImage.alt}
+                                                onChange={getStableChangeHandler('mainImage.alt')}
+                                                onBlur={getStableBlurHandler('mainImage.alt')}
                                                 placeholder={t('articles.createForm.videoTitlePlaceholder')}
-                                                wrapperClassName="editor-wrapper-small"
-                                                editorClassName="editor-main-small"
-                                                toolbarClassName="editor-toolbar-small"
-                                                key={i18n.language}
+                                                className="slate-editable slate-editable-small"
+                                                toolbarSize="small"
                                             />
                                         </div>
                                         {errors["mainImage.alt"] && <div className="error-message">{errors["mainImage.alt"]}</div>}
@@ -768,15 +1090,14 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                         </div>
                                     </div>
 
-                                    {/* Предпреглед на видео - използва кеширания URL */}
                                     {values.mainImage.type === "video" && mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && (
-                                        <div className="video-preview-container" >
+                                        <div className="video-preview-container">
                                             <div className="video-element-wrapper">
                                                 <video
                                                     controls
                                                     width="100%"
                                                     height="auto"
-                                                    src={videoPreviewUrl} // Използваме кеширания URL
+                                                    src={videoPreviewUrl}
                                                     poster={values.mainImage.thumbnail || ""}
                                                 >
                                                     {t('articles.createForm.browserNotSupport')}
@@ -784,7 +1105,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                             </div>
                                             <div className="video-controls-container">
                                                 <div className="video-info-details">
-                                                    <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || t('articles.createForm.videoFile') }}></h4>
+                                                    <h4 dangerouslySetInnerHTML={{ __html: convertSlateToHtml(values.mainImage.alt) || t('articles.createForm.videoFile') }}></h4>
                                                     <p>{mediaFiles.mainImage[0]?.name || t('articles.createForm.unnamedFile')}</p>
                                                     <p>{t('articles.createForm.size')} {mediaFiles.mainImage[0]?.size ? (mediaFiles.mainImage[0].size / (1024 * 1024)).toFixed(2) + " MB" : t('articles.createForm.unknownSize')}</p>
                                                 </div>
@@ -798,7 +1119,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                             </div>
                                         </div>
                                     )}
-                                    {/* Добавяме генератора на thumbnail за качени видео файлове */}
+
                                     {values.mainImage.type === "video" && mediaFiles.mainImage && mediaFiles.mainImage.length > 0 && (
                                         <VideoThumbnailGenerator
                                             videoFile={mediaFiles.mainImage[0]}
@@ -808,26 +1129,24 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                         />
                                     )}
 
-                                    {/* Предпреглед за външно видео от URL */}
                                     {values.mainImage.type === "video" && values.mainImage.videoUrl && !mediaFiles.mainImage?.length && (
                                         <div className="video-preview-container">
                                             <VideoPlayer
                                                 src={values.mainImage.videoUrl}
                                                 thumbnail={values.mainImage.thumbnail || ''}
-                                                alt={convertEditorToHtml(values.mainImage.alt) || t('articles.createForm.urlVideo')}
+                                                alt={convertSlateToHtml(values.mainImage.alt) || t('articles.createForm.urlVideo')}
                                                 allowDownload={false}
                                             />
                                             <div className="video-controls-container">
                                                 <div className="video-info-details">
-                                                    <h4 dangerouslySetInnerHTML={{ __html: convertEditorToHtml(values.mainImage.alt) || t('articles.createForm.externalVideo') }}></h4>
-                                                    {/* <p>URL: {values.mainImage.videoUrl}</p> */}
+                                                    <h4 dangerouslySetInnerHTML={{ __html: convertSlateToHtml(values.mainImage.alt) || t('articles.createForm.externalVideo') }}></h4>
                                                 </div>
                                                 <button
                                                     type="button"
                                                     className="remove-video-btn"
                                                     onClick={() => {
                                                         onChangeHandler({ target: { name: "mainImage.videoUrl", value: "" } });
-                                                        forceUpdate(); // Използваме useReducer версията
+                                                        forceUpdate();
                                                     }}
                                                 >
                                                     <FontAwesomeIcon icon={faTimes} /> {t('articles.createForm.removeBtn')}
@@ -889,17 +1208,14 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
                                     <div className="form-group-article">
                                         <label htmlFor={`section-content-${index}`}>{t('articles.createForm.contentSimple')} <span className="required">*</span></label>
-                                        <div className={errors[`sections[${index}].content`] ? "editor-container error" : "editor-container"}>
-                                            <Editor
-                                                editorState={section.content}
-                                                onEditorStateChange={(editorState) => handleEditorChange(editorState, `sections[${index}].content`)}
-                                                onBlur={() => handleEditorBlur(`sections[${index}].content`, section.content)}
-                                                toolbar={editorToolbarOptions}
+                                        <div className={errors[`sections[${index}].content`] ? "slate-editor-container error" : "slate-editor-container"}>
+                                            <MemoizedSlateEditor
+                                                editor={getSectionEditor(index, 'content')}
+                                                value={section.content}
+                                                onChange={getStableChangeHandler(`sections[${index}].content`)}
+                                                onBlur={getStableBlurHandler(`sections[${index}].content`)}
                                                 placeholder={t('articles.createForm.sectionContentPlaceholder')}
-                                                wrapperClassName="editor-wrapper"
-                                                editorClassName="editor-main"
-                                                toolbarClassName="editor-toolbar"
-                                                key={i18n.language}
+                                                toolbarSize="normal"
                                             />
                                         </div>
                                         {errors[`sections[${index}].content`] && <div className="error-message">{errors[`sections[${index}].content`]}</div>}
@@ -950,12 +1266,8 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                             />
                                         </div>
 
-                                        {/* Показване на всички изображения */}
                                         <div className="section-images-container">
-
-                                            {/* Показване на всички изображения от масива */}
                                             {Array.isArray(section.image) && section.image.map((image, imgIndex) => {
-
                                                 if (!image || !image.src) return null;
 
                                                 return (
@@ -988,24 +1300,21 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                                             </button>
                                                         </div>
 
-                                                        {/* ALT текст */}
-                                                        {image.alt && convertEditorToHtml(image.alt) && (
+                                                        {image.alt && convertSlateToHtml(image.alt) && (
                                                             <div className="img-alt-text-preview">
-                                                                ALT: <span className="truncated-alt-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.alt) }}></span>
+                                                                ALT: <span className="truncated-alt-text" dangerouslySetInnerHTML={{ __html: convertSlateToHtml(image.alt) }}></span>
                                                             </div>
                                                         )}
 
-                                                        {/* Caption */}
-                                                        {image.caption && convertEditorToHtml(image.caption) && (
+                                                        {image.caption && convertSlateToHtml(image.caption) && (
                                                             <div className="img-caption-preview">
-                                                                <span className="truncated-caption-text" dangerouslySetInnerHTML={{ __html: convertEditorToHtml(image.caption) }}></span>
+                                                                <span className="truncated-caption-text" dangerouslySetInnerHTML={{ __html: convertSlateToHtml(image.caption) }}></span>
                                                             </div>
                                                         )}
                                                     </div>
                                                 );
                                             })}
 
-                                            {/* За обратна съвместимост - ако image не е масив, но има src */}
                                             {section.image && !Array.isArray(section.image) && section.image.src && (
                                                 <div className="section-image-preview">
                                                     <img
@@ -1073,7 +1382,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                     </div>
                 </div>
 
-                {/* Прогрес при качване */}
                 {isUploading && (
                     <div className="upload-progress">
                         <div className="progress-bar">
@@ -1083,7 +1391,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                     </div>
                 )}
 
-                {/* Бутони на формата */}
                 <div className="form-actions">
                     <button
                         type="button"
@@ -1103,7 +1410,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                 </div>
             </form>
 
-            {/* Модален прозорец за преглед на изображение в пълен размер */}
             {expandedImageUrl && (
                 <div className="image-modal" onClick={closeExpandedImage}>
                     <div className="image-modal-content">
@@ -1114,8 +1420,9 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                     </div>
                 </div>
             )}
+            
             <ScrollToTop />
-            {/* В края на компонента, преди последния затварящ таг */}
+            
             <ImageAltEditModal
                 isOpen={isAltModalOpen}
                 onClose={() => setIsAltModalOpen(false)}
