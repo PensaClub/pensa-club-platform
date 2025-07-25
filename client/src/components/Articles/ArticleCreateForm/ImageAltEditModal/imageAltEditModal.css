@@ -1,4 +1,3 @@
-
 .image-alt-modal {
     position: fixed;
     top: 0;
@@ -10,9 +9,9 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-  }
-  
-  .image-alt-modal-content {
+}
+
+.image-alt-modal-content {
     background-color: white;
     border-radius: 8px;
     padding: 20px;
@@ -20,39 +19,39 @@
     max-width: 600px;
     max-height: 90vh;
     overflow-y: auto;
-  }
-  
-  .image-preview {
+}
+
+.image-preview {
     margin-bottom: 15px;
     text-align: center;
-  }
-  
-  .alt-editor-container {
+}
+
+.alt-editor-container {
     margin-bottom: 20px;
-  }
-  
-  .help-text {
+}
+
+.help-text {
     font-size: 12px;
     color: #666;
     margin-top: 5px;
-  }
-  
-  .modal-actions {
+}
+
+.modal-actions {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
     margin-top: 15px;
-  }
-  
-  .image-actions {
+}
+
+.image-actions {
     display: flex;
     gap: 5px;
     position: absolute;
     top: 5px;
     right: 5px;
-  }
-  
-  .edit-alt-btn {
+}
+
+.edit-alt-btn {
     background-color: #3498db;
     color: white;
     border: none;
@@ -60,9 +59,9 @@
     padding: 3px 6px;
     font-size: 12px;
     cursor: pointer;
-  }
-  
-  .image-alt-preview {
+}
+
+.image-alt-preview {
     font-size: 12px;
     color: #666;
     margin-top: 5px;
@@ -70,59 +69,272 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-  
-  .section-image-preview {
+}
+
+.section-image-preview {
     position: relative;
-  }
-  @media screen and (max-width: 768px) {
-    .image-alt-modal-content {
-      padding: 15px;
-      width: 95%;
-    }
+}
+
+/* НОВИ СТИЛОВЕ ЗА SLATE.JS */
+.alt-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.alt-modal-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.alt-modal-header {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.alt-modal-image-preview {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.alt-modal-image-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alt-modal-editor-wrapper {
+    margin-bottom: 20px;
+}
+
+.alt-modal-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.slate-editor-container-small {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background-color: #fff;
+}
+
+.slate-toolbar-small {
+    display: flex;
+    gap: 4px;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9;
+    border-radius: 4px 4px 0 0;
+}
+
+.slate-btn-small {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    transition: all 0.2s ease;
+}
+
+.slate-btn-small:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+}
+
+.slate-btn-small.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.slate-editable-small {
+    padding: 12px;
+    min-height: 60px;
+    outline: none;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.slate-editable-small:focus {
+    outline: none;
+}
+
+.slate-editable-small::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.alt-modal-help-text {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+.alt-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.alt-modal-cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.alt-modal-cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+.alt-modal-save-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.alt-modal-save-btn:hover {
+    background-color: #218838;
+}
+
+/* МЕДИЙНИ ЗАЯВКИ */
+@media screen and (max-width: 768px) {
+    .image-alt-modal-content,
     .alt-modal-container {
-      max-height: 75vh;
-    }
-    .modal-actions {
-      flex-direction: row;
-      justify-content: space-between;
-      width: 100%;
+        padding: 15px;
+        width: 95%;
+        max-height: 85vh;
     }
     
-    .modal-actions button {
-      flex: 1;
-      padding: 10px 5px;
-      font-size: 14px;
+    .modal-actions,
+    .alt-modal-buttons {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
     }
-  }
-  
-  @media screen and (max-width: 480px) {
-    .image-alt-modal-content {
-      padding: 10px;
-      width: 100%;
-      max-height: 95vh;
+    
+    .modal-actions button,
+    .alt-modal-buttons button {
+        flex: 1;
+        padding: 12px 8px;
+        font-size: 14px;
+    }
+
+    .alt-modal-image-preview img {
+        max-height: 150px;
+    }
+
+    .slate-toolbar-small {
+        padding: 6px;
+        gap: 3px;
+    }
+
+    .slate-btn-small {
+        min-width: 24px;
+        height: 24px;
+        padding: 2px 4px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .image-alt-modal-content,
+    .alt-modal-container {
+        padding: 10px;
+        width: 100%;
+        max-height: 95vh;
     }
     
     .rdw-editor-toolbar {
-      padding: 2px !important;
+        padding: 2px !important;
     }
     
     .rdw-option-wrapper {
-      margin: 2px !important;
-      height: 22px !important;
-      min-width: 22px !important;
+        margin: 2px !important;
+        height: 22px !important;
+        min-width: 22px !important;
     }
     
-    .image-preview {
-      margin-bottom: 10px;
+    .image-preview,
+    .alt-modal-image-preview {
+        margin-bottom: 10px;
     }
     
-    .image-preview img {
-      max-height: 25vh;
+    .image-preview img,
+    .alt-modal-image-preview img {
+        max-height: 120px;
     }
     
-    .help-text {
-      font-size: 11px;
+    .help-text,
+    .alt-modal-help-text {
+        font-size: 11px;
     }
-  }
-  
+
+    .alt-modal-header {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .slate-editable-small {
+        padding: 8px;
+        min-height: 50px;
+        font-size: 13px;
+    }
+
+    .alt-modal-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .alt-modal-cancel-btn,
+    .alt-modal-save-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+    }
+}
