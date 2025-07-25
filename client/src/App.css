@@ -106,14 +106,14 @@ p, a {
 } */
 @font-face {
   font-family: 'Montserrat';
-  src: url('../../client/public/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
   /* font-weight: normal; */
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../../client/public/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
 }
