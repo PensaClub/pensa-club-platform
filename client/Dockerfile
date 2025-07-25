@@ -24,6 +24,9 @@ COPY . .
 # Move fonts to the src directory to be bundled by Webpack
 RUN mkdir -p src/assets && mv public/fonts src/assets/fonts
 
+# Increase memory limit for the build process
+ENV NODE_OPTIONS=--max-old-space-size=1536
+
 RUN npm run build
 
 # Stage 2: Serve the static files with Nginx
