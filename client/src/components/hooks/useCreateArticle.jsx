@@ -117,7 +117,6 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
-  // КЛЮЧОВО: Ref за стабилен достъп до values
   const valuesRef = useRef(values);
   const mediaFilesRef = useRef(mediaFiles);
   
