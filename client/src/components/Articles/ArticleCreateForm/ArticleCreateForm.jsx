@@ -22,6 +22,7 @@ import { SectionQuickMenu } from "../ArticleCreateForm/SectionQuickMenu/SectionQ
 import ArticlePreview from "./ArticlePreview/ArticlePreview";
 import { useCreateArticle } from "../../hooks/useCreateArticle";
 import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
+import { htmlToSlate } from "../articleUtils/htmlToSlate";
 
 // 🎯 Slate utility functions
 const createSlateEditorState = () => {
@@ -443,7 +444,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 const actualInitialValues = useMemo(() => {
     if (!propInitialValues) return defaultValues;
 
-    // Функция за обработка на EditorState или други формати
+    // ПРОСТА функция за обработка
     const processEditorValue = (value) => {
         if (!value) return createSlateEditorState();
         
@@ -452,24 +453,22 @@ const actualInitialValues = useMemo(() => {
             return normalizeSlateValue(value);
         }
         
-        // Ако е EditorState обект
-        if (value && typeof value === 'object' && value.getCurrentContent) {
-            // Draft.js EditorState - конвертираме в plain text и после в Slate
-            const plainText = value.getCurrentContent().getPlainText();
-            return plainText ? [{ type: 'paragraph', children: [{ text: plainText }] }] : createSlateEditorState();
+        // Ако е string (HTML или plain text) - ТОВА Е КЛЮЧОВОТО!
+        if (typeof value === 'string') {
+            const converted = htmlToSlate(value);
+            return converted;
         }
         
-        // Ако е string (HTML или plain text)
-        if (typeof value === 'string') {
-            return value.trim() ? [{ type: 'paragraph', children: [{ text: value }] }] : createSlateEditorState();
+        // Ако е EditorState обект (fallback)
+        if (value && typeof value === 'object' && value.getCurrentContent) {
+            const plainText = value.getCurrentContent().getPlainText();
+            return plainText ? [{ type: 'paragraph', children: [{ text: plainText }] }] : createSlateEditorState();
         }
         
         return createSlateEditorState();
     };
 
-    console.log('🔍 Processing propInitialValues.summary:', propInitialValues.summary);
-
-    return {
+    const result = {
         ...defaultValues,
         ...propInitialValues,
         summary: processEditorValue(propInitialValues.summary),
@@ -483,8 +482,20 @@ const actualInitialValues = useMemo(() => {
             ...section,
             content: processEditorValue(section.content),
             order: index + 1,
+            // Обработваме и изображенията в секциите
+            image: Array.isArray(section.sectionImages) 
+                ? section.sectionImages.map(img => ({
+                    src: img.src,
+                    alt: processEditorValue(img.alt),
+                    caption: processEditorValue(img.caption)
+                }))
+                : (section.image || [])
         })),
     };
+
+    // 🔍 DEBUG: Проверяваме резултата
+    
+    return result;
 }, [propInitialValues, defaultValues]);
 
     // Мемоизиран submit handler
@@ -535,10 +546,7 @@ const actualInitialValues = useMemo(() => {
     const stableHandlersRef = useRef({});
     const valuesRef = useRef(values);
     valuesRef.current = values; // Винаги актуални values
-console.log('🔍 propInitialValues:', propInitialValues);
-console.log('🔍 actualInitialValues:', actualInitialValues);
-console.log('🔍 values.summary:', values.summary);
-console.log('🔍 values.mainImage.alt:', values.mainImage.alt);
+
     // Helper функция за взимане на стойност по path
     const getValueByPath = useCallback((obj, path) => {
         if (path === 'summary') return obj.summary;

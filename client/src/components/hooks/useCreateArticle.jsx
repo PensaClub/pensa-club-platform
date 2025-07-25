@@ -64,7 +64,8 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     return mediaFiles;
   }, [initialValues]);
 
-  const [values, setValues] = useState(() => {
+// В useCreateArticle.jsx - ОПРОСТИ useState:
+const [values, setValues] = useState(() => {
     const defaultValues = {
       title: "",
       slug: "",
@@ -72,13 +73,13 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       publishDate: new Date().toISOString().split('T')[0],
       summary: createSlateEditorState(),
       mainImage: {
-        type: "image", // "image", "slider", "video"
+        type: "image",
         sources: [],
         alt: createSlateEditorState(),
-        thumbnail: "", // за видео
-        videoUrl: "", // за видео
-        subtitles: [], // за видео
-        allowDownload: false, // за видео
+        thumbnail: "",
+        videoUrl: "",
+        subtitles: [],
+        allowDownload: false,
       },
       sections: [
         {
@@ -93,24 +94,8 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       nextArticle: null,
     };
 
-    if (!initialValues) return defaultValues;
-
-    // Нормализиране на всички Slate стойности в initialValues
-    const normalizedInitialValues = {
-      ...initialValues,
-      summary: normalizeSlateValue(initialValues.summary || createSlateEditorState()),
-      mainImage: {
-        ...initialValues.mainImage,
-        alt: normalizeSlateValue(initialValues.mainImage?.alt || createSlateEditorState()),
-      },
-      sections: (initialValues.sections || []).map(section => ({
-        ...section,
-        content: normalizeSlateValue(section.content || createSlateEditorState()),
-      })),
-    };
-
-    return normalizedInitialValues;
-  });
+    return initialValues || defaultValues;
+});
 
   const [errors, setErrors] = useState({});
   const [mediaFiles, setMediaFiles] = useState(preparedMediaFiles);

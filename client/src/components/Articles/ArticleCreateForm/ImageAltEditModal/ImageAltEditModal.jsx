@@ -164,6 +164,7 @@ export const ImageAltEditModal = ({ isOpen, onClose, image, onSave }) => {
                             editor={captionEditor}
                             initialValue={captionEditorState}
                             onChange={setCaptionEditorState}
+                            
                         >
                             <SlateToolbar editor={captionEditor} />
                             <Editable
