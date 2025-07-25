@@ -22,6 +22,7 @@ import { SectionQuickMenu } from "../ArticleCreateForm/SectionQuickMenu/SectionQ
 import ArticlePreview from "./ArticlePreview/ArticlePreview";
 import { useCreateArticle } from "../../hooks/useCreateArticle";
 import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
+import { htmlToSlate } from "../articleUtils/htmlToSlate";
 
 // 🎯 Slate utility functions
 const createSlateEditorState = () => {
@@ -119,7 +120,6 @@ const MemoizedSlateEditor = memo(({
     toolbarSize = "normal"
 }) => {
     
-    // Състояние за проследяване на selection промени
     const [selection, setSelection] = useState(editor.selection);
     
     // Effect за проследяване на selection промени
@@ -186,11 +186,9 @@ const MemoizedSlateEditor = memo(({
             Transforms.wrapNodes(editor, block);
         }
         
-        // Принудително обновяване на selection state
         setSelection(editor.selection);
     }, [editor]);
 
-    // Функции за проверка на активно състояние (зависят от selection state)
     const isMarkActive = useCallback((format) => {
         const marks = Editor.marks(editor);
         return marks ? marks[format] === true : false;
@@ -208,7 +206,7 @@ const MemoizedSlateEditor = memo(({
         );
 
         return !!match;
-    }, [editor, selection]); // Добавяме selection като dependency
+    }, [editor, selection]);
 
     // Memoized render functions
     const renderElement = useCallback((props) => {
@@ -361,6 +359,8 @@ const MemoizedSlateEditor = memo(({
         <Slate
             editor={editor}
             initialValue={normalizeSlateValue(value)}
+            value={normalizeSlateValue(value)}
+
             onChange={onChange}
         >
             {renderToolbar(toolbarSize === "small")}
@@ -440,27 +440,63 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         nextArticle: null,
     }), []);
 
-    // Мемоизирани initial values
-    const actualInitialValues = useMemo(() => {
-        if (!propInitialValues) return defaultValues;
+  // В ArticleCreateForm заменям actualInitialValues логиката:
+const actualInitialValues = useMemo(() => {
+    if (!propInitialValues) return defaultValues;
 
-        return {
-            ...defaultValues,
-            ...propInitialValues,
-            summary: normalizeSlateValue(propInitialValues.summary || defaultValues.summary),
-            mainImage: {
-                ...defaultValues.mainImage,
-                ...propInitialValues.mainImage,
-                alt: normalizeSlateValue(propInitialValues.mainImage?.alt || defaultValues.mainImage.alt),
-            },
-            sections: (propInitialValues.sections || defaultValues.sections).map((section, index) => ({
-                ...defaultValues.sections[0],
-                ...section,
-                content: normalizeSlateValue(section.content || defaultValues.sections[0].content),
-                order: index + 1,
-            })),
-        };
-    }, [propInitialValues, defaultValues]);
+    // ПРОСТА функция за обработка
+    const processEditorValue = (value) => {
+        if (!value) return createSlateEditorState();
+        
+        // Ако е вече Slate формат (Array)
+        if (Array.isArray(value)) {
+            return normalizeSlateValue(value);
+        }
+        
+        // Ако е string (HTML или plain text) - ТОВА Е КЛЮЧОВОТО!
+        if (typeof value === 'string') {
+            const converted = htmlToSlate(value);
+            return converted;
+        }
+        
+        // Ако е EditorState обект (fallback)
+        if (value && typeof value === 'object' && value.getCurrentContent) {
+            const plainText = value.getCurrentContent().getPlainText();
+            return plainText ? [{ type: 'paragraph', children: [{ text: plainText }] }] : createSlateEditorState();
+        }
+        
+        return createSlateEditorState();
+    };
+
+    const result = {
+        ...defaultValues,
+        ...propInitialValues,
+        summary: processEditorValue(propInitialValues.summary),
+        mainImage: {
+            ...defaultValues.mainImage,
+            ...propInitialValues.mainImage,
+            alt: processEditorValue(propInitialValues.mainImage?.alt),
+        },
+        sections: (propInitialValues.sections || defaultValues.sections).map((section, index) => ({
+            ...defaultValues.sections[0],
+            ...section,
+            content: processEditorValue(section.content),
+            order: index + 1,
+            // Обработваме и изображенията в секциите
+            image: Array.isArray(section.sectionImages) 
+                ? section.sectionImages.map(img => ({
+                    src: img.src,
+                    alt: processEditorValue(img.alt),
+                    caption: processEditorValue(img.caption)
+                }))
+                : (section.image || [])
+        })),
+    };
+
+    // 🔍 DEBUG: Проверяваме резултата
+    
+    return result;
+}, [propInitialValues, defaultValues]);
 
     // Мемоизиран submit handler
     const submitHandler = useMemo(() => onSubmitHandler || createArticle, [onSubmitHandler, createArticle]);
@@ -668,6 +704,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
     }, [imageUrl, handleMainImageUrl]);
 
     const openAltEditModal = useCallback((sectionIndex, imageIndex, image) => {
+        
         setCurrentEditingImage({
             sectionIndex,
             imageIndex,
@@ -847,6 +884,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                             <label htmlFor="summary">{t('articles.createForm.summary')} <span className="required">*</span></label>
                             <div className={errors.summary ? "slate-editor-container error" : "slate-editor-container"}>
                                 <MemoizedSlateEditor
+                                key={`summary-${isEditMode ? 'edit' : 'create'}-${JSON.stringify(values.summary)}`}
                                     editor={summaryEditor}
                                     value={values.summary}
                                     onChange={getStableChangeHandler('summary')}
@@ -895,6 +933,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                         <label htmlFor="mainImageAlt">{t('articles.createForm.altText')} <span className="required">*</span></label>
                                         <div className={errors["mainImage.alt"] ? "slate-editor-container error" : "slate-editor-container"}>
                                             <MemoizedSlateEditor
+                                             key={`mainImageAlt-${isEditMode ? 'edit' : 'create'}-${JSON.stringify(values.mainImage.alt)}`}
                                                 editor={mainImageAltEditor}
                                                 value={values.mainImage.alt}
                                                 onChange={getStableChangeHandler('mainImage.alt')}
@@ -996,6 +1035,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                         <label htmlFor="mainImageAlt">{t('articles.createForm.videoTitle')} <span className="required">*</span></label>
                                         <div className={errors["mainImage.alt"] ? "slate-editor-container error" : "slate-editor-container"}>
                                             <MemoizedSlateEditor
+                                             key={`mainImageAlt-${isEditMode ? 'edit' : 'create'}-${JSON.stringify(values.mainImage.alt)}`}
                                                 editor={mainImageAltEditor}
                                                 value={values.mainImage.alt}
                                                 onChange={getStableChangeHandler('mainImage.alt')}
@@ -1194,6 +1234,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                         <label htmlFor={`section-content-${index}`}>{t('articles.createForm.contentSimple')} <span className="required">*</span></label>
                                         <div className={errors[`sections[${index}].content`] ? "slate-editor-container error" : "slate-editor-container"}>
                                             <MemoizedSlateEditor
+                                            key={`section-${index}-content-${JSON.stringify(section.content)}`}
                                                 editor={getSectionEditor(index, 'content')}
                                                 value={section.content}
                                                 onChange={getStableChangeHandler(`sections[${index}].content`)}
