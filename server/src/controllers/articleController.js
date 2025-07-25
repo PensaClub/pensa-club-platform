@@ -281,7 +281,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             if (sections && Array.isArray(sections)) {
                 const existingSections = await section.findAll({
                     where: { sectionableId: existingArticle.id, sectionLinkConnection: 'article' },
-                    include: [image],
+                    include: [{ model: image, as: 'sectionImages' }],
                     transaction: t,
                 });
 

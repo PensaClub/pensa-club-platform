@@ -7,6 +7,66 @@ import { faSave, faTimes, faBold, faItalic, faUnderline } from '@fortawesome/fre
 import './imageAltEditModal.css';
 import { useTranslation } from 'react-i18next';
 
+// ✅ htmlToSlate функция
+const htmlToSlate = (html) => {
+    if (!html || typeof html !== 'string') {
+        return [{ type: 'paragraph', children: [{ text: '' }] }];
+    }
+
+    if (!html.includes('<') || !html.includes('>')) {
+        return html.trim() ? [{ type: 'paragraph', children: [{ text: html }] }] : [{ type: 'paragraph', children: [{ text: '' }] }];
+    }
+
+    try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        const parseNode = (node) => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                return { text: node.textContent };
+            }
+            
+            if (node.nodeType !== Node.ELEMENT_NODE) {
+                return null;
+            }
+
+            const children = Array.from(node.childNodes)
+                .map(parseNode)
+                .filter(Boolean);
+            
+            if (children.length === 0) {
+                children.push({ text: '' });
+            }
+
+            switch (node.tagName.toLowerCase()) {
+                case 'p':
+                    return { type: 'paragraph', children };
+                case 'strong':
+                case 'b':
+                    return children.map(child => ({ ...child, bold: true }));
+                case 'em':
+                case 'i':
+                    return children.map(child => ({ ...child, italic: true }));
+                case 'u':
+                    return children.map(child => ({ ...child, underline: true }));
+                default:
+                    return { type: 'paragraph', children };
+            }
+        };
+
+        const result = Array.from(doc.body.childNodes)
+            .map(parseNode)
+            .filter(Boolean);
+
+        return result.length > 0 ? result : [{ type: 'paragraph', children: [{ text: '' }] }];
+        
+    } catch (error) {
+        console.error('HTML parsing error:', error);
+        const textContent = html.replace(/<[^>]*>/g, '');
+        return textContent.trim() ? [{ type: 'paragraph', children: [{ text: textContent }] }] : [{ type: 'paragraph', children: [{ text: '' }] }];
+    }
+};
+
 // Utility functions
 const createSlateEditorState = () => {
     return [
@@ -28,6 +88,24 @@ const normalizeSlateValue = (value) => {
     }));
 };
 
+// ✅ processEditorValue функция
+const processEditorValue = (value) => {
+    if (!value) return createSlateEditorState();
+    
+    if (Array.isArray(value)) {
+        return normalizeSlateValue(value);
+    }
+    
+    if (typeof value === 'string') {
+        console.log('🔧 Modal конвертирам HTML в Slate:', value);
+        const converted = htmlToSlate(value);
+        console.log('✅ Modal резултат:', converted);
+        return converted;
+    }
+    
+    return createSlateEditorState();
+};
+
 export const ImageAltEditModal = ({ isOpen, onClose, image, onSave }) => {
     const { t } = useTranslation();
 
@@ -39,11 +117,39 @@ export const ImageAltEditModal = ({ isOpen, onClose, image, onSave }) => {
     const [captionEditorState, setCaptionEditorState] = useState(createSlateEditorState());
 
     useEffect(() => {
+        console.log('🚨 Modal useEffect triggered');
+        console.log('🚨 image parameter:', image);
+        
         if (image) {
-            setAltEditorState(normalizeSlateValue(image.alt || createSlateEditorState()));
-            setCaptionEditorState(normalizeSlateValue(image.caption || createSlateEditorState()));
+            console.log('🔍 Modal image.alt type:', typeof image.alt);
+            console.log('🔍 Modal image.alt value:', image.alt);
+            
+            // ✅ ФИКСИРАНО: Директно използваме данните ако са вече Slate формат
+            let processedAlt, processedCaption;
+            
+            if (Array.isArray(image.alt)) {
+                processedAlt = normalizeSlateValue(image.alt);
+                console.log('✅ Alt е вече Slate формат');
+            } else {
+                processedAlt = processEditorValue(image.alt);
+                console.log('✅ Alt конвертиран от HTML/string');
+            }
+            
+            if (Array.isArray(image.caption)) {
+                processedCaption = normalizeSlateValue(image.caption);
+                console.log('✅ Caption е вече Slate формат');
+            } else {
+                processedCaption = processEditorValue(image.caption);
+                console.log('✅ Caption конвертиран от HTML/string');
+            }
+            
+            console.log('🎯 Final processed alt:', processedAlt);
+            console.log('🎯 Final processed caption:', processedCaption);
+            
+            setAltEditorState(processedAlt);
+            setCaptionEditorState(processedCaption);
         }
-    }, [image]);
+    }, [image, isOpen]);
 
     // Slate toolbar functions
     const toggleMark = (editor, format) => {
@@ -140,6 +246,7 @@ export const ImageAltEditModal = ({ isOpen, onClose, image, onSave }) => {
                     <label className="alt-modal-label">{t('articles.imageEdit.altLabel')}</label>
                     <div className="slate-editor-container-small">
                         <Slate
+                            key={`alt-${image?.src}-${Date.now()}`}
                             editor={altEditor}
                             initialValue={altEditorState}
                             onChange={setAltEditorState}
@@ -161,6 +268,7 @@ export const ImageAltEditModal = ({ isOpen, onClose, image, onSave }) => {
                     <label className="alt-modal-label">{t('articles.imageEdit.captionLabel')}</label>
                     <div className="slate-editor-container-small">
                         <Slate
+                            key={`caption-${image?.src}-${Date.now()}`}
                             editor={captionEditor}
                             initialValue={captionEditorState}
                             onChange={setCaptionEditorState}
