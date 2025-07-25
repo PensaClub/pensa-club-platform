@@ -97,9 +97,7 @@ const processEditorValue = (value) => {
     }
     
     if (typeof value === 'string') {
-        console.log('🔧 Modal конвертирам HTML в Slate:', value);
         const converted = htmlToSlate(value);
-        console.log('✅ Modal резултат:', converted);
         return converted;
     }
     
@@ -117,34 +115,22 @@ export const ImageAltEditModal = ({ isOpen, onClose, image, onSave }) => {
     const [captionEditorState, setCaptionEditorState] = useState(createSlateEditorState());
 
     useEffect(() => {
-        console.log('🚨 Modal useEffect triggered');
-        console.log('🚨 image parameter:', image);
-        
         if (image) {
-            console.log('🔍 Modal image.alt type:', typeof image.alt);
-            console.log('🔍 Modal image.alt value:', image.alt);
             
             // ✅ ФИКСИРАНО: Директно използваме данните ако са вече Slate формат
             let processedAlt, processedCaption;
             
             if (Array.isArray(image.alt)) {
                 processedAlt = normalizeSlateValue(image.alt);
-                console.log('✅ Alt е вече Slate формат');
             } else {
                 processedAlt = processEditorValue(image.alt);
-                console.log('✅ Alt конвертиран от HTML/string');
             }
             
             if (Array.isArray(image.caption)) {
                 processedCaption = normalizeSlateValue(image.caption);
-                console.log('✅ Caption е вече Slate формат');
             } else {
                 processedCaption = processEditorValue(image.caption);
-                console.log('✅ Caption конвертиран от HTML/string');
             }
-            
-            console.log('🎯 Final processed alt:', processedAlt);
-            console.log('🎯 Final processed caption:', processedCaption);
             
             setAltEditorState(processedAlt);
             setCaptionEditorState(processedCaption);
