@@ -759,10 +759,8 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
 
   // Мемоизираме updateImageInfo
   const updateImageInfo = useCallback((sectionIndex, imageIndex, altText, captionText) => {
-    console.log('🔍 updateImageInfo извикана с:', { sectionIndex, imageIndex, altText, captionText }); // Debug
     
     setValues(prev => {
-      console.log('🔍 Преди обновяване - sections:', prev.sections[sectionIndex]?.image); // Debug
       
       const updatedSections = [...prev.sections];
       
@@ -787,8 +785,6 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
         alt: altText,
         caption: captionText
       };
-      
-      console.log('✅ След обновяване - image:', updatedSections[sectionIndex].image[imageIndex]); // Debug
       
       return {
         ...prev,

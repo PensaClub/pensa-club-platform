@@ -59,10 +59,8 @@ const normalizeSlateValue = (value) => {
 };
 
 const convertSlateToHtml = (slateValue) => {
-    console.log('🔄 convertSlateToHtml извикана с:', slateValue);
     
     if (!isValidSlateValue(slateValue)) {
-        console.log('❌ Празен или невалиден slateValue');
         return '';
     }
     
@@ -97,11 +95,9 @@ const convertSlateToHtml = (slateValue) => {
     
     try {
         const result = slateValue.map(serialize).join('');
-        console.log('✅ convertSlateToHtml резултат:', result);
         
         const textOnly = result.replace(/<[^>]*>/g, '').trim();
         if (!textOnly) {
-            console.log('❌ Няма реален текст след премахване на таговете');
             return '';
         }
         
@@ -122,7 +118,6 @@ const MemoizedSlateEditor = memo(({
     className = "slate-editable",
     toolbarSize = "normal"
 }) => {
-    console.log('🔄 MemoizedSlateEditor render за:', placeholder?.substring(0, 20));
     
     // Състояние за проследяване на selection промени
     const [selection, setSelection] = useState(editor.selection);
@@ -403,8 +398,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         image: null
     });
 
-    console.log('🔄 ArticleCreateForm RENDER');
-
     // Slate editors
     const summaryEditor = useMemo(() => withHistory(withReact(createEditor())), []);
     const mainImageAltEditor = useMemo(() => withHistory(withReact(createEditor())), []);
@@ -537,7 +530,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
     const getStableChangeHandler = useCallback((fieldName) => {
         if (!stableHandlersRef.current[fieldName]) {
             stableHandlersRef.current[fieldName] = (value) => {
-                console.log('📝 Slate change:', fieldName, Date.now());
                 onChangeHandler(null, true, { name: fieldName, value });
             };
         }
@@ -549,7 +541,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         const blurKey = `${fieldName}_blur`;
         if (!stableHandlersRef.current[blurKey]) {
             stableHandlersRef.current[blurKey] = () => {
-                console.log('🔍 Slate blur:', fieldName, Date.now());
                 // Използваме valuesRef за актуални стойности
                 const currentValue = getValueByPath(valuesRef.current, fieldName);
                 onBlurHandler(null, true, { name: fieldName, value: currentValue });
@@ -687,16 +678,11 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
     const handleSaveImageInfo = useCallback((altEditorState, captionEditorState) => {
         try {
-            console.log('handleSaveImageInfo извикана с:', { altEditorState, captionEditorState });
             
             const { sectionIndex, imageIndex } = currentEditingImage;
             
-            console.log('Ще обнови изображение на позиция:', { sectionIndex, imageIndex });
-            
             const normalizedAlt = normalizeSlateValue(altEditorState);
             const normalizedCaption = normalizeSlateValue(captionEditorState);
-            
-            console.log('Нормализирани стойности:', { normalizedAlt, normalizedCaption });
             
             updateImageInfo(sectionIndex, imageIndex, normalizedAlt, normalizedCaption);
             
@@ -706,9 +692,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                 imageIndex: null,
                 image: null
             });
-            
-            console.log('Модалът трябва да се затвори сега');
-            
+                        
         } catch (error) {
             console.error('Грешка при запазване на image info:', error);
             setIsAltModalOpen(false);
