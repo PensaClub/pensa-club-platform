@@ -704,6 +704,7 @@ const actualInitialValues = useMemo(() => {
     }, [imageUrl, handleMainImageUrl]);
 
     const openAltEditModal = useCallback((sectionIndex, imageIndex, image) => {
+        
         setCurrentEditingImage({
             sectionIndex,
             imageIndex,
