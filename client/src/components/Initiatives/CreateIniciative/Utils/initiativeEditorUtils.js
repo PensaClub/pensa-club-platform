@@ -26,62 +26,146 @@ export const createSlateEditorState = (html = '') => {
 };
 
 // Конвертиране на Slate в HTML
-// utils/initiativeEditorUtils.js
+
+// да се върна ако дава грещка при инциативите 
+// export const convertSlateToHtml = (value) => {
+//   if (!value || !Array.isArray(value)) return '';
+  
+//   return value
+//     .map(node => {
+//       if (node.type === 'paragraph') {
+//         const text = node.children.map(child => {
+//           let content = child.text || '';
+//           if (child.bold) content = `<strong>${content}</strong>`;
+//           if (child.italic) content = `<em>${content}</em>`;
+//           if (child.underline) content = `<u>${content}</u>`;
+//           return content;
+//         }).join('');
+//         return `<p>${text}</p>`;
+//       }
+//       if (node.type === 'heading-one') {
+//         return `<h1>${node.children.map(child => child.text).join('')}</h1>`;
+//       }
+//       if (node.type === 'heading-two') {
+//         return `<h2>${node.children.map(child => child.text).join('')}</h2>`;
+//       }
+//       if (node.type === 'bulleted-list') {
+//         const items = node.children.map(item => 
+//           `<li>${item.children.map(child => child.text).join('')}</li>`
+//         ).join('');
+//         return `<ul>${items}</ul>`;
+//       }
+//       if (node.type === 'numbered-list') {
+//         const items = node.children.map(item => 
+//           `<li>${item.children.map(child => child.text).join('')}</li>`
+//         ).join('');
+//         return `<ol>${items}</ol>`;
+//       }
+//       // ДОБАВЯМЕ ОБРАБОТКА НА BLOCKQUOTE
+//       if (node.type === 'block-quote') {
+//         const text = node.children.map(child => {
+//           if (child.children) {
+//             return child.children.map(c => {
+//               let content = c.text || '';
+//               if (c.bold) content = `<strong>${content}</strong>`;
+//               if (c.italic) content = `<em>${content}</em>`;
+//               if (c.underline) content = `<u>${content}</u>`;
+//               return content;
+//             }).join('');
+//           }
+//           return child.text || '';
+//         }).join('');
+//         return `<blockquote>${text}</blockquote>`;
+//       }
+//       return `<p>${node.children?.map(child => child.text).join('') || ''}</p>`;
+//     })
+//     .join('');
+// };
+
+// Проверка дали Slate редакторът е празен
+
+// Конвертиране на Slate в HTML
 export const convertSlateToHtml = (value) => {
   if (!value || !Array.isArray(value)) return '';
   
-  return value
-    .map(node => {
-      if (node.type === 'paragraph') {
-        const text = node.children.map(child => {
-          let content = child.text || '';
-          if (child.bold) content = `<strong>${content}</strong>`;
-          if (child.italic) content = `<em>${content}</em>`;
-          if (child.underline) content = `<u>${content}</u>`;
-          return content;
-        }).join('');
+  const serialize = (node) => {
+    // 🔧 БЕЗОПАСНИ ПРОВЕРКИ
+    if (!node || typeof node !== 'object') return '';
+    
+    // Handle text nodes (leaf nodes)
+    if (node.hasOwnProperty('text')) {
+      let content = node.text || '';
+      if (node.bold) content = `<strong>${content}</strong>`;
+      if (node.italic) content = `<em>${content}</em>`;
+      if (node.underline) content = `<u>${content}</u>`;
+      return content;
+    }
+    
+    // Handle element nodes
+    if (!node.type) {
+      // Fallback за стари структури без type
+      if (node.children && Array.isArray(node.children)) {
+        return node.children.map(child => serialize(child)).join('');
+      }
+      return '';
+    }
+    
+    // 🔧 БЕЗОПАСНА обработка на children
+    let children = '';
+    if (node.children && Array.isArray(node.children)) {
+      children = node.children.map(child => serialize(child)).join('');
+    }
+    
+    switch (node.type) {
+      case 'paragraph':
+        return `<p>${children}</p>`;
+      case 'heading-one':
+        return `<h1>${children}</h1>`;
+      case 'heading-two':
+        return `<h2>${children}</h2>`;
+      case 'bulleted-list':
+        return `<ul>${children}</ul>`;
+      case 'numbered-list':
+        return `<ol>${children}</ol>`;
+      case 'list-item':
+        return `<li>${children}</li>`;
+      case 'block-quote':
+        return `<blockquote>${children}</blockquote>`;
+      default:
+        return `<p>${children}</p>`;
+    }
+  };
+  
+  try {
+    return value.map(node => serialize(node)).join('');
+  } catch (error) {
+    console.error('Грешка при конвертиране на Slate в HTML:', error);
+    // 🔧 FALLBACK към старата логика ако новата не работи
+    return value
+      .map(node => {
+        if (!node || typeof node !== 'object') return '';
+        
+        if (node.type === 'paragraph') {
+          const children = node.children && Array.isArray(node.children) ? node.children : [];
+          const text = children.map(child => {
+            if (!child) return '';
+            let content = child.text || '';
+            if (child.bold) content = `<strong>${content}</strong>`;
+            if (child.italic) content = `<em>${content}</em>`;
+            if (child.underline) content = `<u>${content}</u>`;
+            return content;
+          }).join('');
+          return `<p>${text}</p>`;
+        }
+        
+        // Добавяме всички останали типове...
+        const children = node.children && Array.isArray(node.children) ? node.children : [];
+        const text = children.map(child => child ? (child.text || '') : '').join('');
         return `<p>${text}</p>`;
-      }
-      if (node.type === 'heading-one') {
-        return `<h1>${node.children.map(child => child.text).join('')}</h1>`;
-      }
-      if (node.type === 'heading-two') {
-        return `<h2>${node.children.map(child => child.text).join('')}</h2>`;
-      }
-      if (node.type === 'bulleted-list') {
-        const items = node.children.map(item => 
-          `<li>${item.children.map(child => child.text).join('')}</li>`
-        ).join('');
-        return `<ul>${items}</ul>`;
-      }
-      if (node.type === 'numbered-list') {
-        const items = node.children.map(item => 
-          `<li>${item.children.map(child => child.text).join('')}</li>`
-        ).join('');
-        return `<ol>${items}</ol>`;
-      }
-      // ДОБАВЯМЕ ОБРАБОТКА НА BLOCKQUOTE
-      if (node.type === 'block-quote') {
-        const text = node.children.map(child => {
-          if (child.children) {
-            return child.children.map(c => {
-              let content = c.text || '';
-              if (c.bold) content = `<strong>${content}</strong>`;
-              if (c.italic) content = `<em>${content}</em>`;
-              if (c.underline) content = `<u>${content}</u>`;
-              return content;
-            }).join('');
-          }
-          return child.text || '';
-        }).join('');
-        return `<blockquote>${text}</blockquote>`;
-      }
-      return `<p>${node.children?.map(child => child.text).join('') || ''}</p>`;
-    })
-    .join('');
+      })
+      .join('');
+  }
 };
-
-// Проверка дали Slate редакторът е празен
 export const isSlateEmpty = (value) => {
   if (!value || !Array.isArray(value)) return true;
   

@@ -1,4 +1,3 @@
-/* eslint-disable no-loop-func */
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { notify } from "../../utils/notify";
@@ -7,877 +6,814 @@ import { isFormValid, validateArticleField, validateArticleForm } from "../Artic
 import { allowedImageTypes, allowedVideoTypes, compressImage, uploadFileWithProgress, isValidImageUrl } from "../Articles/articleUtils/file-utils";
 import { prepareArticleValuesForSubmit, addSectionToArray, removeSectionByIndex, createEmptySection, swapSectionMediaFiles } from "../Articles/articleUtils/article-utils";
 import { updateSectionImageAlt, updateSectionImageInfo } from "../Articles/articleUtils/image-utils";
-import { createSlateEditorState, isSlateEmpty, convertEditorToHtml, convertSlateToHtml } from "../Initiatives/CreateIniciative/Utils/initiativeEditorUtils";
 import { addTagToArray, removeTagByIndex } from "../Articles/articleUtils/tags";
+import { htmlToSlate, isHtmlContent, createSlateEditorState } from "../Articles/articleUtils/htmlToSlate";
 
-// Валидационни функции за Slate - мемоизирани
-const isValidSlateValue = (value) => {
-  if (!Array.isArray(value) || value.length === 0) {
-    return false;
-  }
-  
-  return value.every(node => {
-    if (!node || typeof node !== 'object') return false;
-    if (!node.children || !Array.isArray(node.children)) return false;
+// Конвертиране на Slate към HTML
+// Конвертиране на Slate към HTML
+const convertSlateToHtml = (slateValue) => {
+    if (!Array.isArray(slateValue)) return '';
     
-    return node.children.length > 0 && 
-           node.children.some(child => child.hasOwnProperty('text'));
-  });
+    const serialize = (node) => {
+        if (typeof node === 'string') return node;
+        if (!node || !node.children) return '';
+        
+        // 🔧 БЕЗОПАСНА обработка на children
+        const children = node.children && Array.isArray(node.children) 
+            ? node.children.map(n => serialize(n)).join('') 
+            : '';
+        
+        switch (node.type) {
+            case 'heading-one':
+                return `<h1>${children}</h1>`;
+            case 'heading-two':
+                return `<h2>${children}</h2>`;
+            case 'block-quote':
+                return `<blockquote>${children}</blockquote>`;
+            case 'bulleted-list':
+                return `<ul>${children}</ul>`;
+            case 'numbered-list':
+                return `<ol>${children}</ol>`;
+            case 'list-item':
+                return `<li>${children}</li>`;
+            case 'paragraph':
+            default:
+                let text = children;
+                if (node.bold) text = `<strong>${text}</strong>`;
+                if (node.italic) text = `<em>${text}</em>`;
+                if (node.underline) text = `<u>${text}</u>`;
+                return node.type === 'paragraph' ? `<p>${text}</p>` : text;
+        }
+    };
+    
+    try {
+        const result = slateValue.map(serialize).join('');
+        return result || '';
+    } catch (error) {
+        console.error('Грешка при конвертиране на Slate в HTML:', error);
+        return '';
+    }
 };
 
-const normalizeSlateValue = (value) => {
-  if (!isValidSlateValue(value)) {
-    return [{ type: 'paragraph', children: [{ text: '' }] }];
-  }
-  
-  return value.map(node => ({
-    ...node,
-    children: node.children.length > 0 ? node.children : [{ text: '' }]
-  }));
-};
-
-// Функция за дълбоко сравнение на Slate стойности
-const isSlateValueEqual = (value1, value2) => {
-  return JSON.stringify(value1) === JSON.stringify(value2);
+// Проверка дали Slate е празен
+const isSlateEmpty = (value) => {
+    if (!Array.isArray(value) || value.length === 0) return true;
+    
+    return value.every(node => {
+        if ('text' in node) {
+            return !node.text || node.text.trim() === '';
+        }
+        
+        if (node.type) {
+            return false;
+        }
+        
+        if (!node.children || node.children.length === 0) return true;
+        return node.children.every(child => !child.text || child.text.trim() === '');
+    });
 };
 
 export const useCreateArticle = (initialValues, onSubmitHandler) => {
-  const { t } = useTranslation();
-  
-  // Подготвяме началните mediaFiles според наличните изображения от initialValues
-  const preparedMediaFiles = useMemo(() => {
-    const mediaFiles = {
-      mainImage: [],
-      sectionImages: {}
-    };
+    const { t } = useTranslation();
     
-    // Ако редактираме статия със съществуващи изображения в секциите
-    if (initialValues && initialValues.sections) {
-      initialValues.sections.forEach((section, index) => {
-        if (Array.isArray(section.image) && section.image.length > 0) {
-          // Имаме изображения в тази секция - добавяме празен масив
-          mediaFiles.sectionImages[index] = [];
-        }
-      });
-    }
-    
-    return mediaFiles;
-  }, [initialValues]);
-
-// В useCreateArticle.jsx - ОПРОСТИ useState:
-const [values, setValues] = useState(() => {
-    const defaultValues = {
-      title: "",
-      slug: "",
-      author: "",
-      publishDate: new Date().toISOString().split('T')[0],
-      summary: createSlateEditorState(),
-      mainImage: {
-        type: "image",
-        sources: [],
-        alt: createSlateEditorState(),
-        thumbnail: "",
-        videoUrl: "",
-        subtitles: [],
-        allowDownload: false,
-      },
-      sections: [
-        {
-          title: "",
-          content: createSlateEditorState(),
-          image: [],
-          order: 1,
+    const defaultValues = useMemo(() => ({
+        title: "",
+        slug: "",
+        author: "",
+        publishDate: new Date().toISOString().split('T')[0],
+        summary: createSlateEditorState(),
+        mainImage: {
+            type: "image",
+            sources: [],
+            alt: createSlateEditorState(),
+            thumbnail: "",
+            videoUrl: "",
+            subtitles: [],
+            allowDownload: false,
         },
-      ],
-      tags: [],
-      previousArticle: null,
-      nextArticle: null,
-    };
+        sections: [
+            {
+                title: "",
+                content: createSlateEditorState(),
+                image: [],
+                order: 1,
+            },
+        ],
+        tags: [],
+        previousArticle: null,
+        nextArticle: null,
+    }), []);
 
-    return initialValues || defaultValues;
-});
+    // 🔧 ПРАВИЛНО използване на initial values
+    const [values, setValues] = useState(() => {
+        console.log('🔧 Hook initialization with:', initialValues);
+        return initialValues || defaultValues;
+    });
 
-  const [errors, setErrors] = useState({});
-  const [mediaFiles, setMediaFiles] = useState(preparedMediaFiles);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
+    // 🔧 ВАЖНО: Update values когато initialValues се променят
+    useEffect(() => {
+        if (initialValues && initialValues !== values) {
+            console.log('🔄 Updating values with new initialValues:', initialValues);
+            setValues(initialValues);
+        }
+    }, [initialValues]);
 
-  const valuesRef = useRef(values);
-  const mediaFilesRef = useRef(mediaFiles);
-  
-  // Винаги актуални стойности
-  valuesRef.current = values;
-  mediaFilesRef.current = mediaFiles;
+    const [errors, setErrors] = useState({});
+    const [mediaFiles, setMediaFiles] = useState({
+        mainImage: [],
+        sectionImages: {}
+    });
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [isUploading, setIsUploading] = useState(false);
 
-  // Мемоизираме onChangeHandler
-  const onChangeHandler = useCallback((e, isEditor = false, editorValue = null) => {
-    if (isEditor) {
-      const { name, value } = editorValue;
-      
-      setValues(prev => {
-        // Проверка за промяна в секции
-        if (name.includes("[") && name.includes("]")) {
-          const matches = name.match(/sections\[(\d+)\]\.(\w+)/);
-          if (matches) {
-            const sectionIndex = parseInt(matches[1], 10);
-            const sectionField = matches[2];
+    const valuesRef = useRef(values);
+    const mediaFilesRef = useRef(mediaFiles);
+    
+    valuesRef.current = values;
+    mediaFilesRef.current = mediaFiles;
+
+    // onChange handler
+    const onChangeHandler = useCallback((e, isEditor = false, editorValue = null) => {
+        if (isEditor) {
+            const { name, value } = editorValue;
             
-            // Проверяваме дали има реална промяна
-            const currentValue = prev.sections[sectionIndex]?.[sectionField];
-            if (isSlateValueEqual(currentValue, value)) {
-              return prev; // Няма промяна - връщаме същия state
+            setValues(prev => {
+                if (name.includes("[") && name.includes("]")) {
+                    const matches = name.match(/sections\[(\d+)\]\.(\w+)/);
+                    if (matches) {
+                        const sectionIndex = parseInt(matches[1], 10);
+                        const sectionField = matches[2];
+                        
+                        const updatedSections = [...prev.sections];
+                        
+                        if (!updatedSections[sectionIndex]) {
+                            updatedSections[sectionIndex] = { 
+                                order: sectionIndex + 1,
+                                content: createSlateEditorState(),
+                                title: "",
+                                image: []
+                            };
+                        }
+
+                        updatedSections[sectionIndex] = {
+                            ...updatedSections[sectionIndex],
+                            [sectionField]: value
+                        };
+
+                        return {
+                            ...prev,
+                            sections: updatedSections
+                        };
+                    }
+                } else if (name.includes(".")) {
+                    const [parent, child] = name.split(".");
+                    return {
+                        ...prev,
+                        [parent]: {
+                            ...prev[parent],
+                            [child]: value
+                        }
+                    };
+                } else {
+                    return {
+                        ...prev,
+                        [name]: value
+                    };
+                }
+            });
+            return;
+        }
+
+        const { name, value } = e.target;
+
+        setValues(prev => {
+            if (name === "title") {
+                const slug = generateSlug(value);
+                return {
+                    ...prev,
+                    title: value,
+                    slug: slug
+                };
+            } else if (name.includes("[") && name.includes("]")) {
+                const matches = name.match(/sections\[(\d+)\]\.(\w+)/);
+                if (matches) {
+                    const sectionIndex = parseInt(matches[1], 10);
+                    const sectionField = matches[2];
+
+                    const updatedSections = [...prev.sections];
+                    if (!updatedSections[sectionIndex]) {
+                        updatedSections[sectionIndex] = { order: sectionIndex + 1 };
+                    }
+
+                    updatedSections[sectionIndex] = {
+                        ...updatedSections[sectionIndex],
+                        [sectionField]: value
+                    };
+
+                    return {
+                        ...prev,
+                        sections: updatedSections
+                    };
+                }
+            } else if (name.includes(".")) {
+                const [parent, child] = name.split(".");
+                return {
+                    ...prev,
+                    [parent]: {
+                        ...prev[parent],
+                        [child]: value
+                    }
+                };
+            } else {
+                return {
+                    ...prev,
+                    [name]: value
+                };
             }
-            
-            const normalizedValue = normalizeSlateValue(value);
+        });
+    }, []);
+
+    // onBlur handler
+    const onBlurHandler = useCallback((e, isEditor = false, editorValue = null) => {
+        try {
+            if (isEditor) {
+                const { name, value } = editorValue;
+                const error = validateArticleField(name, value, t);
+                setErrors(prev => ({ ...prev, [name]: error }));
+                return;
+            }
+
+            const { name, value } = e.target;
+            const error = validateArticleField(name, value, t);
+
+            setErrors(prev => ({
+                ...prev,
+                [name]: error
+            }));
+        } catch (error) {
+            console.error('Грешка при валидация:', error);
+        }
+    }, [t]);
+
+    // Main image type change
+    const handleMainImageTypeChange = useCallback((type) => {
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                type: type,
+                sources: []
+            }
+        }));
+    }, []);
+
+    // Section management
+    const addSection = useCallback(() => {
+        setValues(prev => ({
+            ...prev,
+            sections: addSectionToArray(prev.sections)
+        }));
+    }, []);
+
+    const removeSection = useCallback((index) => {
+        if (valuesRef.current.sections.length <= 1) {
+            notify("notification.minimum_one_section");
+            return;
+        }
+
+        setValues(prev => ({
+            ...prev,
+            sections: removeSectionByIndex(prev.sections, index)
+        }));
+
+        setMediaFiles(prev => {
+            if (prev.sectionImages[index]) {
+                const updatedMediaFiles = { ...prev };
+                delete updatedMediaFiles.sectionImages[index];
+                return updatedMediaFiles;
+            }
+            return prev;
+        });
+    }, []);
+
+    // Tag management
+    const addTag = useCallback((tag) => {
+        setValues(prev => ({
+            ...prev,
+            tags: addTagToArray(prev.tags, tag)
+        }));
+    }, []);
+
+    const removeTag = useCallback((index) => {
+        setValues(prev => ({
+            ...prev,
+            tags: removeTagByIndex(prev.tags, index)
+        }));
+    }, []);
+
+    // Media file handling
+    const handleMainImageFiles = useCallback((files) => {
+        if (!files || files.length === 0) return;
+
+        const fileArray = Array.from(files);
+        const currentValues = valuesRef.current;
+
+        if (currentValues.mainImage.type === "video") {
+            const videoFile = fileArray[0];
+            if (!allowedVideoTypes.includes(videoFile.type)) {
+                notify("notification.invalid_video_format");
+                return;
+            }
+
+            setMediaFiles(prev => ({
+                ...prev,
+                mainImage: [videoFile]
+            }));
+        } else {
+            const validFiles = fileArray.filter(file =>
+                allowedImageTypes.includes(file.type)
+            );
+
+            if (validFiles.length !== fileArray.length) {
+                notify("notification.invalid_image_format");
+            }
+
+            if (currentValues.mainImage.type === "slider") {
+                setMediaFiles(prev => ({
+                    ...prev,
+                    mainImage: [...prev.mainImage, ...validFiles]
+                }));
+            } else {
+                setMediaFiles(prev => ({
+                    ...prev,
+                    mainImage: [validFiles[0]]
+                }));
+            }
+        }
+    }, []);
+
+    const handleSectionImageFile = useCallback((files, sectionIndex) => {
+        if (!files || files.length === 0) return;
+
+        const fileArray = Array.from(files);
+        const validFiles = fileArray.filter(file => allowedImageTypes.includes(file.type));
+
+        if (validFiles.length !== fileArray.length) {
+            notify("notification.invalid_image_format");
+        }
+
+        if (validFiles.length === 0) return;
+
+        setMediaFiles(prev => {
+            const existingFiles = prev.sectionImages[sectionIndex] || [];
+            return {
+                ...prev,
+                sectionImages: {
+                    ...prev.sectionImages,
+                    [sectionIndex]: [...existingFiles, ...validFiles]
+                }
+            };
+        });
+
+        setValues(prev => {
+            const updatedSections = [...prev.sections];
+
+            if (!updatedSections[sectionIndex]) {
+                return prev;
+            }
+
+            if (!Array.isArray(updatedSections[sectionIndex].image)) {
+                updatedSections[sectionIndex].image = [];
+            }
+
+            const newImages = validFiles.map(file => ({
+                src: URL.createObjectURL(file),
+                alt: createSlateEditorState(),
+                caption: createSlateEditorState(),
+                isFile: true,
+                file: file
+            }));
+
+            updatedSections[sectionIndex].image = [
+                ...updatedSections[sectionIndex].image,
+                ...newImages
+            ];
+
+            return {
+                ...prev,
+                sections: updatedSections
+            };
+        });
+
+        return true;
+    }, []);
+
+    // Image URL handlers
+    const handleMainImageUrl = useCallback((url) => {
+        if (!url) return false;
+
+        if (!isValidImageUrl(url)) {
+            notify("notification.invalid_image_url");
+            return false;
+        }
+
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                sources: [...prev.mainImage.sources, url]
+            }
+        }));
+
+        notify("notification.image_url_added");
+        return true;
+    }, []);
+
+    const handleSectionImageUrl = useCallback((url, sectionIndex) => {
+        if (!url) return false;
+
+        if (!url.match(/^(https?:\/\/)(.+)\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i)) {
+            notify("notification.invalid_image_url");
+            return false;
+        }
+
+        setValues(prev => {
+            const updatedSections = [...prev.sections];
+
+            if (!updatedSections[sectionIndex]) {
+                return prev;
+            }
+
+            if (!Array.isArray(updatedSections[sectionIndex].image)) {
+                updatedSections[sectionIndex].image = [];
+            }
+
+            updatedSections[sectionIndex].image.push({
+                src: url,
+                alt: createSlateEditorState(),
+                caption: createSlateEditorState()
+            });
+
+            return {
+                ...prev,
+                sections: updatedSections
+            };
+        });
+
+        notify("notification.section_image_url_added");
+        return true;
+    }, []);
+
+    // Remove functions
+    const removeUrlImage = useCallback((index) => {
+        setValues(prev => {
+            const newSources = [...prev.mainImage.sources];
+            newSources.splice(index, 1);
+
+            return {
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    sources: newSources
+                }
+            };
+        });
+    }, []);
+
+    const removeMainImage = useCallback((index) => {
+        setMediaFiles(prev => {
+            const updatedFiles = [...prev.mainImage];
+            updatedFiles.splice(index, 1);
+            return {
+                ...prev,
+                mainImage: updatedFiles
+            };
+        });
+    }, []);
+
+    const removeSectionImage = useCallback((sectionIndex, imageIndex = 0) => {
+        setValues(prev => {
+            const updatedSections = [...prev.sections];
+
+            if (!updatedSections[sectionIndex]) {
+                return prev;
+            }
+
+            if (Array.isArray(updatedSections[sectionIndex].image)) {
+                updatedSections[sectionIndex].image.splice(imageIndex, 1);
+            } else {
+                updatedSections[sectionIndex].image = [];
+            }
+
+            return {
+                ...prev,
+                sections: updatedSections
+            };
+        });
+
+        setMediaFiles(prev => {
+            const sectionFiles = prev.sectionImages[sectionIndex] || [];
+
+            if (sectionFiles.length > imageIndex) {
+                const updatedFiles = [...sectionFiles];
+                updatedFiles.splice(imageIndex, 1);
+
+                return {
+                    ...prev,
+                    sectionImages: {
+                        ...prev.sectionImages,
+                        [sectionIndex]: updatedFiles.length > 0 ? updatedFiles : []
+                    }
+                };
+            }
+
+            return prev;
+        });
+    }, []);
+
+    // Update image info
+    const updateImageInfo = useCallback((sectionIndex, imageIndex, altText, captionText) => {
+        setValues(prev => {
             const updatedSections = [...prev.sections];
             
             if (!updatedSections[sectionIndex]) {
-              updatedSections[sectionIndex] = { 
-                order: sectionIndex + 1,
-                content: createSlateEditorState(),
-                title: "",
-                image: []
-              };
+                return prev;
             }
-
-            updatedSections[sectionIndex] = {
-              ...updatedSections[sectionIndex],
-              [sectionField]: normalizedValue
+            
+            if (!Array.isArray(updatedSections[sectionIndex].image)) {
+                return prev;
+            }
+            
+            if (!updatedSections[sectionIndex].image[imageIndex]) {
+                return prev;
+            }
+            
+            updatedSections[sectionIndex].image[imageIndex] = {
+                ...updatedSections[sectionIndex].image[imageIndex],
+                alt: altText,
+                caption: captionText
             };
-
+            
             return {
-              ...prev,
-              sections: updatedSections
+                ...prev,
+                sections: updatedSections
             };
-          }
-        } else if (name.includes(".")) {
-          const [parent, child] = name.split(".");
-          const currentValue = prev[parent]?.[child];
-          
-          if (isSlateValueEqual(currentValue, value)) {
-            return prev; // Няма промяна
-          }
-          
-          const normalizedValue = normalizeSlateValue(value);
-          return {
+        });
+    }, []);
+
+    const updateImageAlt = useCallback((sectionIndex, imageIndex, altText) => {
+        setValues(prev => ({
             ...prev,
-            [parent]: {
-              ...prev[parent],
-              [child]: normalizedValue
-            }
-          };
-        } else {
-          const currentValue = prev[name];
-          if (isSlateValueEqual(currentValue, value)) {
-            return prev; // Няма промяна
-          }
-          
-          const normalizedValue = normalizeSlateValue(value);
-          return {
-            ...prev,
-            [name]: normalizedValue
-          };
-        }
-      });
-      return;
-    }
-
-    const { name, value } = e.target;
-
-    setValues(prev => {
-      if (name === "title") {
-        // Автоматично генерираме slug при промяна на заглавието
-        const slug = generateSlug(value);
-        if (prev.title === value && prev.slug === slug) {
-          return prev; // Няма промяна
-        }
-        return {
-          ...prev,
-          title: value,
-          slug: slug
-        };
-      } else if (name.includes("[") && name.includes("]")) {
-        // Обработка на полета в секциите - sections[0].title
-        const matches = name.match(/sections\[(\d+)\]\.(\w+)/);
-        if (matches) {
-          const sectionIndex = parseInt(matches[1], 10);
-          const sectionField = matches[2];
-
-          // Проверяваме за промяна
-          const currentValue = prev.sections[sectionIndex]?.[sectionField];
-          if (currentValue === value) {
-            return prev;
-          }
-
-          const updatedSections = [...prev.sections];
-          if (!updatedSections[sectionIndex]) {
-            updatedSections[sectionIndex] = { order: sectionIndex + 1 };
-          }
-
-          updatedSections[sectionIndex] = {
-            ...updatedSections[sectionIndex],
-            [sectionField]: value
-          };
-
-          return {
-            ...prev,
-            sections: updatedSections
-          };
-        }
-      } else if (name.includes(".")) {
-        const [parent, child] = name.split(".");
-        const currentValue = prev[parent]?.[child];
-        
-        if (currentValue === value) {
-          return prev;
-        }
-        
-        return {
-          ...prev,
-          [parent]: {
-            ...prev[parent],
-            [child]: value
-          }
-        };
-      } else {
-        if (prev[name] === value) {
-          return prev;
-        }
-        
-        return {
-          ...prev,
-          [name]: value
-        };
-      }
-    });
-  }, []);
-
-  // Мемоизираме onBlurHandler
-  const onBlurHandler = useCallback((e, isEditor = false, editorValue = null) => {
-    try {
-      if (isEditor) {
-        const { name, value } = editorValue;
-        const error = validateArticleField(name, value, t);
-        setErrors(prev => ({ ...prev, [name]: error }));
-        return;
-      }
-
-      const { name, value } = e.target;
-      const error = validateArticleField(name, value, t);
-
-      setErrors(prev => ({
-        ...prev,
-        [name]: error
-      }));
-    } catch (error) {
-      console.error('Грешка при валидация:', error);
-    }
-  }, [t]);
-
-  // ФИКСИРАНИ ФУНКЦИИ С REFS:
-
-  // Мемоизираме handleMainImageTypeChange
-  const handleMainImageTypeChange = useCallback((type) => {
-    setValues(prev => {
-      if (prev.mainImage.type === type) {
-        return prev;
-      }
-      
-      return {
-        ...prev,
-        mainImage: {
-          ...prev.mainImage,
-          type: type,
-          sources: []
-        }
-      };
-    });
-  }, []);
-
-  // Мемоизираме addSection
-  const addSection = useCallback(() => {
-    setValues(prev => ({
-      ...prev,
-      sections: addSectionToArray(prev.sections)
-    }));
-  }, []);
-
-  // ФИКСИРАН removeSection - използва ref
-  const removeSection = useCallback((index) => {
-    if (valuesRef.current.sections.length <= 1) {
-      notify("notification.minimum_one_section");
-      return;
-    }
-
-    setValues(prev => ({
-      ...prev,
-      sections: removeSectionByIndex(prev.sections, index)
-    }));
-
-    // Премахване от медийните файлове
-    setMediaFiles(prev => {
-      if (prev.sectionImages[index]) {
-        const updatedMediaFiles = { ...prev };
-        delete updatedMediaFiles.sectionImages[index];
-        return updatedMediaFiles;
-      }
-      return prev;
-    });
-  }, []); // БЕЗ dependencies!
-
-  // Мемоизираме addTag
-  const addTag = useCallback((tag) => {
-    setValues(prev => ({
-      ...prev,
-      tags: addTagToArray(prev.tags, tag)
-    }));
-  }, []);
-
-  // Мемоизираме removeTag
-  const removeTag = useCallback((index) => {
-    setValues(prev => ({
-      ...prev,
-      tags: removeTagByIndex(prev.tags, index)
-    }));
-  }, []);
-
-  // ФИКСИРАН handleMainImageFiles - използва ref
-  const handleMainImageFiles = useCallback((files) => {
-    if (!files || files.length === 0) return;
-
-    const fileArray = Array.from(files);
-    const currentValues = valuesRef.current;
-
-    // Проверяваме типа на медията
-    if (currentValues.mainImage.type === "video") {
-      // За видео, проверяваме само първия файл
-      const videoFile = fileArray[0];
-      if (!allowedVideoTypes.includes(videoFile.type)) {
-        notify("notification.invalid_video_format");
-        return;
-      }
-
-      // За видео, запазваме само един файл
-      setMediaFiles(prev => ({
-        ...prev,
-        mainImage: [videoFile]
-      }));
-    } else {
-      // За изображения, филтрираме по допустими формати
-      const validFiles = fileArray.filter(file =>
-        allowedImageTypes.includes(file.type)
-      );
-
-      if (validFiles.length !== fileArray.length) {
-        notify("notification.invalid_image_format");
-      }
-
-      if (currentValues.mainImage.type === "slider") {
-        // За слайдер можем да добавим множество изображения
-        setMediaFiles(prev => ({
-          ...prev,
-          mainImage: [...prev.mainImage, ...validFiles]
+            sections: updateSectionImageAlt(prev.sections, sectionIndex, imageIndex, altText)
         }));
-      } else {
-        // За единично изображение, заменяме съществуващото
-        setMediaFiles(prev => ({
-          ...prev,
-          mainImage: [validFiles[0]]
-        }));
-      }
-    }
-  }, []); // БЕЗ dependencies!
+    }, []);
 
-  // Мемоизираме handleSectionImageFile
-  const handleSectionImageFile = useCallback((files, sectionIndex) => {
-    if (!files || files.length === 0) return;
+    // Upload thumbnail
+    const uploadThumbnailFile = useCallback(async (file) => {
+        try {
+            setIsUploading(true);
 
-    const fileArray = Array.from(files);
-    const validFiles = fileArray.filter(file => allowedImageTypes.includes(file.type));
-
-    if (validFiles.length !== fileArray.length) {
-      notify("notification.invalid_image_format");
-    }
-
-    if (validFiles.length === 0) return;
-
-    // Обновяваме медийните файлове
-    setMediaFiles(prev => {
-      const existingFiles = prev.sectionImages[sectionIndex] || [];
-      return {
-        ...prev,
-        sectionImages: {
-          ...prev.sectionImages,
-          [sectionIndex]: [...existingFiles, ...validFiles]
-        }
-      };
-    });
-
-    // Обновяваме стойностите на секцията
-    setValues(prev => {
-      const updatedSections = [...prev.sections];
-
-      if (!updatedSections[sectionIndex]) {
-        return prev;
-      }
-
-      if (!Array.isArray(updatedSections[sectionIndex].image)) {
-        updatedSections[sectionIndex].image = [];
-      }
-
-      // Добавяме новите изображения към масива
-      const newImages = validFiles.map(file => ({
-        src: URL.createObjectURL(file),
-        alt: createSlateEditorState(),
-        caption: createSlateEditorState(),
-        isFile: true,
-        file: file
-      }));
-
-      updatedSections[sectionIndex].image = [
-        ...updatedSections[sectionIndex].image,
-        ...newImages
-      ];
-
-      return {
-        ...prev,
-        sections: updatedSections
-      };
-    });
-
-    return true;
-  }, []);
-
-  // Мемоизираме removeMainImage
-  const removeMainImage = useCallback((index) => {
-    setMediaFiles(prev => {
-      const updatedFiles = [...prev.mainImage];
-      updatedFiles.splice(index, 1);
-      return {
-        ...prev,
-        mainImage: updatedFiles
-      };
-    });
-  }, []);
-
-  // Мемоизираме removeSectionImage
-  const removeSectionImage = useCallback((sectionIndex, imageIndex = 0) => {
-    setValues(prev => {
-      const updatedSections = [...prev.sections];
-
-      if (!updatedSections[sectionIndex]) {
-        return prev;
-      }
-
-      if (Array.isArray(updatedSections[sectionIndex].image)) {
-        // Премахваме изображението от масива
-        updatedSections[sectionIndex].image.splice(imageIndex, 1);
-      } else {
-        updatedSections[sectionIndex].image = [];
-      }
-
-      return {
-        ...prev,
-        sections: updatedSections
-      };
-    });
-
-    setMediaFiles(prev => {
-      const sectionFiles = prev.sectionImages[sectionIndex] || [];
-
-      if (sectionFiles.length > imageIndex) {
-        const updatedFiles = [...sectionFiles];
-        updatedFiles.splice(imageIndex, 1);
-
-        return {
-          ...prev,
-          sectionImages: {
-            ...prev.sectionImages,
-            [sectionIndex]: updatedFiles.length > 0 ? updatedFiles : []
-          }
-        };
-      }
-
-      return prev;
-    });
-  }, []);
-
-  // ФИКСИРАН validateForm - използва ref
-  const validateForm = useCallback(() => {
-    const newErrors = validateArticleForm(valuesRef.current, t);
-    setErrors(newErrors);
-    return isFormValid(newErrors);
-  }, [t]); // БЕЗ values dependency!
-
-  // ФИКСИРАН uploadAllMedia - използва ref
-  const uploadAllMedia = useCallback(async () => {
-    setIsUploading(true);
-    setUploadProgress(0);
-
-    try {
-      const currentValues = valuesRef.current;
-      const currentMediaFiles = mediaFilesRef.current;
-      
-      let mainImageUrls = [];
-      let totalFilesCount = currentMediaFiles.mainImage.length;
-
-      // Изчисляваме общия брой на файловете за качване
-      Object.values(currentMediaFiles.sectionImages).forEach(files => {
-        if (Array.isArray(files)) {
-          totalFilesCount += files.length;
-        } else if (files) {
-          totalFilesCount += 1;
-        }
-      });
-
-      let uploadedFilesCount = 0;
-
-      // 1. Качване на основното изображение/видео
-      if (currentMediaFiles.mainImage.length > 0) {
-        if (currentValues.mainImage.type === "image" || currentValues.mainImage.type === "slider") {
-          // Качване на изображения
-          const imageUploads = currentMediaFiles.mainImage.map(async (file) => {
-            const compressedFile = await compressImage(file, {
-              maxSizeMB: 2,
-              maxWidthOrHeight: 1920
-            });
-
-            const url = await uploadFileWithProgress(
-              compressedFile,
-              'articles/images',
-              (progress) => {
-                uploadedFilesCount = Math.min(uploadedFilesCount + (progress / 100), totalFilesCount);
-                setUploadProgress((uploadedFilesCount / totalFilesCount) * 100);
-              }
+            const thumbnailUrl = await uploadFileWithProgress(
+                file,
+                'articles/thumbnails',
+                (progress) => {
+                    setUploadProgress(progress);
+                }
             );
 
-            return url;
-          });
+            onChangeHandler({
+                target: {
+                    name: "mainImage.thumbnail",
+                    value: thumbnailUrl
+                }
+            });
 
-          mainImageUrls = await Promise.all(imageUploads);
-        } else if (currentValues.mainImage.type === "video") {
-          // Качване на видео
-          const videoFile = currentMediaFiles.mainImage[0];
-          const videoUrl = await uploadFileWithProgress(
-            videoFile,
-            'articles/videos',
-            (progress) => {
-              uploadedFilesCount = Math.min(uploadedFilesCount + (progress / 100), totalFilesCount);
-              setUploadProgress((uploadedFilesCount / totalFilesCount) * 100);
+            notify("notification.thumbnail_upload_success");
+        } catch (error) {
+            console.error("Грешка при качване на миниатюра:", error);
+            notify("notification.thumbnail_upload_error", error);
+        } finally {
+            setIsUploading(false);
+        }
+    }, [onChangeHandler]);
+
+    // Swap sections media
+    const swapSectionsMedia = useCallback((index1, index2) => {
+        setMediaFiles(prev => ({
+            ...prev,
+            sectionImages: swapSectionMediaFiles(prev.sectionImages, index1, index2)
+        }));
+    }, []);
+
+    // Form validation
+    const validateForm = useCallback(() => {
+        const newErrors = validateArticleForm(valuesRef.current, t);
+        setErrors(newErrors);
+        return isFormValid(newErrors);
+    }, [t]);
+
+    // Upload all media
+    const uploadAllMedia = useCallback(async () => {
+        setIsUploading(true);
+        setUploadProgress(0);
+
+        try {
+            const currentValues = valuesRef.current;
+            const currentMediaFiles = mediaFilesRef.current;
+            
+            let mainImageUrls = [];
+            let totalFilesCount = currentMediaFiles.mainImage.length;
+
+            Object.values(currentMediaFiles.sectionImages).forEach(files => {
+                if (Array.isArray(files)) {
+                    totalFilesCount += files.length;
+                } else if (files) {
+                    totalFilesCount += 1;
+                }
+            });
+
+            let uploadedFilesCount = 0;
+
+            // Upload main images/videos
+            if (currentMediaFiles.mainImage.length > 0) {
+                if (currentValues.mainImage.type === "image" || currentValues.mainImage.type === "slider") {
+                    const imageUploads = currentMediaFiles.mainImage.map(async (file) => {
+                        const compressedFile = await compressImage(file, {
+                            maxSizeMB: 2,
+                            maxWidthOrHeight: 1920
+                        });
+
+                        const url = await uploadFileWithProgress(
+                            compressedFile,
+                            'articles/images',
+                            (progress) => {
+                                uploadedFilesCount = Math.min(uploadedFilesCount + (progress / 100), totalFilesCount);
+                                setUploadProgress((uploadedFilesCount / totalFilesCount) * 100);
+                            }
+                        );
+
+                        return url;
+                    });
+
+                    mainImageUrls = await Promise.all(imageUploads);
+                } else if (currentValues.mainImage.type === "video") {
+                    const videoFile = currentMediaFiles.mainImage[0];
+                    const videoUrl = await uploadFileWithProgress(
+                        videoFile,
+                        'articles/videos',
+                        (progress) => {
+                            uploadedFilesCount = Math.min(uploadedFilesCount + (progress / 100), totalFilesCount);
+                            setUploadProgress((uploadedFilesCount / totalFilesCount) * 100);
+                        }
+                    );
+
+                    mainImageUrls = [videoUrl];
+                }
             }
-          );
 
-          mainImageUrls = [videoUrl];
-        }
-      }
+            // Upload section images
+            const sectionImagesUrlsBySection = {};
 
-      // 2. Качване на изображения за секции
-      const sectionImagesUrlsBySection = {};
+            for (const [sectionIndex, files] of Object.entries(currentMediaFiles.sectionImages)) {
+                if (!files || (Array.isArray(files) && files.length === 0)) continue;
 
-      // За всяка секция с изображения
-      for (const [sectionIndex, files] of Object.entries(currentMediaFiles.sectionImages)) {
-        if (!files || (Array.isArray(files) && files.length === 0)) continue;
+                const filesArray = Array.isArray(files) ? files : [files];
+                const sectionImagesUrls = [];
 
-        const filesArray = Array.isArray(files) ? files : [files];
-        const sectionImagesUrls = [];
+                for (const file of filesArray) {
+                    const compressedFile = await compressImage(file, {
+                        maxSizeMB: 1,
+                        maxWidthOrHeight: 1200
+                    });
 
-        // Качваме всеки файл
-        for (const file of filesArray) {
-          const compressedFile = await compressImage(file, {
-            maxSizeMB: 1,
-            maxWidthOrHeight: 1200
-          });
+                    const url = await uploadFileWithProgress(
+                        compressedFile,
+                        'articles/section-images',
+                        (progress) => {
+                            uploadedFilesCount = Math.min(uploadedFilesCount + (progress / 100), totalFilesCount);
+                            setUploadProgress((uploadedFilesCount / totalFilesCount) * 100);
+                        }
+                    );
 
-          const url = await uploadFileWithProgress(
-            compressedFile,
-            'articles/section-images',
-            (progress) => {
-              uploadedFilesCount = Math.min(uploadedFilesCount + (progress / 100), totalFilesCount);
-              setUploadProgress((uploadedFilesCount / totalFilesCount) * 100);
+                    sectionImagesUrls.push(url);
+                }
+
+                sectionImagesUrlsBySection[sectionIndex] = sectionImagesUrls;
             }
-          );
 
-          sectionImagesUrls.push(url);
-        }
+            const updatedValues = { ...currentValues };
 
-        sectionImagesUrlsBySection[sectionIndex] = sectionImagesUrls;
-      }
-
-      const updatedValues = { ...currentValues };
-
-      if (mainImageUrls.length > 0) {
-        updatedValues.mainImage.sources = [
-          ...mainImageUrls,
-          ...updatedValues.mainImage.sources
-        ];
-      }
-
-      // Обновяваме секциите с изображения
-      for (const [sectionIndex, urls] of Object.entries(sectionImagesUrlsBySection)) {
-        if (!urls || urls.length === 0) continue;
-
-        const index = parseInt(sectionIndex, 10);
-        if (isNaN(index) || !updatedValues.sections[index]) continue;
-
-        // Получаваме текущите изображения
-        let currentImages = updatedValues.sections[index].image || [];
-        if (!Array.isArray(currentImages)) {
-          currentImages = [];
-        }
-
-        // Заместваме временните URL с реалните
-        const updatedImages = [...currentImages];
-
-        // Намираме изображенията, които са файлове и ги заместваме с новите URL
-        let urlIndex = 0;
-        for (let i = 0; i < updatedImages.length; i++) {
-          if (updatedImages[i] && updatedImages[i].isFile) {
-            if (urlIndex < urls.length) {
-              updatedImages[i] = {
-                src: urls[urlIndex],
-                alt: updatedImages[i].alt || createSlateEditorState(),
-                caption: updatedImages[i].caption || createSlateEditorState()
-              };
-              urlIndex++;
-            } else {
-              // Няма съответен URL, премахваме изображението
-              updatedImages.splice(i, 1);
-              i--;
+            if (mainImageUrls.length > 0) {
+                updatedValues.mainImage.sources = [
+                    ...mainImageUrls,
+                    ...updatedValues.mainImage.sources
+                ];
             }
-          }
+
+            // Update sections with uploaded images
+            for (const [sectionIndex, urls] of Object.entries(sectionImagesUrlsBySection)) {
+                if (!urls || urls.length === 0) continue;
+
+                const index = parseInt(sectionIndex, 10);
+                if (isNaN(index) || !updatedValues.sections[index]) continue;
+
+                let currentImages = updatedValues.sections[index].image || [];
+                if (!Array.isArray(currentImages)) {
+                    currentImages = [];
+                }
+
+                const updatedImages = [...currentImages];
+
+                let urlIndex = 0;
+                for (let i = 0; i < updatedImages.length; i++) {
+                    if (updatedImages[i] && updatedImages[i].isFile) {
+                        if (urlIndex < urls.length) {
+                            updatedImages[i] = {
+                                src: urls[urlIndex],
+                                alt: updatedImages[i].alt || createSlateEditorState(),
+                                caption: updatedImages[i].caption || createSlateEditorState()
+                            };
+                            urlIndex++;
+                        } else {
+                            updatedImages.splice(i, 1);
+                            i--;
+                        }
+                    }
+                }
+
+                updatedValues.sections[index].image = updatedImages;
+            }
+
+            setUploadProgress(100);
+            setIsUploading(false);
+
+            return updatedValues;
+        } catch (error) {
+            setIsUploading(false);
+            throw error;
+        }
+    }, []);
+
+    // Submit handler
+    const onSubmit = useCallback(async (e) => {
+        e.preventDefault();
+
+        const isValid = validateForm();
+        if (!isValid) {
+            notify("notification.form_contains_errors");
+            return;
         }
 
-        updatedValues.sections[index].image = updatedImages;
-      }
+        try {
+            const mediaUpdatedValues = await uploadAllMedia();
+            const preparedValues = prepareArticleValuesForSubmit(mediaUpdatedValues);
 
-      setUploadProgress(100);
-      setIsUploading(false);
+            if (onSubmitHandler) {
+                await onSubmitHandler(preparedValues);
+            }
 
-      return updatedValues;
-    } catch (error) {
-      setIsUploading(false);
-      throw error;
-    }
-  }, []); // БЕЗ dependencies!
-
-  // Мемоизираме handleMainImageUrl
-  const handleMainImageUrl = useCallback((url) => {
-    if (!url) return false;
-
-    if (!isValidImageUrl(url)) {
-      notify("notification.invalid_image_url");
-      return false;
-    }
-
-    setValues(prev => ({
-      ...prev,
-      mainImage: {
-        ...prev.mainImage,
-        sources: [...prev.mainImage.sources, url]
-      }
-    }));
-
-    notify("notification.image_url_added");
-    return true;
-  }, []);
-
-  // Мемоизираме handleSectionImageUrl
-  const handleSectionImageUrl = useCallback((url, sectionIndex) => {
-    if (!url) return false;
-
-    if (!url.match(/^(https?:\/\/)(.+)\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i)) {
-      notify("notification.invalid_image_url");
-      return false;
-    }
-
-    setValues(prev => {
-      const updatedSections = [...prev.sections];
-
-      if (!updatedSections[sectionIndex]) {
-        return prev;
-      }
-
-      if (!Array.isArray(updatedSections[sectionIndex].image)) {
-        updatedSections[sectionIndex].image = [];
-      }
-
-      updatedSections[sectionIndex].image.push({
-        src: url,
-        alt: createSlateEditorState(),
-        caption: createSlateEditorState()
-      });
-
-      return {
-        ...prev,
-        sections: updatedSections
-      };
-    });
-
-    notify("notification.section_image_url_added");
-    return true;
-  }, []);
-
-  // Мемоизираме removeUrlImage
-  const removeUrlImage = useCallback((index) => {
-    setValues(prev => {
-      const newSources = [...prev.mainImage.sources];
-      newSources.splice(index, 1);
-
-      return {
-        ...prev,
-        mainImage: {
-          ...prev.mainImage,
-          sources: newSources
+            // DON'T RESET VALUES ON EDIT
+            if (!initialValues) {
+                setValues(defaultValues);
+                setMediaFiles({
+                    mainImage: [],
+                    sectionImages: {}
+                });
+                setErrors({});
+            }
+        } catch (error) {
+            console.error("Error submitting article:", error);
+            notify("notification.error", error);
         }
-      };
-    });
-  }, []);
+    }, [validateForm, uploadAllMedia, onSubmitHandler, initialValues, defaultValues]);
 
-  // Мемоизираме updateImageAlt
-  const updateImageAlt = useCallback((sectionIndex, imageIndex, altText) => {
-    setValues(prev => ({
-      ...prev,
-      sections: updateSectionImageAlt(prev.sections, sectionIndex, imageIndex, altText)
-    }));
-  }, []);
-
-  // Мемоизираме updateImageInfo
-  const updateImageInfo = useCallback((sectionIndex, imageIndex, altText, captionText) => {
-    
-    setValues(prev => {
-      
-      const updatedSections = [...prev.sections];
-      
-      if (!updatedSections[sectionIndex]) {
-        console.error('❌ Секция не съществува:', sectionIndex);
-        return prev;
-      }
-      
-      if (!Array.isArray(updatedSections[sectionIndex].image)) {
-        console.error('❌ Image не е масив:', updatedSections[sectionIndex].image);
-        return prev;
-      }
-      
-      if (!updatedSections[sectionIndex].image[imageIndex]) {
-        console.error('❌ Изображение не съществува на позиция:', imageIndex);
-        return prev;
-      }
-      
-      // Обновяваме изображението
-      updatedSections[sectionIndex].image[imageIndex] = {
-        ...updatedSections[sectionIndex].image[imageIndex],
-        alt: altText,
-        caption: captionText
-      };
-      
-      return {
-        ...prev,
-        sections: updatedSections
-      };
-    });
-  }, []);
-
-  // Мемоизираме uploadThumbnailFile
-  const uploadThumbnailFile = useCallback(async (file) => {
-    try {
-      setIsUploading(true);
-
-      const thumbnailUrl = await uploadFileWithProgress(
-        file,
-        'articles/thumbnails',
-        (progress) => {
-          setUploadProgress(progress);
-        }
-      );
-
-      // След качване, актуализираме стойността на thumbnail
-      onChangeHandler({
-        target: {
-          name: "mainImage.thumbnail",
-          value: thumbnailUrl
-        }
-      });
-
-      notify("notification.thumbnail_upload_success");
-    } catch (error) {
-      console.error("Грешка при качване на миниатюра:", error);
-      notify("notification.thumbnail_upload_error", error);
-    } finally {
-      setIsUploading(false);
-    }
-  }, [onChangeHandler]);
-
-  // Мемоизираме swapSectionsMedia
-  const swapSectionsMedia = useCallback((index1, index2) => {
-    setMediaFiles(prev => ({
-      ...prev,
-      sectionImages: swapSectionMediaFiles(prev.sectionImages, index1, index2)
-    }));
-  }, []);
-
-  // ФИКСИРАН onSubmit - използва ref
-  const onSubmit = useCallback(async (e) => {
-    e.preventDefault();
-
-    // Валидиране на формата
-    const isValid = validateForm();
-    if (!isValid) {
-      notify("notification.form_contains_errors");
-      return;
-    }
-
-    try {
-      // Качване на медийни файлове
-      const mediaUpdatedValues = await uploadAllMedia();
-
-      // Използваме утилитата за подготовка на стойностите за изпращане
-      const preparedValues = prepareArticleValuesForSubmit(mediaUpdatedValues);
-
-      // Извикване на обработчика с обновените стойности
-      if (onSubmitHandler) {
-        await onSubmitHandler(preparedValues);
-      }
-
-      // Ресет на формата след успешно създаване
-      setValues(initialValues);
-      setMediaFiles({
-        mainImage: [],
-        sectionImages: {}
-      });
-      setErrors({});
-    } catch (error) {
-      console.error("Error submitting article:", error);
-      notify("notification.error", error);
-    }
-  }, [validateForm, uploadAllMedia, onSubmitHandler, initialValues]);
-
-  return {
-    values,
-    setValues,
-    uploadThumbnailFile,
-    errors,
-    isUploading,
-    uploadProgress,
-    onChangeHandler,
-    updateImageAlt,
-    onBlurHandler,
-    swapSectionsMedia,
-    onSubmit,
-    handleMainImageTypeChange,
-    handleMainImageFiles,
-    handleSectionImageFile,
-    handleMainImageUrl,
-    handleSectionImageUrl,
-    removeUrlImage,
-    removeMainImage,
-    removeSectionImage,
-    addSection,
-    updateImageInfo,
-    removeSection,
-    addTag,
-    removeTag,
-    mediaFiles,
-    createSlateEditorState,
-    convertEditorToHtml: convertSlateToHtml 
-  };
+    return {
+        values,
+        setValues,
+        uploadThumbnailFile,
+        errors,
+        isUploading,
+        uploadProgress,
+        onChangeHandler,
+        updateImageAlt,
+        onBlurHandler,
+        swapSectionsMedia,
+        onSubmit,
+        handleMainImageTypeChange,
+        handleMainImageFiles,
+        handleSectionImageFile,
+        handleMainImageUrl,
+        handleSectionImageUrl,
+        removeUrlImage,
+        removeMainImage,
+        removeSectionImage,
+        addSection,
+        updateImageInfo,
+        removeSection,
+        addTag,
+        removeTag,
+        mediaFiles,
+        createSlateEditorState,
+        convertEditorToHtml: convertSlateToHtml 
+    };
 };

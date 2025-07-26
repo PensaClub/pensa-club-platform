@@ -601,6 +601,125 @@
   object-fit: contain;
   object-position: top;
 }
+/* === SLATE EDITOR CONTENT СТИЛОВЕ === */
+.article-summary-view[data-editor="slate"],
+.section-content[data-editor="slate"],
+.article-summary-view,
+.section-content {
+  
+  /* === BLOCKQUOTE СТИЛИЗАЦИЯ === */
+  blockquote, 
+  .slate-blockquote {
+    display: block !important;
+    border-left: 4px solid #1B8B8A !important;
+    margin: 1.5rem 0 !important;
+    padding: 1rem 1.5rem !important;
+    background-color: #f7fafc !important;
+    font-style: italic !important;
+    color: #4a5568 !important;
+    font-size: 1.125rem !important;
+    border-radius: 0 8px 8px 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    position: relative !important;
+  }
+
+  blockquote::before,
+  .slate-blockquote::before {
+    content: '"' !important;
+    font-size: 3rem !important;
+    color: #1B8B8A !important;
+    line-height: 0 !important;
+    position: absolute !important;
+    top: 0.5rem !important;
+    left: 1rem !important;
+    opacity: 0.3 !important;
+  }
+
+  /* === ЗАГЛАВИЯ === */
+  h1, .slate-heading-1 {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    margin: 1.5rem 0 1rem 0 !important;
+    color: #1e293b !important;
+    border-bottom: 2px solid #f0f0f0 !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  h2, .slate-heading-2 {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    margin: 1.25rem 0 0.75rem 0 !important;
+    color: #1B8B8A !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding-bottom: 0.3rem !important;
+  }
+
+  /* === СПИСЪЦИ === */
+  ul, .slate-bulleted-list {
+    margin: 1rem 0 !important;
+    padding-left: 2rem !important;
+  }
+
+  ol, .slate-numbered-list {
+    margin: 1rem 0 !important;
+    padding-left: 2rem !important;
+  }
+
+  li, .slate-list-item {
+    margin: 0.5rem 0 !important;
+    line-height: 1.6 !important;
+  }
+
+  /* === ТЕКСТОВИ СТИЛОВЕ === */
+  strong {
+    font-weight: 700 !important;
+    color: #1a202c !important;
+  }
+
+  em {
+    font-style: italic !important;
+    color: #4a5568 !important;
+  }
+
+  u {
+    text-decoration: underline !important;
+    text-decoration-color: #1B8B8A !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 2px !important;
+  }
+}
+
+/* === СПЕЦИФИЧНИ BLOCKQUOTE СТИЛОВЕ ЗА ВСИЧКИ МЕСТА В СТАТИЯТА === */
+.article-summary-view blockquote,
+.section-content blockquote,
+.article-body-view blockquote {
+  display: block !important;
+  border-left: 4px solid #1B8B8A !important;
+  margin: 1.5rem 0 !important;
+  padding: 1rem 1.5rem !important;
+  background-color: #f7fafc !important;
+  font-style: italic !important;
+  color: #4a5568 !important;
+  font-size: 1.125rem !important;
+  border-radius: 0 8px 8px 0 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  position: relative !important;
+}
+
+.article-summary-view blockquote::before,
+.section-content blockquote::before,
+.article-body-view blockquote::before {
+  content: '"' !important;
+  font-size: 3rem !important;
+  color: #1B8B8A !important;
+  line-height: 0 !important;
+  position: absolute !important;
+  top: 0.5rem !important;
+  left: 1rem !important;
+  opacity: 0.3 !important;
+}
 @media (min-width: 1200px) {
   .article-main-image,
   .section-figure {
@@ -639,6 +758,21 @@
   }
   .nav-title {
     font-size: 0.9rem;
+  }
+   .article-summary-view blockquote,
+  .section-content blockquote,
+  .article-body-view blockquote {
+    margin: 1rem 0 !important;
+    padding: 0.8rem 1.2rem !important;
+    font-size: 1rem !important;
+  }
+
+  .article-summary-view blockquote::before,
+  .section-content blockquote::before,
+  .article-body-view blockquote::before {
+    font-size: 2.5rem !important;
+    top: 0.3rem !important;
+    left: 0.8rem !important;
   }
 }
 
