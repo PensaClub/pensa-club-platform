@@ -24,6 +24,7 @@ import { useCreateArticle } from "../../hooks/useCreateArticle";
 import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import { generateSlug, isValidSlug, sanitizeSlug } from "../../../utils/slugUtils";
 
 // 🔧 HTML to Slate conversion
 const htmlToSlate = (html) => {
@@ -318,7 +319,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
     const [newTag, setNewTag] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [sectionImageUrls, setSectionImageUrls] = useState({});
-
+    const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
     // Slate change handlers
     const handleSlateChange = useCallback((fieldName) => (value) => {
         console.log(`📝 Slate change for ${fieldName}:`, value);
@@ -414,6 +415,19 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
             match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'link',
         });
     }, []);
+
+    const resetSlugFromTitle = useCallback(() => {
+        const newSlug = generateSlug(values.title);
+        onChangeHandler({ target: { name: "slug", value: newSlug } });
+        setIsSlugManuallyEdited(false);
+    }, [values.title, onChangeHandler]);
+
+    // Добави handleSlugChange
+    const handleSlugChange = useCallback((e) => {
+        setIsSlugManuallyEdited(true);
+        const sanitizedSlug = sanitizeSlug(e.target.value);
+        onChangeHandler({ target: { name: "slug", value: sanitizedSlug } });
+    }, [onChangeHandler]);
 
     const toggleLink = useCallback((editor) => {
         if (isLinkActive(editor)) {
@@ -754,17 +768,39 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                         </div>
 
                         <div className="form-group-article">
-                            <label htmlFor="slug">{t('articles.createForm.slug')} <span className="required">*</span></label>
-                            <input
-                                type="text"
-                                id="slug"
-                                name="slug"
-                                value={values.slug || ''}
-                                onChange={onChangeHandler}
-                                onBlur={onBlurHandler}
-                                className={errors.slug ? "error" : ""}
-                                placeholder={t('articles.createForm.slugPlaceholder')}
-                            />
+                            <label htmlFor="slug">
+                                {t('articles.createForm.slug')} <span className="required">*</span>
+                            </label>
+                            <div className="slug-input-container">
+                                <input
+                                    type="text"
+                                    id="slug"
+                                    name="slug"
+                                    value={values.slug || ''}
+                                    onChange={handleSlugChange}
+                                    onBlur={onBlurHandler}
+                                    className={errors.slug ? "error" : (isValidSlug(values.slug) ? "valid" : "")}
+                                    placeholder={t('articles.createForm.slugPlaceholder')}
+                                />
+                                <button
+                                    type="button"
+                                    className="slug-reset-btn"
+                                    onClick={resetSlugFromTitle}
+                                    title="Генерирай slug от заглавието"
+                                >
+                                    🔄
+                                </button>
+                            </div>
+                            {!isValidSlug(values.slug) && values.slug && (
+                                <div className="slug-warning">
+                                    Slug-ът трябва да съдържа само малки букви, цифри и тирета
+                                </div>
+                            )}
+                            {isSlugManuallyEdited && (
+                                <div className="slug-info">
+                                    Slug-ът е ръчно редактиран и няма да се променя автоматично
+                                </div>
+                            )}
                             {errors.slug && <div className="error-message">{errors.slug}</div>}
                         </div>
 

@@ -1,16 +1,15 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { notify } from "../../utils/notify";
-import { generateSlug } from "../Articles/articleUtils/formatting";
+// import { generateSlug } from "../Articles/articleUtils/formatting";
 import { isFormValid, validateArticleField, validateArticleForm } from "../Articles/articleUtils/validation";
 import { allowedImageTypes, allowedVideoTypes, compressImage, uploadFileWithProgress, isValidImageUrl } from "../Articles/articleUtils/file-utils";
 import { prepareArticleValuesForSubmit, addSectionToArray, removeSectionByIndex, createEmptySection, swapSectionMediaFiles } from "../Articles/articleUtils/article-utils";
 import { updateSectionImageAlt, updateSectionImageInfo } from "../Articles/articleUtils/image-utils";
 import { addTagToArray, removeTagByIndex } from "../Articles/articleUtils/tags";
 import { htmlToSlate, isHtmlContent, createSlateEditorState } from "../Articles/articleUtils/htmlToSlate";
+import { generateSlug } from "../../utils/slugUtils";
 
-// Конвертиране на Slate към HTML
-// Конвертиране на Slate към HTML
 const convertSlateToHtml = (slateValue) => {
     if (!Array.isArray(slateValue)) return '';
     
@@ -133,76 +132,26 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     mediaFilesRef.current = mediaFiles;
 
     // onChange handler
-    const onChangeHandler = useCallback((e, isEditor = false, editorValue = null) => {
-        if (isEditor) {
-            const { name, value } = editorValue;
-            
-            setValues(prev => {
-                if (name.includes("[") && name.includes("]")) {
-                    const matches = name.match(/sections\[(\d+)\]\.(\w+)/);
-                    if (matches) {
-                        const sectionIndex = parseInt(matches[1], 10);
-                        const sectionField = matches[2];
-                        
-                        const updatedSections = [...prev.sections];
-                        
-                        if (!updatedSections[sectionIndex]) {
-                            updatedSections[sectionIndex] = { 
-                                order: sectionIndex + 1,
-                                content: createSlateEditorState(),
-                                title: "",
-                                image: []
-                            };
-                        }
-
-                        updatedSections[sectionIndex] = {
-                            ...updatedSections[sectionIndex],
-                            [sectionField]: value
-                        };
-
-                        return {
-                            ...prev,
-                            sections: updatedSections
-                        };
-                    }
-                } else if (name.includes(".")) {
-                    const [parent, child] = name.split(".");
-                    return {
-                        ...prev,
-                        [parent]: {
-                            ...prev[parent],
-                            [child]: value
-                        }
-                    };
-                } else {
-                    return {
-                        ...prev,
-                        [name]: value
-                    };
-                }
-            });
-            return;
-        }
-
-        const { name, value } = e.target;
-
+   const onChangeHandler = useCallback((e, isEditor = false, editorValue = null) => {
+    if (isEditor) {
+        const { name, value } = editorValue;
+        
         setValues(prev => {
-            if (name === "title") {
-                const slug = generateSlug(value);
-                return {
-                    ...prev,
-                    title: value,
-                    slug: slug
-                };
-            } else if (name.includes("[") && name.includes("]")) {
+            if (name.includes("[") && name.includes("]")) {
                 const matches = name.match(/sections\[(\d+)\]\.(\w+)/);
                 if (matches) {
                     const sectionIndex = parseInt(matches[1], 10);
                     const sectionField = matches[2];
-
+                    
                     const updatedSections = [...prev.sections];
+                    
                     if (!updatedSections[sectionIndex]) {
-                        updatedSections[sectionIndex] = { order: sectionIndex + 1 };
+                        updatedSections[sectionIndex] = { 
+                            order: sectionIndex + 1,
+                            content: createSlateEditorState(),
+                            title: "",
+                            image: []
+                        };
                     }
 
                     updatedSections[sectionIndex] = {
@@ -231,7 +180,58 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
                 };
             }
         });
-    }, []);
+        return;
+    }
+
+    const { name, value } = e.target;
+
+    setValues(prev => {
+        if (name === "title") {
+            // Автоматично генериране на slug от title
+            const slug = generateSlug(value);
+            return {
+                ...prev,
+                title: value,
+                slug: slug
+            };
+        } else if (name.includes("[") && name.includes("]")) {
+            const matches = name.match(/sections\[(\d+)\]\.(\w+)/);
+            if (matches) {
+                const sectionIndex = parseInt(matches[1], 10);
+                const sectionField = matches[2];
+
+                const updatedSections = [...prev.sections];
+                if (!updatedSections[sectionIndex]) {
+                    updatedSections[sectionIndex] = { order: sectionIndex + 1 };
+                }
+
+                updatedSections[sectionIndex] = {
+                    ...updatedSections[sectionIndex],
+                    [sectionField]: value
+                };
+
+                return {
+                    ...prev,
+                    sections: updatedSections
+                };
+            }
+        } else if (name.includes(".")) {
+            const [parent, child] = name.split(".");
+            return {
+                ...prev,
+                [parent]: {
+                    ...prev[parent],
+                    [child]: value
+                }
+            };
+        } else {
+            return {
+                ...prev,
+                [name]: value
+            };
+        }
+    });
+}, []);
 
     // onBlur handler
     const onBlurHandler = useCallback((e, isEditor = false, editorValue = null) => {
