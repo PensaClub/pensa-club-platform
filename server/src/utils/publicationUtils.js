@@ -17,7 +17,7 @@ const publicationConfig = [
         include: [
             {
                 model: image,
-                as: 'sectionImages',
+                as: 'sectionImage',
             },
         ],
     },
@@ -41,8 +41,8 @@ const transformPublication = async (pub) => {
 
     const plainPublication = pub.get({ plain: true });
 
-    // Remove junction table data and isDraft flag
-    const { publication_bookmarks, publication_likes, related_publications, isDraft, ...publicationData } = plainPublication;
+    // Remove junction table data, isDraft flag, and likedBy for security
+    const { publication_bookmarks, publication_likes, related_publications, isDraft, likedBy, ...publicationData } = plainPublication;
 
     // Add userEmail from creator and remove creator object
     if (publicationData.creator) {
@@ -54,11 +54,11 @@ const transformPublication = async (pub) => {
     // Transform sections
     if (publicationData.sections) {
         publicationData.sections = publicationData.sections.map((section) => {
-            if (section.sectionImages) {
-                const { sectionImages, ...singleSection } = section;
+            if (section.sectionImage) {
+                const { sectionImage, ...singleSection } = section;
                 return {
                     ...singleSection,
-                    images: sectionImages,
+                    image: sectionImage,
                 };
             }
             return section;

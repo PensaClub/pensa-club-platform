@@ -30,6 +30,7 @@ publicationController.post('/draft/save/:id?', isAuth, checkPermission('publicat
 
         // For draft creation, use a more lenient validation
         const validationResult = UpdatePublicationSchema.safeParse(req.body);
+
         if (!id) {
             const publicationData = { ...validationResult.data, isDraft: true };
             return createPublication(publicationData, req, res, next);
@@ -45,7 +46,7 @@ publicationController.get('/draft/:id', isAuth, checkPermission('publications', 
     return getSinglePublicationByDraftStatus(true, req, res, next);
 });
 
-publicationController.get('/single/:id', checkPermission('publications', 'read'), async (req, res, next) => {
+publicationController.get('/single/:id', isAuth.allowGuest, checkPermission('publications', 'read'), async (req, res, next) => {
     return getSinglePublicationByDraftStatus(false, req, res, next);
 });
 
@@ -183,7 +184,7 @@ publicationController.get('/user-publications/:email', checkPermission('publicat
 
 publicationController.post('/:id/like', isAuth, checkPermission('publications', 'read'), async (req, res, next) => {
     try {
-        const userId = req.user.userId;
+        const userId = parseInt(req.user.userId, 10);
         const param = req.params.id;
 
         const foundPublication = await findBySlugOrId(publication, param, {
@@ -205,14 +206,32 @@ publicationController.post('/:id/like', isAuth, checkPermission('publications', 
         if (existingLike) {
             await existingLike.destroy();
             await foundPublication.decrement('likes');
-            return res.status(200).json({ message: 'Like removed', liked: false });
+
+            const updatedCount = await publication.sequelize.models.publication_likes.count({
+                where: { publication_id: foundPublication.id },
+            });
+
+            return res.status(200).json({
+                message: 'Like removed',
+                liked: false,
+                likes: updatedCount,
+            });
         } else {
             await publication.sequelize.models.publication_likes.create({
                 publication_id: foundPublication.id,
                 user_id: userId,
             });
             await foundPublication.increment('likes');
-            return res.status(201).json({ message: 'Publication liked', liked: true });
+
+            const updatedCount = await publication.sequelize.models.publication_likes.count({
+                where: { publication_id: foundPublication.id },
+            });
+
+            return res.status(201).json({
+                message: 'Publication liked',
+                liked: true,
+                likes: updatedCount,
+            });
         }
     } catch (err) {
         next(err);
@@ -267,6 +286,7 @@ publicationController.post('/:id/download', checkPermission('publications', 'rea
 const getSinglePublicationByDraftStatus = async (isDraft, req, res, next) => {
     try {
         const param = req.params.id;
+        const userId = req.user?.userId ? parseInt(req.user.userId, 10) : null;
 
         const foundPublication = await findBySlugOrId(publication, param, {
             where: { isDraft: isDraft },
@@ -284,6 +304,26 @@ const getSinglePublicationByDraftStatus = async (isDraft, req, res, next) => {
 
         const transformed = await transformPublication(foundPublication);
         transformed.comments = comments.map((comment) => transformComment(comment));
+
+        const actualLikesCount = await publication.sequelize.models.publication_likes.count({
+            where: { publication_id: foundPublication.id },
+        });
+
+        let currentUserLiked = false;
+        if (userId) {
+            const userLike = await publication.sequelize.models.publication_likes.findOne({
+                where: {
+                    publication_id: foundPublication.id,
+                    user_id: userId,
+                },
+            });
+            currentUserLiked = !!userLike;
+        }
+
+        transformed.likes = actualLikesCount;
+        transformed.isLiked = currentUserLiked;
+
+        delete transformed.likedBy;
 
         return res.status(200).json(transformed);
     } catch (err) {

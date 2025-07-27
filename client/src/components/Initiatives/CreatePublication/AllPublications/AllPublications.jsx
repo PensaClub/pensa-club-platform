@@ -12,13 +12,18 @@ export const AllPublications = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const {
-        // Publication functions from context
-        getAllPublicationsTemporary,
-        publicationsTemporary = [],
-        publicationsTemporaryLoaded = false,
-        publicationsTemporaryHasMore = false,
-        publicationsTemporaryCurrentPage = 1,
-        isLoading: contextLoading = false
+        // Publication functions from context - FIXED NAMES
+        getAllPublications, // Changed from getAllPublicationsTemporary
+        publications = [], // Changed from publicationsTemporary
+        publicationsLoaded = false, // Changed from publicationsTemporaryLoaded
+        publicationsHasMore = false, // Changed from publicationsTemporaryHasMore
+        publicationsCurrentPage = 1, // Changed from publicationsTemporaryCurrentPage
+        isLoading: contextLoading = false,
+        // NEW:
+        getAllPublicationDrafts,
+        publicationDrafts = [],
+        publicationDraftsHasMore = false,
+        publicationDraftsCurrentPage = 1,
     } = useInitiativeContext();
 
     const location = useLocation();
@@ -26,18 +31,11 @@ export const AllPublications = () => {
     const [filteredItems, setFilteredItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filters, setFilters] = useState({
-        status: 'all',
         category: 'all',
-        priority: 'all',
         sortBy: 'newest'
     });
     const [openDropdownId, setOpenDropdownId] = useState(null);
     const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
-
-    // Mock data for drafts - we'll implement this later
-    const publicationDrafts = [];
-    const publicationDraftsHasMore = false;
-    const publicationDraftsCurrentPage = 1;
 
     useEffect(() => {
         // Ако се връщаме от edit страница, refresh-ваме данните
@@ -53,17 +51,16 @@ export const AllPublications = () => {
         }
     }, [location.pathname, viewMode]);
 
-    // Load publications on component mount - FIXED to prevent infinite loop
+    // Load publications on component mount - FIXED function names
     useEffect(() => {
         if (viewMode === 'publications' && !hasLoadedInitial) {
-            getAllPublicationsTemporary(1, true);
+            getAllPublications(1, true); // Changed from getAllPublicationsTemporary
             setHasLoadedInitial(true);
         } else if (viewMode === 'drafts' && !hasLoadedInitial) {
-            // Load drafts - for now just reload the component
-            // TODO: Replace with real context function
+            getAllPublicationDrafts(1, true);
             setHasLoadedInitial(true);
         }
-    }, [viewMode, hasLoadedInitial]);
+    }, [viewMode, hasLoadedInitial, getAllPublications, getAllPublicationDrafts]);
 
     // Global click handler to close dropdown
     useEffect(() => {
@@ -77,9 +74,9 @@ export const AllPublications = () => {
         return () => document.removeEventListener('click', handleGlobalClick);
     }, []);
 
-    // Filter items - FIXED to prevent infinite loop
+    // Filter items - FIXED variable names
     useEffect(() => {
-        const items = viewMode === 'publications' ? publicationsTemporary : publicationDrafts;
+        const items = viewMode === 'publications' ? publications : publicationDrafts; // Changed from publicationsTemporary
         let filtered = [...items];
 
         if (searchTerm) {
@@ -90,18 +87,12 @@ export const AllPublications = () => {
             );
         }
 
-        if (viewMode === 'publications' && filters.status !== 'all') {
-            filtered = filtered.filter(item => item.status === filters.status);
-        }
-
+        // Filter by category
         if (filters.category !== 'all') {
             filtered = filtered.filter(item => item.category === filters.category);
         }
 
-        if (filters.priority !== 'all') {
-            filtered = filtered.filter(item => item.priority?.toLowerCase() === filters.priority);
-        }
-
+        // Sort items
         filtered.sort((a, b) => {
             switch (filters.sortBy) {
                 case 'newest':
@@ -110,17 +101,21 @@ export const AllPublications = () => {
                     return new Date(a.createdAt) - new Date(b.createdAt);
                 case 'updated':
                     return new Date(b.updatedAt) - new Date(a.updatedAt);
-                case 'title':
-                    return a.title.localeCompare(b.title);
-                case 'deadline':
-                    return new Date(a.deadline || '9999-12-31') - new Date(b.deadline || '9999-12-31');
+                case 'published':
+                    return new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0);
+                case 'likes':
+                    return (b.likes || 0) - (a.likes || 0);
+                case 'views':
+                    return (b.views || 0) - (a.views || 0);
+                case 'downloads':
+                    return (b.downloads || 0) - (a.downloads || 0);
                 default:
                     return 0;
             }
         });
 
         setFilteredItems(filtered);
-    }, [searchTerm, filters, viewMode, publicationsTemporaryLoaded]); // Remove publicationsTemporary and publicationDrafts from dependencies
+    }, [viewMode, publications, publicationDrafts, searchTerm, filters]); // Changed from publicationsTemporary
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -133,9 +128,17 @@ export const AllPublications = () => {
     const handleViewModeChange = (mode) => {
         setViewMode(mode);
         setSearchTerm('');
-        setFilters({ status: 'all', category: 'all', priority: 'all', sortBy: 'newest' });
-        setOpenDropdownId(null);
-        setHasLoadedInitial(false); // Reset when changing view mode
+        setFilters({
+            category: 'all',
+            sortBy: 'newest'
+        });
+        setHasLoadedInitial(false);
+
+        if (mode === 'publications') {
+            getAllPublications(1, true); // Changed from getAllPublicationsTemporary
+        } else if (mode === 'drafts') {
+            getAllPublicationDrafts(1, true);
+        }
     };
 
     const formatDate = (dateString) => {
@@ -149,18 +152,20 @@ export const AllPublications = () => {
     };
 
     const handleLoadMore = useCallback(() => {
-        if (viewMode === 'publications' && publicationsTemporaryHasMore && !contextLoading) {
-            getAllPublicationsTemporary(publicationsTemporaryCurrentPage + 1);
+        if (viewMode === 'publications' && publicationsHasMore && !contextLoading) {
+            getAllPublications(publicationsCurrentPage + 1);
         } else if (viewMode === 'drafts' && publicationDraftsHasMore && !contextLoading) {
-            // Load more drafts
-            // TODO: Replace with real context function
+            getAllPublicationDrafts(publicationDraftsCurrentPage + 1);
         }
     }, [
         viewMode,
-        publicationsTemporaryHasMore,
-        publicationsTemporaryCurrentPage,
+        publicationsHasMore,
+        publicationsCurrentPage,
         publicationDraftsHasMore,
-        contextLoading
+        publicationDraftsCurrentPage,
+        contextLoading,
+        getAllPublications,
+        getAllPublicationDrafts
     ]);
 
     // Action handlers
@@ -177,7 +182,6 @@ export const AllPublications = () => {
                         navigate(`/profile/publication-create?draftId=${identifier}`);
                     }
                     break;
-
                 case 'edit':
                     if (viewMode === 'drafts') {
                         sessionStorage.setItem('wasEditingDraft', 'true');
@@ -228,8 +232,12 @@ export const AllPublications = () => {
             return <span className="all-publications-status-badge draft">{t('publications.admin.statusDraft')}</span>;
         }
 
-        // For publications, we can use a default status since the API doesn't return status
-        return <span className="all-publications-status-badge active">{t('publications.admin.statusActive')}</span>;
+        // For publications, check if it's published or not
+        if (item.publishedAt) {
+            return <span className="all-publications-status-badge active">{t('publications.admin.statusPublished')}</span>;
+        } else {
+            return <span className="all-publications-status-badge draft">{t('publications.admin.statusDraft')}</span>;
+        }
     };
 
     const getDefaultImage = () => {
@@ -246,7 +254,7 @@ export const AllPublications = () => {
     return (
         <div className="all-publications-admin-container">
             <PublicationsHeaderAdmin
-                totalCount={viewMode === 'publications' ? publicationsTemporary.length : publicationDrafts.length}
+                totalCount={viewMode === 'publications' ? publications.length : publicationDrafts.length}
                 viewMode={viewMode}
                 onViewModeChange={handleViewModeChange}
                 isLoading={contextLoading}
@@ -264,8 +272,8 @@ export const AllPublications = () => {
                     <div key={`${viewMode}-${item.id}`} className="all-publications-card">
                         <div className="all-publications-card-header">
                             <img
-                                src={item.mainImage?.src || item.logo || getDefaultImage()}
-                                alt={item.title}
+                                src={item.image?.src || item.logo || getDefaultImage()}
+                                alt={item.image?.alt || item.title}
                                 className="all-publications-card-image"
                                 onError={(e) => {
                                     e.target.src = getDefaultImage();
@@ -314,13 +322,19 @@ export const AllPublications = () => {
                                     {item.category && (
                                         <span className="all-publications-stat-badge">{item.category}</span>
                                     )}
+                                    {item.fileType && (
+                                        <span className="all-publications-stat-badge">{item.fileType.toUpperCase()}</span>
+                                    )}
                                     {item.readTime && (
                                         <span className="all-publications-stat-badge">{item.readTime}</span>
                                     )}
-                                    {item.views && (
+                                    {item.views !== undefined && (
                                         <span className="all-publications-stat-badge">{item.views} прегледа</span>
                                     )}
-                                    {item.downloads && (
+                                    {item.likes !== undefined && (
+                                        <span className="all-publications-stat-badge">{item.likes} харесвания</span>
+                                    )}
+                                    {item.downloads !== undefined && (
                                         <span className="all-publications-stat-badge">{item.downloads} изтегляния</span>
                                     )}
                                 </div>
@@ -410,7 +424,7 @@ export const AllPublications = () => {
                 ))}
             </div>
 
-            {((viewMode === 'publications' && publicationsTemporaryHasMore) || (viewMode === 'drafts' && publicationDraftsHasMore)) && !contextLoading && (
+            {((viewMode === 'publications' && publicationsHasMore) || (viewMode === 'drafts' && publicationDraftsHasMore)) && !contextLoading && (
                 <div className="all-publications-load-more-container">
                     <button
                         className="all-publications-load-more-btn"

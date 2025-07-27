@@ -55,12 +55,12 @@ export const InitiativeProvider = ({ children }) => {
   const [projectsLoaded, setProjectsLoaded] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
 
-  //Publications (Temporary - will replace mock data later)
-  const [publicationsTemporary, setPublicationsTemporary] = useState([]);
-  const [publicationsTemporaryLoaded, setPublicationsTemporaryLoaded] = useState(false);
-  const [currentPublicationTemporary, setCurrentPublicationTemporary] = useState(null);
-  const [publicationsTemporaryHasMore, setPublicationsTemporaryHasMore] = useState(true);
-  const [publicationsTemporaryCurrentPage, setPublicationsTemporaryCurrentPage] = useState(1);
+  //Publications
+  const [publications, setPublications] = useState([]);
+  const [publicationsLoaded, setPublicationsLoaded] = useState(false);
+  const [currentPublication, setCurrentPublication] = useState(null);
+  const [publicationsHasMore, setPublicationsHasMore] = useState(true);
+  const [publicationsCurrentPage, setPublicationsCurrentPage] = useState(1);
 
   //komentari
   const [comments, setComments] = useState({});
@@ -994,7 +994,7 @@ export const InitiativeProvider = ({ children }) => {
       }, 30);
 
       // Проверяваме дали потребителят вече е харесал
-      if (likeData.isLiked === false && likeData.likes?.includes(userEmail)) {
+      if (likeData.liked === false && likeData.likes?.includes(userEmail)) {
         notify('info', 'Вече сте харесали този коментар');
       } else {
         notify('success', 'Успешно харесахте коментара');
@@ -1627,15 +1627,15 @@ export const InitiativeProvider = ({ children }) => {
   }, [isAuthentication, initiativeService, getProjectComments]);
 
   // =================
-  // PUBLICATION FUNCTIONS (TEMPORARY - will replace mock data later)
+  // PUBLICATION FUNCTIONS (REPLACED OLD MOCK DATA FUNCTIONS)
   // =================
 
-  const getAllPublicationsTemporary = useCallback(async (page = 1, forceRefresh = false) => {
-    if (page === 1 && publicationsTemporary.length > 0 && publicationsTemporaryLoaded && !forceRefresh) {
+  const getAllPublications = useCallback(async (page = 1, forceRefresh = false) => {
+    if (page === 1 && publications.length > 0 && publicationsLoaded && !forceRefresh) {
       return {
-        data: publicationsTemporary,
-        hasMore: publicationsTemporaryHasMore,
-        currentPage: publicationsTemporaryCurrentPage
+        data: publications,
+        hasMore: publicationsHasMore,
+        currentPage: publicationsCurrentPage
       };
     }
 
@@ -1651,14 +1651,14 @@ export const InitiativeProvider = ({ children }) => {
       };
 
       if (page === 1) {
-        setPublicationsTemporary(responseData.data);
+        setPublications(responseData.data);
       } else {
-        setPublicationsTemporary(prev => [...prev, ...responseData.data]);
+        setPublications(prev => [...prev, ...responseData.data]);
       }
 
-      setPublicationsTemporaryHasMore(responseData.hasMore);
-      setPublicationsTemporaryCurrentPage(responseData.currentPage);
-      setPublicationsTemporaryLoaded(true);
+      setPublicationsHasMore(responseData.hasMore);
+      setPublicationsCurrentPage(responseData.currentPage);
+      setPublicationsLoaded(true);
 
       return responseData;
     } catch (e) {
@@ -1669,28 +1669,29 @@ export const InitiativeProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [publicationsTemporary.length, publicationsTemporaryLoaded, publicationsTemporaryHasMore, publicationsTemporaryCurrentPage, storyPubService, showErrorAndSetTimeouts]);
+  }, [publications.length, publicationsLoaded, publicationsHasMore, publicationsCurrentPage, storyPubService, showErrorAndSetTimeouts]);
 
-  const getPublicationByIdTemporary = useCallback(async (id) => {
-    if (!id || id === 'undefined' || id === 'null') {
-      const error = new Error(`Invalid publication ID: ${id}`);
-      console.error('getPublicationByIdTemporary called with invalid ID:', id);
+  const getPublicationBySlug = useCallback(async (slug) => {
+    if (!slug || slug === 'undefined' || slug === 'null') {
+      const error = new Error(`Invalid publication slug: ${slug}`);
+      console.error('getPublicationBySlug called with invalid slug:', slug);
       throw error;
     }
 
     try {
       setIsLoading(true);
-      const response = await storyPubService.getPublicationBySlug(id);
+      const response = await storyPubService.getPublicationBySlug(slug);
+
       const publication = response.data || response;
 
       if (!publication) {
-        throw new Error(`Publication not found with id/slug: ${id}`);
+        throw new Error(`Publication not found with slug: ${slug}`);
       }
 
-      setCurrentPublicationTemporary(publication);
+      setCurrentPublication(publication);
       return publication;
     } catch (e) {
-      console.error('Error fetching publication by ID:', e);
+      console.error('Error fetching publication by slug:', e);
       notify('error', e.message || 'Failed to fetch publication');
       showErrorAndSetTimeouts(e.message);
       throw e;
@@ -1699,7 +1700,7 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [storyPubService, showErrorAndSetTimeouts]);
 
-  const getPublicationsByInitiativeTemporary = useCallback(async (initiativeId) => {
+  const getPublicationsByInitiative = useCallback(async (initiativeId) => {
     try {
       const response = await storyPubService.getPublicationsByInitiative(initiativeId);
       return response;
@@ -1710,8 +1711,8 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [storyPubService]);
 
-  // Publication comments (Temporary)
-  const getPublicationCommentsTemporary = useCallback(async (publicationId) => {
+  // Publication comments - FIXED TO FOLLOW SAME PATTERN AS PROJECTS
+  const getPublicationComments = useCallback(async (publicationId) => {
     try {
       setCommentsLoading(true);
 
@@ -1729,6 +1730,7 @@ export const InitiativeProvider = ({ children }) => {
       const processedComments = commentsData
         .filter(comment => !comment.parentId)
         .map(comment => {
+          // Сортираме replies по дата ВЪЗХОДЯЩО
           if (comment.replies && comment.replies.length > 0) {
             return {
               ...comment,
@@ -1741,9 +1743,10 @@ export const InitiativeProvider = ({ children }) => {
         })
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+      const pubKey = `publication-${publicationId}`;
       setComments(prev => ({
         ...prev,
-        [`publication-temp-${publicationId}`]: processedComments
+        [pubKey]: processedComments
       }));
 
       return processedComments;
@@ -1751,9 +1754,10 @@ export const InitiativeProvider = ({ children }) => {
       console.error('Error getting publication comments:', error);
       notify('error', 'Failed to load comments');
 
+      const pubKey = `publication-${publicationId}`;
       setComments(prev => ({
         ...prev,
-        [`publication-temp-${publicationId}`]: []
+        [pubKey]: []
       }));
 
       return [];
@@ -1762,7 +1766,7 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, []);
 
-  const addPublicationCommentTemporary = useCallback(async (publicationId, content, parentId = null) => {
+  const addPublicationComment = useCallback(async (publicationId, content, parentId = null) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
@@ -1775,11 +1779,12 @@ export const InitiativeProvider = ({ children }) => {
         ...(parentId && { parentId: Number(parentId) })
       };
 
-      const response = await storyPubService.addPublicationComment(publicationId, commentData);
+      const response = await storyPubService.addPublicationComment(commentData);
       const newComment = response.data || response;
 
+      // Презареждаме коментарите от сървъра след кратка пауза
       setTimeout(async () => {
-        await getPublicationCommentsTemporary(publicationId);
+        await getPublicationComments(publicationId);
       }, 10);
 
       notify('success', 'Comment added successfully');
@@ -1789,16 +1794,16 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', error.response?.data?.message || 'Failed to add comment');
       throw error;
     }
-  }, [isAuthentication, storyPubService, getPublicationCommentsTemporary]);
+  }, [isAuthentication, storyPubService, getPublicationComments]);
 
-  const updatePublicationCommentTemporary = useCallback(async (publicationId, commentId, newContent) => {
+  const updatePublicationComment = useCallback(async (publicationId, commentId, newContent) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
       }
 
-      const response = await storyPubService.updatePublicationComment(publicationId, commentId, { content: newContent });
-      await getPublicationCommentsTemporary(publicationId);
+      const response = await storyPubService.updatePublicationComment(commentId, newContent);
+      await getPublicationComments(publicationId);
 
       notify('success', 'Comment updated successfully');
       return response.data || response;
@@ -1807,16 +1812,16 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to update comment');
       throw error;
     }
-  }, [isAuthentication, storyPubService, getPublicationCommentsTemporary]);
+  }, [isAuthentication, storyPubService, getPublicationComments]);
 
-  const deletePublicationCommentTemporary = useCallback(async (publicationId, commentId) => {
+  const deletePublicationComment = useCallback(async (publicationId, commentId) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
       }
 
-      await storyPubService.deletePublicationComment(publicationId, commentId);
-      await getPublicationCommentsTemporary(publicationId);
+      await storyPubService.deletePublicationComment(commentId);
+      await getPublicationComments(publicationId);
 
       notify('success', 'Comment deleted successfully');
     } catch (error) {
@@ -1824,29 +1829,94 @@ export const InitiativeProvider = ({ children }) => {
       notify('error', 'Failed to delete comment');
       throw error;
     }
-  }, [isAuthentication, storyPubService, getPublicationCommentsTemporary]);
+  }, [isAuthentication, storyPubService, getPublicationComments]);
 
-  const likePublicationCommentTemporary = useCallback(async (publicationId, commentId) => {
+  const likePublicationComment = useCallback(async (publicationId, commentId) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
       }
 
-      const response = await storyPubService.likePublicationComment(publicationId, commentId);
-      const updatedCommentData = response.data || response;
+      const response = await storyPubService.likePublicationComment(commentId);
+      const likeData = response.data || response;
 
+      // Презареждаме коментарите
       setTimeout(async () => {
-        await getPublicationCommentsTemporary(publicationId);
-      }, 200);
+        await getPublicationComments(publicationId);
+      }, 30);
 
-      notify('success', 'Успешно харесахте коментара');
-      return updatedCommentData;
+      // Проверяваме дали потребителят вече е харесал
+      if (likeData.liked === false && likeData.likes?.includes(userEmail)) {
+        notify('info', 'Вече сте харесали този коментар');
+      } else {
+        notify('success', 'Успешно харесахте коментара');
+      }
+
+      return likeData;
     } catch (error) {
-      console.error('Error in likePublicationCommentTemporary:', error);
-      notify('error', 'Failed to like comment');
+      console.error('Error in likePublicationComment - full error:', error);
+      console.error('Error response:', error.response);
+
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to like comment';
+      notify('error', `Like error: ${errorMessage}`);
+
       return null;
     }
-  }, [isAuthentication, storyPubService, getPublicationCommentsTemporary]);
+  }, [isAuthentication, storyPubService, getPublicationComments, userEmail]);
+
+  const likePublication = useCallback(async (publicationId, onUpdate = null) => {
+    try {
+        if (!isAuthentication) {
+            throw new Error('Authentication required');
+        }
+
+        const response = await storyPubService.likePublication(publicationId);
+        const likeData = response.data || response;
+
+        // Update the current publication's like status and count locally
+        const updatedPublication = {
+            ...currentPublication,
+            isLiked: likeData.liked,
+            likes: likeData.likes
+        };
+
+        setCurrentPublication(updatedPublication);
+
+        // Update the publication in the publications list if it exists
+        setPublications(prev =>
+            prev.map(pub =>
+                pub.id === publicationId
+                    ? {
+                        ...pub,
+                        isLiked: likeData.liked,
+                        likes: likeData.likes
+                    }
+                    : pub
+            )
+        );
+
+        // Call the callback if provided (for updating local component state)
+        if (onUpdate && typeof onUpdate === 'function') {
+            onUpdate(updatedPublication);
+        }
+
+        if (likeData.liked) {
+            notify('success', 'Успешно харесахте публикацията');
+        } else {
+            notify('info', 'Премахнахте харесването от публикацията');
+        }
+
+        return likeData;
+    } catch (error) {
+        console.error('Error in likePublication - full error:', error);
+        console.error('Error response:', error.response);
+
+        const errorMessage = error.response?.data?.message || error.message || 'Failed to like publication';
+        notify('error', `Like error: ${errorMessage}`);
+
+        return null;
+    }
+}, [isAuthentication, storyPubService, currentPublication]);
 
   //STORIES AND PUBLICATIONS
   //Stories functions
@@ -1885,53 +1955,6 @@ export const InitiativeProvider = ({ children }) => {
       return story;
     } catch (e) {
       console.error('Error fetching story by slug:', e);
-      throw e;
-    } finally {
-      // setIsLoading(false);
-    }
-  }, [generateId]);
-
-  const getPublicationBySlug = useCallback(async (slug) => {
-    try {
-      // setIsLoading(true);
-
-      // Търсим в mock данните
-      const publication = publicationsData.publications.find(pub =>
-        pub.slug === slug || pub.titleSlug === slug
-      );
-
-      if (!publication) {
-        throw new Error(`Publication not found with slug: ${slug}`);
-      }
-
-      // Обработваме коментарите ако има
-      if (publication.comments && Array.isArray(publication.comments)) {
-        const processedComments = publication.comments
-          .filter(comment => !comment.parentId)
-          .map(comment => {
-            const replies = publication.comments
-              .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
-              .map(reply => ({
-                ...reply,
-                id: reply.id === comment.id ? generateId() : reply.id
-              }));
-
-            return {
-              ...comment,
-              replies: replies
-            };
-          });
-
-        setComments(prev => ({
-          ...prev,
-          [`publication-${publication.id}`]: processedComments,
-          [`publication-${publication.slug}`]: processedComments
-        }));
-      }
-
-      return publication;
-    } catch (e) {
-      console.error('Error fetching publication by slug:', e);
       throw e;
     } finally {
       // setIsLoading(false);
@@ -2031,99 +2054,6 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar]);
 
-  // Функции за коментари на publications
-  const getPublicationComments = useCallback(async (publicationId) => {
-    try {
-      const pubKey = `publication-${publicationId}`;
-      if (comments[pubKey]) {
-        return comments[pubKey];
-      }
-
-      setCommentsLoading(true);
-      const publication = publicationsData.publications.find(pub =>
-        pub.id === publicationId || pub.slug === publicationId
-      );
-
-      if (!publication) {
-        throw new Error('Publication not found');
-      }
-
-      const pubComments = Array.isArray(publication.comments) ? publication.comments : [];
-      setComments(prev => ({
-        ...prev,
-        [pubKey]: pubComments
-      }));
-
-      return pubComments;
-    } catch (error) {
-      console.error('Error getting publication comments:', error);
-      notify('error', 'Failed to load comments');
-      return [];
-    } finally {
-      setCommentsLoading(false);
-    }
-  }, [comments]);
-
-  const addPublicationComment = useCallback(async (publicationId, content, parentId = null) => {
-    try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
-
-      const newComment = {
-        id: parentId ? `${generateId()}_${Date.now()}` : generateId(),
-        userId: userEmail,
-        userEmail: userEmail,
-        userName: getUserDisplayName(),
-        userAvatar: profileData?.avatar || null,
-        content: content,
-        createdAt: new Date().toISOString(),
-        updatedAt: null,
-        likes: [],
-        likesCount: 0,
-        replies: [],
-        ...(parentId && { parentId })
-      };
-
-      const pubKey = `publication-${publicationId}`;
-
-      setComments(prev => {
-        const currentComments = prev[pubKey] || [];
-
-        if (parentId) {
-          // Това е reply
-          const updatedComments = currentComments.map(comment => {
-            if (comment.id === parentId) {
-              return {
-                ...comment,
-                replies: [...(comment.replies || []), newComment]
-              };
-            }
-            return comment;
-          });
-
-          return {
-            ...prev,
-            [pubKey]: updatedComments
-          };
-        } else {
-          // Това е нов основен коментар
-          return {
-            ...prev,
-            [pubKey]: [newComment, ...currentComments]
-          };
-        }
-      });
-
-      notify('success', 'Comment added successfully');
-      return newComment;
-    } catch (error) {
-      console.error('Error adding publication comment:', error);
-      notify('error', 'Failed to add comment');
-      throw error;
-    }
-  }, [isAuthentication, generateId, userEmail, getUserDisplayName, profileData?.avatar]);
-
   // Функция за зареждане на свързани stories/publications
   const getRelatedContent = useCallback(async (contentType, contentId) => {
     try {
@@ -2149,6 +2079,54 @@ export const InitiativeProvider = ({ children }) => {
       return [];
     }
   }, []);
+
+  // Add state at the top with other publication states
+  const [publicationDrafts, setPublicationDrafts] = useState([]);
+  const [publicationDraftsHasMore, setPublicationDraftsHasMore] = useState(false);
+  const [publicationDraftsCurrentPage, setPublicationDraftsCurrentPage] = useState(1);
+  const [publicationDraftsLoaded, setPublicationDraftsLoaded] = useState(false);
+
+  // Add the function, mirroring getAllPublicationsTemporary
+  const getAllPublicationDrafts = useCallback(async (page = 1, forceRefresh = false) => {
+    if (page === 1 && publicationDrafts.length > 0 && publicationDraftsLoaded && !forceRefresh) {
+      return {
+        data: publicationDrafts,
+        hasMore: publicationDraftsHasMore,
+        currentPage: publicationDraftsCurrentPage
+      };
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await storyPubService.getAllPublicationDrafts(page, 6);
+
+      const responseData = {
+        data: response.data || response,
+        hasMore: response.pagination?.hasNextPage || false,
+        totalCount: response.pagination?.totalPublications || 0,
+        currentPage: response.pagination?.page || page
+      };
+
+      if (page === 1) {
+        setPublicationDrafts(responseData.data);
+      } else {
+        setPublicationDrafts(prev => [...prev, ...responseData.data]);
+      }
+
+      setPublicationDraftsHasMore(responseData.hasMore);
+      setPublicationDraftsCurrentPage(responseData.currentPage);
+      setPublicationDraftsLoaded(true);
+
+      return responseData;
+    } catch (e) {
+      console.error('Error fetching publication drafts:', e);
+      notify('error', e.message || 'Failed to fetch publication drafts');
+      showErrorAndSetTimeouts(e.message);
+      return { data: [], hasMore: false, currentPage: page };
+    } finally {
+      setIsLoading(false);
+    }
+  }, [publicationDrafts.length, publicationDraftsLoaded, publicationDraftsHasMore, publicationDraftsCurrentPage, storyPubService, showErrorAndSetTimeouts]);
 
   const contextService = {
     // Existing initiative functions
@@ -2245,28 +2223,28 @@ export const InitiativeProvider = ({ children }) => {
     getStoryComments,
     addStoryComment,
 
-    // Publications functions
+    // Publications functions (REPLACED OLD MOCK DATA FUNCTIONS)
+    getAllPublications,
     getPublicationBySlug,
+    getPublicationsByInitiative,
     getPublicationComments,
     addPublicationComment,
-    invalidateProjectDraftsCache,
+    updatePublicationComment,
+    deletePublicationComment,
+    likePublicationComment,
+    likePublication,
+    publications,
+    currentPublication,
+    publicationsLoaded,
+    publicationsHasMore,
+    publicationsCurrentPage,
 
-    // Publication functions (Temporary - will replace mock data later)
-    getAllPublicationsTemporary,
-    getPublicationByIdTemporary,
-    getPublicationsByInitiativeTemporary,
-    publicationsTemporary,
-    currentPublicationTemporary,
-    publicationsTemporaryLoaded,
-    publicationsTemporaryHasMore,
-    publicationsTemporaryCurrentPage,
-
-    // Publication comments (Temporary)
-    getPublicationCommentsTemporary,
-    addPublicationCommentTemporary,
-    updatePublicationCommentTemporary,
-    deletePublicationCommentTemporary,
-    likePublicationCommentTemporary,
+    // Publication drafts
+    getAllPublicationDrafts,
+    publicationDrafts,
+    publicationDraftsHasMore,
+    publicationDraftsCurrentPage,
+    publicationDraftsLoaded,
 
     // Related content
     getRelatedContent,

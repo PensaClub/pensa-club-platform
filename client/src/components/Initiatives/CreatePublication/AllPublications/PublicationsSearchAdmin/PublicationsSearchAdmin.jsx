@@ -11,10 +11,8 @@ export const PublicationsSearchAdmin = ({
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
     const [filters, setFilters] = useState({
-        status: 'all',
         category: 'all',
-        priority: 'all',
-        sortBy: 'newest'
+        sortBy: 'newest' // newest, oldest, updated, published, likes, views, downloads
     });
 
     const handleSearchChange = (e) => {
@@ -64,26 +62,7 @@ export const PublicationsSearchAdmin = ({
             </div>
 
             <div className="publications-search-admin-filters-section">
-                <div className="publications-search-admin-filter-group">
-                    <label className="publications-search-admin-filter-label">
-                        {t('publications.admin.filters.status')}
-                    </label>
-                    <select
-                        className="publications-search-admin-filter-select"
-                        value={filters.status}
-                        onChange={(e) => handleFilterChange('status', e.target.value)}
-                    >
-                        <option value="all">{t('publications.admin.filters.allStatuses')}</option>
-                        {viewMode === 'publications' && (
-                            <>
-                                <option value="active">{t('publications.admin.filters.active')}</option>
-                                <option value="completed">{t('publications.admin.filters.completed')}</option>
-                                <option value="paused">{t('publications.admin.filters.paused')}</option>
-                            </>
-                        )}
-                    </select>
-                </div>
-
+                {/* Category Filter */}
                 <div className="publications-search-admin-filter-group">
                     <label className="publications-search-admin-filter-label">
                         {t('publications.admin.filters.category')}
@@ -94,13 +73,16 @@ export const PublicationsSearchAdmin = ({
                         onChange={(e) => handleFilterChange('category', e.target.value)}
                     >
                         <option value="all">{t('publications.admin.filters.allCategories')}</option>
-                        <option value="Ръководства">{t('publications.admin.filters.guides')}</option>
-                        <option value="Наръчници">{t('publications.admin.filters.manuals')}</option>
-                        <option value="Здраве">{t('publications.admin.filters.health')}</option>
-                        <option value="Образование">{t('publications.admin.filters.education')}</option>
+                        <option value="research">{t('publications.admin.filters.research')}</option>
+                        <option value="guide">{t('publications.admin.filters.guide')}</option>
+                        <option value="report">{t('publications.admin.filters.report')}</option>
+                        <option value="manual">{t('publications.admin.filters.manual')}</option>
+                        <option value="presentation">{t('publications.admin.filters.presentation')}</option>
+                        <option value="other">{t('publications.admin.filters.other')}</option>
                     </select>
                 </div>
 
+                {/* Sort By Filter */}
                 <div className="publications-search-admin-filter-group">
                     <label className="publications-search-admin-filter-label">
                         {t('publications.admin.filters.sortBy')}
@@ -113,7 +95,10 @@ export const PublicationsSearchAdmin = ({
                         <option value="newest">{t('publications.admin.filters.newest')}</option>
                         <option value="oldest">{t('publications.admin.filters.oldest')}</option>
                         <option value="updated">{t('publications.admin.filters.updated')}</option>
-                        <option value="title">{t('publications.admin.filters.title')}</option>
+                        <option value="published">{t('publications.admin.filters.published')}</option>
+                        <option value="likes">{t('publications.admin.filters.likes')}</option>
+                        <option value="views">{t('publications.admin.filters.views')}</option>
+                        <option value="downloads">{t('publications.admin.filters.downloads')}</option>
                     </select>
                 </div>
             </div>

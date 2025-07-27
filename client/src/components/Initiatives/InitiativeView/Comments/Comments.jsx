@@ -22,8 +22,10 @@ export const Comments = ({
     const {
         // Initiative functions
         getComments, addComment, updateComment, deleteComment, likeComment,
-        // Project functions  
+        // Project functions
         getProjectComments, addProjectComment, updateProjectComment, deleteProjectComment, likeProjectComment,
+        // Publication functions
+        getPublicationComments, addPublicationComment, updatePublicationComment, deletePublicationComment, likePublicationComment,
         commentsLoading,
         comments
     } = useInitiativeContext();
@@ -34,14 +36,15 @@ export const Comments = ({
     // Определяме ID и ключ според типа
     const targetId = initiativeId || entityId;
     const isProject = entityType === 'project';
-    const commentsKey = isProject ? `project-${targetId}` : targetId;
+    const isPublication = entityType === 'publication';
+    const commentsKey = isProject ? `project-${targetId}` : isPublication ? `publication-${targetId}` : targetId;
 
     // Избираме правилните функции според типа
-    const fetchComments = isProject ? getProjectComments : getComments;
-    const submitComment = isProject ? addProjectComment : addComment;
-    const updateCommentFunc = isProject ? updateProjectComment : updateComment;
-    const deleteCommentFunc = isProject ? deleteProjectComment : deleteComment;
-    const likeCommentFunc = isProject ? likeProjectComment : likeComment;
+    const fetchComments = isProject ? getProjectComments : isPublication ? getPublicationComments : getComments;
+    const submitComment = isProject ? addProjectComment : isPublication ? addPublicationComment : addComment;
+    const updateCommentFunc = isProject ? updateProjectComment : isPublication ? updatePublicationComment : updateComment;
+    const deleteCommentFunc = isProject ? deleteProjectComment : isPublication ? deletePublicationComment : deleteComment;
+    const likeCommentFunc = isProject ? likeProjectComment : isPublication ? likePublicationComment : likeComment;
 
     // Вземаме коментарите с правилния ключ
     const currentComments = comments[commentsKey] || [];
@@ -107,7 +110,7 @@ export const Comments = ({
         <section className="initiative-comments-section" id="comments">
             <div className="initiative-comments-header">
                 <h2 className="initiative-comments-section-title">
-                    {t('comments.title')} ({currentComments.reduce((sum, comment) => 
+                    {t('comments.title')} ({currentComments.reduce((sum, comment) =>
                         sum + 1 + (comment.replies?.length || 0), 0)})
                 </h2>
 

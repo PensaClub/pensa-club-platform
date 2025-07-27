@@ -26,6 +26,14 @@ module.exports = (sequelize, DataTypes) => {
                     image_link_connection: 'section',
                 },
             });
+            section.hasOne(models.image, {
+                as: 'sectionImage',
+                foreignKey: 'imageableId',
+                constraints: false,
+                scope: {
+                    image_link_connection: 'section',
+                },
+            });
         }
     }
     section.init(

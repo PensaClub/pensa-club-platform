@@ -35,7 +35,8 @@ export const StoryPubView = ({ type }) => {
         getStoryBySlug,
         getPublicationBySlug,
         getRelatedContent,
-
+        likePublication,
+        currentPublication, // Add this to get the updated publication from context
     } = useInitiativeContext();
 
     useEffect(() => {
@@ -78,7 +79,14 @@ export const StoryPubView = ({ type }) => {
         if (slug) {
             fetchContent();
         }
-    }, [slug, type, getStoryBySlug, getPublicationBySlug, getRelatedContent]);
+    }, [slug, type]);
+
+    // Add a new useEffect to sync content with context state
+    useEffect(() => {
+        if (type === 'publication' && currentPublication && content && currentPublication.id === content.id) {
+            setContent(currentPublication);
+        }
+    }, [currentPublication, content, type]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -106,6 +114,7 @@ export const StoryPubView = ({ type }) => {
         if (!content) return 0;
         return getViewCount(content.id, type);
     };
+
     const handleDownload = (e) => {
         if (content && type === 'publication') {
             trackContentDownload(
@@ -123,11 +132,24 @@ export const StoryPubView = ({ type }) => {
         trackContentShare(contentId, contentTitle, contentType, shareMethod);
     };
 
+    const handleLike = async () => {
+        if (!content || type !== 'publication') return;
+
+        try {
+            await likePublication(content.id, (updatedPublication) => {
+                setContent(updatedPublication);
+            });
+        } catch (error) {
+            console.error('Error liking publication:', error);
+        }
+    };
+
     // Получаване на реалния download count
     const getRealDownloadCount = () => {
         if (!content || type !== 'publication') return 0;
         return getCurrentDownloadCount(content.id, type);
     };
+
     if (isLoading) {
         return <Loader />;
     }
@@ -167,24 +189,38 @@ export const StoryPubView = ({ type }) => {
                                 {t('storyPubView.breadcrumb.initiatives')}
                             </Link>
                             <span className="story-pub-breadcrumb-separator">›</span>
-                            <Link
-                                to={`/initiatives/${content.initiative.slug}`}
-                                className="story-pub-breadcrumb-link"
-                            >
-                                {content.initiative.title}
-                            </Link>
-                            <span className="story-pub-breadcrumb-separator">›</span>
+                            {content.initiative && (
+                                <>
+                                    <Link
+                                        to={`/initiatives/${content.initiative.slug}`}
+                                        className="story-pub-breadcrumb-link"
+                                    >
+                                        {content.initiative.title}
+                                    </Link>
+                                    <span className="story-pub-breadcrumb-separator">›</span>
+                                </>
+                            )}
                             <span className="story-pub-breadcrumb-current">{getTypeTranslation()}</span>
                         </nav>
                         {/* Mobile Breadcrumb Button */}
                         <div className="story-pub-breadcrumb-mobile">
-                            <Link
-                                to={`/initiatives/${content.initiative.slug}`}
-                                className="story-pub-breadcrumb-btn"
-                            >
-                                <span className="story-pub-breadcrumb-btn-icon">←</span>
-                                <span>{t('storyPubView.breadcrumb.back')}</span>
-                            </Link>
+                            {content.initiative ? (
+                                <Link
+                                    to={`/initiatives/${content.initiative.slug}`}
+                                    className="story-pub-breadcrumb-btn"
+                                >
+                                    <span className="story-pub-breadcrumb-btn-icon">←</span>
+                                    <span>{t('storyPubView.breadcrumb.back')}</span>
+                                </Link>
+                            ) : (
+                                <Link
+                                    to="/initiatives"
+                                    className="story-pub-breadcrumb-btn"
+                                >
+                                    <span className="story-pub-breadcrumb-btn-icon">←</span>
+                                    <span>{t('storyPubView.breadcrumb.back')}</span>
+                                </Link>
+                            )}
                         </div>
 
                         <div className="story-pub-hero-main">
@@ -331,12 +367,19 @@ export const StoryPubView = ({ type }) => {
 
                             {/* Social Actions */}
                             <div className="story-pub-actions">
-                                <button className="action-btn like-btn">
-                                    <span className="action-icon">❤️</span>
-                                    <span className="action-text">
-                                        {getLikesCountText(content.likes || 0, t)}
-                                    </span>
-                                </button>
+                                {type === 'publication' && (
+                                    <button
+                                        className={`action-btn like-btn ${content.isLiked ? 'liked' : ''}`}
+                                        onClick={handleLike}
+                                    >
+                                        <span className="action-icon">
+                                            {content.isLiked ? '❤️' : '🤍'}
+                                        </span>
+                                        <span className="action-text">
+                                            {getLikesCountText(content.likes || 0, t)}
+                                        </span>
+                                    </button>
+                                )}
                                 <ShareButton
                                     contentId={content.id}
                                     contentTitle={content.title}

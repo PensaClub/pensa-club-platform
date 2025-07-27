@@ -1,0 +1,7 @@
+/* File Section specific styles */
+.publication-field-help {
+    font-size: 0.8125rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+    font-style: italic;
+}

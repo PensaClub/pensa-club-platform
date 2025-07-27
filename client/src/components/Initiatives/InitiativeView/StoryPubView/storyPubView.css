@@ -598,7 +598,7 @@
 /* Social Actions */
 .story-pub-actions {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     padding: 2rem 0;
     /* border-top: 1px solid #e2e8f0; */
     border-bottom: 1px solid #e2e8f0;
@@ -624,9 +624,15 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
+    min-width: fit-content;
+    white-space: nowrap;
+    overflow: visible;
 }
 .action-text{
      color: #64748b;
+     white-space: nowrap;
+     overflow: visible;
+     text-overflow: unset;
 }
 .action-text:hover {
     color: #1B8B8A;
@@ -639,6 +645,26 @@
 
 .action-icon {
     font-size: 1.1rem;
+}
+
+.action-btn.liked {
+    border-color: #e53e3e;
+    color: #e53e3e;
+    background: rgba(229, 62, 62, 0.05);
+}
+
+.action-btn.liked:hover {
+    border-color: #c53030;
+    color: #c53030;
+    background: rgba(229, 62, 62, 0.1);
+}
+
+.action-btn.liked .action-text {
+    color: #e53e3e;
+}
+
+.action-btn.liked:hover .action-text {
+    color: #c53030;
 }
 
 /* Sidebar */

@@ -61,25 +61,29 @@ getPublicationsByInitiative: async (initiativeId) => {
   return requester.get(`${apiUrl}/publications/initiative/${initiativeId}`);
 },
 
-// Publication comments
+getAllPublicationDrafts: async (page = 1, limit = 10) => {
+  return requester.get(`${apiUrl}/publications/drafts?page=${page}&limit=${limit}`);
+},
+
+// Publication comments - SIMPLIFIED ENDPOINTS
 getPublicationComments: async (publicationId) => {
-  return requester.get(`${apiUrl}/publications/${publicationId}/comments`);
+  return requester.get(`${apiUrl}/comments/all/publication/${publicationId}`);
 },
 
-addPublicationComment: async (publicationId, commentData) => {
-  return requester.post(`${apiUrl}/publications/${publicationId}/comments`, commentData);
+addPublicationComment: async (commentData) => {
+  return requester.post(`${apiUrl}/comments/create`, commentData);
 },
 
-updatePublicationComment: async (publicationId, commentId, commentData) => {
-  return requester.patch(`${apiUrl}/publications/${publicationId}/comments/${commentId}`, commentData);
+updatePublicationComment: async (commentId, content) => {
+  return requester.patch(`${apiUrl}/comments/${commentId}`, { content });
 },
 
-deletePublicationComment: async (publicationId, commentId) => {
-  return requester.del(`${apiUrl}/publications/${publicationId}/comments/${commentId}`);
+deletePublicationComment: async (commentId) => {
+  return requester.del(`${apiUrl}/comments/${commentId}`);
 },
 
-likePublicationComment: async (publicationId, commentId) => {
-  return requester.post(`${apiUrl}/publications/${publicationId}/comments/${commentId}/like`);
+likePublicationComment: async (commentId) => {
+  return requester.post(`${apiUrl}/comments/like/${commentId}`);
 },
 
 // Publication interactions
