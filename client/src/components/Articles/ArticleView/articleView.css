@@ -102,6 +102,10 @@
   color: var(--orange);
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+
+}
 @media (max-width: 768px) {
   .article-view-count {
     margin: 1rem 1.5rem;
@@ -720,6 +724,63 @@
   left: 1rem !important;
   opacity: 0.3 !important;
 }
+
+/* === ARTICLE CONTENT LINK STYLES === */
+.article-summary-view a,
+.section-content a,
+.article-body-view a {
+  color: #1B8B8A !important;
+  text-decoration: underline !important;
+  text-decoration-color: #1B8B8A !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 2px !important;
+  transition: all 0.3s ease !important;
+  font-weight: 500 !important;
+}
+
+.article-summary-view a:hover,
+.section-content a:hover,
+.article-body-view a:hover {
+  color: #E26020 !important;
+  text-decoration-color: #E26020 !important;
+  text-decoration-thickness: 2px !important;
+  transform: translateY(-1px);
+}
+
+.article-summary-view a:focus,
+.section-content a:focus,
+.article-body-view a:focus {
+  outline: 2px solid #1B8B8A !important;
+  outline-offset: 2px !important;
+  border-radius: 3px !important;
+}
+
+/* Links in blockquotes */
+.article-summary-view blockquote a,
+.section-content blockquote a,
+.article-body-view blockquote a {
+  color: #1B8B8A !important;
+  font-style: normal !important;
+}
+
+/* Links in lists */
+.article-summary-view li a,
+.section-content li a,
+.article-body-view li a {
+  font-weight: 600 !important;
+}
+
+/* External link indicator */
+.article-summary-view a[target="_blank"]::after,
+.section-content a[target="_blank"]::after,
+.article-body-view a[target="_blank"]::after {
+  content: " ↗";
+  font-size: 1em;
+  opacity: 1;
+  margin-left: 2px;
+}
+
+
 @media (min-width: 1200px) {
   .article-main-image,
   .section-figure {
@@ -742,6 +803,11 @@
   .article-navigation {
     /* margin-left: 1.5rem;
     margin-right: 1.5rem; */
+  }
+    .article-summary-view a,
+  .section-content a,
+  .article-body-view a {
+    word-break: break-word;
   }
   .article-summary-view{
     margin: 2rem 1.5rem 2rem;

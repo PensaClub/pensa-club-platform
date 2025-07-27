@@ -12,7 +12,7 @@ import "./articleCreateForm.css";
 // Slate.js imports
 import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
-import { createEditor, Editor, Transforms, Element as SlateElement } from 'slate';
+import { createEditor, Editor, Transforms, Element as SlateElement, Range } from 'slate';
 
 import { useArticleContext } from "../../contexts/ArticleContext";
 import ScrollToTop from "../../ScrollToTop/ScrollToTop";
@@ -33,7 +33,7 @@ const htmlToSlate = (html) => {
 
     const parser = new DOMParser();
     const document = parser.parseFromString(html, 'text/html');
-    
+
     const deserialize = (el) => {
         if (el.nodeType === 3) {
             // Игнорираме празни text nodes
@@ -68,7 +68,7 @@ const htmlToSlate = (html) => {
                 return children.length > 0 ? { type: 'heading-two', children } : null;
             case 'H3':
                 return children.length > 0 ? { type: 'heading-three', children } : null;
-            
+
             case 'UL':
                 return children.length > 0 ? { type: 'bulleted-list', children } : null;
             case 'OL':
@@ -76,7 +76,7 @@ const htmlToSlate = (html) => {
             case 'LI':
                 // За list items, ако няма children, добавяме празен text
                 return { type: 'list-item', children: children.length > 0 ? children : [{ text: '' }] };
-            
+
             case 'STRONG':
             case 'B':
                 return children.map(child => {
@@ -100,6 +100,10 @@ const htmlToSlate = (html) => {
                     }
                     return child;
                 });
+
+            case 'A':
+                const url = el.getAttribute('href') || '';
+                return { type: 'link', url, children };
             default:
                 return children;
         }
@@ -107,21 +111,21 @@ const htmlToSlate = (html) => {
 
     const nodes = deserialize(document.body);
     const result = Array.isArray(nodes) ? nodes : [nodes];
-    
+
     // 🔧 АГРЕСИВНО ФИЛТРИРАНЕ - махаме всички null/undefined
     const filtered = result.filter(node => {
         if (!node || typeof node !== 'object') return false;
-        
+
         // Text nodes
         if (node.text !== undefined) {
             return node.text.trim().length > 0;
         }
-        
+
         // Element nodes - само ако имат валидно съдържание
         if (node.type) {
             return true;
         }
-        
+
         return false;
     }).map(node => {
         // Wrap text nodes в paragraphs
@@ -131,7 +135,6 @@ const htmlToSlate = (html) => {
         return node;
     });
 
-    // Ако няма нищо валидно, връщаме един празен параграф
     return filtered.length > 0 ? filtered : [{ type: 'paragraph', children: [{ text: '' }] }];
 };
 
@@ -377,6 +380,60 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         return !!match;
     }, []);
 
+    // Добави тези функции след isBlockActive
+    const isLinkActive = useCallback((editor) => {
+        const [link] = Editor.nodes(editor, {
+            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'link',
+        });
+        return !!link;
+    }, []);
+
+    const insertLink = useCallback((editor, url, text) => {
+        if (isLinkActive(editor)) {
+            unwrapLink(editor);
+        }
+
+        const { selection } = editor;
+        const isCollapsed = selection && Range.isCollapsed(selection);
+        const link = {
+            type: 'link',
+            url,
+            children: isCollapsed ? [{ text }] : [],
+        };
+
+        if (isCollapsed) {
+            Transforms.insertNodes(editor, link);
+        } else {
+            Transforms.wrapNodes(editor, link, { split: true });
+            Transforms.collapse(editor, { edge: 'end' });
+        }
+    }, []);
+
+    const unwrapLink = useCallback((editor) => {
+        Transforms.unwrapNodes(editor, {
+            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'link',
+        });
+    }, []);
+
+    const toggleLink = useCallback((editor) => {
+        if (isLinkActive(editor)) {
+            unwrapLink(editor);
+        } else {
+            const url = window.prompt('Enter the URL:');
+            if (!url) return;
+
+            const { selection } = editor;
+            const isCollapsed = selection && Range.isCollapsed(selection);
+
+            if (isCollapsed) {
+                const text = window.prompt('Enter link text:') || url;
+                insertLink(editor, url, text);
+            } else {
+                insertLink(editor, url, '');
+            }
+        }
+    }, [isLinkActive, insertLink, unwrapLink]);
+
     // Render functions
     const renderElement = useCallback((props) => {
         switch (props.element.type) {
@@ -392,6 +449,18 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                 return <li {...props.attributes}>{props.children}</li>;
             case 'numbered-list':
                 return <ol {...props.attributes}>{props.children}</ol>;
+
+            case 'link':
+                return (
+                    <a
+                        {...props.attributes}
+                        href={props.element.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {props.children}
+                    </a>
+                );
             default:
                 return <p {...props.attributes}>{props.children}</p>;
         }
@@ -506,10 +575,20 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                     >
                         <FontAwesomeIcon icon={faQuoteLeft} />
                     </button>
+                    <button
+                        type="button"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            toggleLink(editor);
+                        }}
+                        className={`slate-btn ${isLinkActive(editor) ? 'active' : ''}`}
+                    >
+                        🔗
+                    </button>
                 </>
             )}
         </div>
-    ), [toggleMark, toggleBlock, isMarkActive, isBlockActive]);
+    ), [toggleMark, toggleBlock, isMarkActive, isBlockActive, toggleLink, isLinkActive]);
 
     // Other handlers
     const moveSectionUp = useCallback((index) => {
@@ -568,8 +647,8 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         });
         setIsAltModalOpen(true);
     }, []);
-    
- const handleAddVideoUrl = useCallback(() => {
+
+    const handleAddVideoUrl = useCallback(() => {
         if (!values.mainImage.videoUrl) return;
         const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
         const vimeoRegex = /^(https?:\/\/)?(www\.)?vimeo\.com\/.+$/;

@@ -1538,3 +1538,35 @@
         font-size: calc(var(--xxs-font-size) - 2px);
     }
 }
+/* === SLATE EDITOR LINK STYLES === */
+.slate-editable a {
+  color: rgb(10, 36, 107) !important;
+  text-decoration: underline;
+  text-decoration-color: #1B8B8A !important;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: all 0.2s ease;
+  cursor: pointer !important;
+}
+
+.slate-editable a:hover {
+  color: #E26020 !important;
+  text-decoration-color: #E26020;
+  text-decoration-thickness: 2px;
+}
+
+.slate-editable a:focus {
+  outline: 2px solid #1B8B8A !important;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Link toolbar button */
+.slate-btn.link-btn {
+  font-size: 1.1rem;
+}
+
+.slate-btn.link-btn.active {
+  background-color: #1B8B8A;
+  color: white;
+}
