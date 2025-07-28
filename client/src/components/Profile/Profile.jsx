@@ -64,6 +64,7 @@ import ProjectPreview from "../Initiatives/CreateProject/ProjectPreview/ProjectP
 import DraftProjects from "../Initiatives/CreateProject/DraftProjects/DraftProjects";
 import { LanguageSwitcherAdmin } from "../LanguageSwitcher/LanguageSwitcherAdmin";
 import { ProfessionalAvatarBuilder } from "../AvatarDemo/ProfessionalAvatarBuilder";
+import ArticlePreviewPage from "../Articles/ArticleCreateForm/ArticlePreviewPage";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -165,6 +166,7 @@ export const Profile = () => {
     "/profile/projects",
     "/profile/project-create",
     "/profile/project-preview",
+    "/profile/article-preview",
 
     "/profile/applications-admin"
   ];
@@ -854,6 +856,7 @@ export const Profile = () => {
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
             <Route path="projects-create" element={<ManagementGuard><ProjectCreateForm /></ManagementGuard>} />
             <Route path="project-preview" element={<ManagementGuard><ProjectPreview /></ManagementGuard>} />
+            <Route path="article-preview" element={<ManagementGuard><ArticlePreviewPage /></ManagementGuard>} />
 
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}

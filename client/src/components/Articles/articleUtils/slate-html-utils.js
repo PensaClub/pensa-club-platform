@@ -1,3 +1,5 @@
+// slate-html-utils.js
+
 import { htmlToSlate } from '@slate-serializers/html';
 
 // Конфигурация за вашата Slate схема
