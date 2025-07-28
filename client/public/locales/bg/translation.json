@@ -136,7 +136,7 @@
     "welcome-back-left-side-desc": "Радваме се да Ви видим отново. Влезте в профила си, за да продължите своето пътуване с нас."
   },
   "error-page": {
-     "error": "Грешка",
+    "error": "Грешка",
     "home": "Начало",
     "map": "Карта",
     "craigslist": "Общност",
@@ -846,19 +846,25 @@
     "views": "Прегледи",
     "slide": "слайд",
     "preview": {
-      "backToEditing": "Назад към редактирането",
-      "noMainImage": "Няма избрано основно изображение",
+      "backToEditing": "Назад към редактиране",
+      "articlePreview": "Преглед на статия",
+      "preview": "ПРЕГЛЕД",
+      "previewMode": "Режим на преглед",
+      "sliderImage": "Изображение от слайдер",
+      "videoPreview": "Видео преглед",
+      "mainImage": "Основно изображение",
+      "noMainImage": "Няма основно изображение",
       "temporaryImage": "Временно изображение",
-      "preview": "ПРЕДПРЕГЛЕД",
-      "articlePreview": "Предпреглед на статията",
-      "articleTitle": "Заглавие на статията",
+      "sectionImage": "Изображение на секция {{number}}",
+      "noContent": "Няма съдържание",
+      "articleTitle": "Заглавие на статия",
       "author": "Автор",
       "sectionTitle": "Заглавие на секция {{number}}",
-      "sectionImage": "Изображение към секция {{number}}",
-      "noContent": "Няма съдържание",
-      "sliderImage": "Слайдер изображение",
-      "videoPreview": "Видео превю",
-      "mainImage": "Основно изображение"
+      "backToForm": "Назад към формата",
+      "previewDescription": "Това е как ще изглежда статията след публикуване",
+      "editArticle": "Редактирай статия",
+      "publishArticle": "Публикувай статия",
+      "sidebarDescription": "Можете да се върнете и да редактирате статията преди публикуване"
     },
     "imageEdit": {
       "title": "Редактиране на информация за изображението",
@@ -1097,14 +1103,11 @@
   },
   "initiatives": {
     "create": {
-     
       "facebook": "Facebook",
-      "instagram": "Instagram", 
+      "instagram": "Instagram",
       "linkedin": "LinkedIn",
       "twitter": "Twitter",
-     
       "tagsDescription": "Добавете ключови думи за по-лесно намиране на вашата инициатива",
-   
       "newTitle": "Нова инициатива",
       "editTitle": "Редактиране на инициатива",
       "subtitle": "Създайте значима инициатива, която ще направи разлика в обществото",
@@ -1629,12 +1632,12 @@
       "backToInitiative": "Връщане към инициативата"
     },
     "gallery": {
-            "title": "Галерия",
-            "noImages": "Няма изображения",
-            "image": "изображение",
-            "images": "изображения", 
-            "viewImage": "Преглед"
-        },
+      "title": "Галерия",
+      "noImages": "Няма изображения",
+      "image": "изображение",
+      "images": "изображения",
+      "viewImage": "Преглед"
+    },
     "status": {
       "active": "Активен",
       "in-progress": "В процес",
@@ -2236,7 +2239,7 @@
     "hero": {
       "keywords": {
         "innovation": "Иновации",
-        "technology": "Технологии", 
+        "technology": "Технологии",
         "future": "Бъдеще",
         "development": "Развитие",
         "causes": "Каузи",
@@ -2909,7 +2912,7 @@
     },
     "backToHome": "Обратно към началото"
   },
-   "eliteCard": {
+  "eliteCard": {
     "badge": "ELITE",
     "brand": "Pensa Elite",
     "subtitle": "CARD",
@@ -2935,10 +2938,9 @@
   "loading": {
     "articles": "Зареждане на статии...",
     "initiatives": "Зареждане на инициативи...",
-    "projects": "Зареждане на проекти...", 
+    "projects": "Зареждане на проекти...",
     "page": "Зареждане..."
   },
-
   "avatar": {
     "title": "Създай своя аватар",
     "subtitle": "Персонализирай своя профил с уникален аватар",
@@ -3022,7 +3024,7 @@
     "clotheColors": {
       "black": "Черен",
       "blue1": "Син 1",
-      "blue2": "Син 2", 
+      "blue2": "Син 2",
       "blue3": "Син 3",
       "gray1": "Сив 1",
       "gray2": "Сив 2",
@@ -3093,7 +3095,7 @@
       "darkBrown": "Тъмно кафява",
       "black": "Черна"
     },
-     "beardColor": "Цвят на брадата",
+    "beardColor": "Цвят на брадата",
     "graphics": {
       "title": "Графики",
       "bat": "Прилеп",
@@ -3109,7 +3111,4 @@
       "skull": "Череп"
     }
   }
-
-
- 
 }

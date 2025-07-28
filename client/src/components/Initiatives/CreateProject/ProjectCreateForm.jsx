@@ -71,8 +71,8 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
         saveDraft,
         publishDraft,
         draftId,
-          editId,        // 🔧 ДОБАВЯМЕ editId
-  setEditId,   
+        editId,        // 🔧 ДОБАВЯМЕ editId
+        setEditId,
         saveToLocalStorage,
         loadFromLocalStorage,
         clearLocalStorage,
@@ -205,32 +205,32 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
     };
 
     const toggleBlock = (editor, format) => {
-    try {
-        const isActive = isBlockActive(editor, format);
-        const isList = ['numbered-list', 'bulleted-list'].includes(format);
+        try {
+            const isActive = isBlockActive(editor, format);
+            const isList = ['numbered-list', 'bulleted-list'].includes(format);
 
-        // Премахваме списъци ако превключваме към друг формат
-        Transforms.unwrapNodes(editor, {
-            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && 
-                ['numbered-list', 'bulleted-list'].includes(n.type),
-            split: true,
-        });
+            // Премахваме списъци ако превключваме към друг формат
+            Transforms.unwrapNodes(editor, {
+                match: n => !Editor.isEditor(n) && SlateElement.isElement(n) &&
+                    ['numbered-list', 'bulleted-list'].includes(n.type),
+                split: true,
+            });
 
-        const newProperties = {
-            type: isActive ? 'paragraph' : isList ? 'list-item' : format,
-        };
+            const newProperties = {
+                type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+            };
 
-        Transforms.setNodes(editor, newProperties);
+            Transforms.setNodes(editor, newProperties);
 
-        // Ако е списък, обвиваме в съответния wrapper
-        if (!isActive && isList) {
-            const block = { type: format, children: [] };
-            Transforms.wrapNodes(editor, block);
+            // Ако е списък, обвиваме в съответния wrapper
+            if (!isActive && isList) {
+                const block = { type: format, children: [] };
+                Transforms.wrapNodes(editor, block);
+            }
+        } catch (error) {
+            console.error('❌ Error toggling block:', error);
         }
-    } catch (error) {
-        console.error('❌ Error toggling block:', error);
-    }
-};
+    };
 
     const isMarkActive = (editor, format) => {
         const marks = Editor.marks(editor);
@@ -339,91 +339,91 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
     );
 
     // 🎯 Render Slate element
-   // В ProjectCreateForm.jsx - замени renderElement функцията
-const renderElement = (props) => {
-    switch (props.element.type) {
-        case 'block-quote':
-            return <blockquote {...props.attributes}>{props.children}</blockquote>;
-        case 'bulleted-list':
-            return <ul {...props.attributes}>{props.children}</ul>;
-        case 'heading-one':
-            return (
-                <h1
-                    {...props.attributes}
-                    style={{
-                        fontSize: '2rem',
-                        fontWeight: '700',
-                        lineHeight: '1.3',
-                        margin: '1rem 0 0.5rem 0',
-                        color: '#1B8B8A',
-                        border: 'none',
-                        background: 'transparent',
-                        padding: '0',
-                        boxShadow: 'none',
-                        borderRadius: '0'
-                    }}
-                >
-                    {props.children}
-                </h1>
-            );
-        case 'heading-two':
-            return (
-                <h2
-                    {...props.attributes}
-                    style={{
-                        fontSize: '1.5rem',
-                        fontWeight: '600',
-                        lineHeight: '1.4',
-                        margin: '0.75rem 0 0.5rem 0',
-                        color: '#1B8B8A',
-                        border: 'none',
-                        background: 'transparent',
-                        padding: '0',
-                        boxShadow: 'none',
-                        borderRadius: '0'
-                    }}
-                >
-                    {props.children}
-                </h2>
-            );
-        case 'heading-three':
-            return (
-                <h3
-                    {...props.attributes}
-                    style={{
-                        fontSize: '1.25rem',
-                        fontWeight: '600',
-                        lineHeight: '1.4',
-                        margin: '0.5rem 0 0.25rem 0',
-                        color: '#2d3748',
-                        border: 'none',
-                        background: 'transparent',
-                        padding: '0'
-                    }}
-                >
-                    {props.children}
-                </h3>
-            );
-        case 'list-item':
-            return <li {...props.attributes}>{props.children}</li>;
-        case 'numbered-list':
-            return <ol {...props.attributes}>{props.children}</ol>;
-        default:
-            return (
-                <p
-                    {...props.attributes}
-                    style={{
-                        fontSize: '1rem',
-                        lineHeight: '1.6',
-                        margin: '0.5rem 0',
-                        color: '#2d3748'
-                    }}
-                >
-                    {props.children}
-                </p>
-            );
-    }
-};
+    // В ProjectCreateForm.jsx - замени renderElement функцията
+    const renderElement = (props) => {
+        switch (props.element.type) {
+            case 'block-quote':
+                return <blockquote {...props.attributes}>{props.children}</blockquote>;
+            case 'bulleted-list':
+                return <ul {...props.attributes}>{props.children}</ul>;
+            case 'heading-one':
+                return (
+                    <h1
+                        {...props.attributes}
+                        style={{
+                            fontSize: '2rem',
+                            fontWeight: '700',
+                            lineHeight: '1.3',
+                            margin: '1rem 0 0.5rem 0',
+                            color: '#1B8B8A',
+                            border: 'none',
+                            background: 'transparent',
+                            padding: '0',
+                            boxShadow: 'none',
+                            borderRadius: '0'
+                        }}
+                    >
+                        {props.children}
+                    </h1>
+                );
+            case 'heading-two':
+                return (
+                    <h2
+                        {...props.attributes}
+                        style={{
+                            fontSize: '1.5rem',
+                            fontWeight: '600',
+                            lineHeight: '1.4',
+                            margin: '0.75rem 0 0.5rem 0',
+                            color: '#1B8B8A',
+                            border: 'none',
+                            background: 'transparent',
+                            padding: '0',
+                            boxShadow: 'none',
+                            borderRadius: '0'
+                        }}
+                    >
+                        {props.children}
+                    </h2>
+                );
+            case 'heading-three':
+                return (
+                    <h3
+                        {...props.attributes}
+                        style={{
+                            fontSize: '1.25rem',
+                            fontWeight: '600',
+                            lineHeight: '1.4',
+                            margin: '0.5rem 0 0.25rem 0',
+                            color: '#2d3748',
+                            border: 'none',
+                            background: 'transparent',
+                            padding: '0'
+                        }}
+                    >
+                        {props.children}
+                    </h3>
+                );
+            case 'list-item':
+                return <li {...props.attributes}>{props.children}</li>;
+            case 'numbered-list':
+                return <ol {...props.attributes}>{props.children}</ol>;
+            default:
+                return (
+                    <p
+                        {...props.attributes}
+                        style={{
+                            fontSize: '1rem',
+                            lineHeight: '1.6',
+                            margin: '0.5rem 0',
+                            color: '#2d3748'
+                        }}
+                    >
+                        {props.children}
+                    </p>
+                );
+        }
+    };
 
     // 🎯 Render Slate leaf
     const renderLeaf = (props) => {
@@ -506,7 +506,7 @@ const renderElement = (props) => {
                 ...savedDraft.data
             }));
             setShowLocalStoragePrompt(false);
-           notify('success', t('projects.create.draftLoadedSuccessfully'));
+            notify('success', t('projects.create.draftLoadedSuccessfully'));
         }
     };
 
@@ -1080,7 +1080,7 @@ const renderElement = (props) => {
                                 removeSectionImage={removeSectionImage}
                                 updateSectionImageAlt={updateSectionImageAlt}
                                 clearSectionImages={clearSectionImages}
-                                updateSectionImageCaption={updateSectionImageCaption} 
+                                updateSectionImageCaption={updateSectionImageCaption}
                             />
                         )}
 
@@ -1180,72 +1180,72 @@ const renderElement = (props) => {
             </div>
 
             {/* Floating Actions */}
-<div className="project-floating-actions">
-  {(draftId || editId || values.title?.trim()) && (
-    <button
-      type="button"
-      className="project-floating-btn new-project"
-      onClick={handleStartNewProject}
-      title={t('projects.create.startNewProject')}
-    >
-      <FontAwesomeIcon icon={faPlus} />
-    </button>
-  )}
+            <div className="project-floating-actions">
+                {(draftId || editId || values.title?.trim()) && (
+                    <button
+                        type="button"
+                        className="project-floating-btn new-project"
+                        onClick={handleStartNewProject}
+                        title={t('projects.create.startNewProject')}
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                )}
 
-  {/* Save/Update Draft button - показва се само когато НЕ е в edit mode */}
-  {!editId && (
-    <button
-      type="button"
-      className="project-floating-btn draft"
-      onClick={saveDraft}
-      title={draftId ? t('projects.create.updateDraft') : t('projects.create.saveDraft')}
-    >
-      <FontAwesomeIcon icon={faSave} />
-    </button>
-  )}
-  
-  <button
-    type="button"
-    className="project-floating-btn preview"
-    onClick={handlePreview}
-    title={t('projects.create.preview')}
-  >
-    <FontAwesomeIcon icon={faEye} />
-  </button>
-  
-  {/* 🔧 ГЛАВНАТА ЛОГИКА ТУК */}
-  {draftId && !editId ? (
-    // DRAFT MODE - може да публикува draft
-    <button
-      type="button"
-      className="project-floating-btn publish"
-      onClick={publishDraft}
-      title={t('projects.create.publishProject')}
-    >
-      <FontAwesomeIcon icon={faShare} />
-    </button>
-  ) : editId ? (
-    // EDIT MODE - обновява съществуващ проект
-    <button
-      type="button"
-      className="project-floating-btn update"
-      onClick={onSubmit}
-      title={t('projects.create.updateProject')}
-    >
-      <FontAwesomeIcon icon={faEdit} />
-    </button>
-  ) : (
-    // NEW PROJECT MODE - създава нов проект
-    <button
-      type="button"
-      className="project-floating-btn create"
-      onClick={onSubmit}
-      title={t('projects.create.createProject')}
-    >
-      <FontAwesomeIcon icon={faCheckCircle} />
-    </button>
-  )}
-</div>
+                {/* Save/Update Draft button - показва се само когато НЕ е в edit mode */}
+                {!editId && (
+                    <button
+                        type="button"
+                        className="project-floating-btn draft"
+                        onClick={saveDraft}
+                        title={draftId ? t('projects.create.updateDraft') : t('projects.create.saveDraft')}
+                    >
+                        <FontAwesomeIcon icon={faSave} />
+                    </button>
+                )}
+
+                <button
+                    type="button"
+                    className="project-floating-btn preview"
+                    onClick={handlePreview}
+                    title={t('projects.create.preview')}
+                >
+                    <FontAwesomeIcon icon={faEye} />
+                </button>
+
+                {/* 🔧 ГЛАВНАТА ЛОГИКА ТУК */}
+                {draftId && !editId ? (
+                    // DRAFT MODE - може да публикува draft
+                    <button
+                        type="button"
+                        className="project-floating-btn publish"
+                        onClick={publishDraft}
+                        title={t('projects.create.publishProject')}
+                    >
+                        <FontAwesomeIcon icon={faShare} />
+                    </button>
+                ) : editId ? (
+                    // EDIT MODE - обновява съществуващ проект
+                    <button
+                        type="button"
+                        className="project-floating-btn update"
+                        onClick={onSubmit}
+                        title={t('projects.create.updateProject')}
+                    >
+                        <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                ) : (
+                    // NEW PROJECT MODE - създава нов проект
+                    <button
+                        type="button"
+                        className="project-floating-btn create"
+                        onClick={onSubmit}
+                        title={t('projects.create.createProject')}
+                    >
+                        <FontAwesomeIcon icon={faCheckCircle} />
+                    </button>
+                )}
+            </div>
 
             {/* 📜 Scroll to Top */}
             <ScrollToTop />

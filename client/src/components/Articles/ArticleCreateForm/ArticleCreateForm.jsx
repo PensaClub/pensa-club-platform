@@ -25,6 +25,9 @@ import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { generateSlug, isValidSlug, sanitizeSlug } from "../../../utils/slugUtils";
+import { convertSlateToHtml } from "../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils";
+import { useNavigate } from "react-router-dom";
+import { notify } from "../../../utils/notify";
 
 // 🔧 HTML to Slate conversion
 const htmlToSlate = (html) => {
@@ -197,7 +200,6 @@ const normalizeSlateValue = (value) => {
 const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubmitHandler, isEditMode }, ref) => {
     const { t } = useTranslation();
     const { createArticle } = useArticleContext();
-    const [previewMode, setPreviewMode] = useState(false);
     const [isAltModalOpen, setIsAltModalOpen] = useState(false);
     const [activeSection, setActiveSection] = useState(null);
     const [currentEditingImage, setCurrentEditingImage] = useState({
@@ -210,7 +212,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
     const summaryEditor = useMemo(() => createSlateEditor(), []);
     const mainImageAltEditor = useMemo(() => createSlateEditor(), []);
     const sectionEditorsRef = useRef({});
-
+const navigate = useNavigate();
     const getSectionEditor = useCallback((index, field) => {
         const key = `${index}-${field}`;
         if (!sectionEditorsRef.current[key]) {
@@ -226,7 +228,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         }
 
         const processEditorValue = (value, fieldName) => {
-            console.log(`🔄 Processing ${fieldName}:`, value);
 
             if (!value) {
                 return createSlateEditorState();
@@ -234,28 +235,23 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
 
             // Ако е Draft.js EditorState (от API)
             if (value && value._immutable && typeof value.getCurrentContent === 'function') {
-                console.log(`📝 Converting Draft EditorState to Slate for ${fieldName}`);
                 return convertEditorStateToSlate(value);
             }
 
             // Ако е вече Slate array
             if (Array.isArray(value)) {
-                console.log(`✅ Already Slate array for ${fieldName}`);
                 return normalizeSlateValue(value);
             }
 
             // Ако е HTML string
             if (typeof value === 'string') {
                 if (value.includes('<') && value.includes('>')) {
-                    console.log(`🔄 Converting HTML to Slate for ${fieldName}:`, value);
                     return htmlToSlate(value);
                 } else {
-                    console.log(`📝 Plain text for ${fieldName}:`, value);
                     return value.trim() ? [{ type: 'paragraph', children: [{ text: value }] }] : createSlateEditorState();
                 }
             }
 
-            console.log(`⚠️ Unknown format for ${fieldName}, using default`);
             return createSlateEditorState();
         };
 
@@ -280,7 +276,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
             })),
         };
 
-        console.log('✅ Final processed values:', result);
         return result;
     }, [propInitialValues]);
 
@@ -322,7 +317,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
     const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
     // Slate change handlers
     const handleSlateChange = useCallback((fieldName) => (value) => {
-        console.log(`📝 Slate change for ${fieldName}:`, value);
         onChangeHandler(null, true, { name: fieldName, value });
     }, [onChangeHandler]);
 
@@ -643,9 +637,19 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         }
     }, [newTag, addTag]);
 
-    const handlePreviewToggle = useCallback(() => {
-        setPreviewMode(!previewMode);
-    }, [previewMode]);
+   const handlePreview = useCallback(() => {
+    if (!values.title?.trim()) {
+        notify('warning', t('articles.createForm.enterTitleForPreview'));
+        return;
+    }
+
+    navigate('/profile/article-preview', {
+        state: { 
+            previewData: values,
+            mediaFiles: mediaFiles 
+        }
+    });
+}, [values, mediaFiles, navigate, t]);
 
     const handleAddImageUrl = useCallback(() => {
         if (handleMainImageUrl(imageUrl)) {
@@ -716,17 +720,6 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
             </div>
         );
     }
-
-    if (previewMode) {
-        return (
-            <ArticlePreview
-                article={values}
-                onBack={handlePreviewToggle}
-                mediaFiles={mediaFiles}
-            />
-        );
-    }
-
     const formTitle = isEditMode
         ? t('articles.editArticle.edit_article')
         : t('articles.createForm.createNewArticle');
@@ -1352,7 +1345,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                     <button
                         type="button"
                         className="preview-btn"
-                        onClick={handlePreviewToggle}
+                        onClick={handlePreview}
                     >
                         <FontAwesomeIcon icon={faEye} />  {t('articles.createForm.previewBtn')}
                     </button>
