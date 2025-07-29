@@ -6,7 +6,7 @@ export const articles = [
     mainImage: {
       type: "image",
       sources: ["/images/articles/digital-literacy-main.webp"],
-      alt: "Възрастна жена използва таблет с усмивка"
+      alt: "Възрастна жена използва таблет с усмивка",
     },
     publishDate: "2025-03-15",
     author: "Мария Петрова",
@@ -14,7 +14,7 @@ export const articles = [
     relatedArticle: {
       id: 3,
       title: "Онлайн сигурност: как да се предпазим от интернет измами",
-      slug: "online-security-protection"
+      slug: "online-security-protection",
     },
     sections: [
       {
@@ -23,8 +23,8 @@ export const articles = [
         image: {
           src: "/images/articles/digital-benefits.png",
           alt: "Възрастни хора комуникират чрез видео разговор",
-          caption: "Технологиите позволяват на възрастните хора да поддържат връзка с близките си независимо от разстоянието"
-        }
+          caption: "Технологиите позволяват на възрастните хора да поддържат връзка с близките си независимо от разстоянието",
+        },
       },
       {
         title: "Избор на подходящо устройство",
@@ -32,21 +32,21 @@ export const articles = [
         image: {
           src: "/images/articles/device-selection.jpg",
           alt: "Различни типове устройства - таблет, смартфон и лаптоп",
-          caption: "Изборът на подходящо устройство зависи от индивидуалните нужди и способности"
-        }
+          caption: "Изборът на подходящо устройство зависи от индивидуалните нужди и способности",
+        },
       },
       {
         title: "Основни умения за навигация",
-        content: "След като имате устройство, следващата стъпка е да усвоите основните жестове и команди за навигация. При устройства с докосване, това включва докосване, плъзгане, щипване за увеличаване и намаляване. За компютри, важно е да се научите да използвате мишка и клавиатура ефективно..."
-      }
+        content: "След като имате устройство, следващата стъпка е да усвоите основните жестове и команди за навигация. При устройства с докосване, това включва докосване, плъзгане, щипване за увеличаване и намаляване. За компютри, важно е да се научите да използвате мишка и клавиатура ефективно...",
+      },
     ],
     tags: ["дигитална грамотност", "възрастни хора", "технологии", "обучение", "интернет"],
     nextArticle: {
       id: 2,
       title: "Социални мрежи за поддържане на активни връзки с близки и приятели",
-      slug: "social-networks-family-connections"
+      slug: "social-networks-family-connections",
     },
-    previousArticle: null
+    previousArticle: null,
   },
   
   {
@@ -58,9 +58,9 @@ export const articles = [
       sources: [
         "/images/articles/social-media-1.jpg",
         "/images/articles/social-media-2.jpg",
-        "/images/articles/social-media-3.jpg"
+        "/images/articles/social-media-3.jpg",
       ],
-      alt: "Възрастни хора използват социални мрежи"
+      alt: "Възрастни хора използват социални мрежи",
     },
     publishDate: "2025-03-10",
     author: "Иван Димитров",
@@ -68,7 +68,7 @@ export const articles = [
     relatedArticle: {
       id: 5,
       title: "Видео разговори: Стъпка по стъпка ръководство",
-      slug: "video-calls-step-by-step"
+      slug: "video-calls-step-by-step",
     },
     sections: [
       {
@@ -77,25 +77,25 @@ export const articles = [
         image: {
           src: "/images/articles/social-benefits.jpg",
           alt: "Възрастна двойка се усмихва докато гледа в таблет",
-          caption: "Социалните мрежи могат да донесат радост и свързаност в живота на възрастните хора"
-        }
+          caption: "Социалните мрежи могат да донесат радост и свързаност в живота на възрастните хора",
+        },
       },
       {
         title: "Кои платформи са най-подходящи?",
-        content: "Съществуват различни социални платформи, всяка със своите предимства. Facebook е популярен избор с интуитивен интерфейс и функции като групи и събития. WhatsApp и Viber предлагат лесни за използване опции за съобщения и видео разговори. Instagram е идеален за споделяне на снимки с близки..."
-      }
+        content: "Съществуват различни социални платформи, всяка със своите предимства. Facebook е популярен избор с интуитивен интерфейс и функции като групи и събития. WhatsApp и Viber предлагат лесни за използване опции за съобщения и видео разговори. Instagram е идеален за споделяне на снимки с близки...",
+      },
     ],
     tags: ["социални мрежи", "възрастни хора", "общуване", "Facebook", "WhatsApp"],
     nextArticle: {
       id: 3,
       title: "Онлайн сигурност: как да се предпазим от интернет измами",
-      slug: "online-security-protection"
+      slug: "online-security-protection",
     },
     previousArticle: {
       id: 1,
       title: "Дигитална грамотност за възрастни хора: първи стъпки в света на технологиите",
-      slug: "digital-literacy-first-steps"
-    }
+      slug: "digital-literacy-first-steps",
+    },
   },
   
   {
@@ -106,7 +106,7 @@ export const articles = [
       type: "video",
       sources: ["/videos/online-security.mp4"],
       thumbnail: "/images/articles/online-security-thumbnail.png",
-      alt: "Видео за онлайн сигурност и защита"
+      alt: "Видео за онлайн сигурност и защита",
     },
     publishDate: "2025-03-05",
     author: "Петър Иванов",
@@ -114,7 +114,7 @@ export const articles = [
     relatedArticle: {
       id: 1,
       title: "Дигитална грамотност за възрастни хора: първи стъпки в света на технологиите",
-      slug: "digital-literacy-first-steps"
+      slug: "digital-literacy-first-steps",
     },
     sections: [
       {
@@ -123,17 +123,17 @@ export const articles = [
         image: {
           src: "/images/articles/phishing-example.png",
           alt: "Пример за фишинг имейл с отбелязани предупредителни знаци",
-          caption: "Обърнете внимание на тези предупредителни знаци при получаване на подозрителни имейли"
-        }
-      }
+          caption: "Обърнете внимание на тези предупредителни знаци при получаване на подозрителни имейли",
+        },
+      },
     ],
     tags: ["онлайн сигурност", "фишинг", "пароли", "лични данни", "измами"],
     nextArticle: null,
     previousArticle: {
       id: 2,
       title: "Социални мрежи за поддържане на активни връзки с близки и приятели",
-      slug: "social-networks-family-connections"
-    }
+      slug: "social-networks-family-connections",
+    },
   },
   // статия с външна снимкаа
   {
@@ -143,7 +143,7 @@ export const articles = [
     mainImage: {
       type: "image",
       sources: ["https://m.netinfo.bg/media/images/47836/47836067/1280-840-rabota.jpg"],
-      alt: "Възрастни хора участват в онлайн обучение"
+      alt: "Възрастни хора участват в онлайн обучение",
     },
     publishDate: "2025-02-28",
     author: "Силвия Георгиева",
@@ -151,7 +151,7 @@ export const articles = [
     relatedArticle: {
       id: 1,
       title: "Дигитална грамотност за възрастни хора: първи стъпки в света на технологиите",
-      slug: "digital-literacy-first-steps"
+      slug: "digital-literacy-first-steps",
     },
     sections: [
       {
@@ -160,17 +160,17 @@ export const articles = [
         image: {
           src: "https://nstatic.nova.bg/public/pics/nova/article/980x551_1583868509.jpg",
           alt: "Различни образователни платформи на компютърен екран",
-          caption: "Много онлайн платформи предлагат безплатни или нискобюджетни курсове за всички възрасти"
-        }
-      }
+          caption: "Много онлайн платформи предлагат безплатни или нискобюджетни курсове за всички възрасти",
+        },
+      },
     ],
     tags: ["онлайн образование", "възрастни хора", "курсове", "учене през целия живот"],
     nextArticle: null,
     previousArticle: {
       id: 3,
       title: "Онлайн сигурност: как да се предпазим от интернет измами",
-      slug: "online-security-protection"
-    }
+      slug: "online-security-protection",
+    },
   },
   
   //  статия с външно видео
@@ -182,7 +182,7 @@ export const articles = [
       type: "video",
       sources: ["https://www.youtube.com/watch?v=Xa5lZoKlpDs&t=1s"],
       thumbnail: "https://www.tutkit.com/storage/media/text-tutorials/4715/grundlagen-von-youtube-marketing-fuer-neulinge-4.webp?tutkfid=243426",
-      alt: "Видео урок за използване на YouTube"
+      alt: "Видео урок за използване на YouTube",
     },
     publishDate: "2025-02-20",
     author: "Георги Стоянов",
@@ -190,7 +190,7 @@ export const articles = [
     relatedArticle: {
       id: 4,
       title: "Онлайн образование за възрастни: достъпни курсове и ресурси",
-      slug: "online-education-seniors"
+      slug: "online-education-seniors",
     },
     sections: [
       {
@@ -199,18 +199,18 @@ export const articles = [
         image: {
           src: "https://digital.bg/wp-content/uploads/2025/03/youtube-premium-lite.jpg",
           alt: "Интерфейс на YouTube",
-          caption: "Основният екран на YouTube с търсачка и препоръчани видеа"
-        }
-      }
+          caption: "Основният екран на YouTube с търсачка и препоръчани видеа",
+        },
+      },
     ],
     tags: ["YouTube", "видео платформи", "образование", "дигитална грамотност"],
     nextArticle: null,
     previousArticle: {
       id: 4,
       title: "Онлайн образование за възрастни: достъпни курсове и ресурси",
-      slug: "online-education-seniors"
-    }
-  }
+      slug: "online-education-seniors",
+    },
+  },
 ];
 
 export const getArticleBySlug = (slug) => {
