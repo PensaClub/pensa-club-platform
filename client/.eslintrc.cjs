@@ -23,12 +23,12 @@ module.exports = {
 
         // React правила
         'react/prop-types': 'off', // Изключи ако не използваш PropTypes
-        'react/react-in-jsx-scope': 'off', // За React 17+
+        'react/react-in-jsx-scope': 'off', 
 
         // Стил правила
         'indent': ['warn', 2],
         'semi': ['warn', 'always'],
-        'comma-dangle': ['warn', 'always-multiline'],
+        // 'comma-dangle': ['warn', 'always-multiline'],
 
         // Хуки правила
         'react-hooks/rules-of-hooks': 'error',
