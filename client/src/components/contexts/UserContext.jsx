@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './error.css';
 import { Loader } from '../Loader/Loader';
 import { loadAddressData } from '../../utils/loadAddressData';
-import { notify } from '../../utils/notify';
+import { notify } from '../../utils/notify.jsx';
 import { toast } from 'react-toastify';
 import { getAuthStatus, setAuthStatusUpdater } from '../../utils/handle401Error';
 

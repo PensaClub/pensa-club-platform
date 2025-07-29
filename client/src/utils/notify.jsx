@@ -23,7 +23,6 @@ export const notify = (key, error, customMessage = null) => {
     }
   }
 
-  // 🔄 ОСТАНАЛАТА ЛОГИКА ОСТАВА СЪЩАТА
   // eslint-disable-next-line default-case
   switch (key) {
     case 'success-data':

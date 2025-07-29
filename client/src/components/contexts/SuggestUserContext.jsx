@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './error.css';
 import { Loader } from '../Loader/Loader';
-import { notify } from '../../utils/notify';
+import { notify } from '../../utils/notify.jsx';
 import { suggestUserServiceFactory } from '../Services/suggestUserService';
 
 export const SuggestUserContext = createContext();

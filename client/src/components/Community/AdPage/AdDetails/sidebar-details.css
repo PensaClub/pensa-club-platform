@@ -4,7 +4,7 @@
 
 .ad-sidebar-map-details {
     position: fixed;
-    background-image: url('../../../../../public/images/sign-up/background.jpg');
+    background-image: url('/images/sign-up/background.jpg');
     left: 0; 
     top: 60%;
     width: 300px;

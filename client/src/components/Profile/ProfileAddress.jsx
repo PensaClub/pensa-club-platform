@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { handleReset, validateField, trimObjectStrings } from '../../utils/profile';
+import { handleReset, validateField, trimObjectStrings } from '../../utils/profile.jsx';
 import { UserContext } from '../contexts/UserContext';
 
 import { loadData } from '../../utils/loadData';

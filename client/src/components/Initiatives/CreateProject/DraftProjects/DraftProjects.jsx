@@ -12,7 +12,7 @@ import {
 import { calculateProjectProgress } from '../utils/projectProgressUtils';
 import './draftProjects.css';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
-import { notify } from '../../../../utils/notify';
+import { notify } from '../../../../utils/notify.jsx';
 
 const DraftProjects = () => {
     const { t } = useTranslation();

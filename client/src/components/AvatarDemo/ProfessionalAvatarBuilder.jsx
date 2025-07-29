@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserContext } from '../contexts/UserContext';
-import { notify } from '../../utils/notify';
+import { notify } from '../../utils/notify.jsx';
 import './professionalAvatarBuilder.css';
 
 export const ProfessionalAvatarBuilder = () => {

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ArticlePreview from './ArticlePreview/ArticlePreview';
-import { convertSlateToHtml } from '../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils';
+import { convertSlateToHtml } from '../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils.jsx';
 // const convertSlateToHtml = (slateValue) => {
 //   if (!Array.isArray(slateValue)) return '';
 

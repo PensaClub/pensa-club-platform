@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { notify } from "../../utils/notify";
+import { notify } from "../../utils/notify.jsx";
 // import { generateSlug } from "../Articles/articleUtils/formatting";
 import { isFormValid, validateArticleField, validateArticleForm } from "../Articles/articleUtils/validation";
 import { allowedImageTypes, allowedVideoTypes, compressImage, uploadFileWithProgress, isValidImageUrl } from "../Articles/articleUtils/file-utils";
-import { prepareArticleValuesForSubmit, addSectionToArray, removeSectionByIndex, createEmptySection, swapSectionMediaFiles } from "../Articles/articleUtils/article-utils";
-import { updateSectionImageAlt, updateSectionImageInfo } from "../Articles/articleUtils/image-utils";
+import { prepareArticleValuesForSubmit, addSectionToArray, removeSectionByIndex, swapSectionMediaFiles } from "../Articles/articleUtils/article-utils.jsx";
+import { updateSectionImageAlt } from "../Articles/articleUtils/image-utils";
 import { addTagToArray, removeTagByIndex } from "../Articles/articleUtils/tags";
 import { htmlToSlate, isHtmlContent, createSlateEditorState } from "../Articles/articleUtils/htmlToSlate";
 import { generateSlug } from "../../utils/slugUtils";

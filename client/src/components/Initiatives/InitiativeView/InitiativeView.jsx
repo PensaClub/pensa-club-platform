@@ -13,7 +13,7 @@ import { truncateText } from '../../../utils/truncateText';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
 import ImageSlider from '../../Articles/ArticleView/ImageSlider/ImageSlider';
 // Import вашите съществуващи утилити
-import { getDescriptionParts, handleSmoothScroll, renderSlateContent } from '../../../utils/slateRenderer';
+import { getDescriptionParts, handleSmoothScroll, renderSlateContent } from '../../../utils/slateRenderer.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCalendar, faUsers, faHandshake, faTrophy, faTag,

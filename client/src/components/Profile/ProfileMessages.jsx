@@ -7,7 +7,6 @@ import { useAdminContext } from '../contexts/AdminContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { notify } from '../../utils/notify';
 
 export const ProfileMessages = () => {
   const { getMyAds } = useCommunityContext();

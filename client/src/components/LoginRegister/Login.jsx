@@ -149,7 +149,7 @@ export const Login = ({ navToRegister }) => {
             <div className="recaptcha-container">
               <ReCAPTCHA
                 ref={recaptchaRef}
-                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                 onChange={onRecaptchaChange}
                 theme="light"
                 size={recaptchaSize}

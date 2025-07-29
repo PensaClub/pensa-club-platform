@@ -1,5 +1,5 @@
 .background-community {
-    background-image: url('../../../public/images/community/community-bg.png');
+    background-image: url('/images/community/community-bg.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

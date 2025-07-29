@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './profile.css';
 import CustomSelect from './CustomSelect';
-import { resetFields, handleReset } from '../../utils/profile';
+import { resetFields, handleReset } from '../../utils/profile.jsx';
 import { UserContext } from '../contexts/UserContext';import { useTranslation } from 'react-i18next';
 import { useMappingContext } from '../contexts/MapContext';
 

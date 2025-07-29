@@ -11,7 +11,7 @@ import { StoriesPublications } from '../StoriesPublications/StoriesPublications'
 import { Comments } from '../Comments/Comments';
 import { ApplicationForm } from '../ApplicationForm/ApplicationForm';
 // Добави import за утилитите
-import { renderSlateContent } from '../../../../utils/slateRenderer';
+import { renderSlateContent } from '../../../../utils/slateRenderer.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
 import { getLocationFromCoordinates } from '../../../../utils/getLocationFromCoordinates';
