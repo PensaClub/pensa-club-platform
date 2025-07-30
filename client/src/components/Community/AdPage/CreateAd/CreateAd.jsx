@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { v4 } from "uuid";
 import { TagInput } from "./TagInput";
-import { notify } from "../../../../utils/notify";
+import { notify } from "../../../../utils/notify.jsx";
 
 export const CreateAd = () => {
   const { t, i18n } = useTranslation();

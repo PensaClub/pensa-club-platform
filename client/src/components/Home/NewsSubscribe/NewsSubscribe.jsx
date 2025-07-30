@@ -142,7 +142,7 @@ export const NewsSubscribe = () => {
                     {showRecaptcha && (
                         <div className="recaptcha-wrapper">
                             <ReCAPTCHA
-                                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                                 onChange={onRecaptchaChange}
                                 size={recaptchaSize}
                             />

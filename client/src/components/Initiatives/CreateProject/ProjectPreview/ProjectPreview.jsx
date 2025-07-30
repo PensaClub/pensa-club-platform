@@ -14,11 +14,11 @@ import './projectPreview.css';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { useAuthContext } from '../../../contexts/UserContext';
 import { getLocationFromCoordinates } from '../../../../utils/getLocationFromCoordinates';
-import { renderSlateContent } from '../../../../utils/slateRenderer';
+import { renderSlateContent } from '../../../../utils/slateRenderer.jsx';
 import { Milestones } from '../../InitiativeView/Milestones/Milestones';
 import { ProjectBudget } from '../../InitiativeView/ProjectBudget/ProjectBudget';
 import { SponsorsPartners } from '../../InitiativeView/SponsorsPartners/SponsorsPartners';
-import { notify } from '../../../../utils/notify';
+import { notify } from '../../../../utils/notify.jsx';
 import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 
 export const ProjectPreview = () => {

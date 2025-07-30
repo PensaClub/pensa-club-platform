@@ -26,8 +26,8 @@ import {
   convertEditorToHtml,
   isSlateEmpty,
   isDraftEmpty
-} from '../Initiatives/CreateIniciative/Utils/initiativeEditorUtils';
-import { notify } from '../../utils/notify';
+} from '../Initiatives/CreateIniciative/Utils/initiativeEditorUtils.jsx';
+import { notify } from '../../utils/notify.jsx';
 import {
   uploadInitiativeImages,
   uploadSectionImages,

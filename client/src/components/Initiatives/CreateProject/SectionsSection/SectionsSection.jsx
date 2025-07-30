@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash, faEdit, faChevronUp, faChevronDown, faImage, faUpload, faTimes, faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { Slate, Editable } from 'slate-react';
-import { createSlateEditor, createSlateEditorState } from '../../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils';
+import { createSlateEditor, createSlateEditorState } from '../../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils.jsx';
 import './sectionsSection.css';
 const SectionsSection = ({
     values,

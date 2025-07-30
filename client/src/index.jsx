@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from './App.jsx';
+// import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
 
 import { I18nextProvider } from 'react-i18next';
@@ -12,11 +12,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
     <I18nextProvider i18n={i18n}>
-    <BrowserRouter future={{ v7_startTransition: true }}>
+    <BrowserRouter >
     <App />
     </BrowserRouter>
     </I18nextProvider>
   // </React.StrictMode> 
 );
   
-reportWebVitals();
+// reportWebVitals();

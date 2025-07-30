@@ -28,7 +28,7 @@
   left: 0;
   width: 100%;
   height: 120%;
-  background-image: url("../../../../public/images/homePage/hero-img.jpg");
+  background-image: url("/images/homePage/hero-img.jpg");
   background-size: cover;
   background-position: center;
   filter: brightness(0.9);

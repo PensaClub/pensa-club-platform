@@ -12,7 +12,7 @@ import { useArticleContext } from "../../../contexts/ArticleContext";
 import { createEditorState } from "../../articleUtils/editor";
 import { useAnalytics } from "../../../contexts/AnalyticsContext";
 import AnalyticsPanel from "../AnalyticsPanel/AnalyticsPanel";
-import { notify } from "../../../../utils/notify";
+import { notify } from "../../../../utils/notify.jsx";
 // import EditArticleForm from "../EditArticleFrom/EditArticleFrom";
 import ArticleCreateForm from "../../ArticleCreateForm/ArticleCreateForm";
 function EditArticle() {

@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
 
 <head>
   <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <!-- 🔧 ПРЕМАХНАХ %PUBLIC_URL% -->
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  
+  <!-- Fonts -->
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css'>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,16 +17,17 @@
     rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <title>Pensa Club - Pensa Club е иновативна, дигитална и интерактивна платформа, насочена към подобряване на
-    качеството на живот на възрастните хора. Включете се активно в съвременното общество, развийте нови умения и
-    интереси, и живейте здравословно и пълноценно с Pensa Club.</title>
+  
+  <!-- 🔧 ОСТАВИХ САМО ЕДНО TITLE -->
+  <title>Pensa Club - Общност за пенсионери в дигиталния свят</title>
 
+  <!-- 🔧 ПОЧИСТИХ ДУБЛИРАЩИ META ТАГОВЕ -->
   <meta name="description"
     content="Pensa Club е иновативна, дигитална и интерактивна платформа, насочена към подобряване на качеството на живот на възрастните хора. Включете се активно в съвременното общество, развийте нови умения и интереси, и живейте здравословно и пълноценно с Pensa Club." />
   <meta name="keywords"
-    content="Pensa Club, PensaMap,Общност, възрастни хора, дигитална платформа, интернет общество, нови умения, социална интеграция, помощ за пенсионери, , обяви за дарение, туризъм, услуги, курсове" />
+    content="Pensa Club, PensaMap, Общност, възрастни хора, дигитална платформа, интернет общество, нови умения, социална интеграция, помощ за пенсионери, обяви за дарение, туризъм, услуги, курсове" />
+  
+  <!-- Open Graph -->
   <meta property="og:title" content="Pensa Club - Общност за пенсионери в дигиталния свят" />
   <meta property="og:image" content="https://www.pensa.club/images/iniciatives/iniciatives-2.jpg" />
   <meta property="og:url" content="https://www.pensa.club/articles" />
@@ -31,21 +37,15 @@
   <meta property="og:locale" content="bg_BG" />
   <meta property="article:author" content="Pensa Club" />
   <meta property="article:publisher" content="https://www.facebook.com/profile.php?id=61578204366479" />
-  <meta name="description"
-    content="Pensa Club - Connect and Help Senior Citizens. A platform dedicated to improving the quality of life for elderly people in Bulgaria through ads, a map, and a social network." />
-  <meta name="keywords"
-    content="Pensa Club, Pensa map,seniors, help, Community, internet community, digital platform ,  ads, map, social network, elderly people, Bulgaria, " />
-  <title>Pensa Club - Connect and Help Senior Citizens</title>
-
-  <title>Pensa club</title>
+  
+  <!-- Google Sign-In -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-
+  <script type="module" src="/src/index.jsx"></script>
 </body>
 
 </html>

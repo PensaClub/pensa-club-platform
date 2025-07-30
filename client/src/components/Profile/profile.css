@@ -1,5 +1,5 @@
 .profile-section {
-  background-image: url("../../../public/images/sign-up/background.jpg");
+  background-image: url("/images/sign-up/background.jpg");
   padding: var(--xxxl-space);
   padding-top: 8em;
   display: flex;

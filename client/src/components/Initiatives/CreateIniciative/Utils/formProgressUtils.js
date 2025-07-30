@@ -1,4 +1,4 @@
-import { isSlateEmpty } from "./initiativeEditorUtils";
+import { isSlateEmpty } from "./initiativeEditorUtils.jsx";
 
 /**
  * Calculate overall form completion percentage

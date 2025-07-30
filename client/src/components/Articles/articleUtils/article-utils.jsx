@@ -1,6 +1,6 @@
 // Оставете импорта в началото:
 
-import { convertSlateToHtml } from "../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils";
+import { convertSlateToHtml } from "../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils.jsx";
 
 // Локална функция за създаване на Slate editor state
 const createSlateEditorState = () => {
@@ -86,7 +86,7 @@ export const getSlateText = (slateValue) => {
 export const prepareArticleValuesForSubmit = (values) => {
   const prepared = { ...values };
   
-  // Конвертиране на summary (използваме импортираната функция)
+  // Конвертиране на summary
   prepared.summary = convertSlateToHtml(values.summary);
   
   // Конвертиране на mainImage.alt
@@ -100,48 +100,32 @@ export const prepareArticleValuesForSubmit = (values) => {
     const updatedSection = { ...section };
     
     // Конвертиране на съдържанието
-    if (section.content) {
-      updatedSection.content = convertSlateToHtml(section.content);
-    }
+    updatedSection.content = convertSlateToHtml(section.content);
     
-    // Обработка на изображенията в масив
-    if (section.image) {
-      if (Array.isArray(section.image) && section.image.length > 0) {
-        // Конвертираме всички изображения в масива
-        updatedSection.image = section.image.map(img => {
-          if (!img || !img.src) return null;
-          
-          return {
-            src: img.src,
-            alt: img.alt ? convertSlateToHtml(img.alt) : '',
-            caption: img.caption ? convertSlateToHtml(img.caption) : ''
-          };
-        }).filter(img => img !== null);
-        
-        // Ако няма изображения след филтрирането, задаваме image на null
-        if (updatedSection.image.length === 0) {
-          updatedSection.image = null;
-        }
-      } else if (!Array.isArray(section.image) && section.image.src) {
-        // Ако image е обект (не масив), но има src, обработваме го
-        updatedSection.image = {
-          src: section.image.src,
-          alt: convertSlateToHtml(section.image.alt),
-          caption: section.image.caption ? convertSlateToHtml(section.image.caption) : ''
-        };
-      } else {
-        // Ако няма valid image, задаваме го на null
-        updatedSection.image = null;
-      }
+    // Обработка на изображенията
+    if (section.image && Array.isArray(section.image) && section.image.length > 0) {
+      updatedSection.image = section.image.map(img => ({
+        src: img.src,
+        alt: img.alt ? convertSlateToHtml(img.alt) : '',
+        caption: img.caption ? convertSlateToHtml(img.caption) : ''
+      }));
     } else {
-      updatedSection.image = null;
+      updatedSection.image = [];
     }
     
-    // Премахваме полетата, които не са нужни при изпращане
-    if (updatedSection.images) delete updatedSection.images;
+    // Премахваме ненужните полета
+    delete updatedSection.sectionImages;
+    delete updatedSection.images;
+    delete updatedSection.id; // ID на секцията не трябва при update
     
     return updatedSection;
   });
+  
+  // Премахваме други ненужни полета от основния обект
+  delete prepared.id;
+  delete prepared.createdAt;
+  delete prepared.updatedAt;
+  delete prepared.updateAt;
   
   return prepared;
 };

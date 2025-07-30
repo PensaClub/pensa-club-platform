@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { ProjectsSearchAdmin } from './ProjectsSearchAdmin/ProjectsSearchAdmin';
 import { ProjectsHeaderAdmin } from './ProjectsHeaderAdmin/ProjectsHeaderAdmin';
-import { notify } from '../../../../utils/notify';
+import { notify } from '../../../../utils/notify.jsx';
 
 export const AllProjects = () => {
     const { t } = useTranslation();
