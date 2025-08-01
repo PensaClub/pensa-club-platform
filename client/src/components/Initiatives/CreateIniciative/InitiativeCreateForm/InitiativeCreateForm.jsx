@@ -61,7 +61,7 @@ import { getSlateTextLength } from '../Utils/slateUtils.js';
 import { handleCleanPaste } from '../../../../utils/textPasteUtils.js';
 import { htmlToSlate, isHtmlContent } from '../Utils/htmlToSlate.js';
 
-const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
+const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
 
     const { t } = useTranslation();
     // 🎯 Hook
@@ -138,6 +138,10 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         setDraftId,
         startNewDraft,
         uploadAllMedia,
+        isEditMode,        // 🆕 ДОБАВИ ТОВА
+        editId,            // 🆕 ДОБАВИ ТОВА
+        setIsEditMode,     // 🆕 ДОБАВИ ТОВА 
+        setEditId,         // 🆕 ДОБАВИ ТОВА
     } = useCreateInitiative(initialValues, onSubmitHandler);
 
     // 🎯 Local state
@@ -1471,7 +1475,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                 </small>
                             </div>
                         </div>
-                        
+
                         {/* 🎯 SECTION: SECTIONS  */}
                         {activeSection === 'sections' && (
                             <div className="form-section-card">
