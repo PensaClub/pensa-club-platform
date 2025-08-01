@@ -29,6 +29,9 @@ services:
       - ./.env
     depends_on:
       - db
+    networks:
+      - default
+      - nginx-proxy
 
   db:
     image: postgres:16
