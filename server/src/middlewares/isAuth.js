@@ -13,7 +13,7 @@ function createMiddleware(allowGuest = false) {
         }
 
         // Regular auth flow
-        if (authHeader && authHeader.startsWith('Bearer ') && refreshJwtToken) {
+        if (authHeader && authHeader.startsWith('Bearer ')) {
             const token = authHeader.split(' ')[1];
             try {
                 const decodedToken = jwt.tokenVerification('access', token);
