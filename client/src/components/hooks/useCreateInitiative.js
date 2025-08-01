@@ -2115,105 +2115,354 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         }
     }, [draftId, saveDraft, toggleDraftStatus, clearLocalStorage]);
 
+    const uploadAllMedia = useCallback(async () => {
+    const currentValues = values;
+    let totalFilesCount = 0;
+
+    // 🔍 ПЪРВО - преброяваме файловете за upload
+    if (mediaFiles.logo) totalFilesCount++;
+    if (mediaFiles.mainImage) totalFilesCount += mediaFiles.mainImage.length;
+    if (mediaFiles.gallery) totalFilesCount += mediaFiles.gallery.length;
+    if (mediaFiles.documents) totalFilesCount += mediaFiles.documents.length;
+    
+    Object.values(mediaFiles.partnerLogos || {}).forEach(file => {
+        if (file) totalFilesCount++;
+    });
+    
+    Object.values(mediaFiles.sponsorLogos || {}).forEach(file => {
+        if (file) totalFilesCount++;
+    });
+
+    // 🎯 АКО НЯМА ФАЙЛОВЕ - връщаме values БЕЗ прогрес бар
+    if (totalFilesCount === 0) {
+        return currentValues;
+    }
+
+    // 🚀 АКО ИМА ФАЙЛОВЕ - показваме прогрес бар и upload-ваме
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+        let uploadedFilesCount = 0;
+
+        // 🔧 Функция за update на прогреса
+        const updateProgress = () => {
+            uploadedFilesCount++;
+            const progress = (uploadedFilesCount / totalFilesCount) * 100;
+            setUploadProgress(Math.min(progress, 100));
+        };
+
+        const updatedValues = { ...currentValues };
+
+        // 🔧 Upload logo ако има
+        if (mediaFiles.logo && !values.logo?.startsWith('http')) {
+            try {
+                const compressedFile = await compressImage(mediaFiles.logo, {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 500
+                });
+
+                const logoUrl = await uploadFileWithProgress(
+                    compressedFile,
+                    'initiatives/logos',
+                    () => {}
+                );
+
+                updatedValues.logo = logoUrl;
+                updateProgress();
+            } catch (error) {
+                console.error('Logo upload error:', error);
+                updateProgress();
+            }
+        }
+
+        // 🔧 Upload main images ако има файлове (не URL-и)
+        if (mediaFiles.mainImage.length > 0) {
+            try {
+                const uploadedUrls = await Promise.all(
+                    mediaFiles.mainImage.map(async (file) => {
+                        const compressedFile = await compressImage(file, {
+                            maxSizeMB: 2,
+                            maxWidthOrHeight: 1920
+                        });
+
+                        const url = await uploadFileWithProgress(
+                            compressedFile,
+                            'initiatives/main-images',
+                            () => {}
+                        );
+
+                        updateProgress();
+                        return {
+                            src: url,
+                            alt: '',
+                            caption: ''
+                        };
+                    })
+                );
+
+                // Заменяме blob URLs с Firebase URLs
+                if (updatedValues.mainImage?.gallery) {
+                    updatedValues.mainImage.gallery = updatedValues.mainImage.gallery.map(img => {
+                        if (img.src?.startsWith('blob:')) {
+                            const firebaseImg = uploadedUrls.shift();
+                            return firebaseImg || img;
+                        }
+                        return img;
+                    });
+                }
+
+                // Ако главната снимка е blob URL
+                if (updatedValues.mainImage?.src?.startsWith('blob:') && uploadedUrls.length > 0) {
+                    const mainImg = uploadedUrls.shift();
+                    updatedValues.mainImage.src = mainImg.src;
+                }
+
+            } catch (error) {
+                console.error('Main images upload error:', error);
+                mediaFiles.mainImage.forEach(() => updateProgress());
+            }
+        }
+
+        // 🔧 Upload gallery ако има файлове
+        if (mediaFiles.gallery?.length > 0) {
+            try {
+                const galleryUrls = await Promise.all(
+                    mediaFiles.gallery.map(async (file) => {
+                        const compressedFile = await compressImage(file, {
+                            maxSizeMB: 2,
+                            maxWidthOrHeight: 1920
+                        });
+
+                        const url = await uploadFileWithProgress(
+                            compressedFile,
+                            'initiatives/gallery',
+                            () => {}
+                        );
+
+                        updateProgress();
+                        return {
+                            src: url,
+                            alt: '',
+                            caption: ''
+                        };
+                    })
+                );
+
+                // Update gallery URLs
+                if (updatedValues.gallery) {
+                    updatedValues.gallery = updatedValues.gallery.map(img => {
+                        if (img.src?.startsWith('blob:')) {
+                            const firebaseImg = galleryUrls.shift();
+                            return firebaseImg || img;
+                        }
+                        return img;
+                    });
+                }
+
+            } catch (error) {
+                console.error('Gallery upload error:', error);
+                mediaFiles.gallery.forEach(() => updateProgress());
+            }
+        }
+
+        // 🔧 Upload partner logos
+        for (const [index, file] of Object.entries(mediaFiles.partnerLogos || {})) {
+            if (!file) continue;
+
+            try {
+                const compressedFile = await compressImage(file, {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 400
+                });
+
+                const logoUrl = await uploadFileWithProgress(
+                    compressedFile,
+                    'initiatives/partners',
+                    () => {}
+                );
+
+                if (updatedValues.partners?.[index]) {
+                    updatedValues.partners[index].logo = logoUrl;
+                }
+
+                updateProgress();
+            } catch (error) {
+                console.error(`Partner logo ${index} upload error:`, error);
+                updateProgress();
+            }
+        }
+
+        // 🔧 Upload sponsor logos
+        for (const [index, file] of Object.entries(mediaFiles.sponsorLogos || {})) {
+            if (!file) continue;
+
+            try {
+                const compressedFile = await compressImage(file, {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 400
+                });
+
+                const logoUrl = await uploadFileWithProgress(
+                    compressedFile,
+                    'initiatives/sponsors',
+                    () => {}
+                );
+
+                if (updatedValues.sponsors?.[index]) {
+                    updatedValues.sponsors[index].logo = logoUrl;
+                }
+
+                updateProgress();
+            } catch (error) {
+                console.error(`Sponsor logo ${index} upload error:`, error);
+                updateProgress();
+            }
+        }
+
+        // 🔧 Upload documents
+        if (mediaFiles.documents?.length > 0) {
+            try {
+                await Promise.all(
+                    mediaFiles.documents.map(async (file, index) => {
+                        const docUrl = await uploadDocumentWithProgress(
+                            file,
+                            `initiatives/documents/${file.name}`,
+                            () => {}
+                        );
+
+                        if (updatedValues.downloadMaterials?.[index]) {
+                            updatedValues.downloadMaterials[index].downloadUrl = docUrl;
+                        }
+
+                        updateProgress();
+                    })
+                );
+            } catch (error) {
+                console.error('Documents upload error:', error);
+                mediaFiles.documents.forEach(() => updateProgress());
+            }
+        }
+
+        setUploadProgress(100);
+        
+        // Кратко показваме 100% преди да скрием
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        setIsUploading(false);
+        setUploadProgress(0);
+
+        return updatedValues;
+
+    } catch (error) {
+        setIsUploading(false);
+        setUploadProgress(0);
+        throw error;
+    }
+}, [values, mediaFiles, setIsUploading, setUploadProgress]);
+
     // 💾 FORM SUBMISSION - ОБНОВЕНО
-    const onSubmit = useCallback(async (e) => {
-        e.preventDefault();
+  const onSubmit = useCallback(async (e) => {
+    e.preventDefault();
 
-        if (!validateForm()) {
-            // 🚨 Показваме конкретната грешка от първото поле
-            const errorEntries = Object.entries(errors);
-            if (errorEntries.length > 0) {
-                const [fieldName, errorMessage] = errorEntries[0];
+    if (!validateForm()) {
+        // 🚨 Показваме конкретната грешка от първото поле
+        const errorEntries = Object.entries(errors);
+        if (errorEntries.length > 0) {
+            const [fieldName, errorMessage] = errorEntries[0];
 
-                notify('error', null, errorMessage);
-                let errorElement = null;
+            notify('error', null, errorMessage);
+            let errorElement = null;
 
-                if (fieldName.startsWith('sections[')) {
+            if (fieldName.startsWith('sections[')) {
+                const sectionMatch = fieldName.match(/sections\[(\d+)\]/);
+                if (sectionMatch) {
+                    const sectionIndex = parseInt(sectionMatch[1], 10);
 
-                    const sectionMatch = fieldName.match(/sections\[(\d+)\]/);
-                    if (sectionMatch) {
-                        const sectionIndex = parseInt(sectionMatch[1], 10);
+                    errorElement = document.querySelector(`.section-item:nth-child(${sectionIndex + 1})`);
 
-                        errorElement = document.querySelector(`.section-item:nth-child(${sectionIndex + 1})`);
-
-                        if (!errorElement) {
-                            const sectionsContainer = document.querySelector('.sections-list');
-                            if (sectionsContainer) {
-                                const sectionItems = sectionsContainer.querySelectorAll('.section-item');
-                                errorElement = sectionItems[sectionIndex];
-                            }
+                    if (!errorElement) {
+                        const sectionsContainer = document.querySelector('.sections-list');
+                        if (sectionsContainer) {
+                            const sectionItems = sectionsContainer.querySelectorAll('.section-item');
+                            errorElement = sectionItems[sectionIndex];
                         }
                     }
-                } else {
-                    // За обикновени полета - escape-ваме специалните символи
-                    const escapedFieldName = fieldName.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+                }
+            } else {
+                // За обикновени полета - escape-ваме специалните символи
+                const escapedFieldName = fieldName.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
 
+                try {
+                    errorElement = document.querySelector(`[name="${escapedFieldName}"], #${escapedFieldName}`);
+                } catch (e) {
+                    // Ако още има проблем, опитваме без escape
                     try {
-                        errorElement = document.querySelector(`[name="${escapedFieldName}"], #${escapedFieldName}`);
-                    } catch (e) {
-                        // Ако още има проблем, опитваме без escape
-                        try {
-                            errorElement = document.querySelector(`[name="${fieldName}"], #${fieldName}`);
-                        } catch (e2) {
-                            // Ако и това не работи, търсим по по-прост начин
-                            const baseName = fieldName.split('[')[0].split('.')[0];
-                            errorElement = document.querySelector(`[name="${baseName}"], #${baseName}`);
-                        }
+                        errorElement = document.querySelector(`[name="${fieldName}"], #${fieldName}`);
+                    } catch (e2) {
+                        // Ако и това не работи, търсим по по-прост начин
+                        const baseName = fieldName.split('[')[0].split('.')[0];
+                        errorElement = document.querySelector(`[name="${baseName}"], #${baseName}`);
                     }
                 }
+            }
 
-                // Скролваме до елемента ако го намерим
-                if (errorElement) {
-                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Скролваме до елемента ако го намерим
+            if (errorElement) {
+                errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-                    // Focus само ако е input/textarea
-                    if (errorElement.tagName === 'INPUT' || errorElement.tagName === 'TEXTAREA') {
-                        errorElement.focus();
-                    }
-                } else {
-                    // Fallback - скролваме нагоре
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Focus само ако е input/textarea
+                if (errorElement.tagName === 'INPUT' || errorElement.tagName === 'TEXTAREA') {
+                    errorElement.focus();
                 }
             } else {
-                // Fallback ако няма errors (не трябва да се случи)
-                notify('error', null, 'Моля поправете грешките във формата');
+                // Fallback - скролваме нагоре
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-
-            return;
+        } else {
+            // Fallback ако няма errors (не трябва да се случи)
+            notify('error', null, 'Моля поправете грешките във формата');
         }
 
-        try {
-            // 🔧 ВАЖНО: Не пращаме mediaFiles, само data-та с URL адресите
-            const submissionData = convertFormToHtml();
-            submissionData.updatedAt = new Date().toISOString();
+        return;
+    }
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const editIdFromUrl = urlParams.get('editId');
-            const mode = urlParams.get('mode');
-            if (mode === 'edit' && editIdFromUrl) {
-                // Редактираме съществуваща инициатива
-                await updateInitiative(editIdFromUrl, submissionData);
-                setEditId(null);
-                notify('success', 'Инициативата е обновена успешно!');
-                navigate(`/initiatives/${submissionData.slug || editIdFromUrl}`);
-            } else {
-                // Създаваме нова инициатива (съществуваща логика)
-                submissionData.createdAt = new Date().toISOString();
-                delete submissionData.timestamp;
+    try {
+        // 🔧 Винаги викаме uploadAllMedia() - ще показва прогрес бар САМО ако има файлове
+        const mediaUpdatedValues = await uploadAllMedia();
 
-                const handler = onSubmitHandler || createInitiative;
-                await handler(submissionData);
+        // 🔧 Конвертиране на данни с обновените URL-и
+        const submissionData = convertFormToHtml.call(null, mediaUpdatedValues);
+        submissionData.updatedAt = new Date().toISOString();
 
-                setDraftId(null);
-                clearLocalStorage();
-                notify('success', 'Инициативата е създадена успешно!');
-                navigate('/initiatives');
-            }
-        } catch (error) {
-            console.error('Submission error:', error);
-            notify('error', null, 'Грешка при създаване на инициативата');
+        const urlParams = new URLSearchParams(window.location.search);
+        const editIdFromUrl = urlParams.get('editId');
+        const mode = urlParams.get('mode');
+        
+        if (mode === 'edit' && editIdFromUrl) {
+            // Редактираме съществуваща инициатива
+            await updateInitiative(editIdFromUrl, submissionData);
+            setEditId(null);
+            notify('success', 'Инициативата е обновена успешно!');
+            navigate(`/initiatives/${submissionData.slug || editIdFromUrl}`);
+        } else {
+            // Създаваме нова инициатива
+            submissionData.createdAt = new Date().toISOString();
+            delete submissionData.timestamp;
+
+            const handler = onSubmitHandler || createInitiative;
+            await handler(submissionData);
+
+            setDraftId(null);
+            clearLocalStorage();
+            notify('success', 'Инициативата е създадена успешно!');
+            navigate('/initiatives');
         }
-    }, [values, validateForm, errors, onSubmitHandler, createInitiative, navigate, convertFormToHtml, clearLocalStorage]);
+    } catch (error) {
+        console.error('Submission error:', error);
+        notify('error', null, 'Грешка при създаване на инициативата');
+    }
+}, [values, validateForm, errors, onSubmitHandler, createInitiative, navigate, convertFormToHtml, clearLocalStorage, uploadAllMedia, updateInitiative, setEditId]);
 
     // В useCreateInitiative.js - в return statement добави:
     return {
@@ -2306,6 +2555,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         localStorageTimestamp,
         setHasLocalStorageDraft,
         setLocalStorageTimestamp,
+        uploadAllMedia
     };
 };
 

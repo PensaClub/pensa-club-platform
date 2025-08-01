@@ -16,7 +16,7 @@ import {
 import { getDescriptionParts, renderSlateContent } from '../../../../utils/slateRenderer';
 import { truncateText } from '../../../../utils/truncateText';
 
-export const InitiativePreview = () => {
+export const InitiativePreview = ({onBackToEdit}) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
@@ -90,11 +90,11 @@ export const InitiativePreview = () => {
         }
     };
 
-    const onBackToEdit = () => {
-        navigate('/initiatives/create', {
-            state: { formData: values }
-        });
-    };
+    // const onBackToEdit = () => {
+    //     navigate('/profile/initiative-create', {
+    //         state: { formData: values }
+    //     });
+    // };
 
     const { firstSentence, restSentences } = getDescriptionParts(values.shortDescription);
 
