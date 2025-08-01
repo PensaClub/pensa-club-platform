@@ -15,7 +15,7 @@ services:
         - VITE_FIREBASE_measurementId=${VITE_FIREBASE_measurementId}
         - VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
     ports:
-      - "80:80"
+      - "3000"
     depends_on:
       - server
 

@@ -38,17 +38,19 @@ ENV NODE_OPTIONS=--max-old-space-size=1024
 # Build the application with Vite
 RUN npm run build
 
-# Stage 2: Serve the static files with Nginx
-FROM nginx:stable-alpine
+# Stage 2: Serve the application with a simple Node server
+FROM node:18-alpine
 
-# Vite builds to 'dist' by default
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Copy the Nginx configuration file
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Install 'serve' to serve static files
+RUN npm install -g serve
 
-# Expose port 80 for the Nginx server
-EXPOSE 80
+# Copy built assets from the builder stage
+COPY --from=builder /app/dist .
 
-# Start Nginx when the container launches
-CMD ["nginx", "-g", "daemon off;"]
+# Expose port 3000
+EXPOSE 3000
+
+# Start the server and listen on all interfaces
+CMD ["serve", "-s", ".", "-l", "3000"]
