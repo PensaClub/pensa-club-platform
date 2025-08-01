@@ -6,7 +6,7 @@ import {
   generateNumberOptions,
   trimObjectStrings,
   handleReset,
-} from "../../utils/profile";
+} from "../../utils/profile.jsx";
 import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
 import { useImagePreview } from "../hooks/useImagePreview";

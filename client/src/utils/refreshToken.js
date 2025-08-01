@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export async function refreshToken(authInfo) {
   const decodedToken = jwtDecode(authInfo.token);

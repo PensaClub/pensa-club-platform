@@ -89,22 +89,6 @@
         padding: 2em 0;
     }
 
-    /* .hero-bg {
-        width: 100%;
-        height: 400px;
-        display: flex;
-        background-image: url('../../../public/community/community-bg.jpg');
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-        position: relative;
-        margin-top: 4em;
-
-        filter: brightness(65%);
-
-    } */
 
     .search-bar-commun {
         position: absolute;

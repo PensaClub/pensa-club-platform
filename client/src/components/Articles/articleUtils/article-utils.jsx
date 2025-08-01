@@ -1,6 +1,6 @@
 // Оставете импорта в началото:
 
-import { convertSlateToHtml } from "../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils";
+import { convertSlateToHtml } from "../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils.jsx";
 
 // Локална функция за създаване на Slate editor state
 const createSlateEditorState = () => {

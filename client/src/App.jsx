@@ -1,18 +1,18 @@
 import './App.css';
-import { Footer } from './components/Footer/Footer';
-import { Header } from './components/Header/Header';
-import { Home } from './components/Home/Home';
+import { Footer } from './components/Footer/Footer.jsx';
+import { Header } from './components/Header/Header.jsx';
+import { Home } from './components/Home/Home.jsx';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { NotFound } from './components/ErrorPages/NotFound/NotFound';
-import { ServerError } from './components/ErrorPages/ServerError/ServerError';
-import { LoginRegister } from './components/LoginRegister/LoginRegister';
-import { UserProvider } from './components/contexts/UserContext';
-import { Logout } from './components/Logout/Logout';
-import { Profile } from './components/Profile/Profile';
-import ErrorBoundary from './tools/errorBoundary';
-import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary';
-import { FiltersMap } from './components/MapPage/FitlersMap/FiltersMap';
-import { MapPage } from './components/MapPage/MapPage';
+import { NotFound } from './components/ErrorPages/NotFound/NotFound.jsx';
+import { ServerError } from './components/ErrorPages/ServerError/ServerError.jsx';
+import { LoginRegister } from './components/LoginRegister/LoginRegister.jsx';
+import { UserProvider } from './components/contexts/UserContext.jsx';
+import { Logout } from './components/Logout/Logout.jsx';
+import { Profile } from './components/Profile/Profile.jsx';
+import ErrorBoundary from './tools/errorBoundary.jsx';
+import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary.jsx';
+import { FiltersMap } from './components/MapPage/FitlersMap/FiltersMap.jsx';
+import { MapPage } from './components/MapPage/MapPage.jsx';
 import { UserSuggestion } from './components/UserSuggestion/UserSuggestion.jsx';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
@@ -90,7 +90,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const GA_TRACKING_ID = process.env.REACT_APP_GA_TRACKING_ID || 'G-GE8XZREVM6';
+    const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID || 'G-GE8XZREVM6';
     initGA(GA_TRACKING_ID);
   }, []);
 
@@ -103,7 +103,7 @@ function App() {
   return (
     <>
       <ErrorBoundary>
-        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <UserProvider>
             <GoogleAuthProvider>
               <MapProvider>

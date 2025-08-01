@@ -3,7 +3,7 @@
     position: relative;
 
     min-height: 100vh;
-    background-image: url('../../../public/images/map/back-us.webp');
+    background-image: url('/images/map/back-us.webp');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;

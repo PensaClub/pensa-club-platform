@@ -22,11 +22,13 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuthContext } from "../../contexts/UserContext";
 import { MapNotify } from "./MapNotifi";
 import { MapSidebar } from "./MapSidebar"; // Import the MapSidebar component
-
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 const DefaultIcon = L.icon({
-  iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl: markerShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -104,7 +106,7 @@ export const MapEditor = ({ filteredUsers }) => {
   const sidebarRef = useRef(null);
   const mapContainerRef = useRef(null);
   const [modalImage, setModalImage] = useState(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [scrollPosition] = useState(0);
   const { isAuthentication } = useAuthContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -166,20 +168,20 @@ export const MapEditor = ({ filteredUsers }) => {
   };
 
   const getRegionMarkerLocation = ({ region }) => {
-    
+
     if (geoJsonData?.features) {
       const currRegion =
         region == "София-столица"
           ? "София-град"
           : region == "София"
-          ? "Софийска"
-          : region;
+            ? "Софийска"
+            : region;
       const currGeoJson = geoJsonData["features"]?.filter(
         (r) => r.properties.name == currRegion
       )[0];
       const layer = L.geoJSON(currGeoJson);
       const bounds = layer.getBounds().getCenter();
-      
+
       return [bounds?.lat, bounds?.lng];
     }
   };
@@ -192,9 +194,9 @@ export const MapEditor = ({ filteredUsers }) => {
     }
   };
 
-  const handleImageClick = (image) => {
-    setModalImage(image);
-  };
+  // const handleImageClick = (image) => {
+  //   setModalImage(image);
+  // };
 
   const closeNotify = () => {
     setOpen(false);
@@ -208,7 +210,7 @@ export const MapEditor = ({ filteredUsers }) => {
     useMapEvents({
       zoomend: (e) => {
         const zoomLevel = e.target.getZoom();
-        setShowGeoJSON(zoomLevel <= 12); // направил съм го да изключи над този zoom level
+        setShowGeoJSON(zoomLevel <= 12); 
       },
     });
     return null;

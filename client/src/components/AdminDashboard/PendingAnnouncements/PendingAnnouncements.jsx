@@ -7,7 +7,7 @@ import { CommentModal } from './CommentModal';
 import { useAdminContext } from '../../contexts/AdminContext';
 import { Flyout } from '../Flyout';
 import { useTranslation } from 'react-i18next';
-import { notify } from '../../../utils/notify';
+import { notify } from '../../../utils/notify.jsx';
 import { useAuthContext } from '../../contexts/UserContext';
 
 export const PendingAnnouncements = ({ setAdsCount }) => {

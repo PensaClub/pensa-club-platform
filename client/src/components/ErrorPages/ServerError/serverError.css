@@ -1,5 +1,5 @@
 .bg-server-error {
-  background-image: url('../../../../public/images/errorPage/broken-tv-screen.jpg');
+  background-image: url('/images/errorPage/broken-tv-screen.jpg');
 
   background-repeat: no-repeat;
   background-size: cover;

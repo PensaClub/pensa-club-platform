@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { googleAuthServiceFactory } from '../Services/googleAuthService';
 import { useAuthContext } from './UserContext';
-import { notify } from '../../utils/notify';
+import { notify } from '../../utils/notify.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { InitiativePreview } from '../InitiativePreview/InitiativePreview';
-import { notify } from '../../../../utils/notify';
+import { notify } from '../../../../utils/notify.jsx';
 import '../InitiativePreview/initiativePreview.css'; // Използваме същия CSS
 import '../../InitiativeView/initiativeView.css'; // Нови стилове за preview
 export const InitiativePreviewPage = () => {

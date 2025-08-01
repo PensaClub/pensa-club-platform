@@ -3,8 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 import "./contactForm.css";
-import { notify } from "../../utils/notify";
-import { requestFactory } from "../Services/requester";
+
 import { useAuthContext } from "../contexts/UserContext";
 
 export const ContactForm = () => {
@@ -407,7 +406,7 @@ export const ContactForm = () => {
                         {showRecaptcha && (
                             <div className="recaptcha-wrapper">
                                 <ReCAPTCHA
-                                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                    sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                                     onChange={onRecaptchaChange}
                                     size={recaptchaSize}
                                 />

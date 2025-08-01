@@ -3,7 +3,7 @@
 
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { Loader } from "../Loader/Loader";
-import { notify } from "../../utils/notify";
+import { notify } from "../../utils/notify.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "./UserContext";
 import { initiativeServiceFactory } from "../Services/initiativeServiceFactory";

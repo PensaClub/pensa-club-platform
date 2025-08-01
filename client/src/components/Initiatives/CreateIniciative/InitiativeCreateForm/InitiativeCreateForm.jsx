@@ -50,8 +50,8 @@ import SectionImageItem from '../SectionImageItem/SectionImageItem';
 import MainImagePreview from '../MainImagePreview/MainImagePreview';
 import MainImageGalleryItem from '../MainImageGalleryItem/MainImageGalleryItem';
 
-import { notify } from '../../../../utils/notify';
-import { createSlateEditor, createSlateEditorState, isSlateEmpty, normalizeSlateValue } from '../Utils/initiativeEditorUtils';
+import { notify } from '../../../../utils/notify.jsx';
+import { createSlateEditor, createSlateEditorState} from '../Utils/initiativeEditorUtils.jsx';
 import { calculateInitiativeProgress, getProgressBreakdown } from '../Utils/formProgressUtils';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { useLocation, useNavigate } from 'react-router-dom';

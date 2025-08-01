@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 import { adminServiceFactory } from "../Services/adminService";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../Loader/Loader";
-import { notify } from '../../utils/notify';
+import { notify } from '../../utils/notify.jsx';
 
 export const AdminContext = createContext()
 

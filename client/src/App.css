@@ -5,8 +5,8 @@
   --bg-black: #000;
   --bg-gray: #f4f4f4;
   --bg-in-gray: #dad7d7;
-  --bg-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url('../public/images/homePage/orange-pattern.jpg');
-  --bg-image-rotated: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url('../public/images/homePage/orange-pattern.jpg');
+  --bg-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url('/images/homePage/orange-pattern.jpg');
+  --bg-image-rotated: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url('/images/homePage/orange-pattern.jpg');
   --button-bg:#B7582C;
   --create-form-bg:#FFF5E8;
   --form-input-bg:#FFFBF5;
@@ -99,21 +99,17 @@ p, a {
   background-repeat: no-repeat;
   padding-right: 30px;
 } */
-/* 
-@font-face {
-  font-family: Phenomena;
-  src: url("../../client/public/Phenomena-Regular.woff");
-} */
+
 @font-face {
   font-family: 'Montserrat';
-  src: url('../../client/public/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+  src: url('/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
   /* font-weight: normal; */
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../../client/public/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  src: url('/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
 }
