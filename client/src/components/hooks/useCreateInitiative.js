@@ -136,6 +136,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [draftId, setDraftId] = useState(null);
     const [editId, setEditId] = useState(null);
+    const [isEditMode, setIsEditMode] = useState(false);
     // 📁 MEDIA FILES STATE
     const [mediaFiles, setMediaFiles] = useState({
         logo: null,
@@ -404,17 +405,17 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                     // Използваме същата логика като saveDraft
                     if (draftId) {
                         await updateDraftInitiative(draftId, { ...convertedData, userEmail });
-                     
+
                     } else {
                         const result = await saveDraftInitiative({ ...convertedData, userEmail });
                         const newDraftId = result?.data?.id || result?.id;
                         if (newDraftId) {
                             setDraftId(newDraftId);
-                       
+
                         }
                     }
                 } catch (error) {
-                 
+
                 }
             }
         }, 30000);
@@ -1831,7 +1832,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 const parsedData = JSON.parse(savedData);
                 if (parsedData.draftId) {
                     setDraftId(parsedData.draftId);
-                
+
                 }
 
                 const saveTime = new Date(timestamp);
@@ -2021,35 +2022,43 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                     const dataToSave = { ...convertedData, userEmail };
                     let result;
 
-                    // Проверяваме дали вече имаме draft ID
-                    if (draftId) {
-                        // Ако имаме ID, използваме update
+                    // 🆕 ПРАВИЛНА ЛОГИКА ЗА EDIT MODE
+                    if (isEditMode && editId) {
+                        // 📝 EDIT MODE - използваме updateDraftInitiative с editId
+                        console.log('📝 UPDATING existing initiative as draft:', editId);
+                        result = await updateDraftInitiative(editId, dataToSave);
+
+                    } else if (draftId) {
+                        // 📋 DRAFT UPDATE - обновяваме съществуваща draft
+                        console.log('📋 UPDATING existing draft:', draftId);
                         result = await updateDraftInitiative(draftId, dataToSave);
-                   
+
                     } else {
-                        // Ако нямаме ID, създаваме нова чернова
+                        // ✨ NEW DRAFT - създаваме нова draft
+                        console.log('✨ CREATING new draft');
                         result = await saveDraftInitiative(dataToSave);
 
                         // Запазваме ID-то на новосъздадената чернова
                         const newDraftId = result?.data?.id || result?.id;
                         if (newDraftId) {
                             setDraftId(newDraftId);
-                      
                         }
                     }
 
                     notify('draft-saved-both');
                     return result;
                 } catch (saveError) {
+                    console.error('Save error:', saveError);
                     notify('error', null, `Грешка при запазване: ${saveError.message}`);
                 }
             } else {
                 notify('draft-saved-browser');
             }
         } catch (fatalError) {
+            console.error('Fatal save error:', fatalError);
             notify('draft-saved-browser-only');
         }
-    }, [values, saveDraftInitiative, updateDraftInitiative, userEmail, saveToLocalStorage, convertFormToHtml, draftId]);
+    }, [values, saveDraftInitiative, updateDraftInitiative, userEmail, saveToLocalStorage, convertFormToHtml, draftId, isEditMode, editId]);
 
     const startNewDraft = useCallback(async () => {
         try {
@@ -2306,6 +2315,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         localStorageTimestamp,
         setHasLocalStorageDraft,
         setLocalStorageTimestamp,
+        isEditMode,      // 🆕 Добави
+        editId,          // 🆕 Добави  
+        setIsEditMode,   // 🆕 Добави
+        setEditId,       // 🆕 Добави
     };
 };
 
