@@ -61,7 +61,7 @@ import { getSlateTextLength } from '../Utils/slateUtils.js';
 import { handleCleanPaste } from '../../../../utils/textPasteUtils.js';
 import { htmlToSlate, isHtmlContent } from '../Utils/htmlToSlate.js';
 
-const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
+const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
 
     const { t } = useTranslation();
     // 🎯 Hook
@@ -136,7 +136,12 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
         getDraftById,
         draftId,
         setDraftId,
-        startNewDraft
+        startNewDraft,
+        uploadAllMedia,
+        isEditMode,        // 🆕 ДОБАВИ ТОВА
+        editId,            // 🆕 ДОБАВИ ТОВА
+        setIsEditMode,     // 🆕 ДОБАВИ ТОВА 
+        setEditId,         // 🆕 ДОБАВИ ТОВА
     } = useCreateInitiative(initialValues, onSubmitHandler);
 
     // 🎯 Local state
@@ -1470,6 +1475,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                 </small>
                             </div>
                         </div>
+
                         {/* 🎯 SECTION: SECTIONS  */}
                         {activeSection === 'sections' && (
                             <div className="form-section-card">
@@ -4188,6 +4194,16 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                 </div>
                             </div>
                         )}
+
+                        {isUploading && (
+                            <div className="upload-progress">
+                                <div className="progress-bar">
+                                    <div className="progress-fill" style={{ width: `${uploadProgress}%` }}></div>
+                                </div>
+                                <span>{uploadProgress.toFixed(0)}% качено</span>
+                            </div>
+                        )}
+
                         {/* Navigation buttons */}
                         <div className="form-navigation">
                             <button
@@ -4230,6 +4246,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                         type="button"
                         className="floating-btn new-draft"
                         onClick={handleStartNewDraft}
+                        disabled={isUploading}
                         title="Започни нова чернова"
                     >
                         <FontAwesomeIcon icon={faPlus} />
@@ -4239,6 +4256,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                     type="button"
                     className="floating-btn draft"
                     onClick={saveDraft}
+                    disabled={isUploading}
                     title={t('initiatives.create.saveDraft')}
                 >
                     <FontAwesomeIcon icon={faSave} />
@@ -4263,6 +4281,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                                 console.error('Error publishing:', error);
                             }
                         }}
+                        disabled={isUploading}
                         title="Публикувай инициативата"
                     >
                         <FontAwesomeIcon icon={faShare} />
@@ -4273,6 +4292,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fal
                         type="button"
                         className="floating-btn create"
                         onClick={onSubmit}
+                        disabled={isUploading}
                         title="Създай инициатива"
                     >
                         <FontAwesomeIcon icon={faCheckCircle} />

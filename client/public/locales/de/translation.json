@@ -1090,6 +1090,9 @@
         }
     },
     "initiatives": {
+         "preview":{
+    "backToForm": "Zurück zum Formular"
+  },
         "create": {
             "facebook": "Facebook",
             "instagram": "Instagram",

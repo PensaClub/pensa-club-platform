@@ -1894,7 +1894,7 @@ useEffect(() => {
     }
   }, [values]);
 
-  // Save draft
+  // Save draft projects
   const saveDraft = useCallback(async () => {
     try {
       saveToLocalStorage(values);
