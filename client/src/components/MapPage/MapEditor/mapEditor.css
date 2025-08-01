@@ -1,4 +1,4 @@
-@import "~leaflet-fullscreen/dist/leaflet.fullscreen.css";
+@import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 
 .map-container {
     position: relative;

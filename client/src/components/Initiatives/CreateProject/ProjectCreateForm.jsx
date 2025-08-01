@@ -35,8 +35,8 @@ import MainImagePreview from '../../Initiatives/CreateIniciative/MainImagePrevie
 import MainImageGalleryItem from '../../Initiatives/CreateIniciative/MainImageGalleryItem/MainImageGalleryItem';
 import { LocalStorageStatus } from '../../Initiatives/CreateIniciative/LocalStorageStatus/LocalStorageStatus';
 
-import { notify } from '../../../utils/notify.js';
-import { createSlateEditor, createSlateEditorState } from '../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils';
+import { notify } from '../../../utils/notify.jsx';
+import { createSlateEditor } from '../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils.jsx';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider.jsx';
 import { useNavigate } from 'react-router-dom';
 import { handleCleanPaste } from '../../../utils/textPasteUtils.js';

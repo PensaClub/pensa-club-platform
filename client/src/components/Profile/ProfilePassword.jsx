@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import './profile.css';
-import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile';
+import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile.jsx';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';

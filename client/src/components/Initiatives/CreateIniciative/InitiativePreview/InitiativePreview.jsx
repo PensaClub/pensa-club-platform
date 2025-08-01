@@ -13,7 +13,7 @@ import {
 import {
     faFacebook, faInstagram, faLinkedin, faTwitter
 } from '@fortawesome/free-brands-svg-icons';
-import { getDescriptionParts, renderSlateContent } from '../../../../utils/slateRenderer';
+import { getDescriptionParts, renderSlateContent } from '../../../../utils/slateRenderer.jsx';
 import { truncateText } from '../../../../utils/truncateText';
 
 export const InitiativePreview = ({onBackToEdit}) => {

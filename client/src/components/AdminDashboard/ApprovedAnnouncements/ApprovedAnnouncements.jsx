@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useAdminContext } from '../../contexts/AdminContext';
 import { useTranslation } from 'react-i18next';
-import { notify } from '../../../utils/notify';
+import { notify } from '../../../utils/notify.jsx';
 import { CommentModal } from '../PendingAnnouncements/CommentModal';
 import { FlyoutApproved } from './FlyoutApproved';
 import { useAuthContext } from '../../contexts/UserContext';

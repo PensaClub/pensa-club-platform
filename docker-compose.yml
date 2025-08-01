@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: ./client
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+        - VITE_FIREBASE_apiKey=${VITE_FIREBASE_apiKey}
+        - VITE_FIREBASE_authDomain=${VITE_FIREBASE_authDomain}
+        - VITE_FIREBASE_projectId=${VITE_FIREBASE_projectId}
+        - VITE_FIREBASE_storageBucket=${VITE_FIREBASE_storageBucket}
+        - VITE_FIREBASE_messagingSenderId=${VITE_FIREBASE_messagingSenderId}
+        - VITE_FIREBASE_appId=${VITE_FIREBASE_appId}
+        - VITE_FIREBASE_measurementId=${VITE_FIREBASE_measurementId}
+        - VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data:

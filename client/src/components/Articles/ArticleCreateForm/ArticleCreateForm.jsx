@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback, forwardRef, useImperativeHandle } from "react";
+import{ useState, useRef, useMemo, useCallback, forwardRef, useImperativeHandle } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faPlus, faMinus, faImage, faVideo, faSliders,
@@ -25,9 +25,9 @@ import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { generateSlug, isValidSlug, sanitizeSlug } from "../../../utils/slugUtils";
-import { convertSlateToHtml } from "../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils";
+
 import { useNavigate } from "react-router-dom";
-import { notify } from "../../../utils/notify";
+import { notify } from "../../../utils/notify.jsx";
 
 // 🔧 HTML to Slate conversion
 const htmlToSlate = (html) => {

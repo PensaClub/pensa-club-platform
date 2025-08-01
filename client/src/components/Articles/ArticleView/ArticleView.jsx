@@ -24,7 +24,7 @@ import VideoPlayer from './VideoPlayer/VideoPlayer';
 import { useLoading } from '../../contexts/LoadingContext';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { useArticleContext } from '../../contexts/ArticleContext';
-import { renderHtml } from '../articleUtils/article-utils';
+import { renderHtml } from '../articleUtils/article-utils.jsx';
 import { useArticleLimit } from '../../contexts/ArticleLimitContext';
 import Pagination from '../Pagination/Pagination';
 import { Helmet } from 'react-helmet';

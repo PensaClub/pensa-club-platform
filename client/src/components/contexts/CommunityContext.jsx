@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Loader } from "../Loader/Loader";
 import "./error.css";
 import { communityServiceFactory } from "../Services/communityService";
-import { notify } from "../../utils/notify";
+import { notify } from "../../utils/notify.jsx";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 

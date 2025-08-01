@@ -146,7 +146,7 @@ export const trackView = (contentId, contentTitle, contentType = 'article') => {
 };
 
 // Запазване на кеша на посещенията в localStorage
-const saveViewCounts = () => {
+export const saveViewCounts = () => {
   try {
     localStorage.setItem('viewCounts', JSON.stringify(localViewCountCache));
   } catch (error) {

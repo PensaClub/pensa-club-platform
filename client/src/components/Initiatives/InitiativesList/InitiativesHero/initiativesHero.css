@@ -34,7 +34,7 @@
   width: 310px;
   height: 310px;
   border-radius: 50%;
-  background-image: url('../../../../../public/images/iniciatives/iniciatives-1.webp');
+  background-image: url('/images/iniciatives/iniciatives-1.webp');
   background-size: cover;
   background-position: center;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
@@ -115,28 +115,28 @@
 
 .hero-small-image:nth-child(1) {
   border-radius: 25px 8px 25px 8px;
-  background-image: url('../../../../../public/images/iniciatives/iniciatives-2.jpg');
+  background-image: url('/images/iniciatives/iniciatives-2.jpg');
   background-size: cover;
   background-position: center;
 }
 
 .hero-small-image:nth-child(2) {
   border-radius: 8px 25px 8px 25px;
-  background-image: url('../../../../../public/images/iniciatives/iniciatives-5.jpg');
+  background-image: url('/images/iniciatives/iniciatives-5.jpg');
   background-size: cover;
   background-position: center;
 }
 
 .hero-small-images-bottom .hero-small-image:nth-child(1) {
   border-radius: 20px 0px 20px 0px;
-  background-image: url('../../../../../public/images/iniciatives/iniciatives-7.jpg');
+  background-image: url('/images/iniciatives/iniciatives-7.jpg');
   background-size: cover;
   background-position: center;
 }
 
 .hero-small-images-bottom .hero-small-image:nth-child(2) {
   border-radius: 0px 20px 0px 20px;
-  background-image: url('../../../../../public/images/iniciatives/iniciatives.jpg');
+  background-image: url('/images/iniciatives/iniciatives.jpg');
   background-size: cover;
   background-position: center;
 }

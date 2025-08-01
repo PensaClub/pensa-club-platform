@@ -4,7 +4,7 @@ import { Loader } from "../Loader/Loader";
 import { useAuthContext } from "./UserContext";
 import { mapServiceFactory } from "../Services/MapService";
 import './error.css';
-import { notify } from "../../utils/notify";
+import { notify } from "../../utils/notify.jsx";
 
 export const MapContext = createContext()
 

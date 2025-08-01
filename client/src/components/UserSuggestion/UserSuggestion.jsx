@@ -1,6 +1,6 @@
 import './userSuggestion.css';
 
-import { trimObjectStrings, resetFields } from '../../utils/profile';
+import { trimObjectStrings, resetFields } from '../../utils/profile.jsx';
 
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

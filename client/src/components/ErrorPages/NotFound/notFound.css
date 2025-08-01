@@ -1,5 +1,5 @@
 .bg-not-found {
-  background-image: url('../../../../public/images/errorPage/confused-man.jpg');
+  background-image: url('/images/errorPage/confused-man.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

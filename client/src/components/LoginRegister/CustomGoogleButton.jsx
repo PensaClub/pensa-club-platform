@@ -9,7 +9,7 @@ export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
   const buttonRef = useRef(null);
   const navigate = useNavigate();
 
-  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "224833004247-o2q7ff1onln6j5pkhtqtnct74p0ehjj9.apps.googleusercontent.com";
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "224833004247-o2q7ff1onln6j5pkhtqtnct74p0ehjj9.apps.googleusercontent.com";
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.google || !window.google.accounts) {

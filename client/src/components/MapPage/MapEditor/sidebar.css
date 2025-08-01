@@ -11,7 +11,7 @@ body.active-sidebar .ad-sidebar-map {
 
 .ad-sidebar-map {
     position: relative;
-    background-image: url('../../../../public/images/sign-up/background.jpg');
+    background-image: url('/images/sign-up/background.jpg');
     left: 0;
     bottom: 0;
     width: 100%;
@@ -288,7 +288,7 @@ body.active-sidebar .ad-sidebar-map {
 @media (min-width: 1200px) {
     .ad-sidebar-map {
         position: absolute;
-        background-image: url('../../../../public/images/sign-up/background.jpg');
+        background-image: url('/images/sign-up/background.jpg');
         left: 0;
         top: 0;
         width: 300px;

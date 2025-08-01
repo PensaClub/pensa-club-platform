@@ -1,4 +1,4 @@
-import { isSlateEmpty } from "./initiativeEditorUtils.js";
+import { isSlateEmpty } from "./initiativeEditorUtils.jsx";
 import { getSlateTextLength } from "./slateUtils.js";
 
 /**
