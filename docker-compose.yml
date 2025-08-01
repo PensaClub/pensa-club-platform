@@ -14,10 +14,13 @@ services:
         - VITE_FIREBASE_appId=${VITE_FIREBASE_appId}
         - VITE_FIREBASE_measurementId=${VITE_FIREBASE_measurementId}
         - VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
-    ports:
+    expose:
       - "3000"
     depends_on:
       - server
+    networks:
+      - default
+      - nginx-proxy
 
   server:
     build:
@@ -36,3 +39,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  nginx-proxy:
+    external: true
