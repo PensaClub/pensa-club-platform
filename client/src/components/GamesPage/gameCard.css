@@ -215,7 +215,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 12px 0;
     border-top: 1px solid rgba(148, 163, 184, 0.1);
 }
