@@ -113,7 +113,7 @@ const GamesPage = () => {
                     </div>
                     <div className="games-hero-image">
                         <img
-                            src="https://cdn.tapetender70er.de/media/image/ab/06/28/Gaming-room-cove-dark-themed-workspace_944x944.jpg"
+                            src="/images/games/gaming-room.jpg"
                             alt={t('games.heroImageAlt')}
                         />
                     </div>
