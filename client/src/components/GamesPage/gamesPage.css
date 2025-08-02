@@ -673,6 +673,7 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
     .games-hero-content {
+        margin-top: 5rem;
         grid-template-columns: 1fr;
         gap: 40px;
         text-align: center;
