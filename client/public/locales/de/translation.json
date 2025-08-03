@@ -10,7 +10,8 @@
         "register": "Registrieren",
         "logout": "Abmelden",
         "home": "Startseite",
-        "projects": "Projekte"
+        "projects": "Projekte",
+        "games": "Spiele"
     },
     "footer": {
         "site-map": "Sitemap",
@@ -3113,5 +3114,71 @@
             "skullOutline": "Schädel Umriss",
             "skull": "Schädel"
         }
+    },
+    
+  "games": {
+    "title": "Unterhaltung und Spiele",
+    "subtitle": "Entdecken Sie die beliebtesten Online-Spiele! Schach, Sudoku, Solitaire und viele andere klassische Spiele für alle Altersgruppen.",
+    "heroImageAlt": "Gaming-Illustration",
+    "playNow": "Jetzt spielen",
+    "searchPlaceholder": "Nach einem Spiel suchen...",
+    "stats": {
+      "totalGames": "{{count}} Spiele",
+      "allAges": "Für alle Altersgruppen",
+      "available24_7": "24/7 verfügbar"
+    },
+    "categories": {
+      "title": "Kategorien",
+      "all": "Alle",
+      "strategy": "Strategie",
+      "logic": "Logik",
+      "cards": "Karten",
+      "classic": "Klassisch",
+      "arcade": "Arcade",
+      "puzzle": "Puzzle"
+    },
+    "difficulty": {
+      "easy": "Einfach",
+      "medium": "Mittel",
+      "hard": "Schwer",
+      "expert": "Experte"
+    },
+    "playerCount": {
+      "single": "1 Spieler",
+      "two": "2 Spieler",
+      "oneToTwo": "1-2 Spieler",
+      "oneToFour": "1-4 Spieler"
+    },
+    "names": {
+      "chess": "Schach",
+      "sudoku": "Sudoku",
+      "solitaire": "Solitaire",
+      "backgammon": "Backgammon",
+      "tetris": "Tetris",
+      "game2048": "2048",
+      "checkers": "Dame",
+      "mahjong": "Mahjong"
+    },
+    "descriptions": {
+      "chess": "Das klassische Spiel der Könige! Spielen Sie gegen den Computer oder andere Spieler online.",
+      "sudoku": "Das beliebte japanische Zahlen-Logikspiel. Füllen Sie das 9x9-Raster aus.",
+      "solitaire": "Klassisches Klondike-Solitaire. Ordnen Sie alle Karten nach Farbe.",
+      "backgammon": "Das traditionelle Backgammon-Spiel. Spielen Sie gegen Computer oder Freunde.",
+      "tetris": "Das legendäre Spiel mit fallenden Blöcken. Räumen Sie Reihen ab und sammeln Sie Punkte.",
+      "game2048": "Kombinieren Sie Zahlen und erreichen Sie 2048! Suchtgefahr garantiert.",
+      "checkers": "Klassisches 8x8-Dame-Spiel. Besiegen Sie Ihren Gegner, indem Sie alle seine Steine schlagen.",
+      "mahjong": "Traditionelles chinesisches Plättchenspiel. Finden Sie alle Paare."
+    },
+    "results": {
+         "allGames": "Alle Spiele ({{count}})",
+      "categoryGames": "{{category}} ({{count}})",
+      "searchResults": "Ergebnisse für: \"{{term}}\""
+    },
+    "noGamesFound": {
+      "title": "Keine Spiele gefunden",
+      "description": "Versuchen Sie andere Suchkriterien oder wählen Sie eine andere Kategorie.",
+      "resetButton": "Filter zurücksetzen"
     }
+  }
+
 }

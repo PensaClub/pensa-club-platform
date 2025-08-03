@@ -5,18 +5,23 @@ import eslint from 'vite-plugin-eslint'
 import { resolve } from 'path'
 export default defineConfig({
     plugins: [react(),
-    // eslint({
-    //     cache: false,
-    //     include: ['./src/**/*.js', './src/**/*.jsx'],
-    //     exclude: [],
-    // })
+        // eslint({
+        //     cache: false,
+        //     include: ['./src/**/*.js', './src/**/*.jsx'],
+        //     exclude: [],
+        // })
     ],
     server: {
         port: 3000,
         open: true,
-        // 🔧 Добави тези настройки
+   
+        watch: {
+            usePolling: true,
+            interval: 1000,
+            binaryInterval: 1000
+        },
         hmr: {
-            overlay: false  // Спре overlay-a временно
+            overlay: true // 🔧 Показва грешки като overlay
         },
         fs: {
             strict: false,  // По-толерантен към файлове
@@ -27,13 +32,13 @@ export default defineConfig({
         outDir: 'dist',
     },
     resolve: {
-        alias: {
-            '@': resolve(__dirname, 'src'),
-            '@components': resolve(__dirname, 'src/components'),
-            '@utils': resolve(__dirname, 'src/utils'),
-            // '@contexts': resolve(__dirname, 'src/components/contexts'),
-            '@assets': resolve(__dirname, 'src/assets'),
-        },
+        // alias: {
+        //     '@': resolve(__dirname, 'src'),
+        //     '@components': resolve(__dirname, 'src/components'),
+        //     '@utils': resolve(__dirname, 'src/utils'),
+        //     // '@contexts': resolve(__dirname, 'src/components/contexts'),
+        //     '@assets': resolve(__dirname, 'src/assets'),
+        // },
     },
     define: {
         global: 'globalThis',

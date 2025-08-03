@@ -56,6 +56,7 @@ import { initGA } from './components/Services/analyticsService.js';
 import { AnalyticsProvider } from './components/contexts/AnalyticsContext.jsx';
 import EliteMembershipPage from './components/EliteMembershipPage/EliteMembershipPage.jsx';
 import { useTranslation } from 'react-i18next';
+import GamesPage from './components/GamesPage/GamesPage.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -174,6 +175,7 @@ function App() {
                                     <Route path="/ad/details/:adId" element={<AdDetails />} />
                                     <Route path="/ad/edit/:adId" element={<EditAd />} />
                                     <Route path="/ad" element={<AdPage />} />
+                                    <Route path="/games" element={<GamesPage />} />
                                     <Route path="/ad/create" element={<CreateAd />} />
                                     <Route path="/logout" element={<Logout />} />
                                     <Route path="/profile/*" element={<Profile />} />

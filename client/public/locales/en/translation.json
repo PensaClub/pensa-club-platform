@@ -11,7 +11,8 @@
     "articles": "Articles",
     "welcome": "Welcome",
     "initiatives": "Initiatives",
-    "projects": "Projects"
+    "projects": "Projects",
+    "games": "Games"
   },
   "footer": {
     "site-map": "Site Map",
@@ -3077,5 +3078,71 @@
       "skullOutline": "Skull Outline",
       "skull": "Skull"
     }
+  },
+  
+  "games": {
+    "title": "Entertainment and Games",
+    "subtitle": "Discover the most popular online games! Chess, sudoku, solitaire and many other classic games for all ages.",
+    "heroImageAlt": "Gaming illustration",
+    "playNow": "Play Now",
+    "searchPlaceholder": "Search for a game...",
+    "stats": {
+      "totalGames": "{{count}} games",
+      "allAges": "For all ages",
+      "available24_7": "Available 24/7"
+    },
+    "categories": {
+      "title": "Categories",
+      "all": "All",
+      "strategy": "Strategy",
+      "logic": "Logic",
+      "cards": "Cards",
+      "classic": "Classic",
+      "arcade": "Arcade",
+      "puzzle": "Puzzle"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard",
+      "expert": "Expert"
+    },
+    "playerCount": {
+      "single": "1 player",
+      "two": "2 players",
+      "oneToTwo": "1-2 players",
+      "oneToFour": "1-4 players"
+    },
+    "names": {
+      "chess": "Chess",
+      "sudoku": "Sudoku",
+      "solitaire": "Solitaire",
+      "backgammon": "Backgammon",
+      "tetris": "Tetris",
+      "game2048": "2048",
+      "checkers": "Checkers",
+      "mahjong": "Mahjong"
+    },
+    "descriptions": {
+      "chess": "The classic game of kings! Play against the computer or other players online.",
+      "sudoku": "The popular Japanese number logic game. Fill in the 9x9 grid.",
+      "solitaire": "Classic Klondike solitaire. Arrange all cards by suit.",
+      "backgammon": "The traditional backgammon game. Play against computer or friends.",
+      "tetris": "The legendary falling blocks game. Clear lines and score points.",
+      "game2048": "Combine numbers and reach 2048! Addiction guaranteed.",
+      "checkers": "Classic 8x8 checkers. Defeat your opponent by capturing all their pieces.",
+      "mahjong": "Traditional Chinese tile game. Match all pairs."
+    },
+    "results": {
+         "allGames": "All games ({{count}})",
+      "categoryGames": "{{category}} ({{count}})",
+      "searchResults": "Results for: \"{{term}}\""
+    },
+    "noGamesFound": {
+      "title": "No games found",
+      "description": "Try different search criteria or select another category.",
+      "resetButton": "Clear filters"
+    }
   }
+
 }

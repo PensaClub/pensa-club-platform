@@ -1,0 +1,409 @@
+.game-card {
+    /* background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); */
+    border-radius: 20px;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.09);
+    backdrop-filter: blur(60px);
+}
+
+/* 🆕 Декоративен градиент border */
+.game-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: linear-gradient(45deg, 
+        transparent 20%, 
+        rgba(59, 130, 246, 0.3) 40%, 
+        rgba(168, 85, 247, 0.3) 60%, 
+        transparent 80%
+    );
+    border-radius: 20px;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: subtract;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+.game-card:hover::before {
+    opacity: 1;
+}
+
+.game-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.15),
+        0 8px 20px rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.game-card-header {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+}
+
+/* 🆕 Градиент overlay за снимката */
+.game-card-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.05) 100%
+    );
+    z-index: 1;
+}
+
+.game-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.game-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: saturate(1.1) brightness(1.05);
+}
+
+.game-card:hover .game-image {
+    transform: scale(1.08);
+    filter: saturate(1.3) brightness(1.1);
+}
+
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.85) 0%, 
+        rgba(168, 85, 247, 0.85) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.6s ease-out;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+}
+
+.game-card:hover .game-overlay {
+    opacity: 1;
+}
+
+.play-icon {
+    color: white;
+    font-size: 3.5rem;
+    transform: scale(0.6) rotate(-10deg);
+    transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.game-card:hover .play-icon {
+    transform: scale(1) rotate(0deg);
+}
+
+.game-category-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #3b82f6;
+    padding: 8px 14px;
+    border-radius: 25px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    z-index: 3;
+    transition: all 0.5s ease-out;
+}
+
+.game-card:hover .game-category-badge {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+}
+
+.game-card-content {
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.9) 0%, 
+        rgba(248, 250, 252, 0.95) 100%
+    );
+    backdrop-filter: blur(5px); */
+}
+
+.game-title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.game-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+background: linear-gradient(135deg, #cbd5e1 0%, #dbeafe 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    line-height: 1.2;
+    flex: 1;
+    transition: all 0.6s ease-out;
+}
+
+.game-card:hover .game-name {
+   background: linear-gradient(135deg, #3b82f6 0%, #a78bfa 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.external-link-icon {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-left: 12px;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0.7;
+}
+
+.game-card:hover .external-link-icon {
+    color: #3b82f6;
+    opacity: 1;
+    transform: translate(4px, -4px) rotate(15deg);
+}
+
+.game-description {
+    color: #dfe6f0; /* slate-300 - доста светло */
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 10px;
+    flex: 1;
+    font-weight: 600;
+}
+
+.game-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.difficulty-indicator {
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease-out;
+}
+
+.game-card:hover .difficulty-indicator {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.game-players {
+    color: #dfe6f0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: 12px;
+    transition: all 0.4s ease-out;
+}
+
+.game-card:hover .game-players {
+    background: rgba(59, 130, 246, 0.2);
+    color: #ffffff; 
+}
+
+.game-card-footer {
+    padding: 0 24px 24px;
+}
+
+.play-button {
+    width: 100%;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 16px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+/* 🆕 Shimmer ефект за бутона */
+.play-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%
+    );
+    transition: left 0.8s ease-out;
+}
+
+.play-button:hover::before {
+    left: 100%;
+}
+
+.play-button:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.play-button:active {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* 🎨 Цветни варианти за различни категории */
+.game-card[data-category="strategy"] .game-category-badge {
+    color: #dc2626;
+    background: rgba(254, 226, 226, 0.95);
+}
+
+.game-card[data-category="logic"] .game-category-badge {
+    color: #059669;
+    background: rgba(209, 250, 229, 0.95);
+}
+
+.game-card[data-category="arcade"] .game-category-badge {
+    color: #7c3aed;
+    background: rgba(237, 233, 254, 0.95);
+}
+
+.game-card[data-category="puzzle"] .game-category-badge {
+    color: #d97706;
+    background: rgba(254, 243, 199, 0.95);
+}
+
+.game-card[data-category="cards"] .game-category-badge {
+    color: #be185d;
+    background: rgba(252, 231, 243, 0.95);
+}
+
+.game-card[data-category="classic"] .game-category-badge {
+    color: #374151;
+    background: rgba(243, 244, 246, 0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-card-header {
+        height: 170px;
+    }
+    
+    .game-name {
+        font-size: 1.3rem;
+    }
+    
+    .game-description {
+        font-size: 0.9rem;
+    }
+    
+    .play-icon {
+        font-size: 3rem;
+    }
+    
+    .game-card-content {
+        padding: 20px;
+    }
+    
+    .game-card-footer {
+        padding: 0 20px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-card-content {
+        padding: 16px;
+    }
+    
+    .game-card-footer {
+        padding: 0 16px 16px;
+    }
+    
+    .game-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .play-button {
+        padding: 14px 20px;
+        font-size: 1rem;
+    }
+}
+
+/* 🌟 По-плавна floating анимация */
+@media (hover: hover) {
+    .game-card:hover {
+        animation: cardFloat 1s ease-out;
+    }
+}
+
+@keyframes cardFloat {
+    0%, 100% {
+        transform: translateY(-12px) scale(1.02);
+    }
+    50% {
+        transform: translateY(-16px) scale(1.02);
+    }
+}

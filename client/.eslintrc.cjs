@@ -26,7 +26,7 @@ module.exports = {
         'react/react-in-jsx-scope': 'off', 
 
         // Стил правила
-        'indent': ['warn', 2],
+        // 'indent': ['warn', 2],
         'semi': ['warn', 'always'],
         // 'comma-dangle': ['warn', 'always-multiline'],
 
