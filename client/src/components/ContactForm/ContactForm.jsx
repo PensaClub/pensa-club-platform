@@ -1,5 +1,6 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useRef, useEffect } from "react";
+import  { useState, useRef, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 import "./contactForm.css";
@@ -253,7 +254,7 @@ export const ContactForm = () => {
                             <div className="card-content">
                                 <h3>{t("contact.social.title")}</h3>
                                 <div className="social-links">
-                                    <a href="https://facebook.com/pensaclub" target="_blank" rel="noopener noreferrer">
+                                    <a href="https://www.facebook.com/profile.php?id=61578204366479" target="_blank" rel="noopener noreferrer">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
                                             <path fill="currentColor" d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96C15.9 21.59 18.03 20.37 19.58 18.54C21.13 16.7 21.98 14.35 22 11.91C22 6.48 17.5 2.04 12 2.04Z" />
                                         </svg>
