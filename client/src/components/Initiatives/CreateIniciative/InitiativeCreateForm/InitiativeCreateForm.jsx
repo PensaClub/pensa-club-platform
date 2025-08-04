@@ -1804,7 +1804,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
                                         ) : (
                                             <div className="milestones-list">
                                                 {values.milestones.map((milestone, index) => (
-                                                    <div key={index} className="milestone-item">
+                                                    <div key={index} className="milestone-item-create">
                                                         <div className="milestone-header">
                                                             <h5>
                                                                 Етап {index + 1}
