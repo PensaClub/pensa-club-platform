@@ -419,7 +419,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 }
             }
         }, 30000);
-    }, [values, errors, generateSlug, saveDraftInitiative, userEmail, saveToLocalStorage, calculateDuration]);
+    }, [generateSlug, calculateDuration, errors, draftId, userEmail]);
 
     // 🎯 HANDLE BLUR (за валидация)
     const onBlurHandler = useCallback((e, isEditor = false, customData = null) => {
@@ -2204,7 +2204,8 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
                 await updateInitiative(editIdFromUrl, submissionData);
                 setEditId(null);
                 notify('success', 'Инициативата е обновена успешно!');
-                navigate(`/initiatives/${submissionData.slug || editIdFromUrl}`);
+                console.log('Redirecting to edit page:', `/initiatives/${submissionData.slug}`);
+                navigate(`/initiatives/${submissionData.slug}`);
             } else {
                 // Създаваме нова инициатива (съществуваща логика)
                 submissionData.createdAt = new Date().toISOString();
