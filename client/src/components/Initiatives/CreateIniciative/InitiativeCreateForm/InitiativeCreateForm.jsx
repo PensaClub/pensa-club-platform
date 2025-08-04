@@ -51,7 +51,7 @@ import MainImagePreview from '../MainImagePreview/MainImagePreview';
 import MainImageGalleryItem from '../MainImageGalleryItem/MainImageGalleryItem';
 
 import { notify } from '../../../../utils/notify.jsx';
-import { createSlateEditor, createSlateEditorState} from '../Utils/initiativeEditorUtils.jsx';
+import { createSlateEditor, createSlateEditorState } from '../Utils/initiativeEditorUtils.jsx';
 import { calculateInitiativeProgress, getProgressBreakdown } from '../Utils/formProgressUtils';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -225,7 +225,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
         }
 
         setLocalStorageChecked(true);
-    }, [initialValues, loadFromLocalStorage, setValues, setHasLocalStorageDraft, setLocalStorageTimestamp, localStorageChecked]);
+    }, [initialValues, localStorageChecked]);
 
     // 🔧 Функция за зареждане на draft (за бутона)
     const handleLoadDraft = () => {
@@ -1400,81 +1400,83 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
                                             </div>
                                         </div>
                                     </div>
+                                    {/* 🏷️ TAGS SECTION */}
+                                    <div className="form-group-initiative">
+                                        <label className="basic-info-tags-label">
+                                            🏷️ {t('initiatives.create.tags')}
+                                            <span className="basic-info-tags-description">{t('initiatives.create.tagsDescription')}</span>
+                                        </label>
+                                        <div className="basic-info-tags-help">
+                                            {t('initiatives.create.tags-help')}
+                                        </div>
+                                        <div className="basic-info-tags-input-container">
+                                            <input
+                                                type="text"
+                                                value={newTag}
+                                                onChange={(e) => setNewTag(e.target.value)}
+                                                onKeyPress={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        e.preventDefault();
+                                                        if (newTag.trim()) {
+                                                            addTag(newTag.trim());
+                                                            setNewTag('');
+                                                        }
+                                                    }
+                                                }}
+                                                placeholder={t('initiatives.create.tagPlaceholder')}
+                                                className="basic-info-tags-input"
+                                                maxLength={30}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="basic-info-tags-add-btn"
+                                                onClick={() => {
+                                                    if (newTag.trim()) {
+                                                        addTag(newTag.trim());
+                                                        setNewTag('');
+                                                    }
+                                                }}
+                                                disabled={values.tags.length >= 20}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                {t('initiatives.create.addTag')}
+                                            </button>
+                                        </div>
+                                        {values.tags.length > 0 && (
+                                            <div className="basic-info-tags-display">
+                                                <div className="basic-info-tags-list">
+                                                    {values.tags.map((tag, index) => (
+                                                        <div key={index} className="basic-info-tag-item">
+                                                            <span className="basic-info-tag-text">{tag}</span>
+                                                            <button
+                                                                type="button"
+                                                                className="basic-info-tag-remove-btn"
+                                                                onClick={() => removeTag(index)}
+                                                                title={t('initiatives.create.removeTag')}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTimes} />
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="basic-info-tags-info">
+                                            <small>
+                                                {t('initiatives.create.tagsCount', { count: values.tags.length })}
+                                                {values.tags.length >= 18 && (
+                                                    <span className="basic-info-tags-warning"> - {t('initiatives.create.close-to-limit')} (20)</span>
+                                                )}
+                                            </small>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
 
                         )}
-                        {/* 🏷️ TAGS SECTION */}
-                        <div className="form-group-initiative">
-                            <label className="basic-info-tags-label">
-                                🏷️ {t('initiatives.create.tags')}
-                                <span className="basic-info-tags-description">{t('initiatives.create.tagsDescription')}</span>
-                            </label>
-                            <div className="basic-info-tags-help">
-                                {t('initiatives.create.tags-help')}
-                            </div>
-                            <div className="basic-info-tags-input-container">
-                                <input
-                                    type="text"
-                                    value={newTag}
-                                    onChange={(e) => setNewTag(e.target.value)}
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter') {
-                                            e.preventDefault();
-                                            if (newTag.trim()) {
-                                                addTag(newTag.trim());
-                                                setNewTag('');
-                                            }
-                                        }
-                                    }}
-                                    placeholder={t('initiatives.create.tagPlaceholder')}
-                                    className="basic-info-tags-input"
-                                    maxLength={30}
-                                />
-                                <button
-                                    type="button"
-                                    className="basic-info-tags-add-btn"
-                                    onClick={() => {
-                                        if (newTag.trim()) {
-                                            addTag(newTag.trim());
-                                            setNewTag('');
-                                        }
-                                    }}
-                                    disabled={values.tags.length >= 20}
-                                >
-                                    <FontAwesomeIcon icon={faPlus} />
-                                    {t('initiatives.create.addTag')}
-                                </button>
-                            </div>
-                            {values.tags.length > 0 && (
-                                <div className="basic-info-tags-display">
-                                    <div className="basic-info-tags-list">
-                                        {values.tags.map((tag, index) => (
-                                            <div key={index} className="basic-info-tag-item">
-                                                <span className="basic-info-tag-text">{tag}</span>
-                                                <button
-                                                    type="button"
-                                                    className="basic-info-tag-remove-btn"
-                                                    onClick={() => removeTag(index)}
-                                                    title={t('initiatives.create.removeTag')}
-                                                >
-                                                    <FontAwesomeIcon icon={faTimes} />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
 
-                            <div className="basic-info-tags-info">
-                                <small>
-                                    {t('initiatives.create.tagsCount', { count: values.tags.length })}
-                                    {values.tags.length >= 18 && (
-                                        <span className="basic-info-tags-warning"> - {t('initiatives.create.close-to-limit')} (20)</span>
-                                    )}
-                                </small>
-                            </div>
-                        </div>
 
                         {/* 🎯 SECTION: SECTIONS  */}
                         {activeSection === 'sections' && (
@@ -3958,12 +3960,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
 
                                             </div>
                                         )}
-                                        <div className="tags-info">
-                                            <small>  {t('initiatives.create.tagsCount', { count: values.tags.length })}
-                                                {values.tags.length >= 18 && (
-                                                    <span className="tags-warning"> - {t('initiatives.create.close-to-limit')} (20)</span>
-                                                )}</small>
-                                        </div>
+
                                     </div>
 
                                     {/* 🔗 RELATED INITIATIVES */}
