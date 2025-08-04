@@ -34,6 +34,17 @@ initiativeController.post('/draft/save/:id?', isAuth, checkPermission('initiativ
             return createInitiative(initiativeData, req, res, next);
         }
 
+        const foundInitiative = await findBySlugOrId(initiative, id);
+
+        if (!foundInitiative) {
+            throw new CustomError({
+                message: 'Initiative not found',
+                statusCode: 404,
+            });
+        }
+
+        await foundInitiative.update({ isDraft: true });
+
         const validatedData = UpdateInitiativeSchema.parse(req.body);
         return updateInitiative(validatedData, req, res, next, true);
     } catch (err) {

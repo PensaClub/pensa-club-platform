@@ -215,7 +215,7 @@ export const AllInitiatives = () => {
   };
 
   const getDefaultImage = () => {
-    return 'https://via.placeholder.com/400x200/f7fafc/718096?text=Няма+изображение';
+    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZjdmYWZjIi8+CjxwYXRoIGQ9Ik0xNTAgNzVIMjUwVjEyNUgxNTBWNzVaIiBmaWxsPSIjNzE4MDk2Ii8+CjxwYXRoIGQ9Ik0xNzUgOTVMMTg1IDEwNUwxOTUgOTVMMjA1IDEwNUwyMTUgOTVMMjI1IDEwNVYxMTVIMTc1Vjk1WiIgZmlsbD0iIzcxODA5NiIvPgo8dGV4dCB4PSIyMDAiIHk9IjE0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzcxODA5NiIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0cHgiPk7Rj9C80LAg0LjQt9C+0LHRgNCw0LbQtdC90LjQtTwvdGV4dD4KPC9zdmc+';
   };
 
   return (

@@ -1408,16 +1408,17 @@
   margin-top: 1rem;
 }
 
-.milestone-item {
+.milestone-item-create {
   background: white;
   border: 2px solid var(--initiative-border);
   border-radius: 12px;
   padding: 1.5rem;
   transition: all 0.3s ease;
   position: relative;
+
 }
 
-.milestone-item:hover {
+.milestone-item-create:hover {
   border-color: var(--initiative-primary);
   box-shadow: 0 4px 15px rgba(32, 178, 170, 0.1);
 }

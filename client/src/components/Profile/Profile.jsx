@@ -1,6 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate, NavLink } from "react-router-dom";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Link, useLocation, useNavigate, NavLink, Routes, Route, Outlet } from "react-router-dom";
 import { ProfileData } from "./ProfileData";
 import ProfileForm from "./ProfileForm";
 import ProfileAddress from "./ProfileAddress";
@@ -412,7 +412,35 @@ export const Profile = () => {
                       </NavLink>
                     </div>
                   </div>
-
+                  <NavLink to="/games" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <svg
+                        id="Icons"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlnsXlink="http://www.w3.org/1999/xlink"
+                        viewBox="0 0 32 32"
+                        xmlSpace="preserve"
+                      >
+                        <style type="text/css">
+                          {
+                            "\n\t.st0{fill:none;stroke:#333;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n"
+                          }
+                        </style>
+                        <path
+                          className="st0"
+                          d="M23,15c-1.2,0-2.4,0.4-3.3,1h-7.4c-0.9-0.6-2.1-1-3.3-1c-3.3,0-6,2.7-6,6s2.7,6,6,6c1.2,0,2.4-0.4,3.3-1h7.4 c0.9,0.6,2.1,1,3.3,1c3.3,0,6-2.7,6-6S26.3,15,23,15z"
+                        />
+                        <line className="st0" x1={9} y1={19} x2={9} y2={23} />
+                        <line className="st0" x1={7} y1={21} x2={11} y2={21} />
+                        <line className="st0" x1={23} y1={19} x2={23} y2={19} />
+                        <line className="st0" x1={21} y1={21} x2={21} y2={21} />
+                        <line className="st0" x1={25} y1={21} x2={25} y2={21} />
+                        <line className="st0" x1={23} y1={23} x2={23} y2={23} />
+                        <path className="st0" d="M16,16v-2c0-2.2-1.8-4-4-4H9c-2.2,0-4-1.8-4-4V3" />
+                      </svg>
+                      {t("header.games")}
+                    </span>
+                  </NavLink>
                   <NavLink to="/ad/create" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
                     <span className="link-content">
                       <JobsAdsIcon className="menu-icon" />
@@ -525,7 +553,7 @@ export const Profile = () => {
                       {t("profile.bookmarks")}
                     </span>
                   </NavLink>
-                   <NavLink
+                  <NavLink
                     to="avatars"
                     className={({ isActive }) => isActive ? 'active' : ''}
                   >

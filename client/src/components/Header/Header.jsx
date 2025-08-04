@@ -7,6 +7,8 @@ import AlertModal from "./AlertModal/AlertModal";
 import { useInitiativeContext } from "../contexts/InitiativeProvider";
 import { BookmarkIcon, BookmarkIconHeader } from "../Initiatives/Icons/InitiativeIcons";
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
+import { faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Header = ({ additionalClasses }) => {
   const { t, i18n } = useTranslation();
@@ -172,6 +174,12 @@ export const Header = ({ additionalClasses }) => {
               className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
             >
               {t("header.ad-create")}
+            </NavLink>
+             <NavLink
+              to="/games"
+              className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+            >
+              {t("header.games")}
             </NavLink>
             <LanguageSwitcher />
           </nav>
@@ -415,6 +423,14 @@ export const Header = ({ additionalClasses }) => {
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor" />
               </svg>
               {t("header.ad-create")}
+            </NavLink>
+             <NavLink
+              to="/games"
+              className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
+              onClick={toggleMobileMenu}
+            >
+               <FontAwesomeIcon icon={faGamepad} />
+              {t("header.games")}
             </NavLink>
 
             {/* <div className="mobile-menu-divider"></div> */}

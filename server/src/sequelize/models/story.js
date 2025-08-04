@@ -94,7 +94,6 @@ module.exports = (sequelize, DataTypes) => {
             slug: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true,
             },
             titleSlug: {
                 type: DataTypes.STRING,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import './initiativesSearch.css';
 import { useTranslation } from 'react-i18next';
 import '../InitiativesList/initiativesList.css';
@@ -11,13 +11,28 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
   const [selectedLocation, setSelectedLocation] = useState('');
   const [showOpenOnly, setShowOpenOnly] = useState(false);
 
-  // Извличане на уникални стойности за филтрите
-  const categories = [...new Set(initiatives.map(init => init.category))];
-  const statuses = [...new Set(initiatives.map(init => init.status))];
-  const locations = [...new Set(initiatives.map(init => init.location.address))];
+  // Извличане на уникални стойности за филтрите с null проверки
+  const categories = useMemo(() => 
+    [...new Set(initiatives.map(init => init.category).filter(category => category))],
+    [initiatives]
+  );
+  
+  const statuses = useMemo(() => 
+    [...new Set(initiatives.map(init => init.status).filter(status => status))],
+    [initiatives]
+  );
+  
+  const locations = useMemo(() => 
+    [...new Set(
+      initiatives
+        .map(init => init.location?.address)
+        .filter(address => address && address.trim()) // 🔧 Филтрираме null/undefined/празни адреси
+    )],
+    [initiatives]
+  );
 
   // Функция за определяне на типа локации
-  const getLocationType = (locations) => {
+  const getLocationType = useCallback((locations) => {
     if (locations.length === 0) return 'locations';
     
     // Списък с известни държави на български
@@ -36,6 +51,11 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
     let mixedCount = 0;
 
     locations.forEach(location => {
+      // 🔧 ДОБАВЕНА проверка за null/undefined
+      if (!location || typeof location !== 'string') {
+        return; // Прескачаме невалидни локации
+      }
+      
       const parts = location.split(',').map(part => part.trim());
       
       if (parts.length === 1) {
@@ -64,12 +84,13 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
     } else {
       return 'locations'; // Fallback за смесени или неясни случаи
     }
-  };
+  }, []);
+
+  // Мемоизиране на location типа
+  const locationType = useMemo(() => getLocationType(locations), [locations, getLocationType]);
 
   // Функция за получаване на правилния текст
-  const getLocationText = () => {
-    const locationType = getLocationType(locations);
-    
+  const locationText = useMemo(() => {
     switch(locationType) {
       case 'countries':
         return locations.length === 1 
@@ -84,12 +105,10 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
           ? t('initiatives.initiativesList.oneLocation')
           : t('initiatives.initiativesList.locations');
     }
-  };
+  }, [locationType, locations.length, t]);
 
   // Функция за получаване на правилния предлог "в"
-  const getLocationPreposition = () => {
-    const locationType = getLocationType(locations);
-    
+  const locationPreposition = useMemo(() => {
     switch(locationType) {
       case 'countries':
         return t('initiatives.initiativesList.inCountries'); // "в държави"
@@ -98,10 +117,10 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
       default:
         return t('initiatives.initiativesList.inLocations'); // "в локации"
     }
-  };
+  }, [locationType, t]);
 
-  // Филтриране
-  useEffect(() => {
+  // Мемоизирана функция за филтриране
+  const filterInitiatives = useCallback(() => {
     let filtered = initiatives;
 
     if (searchTerm.trim()) {
@@ -120,60 +139,47 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
     }
 
     if (selectedLocation) {
-      filtered = filtered.filter(initiative => initiative.location.address === selectedLocation);
+      filtered = filtered.filter(initiative => 
+        initiative.location?.address === selectedLocation
+      );
     }
 
     if (showOpenOnly) {
       filtered = filtered.filter(initiative => initiative.campaignStatus === 'open');
     }
 
-    onFilter(filtered);
-  }, [searchTerm, selectedCategory, selectedStatus, selectedLocation, showOpenOnly, initiatives, onFilter]);
+    return filtered;
+  }, [searchTerm, selectedCategory, selectedStatus, selectedLocation, showOpenOnly, initiatives]);
 
-  const clearAllFilters = () => {
+  // 🔧 ОПТИМИЗИРАН useEffect за филтриране
+  useEffect(() => {
+    const filtered = filterInitiatives();
+    onFilter(filtered);
+  }, [filterInitiatives, onFilter]);
+
+  // Мемоизиран брой на филтрираните резултати
+  const filteredCount = useMemo(() => {
+    return filterInitiatives().length;
+  }, [filterInitiatives]);
+
+  const clearAllFilters = useCallback(() => {
     setSearchTerm('');
     setSelectedCategory('');
     setSelectedStatus('');
     setSelectedLocation('');
     setShowOpenOnly(false);
-  };
+  }, []);
 
   const hasActiveFilters = searchTerm || selectedCategory || selectedStatus || selectedLocation || showOpenOnly;
 
-  const getStatusLabel = (status) => {
+  const getStatusLabel = useCallback((status) => {
     switch(status) {
       case 'active': return t('initiatives.initiativesList.statusActive');
       case 'planned': return t('initiatives.initiativesList.statusPlanned');
       case 'completed': return t('initiatives.initiativesList.statusCompleted');
       default: return status;
     }
-  };
-
-  // Изчисляване на филтрираните резултати за показване в заглавието
-  const getFilteredCount = () => {
-    let filtered = initiatives;
-    
-    if (searchTerm.trim()) {
-      filtered = filtered.filter(initiative =>
-        initiative.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        initiative.shortDescription.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    if (selectedCategory) {
-      filtered = filtered.filter(initiative => initiative.category === selectedCategory);
-    }
-    if (selectedStatus) {
-      filtered = filtered.filter(initiative => initiative.status === selectedStatus);
-    }
-    if (selectedLocation) {
-      filtered = filtered.filter(initiative => initiative.location.address === selectedLocation);
-    }
-    if (showOpenOnly) {
-      filtered = filtered.filter(initiative => initiative.campaignStatus === 'open');
-    }
-    
-    return filtered.length;
-  };
+  }, [t]);
 
   return (
     <div className="project-search-container">
@@ -261,7 +267,7 @@ export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap 
       {/* Results Header */}
       <div className="results-header">
         <h2 className="results-count">
-          {getFilteredCount()} {t('initiatives.initiativesList.projectsIn')} {getLocationPreposition()} {locations.length} {getLocationText()}
+          {filteredCount} {t('initiatives.initiativesList.projectsIn')} {locationPreposition} {locations.length} {locationText}
         </h2>
         
         <button 
