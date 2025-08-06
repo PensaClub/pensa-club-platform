@@ -57,6 +57,7 @@ import { AnalyticsProvider } from './components/contexts/AnalyticsContext.jsx';
 import EliteMembershipPage from './components/EliteMembershipPage/EliteMembershipPage.jsx';
 import { useTranslation } from 'react-i18next';
 import GamesPage from './components/GamesPage/GamesPage.jsx';
+import { AllClubs } from './components/Clubs/AllClubs/AllClubs.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -186,6 +187,7 @@ function App() {
                                   </Route>
                                   
                                   <Route path="/craigslist" element={<CommunityPage />} />
+                                  <Route path="/clubs" element={<AllClubs />} />
                                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                                   <Route path="/ads" element={<AdsCard />} />
                                   <Route path="/filter" element={<FiltersMap />} />

@@ -1,0 +1,457 @@
+/* components/Clubs/AllClubs/ClubsMap/clubsMap.css */
+.clubs-map-container {
+  /* background: white; */
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  height: 100%; /* Променяме от фиксирана височина */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.clubs-map-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  /* background: linear-gradient(135deg, #f8fafc, #edf2f7); */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.clubs-map-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+}
+
+.clubs-map-title svg {
+  color: #3182ce;
+}
+
+.clubs-map-legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #4a5568;
+}
+
+.legend-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.legend-marker.cultural { background-color: #3182ce; }
+.legend-marker.general { background-color: #4a5568; }
+.legend-marker.sports { background-color: #38a169; }
+.legend-marker.educational { background-color: #805ad5; }
+
+.clubs-map-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.clubs-leaflet-map {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.clubs-map-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 1000;
+}
+
+.clubs-map-loading .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #3182ce;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.clubs-map-loading p {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.clubs-map-info {
+  padding: 1rem 1.5rem;
+  /* background: #f8fafc; */
+  /* border-top: 1px solid #e2e8f0; */
+  color: #718096;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clubs-map-info svg {
+  color: #3182ce;
+}
+
+/* Custom маркери */
+.custom-marker {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.custom-marker.selected {
+  animation: pulse 2s infinite;
+}
+
+.custom-marker:hover {
+  transform: scale(1.1);
+}
+
+/* Cluster иконки */
+.cluster-marker {
+  background: linear-gradient(135deg, #3182ce, #4299e1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.cluster-small {
+  width: 40px !important;
+  height: 40px !important;
+  font-size: 12px;
+}
+
+.cluster-medium {
+  width: 50px !important;
+  height: 50px !important;
+  font-size: 14px;
+}
+
+.cluster-large {
+  width: 60px !important;
+  height: 60px !important;
+  font-size: 16px;
+}
+
+.cluster-marker:hover {
+  transform: scale(1.1);
+}
+
+/* Popup стилове */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-tip {
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.club-popup {
+  width: 100%;
+  max-width: 320px;
+}
+
+.club-popup-header {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+}
+
+.club-popup-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.club-popup-image-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #f7fafc, #edf2f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+  font-size: 2rem;
+}
+
+.club-popup-badges {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.club-popup-category {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.club-popup-content {
+  padding: 1rem;
+}
+
+.club-popup-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.club-popup-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.club-popup-stars {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.popup-star.filled {
+  color: #ecc94b;
+}
+
+.popup-star.half {
+  color: #ecc94b;
+  opacity: 0.5;
+}
+
+.popup-star.empty {
+  color: #e2e8f0;
+}
+
+.club-popup-rating-value {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.875rem;
+}
+
+.club-popup-location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #718096;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.club-popup-location svg {
+  color: #e53e3e;
+}
+
+.club-popup-description {
+  color: #4a5568;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.club-popup-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.club-popup-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #4a5568;
+}
+
+.club-popup-stat svg {
+  color: #3182ce;
+}
+
+.club-popup-contacts {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.club-popup-contact {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.club-popup-contact:hover {
+  background: #3182ce;
+  color: white;
+  transform: scale(1.1);
+}
+
+.club-popup-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.club-popup-btn {
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.club-popup-btn.secondary {
+  background: #f8fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.club-popup-btn.secondary:hover {
+  background: #edf2f7;
+  transform: translateY(-1px);
+}
+
+.club-popup-btn.primary {
+  background: linear-gradient(135deg, #3182ce, #4299e1);
+  color: white;
+}
+
+.club-popup-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+}
+
+/* Анимации */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(49, 130, 206, 0.7);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(49, 130, 206, 0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .clubs-map-container {
+    height: 400px;
+  }
+  
+  .clubs-map-header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .clubs-map-legend {
+    justify-content: center;
+  }
+  
+  .club-popup {
+    max-width: 280px;
+  }
+  
+  .club-popup-content {
+    padding: 0.75rem;
+  }
+  
+  .club-popup-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .clubs-map-header {
+    padding: 0.75rem;
+  }
+  
+  .clubs-map-title {
+    font-size: 1rem;
+  }
+  
+  .clubs-map-legend {
+    gap: 0.75rem;
+  }
+  
+  .legend-item {
+    font-size: 0.75rem;
+  }
+}

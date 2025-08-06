@@ -11,7 +11,8 @@
         "logout": "Abmelden",
         "home": "Startseite",
         "projects": "Projekte",
-        "games": "Spiele"
+        "games": "Spiele",
+    "clubs": "Clubs"
     },
     "footer": {
         "site-map": "Sitemap",
