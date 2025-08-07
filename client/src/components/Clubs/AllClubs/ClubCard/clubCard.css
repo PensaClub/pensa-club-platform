@@ -887,3 +887,261 @@
     transform: translateY(0) !important;
   }
 }
+/* Основни промени за адаптивност към текст */
+.club-card-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  width: 100%;
+  min-height: 530px; /* Променено от height на min-height */
+  height: auto; /* Добавено за гъвкавост */
+  display: grid;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Изображение секция - гъвкава височина */
+.club-card-image-section {
+  position: relative;
+  overflow: hidden;
+  width: 350px;
+  min-height: 530px; /* Променено от height на min-height */
+  height: auto; /* Добавено */
+  display: flex;
+  flex-direction: column;
+}
+
+.club-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 430px; /* Променено от height на min-height */
+  height: auto; /* Добавено */
+  flex-shrink: 0;
+}
+
+/* Съдържание секция - гъвкава височина */
+.club-card-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  position: relative;
+  min-height: 530px; /* Променено от height на min-height */
+  height: auto; /* Добавено за гъвкавост */
+  overflow: visible; /* Променено от hidden */
+}
+
+/* Статистики - гъвкава височина */
+.club-card-stats {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8fafc;
+  flex-shrink: 0;
+  min-height: 100px; /* Променено от height на min-height */
+  height: auto; /* Добавено */
+  margin: 0;
+}
+
+/* Дейности - по-гъвкави */
+.club-card-activities {
+  background: linear-gradient(135deg, #f7fafc, #edf2f7);
+  padding: 1rem;
+  border-radius: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.club-card-activities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 120px; /* Променено от max-height на min-height */
+  max-height: none; /* Премахваме ограничението */
+  overflow: visible; /* Променено от hidden */
+}
+
+/* Responsive промени - също гъвкави височини */
+@media (max-width: 380px) {
+  .club-card-image-section {
+    width: 100% !important;
+    min-height: 200px !important; /* Променено */
+    height: auto !important;
+    order: 1 !important;
+  }
+
+  .club-card-image-wrapper {
+    min-height: 150px !important; /* Променено */
+    height: auto !important;
+  }
+
+  .club-card-content {
+    min-height: auto !important; /* Променено */
+    height: auto !important;
+    padding: 1rem !important;
+    gap: 0.75rem !important;
+    order: 2 !important;
+  }
+
+  .club-card-stats {
+    min-height: auto !important; /* Променено */
+    height: auto !important;
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0.5rem;
+  }
+
+  .club-card-activities-list {
+    min-height: 80px !important; /* Променено */
+    max-height: none !important; /* Премахваме ограничението */
+    overflow: visible !important;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 480px) {
+  .club-card-image-section {
+    width: 100% !important;
+    min-height: 220px !important; /* Променено */
+    height: auto !important;
+    order: 1 !important;
+  }
+
+  .club-card-image-wrapper {
+    min-height: 170px !important; /* Променено */
+    height: auto !important;
+  }
+
+  .club-card-content {
+    min-height: auto !important; /* Променено */
+    height: auto !important;
+    padding: 1.25rem !important;
+    order: 2 !important;
+  }
+
+  .club-card-stats {
+    min-height: auto !important; /* Променено */
+    height: auto !important;
+    padding: 0.875rem !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .club-card-container {
+    min-height: auto; /* Променено */
+    height: auto;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto; /* Променено за гъвкавост */
+  }
+
+  .club-card-image-section {
+    width: 100% !important;
+    min-height: 280px !important; /* Променено */
+    height: auto !important;
+    order: 1 !important;
+  }
+
+  .club-card-image-wrapper {
+    min-height: 230px !important; /* Променено */
+    height: auto !important;
+  }
+
+  .club-card-content {
+    min-height: auto !important; /* Променено */
+    height: auto !important;
+    padding: 1.5rem !important;
+    order: 2 !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .club-card-container {
+    min-height: auto; /* Променено */
+    height: auto;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto; /* Променено */
+  }
+
+  .club-card-image-section {
+    width: 100% !important;
+    min-height: 300px !important; /* Променено */
+    height: auto !important;
+    order: 1 !important;
+  }
+
+  .club-card-image-wrapper {
+    min-height: 250px !important; /* Променено */
+    height: auto !important;
+  }
+
+  .club-card-content {
+    margin-top: 1rem;
+    min-height: auto !important; /* Променено */
+    height: auto !important;
+    padding: 1.75rem !important;
+    order: 2 !important;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1540px) {
+  .club-card-meta {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .club-card-image-section {
+    width: 320px;
+    min-height: 615px; /* Променено */
+    height: auto;
+  }
+
+  .club-card-contacts {
+    flex-direction: column;
+  }
+
+  .club-card-content {
+    min-height: 615px; /* Променено */
+    height: auto;
+  }
+
+  .club-card-container {
+    min-height: 615px; /* Променено */
+    height: auto;
+  }
+}
+
+/* Добавяме стилове за по-голям текст */
+@media (min-width: 1025px) {
+  /* При увеличен текст, картите стават по-високи */
+  .club-card-container {
+    align-items: stretch; /* За еднаква височина на grid елементите */
+  }
+
+  .club-card-image-section,
+  .club-card-content {
+    min-height: fit-content; /* Адаптиране към съдържанието */
+  }
+}
+
+/* Допълнителни стилове за много голям текст */
+html[style*="120%"] .club-card-container,
+html[style*="130%"] .club-card-container,
+html[style*="140%"] .club-card-container,
+html[style*="150%"] .club-card-container {
+  gap: 1rem; /* Увеличаваме разстоянието между картите */
+  margin-bottom: 2rem; /* Повече пространство отдолу */
+}
+
+html[style*="130%"] .club-card-activities-list,
+html[style*="140%"] .club-card-activities-list,
+html[style*="150%"] .club-card-activities-list {
+  min-height: 150px; /* По-високи дейности при голям текст */
+}

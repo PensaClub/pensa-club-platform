@@ -8,6 +8,7 @@ import { LoadingSpinner } from '../../common/LoadingSpinner/LoadingSpinner';
 import './allClubs.css';
 import { mockClubsData } from '../data/mockClubsData';
 import { RecentArticles } from './RecentArticles/RecentArticles';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 export const AllClubs = () => {
   const [clubs, setClubs] = useState([]);
@@ -301,7 +302,7 @@ setTimeout(() => {
           })}
         </script>
       </Helmet>
-
+<TextZoom />
       <div className="all-clubs-container">
         {/* Фонов слой със снимки */}
         <div className="all-clubs-bg-layer">
