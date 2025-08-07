@@ -150,17 +150,18 @@ background: linear-gradient(
   margin: 6rem auto 1rem auto;
   padding: 0 3rem;
   display: flex;
+  flex-direction: column;
   /* grid-template-columns: 800px 820px; */
   align-items: center;
   justify-content: center;
-  /* gap: 2rem; */
+  gap: 2rem;
 
 }
 
 .all-clubs-header-content {
   flex: 1;
   max-width: 1000px;
-  margin-left: 10rem;
+  /* margin-left: 10rem; */
 }
 
 .all-clubs-main-title {
@@ -187,8 +188,7 @@ background: linear-gradient(
 
 /* Статистики */
 .all-clubs-stats {
-  display: grid;
-  grid-template-columns: 120px 120px ;
+  display: flex;
   gap: 1rem;
   flex-shrink: 0;
 }
@@ -435,116 +435,7 @@ background: linear-gradient(
   max-width: 1600px;
   margin: 0 auto;
   padding: 0 3rem;
-  height: 600px;
-}
-
-/* Responsive дизайн */
-@media (max-width: 1400px) {
-  .all-clubs-header-container {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .all-clubs-header-content {
-    max-width: 100%;
-  }
-
-  .all-clubs-stats {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 1200px) {
-  .all-clubs-main-layout {
-    grid-template-columns: 1fr 280px;
-    gap: 2rem;
-    padding: 2rem 2rem 3rem;
-  }
-
-  .all-clubs-sidebar-articles {
-    display: none;
-  }
-
-  .all-clubs-header-container {
-    padding: 0 2rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  .all-clubs-main-layout {
-    grid-template-columns: 1fr;
-    padding: 2rem 1.5rem 3rem;
-  }
-  
-  .all-clubs-sidebar,
-  .all-clubs-sidebar-articles {
-    display: none;
-  }
-
-  .stat-card-clubs {
-    padding: 0.75rem 1rem;
-    min-width: 80px;
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
-  }
-
-  .stat-icon {
-    font-size: 1.25rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .all-clubs-main-title {
-    font-size: 2rem;
-  }
-  
-  .all-clubs-subtitle {
-    font-size: 1rem;
-  }
-
-  .all-clubs-stats {
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .stat-card-clubs {
-    flex: 1 1 calc(50% - 0.375rem);
-    min-width: 0;
-  }
-  
-  .all-clubs-grid {
-    gap: 1.5rem;
-  }
-  
-  /* Скриваме фоновите снимки на мобилни */
-  .bg-image {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .all-clubs-main-title {
-    font-size: 1.6rem;
-  }
-
-  .all-clubs-header-container {
-    padding: 0 1rem;
-  }
-  
-  .all-clubs-main-layout {
-    padding: 1.5rem 1rem 2rem;
-  }
-
-  .stat-card-clubs {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .stat-value {
-    font-size: 1.25rem;
-  }
+  height: 800px;
 }
 .all-clubs-sidebar-right {
   position: sticky;
@@ -617,6 +508,139 @@ background: linear-gradient(
 .all-clubs-sidebar-left::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #ea580c, #c2410c);
 }
+/* Responsive дизайн */
+@media (max-width: 1400px) {
+  .all-clubs-header-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .all-clubs-header-content {
+    max-width: 100%;
+  }
+
+  .all-clubs-stats {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1200px) {
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr 280px;
+    gap: 2rem;
+    padding: 2rem 2rem 3rem;
+  }
+.all-clubs-map-full-width .clubs-map-container{
+    padding: 0 0.9rem;
+    height: 600px;
+}
+  .all-clubs-sidebar-articles {
+    display: none;
+  }
+
+  .all-clubs-header-container {
+    padding: 0 2rem;
+  }
+  .all-clubs-sidebar-left{
+    display: none;
+};
+}
+
+@media (max-width: 1024px) {
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    padding: 2rem 1.5rem 3rem;
+    gap: 2rem;
+  }
+  
+  /* Скриваме левия sidebar */
+  .all-clubs-sidebar-left {
+    display: none;
+  }
+  
+  /* Показваме дясния sidebar (търсачка) отгоре */
+  .all-clubs-sidebar-right {
+    display: block;
+    position: static;
+    order: 1;
+    max-height: none;
+    border: 1px solid rgba(146, 64, 14, 0.2);
+    border-radius: 8px;
+    margin-bottom: 0;
+  }
+  
+  /* Главното съдържание отдолу */
+  .all-clubs-main-content {
+    order: 2;
+  }
+
+  .stat-card-clubs {
+    padding: 0.75rem 1rem;
+    min-width: 80px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-icon {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .all-clubs-main-title {
+    font-size: 2rem;
+  }
+  
+  .all-clubs-subtitle {
+    font-size: 1rem;
+  }
+
+  .all-clubs-stats {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .stat-card-clubs {
+    flex: 1 1 calc(50% - 0.375rem);
+    min-width: 0;
+  }
+  
+  .all-clubs-grid {
+    gap: 1.5rem;
+  }
+  
+  /* Скриваме фоновите снимки на мобилни */
+  .bg-image {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .all-clubs-main-title {
+    font-size: 1.6rem;
+  }
+
+  .all-clubs-header-container {
+    padding: 0 1rem;
+  }
+  
+  .all-clubs-main-layout {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .stat-card-clubs {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+}
+
 /* .all-clubs-sidebar-articles {
   position: -webkit-sticky;
   position: sticky;

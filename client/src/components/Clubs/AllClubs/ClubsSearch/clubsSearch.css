@@ -263,9 +263,216 @@
   line-height: 1.4;
 }
 
-/* Mobile responsive - скриваме и показваме в header */
-@media (max-width: 1024px) {
+/* RESPONSIVE DESIGN */
+
+/* Телефони до 380px */
+@media (max-width: 380px) {
   .clubs-search-sidebar {
+    padding: 1rem 0.75rem;
+    border-radius: 6px;
+  }
+
+  .clubs-search-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .clubs-search-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .clubs-search-results {
+    font-size: 0.75rem;
+  }
+
+  .clubs-search-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .clubs-search-input {
+    padding: 0.75rem 2rem;
+    font-size: 0.875rem;
+  }
+
+  .clubs-search-filters {
+    margin-bottom: 1.5rem;
+  }
+
+  .clubs-filter-group {
+    margin-bottom: 1rem;
+  }
+
+  .clubs-filter-group label {
+    font-size: 0.75rem;
+  }
+
+  .clubs-filter-select {
+    padding: 0.625rem 0.75rem 0.625rem 2rem;
+    font-size: 0.75rem;
+  }
+
+  .clubs-search-actions {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .clubs-action-btn {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  /* Скриваме публикациите на много малки екрани */
+  .clubs-recent-section {
+    display: none;
+  }
+}
+
+/* Малки телефони 381px - 480px */
+@media (min-width: 381px) and (max-width: 480px) {
+  .clubs-search-sidebar {
+    padding: 1.25rem 1rem;
+  }
+
+  .clubs-search-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .clubs-filter-select {
+    padding: 0.625rem 0.875rem 0.625rem 2.25rem;
+    font-size: 0.8125rem;
+  }
+
+  /* Скриваме публикациите */
+  .clubs-recent-section {
+    display: none;
+  }
+}
+
+/* Таблети портрет 481px - 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+  .clubs-search-sidebar {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .clubs-search-header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .clubs-search-actions {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .clubs-action-btn {
+    flex: 1;
+    padding: 0.625rem 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  /* Скриваме публикациите */
+  .clubs-recent-section {
+    display: none;
+  }
+}
+
+/* Таблети ландшафт 769px - 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .clubs-search-sidebar {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .clubs-search-actions {
+    flex-direction: column;
+  }
+
+  /* Показваме публикациите но компактно */
+  .clubs-recent-section {
+    display: block;
+  }
+
+  .clubs-recent-items {
+    gap: 0.75rem;
+  }
+
+  .clubs-recent-item {
+    padding: 0.5rem 0;
+  }
+
+  .clubs-recent-category {
+    font-size: 0.625rem;
+  }
+
+  .clubs-recent-name {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Малки лаптопи 1025px - 1200px */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .clubs-search-sidebar {
+    padding: 1.75rem 1.25rem;
+  }
+
+  /* Компактни публикации */
+  .clubs-recent-items {
+    gap: 0.875rem;
+  }
+}
+
+/* Средни и големи екрани 1201px+ */
+@media (min-width: 1201px) {
+  .clubs-search-sidebar {
+    padding: 2rem 1.5rem;
+  }
+
+  /* Пълни публикации */
+  .clubs-recent-section {
+    display: block;
+  }
+}
+
+/* Специално за много широки екрани */
+@media (min-width: 1600px) {
+  .clubs-search-sidebar {
+    padding: 2.25rem 1.75rem;
+  }
+
+  .clubs-search-header h3 {
+    font-size: 1.375rem;
+  }
+
+  .clubs-search-input {
+    padding: 1rem 2.75rem;
+    font-size: 1rem;
+  }
+
+  .clubs-filter-select {
+    padding: 0.875rem 1.125rem 0.875rem 2.75rem;
+    font-size: 0.9375rem;
+  }
+}
+
+/* Landscape orientation за мобилни */
+@media (max-width: 768px) and (orientation: landscape) {
+  .clubs-search-sidebar {
+    padding: 1rem;
+  }
+
+  .clubs-search-filters {
+    margin-bottom: 1rem;
+  }
+
+  .clubs-filter-group {
+    margin-bottom: 0.75rem;
+  }
+
+  .clubs-recent-section {
     display: none;
   }
 }

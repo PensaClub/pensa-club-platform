@@ -24,13 +24,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom иконки за различни типове клубове
 const createCustomIcon = (category, isSelected = false) => {
   const colors = {
     'cultural': '#3182ce',
     'general': '#4a5568', 
     'sports': '#38a169',
-    'educational': '#805ad5'
+    'educational': '#805ad5',
+    'traditional': '#d97706'
   };
   
   const color = colors[category] || '#4a5568';
@@ -57,7 +57,6 @@ const createCustomIcon = (category, isSelected = false) => {
   });
 };
 
-// Компонент за промяна на view при избиране на клуб
 const MapController = ({ selectedClub, clubs }) => {
   const map = useMap();
   
@@ -69,7 +68,7 @@ const MapController = ({ selectedClub, clubs }) => {
         { animate: true, duration: 1 }
       );
     } else if (clubs.length > 0) {
-      // Fit всички клубове в view
+ 
       const group = new L.featureGroup();
       clubs.forEach(club => {
         if (club.location.coordinates.lat && club.location.coordinates.lng) {
@@ -93,7 +92,8 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
       'cultural': 'Културен',
       'general': 'Общ',
       'sports': 'Спортен', 
-      'educational': 'Образователен'
+      'educational': 'Образователен',
+      'traditional': 'Традиционен'
     };
     return labels[category] || category;
   };
@@ -161,7 +161,7 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
           {club.shortDescription.slice(0, 100)}...
         </p>
         
-        <div className="club-popup-stats">
+        {/* <div className="club-popup-stats">
           <div className="club-popup-stat">
             <FontAwesomeIcon icon={faUsers} />
             <span>{club.membership.totalMembers} членове</span>
@@ -170,7 +170,7 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
             <FontAwesomeIcon icon={faMapPin} />
             <span>{club.activities.regular.length} дейности</span>
           </div>
-        </div>
+        </div> */}
         
         <div className="club-popup-contacts">
           {club.contacts.phone && (
@@ -186,12 +186,12 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
         </div>
         
         <div className="club-popup-actions">
-          <button 
+          {/* <button 
             onClick={() => onSelect(club)}
             className="club-popup-btn secondary"
           >
             Избери клуб
-          </button>
+          </button> */}
           <button 
             onClick={() => onViewDetails(club)}
             className="club-popup-btn primary"
@@ -207,7 +207,8 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
 
 export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
   const [mapReady, setMapReady] = useState(false);
-  const popupRefs = useRef({});
+  const markerRefs = useRef({});
+  const previousSelectedClubId = useRef(null);
 
   // България центрирана позиция
   const bulgariaCenterPosition = [42.7339, 25.4858];
@@ -220,16 +221,32 @@ export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
     window.open(`/clubs/${club.slug}`, '_blank');
   };
 
-  // Затваряме всички попъпи когато се избере нов клуб
+
   useEffect(() => {
-    if (selectedClub) {
-      Object.values(popupRefs.current).forEach(popup => {
-        if (popup && popup._source !== selectedClub) {
-          popup.close();
-        }
-      });
+    const currentSelectedId = selectedClub?.id;
+    const prevSelectedId = previousSelectedClubId.current;
+    
+    // Затваряме предишния popup ако има такъв
+    if (prevSelectedId && prevSelectedId !== currentSelectedId) {
+      const prevMarker = markerRefs.current[prevSelectedId];
+      if (prevMarker && typeof prevMarker.closePopup === 'function') {
+        prevMarker.closePopup();
+      }
     }
-  }, [selectedClub]);
+    
+    if (currentSelectedId && currentSelectedId !== prevSelectedId) {
+      const currentMarker = markerRefs.current[currentSelectedId];
+      if (currentMarker && typeof currentMarker.openPopup === 'function') {
+        // Малка пауза за да се update-не view-то преди да отворим popup
+        setTimeout(() => {
+          currentMarker.openPopup();
+        }, 500);
+      }
+    }
+    
+    // Запомняме текущия ID за следващия път
+    previousSelectedClubId.current = currentSelectedId;
+  }, [selectedClub?.id]); // Само ID-то за да избегнем безкрайни re-render-и
 
   return (
     <div className="clubs-map-container">
@@ -254,6 +271,10 @@ export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
           <div className="legend-item">
             <div className="legend-marker educational"></div>
             <span>Образователни</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-marker traditional"></div>
+            <span>Традиционни</span>
           </div>
         </div>
       </div>
@@ -307,7 +328,7 @@ export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
                   }}
                   ref={(ref) => {
                     if (ref) {
-                      popupRefs.current[club.id] = ref;
+                      markerRefs.current[club.id] = ref;
                     }
                   }}
                 >

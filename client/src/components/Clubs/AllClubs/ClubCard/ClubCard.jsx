@@ -18,10 +18,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import './clubCard.css';
 
-export const ClubCard = ({ club, index, isSelected, onSelect }) => {
+export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isOpeningMap, setIsOpeningMap] = useState(false);
   
   const isEven = index % 2 === 0;
   
@@ -32,6 +33,21 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
   const handleSelectClick = (e) => {
     e.stopPropagation();
     onSelect();
+  };
+
+  // Нова функция за показване на картата
+  const handleShowOnMap = (e) => {
+    e.stopPropagation();
+    setIsOpeningMap(true);
+    
+    if (onSelectOnMap) {
+      onSelectOnMap();
+      
+      // Премахваме loading state след 1 секунда
+      setTimeout(() => {
+        setIsOpeningMap(false);
+      }, 1000);
+    }
   };
 
   const formatDate = (dateString) => {
@@ -46,7 +62,8 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
       'cultural': '#3182ce',
       'general': '#4a5568', 
       'sports': '#38a169',
-      'educational': '#805ad5'
+      'educational': '#805ad5',
+      'traditional': '#d97706'
     };
     return colors[category] || '#4a5568';
   };
@@ -56,7 +73,8 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
       'cultural': 'Културен',
       'general': 'Общ',
       'sports': 'Спортен', 
-      'educational': 'Образователен'
+      'educational': 'Образователен',
+      'traditional': 'Традиционен'
     };
     return labels[category] || category;
   };
@@ -68,6 +86,15 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
       'suspended': '#e53e3e'
     };
     return colors[status] || '#718096';
+  };
+
+  const getStatusLabel = (status) => {
+    const labels = {
+      'active': 'Активен',
+      'inactive': 'Неактивен',
+      'suspended': 'Спрян'
+    };
+    return labels[status] || status;
   };
 
   const renderStars = (rating) => {
@@ -96,6 +123,9 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
     
     return stars;
   };
+
+  // Намираме председателя
+  const chairman = club.management.board.find(member => member.role === 'председател');
 
   return (
     <div 
@@ -127,7 +157,7 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
             {/* Overlay информация */}
             <div className="club-card-image-overlay">
               <div className="club-card-status-badge" style={{ backgroundColor: getStatusColor(club.status) }}>
-                Активен
+                {getStatusLabel(club.status)}
               </div>
               <div className="club-card-category-badge" style={{ backgroundColor: getCategoryColor(club.category) }}>
                 {getCategoryLabel(club.category)}
@@ -137,13 +167,18 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
             {/* Hover actions */}
             <div className="club-card-image-actions">
               <button 
-                className="club-card-select-btn"
-                onClick={handleSelectClick}
+                className={`club-card-select-btn ${isOpeningMap ? 'map-opening' : ''}`}
+                onClick={handleShowOnMap}
                 title="Покажи на картата"
+                disabled={isOpeningMap}
               >
                 <FontAwesomeIcon icon={faMapMarkerAlt} />
               </button>
-              <button className="club-card-favorite-btn" title="Добави в любими">
+              <button 
+                className="club-card-favorite-btn" 
+                title="Добави в любими"
+                onClick={handleSelectClick}
+              >
                 <FontAwesomeIcon icon={faHeart} />
               </button>
             </div>
@@ -211,21 +246,21 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
                     </div>
                   ))}
                   {club.activities.regular.length > 2 && (
-                    <span className="club-card-activities-more">
-                      +{club.activities.regular.length - 2} още
-                    </span>
+                    <div className="club-card-activities-more">
+                      +{club.activities.regular.length - 2} още дейности
+                    </div>
                   )}
                 </div>
               </div>
             )}
 
             {/* Председател */}
-            {club.management.board.length > 0 && (
+            {chairman && (
               <div className="club-card-chairman">
                 <FontAwesomeIcon icon={faUserTie} className="club-card-chairman-icon" />
                 <div className="club-card-chairman-info">
                   <span className="club-card-chairman-name">
-                    {club.management.board.find(member => member.role === 'председател')?.name}
+                    {chairman.name}
                   </span>
                   <span className="club-card-chairman-role">Председател</span>
                 </div>
@@ -237,17 +272,34 @@ export const ClubCard = ({ club, index, isSelected, onSelect }) => {
           <div className="club-card-footer">
             <div className="club-card-contacts">
               {club.contacts.phone && (
-                <a href={`tel:${club.contacts.phone}`} className="club-card-contact-item">
+                <a 
+                  href={`tel:${club.contacts.phone}`} 
+                  className="club-card-contact-item"
+                  onClick={(e) => e.stopPropagation()}
+                  title={`Обади се: ${club.contacts.phone}`}
+                >
                   <FontAwesomeIcon icon={faPhone} />
                 </a>
               )}
               {club.contacts.email && (
-                <a href={`mailto:${club.contacts.email}`} className="club-card-contact-item">
+                <a 
+                  href={`mailto:${club.contacts.email}`} 
+                  className="club-card-contact-item"
+                  onClick={(e) => e.stopPropagation()}
+                  title={`Изпрати имейл: ${club.contacts.email}`}
+                >
                   <FontAwesomeIcon icon={faEnvelope} />
                 </a>
               )}
               {club.contacts.website && (
-                <a href={club.contacts.website} target="_blank" rel="noopener noreferrer" className="club-card-contact-item">
+                <a 
+                  href={club.contacts.website} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="club-card-contact-item"
+                  onClick={(e) => e.stopPropagation()}
+                  title={`Посети сайт: ${club.contacts.website}`}
+                >
                   <FontAwesomeIcon icon={faGlobe} />
                 </a>
               )}

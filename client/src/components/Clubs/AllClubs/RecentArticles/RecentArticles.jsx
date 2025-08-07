@@ -33,7 +33,7 @@ export const RecentArticles = () => {
     };
 
     fetchArticles();
-  }, [getAllArticles, articles, articlesLoaded]);
+  }, [articles, articlesLoaded]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

@@ -24,9 +24,9 @@
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   width: 100%;
-  height: 530px; /* УВЕЛИЧЕНА височина */
+  height: 530px;
   display: grid;
-  max-width: 1000px; /* НАМАЛЕНА максимална ширина */
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -44,21 +44,21 @@
     0 12px 20px -5px rgba(0, 0, 0, 0.1);
 }
 
-/* ПРАВИЛНО АЛТЕРНИРАНЕ - по-тесни изображения */
+/* Desktop Layout */
 .club-card-left .club-card-container {
-  grid-template-columns: 350px 1fr; /* НАМАЛЕНО от 400px */
+  grid-template-columns: 350px 1fr;
 }
 
 .club-card-right .club-card-container {
-  grid-template-columns: 1fr 350px; /* НАМАЛЕНО от 400px */
+  grid-template-columns: 1fr 350px;
 }
 
 /* Изображение секция */
 .club-card-image-section {
   position: relative;
   overflow: hidden;
-  width: 350px; /* НАМАЛЕНО */
-  height: 530px; /* УВЕЛИЧЕНО */
+  width: 350px;
+  height: 530px;
   display: flex;
   flex-direction: column;
 }
@@ -75,7 +75,7 @@
   position: relative;
   width: 100%;
   height: 430px;
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 .club-card-image {
@@ -178,14 +178,14 @@
   transform: scale(1.1);
 }
 
-/* Съдържание секция - УВЕЛИЧЕНО */
+/* Съдържание секция */
 .club-card-content {
-  padding: 2rem; /* УВЕЛИЧЕНО padding */
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem; /* УВЕЛИЧЕНО gap */
+  gap: 0.9rem;
   position: relative;
-  height: 530px; /* УВЕЛИЧЕНО */
+  height: 530px;
   overflow: hidden;
 }
 
@@ -206,7 +206,7 @@
 }
 
 .club-card-title {
-  font-size: 1.375rem; /* УВЕЛИЧЕН размер */
+  font-size: 1.375rem;
   font-weight: 700;
   color: #1a202c;
   line-height: 1.3;
@@ -232,7 +232,7 @@
 }
 
 .club-card-star {
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
 }
 
 .club-card-rating .club-card-star.filled {
@@ -253,7 +253,7 @@
 .club-card-rating-value {
   font-weight: 600;
   color: #4a5568;
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
 }
 
 .club-card-location {
@@ -261,12 +261,14 @@
   align-items: center;
   gap: 0.5rem;
   color: #718096;
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
   flex-shrink: 0;
 }
+
 .club-card-location span {
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
 }
+
 .club-card-location svg.club-card-location-icon {
   color: #e53e3e;
   height: 0.875rem;
@@ -276,7 +278,7 @@
   color: #4a5568;
   line-height: 1.5;
   margin: 0;
-  font-size: 1rem; /* УВЕЛИЧЕНО */
+  font-size: 1rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -290,10 +292,9 @@
   gap: 0.75rem;
   padding: 1rem;
   background: #f8fafc;
-  /* border-left: 4px solid #3182ce; */
   flex-shrink: 0;
-  height: 100px; /* ФИКСИРАНА височина */
-  margin: 0; /* Премахваме margin */
+  height: 100px;
+  margin: 0;
 }
 
 .club-card-stat {
@@ -306,11 +307,11 @@
 
 .club-card-stat svg.club-card-stat-icon {
   color: #3182ce;
-  font-size: 1.125rem; /* УВЕЛИЧЕНО */
+  font-size: 1.125rem;
 }
 
 .club-card-stat-value {
-  font-size: 1.125rem; /* УВЕЛИЧЕНО */
+  font-size: 1.125rem;
   font-weight: 700;
   color: #1a202c;
 }
@@ -323,7 +324,7 @@
   font-weight: 500;
 }
 
-/* Средна секция - FLEX GROW */
+/* Средна секция */
 .club-card-middle {
   flex: 1;
   display: flex;
@@ -335,7 +336,7 @@
 /* Компактни дейности */
 .club-card-activities {
   background: linear-gradient(135deg, #f7fafc, #edf2f7);
-  padding: 1rem; /* УВЕЛИЧЕНО */
+  padding: 1rem;
   border-radius: 10px;
   flex: 1;
   min-height: 0;
@@ -345,7 +346,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
   font-weight: 600;
   color: #4a5568;
   margin: 0 0 0.75rem 0;
@@ -361,8 +362,8 @@
 .club-card-activities-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; /* УВЕЛИЧЕНО */
-  max-height: 120px; /* УВЕЛИЧЕНО */
+  gap: 0.5rem;
+  max-height: 120px;
   overflow: hidden;
 }
 
@@ -370,7 +371,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem; /* УВЕЛИЧЕНО */
+  padding: 0.5rem 0.75rem;
   background: white;
   border-radius: 8px;
   border-left: 3px solid red;
@@ -379,7 +380,7 @@
 .club-card-activity-name {
   font-weight: 500;
   color: #2d3748;
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -387,7 +388,7 @@
 }
 
 .club-card-activity-time {
-  font-size: 0.75rem; /* УВЕЛИЧЕНО */
+  font-size: 0.75rem;
   color: #718096;
   margin-left: 0.5rem;
   white-space: nowrap;
@@ -405,8 +406,8 @@
 .club-card-chairman {
   display: flex;
   align-items: center;
-  gap: 0.75rem; /* УВЕЛИЧЕНО */
-  padding: 0.75rem 1rem; /* УВЕЛИЧЕНО */
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
   background: linear-gradient(135deg, rgba(49, 130, 206, 0.05), rgba(66, 153, 225, 0.05));
   border-radius: 10px;
   border: 1px solid rgba(49, 130, 206, 0.1);
@@ -414,7 +415,7 @@
 
 .club-card-chairman svg.club-card-chairman-icon {
   color: #3182ce;
-  font-size: 1.125rem; /* УВЕЛИЧЕНО */
+  font-size: 1.125rem;
   flex-shrink: 0;
 }
 
@@ -429,7 +430,7 @@
 .club-card-chairman-name {
   font-weight: 600;
   color: #2d3748;
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -449,8 +450,8 @@
   align-items: center;
   gap: 1rem;
   flex-shrink: 0;
-  padding-top: 1rem; /* ДОБАВЕНО */
-  border-top: 1px solid #e2e8f0; /* ДОБАВЕНО */
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
 }
 
 .club-card-contacts {
@@ -459,8 +460,8 @@
 }
 
 .club-card-contacts .club-card-contact-item {
-  width: 36px; /* УВЕЛИЧЕНО */
-  height: 36px; /* УВЕЛИЧЕНО */
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -470,7 +471,7 @@
   justify-content: center;
   text-decoration: none;
   transition: all 0.3s ease;
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
 }
 
 .club-card-contact-item:hover {
@@ -496,14 +497,14 @@
 .club-card-view-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* УВЕЛИЧЕНО */
+  gap: 0.5rem;
   background: linear-gradient(135deg, #3182ce, #4299e1);
   color: white;
   border: none;
-  padding: 0.75rem 1.25rem; /* УВЕЛИЧЕНО */
+  padding: 0.75rem 1.25rem;
   border-radius: 22px;
   font-weight: 600;
-  font-size: 0.875rem; /* УВЕЛИЧЕНО */
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
@@ -538,134 +539,351 @@
   }
 }
 
-/* Responsive */
-@media (max-width: 1400px) {
-  .club-card-left .club-card-container,
-  .club-card-right .club-card-container {
-    grid-template-columns: 320px 1fr;
-  }
-  
-  .club-card-image-section {
-    width: 320px;
-  }
-}
+/* RESPONSIVE DESIGN - Mobile First Approach */
 
-@media (max-width: 1200px) {
-  .club-card-left .club-card-container,
-  .club-card-right .club-card-container {
-    grid-template-columns: 300px 1fr;
+/* Телефони до 380px */
+@media (max-width: 380px) {
+  .club-card {
+    margin-bottom: 1rem;
   }
-  
-  .club-card-image-section {
-    width: 300px;
-  }
-  
-  .club-card-content {
-    padding: 1.5rem;
-  }
-}
 
-@media (max-width: 1024px) {
-  .club-card-left .club-card-container,
-  .club-card-right .club-card-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: 250px 1fr;
-    height: auto;
-  }
-  
-  .club-card-image-section {
-    width: 100%;
-    height: 250px;
-  }
-  
-  .club-card-left .club-card-image-section,
-  .club-card-right .club-card-image-section {
-    order: 1;
-  }
-  
-  .club-card-left .club-card-content,
-  .club-card-right .club-card-content {
-    order: 2;
-  }
-  
-  .club-card-content {
-    height: auto;
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
   .club-card-container {
     border-radius: 12px;
     max-width: none;
+    height: auto;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto;
   }
-  
+
+  .club-card-image-section {
+    width: 100% !important;
+    height: 320px !important;
+    order: 1 !important;
+  }
+
+  .club-card-image-wrapper {
+    height: 150px !important;
+  }
+
   .club-card-content {
-    padding: 1.25rem;
-    gap: 1rem;
+    height: auto !important;
+    padding: 1rem !important;
+    gap: 0.75rem !important;
+    order: 2 !important;
   }
-  
-  .club-card-header {
+
+  .club-card-title {
+    font-size: 1.125rem !important;
+    -webkit-line-clamp: 3;
+  }
+
+  .club-card-description {
+    font-size: 0.875rem !important;
+    -webkit-line-clamp: 3;
+  }
+
+  .club-card-stats {
+    height: auto !important;
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0.5rem;
+  }
+
+  .club-card-stat {
+    gap: 0.125rem;
+  }
+
+  .club-card-stat svg.club-card-stat-icon {
+    font-size: 1rem !important;
+  }
+
+  .club-card-stat-value {
+    font-size: 1rem !important;
+  }
+
+  .club-card-stat-label {
+    font-size: 0.625rem !important;
+  }
+
+  .club-card-activities {
+    padding: 0.75rem !important;
+  }
+
+  .club-card-activities-list {
+    max-height: 130px !important;
+  }
+
+  .club-card-activity {
+    padding: 0.375rem 0.5rem !important;
     flex-direction: column;
-    gap: 0.75rem;
     align-items: flex-start;
+    gap: 0.25rem;
   }
-  
-  .club-card-rating {
-    align-items: flex-start;
+
+  .club-card-activity-name {
+    font-size: 0.75rem !important;
+    white-space: normal;
   }
-  
+
+  .club-card-activity-time {
+    font-size: 0.625rem !important;
+    margin-left: 0;
+  }
+
+  .club-card-chairman {
+    padding: 0.5rem 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .club-card-chairman-name {
+    font-size: 0.75rem !important;
+  }
+
+  .club-card-chairman-role {
+    font-size: 0.625rem !important;
+  }
+
   .club-card-footer {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    align-items: stretch !important;
   }
-  
+
+  .club-card-contacts .club-card-contact-item {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .club-card-view-btn {
+    padding: 0.625rem 1rem !important;
+    font-size: 0.75rem !important;
+    align-self: center;
+    min-width: 120px;
+  }
+
+  .club-card-founded {
+    font-size: 0.625rem !important;
+    text-align: center;
+  }
+
+  .club-card-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .club-card-image-overlay {
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .club-card-status-badge,
+  .club-card-category-badge {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.625rem !important;
+  }
+
+  .club-card-image-actions {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .club-card-select-btn,
+  .club-card-favorite-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.875rem !important;
+  }
+}
+
+/* Малки телефони 381px - 480px */
+@media (min-width: 381px) and (max-width: 480px) {
+  .club-card {
+    margin-bottom: 1.25rem;
+  }
+
+  .club-card-container {
+    border-radius: 14px;
+    max-width: none;
+    height: auto;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto;
+  }
+
+  .club-card-image-section {
+    width: 100% !important;
+    height: 280px !important;
+    order: 1 !important;
+  }
+
+  .club-card-image-wrapper {
+    height: 170px !important;
+  }
+
+  .club-card-content {
+    height: auto !important;
+    padding: 1.25rem !important;
+    order: 2 !important;
+  }
+
+  .club-card-title {
+    font-size: 1.25rem !important;
+  }
+
+  .club-card-stats {
+    height: auto !important;
+    padding: 0.875rem !important;
+  }
+
+  .club-card-activities {
+    padding: 0.875rem !important;
+  }
+
+  .club-card-footer {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: stretch !important;
+  }
+
   .club-card-view-btn {
     align-self: center;
   }
 }
 
-@media (max-width: 480px) {
-  .club-card {
-    margin-bottom: 1rem;
+/* Таблети портрет 481px - 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+  .club-card-container {
+    height: auto;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 320px auto;
   }
-  
+
+   .club-card-image-section {
+    width: 100% !important;
+    height: 320px !important;
+    order: 1 !important;
+  }
+
+  .club-card-image-wrapper {
+    height: 230px !important;
+  }
+
   .club-card-content {
-    padding: 1rem;
+    height: auto !important;
+    padding: 1.5rem !important;
+    order: 2 !important;
   }
-  
-  .club-card-title {
-    font-size: 1.25rem;
+
+  .club-card-header {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: flex-start;
   }
-}
-@media (max-width: 1400px) {
-  .club-card-image-section {
-    width: 320px;
+
+  .club-card-footer {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
   }
 }
 
-@media (max-width: 1200px) {
+/* Таблети ландшафт 769px - 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .club-card-container {
+    height: auto;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 300px auto;
+  }
+
+  .club-card-image-section {
+    width: 100% !important;
+    height: 330px !important;
+    order: 1 !important;
+  }
+
+  .club-card-image-wrapper {
+    height: 250px !important;
+  }
+
+  .club-card-content {
+    margin-top: 1rem;
+    height: auto !important;
+    padding: 1.75rem !important;
+    order: 2 !important;
+  }
+}
+
+/* Малки лаптопи 1025px - 1200px */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .club-card-left .club-card-container,
+  .club-card-right .club-card-container {
+    grid-template-columns: 300px 1fr;
+  }
+
   .club-card-image-section {
     width: 300px;
   }
+
+  .club-card-content {
+    padding: 1.5rem;
+  }
 }
 
-@media (max-width: 1024px) {
+/* Средни лаптопи 1201px - 1400px */
+@media (min-width: 1201px) and (max-width: 1540px) {
+  /* .club-card-left .club-card-container,
+  .club-card-right .club-card-container {
+    grid-template-columns: 320px 1fr;
+  } */
+  .club-card-meta {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
   .club-card-image-section {
-    width: 100%;
-    height: 350px; /* Намалено за мобилни */
+    width: 320px;
   }
-  
-  .club-card-image-wrapper {
-    height: 250px;
+  .club-card-contacts{
+    flex-direction: column;
   }
-  
+  .club-card-content{
+    height: 615px;
+  }
   .club-card-container {
-    height: auto;
+    height: 615px;
   }
-  
-  .club-card-content {
-    height: auto;
+}
+
+
+/* @media (min-width: 1641px) {
+  .club-card-left .club-card-container,
+  .club-card-right .club-card-container {
+    grid-template-columns: 350px 1fr;
+  }
+
+  .club-card-image-section {
+    width: 350px;
+  }
+} */
+
+/* Hover ефекти само за устройства с курсор */
+@media (hover: hover) and (pointer: fine) {
+  .club-card:hover .club-card-image-actions {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* За touch устройства - винаги показваме action бутоните */
+@media (hover: none) {
+  .club-card-image-actions {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
   }
 }

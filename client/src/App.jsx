@@ -2,6 +2,7 @@ import './App.css';
 import { Footer } from './components/Footer/Footer.jsx';
 import { Header } from './components/Header/Header.jsx';
 import { Home } from './components/Home/Home.jsx';
+import {  HelmetProvider } from 'react-helmet-async';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { NotFound } from './components/ErrorPages/NotFound/NotFound.jsx';
 import { ServerError } from './components/ErrorPages/ServerError/ServerError.jsx';
@@ -104,6 +105,7 @@ function App() {
 
   return (
     <>
+    <HelmetProvider>
       <ErrorBoundary>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <UserProvider>
@@ -219,6 +221,7 @@ function App() {
           </UserProvider>
         </GoogleOAuthProvider>
       </ErrorBoundary>
+      </HelmetProvider>
     </>
   );
 }

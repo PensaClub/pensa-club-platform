@@ -669,5 +669,948 @@ export const mockClubsData = [
       views: 234,
       followers: 8
     }
+  },
+  {
+  // 🏛️ КЛУБ 4: Варна - морски клуб
+  id: "club-4",
+  slug: "klub-morska-sirena-varna",
+  name: "Клуб 'Морска сирена'",
+  shortDescription: "Уютен приморски клуб във Варна с фокус върху морските традиции и здравето",
+  fullDescription: "Клуб 'Морска сирена' обединява 52 пенсионери от Варна около любовта към морето и здравословния начин на живот. Основан през 2016 г., клубът предлага уникални морски разходки, талазотерапия и богата програма за активно стареене на брега на Черно море.",
+  foundedYear: 2016,
+  status: "active",
+  logo: "https://picsum.photos/200/200?random=4",
+  mainImage: "https://picsum.photos/800/400?random=14",
+  gallery: [
+    "https://picsum.photos/600/400?random=31",
+    "https://picsum.photos/600/400?random=32",
+    "https://picsum.photos/600/400?random=33",
+    "https://picsum.photos/600/400?random=34"
+  ],
+  category: "sports",
+
+  location: {
+    address: "бул. Приморски №85",
+    city: "Варна",
+    municipality: "Варна",
+    region: "Варна",
+    postalCode: "9000",
+    coordinates: { lat: 43.2141, lng: 27.9147 },
+    venue: {
+      type: "municipal",
+      size: "120 кв.м",
+      capacity: 60,
+      facilities: ["голяма зала", "тераса с морска гледка", "фитнес кът", "библиотека"],
+      accessibility: true
+    }
+  },
+
+  membership: {
+    totalMembers: 52,
+    ageGroups: {
+      "60-70": 28,
+      "70-80": 19,
+      "80+": 5
+    },
+    membershipFee: {
+      monthly: 12,
+      yearly: 120,
+      currency: "BGN"
+    },
+    requirements: [
+      "навършени 60 години",
+      "живеещ във Варна или околностите"
+    ],
+    benefits: [
+      "безплатни морски разходки",
+      "групови упражнения на плажа",
+      "здравни консултации",
+      "културни събития",
+      "екскурзии по крайбрежието"
+    ]
+  },
+
+  management: {
+    board: [
+      {
+        name: "Капитан Георги Маринов",
+        role: "председател",
+        phone: "0888123457",
+        email: "g.marinov@morskasirena.bg",
+        address: "ул. Царь Калоян №34, Варна",
+        avatar: "https://picsum.photos/100/100?random=401",
+        bio: "Пенсиониран морски капитан с 40-годишен стаж, ентусиаст на морските традиции"
+      },
+      {
+        name: "Елена Петрова",
+        role: "секретар",
+        phone: "0877654123",
+        email: "elena.p@morskasirena.bg",
+        address: "ул. Сливница №22, Варна",
+        avatar: "https://picsum.photos/100/100?random=402",
+        bio: "Бивша медицинска сестра, специализирана в рехабилитация"
+      },
+      {
+        name: "Михаил Димов",
+        role: "касиер",
+        phone: "0899321456",
+        email: "mihail@morskasirena.bg",
+        address: "бул. Владислав Варненчик №67, Варна",
+        avatar: "https://picsum.photos/100/100?random=403",
+        bio: "Пенсиониран икономист, управлява финансите на клуба"
+      },
+      {
+        name: "Цветана Йорданова",
+        role: "спортен координатор",
+        phone: "0888567234",
+        email: "cvetana@morskasirena.bg",
+        address: "ул. Девня №18, Варна",
+        avatar: "https://picsum.photos/100/100?random=404",
+        bio: "Бивша учителка по физкултура, организира спортните дейности"
+      }
+    ]
+  },
+
+  activities: {
+    regular: [
+      {
+        name: "Сутрешна гимнастика на плажа",
+        day: "всеки ден",
+        time: "07:00-08:00",
+        instructor: "Цветана Йорданова",
+        participants: 25,
+        description: "Ежедневни упражнения на свеж въздух с морска гледка"
+      },
+      {
+        name: "Морски разходки",
+        day: "вторник",
+        time: "16:00-18:00",
+        instructor: "Георги Маринов",
+        participants: 20,
+        description: "Разходки по крайбрежната алея с разказки за морето"
+      },
+      {
+        name: "Водна аеробика",
+        day: "четвъртък",
+        time: "10:00-11:00",
+        instructor: "Елена Петрова",
+        participants: 18,
+        description: "Водни упражнения в басейн за гъвкавост и сила"
+      },
+      {
+        name: "Морски хор",
+        day: "сряда",
+        time: "17:00-19:00",
+        instructor: "Мария Николова",
+        participants: 22,
+        description: "Морски шантии и народни песни за морето"
+      }
+    ],
+    events: [
+      {
+        id: "event-5",
+        title: "Ден на морето 2024",
+        date: "2024-07-15",
+        time: "10:00",
+        type: "cultural",
+        participants: 150,
+        description: "Голямо празнуване с концерт и морски специалитети"
+      }
+    ],
+    trips: [
+      {
+        destination: "Несебър и Созопол",
+        date: "2024-09-20",
+        participants: 35,
+        price: 35,
+        description: "Еднодневна екскурзия до черноморските перли"
+      }
+    ],
+    courses: [
+      {
+        name: "Основи на талазотерапията",
+        duration: "4 седмици",
+        participants: 12,
+        instructor: "Д-р Светлана Димитрова",
+        description: "Как морето лекува - практически съвети"
+      }
+    ]
+  },
+
+  contacts: {
+    phone: "052/601-234",
+    mobile: "0888123457",
+    email: "info@morskasirena-varna.bg",
+    website: "www.morskasirena.bg",
+    socialMedia: {
+      facebook: "facebook.com/morskasirena.varna"
+    },
+    workingHours: {
+      monday: "07:00-19:00",
+      tuesday: "07:00-19:00", 
+      wednesday: "07:00-19:00",
+      thursday: "07:00-19:00",
+      friday: "07:00-19:00",
+      saturday: "08:00-16:00",
+      sunday: "08:00-14:00"
+    }
+  },
+
+  finances: {
+    budget: {
+      yearly: 8500,
+      currency: "BGN"
+    },
+    funding: [
+      {
+        source: "Община Варна",
+        amount: 4000,
+        type: "subsidy"
+      },
+      {
+        source: "Членски внос",
+        amount: 3500,
+        type: "membership"
+      },
+      {
+        source: "Спонсори",
+        amount: 1000,
+        type: "sponsorship"
+      }
+    ],
+    sponsors: [
+      {
+        name: "Хотел 'Морски бриз'",
+        contribution: "безплатни зали за събития",
+        type: "facilities"
+      }
+    ]
+  },
+
+  metadata: {
+    createdAt: "2024-01-25T08:00:00Z",
+    updatedAt: "2024-12-12T15:45:00Z",
+    createdBy: "admin-varna-1",
+    isVerified: true,
+    isPublic: true,
+    tags: ["море", "спорт", "здраве", "морски традиции", "водна аеробика"],
+    rating: 4.7,
+    views: 1340,
+    followers: 31
   }
+},
+
+{
+  // 🏛️ КЛУБ 5: Бургас - културен клуб
+  id: "club-5", 
+  slug: "klub-burgas-melodi-burgas",
+  name: "Културен клуб 'Бургаски мелодии'",
+  shortDescription: "Културен център за пенсионери в Бургас с богата музикална и театрална програма",
+  fullDescription: "Клуб 'Бургаски мелодии' е културното сърце на пенсионерската общност в Бургас. Основан през 2012 г., клубът обединява 78 души около любовта към музиката, театъра и изкуството. Нашият клуб е известен с великолепните концерти и театрални представления.",
+  foundedYear: 2012,
+  status: "active",
+  logo: "https://picsum.photos/200/200?random=5",
+  mainImage: "https://picsum.photos/800/400?random=15", 
+  gallery: [
+    "https://picsum.photos/600/400?random=35",
+    "https://picsum.photos/600/400?random=36",
+    "https://picsum.photos/600/400?random=37",
+    "https://picsum.photos/600/400?random=38",
+    "https://picsum.photos/600/400?random=39"
+  ],
+  category: "cultural",
+
+  location: {
+    address: "ул. Александровска №156",
+    city: "Бургас",
+    municipality: "Бургас", 
+    region: "Бургас",
+    postalCode: "8000",
+    coordinates: { lat: 42.5048, lng: 27.4626 },
+    venue: {
+      type: "cultural_center",
+      size: "200 кв.м",
+      capacity: 90,
+      facilities: ["концертна зала", "сцена", "пиано", "костюмерна", "звукова техника"],
+      accessibility: true
+    }
+  },
+
+  membership: {
+    totalMembers: 78,
+    ageGroups: {
+      "60-70": 35,
+      "70-80": 32,
+      "80+": 11
+    },
+    membershipFee: {
+      monthly: 18,
+      yearly: 180,
+      currency: "BGN"
+    },
+    requirements: [
+      "навършени 60 години",
+      "интерес към култура и изкуство",
+      "живеещ в Бургас"
+    ],
+    benefits: [
+      "участие в хор и театрална група",
+      "безплатни концерти и представления",
+      "майсторски класове",
+      "културни екскурзии",
+      "костюми за представления"
+    ]
+  },
+
+  management: {
+    board: [
+      {
+        name: "Маестро Атанас Петков",
+        role: "председател",
+        phone: "0888234567",
+        email: "maestro@burgasmelodi.bg",
+        address: "ул. Богориди №45, Бургас",
+        avatar: "https://picsum.photos/100/100?random=501",
+        bio: "Пенсиониран диригент с 45-годишна кариера, основател на клуба"
+      },
+      {
+        name: "Виолета Стефанова", 
+        role: "арт директор",
+        phone: "0877345678",
+        email: "violeta@burgasmelodi.bg",
+        address: "ул. Лермонтов №28, Бургас",
+        avatar: "https://picsum.photos/100/100?random=502",
+        bio: "Бивша оперна певица, ръководи вокалните дейности"
+      },
+      {
+        name: "Христо Димитров",
+        role: "режисьор",
+        phone: "0899456789",
+        email: "hristo@burgasmelodi.bg",
+        address: "бул. Демокрация №134, Бургас",
+        avatar: "https://picsum.photos/100/100?random=503",
+        bio: "Пенсиониран театрален режисьор, ръководи драматичната секция"
+      },
+      {
+        name: "Рени Георгиева",
+        role: "секретар",
+        phone: "0888567890",
+        email: "reni@burgasmelodi.bg", 
+        address: "ул. Цар Петър №67, Бургас",
+        avatar: "https://picsum.photos/100/100?random=504",
+        bio: "Бивша журналистка, отговаря за връзките с медиите"
+      },
+      {
+        name: "Любен Христов",
+        role: "касиер", 
+        phone: "0877678901",
+        email: "luben@burgasmelodi.bg",
+        address: "ул. Граф Игнатиев №89, Бургас",
+        avatar: "https://picsum.photos/100/100?random=505",
+        bio: "Пенсиониран счетоводител, управлява клубния бюджет"
+      }
+    ]
+  },
+
+  activities: {
+    regular: [
+      {
+        name: "Смесен хор 'Черноморски вълни'",
+        day: "понеделник",
+        time: "17:00-19:00",
+        instructor: "Маестро Атанас Петков",
+        participants: 45,
+        description: "Класическа и народна музика с концерти всеки месец"
+      },
+      {
+        name: "Театрална студия 'Златна възраст'",
+        day: "сряда", 
+        time: "16:00-18:00",
+        instructor: "Христо Димитров",
+        participants: 22,
+        description: "Драматично изкуство и театрални представления"
+      },
+      {
+        name: "Танцов ансамбъл 'Бургаска прелест'",
+        day: "четвъртък",
+        time: "16:30-18:00", 
+        instructor: "Мила Николова",
+        participants: 28,
+        description: "Народни и обществени танци"
+      },
+      {
+        name: "Литературен салон",
+        day: "петък",
+        time: "15:00-17:00",
+        instructor: "Рени Георгиева", 
+        participants: 18,
+        description: "Четене на поезия и проза, дискусии за литература"
+      }
+    ],
+    events: [
+      {
+        id: "event-6",
+        title: "Годишен гала концерт",
+        date: "2024-12-15",
+        time: "19:00",
+        type: "cultural",
+        participants: 200,
+        description: "Голям концерт с участието на всички секции на клуба"
+      },
+      {
+        id: "event-7",
+        title: "Театрална премиера",
+        date: "2024-11-30", 
+        time: "18:30",
+        type: "cultural",
+        participants: 120,
+        description: "Премиера на постановката 'Под игото' по Иван Вазов"
+      }
+    ],
+    trips: [
+      {
+        destination: "София - Народен театър",
+        date: "2024-10-25",
+        participants: 40,
+        price: 85,
+        description: "Културна екскурзия с посещение на театрално представление"
+      }
+    ],
+    courses: [
+      {
+        name: "Основи на сценичното майсторство",
+        duration: "6 седмици",
+        participants: 15,
+        instructor: "Христо Димитров",
+        description: "Как да се държим на сцена и пред публика"
+      }
+    ]
+  },
+
+  contacts: {
+    phone: "056/845-678",
+    mobile: "0888234567",
+    email: "info@burgasmelodi.bg",
+    website: "www.burgasmelodi-club.bg",
+    socialMedia: {
+      facebook: "facebook.com/burgasmelodi",
+      youtube: "youtube.com/burgasmelodi"
+    },
+    workingHours: {
+      monday: "15:00-20:00",
+      tuesday: "15:00-20:00",
+      wednesday: "15:00-20:00", 
+      thursday: "15:00-20:00",
+      friday: "15:00-20:00",
+      saturday: "10:00-18:00",
+      sunday: "closed"
+    }
+  },
+
+  finances: {
+    budget: {
+      yearly: 15000,
+      currency: "BGN"
+    },
+    funding: [
+      {
+        source: "Община Бургас",
+        amount: 7000,
+        type: "subsidy"
+      },
+      {
+        source: "Членски внос",
+        amount: 6000,
+        type: "membership"
+      },
+      {
+        source: "Билети от концерти",
+        amount: 2000,
+        type: "tickets"
+      }
+    ],
+    sponsors: [
+      {
+        name: "Културен дом 'Петя Дубарова'",
+        contribution: "техническа поддръжка",
+        type: "services"
+      },
+      {
+        name: "Музикален магазин 'Арт'",
+        contribution: "отстъпки за инструменти",
+        type: "discounts"
+      }
+    ]
+  },
+
+  metadata: {
+    createdAt: "2024-01-18T12:00:00Z", 
+    updatedAt: "2024-12-08T17:20:00Z",
+    createdBy: "admin-burgas-1",
+    isVerified: true,
+    isPublic: true,
+    tags: ["хор", "театър", "танци", "концерти", "култура", "изкуство"],
+    rating: 4.9,
+    views: 1890,
+    followers: 67
+  }
+},
+
+{
+  // 🏛️ КЛУБ 6: Стара Загора - спортен клуб
+  id: "club-6",
+  slug: "klub-zdravi-i-silni-stara-zagora", 
+  name: "Спортен клуб 'Здрави и силни'",
+  shortDescription: "Активен спортен клуб в Стара Загора за пенсионери, които обичат движението",
+  fullDescription: "Клуб 'Здрави и силни' е първият специализиран спортен клуб за пенсионери в Стара Загора. Основан през 2017 г., клубът промотира активния начин на живот чрез разнообразни спортни дейности. Нашите 41 членове доказват, че възрастта е само число!",
+  foundedYear: 2017,
+  status: "active",
+  logo: "https://picsum.photos/200/200?random=6",
+  mainImage: "https://picsum.photos/800/400?random=16",
+  gallery: [
+    "https://picsum.photos/600/400?random=40",
+    "https://picsum.photos/600/400?random=41", 
+    "https://picsum.photos/600/400?random=42",
+    "https://picsum.photos/600/400?random=43"
+  ],
+  category: "sports",
+
+  location: {
+    address: "ул. Цар Симеон Велики №78",
+    city: "Стара Загора",
+    municipality: "Стара Загора",
+    region: "Стара Загора", 
+    postalCode: "6000",
+    coordinates: { lat: 42.4258, lng: 25.6342 },
+    venue: {
+      type: "sports_center",
+      size: "300 кв.м",
+      capacity: 50,
+      facilities: ["фитнес зала", "йога студио", "съблекални", "душове", "медицински кабинет"],
+      accessibility: true
+    }
+  },
+
+  membership: {
+    totalMembers: 41,
+    ageGroups: {
+      "60-70": 24,
+      "70-80": 14,
+      "80+": 3
+    },
+    membershipFee: {
+      monthly: 20,
+      yearly: 200,
+      currency: "BGN"
+    },
+    requirements: [
+      "навършени 60 години",
+      "медицинска справка за спортуване",
+      "желание за активен живот"
+    ],
+    benefits: [
+      "достъп до всички спортни дейности",
+      "персонални тренировки",
+      "здравни измервания",
+      "спортно облекло",
+      "участие в турнири"
+    ]
+  },
+
+  management: {
+    board: [
+      {
+        name: "Стефан Колев",
+        role: "председател",
+        phone: "0888345789",
+        email: "stefan@zdraviisilni.bg",
+        address: "ул. Пеню Пенев №23, Стара Загора",
+        avatar: "https://picsum.photos/100/100?random=601",
+        bio: "Бивш треньор по лека атлетика, пропагандист на здравословния живот"
+      },
+      {
+        name: "Д-р Милка Стоянова",
+        role: "медицински консултант",
+        phone: "0877456890",
+        email: "milka@zdraviisilni.bg",
+        address: "бул. Цар Освободител №45, Стара Загора", 
+        avatar: "https://picsum.photos/100/100?random=602",
+        bio: "Лекар по спортна медицина, следи здравното състояние на членовете"
+      },
+      {
+        name: "Васил Христов",
+        role: "треньор",
+        phone: "0899567901", 
+        email: "vasil@zdraviisilni.bg",
+        address: "ул. Средец №67, Стара Загора",
+        avatar: "https://picsum.photos/100/100?random=603",
+        bio: "Сертифициран треньор по йога и пилатес за възрастни"
+      },
+      {
+        name: "Гинка Петрова",
+        role: "секретар",
+        phone: "0888678012",
+        email: "ginka@zdraviisilni.bg",
+        address: "ул. Патриарх Евтимий №34, Стара Загора",
+        avatar: "https://picsum.photos/100/100?random=604", 
+        bio: "Бивша спортистка, организира състезанията и турнирите"
+      }
+    ]
+  },
+
+  activities: {
+    regular: [
+      {
+        name: "Сутрешна гимнастика",
+        day: "всеки ден",
+        time: "08:00-09:00",
+        instructor: "Стефан Колев",
+        participants: 32,
+        description: "Общоукрепващи упражнения за добро начало на деня"
+      },
+      {
+        name: "Йога за начинаещи", 
+        day: "понеделник",
+        time: "17:00-18:00",
+        instructor: "Васил Христов",
+        participants: 18,
+        description: "Нежни йога упражнения за гъвкавост и баланс"
+      },
+      {
+        name: "Аквааеробика", 
+        day: "сряда",
+        time: "16:00-17:00",
+        instructor: "Стефан Колев",
+        participants: 22,
+        description: "Водни упражнения в басейна на спортния комплекс"
+      },
+      {
+        name: "Пинг-понг турнири",
+        day: "петък",
+        time: "15:00-17:00", 
+        instructor: "Гинка Петрова",
+        participants: 16,
+        description: "Седмични турнири по тенис на маса"
+      },
+      {
+        name: "Разходки в природата",
+        day: "събота",
+        time: "09:00-12:00",
+        instructor: "Цялата група",
+        participants: 25,
+        description: "Групови разходки до Старозагорските бани и околностите"
+      }
+    ],
+    events: [
+      {
+        id: "event-8",
+        title: "Спартакиада на пенсионерите",
+        date: "2024-09-21", 
+        time: "10:00",
+        type: "sports",
+        participants: 80,
+        description: "Голямо спортно състезание с участие на клубове от региона"
+      }
+    ],
+    trips: [
+      {
+        destination: "Хисаря - СПА уикенд",
+        date: "2024-11-15",
+        participants: 30,
+        price: 120,
+        description: "Двудневна екскурзия с минерални бани и релакс"
+      }
+    ],
+    courses: [
+      {
+        name: "Здравословно хранене за активни хора",
+        duration: "4 седмици", 
+        participants: 20,
+        instructor: "Д-р Милка Стоянова",
+        description: "Как да се храним правилно при активен начин на живот"
+      }
+    ]
+  },
+
+  contacts: {
+    phone: "042/601-789",
+    mobile: "0888345789",
+    email: "info@zdraviisilni.bg",
+    website: "www.zdraviisilni-sz.bg",
+    socialMedia: {
+      facebook: "facebook.com/zdraviisilni.sz",
+      instagram: "instagram.com/zdraviisilni_sz"
+    },
+    workingHours: {
+      monday: "07:00-20:00",
+      tuesday: "07:00-20:00",
+      wednesday: "07:00-20:00",
+      thursday: "07:00-20:00", 
+      friday: "07:00-20:00",
+      saturday: "08:00-18:00",
+      sunday: "09:00-15:00"
+    }
+  },
+
+  finances: {
+    budget: {
+      yearly: 10000,
+      currency: "BGN"
+    },
+    funding: [
+      {
+        source: "Община Стара Загора",
+        amount: 4000,
+        type: "subsidy"
+      },
+      {
+        source: "Членски внос",
+        amount: 5000,
+        type: "membership"
+      },
+      {
+        source: "Спортни мероприятия",
+        amount: 1000,
+        type: "events"
+      }
+    ],
+    sponsors: [
+      {
+        name: "Спортен комплекс 'Олимпия'",
+        contribution: "отстъпки за басейн и съоръжения",
+        type: "facilities"
+      },
+      {
+        name: "Аптека 'Фамакс'",
+        contribution: "безплатни здравни измервания",
+        type: "services"
+      }
+    ]
+  },
+
+  metadata: {
+    createdAt: "2024-02-12T09:30:00Z",
+    updatedAt: "2024-12-05T11:15:00Z", 
+    createdBy: "admin-sz-1",
+    isVerified: true,
+    isPublic: true,
+    tags: ["спорт", "фитнес", "йога", "здраве", "активност", "турнири"],
+    rating: 4.8,
+    views: 1120,
+    followers: 38
+  }
+},
+
+{
+  // 🏛️ КЛУБ 7: Малко село - традиционен клуб
+  id: "club-7",
+  slug: "klub-roden-krai-gabrovnitsa",
+  name: "Клуб 'Роден край'",
+  shortDescription: "Автентичен селски клуб в Габровница, пазител на местните традиции и обичаи",
+  fullDescription: "Клуб 'Роден край' е душата на село Габровница. Основан през 2019 г., нашият малък но сплотен клуб от 14 члена пази и предава традициите на Габровнишкия край. Тук всеки е познат, всеки е важен и всеки има своята история за разказване.",
+  foundedYear: 2019,
+  status: "active",
+  logo: "https://picsum.photos/200/200?random=7",
+  mainImage: "https://picsum.photos/800/400?random=17",
+  gallery: [
+    "https://picsum.photos/600/400?random=44",
+    "https://picsum.photos/600/400?random=45"
+  ],
+  category: "traditional",
+
+  location: {
+    address: "ул. Централна №3",
+    city: "Габровница",
+    municipality: "Габрово", 
+    region: "Габрово",
+    postalCode: "5349",
+    coordinates: { lat: 42.8719, lng: 25.2981 },
+    venue: {
+      type: "community_center",
+      size: "35 кв.м",
+      capacity: 20,
+      facilities: ["основна стая", "мини кухня", "камина", "двор"],
+      accessibility: false
+    }
+  },
+
+  membership: {
+    totalMembers: 14,
+    ageGroups: {
+      "60-70": 4,
+      "70-80": 7,
+      "80+": 3
+    },
+    membershipFee: {
+      monthly: 3,
+      yearly: 30,
+      currency: "BGN"
+    },
+    requirements: [
+      "навършени 60 години", 
+      "роден или живеещ в Габровница",
+      "обич към родните традиции"
+    ],
+    benefits: [
+      "топла домашна атмосфера",
+      "запазване на традициите",
+      "взаимопомощ в ежедневието",
+      "общи празници и събирания"
+    ]
+  },
+
+  management: {
+    board: [
+      {
+        name: "Баба Стойка Димитрова",
+        role: "председател", 
+        phone: "0888456123",
+        email: "stoyka@rodenkrai.bg",
+        address: "ул. Розова №7, Габровница",
+        avatar: "https://picsum.photos/100/100?random=701",
+        bio: "На 78 години, родена и израсла в селото, пазител на местните легенди и обичаи"
+      },
+      {
+        name: "Дядо Иван Петков",
+        role: "секретар",
+        phone: "0877567234",
+        email: "ivan@rodenkrai.bg", 
+        address: "ул. Главна №12, Габровница",
+        avatar: "https://picsum.photos/100/100?random=702",
+        bio: "Бивш овчар, знае всички стари песни и приказки на Габровнишкия край"
+      },
+      {
+        name: "Цвета Георгиева",
+        role: "касиер",
+        phone: "0899678345",
+        email: "cveta@rodenkrai.bg",
+        address: "ул. Дунав №5, Габровница", 
+        avatar: "https://picsum.photos/100/100?random=703",
+        bio: "Майстор на традиционната кухня, водач на готварските събирания"
+      }
+    ]
+  },
+
+  activities: {
+    regular: [
+      {
+        name: "Кафе и приказки",
+        day: "всеки ден",
+        time: "14:00-17:00", 
+        instructor: null,
+        participants: 12,
+        description: "Свободни разговори при чаша домашно кафе"
+      },
+      {
+        name: "Готвене на традиционни ястия",
+        day: "понеделник",
+        time: "10:00-14:00",
+        instructor: "Цвета Георгиева",
+        participants: 8,
+        description: "Заедно готвим традиционни ястия по стари рецепти"
+      },
+      {
+        name: "Стари песни и приказки",
+        day: "четвъртък",
+        time: "16:00-18:00",
+        instructor: "Дядо Иван Петков", 
+        participants: 10,
+        description: "Разказване на стари истории и пеене на народни песни"
+      },
+      {
+        name: "Рукоделие и занаяти",
+        day: "вторник",
+        time: "15:00-17:00",
+        instructor: "Баба Стойка",
+        participants: 6,
+        description: "Плетене, бродерия и други традиционни занаяти"
+      }
+    ],
+    events: [
+      {
+        id: "event-9",
+        title: "Сборът на селото",
+        date: "2024-08-10",
+        time: "15:00", 
+        type: "traditional",
+        participants: 60,
+        description: "Голям събор с участие на всички жители и гости на селото"
+      },
+      {
+        id: "event-10",
+        title: "Коледувание",
+        date: "2024-12-24",
+        time: "18:00",
+        type: "traditional",
+        participants: 25,
+        description: "Традиционно коледувание по къщите в селото"
+      }
+    ],
+    trips: [
+      {
+        destination: "Етъра - Музей на занаятите",
+        date: "2024-10-05",
+        participants: 10,
+        price: 20,
+        description: "Посещение на музея с традиционните български занаяти"
+      }
+    ],
+    courses: []
+  },
+
+  contacts: {
+    phone: "066/801-234",
+    mobile: "0888456123",
+    email: "rodenkrai.gabrovnica@gmail.com",
+    website: null,
+    socialMedia: {},
+    workingHours: {
+      monday: "10:00-17:00",
+      tuesday: "14:00-17:00", 
+      wednesday: "14:00-17:00",
+      thursday: "14:00-18:00",
+      friday: "14:00-17:00",
+      saturday: "closed",
+      sunday: "closed"
+    }
+  },
+
+  finances: {
+    budget: {
+      yearly: 600,
+      currency: "BGN"
+    },
+    funding: [
+      {
+        source: "Община Габрово",
+        amount: 300,
+        type: "subsidy"
+      },
+      {
+        source: "Членски внос",
+        amount: 300,
+        type: "membership" 
+      }
+    ],
+    sponsors: [
+      {
+        name: "Местна кооперация",
+        contribution: "храни за събития",
+        type: "products"
+      }
+    ]
+  },
+
+  metadata: {
+    createdAt: "2024-04-05T13:00:00Z",
+    updatedAt: "2024-11-20T14:30:00Z",
+    createdBy: "admin-gabrovo-1",
+    isVerified: true,
+    isPublic: true,
+    tags: ["село", "традиции", "обичаи", "автентичност", "общност", "рукоделие"],
+    rating: 5.0,
+    views: 156,
+    followers: 5
+  }
+}
 ];
