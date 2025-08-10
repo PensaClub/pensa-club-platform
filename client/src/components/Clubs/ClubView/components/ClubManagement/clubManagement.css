@@ -1,0 +1,494 @@
+.club-management {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+}
+
+.management-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.management-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.management-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 1rem;
+}
+
+.management-subtitle {
+  font-size: 1.125rem;
+  color: #718096;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Member Cards */
+.management-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.member-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.member-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.member-card.chairman::before {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.member-card.vice-chairman::before {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.member-card.secretary::before {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.member-card.treasurer::before {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.member-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.member-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.member-avatar img,
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 2rem;
+}
+
+.role-badge {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 32px;
+  height: 32px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 2px solid white;
+}
+
+.member-card.chairman .role-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.member-card.vice-chairman .role-badge {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.member-card.secretary .role-badge {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+}
+
+.member-card.treasurer .role-badge {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 0.5rem 0;
+}
+
+.member-role {
+  color: #22c55e;
+  font-weight: 500;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.member-card.chairman .member-role {
+  color: #f59e0b;
+}
+
+.member-card.vice-chairman .member-role {
+  color: #3b82f6;
+}
+
+.member-card.secretary .member-role {
+  color: #8b5cf6;
+}
+
+.member-card.treasurer .member-role {
+  color: #ef4444;
+}
+
+.member-bio {
+  margin-bottom: 1.5rem;
+}
+
+.member-bio p {
+  color: #4a5568;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Contact Section */
+.member-contact {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1.5rem;
+}
+
+.contact-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  color: #4a5568;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.contact-toggle-btn:hover {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: slideDown 0.3s ease;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.contact-item svg {
+  color: #22c55e;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.contact-item a {
+  color: #3182ce;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-item a:hover {
+  text-decoration: underline;
+}
+
+.contact-item span {
+  color: #4a5568;
+  font-size: 0.875rem;
+}
+
+/* Show More Button */
+.show-more-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.show-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.show-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+}
+
+/* Management Structure */
+.management-structure {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  margin-bottom: 3rem;
+}
+
+.management-structure h3 {
+  color: #1a202c;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.structure-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.structure-level {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.structure-role {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 25px;
+  color: #4a5568;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.chairman-level .structure-role {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.vice-chairman-level .structure-role {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #3b82f6;
+  color: #1e40af;
+}
+
+.admin-level .structure-role {
+  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  border-color: #8b5cf6;
+  color: #5b21b6;
+}
+
+.members-level .structure-role {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border-color: #22c55e;
+  color: #166534;
+}
+
+/* Management Contact */
+.management-contact-section {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
+
+.management-contact-section h3 {
+  color: #1a202c;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.contact-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.contact-method {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.contact-method:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.contact-method svg {
+  color: #22c55e;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.contact-method strong {
+  color: #1a202c;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.contact-method p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.contact-method a {
+  color: #3182ce;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-method a:hover {
+  text-decoration: underline;
+}
+
+.contact-method span {
+  color: #4a5568;
+}
+
+/* No Management */
+.no-management {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.no-management-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: #cbd5e0;
+}
+
+.no-management p {
+  font-size: 1.25rem;
+  color: #6b7280;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .management-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  .contact-methods {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .club-management {
+    padding: 2rem 0;
+  }
+  
+  .management-header h2 {
+    font-size: 2rem;
+  }
+  
+  .management-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .member-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .structure-level {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .member-card {
+    padding: 1.5rem;
+  }
+  
+  .member-avatar img,
+  .avatar-placeholder {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .role-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+  
+  .contact-method {
+    flex-direction: column;
+    text-align: center;
+  }
+}

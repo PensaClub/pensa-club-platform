@@ -1,0 +1,467 @@
+    .club-about {
+  padding: 4rem 0;
+  background: #fefefe;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.about-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 1rem;
+}
+
+.about-subtitle {
+  font-size: 1.125rem;
+  color: #718096;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Секции */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.about-section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.section-header:hover {
+  background: #f8fafc;
+}
+
+.section-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0;
+}
+
+.section-header h3 svg {
+  color: #3182ce;
+  font-size: 1.125rem;
+}
+
+.toggle-icon {
+  color: #9ca3af;
+  transition: transform 0.3s ease;
+}
+
+.section-content {
+  padding: 1.5rem;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Описание */
+.description-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.description-text p {
+  color: #4a5568;
+  line-height: 1.7;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+
+.club-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.fact-item svg {
+  color: #3182ce;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.fact-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fact-item strong {
+  color: #2d3748;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.fact-item span {
+  color: #4a5568;
+  font-size: 1rem;
+}
+
+/* Възрастова статистика */
+.age-statistics {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #bfdbfe;
+}
+
+.age-statistics h4 {
+  color: #1e40af;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.age-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.age-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.age-bar {
+  background: #e0f2fe;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.age-fill {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.age-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.age-range {
+  font-weight: 500;
+  color: #1e40af;
+  font-size: 0.875rem;
+}
+
+.age-count {
+  color: #475569;
+  font-size: 0.875rem;
+}
+
+/* Постижения */
+.achievements-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.achievement-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-card.award {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-color: #f59e0b;
+}
+
+.achievement-card.recognition {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #3b82f6;
+}
+
+.achievement-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.achievement-card.award .achievement-icon {
+  color: #d97706;
+}
+
+.achievement-card.recognition .achievement-icon {
+  color: #2563eb;
+}
+
+.achievement-content h4 {
+  color: #1a202c;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.achievement-content p {
+  color: #4a5568;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.achievement-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+/* Социално въздействие */
+.impact-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.impact-category h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #1a202c;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+}
+
+.impact-category h4 svg {
+  color: #22c55e;
+}
+
+.impact-item {
+  padding: 1.25rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+.impact-item h5 {
+  color: #1a202c;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.impact-item p {
+  color: #4a5568;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.project-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.project-stats span {
+  background: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.status.активен {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+/* Услуги */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.service-category h4 {
+  color: #1a202c;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.service-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.service-item {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.service-item.active {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.service-item.inactive {
+  background: #f1f5f9;
+  color: #9ca3af;
+  border: 1px solid #e2e8f0;
+}
+
+/* Регионална информация */
+.regional-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.regional-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.regional-item strong {
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.club-type {
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.club-type.central {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.club-type.local {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .description-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .club-about {
+    padding: 2rem 0;
+  }
+  
+  .about-header h2 {
+    font-size: 2rem;
+  }
+  
+  .section-header {
+    padding: 1rem;
+  }
+  
+  .section-content {
+    padding: 1rem;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .achievement-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .regional-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .project-stats {
+    flex-direction: column;
+  }
+  
+  .achievement-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

@@ -1,0 +1,730 @@
+.cultural-management-main-section {
+  padding: 6rem 0;
+  background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 50%, #f8fafc 100%);
+  position: relative;
+}
+
+.cultural-management-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Header */
+.cultural-management-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.cultural-management-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.cultural-management-badge svg {
+  font-size: 1.2rem;
+}
+
+.cultural-management-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.cultural-management-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Board Section */
+.cultural-management-board-section {
+  margin-bottom: 4rem;
+}
+
+.cultural-management-section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.cultural-management-section-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.cultural-management-section-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.cultural-management-board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.cultural-management-member-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.cultural-management-member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.cultural-management-member-avatar {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.cultural-management-member-avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f1f5f9;
+}
+
+.cultural-management-member-role-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  border: 3px solid white;
+}
+
+.cultural-management-member-info h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.cultural-management-member-role {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.cultural-management-member-bio {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.cultural-management-member-specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+
+.cultural-management-specialty-tag {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.cultural-management-member-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.cultural-management-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.cultural-management-contact-item svg {
+  color: #3b82f6;
+  font-size: 0.875rem;
+  width: 16px;
+}
+
+.cultural-management-member-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+}
+
+.cultural-management-member-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+/* Contact Section */
+.cultural-management-contact-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+/* Office Info */
+.cultural-management-office-info {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.cultural-management-office-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.cultural-management-office-header svg {
+  font-size: 1.8rem;
+  color: #3b82f6;
+}
+
+.cultural-management-office-header h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.cultural-management-office-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.cultural-management-office-address h4,
+.cultural-management-office-contacts h4,
+.cultural-management-office-hours h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.cultural-management-address-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  color: #475569;
+}
+
+.cultural-management-address-info svg {
+  color: #3b82f6;
+  font-size: 1.2rem;
+  margin-top: 0.25rem;
+}
+
+.cultural-management-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cultural-management-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #475569;
+}
+
+.cultural-management-contact-row svg {
+  color: #3b82f6;
+  font-size: 1rem;
+  width: 20px;
+}
+
+.cultural-management-hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cultural-management-hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cultural-management-day {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.cultural-management-time {
+  color: #64748b;
+}
+
+/* Contact Form */
+.cultural-management-contact-form {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.cultural-management-form-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.cultural-management-form-header svg {
+  font-size: 2rem;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.cultural-management-form-header h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.cultural-management-form-header p {
+  color: #64748b;
+  margin: 0;
+}
+
+.cultural-management-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cultural-management-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cultural-management-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cultural-management-form-group label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.cultural-management-form-group input,
+.cultural-management-form-group select,
+.cultural-management-form-group textarea {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.cultural-management-form-group input:focus,
+.cultural-management-form-group select:focus,
+.cultural-management-form-group textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.cultural-management-form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.cultural-management-submit-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.cultural-management-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+/* Quick Contact */
+.cultural-management-quick-contact {
+  margin-bottom: 3rem;
+}
+
+.cultural-management-quick-contact h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+  margin: 0 0 2rem 0;
+}
+
+.cultural-management-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.cultural-management-quick-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.cultural-management-quick-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.cultural-management-quick-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.cultural-management-quick-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.25rem 0;
+}
+
+.cultural-management-quick-info p {
+  color: #64748b;
+  margin: 0 0 0.75rem 0;
+  font-weight: 500;
+}
+
+.cultural-management-quick-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cultural-management-quick-contact-info span {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+/* Modal */
+.cultural-management-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.cultural-management-modal {
+  background: white;
+  border-radius: 25px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  position: relative;
+}
+
+.cultural-management-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.cultural-management-modal-content {
+  padding: 2rem;
+}
+
+.cultural-management-modal-header {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.cultural-management-modal-header img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.cultural-management-modal-info h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.cultural-management-modal-role {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.cultural-management-modal-info p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cultural-management-modal-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.cultural-management-modal-contact h4,
+.cultural-management-modal-specialties h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.cultural-management-modal-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cultural-management-modal-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #475569;
+}
+
+.cultural-management-modal-contact-item svg {
+  color: #3b82f6;
+  width: 20px;
+}
+
+.cultural-management-modal-specialty-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cultural-management-modal-specialty-tag {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.cultural-management-modal-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cultural-management-modal-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  flex: 1;
+  justify-content: center;
+}
+
+.cultural-management-modal-btn.primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.cultural-management-modal-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.cultural-management-modal-btn.secondary {
+  background: white;
+  color: #3b82f6;
+  border: 2px solid #e2e8f0;
+}
+
+.cultural-management-modal-btn.secondary:hover {
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .cultural-management-contact-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cultural-management-main-section {
+    padding: 4rem 0;
+  }
+  
+  .cultural-management-container {
+    padding: 0 1rem;
+  }
+  
+  .cultural-management-board-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cultural-management-quick-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cultural-management-form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .cultural-management-office-info,
+  .cultural-management-contact-form {
+    padding: 2rem;
+  }
+  
+  .cultural-management-modal-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .cultural-management-modal-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .cultural-management-member-card {
+    padding: 1.5rem;
+  }
+  
+  .cultural-management-quick-card {
+    padding: 1.5rem;
+  }
+  
+  .cultural-management-modal-overlay {
+    padding: 1rem;
+  }
+  
+  .cultural-management-modal-content {
+    padding: 1.5rem;
+  }
+}

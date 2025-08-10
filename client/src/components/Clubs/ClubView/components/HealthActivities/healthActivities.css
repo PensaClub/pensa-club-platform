@@ -1,0 +1,1338 @@
+.health-activities-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 30%, #bae6fd 70%, #7dd3fc 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.health-activities-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.health-activities-section::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  right: -8%;
+  width: 500px;
+  height: 500px;
+  background: conic-gradient(from 225deg, rgba(59, 130, 246, 0.1), rgba(34, 197, 94, 0.08), rgba(239, 68, 68, 0.06), rgba(59, 130, 246, 0.1));
+  border-radius: 50%;
+  animation: healthRotate 50s linear infinite;
+  z-index: 1;
+}
+
+@keyframes healthRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.health-activities-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.health-activities-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 
+    0 20px 60px rgba(59, 130, 246, 0.15),
+    0 0 0 1px rgba(59, 130, 246, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.health-activities-header::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(34, 197, 94, 0.06));
+  border-radius: 50%;
+  animation: healthHeaderPulse 8s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes healthHeaderPulse {
+  0%, 100% {
+    transform: scale(1) translateY(0px);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1) translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.health-activities-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 2;
+}
+
+.health-activities-badge svg {
+  font-size: 1.2rem;
+  animation: healthHeartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes healthHeartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.15);
+  }
+}
+
+.health-activities-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  line-height: 1.1;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 2;
+}
+
+.health-activities-subtitle {
+  font-size: 1.2rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Overview Cards */
+.health-activities-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.health-activities-overview-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  animation: healthOverviewIn 0.6s ease var(--feature-delay) both;
+}
+
+@keyframes healthOverviewIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.health-activities-overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--feature-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.health-activities-overview-card:hover::before {
+  transform: scaleX(1);
+}
+
+.health-activities-overview-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border-color: var(--feature-color);
+}
+
+.health-activities-overview-icon {
+  width: 70px;
+  height: 70px;
+  background: var(--feature-color);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.health-activities-overview-icon::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  animation: healthIconShine 4s ease-in-out infinite;
+}
+
+@keyframes healthIconShine {
+  0%, 100% {
+    transform: rotate(45deg) translate(-100%, -100%);
+  }
+  50% {
+    transform: rotate(45deg) translate(100%, 100%);
+  }
+}
+
+.health-activities-overview-content {
+  flex: 1;
+}
+
+.health-activities-overview-content h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.health-activities-overview-content p {
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.health-activities-overview-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #22c55e;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.health-activities-overview-status svg {
+  font-size: 1.5rem;
+}
+
+/* Navigation Tabs */
+.health-activities-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 50px rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  flex-wrap: wrap;
+}
+
+.health-activities-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 15px;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.health-activities-nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.health-activities-nav-btn:hover::before {
+  left: 100%;
+}
+
+.health-activities-nav-btn:hover {
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+}
+
+.health-activities-nav-btn.active {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border-color: #3b82f6;
+  color: white;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+}
+
+.health-activities-nav-btn svg {
+  font-size: 1.2rem;
+}
+
+/* Content Container */
+.health-activities-content {
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  min-height: 500px;
+}
+
+/* Services */
+.health-activities-services-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.health-activities-services-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.health-activities-services-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.health-activities-services-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.health-activities-service-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.health-activities-service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--service-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.health-activities-service-card:hover::before {
+  transform: scaleX(1);
+}
+
+.health-activities-service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  border-color: var(--service-color);
+}
+
+.health-activities-service-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+}
+
+.health-activities-service-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--service-color);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.health-activities-service-info {
+  flex: 1;
+}
+
+.health-activities-service-info h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.health-activities-service-info p {
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.health-activities-service-toggle {
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #64748b;
+}
+
+.health-activities-service-toggle:hover {
+  background: var(--service-color);
+  color: white;
+  transform: scale(1.1);
+}
+
+.health-activities-service-details {
+  padding: 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f9fafb;
+  animation: healthServiceExpand 0.3s ease;
+}
+
+@keyframes healthServiceExpand {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+.health-activities-service-benefits h5 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.health-activities-service-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.health-activities-service-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.health-activities-service-benefits li::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--service-color);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Education */
+.health-activities-education-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.health-activities-education-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.health-activities-education-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.health-activities-lectures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.health-activities-lecture-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.health-activities-lecture-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  border-color: #8b5cf6;
+}
+
+.health-activities-lecture-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+}
+
+.health-activities-lecture-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3rem;
+}
+
+.health-activities-lecture-type {
+  background: #8b5cf6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.health-activities-lecture-content {
+  padding: 1.5rem;
+}
+
+.health-activities-lecture-content h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.health-activities-lecture-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.health-activities-lecture-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.health-activities-lecture-detail svg {
+  color: #8b5cf6;
+  font-size: 0.8rem;
+  width: 16px;
+}
+
+.health-activities-lecture-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.health-activities-lecture-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.health-activities-lecture-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+}
+
+/* Partners */
+.health-activities-partners-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.health-activities-partners-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.health-activities-partners-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.health-activities-partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.health-activities-partner-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.health-activities-partner-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  border-color: #22c55e;
+}
+
+.health-activities-partner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+}
+
+.health-activities-partner-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3rem;
+}
+
+.health-activities-partner-discount {
+  background: #ef4444;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.health-activities-partner-content {
+  padding: 1.5rem;
+}
+
+.health-activities-partner-content h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.75rem 0;
+}
+
+.health-activities-partner-content p {
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.health-activities-partner-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.health-activities-partner-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.health-activities-partner-detail svg {
+  color: #22c55e;
+  font-size: 0.8rem;
+  width: 16px;
+}
+
+.health-activities-partner-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.health-activities-partner-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.health-activities-partner-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+  color: white;
+}
+
+/* Nutrition */
+.health-activities-nutrition-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.health-activities-nutrition-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.health-activities-nutrition-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.health-activities-nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.health-activities-nutrition-card {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 2px solid #fbbf24;
+  border-radius: 18px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.health-activities-nutrition-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(251, 191, 36, 0.3);
+  border-color: #f59e0b;
+}
+
+.health-activities-nutrition-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.health-activities-nutrition-content h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.health-activities-nutrition-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.health-activities-nutrition-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.health-activities-nutrition-detail svg {
+  font-size: 0.8rem;
+  width: 14px;
+}
+
+/* Safety */
+.health-activities-safety-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.health-activities-safety-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.health-activities-safety-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.health-activities-prevention {
+  margin-bottom: 3rem;
+}
+
+.health-activities-prevention h4 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1.5rem 0;
+}
+
+.health-activities-prevention h4 svg {
+  color: #22c55e;
+  font-size: 1.3rem;
+}
+
+.health-activities-prevention-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.health-activities-prevention-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.health-activities-prevention-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+}
+
+.health-activities-prevention-item svg {
+  color: #22c55e;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.health-activities-prevention-item span {
+  color: #047857;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.health-activities-emergency h4 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1.5rem 0;
+}
+
+.health-activities-emergency h4 svg {
+  color: #ef4444;
+  font-size: 1.3rem;
+}
+
+.health-activities-emergency-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.health-activities-emergency-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border: 1px solid #fecaca;
+  border-radius: 15px;
+}
+
+.health-activities-emergency-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.health-activities-emergency-item strong {
+  display: block;
+  color: #7f1d1d;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.health-activities-emergency-item span {
+  color: #991b1b;
+  font-weight: 500;
+}
+
+.health-activities-emergency-contacts {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.health-activities-emergency-contact {
+  background: #dc2626;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.health-activities-emergency-contact:hover {
+  background: #b91c1c;
+  transform: scale(1.05);
+  color: white;
+}
+
+.health-activities-emergency-item ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+}
+
+.health-activities-emergency-item li {
+  color: #991b1b;
+  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.health-activities-emergency-item li::before {
+  content: '•';
+  color: #dc2626;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Modal Styles */
+.health-activities-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 2rem;
+  animation: healthModalIn 0.3s ease;
+}
+
+@keyframes healthModalIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(15px);
+  }
+}
+
+.health-activities-modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: healthModalSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes healthModalSlide {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.health-activities-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 3001;
+}
+
+.health-activities-modal-close:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.1) rotate(90deg);
+}
+
+.health-activities-modal-header {
+  text-align: center;
+  padding: 3rem 3rem 2rem 3rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.health-activities-modal-header svg {
+  font-size: 3rem;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.health-activities-modal-header h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.health-activities-modal-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.health-activities-modal-body {
+  padding: 2rem 3rem 3rem 3rem;
+}
+
+.health-activities-lecture-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.health-activities-schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border-left: 4px solid #3b82f6;
+}
+
+.health-activities-schedule-item svg {
+  color: #3b82f6;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.health-activities-schedule-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.health-activities-schedule-item strong {
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.health-activities-schedule-item span {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.health-activities-modal-footer {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.health-activities-modal-footer p {
+  color: #6b7280;
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+}
+
+.health-activities-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.health-activities-contact-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .health-activities-overview {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .health-activities-overview-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .health-activities-section {
+    padding: 4rem 0;
+  }
+  
+  .health-activities-container {
+    padding: 0 1rem;
+  }
+  
+  .health-activities-header {
+    padding: 2rem;
+  }
+  
+  .health-activities-content {
+    padding: 2rem;
+  }
+  
+  .health-activities-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .health-activities-nav-btn {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+  
+  .health-activities-overview {
+    grid-template-columns: 1fr;
+  }
+  
+  .health-activities-overview-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .health-activities-service-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .health-activities-lectures-grid,
+  .health-activities-partners-grid,
+  .health-activities-nutrition-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .health-activities-prevention-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .health-activities-emergency-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .health-activities-emergency-contacts {
+    justify-content: center;
+  }
+  
+  .health-activities-modal {
+    padding: 1rem;
+  }
+  
+  .health-activities-modal-content {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+  
+  .health-activities-modal-header,
+  .health-activities-modal-body {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .health-activities-title {
+    font-size: 2rem;
+  }
+  
+  .health-activities-subtitle {
+    font-size: 1rem;
+  }
+  
+  .health-activities-overview-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+  
+  .health-activities-service-icon,
+  .health-activities-partner-icon,
+  .health-activities-nutrition-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+  
+  .health-activities-emergency-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+}

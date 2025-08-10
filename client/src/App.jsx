@@ -59,6 +59,8 @@ import EliteMembershipPage from './components/EliteMembershipPage/EliteMembershi
 import { useTranslation } from 'react-i18next';
 import GamesPage from './components/GamesPage/GamesPage.jsx';
 import { AllClubs } from './components/Clubs/AllClubs/AllClubs.jsx';
+import { ClubProvider } from './components/contexts/ClubContext.jsx';
+import ClubView from './components/Clubs/ClubView/ClubView.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -119,6 +121,7 @@ function App() {
                           <AnalyticsProvider>
                             <LoadingProvider>
                               <ArticleLimitProvider>
+                                <ClubProvider>
                                 {!isProfilePage && <Header
                                   additionalClasses={isProfilePage ? 'hide-header' : ''}
                                 />}
@@ -190,6 +193,7 @@ function App() {
                                   
                                   <Route path="/craigslist" element={<CommunityPage />} />
                                   <Route path="/clubs" element={<AllClubs />} />
+                                  <Route path="/clubs/:slug" element={<ClubView />} />
                                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                                   <Route path="/ads" element={<AdsCard />} />
                                   <Route path="/filter" element={<FiltersMap />} />
@@ -208,6 +212,7 @@ function App() {
                                   />
                                 )}
                                 {!isProfilePage && <MenuCommunity />}
+                                </ClubProvider>
                               </ArticleLimitProvider>
                             </LoadingProvider>
                           </AnalyticsProvider>

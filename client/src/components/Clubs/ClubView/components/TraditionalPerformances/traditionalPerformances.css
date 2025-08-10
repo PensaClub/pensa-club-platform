@@ -1,0 +1,1462 @@
+.traditional-performances-main-section {
+  padding: 6rem 0;
+  background: linear-gradient(180deg, #faf5ff 0%, #ffffff 50%, #fef3c7 100%);
+  position: relative;
+}
+
+.traditional-performances-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Header */
+.traditional-performances-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.traditional-performances-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+}
+
+.traditional-performances-badge svg {
+  font-size: 1.2rem;
+}
+
+.traditional-performances-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.traditional-performances-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Performance Stats */
+.traditional-performances-stats {
+  margin-bottom: 4rem;
+}
+
+.traditional-performances-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.traditional-performances-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.traditional-performances-stat-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.traditional-performances-stat-content {
+  flex: 1;
+}
+
+.traditional-performances-stat-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #1e293b;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.traditional-performances-stat-label {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Main Grid */
+.traditional-performances-main-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* Section */
+.traditional-performances-section {
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.traditional-performances-section::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.1), transparent);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.traditional-performances-section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-performances-section-header svg {
+  font-size: 3rem;
+  color: #7c3aed;
+  margin-bottom: 1rem;
+}
+
+.traditional-performances-section-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-performances-section-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+/* Event Cards */
+.traditional-performances-events,
+.traditional-performances-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-performances-event-card,
+.traditional-performances-group-card {
+  display: flex;
+  gap: 2rem;
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 2rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.traditional-performances-event-card:hover,
+.traditional-performances-group-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.traditional-performances-event-card.upcoming {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.traditional-performances-event-card.upcoming::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+  z-index: 1;
+}
+
+.traditional-performances-group-card {
+  border-color: #7c3aed;
+  background: #faf5ff;
+}
+
+.traditional-performances-group-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  z-index: 1;
+}
+
+/* Event/Group Icons */
+.traditional-performances-event-icon,
+.traditional-performances-group-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-performances-event-card.upcoming .traditional-performances-event-icon {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.traditional-performances-group-card .traditional-performances-group-icon {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+/* Event/Group Content */
+.traditional-performances-event-content,
+.traditional-performances-group-content {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-performances-event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.traditional-performances-event-header h4,
+.traditional-performances-group-content h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.traditional-performances-event-type {
+  background: #16a34a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Event Details */
+.traditional-performances-event-details,
+.traditional-performances-group-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.traditional-performances-event-date,
+.traditional-performances-event-time,
+.traditional-performances-event-audience,
+.traditional-performances-group-schedule,
+.traditional-performances-instructor,
+.traditional-performances-participants {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.traditional-performances-event-date svg,
+.traditional-performances-event-time svg {
+  color: #16a34a;
+}
+
+.traditional-performances-event-audience svg,
+.traditional-performances-participants svg {
+  color: #7c3aed;
+}
+
+.traditional-performances-group-schedule svg {
+  color: #dc2626;
+}
+
+.traditional-performances-instructor svg {
+  color: #f59e0b;
+}
+
+/* Event Description */
+.traditional-performances-event-description,
+.traditional-performances-group-content p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Event Actions */
+.traditional-performances-event-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.traditional-performances-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.traditional-performances-action-btn.primary {
+  background: #16a34a;
+  color: white;
+}
+
+.traditional-performances-action-btn.primary:hover {
+  background: #15803d;
+  transform: translateY(-2px);
+}
+
+.traditional-performances-action-btn.secondary {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.traditional-performances-action-btn.secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+/* Video Gallery */
+.traditional-performances-videos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-performances-video-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.traditional-performances-video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.traditional-performances-video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.traditional-performances-video-card:hover .traditional-performances-video-thumbnail img {
+  transform: scale(1.05);
+}
+
+.traditional-performances-play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(124, 58, 237, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-play-overlay:hover {
+  background: #7c3aed;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.traditional-performances-duration {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.traditional-performances-video-info {
+  padding: 1.5rem;
+}
+
+.traditional-performances-video-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-performances-video-info p {
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.traditional-performances-video-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.traditional-performances-video-type {
+  background: #e2e8f0;
+  color: #475569;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.traditional-performances-video-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.traditional-performances-video-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-video-btn:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+/* Past Events */
+.traditional-performances-past-events {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-performances-past-card {
+  display: flex;
+  gap: 1.5rem;
+  background: #f8fafc;
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-past-card:hover {
+  background: #f1f5f9;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.traditional-performances-past-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #64748b, #475569);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.traditional-performances-past-content h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-performances-past-date {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.traditional-performances-past-content p {
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0 0 0.75rem 0;
+}
+
+.traditional-performances-past-audience {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-size: 0.8rem;
+}
+
+.traditional-performances-past-audience svg {
+  color: #7c3aed;
+}
+
+/* Awards */
+.traditional-performances-awards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-performances-award-card {
+  display: flex;
+  gap: 1.5rem;
+  background: #fef3c7;
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid #fcd34d;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-award-card:hover {
+  background: #fef08a;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+}
+
+.traditional-performances-award-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.traditional-performances-award-content h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #92400e;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-performances-award-content p {
+  color: #a16207;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.traditional-performances-award-details {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.traditional-performances-award-year {
+  background: #92400e;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.traditional-performances-award-by {
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Call to Action */
+.traditional-performances-cta {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-radius: 25px;
+  padding: 3rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  margin-top: 4rem;
+}
+
+.traditional-performances-cta::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.traditional-performances-cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-performances-cta-content h3 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.traditional-performances-cta-content p {
+  font-size: 1.2rem;
+  margin: 0 0 2rem 0;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.traditional-performances-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.traditional-performances-cta-primary,
+.traditional-performances-cta-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.2rem 2.5rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.traditional-performances-cta-primary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.traditional-performances-cta-primary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.traditional-performances-cta-secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.traditional-performances-cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Decorative Pattern */
+.traditional-performances-decorative {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.traditional-performances-pattern {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  color: rgba(124, 58, 237, 0.3);
+  font-size: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .traditional-performances-main-section {
+    padding: 4rem 0;
+  }
+  
+  .traditional-performances-container {
+    padding: 0 1rem;
+  }
+  
+  .traditional-performances-section {
+    padding: 2rem;
+  }
+  
+  .traditional-performances-cta {
+    padding: 2rem;
+  }
+  
+  .traditional-performances-cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .traditional-performances-event-card,
+  .traditional-performances-group-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .traditional-performances-event-header {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .traditional-performances-event-details,
+  .traditional-performances-group-details {
+    justify-content: center;
+  }
+  
+  .traditional-performances-videos,
+  .traditional-performances-past-events,
+  .traditional-performances-awards {
+    grid-template-columns: 1fr;
+  }
+  
+  .traditional-performances-past-card,
+  .traditional-performances-award-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .traditional-performances-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .traditional-performances-video-thumbnail {
+    height: 150px;
+  }
+  
+  .traditional-performances-pattern {
+    gap: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .traditional-performances-event-actions {
+    flex-direction: column;
+  }
+  
+  .traditional-performances-video-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .traditional-performances-video-btn {
+    justify-content: center;
+  }
+}
+/* Видео модал */
+.traditional-performances-video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.traditional-performances-video-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+}
+
+.traditional-performances-video-modal-container {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  z-index: 10001;
+}
+
+.traditional-performances-video-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 10002;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-video-modal-close:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.traditional-performances-video-player {
+  width: 100%;
+  background: black;
+}
+
+.traditional-performances-video-player video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.traditional-performances-video-modal-info {
+  padding: 2rem;
+}
+
+.traditional-performances-video-modal-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.traditional-performances-video-modal-info p {
+  color: #64748b;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.6;
+}
+
+.traditional-performances-video-modal-details {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.traditional-performances-video-modal-duration,
+.traditional-performances-video-modal-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+.traditional-performances-video-modal-duration svg,
+.traditional-performances-video-modal-type svg {
+  color: #7c3aed;
+}
+
+.traditional-performances-video-modal-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.traditional-performances-modal-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.traditional-performances-modal-btn.primary {
+  background: #7c3aed;
+  color: white;
+}
+
+.traditional-performances-modal-btn.primary:hover {
+  background: #6d28d9;
+  transform: translateY(-2px);
+}
+
+.traditional-performances-modal-btn.secondary {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.traditional-performances-modal-btn.secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+/* Responsive за модала */
+@media (max-width: 768px) {
+  .traditional-performances-video-modal {
+    padding: 1rem;
+  }
+  
+  .traditional-performances-video-modal-container {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .traditional-performances-video-modal-info {
+    padding: 1.5rem;
+  }
+  
+  .traditional-performances-video-modal-details {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .traditional-performances-video-modal-actions {
+    flex-direction: column;
+  }
+  
+  .traditional-performances-modal-btn {
+    justify-content: center;
+  }
+}
+/* Календар модал */
+.traditional-performances-calendar-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.traditional-performances-calendar-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.traditional-performances-calendar-modal-container {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  z-index: 10001;
+  width: 100%;
+}
+
+.traditional-performances-calendar-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  color: #64748b;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 10002;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-calendar-modal-close:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.traditional-performances-calendar-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.traditional-performances-calendar-header svg {
+  font-size: 2.5rem;
+  color: #7c3aed;
+  margin-bottom: 1rem;
+}
+
+.traditional-performances-calendar-header h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.traditional-performances-calendar-content {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.traditional-performances-calendar-section {
+  margin-bottom: 2rem;
+}
+
+.traditional-performances-calendar-section h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+  border-bottom: 2px solid #7c3aed;
+  padding-bottom: 0.5rem;
+}
+
+.traditional-performances-calendar-activities,
+.traditional-performances-calendar-events {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.traditional-performances-calendar-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border-left: 4px solid #7c3aed;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-calendar-item:hover {
+  background: #f1f5f9;
+  transform: translateX(5px);
+}
+
+.traditional-performances-calendar-day,
+.traditional-performances-calendar-date {
+  min-width: 100px;
+  font-weight: 600;
+  color: #7c3aed;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.traditional-performances-calendar-details {
+  flex: 1;
+}
+
+.traditional-performances-calendar-title {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.traditional-performances-calendar-time,
+.traditional-performances-calendar-instructor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.traditional-performances-calendar-time svg,
+.traditional-performances-calendar-instructor svg {
+  color: #7c3aed;
+  font-size: 0.8rem;
+}
+
+.traditional-performances-calendar-description {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Регистрация модал */
+.traditional-performances-registration-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.traditional-performances-registration-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.traditional-performances-registration-modal-container {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  z-index: 10001;
+  width: 100%;
+}
+
+.traditional-performances-registration-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  color: #64748b;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 10002;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-registration-modal-close:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.traditional-performances-registration-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.traditional-performances-registration-header svg {
+  font-size: 2.5rem;
+  color: #7c3aed;
+  margin-bottom: 1rem;
+}
+
+.traditional-performances-registration-header h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.traditional-performances-registration-header p {
+  color: #64748b;
+  margin: 0;
+}
+
+.traditional-performances-registration-form {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.traditional-performances-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.traditional-performances-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #374151;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.traditional-performances-form-group label svg {
+  color: #7c3aed;
+  font-size: 0.9rem;
+}
+
+.traditional-performances-form-group input,
+.traditional-performances-form-group select,
+.traditional-performances-form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.traditional-performances-form-group input:focus,
+.traditional-performances-form-group select:focus,
+.traditional-performances-form-group textarea:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.traditional-performances-form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.traditional-performances-form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.traditional-performances-submit-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-submit-btn:hover {
+  background: #6d28d9;
+  transform: translateY(-2px);
+}
+
+.traditional-performances-cancel-btn {
+  padding: 1rem 1.5rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-performances-cancel-btn:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+/* Поправка за видео модала */
+.traditional-performances-video-modal-container {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+}
+
+.traditional-performances-video-player {
+  width: 100%;
+  background: black;
+  flex-shrink: 0;
+}
+
+.traditional-performances-video-player video {
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  display: block;
+}
+
+.traditional-performances-video-modal-info {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Стилове за видео бутоните */
+.traditional-performances-video-btn.play {
+  background: #7c3aed;
+}
+
+.traditional-performances-video-btn.download {
+  background: #16a34a;
+}
+
+.traditional-performances-video-btn.play:hover {
+  background: #6d28d9;
+}
+
+.traditional-performances-video-btn.download:hover {
+  background: #15803d;
+}
+
+/* Responsive за модалите */
+@media (max-width: 768px) {
+  .traditional-performances-calendar-modal,
+  .traditional-performances-registration-modal {
+    padding: 1rem;
+  }
+  
+  .traditional-performances-calendar-modal-container,
+  .traditional-performances-registration-modal-container {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .traditional-performances-calendar-header,
+  .traditional-performances-registration-header {
+    padding: 1.5rem;
+  }
+  
+  .traditional-performances-calendar-content,
+  .traditional-performances-registration-form {
+    padding: 1.5rem;
+  }
+  
+  .traditional-performances-calendar-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .traditional-performances-calendar-day,
+  .traditional-performances-calendar-date {
+    min-width: auto;
+    align-self: center;
+  }
+  
+  .traditional-performances-form-actions {
+    flex-direction: column;
+  }
+  
+  .traditional-performances-video-modal-container {
+    max-width: 95vw;
+  }
+  
+  .traditional-performances-video-player video {
+    max-height: 40vh;
+  }
+}

@@ -1,0 +1,512 @@
+/* components/Clubs/ClubView/components/ClubHero/clubHero.css */
+
+.club-hero {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
+}
+
+.club-hero-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Лява страна - Изображения */
+.club-hero-images {
+  position: relative;
+}
+
+.hero-image-gallery {
+  position: relative;
+}
+
+.main-image-container {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #f7fafc;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.hero-main-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.hero-main-image:hover {
+  transform: scale(1.02);
+}
+
+.image-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  backdrop-filter: blur(10px);
+}
+
+.image-nav-btn:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.image-nav-btn.prev {
+  left: 1rem;
+}
+
+.image-nav-btn.next {
+  right: 1rem;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+}
+
+.image-badges {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.status-badge,
+.category-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.status-badge.active {
+  background: rgba(34, 197, 94, 0.9);
+  color: white;
+}
+
+.category-badge {
+  background: rgba(255, 255, 255, 0.9);
+  color: #4a5568;
+}
+
+.image-thumbnails {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.thumbnail {
+  position: relative;
+  width: 80px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+
+.thumbnail:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.thumbnail.active {
+  border-color: #3182ce;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.more-images {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* Placeholder за снимки */
+.hero-image-placeholder {
+  height: 400px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f7fafc, #edf2f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #cbd5e0;
+}
+
+.placeholder-content {
+  text-align: center;
+  color: #9ca3af;
+}
+
+.placeholder-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  object-fit: cover;
+}
+
+.placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Дясна страна - Информация */
+.club-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.club-title-section {
+  flex: 1;
+}
+
+.club-name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  line-height: 1.2;
+  margin: 0 0 1rem 0;
+}
+
+.club-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stars {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star {
+  font-size: 1.125rem;
+}
+
+.star.filled {
+  color: #ecc94b;
+}
+
+.star.half {
+  color: #ecc94b;
+  opacity: 0.5;
+}
+
+.star.empty {
+  color: #e2e8f0;
+}
+
+.rating-value {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 1.125rem;
+}
+
+.rating-count {
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.club-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.club-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.club-location-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #718096;
+  font-size: 1.125rem;
+}
+
+.club-location-info svg {
+  color: #e53e3e;
+  font-size: 1.25rem;
+}
+
+.club-description {
+  font-size: 1.125rem;
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Статистики */
+.club-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.stat-item-clubview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+}
+
+.stat-item-clubview:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.stat-item-clubview svg.stat-icon {
+  font-size: 1.5rem;
+  color: #3182ce;
+}
+
+.stat-value-club {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a202c;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Бързи контакти */
+.quick-contacts h3,
+.membership-info h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 1rem 0;
+}
+
+.contact-buttons-clubview {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.contact-btn.phone {
+  background: #22c55e;
+  color: white;
+}
+
+.contact-btn.phone:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+}
+
+.contact-btn.email {
+  background: #3b82f6;
+  color: white;
+}
+
+.contact-btn.email:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.contact-btn.website {
+  background: #f8fafc;
+  color: #4a5568;
+  border-color: #e2e8f0;
+}
+
+.contact-btn.website:hover {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+}
+
+.contact-btn.facebook {
+  background: #1877f2;
+  color: white;
+}
+
+.contact-btn.facebook:hover {
+  background: #166fe5;
+  transform: translateY(-2px);
+}
+
+/* Членство */
+.membership-info {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #bfdbfe;
+}
+
+.membership-fee {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.fee-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.fee-period {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.membership-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.benefit-item {
+  color: #475569;
+  font-size: 0.875rem;
+}
+
+.more-benefits {
+  color: #3b82f6;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Responsive дизайн */
+@media (max-width: 1024px) {
+  .club-hero-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .club-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .club-hero {
+    padding: 2rem 0;
+  }
+  
+  .club-name {
+    font-size: 2rem;
+  }
+  
+  .hero-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .club-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-item-clubview {
+    padding: 1rem;
+  }
+  
+  .hero-main-image {
+    height: 250px;
+  }
+  
+  .contact-buttons-clubview {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .club-name {
+    font-size: 1.75rem;
+  }
+  
+  .hero-main-image {
+    height: 200px;
+  }
+  
+  .image-nav-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .contact-buttons-clubview {
+    flex-direction: column;
+  }
+  
+  .contact-btn {
+    justify-content: center;
+  }
+}
