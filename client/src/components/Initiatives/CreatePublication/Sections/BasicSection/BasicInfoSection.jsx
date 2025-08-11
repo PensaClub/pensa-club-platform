@@ -10,7 +10,9 @@ import {
     faFileAlt,
     faLink,
     faAlignLeft,
-    faFolder
+    faFolder,
+    faImage,
+    faUpload
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import './basicSection.css';
@@ -23,7 +25,12 @@ const BasicInfoSection = ({
     newTag,
     setNewTag,
     addTag,
-    removeTag
+    removeTag,
+    handleMainImageUpload,
+    addMainImageFromUrl,
+    removeMainImage,
+    updateMainImageAlt,
+    updateMainImageCaption
 }) => {
     const { t } = useTranslation();
 
@@ -97,6 +104,110 @@ const BasicInfoSection = ({
                         placeholder={t('publications.fields.shortDescriptionPlaceholder')}
                         rows="3"
                     />
+                </div>
+
+                {/* Main Image */}
+                <div className="publication-form-group">
+                    <label className="publication-field-label">
+                        <FontAwesomeIcon icon={faImage} />
+                        {t('publications.fields.mainImage') || 'Main Image'}
+                    </label>
+
+                    <div className="publication-main-image-section">
+                        {/* Image Upload */}
+                        <div className="publication-main-image-upload">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleMainImageUpload}
+                                className="publication-main-image-input"
+                                id="main-image-upload"
+                            />
+                            <label htmlFor="main-image-upload" className="publication-main-image-upload-btn">
+                                <FontAwesomeIcon icon={faUpload} />
+                                {values.mainImage?.src ? t('publications.create.changeImage') || 'Change Image' : t('publications.create.uploadImage') || 'Upload Image'}
+                            </label>
+                        </div>
+
+                        {/* Image Preview */}
+                        {values.mainImage?.src && (
+                            <div className="publication-main-image-preview">
+                                <div className="publication-main-image-container">
+                                    <img
+                                        src={values.mainImage.src}
+                                        alt={values.mainImage.alt || 'Main image preview'}
+                                        className="publication-main-image"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={removeMainImage}
+                                        className="publication-main-image-remove"
+                                        title={t('publications.create.removeImage') || 'Remove Image'}
+                                    >
+                                        <FontAwesomeIcon icon={faTimes} />
+                                    </button>
+                                </div>
+
+                                {/* Image Details */}
+                                <div className="publication-main-image-details">
+                                    <div className="publication-form-group">
+                                        <label className="publication-field-label">
+                                            {t('publications.fields.imageAlt') || 'Image Alt Text'}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={values.mainImage.alt || ''}
+                                            onChange={(e) => updateMainImageAlt(e.target.value)}
+                                            placeholder={t('publications.fields.imageAltPlaceholder') || 'Describe the image for accessibility'}
+                                            className="publication-input"
+                                        />
+                                    </div>
+
+                                    <div className="publication-form-group">
+                                        <label className="publication-field-label">
+                                            {t('publications.fields.imageCaption') || 'Image Caption'}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={values.mainImage.caption || ''}
+                                            onChange={(e) => updateMainImageCaption(e.target.value)}
+                                            placeholder={t('publications.fields.imageCaptionPlaceholder') || 'Optional caption for the image'}
+                                            className="publication-input"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* URL Input */}
+                        <div className="publication-main-image-url">
+                            <div className="publication-main-image-url-input">
+                                <input
+                                    type="url"
+                                    placeholder={t('publications.fields.imageUrlPlaceholder') || 'Or enter image URL'}
+                                    className="publication-input"
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            addMainImageFromUrl(e.target.value);
+                                            e.target.value = '';
+                                        }
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        const input = e.target.previousElementSibling;
+                                        addMainImageFromUrl(input.value);
+                                        input.value = '';
+                                    }}
+                                    className="publication-main-image-url-btn"
+                                >
+                                    <FontAwesomeIcon icon={faLink} />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Category */}

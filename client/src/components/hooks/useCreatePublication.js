@@ -27,6 +27,14 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
         downloadUrl: '',
         commentsEnabled: true,
 
+        // Main image
+        mainImage: {
+            src: '',
+            alt: '',
+            caption: '',
+            gallery: []
+        },
+
         // Always start with 1 section
         sections: [{
             titleSlug: 'introduction',
@@ -374,6 +382,161 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
         });
     }, []);
 
+    // Main image management
+    const handleMainImageUpload = useCallback(async (e) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+        let blobUrl = null;
+
+        try {
+            blobUrl = URL.createObjectURL(file);
+
+            // Update UI immediately with blob URL
+            setValues(prev => ({
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    src: blobUrl,
+                    alt: '',
+                    caption: '',
+                    isUploading: true
+                }
+            }));
+
+            e.target.value = '';
+
+            // Upload to Firebase
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 2,
+                maxWidthOrHeight: 1920
+            });
+
+            const url = await uploadFileWithProgress(
+                compressedFile,
+                'publications/main-images',
+                (progress) => { }
+            );
+
+            // Replace blob URL with Firebase URL
+            setValues(prev => ({
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    src: url,
+                    alt: prev.mainImage.alt || '',
+                    caption: prev.mainImage.caption || '',
+                    isUploading: false
+                }
+            }));
+
+            // Clean up blob URL
+            if (blobUrl) {
+                try {
+                    URL.revokeObjectURL(blobUrl);
+                } catch (e) {
+                    console.warn('Could not revoke blob URL:', e);
+                }
+            }
+
+            notify('success', 'Main image uploaded successfully!');
+
+        } catch (error) {
+            console.error('Upload error:', error);
+            notify('error', 'Error uploading main image');
+
+            // Reset on error
+            setValues(prev => ({
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    src: '',
+                    alt: '',
+                    caption: '',
+                    isUploading: false
+                }
+            }));
+
+            if (blobUrl) {
+                try {
+                    URL.revokeObjectURL(blobUrl);
+                } catch (e) {
+                    console.warn('Could not revoke blob URL:', e);
+                }
+            }
+        }
+    }, []);
+
+    // Add main image from URL
+    const addMainImageFromUrl = useCallback((imageUrl) => {
+        if (!imageUrl.trim()) return;
+
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                src: imageUrl.trim(),
+                alt: '',
+                caption: ''
+            }
+        }));
+    }, []);
+
+    // Remove main image
+    const removeMainImage = useCallback(() => {
+        setValues(prev => {
+            const imageToDelete = prev.mainImage;
+
+            // Delete from Firebase if needed
+            if (imageToDelete?.src && !imageToDelete.isUploading && !imageToDelete.src.startsWith('blob:')) {
+                deleteSingleImage(imageToDelete.src).catch(error => {
+                    console.error('Error deleting from Firebase:', error);
+                });
+            }
+
+            if (imageToDelete?.src?.startsWith('blob:')) {
+                try {
+                    URL.revokeObjectURL(imageToDelete.src);
+                } catch (e) {
+                    console.warn('Could not revoke blob URL:', e);
+                }
+            }
+
+            return {
+                ...prev,
+                mainImage: {
+                    src: '',
+                    alt: '',
+                    caption: '',
+                    gallery: []
+                }
+            };
+        });
+    }, []);
+
+    // Update main image alt
+    const updateMainImageAlt = useCallback((altText) => {
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                alt: altText
+            }
+        }));
+    }, []);
+
+    // Update main image caption
+    const updateMainImageCaption = useCallback((caption) => {
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                caption: caption
+            }
+        }));
+    }, []);
+
     return {
         // State
         values,
@@ -397,7 +560,14 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
         removeSectionImage,
         updateSectionImageAlt,
         updateSectionImageCaption,
-        clearSectionImages
+        clearSectionImages,
+
+        // Main image management
+        handleMainImageUpload,
+        addMainImageFromUrl,
+        removeMainImage,
+        updateMainImageAlt,
+        updateMainImageCaption
     };
 };
 

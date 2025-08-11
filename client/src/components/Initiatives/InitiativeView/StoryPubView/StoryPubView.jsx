@@ -13,7 +13,7 @@ import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { getDownloadsCountText, getLikesCountText, getViewCountText } from '../../../../utils/textUtils';
 import { ShareButton } from '../../../ShareButton/ShareButton';
 
-export const StoryPubView = ({ type }) => {
+export const StoryPubView = ({ type, previewMode = false, previewData = null }) => {
     const { slug } = useParams();
     const { t } = useTranslation();
     const [content, setContent] = useState(null);
@@ -45,7 +45,10 @@ export const StoryPubView = ({ type }) => {
             try {
                 let data;
 
-                if (type === 'story') {
+                if (previewMode && previewData) {
+                    // Use preview data directly
+                    data = previewData;
+                } else if (type === 'story') {
                     data = await getStoryBySlug(slug);
                 } else {
                     data = await getPublicationBySlug(slug);
@@ -53,8 +56,8 @@ export const StoryPubView = ({ type }) => {
 
                 setContent(data);
 
-                // Зареждаме свързаното съдържание
-                if (data) {
+                // Only load related content and analytics for non-preview mode
+                if (data && !previewMode) {
                     // Track view
                     trackStoryOrPublication(data.id, data.title, type);
 
@@ -76,10 +79,14 @@ export const StoryPubView = ({ type }) => {
             }
         };
 
-        if (slug) {
+        if (previewMode && previewData) {
+            // For preview mode, set content immediately
+            setContent(previewData);
+            setIsLoading(false);
+        } else if (slug) {
             fetchContent();
         }
-    }, [slug, type]);
+    }, [slug, type, previewMode, previewData]);
 
     // Add a new useEffect to sync content with context state
     useEffect(() => {
@@ -168,60 +175,81 @@ export const StoryPubView = ({ type }) => {
         );
     }
 
+    // Don't render breadcrumbs, actions, comments, or related content in preview mode
+    const shouldShowBreadcrumbs = !previewMode;
+    const shouldShowActions = !previewMode;
+    const shouldShowComments = !previewMode && content?.commentsEnabled;
+    const shouldShowRelated = !previewMode && relatedContent.length > 0;
+
     return (
         <article className="story-pub-view">
             {/* Hero Section */}
             <section className="story-pub-hero">
                 <div className="story-pub-hero-background">
-                    <img
-                        src={content.image.src}
-                        alt={content.image.alt}
-                        className="story-pub-hero-image"
-                    />
+                    {content.image?.src ? (
+                        <img
+                            src={content.image.src}
+                            alt={content.image.alt || content.title || 'Publication'}
+                            className="story-pub-hero-image"
+                        />
+                    ) : (
+                        <div className="story-pub-hero-placeholder">
+                            <span
+                                className="story-pub-hero-placeholder-text"
+                                style={{ zIndex: '3' }}
+                            >
+                                {t('publications.preview.noImageAvailable')}
+                            </span>
+                        </div>
+                    )}
                     <div className="story-pub-hero-overlay"></div>
                 </div>
 
                 <div className="story-pub-hero-content">
                     <div className="container">
                         {/* Breadcrumb */}
-                        <nav className="story-pub-breadcrumb">
-                            <Link to="/initiatives" className="story-pub-breadcrumb-link">
-                                {t('storyPubView.breadcrumb.initiatives')}
-                            </Link>
-                            <span className="story-pub-breadcrumb-separator">›</span>
-                            {content.initiative && (
-                                <>
+                        {shouldShowBreadcrumbs && (
+                            <nav className="story-pub-breadcrumb">
+                                <Link to="/initiatives" className="story-pub-breadcrumb-link">
+                                    {t('storyPubView.breadcrumb.initiatives')}
+                                </Link>
+                                <span className="story-pub-breadcrumb-separator">›</span>
+                                {content.initiative && (
+                                    <>
+                                        <Link
+                                            to={`/initiatives/${content.initiative.slug}`}
+                                            className="story-pub-breadcrumb-link"
+                                        >
+                                            {content.initiative.title}
+                                        </Link>
+                                        <span className="story-pub-breadcrumb-separator">›</span>
+                                    </>
+                                )}
+                                <span className="story-pub-breadcrumb-current">{getTypeTranslation()}</span>
+                            </nav>
+                        )}
+                        {/* Mobile Breadcrumb Button */}
+                        {shouldShowBreadcrumbs && (
+                            <div className="story-pub-breadcrumb-mobile">
+                                {content.initiative ? (
                                     <Link
                                         to={`/initiatives/${content.initiative.slug}`}
-                                        className="story-pub-breadcrumb-link"
+                                        className="story-pub-breadcrumb-btn"
                                     >
-                                        {content.initiative.title}
+                                        <span className="story-pub-breadcrumb-btn-icon">←</span>
+                                        <span>{t('storyPubView.breadcrumb.back')}</span>
                                     </Link>
-                                    <span className="story-pub-breadcrumb-separator">›</span>
-                                </>
-                            )}
-                            <span className="story-pub-breadcrumb-current">{getTypeTranslation()}</span>
-                        </nav>
-                        {/* Mobile Breadcrumb Button */}
-                        <div className="story-pub-breadcrumb-mobile">
-                            {content.initiative ? (
-                                <Link
-                                    to={`/initiatives/${content.initiative.slug}`}
-                                    className="story-pub-breadcrumb-btn"
-                                >
-                                    <span className="story-pub-breadcrumb-btn-icon">←</span>
-                                    <span>{t('storyPubView.breadcrumb.back')}</span>
-                                </Link>
-                            ) : (
-                                <Link
-                                    to="/initiatives"
-                                    className="story-pub-breadcrumb-btn"
-                                >
-                                    <span className="story-pub-breadcrumb-btn-icon">←</span>
-                                    <span>{t('storyPubView.breadcrumb.back')}</span>
-                                </Link>
-                            )}
-                        </div>
+                                ) : (
+                                    <Link
+                                        to="/initiatives"
+                                        className="story-pub-breadcrumb-btn"
+                                    >
+                                        <span className="story-pub-breadcrumb-btn-icon">←</span>
+                                        <span>{t('storyPubView.breadcrumb.back')}</span>
+                                    </Link>
+                                )}
+                            </div>
+                        )}
 
                         <div className="story-pub-hero-main">
                             <div className="story-pub-meta-badges">
@@ -292,7 +320,7 @@ export const StoryPubView = ({ type }) => {
                             </div>
 
                             {/* Download Button for Publications */}
-                            {type === 'publication' && content.downloadUrl && (
+                            {type === 'publication' && content.downloadUrl && !previewMode && (
                                 <div className="story-pub-download-section">
 
                                     <a href={content.downloadUrl}
@@ -316,7 +344,7 @@ export const StoryPubView = ({ type }) => {
                             )}
 
                             {/* Sections */}
-                            {content.sections && content.sections.length > 0 && (
+                            {content.sections && content.sections.length > 0 ? (
                                 <div className="story-pub-sections">
                                     {content.sections.map((section, index) => (
                                         <section key={index} className="story-pub-section" id={section.titleSlug}>
@@ -336,6 +364,11 @@ export const StoryPubView = ({ type }) => {
                                             </div>
                                         </section>
                                     ))}
+                                </div>
+                            ) : (
+                                <div className="story-pub-empty-content">
+                                    <h3>No content sections added yet</h3>
+                                    <p>Add some content sections to see them in the preview.</p>
                                 </div>
                             )}
 
@@ -366,68 +399,70 @@ export const StoryPubView = ({ type }) => {
                             )}
 
                             {/* Social Actions */}
-                            <div className="story-pub-actions">
-                                {type === 'publication' && (
-                                    <button
-                                        className={`action-btn like-btn ${content.isLiked ? 'liked' : ''}`}
-                                        onClick={handleLike}
-                                    >
-                                        <span className="action-icon">
-                                            {content.isLiked ? '❤️' : '🤍'}
-                                        </span>
-                                        <span className="action-text">
-                                            {getLikesCountText(content.likes || 0, t)}
-                                        </span>
-                                    </button>
-                                )}
-                                <ShareButton
-                                    contentId={content.id}
-                                    contentTitle={content.title}
-                                    contentType={type}
-                                    onShare={handleShare}
-                                    className="action-btn"
-                                />
-                            </div>
+                            {shouldShowActions && (
+                                <div className="story-pub-actions">
+                                    {type === 'publication' && (
+                                        <button
+                                            className={`action-btn like-btn ${content.isLiked ? 'liked' : ''}`}
+                                            onClick={handleLike}
+                                        >
+                                            <span className="action-icon">
+                                                {content.isLiked ? '❤️' : '🤍'}
+                                            </span>
+                                            <span className="action-text">
+                                                {getLikesCountText(content.likes || 0, t)}
+                                            </span>
+                                        </button>
+                                    )}
+                                    <ShareButton
+                                        contentId={content.id}
+                                        contentTitle={content.title}
+                                        contentType={type}
+                                        onShare={handleShare}
+                                        className="action-btn"
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         {/* Sidebar */}
-                        <aside className="story-pub-sidebar">
-                            {/* Table of Contents */}
-                            {content.sections && content.sections.length > 1 && (
-                                <div className="story-pub-toc">
-                                    <h3 className="toc-title">
-                                        {t('storyPubView.toc.title')}
-                                    </h3>
-                                    <div className="toc-content">
-                                        <ul className="toc-list">
-                                            {content.sections.map((section, index) => (
-                                                <li key={index} className="toc-item">
-                                                    <a
-                                                        href={`#${section.titleSlug}`}
-                                                        className="toc-link"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            const target = document.getElementById(section.titleSlug);
-                                                            if (target) {
-                                                                target.scrollIntoView({
-                                                                    behavior: 'smooth',
-                                                                    block: 'start',
-                                                                    inline: 'nearest'
-                                                                });
-                                                            }
-                                                        }}
-                                                    >
-                                                        {section.title}
-                                                    </a>
-                                                </li>
-                                            ))}
-                                        </ul>
+                        {shouldShowRelated && (
+                            <aside className="story-pub-sidebar">
+                                {/* Table of Contents */}
+                                {content.sections && content.sections.length > 1 && (
+                                    <div className="story-pub-toc">
+                                        <h3 className="toc-title">
+                                            {t('storyPubView.toc.title')}
+                                        </h3>
+                                        <div className="toc-content">
+                                            <ul className="toc-list">
+                                                {content.sections.map((section, index) => (
+                                                    <li key={index} className="toc-item">
+                                                        <a
+                                                            href={`#${section.titleSlug}`}
+                                                            className="toc-link"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                const target = document.getElementById(section.titleSlug);
+                                                                if (target) {
+                                                                    target.scrollIntoView({
+                                                                        behavior: 'smooth',
+                                                                        block: 'start',
+                                                                        inline: 'nearest'
+                                                                    });
+                                                                }
+                                                            }}
+                                                        >
+                                                            {section.title}
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
 
-                            {/* Related Content */}
-                            {relatedContent.length > 0 && (
+                                {/* Related Content */}
                                 <div className="story-pub-related">
                                     <h3 className="story-pub-related-title">
                                         {t('storyPubView.related.title')}
@@ -451,13 +486,13 @@ export const StoryPubView = ({ type }) => {
                                         ))}
                                     </div>
                                 </div>
-                            )}
-                            <ClubCardPromo />
-                        </aside>
+                                <ClubCardPromo />
+                            </aside>
+                        )}
                     </div>
 
                     {/* Comments Section */}
-                    {content.commentsEnabled && (
+                    {shouldShowComments && (
                         <section className="story-pub-comments">
                             <Comments
                                 entityId={content.id}

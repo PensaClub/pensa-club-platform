@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faEdit, faFileAlt, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faEdit, faFileAlt, faCog, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { createEditor, Element as SlateElement, Transforms, Editor } from 'slate';
 
@@ -11,6 +11,7 @@ import './mainFormPublication.css';
 import BasicInfoSection from '../Sections/BasicSection/BasicInfoSection';
 import ContentSection from '../Sections/ContentSection/ContentSection';
 import PublicationProgressBar from '../components/PublicationProgressBar';
+import FloatingActions from '../FloatingActions/FloatingActions';
 
 // Hooks and utilities
 import useCreatePublication from '../../../hooks/useCreatePublication';
@@ -18,11 +19,40 @@ import useCreatePublication from '../../../hooks/useCreatePublication';
 // Add imports for new sections
 import FileSection from "../Sections/FileSection/FileSection";
 import SettingsSection from "../Sections/SettingsSection/SettingsSection";
+import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
 
 const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
     const { t } = useTranslation();
     const [activeSection, setActiveSection] = useState('basic-info');
     const [newTag, setNewTag] = useState('');
+    const [showPreview, setShowPreview] = useState(false);
+
+    // Add ESC key and outside click handling
+    useEffect(() => {
+        const handleEscape = (event) => {
+            if (event.key === 'Escape' && showPreview) {
+                closePreview();
+            }
+        };
+
+        const handleOutsideClick = (event) => {
+            if (showPreview && event.target.classList.contains('publication-preview-modal-overlay')) {
+                closePreview();
+            }
+        };
+
+        if (showPreview) {
+            document.addEventListener('keydown', handleEscape);
+            document.addEventListener('click', handleOutsideClick);
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+            document.removeEventListener('click', handleOutsideClick);
+            document.body.style.overflow = 'unset';
+        };
+    }, [showPreview]);
 
     const {
         values, setValues, errors, onChangeHandler, onBlurHandler, onSubmit,
@@ -31,13 +61,19 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
         addSection,
         removeSection,
         updateSection,
-        // Image management
+        // Section image management
         handleSectionImageUpload,
         addSectionImageFromUrl,
         removeSectionImage,
         updateSectionImageAlt,
         updateSectionImageCaption,
-        clearSectionImages
+        clearSectionImages,
+        // Main image management
+        handleMainImageUpload,
+        addMainImageFromUrl,
+        removeMainImage,
+        updateMainImageAlt,
+        updateMainImageCaption
     } = useCreatePublication(initialValues, onSubmitHandler);
 
     // Add tag
@@ -80,6 +116,35 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
     };
 
     const currentSectionIndex = sectionOrder.indexOf(activeSection);
+
+    // Action handlers
+    const handleNewPublication = () => {
+        console.log('Start new publication');
+    };
+
+    const handleSaveDraft = () => {
+        console.log('Save draft');
+    };
+
+    const handlePreview = () => {
+        setShowPreview(true);
+    };
+
+    const handlePublish = () => {
+        console.log('Publish publication');
+    };
+
+    const handleUpdate = () => {
+        console.log('Update publication');
+    };
+
+    const handleCreate = () => {
+        console.log('Create publication');
+    };
+
+    const closePreview = () => {
+        setShowPreview(false);
+    };
 
     return (
         <div className="publication-create-container">
@@ -136,6 +201,11 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                                 setNewTag={setNewTag}
                                 addTag={addTag}
                                 removeTag={removeTag}
+                                handleMainImageUpload={handleMainImageUpload}
+                                addMainImageFromUrl={addMainImageFromUrl}
+                                removeMainImage={removeMainImage}
+                                updateMainImageAlt={updateMainImageAlt}
+                                updateMainImageCaption={updateMainImageCaption}
                             />
                         )}
 
@@ -178,13 +248,6 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                             />
                         )}
 
-                        {/* Submit Button */}
-                        {/* <div className="publication-form-actions">
-                            <button type="submit" className="publication-btn-submit">
-                                {isEditMode ? t('publications.edit.submit') : t('publications.create.submit')}
-                            </button>
-                        </div> */}
-
                         {/* Navigation Buttons */}
                         <div className="publication-form-navigation">
                             <button
@@ -218,6 +281,89 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                     </form>
                 </div>
             </div>
+
+            {/* Floating Actions */}
+            <FloatingActions
+                draftId={null} // TODO: Add from hook
+                editId={null} // TODO: Add from hook
+                hasTitle={values.title?.trim()}
+                onSaveDraft={handleSaveDraft}
+                onPreview={handlePreview}
+                onPublish={handlePublish}
+                onUpdate={handleUpdate}
+                onCreate={handleCreate}
+            />
+
+            {/* Preview Modal */}
+            {showPreview && (
+                <div className="publication-preview-modal-overlay">
+                    <div className="publication-preview-modal-content">
+                        <div className="publication-preview-modal-header">
+                            <button
+                                className="publication-preview-close-btn"
+                                onClick={closePreview}
+                            >
+                                <FontAwesomeIcon icon={faArrowLeft} />
+                                {t('publications.preview.backToEditing')}
+                            </button>
+                            <h2>{t('publications.preview.previewMode')}</h2>
+                        </div>
+                        <div className="publication-preview-modal-body">
+                            <StoryPubView
+                                type="publication"
+                                previewMode={true}
+                                previewData={{
+                                    id: 'preview-123',
+                                    title: values.title || 'Untitled Publication',
+                                    shortDescription: values.shortDescription || 'No description provided',
+                                    description: values.shortDescription || 'No description provided',
+                                    publishedAt: new Date().toISOString(),
+                                    author: values.author || 'Anonymous',
+                                    authorEmail: values.authorEmail || '',
+                                    authorImage: values.authorImage || null,
+                                    readTime: values.readTime || '5',
+                                    category: values.category || 'General',
+                                    tags: values.tags || [],
+                                                image: {
+                src: values.mainImage?.src || '',
+                alt: values.mainImage?.alt || values.title || 'Publication',
+                caption: values.mainImage?.caption || ''
+            },
+                                    mainImage: values.mainImage || null,
+                                    sections: [
+                                        {
+                                            id: 'section-1',
+                                            title: 'Introduction',
+                                            titleSlug: 'introduction',
+                                            content: 'This is a sample introduction section for the preview.',
+                                            image: null,
+                                            images: []
+                                        },
+                                        {
+                                            id: 'section-2',
+                                            title: 'Main Content',
+                                            titleSlug: 'main-content',
+                                            content: 'This is the main content section with some sample text.',
+                                            image: null,
+                                            images: []
+                                        }
+                                    ],
+                                    downloadUrl: values.downloadUrl || '',
+                                    fileType: values.fileType || 'PDF',
+                                    fileSize: values.fileSize || 'Unknown',
+                                    commentsEnabled: values.commentsEnabled !== false,
+                                    views: 0,
+                                    downloads: 0,
+                                    likes: 0,
+                                    isLiked: false,
+                                    initiative: values.initiative || null,
+                                    slug: values.slug || 'preview-slug'
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

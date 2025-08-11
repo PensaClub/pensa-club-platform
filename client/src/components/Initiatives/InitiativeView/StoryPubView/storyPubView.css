@@ -50,7 +50,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     color: white;
 }
 
@@ -129,8 +129,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    text-align: center;
     max-width: 900px;
-    margin-bottom: 3rem;
+    margin: 0 auto;
 }
 
 .story-pub-meta-badges {
@@ -138,6 +140,7 @@
     gap: 1rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .story-pub-type-badge,
@@ -182,6 +185,7 @@
     gap: 2rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .story-pub-hero .story-pub-meta-item {
@@ -210,6 +214,7 @@
     display: flex;
     gap: 0.8rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .story-pub-hero .story-pub-tag {
@@ -873,6 +878,73 @@
 .back-link:hover {
     background: #1B8B8A;
     color: white;
+}
+
+/* Preview-specific styles */
+.story-pub-hero-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    font-size: 3rem;
+    position: relative;
+}
+
+.story-pub-hero-placeholder-text {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #ffffff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 12px 16px;
+    border-radius: 8px;
+    z-index: 2;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.story-pub-hero-placeholder p {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #9ca3af;
+}
+
+.story-pub-empty-content {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #6b7280;
+}
+
+.story-pub-empty-content h3 {
+    margin: 0 0 1rem 0;
+    color: #374151;
+}
+
+.story-pub-empty-content p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* Ensure proper z-index for hero content */
+.story-pub-hero-main {
+    position: relative;
+    z-index: 10;
+}
+
+.story-pub-hero-main .story-pub-title,
+.story-pub-hero-main .story-pub-description,
+.story-pub-hero-main .story-pub-meta,
+.story-pub-hero-main .story-pub-tags {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    position: relative;
+    z-index: 10;
 }
 
 /* Responsive Design */

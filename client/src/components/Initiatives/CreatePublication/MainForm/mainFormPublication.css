@@ -1688,3 +1688,337 @@
     background-size: 1rem;
     padding-right: 2.5rem; /* Reduce padding to accommodate moved arrow */
 }
+
+/* Preview Modal Styles - Updated */
+.publication-preview-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the modal */
+    z-index: 9999;
+    padding: 1rem;
+    animation: publicationModalFadeIn 0.3s ease;
+}
+
+.publication-preview-modal-content {
+    background: white;
+    width: 85%; /* Keep the same width */
+    height: 95%;
+    border-radius: 12px; /* Rounded corners on all sides */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: publicationModalSlideIn 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Shadow on all sides */
+}
+
+.publication-preview-modal-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #f59e0b;
+    flex-shrink: 0;
+}
+
+.publication-preview-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.publication-preview-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.publication-preview-modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f59e0b;
+}
+
+.publication-preview-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    position: relative;
+}
+
+/* StoryPubView overrides for modal - Fixed */
+.publication-preview-modal-body .story-pub-view {
+    margin-top: 0 !important;
+    min-height: auto !important;
+    background: white !important;
+}
+
+.publication-preview-modal-body .story-pub-hero {
+    margin-top: 0 !important;
+    height: 50vh !important;
+    min-height: 400px !important;
+}
+
+.publication-preview-modal-body .story-pub-hero-background {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1 !important;
+}
+
+.publication-preview-modal-body .story-pub-hero-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    filter: brightness(0.7) saturate(1.1) !important;
+}
+
+.publication-preview-modal-body .story-pub-hero-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(135deg,
+            rgba(27, 139, 138, 0.85) 0%,
+            rgba(8, 145, 178, 0.75) 30%,
+            rgba(226, 96, 32, 0.65) 100%) !important;
+    z-index: 2 !important;
+}
+
+.publication-preview-modal-body .story-pub-hero-content {
+    position: relative !important;
+    z-index: 3 !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    color: white !important;
+}
+
+.publication-preview-modal-body .story-pub-hero-main {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    max-width: 900px !important;
+    margin: 0 auto !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Ensure text is always visible in modal */
+.publication-preview-modal-body .story-pub-hero-main .story-pub-title,
+.publication-preview-modal-body .story-pub-hero-main .story-pub-description,
+.publication-preview-modal-body .story-pub-hero-main .story-pub-meta,
+.publication-preview-modal-body .story-pub-hero-main .story-pub-tags {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Hide elements that shouldn't be in preview */
+.publication-preview-modal-body .story-pub-breadcrumb,
+.publication-preview-modal-body .story-pub-breadcrumb-mobile,
+.publication-preview-modal-body .story-pub-actions,
+.publication-preview-modal-body .story-pub-comments,
+.publication-preview-modal-body .story-pub-related,
+.publication-preview-modal-body .story-pub-download-section {
+    display: none !important;
+}
+
+/* Adjust layout for modal */
+.publication-preview-modal-body .story-pub-layout {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+}
+
+.publication-preview-modal-body .story-pub-sidebar {
+    display: none !important;
+}
+
+/* Ensure proper spacing in modal */
+.publication-preview-modal-body .story-pub-content {
+    padding: 2rem 0 !important;
+}
+
+.publication-preview-modal-body .story-pub-article {
+    padding: 1.5rem !important;
+}
+
+/* Fix hero placeholder for empty images */
+.publication-preview-modal-body .story-pub-hero-placeholder {
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #6b7280 !important;
+    font-size: 3rem !important;
+    position: relative !important;
+}
+
+/* Fix for placeholder text color in modal preview */
+.publication-preview-modal-body .story-pub-hero-placeholder-text {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 12px 16px;
+    border-radius: 8px;
+    z-index: 2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Additional specificity to ensure white color */
+.publication-preview-modal-body .story-pub-hero .story-pub-hero-placeholder .story-pub-hero-placeholder-text {
+    color: white;
+}
+
+/* Even more specific for maximum override */
+.publication-preview-modal-body .story-pub-hero-background .story-pub-hero-placeholder .story-pub-hero-placeholder-text {
+    color: white;
+}
+
+.publication-preview-modal-body .story-pub-hero-placeholder p {
+    margin-top: 1rem !important;
+    font-size: 1rem !important;
+    color: #9ca3af !important;
+}
+
+/* Ensure proper z-index for all hero content */
+.publication-preview-modal-body .story-pub-hero-main {
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Center all hero content elements in modal */
+.publication-preview-modal-body .story-pub-meta-badges {
+    justify-content: center !important;
+}
+
+.publication-preview-modal-body .story-pub-hero .story-pub-meta {
+    justify-content: center !important;
+}
+
+.publication-preview-modal-body .story-pub-hero .story-pub-tags {
+    justify-content: center !important;
+}
+
+.publication-preview-modal-body .story-pub-hero-main .story-pub-title,
+.publication-preview-modal-body .story-pub-hero-main .story-pub-description,
+.publication-preview-modal-body .story-pub-hero-main .story-pub-meta,
+.publication-preview-modal-body .story-pub-hero-main .story-pub-tags {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Modal animations */
+@keyframes publicationModalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes publicationModalSlideIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Responsive design for modal */
+@media (max-width: 768px) {
+    .publication-preview-modal-content {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+
+    .publication-preview-modal-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .publication-preview-close-btn {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .publication-preview-modal-header h2 {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .publication-preview-modal-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .publication-preview-close-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* High contrast mode support for modal */
+@media (prefers-contrast: high) {
+    .publication-preview-modal-content {
+        border: 2px solid #000;
+    }
+
+    .publication-preview-close-btn {
+        border: 2px solid #fff;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .publication-preview-modal-overlay,
+    .publication-preview-modal-content {
+        animation: none;
+    }
+
+    .publication-preview-close-btn {
+        transition: none;
+    }
+}

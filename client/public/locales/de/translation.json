@@ -3115,7 +3115,7 @@
             "skull": "Schädel"
         }
     },
-    
+
   "games": {
     "title": "Unterhaltung und Spiele",
     "subtitle": "Entdecken Sie die beliebtesten Online-Spiele! Schach, Sudoku, Solitaire und viele andere klassische Spiele für alle Altersgruppen.",
@@ -3178,6 +3178,24 @@
       "title": "Keine Spiele gefunden",
       "description": "Versuchen Sie andere Suchkriterien oder wählen Sie eine andere Kategorie.",
       "resetButton": "Filter zurücksetzen"
+    }
+  },
+  "publications": {
+    "preview": {
+      "loading": "Lade Vorschau...",
+      "notFound": "Vorschau nicht gefunden",
+      "noData": "Keine Vorschaudaten verfügbar",
+      "previewMode": "Vorschau-Modus",
+      "previewDescription": "So wird Ihre Publikation nach der Veröffentlichung aussehen",
+      "backToEditing": "Zurück zum Bearbeiten",
+      "noImageAvailable": "Kein Bild verfügbar",
+      "noCategory": "Keine Kategorie",
+      "download": "Herunterladen",
+      "share": "Teilen",
+      "like": "Gefällt mir",
+      "previewNotice": "Dies ist eine Vorschau Ihrer Publikation. Änderungen werden noch nicht gespeichert.",
+      "noTitle": "Kein Titel",
+      "noDescription": "Keine Beschreibung"
     }
   }
 
