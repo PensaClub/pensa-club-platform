@@ -115,5 +115,38 @@ togglePublicationBookmark: async (publicationId) => {
 getUserPublications: async (email) => {
   return requester.get(`${apiUrl}/publications/user-publications/${email}`);
 },
+
+// Add these missing endpoints
+createPublication: async (publicationData) => {
+  return requester.post(`${apiUrl}/publications/create`, publicationData);
+},
+
+savePublicationDraft: async (draftData) => {
+  return requester.post(`${apiUrl}/publications/draft/save`, draftData);
+},
+
+updatePublicationDraft: async (id, draftData) => {
+  return requester.post(`${apiUrl}/publications/draft/save/${id}`, draftData);
+},
+
+getPublicationDraft: async (id) => {
+  return requester.get(`${apiUrl}/publications/draft/${id}`);
+},
+
+updatePublication: async (id, publicationData) => {
+  return requester.put(`${apiUrl}/publications/${id}`, publicationData);
+},
+
+deletePublication: async (id) => {
+  return requester.del(`${apiUrl}/publications/${id}`);
+},
+
+deletePublicationDraft: async (id) => {
+  return requester.del(`${apiUrl}/publications/draft/${id}`);
+},
+
+togglePublicationDraftStatus: async (id) => {
+  return requester.patch(`${apiUrl}/publications/toggle-draft/${id}`);
+},
    }
 };

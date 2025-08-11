@@ -3291,14 +3291,16 @@
     "sections": {
       "basicInfo": "Basic Information",
       "content": "Content",
-      "file": "File",
-      "settings": "Settings"
+      "fileOptions": "File & Options",
+      "publishing": "Publishing"
     },
     "fields": {
       "title": "Title",
       "slug": "Slug",
       "shortDescription": "Short Description",
       "category": "Category",
+      "tags": "Tags",
+      "addTagPlaceholder": "Add a tag...",
       "selectCategory": "Select a category",
       "titlePlaceholder": "Enter publication title",
       "shortDescriptionPlaceholder": "Enter a brief description",
@@ -3340,6 +3342,24 @@
       "fileTypeInvalid": "Invalid file type",
       "fileSizeRange": "File size must be between 1 and 100 MB",
       "downloadUrlInvalid": "Invalid download URL"
+    },
+    "fileType": "File Type",
+    "fileSize": "File Size (in MB)",
+    "downloadUrl": "Download Link",
+    "readTime": "Read Time",
+    "commentsEnabled": "Comments Enabled",
+    "commentsEnabledDescription": "Allow users to leave comments",
+    "selectFileType": "Select File Type",
+    "commentsAllowed": "Allowed",
+    "commentsDisabled": "Disabled",
+    "fileSizePlaceholder": "2.5 MB",
+    "readTimePlaceholder": "15 min",
+    "downloadUrlPlaceholder": "/downloads/publication.pdf",
+    "fileTypes": {
+      "pdf": "PDF Document",
+      "doc": "Word Document",
+      "txt": "Text File",
+      "epub": "EPUB Book"
     }
   }
 }

@@ -1,11 +1,38 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+    faInfoCircle,
+    faCommentDots,
+    faCheck,
+    faTimes,
+    faTag,
+    faPlus,
+    faFileAlt,
+    faLink,
+    faAlignLeft,
+    faFolder
+} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import './basicSection.css';
 
-const BasicInfoSection = ({ values, onChangeHandler, setValues, generateSlug }) => {
+const BasicInfoSection = ({
+    values,
+    onChangeHandler,
+    setValues,
+    generateSlug,
+    newTag,
+    setNewTag,
+    addTag,
+    removeTag
+}) => {
     const { t } = useTranslation();
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag();
+        }
+    };
 
     return (
         <div className="publication-form-section-card">
@@ -19,7 +46,8 @@ const BasicInfoSection = ({ values, onChangeHandler, setValues, generateSlug }) 
             <div className="publication-form-section-content">
                 {/* Title */}
                 <div className="publication-form-group">
-                    <label htmlFor="title">
+                    <label htmlFor="title" className="publication-field-label">
+                        <FontAwesomeIcon icon={faFileAlt} />
                         {t('publications.fields.title')}
                         <span className="publication-required-indicator">*</span>
                     </label>
@@ -36,7 +64,8 @@ const BasicInfoSection = ({ values, onChangeHandler, setValues, generateSlug }) 
 
                 {/* Slug - Read Only */}
                 <div className="publication-form-group">
-                    <label htmlFor="slug">
+                    <label htmlFor="slug" className="publication-field-label">
+                        <FontAwesomeIcon icon={faLink} />
                         {t('publications.fields.slug')}
                         <span className="publication-required-indicator">*</span>
                     </label>
@@ -56,7 +85,8 @@ const BasicInfoSection = ({ values, onChangeHandler, setValues, generateSlug }) 
 
                 {/* Short Description */}
                 <div className="publication-form-group">
-                    <label htmlFor="shortDescription">
+                    <label htmlFor="shortDescription" className="publication-field-label">
+                        <FontAwesomeIcon icon={faAlignLeft} />
                         {t('publications.fields.shortDescription')}
                     </label>
                     <textarea
@@ -71,7 +101,8 @@ const BasicInfoSection = ({ values, onChangeHandler, setValues, generateSlug }) 
 
                 {/* Category */}
                 <div className="publication-form-group">
-                    <label htmlFor="category">
+                    <label htmlFor="category" className="publication-field-label">
+                        <FontAwesomeIcon icon={faFolder} />
                         {t('publications.fields.category')}
                     </label>
                     <select
@@ -87,6 +118,89 @@ const BasicInfoSection = ({ values, onChangeHandler, setValues, generateSlug }) 
                         <option value="lifestyle">{t('publications.categories.lifestyle')}</option>
                         <option value="other">{t('publications.categories.other')}</option>
                     </select>
+                </div>
+
+                {/* Tags */}
+                <div className="publication-form-group">
+                    <label htmlFor="tags" className="publication-field-label">
+                        <FontAwesomeIcon icon={faTag} />
+                        {t('publications.fields.tags')}
+                    </label>
+                    <div className="publication-tags-container">
+                        <div className="publication-tags-input-group">
+                            <input
+                                type="text"
+                                value={newTag}
+                                onChange={(e) => setNewTag(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                placeholder={t('publications.fields.addTagPlaceholder')}
+                                className="publication-tags-input"
+                            />
+                            <button
+                                type="button"
+                                onClick={addTag}
+                                className="publication-tags-add-btn"
+                                disabled={!newTag.trim()}
+                            >
+                                <FontAwesomeIcon icon={faPlus} />
+                            </button>
+                        </div>
+                        <div className="publication-tags-list">
+                            {values.tags.map((tag, index) => (
+                                <span key={index} className="publication-tag">
+                                    {tag}
+                                    <button
+                                        type="button"
+                                        onClick={() => removeTag(tag)}
+                                        className="publication-tag-remove"
+                                    >
+                                        ×
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Comments Enabled */}
+                <div className="publication-form-group">
+                    <div className="publication-comments-enabled-section">
+                        <div className="publication-comments-enabled-header">
+                            <label className="publication-comments-enabled-label">
+                                <FontAwesomeIcon icon={faCommentDots} />
+                                {t('publications.commentsEnabled')}
+                            </label>
+                            <div className="publication-comments-enabled-description">
+                                {t('publications.commentsEnabledDescription')}
+                            </div>
+                        </div>
+
+                        <div className="publication-comments-toggle-container">
+                            <label className="publication-comments-toggle">
+                                <input
+                                    type="checkbox"
+                                    name="commentsEnabled"
+                                    checked={values.commentsEnabled}
+                                    onChange={onChangeHandler}
+                                    className="publication-comments-toggle-input"
+                                />
+                                <span className="publication-comments-toggle-slider">
+                                    <span className="publication-comments-toggle-thumb">
+                                        <FontAwesomeIcon
+                                            icon={values.commentsEnabled ? faCheck : faTimes}
+                                            className="publication-comments-toggle-icon"
+                                        />
+                                    </span>
+                                </span>
+                                <span className="publication-comments-toggle-text">
+                                    {values.commentsEnabled
+                                        ? t('publications.commentsAllowed')
+                                        : t('publications.commentsDisabled')
+                                    }
+                                </span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

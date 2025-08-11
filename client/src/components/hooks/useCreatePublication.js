@@ -15,14 +15,25 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
     const { userEmail } = useAuthContext();
 
     const defaultValues = useMemo(() => ({
-        // Basic info only
+        // Basic info
         title: '',
         slug: '',
         shortDescription: '',
         category: '',
+        tags: [],
+        readTime: '',
+        fileType: '',
+        fileSize: '',
+        downloadUrl: '',
+        commentsEnabled: true,
 
-        // Add sections array
-        sections: [],
+        // Always start with 1 section
+        sections: [{
+            titleSlug: 'introduction',
+            title: 'Въведение',
+            content: createSlateEditorState(),
+            images: []
+        }],
 
         // Meta
         userEmail: userEmail || '',
@@ -61,19 +72,22 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
 
     // Basic form handlers
     const onChangeHandler = useCallback((e) => {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target;
+
+        // Handle checkboxes differently
+        const fieldValue = type === 'checkbox' ? checked : value;
 
         // Auto-generate slug when title changes
         if (name === 'title') {
             setValues(prev => ({
                 ...prev,
-                title: value,
-                slug: generateSlug(value)
+                title: fieldValue,
+                slug: generateSlug(fieldValue)
             }));
         } else {
             setValues(prev => ({
                 ...prev,
-                [name]: value
+                [name]: fieldValue
             }));
         }
     }, [generateSlug]);

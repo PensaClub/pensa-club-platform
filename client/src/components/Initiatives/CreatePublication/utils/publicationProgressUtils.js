@@ -29,25 +29,25 @@ export const getPublicationProgressBreakdown = (values) => {
         basicInfo: {
             label: 'Basic Info',
             progress: calculateBasicInfoProgress(values),
-            weight: 0.4, // 40% weight
+            weight: 0.45, // Increased from 0.4
             fields: ['title', 'slug', 'shortDescription', 'category', 'readTime', 'tags']
         },
         content: {
             label: 'Content',
             progress: calculateContentProgress(values),
-            weight: 0.4, // 40% weight
+            weight: 0.45, // Increased from 0.4
             fields: ['sections', 'image']
         },
-        file: {
-            label: 'File',
+        'file-options': {
+            label: 'File & Options',
             progress: calculateFileProgress(values),
-            weight: 0.15, // 15% weight
+            weight: 0.1, // Decreased from 0.15
             fields: ['fileType', 'fileSize', 'downloadUrl']
         },
-        settings: {
-            label: 'Settings',
+        publishing: {
+            label: 'Publishing',
             progress: calculateSettingsProgress(values),
-            weight: 0.05, // 5% weight
+            weight: 0, // Changed from 0.05 - no initial contribution
             fields: ['commentsEnabled']
         }
     };
@@ -107,10 +107,10 @@ const calculateContentProgress = (values) => {
         completed++;
     }
 
-    // Check sections
+    // Check sections - only count if user has actually added content
     if (values.sections && values.sections.length > 0) {
         const validSections = values.sections.filter(section =>
-            section.title && section.title.trim() &&
+            section.title && section.title.trim() && section.title !== 'Въведение' && // Don't count default title
             section.content && getSlateTextLength(section.content) > 0
         );
 
@@ -132,6 +132,10 @@ const calculateFileProgress = (values) => {
     let completed = 0;
 
     fields.forEach(field => {
+        // Don't count default fileType as progress
+        if (field === 'fileType' && values[field] === 'pdf') {
+            return; // Skip default value
+        }
         if (values[field] && values[field].toString().trim()) {
             completed++;
         }
@@ -146,8 +150,8 @@ const calculateFileProgress = (values) => {
  * @returns {number} - Progress percentage (0-100)
  */
 const calculateSettingsProgress = (values) => {
-    // Settings section should start at 0% and only be complete when user interacts with it
-    // For now, return 0% until we have actual settings to validate
+    // Only count progress if user has explicitly changed the setting
+    // For now, always return 0 until user interacts
     return 0;
 };
 

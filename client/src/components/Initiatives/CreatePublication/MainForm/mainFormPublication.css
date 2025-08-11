@@ -134,7 +134,7 @@
 .publication-sidebar-nav-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     padding: 0.875rem 1rem;
     margin-bottom: 0.5rem;
     color: #64748b;
@@ -234,10 +234,17 @@
 
 .publication-form-group label {
     display: flex;
+    align-items: center;
+    gap: 0;
     font-weight: 600;
     color: #334155;
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
+}
+
+.publication-form-group label svg {
+    color: #3b82f6;
+    font-size: 0.9rem;
 }
 
 .publication-required-indicator {
@@ -1597,4 +1604,87 @@
     .publication-btn-publication {
         border: 2px solid #000;
     }
+}
+
+/* Form icon spacing */
+.publication-form-icon {
+    margin-right: 0.75rem;
+    color: #6b7280;
+    width: 1rem;
+}
+
+/* New comments toggle styling */
+.publication-comments-section {
+    margin-top: 1.5rem;
+}
+
+.publication-comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.publication-comments-label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.publication-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.publication-toggle-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.publication-toggle-button.enabled {
+    background: #10b981;
+    color: white;
+}
+
+.publication-toggle-button.disabled {
+    background: #ef4444;
+    color: white;
+}
+
+.publication-toggle-button:hover {
+    transform: scale(1.05);
+}
+
+.publication-toggle-icon {
+    font-size: 0.875rem;
+}
+
+.publication-toggle-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Custom styling for select elements to move dropdown arrows */
+.publication-form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center; /* Move arrow 0.75rem from right instead of far right */
+    background-size: 1rem;
+    padding-right: 2.5rem; /* Reduce padding to accommodate moved arrow */
 }

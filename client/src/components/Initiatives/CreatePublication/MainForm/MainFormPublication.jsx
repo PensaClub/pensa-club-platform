@@ -15,6 +15,10 @@ import PublicationProgressBar from '../components/PublicationProgressBar';
 // Hooks and utilities
 import useCreatePublication from '../../../hooks/useCreatePublication';
 
+// Add imports for new sections
+import FileSection from "../Sections/FileSection/FileSection";
+import SettingsSection from "../Sections/SettingsSection/SettingsSection";
+
 const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
     const { t } = useTranslation();
     const [activeSection, setActiveSection] = useState('basic-info');
@@ -59,20 +63,21 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
     const navigationSections = [
         { id: 'basic-info', label: t('publications.sections.basicInfo') || 'Basic Information', icon: faInfoCircle },
         { id: 'content', label: t('publications.sections.content') || 'Content', icon: faEdit },
-        { id: 'file', label: t('publications.sections.file') || 'File', icon: faFileAlt },
-        { id: 'settings', label: t('publications.sections.settings') || 'Settings', icon: faCog }
+        { id: 'file-options', label: t('publications.sections.fileOptions') || 'File & Options', icon: faFileAlt },
+        { id: 'publishing', label: t('publications.sections.publishing') || 'Publishing', icon: faCog }
+    ];
+
+    // Update section order
+    const sectionOrder = [
+        'basic-info',
+        'content',
+        'file-options',
+        'publishing'
     ];
 
     const handleSectionClick = (sectionId) => {
         setActiveSection(sectionId);
     };
-
-    const sectionOrder = [
-        'basic-info',
-        'content',
-        'file',
-        'settings'
-    ];
 
     const currentSectionIndex = sectionOrder.indexOf(activeSection);
 
@@ -154,32 +159,23 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                             />
                         )}
 
-                        {activeSection === 'file' && (
-                            <div className="publication-form-section-card">
-                                <div className="publication-form-section-header">
-                                    <h2 className="publication-form-section-title">
-                                        <FontAwesomeIcon icon={faFileAlt} />
-                                        File
-                                    </h2>
-                                </div>
-                                <div className="publication-form-section-content">
-                                    <p>File section coming soon...</p>
-                                </div>
-                            </div>
+                        {activeSection === 'file-options' && (
+                            <FileSection
+                                values={values}
+                                errors={errors}
+                                onChangeHandler={onChangeHandler}
+                                onBlurHandler={onBlurHandler}
+                                setValues={setValues}
+                            />
                         )}
 
-                        {activeSection === 'settings' && (
-                            <div className="publication-form-section-card">
-                                <div className="publication-form-section-header">
-                                    <h2 className="publication-form-section-title">
-                                        <FontAwesomeIcon icon={faCog} />
-                                        Settings
-                                    </h2>
-                                </div>
-                                <div className="publication-form-section-content">
-                                    <p>Settings section coming soon...</p>
-                                </div>
-                            </div>
+                        {activeSection === 'publishing' && (
+                            <SettingsSection
+                                values={values}
+                                errors={errors}
+                                onSubmit={onSubmit}
+                                isEditMode={isEditMode}
+                            />
                         )}
 
                         {/* Submit Button */}

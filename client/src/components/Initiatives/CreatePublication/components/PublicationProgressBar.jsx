@@ -22,8 +22,8 @@ const PublicationProgressBar = ({ values, activeSection, onSectionClick }) => {
     const sections = [
         { key: 'basicInfo', label: t('publications.sections.basicInfo') },
         { key: 'content', label: t('publications.sections.content') },
-        { key: 'file', label: t('publications.sections.file') },
-        { key: 'settings', label: t('publications.sections.settings') },
+        { key: 'file-options', label: t('publications.sections.fileOptions') },
+        { key: 'publishing', label: t('publications.sections.publishing') },
     ];
 
     return (
@@ -52,11 +52,11 @@ const PublicationProgressBar = ({ values, activeSection, onSectionClick }) => {
                 <div className={`publication-progress-section ${progressBreakdown.content.progress === 100 ? 'complete' : 'incomplete'}`}>
                     📄 {t('publications.sections.content')}
                 </div>
-                <div className={`publication-progress-section ${progressBreakdown.file.progress === 100 ? 'complete' : 'incomplete'}`}>
-                    📎 {t('publications.sections.file')}
+                <div className={`publication-progress-section ${progressBreakdown['file-options'].progress === 100 ? 'complete' : 'incomplete'}`}>
+                    📎 {t('publications.sections.fileOptions')}
                 </div>
-                <div className={`publication-progress-section ${progressBreakdown.settings.progress === 100 ? 'complete' : 'incomplete'}`}>
-                    ⚙️ {t('publications.sections.settings')}
+                <div className={`publication-progress-section ${progressBreakdown.publishing.progress === 100 ? 'complete' : 'incomplete'}`}>
+                    ⚙️ {t('publications.sections.publishing')}
                 </div>
             </div>
         </div>
