@@ -3223,7 +3223,8 @@
       "statusPaused": "Paused",
       "statusDraft": "Draft",
       "statusUnknown": "Unknown",
-      "statusPublished": "Published"
+      "statusPublished": "Published",
+      "createPublication": "Create Publication"
     },
     "create": {
       "title": "Create Publication",

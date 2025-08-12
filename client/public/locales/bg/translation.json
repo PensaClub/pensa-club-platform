@@ -3258,7 +3258,8 @@
       "showAuthor": "Покажи автора",
       "showAuthorDescription": "Покажи името на автора в публикацията",
       "authorVisible": "Авторът ще бъде видим",
-      "authorHidden": "Авторът ще бъде скрит"
+      "authorHidden": "Авторът ще бъде скрит",
+      "createPublication": "Създай публикация"
     },
     "create": {
       "title": "Създаване на публикация",

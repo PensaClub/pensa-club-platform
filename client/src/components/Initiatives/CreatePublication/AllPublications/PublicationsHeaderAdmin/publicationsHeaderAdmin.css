@@ -54,7 +54,14 @@
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
-  min-width: 120px;
+  min-width: 140px; /* Make it wider */
+  padding: 1rem 1.5rem; /* Add more padding */
+}
+
+.publications-header-admin-stat-card .publications-header-admin-stat-number svg {
+  width: 24px;
+  height: 24px;
+  color: #3b82f6; /* Blue color for the plus icon */
 }
 
 .publications-header-admin-stat-number {
@@ -113,6 +120,10 @@
 
 .publications-header-admin-toggle-btn.active svg {
   color: #3b82f6;
+}
+
+.publications-header-admin-stat-card.invisible {
+  visibility: hidden;
 }
 
 /* Mobile styles */
