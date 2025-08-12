@@ -25,7 +25,11 @@ import {
   faCheckCircle,
   faExclamationTriangle,
   faPaperPlane,
-  faFlag
+  faFlag,
+    faUserFriends,
+  faIdCard,
+  faAddressCard,
+  faCopy
 } from '@fortawesome/free-solid-svg-icons';
 import './sportsHero.css';
 
@@ -48,6 +52,8 @@ export const SportsHero = ({ club }) => {
     experience: '',
     healthConditions: ''
   });
+  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [copiedItems, setCopiedItems] = useState({});
   const [contactStatus, setContactStatus] = useState(null);
   const [enrollStatus, setEnrollStatus] = useState(null);
 
@@ -235,6 +241,26 @@ ${contactForm.message}
     setActiveVideo(null);
   };
 
+const members = club.members || [];
+const copyMemberData = async (data, type, memberName) => {
+  try {
+    await navigator.clipboard.writeText(data);
+    setCopiedItems(prev => ({
+      ...prev,
+      [`${memberName}-${type}`]: true
+    }));
+    setTimeout(() => {
+      setCopiedItems(prev => {
+        const newState = { ...prev };
+        delete newState[`${memberName}-${type}`];
+        return newState;
+      });
+    }, 2000);
+  } catch (error) {
+    console.error('Грешка при копиране:', error);
+  }
+};
+
   return (
     <section id="sports-hero" className="sports-hero-section">
       <div className="sports-hero-container">
@@ -339,7 +365,15 @@ ${contactForm.message}
             ))}
           </div>
         )}
-
+{members.length > 0 && (
+  <button 
+    onClick={() => setShowMembersModal(true)}
+    className="sports-hero-btn secondary"
+  >
+    <FontAwesomeIcon icon={faUserFriends} />
+    <span>Членове ({members.length})</span>
+  </button>
+)}
         {/* Popular Activities */}
         {popularActivities.length > 0 && (
           <div className="sports-hero-activities">
@@ -774,6 +808,117 @@ ${contactForm.message}
           </div>
         </div>
       )}
+      {/* Members Modal */}
+{showMembersModal && (
+  <div className="sports-hero-modal" onClick={() => setShowMembersModal(false)}>
+    <div className="sports-hero-modal-content sports-hero-members-modal" onClick={(e) => e.stopPropagation()}>
+      <button 
+        className="sports-hero-modal-close" 
+        onClick={() => setShowMembersModal(false)}
+      >
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+      
+      <div className="sports-hero-modal-header">
+        <FontAwesomeIcon icon={faUserFriends} />
+        <h3>Членове на клуба</h3>
+        <p>Общо {members.length} {members.length === 1 ? 'член' : 'членове'}</p>
+      </div>
+      
+      <div className="sports-hero-members-container">
+        <div className="sports-hero-members-grid">
+          {members.map((member) => (
+            <div key={member.id} className="sports-hero-member-card">
+              <div className="sports-hero-member-photo">
+                {member.photo ? (
+                  <img 
+                    src={member.photo.src} 
+                    alt={member.photo.alt}
+                    className="sports-hero-member-image"
+                  />
+                ) : (
+                  <div className="sports-hero-member-placeholder">
+                    <FontAwesomeIcon icon={faUser} />
+                  </div>
+                )}
+                {member.role && member.role !== 'член' && (
+                  <div className="sports-hero-member-role">
+                    <FontAwesomeIcon icon={faAward} />
+                    <span>{member.role}</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="sports-hero-member-info">
+                <div className="sports-hero-member-name">
+                  <h4>{member.firstName} {member.lastName}</h4>
+                  <button
+                    className={`sports-hero-copy-icon ${copiedItems[`${member.id}-name`] ? 'copied' : ''}`}
+                    onClick={() => copyMemberData(`${member.firstName} ${member.lastName}`, 'name', member.id)}
+                    title="Копирай името"
+                  >
+                    <FontAwesomeIcon icon={copiedItems[`${member.id}-name`] ? faCheckCircle : faCopy} />
+                  </button>
+                </div>
+                
+                <div className="sports-hero-member-details">
+                  {member.phone && (
+                    <div className="sports-hero-member-detail">
+                      <FontAwesomeIcon icon={faPhone} />
+                      <span>{member.phone}</span>
+                      <button
+                        className={`sports-hero-copy-icon ${copiedItems[`${member.id}-phone`] ? 'copied' : ''}`}
+                        onClick={() => copyMemberData(member.phone, 'phone', member.id)}
+                        title="Копирай телефона"
+                      >
+                        <FontAwesomeIcon icon={copiedItems[`${member.id}-phone`] ? faCheckCircle : faCopy} />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {member.email && (
+                    <div className="sports-hero-member-detail">
+                      <FontAwesomeIcon icon={faEnvelope} />
+                      <span>{member.email}</span>
+                      <button
+                        className={`sports-hero-copy-icon ${copiedItems[`${member.id}-email`] ? 'copied' : ''}`}
+                        onClick={() => copyMemberData(member.email, 'email', member.id)}
+                        title="Копирай имейла"
+                      >
+                        <FontAwesomeIcon icon={copiedItems[`${member.id}-email`] ? faCheckCircle : faCopy} />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {member.address && (
+                    <div className="sports-hero-member-detail">
+                      <FontAwesomeIcon icon={faMapMarkerAlt} />
+                      <span>{member.address}</span>
+                      <button
+                        className={`sports-hero-copy-icon ${copiedItems[`${member.id}-address`] ? 'copied' : ''}`}
+                        onClick={() => copyMemberData(member.address, 'address', member.id)}
+                        title="Копирай адреса"
+                      >
+                        <FontAwesomeIcon icon={copiedItems[`${member.id}-address`] ? faCheckCircle : faCopy} />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {member.joinDate && (
+                    <div className="sports-hero-member-detail">
+                      <FontAwesomeIcon icon={faCalendarAlt} />
+                      <span>Член от {new Date(member.joinDate).toLocaleDateString('bg-BG')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </section>
   );
 };

@@ -19,13 +19,39 @@ import {
   faStar,
   faGraduationCap,
   faAward,
-  faHeart
+  faHeart,
+  faTimes,
+  faPhone,
+  faEnvelope,
+  faCheck,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import './culturalActivities.css';
 
 export const CulturalActivities = ({ club }) => {
   const [activeTab, setActiveTab] = useState('regular');
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
+  const [joinForm, setJoinForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+    activityName: ''
+  });
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState(null);
+
+  // Проверяваме дали има необходимите данни
+  if (!club?.activities) {
+    return null;
+  }
 
   const activityIcons = {
     'хор': faMusic,
@@ -33,6 +59,9 @@ export const CulturalActivities = ({ club }) => {
     'рисуване': faPalette,
     'четене': faBookOpen,
     'курсове': faGraduationCap,
+    'музика': faMusic,
+    'театър': faTheaterMasks,
+    'изкуство': faPalette,
     'default': faUsers
   };
 
@@ -46,79 +75,161 @@ export const CulturalActivities = ({ club }) => {
 
   const weekDays = ['понеделник', 'вторник', 'сряда', 'четвъртък', 'петък', 'събота', 'неделя'];
 
-  const regularActivities = club.activities?.regular || [
-    {
-      name: "Хор 'Родопски звуци'",
-      day: "понеделник",
-      time: "16:00-18:00",
-      instructor: "Мария Димитрова",
-      participants: 24,
-      description: "Традиционни български песни и класическа музика",
-      level: "всички нива",
-      duration: "2 часа"
-    },
-    {
-      name: "Народни танци",
-      day: "сряда", 
-      time: "17:00-19:00",
-      instructor: "Георги Стойков",
-      participants: 18,
-      description: "Български народни танци за начинаещи и напреднали",
-      level: "начинаещи",
-      duration: "2 часа"
-    }
-  ];
+  // Само реални данни от club
+  const regularActivities = club.activities?.regular || [];
+  const courses = club.activities?.courses || [];
+  const specialPrograms = club.activities?.special || [];
 
-  const courses = club.activities?.courses || [
-    {
-      name: "Основи на дигиталните технологии",
-      duration: "8 седмици",
-      participants: 15,
-      instructor: "Млади доброволци",
-      description: "Как да използваме смартфон, имейл и онлайн услуги",
-      startDate: "2025-02-01",
-      schedule: "петък 14:00-16:00"
-    }
-  ];
+  // Проверяваме дали има какво да показваме
+  const hasRegularActivities = regularActivities.length > 0;
+  const hasCourses = courses.length > 0;
+  const hasSpecialPrograms = specialPrograms.length > 0;
+  const hasAnyActivities = hasRegularActivities || hasCourses || hasSpecialPrograms;
 
-  const specialPrograms = [
-    {
-      name: "Междупоколенческа програма",
-      description: "Свързване на пенсионери с ученици за културен обмен",
-      participants: 30,
-      frequency: "месечно",
-      icon: faHeart
-    },
-    {
-      name: "Културни експедиции",
-      description: "Посещения на музеи, театри и исторически места",
-      participants: 25,
-      frequency: "тримесечно", 
-      icon: faMapMarkerAlt
-    },
-    {
-      name: "Творчески работилници",
-      description: "Занаяти, рисуване и художествено творчество",
-      participants: 20,
-      frequency: "седмично",
-      icon: faPalette
-    },
-    {
-      name: "Литературен клуб",
-      description: "Четения, дискусии и срещи с автори",
-      participants: 15,
-      frequency: "двуседмично",
-      icon: faBookOpen
-    }
-  ];
+  // Ако няма никакви дейности, не показваме компонента
+  if (!hasAnyActivities) {
+    return null;
+  }
 
-  const handleJoinActivity = (activity) => {
-    alert(`Записвате се за: ${activity.name}`);
+  // Функции за форми
+  const openJoinModal = (activity) => {
+    setSelectedActivity(activity);
+    setJoinForm(prev => ({
+      ...prev,
+      activityName: activity.name
+    }));
+    setShowJoinModal(true);
+  };
+
+  const closeJoinModal = () => {
+    setShowJoinModal(false);
+    setSelectedActivity(null);
+    setJoinForm({
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+      activityName: ''
+    });
+    setFormStatus(null);
+  };
+
+  const openContactModal = () => {
+    setShowContactModal(true);
+  };
+
+  const closeContactModal = () => {
+    setShowContactModal(false);
+    setContactForm({
+      name: '',
+      email: '',
+      phone: '',
+      message: ''
+    });
+    setFormStatus(null);
+  };
+
+  const handleJoinFormChange = (field, value) => {
+    setJoinForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleContactFormChange = (field, value) => {
+    setContactForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleJoinSubmit = (e) => {
+    e.preventDefault();
+    setFormStatus('sending');
+
+    if (club.contacts?.email) {
+      const subject = encodeURIComponent(`Записване за дейност в ${club.name}`);
+      const body = encodeURIComponent(`
+Здравейте,
+
+Получихте заявка за записване за дейност от ${club.name}:
+
+Дейност: ${joinForm.activityName}
+Име: ${joinForm.name}
+Имейл: ${joinForm.email}
+Телефон: ${joinForm.phone || 'Не е посочен'}
+
+Съобщение:
+${joinForm.message || 'Няма допълнително съобщение'}
+
+---
+Изпратено от ${joinForm.email}
+      `);
+      
+      try {
+        window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
+        setFormStatus('sent');
+        setTimeout(() => {
+          closeJoinModal();
+        }, 2000);
+      } catch (error) {
+        setFormStatus('error');
+      }
+    } else {
+      setFormStatus('error');
+    }
+  };
+
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    setFormStatus('sending');
+
+    if (club.contacts?.email) {
+      const subject = encodeURIComponent(`Запитване за дейности от ${club.name}`);
+      const body = encodeURIComponent(`
+Здравейте,
+
+Получихте запитване за дейности от ${club.name}:
+
+Име: ${contactForm.name}
+Имейл: ${contactForm.email}
+Телефон: ${contactForm.phone || 'Не е посочен'}
+
+Съобщение:
+${contactForm.message}
+
+---
+Изпратено от ${contactForm.email}
+      `);
+      
+      try {
+        window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
+        setFormStatus('sent');
+        setTimeout(() => {
+          closeContactModal();
+        }, 2000);
+      } catch (error) {
+        setFormStatus('error');
+      }
+    } else {
+      setFormStatus('error');
+    }
   };
 
   const handleInfoRequest = (activity) => {
-    alert(`Повече информация за: ${activity.name}`);
+    setSelectedActivity(activity);
+    setContactForm(prev => ({
+      ...prev,
+      message: `Моля, изпратете ми повече информация за "${activity.name}".`
+    }));
+    setShowContactModal(true);
   };
+
+  // Set initial tab based on available content
+  if (activeTab === 'regular' && !hasRegularActivities) {
+    if (hasCourses) setActiveTab('courses');
+    else if (hasSpecialPrograms) setActiveTab('special');
+  }
 
   return (
     <section id="club-activities" className="cultural-activities-main-section">
@@ -138,34 +249,40 @@ export const CulturalActivities = ({ club }) => {
 
         {/* Navigation Tabs */}
         <div className="cultural-activities-tabs">
-          <button 
-            className={`cultural-activities-tab ${activeTab === 'regular' ? 'active' : ''}`}
-            onClick={() => setActiveTab('regular')}
-          >
-            <FontAwesomeIcon icon={faCalendarAlt} />
-            Редовни дейности
-          </button>
-          <button 
-            className={`cultural-activities-tab ${activeTab === 'courses' ? 'active' : ''}`}
-            onClick={() => setActiveTab('courses')}
-          >
-            <FontAwesomeIcon icon={faGraduationCap} />
-            Курсове и обучения
-          </button>
-          <button 
-            className={`cultural-activities-tab ${activeTab === 'special' ? 'active' : ''}`}
-            onClick={() => setActiveTab('special')}
-          >
-            <FontAwesomeIcon icon={faStar} />
-            Специални програми
-          </button>
+          {hasRegularActivities && (
+            <button 
+              className={`cultural-activities-tab ${activeTab === 'regular' ? 'active' : ''}`}
+              onClick={() => setActiveTab('regular')}
+            >
+              <FontAwesomeIcon icon={faCalendarAlt} />
+              Редовни дейности ({regularActivities.length})
+            </button>
+          )}
+          {hasCourses && (
+            <button 
+              className={`cultural-activities-tab ${activeTab === 'courses' ? 'active' : ''}`}
+              onClick={() => setActiveTab('courses')}
+            >
+              <FontAwesomeIcon icon={faGraduationCap} />
+              Курсове и обучения ({courses.length})
+            </button>
+          )}
+          {hasSpecialPrograms && (
+            <button 
+              className={`cultural-activities-tab ${activeTab === 'special' ? 'active' : ''}`}
+              onClick={() => setActiveTab('special')}
+            >
+              <FontAwesomeIcon icon={faStar} />
+              Специални програми ({specialPrograms.length})
+            </button>
+          )}
         </div>
 
         {/* Content Based on Active Tab */}
         <div className="cultural-activities-content">
           
           {/* Regular Activities */}
-          {activeTab === 'regular' && (
+          {activeTab === 'regular' && hasRegularActivities && (
             <div className="cultural-activities-regular">
               <div className="cultural-activities-grid">
                 {regularActivities.map((activity, index) => (
@@ -177,41 +294,49 @@ export const CulturalActivities = ({ club }) => {
                       <div className="cultural-activities-card-title">
                         <h3>{activity.name}</h3>
                         <div className="cultural-activities-card-meta">
-                          <span className="cultural-activities-day">{activity.day}</span>
-                          <span className="cultural-activities-time">{activity.time}</span>
+                          {activity.day && <span className="cultural-activities-day">{activity.day}</span>}
+                          {activity.time && <span className="cultural-activities-time">{activity.time}</span>}
                         </div>
                       </div>
                     </div>
                     
                     <div className="cultural-activities-card-content">
-                      <p className="cultural-activities-description">{activity.description}</p>
+                      {activity.description && (
+                        <p className="cultural-activities-description">{activity.description}</p>
+                      )}
                       
                       <div className="cultural-activities-details">
-                        <div className="cultural-activities-detail-item">
-                          <FontAwesomeIcon icon={faUser} />
-                          <span>Инструктор: {activity.instructor}</span>
-                        </div>
-                        <div className="cultural-activities-detail-item">
-                          <FontAwesomeIcon icon={faUsers} />
-                          <span>{activity.participants} участници</span>
-                        </div>
+                        {activity.instructor && (
+                          <div className="cultural-activities-detail-item">
+                            <FontAwesomeIcon icon={faUser} />
+                            <span>Инструктор: {activity.instructor}</span>
+                          </div>
+                        )}
+                        {activity.participants && (
+                          <div className="cultural-activities-detail-item">
+                            <FontAwesomeIcon icon={faUsers} />
+                            <span>{activity.participants} участници</span>
+                          </div>
+                        )}
                         {activity.level && (
                           <div className="cultural-activities-detail-item">
                             <FontAwesomeIcon icon={faStar} />
                             <span>Ниво: {activity.level}</span>
                           </div>
                         )}
-                        <div className="cultural-activities-detail-item">
-                          <FontAwesomeIcon icon={faClock} />
-                          <span>Продължителност: {activity.duration || '2 часа'}</span>
-                        </div>
+                        {activity.duration && (
+                          <div className="cultural-activities-detail-item">
+                            <FontAwesomeIcon icon={faClock} />
+                            <span>Продължителност: {activity.duration}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                     
                     <div className="cultural-activities-card-actions">
                       <button 
                         className="cultural-activities-btn-primary"
-                        onClick={() => handleJoinActivity(activity)}
+                        onClick={() => openJoinModal(activity)}
                       >
                         <FontAwesomeIcon icon={faUserPlus} />
                         Записване
@@ -231,7 +356,7 @@ export const CulturalActivities = ({ club }) => {
           )}
 
           {/* Courses */}
-          {activeTab === 'courses' && (
+          {activeTab === 'courses' && hasCourses && (
             <div className="cultural-activities-courses">
               <div className="cultural-activities-grid">
                 {courses.map((course, index) => (
@@ -242,22 +367,30 @@ export const CulturalActivities = ({ club }) => {
                       </div>
                       <div className="cultural-activities-course-title">
                         <h3>{course.name}</h3>
-                        <div className="cultural-activities-course-duration">{course.duration}</div>
+                        {course.duration && (
+                          <div className="cultural-activities-course-duration">{course.duration}</div>
+                        )}
                       </div>
                     </div>
                     
                     <div className="cultural-activities-course-content">
-                      <p className="cultural-activities-course-description">{course.description}</p>
+                      {course.description && (
+                        <p className="cultural-activities-course-description">{course.description}</p>
+                      )}
                       
                       <div className="cultural-activities-course-details">
-                        <div className="cultural-activities-course-detail-item">
-                          <FontAwesomeIcon icon={faUser} />
-                          <span>Преподавател: {course.instructor}</span>
-                        </div>
-                        <div className="cultural-activities-course-detail-item">
-                          <FontAwesomeIcon icon={faUsers} />
-                          <span>{course.participants} участници</span>
-                        </div>
+                        {course.instructor && (
+                          <div className="cultural-activities-course-detail-item">
+                            <FontAwesomeIcon icon={faUser} />
+                            <span>Преподавател: {course.instructor}</span>
+                          </div>
+                        )}
+                        {course.participants && (
+                          <div className="cultural-activities-course-detail-item">
+                            <FontAwesomeIcon icon={faUsers} />
+                            <span>{course.participants} участници</span>
+                          </div>
+                        )}
                         {course.schedule && (
                           <div className="cultural-activities-course-detail-item">
                             <FontAwesomeIcon icon={faCalendarAlt} />
@@ -276,7 +409,7 @@ export const CulturalActivities = ({ club }) => {
                     <div className="cultural-activities-course-actions">
                       <button 
                         className="cultural-activities-btn-primary"
-                        onClick={() => handleJoinActivity(course)}
+                        onClick={() => openJoinModal(course)}
                       >
                         <FontAwesomeIcon icon={faUserPlus} />
                         Записване
@@ -296,26 +429,30 @@ export const CulturalActivities = ({ club }) => {
           )}
 
           {/* Special Programs */}
-          {activeTab === 'special' && (
+          {activeTab === 'special' && hasSpecialPrograms && (
             <div className="cultural-activities-special">
               <div className="cultural-activities-special-grid">
                 {specialPrograms.map((program, index) => (
                   <div key={index} className="cultural-activities-special-card">
                     <div className="cultural-activities-special-icon">
-                      <FontAwesomeIcon icon={program.icon} />
+                      <FontAwesomeIcon icon={getActivityIcon(program.name)} />
                     </div>
                     <div className="cultural-activities-special-content">
                       <h3>{program.name}</h3>
-                      <p>{program.description}</p>
+                      {program.description && <p>{program.description}</p>}
                       <div className="cultural-activities-special-stats">
-                        <div className="cultural-activities-special-stat">
-                          <FontAwesomeIcon icon={faUsers} />
-                          <span>{program.participants} участници</span>
-                        </div>
-                        <div className="cultural-activities-special-stat">
-                          <FontAwesomeIcon icon={faClock} />
-                          <span>{program.frequency}</span>
-                        </div>
+                        {program.participants && (
+                          <div className="cultural-activities-special-stat">
+                            <FontAwesomeIcon icon={faUsers} />
+                            <span>{program.participants} участници</span>
+                          </div>
+                        )}
+                        {program.frequency && (
+                          <div className="cultural-activities-special-stat">
+                            <FontAwesomeIcon icon={faClock} />
+                            <span>{program.frequency}</span>
+                          </div>
+                        )}
                       </div>
                       <button 
                         className="cultural-activities-special-btn"
@@ -332,42 +469,44 @@ export const CulturalActivities = ({ club }) => {
         </div>
 
         {/* Weekly Schedule Overview */}
-        <div className="cultural-activities-schedule">
-          <div className="cultural-activities-schedule-header">
-            <h3>Седмична програма</h3>
-            <p>Преглед на всички дейности по дни</p>
-          </div>
-          <div className="cultural-activities-weekly-grid">
-            {weekDays.map((day, index) => {
-              const dayActivities = regularActivities.filter(activity => 
-                activity.day.toLowerCase() === day.toLowerCase()
-              );
-              
-              return (
-                <div key={index} className="cultural-activities-day-column">
-                  <div className="cultural-activities-day-header">
-                    <h4>{day}</h4>
-                  </div>
-                  <div className="cultural-activities-day-content">
-                    {dayActivities.length > 0 ? (
-                      dayActivities.map((activity, actIndex) => (
-                        <div key={actIndex} className="cultural-activities-day-activity">
-                          <div className="cultural-activities-day-time">{activity.time}</div>
-                          <div className="cultural-activities-day-name">{activity.name}</div>
-                          <div className="cultural-activities-day-instructor">{activity.instructor}</div>
+        {hasRegularActivities && regularActivities.some(activity => activity.day) && (
+          <div className="cultural-activities-schedule">
+            <div className="cultural-activities-schedule-header">
+              <h3>Седмична програма</h3>
+              <p>Преглед на всички дейности по дни</p>
+            </div>
+            <div className="cultural-activities-weekly-grid">
+              {weekDays.map((day, index) => {
+                const dayActivities = regularActivities.filter(activity => 
+                  activity.day && activity.day.toLowerCase() === day.toLowerCase()
+                );
+                
+                return (
+                  <div key={index} className="cultural-activities-day-column">
+                    <div className="cultural-activities-day-header">
+                      <h4>{day}</h4>
+                    </div>
+                    <div className="cultural-activities-day-content">
+                      {dayActivities.length > 0 ? (
+                        dayActivities.map((activity, actIndex) => (
+                          <div key={actIndex} className="cultural-activities-day-activity">
+                            {activity.time && <div className="cultural-activities-day-time">{activity.time}</div>}
+                            <div className="cultural-activities-day-name">{activity.name}</div>
+                            {activity.instructor && <div className="cultural-activities-day-instructor">{activity.instructor}</div>}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="cultural-activities-no-activities">
+                          Няма планирани дейности
                         </div>
-                      ))
-                    ) : (
-                      <div className="cultural-activities-no-activities">
-                        Няма планирани дейности
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Call to Action */}
         <div className="cultural-activities-cta">
@@ -375,11 +514,11 @@ export const CulturalActivities = ({ club }) => {
             <h3>Готови да се включите?</h3>
             <p>Присъединете се към някоя от нашите програми и открийте нови таланти и приятели</p>
             <div className="cultural-activities-cta-buttons">
-              <button className="cultural-activities-cta-primary">
+              <button className="cultural-activities-cta-primary" onClick={openContactModal}>
                 <FontAwesomeIcon icon={faUserPlus} />
                 Запишете се сега
               </button>
-              <button className="cultural-activities-cta-secondary">
+              <button className="cultural-activities-cta-secondary" onClick={openContactModal}>
                 <FontAwesomeIcon icon={faInfoCircle} />
                 Свържете се с нас
               </button>
@@ -387,6 +526,232 @@ export const CulturalActivities = ({ club }) => {
           </div>
         </div>
       </div>
+
+      {/* Join Activity Modal */}
+      {showJoinModal && selectedActivity && (
+        <div className="cultural-activities-join-modal">
+          <div className="cultural-activities-join-modal-overlay" onClick={closeJoinModal}></div>
+          <div className="cultural-activities-join-modal-container">
+            <button className="cultural-activities-join-modal-close" onClick={closeJoinModal}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            
+            <div className="cultural-activities-join-header">
+              <FontAwesomeIcon icon={faUserPlus} />
+              <h3>Записване за {selectedActivity.name}</h3>
+              <p>Попълнете формата и ще се свържем с вас за потвърждение</p>
+            </div>
+            
+            {formStatus === 'sent' ? (
+              <div className="cultural-activities-form-success">
+                <FontAwesomeIcon icon={faCheck} />
+                <h4>Заявката е изпратена!</h4>
+                <p>Благодарим ви! Ще се свържем с вас скоро за потвърждение на записването.</p>
+              </div>
+            ) : formStatus === 'error' ? (
+              <div className="cultural-activities-form-error">
+                <FontAwesomeIcon icon={faExclamationTriangle} />
+                <h4>Възникна грешка</h4>
+                <p>Моля опитайте отново или се свържете с нас директно.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleJoinSubmit} className="cultural-activities-join-form">
+                <div className="cultural-activities-form-row">
+                  <div className="cultural-activities-form-group">
+                    <label htmlFor="joinName">
+                      <FontAwesomeIcon icon={faUser} />
+                      Вашето име *
+                    </label>
+                    <input
+                      type="text"
+                      id="joinName"
+                      value={joinForm.name}
+                      onChange={(e) => handleJoinFormChange('name', e.target.value)}
+                      required
+                      placeholder="Въведете вашето име"
+                    />
+                  </div>
+                  
+                  <div className="cultural-activities-form-group">
+                    <label htmlFor="joinEmail">
+                      <FontAwesomeIcon icon={faEnvelope} />
+                      Имейл адрес *
+                    </label>
+                    <input
+                      type="email"
+                      id="joinEmail"
+                      value={joinForm.email}
+                      onChange={(e) => handleJoinFormChange('email', e.target.value)}
+                      required
+                      placeholder="Въведете вашия имейл"
+                    />
+                  </div>
+                </div>
+                
+                <div className="cultural-activities-form-group">
+                  <label htmlFor="joinPhone">
+                    <FontAwesomeIcon icon={faPhone} />
+                    Телефон *
+                  </label>
+                  <input
+                    type="tel"
+                    id="joinPhone"
+                    value={joinForm.phone}
+                    onChange={(e) => handleJoinFormChange('phone', e.target.value)}
+                    required
+                    placeholder="Въведете вашия телефон"
+                  />
+                </div>
+                
+                <div className="cultural-activities-form-group">
+                  <label htmlFor="joinMessage">
+                    <FontAwesomeIcon icon={faEnvelope} />
+                    Допълнително съобщение (по желание)
+                  </label>
+                  <textarea
+                    id="joinMessage"
+                    value={joinForm.message}
+                    onChange={(e) => handleJoinFormChange('message', e.target.value)}
+                    placeholder="Опишете нивото си на опит или задайте въпрос..."
+                    rows="4"
+                  />
+                </div>
+                
+                <div className="cultural-activities-form-actions">
+                  <button 
+                    type="submit" 
+                    className="cultural-activities-submit-btn"
+                    disabled={formStatus === 'sending'}
+                  >
+                    <FontAwesomeIcon icon={faUserPlus} />
+                    {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявка'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={closeJoinModal}
+                    className="cultural-activities-cancel-btn"
+                  >
+                    Отказ
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Contact Modal */}
+      {showContactModal && (
+        <div className="cultural-activities-contact-modal">
+          <div className="cultural-activities-contact-modal-overlay" onClick={closeContactModal}></div>
+          <div className="cultural-activities-contact-modal-container">
+            <button className="cultural-activities-contact-modal-close" onClick={closeContactModal}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            
+            <div className="cultural-activities-contact-header">
+              <FontAwesomeIcon icon={faInfoCircle} />
+              <h3>Свържете се с нас</h3>
+              <p>Задайте вашия въпрос и ще ви отговорим възможно най-скоро</p>
+            </div>
+            
+            {formStatus === 'sent' ? (
+              <div className="cultural-activities-form-success">
+                <FontAwesomeIcon icon={faCheck} />
+                <h4>Съобщението е изпратено!</h4>
+                <p>Благодарим ви! Ще се свържем с вас скоро.</p>
+              </div>
+            ) : formStatus === 'error' ? (
+              <div className="cultural-activities-form-error">
+                <FontAwesomeIcon icon={faExclamationTriangle} />
+                <h4>Възникна грешка</h4>
+                <p>Моля опитайте отново или се свържете с нас директно.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleContactSubmit} className="cultural-activities-contact-form">
+                <div className="cultural-activities-form-row">
+                  <div className="cultural-activities-form-group">
+                    <label htmlFor="contactName">
+                      <FontAwesomeIcon icon={faUser} />
+                      Вашето име *
+                    </label>
+                    <input
+                      type="text"
+                      id="contactName"
+                      value={contactForm.name}
+                      onChange={(e) => handleContactFormChange('name', e.target.value)}
+                      required
+                      placeholder="Въведете вашето име"
+                    />
+                  </div>
+                  
+                  <div className="cultural-activities-form-group">
+                    <label htmlFor="contactEmail">
+                      <FontAwesomeIcon icon={faEnvelope} />
+                      Имейл адрес *
+                    </label>
+                    <input
+                      type="email"
+                      id="contactEmail"
+                      value={contactForm.email}
+                      onChange={(e) => handleContactFormChange('email', e.target.value)}
+                      required
+                      placeholder="Въведете вашия имейл"
+                    />
+                  </div>
+                </div>
+                
+                <div className="cultural-activities-form-group">
+                  <label htmlFor="contactPhone">
+                    <FontAwesomeIcon icon={faPhone} />
+                    Телефон (по желание)
+                  </label>
+                  <input
+                    type="tel"
+                    id="contactPhone"
+                    value={contactForm.phone}
+                    onChange={(e) => handleContactFormChange('phone', e.target.value)}
+                    placeholder="Въведете вашия телефон"
+                  />
+                </div>
+                
+                <div className="cultural-activities-form-group">
+                  <label htmlFor="contactMessage">
+                    <FontAwesomeIcon icon={faEnvelope} />
+                    Съобщение *
+                  </label>
+                  <textarea
+                    id="contactMessage"
+                    value={contactForm.message}
+                    onChange={(e) => handleContactFormChange('message', e.target.value)}
+                    required
+                    placeholder="Какво бихте искали да знаете?"
+                    rows="4"
+                  />
+                </div>
+                
+                <div className="cultural-activities-form-actions">
+                  <button 
+                    type="submit" 
+                    className="cultural-activities-submit-btn"
+                    disabled={formStatus === 'sending'}
+                  >
+                    <FontAwesomeIcon icon={faEnvelope} />
+                    {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщение'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={closeContactModal}
+                    className="cultural-activities-cancel-btn"
+                  >
+                    Отказ
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 };

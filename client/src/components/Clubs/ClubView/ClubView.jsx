@@ -117,9 +117,9 @@ export const ClubView = () => {
         { id: 'health-activities', label: 'Здравни дейности', icon: faHeartbeat },
         { id: 'wellness-services', label: 'Wellness услуги', icon: faLeaf },
         { id: 'sport-events', label: 'Спортни събития', icon: faTrophy },
-        { id: 'health-tracking', label: 'Следене прогрес', icon: faChartLine },
+        { id: 'sports-health-tracking', label: 'Следене прогрес', icon: faChartLine },
         { id: 'sports-gallery', label: 'Галерия', icon: faImages },
-        { id: 'fitness-partners', label: 'Партньори', icon: faHandshake },
+        { id: 'sports-partners', label: 'Партньори', icon: faHandshake },
         { id: 'sports-location', label: 'Локация', icon: faMapPin },
         { id: 'sports-contacts', label: 'Контакти', icon: faHeadset }
     ];

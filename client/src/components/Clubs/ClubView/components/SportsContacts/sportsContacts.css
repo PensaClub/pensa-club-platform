@@ -1,0 +1,1086 @@
+/* components/SportsContacts/sportsContacts.css */
+.sports-contacts-section {
+  padding: 8rem 0;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 25%, #06b6d4 50%, #10b981 75%, #f59e0b 100%);
+  background-size: 400% 400%;
+  animation: sportsContactsGradient 25s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes sportsContactsGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.sports-contacts-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.sports-contacts-section::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.03), transparent),
+    conic-gradient(from 90deg, transparent, rgba(255, 255, 255, 0.02), transparent),
+    conic-gradient(from 180deg, transparent, rgba(255, 255, 255, 0.01), transparent);
+  animation: sportsContactsSpin 40s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes sportsContactsSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.sports-contacts-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.sports-contacts-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  animation: sportsContactsHeaderSlide 0.8s ease-out;
+}
+
+@keyframes sportsContactsHeaderSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sports-contacts-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 
+    0 10px 30px rgba(239, 68, 68, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+  animation: sportsContactsBadgePulse 2.5s ease-in-out infinite;
+}
+
+@keyframes sportsContactsBadgePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 10px 30px rgba(239, 68, 68, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 
+      0 15px 40px rgba(239, 68, 68, 0.6),
+      0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.sports-contacts-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  color: white;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+.sports-contacts-title-icon {
+  animation: sportsContactsTitleBolt 2s ease-in-out infinite;
+  color: #fbbf24;
+}
+
+@keyframes sportsContactsTitleBolt {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 15px #fbbf24);
+  }
+  50% { 
+    transform: scale(1.15) rotate(-10deg);
+    filter: drop-shadow(0 0 25px #fbbf24);
+  }
+}
+
+.sports-contacts-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Quick Contact Cards */
+.sports-contacts-quick {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 5rem;
+  animation: sportsContactsQuickSlide 0.8s ease-out 0.2s both;
+}
+
+@keyframes sportsContactsQuickSlide {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sports-contacts-quick-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 2.5rem;
+  
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-direction: column;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 100px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.sports-contacts-quick-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.8s;
+}
+
+.sports-contacts-quick-card:hover::before {
+  left: 100%;
+}
+
+.sports-contacts-quick-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 35px 120px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.sports-contacts-quick-card.phone {
+  border-left: 4px solid #10b981;
+}
+
+.sports-contacts-quick-card.email {
+  border-left: 4px solid #3b82f6;
+}
+
+.sports-contacts-quick-card.location {
+  border-left: 4px solid #f59e0b;
+}
+
+.sports-contacts-quick-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.sports-contacts-quick-card.phone .sports-contacts-quick-icon {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.sports-contacts-quick-card.email .sports-contacts-quick-icon {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.sports-contacts-quick-card.location .sports-contacts-quick-icon {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.sports-contacts-icon-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 3px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: sportsContactsIconPulse 2s ease-out infinite;
+}
+
+@keyframes sportsContactsIconPulse {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.sports-contacts-quick-info {
+  flex: 1;
+}
+
+.sports-contacts-quick-info h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sports-contacts-quick-info p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.sports-contacts-quick-note {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.sports-contacts-quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sports-contacts-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-contacts-action-btn.primary {
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: white;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.sports-contacts-action-btn.primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(239, 68, 68, 0.6);
+}
+
+.sports-contacts-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  justify-content: center;
+  min-width: 50px;
+}
+
+.sports-contacts-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.sports-contacts-copy-btn.copied {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border-color: #10b981;
+}
+
+/* Main Content Grid */
+.sports-contacts-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  margin-bottom: 5rem;
+  animation: sportsContactsMainSlide 0.8s ease-out 0.4s both;
+}
+
+@keyframes sportsContactsMainSlide {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Contact Form */
+.sports-contacts-form-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 
+    0 25px 100px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.sports-contacts-form-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: white;
+}
+
+.sports-contacts-form-header svg {
+  font-size: 3rem;
+  color: #f97316;
+  margin-bottom: 1rem;
+  animation: sportsContactsFireFlicker 2s ease-in-out infinite;
+}
+
+@keyframes sportsContactsFireFlicker {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(-3deg); }
+  75% { transform: scale(1.1) rotate(3deg); }
+}
+
+.sports-contacts-form-header h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+}
+
+.sports-contacts-form-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sports-contacts-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sports-contacts-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.sports-contacts-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sports-contacts-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: white;
+  font-size: 1rem;
+}
+
+.sports-contacts-form-group label svg {
+  color: #06b6d4;
+  font-size: 1.1rem;
+}
+
+.sports-contacts-form-group input,
+.sports-contacts-form-group select,
+.sports-contacts-form-group textarea {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1.25rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.sports-contacts-form-group input::placeholder,
+.sports-contacts-form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sports-contacts-form-group input:focus,
+.sports-contacts-form-group select:focus,
+.sports-contacts-form-group textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.sports-contacts-form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.sports-contacts-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem 3rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+}
+
+.sports-contacts-btn-energy {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+.sports-contacts-submit-btn:hover .sports-contacts-btn-energy {
+  left: 100%;
+}
+
+.sports-contacts-submit-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 20px 50px rgba(16, 185, 129, 0.6);
+}
+
+.sports-contacts-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sports-contacts-submit-btn.sending {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.sports-contacts-submit-btn.success {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.sports-contacts-submit-btn .spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Info Section */
+.sports-contacts-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sports-contacts-info-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.sports-contacts-info-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.sports-contacts-info-card.emergency {
+  border-left: 4px solid #ef4444;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(255, 255, 255, 0.1));
+}
+
+.sports-contacts-info-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.sports-contacts-info-header svg {
+  font-size: 1.5rem;
+  color: #06b6d4;
+}
+
+.sports-contacts-info-card.emergency .sports-contacts-info-header svg {
+  color: #ef4444;
+}
+
+.sports-contacts-info-header h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Working Hours */
+.sports-contacts-hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sports-contacts-hours-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border-left: 3px solid #10b981;
+}
+
+.sports-contacts-day {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sports-contacts-time {
+  font-weight: 700;
+  color: white;
+}
+
+/* Extra Info */
+.sports-contacts-extra-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sports-contacts-extra-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+}
+
+.sports-contacts-extra-item svg {
+  color: #3b82f6;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sports-contacts-extra-item div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sports-contacts-extra-item strong {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sports-contacts-extra-item span {
+  font-weight: 600;
+}
+
+.sports-contacts-extra-item button {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #3b82f6;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-contacts-extra-item button:hover {
+  background: rgba(59, 130, 246, 0.3);
+  transform: scale(1.1);
+}
+
+/* Social Media */
+.sports-contacts-social-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sports-contacts-social-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-contacts-social-btn:hover {
+  background: var(--social-color);
+  border-color: var(--social-color);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.sports-contacts-social-btn svg {
+  font-size: 1.3rem;
+}
+
+.sports-contacts-social-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--social-color);
+  border-radius: 15px;
+  opacity: 0;
+  animation: sportsContactsSocialPulse 3s ease-out infinite;
+}
+
+@keyframes sportsContactsSocialPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.05);
+    opacity: 0;
+  }
+}
+
+/* Emergency Info */
+.sports-contacts-emergency-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sports-contacts-emergency-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  color: white;
+}
+
+.sports-contacts-emergency-item svg {
+  color: #ef4444;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sports-contacts-emergency-item div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sports-contacts-emergency-item strong {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sports-contacts-emergency-item span {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.sports-contacts-emergency-item button {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  padding: 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 700;
+}
+
+.sports-contacts-emergency-item button:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Bottom CTA */
+.sports-contacts-cta {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.2));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 4rem;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 3rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 100px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.sports-contacts-cta-icon {
+  font-size: 4rem;
+  color: #fbbf24;
+  margin-bottom: 2rem;
+  animation: sportsContactsCtaTrophy 3s ease-in-out infinite;
+}
+
+@keyframes sportsContactsCtaTrophy {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 20px #fbbf24);
+  }
+  50% { 
+    transform: scale(1.1) rotate(-5deg);
+    filter: drop-shadow(0 0 30px #fbbf24);
+  }
+}
+
+.sports-contacts-cta-content {
+  color: white;
+  position: relative;
+  z-index: 2;
+}
+
+.sports-contacts-cta-content h3 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sports-contacts-cta-content p {
+  font-size: 1.3rem;
+  margin: 0 0 2rem 0;
+  opacity: 0.9;
+  line-height: 1.6;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sports-contacts-cta-buttons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.sports-contacts-cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2.5rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-contacts-cta-btn.primary {
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: white;
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+}
+
+.sports-contacts-cta-btn.primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 20px 50px rgba(239, 68, 68, 0.6);
+}
+
+.sports-contacts-cta-btn.secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.sports-contacts-cta-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+.sports-contacts-cta-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.sports-contacts-cta-stat {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  color: white;
+}
+
+.sports-contacts-cta-stat-number {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sports-contacts-cta-stat-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
+
+.sports-contacts-cta-bg-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sports-contacts-bg-icon {
+  position: absolute;
+  font-size: 6rem;
+  color: rgba(255, 255, 255, 0.03);
+  animation: sportsContactsBgFloat 8s ease-in-out infinite;
+}
+
+.sports-contacts-bg-icon:nth-child(1) {
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.sports-contacts-bg-icon:nth-child(2) {
+  top: 15%;
+  right: 10%;
+  animation-delay: 2s;
+}
+
+.sports-contacts-bg-icon:nth-child(3) {
+  bottom: 20%;
+  left: 15%;
+  animation-delay: 4s;
+}
+
+.sports-contacts-bg-icon:nth-child(4) {
+  bottom: 10%;
+  right: 5%;
+  animation-delay: 6s;
+}
+
+@keyframes sportsContactsBgFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(10deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .sports-contacts-main {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .sports-contacts-cta {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+  
+  .sports-contacts-cta-stats {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .sports-contacts-section {
+    padding: 6rem 0;
+  }
+  
+  .sports-contacts-container {
+    padding: 0 1rem;
+  }
+  
+  .sports-contacts-quick {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .sports-contacts-quick-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  
+  .sports-contacts-quick-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .sports-contacts-form-section {
+    padding: 2rem;
+  }
+  
+  .sports-contacts-form-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .sports-contacts-cta-buttons {
+    flex-direction: column;
+  }
+  
+  .sports-contacts-cta-stats {
+    flex-direction: column;
+  }
+  
+  .sports-contacts-cta {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sports-contacts-form-header h3 {
+    font-size: 1.5rem;
+  }
+  
+  .sports-contacts-cta-content h3 {
+    font-size: 2rem;
+  }
+  
+  .sports-contacts-cta-content p {
+    font-size: 1.1rem;
+  }
+  
+  .sports-contacts-cta-btn {
+    padding: 1.25rem 2rem;
+    font-size: 1rem;
+  }
+  
+  .sports-contacts-title {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .sports-contacts-section,
+  .sports-contacts-section::after,
+  .sports-contacts-badge,
+  .sports-contacts-title-icon,
+  .sports-contacts-icon-pulse,
+  .sports-contacts-fire-flicker,
+  .sports-contacts-cta-trophy,
+  .sports-contacts-bg-float {
+    animation: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .sports-contacts-section {
+    background: white;
+    color: black;
+  }
+  
+  .sports-contacts-cta-btn,
+  .sports-contacts-action-btn,
+  .sports-contacts-submit-btn {
+    display: none;
+  }
+}

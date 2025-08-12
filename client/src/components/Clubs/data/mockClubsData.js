@@ -60,7 +60,188 @@ export const mockClubsData = [
                 "празнични вечери"
             ]
         },
-
+        members: [
+            {
+                id: "member-1-1",
+                firstName: "Анка",
+                lastName: "Димитрова",
+                phone: "0888567123",
+                email: "anka.dimitrova@gmail.com",
+                address: "ул. Витоша 45, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1001",
+                    alt: "Снимка на Анка Димитрова"
+                },
+                joinDate: "2020-03-15",
+                isActive: true,
+                role: "председател"
+            },
+            {
+                id: "member-1-2",
+                firstName: "Васил",
+                lastName: "Георгиев",
+                phone: "0877234567",
+                email: "vasil.georgiev@abv.bg",
+                address: "ул. Раковски 12, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1002",
+                    alt: "Снимка на Васил Георгиев"
+                },
+                joinDate: "2019-07-22",
+                isActive: true,
+                role: "секретар"
+            },
+            {
+                id: "member-1-3",
+                firstName: "Мария",
+                lastName: "Петкова",
+                phone: "0899345678",
+                email: "maria.petkova@yahoo.com",
+                address: "бул. Стамболийски 78, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1003",
+                    alt: "Снимка на Мария Петкова"
+                },
+                joinDate: "2018-11-10",
+                isActive: true,
+                role: "касиер"
+            },
+            {
+                id: "member-1-4",
+                firstName: "Иван",
+                lastName: "Стоянов",
+                phone: "0888111222",
+                email: "ivan.stoyanov@dir.bg",
+                address: "ул. Граф Игнатиев 25, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1004",
+                    alt: "Снимка на Иван Стоянов"
+                },
+                joinDate: "2021-01-18",
+                isActive: true,
+                role: "заместник-председател"
+            },
+            {
+                id: "member-1-5",
+                firstName: "Елка",
+                lastName: "Николова",
+                phone: "0877333444",
+                email: "elka.nikolova@gmail.com",
+                address: "ул. Шипка 33, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1005",
+                    alt: "Снимка на Елка Николова"
+                },
+                joinDate: "2020-09-05",
+                isActive: true,
+                role: "културен деец"
+            },
+            {
+                id: "member-1-6",
+                firstName: "Петър",
+                lastName: "Василев",
+                phone: "0889777888",
+                email: "petko.vasilev@mail.bg",
+                address: "ул. Цар Борис III 67, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1006",
+                    alt: "Снимка на Петър Василев"
+                },
+                joinDate: "2019-05-20",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-1-7",
+                firstName: "Надежда",
+                lastName: "Кирова",
+                phone: "0878456789",
+                email: "nadezhda.kirova@abv.bg",
+                address: "ул. Македония 89, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1007",
+                    alt: "Снимка на Надежда Кирова"
+                },
+                joinDate: "2021-06-12",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-1-8",
+                firstName: "Стефан",
+                lastName: "Младенов",
+                phone: "0887654321",
+                email: "stefan.mladenov@gmail.com",
+                address: "бул. Витоша 234, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1008",
+                    alt: "Снимка на Стефан Младенов"
+                },
+                joinDate: "2020-12-03",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-1-9",
+                firstName: "Роза",
+                lastName: "Божинова",
+                phone: "0899123456",
+                email: "roza.bozhinova@dir.bg",
+                address: "ул. Дунав 45, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1009",
+                    alt: "Снимка на Роза Божинова"
+                },
+                joinDate: "2022-02-14",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-1-10",
+                firstName: "Тодор",
+                lastName: "Христов",
+                phone: "0876987654",
+                email: "todor.hristov@yahoo.com",
+                address: "ул. Гурко 78, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1010",
+                    alt: "Снимка на Тодор Христов"
+                },
+                joinDate: "2021-08-25",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-1-11",
+                firstName: "Венета",
+                lastName: "Ангелова",
+                phone: "0888345678",
+                email: "veneta.angelova@gmail.com",
+                address: "ул. Искър 123, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1011",
+                    alt: "Снимка на Венета Ангелова"
+                },
+                joinDate: "2023-01-10",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-1-12",
+                firstName: "Димитър",
+                lastName: "Костов",
+                phone: "0877555666",
+                email: "dimitar.kostov@abv.bg",
+                address: "бул. Сливница 234, София",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=1012",
+                    alt: "Снимка на Димитър Костов"
+                },
+                joinDate: "2019-10-30",
+                isActive: true,
+                role: "член"
+            }
+        ],
         media: {
             videos: [
                 {
@@ -198,18 +379,78 @@ export const mockClubsData = [
                     title: "Коледен концерт 2024",
                     date: "2024-12-20",
                     time: "18:00",
-                    type: "cultural", // ОПЦИИ: "cultural"/"social"/"traditional"/"charity"/"community"/"sports_competition"/"wellness_event"/"sports_festival"/"swimming_competition"
+                    type: "cultural",
                     participants: 120,
-                    description: "Традиционен коледен концерт с участието на хора и танцова група"
+                    description: "Традиционен коледен концерт с участието на хора и танцова група",
+                    location: "Основна зала на клуба",
+                    organizer: "Елка Николова",
+                    highlights: ["Хор 'Родопски звуци'", "Танцова група", "Коледни песни", "Топли напитки", "Подаръци за деца"],
+                    featured: true,
+                    price: "безплатно",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=301",
+                            alt: "Коледен концерт - основна сцена",
+                            caption: "Хор 'Родопски звуци' изпълнява коледни песни",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=302",
+                            alt: "Танцова група",
+                            caption: "Танцовата група в традиционни носии"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=303",
+                            alt: "Публика",
+                            caption: "Засмени лица в публиката"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=304",
+                            alt: "Коледно дърво",
+                            caption: "Красиво украсена зала с коледни декорации"
+                        }
+                    ],
+                    videos: [
+                        {
+                            src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                            alt: "Коледен концерт 2024 - запис",
+                            caption: "Пълен запис от коледния концерт",
+                            duration: "45:30",
+                            thumbnail: "https://picsum.photos/400/225?random=351"
+                        }
+                    ]
                 },
                 {
                     id: "event-2",
                     title: "Великденски базар",
                     date: "2024-04-28",
                     time: "10:00",
-                    type: "social",
+                    type: "traditional",
                     participants: 80,
-                    description: "Базар с домашно приготвени лакомства и занаятчийски изделия"
+                    description: "Базар с домашно приготвени лакомства и занаятчийски изделия",
+                    location: "Клубна зала и тераса",
+                    organizer: "Мария Петкова",
+                    highlights: ["Домашни лакомства", "Занаятчийски изделия", "Великденски украси", "Детски кътче"],
+                    featured: false,
+                    price: "безплатен вход",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=305",
+                            alt: "Великденски базар",
+                            caption: "Щандове с домашни лакомства",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=306",
+                            alt: "Боядисани яйца",
+                            caption: "Красиво боядисани великденски яйца"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=307",
+                            alt: "Детски кътче",
+                            caption: "Деца се забавляват с великденски игри"
+                        }
+                    ]
                 }
             ],
             trips: [
@@ -286,14 +527,26 @@ export const mockClubsData = [
                 {
                     name: "Аптека 'Здраве'",
                     contribution: "безплатни здравни консултации",
-                    type: "services" // ОПЦИИ: "services"/"goods"/"discounts"/"financial"
+                    type: "services",
+                    contact: "02/123-456",
+                    address: "ул. Витоша 132, София",
+                    website: "www.apteka-zdrave.bg",
+                    workingHours: "Пн-Нд: 8:00-22:00",
+                    discount: null,
+                    description: "Безплатни консултации и измерване на кръвно налягане за членове на клуба"
                 },
                 {
                     name: "Пекарна 'Дунав'",
                     contribution: "отстъпки за събития",
-                    type: "discounts"
+                    type: "discounts",
+                    contact: "02/987-321",
+                    address: "ул. Граф Игнатиев 15, София",
+                    website: null,
+                    workingHours: "Пн-Сб: 6:00-20:00",
+                    discount: "15%",
+                    description: "Отстъпки за хляб и сладкиши при организиране на събития"
                 }
-            ]
+            ],
         },
 
         metadata: {
@@ -651,6 +904,128 @@ export const mockClubsData = [
                 "взаимопомощ"
             ]
         },
+        members: [
+            {
+                id: "member-2-1",
+                firstName: "Стоян",
+                lastName: "Иванов",
+                phone: "0876432111",
+                email: "stoyan.ivanov@sarnena.bg",
+                address: "ул. Цар Борис III №23, Пловдив",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=2001",
+                    alt: "Снимка на Стоян Иванов"
+                },
+                joinDate: "2015-06-15",
+                isActive: true,
+                role: "председател"
+            },
+            {
+                id: "member-2-2",
+                firstName: "Невена",
+                lastName: "Георгиева",
+                phone: "0887123456",
+                email: "nevena@sarnena.bg",
+                address: "ул. Гладстон №15, Пловдив",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=2002",
+                    alt: "Снимка на Невена Георгиева"
+                },
+                joinDate: "2016-02-20",
+                isActive: true,
+                role: "секретар"
+            },
+            {
+                id: "member-2-3",
+                firstName: "Димитър",
+                lastName: "Петков",
+                phone: "0899876543",
+                email: "dimitar@sarnena.bg",
+                address: "бул. Марица №67, Пловдив",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=2003",
+                    alt: "Снимка на Димитър Петков"
+                },
+                joinDate: "2015-09-10",
+                isActive: true,
+                role: "касиер"
+            },
+            {
+                id: "member-2-4",
+                firstName: "Величка",
+                lastName: "Димитрова",
+                phone: "0878654321",
+                email: "velichka.dimitrova@abv.bg",
+                address: "ул. Дунав 34, Пловдив",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=2004",
+                    alt: "Снимка на Величка Димитрова"
+                },
+                joinDate: "2017-03-25",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-2-5",
+                firstName: "Мария",
+                lastName: "Стоянова",
+                phone: "0889234567",
+                email: "maria.stoyanova@dir.bg",
+                address: "ул. Шипка 89, Пловдив",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=2005",
+                    alt: "Снимка на Мария Стоянова"
+                },
+                joinDate: "2018-07-12",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-2-6",
+                firstName: "Петър",
+                lastName: "Николов",
+                phone: "0876789123",
+                email: "petar.nikolov@gmail.com",
+                address: "ул. Васил Левски 56, Пловдив",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=2006",
+                    alt: "Снимка на Петър Николов"
+                },
+                joinDate: "2019-01-18",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-2-7",
+                firstName: "Красимира",
+                lastName: "Йорданова",
+                phone: "0888567890",
+                email: "krasimira.yordanova@yahoo.com",
+                address: "бул. България 123, Пловдив",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=2007",
+                    alt: "Снимка на Красимира Йорданова"
+                },
+                joinDate: "2020-05-22",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-2-8",
+                firstName: "Иван",
+                lastName: "Христов",
+                phone: "0877456789",
+                email: "ivan.hristov@mail.bg",
+                address: "ул. Хан Кубрат 67, Пловдив",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=2008",
+                    alt: "Снимка на Иван Христов"
+                },
+                joinDate: "2021-09-14",
+                isActive: true,
+                role: "член"
+            }
+        ],
         media: {
             videos: [
                 {
@@ -732,7 +1107,39 @@ export const mockClubsData = [
                     time: "12:00",
                     type: "traditional",
                     participants: 50,
-                    description: "Традиционно празнуване на Трифон Зарезан с вино и песни"
+                    description: "Традиционно празнуване на Трифон Зарезан с вино и песни",
+                    location: "Централен градски парк",
+                    organizer: "Стоян Иванов",
+                    highlights: ["Тракийски танци", "Дегустация на вино", "Народни песни", "Традиционни ястия"],
+                    featured: true,
+                    price: "5 лв за дегустация",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=308",
+                            alt: "Трифон Зарезан празник",
+                            caption: "Традиционно подрязване на лозата",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=309",
+                            alt: "Тракийски танци",
+                            caption: "Участници в тракийски народни танци"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=310",
+                            alt: "Дегустация вино",
+                            caption: "Дегустация на местно вино"
+                        }
+                    ],
+                    videos: [
+                        {
+                            src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                            alt: "Тракийски танци",
+                            caption: "Изпълнение на автентични тракийски танци",
+                            duration: "8:15",
+                            thumbnail: "https://picsum.photos/400/225?random=352"
+                        }
+                    ]
                 }
             ],
             trips: [
@@ -792,7 +1199,24 @@ export const mockClubsData = [
                 {
                     name: "Ресторант 'Старият Пловдив'",
                     contribution: "отстъпки за групови обяди",
-                    type: "discounts"
+                    type: "discounts",
+                    contact: "032/555-777",
+                    address: "ул. Княз Александър I №58, Пловдив",
+                    website: "www.stariyat-plovdiv.bg",
+                    workingHours: "Пн-Нд: 11:00-23:00",
+                    discount: "20%",
+                    description: "Специални цени за групови обяди и празненства на клуба"
+                },
+                {
+                    name: "Магазин за занаяти 'Тракия'",
+                    contribution: "материали за рукоделие",
+                    type: "goods",
+                    contact: "032/444-888",
+                    address: "ул. Гладстон №22, Пловдив",
+                    website: null,
+                    workingHours: "Пн-Пт: 9:00-18:00, Сб: 9:00-14:00",
+                    discount: "25%",
+                    description: "Прежди, плат и материали за традиционни занаяти"
                 }
             ]
         },
@@ -988,6 +1412,98 @@ export const mockClubsData = [
                 "общи обяди"
             ]
         },
+        members: [
+            {
+                id: "member-3-1",
+                firstName: "Дечка",
+                lastName: "Георгиева",
+                phone: "0888345612",
+                email: "dechka@nadezhda-etropole.bg",
+                address: "ул. Васил Левски №8, Етрополе",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=3001",
+                    alt: "Снимка на Дечка Георгиева"
+                },
+                joinDate: "2018-04-10",
+                isActive: true,
+                role: "председател"
+            },
+            {
+                id: "member-3-2",
+                firstName: "Тодор",
+                lastName: "Методиев",
+                phone: "0877654321",
+                email: "todor@nadezhda-etropole.bg",
+                address: "ул. Иван Вазов №14, Етрополе",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=3002",
+                    alt: "Снимка на Тодор Методиев"
+                },
+                joinDate: "2018-05-22",
+                isActive: true,
+                role: "секретар"
+            },
+            {
+                id: "member-3-3",
+                firstName: "Стоянка",
+                lastName: "Петрова",
+                phone: "0889123456",
+                email: "stoyanka.petrova@abv.bg",
+                address: "ул. Освобождение №25, Етрополе",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=3003",
+                    alt: "Снимка на Стоянка Петрова"
+                },
+                joinDate: "2019-02-14",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-3-4",
+                firstName: "Иван",
+                lastName: "Станков",
+                phone: "0876234567",
+                email: "ivan.stankov@gmail.com",
+                address: "ул. Христо Ботев №7, Етрополе",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=3004",
+                    alt: "Снимка на Иван Станков"
+                },
+                joinDate: "2020-06-30",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-3-5",
+                firstName: "Мария",
+                lastName: "Димитрова",
+                phone: "0888789123",
+                email: "maria.dimitrova@dir.bg",
+                address: "ул. Цар Симеон №12, Етрополе",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=3005",
+                    alt: "Снимка на Мария Димитрова"
+                },
+                joinDate: "2021-03-18",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-3-6",
+                firstName: "Стефан",
+                lastName: "Георгиев",
+                phone: "0877345678",
+                email: "stefan.georgiev@yahoo.com",
+                address: "ул. Стара планина №19, Етрополе",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=3006",
+                    alt: "Снимка на Стефан Георгиев"
+                },
+                joinDate: "2022-01-25",
+                isActive: true,
+                role: "член"
+            }
+        ],
         media: {
             videos: [],
             virtualTour: null,
@@ -1035,6 +1551,7 @@ export const mockClubsData = [
                     description: "Свободно прекарване на време - домино, карти, разговори"
                 }
             ],
+            // КЛУБ 3: Етрополе - 'Надежда'
             events: [
                 {
                     id: "event-4",
@@ -1043,7 +1560,30 @@ export const mockClubsData = [
                     time: "16:00",
                     type: "social",
                     participants: 30,
-                    description: "Ежегоден летен празник с гости от съседни села"
+                    description: "Ежегоден летен празник с гости от съседни села",
+                    location: "Градски парк Етрополе",
+                    organizer: "Дечка Георгиева",
+                    highlights: ["Семейна атмосфера", "Домашно готвене", "Музика на живо", "Игри за деца"],
+                    featured: true,
+                    price: "безплатно",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=311",
+                            alt: "Летен празник Етрополе",
+                            caption: "Семейна атмосфера в парка",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=312",
+                            alt: "Домашно готвене",
+                            caption: "Приготвяне на традиционни ястия"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=313",
+                            alt: "Детски игри",
+                            caption: "Деца играят традиционни игри"
+                        }
+                    ]
                 }
             ],
             trips: [],
@@ -1256,7 +1796,158 @@ export const mockClubsData = [
                 "безплатни консултации с психолог"
             ]
         },
-
+        members: [
+            {
+                id: "member-4-1",
+                firstName: "Милка",
+                lastName: "Стефанова",
+                phone: "0889123456",
+                email: "milka.stefanova@dobroto-sartse.bg",
+                address: "ул. Македония №15, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4001",
+                    alt: "Снимка на Милка Стефанова"
+                },
+                joinDate: "2012-05-25",
+                isActive: true,
+                role: "председател"
+            },
+            {
+                id: "member-4-2",
+                firstName: "Петко",
+                lastName: "Василев",
+                phone: "0876987654",
+                email: "petko.vasilev@dobroto-sartse.bg",
+                address: "ул. Сливница №22, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4002",
+                    alt: "Снимка на Петко Василев"
+                },
+                joinDate: "2013-02-10",
+                isActive: true,
+                role: "заместник-председател"
+            },
+            {
+                id: "member-4-3",
+                firstName: "Розалия",
+                lastName: "Димитрова",
+                phone: "0887654321",
+                email: "rozalia@dobroto-sartse.bg",
+                address: "бул. Владислав Варненчик №45, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4003",
+                    alt: "Снимка на Розалия Димитрова"
+                },
+                joinDate: "2014-07-18",
+                isActive: true,
+                role: "секретар"
+            },
+            {
+                id: "member-4-4",
+                firstName: "Иван",
+                lastName: "Петров",
+                phone: "0899333444",
+                email: "ivan.petrov@dobroto-sartse.bg",
+                address: "ул. Граф Игнатиев №8, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4004",
+                    alt: "Снимка на Иван Петров"
+                },
+                joinDate: "2015-01-22",
+                isActive: true,
+                role: "касиер"
+            },
+            {
+                id: "member-4-5",
+                firstName: "Надежда",
+                lastName: "Георгиева",
+                phone: "0877222333",
+                email: "nadezhda@dobroto-sartse.bg",
+                address: "ул. Цар Освободител №18, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4005",
+                    alt: "Снимка на Надежда Георгиева"
+                },
+                joinDate: "2016-06-12",
+                isActive: true,
+                role: "координатор проекти"
+            },
+            {
+                id: "member-4-6",
+                firstName: "Стоян",
+                lastName: "Кирилов",
+                phone: "0888777888",
+                email: "stoyan.kirilov@gmail.com",
+                address: "ул. Дунав №67, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4006",
+                    alt: "Снимка на Стоян Кирилов"
+                },
+                joinDate: "2017-03-28",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-4-7",
+                firstName: "Елена",
+                lastName: "Маринова",
+                phone: "0876543210",
+                email: "elena.marinova@abv.bg",
+                address: "бул. Черно море №123, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4007",
+                    alt: "Снимка на Елена Маринова"
+                },
+                joinDate: "2018-09-15",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-4-8",
+                firstName: "Васил",
+                lastName: "Христов",
+                phone: "0889456789",
+                email: "vasil.hristov@dir.bg",
+                address: "ул. Шипка №89, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4008",
+                    alt: "Снимка на Васил Христов"
+                },
+                joinDate: "2019-12-05",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-4-9",
+                firstName: "Мария",
+                lastName: "Ангелова",
+                phone: "0877123456",
+                email: "maria.angelova@yahoo.com",
+                address: "ул. Възраждане №34, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4009",
+                    alt: "Снимка на Мария Ангелова"
+                },
+                joinDate: "2020-04-20",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-4-10",
+                firstName: "Тодор",
+                lastName: "Младенов",
+                phone: "0888234567",
+                email: "todor.mladenov@mail.bg",
+                address: "ул. Преслав №56, Варна",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=4010",
+                    alt: "Снимка на Тодор Младенов"
+                },
+                joinDate: "2021-08-14",
+                isActive: true,
+                role: "член"
+            }
+        ],
         media: {
             videos: [
                 {
@@ -1389,7 +2080,44 @@ export const mockClubsData = [
                     time: "10:00",
                     type: "charity",
                     participants: 200,
-                    description: "Раздаване на коледни пакети на 50 нуждаещи се семейства"
+                    description: "Раздаване на коледни пакети на 50 нуждаещи се семейства",
+                    location: "Клубна зала и околностите",
+                    organizer: "Милка Стефанова",
+                    highlights: ["Коледни пакети", "50 семейства", "Доброволци", "Топла храна", "Подаръци за деца"],
+                    featured: true,
+                    price: "безплатно",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=314",
+                            alt: "Благотворителна кампания",
+                            caption: "Доброволци подготвят коледни пакети",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=315",
+                            alt: "Коледни пакети",
+                            caption: "Красиво опаковани коледни подаръци"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=316",
+                            alt: "Щастливи семейства",
+                            caption: "Семейства получават коледните пакети"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=317",
+                            alt: "Деца с подаръци",
+                            caption: "Щастливи деца с коледните си подаръци"
+                        }
+                    ],
+                    videos: [
+                        {
+                            src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                            alt: "Коледна благотворителна кампания",
+                            caption: "Как протече коледната ни благотворителна кампания",
+                            duration: "12:45",
+                            thumbnail: "https://picsum.photos/400/225?random=353"
+                        }
+                    ]
                 },
                 {
                     id: "event-6",
@@ -1398,7 +2126,25 @@ export const mockClubsData = [
                     time: "14:00",
                     type: "social",
                     participants: 80,
-                    description: "Празничен обяд и програма за всички възрастни в квартала"
+                    description: "Празничен обяд и програма за всички възрастни в квартала",
+                    location: "Основна зала",
+                    organizer: "Петко Василев",
+                    highlights: ["Празничен обяд", "Музикална програма", "Награди", "Социализация"],
+                    featured: false,
+                    price: "безплатно",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=318",
+                            alt: "Ден на възрастните хора",
+                            caption: "Празничен обяд за възрастните",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=319",
+                            alt: "Музикална програма",
+                            caption: "Музикално изпълнение по време на празника"
+                        }
+                    ]
                 },
                 {
                     id: "event-7",
@@ -1407,7 +2153,25 @@ export const mockClubsData = [
                     time: "09:00",
                     type: "community",
                     participants: 35,
-                    description: "Доброволческа акция за почистване на парк Морската градина"
+                    description: "Доброволческа акция за почистване на парк Морската градина",
+                    location: "Парк Морската градина",
+                    organizer: "Надежда Георгиева",
+                    highlights: ["Доброволци", "Почистване", "Озеленяване", "Обща кауза"],
+                    featured: false,
+                    price: "безплатно",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=320",
+                            alt: "Пролетно почистване",
+                            caption: "Доброволци почистват парка",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=321",
+                            alt: "Засаждане на дървета",
+                            caption: "Засаждане на нови дървета и цветя"
+                        }
+                    ]
                 }
             ],
             trips: [
@@ -1483,19 +2247,37 @@ export const mockClubsData = [
                 {
                     name: "Верига магазини 'Фантастико'",
                     contribution: "месечни дарения на храна",
-                    type: "goods"
+                    type: "goods",
+                    contact: "052/300-400",
+                    address: "бул. Владислав Варненчик №120, Варна",
+                    website: "www.fantastico.bg",
+                    workingHours: "Пн-Нд: 8:00-22:00",
+                    discount: null,
+                    description: "Ежемесечни дарения на храна за нуждаещи се семейства"
                 },
                 {
                     name: "Аптечна верига 'Субра'",
                     contribution: "безплатни лекарства за нуждаещи се",
-                    type: "services"
+                    type: "services",
+                    contact: "052/222-333",
+                    address: "ул. Цар Освободител №85, Варна",
+                    website: "www.subra.bg",
+                    workingHours: "Пн-Пт: 8:00-20:00, Сб-Нд: 9:00-18:00",
+                    discount: "30%",
+                    description: "Безплатни лекарства и консултации за социално слаби граждани"
                 },
                 {
                     name: "Транспортна компания 'Варна Транс'",
                     contribution: "безплатен транспорт за акции",
-                    type: "services"
+                    type: "services",
+                    contact: "052/111-222",
+                    address: "ул. Девня №45, Варна",
+                    website: "www.varna-trans.bg",
+                    workingHours: "Пн-Пт: 7:00-19:00",
+                    discount: null,
+                    description: "Безплатен автобусен транспорт за благотворителни акции"
                 }
-            ]
+            ],
         },
 
         metadata: {
@@ -1881,6 +2663,203 @@ export const mockClubsData = [
                 "участие в състезания"
             ]
         },
+        members: [
+            {
+                id: "member-5-1",
+                firstName: "Добринка",
+                lastName: "Петрова",
+                phone: "0887654987",
+                email: "dobrinka.petrova@aktivna-energiya.bg",
+                address: "ул. Александровска №28, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5001",
+                    alt: "Снимка на Добринка Петрова"
+                },
+                joinDate: "2016-03-15",
+                isActive: true,
+                role: "председател"
+            },
+            {
+                id: "member-5-2",
+                firstName: "Стефан",
+                lastName: "Христов",
+                phone: "0899123789",
+                email: "stefan.hristov@aktivna-energiya.bg",
+                address: "ул. Цар Симеон №15, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5002",
+                    alt: "Снимка на Стефан Христов"
+                },
+                joinDate: "2016-05-20",
+                isActive: true,
+                role: "треньор-координатор"
+            },
+            {
+                id: "member-5-3",
+                firstName: "Елена",
+                lastName: "Димитрова",
+                phone: "0876543210",
+                email: "elena.dimitrova@aktivna-energiya.bg",
+                address: "бул. Демокрация №67, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5003",
+                    alt: "Снимка на Елена Димитрова"
+                },
+                joinDate: "2017-01-10",
+                isActive: true,
+                role: "секретар"
+            },
+            {
+                id: "member-5-4",
+                firstName: "Васил",
+                lastName: "Георгиев",
+                phone: "0888765432",
+                email: "vasil.georgiev@aktivna-energiya.bg",
+                address: "ул. Княз Борис I №22, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5004",
+                    alt: "Снимка на Васил Георгиев"
+                },
+                joinDate: "2017-08-25",
+                isActive: true,
+                role: "касиер"
+            },
+            {
+                id: "member-5-5",
+                firstName: "Мария",
+                lastName: "Иванова",
+                phone: "0877345678",
+                email: "maria.ivanova@aktivna-energiya.bg",
+                address: "ул. Гладстон №8, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5005",
+                    alt: "Снимка на Мария Иванова"
+                },
+                joinDate: "2018-02-14",
+                isActive: true,
+                role: "инструктор йога"
+            },
+            {
+                id: "member-5-6",
+                firstName: "Петър",
+                lastName: "Станков",
+                phone: "0889567890",
+                email: "petar.stankov@gmail.com",
+                address: "ул. Морска №45, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5006",
+                    alt: "Снимка на Петър Станков"
+                },
+                joinDate: "2018-07-30",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-5-7",
+                firstName: "Надежда",
+                lastName: "Кирова",
+                phone: "0876987654",
+                email: "nadezhda.kirova@abv.bg",
+                address: "бул. Богориди №123, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5007",
+                    alt: "Снимка на Надежда Кирова"
+                },
+                joinDate: "2019-03-18",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-5-8",
+                firstName: "Иван",
+                lastName: "Младенов",
+                phone: "0888123456",
+                email: "ivan.mladenov@dir.bg",
+                address: "ул. Стефан Стамболов №67, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5008",
+                    alt: "Снимка на Иван Младенов"
+                },
+                joinDate: "2019-10-22",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-5-9",
+                firstName: "Росица",
+                lastName: "Ангелова",
+                phone: "0877654321",
+                email: "rositsa.angelova@yahoo.com",
+                address: "ул. Христо Ботев №89, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5009",
+                    alt: "Снимка на Росица Ангелова"
+                },
+                joinDate: "2020-05-12",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-5-10",
+                firstName: "Георги",
+                lastName: "Костов",
+                phone: "0889234567",
+                email: "georgi.kostov@mail.bg",
+                address: "ул. Волга №34, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5010",
+                    alt: "Снимка на Георги Костов"
+                },
+                joinDate: "2021-02-28",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-5-11",
+                firstName: "Венета",
+                lastName: "Николова",
+                phone: "0876345678",
+                email: "veneta.nikolova@gmail.com",
+                address: "бул. Алеко Богориди №156, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5011",
+                    alt: "Снимка на Венета Николова"
+                },
+                joinDate: "2021-09-15",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-5-12",
+                firstName: "Тодор",
+                lastName: "Христов",
+                phone: "0888456789",
+                email: "todor.hristov@abv.bg",
+                address: "ул. Индустриална №78, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5012",
+                    alt: "Снимка на Тодор Христов"
+                },
+                joinDate: "2022-04-10",
+                isActive: true,
+                role: "член"
+            },
+            {
+                id: "member-5-13",
+                firstName: "Красимира",
+                lastName: "Петкова",
+                phone: "0877567890",
+                email: "krasimira.petkova@dir.bg",
+                address: "ул. Луиза №23, Бургас",
+                photo: {
+                    src: "https://picsum.photos/150/150?random=5013",
+                    alt: "Снимка на Красимира Петкова"
+                },
+                joinDate: "2022-11-20",
+                isActive: true,
+                role: "член"
+            }
+        ],
 
         media: {
             videos: [
@@ -2038,7 +3017,39 @@ export const mockClubsData = [
                     time: "09:00",
                     type: "sports_competition",
                     participants: 45,
-                    description: "5км пеша разходка/бягане по морския бряг с награди за всички участници"
+                    description: "5км пеша разходка/бягане по морския бряг с награди за всички участници",
+                    location: "Морски бряг Бургас",
+                    organizer: "Добринка Петрова",
+                    highlights: ["5км дистанция", "Морски бряг", "Награди за всички", "Здравословно състезание"],
+                    featured: true,
+                    price: "10 лв стартов номер",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=322",
+                            alt: "Пролетен мини маратон",
+                            caption: "Старт на мини маратона по морския бряг",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=323",
+                            alt: "Бегачи по морския бряг",
+                            caption: "Участници бягат по красивия морски бряг"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=324",
+                            alt: "Финиш и награди",
+                            caption: "Церемония по награждаване на участниците"
+                        }
+                    ],
+                    videos: [
+                        {
+                            src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+                            alt: "Мини маратон Бургас",
+                            caption: "Моменти от пролетния мини маратон",
+                            duration: "15:20",
+                            thumbnail: "https://picsum.photos/400/225?random=354"
+                        }
+                    ]
                 },
                 {
                     id: "event-9",
@@ -2047,7 +3058,39 @@ export const mockClubsData = [
                     time: "07:00",
                     type: "wellness_event",
                     participants: 60,
-                    description: "Масова йога сесия на плажа при изгрев слънце"
+                    description: "Масова йога сесия на плажа при изгрев слънце",
+                    location: "Централен плаж Бургас",
+                    organizer: "Мария Иванова",
+                    highlights: ["Йога при изгрев", "Морски бряг", "Всички нива", "Безплатни килимчета"],
+                    featured: true,
+                    price: "безплатно",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=325",
+                            alt: "Йога на плажа",
+                            caption: "Йога сесия при изгрев слънце",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=326",
+                            alt: "Изгрев слънце",
+                            caption: "Красив изгрев над Черно море"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=327",
+                            alt: "Групова медитация",
+                            caption: "Групова медитация на плажа"
+                        }
+                    ],
+                    videos: [
+                        {
+                            src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+                            alt: "Йога при изгрев",
+                            caption: "Релаксираща йога сесия при изгрев слънце",
+                            duration: "25:10",
+                            thumbnail: "https://picsum.photos/400/225?random=355"
+                        }
+                    ]
                 },
                 {
                     id: "event-10",
@@ -2056,7 +3099,30 @@ export const mockClubsData = [
                     time: "10:00",
                     type: "sports_festival",
                     participants: 80,
-                    description: "Спортен празник с различни дисциплини и здравословно хранене"
+                    description: "Спортен празник с различни дисциплини и здравословно хранене",
+                    location: "Спортен комплекс",
+                    organizer: "Стефан Христов",
+                    highlights: ["Множество дисциплини", "Здравословна храна", "Награди", "Семейно събитие"],
+                    featured: false,
+                    price: "5 лв участие",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=328",
+                            alt: "Есенни спортни игри",
+                            caption: "Различни спортни дисциплини",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=329",
+                            alt: "Здравословна храна",
+                            caption: "Щанд със здравословни храни"
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=330",
+                            alt: "Семейно участие",
+                            caption: "Семейства участват заедно в игрите"
+                        }
+                    ]
                 },
                 {
                     id: "event-11",
@@ -2065,7 +3131,25 @@ export const mockClubsData = [
                     time: "11:00",
                     type: "swimming_competition",
                     participants: 25,
-                    description: "Плувна надпревара в топъл басейн с топли напитки след това"
+                    description: "Плувна надпревара в топъл басейн с топли напитки след това",
+                    location: "Басейн на комплекса",
+                    organizer: "Васил Георгиев",
+                    highlights: ["Топъл басейн", "Различни дистанции", "Топли напитки", "Медали"],
+                    featured: false,
+                    price: "безплатно за членове",
+                    images: [
+                        {
+                            src: "https://picsum.photos/800/600?random=331",
+                            alt: "Плувна надпревара",
+                            caption: "Състезание в топлия басейн",
+                            isMain: true
+                        },
+                        {
+                            src: "https://picsum.photos/800/600?random=332",
+                            alt: "Награждаване",
+                            caption: "Церемония по награждаване с медали"
+                        }
+                    ]
                 }
             ],
             trips: [
@@ -2156,17 +3240,35 @@ export const mockClubsData = [
                 {
                     name: "Фитнес верига 'Active Life'",
                     contribution: "безплатни тренировъчни програми",
-                    type: "services"
+                    type: "services",
+                    contact: "056/789-456",
+                    address: "бул. Богориди №67, Бургас",
+                    website: "www.activelife.bg",
+                    workingHours: "Пн-Нд: 6:00-23:00",
+                    discount: "40%",
+                    description: "Достъп до фитнес зали и персонални тренировки за членове"
                 },
                 {
                     name: "Спортен магазин 'Champion'",
                     contribution: "отстъпки за спортни стоки",
-                    type: "discounts"
+                    type: "discounts",
+                    contact: "056/333-444",
+                    address: "ул. Александровска №88, Бургас",
+                    website: "www.champion-sport.bg",
+                    workingHours: "Пн-Сб: 9:00-20:00, Нд: 10:00-18:00",
+                    discount: "25%",
+                    description: "Спортни екипи, обувки и аксесоари с отстъпка"
                 },
                 {
                     name: "Аптека 'Здраве+'",
                     contribution: "витамини и хранителни добавки",
-                    type: "goods"
+                    type: "goods",
+                    contact: "056/555-666",
+                    address: "ул. Стефан Стамболов №15, Бургас",
+                    website: "www.zdraveplus.bg",
+                    workingHours: "Пн-Нд: 8:00-21:00",
+                    discount: "20%",
+                    description: "Витамини, протеини и хранителни добавки за спортисти"
                 }
             ]
         },

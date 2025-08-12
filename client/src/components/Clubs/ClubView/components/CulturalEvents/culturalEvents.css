@@ -1,3 +1,4 @@
+/* БЪРЗИ АНИМАЦИИ */
 .cultural-events-main-section {
   padding: 6rem 0;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
@@ -154,7 +155,7 @@
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
   border: none;
   text-decoration: none;
 }
@@ -193,6 +194,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
 }
 
 .cultural-events-featured-type {
@@ -231,7 +233,7 @@
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
 }
 
 .cultural-events-filter:hover {
@@ -263,7 +265,7 @@
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(226, 232, 240, 0.8);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
 }
 
 .cultural-events-card:hover {
@@ -281,7 +283,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
 }
 
 .cultural-events-card:hover .cultural-events-card-image img {
@@ -409,7 +411,7 @@
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -458,7 +460,7 @@
   text-align: center;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(226, 232, 240, 0.8);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
 }
 
 .cultural-events-stat-card:hover {
@@ -554,7 +556,7 @@
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
   border: none;
   text-decoration: none;
 }
@@ -581,7 +583,7 @@
   transform: translateY(-2px);
 }
 
-/* Modal */
+/* Modal Styles */
 .cultural-events-modal-overlay {
   position: fixed;
   top: 0;
@@ -592,101 +594,567 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 9999;
   padding: 2rem;
+  animation: fadeIn 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .cultural-events-modal {
   background: white;
-  border-radius: 25px;
-  max-width: 800px;
+  border-radius: 20px;
+  max-width: 600px;
   width: 100%;
   max-height: 90vh;
-  overflow: auto;
+  overflow: hidden;
   position: relative;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .cultural-events-modal-close {
   position: absolute;
   top: 1rem;
   right: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  color: #64748b;
+  border: none;
+  border-radius: 50%;
   width: 40px;
   height: 40px;
-  border: none;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 10;
-}
-
-.cultural-events-modal-content {
-  padding: 0;
-}
-
-.cultural-events-modal-content img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-}
-
-.cultural-events-modal-info {
-  padding: 2rem;
-}
-
-.cultural-events-modal-info h3 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 1rem 0;
-}
-
-.cultural-events-modal-info p {
-  color: #64748b;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-}
-
-.cultural-events-modal-details {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.cultural-events-modal-detail {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  color: #475569;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 10002;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
 }
 
-.cultural-events-modal-detail svg {
+.cultural-events-modal-close:hover {
+  background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
-  width: 20px;
+  transform: scale(1.1);
 }
 
-.cultural-events-modal-btn {
-  width: 100%;
+.cultural-events-modal-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 16px;
+}
+
+.cultural-events-modal-header svg {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cultural-events-modal-header h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.cultural-events-modal-header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.cultural-events-modal-form {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.cultural-events-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.cultural-events-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.cultural-events-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #374151;
   font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.cultural-events-form-group label svg {
+  color: #ef4444;
+  font-size: 0.9rem;
+}
+
+.cultural-events-form-group input,
+.cultural-events-form-group textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
   font-size: 1rem;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
+  font-family: inherit;
+}
+
+.cultural-events-form-group input:focus,
+.cultural-events-form-group textarea:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.cultural-events-interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.cultural-events-interest-btn {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: white;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
+  text-align: center;
+}
+
+.cultural-events-interest-btn:hover {
+  border-color: #ef4444;
+  background: #f8fafc;
+}
+
+.cultural-events-interest-btn.selected {
+  border-color: #ef4444;
+  background: #ef4444;
+  color: white;
+}
+
+.cultural-events-form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.cultural-events-submit-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
 }
 
-.cultural-events-modal-btn:hover {
+.cultural-events-submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+}
+
+.cultural-events-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cultural-events-cancel-btn {
+  padding: 1.25rem 2rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease; /* БЪРЗА АНИМАЦИЯ */
+}
+
+.cultural-events-cancel-btn:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.cultural-events-form-success,
+.cultural-events-form-error {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.cultural-events-form-success svg {
+  font-size: 4rem;
+  color: #10b981;
+  margin-bottom: 1.5rem;
+}
+
+.cultural-events-form-error svg {
+  font-size: 4rem;
+  color: #ef4444;
+  margin-bottom: 1.5rem;
+}
+
+.cultural-events-form-success h4,
+.cultural-events-form-error h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.cultural-events-form-success h4 {
+  color: #10b981;
+}
+
+.cultural-events-form-error h4 {
+  color: #ef4444;
+}
+
+.cultural-events-form-success p,
+.cultural-events-form-error p {
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Gallery Modal Styles - БЪРЗИ АНИМАЦИИ */
+.cultural-events-gallery-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 2rem;
+  animation: fadeIn 0.1s ease; /* МНОГО БЪРЗА АНИМАЦИЯ */
+}
+
+.cultural-events-gallery-container {
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: scaleIn 0.1s ease; /* МНОГО БЪРЗА АНИМАЦИЯ */
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.cultural-events-gallery-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  z-index: 10001;
+  transition: all 0.1s ease; /* МНОГО БЪРЗА АНИМАЦИЯ */
+}
+
+.cultural-events-gallery-close:hover {
+  background: rgba(239, 68, 68, 0.8);
+  transform: scale(1.1);
+}
+
+.cultural-events-gallery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.cultural-events-gallery-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.cultural-events-gallery-counter {
+  background: #ef4444;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cultural-events-gallery-content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  min-height: 400px;
+}
+
+.cultural-events-gallery-media {
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.cultural-events-gallery-media img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  transition: opacity 0.1s ease; /* МНОГО БЪРЗА АНИМАЦИЯ */
+}
+
+.cultural-events-gallery-video {
+  position: relative;
+  max-width: 100%;
+  max-height: 70vh;
+}
+
+.cultural-events-gallery-video video {
+  width: 100%;
+  height: 100%;
+  max-height: 70vh;
+}
+
+.cultural-events-video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 2rem;
+  transition: all 0.1s ease; /* МНОГО БЪРЗА АНИМАЦИЯ */
+}
+
+.cultural-events-video-play:hover {
+  background: rgba(239, 68, 68, 1);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.cultural-events-video-info {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.cultural-events-gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  color: #ef4444;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: all 0.1s ease; /* МНОГО БЪРЗА АНИМАЦИЯ */
+  z-index: 10;
+}
+
+.cultural-events-gallery-nav:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cultural-events-gallery-nav.prev {
+  left: 1rem;
+}
+
+.cultural-events-gallery-nav.next {
+  right: 1rem;
+}
+
+.cultural-events-gallery-caption {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.cultural-events-gallery-caption p {
+  margin: 0;
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.cultural-events-gallery-thumbnails {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  overflow-x: auto;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.cultural-events-gallery-thumb {
+  flex-shrink: 0;
+  width: 80px;
+  height: 60px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.1s ease; /* МНОГО БЪРЗА АНИМАЦИЯ */
+  background: none;
+  padding: 0;
+}
+
+.cultural-events-gallery-thumb:hover {
+  border-color: #ef4444;
+  transform: scale(1.05);
+}
+
+.cultural-events-gallery-thumb.active {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.cultural-events-gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cultural-events-thumb-video {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.cultural-events-thumb-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+/* Gallery indicators on cards */
+.cultural-events-featured-gallery-indicator,
+.cultural-events-card-gallery-indicator {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* БЪРЗИ Loading Styles */
+.cultural-events-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ef4444;
+  font-size: 2rem;
+  z-index: 10;
+  animation: spin 0.5s linear infinite; /* БЪРЗА РОТАЦИЯ */
+}
+
+@keyframes spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.cultural-events-no-media {
+  color: #64748b;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 2rem;
 }
 
 /* Responsive Design */
@@ -743,6 +1211,65 @@
   .cultural-events-cta-secondary {
     justify-content: center;
   }
+  
+  .cultural-events-form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .cultural-events-form-actions {
+    flex-direction: column;
+  }
+  
+  .cultural-events-interests-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .cultural-events-gallery-modal {
+    padding: 1rem;
+  }
+  
+  .cultural-events-gallery-container {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .cultural-events-gallery-header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .cultural-events-gallery-nav {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .cultural-events-gallery-nav.prev {
+    left: 0.5rem;
+  }
+  
+  .cultural-events-gallery-nav.next {
+    right: 0.5rem;
+  }
+  
+  .cultural-events-gallery-caption,
+  .cultural-events-gallery-thumbnails {
+    padding: 1rem;
+  }
+  
+  .cultural-events-gallery-thumb {
+    width: 60px;
+    height: 45px;
+  }
+  
+  .cultural-events-video-play {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -759,7 +1286,8 @@
     padding: 1rem;
   }
   
-  .cultural-events-modal-info {
+  .cultural-events-modal-header,
+  .cultural-events-modal-form {
     padding: 1.5rem;
   }
 }

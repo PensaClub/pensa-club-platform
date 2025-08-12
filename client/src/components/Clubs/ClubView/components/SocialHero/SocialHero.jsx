@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
   faPlay,
   faUsers,
   faCalendarAlt,
@@ -17,7 +17,15 @@ import {
   faTimes,
   faUser,
   faCheck,
-  faExclamationTriangle
+  faExclamationTriangle,
+  faUserFriends,
+  faIdCard,
+  faAddressCard,
+  faCopy,
+  faCheckCircle,
+  faAward,
+   faSearch,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import './socialHero.css';
 
@@ -32,7 +40,9 @@ export const SocialHero = ({ club }) => {
     message: ''
   });
   const [formStatus, setFormStatus] = useState(null); // 'sending', 'sent', 'error'
-
+  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [copiedItems, setCopiedItems] = useState({});
+  const [memberSearchTerm, setMemberSearchTerm] = useState('');
   // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
@@ -40,17 +50,17 @@ export const SocialHero = ({ club }) => {
 
   // Строим hero данни от основните клуб данни
   const heroImages = [];
-  
+
   // Добавяме main image ако има
   if (club.mainImage) {
     heroImages.push(club.mainImage);
   }
-  
+
   // Добавяме gallery images ако има
   if (club.gallery && club.gallery.length > 0) {
     heroImages.push(...club.gallery);
   }
-  
+
   // Ако няма никакви изображения, използваме placeholder
   if (heroImages.length === 0) {
     heroImages.push('https://picsum.photos/1920/1080?random=501');
@@ -173,7 +183,7 @@ ${emailForm.message}
 ---
 Изпратено от ${emailForm.email}
       `);
-      
+
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
         setFormStatus('sent');
@@ -189,7 +199,7 @@ ${emailForm.message}
   };
 
   const handleContactAction = (type) => {
-    switch(type) {
+    switch (type) {
       case 'phone':
         if (club.contacts?.phone || club.contacts?.mobile) {
           window.open(`tel:${club.contacts.phone || club.contacts.mobile}`);
@@ -208,6 +218,46 @@ ${emailForm.message}
         break;
       default:
         break;
+    }
+  };
+  const members = club.members || [];
+
+  // Функция за филтриране на членовете:
+const filteredMembers = members.filter(member => {
+  const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
+  const searchLower = memberSearchTerm.toLowerCase();
+  return fullName.includes(searchLower) || 
+         member.phone?.includes(searchLower) ||
+         member.email?.toLowerCase().includes(searchLower);
+});
+
+// Функция за изчистване на търсенето:
+const clearSearch = () => {
+  setMemberSearchTerm('');
+};
+
+// Функция за затваряне на модала (reset search):
+const closeMembersModal = () => {
+  setShowMembersModal(false);
+  setMemberSearchTerm('');
+};
+
+  const copyMemberData = async (data, type, memberName) => {
+    try {
+      await navigator.clipboard.writeText(data);
+      setCopiedItems(prev => ({
+        ...prev,
+        [`${memberName}-${type}`]: true
+      }));
+      setTimeout(() => {
+        setCopiedItems(prev => {
+          const newState = { ...prev };
+          delete newState[`${memberName}-${type}`];
+          return newState;
+        });
+      }, 2000);
+    } catch (error) {
+      console.error('Грешка при копиране:', error);
     }
   };
 
@@ -253,7 +303,7 @@ ${emailForm.message}
           {(firstVideo || club.location || club.contacts) && (
             <div className="social-hero-actions">
               {firstVideo && (
-                <button 
+                <button
                   className="social-hero-btn primary"
                   onClick={handleVideoPlay}
                 >
@@ -261,7 +311,7 @@ ${emailForm.message}
                   Гледайте видео
                 </button>
               )}
-              <button 
+              <button
                 className="social-hero-btn secondary"
                 onClick={() => handleContactAction('visit')}
               >
@@ -275,7 +325,7 @@ ${emailForm.message}
           {hasContacts && (
             <div className="social-hero-quick-contact">
               {(club.contacts?.phone || club.contacts?.mobile) && (
-                <button 
+                <button
                   className="social-hero-contact-btn"
                   onClick={() => handleContactAction('phone')}
                 >
@@ -284,7 +334,7 @@ ${emailForm.message}
                 </button>
               )}
               {club.contacts?.email && (
-                <button 
+                <button
                   className="social-hero-contact-btn"
                   onClick={() => handleContactAction('email')}
                 >
@@ -301,7 +351,7 @@ ${emailForm.message}
           <div className="social-hero-stats">
             {availableStats.map((stat, index) => (
               <div key={index} className="social-hero-stat-card">
-                <div 
+                <div
                   className="social-hero-stat-icon"
                   style={{ backgroundColor: stat.color }}
                 >
@@ -311,10 +361,22 @@ ${emailForm.message}
                   <div className="social-hero-stat-value">{stat.value}</div>
                   <div className="social-hero-stat-label">{stat.label}</div>
                 </div>
+
               </div>
             ))}
+            {members.length > 0 && (
+              <button
+                className="social-hero-btn secondary"
+                onClick={() => setShowMembersModal(true)}
+              >
+                <FontAwesomeIcon icon={faUserFriends} />
+                Нашите членове ({members.length})
+              </button>
+            )}
           </div>
+
         )}
+
       </div>
 
       {/* Scroll Indicator */}
@@ -332,11 +394,11 @@ ${emailForm.message}
             <button className="social-hero-video-close" onClick={closeVideoModal}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            
+
             {/* РЕАЛЕН VIDEO PLAYER */}
             <div className="social-hero-video-player">
-              <video 
-                controls 
+              <video
+                controls
                 autoPlay
                 width="100%"
                 height="400"
@@ -346,7 +408,7 @@ ${emailForm.message}
                 Вашият браузър не поддържа video елемента.
               </video>
             </div>
-            
+
             {/* Информация за видеото */}
             <div className="social-hero-video-info-section">
               <h3>{firstVideo.caption || 'Видео от клуба'}</h3>
@@ -378,13 +440,13 @@ ${emailForm.message}
             <button className="social-hero-email-modal-close" onClick={closeEmailModal}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            
+
             <div className="social-hero-email-header">
               <FontAwesomeIcon icon={faEnvelope} />
               <h3>Свържете се с нас</h3>
               <p>Изпратете ни съобщение и ще ви отговорим възможно най-скоро</p>
             </div>
-            
+
             {formStatus === 'sent' ? (
               <div className="social-hero-form-success">
                 <FontAwesomeIcon icon={faCheck} />
@@ -414,7 +476,7 @@ ${emailForm.message}
                       placeholder="Въведете вашето име"
                     />
                   </div>
-                  
+
                   <div className="social-hero-form-group">
                     <label htmlFor="email">
                       <FontAwesomeIcon icon={faEnvelope} />
@@ -430,7 +492,7 @@ ${emailForm.message}
                     />
                   </div>
                 </div>
-                
+
                 <div className="social-hero-form-group">
                   <label htmlFor="phone">
                     <FontAwesomeIcon icon={faPhone} />
@@ -444,7 +506,7 @@ ${emailForm.message}
                     placeholder="Въведете вашия телефон"
                   />
                 </div>
-                
+
                 <div className="social-hero-form-group">
                   <label htmlFor="message">
                     <FontAwesomeIcon icon={faEnvelope} />
@@ -459,18 +521,18 @@ ${emailForm.message}
                     rows="4"
                   />
                 </div>
-                
+
                 <div className="social-hero-form-actions">
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="social-hero-submit-btn"
                     disabled={formStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faEnvelope} />
                     {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщение'}
                   </button>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={closeEmailModal}
                     className="social-hero-cancel-btn"
                   >
@@ -495,6 +557,212 @@ ${emailForm.message}
           ))}
         </div>
       )}
+    {/* Members Modal */}
+{showMembersModal && (
+  <div className="social-hero-email-modal">
+    <div className="social-hero-email-modal-overlay" onClick={closeMembersModal}></div>
+    <div className="social-hero-email-modal-container social-hero-members-modal">
+      <button 
+        className="social-hero-email-modal-close" 
+        onClick={closeMembersModal}
+      >
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+      
+      <div className="social-hero-email-header">
+        <FontAwesomeIcon icon={faUserFriends} />
+        <h3>Членове на клуба</h3>
+        <p>Нашата дружна общност от {members.length} {members.length === 1 ? 'член' : 'членове'}</p>
+      </div>
+
+      {/* Search Section */}
+      <div className="social-hero-members-search">
+        <div className="social-hero-search-container">
+          <div className="social-hero-search-input-wrapper">
+            <FontAwesomeIcon icon={faSearch} className="social-hero-search-icon" />
+            <input
+              type="text"
+              placeholder="Търсене по име, телефон или имейл..."
+              value={memberSearchTerm}
+              onChange={(e) => setMemberSearchTerm(e.target.value)}
+              className="social-hero-search-input"
+            />
+            {memberSearchTerm && (
+              <button 
+                onClick={clearSearch}
+                className="social-hero-search-clear"
+                title="Изчисти търсенето"
+              >
+                <FontAwesomeIcon icon={faTimesCircle} />
+              </button>
+            )}
+          </div>
+          
+          {memberSearchTerm && (
+            <div className="social-hero-search-results">
+              {filteredMembers.length === 0 ? (
+                <span className="social-hero-no-results">
+                  Няма намерени резултати за "{memberSearchTerm}"
+                </span>
+              ) : (
+                <span className="social-hero-results-count">
+                  {filteredMembers.length === 1 
+                    ? `Намерен 1 член` 
+                    : `Намерени ${filteredMembers.length} членове`
+                  }
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+      
+      <div className="social-hero-members-container">
+        {filteredMembers.length === 0 && !memberSearchTerm ? (
+          <div className="social-hero-no-members">
+            <FontAwesomeIcon icon={faUsers} />
+            <h4>Няма регистрирани членове</h4>
+            <p>Все още няма добавени членове в системата.</p>
+          </div>
+        ) : filteredMembers.length === 0 && memberSearchTerm ? (
+          <div className="social-hero-no-members">
+            <FontAwesomeIcon icon={faSearch} />
+            <h4>Няма намерени резултати</h4>
+            <p>Опитайте с различни ключови думи или изчистете търсенето.</p>
+            <button onClick={clearSearch} className="social-hero-clear-search-btn">
+              <FontAwesomeIcon icon={faTimesCircle} />
+              Изчисти търсенето
+            </button>
+          </div>
+        ) : (
+          <div className="social-hero-members-grid">
+            {filteredMembers.map((member) => (
+              <div key={member.id} className="social-hero-member-card">
+                <div className="social-hero-member-photo">
+                  {member.photo ? (
+                    <img 
+                      src={member.photo.src} 
+                      alt={member.photo.alt}
+                      className="social-hero-member-image"
+                    />
+                  ) : (
+                    <div className="social-hero-member-placeholder">
+                      <FontAwesomeIcon icon={faUser} />
+                    </div>
+                  )}
+                  {member.role && member.role !== 'член' && (
+                    <div className="social-hero-member-role">
+                      <FontAwesomeIcon icon={faAward} />
+                      <span>{member.role}</span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="social-hero-member-info">
+                  <div className="social-hero-member-name">
+                    <h4>
+                      {/* Highlight search term in name */}
+                      {memberSearchTerm ? (
+                        <span dangerouslySetInnerHTML={{
+                          __html: `${member.firstName} ${member.lastName}`.replace(
+                            new RegExp(`(${memberSearchTerm})`, 'gi'),
+                            '<mark>$1</mark>'
+                          )
+                        }} />
+                      ) : (
+                        `${member.firstName} ${member.lastName}`
+                      )}
+                    </h4>
+                    <button
+                      className={`social-hero-copy-icon ${copiedItems[`${member.id}-name`] ? 'copied' : ''}`}
+                      onClick={() => copyMemberData(`${member.firstName} ${member.lastName}`, 'name', member.id)}
+                      title="Копирай името"
+                    >
+                      <FontAwesomeIcon icon={copiedItems[`${member.id}-name`] ? faCheckCircle : faCopy} />
+                    </button>
+                  </div>
+                  
+                  <div className="social-hero-member-details">
+                    {member.phone && (
+                      <div className="social-hero-member-detail">
+                        <FontAwesomeIcon icon={faPhone} />
+                        <span>
+                          {memberSearchTerm ? (
+                            <span dangerouslySetInnerHTML={{
+                              __html: member.phone.replace(
+                                new RegExp(`(${memberSearchTerm})`, 'gi'),
+                                '<mark>$1</mark>'
+                              )
+                            }} />
+                          ) : (
+                            member.phone
+                          )}
+                        </span>
+                        <button
+                          className={`social-hero-copy-icon ${copiedItems[`${member.id}-phone`] ? 'copied' : ''}`}
+                          onClick={() => copyMemberData(member.phone, 'phone', member.id)}
+                          title="Копирай телефона"
+                        >
+                          <FontAwesomeIcon icon={copiedItems[`${member.id}-phone`] ? faCheckCircle : faCopy} />
+                        </button>
+                      </div>
+                    )}
+                    
+                    {member.email && (
+                      <div className="social-hero-member-detail">
+                        <FontAwesomeIcon icon={faEnvelope} />
+                        <span>
+                          {memberSearchTerm ? (
+                            <span dangerouslySetInnerHTML={{
+                              __html: member.email.replace(
+                                new RegExp(`(${memberSearchTerm})`, 'gi'),
+                                '<mark>$1</mark>'
+                              )
+                            }} />
+                          ) : (
+                            member.email
+                          )}
+                        </span>
+                        <button
+                          className={`social-hero-copy-icon ${copiedItems[`${member.id}-email`] ? 'copied' : ''}`}
+                          onClick={() => copyMemberData(member.email, 'email', member.id)}
+                          title="Копирай имейла"
+                        >
+                          <FontAwesomeIcon icon={copiedItems[`${member.id}-email`] ? faCheckCircle : faCopy} />
+                        </button>
+                      </div>
+                    )}
+                    
+                    {member.address && (
+                      <div className="social-hero-member-detail">
+                        <FontAwesomeIcon icon={faMapMarkerAlt} />
+                        <span>{member.address}</span>
+                        <button
+                          className={`social-hero-copy-icon ${copiedItems[`${member.id}-address`] ? 'copied' : ''}`}
+                          onClick={() => copyMemberData(member.address, 'address', member.id)}
+                          title="Копирай адреса"
+                        >
+                          <FontAwesomeIcon icon={copiedItems[`${member.id}-address`] ? faCheckCircle : faCopy} />
+                        </button>
+                      </div>
+                    )}
+                    
+                    {member.joinDate && (
+                      <div className="social-hero-member-detail">
+                        <FontAwesomeIcon icon={faCalendarAlt} />
+                        <span>Член от {new Date(member.joinDate).toLocaleDateString('bg-BG')}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
     </section>
   );
 };
