@@ -3288,7 +3288,20 @@
       "caption": "Caption",
       "imageDescription": "Image description...",
       "imageCaption": "Image caption...",
-      "sectionImagesCount": "Images ({{count}})"
+      "sectionImagesCount": "Images ({{count}})",
+      "sectionImage": "Section Image",
+      "section-image-help": "Add an image to enhance this section content. You can upload a file or add an image from URL.",
+      "changeImage": "Change Image",
+      "uploadImage": "Upload Image",
+      "changeImageUrl": "Change Image with URL",
+      "addImageUrl": "Add Image with URL",
+      "clearImage": "Clear Image",
+      "addImage": "Add Image",
+      "imageUrl": "Image URL address...",
+      "showAuthor": "Show Author",
+      "showAuthorDescription": "Display the author name in the publication",
+      "authorVisible": "Author will be visible",
+      "authorHidden": "Author will be hidden"
     },
     "edit": {
       "title": "Edit Publication",
@@ -3297,8 +3310,7 @@
     "sections": {
       "basicInfo": "Basic Information",
       "content": "Content",
-      "fileOptions": "File & Options",
-      "publishing": "Publishing"
+      "fileOptions": "File & Options"
     },
     "fields": {
       "title": "Title",
@@ -3316,7 +3328,11 @@
       "imageAltPlaceholder": "Describe the image for accessibility",
       "imageCaption": "Image Caption",
       "imageCaptionPlaceholder": "Optional caption for the image",
-      "imageUrlPlaceholder": "Or enter image URL"
+      "imageUrlPlaceholder": "Or enter image URL",
+      "showAuthor": "Show Author",
+      "showAuthorDescription": "Display the author name in the publication",
+      "authorVisible": "Author will be visible",
+      "authorHidden": "Author will be hidden"
     },
     "categories": {
       "technology": "Technology",
@@ -3391,6 +3407,14 @@
     },
     "changeImage": "Change Image",
     "uploadImage": "Upload Image",
-    "removeImage": "Remove Image"
-  }
+    "removeImage": "Remove Image",
+    "addImage": "Add Image",
+    "changeImageUrl": "Change Image with URL",
+    "addImageUrl": "Add Image with URL",
+    "clearImage": "Clear Image"
+  },
+  "showAuthor": "Show Author",
+  "showAuthorDescription": "Display the author name in the publication",
+  "authorVisible": "Author will be visible",
+  "authorHidden": "Author will be hidden"
 }

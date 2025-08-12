@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSave,
     faEye,
-    faShare
+    faShare,
+    faSpinner
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import './floatingActions.css';
@@ -16,7 +17,8 @@ const FloatingActions = ({
     onPreview,
     onPublish,
     onUpdate,
-    onCreate
+    onCreate,
+    isSaving = false
 }) => {
     const { t } = useTranslation();
 
@@ -69,9 +71,10 @@ const FloatingActions = ({
                     type="button"
                     className="publication-floating-btn draft"
                     onClick={onSaveDraft}
+                    disabled={isSaving || !hasTitle}
                     title={draftId ? t('publications.create.updateDraft') : t('publications.create.saveDraft')}
                 >
-                    <FontAwesomeIcon icon={faSave} />
+                    <FontAwesomeIcon icon={isSaving ? faSpinner : faSave} className={isSaving ? 'fa-spin' : ''} />
                 </button>
             )}
 
@@ -80,6 +83,7 @@ const FloatingActions = ({
                 type="button"
                 className="publication-floating-btn preview"
                 onClick={onPreview}
+                disabled={isSaving}
                 title={t('publications.create.preview')}
             >
                 <FontAwesomeIcon icon={faEye} />

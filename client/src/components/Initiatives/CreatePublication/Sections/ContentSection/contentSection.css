@@ -269,6 +269,7 @@
     overflow: hidden;
     transition: all 0.3s ease;
     background: white;
+    margin-bottom: 2rem;
 }
 
 .publication-sections-slate-editor-container:focus-within {
@@ -341,6 +342,8 @@
     line-height: 1.7;
     color: #374151;
     background: white;
+    box-sizing: border-box;
+    transition: min-height 0.3s ease;
 }
 
 .publication-sections-slate-editable h1 {
@@ -526,7 +529,7 @@
     color: #ffffff !important;
     border: none !important;
     border-radius: 12px !important;
-    font-size: 0.95rem !important;
+    font-size: 0.85rem !important;
     font-weight: 600 !important;
     cursor: pointer !important;
     transition: all 0.3s ease !important;
@@ -535,6 +538,7 @@
     box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25) !important;
     user-select: none !important;
     outline: none !important;
+    white-space: nowrap !important;
 }
 
 .publication-sections-upload-btn:hover {
@@ -560,7 +564,7 @@ button.publication-sections-upload-btn {
     color: #ffffff;
     border: none;
     border-radius: 12px;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -569,6 +573,7 @@ button.publication-sections-upload-btn {
     box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25);
     user-select: none;
     outline: none;
+    white-space: nowrap;
 }
 
 button.publication-sections-upload-btn:hover {
@@ -594,13 +599,14 @@ button.publication-sections-upload-btn:active {
     color: #dc2626 !important;
     border: 2px solid #fca5a5 !important;
     border-radius: 12px !important;
-    font-size: 0.95rem !important;
+    font-size: 0.85rem !important;
     font-weight: 600 !important;
     cursor: pointer !important;
     transition: all 0.3s ease !important;
     font-family: inherit !important;
     user-select: none !important;
     outline: none !important;
+    white-space: nowrap !important;
 }
 
 .publication-sections-clear-btn:hover {
@@ -619,6 +625,7 @@ button.publication-sections-upload-btn:active {
     display: flex;
     gap: 0.75rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
     padding: 1rem;
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     border: 2px solid #7dd3fc;
@@ -666,6 +673,8 @@ button.publication-sections-upload-btn:active {
     background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
     border: 2px solid #fb923c;
     border-radius: 16px;
+    position: relative;
+    z-index: 1;
 }
 
 .publication-sections-images-preview h5 {
@@ -690,6 +699,7 @@ button.publication-sections-upload-btn:active {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     border: 2px solid #e5e7eb;
+    position: relative;
 }
 
 .publication-sections-image-item:hover {
@@ -789,10 +799,11 @@ button.publication-sections-upload-btn:active {
 .publication-sections-image-controls {
     padding: 1.5rem;
     background: #fafafa;
+    position: relative;
 }
 
 .publication-sections-image-input-group {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .publication-sections-image-input-group:last-child {
@@ -1310,5 +1321,59 @@ button.publication-sections-upload-btn:active {
     }
     .publication-sections-stat{
         padding: 1rem;
+    }
+}
+
+/* Image Container Layout */
+.publication-sections-image-container {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    position: relative;
+    z-index: 2;
+}
+
+.publication-sections-image-item {
+    flex: 0 0 auto;
+    max-width: 350px;
+    position: relative;
+}
+
+.publication-sections-image-controls {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.publication-sections-image-input-group {
+    margin-bottom: 0.25rem;
+}
+
+.publication-sections-image-input-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .publication-sections-image-container {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .publication-sections-image-item {
+        max-width: 100%;
+    }
+
+    .publication-sections-image-controls {
+        justify-content: flex-start;
+    }
+
+    .publication-sections-image-input-group {
+        margin-bottom: 0.5rem;
     }
 }

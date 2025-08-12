@@ -15,9 +15,8 @@ const { PublicationSchema, UpdatePublicationSchema } = require('../schemas/publi
 
 publicationController.post('/create', isAuth, checkPermission('publications', 'create'), async (req, res, next) => {
     try {
-        // Validate request body
-        const validationResult = PublicationSchema.safeParse(req.body);
-        const publicationData = { ...validationResult.data, isDraft: false };
+        const validatedData = await PublicationSchema.parseAsync(req.body);
+        const publicationData = { ...validatedData, isDraft: false };
         return createPublication(publicationData, req, res, next);
     } catch (err) {
         next(err);
@@ -28,15 +27,14 @@ publicationController.post('/draft/save/:id?', isAuth, checkPermission('publicat
     try {
         const { id } = req.params;
 
-        // For draft creation, use a more lenient validation
-        const validationResult = UpdatePublicationSchema.safeParse(req.body);
-
         if (!id) {
-            const publicationData = { ...validationResult.data, isDraft: true };
+            const validatedData = await PublicationSchema.parseAsync(req.body);
+            const publicationData = { ...validatedData, isDraft: true };
             return createPublication(publicationData, req, res, next);
         }
 
-        return updatePublication(validationResult.data, req, res, next, true);
+        const validatedData = UpdatePublicationSchema.parse(req.body);
+        return updatePublication(validatedData, req, res, next, true);
     } catch (err) {
         next(err);
     }

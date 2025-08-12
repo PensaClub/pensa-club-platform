@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faEdit, faFileAlt, faCog, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faEdit, faFileAlt, faCog, faArrowLeft, faUser, faCheck, faTimes, faImage, faUpload, faLink, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { createEditor, Element as SlateElement, Transforms, Editor } from 'slate';
+import { useNavigate } from 'react-router-dom';
 
 // CSS
 import './mainFormPublication.css';
@@ -18,14 +19,24 @@ import useCreatePublication from '../../../hooks/useCreatePublication';
 
 // Add imports for new sections
 import FileSection from "../Sections/FileSection/FileSection";
-import SettingsSection from "../Sections/SettingsSection/SettingsSection";
 import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
+import { useAuthContext } from '../../../contexts/UserContext'; // Fixed path - go up 3 levels to reach contexts
+import { initiativeServiceFactory } from '../../../Services/StoryPubServiceFactory';
+import { slateToHtml, isSlateEmpty } from '../../../../utils/slateToHtml';
 
 const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
     const { t } = useTranslation();
+    const { userEmail, username } = useAuthContext(); // Get user info
+    const navigate = useNavigate(); // Add this line
     const [activeSection, setActiveSection] = useState('basic-info');
     const [newTag, setNewTag] = useState('');
     const [showPreview, setShowPreview] = useState(false);
+    const [draftId, setDraftId] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Get the service instance
+    const token = localStorage.getItem('token');
+    const publicationService = initiativeServiceFactory(token);
 
     // Add ESC key and outside click handling
     useEffect(() => {
@@ -99,16 +110,14 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
     const navigationSections = [
         { id: 'basic-info', label: t('publications.sections.basicInfo') || 'Basic Information', icon: faInfoCircle },
         { id: 'content', label: t('publications.sections.content') || 'Content', icon: faEdit },
-        { id: 'file-options', label: t('publications.sections.fileOptions') || 'File & Options', icon: faFileAlt },
-        { id: 'publishing', label: t('publications.sections.publishing') || 'Publishing', icon: faCog }
+        { id: 'file-options', label: t('publications.sections.fileOptions') || 'File & Options', icon: faFileAlt }
     ];
 
     // Update section order
     const sectionOrder = [
         'basic-info',
         'content',
-        'file-options',
-        'publishing'
+        'file-options'
     ];
 
     const handleSectionClick = (sectionId) => {
@@ -122,20 +131,151 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
         console.log('Start new publication');
     };
 
-    const handleSaveDraft = () => {
-        console.log('Save draft');
+    // Helper function to prepare publication data
+    const preparePublicationData = () => {
+        return {
+            title: values.title,
+            slug: values.slug,
+            title_slug: values.slug,
+            shortDescription: values.shortDescription || '',
+            category: values.category || null, // Send null instead of empty string
+            tags: values.tags || [],
+            readTime: values.readTime || '',
+            fileType: values.fileType || null, // Send null instead of empty string
+            fileSize: values.fileSize || '',
+            downloadUrl: values.downloadUrl || 'https://example.com', // Temporary valid URL for now
+            commentsEnabled: values.commentsEnabled ?? true,
+            showAuthor: values.showAuthor ?? true,
+            mainImage: values.mainImage || {
+                src: '',
+                alt: '',
+                caption: '',
+                gallery: []
+            },
+            sections: values.sections?.map(section => {
+                let content = '';
+                if (section.content && !isSlateEmpty(section.content)) {
+                    content = slateToHtml(section.content);
+                }
+
+                const sectionTitleSlug = section.titleSlug || section.title
+                    ?.toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .trim() || `section-${Date.now()}`;
+
+                return {
+                    ...section,
+                    title_slug: sectionTitleSlug,
+                    content
+                };
+            }) || []
+        };
+    };
+
+    const handleSaveDraft = async () => {
+        if (!values.title || !values.slug) {
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const publicationData = preparePublicationData();
+
+            if (!draftId) {
+                await publicationService.savePublicationDraft(publicationData);
+            } else {
+                await publicationService.updatePublicationDraft(draftId, publicationData);
+            }
+
+            setIsSaving(false);
+
+            // Navigate to profile publications page
+            navigate('/profile/publications');
+        } catch (error) {
+            setIsSaving(false);
+        }
+    };
+
+    const handleCreatePublication = async () => {
+        if (!values.title || !values.slug) {
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const publicationData = preparePublicationData();
+            await publicationService.createPublication(publicationData);
+            setIsSaving(false);
+
+            // Navigate to profile publications page
+            navigate('/profile/publications');
+        } catch (error) {
+            setIsSaving(false);
+        }
     };
 
     const handlePreview = () => {
         setShowPreview(true);
     };
 
-    const handlePublish = () => {
-        console.log('Publish publication');
+    const handlePublish = async () => {
+        if (!values.title || !values.slug) {
+            notify('error', 'Please provide a title before publishing');
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const publicationData = {
+                ...values,
+                userEmail: userEmail,
+                isDraft: false,
+            };
+
+            const response = await publicationService.createPublication(publicationData);
+            notify('success', 'Publication published successfully!');
+            console.log('Publication published successfully:', response);
+
+            if (onSubmitHandler) {
+                await onSubmitHandler(response);
+            }
+        } catch (error) {
+            console.error('Failed to publish publication:', error);
+            notify('error', error.message || 'Failed to publish publication');
+        } finally {
+            setIsSaving(false);
+        }
     };
 
-    const handleUpdate = () => {
-        console.log('Update publication');
+    const handleUpdate = async () => {
+        if (!editId) {
+            notify('error', 'No publication ID for update');
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const publicationData = {
+                ...values,
+                userEmail: userEmail,
+            };
+
+            const response = await publicationService.updatePublication(editId, publicationData);
+            notify('success', 'Publication updated successfully!');
+            console.log('Publication updated successfully:', response);
+
+            if (onSubmitHandler) {
+                await onSubmitHandler(response);
+            }
+        } catch (error) {
+            console.error('Failed to update publication:', error);
+            notify('error', error.message || 'Failed to update publication');
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const handleCreate = () => {
@@ -144,6 +284,87 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
 
     const closePreview = () => {
         setShowPreview(false);
+    };
+
+    // Helper function to convert Slate content to text for preview
+    const slateToText = (slateContent) => {
+        if (!slateContent || !Array.isArray(slateContent)) {
+            return '';
+        }
+
+        return slateContent
+            .map(node => {
+                if (node.type === 'paragraph') {
+                    return node.children?.map(child => child.text || '').join('') || '';
+                } else if (node.type === 'heading-one') {
+                    return `<h1>${node.children?.map(child => child.text || '').join('') || ''}</h1>`;
+                } else if (node.type === 'heading-two') {
+                    return `<h2>${node.children?.map(child => child.text || '').join('') || ''}</h2>`;
+                } else if (node.type === 'heading-three') {
+                    return `<h3>${node.children?.map(child => child.text || '').join('') || ''}</h3>`;
+                } else if (node.type === 'bulleted-list') {
+                    const items = node.children?.map(item =>
+                        `<li>${item.children?.map(child => child.text || '').join('') || ''}</li>`
+                    ).join('') || '';
+                    return `<ul>${items}</ul>`;
+                } else if (node.type === 'numbered-list') {
+                    const items = node.children?.map(item =>
+                        `<li>${item.children?.map(child => child.text || '').join('') || ''}</li>`
+                    ).join('') || '';
+                    return `<ol>${items}</ol>`;
+                } else if (node.type === 'blockquote') {
+                    return `<blockquote>${node.children?.map(child => child.text || '').join('') || ''}</blockquote>`;
+                } else {
+                    return node.children?.map(child => child.text || '').join('') || '';
+                }
+            })
+            .filter(text => text.trim() !== '')
+            .join('<br />');
+    };
+
+    // Helper function to get preview sections - use real data if available, fallback to mock
+    const getPreviewSections = () => {
+        if (values.sections && values.sections.length > 0) {
+            return values.sections.map((section, index) => ({
+                id: section.id || `section-${index + 1}`,
+                title: section.title || `Section ${index + 1}`,
+                titleSlug: section.titleSlug || `section-${index + 1}`,
+                content: section.content ? slateToText(section.content) : `This is section ${index + 1} content.`,
+                // Use the single image directly (no need for array access)
+                image: section.image ? {
+                    src: section.image.src,
+                    alt: section.image.alt || `Image for ${section.title}`,
+                    caption: section.image.caption || ''
+                } : null,
+                images: section.image ? [section.image] : [] // For backward compatibility if needed
+            }));
+        } else {
+            // Fallback to mock data when no sections exist
+            return [
+                {
+                    id: 'section-1',
+                    title: 'Introduction',
+                    titleSlug: 'introduction',
+                    content: 'This is a sample introduction section for the preview.',
+                    image: null,
+                    images: []
+                },
+                {
+                    id: 'section-2',
+                    title: 'Main Content',
+                    titleSlug: 'main-content',
+                    content: 'This is the main content section with some sample text.',
+                    image: null,
+                    images: []
+                }
+            ];
+        }
+    };
+
+    // Get author name for preview
+    const getAuthorName = () => {
+        if (!values.showAuthor) return null; // If checkbox is unchecked, no author
+        return username || userEmail || 'Anonymous';
     };
 
     return (
@@ -239,15 +460,6 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                             />
                         )}
 
-                        {activeSection === 'publishing' && (
-                            <SettingsSection
-                                values={values}
-                                errors={errors}
-                                onSubmit={onSubmit}
-                                isEditMode={isEditMode}
-                            />
-                        )}
-
                         {/* Navigation Buttons */}
                         <div className="publication-form-navigation">
                             <button
@@ -284,14 +496,15 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
 
             {/* Floating Actions */}
             <FloatingActions
-                draftId={null} // TODO: Add from hook
+                draftId={draftId}
                 editId={null} // TODO: Add from hook
-                hasTitle={values.title?.trim()}
+                hasTitle={!!values.title}
                 onSaveDraft={handleSaveDraft}
                 onPreview={handlePreview}
                 onPublish={handlePublish}
                 onUpdate={handleUpdate}
-                onCreate={handleCreate}
+                onCreate={handleCreatePublication}
+                isSaving={isSaving}
             />
 
             {/* Preview Modal */}
@@ -318,43 +531,26 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                                     shortDescription: values.shortDescription || 'No description provided',
                                     description: values.shortDescription || 'No description provided',
                                     publishedAt: new Date().toISOString(),
-                                    author: values.author || 'Anonymous',
-                                    authorEmail: values.authorEmail || '',
-                                    authorImage: values.authorImage || null,
+                                    author: getAuthorName(), // Use checkbox-controlled author
+                                    authorEmail: values.showAuthor ? userEmail : null,
+                                    authorImage: null,
                                     readTime: values.readTime || '5',
                                     category: values.category || 'General',
                                     tags: values.tags || [],
-                                                image: {
-                src: values.mainImage?.src || '',
-                alt: values.mainImage?.alt || values.title || 'Publication',
-                caption: values.mainImage?.caption || ''
-            },
+                                    image: {
+                                        src: values.mainImage?.src || '',
+                                        alt: values.mainImage?.alt || values.title || 'Publication',
+                                        caption: values.mainImage?.caption || ''
+                                    },
                                     mainImage: values.mainImage || null,
-                                    sections: [
-                                        {
-                                            id: 'section-1',
-                                            title: 'Introduction',
-                                            titleSlug: 'introduction',
-                                            content: 'This is a sample introduction section for the preview.',
-                                            image: null,
-                                            images: []
-                                        },
-                                        {
-                                            id: 'section-2',
-                                            title: 'Main Content',
-                                            titleSlug: 'main-content',
-                                            content: 'This is the main content section with some sample text.',
-                                            image: null,
-                                            images: []
-                                        }
-                                    ],
+                                    sections: getPreviewSections(), // Dynamic sections with first image only
                                     downloadUrl: values.downloadUrl || '',
                                     fileType: values.fileType || 'PDF',
                                     fileSize: values.fileSize || 'Unknown',
                                     commentsEnabled: values.commentsEnabled !== false,
-                                    views: 0,
-                                    downloads: 0,
-                                    likes: 0,
+                                    views: null,
+                                    downloads: null,
+                                    likes: null,
                                     isLiked: false,
                                     initiative: values.initiative || null,
                                     slug: values.slug || 'preview-slug'

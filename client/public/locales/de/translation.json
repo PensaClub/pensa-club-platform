@@ -3196,6 +3196,21 @@
       "previewNotice": "Dies ist eine Vorschau Ihrer Publikation. Änderungen werden noch nicht gespeichert.",
       "noTitle": "Kein Titel",
       "noDescription": "Keine Beschreibung"
+    },
+    "create": {
+      "sectionImage": "Abschnittsbild",
+      "section-image-help": "Fügen Sie ein Bild hinzu, um den Inhalt dieses Abschnitts zu verbessern. Sie können eine Datei hochladen oder ein Bild von einer URL hinzufügen.",
+      "changeImage": "Bild ändern",
+      "uploadImage": "Bild hochladen",
+      "changeImageUrl": "Bild mit URL ändern",
+      "addImageUrl": "Bild mit URL hinzufügen",
+      "clearImage": "Bild löschen",
+      "addImage": "Bild hinzufügen",
+      "imageUrl": "Bild-URL-Adresse...",
+      "altText": "Alt-Text",
+      "caption": "Bildunterschrift",
+      "imageDescription": "Bildbeschreibung...",
+      "imageCaption": "Bildunterschrift..."
     }
   }
 

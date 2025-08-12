@@ -431,27 +431,26 @@ const ContentSection = ({
                                         )}
                                     </div>
 
-                                    {/* Section Images */}
+                                    {/* Section Image (Single Image) */}
                                     <div className="publication-sections-form-group">
                                         <label>
                                             <FontAwesomeIcon icon={faImage} />
-                                            {t('publications.create.sectionImages')}
+                                            {t('publications.create.sectionImage')}
                                         </label>
                                         <div className="publication-sections-field-help">
-                                            {t('publications.create.section-images-help')}
+                                            {t('publications.create.section-image-help')}
                                         </div>
 
-                                        <div className="publication-sections-images-upload">
+                                        <div className="publication-sections-image-upload">
                                             {/* Upload methods */}
                                             <div className="publication-sections-upload-methods">
                                                 <div className="publication-sections-upload-method">
                                                     <label className="publication-sections-upload-btn">
                                                         <FontAwesomeIcon icon={faUpload} />
-                                                        {(section.images?.length || 0) > 0 ? t('publications.create.addMoreImages') : t('publications.create.uploadImages')}
+                                                        {section.image ? t('publications.create.changeImage') : t('publications.create.uploadImage')}
                                                         <input
                                                             type="file"
                                                             accept="image/*"
-                                                            multiple
                                                             onChange={(e) => handleSectionImageUpload(e, index)}
                                                             style={{ display: 'none' }}
                                                         />
@@ -468,30 +467,30 @@ const ContentSection = ({
                                                         }))}
                                                     >
                                                         <FontAwesomeIcon icon={faLink} />
-                                                        {t('publications.create.addUrl')}
+                                                        {section.image ? t('publications.create.changeImageUrl') : t('publications.create.addImageUrl')}
                                                     </button>
                                                 </div>
 
-                                                {(section.images?.length || 0) > 0 && (
+                                                {section.image && (
                                                     <div className="publication-sections-upload-method">
                                                         <button
                                                             type="button"
                                                             className="publication-sections-clear-btn"
                                                             onClick={() => clearSectionImages(index)}
                                                         >
-                                                            <FontAwesomeIcon icon={faTimes} />
-                                                            {t('publications.create.clearAll')}
+                                                            <FontAwesomeIcon icon={faTrash} />
+                                                            {t('publications.create.clearImage')}
                                                         </button>
                                                     </div>
                                                 )}
                                             </div>
 
-                                            {/* URL input */}
+                                            {/* URL input section */}
                                             {showUrlInputs[index] && (
                                                 <div className="publication-sections-url-input-section">
                                                     <input
                                                         type="url"
-                                                        placeholder="https://example.com/image.jpg"
+                                                        placeholder={t('publications.create.imageUrl')}
                                                         value={imageUrls[index] || ''}
                                                         onChange={(e) => handleImageUrlChange(index, e.target.value)}
                                                         className="publication-sections-url-input"
@@ -500,75 +499,75 @@ const ContentSection = ({
                                                         type="button"
                                                         className="publication-sections-url-add-btn"
                                                         onClick={() => handleAddImageFromUrl(index)}
+                                                        disabled={!imageUrls[index]?.trim()}
                                                     >
-                                                        {t('publications.create.add')}
+                                                        <FontAwesomeIcon icon={faLink} />
+                                                        {t('publications.create.addImage')}
                                                     </button>
                                                 </div>
                                             )}
+                                        </div>
 
-                                            {/* Images preview */}
-                                            {section.images && section.images.length > 0 && (
-                                                <div className="publication-sections-images-preview">
-                                                    <h5>🖼️ {t('publications.create.sectionImagesCount', { count: section.images.length })}</h5>
-                                                    <div className="publication-sections-images-grid">
-                                                        {section.images.map((img, imgIndex) => (
-                                                            <div key={`section-${index}-img-${imgIndex}`} className="publication-sections-image-item">
-                                                                <div className="publication-sections-image-preview">
-                                                                    <img src={img.src} alt={img.alt || `Section image ${imgIndex + 1}`} />
-                                                                    <div className="publication-sections-image-overlay">
-                                                                        <button
-                                                                            type="button"
-                                                                            className="publication-sections-image-remove-btn"
-                                                                            onClick={() => removeSectionImage(index, imgIndex)}
-                                                                            title={t('publications.create.removeImage')}
-                                                                        >
-                                                                            <FontAwesomeIcon icon={faTrash} />
-                                                                        </button>
-                                                                    </div>
-                                                                    {img.isUploading && (
-                                                                        <div className="publication-sections-image-uploading">
-                                                                            <div className="publication-sections-uploading-spinner"></div>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-
-                                                                <div className="publication-sections-image-controls">
-                                                                    <div className="publication-sections-image-input-group">
-                                                                        <label>{t('publications.create.altText')}:</label>
-                                                                        <input
-                                                                            type="text"
-                                                                            placeholder={t('publications.create.imageDescription')}
-                                                                            value={img.alt || ''}
-                                                                            onChange={(e) => updateSectionImageAlt(index, imgIndex, e.target.value)}
-                                                                            className="publication-sections-image-input"
-                                                                            maxLength={100}
-                                                                        />
-                                                                        <div className="publication-sections-char-count">
-                                                                            {img.alt?.length || 0}/100
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="publication-sections-image-input-group">
-                                                                        <label>{t('publications.create.caption')}:</label>
-                                                                        <input
-                                                                            type="text"
-                                                                            placeholder={t('publications.create.imageCaption')}
-                                                                            value={img.caption || ''}
-                                                                            onChange={(e) => updateSectionImageCaption(index, imgIndex, e.target.value)}
-                                                                            className="publication-sections-image-input"
-                                                                            maxLength={150}
-                                                                        />
-                                                                        <div className="publication-sections-char-count">
-                                                                            {img.caption?.length || 0}/150
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                        {/* Single Image Preview with controls on the right */}
+                                        {section.image && (
+                                            <div className="publication-sections-image-preview">
+                                                <div className="publication-sections-image-container">
+                                                    <div className="publication-sections-image-item">
+                                                        <div className="publication-sections-image-preview">
+                                                            <img src={section.image.src} alt={section.image.alt || 'Section image'} />
+                                                            <div className="publication-sections-image-overlay">
+                                                                <button
+                                                                    type="button"
+                                                                    className="publication-sections-image-remove-btn"
+                                                                    onClick={() => clearSectionImages(index)}
+                                                                    title={t('publications.create.removeImage')}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faTrash} />
+                                                                </button>
                                                             </div>
-                                                        ))}
+                                                            {section.image.isUploading && (
+                                                                <div className="publication-sections-image-uploading">
+                                                                    <div className="publication-sections-uploading-spinner"></div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Controls on the right side */}
+                                                    <div className="publication-sections-image-controls">
+                                                        <div className="publication-sections-image-input-group">
+                                                            <label>{t('publications.create.altText')}:</label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder={t('publications.create.imageDescription')}
+                                                                value={section.image.alt || ''}
+                                                                onChange={(e) => updateSectionImageAlt(index, 0, e.target.value)}
+                                                                className="publication-sections-image-input"
+                                                                maxLength={100}
+                                                            />
+                                                            <div className="publication-sections-char-count">
+                                                                {section.image.alt?.length || 0}/100
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="publication-sections-image-input-group">
+                                                            <label>{t('publications.create.caption')}:</label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder={t('publications.create.imageCaption')}
+                                                                value={section.image.caption || ''}
+                                                                onChange={(e) => updateSectionImageCaption(index, 0, e.target.value)}
+                                                                className="publication-sections-image-input"
+                                                                maxLength={150}
+                                                            />
+                                                            <div className="publication-sections-char-count">
+                                                                {section.image.caption?.length || 0}/150
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            )}
-                                        </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

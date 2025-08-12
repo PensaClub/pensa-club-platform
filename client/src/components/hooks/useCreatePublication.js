@@ -26,6 +26,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
         fileSize: '',
         downloadUrl: '',
         commentsEnabled: true,
+        showAuthor: true,
 
         // Main image
         mainImage: {
@@ -40,7 +41,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
             titleSlug: 'introduction',
             title: 'Въведение',
             content: createSlateEditorState(),
-            images: []
+            image: null // Change from images: [] to image: null
         }],
 
         // Meta
@@ -124,7 +125,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
             titleSlug: `section-${Date.now()}`,
             title: '',
             content: createSlateEditorState(),
-            images: []
+            image: null
         };
 
         setValues(prev => ({
@@ -156,112 +157,96 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
         const files = e.target.files;
         if (!files || files.length === 0) return;
 
-        const fileArray = Array.from(files);
-        const newImages = [];
-
-        fileArray.forEach((file, index) => {
-            try {
-                const blobUrl = URL.createObjectURL(file);
-                newImages.push({
-                    src: blobUrl,
-                    alt: '',
-                    caption: '',
-                    isUploading: true,
-                    fileId: Date.now() + Math.random() + index
-                });
-            } catch (error) {
-                console.error(`Error creating blob for ${file.name}:`, error);
-            }
-        });
-
-        if (newImages.length === 0) return;
-
-        // Update UI immediately
-        setValues(prev => {
-            const updatedSections = [...(prev.sections || [])];
-            const existingImages = updatedSections[sectionIndex].images || [];
-            updatedSections[sectionIndex] = {
-                ...updatedSections[sectionIndex],
-                images: [...existingImages, ...newImages]
-            };
-            return { ...prev, sections: updatedSections };
-        });
-
-        e.target.value = '';
+        const file = files[0];
+        let blobUrl = null;
 
         try {
-            const uploadedImages = [];
-            for (let i = 0; i < fileArray.length; i++) {
-                const file = fileArray[i];
-                try {
-                    const compressedFile = await compressImage(file, {
-                        maxSizeMB: 2,
-                        maxWidthOrHeight: 1920
-                    });
+            blobUrl = URL.createObjectURL(file);
 
-                    const url = await uploadFileWithProgress(
-                        compressedFile,
-                        'publications/section-images',
-                        (progress) => { }
-                    );
-
-                    uploadedImages.push({
-                        src: url,
-                        alt: '',
-                        caption: ''
-                    });
-                } catch (fileError) {
-                    console.error(`Error uploading file ${i + 1}:`, fileError);
-                    uploadedImages.push(null);
-                }
-            }
-
-            const validUploads = uploadedImages.filter(img => img !== null);
-
-            // Replace blob URLs with Firebase URLs
+            // Update UI immediately with blob URL
             setValues(prev => {
                 const updatedSections = [...(prev.sections || [])];
-                let updatedImages = [...(updatedSections[sectionIndex].images || [])];
-                let uploadIndex = 0;
-
-                newImages.forEach((blobImg) => {
-                    if (uploadIndex >= validUploads.length) return;
-                    const firebaseImg = validUploads[uploadIndex];
-                    if (!firebaseImg) return;
-
-                    const imageIndex = updatedImages.findIndex(img => img?.src === blobImg.src);
-                    if (imageIndex !== -1) {
-                        updatedImages[imageIndex] = {
-                            ...firebaseImg,
-                            alt: updatedImages[imageIndex].alt || '',
-                            caption: updatedImages[imageIndex].caption || ''
-                        };
-                    }
-
-                    try {
-                        URL.revokeObjectURL(blobImg.src);
-                    } catch (e) {
-                        console.warn('Could not revoke blob URL:', e);
-                    }
-
-                    uploadIndex++;
-                });
-
+                const existingImage = updatedSections[sectionIndex].image || null;
                 updatedSections[sectionIndex] = {
                     ...updatedSections[sectionIndex],
-                    images: updatedImages.filter(img => img && img.src)
+                    image: {
+                        src: blobUrl,
+                        alt: '',
+                        caption: '',
+                        isUploading: true
+                    }
                 };
-
                 return { ...prev, sections: updatedSections };
             });
 
-            if (validUploads.length > 0) {
-                notify('success', `Uploaded ${validUploads.length} images`);
+            e.target.value = '';
+
+            // Upload to Firebase
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 2,
+                maxWidthOrHeight: 1920
+            });
+
+            const url = await uploadFileWithProgress(
+                compressedFile,
+                'publications/section-images',
+                (progress) => { }
+            );
+
+            // Replace blob URL with Firebase URL
+            setValues(prev => {
+                const updatedSections = [...(prev.sections || [])];
+                const existingImage = updatedSections[sectionIndex].image || null;
+                updatedSections[sectionIndex] = {
+                    ...updatedSections[sectionIndex],
+                    image: {
+                        src: url,
+                        alt: existingImage?.alt || '',
+                        caption: existingImage?.caption || '',
+                        isUploading: false
+                    }
+                };
+                return { ...prev, sections: updatedSections };
+            });
+
+            // Clean up blob URL
+            if (blobUrl) {
+                try {
+                    URL.revokeObjectURL(blobUrl);
+                } catch (e) {
+                    console.warn('Could not revoke blob URL:', e);
+                }
             }
+
+            notify('success', 'Section image uploaded successfully!');
 
         } catch (error) {
             console.error('Upload error:', error);
-            notify('error', 'Error uploading images');
+            notify('error', 'Error uploading section image');
+
+            // Reset on error
+            setValues(prev => {
+                const updatedSections = [...(prev.sections || [])];
+                const existingImage = updatedSections[sectionIndex].image || null;
+                updatedSections[sectionIndex] = {
+                    ...updatedSections[sectionIndex],
+                    image: {
+                        src: '',
+                        alt: '',
+                        caption: '',
+                        isUploading: false
+                    }
+                };
+                return { ...prev, sections: updatedSections };
+            });
+
+            if (blobUrl) {
+                try {
+                    URL.revokeObjectURL(blobUrl);
+                } catch (e) {
+                    console.warn('Could not revoke blob URL:', e);
+                }
+            }
         }
     }, []);
 
@@ -277,10 +262,10 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
 
         setValues(prev => {
             const updatedSections = [...(prev.sections || [])];
-            const existingImages = updatedSections[sectionIndex].images || [];
+            const existingImage = updatedSections[sectionIndex].image || null;
             updatedSections[sectionIndex] = {
                 ...updatedSections[sectionIndex],
-                images: [...existingImages, newImage]
+                image: newImage
             };
             return { ...prev, sections: updatedSections };
         });
@@ -290,13 +275,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
     const removeSectionImage = useCallback((sectionIndex, imageIndex) => {
         setValues(prev => {
             const updatedSections = [...(prev.sections || [])];
-            const imageToDelete = updatedSections[sectionIndex].images[imageIndex];
-
-            // Remove image from array
-            updatedSections[sectionIndex] = {
-                ...updatedSections[sectionIndex],
-                images: updatedSections[sectionIndex].images.filter((_, i) => i !== imageIndex)
-            };
+            const imageToDelete = updatedSections[sectionIndex].image;
 
             // Delete from Firebase if needed
             if (imageToDelete?.src && !imageToDelete.isUploading && !imageToDelete.src.startsWith('blob:')) {
@@ -313,6 +292,12 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
                 }
             }
 
+            // Set image to null to remove it
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                image: null
+            };
+
             return { ...prev, sections: updatedSections };
         });
     }, []);
@@ -321,14 +306,11 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
     const updateSectionImageAlt = useCallback((sectionIndex, imageIndex, altText) => {
         setValues(prev => {
             const updatedSections = [...(prev.sections || [])];
-            const updatedImages = [...updatedSections[sectionIndex].images];
-            updatedImages[imageIndex] = {
-                ...updatedImages[imageIndex],
-                alt: altText
-            };
+            const updatedImage = { ...updatedSections[sectionIndex].image };
+            updatedImage.alt = altText;
             updatedSections[sectionIndex] = {
                 ...updatedSections[sectionIndex],
-                images: updatedImages
+                image: updatedImage
             };
             return { ...prev, sections: updatedSections };
         });
@@ -338,14 +320,11 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
     const updateSectionImageCaption = useCallback((sectionIndex, imageIndex, caption) => {
         setValues(prev => {
             const updatedSections = [...(prev.sections || [])];
-            const updatedImages = [...updatedSections[sectionIndex].images];
-            updatedImages[imageIndex] = {
-                ...updatedImages[imageIndex],
-                caption: caption
-            };
+            const updatedImage = { ...updatedSections[sectionIndex].image };
+            updatedImage.caption = caption;
             updatedSections[sectionIndex] = {
                 ...updatedSections[sectionIndex],
-                images: updatedImages
+                image: updatedImage
             };
             return { ...prev, sections: updatedSections };
         });
@@ -355,27 +334,25 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
     const clearSectionImages = useCallback((sectionIndex) => {
         setValues(prev => {
             const updatedSections = [...(prev.sections || [])];
-            const imagesToDelete = updatedSections[sectionIndex].images || [];
+            const imageToDelete = updatedSections[sectionIndex].image;
 
             // Delete from Firebase
-            imagesToDelete.forEach(image => {
-                if (image?.src && !image.isUploading && !image.src.startsWith('blob:')) {
-                    deleteSingleImage(image.src).catch(error => {
-                        console.error('Error deleting from Firebase:', error);
-                    });
+            if (imageToDelete?.src && !imageToDelete.isUploading && !imageToDelete.src.startsWith('blob:')) {
+                deleteSingleImage(imageToDelete.src).catch(error => {
+                    console.error('Error deleting from Firebase:', error);
+                });
+            }
+            if (imageToDelete?.src?.startsWith('blob:')) {
+                try {
+                    URL.revokeObjectURL(imageToDelete.src);
+                } catch (e) {
+                    console.warn('Could not revoke blob URL:', e);
                 }
-                if (image?.src?.startsWith('blob:')) {
-                    try {
-                        URL.revokeObjectURL(image.src);
-                    } catch (e) {
-                        console.warn('Could not revoke blob URL:', e);
-                    }
-                }
-            });
+            }
 
             updatedSections[sectionIndex] = {
                 ...updatedSections[sectionIndex],
-                images: []
+                image: null
             };
 
             return { ...prev, sections: updatedSections };

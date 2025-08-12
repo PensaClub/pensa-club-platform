@@ -805,3 +805,41 @@
         min-width: 100px;
     }
 }
+
+/* Toggles Container - Side by Side Layout */
+.publication-toggles-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.publication-toggle-item {
+    flex: 1;
+    min-width: 0;
+}
+
+.publication-toggle-header {
+    margin-bottom: 0.5rem;
+}
+
+.publication-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #334155;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .publication-toggles-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .publication-toggle-item {
+        flex: none;
+    }
+}

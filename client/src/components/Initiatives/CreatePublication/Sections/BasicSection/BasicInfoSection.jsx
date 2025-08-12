@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faInfoCircle,
@@ -12,10 +12,13 @@ import {
     faAlignLeft,
     faFolder,
     faImage,
-    faUpload
+    faUpload,
+    faUser,
+    faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import './basicSection.css';
+import { useAuthContext } from '../../../../contexts/UserContext';
 
 const BasicInfoSection = ({
     values,
@@ -33,12 +36,23 @@ const BasicInfoSection = ({
     updateMainImageCaption
 }) => {
     const { t } = useTranslation();
+    const { userEmail, username } = useAuthContext(); // Get user info
+
+    // Add state for main image URL input
+    const [showMainImageUrlInput, setShowMainImageUrlInput] = useState(false);
+    const [mainImageUrl, setMainImageUrl] = useState('');
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             addTag();
         }
+    };
+
+    // Get author name for preview
+    const getAuthorName = () => {
+        if (!values.showAuthor) return null; // If checkbox is unchecked, no author
+        return username || userEmail || 'Anonymous';
     };
 
     return (
@@ -108,106 +122,146 @@ const BasicInfoSection = ({
 
                 {/* Main Image */}
                 <div className="publication-form-group">
-                    <label className="publication-field-label">
+                    <label>
                         <FontAwesomeIcon icon={faImage} />
-                        {t('publications.fields.mainImage') || 'Main Image'}
+                        <span style={{ marginLeft: '0.5rem' }}>
+                            {t('publications.fields.mainImage')}
+                        </span>
                     </label>
+                    <div className="publication-sections-field-help">
+                        {t('publications.create.section-image-help')}
+                    </div>
 
-                    <div className="publication-main-image-section">
-                        {/* Image Upload */}
-                        <div className="publication-main-image-upload">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleMainImageUpload}
-                                className="publication-main-image-input"
-                                id="main-image-upload"
-                            />
-                            <label htmlFor="main-image-upload" className="publication-main-image-upload-btn">
-                                <FontAwesomeIcon icon={faUpload} />
-                                {values.mainImage?.src ? t('publications.create.changeImage') || 'Change Image' : t('publications.create.uploadImage') || 'Upload Image'}
-                            </label>
-                        </div>
-
-                        {/* Image Preview */}
-                        {values.mainImage?.src && (
-                            <div className="publication-main-image-preview">
-                                <div className="publication-main-image-container">
-                                    <img
-                                        src={values.mainImage.src}
-                                        alt={values.mainImage.alt || 'Main image preview'}
-                                        className="publication-main-image"
+                    <div className="publication-sections-image-upload">
+                        {/* Upload methods */}
+                        <div className="publication-sections-upload-methods">
+                            <div className="publication-sections-upload-method">
+                                <label className="publication-sections-upload-btn">
+                                    <FontAwesomeIcon icon={faUpload} />
+                                    {values.mainImage?.src ? t('publications.create.changeImage') : t('publications.create.uploadImage')}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleMainImageUpload}
+                                        style={{ display: 'none' }}
                                     />
+                                </label>
+                            </div>
+
+                            <div className="publication-sections-upload-method">
+                                <button
+                                    type="button"
+                                    className="publication-sections-upload-btn"
+                                    onClick={() => setShowMainImageUrlInput(prev => !prev)}
+                                >
+                                    <FontAwesomeIcon icon={faLink} />
+                                    {values.mainImage?.src ? t('publications.create.changeImageUrl') : t('publications.create.addImageUrl')}
+                                </button>
+                            </div>
+
+                            {values.mainImage?.src && (
+                                <div className="publication-sections-upload-method">
                                     <button
                                         type="button"
+                                        className="publication-sections-clear-btn"
                                         onClick={removeMainImage}
-                                        className="publication-main-image-remove"
-                                        title={t('publications.create.removeImage') || 'Remove Image'}
                                     >
-                                        <FontAwesomeIcon icon={faTimes} />
+                                        <FontAwesomeIcon icon={faTrash} />
+                                        {t('publications.create.clearImage')}
                                     </button>
                                 </div>
+                            )}
+                        </div>
 
-                                {/* Image Details */}
-                                <div className="publication-main-image-details">
-                                    <div className="publication-form-group">
-                                        <label className="publication-field-label">
-                                            {t('publications.fields.imageAlt') || 'Image Alt Text'}
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={values.mainImage.alt || ''}
-                                            onChange={(e) => updateMainImageAlt(e.target.value)}
-                                            placeholder={t('publications.fields.imageAltPlaceholder') || 'Describe the image for accessibility'}
-                                            className="publication-input"
-                                        />
-                                    </div>
-
-                                    <div className="publication-form-group">
-                                        <label className="publication-field-label">
-                                            {t('publications.fields.imageCaption') || 'Image Caption'}
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={values.mainImage.caption || ''}
-                                            onChange={(e) => updateMainImageCaption(e.target.value)}
-                                            placeholder={t('publications.fields.imageCaptionPlaceholder') || 'Optional caption for the image'}
-                                            className="publication-input"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* URL Input */}
-                        <div className="publication-main-image-url">
-                            <div className="publication-main-image-url-input">
+                        {/* URL input section */}
+                        {showMainImageUrlInput && (
+                            <div className="publication-sections-url-input-section">
                                 <input
                                     type="url"
-                                    placeholder={t('publications.fields.imageUrlPlaceholder') || 'Or enter image URL'}
-                                    className="publication-input"
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter') {
-                                            e.preventDefault();
-                                            addMainImageFromUrl(e.target.value);
-                                            e.target.value = '';
-                                        }
-                                    }}
+                                    placeholder={t('publications.create.imageUrl')}
+                                    value={mainImageUrl || ''}
+                                    onChange={(e) => setMainImageUrl(e.target.value)}
+                                    className="publication-sections-url-input"
                                 />
                                 <button
                                     type="button"
-                                    onClick={(e) => {
-                                        const input = e.target.previousElementSibling;
-                                        addMainImageFromUrl(input.value);
-                                        input.value = '';
+                                    className="publication-sections-url-add-btn"
+                                    onClick={() => {
+                                        if (mainImageUrl?.trim()) {
+                                            addMainImageFromUrl(mainImageUrl.trim());
+                                            setMainImageUrl('');
+                                            setShowMainImageUrlInput(false);
+                                        }
                                     }}
-                                    className="publication-main-image-url-btn"
+                                    disabled={!mainImageUrl?.trim()}
                                 >
                                     <FontAwesomeIcon icon={faLink} />
+                                    {t('publications.create.addImage')}
                                 </button>
                             </div>
-                        </div>
+                        )}
                     </div>
+
+                    {/* Single Image Preview with controls on the right */}
+                    {values.mainImage?.src && (
+                        <div className="publication-sections-image-preview">
+                            <div className="publication-sections-image-container">
+                                <div className="publication-sections-image-item">
+                                    <div className="publication-sections-image-preview">
+                                        <img src={values.mainImage.src} alt={values.mainImage.alt || 'Main image'} />
+                                        <div className="publication-sections-image-overlay">
+                                            <button
+                                                type="button"
+                                                className="publication-sections-image-remove-btn"
+                                                onClick={removeMainImage}
+                                                title={t('publications.create.removeImage')}
+                                            >
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </button>
+                                        </div>
+                                        {values.mainImage.isUploading && (
+                                            <div className="publication-sections-image-uploading">
+                                                <div className="publication-sections-uploading-spinner"></div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Controls on the right side */}
+                                <div className="publication-sections-image-controls">
+                                    <div className="publication-sections-image-input-group">
+                                        <label>{t('publications.create.altText')}:</label>
+                                        <input
+                                            type="text"
+                                            placeholder={t('publications.create.imageDescription')}
+                                            value={values.mainImage.alt || ''}
+                                            onChange={(e) => updateMainImageAlt(e.target.value)}
+                                            className="publication-sections-image-input"
+                                            maxLength={100}
+                                        />
+                                        <div className="publication-sections-char-count">
+                                            {values.mainImage.alt?.length || 0}/100
+                                        </div>
+                                    </div>
+
+                                    <div className="publication-sections-image-input-group">
+                                        <label>{t('publications.create.caption')}:</label>
+                                        <input
+                                            type="text"
+                                            placeholder={t('publications.create.imageCaption')}
+                                            value={values.mainImage.caption || ''}
+                                            onChange={(e) => updateMainImageCaption(e.target.value)}
+                                            className="publication-sections-image-input"
+                                            maxLength={150}
+                                        />
+                                        <div className="publication-sections-char-count">
+                                            {values.mainImage.caption?.length || 0}/150
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Category */}
@@ -273,43 +327,83 @@ const BasicInfoSection = ({
                     </div>
                 </div>
 
-                {/* Comments Enabled */}
+                {/* Comments and Author Toggles - Side by Side */}
                 <div className="publication-form-group">
-                    <div className="publication-comments-enabled-section">
-                        <div className="publication-comments-enabled-header">
-                            <label className="publication-comments-enabled-label">
-                                <FontAwesomeIcon icon={faCommentDots} />
-                                {t('publications.commentsEnabled')}
-                            </label>
-                            <div className="publication-comments-enabled-description">
-                                {t('publications.commentsEnabledDescription')}
+                    <div className="publication-toggles-container">
+                        {/* Comments Enabled */}
+                        <div className="publication-toggle-item">
+                            <div className="publication-comments-enabled-section">
+                                <div className="publication-comments-enabled-header">
+                                    <label className="publication-comments-enabled-label">
+                                        <FontAwesomeIcon icon={faCommentDots} />
+                                        {t('publications.commentsEnabled')}
+                                    </label>
+                                    <div className="publication-comments-enabled-description">
+                                        {t('publications.commentsEnabledDescription')}
+                                    </div>
+                                </div>
+
+                                <div className="publication-comments-toggle-container">
+                                    <label className="publication-comments-toggle">
+                                        <input
+                                            type="checkbox"
+                                            name="commentsEnabled"
+                                            checked={values.commentsEnabled}
+                                            onChange={onChangeHandler}
+                                            className="publication-comments-toggle-input"
+                                        />
+                                        <span className="publication-comments-toggle-slider">
+                                            <span className="publication-comments-toggle-thumb">
+                                                <FontAwesomeIcon
+                                                    icon={values.commentsEnabled ? faCheck : faTimes}
+                                                    className="publication-comments-toggle-icon"
+                                                />
+                                            </span>
+                                        </span>
+                                        <span className="publication-comments-toggle-text">
+                                            {values.commentsEnabled ? t('publications.commentsAllowed') : t('publications.commentsDisabled')}
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="publication-comments-toggle-container">
-                            <label className="publication-comments-toggle">
-                                <input
-                                    type="checkbox"
-                                    name="commentsEnabled"
-                                    checked={values.commentsEnabled}
-                                    onChange={onChangeHandler}
-                                    className="publication-comments-toggle-input"
-                                />
-                                <span className="publication-comments-toggle-slider">
-                                    <span className="publication-comments-toggle-thumb">
-                                        <FontAwesomeIcon
-                                            icon={values.commentsEnabled ? faCheck : faTimes}
-                                            className="publication-comments-toggle-icon"
+                        {/* Show Author */}
+                        <div className="publication-toggle-item">
+                            <div className="publication-comments-enabled-section">
+                                <div className="publication-comments-enabled-header">
+                                    <label className="publication-comments-enabled-label">
+                                        <FontAwesomeIcon icon={faUser} />
+                                        {t('publications.fields.showAuthor')}
+                                    </label>
+                                    <div className="publication-comments-enabled-description">
+                                        {t('publications.fields.showAuthorDescription')}
+                                    </div>
+                                </div>
+
+                                <div className="publication-comments-toggle-container">
+                                    <label className="publication-comments-toggle">
+                                        <input
+                                            type="checkbox"
+                                            name="showAuthor"
+                                            checked={values.showAuthor}
+                                            onChange={onChangeHandler}
+                                            className="publication-comments-toggle-input"
                                         />
-                                    </span>
-                                </span>
-                                <span className="publication-comments-toggle-text">
-                                    {values.commentsEnabled
-                                        ? t('publications.commentsAllowed')
-                                        : t('publications.commentsDisabled')
-                                    }
-                                </span>
-                            </label>
+                                        <span className="publication-comments-toggle-slider">
+                                            <span className="publication-comments-toggle-thumb">
+                                                <FontAwesomeIcon
+                                                    icon={values.showAuthor ? faCheck : faTimes}
+                                                    className="publication-comments-toggle-icon"
+                                                />
+                                            </span>
+                                        </span>
+                                        <span className="publication-comments-toggle-text">
+                                            {values.showAuthor ? t('publications.fields.authorVisible') : t('publications.fields.authorHidden')}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
