@@ -14,7 +14,8 @@ import {
     faImage,
     faUpload,
     faUser,
-    faTrash
+    faTrash,
+    faClock
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import './basicSection.css';
@@ -283,6 +284,22 @@ const BasicInfoSection = ({
                         <option value="lifestyle">{t('publications.categories.lifestyle')}</option>
                         <option value="other">{t('publications.categories.other')}</option>
                     </select>
+                </div>
+
+                {/* Read Time */}
+                <div className="publication-form-group">
+                    <label htmlFor="readTime" className="publication-field-label">
+                        <FontAwesomeIcon icon={faClock} />
+                        {t('publications.fields.readTime')}
+                    </label>
+                    <input
+                        type="text"
+                        id="readTime"
+                        name="readTime"
+                        value={values.readTime}
+                        onChange={onChangeHandler}
+                        placeholder={t('publications.fields.readTimePlaceholder')}
+                    />
                 </div>
 
                 {/* Tags */}

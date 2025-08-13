@@ -2715,7 +2715,28 @@
       "selectedInitiative": "Избрана инициатива",
       "clearImage": "Изчисти изображението",
       "addImage": "Добави изображение",
-      "imageUrl": "URL адрес на изображението..."
+      "imageUrl": "URL адрес на изображението...",
+      "clickToUploadFile": "Кликни за качване",
+      "readTime": "Време за четене",
+      "readTimePlaceholder": "Време за четене (в минути)",
+      "fileType": "Тип файл",
+      "fileSize": "Размер на файла",
+      "downloadUrl": "Линк за изтегляне",
+      "uploadFile": "Качи файл",
+      "supportedFormats": "Поддържани формати",
+      "maxSize": "Максимален размер",
+      "fileInfo": "Информация за файла",
+      "viewFile": "Преглед на файла",
+      "downloadFile": "Изтегли",
+      "viewUrl": "Линк за преглед",
+      "fileManaging": "Управление на файлове",
+      "fileUploading": "Качване на файл",
+      "fileTypes": {
+        "pdf": "PDF документ",
+        "doc": "Word документ",
+        "txt": "Текстов файл",
+        "epub": "EPUB книга"
+      }
     },
     "categories": {
       "digitalization": "Дигитализация",
@@ -3266,7 +3287,6 @@
       "description": "Споделете знанията и опита си с общността",
       "saveDraft": "Запази като чернова",
       "updateDraft": "Обнови чернова",
-      "preview": "Преглед",
       "publishPublication": "Запази и публикувай",
       "updatePublication": "Обнови публикация",
       "createPublication": "Запази и публикувай",
@@ -3333,22 +3353,64 @@
       "addImageUrl": "Добави изображение с URL",
       "clearImage": "Изчисти изображението",
       "addImage": "Добави изображение",
-      "imageUrl": "URL адрес на изображението..."
+      "imageUrl": "URL адрес на изображението...",
+      "fileType": "Тип файл",
+      "fileSize": "Размер на файла",
+      "downloadUrl": "Линк за изтегляне",
+      "readTime": "Време за четене",
+      "commentsEnabled": "Коментарите са разрешени",
+      "commentsEnabledDescription": "Позволете коментари от потребители",
+      "selectFileType": "Изберете тип файл",
+      "commentsAllowed": "Разрешено",
+      "commentsDisabled": "Забранено",
+      "readTimePlaceholder": "Време за четене (в минути)",
+      "downloadUrlPlaceholder": "/downloads/publication.pdf",
+      "uploadFile": "Качи файл",
+      "clickToUpload": "Кликни за качване на файл",
+      "supportedFormats": "Поддържани формати",
+      "maxSize": "Максимален размер",
+      "fileInfo": "Информация за файла",
+      "viewFile": "Преглед на файла",
+      "downloadFile": "Изтегли",
+      "viewUrl": "Линк за преглед",
+      "fileManaging": "Управление на файлове",
+      "fileUploading": "Качване на файл",
+      "fileTypes": {
+        "pdf": "PDF документ",
+        "doc": "Word документ",
+        "txt": "Текстов файл",
+        "epub": "EPUB книга"
+      },
+      "preview": {
+        "loading": "Зареждане на прегледа...",
+        "notFound": "Прегледът не е намерен",
+        "noData": "Няма данни за преглед",
+        "previewMode": "Режим на преглед",
+        "previewDescription": "Така ще изглежда вашата публикация когато бъде публикувана",
+        "backToEditing": "Обратно към редактирането",
+        "noImageAvailable": "Няма налична снимка",
+        "noCategory": "Без категория",
+        "download": "Изтегли",
+        "share": "Сподели",
+        "like": "Харесай"
+      }
     },
     "edit": {
       "title": "Редактиране на публикация",
       "submit": "Обнови публикация"
     },
     "sections": {
-      "basicInfo": "Основна информация",
+      "basicInfo": "Основна Информация",
       "content": "Съдържание",
-      "fileOptions": "Файл и опции"
+      "fileUpload": "Качи Файл"
     },
     "fields": {
       "title": "Заглавие",
       "slug": "URL идентификатор",
       "shortDescription": "Кратко описание",
       "category": "Категория",
+      "readTime": "Време за четене",
+      "readTimePlaceholder": "Време за четене (в минути)",
       "tags": "Етикети",
       "addTagPlaceholder": "Добавете етикет...",
       "selectCategory": "Изберете категория",
@@ -3397,37 +3459,6 @@
       "fileTypeInvalid": "Невалиден тип файл",
       "fileSizeRange": "Размерът на файла трябва да бъде между 1 и 100 MB",
       "downloadUrlInvalid": "Невалиден URL за изтегляне"
-    },
-    "fileType": "Тип файл",
-    "fileSize": "Размер на файла (в MB)",
-    "downloadUrl": "Линк за изтегляне",
-    "readTime": "Време за четене",
-    "commentsEnabled": "Коментарите са разрешени",
-    "commentsEnabledDescription": "Позволете коментари от потребители",
-    "selectFileType": "Изберете тип файл",
-    "commentsAllowed": "Разрешено",
-    "commentsDisabled": "Забранено",
-    "fileSizePlaceholder": "2.5 MB",
-    "readTimePlaceholder": "15 мин",
-    "downloadUrlPlaceholder": "/downloads/publication.pdf",
-    "fileTypes": {
-      "pdf": "PDF документ",
-      "doc": "Word документ",
-      "txt": "Текстов файл",
-      "epub": "EPUB книга"
-    },
-    "preview": {
-      "loading": "Зареждане на прегледа...",
-      "notFound": "Прегледът не е намерен",
-      "noData": "Няма данни за преглед",
-      "previewMode": "Режим на преглед",
-      "previewDescription": "Така ще изглежда вашата публикация когато бъде публикувана",
-      "backToEditing": "Обратно към редактирането",
-      "noImageAvailable": "Няма налична снимка",
-      "noCategory": "Без категория",
-      "download": "Изтегли",
-      "share": "Сподели",
-      "like": "Харесай"
     }
   }
 }

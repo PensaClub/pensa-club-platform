@@ -8,6 +8,9 @@ import { PublicationsSearchAdmin } from './PublicationsSearchAdmin/PublicationsS
 import { PublicationsHeaderAdmin } from './PublicationsHeaderAdmin/PublicationsHeaderAdmin';
 import { notify } from '../../../../utils/notify';
 import PublicationCreateForm from '../MainForm/MainFormPublication';
+import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const AllPublications = () => {
     const { t } = useTranslation();
@@ -37,6 +40,36 @@ export const AllPublications = () => {
     });
     const [openDropdownId, setOpenDropdownId] = useState(null);
     const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
+    const [previewData, setPreviewData] = useState(null);
+    const [scrollPosition, setScrollPosition] = useState(0); // Add this to preserve scroll position
+
+    // Add ESC key and outside click handling (same as MainFormPublication)
+    useEffect(() => {
+        const handleEscape = (event) => {
+            if (event.key === 'Escape' && showPreview) {
+                closePreview();
+            }
+        };
+
+        const handleOutsideClick = (event) => {
+            if (showPreview && event.target.classList.contains('publication-preview-modal-overlay')) {
+                closePreview();
+            }
+        };
+
+        if (showPreview) {
+            document.addEventListener('keydown', handleEscape);
+            document.addEventListener('click', handleOutsideClick);
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+            document.removeEventListener('click', handleOutsideClick);
+            document.body.style.overflow = 'unset';
+        };
+    }, [showPreview]);
 
     useEffect(() => {
         // Ако се връщаме от edit страница, refresh-ваме данните
@@ -74,6 +107,13 @@ export const AllPublications = () => {
         document.addEventListener('click', handleGlobalClick);
         return () => document.removeEventListener('click', handleGlobalClick);
     }, []);
+
+    // Also reset scroll when data is loaded
+    useEffect(() => {
+        if (publications.length > 0 || publicationDrafts.length > 0) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [publications.length, publicationDrafts.length]);
 
     // Filter items - FIXED variable names
     useEffect(() => {
@@ -169,6 +209,50 @@ export const AllPublications = () => {
         getAllPublicationDrafts
     ]);
 
+    // Function to show preview modal
+    const handleShowPreview = (item) => {
+        // Transform the item data to match the preview format
+        const transformedData = {
+            id: item.id || 'preview-' + Date.now(),
+            title: item.title || 'Untitled Publication',
+            shortDescription: item.shortDescription || 'No description provided',
+            description: item.shortDescription || 'No description provided',
+            publishedAt: item.publishedAt || new Date().toISOString(),
+            author: item.userEmail || 'Unknown Author',
+            authorEmail: item.userEmail || null,
+            authorImage: null,
+            readTime: item.readTime || '5',
+            category: item.category || 'General',
+            tags: item.tags || [],
+            image: {
+                src: item.image?.src || item.mainImage?.src || '',
+                alt: item.image?.alt || item.mainImage?.alt || item.title || 'Publication',
+                caption: item.image?.caption || item.mainImage?.caption || ''
+            },
+            mainImage: item.mainImage || item.image || null,
+            sections: item.sections || [],
+            downloadUrl: item.downloadUrl || '',
+            fileType: item.fileType || 'PDF',
+            fileSize: item.fileSize || 'Unknown',
+            commentsEnabled: item.commentsEnabled !== false,
+            views: item.views || 0,
+            downloads: item.downloads || 0,
+            likes: item.likes || 0,
+            isLiked: false,
+            initiative: item.initiative || null,
+            slug: item.slug || 'preview-slug'
+        };
+
+        setPreviewData(transformedData);
+        setShowPreview(true);
+    };
+
+    // Function to close preview modal (same as MainFormPublication)
+    const closePreview = () => {
+        setShowPreview(false);
+        setPreviewData(null);
+    };
+
     // Action handlers
     const performAction = async (action, item) => {
         setOpenDropdownId(null);
@@ -177,11 +261,8 @@ export const AllPublications = () => {
         try {
             switch (action) {
                 case 'view':
-                    if (viewMode === 'publications') {
-                        navigate(`/publications/${identifier}`);
-                    } else {
-                        navigate(`/profile/publication-create?draftId=${identifier}`);
-                    }
+                    // Show preview modal instead of navigating
+                    handleShowPreview(item);
                     break;
                 case 'edit':
                     if (viewMode === 'drafts') {
@@ -460,6 +541,31 @@ export const AllPublications = () => {
                         </div>
                     )}
                 </>
+            )}
+
+            {/* Preview Modal - same structure as MainFormPublication */}
+            {showPreview && previewData && (
+                <div className="publication-preview-modal-overlay">
+                    <div className="publication-preview-modal-content">
+                        <div className="publication-preview-modal-header">
+                            <button
+                                className="publication-preview-close-btn"
+                                onClick={closePreview}
+                            >
+                                <FontAwesomeIcon icon={faArrowLeft} />
+                                {t('publications.create.preview.backToEditing')}
+                            </button>
+                            <h2>{t('publications.create.preview.previewMode')}</h2>
+                        </div>
+                        <div className="publication-preview-modal-body">
+                            <StoryPubView
+                                type="publication"
+                                previewMode={true}
+                                previewData={previewData}
+                            />
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );

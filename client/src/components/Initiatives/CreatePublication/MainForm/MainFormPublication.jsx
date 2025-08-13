@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faEdit, faFileAlt, faCog, faArrowLeft, faUser, faCheck, faTimes, faImage, faUpload, faLink, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -87,6 +87,16 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
         updateMainImageCaption
     } = useCreatePublication(initialValues, onSubmitHandler);
 
+    // Add this useEffect to monitor values changes
+    useEffect(() => {
+        console.log('📊 Values changed in main component:', {
+            fileType: values.fileType,
+            fileSize: values.fileSize,
+            downloadUrl: values.downloadUrl,
+            category: values.category
+        });
+    }, [values.fileType, values.fileSize, values.downloadUrl, values.category]);
+
     // Add tag
     const addTag = () => {
         if (newTag.trim() && !values.tags.includes(newTag.trim())) {
@@ -110,7 +120,7 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
     const navigationSections = [
         { id: 'basic-info', label: t('publications.sections.basicInfo') || 'Basic Information', icon: faInfoCircle },
         { id: 'content', label: t('publications.sections.content') || 'Content', icon: faEdit },
-        { id: 'file-options', label: t('publications.sections.fileOptions') || 'File & Options', icon: faFileAlt }
+        { id: 'file-options', label: t('publications.sections.fileUpload') || 'File Upload', icon: faFileAlt }
     ];
 
     // Update section order
@@ -133,17 +143,25 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
 
     // Helper function to prepare publication data
     const preparePublicationData = () => {
+        // Add debugging to see what values we have
+        console.log('🔍 Current values before preparePublicationData:', {
+            fileType: values.fileType,
+            fileSize: values.fileSize,
+            downloadUrl: values.downloadUrl,
+            category: values.category
+        });
+
         return {
             title: values.title,
             slug: values.slug,
             title_slug: values.slug,
             shortDescription: values.shortDescription || '',
-            category: values.category || null, // Send null instead of empty string
+            category: values.category || null,
             tags: values.tags || [],
             readTime: values.readTime || '',
-            fileType: values.fileType || null, // Send null instead of empty string
+            fileType: values.fileType || null,
             fileSize: values.fileSize || '',
-            downloadUrl: values.downloadUrl || 'https://example.com', // Temporary valid URL for now
+            downloadUrl: values.downloadUrl || null,
             commentsEnabled: values.commentsEnabled ?? true,
             showAuthor: values.showAuthor ?? true,
             mainImage: values.mainImage || {
@@ -517,9 +535,9 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                                 onClick={closePreview}
                             >
                                 <FontAwesomeIcon icon={faArrowLeft} />
-                                {t('publications.preview.backToEditing')}
+                                {t('publications.create.preview.backToEditing')}
                             </button>
-                            <h2>{t('publications.preview.previewMode')}</h2>
+                            <h2>{t('publications.create.preview.previewMode')}</h2>
                         </div>
                         <div className="publication-preview-modal-body">
                             <StoryPubView

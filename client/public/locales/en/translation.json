@@ -955,7 +955,7 @@
       "chooseImage": "Choose image",
       "addViaUrl": "Add via URL",
       "chooseVideoMethod": "Choose video addition method",
-      "supportedFormats": "Supported formats: MP4, WebM, OGG. Maximum size: 100 MB",
+      "supportedFormats": "Supported formats",
       "unnamedFile": "Unnamed File",
       "unknownSize": "unknown size",
       "size": "Size:",
@@ -1348,7 +1348,16 @@
       "faq-help": "Add frequently asked questions and answers to help users",
       "faq-question-help": "Short and clear question (5-200 characters)",
       "faq-answer-help": "Detailed answer to the question (10-5000 characters)",
-      "close-to-limit": "close to limit"
+      "close-to-limit": "close to limit",
+      "fileInfo": "File Information",
+      "viewFile": "View File",
+      "downloadFile": "Download",
+      "viewUrl": "View Link",
+      "fileManaging": "File Management",
+      "fileUploading": "File Upload",
+      "readTime": "Reading Time",
+      "readTimePlaceholder": "Reading time (in minutes)",
+      "fileSize": "File Size"
     },
     "admin": {
       "title": "Initiatives Management",
@@ -3302,7 +3311,18 @@
       "showAuthor": "Show Author",
       "showAuthorDescription": "Display the author name in the publication",
       "authorVisible": "Author will be visible",
-      "authorHidden": "Author will be hidden"
+      "authorHidden": "Author will be hidden",
+      "uploadFile": "Upload File",
+      "clickToUpload": "Click to upload file",
+      "supportedFormats": "Supported formats",
+      "maxSize": "Maximum size",
+      "fileInfo": "File Information",
+      "fileType": "File Type",
+      "fileSize": "File Size",
+      "downloadUrl": "Download Link",
+      "downloadFile": "Download File",
+      "viewUrl": "View Link",
+      "viewFile": "View File"
     },
     "edit": {
       "title": "Edit Publication",
@@ -3311,13 +3331,15 @@
     "sections": {
       "basicInfo": "Basic Information",
       "content": "Content",
-      "fileOptions": "File & Options"
+      "fileUpload": "File Upload"
     },
     "fields": {
       "title": "Title",
       "slug": "Slug",
       "shortDescription": "Short Description",
       "category": "Category",
+      "readTime": "Read Time",
+      "readTimePlaceholder": "Reading time (in minutes)",
       "tags": "Tags",
       "addTagPlaceholder": "Add a tag...",
       "selectCategory": "Select a category",
@@ -3373,7 +3395,7 @@
       "downloadUrlInvalid": "Invalid download URL"
     },
     "fileType": "File Type",
-    "fileSize": "File Size (in MB)",
+    "fileSize": "File Size",
     "downloadUrl": "Download Link",
     "readTime": "Read Time",
     "commentsEnabled": "Comments Enabled",
@@ -3384,6 +3406,16 @@
     "fileSizePlaceholder": "2.5 MB",
     "readTimePlaceholder": "15 min",
     "downloadUrlPlaceholder": "/downloads/publication.pdf",
+    "uploadFile": "Upload File",
+    "clickToUpload": "Click to upload file",
+    "supportedFormats": "Supported formats",
+    "maxSize": "Maximum size",
+    "fileInfo": "File Information",
+    "viewFile": "View File",
+    "downloadFile": "Download",
+    "viewUrl": "View Link",
+    "fileManaging": "File Management",
+    "fileUploading": "File Upload",
     "fileTypes": {
       "pdf": "PDF Document",
       "doc": "Word Document",

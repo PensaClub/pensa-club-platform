@@ -198,7 +198,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                 className="story-pub-hero-placeholder-text"
                                 style={{ zIndex: '3' }}
                             >
-                                {t('publications.preview.noImageAvailable')}
+                                {t('publications.create.preview.noImageAvailable')}
                             </span>
                         </div>
                     )}
