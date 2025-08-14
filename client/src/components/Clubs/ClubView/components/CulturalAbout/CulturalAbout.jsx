@@ -132,7 +132,7 @@ ${joinForm.message || 'Няма допълнително съобщение'}
   const availableInterests = ['Хорово пеене', 'Народни танци', 'Изобразително изкуство', 'Литературни четения', 'Музика', 'Театър'];
 
   return (
-    <section id="club-about" className="cultural-about-main-section">
+    <section id="cultural-about" className="cultural-about-main-section">
       <div className="cultural-about-container">
         
         {/* Header */}

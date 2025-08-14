@@ -10,37 +10,87 @@ import {
   faGlobe,
   faChevronLeft,
   faChevronRight,
-  faPlay
+  faPlay,
+  faTimes,
+  faUserPlus,
+  faInfoCircle,
+  faEye,
+  faHeart,
+  faShare,
+  faCrown,
+  faUserCircle,
+  faIdCard,
+  faBirthdayCake,
+  faVenus,
+  faMars,
+  faSearch
 } from '@fortawesome/free-solid-svg-icons';
-import { faFacebook } from '@fortawesome/free-brands-svg-icons'; // Тук е поправката
+import { 
+  faFacebook,
+  faInstagram,
+  faYoutube,
+  faTwitter
+} from '@fortawesome/free-brands-svg-icons';
 import './clubHero.css';
 
 export const ClubHero = ({ club }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [imageError, setImageError] = useState(false);
+  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [memberSearchTerm, setMemberSearchTerm] = useState('');
 
-  const images = club.gallery && club.gallery.length > 0 
-    ? club.gallery 
-    : club.mainImage 
-      ? [club.mainImage] 
-      : [];
+  // ПРОВЕРКА ЗА ДАННИ - ако няма основни данни, не показваме компонента
+  if (!club?.name) {
+    return null;
+  }
+
+  // Безопасно извличане на изображения
+  const getImages = () => {
+    const images = [];
+    
+    // От галерия
+    if (club.gallery && Array.isArray(club.gallery)) {
+      images.push(...club.gallery.map(img => typeof img === 'string' ? img : img.src || img.url));
+    }
+    
+    // Основно изображение
+    if (club.mainImage) {
+      images.push(club.mainImage);
+    }
+    
+    // От събития
+    if (club.activities?.events) {
+      club.activities.events.forEach(event => {
+        if (event.images) {
+          event.images.forEach(img => images.push(img.src || img));
+        }
+      });
+    }
+    
+    return images.filter(Boolean).slice(0, 8); // Макс 8 снимки
+  };
+
+  const images = getImages();
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === images.length - 1 ? 0 : prev + 1
-    );
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => 
+        prev === images.length - 1 ? 0 : prev + 1
+      );
+    }
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? images.length - 1 : prev - 1
-    );
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => 
+        prev === 0 ? images.length - 1 : prev - 1
+      );
+    }
   };
 
   const getCategoryLabel = (category) => {
     const labels = {
       'cultural': 'Културен клуб',
-      'sports': 'Спортен клуб',
+      'sports': 'Спортен клуб', 
       'traditional': 'Традиционен клуб',
       'social': 'Социален клуб',
       'educational': 'Образователен клуб',
@@ -52,196 +102,541 @@ export const ClubHero = ({ club }) => {
 
   const renderStars = (rating) => {
     const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
+    const safeRating = rating || 0;
+    const fullStars = Math.floor(safeRating);
+    const hasHalfStar = safeRating % 1 !== 0;
     
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<FontAwesomeIcon key={i} icon={faStar} className="star filled" />);
+      stars.push(<FontAwesomeIcon key={i} icon={faStar} className="general-star filled" />);
     }
     
     if (hasHalfStar) {
-      stars.push(<FontAwesomeIcon key="half" icon={faStar} className="star half" />);
+      stars.push(<FontAwesomeIcon key="half" icon={faStar} className="general-star half" />);
     }
     
-    const remainingStars = 5 - Math.ceil(rating);
+    const remainingStars = 5 - Math.ceil(safeRating);
     for (let i = 0; i < remainingStars; i++) {
-      stars.push(<FontAwesomeIcon key={`empty-${i}`} icon={faStar} className="star empty" />);
+      stars.push(<FontAwesomeIcon key={`empty-${i}`} icon={faStar} className="general-star empty" />);
     }
     
     return stars;
   };
 
-  return (
-    <section id="club-hero" className="club-hero">
-      <div className="club-hero-container">
+  // Безопасно извличане на статистики
+  const getStats = () => {
+    const totalMembers = club.membership?.totalMembers || 
+                        club.membership?.activeMembers || 
+                        club.stats?.totalMembers ||
+                        (club.members ? club.members.filter(m => m.isActive !== false).length : 0) ||
+                        (club.management?.board?.length || 0) + 20; // Fallback
+    
+    const yearsActive = club.foundedYear ? 
+                       new Date().getFullYear() - club.foundedYear : 
+                       club.stats?.yearsActive ||
+                       5; // Fallback
+    
+    const activitiesCount = (club.activities?.regular?.length || 0) + 
+                           (club.activities?.events?.length || 0) + 
+                           (club.activities?.classes?.length || 0) ||
+                           club.stats?.programs ||
+                           3; // Fallback
+
+    const eventsCount = club.activities?.events?.length || 
+                       club.stats?.events || 
+                       12; // Fallback
+
+    return { totalMembers, yearsActive, activitiesCount, eventsCount };
+  };
+
+  const stats = getStats();
+
+  // Получаване на членове за модала - ИЗПОЛЗВА РЕАЛНИ ДАННИ
+  const getMembers = () => {
+    const members = [];
+    
+    // От реалния списък с членове
+    if (club.members && Array.isArray(club.members)) {
+      club.members.forEach(member => {
+        if (member.isActive !== false) { // Показваме само активните
+          members.push({
+            id: member.id,
+            name: `${member.firstName} ${member.lastName}`,
+            role: member.role || 'Член',
+            phone: member.phone,
+            email: member.email,
+            address: member.address,
+            avatar: member.photo?.src,
+            isBoard: ['председател', 'секретар', 'касиер', 'заместник-председател'].includes(member.role?.toLowerCase()),
+            memberSince: member.joinDate ? new Date(member.joinDate).getFullYear() : null,
+            joinDate: member.joinDate,
+            bio: null // Членовете обикновено нямат био
+          });
+        }
+      });
+    }
+    
+    // Добавяме от управленски борд ако не са в списъка
+    if (club.management?.board) {
+      club.management.board.forEach(boardMember => {
+        const existingMember = members.find(m => 
+          m.name.toLowerCase() === boardMember.name.toLowerCase()
+        );
         
-        {/* Лява страна - Изображения */}
-        <div className="club-hero-images">
-          {images.length > 0 ? (
-            <div className="hero-image-gallery">
-              <div className="main-image-container">
-                <img 
-                  src={images[currentImageIndex]} 
-                  alt={`${club.name} - снимка ${currentImageIndex + 1}`}
-                  className="hero-main-image"
-                  onError={() => setImageError(true)}
-                />
-                
-                {images.length > 1 && (
-                  <>
-                    <button className="image-nav-btn prev" onClick={prevImage}>
-                      <FontAwesomeIcon icon={faChevronLeft} />
-                    </button>
-                    <button className="image-nav-btn next" onClick={nextImage}>
-                      <FontAwesomeIcon icon={faChevronRight} />
-                    </button>
-                  </>
-                )}
-                
-                <div className="image-overlay">
-                  <div className="image-badges">
-                    <span className="status-badge active">Активен</span>
-                    <span className="category-badge">{getCategoryLabel(club.category)}</span>
+        if (!existingMember) {
+          members.push({
+            name: boardMember.name,
+            role: boardMember.role || 'Член на борда',
+            phone: boardMember.phone,
+            email: boardMember.email,
+            address: boardMember.address,
+            avatar: boardMember.avatar,
+            bio: boardMember.bio,
+            isBoard: true
+          });
+        } else {
+          // Обновяваме със данни от борда
+          existingMember.bio = boardMember.bio;
+          existingMember.avatar = existingMember.avatar || boardMember.avatar;
+        }
+      });
+    }
+    
+    // Ако няма никакви данни, използваме fallback
+    if (members.length === 0 && stats.totalMembers > 0) {
+      const sampleNames = [
+        'Мария Иванова', 'Георги Петров', 'Елена Стоянова', 'Иван Димитров',
+        'Анна Николова', 'Стоян Георгиев', 'Рада Христова', 'Петър Милев'
+      ];
+      
+      for (let i = 0; i < Math.min(8, stats.totalMembers); i++) {
+        members.push({
+          name: sampleNames[i] || `Член ${i + 1}`,
+          role: i === 0 ? 'Председател' : 'Член',
+          isBoard: i < 3,
+          memberSince: 2018 + Math.floor(Math.random() * 6)
+        });
+      }
+    }
+    
+    // Сортираме - първо борда, после останалите
+    return members.sort((a, b) => {
+      if (a.isBoard && !b.isBoard) return -1;
+      if (!a.isBoard && b.isBoard) return 1;
+      if (a.role === 'председател') return -1;
+      if (b.role === 'председател') return 1;
+      return a.name.localeCompare(b.name);
+    });
+  };
+
+  const members = getMembers();
+
+  // Филтриране на членове
+  const filteredMembers = members.filter(member =>
+    member.name?.toLowerCase().includes(memberSearchTerm.toLowerCase()) ||
+    member.role?.toLowerCase().includes(memberSearchTerm.toLowerCase())
+  );
+
+  // Функционални бутони
+  const handleCall = () => {
+    const phone = club.contacts?.phone || club.contacts?.mobile;
+    if (phone) {
+      window.location.href = `tel:${phone}`;
+    } else {
+      alert('Телефонен номер не е наличен');
+    }
+  };
+
+  const handleEmail = () => {
+    if (club.contacts?.email) {
+      window.location.href = `mailto:${club.contacts.email}`;
+    } else {
+      alert('Имейл адрес не е наличен');
+    }
+  };
+
+  const handleWebsite = () => {
+    if (club.contacts?.website) {
+      window.open(`https://${club.contacts.website}`, '_blank');
+    } else {
+      alert('Уебсайт не е наличен');
+    }
+  };
+
+  const handleSocial = (platform) => {
+    const socialUrl = club.contacts?.socialMedia?.[platform];
+    if (socialUrl) {
+      window.open(socialUrl.startsWith('http') ? socialUrl : `https://${socialUrl}`, '_blank');
+    } else {
+      alert(`${platform} профил не е наличен`);
+    }
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: club.name,
+        text: club.shortDescription || club.description,
+        url: window.location.href
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Линкът е копиран в клипборда!');
+    }
+  };
+
+  const openMembersModal = () => {
+    setShowMembersModal(true);
+    setMemberSearchTerm('');
+  };
+
+  const closeMembersModal = () => {
+    setShowMembersModal(false);
+    setMemberSearchTerm('');
+  };
+
+  return (
+    <section id="general-club-hero" className="general-hero-main">
+      <div className="general-hero-container">
+        
+        {/* Горна лента с бадж и рейтинг */}
+        <div className="general-hero-top-bar">
+          <div className="general-hero-badges">
+            <span className="general-status-badge active">
+              <div className="general-status-dot"></div>
+              Активен клуб
+            </span>
+            <span className="general-category-badge">
+              {getCategoryLabel(club.category)}
+            </span>
+          </div>
+          
+          <div className="general-hero-actions">
+            <button className="general-action-btn" onClick={handleShare}>
+              <FontAwesomeIcon icon={faShare} />
+              Споделяне
+            </button>
+            <button className="general-action-btn favorite">
+              <FontAwesomeIcon icon={faHeart} />
+              Харесай
+            </button>
+          </div>
+        </div>
+
+        {/* Основно съдържание */}
+        <div className="general-hero-content">
+          
+          {/* Лява страна - Hero информация */}
+          <div className="general-hero-main-info">
+            <div className="general-hero-title-section">
+              <div className="general-hero-title-row">
+                <h1 className="general-club-name">{club.name}</h1>
+                {club.logo && (
+                  <div className="general-club-logo">
+                    <img src={club.logo} alt={`${club.name} лого`} />
                   </div>
-                </div>
+                )}
               </div>
               
-              {images.length > 1 && (
-                <div className="image-thumbnails">
-                  {images.slice(0, 4).map((image, index) => (
-                    <div 
-                      key={index}
-                      className={`thumbnail ${index === currentImageIndex ? 'active' : ''}`}
-                      onClick={() => setCurrentImageIndex(index)}
-                    >
-                      <img src={image} alt={`Thumbnail ${index + 1}`} />
-                      {images.length > 4 && index === 3 && (
-                        <div className="more-images">+{images.length - 4}</div>
-                      )}
-                    </div>
-                  ))}
+              {club.metadata?.rating && (
+                <div className="general-club-rating">
+                  <div className="general-stars">
+                    {renderStars(club.metadata.rating)}
+                  </div>
+                  <span className="general-rating-value">{club.metadata.rating}</span>
+                  <span className="general-rating-count">
+                    ({club.metadata.views || 0} прегледа)
+                  </span>
                 </div>
               )}
             </div>
-          ) : (
-            // Placeholder ако няма снимки
-            <div className="hero-image-placeholder">
-              <div className="placeholder-content">
-                {club.logo && <img src={club.logo} alt={club.name} className="placeholder-logo" />}
-                <FontAwesomeIcon icon={faUsers} className="placeholder-icon" />
-                <p>Няма налични снимки</p>
-              </div>
-            </div>
-          )}
-        </div>
 
-        {/* Дясна страна - Информация */}
-        <div className="club-hero-info">
-          <div className="hero-header">
-            <div className="club-title-section">
-              <h1 className="club-name">{club.name}</h1>
-              <div className="club-rating">
-                <div className="stars">
-                  {renderStars(club.metadata.rating)}
+            {(club.location?.address || club.location?.city) && (
+              <div className="general-location-info">
+                <FontAwesomeIcon icon={faMapMarkerAlt} />
+                <span>
+                  {club.location.address ? `${club.location.address}, ` : ''}
+                  {club.location.city || 'София'}
+                </span>
+              </div>
+            )}
+
+            <p className="general-club-description">
+              {club.shortDescription || club.description || 'Добре дошли в нашия клуб!'}
+            </p>
+
+            {/* Статистики в карточки */}
+            <div className="general-stats-grid">
+              <div className="general-stat-card" onClick={openMembersModal}>
+                <div className="general-stat-icon">
+                  <FontAwesomeIcon icon={faUsers} />
                 </div>
-                <span className="rating-value">{club.metadata.rating}</span>
-                <span className="rating-count">({club.metadata.views} прегледа)</span>
+                <div className="general-stat-content">
+                  <div className="general-stat-value">{stats.totalMembers}</div>
+                  <div className="general-hero-stat-label">Членове</div>
+                </div>
+                <div className="general-stat-action">
+                  <FontAwesomeIcon icon={faEye} />
+                </div>
+              </div>
+              
+              <div className="general-stat-card">
+                <div className="general-stat-icon">
+                  <FontAwesomeIcon icon={faCalendarAlt} />
+                </div>
+                <div className="general-stat-content">
+                  <div className="general-stat-value">{stats.yearsActive}</div>
+                  <div className="general-hero-stat-label">Години</div>
+                </div>
+              </div>
+              
+              <div className="general-stat-card">
+                <div className="general-stat-icon">
+                  <FontAwesomeIcon icon={faPlay} />
+                </div>
+                <div className="general-stat-content">
+                  <div className="general-stat-value">{stats.activitiesCount}</div>
+                  <div className="general-hero-stat-label">Дейности</div>
+                </div>
+              </div>
+
+              <div className="general-stat-card">
+                <div className="general-stat-icon">
+                  <FontAwesomeIcon icon={faStar} />
+                </div>
+                <div className="general-stat-content">
+                  <div className="general-stat-value">{stats.eventsCount}</div>
+                  <div className="general-hero-stat-label">Събития</div>
+                </div>
               </div>
             </div>
-            
-            {club.logo && (
-              <div className="club-logo">
-                <img src={club.logo} alt={`${club.name} лого`} />
+
+            {/* Контакти и членство */}
+            <div className="general-hero-bottom-section">
+              {/* Бързи контакти */}
+              <div className="general-quick-contacts">
+                <h3>Свържете се с нас</h3>
+                <div className="general-contact-buttons">
+                  {club.contacts?.phone && (
+                    <button className="general-contact-btn phone" onClick={handleCall}>
+                      <FontAwesomeIcon icon={faPhone} />
+                      <span>Обади се</span>
+                    </button>
+                  )}
+                  
+                  {club.contacts?.email && (
+                    <button className="general-contact-btn email" onClick={handleEmail}>
+                      <FontAwesomeIcon icon={faEnvelope} />
+                      <span>Имейл</span>
+                    </button>
+                  )}
+                  
+                  {club.contacts?.website && (
+                    <button className="general-contact-btn website" onClick={handleWebsite}>
+                      <FontAwesomeIcon icon={faGlobe} />
+                      <span>Сайт</span>
+                    </button>
+                  )}
+                  
+                  {club.contacts?.socialMedia?.facebook && (
+                    <button className="general-contact-btn facebook" onClick={() => handleSocial('facebook')}>
+                      <FontAwesomeIcon icon={faFacebook} />
+                      <span>Facebook</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Членство информация */}
+              {club.membership && (
+                <div className="general-membership-card">
+                  <div className="general-membership-header">
+                    <FontAwesomeIcon icon={faUserPlus} />
+                    <h3>Станете член</h3>
+                  </div>
+                  
+                  {club.membership.membershipFee && (
+                    <div className="general-membership-fee">
+                      <span className="general-fee-amount">
+                        {club.membership.membershipFee.monthly || 'По договаряне'}
+                        {club.membership.membershipFee.monthly && ' лв.'}
+                      </span>
+                      <span className="general-fee-period">месечно</span>
+                    </div>
+                  )}
+                  
+                  {club.membership.benefits && (
+                    <div className="general-membership-benefits">
+                      {club.membership.benefits.slice(0, 3).map((benefit, index) => (
+                        <div key={index} className="general-benefit-item">
+                          ✓ {benefit}
+                        </div>
+                      ))}
+                      {club.membership.benefits.length > 3 && (
+                        <div className="general-more-benefits">
+                          +{club.membership.benefits.length - 3} още предимства
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Дясна страна - Галерия */}
+          <div className="general-hero-gallery">
+            {images.length > 0 ? (
+              <div className="general-gallery-container">
+                <div className="general-main-image-container">
+                  <img 
+                    src={images[currentImageIndex]} 
+                    alt={`${club.name} - снимка ${currentImageIndex + 1}`}
+                    className="general-main-image"
+                  />
+                  
+                  {images.length > 1 && (
+                    <>
+                      <button className="general-nav-btn prev" onClick={prevImage}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                      </button>
+                      <button className="general-nav-btn next" onClick={nextImage}>
+                        <FontAwesomeIcon icon={faChevronRight} />
+                      </button>
+                    </>
+                  )}
+                  
+                  <div className="general-image-counter">
+                    {currentImageIndex + 1} / {images.length}
+                  </div>
+                </div>
+                
+                {images.length > 1 && (
+                  <div className="general-thumbnails">
+                    {images.slice(0, 6).map((image, index) => (
+                      <div 
+                        key={index}
+                        className={`general-thumbnail ${index === currentImageIndex ? 'active' : ''}`}
+                        onClick={() => setCurrentImageIndex(index)}
+                      >
+                        <img src={image} alt={`Thumbnail ${index + 1}`} />
+                        {images.length > 6 && index === 5 && (
+                          <div className="general-more-images">+{images.length - 6}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="general-gallery-placeholder">
+                <div className="general-placeholder-content">
+                  {club.logo ? (
+                    <img src={club.logo} alt={club.name} className="general-placeholder-logo" />
+                  ) : (
+                    <FontAwesomeIcon icon={faUsers} className="general-placeholder-icon" />
+                  )}
+                  <h3>{club.name}</h3>
+                  <p>Очаквайте скоро снимки от нашите дейности</p>
+                </div>
               </div>
             )}
           </div>
+        </div>
+      </div>
 
-          <div className="club-location-info">
-            <FontAwesomeIcon icon={faMapMarkerAlt} />
-            <span>{club.location.address}, {club.location.city}</span>
-          </div>
-
-          <p className="club-description">{club.shortDescription}</p>
-
-          {/* Статистики */}
-          <div className="club-stats-grid">
-            <div className="stat-item-clubview">
-              <FontAwesomeIcon icon={faUsers} className="stat-icon" />
-              <div className="stat-content">
-                <div className="stat-value">{club.membership.totalMembers}</div>
-                <div className="stat-label">Членове</div>
-              </div>
+      {/* Модал за членове */}
+      {showMembersModal && (
+        <div className="general-modal-overlay" onClick={closeMembersModal}>
+          <div className="general-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="general-modal-header">
+              <h3>
+                <FontAwesomeIcon icon={faUsers} />
+                Членове на {club.name}
+              </h3>
+              <button className="general-modal-close" onClick={closeMembersModal}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
             </div>
             
-            <div className="stat-item-clubview">
-              <FontAwesomeIcon icon={faCalendarAlt} className="stat-icon" />
-              <div className="stat-content">
-                <div className="stat-value">{new Date().getFullYear() - club.foundedYear}</div>
-                <div className="stat-label">Години</div>
+            <div className="general-modal-content">
+              {members.length > 5 && (
+                <div className="general-search-box">
+                  <FontAwesomeIcon icon={faSearch} />
+                  <input
+                    type="text"
+                    placeholder="Търсене на член..."
+                    value={memberSearchTerm}
+                    onChange={(e) => setMemberSearchTerm(e.target.value)}
+                  />
+                </div>
+              )}
+              
+              <div className="general-members-grid">
+                {filteredMembers.map((member, index) => (
+                  <div key={member.id || index} className="general-member-card">
+                    <div className="general-member-avatar">
+                      {member.avatar ? (
+                        <img src={member.avatar} alt={member.name} />
+                      ) : (
+                        <FontAwesomeIcon icon={faUserCircle} />
+                      )}
+                      {member.isBoard && (
+                        <div className="general-member-crown">
+                          <FontAwesomeIcon icon={faCrown} />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="general-member-info">
+                      <h4>{member.name}</h4>
+                      <p className="general-member-role">{member.role}</p>
+                      
+                      {member.bio && (
+                        <p className="general-member-bio">{member.bio}</p>
+                      )}
+                      
+                      <div className="general-member-details">
+                        {member.memberSince && (
+                          <span>
+                            <FontAwesomeIcon icon={faIdCard} />
+                            От {member.memberSince}
+                          </span>
+                        )}
+                        {member.phone && (
+                          <span>
+                            <FontAwesomeIcon icon={faPhone} />
+                            <a href={`tel:${member.phone}`}>{member.phone}</a>
+                          </span>
+                        )}
+                        {member.email && (
+                          <span>
+                            <FontAwesomeIcon icon={faEnvelope} />
+                            <a href={`mailto:${member.email}`}>{member.email.split('@')[0]}</a>
+                          </span>
+                        )}
+                      </div>
+                      
+                      {member.address && (
+                        <div className="general-member-address">
+                          <FontAwesomeIcon icon={faMapMarkerAlt} />
+                          <span>{member.address}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-            
-            <div className="stat-item-clubview">
-              <FontAwesomeIcon icon={faPlay} className="stat-icon" />
-              <div className="stat-content">
-                <div className="stat-value">{club.activities.regular.length}</div>
-                <div className="stat-label">Дейности</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Бързи контакти */}
-          <div className="quick-contacts">
-            <h3>Бързи контакти</h3>
-            <div className="contact-buttons-clubview">
-              {club.contacts.phone && (
-                <a href={`tel:${club.contacts.phone}`} className="contact-btn phone">
-                  <FontAwesomeIcon icon={faPhone} />
-                  <span>Обади се</span>
-                </a>
-              )}
               
-              {club.contacts.email && (
-                <a href={`mailto:${club.contacts.email}`} className="contact-btn email">
-                  <FontAwesomeIcon icon={faEnvelope} />
-                  <span>Имейл</span>
-                </a>
-              )}
-              
-              {club.contacts.website && (
-                <a href={`https://${club.contacts.website}`} target="_blank" rel="noopener noreferrer" className="contact-btn website">
-                  <FontAwesomeIcon icon={faGlobe} />
-                  <span>Сайт</span>
-                </a>
-              )}
-              
-              {club.contacts.socialMedia?.facebook && (
-                <a href={`https://${club.contacts.socialMedia.facebook}`} target="_blank" rel="noopener noreferrer" className="contact-btn facebook">
-                  <FontAwesomeIcon icon={faFacebook} />
-                  <span>Facebook</span>
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Членски внос */}
-          <div className="membership-info">
-            <h3>Членство</h3>
-            <div className="membership-fee">
-              <span className="fee-amount">{club.membership.membershipFee.monthly} лв.</span>
-              <span className="fee-period">месечно</span>
-            </div>
-            <div className="membership-benefits">
-              {club.membership.benefits.slice(0, 3).map((benefit, index) => (
-                <div key={index} className="benefit-item">• {benefit}</div>
-              ))}
-              {club.membership.benefits.length > 3 && (
-                <div className="more-benefits">+{club.membership.benefits.length - 3} още</div>
+              {filteredMembers.length === 0 && memberSearchTerm && (
+                <div className="general-no-results">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <p>Няма намерени членове по това търсене</p>
+                </div>
               )}
             </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

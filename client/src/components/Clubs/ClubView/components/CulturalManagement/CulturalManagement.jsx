@@ -142,7 +142,7 @@ export const CulturalManagement = ({ club }) => {
   };
 
   return (
-    <section id="club-management" className="cultural-management-main-section">
+    <section id="cultural-management" className="cultural-management-main-section">
       <div className="cultural-management-container">
         
         {/* Header */}

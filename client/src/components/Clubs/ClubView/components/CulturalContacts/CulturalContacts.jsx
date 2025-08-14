@@ -222,7 +222,7 @@ export const CulturalContacts = ({ club }) => {
     } else {
       faqList.push({
         question: "Има ли възрастови ограничения?",
-        answer: "Клубът е предназначен за хора над 60 години, но приемаме и по-млади членове при специални обстоятелства."
+        answer: "Клубът е предназначен за хора над 55 години, но приемаме и по-млади членове при специални обстоятелства."
       });
     }
 
@@ -344,7 +344,7 @@ ${contactForm.message}
   };
 
   return (
-    <section id="club-contact" className="cultural-contacts-main-section">
+    <section id="cultural-contacts" className="cultural-contacts-main-section">
       <div className="cultural-contacts-container">
         
         {/* Header */}

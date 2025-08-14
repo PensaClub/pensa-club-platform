@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowLeft,
@@ -51,6 +52,7 @@ import CulturalTemplate from './templates/CulturalTemplate';
 import TraditionalTemplate from './templates/TraditionalTemplate';
 import SocialTemplate from './templates/SocialTemplate';
 import SportsTemplate from './templates/SportsTemplate';
+import ShareModal from './components/ShareModal/ShareModal';
 
 export const ClubView = () => {
     const { slug } = useParams();
@@ -66,16 +68,85 @@ export const ClubView = () => {
     const [navCollapsed, setNavCollapsed] = useState(true);
     const [availableNavItems, setAvailableNavItems] = useState([]);
 
+    // 🎯 SEO Meta данни функция
+    const generateSEOData = (club) => {
+        if (!club) return {};
+
+        const title = `${club.name} - Клуб за пенсионери в ${club.location.city}`;
+        const description = club.shortDescription || club.fullDescription?.substring(0, 160) || 
+            `Активен клуб за пенсионери в ${club.location.city}. Присъединете се към нашата общност за ${club.category === 'sports' ? 'спорт и активност' : club.category === 'cultural' ? 'култура и изкуство' : 'социални дейности'}.`;
+        
+        const keywords = [
+            'клуб за пенсионери',
+            'пенсионерски клуб',
+            club.location.city,
+            club.location.region,
+            club.category,
+            ...(club.metadata?.tags || []),
+            'активни пенсионери',
+            'социални дейности',
+            'третата възраст'
+        ].join(', ');
+
+        const canonicalUrl = `${window.location.origin}/clubs/${club.slug}`;
+
+        return {
+            title,
+            description,
+            keywords,
+            canonicalUrl,
+            ogTitle: title,
+            ogDescription: description,
+            ogUrl: canonicalUrl,
+            ogImage: club.mainImage || club.logo || `${window.location.origin}/default-club-image.jpg`,
+            ogType: 'website',
+            twitterCard: 'summary_large_image',
+            schemaOrg: {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": club.name,
+                "description": description,
+                "url": canonicalUrl,
+                "logo": club.logo,
+                "image": club.mainImage,
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": club.location.address,
+                    "addressLocality": club.location.city,
+                    "addressRegion": club.location.region,
+                    "postalCode": club.location.postalCode,
+                    "addressCountry": "BG"
+                },
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "telephone": club.contacts?.phone,
+                    "email": club.contacts?.email,
+                    "contactType": "customer support"
+                },
+                "foundingDate": club.foundedYear ? `${club.foundedYear}-01-01` : undefined,
+                "memberOf": {
+                    "@type": "Organization",
+                    "name": "Български клубове за пенсионери"
+                },
+                "aggregateRating": club.metadata?.rating ? {
+                    "@type": "AggregateRating",
+                    "ratingValue": club.metadata.rating,
+                    "ratingCount": club.metadata.views || 1
+                } : undefined
+            }
+        };
+    };
+
     // Всички възможни навигационни елементи с техните конфигурации
     const allNavItems = [
         // General template
-        { id: 'club-hero', label: 'Начало', icon: faUsers },
-        { id: 'club-about', label: 'За клуба', icon: faInfoCircle },
-        { id: 'club-activities', label: 'Дейности', icon: faRunning },
-        { id: 'club-events', label: 'Събития', icon: faCalendarAlt },
-        { id: 'club-management', label: 'Ръководство', icon: faCrown },
-        { id: 'club-location', label: 'Локация', icon: faMapPin },
-        { id: 'club-contact', label: 'Контакти', icon: faEnvelope },
+        { id: 'general-club-hero', label: 'Начало', icon: faUsers },
+        { id: 'general-club-about', label: 'За клуба', icon: faInfoCircle },
+        { id: 'general-activities', label: 'Дейности', icon: faRunning },
+        { id: 'general-events', label: 'Събития', icon: faCalendarAlt },
+        { id: 'general-management', label: 'Ръководство', icon: faCrown },
+        { id: 'general-location', label: 'Локация', icon: faMapPin },
+        { id: 'general-contact', label: 'Контакти', icon: faEnvelope },
 
         // Cultural template  
         { id: 'cultural-hero', label: 'Начало', icon: faTheaterMasks },
@@ -155,9 +226,6 @@ export const ClubView = () => {
                     // Проверяваме дали е в любими (от localStorage)
                     const favorites = JSON.parse(localStorage.getItem('favoriteClubs') || '[]');
                     setIsFavorited(favorites.includes(clubData.id));
-
-                    // SEO: Обновяваме title на страницата
-                    document.title = `${clubData.name} - Pensa Club`;
                 } else {
                     setNotFound(true);
                 }
@@ -305,38 +373,119 @@ export const ClubView = () => {
         }
     };
 
+    // 🎯 Генерираме SEO данните
+    const seoData = club ? generateSEOData(club) : {};
+
     // Loading състояние
     if (isLoading) {
         return (
-            <div className="club-view-loading">
-                <div className="club-view-loading-content">
-                    <div className="loading-spinner-large"></div>
-                    <p>Зареждане на клуба...</p>
+            <>
+                <Helmet>
+                    <title>Зареждане... - Pensa Club</title>
+                    <meta name="description" content="Зареждане на клуб за пенсионери" />
+                </Helmet>
+                <div className="club-view-loading">
+                    <div className="club-view-loading-content">
+                        <div className="loading-spinner-large"></div>
+                        <p>Зареждане на клуба...</p>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 
     // Клубът не е намерен
     if (notFound || !club) {
         return (
-            <div className="club-view-not-found">
-                <div className="not-found-content">
-                    <FontAwesomeIcon icon={faExclamationTriangle} className="not-found-icon" />
-                    <h2>Клубът не беше намерен</h2>
-                    <p>Съжаляваме, но клубът който търсите не съществува или е бил премахнат.</p>
-                    <button onClick={handleBack} className="back-to-clubs-btn">
-                        <FontAwesomeIcon icon={faArrowLeft} />
-                        Обратно към клубовете
-                    </button>
+            <>
+                <Helmet>
+                    <title>Клуб не е намерен - Pensa Club</title>
+                    <meta name="description" content="Съжаляваме, но клубът който търсите не съществува или е бил премахнат." />
+                    <meta name="robots" content="noindex, nofollow" />
+                </Helmet>
+                <div className="club-view-not-found">
+                    <div className="not-found-content">
+                        <FontAwesomeIcon icon={faExclamationTriangle} className="not-found-icon" />
+                        <h2>Клубът не беше намерен</h2>
+                        <p>Съжаляваме, но клубът който търсите не съществува или е бил премахнат.</p>
+                        <button onClick={handleBack} className="back-to-clubs-btn">
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                            Обратно към клубовете
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 
     // Основният markup
     return (
         <div className="club-view-container">
+            {/* 🎯 SEO Meta данни с Helmet */}
+            <Helmet>
+                {/* Основни мета тагове */}
+                <title>{seoData.title}</title>
+                <meta name="description" content={seoData.description} />
+                <meta name="keywords" content={seoData.keywords} />
+                <link rel="canonical" href={seoData.canonicalUrl} />
+                
+                {/* Open Graph тагове за Facebook/LinkedIn */}
+                <meta property="og:title" content={seoData.ogTitle} />
+                <meta property="og:description" content={seoData.ogDescription} />
+                <meta property="og:url" content={seoData.ogUrl} />
+                <meta property="og:type" content={seoData.ogType} />
+                <meta property="og:image" content={seoData.ogImage} />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
+                <meta property="og:locale" content="bg_BG" />
+                <meta property="og:site_name" content="Pensa Club" />
+                
+                {/* Twitter Card тагове */}
+                <meta name="twitter:card" content={seoData.twitterCard} />
+                <meta name="twitter:title" content={seoData.ogTitle} />
+                <meta name="twitter:description" content={seoData.ogDescription} />
+                <meta name="twitter:image" content={seoData.ogImage} />
+                
+                {/* Допълнителни SEO тагове */}
+                <meta name="author" content={club.name} />
+                <meta name="publisher" content="Pensa Club" />
+                <meta name="robots" content="index, follow, max-image-preview:large" />
+                <meta name="googlebot" content="index, follow" />
+                
+                {/* Geographic SEO */}
+                <meta name="geo.region" content={`BG-${club.location.region}`} />
+                <meta name="geo.placename" content={club.location.city} />
+                {club.location.coordinates && (
+                    <>
+                        <meta name="geo.position" content={`${club.location.coordinates.lat};${club.location.coordinates.lng}`} />
+                        <meta name="ICBM" content={`${club.location.coordinates.lat}, ${club.location.coordinates.lng}`} />
+                    </>
+                )}
+                
+                {/* Schema.org Structured Data */}
+                <script type="application/ld+json">
+                    {JSON.stringify(seoData.schemaOrg)}
+                </script>
+                
+                {/* Favicons и theme */}
+                <meta name="theme-color" content="#2563eb" />
+                <meta name="msapplication-TileColor" content="#2563eb" />
+                
+                {/* Mobile optimizations */}
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+                <meta name="format-detection" content="telephone=yes" />
+                <meta name="format-detection" content="address=yes" />
+                
+                {/* Preload критични ресурси */}
+                {club.mainImage && (
+                    <link rel="preload" as="image" href={club.mainImage} />
+                )}
+                
+                {/* Alternative language versions (if applicable) */}
+                <link rel="alternate" hrefLang="bg" href={seoData.canonicalUrl} />
+                <link rel="alternate" hrefLang="x-default" href={seoData.canonicalUrl} />
+            </Helmet>
+
             {/* Фиксиран header с навигация */}
             <div className="club-view-header">
                 <div className="club-view-header-content">

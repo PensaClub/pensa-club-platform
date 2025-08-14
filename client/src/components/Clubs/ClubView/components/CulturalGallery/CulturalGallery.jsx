@@ -453,7 +453,7 @@ ${photoForm.message}
   const stats = getStatistics();
 
   return (
-    <section id="club-gallery" className="cultural-gallery-main-section">
+    <section id="cultural-gallery" className="cultural-gallery-main-section">
       <div className="cultural-gallery-container">
         
         {/* Header */}

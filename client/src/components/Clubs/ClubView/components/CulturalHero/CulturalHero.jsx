@@ -174,7 +174,7 @@ export const CulturalHero = ({ club }) => {
   const introVideo = club.media?.videos?.find(video => video.type === 'intro');
 
   return (
-    <section id="club-hero" className="cultural-hero-main-section">
+    <section id="cultural-hero" className="cultural-hero-main-section">
       
       {/* Background with Images */}
       <div className="cultural-hero-background">

@@ -332,7 +332,7 @@ export const CulturalLocation = ({ club }) => {
   };
 
   return (
-    <section id="club-location" className="cultural-location-main-section">
+    <section id="cultural-location" className="cultural-location-main-section">
       <div className="cultural-location-container">
         
         {/* Header */}

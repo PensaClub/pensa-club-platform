@@ -1341,7 +1341,7 @@ export const mockClubsData = [
             }
         },
 
-        template: "traditional",
+        template: "general",
 
         preferences: {
             showFinances: false,

@@ -232,7 +232,7 @@ ${contactForm.message}
   }
 
   return (
-    <section id="club-activities" className="cultural-activities-main-section">
+    <section id="cultural-activities" className="cultural-activities-main-section">
       <div className="cultural-activities-container">
         
         {/* Header */}
