@@ -3193,12 +3193,17 @@
       "filters": {
         "category": "Filter by category",
         "allCategories": "All categories",
+        "technology": "Technology & Digital Skills",
+        "health": "Health & Wellness",
+        "lifestyle": "Lifestyle & Hobbies",
+        "education": "Education & Learning",
+        "community": "Community & Social",
+        "other": "Other Topics",
         "research": "Research",
         "guide": "Guide",
         "report": "Report",
         "manual": "Manual",
         "presentation": "Presentation",
-        "other": "Other",
         "sortBy": "Sort by",
         "newest": "Newest",
         "oldest": "Oldest",
@@ -3265,6 +3270,9 @@
       "draftSaveError": "Error saving draft",
       "draftPublished": "Draft published successfully!",
       "draftPublishError": "Error publishing draft",
+      "uploadingFile": "Uploading file...",
+      "uploadingDescription": "Please wait while your file is being uploaded",
+      "uploadingHint": "This may take a few moments",
       "sections": "Sections",
       "addSection": "Add Section",
       "sections-help": "Create sections to organize your publication content. Each section can have a title, rich text content, and images.",
@@ -3362,11 +3370,12 @@
       "authorHidden": "Author will be hidden"
     },
     "categories": {
-      "technology": "Technology",
-      "health": "Health",
-      "education": "Education",
-      "lifestyle": "Lifestyle",
-      "other": "Other"
+      "technology": "Technology & Digital Skills",
+      "health": "Health & Wellness",
+      "lifestyle": "Lifestyle & Hobbies",
+      "education": "Education & Learning",
+      "community": "Community & Social",
+      "other": "Other Topics"
     },
     "progress": {
       "formProgress": "Form Progress",

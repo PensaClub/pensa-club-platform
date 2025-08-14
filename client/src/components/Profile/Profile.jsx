@@ -66,6 +66,7 @@ import { LanguageSwitcherAdmin } from "../LanguageSwitcher/LanguageSwitcherAdmin
 import { ProfessionalAvatarBuilder } from "../AvatarDemo/ProfessionalAvatarBuilder";
 import ArticlePreviewPage from "../Articles/ArticleCreateForm/ArticlePreviewPage";
 import { AllPublications } from "../Initiatives/CreatePublication/AllPublications/AllPublications";
+import PublicationForm from '../Initiatives/CreatePublication/MainForm/MainFormPublication';
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -905,6 +906,7 @@ export const Profile = () => {
             <Route path="article-preview" element={<ManagementGuard><ArticlePreviewPage /></ManagementGuard>} />
             <Route path="publications" element={<ManagementGuard><AllPublications /></ManagementGuard>} />
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
+            <Route path="publication-create" element={<ManagementGuard><PublicationForm /></ManagementGuard>} />
             {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}
 
             {/* <Route path="initiative-preview" element={<ManagementGuard><InitiativePreviewPage /></ManagementGuard>}  /> */}

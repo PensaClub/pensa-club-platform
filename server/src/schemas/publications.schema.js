@@ -2,7 +2,7 @@ const { z } = require('zod');
 const { SectionSchema, SlugSchema, TitleSchema, ShortDescriptionSchema, TagsSchema, MainImageSchema, PaginationQuerySchema } = require('./common.schema');
 
 const FileTypeSchema = z.enum(['pdf', 'docx', 'xlsx', 'xls', 'csv', 'pptx', 'ppt', 'jpg', 'jpeg', 'png', 'gif', 'webp']).nullable().optional();
-const CategorySchema = z.enum(['research', 'guide', 'report', 'manual', 'presentation', 'other']).nullable().optional();
+const CategorySchema = z.enum(['technology', 'health', 'lifestyle', 'education', 'community', 'other']).nullable().optional();
 
 const checkSlugUniqueness = async (slug, publicationId = null) => {
     const { publication } = require('../sequelize/models');

@@ -16,7 +16,7 @@ const FileSection = ({
     const { t } = useTranslation();
     const fileInputRef = useRef(null);
 
-    // Handle file upload
+    // Handle file upload with minimum time
     const handleFileUpload = useCallback(async (e) => {
         console.log('🚀 handleFileUpload called!');
         console.log('📁 Event:', e);
@@ -43,6 +43,10 @@ const FileSection = ({
         }
 
         console.log('✅ File validation passed');
+
+        // Record start time for minimum upload duration
+        const startTime = Date.now();
+        const minUploadTime = 2000; // 2 seconds minimum
 
         try {
             // Show uploading state
@@ -71,6 +75,15 @@ const FileSection = ({
             );
 
             console.log('✅ Firebase upload successful:', uploadedUrl);
+
+            // Calculate elapsed time and ensure minimum duration
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, minUploadTime - elapsedTime);
+
+            if (remainingTime > 0) {
+                console.log(`⏱️ Waiting ${remainingTime}ms to meet minimum upload time`);
+                await new Promise(resolve => setTimeout(resolve, remainingTime));
+            }
 
             // Update with Firebase URL
             console.log('💾 About to call setValues with Firebase URL...');
@@ -132,21 +145,34 @@ const FileSection = ({
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.rtf,.csv,.jpg,.jpeg,.png,.gif,.webp"
                     onChange={handleFileUpload}
                     style={{ display: 'none' }}
+                    disabled={values.isUploading}
                 />
 
                 {/* Upload Area */}
                 {!values.downloadUrl ? (
                     <div
-                        className="publication-file-upload-area"
+                        className={`publication-file-upload-area ${values.isUploading ? 'uploading' : ''}`}
                         onClick={() => {
-                            console.log('🖱️ Upload area clicked!');
-                            console.log('📁 fileInputRef.current:', fileInputRef.current);
-                            fileInputRef.current?.click();
+                            if (!values.isUploading) {
+                                console.log('🖱️ Upload area clicked!');
+                                console.log('📁 fileInputRef.current:', fileInputRef.current);
+                                fileInputRef.current?.click();
+                            }
                         }}
                     >
-                        <h4>{t('publications.create.clickToUpload')}</h4>
-                        <p>{t('publications.create.supportedFormats')}: PDF, Word, Excel, PowerPoint, Text</p>
-                        <small>{t('publications.create.maxSize')}: 10MB</small>
+                        {values.isUploading ? (
+                            <>
+
+                                <p>{t('publications.create.uploadingDescription')}<FontAwesomeIcon icon={faSpinner} className="publication-upload-spinner" spin /></p>
+                                <small>{t('publications.create.uploadingHint')}</small>
+                            </>
+                        ) : (
+                            <>
+                                <h4>{t('publications.create.clickToUpload')}</h4>
+                                <p>{t('publications.create.supportedFormats')}: PDF, Word, Excel, PowerPoint, Text</p>
+                                <small>{t('publications.create.maxSize')}: 10MB</small>
+                            </>
+                        )}
                     </div>
                 ) : (
                     <div className="publication-file-preview">

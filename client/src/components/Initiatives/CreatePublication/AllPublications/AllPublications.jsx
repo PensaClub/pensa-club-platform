@@ -269,7 +269,8 @@ export const AllPublications = () => {
                         sessionStorage.setItem('wasEditingDraft', 'true');
                         navigate(`/profile/publication-create?draftId=${identifier}`);
                     } else {
-                        navigate(`/profile/publication-create?editId=${identifier}&mode=edit`);
+                        // Use the new clean URL structure
+                        navigate(`/publications/edit/${identifier}`);
                     }
                     break;
 
@@ -332,6 +333,17 @@ export const AllPublications = () => {
     </svg>
   `)}`;
     };
+
+    // Update the filter options
+    const categoryFilterOptions = [
+      { value: '', label: t('publications.admin.filters.allCategories') },
+      { value: 'technology', label: t('publications.categories.technology') },
+      { value: 'health', label: t('publications.categories.health') },
+      { value: 'lifestyle', label: t('publications.categories.lifestyle') },
+      { value: 'education', label: t('publications.categories.education') },
+      { value: 'community', label: t('publications.categories.community') },
+      { value: 'other', label: t('publications.categories.other') }
+    ];
 
     return (
         <div className="all-publications-admin-container">

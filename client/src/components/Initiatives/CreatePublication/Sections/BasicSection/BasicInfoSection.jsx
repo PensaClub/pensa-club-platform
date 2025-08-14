@@ -278,10 +278,12 @@ const BasicInfoSection = ({
                         onChange={onChangeHandler}
                     >
                         <option value="">{t('publications.fields.selectCategory')}</option>
+                        {/* Update the category options to use the new categories */}
                         <option value="technology">{t('publications.categories.technology')}</option>
                         <option value="health">{t('publications.categories.health')}</option>
-                        <option value="education">{t('publications.categories.education')}</option>
                         <option value="lifestyle">{t('publications.categories.lifestyle')}</option>
+                        <option value="education">{t('publications.categories.education')}</option>
+                        <option value="community">{t('publications.categories.community')}</option>
                         <option value="other">{t('publications.categories.other')}</option>
                     </select>
                 </div>

@@ -6,7 +6,7 @@
     font-style: italic;
 }
 
-/* File Upload Area */
+/* File Upload Area - Fixed height for consistency */
 .publication-file-upload-area {
     border: 2px dashed #cbd5e1;
     border-radius: 8px;
@@ -16,6 +16,11 @@
     transition: all 0.3s ease;
     background-color: #f8fafc;
     margin-top: 0.5rem;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .publication-file-upload-area:hover {
@@ -34,6 +39,16 @@
     display: block;
 }
 
+/* Centered spinner for upload state - optimized for elderly users */
+.publication-upload-spinner {
+    font-size: 3rem !important;
+    color: #1e40af !important;
+    margin: 0 0.5rem !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
 .publication-file-upload-area h4 {
     font-size: 1.125rem;
     font-weight: 600;
@@ -45,6 +60,10 @@
     color: #64748b;
     margin: 0 0 0.5rem 0;
     font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .publication-file-upload-area small {
@@ -189,10 +208,15 @@
 @media (max-width: 768px) {
     .publication-file-upload-area {
         padding: 1.5rem;
+        min-height: 120px;
     }
 
     .publication-upload-icon {
         font-size: 2rem;
+    }
+
+    .publication-upload-spinner {
+        font-size: 2.5rem !important;
     }
 
     .publication-file-upload-area h4 {
@@ -216,22 +240,67 @@
     }
 }
 
-/* Loading States */
+/* Loading States - Enhanced for elderly users */
 .publication-file-upload-area.uploading {
-    opacity: 0.7;
+    opacity: 1 !important;
     pointer-events: none;
+    border-color: #1e40af !important;
+    background-color: #dbeafe !important;
+    cursor: not-allowed;
+    border-width: 3px !important;
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
 }
 
-.publication-file-upload-area.uploading .publication-upload-icon {
-    animation: spin 1s linear infinite;
+.publication-file-upload-area.uploading .publication-upload-spinner {
+    color: #1e40af !important;
+    font-size: 3rem !important;
+    filter: drop-shadow(0 4px 8px rgba(30, 64, 175, 0.3));
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
+.publication-file-upload-area.uploading h4 {
+    color: #1e40af !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem !important;
+}
+
+.publication-file-upload-area.uploading p {
+    color: #1e40af !important;
+    font-size: 1.125rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.75rem !important;
+    line-height: 1.4;
+}
+
+.publication-file-upload-area.uploading small {
+    color: #3b82f6 !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    opacity: 0.9;
+}
+
+/* Enhanced mobile loading states */
+@media (max-width: 768px) {
+    .publication-file-upload-area.uploading {
+        padding: 2rem 1.5rem;
+        min-height: 120px;
     }
-    to {
-        transform: rotate(360deg);
+
+    .publication-file-upload-area.uploading .publication-upload-spinner {
+        font-size: 2.5rem !important;
+    }
+
+    .publication-file-upload-area.uploading h4 {
+        font-size: 1.25rem !important;
+    }
+
+    .publication-file-upload-area.uploading p {
+        font-size: 1rem !important;
+    }
+
+    .publication-file-upload-area.uploading small {
+        font-size: 0.875rem !important;
     }
 }
 

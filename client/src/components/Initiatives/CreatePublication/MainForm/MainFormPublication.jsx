@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faEdit, faFileAlt, faCog, faArrowLeft, faUser, faCheck, faTimes, faImage, faUpload, faLink, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { createEditor, Element as SlateElement, Transforms, Editor } from 'slate';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // CSS
 import './mainFormPublication.css';
@@ -24,10 +24,14 @@ import { useAuthContext } from '../../../contexts/UserContext'; // Fixed path - 
 import { initiativeServiceFactory } from '../../../Services/StoryPubServiceFactory';
 import { slateToHtml, isSlateEmpty } from '../../../../utils/slateToHtml';
 
-const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
+// Change the component name from PublicationCreateForm to PublicationForm
+const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
     const { t } = useTranslation();
     const { userEmail, username } = useAuthContext(); // Get user info
     const navigate = useNavigate(); // Add this line
+    const { slug } = useParams(); // Get the slug from URL params
+    const [publication, setPublication] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [activeSection, setActiveSection] = useState('basic-info');
     const [newTag, setNewTag] = useState('');
     const [showPreview, setShowPreview] = useState(false);
@@ -96,6 +100,34 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
             category: values.category
         });
     }, [values.fileType, values.fileSize, values.downloadUrl, values.category]);
+
+    // Add this useEffect to fetch publication data when in edit mode
+    useEffect(() => {
+        const fetchPublication = async () => {
+            if (isEditMode && slug) {
+                setLoading(true);
+                try {
+                    const token = localStorage.getItem('token');
+                    const publicationService = initiativeServiceFactory(token);
+                    const data = await publicationService.getPublicationBySlug(slug);
+                    setPublication(data);
+                    // Update the form values with the fetched data
+                    setValues(data);
+                } catch (err) {
+                    console.error('Error fetching publication:', err);
+                    notify('error', t('publications.edit.notFound'));
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchPublication();
+    }, [isEditMode, slug]);
+
+    if (loading) {
+        return <div className="loading">Loading...</div>;
+    }
 
     // Add tag
     const addTag = () => {
@@ -269,7 +301,7 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
     };
 
     const handleUpdate = async () => {
-        if (!editId) {
+        if (!publication?.id) { // Use publication?.id for edit mode
             notify('error', 'No publication ID for update');
             return;
         }
@@ -281,7 +313,7 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                 userEmail: userEmail,
             };
 
-            const response = await publicationService.updatePublication(editId, publicationData);
+            const response = await publicationService.updatePublication(publication.id, publicationData);
             notify('success', 'Publication updated successfully!');
             console.log('Publication updated successfully:', response);
 
@@ -393,7 +425,7 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                     {isEditMode ? t('publications.edit.title') : t('publications.create.title')}
                 </h1>
                 <p className="publication-form-subtitle">
-                    {t('publications.create.description')}
+                    {isEditMode ? t('publications.edit.description') : t('publications.create.description')}
                 </p>
             </div>
 
@@ -402,6 +434,7 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                 values={values}
                 activeSection={activeSection}
                 onSectionClick={handleSectionClick}
+                isEditMode={isEditMode}
             />
 
             {/* Layout */}
@@ -515,7 +548,7 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
             {/* Floating Actions */}
             <FloatingActions
                 draftId={draftId}
-                editId={null} // TODO: Add from hook
+                editId={publication?.id} // Use publication?.id for edit mode
                 hasTitle={!!values.title}
                 onSaveDraft={handleSaveDraft}
                 onPreview={handlePreview}
@@ -544,11 +577,11 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
                                 type="publication"
                                 previewMode={true}
                                 previewData={{
-                                    id: 'preview-123',
+                                    id: publication?.id || 'preview-123', // Use publication?.id
                                     title: values.title || 'Untitled Publication',
                                     shortDescription: values.shortDescription || 'No description provided',
                                     description: values.shortDescription || 'No description provided',
-                                    publishedAt: new Date().toISOString(),
+                                    publishedAt: publication?.publishedAt || new Date().toISOString(), // Use publication?.publishedAt
                                     author: getAuthorName(), // Use checkbox-controlled author
                                     authorEmail: values.showAuthor ? userEmail : null,
                                     authorImage: null,
@@ -582,4 +615,4 @@ const PublicationCreateForm = ({ initialValues, onSubmitHandler, isEditMode = fa
     );
 };
 
-export default PublicationCreateForm;
+export default PublicationForm;

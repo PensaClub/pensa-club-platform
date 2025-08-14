@@ -18,13 +18,26 @@ const FloatingActions = ({
     onPublish,
     onUpdate,
     onCreate,
-    isSaving = false
+    isSaving = false,
+    isEditMode = false // Add this prop
 }) => {
     const { t } = useTranslation();
 
     // Determine the main action button based on state
     const getMainActionButton = () => {
-        if (draftId && !editId) {
+        if (isEditMode) {
+            // EDIT MODE - update existing publication
+            return (
+                <button
+                    type="button"
+                    className="publication-floating-btn publish"
+                    onClick={onUpdate}
+                    title={t('publications.edit.updatePublication')}
+                >
+                    <FontAwesomeIcon icon={faShare} />
+                </button>
+            );
+        } else if (draftId && !editId) {
             // DRAFT MODE - can publish draft
             return (
                 <button
@@ -66,7 +79,7 @@ const FloatingActions = ({
     return (
         <div className="publication-floating-actions">
             {/* Save as Draft button - only show when NOT in edit mode */}
-            {!editId && (
+            {!isEditMode && !editId && (
                 <button
                     type="button"
                     className="publication-floating-btn draft"
@@ -89,7 +102,7 @@ const FloatingActions = ({
                 <FontAwesomeIcon icon={faEye} />
             </button>
 
-            {/* Main action button (Save & Publish / Update / Create) */}
+            {/* Main action button */}
             {getMainActionButton()}
         </div>
     );
