@@ -23,6 +23,7 @@ import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
 import { useAuthContext } from '../../../contexts/UserContext'; // Fixed path - go up 3 levels to reach contexts
 import { initiativeServiceFactory } from '../../../Services/StoryPubServiceFactory';
 import { slateToHtml, isSlateEmpty } from '../../../../utils/slateToHtml';
+import ConnectionSection from "../Sections/ConnectionSection/ConnectionSection";
 
 // Change the component name from PublicationCreateForm to PublicationForm
 const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
@@ -150,16 +151,18 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
 
     // Navigation sections
     const navigationSections = [
-        { id: 'basic-info', label: t('publications.sections.basicInfo') || 'Basic Information', icon: faInfoCircle },
-        { id: 'content', label: t('publications.sections.content') || 'Content', icon: faEdit },
-        { id: 'file-options', label: t('publications.sections.fileUpload') || 'File Upload', icon: faFileAlt }
+        { id: 'basic-info', label: t('publications.sections.basicInfo'), icon: faInfoCircle },
+        { id: 'content', label: t('publications.sections.content') , icon: faEdit },
+        { id: 'file-options', label: t('publications.sections.fileUpload') , icon: faFileAlt },
+        { id: 'connections', label: t('publications.sections.connections'), icon: faLink }
     ];
 
     // Update section order
     const sectionOrder = [
         'basic-info',
         'content',
-        'file-options'
+        'file-options',
+        'connections'
     ];
 
     const handleSectionClick = (sectionId) => {
@@ -503,6 +506,16 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
 
                         {activeSection === 'file-options' && (
                             <FileSection
+                                values={values}
+                                errors={errors}
+                                onChangeHandler={onChangeHandler}
+                                onBlurHandler={onBlurHandler}
+                                setValues={setValues}
+                            />
+                        )}
+
+                        {activeSection === 'connections' && (
+                            <ConnectionSection
                                 values={values}
                                 errors={errors}
                                 onChangeHandler={onChangeHandler}

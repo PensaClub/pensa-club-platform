@@ -3222,6 +3222,23 @@
     }
   },
   "publications": {
+    "connections": {
+        "connections-help": "Свържете вашата публикация със съществуващи инициативи или проекти, за да установите връзки и подобрите откриваемостта.",
+        "connectInitiatives": "Свържи инициативи",
+        "searchInitiatives": "Търсете инициативи по заглавие...",
+        "noInitiativesFound": "Не са намерени инициативи",
+        "noInitiativesAvailable": "Няма налични инициативи",
+        "connectProjects": "Свържи проекти",
+        "searchProjects": "Търсете проекти по заглавие...",
+        "noProjectsFound": "Не са намерени проекти",
+        "noProjectsAvailable": "Няма налични проекти",
+        "draft": "Чернова",
+        "initiativeConnections": "Връзки с инициативи",
+        "projectConnections": "Връзки с проекти",
+        "connected": "Връзки",
+        "notConnected": "Не е свързано",
+        "removeConnection": "Премахни връзката"
+    },
     "next": "Напред",
     "back": "Назад",
     "admin": {
@@ -3409,7 +3426,10 @@
     "sections": {
       "basicInfo": "Основна Информация",
       "content": "Съдържание",
-      "fileUpload": "Качи Файл"
+      "fileUpload": "Качи Файл",
+      "connections": "Връзки",
+      "fileOptions": "Опции за файл",
+      "publishing": "Публикуване"
     },
     "fields": {
       "title": "Заглавие",

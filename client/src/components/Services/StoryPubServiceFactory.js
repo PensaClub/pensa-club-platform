@@ -148,5 +148,14 @@ deletePublicationDraft: async (id) => {
 togglePublicationDraftStatus: async (id) => {
   return requester.patch(`${apiUrl}/publications/toggle-draft/${id}`);
 },
+
+// NEW: Connection endpoints
+getAllInitiativesForConnections: async () => {
+  return requester.get(`${apiUrl}/initiatives/all-for-connections`);
+},
+
+getAllProjectsForConnections: async () => {
+  return requester.get(`${apiUrl}/projects/all-for-connections`);
+},
    }
 };

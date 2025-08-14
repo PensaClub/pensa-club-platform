@@ -349,6 +349,30 @@ projectController.get('/:projectId/applications', isAuth, checkPermission('proje
     }
 });
 
+projectController.get('/all-for-connections', isAuth, checkPermission('projects', 'read'), async (req, res, next) => {
+    try {
+        const projects = await project.findAll({
+            attributes: ['id', 'slug', 'title', 'shortDescription', 'isDraft', 'createdAt'],
+            order: [['createdAt', 'DESC']],
+        });
+
+        const transformedProjects = projects.map((proj) => ({
+            id: proj.id,
+            slug: proj.slug,
+            title: proj.title,
+            shortDescription: proj.shortDescription,
+            isDraft: proj.isDraft,
+            createdAt: proj.createdAt,
+        }));
+
+        return res.status(200).json({
+            data: transformedProjects,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 // ========================================
 // FUNCTIONS
 // ========================================

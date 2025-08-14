@@ -3179,6 +3179,23 @@
     }
   },
   "publications": {
+    "connections" : {
+      "connections-help": "Connect your publication to existing initiatives or projects to establish relationships and improve discoverability.",
+      "connectInitiatives": "Connect Initiatives",
+      "searchInitiatives": "Search initiatives by title...",
+      "noInitiativesFound": "No initiatives found",
+      "noInitiativesAvailable": "No initiatives available",
+      "connectProjects": "Connect Projects",
+      "searchProjects": "Search projects by title...",
+      "noProjectsFound": "No projects found",
+      "noProjectsAvailable": "No projects available",
+      "draft": "Draft",
+      "initiativeConnections": "Initiative Connections",
+      "projectConnections": "Project Connections",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "removeConnection": "Remove connection"
+    },
     "next": "Next",
     "back": "Previous",
     "admin": {
@@ -3343,7 +3360,10 @@
     "sections": {
       "basicInfo": "Basic Information",
       "content": "Content",
-      "fileUpload": "File Upload"
+      "fileUpload": "File Upload",
+      "connections": "Connections",
+      "fileOptions": "File Options",
+      "publishing": "Publishing"
     },
     "fields": {
       "title": "Title",
