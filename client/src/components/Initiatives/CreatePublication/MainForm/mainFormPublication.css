@@ -1850,7 +1850,12 @@
 }
 
 /* Hide sidebar completely in preview */
-.publication-preview-modal-body .story-pub-sidebar {
+/* .publication-preview-modal-body .story-pub-sidebar {
+    display: none !important;
+} */
+
+/* Instead, hide only the related content section in preview */
+.publication-preview-modal-body .story-pub-related {
     display: none !important;
 }
 

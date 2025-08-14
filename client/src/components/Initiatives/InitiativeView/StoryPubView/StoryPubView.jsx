@@ -180,6 +180,8 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
     const shouldShowActions = !previewMode;
     const shouldShowComments = !previewMode && content?.commentsEnabled;
     const shouldShowRelated = !previewMode && relatedContent.length > 0;
+    // Add this new variable for Table of Contents
+    const shouldShowTOC = content.sections && content.sections.length > 1;
 
     return (
         <article className="story-pub-view">
@@ -426,10 +428,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                         </div>
 
                         {/* Sidebar */}
-                        {shouldShowRelated && (
+                        {(shouldShowRelated || shouldShowTOC) && (
                             <aside className="story-pub-sidebar">
                                 {/* Table of Contents */}
-                                {content.sections && content.sections.length > 1 && (
+                                {shouldShowTOC && (
                                     <div className="story-pub-toc">
                                         <h3 className="toc-title">
                                             {t('storyPubView.toc.title')}
@@ -462,30 +464,34 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                     </div>
                                 )}
 
-                                {/* Related Content */}
-                                <div className="story-pub-related">
-                                    <h3 className="story-pub-related-title">
-                                        {t('storyPubView.related.title')}
-                                    </h3>
-                                    <div className="story-pub-related-list">
-                                        {relatedContent.slice(0, 3).map((item) => (
-                                            <Link
-                                                key={item.id}
-                                                to={`/${type}s/${item.slug}`}
-                                                className="story-pub-related-card"
-                                            >
-                                                <div className="related-image">
-                                                    <img src={item.image.src} alt={item.image.alt} />
-                                                </div>
-                                                <div className="related-info">
-                                                    <span className="related-type">{getTypeTranslation()}</span>
-                                                    <h4 className="related-title">{item.title}</h4>
-                                                    <p className="related-excerpt">{item.shortDescription}</p>
-                                                </div>
-                                            </Link>
-                                        ))}
+                                {/* Related Content - only show when not in preview mode */}
+                                {shouldShowRelated && (
+                                    <div className="story-pub-related">
+                                        <h3 className="story-pub-related-title">
+                                            {t('storyPubView.related.title')}
+                                        </h3>
+                                        <div className="story-pub-related-list">
+                                            {relatedContent.slice(0, 3).map((item) => (
+                                                <Link
+                                                    key={item.id}
+                                                    to={`/${type}s/${item.slug}`}
+                                                    className="story-pub-related-card"
+                                                >
+                                                    <div className="related-image">
+                                                        <img src={item.image.src} alt={item.image.alt} />
+                                                    </div>
+                                                    <div className="related-info">
+                                                        <span className="related-type">{getTypeTranslation()}</span>
+                                                        <h4 className="related-title">{item.title}</h4>
+                                                        <p className="related-excerpt">{item.shortDescription}</p>
+                                                    </div>
+                                                </Link>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
+
+                                {/* ClubCardPromo - show in both preview and normal mode */}
                                 <ClubCardPromo />
                             </aside>
                         )}

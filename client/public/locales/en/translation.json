@@ -3326,7 +3326,11 @@
     },
     "edit": {
       "title": "Edit Publication",
-      "submit": "Update Publication"
+      "description": "Transform the good into perfect - refine and enhance your publication",
+      "saveChanges": "Save Changes",
+      "updatePublication": "Update Publication",
+      "changesSaved": "Changes saved successfully!",
+      "saveError": "Error saving changes"
     },
     "sections": {
       "basicInfo": "Basic Information",

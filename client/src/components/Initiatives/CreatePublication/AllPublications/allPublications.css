@@ -296,13 +296,6 @@
   pointer-events: auto;
 }
 
-.all-publications-card:nth-last-child(-n+2) .all-publications-action-dropdown {
-  bottom: auto;
-  top: 100%;
-  margin-top: 0.75rem;
-  margin-bottom: 0;
-}
-
 .all-publications-dropdown-item {
   display: flex;
   align-items: center;
