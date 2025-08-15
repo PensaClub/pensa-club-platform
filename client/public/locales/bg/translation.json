@@ -1831,6 +1831,11 @@
     "related": {
       "title": "Свързано съдържание"
     },
+    "connections": {
+        "title": "Свързани",
+        "initiatives": "Инициативи",
+        "projects": "Проекти"
+      },
     "readTime": "четене"
   },
   "share": {

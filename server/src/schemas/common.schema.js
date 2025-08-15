@@ -45,6 +45,7 @@ const SectionSchema = z.object({
     title: z.string().nullable().optional(),
     content: z.any().nullable().optional(),
     order: z.number().nullable().optional(),
+    image: ImageSchema.nullable().optional(),
     images: z.array(ImageSchema).nullable().optional(),
 });
 

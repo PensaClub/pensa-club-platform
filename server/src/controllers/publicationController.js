@@ -477,6 +477,8 @@ const createPublication = async (publicationData, req, res, next) => {
             const newPublication = await publication.create(
                 {
                     creatorId: req.user.userId,
+                    title_slug: publicationData.title_slug || publicationData.slug, // Use title_slug if provided
+                    publishedAt: publicationData.publishedAt || new Date(), // Add published date
                     ...publicationData,
                 },
                 { transaction: t }
@@ -498,7 +500,8 @@ const createPublication = async (publicationData, req, res, next) => {
             if (publicationData.sections?.length > 0) {
                 await Promise.all(
                     publicationData.sections.map(async (sectionData) => {
-                        const { images: sectionImages, ...sectionFields } = sectionData;
+                        const { image: sectionImage, images: sectionImages, ...sectionFields } = sectionData;
+
                         const createdSection = await section.create(
                             {
                                 ...sectionFields,
@@ -508,17 +511,24 @@ const createPublication = async (publicationData, req, res, next) => {
                             { transaction: t }
                         );
 
+                        // Handle single section image
+                        if (sectionImage?.src) {
+                            await image.create({
+                                ...sectionImage,
+                                imageableId: createdSection.id,
+                                imageLinkConnection: 'section',
+                            });
+                        }
+
+                        // Handle multiple section images (if any)
                         if (sectionImages && Array.isArray(sectionImages)) {
                             await Promise.all(
                                 sectionImages.map((imageData) =>
-                                    image.create(
-                                        {
-                                            ...imageData,
-                                            imageableId: createdSection.id,
-                                            imageLinkConnection: 'section',
-                                        },
-                                        { transaction: t }
-                                    )
+                                    image.create({
+                                        ...imageData,
+                                        imageableId: createdSection.id,
+                                        imageLinkConnection: 'section',
+                                    })
                                 )
                             );
                         }
@@ -539,6 +549,24 @@ const createPublication = async (publicationData, req, res, next) => {
                         )
                     )
                 );
+            }
+
+            // Handle initiative connections
+            if (publicationData.connectedInitiativeIds?.length > 0) {
+                const initiativeLinks = publicationData.connectedInitiativeIds.map((initiativeId) => ({
+                    publication_id: newPublication.id,
+                    initiative_id: initiativeId,
+                }));
+                await publication.sequelize.models.initiative_publications.bulkCreate(initiativeLinks, { transaction: t });
+            }
+
+            // Handle project connections
+            if (publicationData.connectedProjectIds?.length > 0) {
+                const projectLinks = publicationData.connectedProjectIds.map((projectId) => ({
+                    publication_id: newPublication.id,
+                    project_id: projectId,
+                }));
+                await publication.sequelize.models.project_publications.bulkCreate(projectLinks, { transaction: t });
             }
 
             const completePublication = await publication.findByPk(newPublication.id, {
@@ -614,7 +642,7 @@ const updatePublication = async (publicationData, req, res, next, isDraft = fals
                 if (publicationData.sections?.length > 0) {
                     await Promise.all(
                         publicationData.sections.map(async (sectionData) => {
-                            const { images: sectionImages, ...sectionFields } = sectionData;
+                            const { image: sectionImage, images: sectionImages, ...sectionFields } = sectionData;
                             const createdSection = await section.create(
                                 {
                                     ...sectionFields,
@@ -624,17 +652,34 @@ const updatePublication = async (publicationData, req, res, next, isDraft = fals
                                 { transaction: t }
                             );
 
+                            // Handle single section image
+                            if (sectionImage?.src) {
+                                await image.destroy({
+                                    where: {
+                                        imageableId: createdSection.id,
+                                        imageLinkConnection: 'section',
+                                    },
+                                    transaction: t,
+                                });
+                                await image.create(
+                                    {
+                                        ...sectionImage,
+                                        imageableId: createdSection.id,
+                                        imageLinkConnection: 'section',
+                                    },
+                                    { transaction: t }
+                                );
+                            }
+
+                            // Handle multiple section images (if any)
                             if (sectionImages && Array.isArray(sectionImages)) {
                                 await Promise.all(
                                     sectionImages.map((imageData) =>
-                                        image.create(
-                                            {
-                                                ...imageData,
-                                                imageableId: createdSection.id,
-                                                imageLinkConnection: 'section',
-                                            },
-                                            { transaction: t }
-                                        )
+                                        image.create({
+                                            ...imageData,
+                                            imageableId: createdSection.id,
+                                            imageLinkConnection: 'section',
+                                        })
                                     )
                                 );
                             }
@@ -664,6 +709,38 @@ const updatePublication = async (publicationData, req, res, next, isDraft = fals
                             )
                         )
                     );
+                }
+            }
+
+            // Handle initiative connections
+            if (publicationData.connectedInitiativeIds !== undefined) {
+                await publication.sequelize.models.initiative_publications.destroy({
+                    where: { publication_id: foundPublication.id },
+                    transaction: t,
+                });
+
+                if (publicationData.connectedInitiativeIds.length > 0) {
+                    const initiativeLinks = publicationData.connectedInitiativeIds.map((initiativeId) => ({
+                        publication_id: foundPublication.id,
+                        initiative_id: initiativeId,
+                    }));
+                    await publication.sequelize.models.initiative_publications.bulkCreate(initiativeLinks, { transaction: t });
+                }
+            }
+
+            // Handle project connections
+            if (publicationData.connectedProjectIds !== undefined) {
+                await publication.sequelize.models.project_publications.destroy({
+                    where: { publication_id: foundPublication.id },
+                    transaction: t,
+                });
+
+                if (publicationData.connectedProjectIds.length > 0) {
+                    const projectLinks = publicationData.connectedProjectIds.map((projectId) => ({
+                        publication_id: foundPublication.id,
+                        project_id: projectId,
+                    }));
+                    await publication.sequelize.models.project_publications.bulkCreate(projectLinks, { transaction: t });
                 }
             }
 

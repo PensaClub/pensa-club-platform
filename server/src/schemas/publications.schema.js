@@ -36,6 +36,9 @@ const BasePublicationSchema = z.object({
     relatedPublications: z.array(z.union([z.string(), z.number()])).optional(),
     commentsEnabled: z.boolean().default(true).optional(),
     showAuthor: z.boolean().default(true).optional(),
+    // Add connection fields
+    connectedInitiativeIds: z.array(z.number()).optional(),
+    connectedProjectIds: z.array(z.number()).optional(),
 });
 
 const PublicationSchema = BasePublicationSchema.refine(

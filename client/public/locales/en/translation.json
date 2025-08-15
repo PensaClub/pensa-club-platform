@@ -1830,6 +1830,11 @@
     "related": {
       "title": "Related Content"
     },
+    "connections": {
+      "title": "Connected",
+      "initiatives": "Initiatives",
+      "projects": "Projects"
+    },
     "readTime": "read time"
   },
   "share": {

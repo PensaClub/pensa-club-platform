@@ -29,26 +29,14 @@ export const getPublicationProgressBreakdown = (values) => {
         basicInfo: {
             label: 'Basic Info',
             progress: calculateBasicInfoProgress(values),
-            weight: 0.45, // Increased from 0.4
+            weight: 0.5, // 50% weight
             fields: ['title', 'slug', 'shortDescription', 'category', 'readTime', 'tags']
         },
         content: {
             label: 'Content',
             progress: calculateContentProgress(values),
-            weight: 0.45, // Increased from 0.4
-            fields: ['sections', 'image']
-        },
-        'file-options': {
-            label: 'File & Options',
-            progress: calculateFileProgress(values),
-            weight: 0.1, // Decreased from 0.15
-            fields: ['fileType', 'fileSize', 'downloadUrl']
-        },
-        publishing: {
-            label: 'Publishing',
-            progress: calculateSettingsProgress(values),
-            weight: 0, // Changed from 0.05 - no initial contribution
-            fields: ['commentsEnabled']
+            weight: 0.5, // 50% weight
+            fields: ['sections', 'mainImage']
         }
     };
 };
@@ -83,9 +71,8 @@ const calculateBasicInfoProgress = (values) => {
                 completed++;
             }
         } else {
-            // Optional field - give partial credit if filled
             if (values[field.key] && values[field.key].toString().trim()) {
-                completed += 0.5;
+                completed++;
             }
         }
     });
@@ -100,10 +87,10 @@ const calculateBasicInfoProgress = (values) => {
  */
 const calculateContentProgress = (values) => {
     let completed = 0;
-    let total = 2; // image + sections
+    let total = 2; // mainImage + sections
 
     // Check main image
-    if (values.image && values.image.src) {
+    if (values.mainImage && values.mainImage.src) {
         completed++;
     }
 
@@ -120,39 +107,6 @@ const calculateContentProgress = (values) => {
     }
 
     return Math.round((completed / total) * 100);
-};
-
-/**
- * Calculates progress for File section
- * @param {Object} values - Form values
- * @returns {number} - Progress percentage (0-100)
- */
-const calculateFileProgress = (values) => {
-    const fields = ['fileType', 'fileSize', 'downloadUrl'];
-    let completed = 0;
-
-    fields.forEach(field => {
-        // Don't count default fileType as progress
-        if (field === 'fileType' && values[field] === 'pdf') {
-            return; // Skip default value
-        }
-        if (values[field] && values[field].toString().trim()) {
-            completed++;
-        }
-    });
-
-    return Math.round((completed / fields.length) * 100);
-};
-
-/**
- * Calculates progress for Settings section
- * @param {Object} values - Form values
- * @returns {number} - Progress percentage (0-100)
- */
-const calculateSettingsProgress = (values) => {
-    // Only count progress if user has explicitly changed the setting
-    // For now, always return 0 until user interacts
-    return 0;
 };
 
 /**

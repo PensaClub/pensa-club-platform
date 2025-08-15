@@ -95,6 +95,10 @@ trackPublicationView: async (publicationId) => {
   return requester.post(`${apiUrl}/publications/${publicationId}/view`);
 },
 
+trackStoryView: async (storyId) => {
+  return requester.post(`${apiUrl}/stories/${storyId}/view`);
+},
+
 downloadPublication: async (publicationId) => {
   return requester.post(`${apiUrl}/publications/${publicationId}/download`);
 },

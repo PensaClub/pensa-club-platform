@@ -1,4 +1,5 @@
 import ReactGA from 'react-ga4';
+import { initiativeServiceFactory } from './StoryPubServiceFactory';
 
 // Локално съхранение на броячи на посещения, за да избегнем множество заявки към GA
 const localViewCountCache = {};
@@ -32,7 +33,7 @@ export const trackArticleView = (articleId, articleTitle) => {
   updateLocalCache(`article_${articleId}`);
 };
 
-// Проследяване на посещение на инициатива 
+// Проследяване на посещение на инициатива
 export const trackInitiativeView = (initiativeId, initiativeTitle) => {
   ReactGA.event({
     category: 'Initiative',
@@ -46,7 +47,7 @@ export const trackInitiativeView = (initiativeId, initiativeTitle) => {
 };
 
 // Проследяване на story и publication
-export const trackStoryView = (storyId, storyTitle) => {
+export const trackStoryView = async (storyId, storyTitle) => {
   ReactGA.event({
     category: 'Story',
     action: 'View',
@@ -56,9 +57,18 @@ export const trackStoryView = (storyId, storyTitle) => {
   });
 
   updateLocalCache(`story_${storyId}`);
+
+  // Also call server endpoint to update database
+  try {
+    const token = localStorage.getItem('token');
+    const service = initiativeServiceFactory(token);
+    await service.trackStoryView(storyId);
+  } catch (error) {
+    console.error('Error tracking story view on server:', error);
+  }
 };
 
-export const trackPublicationView = (publicationId, publicationTitle) => {
+export const trackPublicationView = async (publicationId, publicationTitle) => {
   ReactGA.event({
     category: 'Publication',
     action: 'View',
@@ -68,10 +78,19 @@ export const trackPublicationView = (publicationId, publicationTitle) => {
   });
 
   updateLocalCache(`publication_${publicationId}`);
+
+  // Also call server endpoint to update database
+  try {
+    const token = localStorage.getItem('token');
+    const service = initiativeServiceFactory(token);
+    await service.trackPublicationView(publicationId);
+  } catch (error) {
+    console.error('Error tracking publication view on server:', error);
+  }
 };
 
 //  Проследяване на download
-export const trackDownload = (contentId, contentTitle, contentType, fileType, fileSize) => {
+export const trackDownload = async (contentId, contentTitle, contentType, fileType, fileSize) => {
   ReactGA.event({
     category: contentType === 'publication' ? 'Publication' : 'Document',
     action: 'Download',
@@ -91,6 +110,17 @@ export const trackDownload = (contentId, contentTitle, contentType, fileType, fi
   }
 
   saveViewCounts();
+
+  // Also call server endpoint to update database for publications
+  if (contentType === 'publication') {
+    try {
+      const token = localStorage.getItem('token');
+      const service = initiativeServiceFactory(token);
+      await service.downloadPublication(contentId);
+    } catch (error) {
+      console.error('Error tracking publication download on server:', error);
+    }
+  }
 };
 // Проследяване на share events
 export const trackShare = (contentId, contentTitle, contentType, shareMethod, userAgent = 'unknown') => {
@@ -126,7 +156,7 @@ const updateLocalCache = (key) => {
 };
 
 // Общa функция за проследяване на различни типове съдържание
-export const trackView = (contentId, contentTitle, contentType = 'article') => {
+export const trackView = async (contentId, contentTitle, contentType = 'article') => {
   switch (contentType) {
     case 'article':
       trackArticleView(contentId, contentTitle);
@@ -135,10 +165,10 @@ export const trackView = (contentId, contentTitle, contentType = 'article') => {
       trackInitiativeView(contentId, contentTitle);
       break;
     case 'story':
-      trackStoryView(contentId, contentTitle);
+      await trackStoryView(contentId, contentTitle);
       break;
     case 'publication':
-      trackPublicationView(contentId, contentTitle);
+      await trackPublicationView(contentId, contentTitle);
       break;
     default:
       console.warn(`Unknown content type: ${contentType}`);

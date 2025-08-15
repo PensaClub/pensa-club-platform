@@ -99,17 +99,17 @@
     color: #374151;
 }
 
-/* Dropdown - Fixed positioning with better alignment */
+/* Dropdown */
 .publication-connection-dropdown {
     position: absolute;
     top: 100%;
     left: 0;
-    width: calc(100% - 2.7rem); /* 100% minus button width (2rem) + margin (0.5rem) */
+    width: calc(100% - 2.7rem);
     background: #ffffff;
     border: 2px solid #d1d5db;
     border-top: none;
     border-radius: 0 0 8px 8px;
-    max-height: 280px; /* Limit height for ~6-7 items */
+    max-height: 280px;
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -197,11 +197,7 @@
 
 /* Connection Status */
 .publication-connection-status {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .publication-connection-status-section {
@@ -253,16 +249,16 @@
 
 .publication-connection-status-item {
     display: flex;
-    align-items: flex-start; /* Changed from center to flex-start */
+    align-items: flex-start;
     justify-content: space-between;
     padding: 0.75rem;
     background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
     border: 2px solid #10b981;
     border-radius: 8px;
     transition: all 0.2s ease;
-    position: relative; /* Added for absolute positioning of X */
-    width: calc(100% - 1rem); /* Match search bar width minus arrow on desktop */
-    align-self: flex-start; /* Align to the left */
+    position: relative;
+    width: calc(100% - 2.7rem);
+    align-self: flex-start;
 }
 
 .publication-connection-status-item:hover {
@@ -272,7 +268,7 @@
 
 .publication-connection-status-item-content {
     flex: 1;
-    padding-right: 2.5rem; /* Space for the X button */
+    padding-right: 2.5rem;
 }
 
 .publication-connection-status-item-title {
@@ -292,9 +288,9 @@
 }
 
 .publication-connection-status-remove {
-    position: absolute; /* Position absolutely */
-    top: 0.75rem; /* Desktop positioning - back to original */
-    right: 0.75rem; /* Desktop positioning - back to original */
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
     background: none;
     border: none;
     color: #ef4444;
@@ -305,7 +301,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1; /* Ensure it's above content */
+    z-index: 1;
 }
 
 .publication-connection-status-remove:hover {
@@ -333,8 +329,8 @@
     }
 
     .publication-connection-dropdown {
-        width: 100%; /* Full width on mobile since button is below */
-        top: calc(100% + 0.75rem); /* Account for the gap */
+        width: 100%;
+        top: calc(100% + 0.75rem);
     }
 
     .publication-connection-status-header {
@@ -346,44 +342,44 @@
 
     .publication-connection-status-value {
         align-self: flex-end;
-        font-size: 1rem; /* Increased from 0.875rem */
-        padding: 0.5rem 0.75rem; /* Increased padding */
+        font-size: 1rem;
+        padding: 0.5rem 0.75rem;
     }
 
     .publication-connection-status-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
-        padding: 1.25rem; /* Increased padding */
-        width: 100%; /* Full width on mobile */
+        padding: 1.25rem;
+        width: 100%;
     }
 
     .publication-connection-status-item-content {
         width: 100%;
-        padding-right: 3rem; /* More space for X on mobile */
+        padding-right: 3rem;
     }
 
     .publication-connection-status-item-title {
-        font-size: 1rem; /* Increased from 0.875rem */
-        margin-bottom: 0.5rem; /* Increased margin */
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
         flex-wrap: wrap;
-        line-height: 1.4; /* Better line height */
+        line-height: 1.4;
     }
 
     .publication-connection-status-item-slug {
-        font-size: 0.875rem; /* Increased from 0.75rem */
+        font-size: 0.875rem;
         word-break: break-all;
-        line-height: 1.3; /* Better line height */
+        line-height: 1.3;
     }
 
     .publication-connection-status-remove {
-        top: 0.5rem; /* Much closer to corner on mobile */
-        right: 0.5rem; /* Much closer to corner on mobile */
-        padding: 0.75rem; /* Increased from 0.625rem */
-        font-size: 1.25rem; /* Increased from 1.125rem */
-        min-width: 44px; /* Minimum touch target size */
-        min-height: 44px; /* Minimum touch target size */
-        border-radius: 8px; /* Slightly larger border radius */
+        top: 0.5rem;
+        right: 0.5rem;
+        padding: 0.75rem;
+        font-size: 1.25rem;
+        min-width: 44px;
+        min-height: 44px;
+        border-radius: 8px;
     }
 
     .publication-connection-dropdown-title {
@@ -398,18 +394,7 @@
     }
 
     .publication-connection-dropdown-item {
-        padding: 1rem; /* Increased from 0.875rem */
-    }
-
-    .publication-connection-dropdown-check {
-        right: 0.75rem;
-        font-size: 1rem; /* Increased from 0.875rem */
-    }
-
-    /* Make draft badge more prominent on mobile */
-    .publication-connection-draft-badge {
-        font-size: 0.875rem; /* Increased from 0.75rem */
-        padding: 0.25rem 0.75rem; /* Increased padding */
+        padding: 1rem; /* Increased from 0.75rem */
     }
 }
 

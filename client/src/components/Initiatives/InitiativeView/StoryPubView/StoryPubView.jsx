@@ -36,7 +36,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         getPublicationBySlug,
         getRelatedContent,
         likePublication,
-        currentPublication, // Add this to get the updated publication from context
+        currentPublication,
     } = useInitiativeContext();
 
     useEffect(() => {
@@ -58,8 +58,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
                 // Only load related content and analytics for non-preview mode
                 if (data && !previewMode) {
-                    // Track view
-                    trackStoryOrPublication(data.id, data.title, type);
+                    await trackStoryOrPublication(data.id, data.title, type);
+
+                    const updatedData = await getPublicationBySlug(slug);
+                    setContent(updatedData);
 
                     await loadContentViewCounts([data.id], type);
                     // Зарежда download counts за publications
@@ -119,7 +121,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
     const getCurrentViewCount = () => {
         if (!content) return 0;
-        return getViewCount(content.id, type);
+        return content.views || 0;
     };
 
     const handleDownload = (e) => {
@@ -154,7 +156,38 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
     // Получаване на реалния download count
     const getRealDownloadCount = () => {
         if (!content || type !== 'publication') return 0;
-        return getCurrentDownloadCount(content.id, type);
+        return content.downloads || 0;
+    };
+
+    // Check if there are any connections to show
+    const hasConnections = () => {
+        if (!content || type !== 'publication') return false;
+        return (content.initiatives && content.initiatives.length > 0) ||
+               (content.projects && content.projects.length > 0);
+    };
+
+    // Generate a slug for section if it doesn't have one
+    const generateSectionSlug = (title, index) => {
+        if (!title) return `section-${index}`;
+        return title.toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim('-') || `section-${index}`;
+    };
+
+    // Handle TOC link click with proper offset
+    const handleTOCClick = (e, sectionSlug) => {
+        e.preventDefault();
+        const target = document.getElementById(sectionSlug);
+        if (target) {
+            const headerHeight = 100;
+            const targetPosition = target.offsetTop - headerHeight;
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        }
     };
 
     if (isLoading) {
@@ -176,12 +209,13 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
     }
 
     // Don't render breadcrumbs, actions, comments, or related content in preview mode
-    const shouldShowBreadcrumbs = !previewMode;
     const shouldShowActions = !previewMode;
     const shouldShowComments = !previewMode && content?.commentsEnabled;
     const shouldShowRelated = !previewMode && relatedContent.length > 0;
-    // Add this new variable for Table of Contents
-    const shouldShowTOC = content.sections && content.sections.length > 1;
+    // Fix TOC logic - show if there are sections with titles
+    const shouldShowTOC = content.sections && content.sections.length > 0 &&
+                         content.sections.some(section => section.title && section.title.trim());
+    const shouldShowConnections = !previewMode && hasConnections();
 
     return (
         <article className="story-pub-view">
@@ -209,50 +243,6 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
                 <div className="story-pub-hero-content">
                     <div className="container">
-                        {/* Breadcrumb */}
-                        {shouldShowBreadcrumbs && (
-                            <nav className="story-pub-breadcrumb">
-                                <Link to="/initiatives" className="story-pub-breadcrumb-link">
-                                    {t('storyPubView.breadcrumb.initiatives')}
-                                </Link>
-                                <span className="story-pub-breadcrumb-separator">›</span>
-                                {content.initiative && (
-                                    <>
-                                        <Link
-                                            to={`/initiatives/${content.initiative.slug}`}
-                                            className="story-pub-breadcrumb-link"
-                                        >
-                                            {content.initiative.title}
-                                        </Link>
-                                        <span className="story-pub-breadcrumb-separator">›</span>
-                                    </>
-                                )}
-                                <span className="story-pub-breadcrumb-current">{getTypeTranslation()}</span>
-                            </nav>
-                        )}
-                        {/* Mobile Breadcrumb Button */}
-                        {shouldShowBreadcrumbs && (
-                            <div className="story-pub-breadcrumb-mobile">
-                                {content.initiative ? (
-                                    <Link
-                                        to={`/initiatives/${content.initiative.slug}`}
-                                        className="story-pub-breadcrumb-btn"
-                                    >
-                                        <span className="story-pub-breadcrumb-btn-icon">←</span>
-                                        <span>{t('storyPubView.breadcrumb.back')}</span>
-                                    </Link>
-                                ) : (
-                                    <Link
-                                        to="/initiatives"
-                                        className="story-pub-breadcrumb-btn"
-                                    >
-                                        <span className="story-pub-breadcrumb-btn-icon">←</span>
-                                        <span>{t('storyPubView.breadcrumb.back')}</span>
-                                    </Link>
-                                )}
-                            </div>
-                        )}
-
                         <div className="story-pub-hero-main">
                             <div className="story-pub-meta-badges">
                                 <span className="story-pub-type-badge">{getTypeTranslation()}</span>
@@ -282,14 +272,14 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                     <span className="story-pub-meta-text">{content.readTime} {t('storyPubView.readTime')}</span>
                                 </div>
 
-                                {content.views && (
-                                    <div className="story-pub-meta-item">
-                                        <span className="story-pub-meta-icon">👁️</span>
-                                        <span className="story-pub-meta-text">{getViewCountText(getCurrentViewCount(), t)}</span>
-                                    </div>
-                                )}
+                                {/* Always show views, even if 0 */}
+                                <div className="story-pub-meta-item">
+                                    <span className="story-pub-meta-icon">👁️</span>
+                                    <span className="story-pub-meta-text">{getViewCountText(getCurrentViewCount(), t)}</span>
+                                </div>
 
-                                {type === 'publication' && content.downloads && (
+                                {/* Always show downloads for publications, even if 0 */}
+                                {type === 'publication' && (
                                     <div className="story-pub-meta-item">
                                         <span className="story-pub-meta-icon">⬇️</span>
                                         <span className="story-pub-meta-text">{getDownloadsCountText(getRealDownloadCount(), t)}</span>
@@ -348,24 +338,27 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                             {/* Sections */}
                             {content.sections && content.sections.length > 0 ? (
                                 <div className="story-pub-sections">
-                                    {content.sections.map((section, index) => (
-                                        <section key={index} className="story-pub-section" id={section.titleSlug}>
-                                            <h2 className="story-pub-section-title">{section.title}</h2>
+                                    {content.sections.map((section, index) => {
+                                        const sectionSlug = section.titleSlug || generateSectionSlug(section.title, index);
+                                        return (
+                                            <section key={index} className="story-pub-section" id={sectionSlug}>
+                                                <h2 className="story-pub-section-title">{section.title}</h2>
 
-                                            {section.image && (
-                                                <div className="story-pub-section-image">
-                                                    <img
-                                                        src={section.image.src}
-                                                        alt={section.image.alt}
-                                                    />
+                                                {section.image && (
+                                                    <div className="story-pub-section-image">
+                                                        <img
+                                                            src={section.image.src}
+                                                            alt={section.image.alt}
+                                                        />
+                                                    </div>
+                                                )}
+
+                                                <div className="story-pub-section-content">
+                                                    {section.content}
                                                 </div>
-                                            )}
-
-                                            <div className="story-pub-section-content">
-                                                {section.content}
-                                            </div>
-                                        </section>
-                                    ))}
+                                            </section>
+                                        );
+                                    })}
                                 </div>
                             ) : (
                                 <div className="story-pub-empty-content">
@@ -428,7 +421,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                         </div>
 
                         {/* Sidebar */}
-                        {(shouldShowRelated || shouldShowTOC) && (
+                        {(shouldShowRelated || shouldShowTOC || shouldShowConnections) && (
                             <aside className="story-pub-sidebar">
                                 {/* Table of Contents */}
                                 {shouldShowTOC && (
@@ -438,28 +431,75 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                         </h3>
                                         <div className="toc-content">
                                             <ul className="toc-list">
-                                                {content.sections.map((section, index) => (
-                                                    <li key={index} className="toc-item">
-                                                        <a
-                                                            href={`#${section.titleSlug}`}
-                                                            className="toc-link"
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                const target = document.getElementById(section.titleSlug);
-                                                                if (target) {
-                                                                    target.scrollIntoView({
-                                                                        behavior: 'smooth',
-                                                                        block: 'start',
-                                                                        inline: 'nearest'
-                                                                    });
-                                                                }
-                                                            }}
-                                                        >
-                                                            {section.title}
-                                                        </a>
-                                                    </li>
-                                                ))}
+                                                {content.sections
+                                                    .filter(section => section.title && section.title.trim())
+                                                    .map((section, index) => {
+                                                        const sectionSlug = section.titleSlug || generateSectionSlug(section.title, index);
+                                                        return (
+                                                            <li key={index} className="toc-item">
+                                                                <a
+                                                                    href={`#${sectionSlug}`}
+                                                                    className="toc-link"
+                                                                    onClick={(e) => handleTOCClick(e, sectionSlug)}
+                                                                >
+                                                                    {section.title}
+                                                                </a>
+                                                            </li>
+                                                        );
+                                                    })}
                                             </ul>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Connections Section - Same style as TOC */}
+                                {shouldShowConnections && (
+                                    <div className="story-pub-connections">
+                                        <h3 className="connections-title">
+                                            {t('storyPubView.connections.title', 'Свързани')}
+                                        </h3>
+                                        <div className="connections-content">
+                                            {/* Initiative Connections */}
+                                            {content.initiatives && content.initiatives.length > 0 && (
+                                                <>
+                                                    <h4 className="connections-group-title">
+                                                        {t('storyPubView.connections.initiatives', 'Инициативи')}
+                                                    </h4>
+                                                    <ul className="connections-list">
+                                                        {content.initiatives.map((initiative) => (
+                                                            <li key={initiative.id} className="connection-item">
+                                                                <Link
+                                                                    to={`/initiatives/${initiative.slug}`}
+                                                                    className="connection-link"
+                                                                >
+                                                                    <span className="connection-text">{initiative.title}</span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
+
+                                            {/* Project Connections */}
+                                            {content.projects && content.projects.length > 0 && (
+                                                <>
+                                                    <h4 className="connections-group-title">
+                                                        {t('storyPubView.connections.projects', 'Проекти')}
+                                                    </h4>
+                                                    <ul className="connections-list">
+                                                        {content.projects.map((project) => (
+                                                            <li key={project.id} className="connection-item">
+                                                                <Link
+                                                                    to={`/projects/${project.slug}`}
+                                                                    className="connection-link"
+                                                                >
+                                                                    <span className="connection-text">{project.title}</span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 )}

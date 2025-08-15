@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faEdit, faFileAlt, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { calculatePublicationProgress, getPublicationProgressBreakdown } from '../utils/publicationProgressUtils';
 
@@ -14,16 +14,12 @@ const PublicationProgressBar = ({ values, activeSection, onSectionClick }) => {
     const sectionIcons = {
         basicInfo: faInfoCircle,
         content: faEdit,
-        file: faFileAlt,
-        settings: faCog,
     };
 
-    // Section order and labels
+    // Section order and labels - simplified to match the new structure
     const sections = [
         { key: 'basicInfo', label: t('publications.sections.basicInfo') },
         { key: 'content', label: t('publications.sections.content') },
-        { key: 'file-options', label: t('publications.sections.fileOptions') },
-        { key: 'publishing', label: t('publications.sections.publishing') },
     ];
 
     return (
@@ -44,19 +40,13 @@ const PublicationProgressBar = ({ values, activeSection, onSectionClick }) => {
                 ></div>
             </div>
 
-            {/* Section Navigation - using different icons for each section */}
+            {/* Section Navigation - simplified to match the new structure */}
             <div className="publication-progress-sections">
                 <div className={`publication-progress-section ${progressBreakdown.basicInfo.progress === 100 ? 'complete' : 'incomplete'}`}>
                     📝 {t('publications.sections.basicInfo')}
                 </div>
                 <div className={`publication-progress-section ${progressBreakdown.content.progress === 100 ? 'complete' : 'incomplete'}`}>
                     📄 {t('publications.sections.content')}
-                </div>
-                <div className={`publication-progress-section ${progressBreakdown['file-options'].progress === 100 ? 'complete' : 'incomplete'}`}>
-                    📎 {t('publications.sections.fileOptions')}
-                </div>
-                <div className={`publication-progress-section ${progressBreakdown.publishing.progress === 100 ? 'complete' : 'incomplete'}`}>
-                    ⚙️ {t('publications.sections.publishing')}
                 </div>
             </div>
         </div>

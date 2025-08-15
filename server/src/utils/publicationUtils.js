@@ -1,4 +1,4 @@
-const { initiative, section, image, comment, publication, user_account } = require('../sequelize/models');
+const { initiative, project, section, image, comment, publication, user_account } = require('../sequelize/models');
 
 const publicationConfig = [
     {
@@ -9,6 +9,11 @@ const publicationConfig = [
     {
         model: initiative,
         as: 'initiatives',
+        attributes: ['id', 'title', 'slug'],
+    },
+    {
+        model: project,
+        as: 'projects',
         attributes: ['id', 'title', 'slug'],
     },
     {
@@ -42,7 +47,16 @@ const transformPublication = async (pub) => {
     const plainPublication = pub.get({ plain: true });
 
     // Remove junction table data, isDraft flag, and likedBy for security
-    const { publication_bookmarks, publication_likes, related_publications, isDraft, likedBy, ...publicationData } = plainPublication;
+    const {
+        publication_bookmarks,
+        publication_likes,
+        related_publications,
+        project_publications,
+        initiative_publications,
+        isDraft,
+        likedBy,
+        ...publicationData
+    } = plainPublication;
 
     // Add userEmail from creator and remove creator object
     if (publicationData.creator) {
@@ -54,8 +68,16 @@ const transformPublication = async (pub) => {
     // Transform sections
     if (publicationData.sections) {
         publicationData.sections = publicationData.sections.map((section) => {
+            let sectionImage = null;
+
             if (section.sectionImage) {
-                const { sectionImage, ...singleSection } = section;
+                sectionImage = section.sectionImage;
+            } else if (section.sectionImages && Array.isArray(section.sectionImages) && section.sectionImages.length > 0) {
+                sectionImage = section.sectionImages[0];
+            }
+
+            if (sectionImage) {
+                const { sectionImage: _, sectionImages: __, ...singleSection } = section;
                 return {
                     ...singleSection,
                     image: sectionImage,
