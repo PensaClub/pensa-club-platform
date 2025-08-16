@@ -1,26 +1,12 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { calculatePublicationProgress, getPublicationProgressBreakdown } from '../utils/publicationProgressUtils';
 
-const PublicationProgressBar = ({ values, activeSection, onSectionClick }) => {
+const PublicationProgressBar = ({ values }) => {
     const { t } = useTranslation();
 
     const progress = calculatePublicationProgress(values);
     const progressBreakdown = getPublicationProgressBreakdown(values);
-
-    // Define icons for each section
-    const sectionIcons = {
-        basicInfo: faInfoCircle,
-        content: faEdit,
-    };
-
-    // Section order and labels - simplified to match the new structure
-    const sections = [
-        { key: 'basicInfo', label: t('publications.sections.basicInfo') },
-        { key: 'content', label: t('publications.sections.content') },
-    ];
 
     return (
         <div className="publication-form-progress-container">

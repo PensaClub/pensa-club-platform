@@ -161,5 +161,9 @@ getAllInitiativesForConnections: async () => {
 getAllProjectsForConnections: async () => {
   return requester.get(`${apiUrl}/projects/all-for-connections`);
 },
+
+getAllPublicationsForConnections: async () => {
+  return requester.get(`${apiUrl}/publications/all-for-connections`);
+},
    }
 };

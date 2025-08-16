@@ -73,12 +73,12 @@ export const PublicationsSearchAdmin = ({
                         onChange={(e) => handleFilterChange('category', e.target.value)}
                     >
                         <option value="all">{t('publications.admin.filters.allCategories')}</option>
-                        <option value="technology">{t('publications.admin.filters.technology')}</option>
-                        <option value="health">{t('publications.admin.filters.health')}</option>
-                        <option value="lifestyle">{t('publications.admin.filters.lifestyle')}</option>
-                        <option value="education">{t('publications.admin.filters.education')}</option>
-                        <option value="community">{t('publications.admin.filters.community')}</option>
-                        <option value="other">{t('publications.admin.filters.other')}</option>
+                        <option value="technology">{t('publications.categories.technology')}</option>
+                        <option value="health">{t('publications.categories.health')}</option>
+                        <option value="lifestyle">{t('publications.categories.lifestyle')}</option>
+                        <option value="education">{t('publications.categories.education')}</option>
+                        <option value="community">{t('publications.categories.community')}</option>
+                        <option value="other">{t('publications.categories.other')}</option>
                     </select>
                 </div>
 

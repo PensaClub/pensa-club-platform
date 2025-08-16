@@ -686,7 +686,7 @@
 .story-pub-sidebar {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .story-pub-related {

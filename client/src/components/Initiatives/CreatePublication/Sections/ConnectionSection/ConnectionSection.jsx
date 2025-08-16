@@ -17,18 +17,23 @@ const ConnectionSection = ({
     const { token } = useAuthContext();
     const [initiatives, setInitiatives] = useState([]);
     const [projects, setProjects] = useState([]);
+    const [publications, setPublications] = useState([]);
     const [loadingInitiatives, setLoadingInitiatives] = useState(false);
     const [loadingProjects, setLoadingProjects] = useState(false);
+    const [loadingPublications, setLoadingPublications] = useState(false);
 
     // Search states
     const [initiativeSearch, setInitiativeSearch] = useState('');
     const [projectSearch, setProjectSearch] = useState('');
+    const [publicationSearch, setPublicationSearch] = useState('');
     const [showInitiativeDropdown, setShowInitiativeDropdown] = useState(false);
     const [showProjectDropdown, setShowProjectDropdown] = useState(false);
+    const [showPublicationDropdown, setShowPublicationDropdown] = useState(false);
 
     // Refs for click outside detection
     const initiativeRef = useRef(null);
     const projectRef = useRef(null);
+    const publicationRef = useRef(null);
 
     // Create service instance
     const service = useMemo(() => initiativeServiceFactory(token), [token]);
@@ -41,6 +46,9 @@ const ConnectionSection = ({
             }
             if (projectRef.current && !projectRef.current.contains(event.target)) {
                 setShowProjectDropdown(false);
+            }
+            if (publicationRef.current && !publicationRef.current.contains(event.target)) {
+                setShowPublicationDropdown(false);
             }
         };
 
@@ -96,6 +104,29 @@ const ConnectionSection = ({
         fetchProjects();
     }, [service, token]);
 
+    // Fetch ALL publications (both drafts and published)
+    useEffect(() => {
+        const fetchPublications = async () => {
+            if (!token) return;
+
+            setLoadingPublications(true);
+            try {
+                const response = await service.getAllPublicationsForConnections();
+                if (response && response.data) {
+                    setPublications(response.data);
+                } else {
+                    console.error('Invalid response format for publications:', response);
+                }
+            } catch (error) {
+                console.error('Error fetching publications:', error);
+            } finally {
+                setLoadingPublications(false);
+            }
+        };
+
+        fetchPublications();
+    }, [service, token]);
+
     // Filter initiatives based on search (limit to 6 results)
     const filteredInitiatives = useMemo(() => {
         if (!initiativeSearch.trim()) return initiatives.slice(0, 6);
@@ -113,6 +144,15 @@ const ConnectionSection = ({
             project.slug.toLowerCase().includes(projectSearch.toLowerCase())
         ).slice(0, 6);
     }, [projects, projectSearch]);
+
+    // Filter publications based on search (limit to 6 results)
+    const filteredPublications = useMemo(() => {
+        if (!publicationSearch.trim()) return publications.slice(0, 6);
+        return publications.filter(pub =>
+            pub.title.toLowerCase().includes(publicationSearch.toLowerCase()) ||
+            pub.slug.toLowerCase().includes(publicationSearch.toLowerCase())
+        ).slice(0, 6);
+    }, [publications, publicationSearch]);
 
     // Handle initiative selection (multi-select)
     const handleInitiativeSelect = (initiative) => {
@@ -160,6 +200,29 @@ const ConnectionSection = ({
         setShowProjectDropdown(false);
     };
 
+    // Handle publication selection (multi-select)
+    const handlePublicationSelect = (pub) => {
+        const currentIds = values.relatedPublications || [];
+        const isSelected = currentIds.includes(pub.id);
+
+        if (isSelected) {
+            // Remove if already selected
+            setValues(prev => ({
+                ...prev,
+                relatedPublications: currentIds.filter(id => id !== pub.id)
+            }));
+        } else {
+            // Add if not selected
+            setValues(prev => ({
+                ...prev,
+                relatedPublications: [...currentIds, pub.id]
+            }));
+        }
+
+        setPublicationSearch('');
+        setShowPublicationDropdown(false);
+    };
+
     // Remove specific initiative connection
     const removeInitiativeConnection = (initiativeId) => {
         setValues(prev => ({
@@ -176,6 +239,14 @@ const ConnectionSection = ({
         }));
     };
 
+    // Remove specific publication connection
+    const removePublicationConnection = (publicationId) => {
+        setValues(prev => ({
+            ...prev,
+            relatedPublications: (prev.relatedPublications || []).filter(id => id !== publicationId)
+        }));
+    };
+
     // Get selected initiatives
     const selectedInitiatives = initiatives.filter(init =>
         (values.connectedInitiativeIds || []).includes(init.id)
@@ -184,6 +255,11 @@ const ConnectionSection = ({
     // Get selected projects
     const selectedProjects = projects.filter(proj =>
         (values.connectedProjectIds || []).includes(proj.id)
+    );
+
+    // Get selected publications
+    const selectedPublications = publications.filter(pub =>
+        (values.relatedPublications || []).includes(pub.id)
     );
 
     return (
@@ -197,7 +273,7 @@ const ConnectionSection = ({
 
             <div className="publication-form-section-content">
                 <div className="publication-connections-help">
-                    <p>{t('publications.connections.connections-help')}</p>
+                    <p>{t('publications.connections.connectionsHelp')}</p>
                 </div>
 
                 {/* Initiative Connection */}
@@ -358,6 +434,85 @@ const ConnectionSection = ({
                     )}
                 </div>
 
+                {/* Publication Connection */}
+                <div className="publication-connection-group" ref={publicationRef}>
+                    <label className="publication-connection-label">
+                        {t('publications.connections.connectPublications')}
+                    </label>
+
+                    <div className="publication-connection-search-container">
+                        <div className="publication-connection-search-input-wrapper">
+                            <FontAwesomeIcon icon={faSearch} className="publication-connection-search-icon" />
+                            <input
+                                type="text"
+                                value={publicationSearch}
+                                onChange={(e) => setPublicationSearch(e.target.value)}
+                                onFocus={() => setShowPublicationDropdown(true)}
+                                placeholder={t('publications.connections.searchPublications')}
+                                className="publication-connection-search-input"
+                                disabled={loadingPublications}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPublicationDropdown(!showPublicationDropdown)}
+                                className="publication-connection-dropdown-toggle"
+                                disabled={loadingPublications}
+                            >
+                                <FontAwesomeIcon icon={faChevronDown} />
+                            </button>
+                        </div>
+
+                        {loadingPublications && (
+                            <FontAwesomeIcon
+                                icon={faSpinner}
+                                className="publication-connection-loading"
+                                spin
+                            />
+                        )}
+                    </div>
+
+                    {/* Publication Dropdown */}
+                    {showPublicationDropdown && (
+                        <div className="publication-connection-dropdown">
+                            {filteredPublications.length === 0 ? (
+                                <div className="publication-connection-dropdown-empty">
+                                    {publicationSearch ? t('publications.connections.noPublicationsFound') : t('publications.connections.noPublicationsAvailable')}
+                                </div>
+                            ) : (
+                                filteredPublications.map(pub => {
+                                    const isSelected = (values.relatedPublications || []).includes(pub.id);
+                                    return (
+                                        <div
+                                            key={pub.id}
+                                            className={`publication-connection-dropdown-item ${isSelected ? 'selected' : ''}`}
+                                            onClick={() => handlePublicationSelect(pub)}
+                                        >
+                                            <div className="publication-connection-dropdown-title">
+                                                {pub.title}
+                                                {pub.isDraft && (
+                                                    <span className="publication-connection-draft-badge">{t('publications.connections.draft')}</span>
+                                                )}
+                                            </div>
+                                            <div className="publication-connection-dropdown-slug">
+                                                {pub.slug}
+                                            </div>
+                                            {isSelected && (
+                                                <FontAwesomeIcon icon={faCheck} className="publication-connection-dropdown-check" />
+                                            )}
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
+                    )}
+
+                    {errors.relatedPublications && (
+                        <div className="publication-connection-error">
+                            {errors.relatedPublications}
+                        </div>
+                    )}
+                </div>
+
                 {/* Connection Status with Connected Items */}
                 <div className="publication-connection-status">
                     <div className="publication-connection-status-section">
@@ -427,6 +582,45 @@ const ConnectionSection = ({
                                         <button
                                             type="button"
                                             onClick={() => removeProjectConnection(project.id)}
+                                            className="publication-connection-status-remove"
+                                            title={t('publications.connections.removeConnection')}
+                                        >
+                                            <FontAwesomeIcon icon={faTimes} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="publication-connection-status-section">
+                        <div className="publication-connection-status-header">
+                            <span className="publication-connection-status-label">
+                                {t('publications.connections.publicationConnections')}:
+                            </span>
+                            <span className={`publication-connection-status-value ${selectedPublications.length > 0 ? 'connected' : 'not-connected'}`}>
+                                {selectedPublications.length > 0 ? `${selectedPublications.length} ${t('publications.connections.connected')}` : t('publications.connections.notConnected')}
+                            </span>
+                        </div>
+
+                        {selectedPublications.length > 0 && (
+                            <div className="publication-connection-status-items">
+                                {selectedPublications.map(pub => (
+                                    <div key={pub.id} className="publication-connection-status-item">
+                                        <div className="publication-connection-status-item-content">
+                                            <div className="publication-connection-status-item-title">
+                                                {pub.title}
+                                                {pub.isDraft && (
+                                                    <span className="publication-connection-draft-badge">{t('publications.connections.draft')}</span>
+                                                )}
+                                            </div>
+                                            <div className="publication-connection-status-item-slug">
+                                                {pub.slug}
+                                            </div>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => removePublicationConnection(pub.id)}
                                             className="publication-connection-status-remove"
                                             title={t('publications.connections.removeConnection')}
                                         >

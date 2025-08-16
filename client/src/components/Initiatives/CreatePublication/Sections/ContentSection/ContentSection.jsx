@@ -278,7 +278,7 @@ const ContentSection = ({
         <div className="publication-form-section-card">
             <div className="publication-sections-section-header">
                 <h2 className="publication-sections-section-title">
-                    📝 {t('publications.create.sections')}
+                    📝 {t('publications.content.sections')}
                 </h2>
                 <button
                     type="button"
@@ -286,28 +286,28 @@ const ContentSection = ({
                     onClick={addSection}
                 >
                     <FontAwesomeIcon icon={faPlus} />
-                    {t('publications.create.addSection')}
+                    {t('publications.content.addSection')}
                 </button>
             </div>
             <div className="publication-form-section-content">
 
                 <div className="publication-sections-help">
-                    <p>{t('publications.create.sections-help')}</p>
+                    <p>{t('publications.helpTexts.sectionsHelp')}</p>
                 </div>
 
                 {(values.sections || []).length === 0 ? (
                     <div className="publication-sections-empty-state">
                         <div className="publication-sections-empty-content">
                             <FontAwesomeIcon icon={faEdit} className="publication-sections-empty-icon" />
-                            <h3>{t('publications.create.noSections')}</h3>
-                            <p>{t('publications.create.sectionsDescription')}</p>
+                            <h3>{t('publications.content.noSections')}</h3>
+                            <p>{t('publications.content.sectionsDescription')}</p>
                             <button
                                 type="button"
                                 className="publication-sections-form-btn primary"
                                 onClick={addSection}
                             >
                                 <FontAwesomeIcon icon={faPlus} />
-                                {t('publications.create.addFirstSection')}
+                                {t('publications.content.addFirstSection')}
                             </button>
                         </div>
                     </div>
@@ -318,7 +318,7 @@ const ContentSection = ({
                                 <div className="publication-sections-item-header">
                                     <div className="publication-sections-item-title">
                                         <h4>
-                                            {t('publications.create.sectionNumber', { number: index + 1 })}
+                                            {t('publications.content.sectionNumber', { number: index + 1 })}
                                             {(errors[`sections[${index}].title`] || errors[`sections[${index}].content`]) && (
                                                 <span className="publication-sections-error-indicator">⚠️</span>
                                             )}
@@ -327,7 +327,7 @@ const ContentSection = ({
                                             {section.title ? (
                                                 <span className="publication-sections-status-complete">✅ {section.title}</span>
                                             ) : (
-                                                <span className="publication-sections-status-incomplete">⚪ {t('publications.create.untitled')}</span>
+                                                <span className="publication-sections-status-incomplete">⚪ {t('publications.content.untitled')}</span>
                                             )}
                                         </div>
                                     </div>
@@ -339,7 +339,7 @@ const ContentSection = ({
                                             className="publication-sections-move-btn"
                                             onClick={() => handleMoveSection(index, 'up')}
                                             disabled={index === 0}
-                                            title={t('publications.create.moveUp')}
+                                            title={t('publications.content.moveUp')}
                                         >
                                             <FontAwesomeIcon icon={faChevronUp} />
                                         </button>
@@ -348,7 +348,7 @@ const ContentSection = ({
                                             className="publication-sections-move-btn"
                                             onClick={() => handleMoveSection(index, 'down')}
                                             disabled={index === (values.sections || []).length - 1}
-                                            title={t('publications.create.moveDown')}
+                                            title={t('publications.content.moveDown')}
                                         >
                                             <FontAwesomeIcon icon={faChevronDown} />
                                         </button>
@@ -358,10 +358,10 @@ const ContentSection = ({
                                             type="button"
                                             className="publication-sections-remove-btn"
                                             onClick={() => removeSection(index)}
-                                            title={t('publications.create.removeSection')}
+                                            title={t('publications.content.removeSection')}
                                         >
                                             <FontAwesomeIcon icon={faTrash} />
-                                            {t('publications.create.remove')}
+                                            {t('publications.common.remove')}
                                         </button>
                                     </div>
                                 </div>
@@ -370,7 +370,7 @@ const ContentSection = ({
                                     {/* Section Title */}
                                     <div className="publication-sections-form-group">
                                         <label htmlFor={`section-title-${index}`}>
-                                            {t('publications.create.sectionTitle')}
+                                            {t('publications.content.sectionTitle')}
                                             <span className="publication-required-indicator">*</span>
                                         </label>
                                         <input
@@ -389,7 +389,7 @@ const ContentSection = ({
                                                 };
                                                 setValues(prev => ({ ...prev, sections: updatedSections }));
                                             }}
-                                            placeholder={t('publications.create.sectionTitlePlaceholder')}
+                                            placeholder={t('publications.content.sectionTitlePlaceholder')}
                                             className={`publication-sections-title-input ${errors[`sections[${index}].title`] ? 'error' : ''}`}
                                             maxLength={200}
                                         />
@@ -404,11 +404,11 @@ const ContentSection = ({
                                     {/* Section Content - Slate.js */}
                                     <div className="publication-sections-form-group">
                                         <label htmlFor={`section-content-${index}`}>
-                                            {t('publications.create.sectionContent')}
+                                            {t('publications.content.sectionContent')}
                                             <span className="publication-required-indicator">*</span>
                                         </label>
                                         <div className="publication-sections-field-help">
-                                            {t('publications.create.section-content-help')}
+                                            {t('publications.helpTexts.sectionContentHelp')}
                                         </div>
                                         <div className={`publication-sections-slate-editor-container ${errors[`sections[${index}].content`] ? 'error' : ''}`}>
                                             <Slate
@@ -420,9 +420,10 @@ const ContentSection = ({
                                                 {renderSlateToolbar(getSectionEditor(index))}
                                                 <Editable
                                                     className="publication-sections-slate-editable"
-                                                    placeholder={t('publications.create.sectionContentPlaceholder')}
+                                                    placeholder={t('publications.content.sectionContentPlaceholder')}
                                                     renderElement={renderElement}
                                                     renderLeaf={renderLeaf}
+                                                    onKeyDown={(event) => handleKeyDown(event, getSectionEditor(index))}
                                                 />
                                             </Slate>
                                         </div>
@@ -435,10 +436,10 @@ const ContentSection = ({
                                     <div className="publication-sections-form-group">
                                         <label>
                                             <FontAwesomeIcon icon={faImage} />
-                                            {t('publications.create.sectionImage')}
+                                            {t('publications.media.sectionImage')}
                                         </label>
                                         <div className="publication-sections-field-help">
-                                            {t('publications.create.section-image-help')}
+                                            {t('publications.helpTexts.sectionImageHelp')}
                                         </div>
 
                                         <div className="publication-sections-image-upload">
@@ -447,7 +448,7 @@ const ContentSection = ({
                                                 <div className="publication-sections-upload-method">
                                                     <label className="publication-sections-upload-btn">
                                                         <FontAwesomeIcon icon={faUpload} />
-                                                        {section.image ? t('publications.create.changeImage') : t('publications.create.uploadImage')}
+                                                        {section.image ? t('publications.media.changeImage') : t('publications.media.uploadImage')}
                                                         <input
                                                             type="file"
                                                             accept="image/*"
@@ -467,7 +468,7 @@ const ContentSection = ({
                                                         }))}
                                                     >
                                                         <FontAwesomeIcon icon={faLink} />
-                                                        {section.image ? t('publications.create.changeImageUrl') : t('publications.create.addImageUrl')}
+                                                        {section.image ? t('publications.media.changeImageUrl') : t('publications.media.addImageUrl')}
                                                     </button>
                                                 </div>
 
@@ -479,7 +480,7 @@ const ContentSection = ({
                                                             onClick={() => clearSectionImages(index)}
                                                         >
                                                             <FontAwesomeIcon icon={faTrash} />
-                                                            {t('publications.create.clearImage')}
+                                                            {t('publications.media.clearImage')}
                                                         </button>
                                                     </div>
                                                 )}
@@ -490,7 +491,7 @@ const ContentSection = ({
                                                 <div className="publication-sections-url-input-section">
                                                     <input
                                                         type="url"
-                                                        placeholder={t('publications.create.imageUrl')}
+                                                        placeholder={t('publications.media.imageUrl')}
                                                         value={imageUrls[index] || ''}
                                                         onChange={(e) => handleImageUrlChange(index, e.target.value)}
                                                         className="publication-sections-url-input"
@@ -502,7 +503,7 @@ const ContentSection = ({
                                                         disabled={!imageUrls[index]?.trim()}
                                                     >
                                                         <FontAwesomeIcon icon={faLink} />
-                                                        {t('publications.create.addImage')}
+                                                        {t('publications.media.addImage')}
                                                     </button>
                                                 </div>
                                             )}
@@ -520,7 +521,7 @@ const ContentSection = ({
                                                                     type="button"
                                                                     className="publication-sections-image-remove-btn"
                                                                     onClick={() => clearSectionImages(index)}
-                                                                    title={t('publications.create.removeImage')}
+                                                                    title={t('publications.media.removeImage')}
                                                                 >
                                                                     <FontAwesomeIcon icon={faTrash} />
                                                                 </button>
@@ -536,10 +537,10 @@ const ContentSection = ({
                                                     {/* Controls on the right side */}
                                                     <div className="publication-sections-image-controls">
                                                         <div className="publication-sections-image-input-group">
-                                                            <label>{t('publications.create.altText')}:</label>
+                                                            <label>{t('publications.media.altText')}:</label>
                                                             <input
                                                                 type="text"
-                                                                placeholder={t('publications.create.imageDescription')}
+                                                                placeholder={t('publications.media.imageDescription')}
                                                                 value={section.image.alt || ''}
                                                                 onChange={(e) => updateSectionImageAlt(index, 0, e.target.value)}
                                                                 className="publication-sections-image-input"
@@ -551,10 +552,10 @@ const ContentSection = ({
                                                         </div>
 
                                                         <div className="publication-sections-image-input-group">
-                                                            <label>{t('publications.create.caption')}:</label>
+                                                            <label>{t('publications.media.caption')}:</label>
                                                             <input
                                                                 type="text"
-                                                                placeholder={t('publications.create.imageCaption')}
+                                                                placeholder={t('publications.media.imageCaption')}
                                                                 value={section.image.caption || ''}
                                                                 onChange={(e) => updateSectionImageCaption(index, 0, e.target.value)}
                                                                 className="publication-sections-image-input"
@@ -578,20 +579,20 @@ const ContentSection = ({
                 {/* Sections Summary */}
                 {(values.sections || []).length > 0 && (
                     <div className="publication-sections-summary">
-                        <h4>📊 {t('publications.create.sectionsSummary')}</h4>
+                        <h4>📊 {t('publications.content.sectionsSummary')}</h4>
                         <div className="publication-sections-summary-stats">
                             <div className="publication-sections-stat">
-                                <span className="publication-sections-stat-label">{t('publications.create.totalSections')}:</span>
+                                <span className="publication-sections-stat-label">{t('publications.content.totalSections')}:</span>
                                 <span className="publication-sections-stat-value">{(values.sections || []).length}</span>
                             </div>
                             <div className="publication-sections-stat">
-                                <span className="publication-sections-stat-label">{t('publications.create.completeSections')}:</span>
+                                <span className="publication-sections-stat-label">{t('publications.content.completeSections')}:</span>
                                 <span className="publication-sections-stat-value">
                                     {(values.sections || []).filter(s => s.title && s.content).length}
                                 </span>
                             </div>
                             <div className="publication-sections-stat">
-                                <span className="publication-sections-stat-label">{t('publications.create.completionRate')}:</span>
+                                <span className="publication-sections-stat-label">{t('publications.content.completionRate')}:</span>
                                 <span className="publication-sections-stat-value">
                                     {(values.sections || []).length > 0 ? Math.round(((values.sections || []).filter(s => s.title && s.content).length / (values.sections || []).length) * 100) : 0}%
                                 </span>
@@ -599,7 +600,6 @@ const ContentSection = ({
                         </div>
                     </div>
                 )}
-
             </div>
         </div>
     );

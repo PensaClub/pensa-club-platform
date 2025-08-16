@@ -111,8 +111,8 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
     const getTypeTranslation = () => {
         return type === 'story'
-            ? t('storyPubView.types.story', 'История')
-            : t('storyPubView.types.publication', 'Публикация');
+            ? t('publications.view.types.story', 'История')
+            : t('publications.view.types.publication', 'Публикация');
     };
 
     const getCommentsEntityType = () => {
@@ -198,10 +198,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         return (
             <div className="story-pub-not-found">
                 <div className="container">
-                    <h1>{t('storyPubView.notFound.title')}</h1>
-                    <p>{t('storyPubView.notFound.description')}</p>
+                    <h1>{t('publications.view.notFound.title')}</h1>
+                    <p>{t('publications.view.notFound.description')}</p>
                     <Link to="/initiatives" className="back-link">
-                        {t('storyPubView.notFound.backToInitiatives')}
+                        {t('publications.view.notFound.backToInitiatives')}
                     </Link>
                 </div>
             </div>
@@ -234,7 +234,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                 className="story-pub-hero-placeholder-text"
                                 style={{ zIndex: '3' }}
                             >
-                                {t('publications.create.preview.noImageAvailable')}
+                                {t('publications.preview.noImageAvailable')}
                             </span>
                         </div>
                     )}
@@ -246,9 +246,9 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                         <div className="story-pub-hero-main">
                             <div className="story-pub-meta-badges">
                                 <span className="story-pub-type-badge">{getTypeTranslation()}</span>
-                                {content.category && (
-                                    <span className="story-pub-category-badge">{content.category}</span>
-                                )}
+                                <span className="story-pub-category-badge">
+                                    {content.category || t('publications.categories.other')}
+                                </span>
                             </div>
 
                             <h1 className="story-pub-title">{content.title}</h1>
@@ -269,7 +269,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
                                 <div className="story-pub-meta-item">
                                     <span className="story-pub-meta-icon">⏱️</span>
-                                    <span className="story-pub-meta-text">{content.readTime} {t('storyPubView.readTime')}</span>
+                                    <span className="story-pub-meta-text">{content.readTime}</span>
                                 </div>
 
                                 {/* Always show views, even if 0 */}
@@ -358,7 +358,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                     <div className="author-info">
                                         <h4 className="author-name">{content.author}</h4>
                                         <p className="author-title">
-                                            {t('storyPubView.author.label')}
+                                            {t('publications.view.author.label')}
                                         </p>
                                         {content.authorEmail && (
                                             <a href={`mailto:${content.authorEmail}`} className="author-email">
@@ -403,7 +403,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                 {type === 'publication' && content.downloadUrl && !previewMode && (
                                     <div className="story-pub-download-sidebar">
                                         <h3 className="download-sidebar-title">
-                                            {t('storyPubView.download.title', 'Документ')}
+                                            {t('publications.view.download.title')}
                                         </h3>
                                         <a href={content.downloadUrl}
                                             className="story-pub-download-btn-sidebar"
@@ -416,7 +416,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                 <span className="download-icon-sidebar">📄</span>
                                                 <div className="download-info-sidebar">
                                                     <span className="download-text-sidebar">
-                                                        {t('storyPubView.download.button', 'Изтегли документа')}
+                                                        {t('publications.view.download.button')}
                                                     </span>
                                                     <span className="download-details-sidebar">
                                                         {content.fileType?.toUpperCase()} • {content.fileSize}
@@ -431,14 +431,14 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                 {shouldShowConnections && (
                                     <div className="story-pub-connections">
                                         <h3 className="connections-title">
-                                            {t('storyPubView.connections.title', 'Свързани')}
+                                            {t('publications.view.connections.title')}
                                         </h3>
                                         <div className="connections-content">
                                             {/* Initiative Connections */}
                                             {content.initiatives && content.initiatives.length > 0 && (
                                                 <>
                                                     <h4 className="connections-group-title">
-                                                        {t('storyPubView.connections.initiatives', 'Инициативи')}
+                                                        {t('publications.view.connections.initiatives')}
                                                     </h4>
                                                     <ul className="connections-list">
                                                         {content.initiatives.map((initiative) => (
@@ -450,7 +450,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                                     <span className="connection-text">
                                                                         {initiative.title}
                                                                         {initiative.isDraft && (
-                                                                            <span className="draft-badge"> (Draft)</span>
+                                                                            <span className="draft-badge"> ({t('publications.connections.draft')})</span>
                                                                         )}
                                                                     </span>
                                                                 </Link>
@@ -464,7 +464,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                             {content.projects && content.projects.length > 0 && (
                                                 <>
                                                     <h4 className="connections-group-title">
-                                                        {t('storyPubView.connections.projects', 'Проекти')}
+                                                        {t('publications.view.connections.projects')}
                                                     </h4>
                                                     <ul className="connections-list">
                                                         {content.projects.map((project) => (
@@ -476,7 +476,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                                     <span className="connection-text">
                                                                         {project.title}
                                                                         {project.isDraft && (
-                                                                            <span className="draft-badge"> (Draft)</span>
+                                                                            <span className="draft-badge"> ({t('publications.connections.draft')})</span>
                                                                         )}
                                                                     </span>
                                                                 </Link>
@@ -493,7 +493,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                 {shouldShowTOC && (
                                     <div className="story-pub-toc">
                                         <h3 className="toc-title">
-                                            {t('storyPubView.toc.title')}
+                                            {t('publications.view.toc.title')}
                                         </h3>
                                         <div className="toc-content">
                                             <ul className="toc-list">
@@ -522,7 +522,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                 {shouldShowRelated && (
                                     <div className="story-pub-related">
                                         <h3 className="story-pub-related-title">
-                                            {t('storyPubView.related.title')}
+                                            {t('publications.view.related.title')}
                                         </h3>
                                         <div className="story-pub-related-list">
                                             {relatedContent.slice(0, 3).map((item) => (

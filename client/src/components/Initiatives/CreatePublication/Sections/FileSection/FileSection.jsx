@@ -135,7 +135,7 @@ const FileSection = ({
             <div className="publication-form-group">
                 <label className="publication-form-label">
                     <FontAwesomeIcon icon={faFileAlt} className="publication-form-icon" />
-                    {t('publications.create.uploadFile')}
+                    {t('publications.fileUpload.uploadFile')}
                 </label>
 
                 {/* Hidden file input */}
@@ -163,14 +163,14 @@ const FileSection = ({
                         {values.isUploading ? (
                             <>
 
-                                <p>{t('publications.create.uploadingDescription')}<FontAwesomeIcon icon={faSpinner} className="publication-upload-spinner" spin /></p>
-                                <small>{t('publications.create.uploadingHint')}</small>
+                                <p>{t('publications.fileUpload.uploadingDescription')}<FontAwesomeIcon icon={faSpinner} className="publication-upload-spinner" spin /></p>
+                                <small>{t('publications.fileUpload.uploadingHint')}</small>
                             </>
                         ) : (
                             <>
-                                <h4>{t('publications.create.clickToUpload')}</h4>
-                                <p>{t('publications.create.supportedFormats')}: PDF, Word, Excel, PowerPoint, Text</p>
-                                <small>{t('publications.create.maxSize')}: 10MB</small>
+                                <h4>{t('publications.fileUpload.clickToUpload')}</h4>
+                                <p>{t('publications.fileUpload.supportedFormats')}: PDF, Word, Excel, PowerPoint, Text</p>
+                                <small>{t('publications.fileUpload.maxSize')}: 10MB</small>
                             </>
                         )}
                     </div>
@@ -208,19 +208,19 @@ const FileSection = ({
                 <div className="publication-form-group">
                     <label className="publication-form-label">
                         <FontAwesomeIcon icon={faFileAlt} className="publication-form-icon" />
-                        {t('publications.create.fileInfo')}
+                        {t('publications.fileUpload.fileInfo')}
                     </label>
                     <div className="publication-file-info-display">
                         <div className="publication-info-row">
-                            <span className="publication-info-label">{t('publications.create.fileType')}:</span>
+                            <span className="publication-info-label">{t('publications.fileUpload.fileType')}:</span>
                             <span className="publication-info-value">{values.fileType?.toUpperCase()}</span>
                         </div>
                         <div className="publication-info-row">
-                            <span className="publication-info-label">{t('publications.create.fileSize')}:</span>
+                            <span className="publication-info-label">{t('publications.fileUpload.fileSize')}:</span>
                             <span className="publication-info-value">{values.fileSize}</span>
                         </div>
                         <div className="publication-info-row">
-                            <span className="publication-info-label">{t('publications.create.downloadUrl')}:</span>
+                            <span className="publication-info-label">{t('publications.fileUpload.downloadUrl')}:</span>
                             <span className="publication-info-value">
                                 <a
                                     href={values.downloadUrl}
@@ -229,7 +229,7 @@ const FileSection = ({
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    {t('publications.create.downloadFile')}
+                                    {t('publications.fileUpload.downloadFile')}
                                 </a>
                             </span>
                         </div>
@@ -237,7 +237,7 @@ const FileSection = ({
                         {/* View link row only for PDF files */}
                         {values.fileType?.toLowerCase() === 'pdf' && (
                             <div className="publication-info-row">
-                                <span className="publication-info-label">{t('publications.create.viewUrl')}:</span>
+                                <span className="publication-info-label">{t('publications.fileUpload.viewUrl')}:</span>
                                 <span className="publication-info-value">
                                     <a
                                         href={values.downloadUrl}
@@ -245,7 +245,7 @@ const FileSection = ({
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        {t('publications.create.viewFile')}
+                                        {t('publications.fileUpload.viewFile')}
                                     </a>
                                 </span>
                             </div>

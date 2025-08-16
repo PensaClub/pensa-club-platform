@@ -56,7 +56,7 @@ const FloatingActions = ({
                     type="button"
                     className="publication-floating-btn publish"
                     onClick={onUpdate}
-                    title={t('publications.create.updatePublication')}
+                    title={t('publications.edit.updatePublication')}
                 >
                     <FontAwesomeIcon icon={faShare} />
                 </button>
@@ -97,7 +97,7 @@ const FloatingActions = ({
                 className="publication-floating-btn preview"
                 onClick={onPreview}
                 disabled={isSaving}
-                title={t('publications.create.preview')}
+                title={t('publications.common.preview')}
             >
                 <FontAwesomeIcon icon={faEye} />
             </button>

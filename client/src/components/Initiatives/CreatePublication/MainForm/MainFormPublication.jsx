@@ -418,6 +418,59 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
         return username || userEmail || 'Anonymous';
     };
 
+    const getOptimizedPreviewData = () => {
+        return {
+            // Required fields - always present
+            id: publication?.id || 'preview-' + Date.now(),
+            title: values.title || t('publications.preview.noTitle'),
+            shortDescription: values.shortDescription || t('publications.preview.noDescription'),
+            publishedAt: publication?.publishedAt || new Date().toISOString(),
+            slug: values.slug || 'preview-slug',
+
+            // Author info - only if showAuthor is true
+            author: values.showAuthor ? (username || userEmail || t('publications.preview.noAuthor')) : null,
+            authorEmail: values.showAuthor ? userEmail : null,
+            authorImage: null, // Publications don't have author images
+
+            // Optional fields - use translations for missing data
+            readTime: values.readTime || t('publications.preview.noReadTime'),
+            category: values.category || t('publications.preview.noCategory'),
+            tags: values.tags?.length > 0 ? values.tags : [],
+
+            // Image - show placeholder if missing
+            image: values.mainImage?.src ? {
+                src: values.mainImage.src,
+                alt: values.mainImage.alt || values.title || 'Publication',
+                caption: values.mainImage.caption || ''
+            } : null,
+            mainImage: values.mainImage || null,
+
+            // Content sections - use real data or fallback
+            sections: getPreviewSections(),
+
+            // Download info - only if document exists
+            downloadUrl: values.downloadUrl || null,
+            fileType: values.downloadUrl ? (values.fileType || 'PDF') : null,
+            fileSize: values.downloadUrl ? (values.fileSize || t('publications.preview.unknownSize')) : null,
+
+            // Settings
+            commentsEnabled: values.commentsEnabled !== false,
+
+            // Analytics - not needed for preview
+            views: null,
+            downloads: null,
+            likes: null,
+            isLiked: false,
+
+            // Connections - use real data if available
+            initiatives: values.connectedInitiativeIds?.length > 0 ? [] : null, // Will be populated by context
+            projects: values.connectedProjectIds?.length > 0 ? [] : null, // Will be populated by context
+
+            // Type info
+            type: 'publication'
+        };
+    };
+
     return (
         <div className="publication-create-container">
             {/* Header */}
@@ -535,7 +588,7 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
                                 }}
                                 disabled={sectionOrder.indexOf(activeSection) === 0}
                             >
-                                {t('publications.back')}
+                                {t('publications.common.back')}
                             </button>
 
                             <button
@@ -549,7 +602,7 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
                                 }}
                                 disabled={sectionOrder.indexOf(activeSection) === sectionOrder.length - 1}
                             >
-                                {t('publications.next')}
+                                {t('publications.common.next')}
                             </button>
                         </div>
                     </form>
@@ -579,44 +632,15 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
                                 onClick={closePreview}
                             >
                                 <FontAwesomeIcon icon={faArrowLeft} />
-                                {t('publications.create.preview.backToEditing')}
+                                {t('publications.preview.backToEditing')}
                             </button>
-                            <h2>{t('publications.create.preview.previewMode')}</h2>
+                            <h2>{t('publications.preview.previewMode')}</h2>
                         </div>
                         <div className="publication-preview-modal-body">
                             <StoryPubView
                                 type="publication"
                                 previewMode={true}
-                                previewData={{
-                                    id: publication?.id || 'preview-123',
-                                    title: values.title || 'Untitled Publication',
-                                    shortDescription: values.shortDescription || 'No description provided',
-                                    description: values.shortDescription || 'No description provided',
-                                    publishedAt: publication?.publishedAt || new Date().toISOString(),
-                                    author: getAuthorName(),
-                                    authorEmail: values.showAuthor ? userEmail : null,
-                                    authorImage: null,
-                                    readTime: values.readTime || '5',
-                                    category: values.category || 'General',
-                                    tags: values.tags || [],
-                                    image: {
-                                        src: values.mainImage?.src || '',
-                                        alt: values.mainImage?.alt || values.title || 'Publication',
-                                        caption: values.mainImage?.caption || ''
-                                    },
-                                    mainImage: values.mainImage || null,
-                                    sections: getPreviewSections(),
-                                    downloadUrl: values.downloadUrl || '',
-                                    fileType: values.fileType || 'PDF',
-                                    fileSize: values.fileSize || 'Unknown',
-                                    commentsEnabled: values.commentsEnabled !== false,
-                                    views: 0,
-                                    downloads: 0,
-                                    likes: 0,
-                                    isLiked: false,
-                                    initiative: values.initiative || null,
-                                    slug: values.slug || 'preview-slug'
-                                }}
+                                previewData={getOptimizedPreviewData()}
                             />
                         </div>
                     </div>

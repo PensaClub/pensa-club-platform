@@ -328,22 +328,65 @@ export const AllPublications = () => {
     <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="#1e293b"/>
       <text x="50%" y="50%" font-family="Arial" font-size="18" fill="#64748b" text-anchor="middle" dy=".3em">
-        Няма изображение
+        ${t('publications.preview.noImageAvailable')}
       </text>
     </svg>
   `)}`;
     };
 
-    // Update the filter options
-    const categoryFilterOptions = [
-      { value: '', label: t('publications.admin.filters.allCategories') },
-      { value: 'technology', label: t('publications.categories.technology') },
-      { value: 'health', label: t('publications.categories.health') },
-      { value: 'lifestyle', label: t('publications.categories.lifestyle') },
-      { value: 'education', label: t('publications.categories.education') },
-      { value: 'community', label: t('publications.categories.community') },
-      { value: 'other', label: t('publications.categories.other') }
-    ];
+    const getOptimizedPreviewData = (item) => {
+        // Remove useTranslation() from here - use the t function from component level
+        return {
+            // Required fields
+            id: item.id || 'preview-' + Date.now(),
+            title: item.title || t('publications.admin.preview.noTitle'),
+            shortDescription: item.shortDescription || t('publications.admin.preview.noDescription'),
+            publishedAt: item.publishedAt || new Date().toISOString(),
+            slug: item.slug || 'preview-slug',
+
+            // Author info
+            author: item.userEmail || t('publications.admin.preview.noAuthor'),
+            authorEmail: item.userEmail || null,
+            authorImage: null,
+
+            // Optional fields with translations
+            readTime: item.readTime || t('publications.admin.preview.noReadTime'),
+            category: item.category || t('publications.admin.preview.noCategory'),
+            tags: item.tags?.length > 0 ? item.tags : [],
+
+            // Image
+            image: item.image?.src ? {
+                src: item.image.src,
+                alt: item.image.alt || item.title || 'Publication',
+                caption: item.image.caption || ''
+            } : null,
+            mainImage: item.mainImage || item.image || null,
+
+            // Content sections
+            sections: item.sections?.length > 0 ? item.sections : [],
+
+            // Download info - only if exists
+            downloadUrl: item.downloadUrl || null,
+            fileType: item.downloadUrl ? (item.fileType || 'PDF') : null,
+            fileSize: item.downloadUrl ? (item.fileSize || t('publications.admin.preview.unknownSize')) : null,
+
+            // Settings
+            commentsEnabled: item.commentsEnabled !== false,
+
+            // Analytics - not needed for preview
+            views: null,
+            downloads: null,
+            likes: null,
+            isLiked: false,
+
+            // Connections
+            initiatives: item.initiatives || null,
+            projects: item.projects || null,
+
+            // Type info
+            type: 'publication'
+        };
+    };
 
     return (
         <div className="all-publications-admin-container">
@@ -465,7 +508,7 @@ export const AllPublications = () => {
                                                             <path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z" stroke="currentColor" strokeWidth="2" />
                                                             <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" />
                                                         </svg>
-                                                        {t('publications.admin.view')}
+                                                        {t('publications.common.view')}
                                                     </button>
 
                                                     <button
@@ -476,7 +519,7 @@ export const AllPublications = () => {
                                                             <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" />
                                                             <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.43741 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="currentColor" strokeWidth="2" />
                                                         </svg>
-                                                        {t('publications.admin.edit')}
+                                                        {t('publications.common.edit')}
                                                     </button>
 
                                                     {viewMode === 'drafts' && (
@@ -487,7 +530,7 @@ export const AllPublications = () => {
                                                             <svg viewBox="0 0 24 24" fill="none">
                                                                 <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                                             </svg>
-                                                            {t('publications.admin.publish')}
+                                                            {t('publications.common.publish')}
                                                         </button>
                                                     )}
 
@@ -500,7 +543,7 @@ export const AllPublications = () => {
                                                                 <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" />
                                                                 <path d="M10 11V17M14 11V17" stroke="currentColor" strokeWidth="2" />
                                                             </svg>
-                                                            {t('publications.admin.delete')}
+                                                            {t('publications.common.delete')}
                                                         </button>
                                                     )}
 
@@ -513,7 +556,7 @@ export const AllPublications = () => {
                                                                 <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" />
                                                                 <path d="M10 11V17M14 11V17" stroke="currentColor" strokeWidth="2" />
                                                             </svg>
-                                                            {t('publications.admin.delete')}
+                                                            {t('publications.common.delete')}
                                                         </button>
                                                     )}
                                                 </div>
@@ -565,15 +608,15 @@ export const AllPublications = () => {
                                 onClick={closePreview}
                             >
                                 <FontAwesomeIcon icon={faArrowLeft} />
-                                {t('publications.create.preview.backToEditing')}
+                                {t('publications.preview.backToEditing')}
                             </button>
-                            <h2>{t('publications.create.preview.previewMode')}</h2>
+                            <h2>{t('publications.preview.previewMode')}</h2>
                         </div>
                         <div className="publication-preview-modal-body">
                             <StoryPubView
                                 type="publication"
                                 previewMode={true}
-                                previewData={previewData}
+                                previewData={getOptimizedPreviewData(previewData)}
                             />
                         </div>
                     </div>

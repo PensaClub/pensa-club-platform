@@ -277,6 +277,30 @@ publicationController.post('/:id/download', checkPermission('publications', 'rea
     }
 });
 
+publicationController.get('/all-for-connections', isAuth, checkPermission('publications', 'read'), async (req, res, next) => {
+    try {
+        const publications = await publication.findAll({
+            attributes: ['id', 'slug', 'title', 'shortDescription', 'isDraft', 'createdAt'],
+            order: [['createdAt', 'DESC']],
+        });
+
+        const transformedPublications = publications.map((pub) => ({
+            id: pub.id,
+            slug: pub.slug,
+            title: pub.title,
+            shortDescription: pub.shortDescription,
+            isDraft: pub.isDraft,
+            createdAt: pub.createdAt,
+        }));
+
+        return res.status(200).json({
+            data: transformedPublications,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 // ========================================
 // FUNCTIONS
 // ========================================
