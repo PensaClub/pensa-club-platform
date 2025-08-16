@@ -9,12 +9,12 @@ const publicationConfig = [
     {
         model: initiative,
         as: 'initiatives',
-        attributes: ['id', 'title', 'slug'],
+        attributes: ['id', 'title', 'slug', 'isDraft'],
     },
     {
         model: project,
         as: 'projects',
-        attributes: ['id', 'title', 'slug'],
+        attributes: ['id', 'title', 'slug', 'isDraft'],
     },
     {
         model: section,
@@ -37,7 +37,7 @@ const publicationConfig = [
     {
         model: publication,
         as: 'relatedPublications',
-        attributes: ['id', 'slug', 'title', 'shortDescription'],
+        attributes: ['id', 'slug', 'title', 'shortDescription', 'isDraft'],
     },
 ];
 
@@ -65,6 +65,53 @@ const transformPublication = async (pub) => {
         delete publicationData.creatorId;
     }
 
+    // Filter connections based on current publication's draft status
+    const currentPublicationIsDraft = plainPublication.isDraft;
+
+    // Filter initiatives: if current publication is published, only show published initiatives
+    if (publicationData.initiatives) {
+        publicationData.initiatives = publicationData.initiatives.filter((initiative) => {
+            if (currentPublicationIsDraft) {
+                // If current publication is draft, show all initiatives (draft and published)
+                return true;
+            } else {
+                // If current publication is published, only show published initiatives
+                return !initiative.isDraft;
+            }
+        });
+    }
+
+    // Filter projects: if current publication is published, only show published projects
+    if (publicationData.projects) {
+        publicationData.projects = publicationData.projects.filter((project) => {
+            if (currentPublicationIsDraft) {
+                // If current publication is draft, show all projects (draft and published)
+                return true;
+            } else {
+                // If current publication is published, only show published projects
+                return !project.isDraft;
+            }
+        });
+    }
+
+    // Filter related publications: if current publication is published, only show published related publications
+    if (publicationData.relatedPublications) {
+        publicationData.relatedPublications = publicationData.relatedPublications
+            .filter((relatedPub) => {
+                if (currentPublicationIsDraft) {
+                    // If current publication is draft, show all related publications (draft and published)
+                    return true;
+                } else {
+                    // If current publication is published, only show published related publications
+                    return !relatedPub.isDraft;
+                }
+            })
+            .map((relatedPub) => {
+                const { related_publications, ...cleanRelatedPub } = relatedPub;
+                return cleanRelatedPub.id;
+            });
+    }
+
     // Transform sections
     if (publicationData.sections) {
         publicationData.sections = publicationData.sections.map((section) => {
@@ -84,14 +131,6 @@ const transformPublication = async (pub) => {
                 };
             }
             return section;
-        });
-    }
-
-    // Clean up related publications
-    if (publicationData.relatedPublications) {
-        publicationData.relatedPublications = publicationData.relatedPublications.map((relatedPub) => {
-            const { related_publications, ...cleanRelatedPub } = relatedPub;
-            return cleanRelatedPub.id;
         });
     }
 

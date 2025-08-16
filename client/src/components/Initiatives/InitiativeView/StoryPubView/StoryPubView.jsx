@@ -311,30 +311,6 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                 <p>{content.shortDescription}</p>
                             </div>
 
-                            {/* Download Button for Publications */}
-                            {type === 'publication' && content.downloadUrl && !previewMode && (
-                                <div className="story-pub-download-section">
-
-                                    <a href={content.downloadUrl}
-                                        className="story-pub-download-btn"
-                                        download
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={handleDownload}
-                                    >
-                                        <span className="download-icon">📄</span>
-                                        <div className="download-info">
-                                            <span className="download-text">
-                                                {t('storyPubView.download.button', 'Изтегли документа')}
-                                            </span>
-                                            <span className="download-details">
-                                                {content.fileType?.toUpperCase()} • {content.fileSize}
-                                            </span>
-                                        </div>
-                                    </a>
-                                </div>
-                            )}
-
                             {/* Sections */}
                             {content.sections && content.sections.length > 0 ? (
                                 <div className="story-pub-sections">
@@ -421,9 +397,99 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                         </div>
 
                         {/* Sidebar */}
-                        {(shouldShowRelated || shouldShowTOC || shouldShowConnections) && (
+                        {(shouldShowRelated || shouldShowTOC || shouldShowConnections || (type === 'publication' && content.downloadUrl && !previewMode)) && (
                             <aside className="story-pub-sidebar">
-                                {/* Table of Contents */}
+                                {/* Download Button for Publications - Top of sidebar */}
+                                {type === 'publication' && content.downloadUrl && !previewMode && (
+                                    <div className="story-pub-download-sidebar">
+                                        <h3 className="download-sidebar-title">
+                                            {t('storyPubView.download.title', 'Документ')}
+                                        </h3>
+                                        <a href={content.downloadUrl}
+                                            className="story-pub-download-btn-sidebar"
+                                            download
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={handleDownload}
+                                        >
+                                            <div className="download-btn-content">
+                                                <span className="download-icon-sidebar">📄</span>
+                                                <div className="download-info-sidebar">
+                                                    <span className="download-text-sidebar">
+                                                        {t('storyPubView.download.button', 'Изтегли документа')}
+                                                    </span>
+                                                    <span className="download-details-sidebar">
+                                                        {content.fileType?.toUpperCase()} • {content.fileSize}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                )}
+
+                                {/* Connections Section - Second in sidebar */}
+                                {shouldShowConnections && (
+                                    <div className="story-pub-connections">
+                                        <h3 className="connections-title">
+                                            {t('storyPubView.connections.title', 'Свързани')}
+                                        </h3>
+                                        <div className="connections-content">
+                                            {/* Initiative Connections */}
+                                            {content.initiatives && content.initiatives.length > 0 && (
+                                                <>
+                                                    <h4 className="connections-group-title">
+                                                        {t('storyPubView.connections.initiatives', 'Инициативи')}
+                                                    </h4>
+                                                    <ul className="connections-list">
+                                                        {content.initiatives.map((initiative) => (
+                                                            <li key={initiative.id} className="connection-item">
+                                                                <Link
+                                                                    to={`/initiatives/${initiative.slug}`}
+                                                                    className="connection-link"
+                                                                >
+                                                                    <span className="connection-text">
+                                                                        {initiative.title}
+                                                                        {initiative.isDraft && (
+                                                                            <span className="draft-badge"> (Draft)</span>
+                                                                        )}
+                                                                    </span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
+
+                                            {/* Project Connections */}
+                                            {content.projects && content.projects.length > 0 && (
+                                                <>
+                                                    <h4 className="connections-group-title">
+                                                        {t('storyPubView.connections.projects', 'Проекти')}
+                                                    </h4>
+                                                    <ul className="connections-list">
+                                                        {content.projects.map((project) => (
+                                                            <li key={project.id} className="connection-item">
+                                                                <Link
+                                                                    to={`/projects/${project.slug}`}
+                                                                    className="connection-link"
+                                                                >
+                                                                    <span className="connection-text">
+                                                                        {project.title}
+                                                                        {project.isDraft && (
+                                                                            <span className="draft-badge"> (Draft)</span>
+                                                                        )}
+                                                                    </span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Table of Contents - Third in sidebar */}
                                 {shouldShowTOC && (
                                     <div className="story-pub-toc">
                                         <h3 className="toc-title">
@@ -452,59 +518,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                     </div>
                                 )}
 
-                                {/* Connections Section - Same style as TOC */}
-                                {shouldShowConnections && (
-                                    <div className="story-pub-connections">
-                                        <h3 className="connections-title">
-                                            {t('storyPubView.connections.title', 'Свързани')}
-                                        </h3>
-                                        <div className="connections-content">
-                                            {/* Initiative Connections */}
-                                            {content.initiatives && content.initiatives.length > 0 && (
-                                                <>
-                                                    <h4 className="connections-group-title">
-                                                        {t('storyPubView.connections.initiatives', 'Инициативи')}
-                                                    </h4>
-                                                    <ul className="connections-list">
-                                                        {content.initiatives.map((initiative) => (
-                                                            <li key={initiative.id} className="connection-item">
-                                                                <Link
-                                                                    to={`/initiatives/${initiative.slug}`}
-                                                                    className="connection-link"
-                                                                >
-                                                                    <span className="connection-text">{initiative.title}</span>
-                                                                </Link>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </>
-                                            )}
-
-                                            {/* Project Connections */}
-                                            {content.projects && content.projects.length > 0 && (
-                                                <>
-                                                    <h4 className="connections-group-title">
-                                                        {t('storyPubView.connections.projects', 'Проекти')}
-                                                    </h4>
-                                                    <ul className="connections-list">
-                                                        {content.projects.map((project) => (
-                                                            <li key={project.id} className="connection-item">
-                                                                <Link
-                                                                    to={`/projects/${project.slug}`}
-                                                                    className="connection-link"
-                                                                >
-                                                                    <span className="connection-text">{project.title}</span>
-                                                                </Link>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Related Content - only show when not in preview mode */}
+                                {/* Related Content - Fourth in sidebar */}
                                 {shouldShowRelated && (
                                     <div className="story-pub-related">
                                         <h3 className="story-pub-related-title">
@@ -531,7 +545,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                     </div>
                                 )}
 
-                                {/* ClubCardPromo - show in both preview and normal mode */}
+                                {/* ClubCardPromo - Always at bottom */}
                                 <ClubCardPromo />
                             </aside>
                         )}

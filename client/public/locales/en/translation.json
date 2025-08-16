@@ -1816,6 +1816,7 @@
       "back": "Back"
     },
     "download": {
+      "title": "Document",
       "button": "Download document"
     },
     "author": {
