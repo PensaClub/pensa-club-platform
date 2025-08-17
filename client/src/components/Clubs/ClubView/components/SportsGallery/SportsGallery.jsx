@@ -41,7 +41,7 @@ import {
   faCompressAlt,
   faPause
 } from '@fortawesome/free-solid-svg-icons';
-import './sportsGallery.css';
+import './SportsGallery.css';
 
 export const SportsGallery = ({ club }) => {
   const { t, i18n } = useTranslation();
