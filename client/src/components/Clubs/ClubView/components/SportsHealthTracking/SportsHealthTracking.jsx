@@ -53,7 +53,7 @@ import {
   faFlag,
   faGraduationCap
 } from '@fortawesome/free-solid-svg-icons';
-import './sportsHealthTracking.css';
+import './SportsHealthTracking.css';
 
 export const SportsHealthTracking = ({ club }) => {
   const { t, i18n } = useTranslation();
