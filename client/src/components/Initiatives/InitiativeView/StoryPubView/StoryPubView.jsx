@@ -190,6 +190,19 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         }
     };
 
+    const getCategoryTranslation = (categoryKey) => {
+        if (!categoryKey) return t('publications.categories.other');
+
+        const translationKey = `publications.categories.${categoryKey}`;
+        const translation = t(translationKey);
+
+        if (translation === translationKey) {
+            return categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
+        }
+
+        return translation;
+    };
+
     if (isLoading) {
         return <Loader />;
     }
@@ -247,7 +260,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                             <div className="story-pub-meta-badges">
                                 <span className="story-pub-type-badge">{getTypeTranslation()}</span>
                                 <span className="story-pub-category-badge">
-                                    {content.category || t('publications.categories.other')}
+                                    {getCategoryTranslation(content.category)}
                                 </span>
                             </div>
 

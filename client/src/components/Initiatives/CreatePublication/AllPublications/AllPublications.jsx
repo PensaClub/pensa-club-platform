@@ -388,6 +388,20 @@ export const AllPublications = () => {
         };
     };
 
+    // Add the category translation helper function (same as StoryPubView)
+    const getCategoryTranslation = (categoryKey) => {
+        if (!categoryKey) return t('publications.categories.other');
+
+        const translationKey = `publications.categories.${categoryKey}`;
+        const translation = t(translationKey);
+
+        if (translation === translationKey) {
+            return categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
+        }
+
+        return translation;
+    };
+
     return (
         <div className="all-publications-admin-container">
             <PublicationsHeaderAdmin
@@ -409,6 +423,7 @@ export const AllPublications = () => {
                         onFilterChange={handleFilterChange}
                         filters={filters}
                         viewMode={viewMode}
+                        totalCount={filteredItems.length} // Add this line - pass filtered results count
                     />
 
                     <div className="all-publications-grid-admin">
@@ -464,22 +479,30 @@ export const AllPublications = () => {
                                     <div className="all-publications-card-footer">
                                         <div className="all-publications-card-stats">
                                             {item.category && (
-                                                <span className="all-publications-stat-badge">{item.category}</span>
+                                                <span className="all-publications-stat-badge">{getCategoryTranslation(item.category)}</span>
                                             )}
                                             {item.fileType && (
                                                 <span className="all-publications-stat-badge">{item.fileType.toUpperCase()}</span>
                                             )}
                                             {item.readTime && (
-                                                <span className="all-publications-stat-badge">{item.readTime}</span>
+                                                <span className="all-publications-stat-badge">
+                                                    {item.readTime} {t('publications.view.readTime')}
+                                                </span>
                                             )}
                                             {item.views !== undefined && (
-                                                <span className="all-publications-stat-badge">{item.views} прегледа</span>
+                                                <span className="all-publications-stat-badge">
+                                                    {item.views} {item.views === 1 ? t('counts.view.singular') : t('counts.view.plural')}
+                                                </span>
                                             )}
                                             {item.likes !== undefined && (
-                                                <span className="all-publications-stat-badge">{item.likes} харесвания</span>
+                                                <span className="all-publications-stat-badge">
+                                                    {item.likes} {item.likes === 1 ? t('counts.like.singular') : t('counts.like.plural')}
+                                                </span>
                                             )}
                                             {item.downloads !== undefined && (
-                                                <span className="all-publications-stat-badge">{item.downloads} изтегляния</span>
+                                                <span className="all-publications-stat-badge">
+                                                    {item.downloads} {item.downloads === 1 ? t('counts.download.singular') : t('counts.download.plural')}
+                                                </span>
                                             )}
                                         </div>
 
