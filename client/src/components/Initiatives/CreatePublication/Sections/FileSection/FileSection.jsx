@@ -95,7 +95,6 @@ const FileSection = ({
                     fileSize: formatFileSize(file.size),
                     downloadUrl: uploadedUrl,
                     isUploading: false,
-                    originalFileName: file.name
                 };
                 console.log('📋 New values after Firebase URL:', newValues);
                 return newValues;
@@ -180,7 +179,7 @@ const FileSection = ({
                             <FontAwesomeIcon icon={faFileAlt} />
                             <div className="publication-file-details">
                                 <div className="publication-file-name">
-                                    {values.originalFileName || 'Uploaded file'}
+                                    {t('publications.fileUpload.uploadedFile')}
                                 </div>
                                 <div className="publication-file-meta">
                                     {values.fileType?.toUpperCase()} • {values.fileSize}

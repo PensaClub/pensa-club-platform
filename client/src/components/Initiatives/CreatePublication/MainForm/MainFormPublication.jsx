@@ -163,6 +163,7 @@ const PublicationForm = ({
             return null;
         };
 
+
         console.log('Transforming publication data:', publicationData); // Debug log
 
         const transformed = {
@@ -186,7 +187,7 @@ const PublicationForm = ({
                 title: section.title || '',
                 titleSlug: section.titleSlug || section.slug || '',
                 content: convertStringToSlateContent(section.content),
-                order: index + 1,
+                order: section.order || index + 1,
                 image: normalizeImageData(section.image)
             })) || [],
 

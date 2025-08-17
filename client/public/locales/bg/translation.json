@@ -3336,6 +3336,7 @@
       "uploadingFile": "Качване на файл...",
       "uploadingDescription": "Моля, изчакайте докато файлът се качва",
       "uploadingHint": "Това може да отнеме няколко секунди",
+      "uploadedFile": "Качен файл",
       "fileTypes": {
         "pdf": "PDF документ",
         "doc": "Word документ",
