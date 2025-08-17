@@ -17,18 +17,14 @@ const checkSlugUniqueness = async (slug, publicationId = null) => {
 };
 
 const BasePublicationSchema = z.object({
-    // Basic info
     slug: SlugSchema,
     title: TitleSchema,
     shortDescription: ShortDescriptionSchema,
-
-    // Optional fields
-    titleSlug: z.string().optional(),
     category: CategorySchema,
-    publishedAt: z.string().datetime().or(z.date()).optional(),
-    readTime: z.string().max(20).optional(),
+    publishedAt: z.string().datetime().or(z.date()).nullable().optional(),
+    readTime: z.string().max(20).nullable().optional(),
     fileType: FileTypeSchema,
-    fileSize: z.string().max(20).optional(),
+    fileSize: z.string().max(20).nullable().optional(),
     downloadUrl: z.string().url().nullable().optional(),
     tags: TagsSchema,
     sections: z.array(SectionSchema).max(50).optional(),
@@ -36,9 +32,9 @@ const BasePublicationSchema = z.object({
     relatedPublications: z.array(z.union([z.string(), z.number()])).optional(),
     commentsEnabled: z.boolean().default(true).optional(),
     showAuthor: z.boolean().default(true).optional(),
-    // Add connection fields
     connectedInitiativeIds: z.array(z.number()).optional(),
     connectedProjectIds: z.array(z.number()).optional(),
+    isDraft: z.boolean().optional(),
 });
 
 const PublicationSchema = BasePublicationSchema.refine(
@@ -60,16 +56,14 @@ const PublicationSchema = BasePublicationSchema.refine(
 );
 
 const UpdatePublicationSchema = z.object({
-    // All fields optional for partial updates
     slug: SlugSchema.optional(),
     title: TitleSchema.optional(),
-    titleSlug: z.string().optional(),
     shortDescription: ShortDescriptionSchema.optional(),
     category: CategorySchema.optional(),
-    publishedAt: z.string().datetime().or(z.date()).optional(),
-    readTime: z.string().max(20).optional(),
+    publishedAt: z.string().datetime().or(z.date()).nullable().optional(),
+    readTime: z.string().max(20).nullable().optional(),
     fileType: FileTypeSchema.optional(),
-    fileSize: z.string().max(20).optional(),
+    fileSize: z.string().max(20).nullable().optional(),
     downloadUrl: z.string().url().nullable().optional(),
     tags: TagsSchema.optional(),
     sections: z.array(SectionSchema).max(50).optional(),
@@ -77,6 +71,7 @@ const UpdatePublicationSchema = z.object({
     relatedPublications: z.array(z.union([z.string(), z.number()])).optional(),
     commentsEnabled: z.boolean().optional(),
     showAuthor: z.boolean().optional(),
+    isDraft: z.boolean().optional(),
 });
 
 module.exports = {

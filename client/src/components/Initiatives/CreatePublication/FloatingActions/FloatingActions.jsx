@@ -25,7 +25,6 @@ const FloatingActions = ({
     if (!isEditMode) {
         return (
             <div className="publication-floating-actions">
-                {/* Preview button */}
                 <button
                     type="button"
                     className="publication-floating-btn preview"
@@ -36,7 +35,6 @@ const FloatingActions = ({
                     <FontAwesomeIcon icon={faEye} />
                 </button>
 
-                {/* Save as Draft button */}
                 <button
                     type="button"
                     className="publication-floating-btn draft"
@@ -47,7 +45,6 @@ const FloatingActions = ({
                     <FontAwesomeIcon icon={isSaving ? faSpinner : faSave} className={isSaving ? 'fa-spin' : ''} />
                 </button>
 
-                {/* Publish button */}
                 <button
                     type="button"
                     className="publication-floating-btn publish"
@@ -64,7 +61,6 @@ const FloatingActions = ({
     // EDIT MODE
     return (
         <div className="publication-floating-actions">
-            {/* Preview button */}
             <button
                 type="button"
                 className="publication-floating-btn preview"
@@ -78,7 +74,6 @@ const FloatingActions = ({
             {isDraft ? (
                 // EDITING A DRAFT
                 <>
-                    {/* Update Draft button */}
                     <button
                         type="button"
                         className="publication-floating-btn draft"
@@ -89,7 +84,6 @@ const FloatingActions = ({
                         <FontAwesomeIcon icon={isSaving ? faSpinner : faSave} className={isSaving ? 'fa-spin' : ''} />
                     </button>
 
-                    {/* Publish Draft button */}
                     <button
                         type="button"
                         className="publication-floating-btn publish"
@@ -103,7 +97,6 @@ const FloatingActions = ({
             ) : (
                 // EDITING A PUBLISHED PUBLICATION
                 <>
-                    {/* Convert to Draft button */}
                     <button
                         type="button"
                         className="publication-floating-btn draft"
@@ -114,7 +107,6 @@ const FloatingActions = ({
                         <FontAwesomeIcon icon={faEdit} />
                     </button>
 
-                    {/* Update Published Publication button */}
                     <button
                         type="button"
                         className="publication-floating-btn publish"

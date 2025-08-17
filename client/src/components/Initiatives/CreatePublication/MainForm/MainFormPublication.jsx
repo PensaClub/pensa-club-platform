@@ -278,7 +278,7 @@ const PublicationForm = ({
         setActiveSection(sectionId);
     };
 
-    const preparePublicationData = () => {
+    const preparePublicationData = (isDraft = true) => {
         const nullIfEmpty = (value) => {
             if (value === '' || value === undefined) return null;
             return value;
@@ -298,7 +298,6 @@ const PublicationForm = ({
         return {
             title: values.title,
             slug: values.slug,
-            titleSlug: values.slug,
             shortDescription: values.shortDescription,
             category: nullIfEmpty(values.category),
             tags: values.tags || [],
@@ -306,11 +305,10 @@ const PublicationForm = ({
             fileType: nullIfEmpty(values.fileType),
             fileSize: nullIfEmpty(values.fileSize),
             downloadUrl: nullIfEmpty(values.downloadUrl),
-            fileName: getFileNameFromUrl(values.downloadUrl), // Add file name
+            fileName: getFileNameFromUrl(values.downloadUrl),
             commentsEnabled: values.commentsEnabled ?? true,
             showAuthor: values.showAuthor ?? true,
-            isDraft: true, // Default to draft for safety
-            // Don't set publishedAt here - let the backend handle it
+            isDraft,
             mainImage: values.mainImage?.src ? {
                 src: values.mainImage.src,
                 alt: nullIfEmpty(values.mainImage.alt),
@@ -340,9 +338,9 @@ const PublicationForm = ({
 
                 return {
                     title: nullIfEmpty(section.title),
-                    titleSlug: sectionTitleSlug,
+                    titleSlug: sectionTitleSlug, // Keep this for sections - it's used for navigation
                     content: nullIfEmpty(content),
-                    order: section.order || index + 1, // Use the actual order property
+                    order: section.order || index + 1,
                     image: section.image?.src ? {
                         src: section.image.src,
                         alt: nullIfEmpty(section.image.alt),
@@ -357,104 +355,63 @@ const PublicationForm = ({
         };
     };
 
-    const handleSaveDraft = async () => {
+    // Simplified unified handler for all publication operations
+    const handlePublicationAction = async (action) => {
+        // Validate required fields
         if (!values.title || !values.slug || !values.shortDescription) {
-            notify('error', 'Please provide title, slug, and short description before saving');
+            const requiredFields = 'title, slug, and short description';
+            const actionText = action === 'draft' ? 'saving' : 'publishing';
+            notify('error', `Please provide ${requiredFields} before ${actionText}`);
             return;
         }
 
         setIsSaving(true);
         try {
-            const publicationData = {
-                ...preparePublicationData(),
-                isDraft: true // Always save as draft
-            };
+            // Determine if this should be a draft or published
+            const isDraft = action === 'draft';
+            const publicationData = preparePublicationData(isDraft);
 
-            if (isEditMode && publication?.id) {
-                // Update existing publication
-                await publicationService.updatePublication(publication.id, publicationData);
-                notify('success', t('publications.admin.draftUpdatedSuccess'));
-            } else {
-                // Create new publication (will be saved as draft by default)
-                await publicationService.createPublication(publicationData);
-                notify('success', t('publications.admin.draftCreatedSuccess'));
-            }
+            // Get the publication ID for edit mode
+            let publicationId = null;
+            if (isEditMode) {
+                publicationId = publication?.id || initialValues?.id;
 
-            setIsSaving(false);
-
-            // If we have an onCancel callback (inline editing), use it instead of navigation
-            if (onCancel) {
-                onCancel();
-            } else {
-                navigate('/profile/publications');
-            }
-        } catch (error) {
-            setIsSaving(false);
-            notify('error', error.message || 'Failed to save draft');
-        }
-    };
-
-    const handleCreatePublication = async () => {
-        if (!values.title || !values.slug || !values.shortDescription) {
-            notify('error', 'Please provide title, slug, and short description before creating');
-            return;
-        }
-
-        setIsSaving(true);
-        try {
-            const publicationData = {
-                ...preparePublicationData(),
-                isDraft: false // Publish immediately
-            };
-
-            // Enhanced debugging
-            console.log('handleCreatePublication debug:', {
-                isEditMode,
-                mode,
-                slug,
-                publication: publication,
-                publicationId: publication?.id,
-                initialValues: initialValues,
-                editingItem: initialValues
-            });
-
-            let publicationId = publication?.id;
-
-            // If we're in edit mode but don't have the publication ID, try to find it by slug
-            if (isEditMode && !publicationId && slug) {
-                try {
-                    const allPublications = await publicationService.getAllPublications(1, 1000);
-                    const foundPublication = allPublications.find(pub => pub.slug === slug);
-                    if (foundPublication) {
-                        publicationId = foundPublication.id;
-                        setPublication(foundPublication); // Update the state
+                // If we still don't have an ID but have a slug, try to find it
+                if (!publicationId && slug) {
+                    try {
+                        const allPublications = await publicationService.getAllPublications(1, 1000);
+                        const foundPublication = allPublications.find(pub => pub.slug === slug);
+                        if (foundPublication) {
+                            publicationId = foundPublication.id;
+                            setPublication(foundPublication);
+                        }
+                    } catch (error) {
+                        console.error('Error finding publication by slug:', error);
                     }
-                } catch (error) {
-                    console.error('Error finding publication by slug:', error);
                 }
-            }
-
-            // If we're in edit mode and have initialValues with an ID, use that
-            if (isEditMode && !publicationId && initialValues?.id) {
-                publicationId = initialValues.id;
-                setPublication(initialValues); // Update the state
             }
 
             if (isEditMode && publicationId) {
                 // Update existing publication
-                console.log('Updating publication with ID:', publicationId);
                 await publicationService.updatePublication(publicationId, publicationData);
-                notify('success', t('publications.admin.publicationUpdatedSuccess'));
+
+                const successMessage = isDraft
+                    ? t('publications.admin.draftUpdatedSuccess')
+                    : t('publications.admin.publicationUpdatedSuccess');
+                notify('success', successMessage);
             } else {
                 // Create new publication
-                console.log('Creating new publication');
                 await publicationService.createPublication(publicationData);
-                notify('success', t('publications.admin.publicationCreatedSuccess'));
+
+                const successMessage = isDraft
+                    ? t('publications.admin.draftCreatedSuccess')
+                    : t('publications.admin.publicationCreatedSuccess');
+                notify('success', successMessage);
             }
 
             setIsSaving(false);
 
-            // If we have an onCancel callback (inline editing), use it instead of navigation
+            // Navigate or close based on context
             if (onCancel) {
                 onCancel();
             } else {
@@ -462,50 +419,23 @@ const PublicationForm = ({
             }
         } catch (error) {
             setIsSaving(false);
-            console.error('Error in handleCreatePublication:', error);
-            notify('error', error.message || 'Failed to create publication');
+            console.error(`Error in handlePublicationAction (${action}):`, error);
+            notify('error', error.message || `Failed to ${action} publication`);
         }
     };
 
+    // Simplified handlers that call the unified handler
+    const handleSaveDraft = () => handlePublicationAction('draft');
+    const handlePublishOrUpdate = () => handlePublicationAction('publish');
+
+    // Preview handler remains the same
     const handlePreview = () => {
         setShowPreview(true);
     };
 
-    const handlePublish = async () => {
-        if (!publication?.id) {
-            notify('error', 'No publication ID for publishing');
-            return;
-        }
-
-        if (!values.title || !values.slug || !values.shortDescription) {
-            notify('error', 'Please provide title, slug, and short description before publishing');
-            return;
-        }
-
-        setIsSaving(true);
-        try {
-            // Convert published publication to draft by updating with isDraft: true
-            const publicationData = {
-                ...preparePublicationData(),
-                isDraft: true
-            };
-
-            await publicationService.updatePublication(publication.id, publicationData);
-            setIsSaving(false);
-
-            notify('success', t('publications.admin.publicationConvertedToDraft'));
-
-            // If we have an onCancel callback (inline editing), use it instead of navigation
-            if (onCancel) {
-                onCancel();
-            } else {
-                navigate('/profile/publications');
-            }
-        } catch (error) {
-            setIsSaving(false);
-            notify('error', error.message || 'Failed to convert publication to draft');
-        }
-    };
+    // Remove the old complex handlers
+    // const handleConvertToDraft = async () => { ... } - REMOVED
+    // const handlePublish = async () => { ... } - REMOVED
 
     const closePreview = () => {
         setShowPreview(false);
@@ -834,8 +764,8 @@ const PublicationForm = ({
             <FloatingActions
                 onPreview={handlePreview}
                 onSaveDraft={handleSaveDraft}
-                onCreate={handleCreatePublication}
-                onToggleDraft={handlePublish}
+                onCreate={handlePublishOrUpdate}
+                onToggleDraft={handleSaveDraft} // For published publications, convert to draft
                 isSaving={isSaving}
                 isDraft={publication?.isDraft}
                 isEditMode={isEditMode}

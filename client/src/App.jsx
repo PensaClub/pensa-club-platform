@@ -63,6 +63,7 @@ const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/Artic
 const InitiativesList = lazy(() => import('./components/Initiatives/InitiativesList/InitiativesList.jsx'));
 const ProjectsList = lazy(() => import('./components/Initiatives/ProjectsList/ProjectsList.jsx'));
 const PublicationForm = lazy(() => import('./components/Initiatives/CreatePublication/MainForm/MainFormPublication'));
+const PublicationsList = lazy(() => import('./components/Initiatives/CreatePublication/PublicationsList/PublicationsList.jsx'));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {
@@ -163,18 +164,18 @@ function App() {
                                       </Suspense>
                                     }
                                   />
-
-                                  <Route path="/initiatives/:slug" element={<InitiativeView />} />
-                                  <Route path="/stories/:slug" element={<StoryView />} />
                                   <Route
-                                    path="/publications/edit/:slug"
+                                    path="/publications"
                                     element={
                                       <Suspense fallback={<LazyLoadingFallback type="publications" />}>
-                                        <PublicationForm isEditMode={true} />
+                                        <PublicationsList />
                                       </Suspense>
                                     }
                                   />
                                   <Route path="/publications/:slug" element={<PublicationView />} />
+                                  <Route path="/publications/edit/:slug" element={<PublicationForm isEditMode={true} />} />
+                                  <Route path="/initiatives/:slug" element={<InitiativeView />} />
+                                  <Route path="/stories/:slug" element={<StoryView />} />
                                   <Route path="/projects/:slug" element={<ProjectView />} />
                                   <Route path="/articles/:slug" element={<ArticleView />} />
                                   <Route path="/elite-membership" element={<EliteMembershipPage />} />
