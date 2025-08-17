@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faEdit, faFileAlt, faCog, faArrowLeft, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faEdit, faFileAlt, faArrowLeft, faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { Element as SlateElement, Transforms, Editor } from 'slate';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -20,6 +20,7 @@ import { useAuthContext } from '../../../contexts/UserContext';
 import { initiativeServiceFactory } from '../../../Services/StoryPubServiceFactory';
 import { isSlateEmpty } from '../../../../utils/slateToHtml';
 import ConnectionSection from "../Sections/ConnectionSection/ConnectionSection";
+import { notify } from '../../../../utils/notify';
 
 const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
     const { t } = useTranslation();
@@ -66,18 +67,15 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
     const {
         values, setValues, errors, onChangeHandler, onBlurHandler, onSubmit,
         generateSlug,
-        // Section management
         addSection,
         removeSection,
         updateSection,
-        // Section image management
         handleSectionImageUpload,
         addSectionImageFromUrl,
         removeSectionImage,
         updateSectionImageAlt,
         updateSectionImageCaption,
         clearSectionImages,
-        // Main image management
         handleMainImageUpload,
         addMainImageFromUrl,
         removeMainImage,
@@ -106,7 +104,7 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
         };
 
         fetchPublication();
-    }, [isEditMode, slug]);
+    }, [isEditMode, slug, setValues, t]);
 
     if (loading) {
         return <div className="loading">Loading...</div>;
@@ -147,8 +145,6 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
         setActiveSection(sectionId);
     };
 
-    const currentSectionIndex = sectionOrder.indexOf(activeSection);
-
     const preparePublicationData = () => {
         const nullIfEmpty = (value) => {
             if (value === '' || value === undefined) return null;
@@ -174,7 +170,7 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
                 alt: nullIfEmpty(values.mainImage.alt),
                 caption: nullIfEmpty(values.mainImage.caption)
             } : null,
-            sections: values.sections?.map(section => {
+            sections: values.sections?.map((section, index) => {
                 let content = '';
                 if (section.content && !isSlateEmpty(section.content)) {
                     content = section.content
@@ -194,14 +190,13 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
                     .replace(/\s+/g, '-')
                     .replace(/-+/g, '-')
                     .replace(/^-+|-+$/g, '')
-                    .trim() || `section-${Date.now()}`;
+                    .trim() || `section-${index + 1}`;
 
                 return {
                     title: nullIfEmpty(section.title),
-                    title_slug: sectionTitleSlug,
+                    titleSlug: sectionTitleSlug,
                     content: nullIfEmpty(content),
-                    order: section.order || 1,
-                    // Single image per section only
+                    order: index + 1,
                     image: section.image?.src ? {
                         src: section.image.src,
                         alt: nullIfEmpty(section.image.alt),
@@ -209,6 +204,8 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
                     } : null
                 };
             }) || [],
+
+            relatedPublications: values.relatedPublications || [],
             connectedInitiativeIds: values.connectedInitiativeIds || [],
             connectedProjectIds: values.connectedProjectIds || []
         };
@@ -231,8 +228,6 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
             }
 
             setIsSaving(false);
-
-            // Navigate to profile publications page
             navigate('/profile/publications');
         } catch (error) {
             setIsSaving(false);
@@ -250,8 +245,6 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
             const publicationData = preparePublicationData();
             await publicationService.createPublication(publicationData);
             setIsSaving(false);
-
-            // Navigate to profile publications page
             navigate('/profile/publications');
         } catch (error) {
             setIsSaving(false);
@@ -292,7 +285,7 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
     };
 
     const handleUpdate = async () => {
-        if (!publication?.id) { // Use publication?.id for edit mode
+        if (!publication?.id) {
             notify('error', 'No publication ID for update');
             return;
         }
@@ -319,15 +312,10 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
         }
     };
 
-    const handleCreate = () => {
-        console.log('Create publication');
-    };
-
     const closePreview = () => {
         setShowPreview(false);
     };
 
-    // Helper function to convert Slate content to text for preview
     const slateToText = (slateContent) => {
         if (!slateContent || !Array.isArray(slateContent)) {
             return '';
@@ -363,81 +351,53 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
             .join('<br />');
     };
 
-    // Helper function to get preview sections - use real data if available, fallback to mock
     const getPreviewSections = () => {
         if (values.sections && values.sections.length > 0) {
-            return values.sections.map((section, index) => {
-                // Generate proper titleSlug for navigation
-                const sectionTitleSlug = section.titleSlug || section.title
-                    ?.toLowerCase()
-                    .replace(/[^a-z0-9\s]/g, '')
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-')
-                    .replace(/^-+|-+$/g, '')
-                    .trim() || `section-${index + 1}`;
+            return values.sections
+                .sort((a, b) => (a.order || 0) - (b.order || 0))
+                .map((section, index) => {
+                    const sectionTitleSlug = section.titleSlug || section.title
+                        ?.toLowerCase()
+                        .replace(/[^a-z0-9\s]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/-+/g, '-')
+                        .replace(/^-+|-+$/g, '')
+                        .trim() || `section-${index + 1}`;
 
-                return {
-                    id: section.id || `section-${index + 1}`,
-                    title: section.title || `Section ${index + 1}`,
-                    titleSlug: sectionTitleSlug, // Use generated titleSlug
-                    content: section.content ? slateToText(section.content) : `This is section ${index + 1} content.`,
-                    image: section.image ? {
-                        src: section.image.src,
-                        alt: section.image.alt || `Image for ${section.title}`,
-                        caption: section.image.caption || ''
-                    } : null,
-                    images: section.image ? [section.image] : []
-                };
-            });
-        } else {
-            // Fallback to mock data when no sections exist
-            return [
-                {
-                    id: 'section-1',
-                    title: 'Introduction',
-                    titleSlug: 'introduction',
-                    content: 'This is a sample introduction section for the preview.',
-                    image: null,
-                    images: []
-                },
-                {
-                    id: 'section-2',
-                    title: 'Main Content',
-                    titleSlug: 'main-content',
-                    content: 'This is the main content section with some sample text.',
-                    image: null,
-                    images: []
-                }
-            ];
+                    return {
+                        id: section.id || `section-${index + 1}`,
+                        title: section.title || `Section ${index + 1}`,
+                        titleSlug: sectionTitleSlug,
+                        content: section.content ? slateToText(section.content) : `This is section ${index + 1} content.`,
+                        order: section.order || index + 1,
+                        image: section.image ? {
+                            src: section.image.src,
+                            alt: section.image.alt || `Image for ${section.title}`,
+                            caption: section.image.caption || ''
+                        } : null,
+                        images: section.image ? [section.image] : []
+                    };
+                });
         }
-    };
-
-    // Get author name for preview
-    const getAuthorName = () => {
-        if (!values.showAuthor) return null; // If checkbox is unchecked, no author
-        return username || userEmail || 'Anonymous';
+        return [];
     };
 
     const getOptimizedPreviewData = () => {
         return {
-            // Required fields - always present
             id: publication?.id || 'preview-' + Date.now(),
             title: values.title || t('publications.preview.noTitle'),
             shortDescription: values.shortDescription || t('publications.preview.noDescription'),
             publishedAt: publication?.publishedAt || new Date().toISOString(),
             slug: values.slug || 'preview-slug',
 
-            // Author info - only if showAuthor is true
             author: values.showAuthor ? (username || userEmail || t('publications.preview.noAuthor')) : null,
             authorEmail: values.showAuthor ? userEmail : null,
-            authorImage: null, // Publications don't have author images
+            authorImage: null,
 
-            // Optional fields - use translations for missing data
             readTime: values.readTime || t('publications.preview.noReadTime'),
             category: values.category || t('publications.preview.noCategory'),
             tags: values.tags?.length > 0 ? values.tags : [],
 
-            // Image - show placeholder if missing
             image: values.mainImage?.src ? {
                 src: values.mainImage.src,
                 alt: values.mainImage.alt || values.title || 'Publication',
@@ -445,28 +405,23 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
             } : null,
             mainImage: values.mainImage || null,
 
-            // Content sections - use real data or fallback
             sections: getPreviewSections(),
 
-            // Download info - only if document exists
             downloadUrl: values.downloadUrl || null,
             fileType: values.downloadUrl ? (values.fileType || 'PDF') : null,
             fileSize: values.downloadUrl ? (values.fileSize || t('publications.preview.unknownSize')) : null,
 
-            // Settings
             commentsEnabled: values.commentsEnabled !== false,
 
-            // Analytics - not needed for preview
             views: null,
             downloads: null,
             likes: null,
             isLiked: false,
 
-            // Connections - use real data if available
-            initiatives: values.connectedInitiativeIds?.length > 0 ? [] : null, // Will be populated by context
-            projects: values.connectedProjectIds?.length > 0 ? [] : null, // Will be populated by context
+            relatedPublications: values.relatedPublications?.length > 0 ? [] : null,
+            initiatives: values.connectedInitiativeIds?.length > 0 ? [] : null,
+            projects: values.connectedProjectIds?.length > 0 ? [] : null,
 
-            // Type info
             type: 'publication'
         };
     };
@@ -475,6 +430,19 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
         <div className="publication-create-container">
             {/* Header */}
             <div className="publication-form-header">
+                {/* Add back navigation for edit mode */}
+                {isEditMode && (
+                    <div className="publication-form-back-nav">
+                        <button
+                            className="publication-form-back-btn"
+                            onClick={() => navigate('/profile/publications')}
+                        >
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                            {t('publications.common.back')}
+                        </button>
+                    </div>
+                )}
+
                 <h1 className="publication-form-title">
                     {isEditMode ? t('publications.edit.title') : t('publications.create.title')}
                 </h1>

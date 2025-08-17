@@ -2128,6 +2128,86 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [publicationDrafts.length, publicationDraftsLoaded, publicationDraftsHasMore, publicationDraftsCurrentPage, storyPubService, showErrorAndSetTimeouts]);
 
+  const deletePublication = useCallback(async (identifier) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      await storyPubService.deletePublication(identifier);
+
+      // Remove from local state
+      setPublications(prev => prev.filter(publication =>
+        publication.id !== identifier &&
+        publication.slug !== identifier &&
+        publication.id.toString() !== identifier.toString()
+      ));
+
+      notify('success', 'Publication deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting publication:', error);
+      notify('error', 'Failed to delete publication');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, storyPubService]);
+
+  const deletePublicationDraft = useCallback(async (identifier) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      await storyPubService.deletePublicationDraft(identifier);
+
+      // Remove from local state
+      setPublicationDrafts(prev => prev.filter(draft =>
+        draft.id !== identifier &&
+        draft.slug !== identifier &&
+        draft.id.toString() !== identifier.toString()
+      ));
+
+      notify('success', 'Publication draft deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting publication draft:', error);
+      notify('error', 'Failed to delete publication draft');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, storyPubService]);
+
+  const togglePublicationDraftStatus = useCallback(async (identifier) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      await storyPubService.togglePublicationDraftStatus(identifier);
+
+      await getAllPublications(1, true);
+      await getAllPublicationDrafts(1, true);
+
+      notify('success', 'Publication status updated successfully!');
+    } catch (error) {
+      console.error('Error toggling publication draft status:', error);
+      notify('error', 'Failed to update publication status');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthentication, storyPubService, getAllPublications, getAllPublicationDrafts]);
+
   const contextService = {
     // Existing initiative functions
     // Draft functions
@@ -2248,6 +2328,11 @@ export const InitiativeProvider = ({ children }) => {
 
     // Related content
     getRelatedContent,
+
+    // New functions for deleting publications
+    deletePublication,
+    deletePublicationDraft,
+    togglePublicationDraftStatus,
   };
   const pagesWithLazyLoading = ['/articles'];
 

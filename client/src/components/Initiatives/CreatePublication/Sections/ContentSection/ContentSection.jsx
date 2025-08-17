@@ -1,5 +1,5 @@
 // components/Initiatives/CreatePublication/Sections/ContentSection/ContentSection.jsx
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash, faEdit, faChevronUp, faChevronDown, faImage, faUpload, faTimes, faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -26,9 +26,65 @@ const ContentSection = ({
 }) => {
     const { t } = useTranslation();
     const sectionEditorsRef = useRef({});
+    const sectionRefs = useRef({});
+    const [lastSectionCount, setLastSectionCount] = useState(values.sections?.length || 0);
+    const [lastRemovedIndex, setLastRemovedIndex] = useState(null);
+
     // State за URL inputs
     const [showUrlInputs, setShowUrlInputs] = useState({});
     const [imageUrls, setImageUrls] = useState({});
+
+    // Track section changes for scroll behavior
+    useEffect(() => {
+        const currentSectionCount = values.sections?.length || 0;
+
+        if (currentSectionCount > lastSectionCount) {
+            // Section was added - scroll to the new section
+            setTimeout(() => {
+                const newSectionIndex = currentSectionCount - 1;
+                scrollToSection(newSectionIndex, true); // true = focus on title input
+            }, 100);
+        } else if (currentSectionCount < lastSectionCount && lastRemovedIndex !== null) {
+            // Section was removed - scroll to the section above (or stay at same position)
+            setTimeout(() => {
+                const targetIndex = Math.max(0, Math.min(lastRemovedIndex - 1, currentSectionCount - 1));
+                if (targetIndex >= 0 && currentSectionCount > 0) {
+                    scrollToSection(targetIndex, false); // false = don't focus
+                }
+                setLastRemovedIndex(null); // Reset
+            }, 100);
+        }
+
+        setLastSectionCount(currentSectionCount);
+    }, [values.sections?.length, lastSectionCount, lastRemovedIndex]);
+
+    // Scroll to specific section
+    const scrollToSection = (sectionIndex, shouldFocus = false) => {
+        const sectionElement = sectionRefs.current[sectionIndex];
+        if (sectionElement) {
+            sectionElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
+
+            // Optional: Focus on the title input of the section
+            if (shouldFocus) {
+                setTimeout(() => {
+                    const titleInput = sectionElement.querySelector('input[type="text"]');
+                    if (titleInput) {
+                        titleInput.focus();
+                    }
+                }, 300);
+            }
+        }
+    };
+
+    // Enhanced remove section handler with scroll tracking
+    const handleRemoveSection = (index) => {
+        setLastRemovedIndex(index);
+        removeSection(index);
+    };
 
     // Handle URL input
     const handleImageUrlChange = (sectionIndex, value) => {
@@ -274,6 +330,31 @@ const ContentSection = ({
         return <span {...props.attributes}>{children}</span>;
     };
 
+    // Track when new section is added and scroll to it
+    useEffect(() => {
+        const currentCount = values.sections?.length || 0;
+        if (currentCount > lastSectionCount) {
+            // New section added, scroll to it
+            setTimeout(() => {
+                const lastSectionIndex = currentCount - 1;
+                const lastSection = sectionRefs.current[lastSectionIndex];
+                if (lastSection) {
+                    lastSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+
+                    // Focus the title input
+                    const titleInput = lastSection.querySelector('input[type="text"]');
+                    if (titleInput) {
+                        setTimeout(() => titleInput.focus(), 300);
+                    }
+                }
+            }, 100);
+        }
+        setLastSectionCount(currentCount);
+    }, [values.sections?.length, lastSectionCount]);
+
     return (
         <div className="publication-form-section-card">
             <div className="publication-sections-section-header">
@@ -314,7 +395,11 @@ const ContentSection = ({
                 ) : (
                     <div className="publication-sections-list">
                         {(values.sections || []).map((section, index) => (
-                            <div key={index} className="publication-sections-item">
+                            <div
+                                key={index}
+                                className="publication-sections-section-item"
+                                ref={el => sectionRefs.current[index] = el}
+                            >
                                 <div className="publication-sections-item-header">
                                     <div className="publication-sections-item-title">
                                         <h4>
@@ -357,7 +442,7 @@ const ContentSection = ({
                                         <button
                                             type="button"
                                             className="publication-sections-remove-btn"
-                                            onClick={() => removeSection(index)}
+                                            onClick={() => handleRemoveSection(index)}
                                             title={t('publications.content.removeSection')}
                                         >
                                             <FontAwesomeIcon icon={faTrash} />

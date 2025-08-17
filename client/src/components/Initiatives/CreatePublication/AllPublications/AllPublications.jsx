@@ -16,18 +16,18 @@ export const AllPublications = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const {
-        // Publication functions from context - FIXED NAMES
-        getAllPublications, // Changed from getAllPublicationsTemporary
-        publications = [], // Changed from publicationsTemporary
-        publicationsLoaded = false, // Changed from publicationsTemporaryLoaded
-        publicationsHasMore = false, // Changed from publicationsTemporaryHasMore
-        publicationsCurrentPage = 1, // Changed from publicationsTemporaryCurrentPage
+        getAllPublications,
+        publications = [],
+        publicationsHasMore = false,
+        publicationsCurrentPage = 1,
         isLoading: contextLoading = false,
-        // NEW:
         getAllPublicationDrafts,
         publicationDrafts = [],
         publicationDraftsHasMore = false,
         publicationDraftsCurrentPage = 1,
+        deletePublication,
+        deletePublicationDraft,
+        togglePublicationDraftStatus,
     } = useInitiativeContext();
 
     const location = useLocation();
@@ -42,9 +42,7 @@ export const AllPublications = () => {
     const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [previewData, setPreviewData] = useState(null);
-    const [scrollPosition, setScrollPosition] = useState(0); // Add this to preserve scroll position
 
-    // Add ESC key and outside click handling (same as MainFormPublication)
     useEffect(() => {
         const handleEscape = (event) => {
             if (event.key === 'Escape' && showPreview) {
@@ -61,7 +59,7 @@ export const AllPublications = () => {
         if (showPreview) {
             document.addEventListener('keydown', handleEscape);
             document.addEventListener('click', handleOutsideClick);
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
         }
 
         return () => {
@@ -72,23 +70,16 @@ export const AllPublications = () => {
     }, [showPreview]);
 
     useEffect(() => {
-        // Ако се връщаме от edit страница, refresh-ваме данните
-        const urlParams = new URLSearchParams(window.location.search);
         const wasEditing = sessionStorage.getItem('wasEditingDraft');
 
         if (wasEditing) {
-            if (viewMode === 'drafts') {
-                // Force refresh - for now just reload the component
-                // TODO: Replace with real context function
-            }
             sessionStorage.removeItem('wasEditingDraft');
         }
     }, [location.pathname, viewMode]);
 
-    // Load publications on component mount - FIXED function names
     useEffect(() => {
         if (viewMode === 'publications' && !hasLoadedInitial) {
-            getAllPublications(1, true); // Changed from getAllPublicationsTemporary
+            getAllPublications(1, true);
             setHasLoadedInitial(true);
         } else if (viewMode === 'drafts' && !hasLoadedInitial) {
             getAllPublicationDrafts(1, true);
@@ -96,7 +87,6 @@ export const AllPublications = () => {
         }
     }, [viewMode, hasLoadedInitial, getAllPublications, getAllPublicationDrafts]);
 
-    // Global click handler to close dropdown
     useEffect(() => {
         const handleGlobalClick = (event) => {
             if (!event.target.closest('.all-publications-card-actions')) {
@@ -108,16 +98,14 @@ export const AllPublications = () => {
         return () => document.removeEventListener('click', handleGlobalClick);
     }, []);
 
-    // Also reset scroll when data is loaded
     useEffect(() => {
         if (publications.length > 0 || publicationDrafts.length > 0) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }, [publications.length, publicationDrafts.length]);
 
-    // Filter items - FIXED variable names
     useEffect(() => {
-        const items = viewMode === 'publications' ? publications : publicationDrafts; // Changed from publicationsTemporary
+        const items = viewMode === 'publications' ? publications : publicationDrafts;
         let filtered = [...items];
 
         if (searchTerm) {
@@ -128,12 +116,10 @@ export const AllPublications = () => {
             );
         }
 
-        // Filter by category
         if (filters.category !== 'all') {
             filtered = filtered.filter(item => item.category === filters.category);
         }
 
-        // Sort items
         filtered.sort((a, b) => {
             switch (filters.sortBy) {
                 case 'newest':
@@ -156,7 +142,7 @@ export const AllPublications = () => {
         });
 
         setFilteredItems(filtered);
-    }, [viewMode, publications, publicationDrafts, searchTerm, filters]); // Changed from publicationsTemporary
+    }, [viewMode, publications, publicationDrafts, searchTerm, filters]);
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -176,7 +162,7 @@ export const AllPublications = () => {
         setHasLoadedInitial(false);
 
         if (mode === 'publications') {
-            getAllPublications(1, true); // Changed from getAllPublicationsTemporary
+            getAllPublications(1, true);
         } else if (mode === 'drafts') {
             getAllPublicationDrafts(1, true);
         }
@@ -209,9 +195,7 @@ export const AllPublications = () => {
         getAllPublicationDrafts
     ]);
 
-    // Function to show preview modal
     const handleShowPreview = (item) => {
-        // Transform the item data to match the preview format
         const transformedData = {
             id: item.id || 'preview-' + Date.now(),
             title: item.title || 'Untitled Publication',
@@ -247,13 +231,11 @@ export const AllPublications = () => {
         setShowPreview(true);
     };
 
-    // Function to close preview modal (same as MainFormPublication)
     const closePreview = () => {
         setShowPreview(false);
         setPreviewData(null);
     };
 
-    // Action handlers
     const performAction = async (action, item) => {
         setOpenDropdownId(null);
         const identifier = item.slug || item.id;
@@ -261,7 +243,6 @@ export const AllPublications = () => {
         try {
             switch (action) {
                 case 'view':
-                    // Show preview modal instead of navigating
                     handleShowPreview(item);
                     break;
                 case 'edit':
@@ -269,7 +250,6 @@ export const AllPublications = () => {
                         sessionStorage.setItem('wasEditingDraft', 'true');
                         navigate(`/profile/publication-create?draftId=${identifier}`);
                     } else {
-                        // Use the new clean URL structure
                         navigate(`/publications/edit/${identifier}`);
                     }
                     break;
@@ -282,13 +262,11 @@ export const AllPublications = () => {
 
                     if (window.confirm(confirmMessage)) {
                         if (isDraft) {
-                            console.log('️ Deleting draft:', identifier);
                             notify('success', t('publications.admin.draftDeletedSuccess'));
-                            // TODO: Replace with real context function
+                            await deletePublicationDraft(identifier);
                         } else {
-                            console.log('🗑️ Deleting published publication:', identifier);
                             notify('success', t('publications.admin.publicationDeletedSuccess'));
-                            // TODO: Replace with real context function
+                            await deletePublication(identifier);
                         }
                     }
                     break;
@@ -296,8 +274,15 @@ export const AllPublications = () => {
                 case 'publish':
                     if (window.confirm(t('publications.admin.confirmPublishDraft'))) {
                         notify('success', t('publications.admin.draftPublishedSuccess'));
-                        // TODO: Replace with real context function
+                        await togglePublicationDraftStatus(identifier);
                         setViewMode('publications');
+                    }
+                    break;
+
+                case 'convertToDraft':
+                    if (window.confirm(t('publications.admin.confirmConvertToDraft'))) {
+                        await togglePublicationDraftStatus(identifier);
+                        setViewMode('drafts');
                     }
                     break;
 
@@ -315,7 +300,6 @@ export const AllPublications = () => {
             return <span className="all-publications-status-badge draft">{t('publications.admin.statusDraft')}</span>;
         }
 
-        // For publications, check if it's published or not
         if (item.publishedAt) {
             return <span className="all-publications-status-badge active">{t('publications.admin.statusPublished')}</span>;
         } else {
@@ -335,60 +319,39 @@ export const AllPublications = () => {
     };
 
     const getOptimizedPreviewData = (item) => {
-        // Remove useTranslation() from here - use the t function from component level
         return {
-            // Required fields
             id: item.id || 'preview-' + Date.now(),
             title: item.title || t('publications.admin.preview.noTitle'),
             shortDescription: item.shortDescription || t('publications.admin.preview.noDescription'),
             publishedAt: item.publishedAt || new Date().toISOString(),
             slug: item.slug || 'preview-slug',
-
-            // Author info
             author: item.userEmail || t('publications.admin.preview.noAuthor'),
             authorEmail: item.userEmail || null,
             authorImage: null,
-
-            // Optional fields with translations
             readTime: item.readTime || t('publications.admin.preview.noReadTime'),
             category: item.category || t('publications.admin.preview.noCategory'),
             tags: item.tags?.length > 0 ? item.tags : [],
-
-            // Image
             image: item.image?.src ? {
                 src: item.image.src,
                 alt: item.image.alt || item.title || 'Publication',
                 caption: item.image.caption || ''
             } : null,
             mainImage: item.mainImage || item.image || null,
-
-            // Content sections
             sections: item.sections?.length > 0 ? item.sections : [],
-
-            // Download info - only if exists
             downloadUrl: item.downloadUrl || null,
             fileType: item.downloadUrl ? (item.fileType || 'PDF') : null,
             fileSize: item.downloadUrl ? (item.fileSize || t('publications.admin.preview.unknownSize')) : null,
-
-            // Settings
             commentsEnabled: item.commentsEnabled !== false,
-
-            // Analytics - not needed for preview
             views: null,
             downloads: null,
             likes: null,
             isLiked: false,
-
-            // Connections
             initiatives: item.initiatives || null,
             projects: item.projects || null,
-
-            // Type info
             type: 'publication'
         };
     };
 
-    // Add the category translation helper function (same as StoryPubView)
     const getCategoryTranslation = (categoryKey) => {
         if (!categoryKey) return t('publications.categories.other');
 
@@ -411,7 +374,6 @@ export const AllPublications = () => {
                 isLoading={contextLoading}
             />
 
-            {/* Show creation form when in create mode */}
             {viewMode === 'create' ? (
                 <div className="all-publications-create-container">
                     <PublicationCreateForm />
@@ -423,7 +385,7 @@ export const AllPublications = () => {
                         onFilterChange={handleFilterChange}
                         filters={filters}
                         viewMode={viewMode}
-                        totalCount={filteredItems.length} // Add this line - pass filtered results count
+                        totalCount={filteredItems.length}
                     />
 
                     <div className="all-publications-grid-admin">
@@ -557,31 +519,30 @@ export const AllPublications = () => {
                                                         </button>
                                                     )}
 
-                                                    {viewMode === 'drafts' && (
-                                                        <button
-                                                            className="all-publications-dropdown-item delete"
-                                                            onMouseDown={() => performAction('delete', item)}
-                                                        >
-                                                            <svg viewBox="0 0 24 24" fill="none">
-                                                                <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" />
-                                                                <path d="M10 11V17M14 11V17" stroke="currentColor" strokeWidth="2" />
-                                                            </svg>
-                                                            {t('publications.common.delete')}
-                                                        </button>
-                                                    )}
 
                                                     {viewMode === 'publications' && (
                                                         <button
-                                                            className="all-publications-dropdown-item delete"
-                                                            onMouseDown={() => performAction('delete', item)}
+                                                            className="all-publications-dropdown-item convert"
+                                                            onMouseDown={() => performAction('convertToDraft', item)}
                                                         >
                                                             <svg viewBox="0 0 24 24" fill="none">
-                                                                <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" />
-                                                                <path d="M10 11V17M14 11V17" stroke="currentColor" strokeWidth="2" />
+                                                                <path d="M9 14L4 9L9 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                <path d="M4 9H16C18.2091 9 20 10.7909 20 13C20 15.2091 18.2091 17 16 17H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                                             </svg>
-                                                            {t('publications.common.delete')}
+                                                            {t('publications.common.convertToDraft')}
                                                         </button>
                                                     )}
+
+                                                    <button
+                                                        className="all-publications-dropdown-item delete"
+                                                        onMouseDown={() => performAction('delete', item)}
+                                                    >
+                                                        <svg viewBox="0 0 24 24" fill="none">
+                                                            <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" />
+                                                            <path d="M10 11V17M14 11V17" stroke="currentColor" strokeWidth="2" />
+                                                        </svg>
+                                                        {t('publications.common.delete')}
+                                                    </button>
                                                 </div>
                                             )}
                                         </div>
@@ -621,7 +582,6 @@ export const AllPublications = () => {
                 </>
             )}
 
-            {/* Preview Modal - same structure as MainFormPublication */}
             {showPreview && previewData && (
                 <div className="publication-preview-modal-overlay">
                     <div className="publication-preview-modal-content">

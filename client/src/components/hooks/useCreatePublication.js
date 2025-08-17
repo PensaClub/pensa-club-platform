@@ -41,8 +41,13 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
             titleSlug: 'introduction',
             title: 'Въведение',
             content: createSlateEditorState(),
-            image: null // Change from images: [] to image: null
+            order: 1,
+            image: null
         }],
+
+        relatedPublications: [],
+        connectedInitiativeIds: [],
+        connectedProjectIds: [],
 
         // Meta
         userEmail: userEmail || '',
@@ -120,7 +125,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
     }, [values, onSubmitHandler]);
 
     // Section management
-    const addSection = useCallback(() => {
+    const addSection = useCallback((onSectionAdded) => {
         const newSection = {
             titleSlug: `section-${Date.now()}`,
             title: '',

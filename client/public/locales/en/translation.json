@@ -3203,7 +3203,8 @@
       "view": "View",
       "publish": "Publish",
       "draft": "Draft",
-      "published": "Published"
+      "published": "Published",
+      "convertToDraft": "Convert to Draft"
     },
     "basic": {
       "title": "Title",
@@ -3481,6 +3482,7 @@
       "publicationDeletedSuccess": "Publication deleted successfully!",
       "confirmPublishDraft": "Are you sure you want to publish this draft?",
       "draftPublishedSuccess": "Draft published successfully!",
+      "confirmConvertToDraft": "Are you sure you want to convert this publication to draft? It will no longer be visible to the public.",
       "actionError": "An error occurred while performing the action",
       "statusActive": "Active",
       "statusPlanning": "Planning",

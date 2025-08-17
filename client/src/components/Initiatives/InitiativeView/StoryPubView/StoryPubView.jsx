@@ -176,12 +176,24 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
             .trim('-') || `section-${index}`;
     };
 
-    // Handle TOC link click with proper offset
     const handleTOCClick = (e, sectionSlug) => {
         e.preventDefault();
         const target = document.getElementById(sectionSlug);
         if (target) {
             const headerHeight = 100;
+
+            if (previewMode) {
+                const modalBody = target.closest('.publication-preview-modal-body');
+                if (modalBody) {
+                    const targetPosition = target.offsetTop - headerHeight;
+                    modalBody.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    return;
+                }
+            }
+
             const targetPosition = target.offsetTop - headerHeight;
             window.scrollTo({
                 top: targetPosition,
