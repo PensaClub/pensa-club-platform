@@ -27,7 +27,7 @@ import {
   faArrowRight,
   faUser
 } from '@fortawesome/free-solid-svg-icons';
-import './socialProjects.css';
+import './SocialProjects.css';
 
 export const SocialProjects = ({ club }) => {
   const { t, i18n } = useTranslation();
