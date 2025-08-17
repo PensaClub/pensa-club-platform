@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus, faUndo, faCog, faHome } from '@fortawesome/free-solid-svg-icons';
-import './textZoom.css';
+import './TextZoom.css';
 
 export const TextZoom = () => {
   const [isExpanded, setIsExpanded] = useState(false);
