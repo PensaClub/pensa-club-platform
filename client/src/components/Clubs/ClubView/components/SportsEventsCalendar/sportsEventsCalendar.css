@@ -1,0 +1,1498 @@
+/* components/SportsEventsCalendar/sportsEventsCalendar.css */
+.sports-events-calendar-section {
+  padding: 8rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+  background-size: 400% 400%;
+  animation: sportsCalendarGradientShift 15s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes sportsCalendarGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.sports-events-calendar-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.3) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.sports-events-calendar-section::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.03), transparent),
+    conic-gradient(from 60deg, transparent, rgba(255, 255, 255, 0.05), transparent),
+    conic-gradient(from 120deg, transparent, rgba(255, 255, 255, 0.02), transparent);
+  animation: sportsCalendarBackgroundRotate 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes sportsCalendarBackgroundRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.sports-events-calendar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Hero Section */
+.sports-events-calendar-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 4rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 3rem;
+  box-shadow: 
+    0 25px 100px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.sports-events-calendar-hero-content {
+  animation: sportsCalendarSlideInLeft 0.8s ease-out;
+}
+
+@keyframes sportsCalendarSlideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sports-events-calendar-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 
+    0 10px 30px rgba(255, 107, 107, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+  animation: sportsCalendarPulse 3s ease-in-out infinite;
+}
+
+@keyframes sportsCalendarPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 10px 30px rgba(255, 107, 107, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 
+      0 15px 40px rgba(255, 107, 107, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.sports-events-calendar-hero-badge svg {
+  font-size: 1.2rem;
+  animation: sportsCalendarBolt 2s ease-in-out infinite;
+}
+
+@keyframes sportsCalendarBolt {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-10deg) scale(1.1); }
+  75% { transform: rotate(10deg) scale(1.1); }
+}
+
+.sports-events-calendar-hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  color: white;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #ffffff, #f8f9fa, #ffffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sports-events-calendar-hero-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sports-events-calendar-hero-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: sportsCalendarSlideInRight 0.8s ease-out;
+}
+
+@keyframes sportsCalendarSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sports-events-calendar-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.sports-events-calendar-stat-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.sports-events-calendar-stat-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-events-calendar-stat-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(45deg);
+  animation: sportsCalendarIconShine 3s ease-in-out infinite;
+}
+
+@keyframes sportsCalendarIconShine {
+  0%, 100% {
+    transform: rotate(45deg) translate(-100%, -100%);
+  }
+  50% {
+    transform: rotate(45deg) translate(100%, 100%);
+  }
+}
+
+.sports-events-calendar-stat-content {
+  color: white;
+}
+
+.sports-events-calendar-stat-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sports-events-calendar-stat-label {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Controls */
+.sports-events-calendar-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 2rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+}
+
+.sports-events-calendar-search {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 1rem 1.5rem;
+  min-width: 300px;
+  transition: all 0.3s ease;
+}
+
+.sports-events-calendar-search:focus-within {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.sports-events-calendar-search svg {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+}
+
+.sports-events-calendar-search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  flex: 1;
+  placeholder-color: rgba(255, 255, 255, 0.6);
+}
+
+.sports-events-calendar-search input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sports-events-calendar-view-modes {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 0.5rem;
+}
+
+.sports-events-calendar-view-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-events-calendar-view-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.sports-events-calendar-view-btn.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.sports-events-calendar-view-btn svg {
+  font-size: 1.1rem;
+}
+
+/* Filters */
+.sports-events-calendar-filters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+
+.sports-events-calendar-filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-events-calendar-filter-chip::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.sports-events-calendar-filter-chip:hover::before {
+  left: 100%;
+}
+
+.sports-events-calendar-filter-chip:hover {
+  background: var(--filter-gradient);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.sports-events-calendar-filter-chip.active {
+  background: var(--filter-gradient);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.sports-events-calendar-filter-chip svg {
+  font-size: 1.2rem;
+}
+
+.sports-events-calendar-filter-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Content */
+.sports-events-calendar-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 3rem;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.1);
+  min-height: 600px;
+}
+
+/* Timeline View */
+.sports-events-calendar-timeline {
+  animation: sportsCalendarFadeIn 0.6s ease-out;
+}
+
+@keyframes sportsCalendarFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sports-events-calendar-timeline-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sports-events-calendar-timeline-header h3 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sports-events-calendar-timeline-header p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.sports-events-calendar-timeline-days {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.sports-events-calendar-timeline-day {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.4s ease;
+  animation: sportsCalendarSlideUp 0.6s ease var(--day-delay, 0s) both;
+}
+
+@keyframes sportsCalendarSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.sports-events-calendar-timeline-day:hover {
+  transform: translateY(-10px) scale(1.02);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+}
+
+.sports-events-calendar-timeline-day.today {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 235, 59, 0.1));
+  border: 2px solid rgba(255, 193, 7, 0.5);
+  box-shadow: 0 0 30px rgba(255, 193, 7, 0.3);
+}
+
+.sports-events-calendar-timeline-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sports-events-calendar-timeline-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sports-events-calendar-timeline-weekday {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.sports-events-calendar-timeline-day-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sports-events-calendar-timeline-month {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sports-events-calendar-today-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  animation: sportsCalendarTodayPulse 2s ease-in-out infinite;
+}
+
+@keyframes sportsCalendarTodayPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(255, 107, 107, 0.6);
+  }
+}
+
+.sports-events-calendar-timeline-events {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sports-events-calendar-timeline-event {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-events-calendar-timeline-event::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--event-gradient);
+}
+
+.sports-events-calendar-timeline-event:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px) scale(1.02);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.sports-events-calendar-event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sports-events-calendar-event-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--event-gradient);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.sports-events-calendar-event-badges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sports-events-calendar-event-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: white;
+}
+
+.sports-events-calendar-event-badge.special {
+  background: linear-gradient(135deg, #ffd700, #ffa500);
+  animation: sportsCalendarStarTwinkle 2s ease-in-out infinite;
+}
+
+@keyframes sportsCalendarStarTwinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(180deg); }
+}
+
+.sports-events-calendar-event-badge.priority {
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  animation: sportsCalendarCrownBounce 2s ease-in-out infinite;
+}
+
+@keyframes sportsCalendarCrownBounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+
+.sports-events-calendar-event-content h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.sports-events-calendar-event-time,
+.sports-events-calendar-event-instructor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.sports-events-calendar-event-time svg,
+.sports-events-calendar-event-instructor svg {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sports-events-calendar-event-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.sports-events-calendar-event-action {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-events-calendar-event-action:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: scale(1.1);
+}
+
+.sports-events-calendar-event-action.active {
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  color: white;
+  border-color: rgba(255, 107, 107, 0.5);
+}
+
+.sports-events-calendar-event-action.register {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
+.sports-events-calendar-event-action.register:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.sports-events-calendar-no-events {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.sports-events-calendar-no-events svg {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.sports-events-calendar-show-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.sports-events-calendar-show-more:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Grid View */
+.sports-events-calendar-grid {
+  animation: sportsCalendarFadeIn 0.6s ease-out;
+}
+
+.sports-events-calendar-grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.sports-events-calendar-grid-header h3 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sports-events-calendar-navigation {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 1rem 1.5rem;
+}
+
+.sports-events-calendar-navigation button {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-events-calendar-navigation button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.sports-events-calendar-navigation span {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  min-width: 200px;
+  text-align: center;
+}
+
+/* List View */
+.sports-events-calendar-list {
+  animation: sportsCalendarFadeIn 0.6s ease-out;
+}
+
+.sports-events-calendar-list-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sports-events-calendar-list-header h3 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sports-events-calendar-list-header p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.sports-events-calendar-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sports-events-calendar-list-day {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.sports-events-calendar-list-day:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.sports-events-calendar-list-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sports-events-calendar-list-date {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  text-transform: capitalize;
+}
+
+.sports-events-calendar-list-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sports-events-calendar-list-events {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sports-events-calendar-list-event {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-events-calendar-list-event::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--event-gradient);
+}
+
+.sports-events-calendar-list-event:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.sports-events-calendar-list-event-content {
+  flex: 1;
+}
+
+.sports-events-calendar-list-event-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sports-events-calendar-list-event-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--event-gradient);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.sports-events-calendar-list-event-info h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.sports-events-calendar-list-event-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.sports-events-calendar-list-event-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.sports-events-calendar-list-event-meta svg {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sports-events-calendar-list-event-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 1rem 0 0 0;
+}
+
+.sports-events-calendar-list-event-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.sports-events-calendar-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-events-calendar-action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.sports-events-calendar-action-btn.active {
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  color: white;
+  border-color: rgba(255, 107, 107, 0.5);
+}
+
+.sports-events-calendar-action-btn.primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
+.sports-events-calendar-action-btn.primary:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* Modal */
+.sports-events-calendar-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 2rem;
+  animation: sportsCalendarModalOverlayIn 0.3s ease;
+}
+
+@keyframes sportsCalendarModalOverlayIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(20px);
+  }
+}
+
+.sports-events-calendar-modal {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: sportsCalendarModalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 50px 150px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+@keyframes sportsCalendarModalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.sports-events-calendar-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 3001;
+}
+
+.sports-events-calendar-modal-close:hover {
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  color: white;
+  transform: scale(1.1) rotate(90deg);
+  border-color: rgba(255, 107, 107, 0.5);
+}
+
+.sports-events-calendar-modal-header {
+  text-align: center;
+  padding: 3rem 3rem 2rem 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sports-events-calendar-modal-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.5rem;
+  margin: 0 auto 1.5rem auto;
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.4);
+  animation: sportsCalendarModalIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes sportsCalendarModalIconFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.sports-events-calendar-modal-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sports-events-calendar-modal-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.sports-events-calendar-modal-header p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-size: 1rem;
+}
+
+.sports-events-calendar-form {
+  padding: 2.5rem 3rem 3rem 3rem;
+}
+
+.sports-events-calendar-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.sports-events-calendar-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.sports-events-calendar-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: white;
+  font-size: 1rem;
+}
+
+.sports-events-calendar-form-group label svg {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+.sports-events-calendar-form-group input,
+.sports-events-calendar-form-group textarea {
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.sports-events-calendar-form-group input::placeholder,
+.sports-events-calendar-form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sports-events-calendar-form-group input:focus,
+.sports-events-calendar-form-group textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 0 0 4px rgba(255, 255, 255, 0.1),
+    0 8px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.sports-events-calendar-form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.sports-events-calendar-form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.sports-events-calendar-btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 3rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-events-calendar-btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.sports-events-calendar-btn-primary:hover::before {
+  left: 100%;
+}
+
+.sports-events-calendar-btn-primary:hover:not(:disabled) {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 25px 80px rgba(102, 126, 234, 0.6);
+}
+
+.sports-events-calendar-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sports-events-calendar-btn-primary svg {
+  font-size: 1.2rem;
+}
+
+.sports-events-calendar-form-success,
+.sports-events-calendar-form-error {
+  text-align: center;
+  padding: 3rem;
+}
+
+.sports-events-calendar-form-success svg,
+.sports-events-calendar-form-error svg {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: sportsCalendarStatusIcon 0.6s ease;
+}
+
+@keyframes sportsCalendarStatusIcon {
+  from {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.sports-events-calendar-form-success svg {
+  color: #4ade80;
+}
+
+.sports-events-calendar-form-error svg {
+  color: #f87171;
+}
+
+.sports-events-calendar-form-success h4,
+.sports-events-calendar-form-error h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  color: white;
+}
+
+.sports-events-calendar-form-success p,
+.sports-events-calendar-form-error p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .sports-events-calendar-hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .sports-events-calendar-hero-stats {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .sports-events-calendar-controls {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .sports-events-calendar-timeline-days {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .sports-events-calendar-section {
+    padding: 6rem 0;
+  }
+  
+  .sports-events-calendar-container {
+    padding: 0 1rem;
+  }
+  
+  .sports-events-calendar-hero {
+    padding: 2rem;
+  }
+  
+  .sports-events-calendar-hero-stats {
+    flex-direction: column;
+  }
+  
+  .sports-events-calendar-search {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .sports-events-calendar-view-modes {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .sports-events-calendar-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sports-events-calendar-filter-chip {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+  
+  .sports-events-calendar-content {
+    padding: 2rem;
+  }
+  
+  .sports-events-calendar-timeline-days {
+    grid-template-columns: 1fr;
+  }
+  
+  .sports-events-calendar-timeline-day-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .sports-events-calendar-event-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .sports-events-calendar-list-event {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  
+  .sports-events-calendar-list-event-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .sports-events-calendar-modal {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+  
+  .sports-events-calendar-modal-header,
+  .sports-events-calendar-form {
+    padding: 2rem;
+  }
+  
+  .sports-events-calendar-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .sports-events-calendar-hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .sports-events-calendar-timeline-header h3,
+  .sports-events-calendar-list-header h3 {
+    font-size: 2rem;
+  }
+  
+  .sports-events-calendar-timeline-day-number {
+    font-size: 2rem;
+  }
+  
+  .sports-events-calendar-event-actions {
+    justify-content: center;
+  }
+  
+  .sports-events-calendar-modal-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+  
+  .sports-events-calendar-btn-primary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+/* Scroll Animations */
+.sports-events-calendar-timeline-day:nth-child(1) { --day-delay: 0.1s; }
+.sports-events-calendar-timeline-day:nth-child(2) { --day-delay: 0.2s; }
+.sports-events-calendar-timeline-day:nth-child(3) { --day-delay: 0.3s; }
+.sports-events-calendar-timeline-day:nth-child(4) { --day-delay: 0.4s; }
+.sports-events-calendar-timeline-day:nth-child(5) { --day-delay: 0.5s; }
+.sports-events-calendar-timeline-day:nth-child(6) { --day-delay: 0.6s; }
+.sports-events-calendar-timeline-day:nth-child(7) { --day-delay: 0.7s; }
+
+/* Utility Classes */
+.sports-events-calendar-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sports-events-calendar-gradient-text {
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sports-events-calendar-glow {
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.1),
+    0 0 40px rgba(255, 255, 255, 0.05),
+    0 0 80px rgba(255, 255, 255, 0.025);
+}

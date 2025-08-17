@@ -1,0 +1,867 @@
+.social-partnerships-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #334155 70%, #475569 100%);
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.social-partnerships-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.social-partnerships-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.social-partnerships-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 4rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-partnerships-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 400px;
+  height: 400px;
+  background: conic-gradient(from 45deg, rgba(99, 102, 241, 0.1), rgba(124, 58, 237, 0.08), rgba(59, 130, 246, 0.06), rgba(99, 102, 241, 0.1));
+  border-radius: 50%;
+  animation: partnershipsRotate 40s linear infinite;
+  z-index: 1;
+}
+
+@keyframes partnershipsRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.social-partnerships-header-content {
+  position: relative;
+  z-index: 2;
+}
+
+.social-partnerships-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.social-partnerships-badge svg {
+  font-size: 1.2rem;
+}
+
+.social-partnerships-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  color: white;
+  margin: 0 0 1rem 0;
+  line-height: 1.1;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.social-partnerships-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Partnership Stats */
+.social-partnerships-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.social-partnerships-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.social-partnerships-stat:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 50px rgba(99, 102, 241, 0.3);
+}
+
+.social-partnerships-stat-number {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #6366f1;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  text-shadow: 0 4px 15px rgba(99, 102, 241, 0.5);
+}
+
+.social-partnerships-stat-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Controls */
+.social-partnerships-controls {
+  margin-bottom: 3rem;
+}
+
+.social-partnerships-search-bar {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto 2rem auto;
+}
+
+.social-partnerships-search-bar svg {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  z-index: 2;
+}
+
+.social-partnerships-search-bar input {
+  width: 100%;
+  padding: 1.25rem 1.25rem 1.25rem 3.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.social-partnerships-search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.social-partnerships-search-bar input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 
+    0 0 0 4px rgba(99, 102, 241, 0.2),
+    0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.social-partnerships-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-partnerships-view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.social-partnerships-view-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.social-partnerships-view-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.social-partnerships-view-btn.active {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.social-partnerships-view-btn svg {
+  font-size: 1rem;
+}
+
+.social-partnerships-category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.social-partnerships-category-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-partnerships-category-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.social-partnerships-category-btn:hover::before {
+  left: 100%;
+}
+
+.social-partnerships-category-btn:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.social-partnerships-category-btn.active {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border-color: #6366f1;
+  color: white;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+.social-partnerships-category-btn svg {
+  font-size: 1rem;
+}
+
+/* Partnerships Grid */
+.social-partnerships-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.social-partnerships-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: partnershipsCardIn 0.6s ease var(--partnership-delay) both;
+}
+
+@keyframes partnershipsCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.social-partnerships-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6366f1, #4f46e5, #7c3aed);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.social-partnerships-card:hover::before {
+  transform: scaleX(1);
+}
+
+.social-partnerships-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.social-partnerships-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.social-partnerships-card-icon-section {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.social-partnerships-card-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-partnerships-card-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+}
+
+.social-partnerships-card:hover .social-partnerships-card-icon::before {
+  transform: rotate(45deg) translate(50%, 50%);
+}
+
+.social-partnerships-priority-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.social-partnerships-card-title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.social-partnerships-card-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.social-partnerships-card-category {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.social-partnerships-card-content {
+  padding: 0 2rem 2rem 2rem;
+}
+
+.social-partnerships-card-description {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.social-partnerships-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-partnerships-card-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.social-partnerships-card-detail svg {
+  color: #6366f1;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.social-partnerships-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.social-partnerships-expand-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+.social-partnerships-expand-btn svg {
+  transition: transform 0.3s ease;
+}
+
+/* Expanded Content */
+.social-partnerships-expanded-content {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  animation: partnershipsExpandIn 0.3s ease;
+}
+
+@keyframes partnershipsExpandIn {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.social-partnerships-projects,
+.social-partnerships-achievements {
+  margin-bottom: 1.5rem;
+}
+
+.social-partnerships-projects h4,
+.social-partnerships-achievements h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem 0;
+}
+
+.social-partnerships-projects ul,
+.social-partnerships-achievements ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.social-partnerships-projects li,
+.social-partnerships-achievements li {
+  position: relative;
+  padding-left: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.social-partnerships-projects li::before,
+.social-partnerships-achievements li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #6366f1;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.social-partnerships-contact-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.social-partnerships-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.social-partnerships-contact-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.social-partnerships-contact-link svg {
+  font-size: 0.9rem;
+}
+
+/* Network View */
+.social-partnerships-network {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+
+.social-partnerships-network-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.social-partnerships-club-node {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  animation: networkPulse 3s infinite;
+  position: relative;
+}
+
+@keyframes networkPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.7);
+  }
+}
+
+.social-partnerships-club-node svg {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.social-partnerships-club-node span {
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.social-partnerships-network-nodes {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.social-partnerships-network-node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 0;
+  transform: translate(-50%, -50%) rotate(var(--node-angle)) translateX(300px) rotate(calc(-1 * var(--node-angle)));
+  animation: networkNodeIn 0.8s ease var(--node-delay) both;
+}
+
+@keyframes networkNodeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--node-angle)) translateX(150px) rotate(calc(-1 * var(--node-angle))) scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--node-angle)) translateX(300px) rotate(calc(-1 * var(--node-angle))) scale(1);
+  }
+}
+
+.social-partnerships-node-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  margin: 0 auto 0.75rem auto;
+  transition: all 0.3s ease;
+}
+
+.social-partnerships-network-node:hover .social-partnerships-node-icon {
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+.social-partnerships-node-label {
+  display: block;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.5rem;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 120px;
+  line-height: 1.2;
+}
+
+/* No Results */
+.social-partnerships-no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.social-partnerships-no-results svg {
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 2rem;
+}
+
+.social-partnerships-no-results h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem 0;
+}
+
+.social-partnerships-no-results p {
+  margin: 0 0 2rem 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.social-partnerships-reset-btn {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+}
+
+.social-partnerships-reset-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .social-partnerships-header {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+  
+  .social-partnerships-stats {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .social-partnerships-network-node {
+    transform: translate(-50%, -50%) rotate(var(--node-angle)) translateX(250px) rotate(calc(-1 * var(--node-angle)));
+  }
+}
+
+@media (max-width: 768px) {
+  .social-partnerships-section {
+    padding: 4rem 0;
+  }
+  
+  .social-partnerships-container {
+    padding: 0 1rem;
+  }
+  
+  .social-partnerships-header {
+    padding: 2rem;
+  }
+  
+  .social-partnerships-stats {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .social-partnerships-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .social-partnerships-category-filters {
+    justify-content: center;
+  }
+  
+  .social-partnerships-category-btn {
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+  }
+  
+  .social-partnerships-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .social-partnerships-card-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .social-partnerships-network-node {
+    transform: translate(-50%, -50%) rotate(var(--node-angle)) translateX(200px) rotate(calc(-1 * var(--node-angle)));
+  }
+  
+  .social-partnerships-club-node {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .social-partnerships-club-node svg {
+    font-size: 2rem;
+  }
+  
+  .social-partnerships-club-node span {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .social-partnerships-title {
+    font-size: 2rem;
+  }
+  
+  .social-partnerships-category-filters {
+    grid-template-columns: 1fr;
+  }
+  
+  .social-partnerships-card-content {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+  }
+  
+  .social-partnerships-contact-info {
+    flex-direction: column;
+  }
+  
+  .social-partnerships-network-node {
+    transform: translate(-50%, -50%) rotate(var(--node-angle)) translateX(150px) rotate(calc(-1 * var(--node-angle)));
+  }
+  
+  .social-partnerships-node-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.2rem;
+  }
+  
+  .social-partnerships-node-label {
+    font-size: 0.7rem;
+    max-width: 100px;
+  }
+}

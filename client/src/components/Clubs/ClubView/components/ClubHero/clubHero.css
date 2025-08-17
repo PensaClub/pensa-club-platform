@@ -1,0 +1,915 @@
+/* General Club Hero - НОВ ДИЗАЙН */
+.general-hero-main {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.general-hero-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+/* Горна лента */
+.general-hero-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.general-hero-badges {
+  display: flex;
+  gap: 1rem;
+}
+
+.general-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.general-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: generalPulse 2s infinite;
+}
+
+.general-category-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.general-hero-actions {
+  display: none;
+  /* display: flex; */
+  gap: 1rem;
+}
+
+.general-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.general-action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.general-action-btn.favorite:hover {
+  color: #ef4444;
+}
+
+/* Основно съдържание */
+.general-hero-content {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Лява страна - Информация */
+.general-hero-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.general-club-name {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+  background: linear-gradient(45deg, #ffffff, #f1f5f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.general-club-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.general-club-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.general-club-rating {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.general-stars {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.general-star {
+  font-size: 1.25rem;
+}
+
+.general-star.filled {
+  color: #fbbf24;
+}
+
+.general-star.half {
+  color: #fbbf24;
+  opacity: 0.5;
+}
+
+.general-star.empty {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.general-rating-value {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.general-rating-count {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.general-location-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.general-location-info svg {
+  color: #ef4444;
+  font-size: 1.3rem;
+}
+
+.general-club-description {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 3rem 0;
+}
+
+/* Статистики */
+.general-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.general-stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.general-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.general-stat-card:hover::before {
+  left: 100%;
+}
+
+.general-stat-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.general-stat-icon {
+  font-size: 2rem;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+}
+
+.general-stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.general-hero-stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.general-stat-action {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+/* Долна секция */
+.general-hero-bottom-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.general-quick-contacts h3,
+.general-membership-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  color: white;
+}
+
+.general-contact-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.general-contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.general-contact-btn.phone {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+}
+
+.general-contact-btn.phone:hover {
+  background: #22c55e;
+  color: white;
+}
+
+.general-contact-btn.email {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #3b82f6;
+}
+
+.general-contact-btn.email:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+.general-contact-btn.website {
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #a855f7;
+}
+
+.general-contact-btn.website:hover {
+  background: #a855f7;
+  color: white;
+}
+
+.general-contact-btn.facebook {
+  background: rgba(24, 119, 242, 0.2);
+  border: 1px solid rgba(24, 119, 242, 0.4);
+  color: #1877f2;
+}
+
+.general-contact-btn.facebook:hover {
+  background: #1877f2;
+  color: white;
+}
+
+/* Членство */
+.general-membership-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.general-membership-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.general-membership-header svg {
+  color: #fbbf24;
+  font-size: 1.3rem;
+}
+
+.general-membership-fee {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.general-fee-amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #fbbf24;
+}
+
+.general-fee-period {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+}
+
+.general-membership-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.general-benefit-item {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.general-more-benefits {
+  color: #fbbf24;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Дясна страна - Галерия */
+.general-hero-gallery {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.general-gallery-container {
+  position: relative;
+}
+
+.general-main-image-container {
+  position: relative;
+  border-radius: 25px;
+  overflow: hidden;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.general-main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.general-main-image:hover {
+  transform: scale(1.05);
+}
+
+.general-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  backdrop-filter: blur(10px);
+}
+
+.general-nav-btn:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.general-nav-btn.prev {
+  left: 1rem;
+}
+
+.general-nav-btn.next {
+  right: 1rem;
+}
+
+.general-image-counter {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.general-thumbnails {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem;
+}
+
+.general-thumbnail {
+  position: relative;
+  width: 80px;
+  height: 60px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+
+.general-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.general-thumbnail.active {
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.5);
+}
+
+.general-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.general-more-images {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+/* Placeholder */
+.general-gallery-placeholder {
+  height: 500px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.general-placeholder-content {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.general-placeholder-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  object-fit: cover;
+}
+
+.general-placeholder-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.general-placeholder-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.general-placeholder-content p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Модал за членове */
+.general-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: generalFadeIn 0.3s ease;
+}
+
+.general-modal {
+  background: white;
+  border-radius: 25px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  color: #1a202c;
+  animation: generalSlideUp 0.3s ease;
+}
+
+.general-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.general-modal-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.general-modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.general-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.general-modal-content {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.general-search-box {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.general-search-box svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.general-search-box input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.general-search-box input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.general-members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.general-member-card {
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.general-member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.general-member-avatar {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem auto;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.general-member-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.general-member-avatar svg {
+  font-size: 2.5rem;
+  color: #9ca3af;
+}
+
+.general-member-crown {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #fbbf24;
+  color: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.general-member-info h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.5rem 0;
+}
+
+.general-member-role {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.general-member-bio {
+  color: #6b7280;
+  font-size: 0.8rem;
+  margin: 0 0 1rem 0;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.general-member-details {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.general-member-details span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.general-member-details svg {
+  font-size: 0.7rem;
+}
+
+.general-member-details a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.general-member-details a:hover {
+  color: #667eea;
+  text-decoration: underline;
+}
+
+.general-member-address {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.general-member-address svg {
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+}
+
+.general-member-address span {
+  line-height: 1.3;
+}
+
+.general-no-results {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.general-no-results svg {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Анимации */
+@keyframes generalPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes generalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes generalSlideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive дизайн */
+@media (max-width: 1200px) {
+  .general-hero-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .general-hero-bottom-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .general-hero-main {
+    padding: 2rem 0;
+    min-height: auto;
+  }
+  
+  .general-hero-container {
+    padding: 0 1rem;
+  }
+  
+  .general-hero-top-bar {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .general-hero-badges,
+  .general-hero-actions {
+    justify-content: center;
+  }
+  
+  .general-club-name {
+    font-size: 2.5rem;
+  }
+  
+  .general-hero-title-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .general-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .general-contact-buttons {
+    justify-content: center;
+  }
+  
+  .general-main-image-container {
+    height: 300px;
+  }
+  
+  .general-modal-content {
+    padding: 1rem;
+  }
+  
+  .general-members-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .general-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .general-contact-buttons {
+    flex-direction: column;
+  }
+  
+  .general-nav-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}

@@ -2,6 +2,7 @@ import './App.css';
 import { Footer } from './components/Footer/Footer.jsx';
 import { Header } from './components/Header/Header.jsx';
 import { Home } from './components/Home/Home.jsx';
+import {  HelmetProvider } from 'react-helmet-async';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { NotFound } from './components/ErrorPages/NotFound/NotFound.jsx';
 import { ServerError } from './components/ErrorPages/ServerError/ServerError.jsx';
@@ -57,6 +58,9 @@ import { AnalyticsProvider } from './components/contexts/AnalyticsContext.jsx';
 import EliteMembershipPage from './components/EliteMembershipPage/EliteMembershipPage.jsx';
 import { useTranslation } from 'react-i18next';
 import GamesPage from './components/GamesPage/GamesPage.jsx';
+import { AllClubs } from './components/Clubs/AllClubs/AllClubs.jsx';
+import { ClubProvider } from './components/contexts/ClubContext.jsx';
+import ClubView from './components/Clubs/ClubView/ClubView.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -103,6 +107,7 @@ function App() {
 
   return (
     <>
+    <HelmetProvider>
       <ErrorBoundary>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <UserProvider>
@@ -116,6 +121,7 @@ function App() {
                           <AnalyticsProvider>
                             <LoadingProvider>
                               <ArticleLimitProvider>
+                                <ClubProvider>
                                 {!isProfilePage && <Header
                                   additionalClasses={isProfilePage ? 'hide-header' : ''}
                                 />}
@@ -186,6 +192,8 @@ function App() {
                                   </Route>
                                   
                                   <Route path="/craigslist" element={<CommunityPage />} />
+                                  <Route path="/clubs" element={<AllClubs />} />
+                                  <Route path="/clubs/:slug" element={<ClubView />} />
                                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                                   <Route path="/ads" element={<AdsCard />} />
                                   <Route path="/filter" element={<FiltersMap />} />
@@ -204,6 +212,7 @@ function App() {
                                   />
                                 )}
                                 {!isProfilePage && <MenuCommunity />}
+                                </ClubProvider>
                               </ArticleLimitProvider>
                             </LoadingProvider>
                           </AnalyticsProvider>
@@ -217,6 +226,7 @@ function App() {
           </UserProvider>
         </GoogleOAuthProvider>
       </ErrorBoundary>
+      </HelmetProvider>
     </>
   );
 }

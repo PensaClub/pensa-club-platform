@@ -1,0 +1,222 @@
+/* components/Clubs/AllClubs/ClubsHero/clubsHero.css */
+.clubs-hero-section {
+  margin-top: 80px;
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 50%, #3182ce 100%);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clubs-hero-section.clubs-hero-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.clubs-hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.clubs-hero-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  animation: clubsHeroPatternFloat 20s ease-in-out infinite;
+}
+
+.clubs-hero-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(227, 62, 62, 0.1) 0%, transparent 50%);
+}
+
+.clubs-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: center;
+}
+
+.clubs-hero-text-content {
+  color: white;
+}
+
+.clubs-hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.clubs-hero-title-highlight {
+  background: linear-gradient(45deg, #e53e3e, #f56565);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+.clubs-hero-subtitle {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.clubs-hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.clubs-hero-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.clubs-hero-stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e53e3e;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.clubs-hero-stat-label {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+.clubs-hero-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.clubs-hero-visual {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+.clubs-hero-circles {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.clubs-hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.clubs-hero-circle-1 {
+  width: 120px;
+  height: 120px;
+  top: 20%;
+  left: 10%;
+  animation: clubsHeroFloat 6s ease-in-out infinite;
+  background: linear-gradient(45deg, rgba(227, 62, 62, 0.3), rgba(245, 101, 101, 0.3));
+}
+
+.clubs-hero-circle-2 {
+  width: 80px;
+  height: 80px;
+  top: 60%;
+  left: 60%;
+  animation: clubsHeroFloat 8s ease-in-out infinite reverse;
+  background: linear-gradient(45deg, rgba(49, 130, 206, 0.3), rgba(66, 153, 225, 0.3));
+}
+
+.clubs-hero-circle-3 {
+  width: 60px;
+  height: 60px;
+  top: 10%;
+  right: 20%;
+  animation: clubsHeroFloat 10s ease-in-out infinite;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+}
+
+@keyframes clubsHeroPatternFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes clubsHeroFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .clubs-hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+  
+  .clubs-hero-visual {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+  
+  .clubs-hero-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .clubs-hero-section {
+    min-height: 300px;
+    padding: 2rem 0;
+  }
+  
+  .clubs-hero-title {
+    font-size: 2rem;
+  }
+  
+  .clubs-hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .clubs-hero-stats {
+    gap: 1rem;
+  }
+  
+  .clubs-hero-stat-number {
+    font-size: 1.5rem;
+  }
+}

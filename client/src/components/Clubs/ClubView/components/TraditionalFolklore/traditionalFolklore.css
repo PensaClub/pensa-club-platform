@@ -1,0 +1,1221 @@
+.traditional-folklore-main-section {
+  padding: 6rem 0;
+  background: linear-gradient(180deg, #fef3c7 0%, #ffffff 50%, #fef2f2 100%);
+  position: relative;
+}
+
+.traditional-folklore-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Header */
+.traditional-folklore-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.traditional-folklore-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+}
+
+.traditional-folklore-badge svg {
+  font-size: 1.2rem;
+}
+
+.traditional-folklore-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.traditional-folklore-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Performance Stats */
+.traditional-folklore-stats {
+  margin-bottom: 4rem;
+}
+
+.traditional-folklore-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.traditional-folklore-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.traditional-folklore-stat-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.traditional-folklore-stat-content {
+  flex: 1;
+}
+
+.traditional-folklore-stat-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #1e293b;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.traditional-folklore-stat-label {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Main Grid */
+.traditional-folklore-main-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* Section */
+.traditional-folklore-section {
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.traditional-folklore-section::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.1), transparent);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.traditional-folklore-section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-folklore-section-header svg {
+  font-size: 3rem;
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+.traditional-folklore-section-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-folklore-section-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+/* Cards Grid */
+.traditional-folklore-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Card Base */
+.traditional-folklore-card {
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 2rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.traditional-folklore-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.traditional-folklore-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: 1;
+}
+
+/* Card Variants */
+.traditional-folklore-card.activity {
+  border-color: #dc2626;
+}
+
+.traditional-folklore-card.activity:hover {
+  background: #fef2f2;
+  border-color: #b91c1c;
+}
+
+.traditional-folklore-card.activity::before {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+.traditional-folklore-card.event {
+  border-color: #fbbf24;
+}
+
+.traditional-folklore-card.event:hover {
+  background: #fefbeb;
+  border-color: #f59e0b;
+}
+
+.traditional-folklore-card.event::before {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+/* Card Icon */
+.traditional-folklore-card-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  margin: 0 auto 1.5rem auto;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-folklore-card.activity .traditional-folklore-card-icon {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.traditional-folklore-card.event .traditional-folklore-card-icon {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+/* Card Content */
+.traditional-folklore-card-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-folklore-card-content h4 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.traditional-folklore-card-content p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+  text-align: left;
+}
+
+/* Schedule and Date */
+.traditional-folklore-schedule,
+.traditional-folklore-event-date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.traditional-folklore-schedule svg,
+.traditional-folklore-event-date svg {
+  color: #dc2626;
+}
+
+/* Details */
+.traditional-folklore-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.traditional-folklore-instructor,
+.traditional-folklore-participants,
+.traditional-folklore-audience {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.traditional-folklore-instructor svg {
+  color: #7c3aed;
+}
+
+.traditional-folklore-participants svg,
+.traditional-folklore-audience svg {
+  color: #16a34a;
+}
+
+/* Event Info */
+.traditional-folklore-event-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.traditional-folklore-event-type {
+  background: #fbbf24;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Video Gallery */
+.traditional-folklore-videos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-folklore-video-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.traditional-folklore-video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.traditional-folklore-video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.traditional-folklore-video-card:hover .traditional-folklore-video-thumbnail img {
+  transform: scale(1.05);
+}
+
+.traditional-folklore-play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(220, 38, 38, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-play-overlay:hover {
+  background: #dc2626;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.traditional-folklore-duration {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.traditional-folklore-video-info {
+  padding: 1.5rem;
+}
+
+.traditional-folklore-video-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-folklore-video-info p {
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.traditional-folklore-video-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.traditional-folklore-video-type {
+  background: #e2e8f0;
+  color: #475569;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.traditional-folklore-video-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.traditional-folklore-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-action-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* Audio Collection */
+.traditional-folklore-audio {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-folklore-audio-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #f8fafc;
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-audio-card:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.traditional-folklore-audio-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.traditional-folklore-audio-info {
+  flex: 1;
+}
+
+.traditional-folklore-audio-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-folklore-audio-info p {
+  color: #64748b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.traditional-folklore-audio-duration {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.traditional-folklore-audio-duration svg {
+  color: #dc2626;
+}
+
+.traditional-folklore-audio-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.traditional-folklore-play-btn,
+.traditional-folklore-download-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-play-btn {
+  background: #dc2626;
+  color: white;
+}
+
+.traditional-folklore-play-btn:hover {
+  background: #b91c1c;
+  transform: scale(1.1);
+}
+
+.traditional-folklore-download-btn {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.traditional-folklore-download-btn:hover {
+  background: #e2e8f0;
+  transform: scale(1.1);
+}
+
+/* Cultural Awards */
+.traditional-folklore-awards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-folklore-award-card {
+  display: flex;
+  gap: 1.5rem;
+  background: #fef3c7;
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid #fcd34d;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-award-card:hover {
+  background: #fef08a;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+}
+
+.traditional-folklore-award-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.traditional-folklore-award-content h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #92400e;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-folklore-award-content p {
+  color: #a16207;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.traditional-folklore-award-details {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.traditional-folklore-award-year {
+  background: #92400e;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.traditional-folklore-award-by {
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Call to Action */
+.traditional-folklore-cta {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 25px;
+  padding: 3rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  margin-top: 4rem;
+}
+
+.traditional-folklore-cta::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.traditional-folklore-cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.traditional-folklore-cta-content h3 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.traditional-folklore-cta-content p {
+  font-size: 1.2rem;
+  margin: 0 0 2rem 0;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.traditional-folklore-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.traditional-folklore-cta-primary,
+.traditional-folklore-cta-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.2rem 2.5rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.traditional-folklore-cta-primary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.traditional-folklore-cta-primary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.traditional-folklore-cta-secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.traditional-folklore-cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Decorative Pattern */
+.traditional-folklore-decorative {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.traditional-folklore-pattern {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  color: rgba(220, 38, 38, 0.3);
+  font-size: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .traditional-folklore-main-section {
+    padding: 4rem 0;
+  }
+  
+  .traditional-folklore-container {
+    padding: 0 1rem;
+  }
+  
+  .traditional-folklore-cards,
+  .traditional-folklore-videos,
+  .traditional-folklore-awards {
+    grid-template-columns: 1fr;
+  }
+  
+  .traditional-folklore-section {
+    padding: 2rem;
+  }
+  
+  .traditional-folklore-cta {
+    padding: 2rem;
+  }
+  
+  .traditional-folklore-cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .traditional-folklore-audio-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .traditional-folklore-award-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .traditional-folklore-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .traditional-folklore-card {
+    padding: 1.5rem;
+  }
+  
+  .traditional-folklore-video-thumbnail {
+    height: 150px;
+  }
+  
+  .traditional-folklore-pattern {
+    gap: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .traditional-folklore-video-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .traditional-folklore-action-btn {
+    justify-content: center;
+  }
+}
+/* Video Modal */
+.traditional-folklore-video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.traditional-folklore-video-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+}
+
+.traditional-folklore-video-modal-container {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+}
+
+.traditional-folklore-video-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 10002;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-video-modal-close:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.traditional-folklore-video-player {
+  width: 100%;
+  background: black;
+  flex-shrink: 0;
+}
+
+.traditional-folklore-video-player video {
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  display: block;
+}
+
+.traditional-folklore-video-modal-info {
+  padding: 2rem;
+  text-align: center;
+}
+
+.traditional-folklore-video-modal-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.traditional-folklore-video-modal-info p {
+  color: #64748b;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.6;
+}
+
+.traditional-folklore-video-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.traditional-folklore-modal-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.traditional-folklore-modal-btn.primary {
+  background: #dc2626;
+  color: white;
+}
+
+.traditional-folklore-modal-btn.primary:hover {
+  background: #b91c1c;
+  transform: translateY(-2px);
+}
+
+.traditional-folklore-modal-btn.secondary {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.traditional-folklore-modal-btn.secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+/* Registration Modal */
+.traditional-folklore-registration-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.traditional-folklore-registration-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.traditional-folklore-registration-modal-container {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  z-index: 10001;
+  width: 100%;
+}
+
+.traditional-folklore-registration-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  color: #64748b;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 10002;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-registration-modal-close:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.traditional-folklore-registration-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+}
+
+.traditional-folklore-registration-header svg {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.traditional-folklore-registration-header h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.traditional-folklore-registration-header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.traditional-folklore-registration-form {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.traditional-folklore-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.traditional-folklore-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.traditional-folklore-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #374151;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.traditional-folklore-form-group label svg {
+  color: #dc2626;
+  font-size: 0.9rem;
+}
+
+.traditional-folklore-form-group input,
+.traditional-folklore-form-group select,
+.traditional-folklore-form-group textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.traditional-folklore-form-group input:focus,
+.traditional-folklore-form-group select:focus,
+.traditional-folklore-form-group textarea:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.traditional-folklore-form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.traditional-folklore-form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.traditional-folklore-submit-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+}
+
+.traditional-folklore-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.traditional-folklore-cancel-btn {
+  padding: 1.25rem 2rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-folklore-cancel-btn:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.traditional-folklore-form-success,
+.traditional-folklore-form-error {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.traditional-folklore-form-success svg {
+  font-size: 4rem;
+  color: #16a34a;
+  margin-bottom: 1.5rem;
+}
+
+.traditional-folklore-form-error svg {
+  font-size: 4rem;
+  color: #ef4444;
+  margin-bottom: 1.5rem;
+}
+
+.traditional-folklore-form-success h4,
+.traditional-folklore-form-error h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.traditional-folklore-form-success h4 {
+  color: #16a34a;
+}
+
+.traditional-folklore-form-error h4 {
+  color: #ef4444;
+}
+
+.traditional-folklore-form-success p,
+.traditional-folklore-form-error p {
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .traditional-folklore-video-modal,
+  .traditional-folklore-registration-modal {
+    padding: 1rem;
+  }
+  
+  .traditional-folklore-video-modal-container,
+  .traditional-folklore-registration-modal-container {
+    max-width: 95vw;
+  }
+  
+  .traditional-folklore-video-player video {
+    max-height: 40vh;
+  }
+  
+  .traditional-folklore-registration-header,
+  .traditional-folklore-registration-form {
+    padding: 1.5rem;
+  }
+  
+  .traditional-folklore-form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .traditional-folklore-form-actions {
+    flex-direction: column;
+  }
+  
+  .traditional-folklore-video-modal-actions {
+    flex-direction: column;
+  }
+}

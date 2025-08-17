@@ -1,0 +1,270 @@
+/* components/Clubs/AllClubs/RecentArticles/recentArticles.css */
+.clubs-articles-widget {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding:2rem 1rem;
+  height: fit-content;
+}
+
+/* Header */
+.clubs-articles-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f97316;
+}
+
+.clubs-articles-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clubs-articles-header h3 svg {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.clubs-articles-view-all {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: none;
+  border: none;
+  color: #f97316;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.clubs-articles-view-all:hover {
+  background: #ffedd5;
+  transform: translateX(2px);
+}
+
+.clubs-articles-view-all svg {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.clubs-articles-view-all:hover svg {
+  transform: translateX(2px);
+}
+
+/* Articles List */
+.clubs-articles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Article Item */
+.clubs-article-item {
+  display: flex;
+  gap: 0.875rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-direction: column;
+}
+
+.clubs-article-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.clubs-article-item:hover {
+  padding-left: 0.5rem;
+  border-left: 3px solid #f97316;
+}
+
+/* Article Image */
+.clubs-article-image {
+  width: 100%;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f9fafb;
+}
+
+.clubs-article-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.clubs-article-item:hover .clubs-article-image img {
+  transform: scale(1.05);
+}
+
+.clubs-article-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  color: #9ca3af;
+  font-size: 1.5rem;
+}
+
+/* Article Content */
+.clubs-article-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.clubs-article-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+
+.clubs-article-item:hover .clubs-article-title {
+  color: #f97316;
+}
+
+/* Article Meta */
+.clubs-article-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #6b7280;
+}
+
+.clubs-article-meta span{
+  margin-right: 0.375rem;
+  font-size: 0.75rem;
+}
+
+.clubs-article-date,
+.clubs-article-author {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.clubs-article-meta .clubs-article-date svg,
+.clubs-article-meta .clubs-article-author svg {
+  height: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Loading State */
+.clubs-articles-loading {
+  padding: 1rem 0;
+}
+
+.clubs-articles-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.clubs-skeleton-item {
+  display: flex;
+  gap: 0.875rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.clubs-skeleton-item:last-child {
+  border-bottom: none;
+}
+
+.clubs-skeleton-image {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.clubs-skeleton-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.clubs-skeleton-title {
+  height: 16px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  width: 80%;
+}
+
+.clubs-skeleton-meta {
+  height: 12px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  width: 60%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Empty State */
+.clubs-articles-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .clubs-article-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .clubs-articles-widget {
+    padding: 1.25rem;
+  }
+  
+  .clubs-article-image {
+    width: 50px;
+    height: 50px;
+  }
+}

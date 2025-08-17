@@ -1,0 +1,1670 @@
+/* components/SportsHealthTracking/sportsHealthTracking.css */
+.sports-health-tracking-section {
+  padding: 8rem 0;
+  background: linear-gradient(135deg, #0f766e 0%, #059669 25%, #10b981 50%, #34d399 75%, #6ee7b7 100%);
+  background-size: 400% 400%;
+  animation: sportsHealthGradientShift 20s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes sportsHealthGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.sports-health-tracking-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(52, 211, 153, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(110, 231, 183, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.sports-health-tracking-section::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.02), transparent),
+    conic-gradient(from 120deg, transparent, rgba(255, 255, 255, 0.03), transparent),
+    conic-gradient(from 240deg, transparent, rgba(255, 255, 255, 0.01), transparent);
+  animation: sportsHealthBackgroundRotate 30s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes sportsHealthBackgroundRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.sports-health-tracking-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.sports-health-tracking-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 4rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 3rem;
+  box-shadow: 
+    0 25px 100px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: sportsHealthHeaderSlideIn 0.8s ease-out;
+}
+
+@keyframes sportsHealthHeaderSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sports-health-tracking-header-content {
+  animation: sportsHealthContentSlideIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes sportsHealthContentSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sports-health-tracking-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 
+    0 10px 30px rgba(16, 185, 129, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+  animation: sportsHealthBadgePulse 3s ease-in-out infinite;
+}
+
+@keyframes sportsHealthBadgePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 10px 30px rgba(16, 185, 129, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 
+      0 15px 40px rgba(16, 185, 129, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.sports-health-tracking-badge svg {
+  font-size: 1.2rem;
+  animation: sportsHealthShield 2s ease-in-out infinite;
+}
+
+@keyframes sportsHealthShield {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(-5deg); }
+  75% { transform: scale(1.1) rotate(5deg); }
+}
+
+.sports-health-tracking-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  color: white;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #ffffff, #f0fdf4, #ffffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sports-health-tracking-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sports-health-tracking-quick-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: sportsHealthStatsSlideIn 0.8s ease-out 0.4s both;
+}
+
+@keyframes sportsHealthStatsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sports-health-tracking-quick-stat {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.sports-health-tracking-quick-stat:hover {
+  transform: translateY(-8px) scale(1.05);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.sports-health-tracking-stat-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-health-tracking-stat-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(45deg);
+  animation: sportsHealthIconShine 3s ease-in-out infinite;
+}
+
+@keyframes sportsHealthIconShine {
+  0%, 100% {
+    transform: rotate(45deg) translate(-100%, -100%);
+  }
+  50% {
+    transform: rotate(45deg) translate(100%, 100%);
+  }
+}
+
+.sports-health-tracking-stat-content {
+  color: white;
+}
+
+.sports-health-tracking-stat-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sports-health-tracking-stat-label {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Tabs */
+.sports-health-tracking-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 1rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.sports-health-tracking-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-health-tracking-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s;
+}
+
+.sports-health-tracking-tab:hover::before {
+  left: 100%;
+}
+
+.sports-health-tracking-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.sports-health-tracking-tab.active {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+  transform: translateY(-2px);
+}
+
+.sports-health-tracking-tab svg {
+  font-size: 1.1rem;
+}
+
+/* Content */
+.sports-health-tracking-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 3rem;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.1);
+  min-height: 600px;
+  animation: sportsHealthContentFadeIn 0.6s ease-out;
+}
+
+@keyframes sportsHealthContentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Overview Tab */
+.sports-health-tracking-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.sports-health-tracking-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.sports-health-tracking-metric-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  animation: sportsHealthMetricSlideIn 0.6s ease var(--metric-delay, 0s) both;
+}
+
+@keyframes sportsHealthMetricSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.sports-health-tracking-metric-card:nth-child(1) { --metric-delay: 0.1s; }
+.sports-health-tracking-metric-card:nth-child(2) { --metric-delay: 0.2s; }
+.sports-health-tracking-metric-card:nth-child(3) { --metric-delay: 0.3s; }
+.sports-health-tracking-metric-card:nth-child(4) { --metric-delay: 0.4s; }
+
+.sports-health-tracking-metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--metric-gradient);
+  border-radius: 20px 20px 0 0;
+}
+
+.sports-health-tracking-metric-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+}
+
+.sports-health-tracking-metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sports-health-tracking-metric-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--metric-gradient);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.sports-health-tracking-metric-trend {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.sports-health-tracking-metric-trend.up {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+}
+
+.sports-health-tracking-metric-trend.down {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  color: white;
+}
+
+.sports-health-tracking-metric-trend.stable {
+  background: linear-gradient(135deg, #6b7280, #9ca3af);
+  color: white;
+}
+
+.sports-health-tracking-metric-content h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem 0;
+}
+
+.sports-health-tracking-metric-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.sports-health-tracking-metric-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+}
+
+.sports-health-tracking-metric-unit {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sports-health-tracking-metric-change {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+/* Section Headers */
+.sports-health-tracking-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.sports-health-tracking-section-header h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+}
+
+.sports-health-tracking-view-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-view-all-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Goals Overview */
+.sports-health-tracking-goals-overview {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.sports-health-tracking-goals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sports-health-tracking-goal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-goal-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.sports-health-tracking-goal-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sports-health-tracking-goal-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--goal-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.sports-health-tracking-goal-details h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.25rem 0;
+}
+
+.sports-health-tracking-goal-details span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sports-health-tracking-goal-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 200px;
+}
+
+.sports-health-tracking-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.sports-health-tracking-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.sports-health-tracking-progress-percent {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  min-width: 45px;
+  text-align: right;
+}
+
+/* Health Tips */
+.sports-health-tracking-tips-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.sports-health-tracking-tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.sports-health-tracking-tip-card {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-tip-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+}
+
+.sports-health-tracking-tip-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--tip-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sports-health-tracking-tip-content h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0;
+}
+
+.sports-health-tracking-tip-content p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Metrics Tab */
+.sports-health-tracking-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sports-health-tracking-metric-selector {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sports-health-tracking-metric-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-metric-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.sports-health-tracking-metric-btn.active {
+  background: var(--metric-color);
+  border-color: var(--metric-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.sports-health-tracking-timeframe-selector {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 0.5rem;
+}
+
+.sports-health-tracking-timeframe-btn {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-timeframe-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.sports-health-tracking-timeframe-btn.active {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.sports-health-tracking-chart-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 3rem;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sports-health-tracking-chart-placeholder {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sports-health-tracking-chart-placeholder svg {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.sports-health-tracking-chart-placeholder h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0;
+}
+
+.sports-health-tracking-chart-placeholder p {
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sports-health-tracking-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.sports-health-tracking-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+.sports-health-tracking-add-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.6);
+}
+
+/* Goals Tab */
+.sports-health-tracking-goals {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sports-health-tracking-goals-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sports-health-tracking-goals-header h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 0.5rem 0;
+}
+
+.sports-health-tracking-goals-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.sports-health-tracking-goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.sports-health-tracking-goal-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-health-tracking-goal-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+}
+
+.sports-health-tracking-goal-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sports-health-tracking-goal-card-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--goal-color);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.sports-health-tracking-goal-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sports-health-tracking-goal-achievement {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  animation: sportsHealthTrophyBounce 2s ease-in-out infinite;
+}
+
+@keyframes sportsHealthTrophyBounce {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-5px) scale(1.1); }
+}
+
+.sports-health-tracking-goal-edit-btn {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-goal-edit-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: scale(1.1);
+}
+
+.sports-health-tracking-goal-card-content h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem 0;
+}
+
+.sports-health-tracking-goal-values {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sports-health-tracking-goal-current {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.sports-health-tracking-goal-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+}
+
+.sports-health-tracking-goal-unit {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sports-health-tracking-goal-target {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+.sports-health-tracking-goal-edit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sports-health-tracking-goal-edit input {
+  width: 80px;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+}
+
+.sports-health-tracking-save-btn {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-save-btn:hover {
+  transform: scale(1.1);
+}
+
+.sports-health-tracking-goal-progress-section {
+  margin-top: 1rem;
+}
+
+.sports-health-tracking-goal-progress-bar {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.sports-health-tracking-goal-progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.8s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sports-health-tracking-goal-progress-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: sportsHealthProgressShine 2s ease-in-out infinite;
+}
+
+@keyframes sportsHealthProgressShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.sports-health-tracking-goal-progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sports-health-tracking-goal-progress-percent {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+}
+
+.sports-health-tracking-goal-deadline {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Insights Tab */
+.sports-health-tracking-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.sports-health-tracking-insights-header {
+  text-align: center;
+}
+
+.sports-health-tracking-insights-header h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 0.5rem 0;
+}
+
+.sports-health-tracking-insights-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.sports-health-tracking-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.sports-health-tracking-insight-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.4s ease;
+}
+
+.sports-health-tracking-insight-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+}
+
+.sports-health-tracking-insight-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.sports-health-tracking-insight-header svg {
+  font-size: 1.5rem;
+  color: #10b981;
+}
+
+.sports-health-tracking-insight-header h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.sports-health-tracking-insight-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sports-health-tracking-trend-item,
+.sports-health-tracking-recommendation,
+.sports-health-tracking-achievement {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-trend-item:hover,
+.sports-health-tracking-recommendation:hover,
+.sports-health-tracking-achievement:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.sports-health-tracking-trend-item.positive svg {
+  color: #10b981;
+}
+
+.sports-health-tracking-trend-item.negative svg {
+  color: #ef4444;
+}
+
+.sports-health-tracking-trend-item.neutral svg {
+  color: #6b7280;
+}
+
+.sports-health-tracking-trend-item span,
+.sports-health-tracking-recommendation span,
+.sports-health-tracking-achievement span {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.sports-health-tracking-recommendation svg {
+  color: #3b82f6;
+}
+
+.sports-health-tracking-achievement svg {
+  color: #fbbf24;
+}
+
+.sports-health-tracking-all-tips h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1.5rem 0;
+}
+
+.sports-health-tracking-tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sports-health-tracking-tip-item {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-tip-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+}
+
+.sports-health-tracking-tip-item-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--tip-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sports-health-tracking-tip-item-content h5 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0;
+}
+
+.sports-health-tracking-tip-item-content p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Services Tab */
+.sports-health-tracking-services {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.sports-health-tracking-services-header {
+  text-align: center;
+}
+
+.sports-health-tracking-services-header h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 0.5rem 0;
+}
+
+.sports-health-tracking-services-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.sports-health-tracking-service-section h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1.5rem 0;
+}
+
+.sports-health-tracking-lectures-grid,
+.sports-health-tracking-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.sports-health-tracking-lecture-card,
+.sports-health-tracking-service-card {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-lecture-card:hover,
+.sports-health-tracking-service-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.sports-health-tracking-lecture-icon,
+.sports-health-tracking-service-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+}
+
+.sports-health-tracking-lecture-content h5,
+.sports-health-tracking-service-content h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.sports-health-tracking-service-content p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.sports-health-tracking-lecture-details,
+.sports-health-tracking-service-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sports-health-tracking-lecture-detail,
+.sports-health-tracking-service-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sports-health-tracking-lecture-detail svg,
+.sports-health-tracking-service-detail svg {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sports-health-tracking-emergency-info {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(248, 113, 113, 0.05));
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.sports-health-tracking-emergency-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sports-health-tracking-emergency-header svg {
+  font-size: 1.5rem;
+  color: #f87171;
+}
+
+.sports-health-tracking-emergency-header h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.sports-health-tracking-emergency-content p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 1rem 0;
+}
+
+.sports-health-tracking-emergency-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sports-health-tracking-emergency-contact {
+  font-size: 1.1rem;
+  color: white;
+  font-weight: 600;
+}
+
+/* Modal */
+.sports-health-tracking-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 2rem;
+  animation: sportsHealthModalOverlayIn 0.3s ease;
+}
+
+@keyframes sportsHealthModalOverlayIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(15px);
+  }
+}
+
+.sports-health-tracking-modal {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: sportsHealthModalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 50px 150px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+@keyframes sportsHealthModalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.sports-health-tracking-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sports-health-tracking-modal-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.sports-health-tracking-modal-close {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-modal-close:hover {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  color: white;
+  transform: scale(1.1) rotate(90deg);
+}
+
+.sports-health-tracking-modal-form {
+  padding: 2rem;
+}
+
+.sports-health-tracking-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.sports-health-tracking-form-group label {
+  font-weight: 600;
+  color: white;
+  font-size: 1rem;
+}
+
+.sports-health-tracking-form-group input,
+.sports-health-tracking-form-group select,
+.sports-health-tracking-form-group textarea {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-form-group input::placeholder,
+.sports-health-tracking-form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sports-health-tracking-form-group input:focus,
+.sports-health-tracking-form-group select:focus,
+.sports-health-tracking-form-group textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 0 0 4px rgba(255, 255, 255, 0.1),
+    0 8px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.sports-health-tracking-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.sports-health-tracking-form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.sports-health-tracking-form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.sports-health-tracking-submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+.sports-health-tracking-submit-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.6);
+}
+
+.sports-health-tracking-cancel-btn {
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sports-health-tracking-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .sports-health-tracking-header {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .sports-health-tracking-quick-stats {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .sports-health-tracking-section {
+    padding: 6rem 0;
+  }
+  
+  .sports-health-tracking-container {
+    padding: 0 1rem;
+  }
+  
+  .sports-health-tracking-header {
+    padding: 2rem;
+  }
+  
+  .sports-health-tracking-quick-stats {
+    flex-direction: column;
+  }
+  
+  .sports-health-tracking-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .sports-health-tracking-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .sports-health-tracking-content {
+    padding: 2rem;
+  }
+  
+  .sports-health-tracking-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sports-health-tracking-goal-progress {
+    min-width: auto;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  
+  .sports-health-tracking-insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sports-health-tracking-lectures-grid,
+  .sports-health-tracking-services-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sports-health-tracking-form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .sports-health-tracking-form-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .sports-health-tracking-title {
+    font-size: 2.5rem;
+  }
+  
+  .sports-health-tracking-metric-selector {
+    flex-direction: column;
+  }
+  
+  .sports-health-tracking-timeframe-selector {
+    flex-direction: column;
+  }
+  
+  .sports-health-tracking-goals-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sports-health-tracking-modal {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .sports-health-tracking-section,
+  .sports-health-tracking-section::after,
+  .sports-health-tracking-badge,
+  .sports-health-tracking-badge svg,
+  .sports-health-tracking-stat-icon::before,
+  .sports-health-tracking-goal-achievement,
+  .sports-health-tracking-progress-fill::before {
+    animation: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .sports-health-tracking-section {
+    background: white;
+    color: black;
+  }
+  
+  .sports-health-tracking-modal-overlay,
+  .sports-health-tracking-add-btn,
+  .sports-health-tracking-goal-edit-btn {
+    display: none;
+  }
+}
