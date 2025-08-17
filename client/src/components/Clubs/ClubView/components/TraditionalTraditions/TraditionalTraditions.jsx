@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faLeaf,
@@ -30,6 +31,7 @@ import {
 import './traditionalTraditions.css';
 
 export const TraditionalTraditions = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [isMembershipModalOpen, setIsMembershipModalOpen] = useState(false);
   const [membershipForm, setMembershipForm] = useState({
     name: '',
@@ -39,21 +41,16 @@ export const TraditionalTraditions = ({ club }) => {
     interests: '',
     message: ''
   });
-  const [formStatus, setFormStatus] = useState(null); // 'sending', 'sent', 'error'
+  const [formStatus, setFormStatus] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // ИЗПОЛЗВАМЕ РЕАЛНИТЕ ДАННИ ОТ MOCK ФАЙЛА
-  
-  // Традиционни събития от activities.events
   const traditionalEvents = club.activities?.events?.filter(event => 
     event.type === 'traditional' || event.type === 'cultural'
   ) || [];
 
-  // Регулярни традиционни дейности 
   const traditionalActivities = club.activities?.regular?.filter(activity => 
     activity.name.toLowerCase().includes('хор') || 
     activity.name.toLowerCase().includes('танци') ||
@@ -61,7 +58,6 @@ export const TraditionalTraditions = ({ club }) => {
     activity.name.toLowerCase().includes('тракийски')
   ) || [];
 
-  // Екскурзии до традиционни места
   const traditionalTrips = club.activities?.trips?.filter(trip =>
     trip.destination.toLowerCase().includes('манастир') ||
     trip.destination.toLowerCase().includes('копривщица') ||
@@ -70,22 +66,18 @@ export const TraditionalTraditions = ({ club }) => {
     trip.destination.toLowerCase().includes('велико търново')
   ) || [];
 
-  // Региональна информация
   const regionalInfo = club.regionalInfo;
   const location = club.location;
 
-  // Социални проекти свързани с традиции
   const traditionalProjects = club.socialImpact?.communityProjects?.filter(project =>
     project.name.toLowerCase().includes('традиц') ||
     project.name.toLowerCase().includes('култур')
   ) || [];
 
-  // Партньорства с културни институции
   const culturalPartnerships = club.socialImpact?.partnerships?.filter(partnership =>
     partnership.type === 'културно' || partnership.type === 'образователно'
   ) || [];
 
-  // Ако няма никакви традиционни елементи, не показваме компонента
   const hasTraditionalContent = traditionalEvents.length > 0 || 
                                traditionalActivities.length > 0 || 
                                traditionalTrips.length > 0 ||
@@ -115,9 +107,17 @@ export const TraditionalTraditions = ({ club }) => {
     return faHeart;
   };
 
-  // ФУНКЦИОНАЛНИ HANDLERS
+  const formatDate = (date) => {
+    const dateObj = new Date(date);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    return dateObj.toLocaleDateString(locale, { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
 
-  // Membership modal handlers
   const openMembershipModal = () => {
     setIsMembershipModalOpen(true);
   };
@@ -147,24 +147,16 @@ export const TraditionalTraditions = ({ club }) => {
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Заявка за членство в ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Заявка за членство:
-
-Име: ${membershipForm.name}
-Имейл: ${membershipForm.email}
-Телефон: ${membershipForm.phone || 'Не е посочен'}
-Възраст: ${membershipForm.age || 'Не е посочена'}
-Интереси: ${membershipForm.interests || 'Общи'}
-
-Съобщение:
-${membershipForm.message || 'Искам да стана член на клуба'}
-
----
-Изпратено от сайта на ${club.name}
-      `);
+      const subject = encodeURIComponent(t('clubs.TraditionalTraditions.membershipModal.emailSubject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.TraditionalTraditions.membershipModal.emailBody', {
+        name: membershipForm.name,
+        email: membershipForm.email,
+        phone: membershipForm.phone || t('clubs.TraditionalTraditions.membershipModal.notSpecified'),
+        age: membershipForm.age || t('clubs.TraditionalTraditions.membershipModal.notSpecified'),
+        interests: membershipForm.interests || t('clubs.TraditionalTraditions.membershipModal.generalInterests'),
+        message: membershipForm.message || t('clubs.TraditionalTraditions.membershipModal.defaultMessage'),
+        clubName: club.name
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -181,17 +173,15 @@ ${membershipForm.message || 'Искам да стана член на клуба
   };
 
   const handleViewEvents = () => {
-    // Scroll to calendar section if exists
     const calendarSection = document.getElementById('traditional-calendar');
     if (calendarSection) {
       calendarSection.scrollIntoView({ behavior: 'smooth' });
     } else {
-      // Show available events in alert
       if (traditionalEvents.length > 0) {
         const eventsList = traditionalEvents.map(event => `• ${event.title} - ${event.date}`).join('\n');
-        alert(`Предстоящи традиционни събития:\n\n${eventsList}`);
+        alert(t('clubs.TraditionalTraditions.messages.upcomingEvents', { events: eventsList }));
       } else {
-        alert('В момента няма предстоящи традиционни събития.');
+        alert(t('clubs.TraditionalTraditions.messages.noEvents'));
       }
     }
   };
@@ -200,40 +190,29 @@ ${membershipForm.message || 'Искам да стана член на клуба
     window.open(`tel:${phone}`);
   };
 
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('bg-BG', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
-
   return (
     <section id="traditional-traditions" className="traditional-traditions-main-section">
       <div className="traditional-traditions-container">
         
-        {/* Header */}
         <div className="traditional-traditions-header">
           <div className="traditional-traditions-badge">
             <FontAwesomeIcon icon={faCrown} />
-            <span>Традиции и култура</span>
+            <span>{t('clubs.TraditionalTraditions.header.badge')}</span>
           </div>
-          <h2 className="traditional-traditions-title">Нашите корени и обичаи</h2>
+          <h2 className="traditional-traditions-title">{t('clubs.TraditionalTraditions.header.title')}</h2>
           <p className="traditional-traditions-subtitle">
-            Съхраняваме и предаваме българската култура и традиции
+            {t('clubs.TraditionalTraditions.header.subtitle')}
           </p>
         </div>
 
-        {/* Main Content */}
         <div className="traditional-traditions-main-grid">
           
-          {/* Traditional Events - показва се САМО ако има събития */}
           {traditionalEvents.length > 0 && (
             <div className="traditional-traditions-section">
               <div className="traditional-traditions-section-header">
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                <h3>Традиционни събития</h3>
-                <p>Празници и културни мероприятия</p>
+                <h3>{t('clubs.TraditionalTraditions.events.title')}</h3>
+                <p>{t('clubs.TraditionalTraditions.events.subtitle')}</p>
               </div>
               
               <div className="traditional-traditions-cards">
@@ -246,7 +225,7 @@ ${membershipForm.message || 'Искам да стана член на клуба
                       <h4>{event.title}</h4>
                       <div className="traditional-traditions-date">
                         <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span>{event.date} в {event.time}</span>
+                        <span>{t('clubs.TraditionalTraditions.events.dateTime', { date: event.date, time: event.time })}</span>
                       </div>
                       {event.description && (
                         <p>{event.description}</p>
@@ -254,7 +233,7 @@ ${membershipForm.message || 'Искам да стана член на клуба
                       {event.participants && (
                         <div className="traditional-traditions-participants">
                           <FontAwesomeIcon icon={faUsers} />
-                          <span>{event.participants} участници</span>
+                          <span>{t('clubs.TraditionalTraditions.common.participants', { count: event.participants })}</span>
                         </div>
                       )}
                     </div>
@@ -264,13 +243,12 @@ ${membershipForm.message || 'Искам да стана член на клуба
             </div>
           )}
 
-          {/* Traditional Activities - показва се САМО ако има дейности */}
           {traditionalActivities.length > 0 && (
             <div className="traditional-traditions-section">
               <div className="traditional-traditions-section-header">
                 <FontAwesomeIcon icon={faMusic} />
-                <h3>Традиционни дейности</h3>
-                <p>Редовни културни занимания</p>
+                <h3>{t('clubs.TraditionalTraditions.activities.title')}</h3>
+                <p>{t('clubs.TraditionalTraditions.activities.subtitle')}</p>
               </div>
               
               <div className="traditional-traditions-cards">
@@ -282,20 +260,20 @@ ${membershipForm.message || 'Искам да стана член на клуба
                     <div className="traditional-traditions-card-content">
                       <h4>{activity.name}</h4>
                       <div className="traditional-traditions-schedule">
-                        <strong>{activity.day}</strong> от {activity.time}
+                        <strong>{activity.day}</strong> {t('clubs.TraditionalTraditions.activities.from')} {activity.time}
                       </div>
                       {activity.description && (
                         <p>{activity.description}</p>
                       )}
                       {activity.instructor && (
                         <div className="traditional-traditions-instructor">
-                          Инструктор: {activity.instructor}
+                          {t('clubs.TraditionalTraditions.activities.instructor')}: {activity.instructor}
                         </div>
                       )}
                       {activity.participants && (
                         <div className="traditional-traditions-participants">
                           <FontAwesomeIcon icon={faUsers} />
-                          <span>{activity.participants} участници</span>
+                          <span>{t('clubs.TraditionalTraditions.common.participants', { count: activity.participants })}</span>
                         </div>
                       )}
                     </div>
@@ -305,13 +283,12 @@ ${membershipForm.message || 'Искам да стана член на клуба
             </div>
           )}
 
-          {/* Traditional Trips - показва се САМО ако има екскурзии */}
           {traditionalTrips.length > 0 && (
             <div className="traditional-traditions-section">
               <div className="traditional-traditions-section-header">
                 <FontAwesomeIcon icon={faMapMarkerAlt} />
-                <h3>Културни екскурзии</h3>
-                <p>Посещения на традиционни места</p>
+                <h3>{t('clubs.TraditionalTraditions.trips.title')}</h3>
+                <p>{t('clubs.TraditionalTraditions.trips.subtitle')}</p>
               </div>
               
               <div className="traditional-traditions-cards">
@@ -332,10 +309,10 @@ ${membershipForm.message || 'Искам да стана член на клуба
                       <div className="traditional-traditions-trip-details">
                         <div className="traditional-traditions-participants">
                           <FontAwesomeIcon icon={faUsers} />
-                          <span>{trip.participants} участници</span>
+                          <span>{t('clubs.TraditionalTraditions.common.participants', { count: trip.participants })}</span>
                         </div>
                         <div className="traditional-traditions-price">
-                          Цена: {trip.price} лв.
+                          {t('clubs.TraditionalTraditions.trips.price')}: {trip.price} {t('clubs.TraditionalTraditions.currency')}
                         </div>
                       </div>
                     </div>
@@ -345,13 +322,12 @@ ${membershipForm.message || 'Искам да стана член на клуба
             </div>
           )}
 
-          {/* Regional Heritage - показва се САМО ако има региональна информация */}
           {(regionalInfo || location?.city || location?.region) && (
             <div className="traditional-traditions-section">
               <div className="traditional-traditions-section-header">
                 <FontAwesomeIcon icon={faHome} />
-                <h3>Регионално наследство</h3>
-                <p>Местни традиции и култура</p>
+                <h3>{t('clubs.TraditionalTraditions.heritage.title')}</h3>
+                <p>{t('clubs.TraditionalTraditions.heritage.subtitle')}</p>
               </div>
               
               <div className="traditional-traditions-cards">
@@ -360,17 +336,19 @@ ${membershipForm.message || 'Искам да стана член на клуба
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
                   </div>
                   <div className="traditional-traditions-card-content">
-                    <h4>Наш регион</h4>
+                    <h4>{t('clubs.TraditionalTraditions.heritage.ourRegion')}</h4>
                     <div className="traditional-traditions-location">
                       {location?.city && location?.region ? `${location.city}, ${location.region}` : 
-                       location?.city || location?.region || 'България'}
+                       location?.city || location?.region || t('clubs.TraditionalTraditions.heritage.defaultCountry')}
                     </div>
                     {regionalInfo?.coverageArea && (
-                      <p>Обхватваме: {regionalInfo.coverageArea}</p>
+                      <p>{t('clubs.TraditionalTraditions.heritage.coverage')}: {regionalInfo.coverageArea}</p>
                     )}
                     {regionalInfo?.regionalRole && (
                       <div className="traditional-traditions-role">
-                        Роля: {regionalInfo.regionalRole === 'central' ? 'Централен клуб' : 'Местен клуб'}
+                        {t('clubs.TraditionalTraditions.heritage.role')}: {regionalInfo.regionalRole === 'central' ? 
+                          t('clubs.TraditionalTraditions.heritage.centralClub') : 
+                          t('clubs.TraditionalTraditions.heritage.localClub')}
                       </div>
                     )}
                   </div>
@@ -379,13 +357,12 @@ ${membershipForm.message || 'Искам да стана член на клуба
             </div>
           )}
 
-          {/* Traditional Projects - показва се САМО ако има проекти */}
           {traditionalProjects.length > 0 && (
             <div className="traditional-traditions-section">
               <div className="traditional-traditions-section-header">
                 <FontAwesomeIcon icon={faHandHoldingHeart} />
-                <h3>Културни проекти</h3>
-                <p>Нашите инициативи за съхраняване на традициите</p>
+                <h3>{t('clubs.TraditionalTraditions.projects.title')}</h3>
+                <p>{t('clubs.TraditionalTraditions.projects.subtitle')}</p>
               </div>
               
               <div className="traditional-traditions-cards">
@@ -402,7 +379,7 @@ ${membershipForm.message || 'Искам да стана член на клуба
                       {project.beneficiaries && (
                         <div className="traditional-traditions-participants">
                           <FontAwesomeIcon icon={faUsers} />
-                          <span>{project.beneficiaries} бенефициенти</span>
+                          <span>{t('clubs.TraditionalTraditions.projects.beneficiaries', { count: project.beneficiaries })}</span>
                         </div>
                       )}
                     </div>
@@ -412,13 +389,12 @@ ${membershipForm.message || 'Искам да стана член на клуба
             </div>
           )}
 
-          {/* Cultural Partnerships - показва се САМО ако има партньорства */}
           {culturalPartnerships.length > 0 && (
             <div className="traditional-traditions-section">
               <div className="traditional-traditions-section-header">
                 <FontAwesomeIcon icon={faHandHoldingHeart} />
-                <h3>Културни партньорства</h3>
-                <p>Сътрудничество с институции</p>
+                <h3>{t('clubs.TraditionalTraditions.partnerships.title')}</h3>
+                <p>{t('clubs.TraditionalTraditions.partnerships.subtitle')}</p>
               </div>
               
               <div className="traditional-traditions-cards">
@@ -443,32 +419,30 @@ ${membershipForm.message || 'Искам да стана член на клуба
           )}
         </div>
 
-        {/* Call to Action */}
         <div className="traditional-traditions-cta">
           <div className="traditional-traditions-cta-content">
-            <h3>Станете част от традицията</h3>
-            <p>Присъединете се към нас и помогнете за съхраняването на българската култура</p>
+            <h3>{t('clubs.TraditionalTraditions.cta.title')}</h3>
+            <p>{t('clubs.TraditionalTraditions.cta.subtitle')}</p>
             <div className="traditional-traditions-cta-buttons">
               <button 
                 className="traditional-traditions-cta-primary"
                 onClick={openMembershipModal}
               >
                 <FontAwesomeIcon icon={faUsers} />
-                Станете член
+                {t('clubs.TraditionalTraditions.cta.becomeMember')}
               </button>
               <button 
                 className="traditional-traditions-cta-secondary"
                 onClick={handleViewEvents}
               >
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                Предстоящи събития
+                {t('clubs.TraditionalTraditions.cta.upcomingEvents')}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* MEMBERSHIP MODAL */}
       {isMembershipModalOpen && (
         <div className="traditional-traditions-membership-modal">
           <div className="traditional-traditions-membership-modal-overlay" onClick={closeMembershipModal}></div>
@@ -479,21 +453,21 @@ ${membershipForm.message || 'Искам да стана член на клуба
             
             <div className="traditional-traditions-membership-header">
               <FontAwesomeIcon icon={faUsers} />
-              <h3>Станете член на {club.name}</h3>
-              <p>Присъединете се към нашата общност и съхранявайте традициите заедно с нас</p>
+              <h3>{t('clubs.TraditionalTraditions.membershipModal.title', { clubName: club.name })}</h3>
+              <p>{t('clubs.TraditionalTraditions.membershipModal.subtitle')}</p>
             </div>
             
             {formStatus === 'sent' ? (
               <div className="traditional-traditions-form-success">
                 <FontAwesomeIcon icon={faCheck} />
-                <h4>Заявката е изпратена!</h4>
-                <p>Благодарим ви! Ще се свържем с вас скоро за потвърждение.</p>
+                <h4>{t('clubs.TraditionalTraditions.membershipModal.success.title')}</h4>
+                <p>{t('clubs.TraditionalTraditions.membershipModal.success.message')}</p>
               </div>
             ) : formStatus === 'error' ? (
               <div className="traditional-traditions-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.TraditionalTraditions.membershipModal.error.title')}</h4>
+                <p>{t('clubs.TraditionalTraditions.membershipModal.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleMembershipSubmit} className="traditional-traditions-membership-form">
@@ -501,7 +475,7 @@ ${membershipForm.message || 'Искам да стана член на клуба
                   <div className="traditional-traditions-form-group">
                     <label htmlFor="name">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.TraditionalTraditions.membershipModal.form.name')} *
                     </label>
                     <input
                       type="text"
@@ -509,14 +483,14 @@ ${membershipForm.message || 'Искам да стана член на клуба
                       value={membershipForm.name}
                       onChange={(e) => handleFormChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.TraditionalTraditions.membershipModal.form.namePlaceholder')}
                     />
                   </div>
                   
                   <div className="traditional-traditions-form-group">
                     <label htmlFor="email">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.TraditionalTraditions.membershipModal.form.email')} *
                     </label>
                     <input
                       type="email"
@@ -524,7 +498,7 @@ ${membershipForm.message || 'Искам да стана член на клуба
                       value={membershipForm.email}
                       onChange={(e) => handleFormChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.TraditionalTraditions.membershipModal.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -533,28 +507,28 @@ ${membershipForm.message || 'Искам да стана член на клуба
                   <div className="traditional-traditions-form-group">
                     <label htmlFor="phone">
                       <FontAwesomeIcon icon={faPhone} />
-                      Телефон
+                      {t('clubs.TraditionalTraditions.membershipModal.form.phone')}
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       value={membershipForm.phone}
                       onChange={(e) => handleFormChange('phone', e.target.value)}
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.TraditionalTraditions.membershipModal.form.phonePlaceholder')}
                     />
                   </div>
                   
                   <div className="traditional-traditions-form-group">
                     <label htmlFor="age">
                       <FontAwesomeIcon icon={faUsers} />
-                      Възраст
+                      {t('clubs.TraditionalTraditions.membershipModal.form.age')}
                     </label>
                     <input
                       type="number"
                       id="age"
                       value={membershipForm.age}
                       onChange={(e) => handleFormChange('age', e.target.value)}
-                      placeholder="Въведете вашата възраст"
+                      placeholder={t('clubs.TraditionalTraditions.membershipModal.form.agePlaceholder')}
                     />
                   </div>
                 </div>
@@ -562,27 +536,27 @@ ${membershipForm.message || 'Искам да стана член на клуба
                 <div className="traditional-traditions-form-group">
                   <label htmlFor="interests">
                     <FontAwesomeIcon icon={faHeart} />
-                    Интереси в традиционната култура
+                    {t('clubs.TraditionalTraditions.membershipModal.form.interests')}
                   </label>
                   <input
                     type="text"
                     id="interests"
                     value={membershipForm.interests}
                     onChange={(e) => handleFormChange('interests', e.target.value)}
-                    placeholder="Напр. фолклор, занаяти, кулинария..."
+                    placeholder={t('clubs.TraditionalTraditions.membershipModal.form.interestsPlaceholder')}
                   />
                 </div>
                 
                 <div className="traditional-traditions-form-group">
                   <label htmlFor="message">
                     <FontAwesomeIcon icon={faEnvelope} />
-                    Защо искате да станете член?
+                    {t('clubs.TraditionalTraditions.membershipModal.form.motivation')}
                   </label>
                   <textarea
                     id="message"
                     value={membershipForm.message}
                     onChange={(e) => handleFormChange('message', e.target.value)}
-                    placeholder="Разкажете ни повече за вашата мотивация..."
+                    placeholder={t('clubs.TraditionalTraditions.membershipModal.form.motivationPlaceholder')}
                     rows="4"
                   />
                 </div>
@@ -594,14 +568,16 @@ ${membershipForm.message || 'Искам да стана член на клуба
                     disabled={formStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faEnvelope} />
-                    {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявката'}
+                    {formStatus === 'sending' ? 
+                      t('clubs.TraditionalTraditions.membershipModal.form.sending') : 
+                      t('clubs.TraditionalTraditions.membershipModal.form.submit')}
                   </button>
                   <button 
                     type="button" 
                     onClick={closeMembershipModal}
                     className="traditional-traditions-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.TraditionalTraditions.membershipModal.form.cancel')}
                   </button>
                 </div>
               </form>

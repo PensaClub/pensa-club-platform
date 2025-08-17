@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalendarAlt,
@@ -22,23 +23,21 @@ import {
 import './traditionalCalendar.css';
 
 export const TraditionalCalendar = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState('month'); // 'month', 'week', 'list'
+  const [viewMode, setViewMode] = useState('month');
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Извличаме САМО реални данни от клуба
   const events = club.activities?.events || [];
   const regularActivities = club.activities?.regular || [];
   const trips = club.activities?.trips || [];
   const courses = club.activities?.courses || [];
 
-  // Проверяваме дали има РЕАЛНО съдържание за показване
   const hasCalendarContent = 
     events.length > 0 ||
     regularActivities.length > 0 ||
@@ -49,11 +48,43 @@ export const TraditionalCalendar = ({ club }) => {
     return null;
   }
 
-  // Подготвяме всички календарни елементи
+  const getLocalizedMonthNames = () => {
+    return Array.from({ length: 12 }, (_, i) => {
+      const date = new Date(2024, i, 1);
+      return date.toLocaleDateString(getLocale(), { month: 'long' });
+    });
+  };
+
+  const getLocalizedDayNames = () => {
+    const locale = getLocale();
+    if (i18n.language === 'bg') {
+      return ['Нед', 'Пон', 'Вт', 'Ср', 'Чет', 'Пет', 'Съб'];
+    }
+    return Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(2024, 0, i);
+      return date.toLocaleDateString(locale, { weekday: 'short' });
+    });
+  };
+
+  const getLocale = () => {
+    return i18n.language === 'bg' ? 'bg-BG' : 
+           i18n.language === 'de' ? 'de-DE' : 'en-US';
+  };
+
+  const getDayNameMapping = () => {
+    return {
+      'понеделник': 1, 'вторник': 2, 'сряда': 3, 'четвъртък': 4, 
+      'петък': 5, 'събота': 6, 'неделя': 0
+    };
+  };
+
+  const getEventTypeLabel = (type) => {
+    return t(`clubs.TraditionalCalendar.eventTypes.${type}`, { defaultValue: type });
+  };
+
   const calendarItems = useMemo(() => {
     const items = [];
 
-    // Добавяме еднократни събития
     events.forEach(event => {
       items.push({
         id: `event-${event.id || Math.random()}`,
@@ -69,16 +100,11 @@ export const TraditionalCalendar = ({ club }) => {
       });
     });
 
-    // Добавяме редовни дейности (генерираме дати за следващите 3 месеца)
-    const dayNames = {
-      'понеделник': 1, 'вторник': 2, 'сряда': 3, 'четвъртък': 4, 
-      'петък': 5, 'събота': 6, 'неделя': 0
-    };
+    const dayNames = getDayNameMapping();
 
     regularActivities.forEach(activity => {
       const dayOfWeek = dayNames[activity.day?.toLowerCase()];
       if (dayOfWeek !== undefined) {
-        // Генерираме дати за следващите 12 седмици
         const today = new Date();
         for (let week = 0; week < 12; week++) {
           const activityDate = new Date(today);
@@ -101,11 +127,10 @@ export const TraditionalCalendar = ({ club }) => {
       }
     });
 
-    // Добавяме екскурзии
     trips.forEach(trip => {
       items.push({
         id: `trip-${Math.random()}`,
-        title: `Екскурзия до ${trip.destination}`,
+        title: t('clubs.TraditionalCalendar.tripTitle', { destination: trip.destination }),
         date: new Date(trip.date),
         time: '08:00',
         type: 'trip',
@@ -119,7 +144,6 @@ export const TraditionalCalendar = ({ club }) => {
       });
     });
 
-    // Добавяме курсове (ако имат дати)
     courses.forEach(course => {
       if (course.startDate) {
         items.push({
@@ -140,9 +164,8 @@ export const TraditionalCalendar = ({ club }) => {
     });
 
     return items.sort((a, b) => a.date - b.date);
-  }, [events, regularActivities, trips, courses]);
+  }, [events, regularActivities, trips, courses, t]);
 
-  // Календарни функции
   const today = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -152,20 +175,14 @@ export const TraditionalCalendar = ({ club }) => {
   const firstDayOfWeek = firstDayOfMonth.getDay();
   const daysInMonth = lastDayOfMonth.getDate();
 
-  const monthNames = [
-    'Януари', 'Февруари', 'Март', 'Април', 'Май', 'Юни',
-    'Юли', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември'
-  ];
+  const monthNames = getLocalizedMonthNames();
+  const dayNames = getLocalizedDayNames();
 
-  const dayNames = ['Нед', 'Пон', 'Вт', 'Ср', 'Чет', 'Пет', 'Съб'];
-
-  // Филтрираме събития за текущия месец
   const monthEvents = calendarItems.filter(item => {
     const itemDate = item.date;
     return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
   });
 
-  // Групираме събития по дата
   const eventsByDate = monthEvents.reduce((acc, item) => {
     const dateKey = item.date.getDate();
     if (!acc[dateKey]) acc[dateKey] = [];
@@ -173,7 +190,6 @@ export const TraditionalCalendar = ({ club }) => {
     return acc;
   }, {});
 
-  // Навигация
   const navigateMonth = (direction) => {
     const newDate = new Date(currentDate);
     newDate.setMonth(currentMonth + direction);
@@ -184,7 +200,6 @@ export const TraditionalCalendar = ({ club }) => {
     setCurrentDate(new Date());
   };
 
-  // Event handlers
   const handleEventClick = (event) => {
     setSelectedEvent(event);
     setIsEventModalOpen(true);
@@ -216,7 +231,7 @@ export const TraditionalCalendar = ({ club }) => {
   };
 
   const formatDate = (date) => {
-    return date.toLocaleDateString('bg-BG', { 
+    return date.toLocaleDateString(getLocale(), { 
       weekday: 'long',
       year: 'numeric', 
       month: 'long', 
@@ -225,7 +240,11 @@ export const TraditionalCalendar = ({ club }) => {
   };
 
   const handleShare = (event) => {
-    const text = `${event.title} - ${formatDate(event.date)} в ${event.time}`;
+    const text = t('clubs.TraditionalCalendar.shareText', {
+      title: event.title,
+      date: formatDate(event.date),
+      time: event.time
+    });
     const url = window.location.href;
     
     if (navigator.share) {
@@ -236,27 +255,22 @@ export const TraditionalCalendar = ({ club }) => {
       });
     } else {
       navigator.clipboard.writeText(`${text}\n${url}`);
-      alert('Информацията е копирана в клипборда!');
+      alert(t('clubs.TraditionalCalendar.messages.shareSuccess'));
     }
   };
 
   const handleReservation = (event) => {
-    const subject = encodeURIComponent(`Записване за ${event.title}`);
-    const body = encodeURIComponent(`
-Здравейте,
-
-Бих искал/а да се запиша за "${event.title}" на ${formatDate(event.date)} в ${event.time}.
-
-Моля потвърдете записването ми.
-
-С уважение
-    `);
+    const subject = encodeURIComponent(t('clubs.TraditionalCalendar.reservation.subject', { title: event.title }));
+    const body = encodeURIComponent(t('clubs.TraditionalCalendar.reservation.body', {
+      title: event.title,
+      date: formatDate(event.date),
+      time: event.time
+    }));
     
     const mailtoLink = `mailto:${club.contacts?.email}?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
   };
 
-  // Upcoming events (следващи 5 събития)
   const upcomingEvents = calendarItems
     .filter(item => item.date >= today)
     .slice(0, 5);
@@ -265,21 +279,19 @@ export const TraditionalCalendar = ({ club }) => {
     <section id="traditional-calendar" className="traditional-calendar-main-section">
       <div className="traditional-calendar-container">
         
-        {/* Header */}
         <div className="traditional-calendar-header">
           <div className="traditional-calendar-badge">
             <FontAwesomeIcon icon={faCalendarAlt} />
-            <span>Календар с дейности</span>
+            <span>{t('clubs.TraditionalCalendar.header.badge')}</span>
           </div>
-          <h2 className="traditional-calendar-title">Нашата програма</h2>
+          <h2 className="traditional-calendar-title">{t('clubs.TraditionalCalendar.header.title')}</h2>
           <p className="traditional-calendar-subtitle">
-            Следете всички предстоящи събития и редовни дейности
+            {t('clubs.TraditionalCalendar.header.subtitle')}
           </p>
         </div>
 
         <div className="traditional-calendar-main-grid">
           
-          {/* Calendar Controls */}
           <div className="traditional-calendar-section">
             <div className="traditional-calendar-controls">
               <div className="traditional-calendar-navigation">
@@ -304,26 +316,25 @@ export const TraditionalCalendar = ({ club }) => {
                   className="traditional-calendar-today-btn"
                   onClick={goToToday}
                 >
-                  Днес
+                  {t('clubs.TraditionalCalendar.controls.today')}
                 </button>
                 <div className="traditional-calendar-view-modes">
                   <button 
                     className={`traditional-calendar-view-btn ${viewMode === 'month' ? 'active' : ''}`}
                     onClick={() => setViewMode('month')}
                   >
-                    Месец
+                    {t('clubs.TraditionalCalendar.controls.month')}
                   </button>
                   <button 
                     className={`traditional-calendar-view-btn ${viewMode === 'list' ? 'active' : ''}`}
                     onClick={() => setViewMode('list')}
                   >
-                    Списък
+                    {t('clubs.TraditionalCalendar.controls.list')}
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Calendar Grid View */}
             {viewMode === 'month' && (
               <div className="traditional-calendar-grid">
                 <div className="traditional-calendar-header-row">
@@ -335,12 +346,10 @@ export const TraditionalCalendar = ({ club }) => {
                 </div>
                 
                 <div className="traditional-calendar-days">
-                  {/* Empty cells for days before month starts */}
                   {Array.from({ length: firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1 }).map((_, index) => (
                     <div key={`empty-${index}`} className="traditional-calendar-day empty" />
                   ))}
                   
-                  {/* Days of the month */}
                   {Array.from({ length: daysInMonth }).map((_, index) => {
                     const day = index + 1;
                     const dayEvents = eventsByDate[day] || [];
@@ -360,7 +369,7 @@ export const TraditionalCalendar = ({ club }) => {
                               key={eventIndex}
                               className="traditional-calendar-event-dot"
                               style={{ backgroundColor: getEventColor(event.type) }}
-                              title={`${event.title} в ${event.time}`}
+                              title={t('clubs.TraditionalCalendar.eventTooltip', { title: event.title, time: event.time })}
                               onClick={() => handleEventClick(event)}
                             />
                           ))}
@@ -377,7 +386,6 @@ export const TraditionalCalendar = ({ club }) => {
               </div>
             )}
 
-            {/* List View */}
             {viewMode === 'list' && (
               <div className="traditional-calendar-list">
                 {monthEvents.length > 0 ? (
@@ -396,22 +404,19 @@ export const TraditionalCalendar = ({ club }) => {
                       <div className="traditional-calendar-list-content">
                         <h4>{event.title}</h4>
                         <div className="traditional-calendar-list-date">
-                          {formatDate(event.date)} в {event.time}
+                          {t('clubs.TraditionalCalendar.eventDateTime', { date: formatDate(event.date), time: event.time })}
                         </div>
                         {event.description && (
                           <p>{event.description}</p>
                         )}
                         <div className="traditional-calendar-list-meta">
                           <span className="traditional-calendar-list-type">
-                            {event.type === 'event' ? 'Събитие' :
-                             event.type === 'activity' ? 'Дейност' :
-                             event.type === 'trip' ? 'Екскурзия' :
-                             event.type === 'course' ? 'Курс' : event.type}
+                            {getEventTypeLabel(event.type)}
                           </span>
                           {event.participants && (
                             <span className="traditional-calendar-list-participants">
                               <FontAwesomeIcon icon={faUsers} />
-                              {event.participants} участници
+                              {t('clubs.TraditionalCalendar.participantsCount', { count: event.participants })}
                             </span>
                           )}
                         </div>
@@ -421,20 +426,19 @@ export const TraditionalCalendar = ({ club }) => {
                 ) : (
                   <div className="traditional-calendar-no-events">
                     <FontAwesomeIcon icon={faCalendarAlt} />
-                    <p>Няма събития за този месец</p>
+                    <p>{t('clubs.TraditionalCalendar.noEvents')}</p>
                   </div>
                 )}
               </div>
             )}
           </div>
 
-          {/* Upcoming Events - показва се САМО ако има предстоящи събития */}
           {upcomingEvents.length > 0 && (
             <div className="traditional-calendar-section">
               <div className="traditional-calendar-section-header">
                 <FontAwesomeIcon icon={faCalendarDay} />
-                <h3>Предстоящи събития</h3>
-                <p>Най-близките дейности и мероприятия</p>
+                <h3>{t('clubs.TraditionalCalendar.upcoming.title')}</h3>
+                <p>{t('clubs.TraditionalCalendar.upcoming.subtitle')}</p>
               </div>
               
               <div className="traditional-calendar-upcoming">
@@ -461,7 +465,7 @@ export const TraditionalCalendar = ({ club }) => {
                       </div>
                       {event.recurring && (
                         <div className="traditional-calendar-recurring-badge">
-                          Редовна дейност
+                          {t('clubs.TraditionalCalendar.recurring')}
                         </div>
                       )}
                     </div>
@@ -471,12 +475,11 @@ export const TraditionalCalendar = ({ club }) => {
             </div>
           )}
 
-          {/* Legend */}
           <div className="traditional-calendar-section">
             <div className="traditional-calendar-section-header">
               <FontAwesomeIcon icon={faInfoCircle} />
-              <h3>Легенда</h3>
-              <p>Видове дейности в календара</p>
+              <h3>{t('clubs.TraditionalCalendar.legend.title')}</h3>
+              <p>{t('clubs.TraditionalCalendar.legend.subtitle')}</p>
             </div>
             
             <div className="traditional-calendar-legend">
@@ -485,35 +488,34 @@ export const TraditionalCalendar = ({ club }) => {
                   className="traditional-calendar-legend-color"
                   style={{ backgroundColor: getEventColor('event') }}
                 />
-                <span>Специални събития</span>
+                <span>{t('clubs.TraditionalCalendar.legend.events')}</span>
               </div>
               <div className="traditional-calendar-legend-item">
                 <div 
                   className="traditional-calendar-legend-color"
                   style={{ backgroundColor: getEventColor('activity') }}
                 />
-                <span>Редовни дейности</span>
+                <span>{t('clubs.TraditionalCalendar.legend.activities')}</span>
               </div>
               <div className="traditional-calendar-legend-item">
                 <div 
                   className="traditional-calendar-legend-color"
                   style={{ backgroundColor: getEventColor('trip') }}
                 />
-                <span>Екскурзии</span>
+                <span>{t('clubs.TraditionalCalendar.legend.trips')}</span>
               </div>
               <div className="traditional-calendar-legend-item">
                 <div 
                   className="traditional-calendar-legend-color"
                   style={{ backgroundColor: getEventColor('course') }}
                 />
-                <span>Курсове</span>
+                <span>{t('clubs.TraditionalCalendar.legend.courses')}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* EVENT DETAILS MODAL */}
       {isEventModalOpen && selectedEvent && (
         <div className="traditional-calendar-event-modal">
           <div className="traditional-calendar-event-modal-overlay" onClick={closeEventModal}></div>
@@ -532,10 +534,7 @@ export const TraditionalCalendar = ({ club }) => {
               <div className="traditional-calendar-event-modal-title">
                 <h3>{selectedEvent.title}</h3>
                 <div className="traditional-calendar-event-modal-type">
-                  {selectedEvent.type === 'event' ? 'Събитие' :
-                   selectedEvent.type === 'activity' ? 'Редовна дейност' :
-                   selectedEvent.type === 'trip' ? 'Екскурзия' :
-                   selectedEvent.type === 'course' ? 'Курс' : selectedEvent.type}
+                  {getEventTypeLabel(selectedEvent.type)}
                 </div>
               </div>
             </div>
@@ -553,38 +552,38 @@ export const TraditionalCalendar = ({ club }) => {
                 {selectedEvent.participants && (
                   <div className="traditional-calendar-event-modal-detail">
                     <FontAwesomeIcon icon={faUsers} />
-                    <span>{selectedEvent.participants} участници</span>
+                    <span>{t('clubs.TraditionalCalendar.participantsCount', { count: selectedEvent.participants })}</span>
                   </div>
                 )}
                 {selectedEvent.instructor && (
                   <div className="traditional-calendar-event-modal-detail">
                     <FontAwesomeIcon icon={faTheaterMasks} />
-                    <span>Ръководител: {selectedEvent.instructor}</span>
+                    <span>{t('clubs.TraditionalCalendar.eventModal.instructor')}: {selectedEvent.instructor}</span>
                   </div>
                 )}
                 {selectedEvent.destination && (
                   <div className="traditional-calendar-event-modal-detail">
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
-                    <span>Дестинация: {selectedEvent.destination}</span>
+                    <span>{t('clubs.TraditionalCalendar.eventModal.destination')}: {selectedEvent.destination}</span>
                   </div>
                 )}
                 {selectedEvent.price && (
                   <div className="traditional-calendar-event-modal-detail">
                     <FontAwesomeIcon icon={faTicketAlt} />
-                    <span>Цена: {selectedEvent.price} лв.</span>
+                    <span>{t('clubs.TraditionalCalendar.eventModal.price')}: {selectedEvent.price} {t('clubs.TraditionalCalendar.currency')}</span>
                   </div>
                 )}
                 {selectedEvent.duration && (
                   <div className="traditional-calendar-event-modal-detail">
                     <FontAwesomeIcon icon={faClock} />
-                    <span>Продължителност: {selectedEvent.duration}</span>
+                    <span>{t('clubs.TraditionalCalendar.eventModal.duration')}: {selectedEvent.duration}</span>
                   </div>
                 )}
               </div>
               
               {selectedEvent.description && (
                 <div className="traditional-calendar-event-modal-description">
-                  <h4>Описание</h4>
+                  <h4>{t('clubs.TraditionalCalendar.eventModal.description')}</h4>
                   <p>{selectedEvent.description}</p>
                 </div>
               )}
@@ -596,7 +595,7 @@ export const TraditionalCalendar = ({ club }) => {
                     onClick={() => handleReservation(selectedEvent)}
                   >
                     <FontAwesomeIcon icon={faTicketAlt} />
-                    Запишете се
+                    {t('clubs.TraditionalCalendar.eventModal.register')}
                   </button>
                 )}
                 <button 
@@ -604,7 +603,7 @@ export const TraditionalCalendar = ({ club }) => {
                   onClick={() => handleShare(selectedEvent)}
                 >
                   <FontAwesomeIcon icon={faShare} />
-                  Споделете
+                  {t('clubs.TraditionalCalendar.eventModal.share')}
                 </button>
                 {club.contacts?.phone && (
                   <button 
@@ -612,7 +611,7 @@ export const TraditionalCalendar = ({ club }) => {
                     onClick={() => window.open(`tel:${club.contacts.phone}`)}
                   >
                     <FontAwesomeIcon icon={faPhone} />
-                    Обадете се
+                    {t('clubs.TraditionalCalendar.eventModal.call')}
                   </button>
                 )}
               </div>

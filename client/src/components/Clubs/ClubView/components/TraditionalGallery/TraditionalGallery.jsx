@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faImages,
@@ -12,7 +13,6 @@ import {
   faVideo,
   faCamera,
   faFilter,
-  
   faList,
   faSearch,
   faCalendarAlt,
@@ -22,58 +22,58 @@ import {
 import './traditionalGallery.css';
 
 export const TraditionalGallery = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Извличаме САМО реални данни от клуба
   const gallery = club.gallery || [];
   const videos = club.media?.videos || [];
   const mainImage = club.mainImage;
   const events = club.activities?.events || [];
   const regularActivities = club.activities?.regular || [];
 
-  // Подготвяме всички медийни елементи
+  const getLocale = () => {
+    return i18n.language === 'bg' ? 'bg-BG' : 
+           i18n.language === 'de' ? 'de-DE' : 'en-US';
+  };
+
   const allMediaItems = useMemo(() => {
     const items = [];
 
-    // Добавяме главната снимка (ако има)
     if (mainImage) {
       items.push({
         id: 'main-image',
         src: mainImage,
         type: 'image',
         category: 'main',
-        title: `Главна снимка на ${club.name}`,
-        description: `Представителна снимка на ${club.name}`,
+        title: t('clubs.TraditionalGallery.items.mainImageTitle', { clubName: club.name }),
+        description: t('clubs.TraditionalGallery.items.mainImageDescription', { clubName: club.name }),
         date: new Date(),
-        alt: `${club.name} - главна снимка`
+        alt: t('clubs.TraditionalGallery.items.mainImageAlt', { clubName: club.name })
       });
     }
 
-    // Добавяме снимки от галерията
     gallery.forEach((imageSrc, index) => {
       items.push({
         id: `gallery-${index}`,
         src: imageSrc,
         type: 'image',
         category: 'gallery',
-        title: `Снимка ${index + 1}`,
-        description: `Снимка от дейностите на ${club.name}`,
-        date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000), // Случайна дата в последната година
-        alt: `Снимка ${index + 1} от ${club.name}`
+        title: t('clubs.TraditionalGallery.items.galleryImageTitle', { index: index + 1 }),
+        description: t('clubs.TraditionalGallery.items.galleryImageDescription', { clubName: club.name }),
+        date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
+        alt: t('clubs.TraditionalGallery.items.galleryImageAlt', { index: index + 1, clubName: club.name })
       });
     });
 
-    // Добавяме видеа
     videos.forEach((video, index) => {
       items.push({
         id: `video-${index}`,
@@ -81,51 +81,45 @@ export const TraditionalGallery = ({ club }) => {
         thumbnail: video.thumbnail,
         type: 'video',
         category: 'video',
-        title: video.caption || `Видео ${index + 1}`,
-        description: video.alt || `Видео запис от ${club.name}`,
+        title: video.caption || t('clubs.TraditionalGallery.items.videoTitle', { index: index + 1 }),
+        description: video.alt || t('clubs.TraditionalGallery.items.videoDescription', { clubName: club.name }),
         duration: video.duration,
         date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
-        alt: video.alt || `Видео ${index + 1} от ${club.name}`,
+        alt: video.alt || t('clubs.TraditionalGallery.items.videoAlt', { index: index + 1, clubName: club.name }),
         videoType: video.type
       });
     });
 
-    // Сортираме по дата (най-новите първо)
     return items.sort((a, b) => b.date - a.date);
-  }, [gallery, videos, mainImage, club.name]);
+  }, [gallery, videos, mainImage, club.name, t]);
 
-  // Извличаме категории от реалните данни
   const categories = useMemo(() => {
-    const cats = [{ id: 'all', label: 'Всички', count: allMediaItems.length }];
+    const cats = [{ 
+      id: 'all', 
+      label: t('clubs.TraditionalGallery.categories.all'), 
+      count: allMediaItems.length 
+    }];
     
-    // Групираме по тип
     const typeCounts = allMediaItems.reduce((acc, item) => {
       acc[item.category] = (acc[item.category] || 0) + 1;
       return acc;
     }, {});
 
     Object.entries(typeCounts).forEach(([category, count]) => {
-      let label = category;
-      if (category === 'main') label = 'Главна';
-      else if (category === 'gallery') label = 'Галерия';
-      else if (category === 'video') label = 'Видеа';
-      
+      const label = t(`clubs.TraditionalGallery.categories.${category}`, { defaultValue: category });
       cats.push({ id: category, label, count });
     });
 
     return cats;
-  }, [allMediaItems]);
+  }, [allMediaItems, t]);
 
-  // Филтрираме елементите
   const filteredItems = useMemo(() => {
     let filtered = allMediaItems;
 
-    // Филтър по категория
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(item => item.category === selectedCategory);
     }
 
-    // Филтър по търсене
     if (searchTerm) {
       filtered = filtered.filter(item => 
         item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -137,14 +131,20 @@ export const TraditionalGallery = ({ club }) => {
     return filtered;
   }, [allMediaItems, selectedCategory, searchTerm]);
 
-  // Проверяваме дали има РЕАЛНО съдържание за показване
   const hasGalleryContent = allMediaItems.length > 0;
 
   if (!hasGalleryContent) {
     return null;
   }
 
-  // Modal функции
+  const formatDate = (date) => {
+    return date.toLocaleDateString(getLocale(), { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
   const openModal = (item, index) => {
     setCurrentItem(item);
     setCurrentIndex(index);
@@ -166,7 +166,6 @@ export const TraditionalGallery = ({ club }) => {
     setCurrentItem(filteredItems[newIndex]);
   };
 
-  // Download функция
   const handleDownload = async (item) => {
     try {
       const response = await fetch(item.src);
@@ -180,13 +179,13 @@ export const TraditionalGallery = ({ club }) => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Грешка при изтегляне:', error);
-      alert('Възникна грешка при изтеглянето');
+      console.error('Download error:', error);
+      alert(t('clubs.TraditionalGallery.messages.downloadError'));
     }
   };
 
   const handleShare = (item) => {
-    const text = `${item.title} - ${club.name}`;
+    const text = t('clubs.TraditionalGallery.shareText', { title: item.title, clubName: club.name });
     const url = window.location.href;
     
     if (navigator.share) {
@@ -197,51 +196,48 @@ export const TraditionalGallery = ({ club }) => {
       });
     } else {
       navigator.clipboard.writeText(`${text}\n${url}`);
-      alert('Информацията е копирана в клипборда!');
+      alert(t('clubs.TraditionalGallery.messages.shareSuccess'));
     }
   };
 
-  const formatDate = (date) => {
-    return date.toLocaleDateString('bg-BG', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
+  const getMediaTypeLabel = (type) => {
+    return t(`clubs.TraditionalGallery.mediaTypes.${type}`);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedCategory('all');
   };
 
   return (
     <section id="traditional-gallery" className="traditional-gallery-main-section">
       <div className="traditional-gallery-container">
         
-        {/* Header */}
         <div className="traditional-gallery-header">
           <div className="traditional-gallery-badge">
             <FontAwesomeIcon icon={faImages} />
-            <span>Галерия</span>
+            <span>{t('clubs.TraditionalGallery.header.badge')}</span>
           </div>
-          <h2 className="traditional-gallery-title">Нашите спомени</h2>
+          <h2 className="traditional-gallery-title">{t('clubs.TraditionalGallery.header.title')}</h2>
           <p className="traditional-gallery-subtitle">
-            Разгледайте снимки и видеа от нашите дейности и мероприятия
+            {t('clubs.TraditionalGallery.header.subtitle')}
           </p>
         </div>
 
         <div className="traditional-gallery-main-content">
           
-          {/* Controls */}
           <div className="traditional-gallery-controls">
             
-            {/* Search */}
             <div className="traditional-gallery-search">
               <FontAwesomeIcon icon={faSearch} />
               <input
                 type="text"
-                placeholder="Търсете в галерията..."
+                placeholder={t('clubs.TraditionalGallery.controls.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
-            {/* Category Filter */}
             {categories.length > 2 && (
               <div className="traditional-gallery-categories">
                 {categories.map(category => (
@@ -257,7 +253,6 @@ export const TraditionalGallery = ({ club }) => {
               </div>
             )}
 
-            {/* View Mode */}
             <div className="traditional-gallery-view-controls">
               <div className="traditional-gallery-view-modes">
                 <button 
@@ -274,16 +269,14 @@ export const TraditionalGallery = ({ club }) => {
                 </button>
               </div>
               <div className="traditional-gallery-count">
-                {filteredItems.length} елементи
+                {t('clubs.TraditionalGallery.controls.itemCount', { count: filteredItems.length })}
               </div>
             </div>
           </div>
 
-          {/* Gallery Content */}
           {filteredItems.length > 0 ? (
             <div className={`traditional-gallery-content ${viewMode}`}>
               
-              {/* Grid View */}
               {viewMode === 'grid' && (
                 <div className="traditional-gallery-grid">
                   {filteredItems.map((item, index) => (
@@ -340,7 +333,7 @@ export const TraditionalGallery = ({ club }) => {
                           <div className="traditional-gallery-item-info">
                             <div className="traditional-gallery-item-type">
                               <FontAwesomeIcon icon={item.type === 'video' ? faVideo : faCamera} />
-                              {item.type === 'video' ? 'Видео' : 'Снимка'}
+                              {getMediaTypeLabel(item.type)}
                             </div>
                             <div className="traditional-gallery-item-title">{item.title}</div>
                           </div>
@@ -351,7 +344,6 @@ export const TraditionalGallery = ({ club }) => {
                 </div>
               )}
 
-              {/* List View */}
               {viewMode === 'list' && (
                 <div className="traditional-gallery-list">
                   {filteredItems.map((item, index) => (
@@ -377,7 +369,7 @@ export const TraditionalGallery = ({ club }) => {
                           <h4>{item.title}</h4>
                           <div className="traditional-gallery-list-type">
                             <FontAwesomeIcon icon={item.type === 'video' ? faVideo : faCamera} />
-                            {item.type === 'video' ? 'Видео' : 'Снимка'}
+                            {getMediaTypeLabel(item.type)}
                           </div>
                         </div>
                         <p>{item.description}</p>
@@ -435,23 +427,19 @@ export const TraditionalGallery = ({ club }) => {
           ) : (
             <div className="traditional-gallery-no-results">
               <FontAwesomeIcon icon={faImages} />
-              <h3>Няма намерени резултати</h3>
-              <p>Опитайте с различни критерии за търсене</p>
+              <h3>{t('clubs.TraditionalGallery.noResults.title')}</h3>
+              <p>{t('clubs.TraditionalGallery.noResults.subtitle')}</p>
               <button 
                 className="traditional-gallery-clear-btn"
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedCategory('all');
-                }}
+                onClick={clearFilters}
               >
-                Изчистете филтрите
+                {t('clubs.TraditionalGallery.noResults.clearFilters')}
               </button>
             </div>
           )}
         </div>
       </div>
 
-      {/* MODAL */}
       {isModalOpen && currentItem && (
         <div className="traditional-gallery-modal">
           <div className="traditional-gallery-modal-overlay" onClick={closeModal}></div>
@@ -460,7 +448,6 @@ export const TraditionalGallery = ({ club }) => {
               <FontAwesomeIcon icon={faTimes} />
             </button>
             
-            {/* Navigation */}
             {filteredItems.length > 1 && (
               <>
                 <button 
@@ -488,7 +475,7 @@ export const TraditionalGallery = ({ club }) => {
                     poster={currentItem.thumbnail}
                   >
                     <source src={currentItem.src} type="video/mp4" />
-                    Вашият браузър не поддържа video елемента.
+                    {t('clubs.TraditionalGallery.modal.videoNotSupported')}
                   </video>
                 ) : (
                   <img src={currentItem.src} alt={currentItem.alt} />
@@ -500,7 +487,7 @@ export const TraditionalGallery = ({ club }) => {
                   <h3>{currentItem.title}</h3>
                   <div className="traditional-gallery-modal-type">
                     <FontAwesomeIcon icon={currentItem.type === 'video' ? faVideo : faCamera} />
-                    {currentItem.type === 'video' ? 'Видео' : 'Снимка'}
+                    {getMediaTypeLabel(currentItem.type)}
                   </div>
                 </div>
                 
@@ -531,20 +518,23 @@ export const TraditionalGallery = ({ club }) => {
                     onClick={() => handleDownload(currentItem)}
                   >
                     <FontAwesomeIcon icon={faDownload} />
-                    Изтегли
+                    {t('clubs.TraditionalGallery.modal.download')}
                   </button>
                   <button 
                     className="traditional-gallery-modal-btn secondary"
                     onClick={() => handleShare(currentItem)}
                   >
                     <FontAwesomeIcon icon={faShare} />
-                    Сподели
+                    {t('clubs.TraditionalGallery.modal.share')}
                   </button>
                 </div>
                 
                 {filteredItems.length > 1 && (
                   <div className="traditional-gallery-modal-counter">
-                    {currentIndex + 1} от {filteredItems.length}
+                    {t('clubs.TraditionalGallery.modal.counter', { 
+                      current: currentIndex + 1, 
+                      total: filteredItems.length 
+                    })}
                   </div>
                 )}
               </div>

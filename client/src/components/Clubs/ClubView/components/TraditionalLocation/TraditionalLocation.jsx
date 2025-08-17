@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup, Circle, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,7 +31,6 @@ import {
 import 'leaflet/dist/leaflet.css';
 import './traditionalLocation.css';
 
-// Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -38,7 +38,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom icon for club
 const clubIcon = new L.Icon({
   iconUrl: 'data:image/svg+xml;base64,' + btoa(`
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#059669" width="32" height="32">
@@ -51,21 +50,19 @@ const clubIcon = new L.Icon({
 });
 
 export const TraditionalLocation = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('map');
   const [selectedTransport, setSelectedTransport] = useState('walking');
   const [mapLoaded, setMapLoaded] = useState(false);
   const [copiedItems, setCopiedItems] = useState({});
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Извличаме САМО реални данни от клуба
   const location = club.location || {};
   const contacts = club.contacts || {};
 
-  // Проверяваме дали има РЕАЛНО съдържание за показване
   const hasLocationContent = 
     location.address ||
     location.city ||
@@ -77,107 +74,106 @@ export const TraditionalLocation = ({ club }) => {
     return null;
   }
 
-  // Default координати ако няма реални (само за показване на картата)
   const coordinates = location.coordinates || { lat: 42.6777, lng: 23.3219 };
   const venue = location.venue || {};
-
-  // Извличаме реални близки места САМО ако има такива данни в club обекта
   const nearbyPlaces = club.location?.nearbyPlaces || [];
 
-  const transportOptions = [
+  const getTransportOptions = () => [
     {
       id: 'walking',
-      name: 'Пеша',
+      name: t('clubs.TraditionalLocation.transport.walking.name'),
       icon: faWalking,
       color: '#059669',
-      duration: '5-15 мин',
-      description: 'От центъра на града',
+      duration: t('clubs.TraditionalLocation.transport.walking.duration'),
+      description: t('clubs.TraditionalLocation.transport.walking.description'),
       instructions: [
-        'От градския център - 10 минути пеша',
-        'Следвайте главната улица',
-        'Търсете указателните табели'
+        t('clubs.TraditionalLocation.transport.walking.instruction1'),
+        t('clubs.TraditionalLocation.transport.walking.instruction2'),
+        t('clubs.TraditionalLocation.transport.walking.instruction3')
       ]
     },
     {
       id: 'bus',
-      name: 'Автобус',
+      name: t('clubs.TraditionalLocation.transport.bus.name'),
       icon: faBus,
       color: '#3b82f6',
-      duration: '15-25 мин',
-      description: 'Градски транспорт',
+      duration: t('clubs.TraditionalLocation.transport.bus.duration'),
+      description: t('clubs.TraditionalLocation.transport.bus.description'),
       instructions: [
-        'Използвайте градския транспорт',
-        'Проверете разписанието на спирките',
-        'Следвайте указанията за посока'
+        t('clubs.TraditionalLocation.transport.bus.instruction1'),
+        t('clubs.TraditionalLocation.transport.bus.instruction2'),
+        t('clubs.TraditionalLocation.transport.bus.instruction3')
       ]
     },
     {
       id: 'metro',
-      name: 'Метро',
+      name: t('clubs.TraditionalLocation.transport.metro.name'),
       icon: faSubway,
       color: '#ef4444',
-      duration: '20-30 мин',
-      description: 'Бърз градски транспорт',
+      duration: t('clubs.TraditionalLocation.transport.metro.duration'),
+      description: t('clubs.TraditionalLocation.transport.metro.description'),
       instructions: [
-        'Използвайте метрото ако има станция наблизо',
-        'Проверете картата на метрото',
-        'Планирайте най-краткия маршрут'
+        t('clubs.TraditionalLocation.transport.metro.instruction1'),
+        t('clubs.TraditionalLocation.transport.metro.instruction2'),
+        t('clubs.TraditionalLocation.transport.metro.instruction3')
       ]
     },
     {
       id: 'car',
-      name: 'Автомобил',
+      name: t('clubs.TraditionalLocation.transport.car.name'),
       icon: faCar,
       color: '#8b5cf6',
-      duration: '10-40 мин',
-      description: 'В зависимост от трафика',
+      duration: t('clubs.TraditionalLocation.transport.car.duration'),
+      description: t('clubs.TraditionalLocation.transport.car.description'),
       instructions: [
-        'Проверете за места за паркиране',
-        'Използвайте GPS навигация',
-        'Внимавайте за ограниченията в движението'
+        t('clubs.TraditionalLocation.transport.car.instruction1'),
+        t('clubs.TraditionalLocation.transport.car.instruction2'),
+        t('clubs.TraditionalLocation.transport.car.instruction3')
       ]
     }
   ];
 
-  const parkingInfo = {
+  const getParkingInfo = () => ({
     street: {
-      type: 'Улично паркиране',
-      price: 'Според местните такси',
-      maxTime: 'Според регулациите',
-      workingHours: 'Проверете местните знаци'
+      type: t('clubs.TraditionalLocation.parking.street.type'),
+      price: t('clubs.TraditionalLocation.parking.street.price'),
+      maxTime: t('clubs.TraditionalLocation.parking.street.maxTime'),
+      workingHours: t('clubs.TraditionalLocation.parking.street.workingHours')
     },
     paid: {
-      name: 'Платени паркинги в района',
-      distance: 'Различни разстояния',
-      price: 'Според тарифите',
-      capacity: 'Различен капацитет',
-      workingHours: 'Различно работно време'
+      name: t('clubs.TraditionalLocation.parking.paid.name'),
+      distance: t('clubs.TraditionalLocation.parking.paid.distance'),
+      price: t('clubs.TraditionalLocation.parking.paid.price'),
+      capacity: t('clubs.TraditionalLocation.parking.paid.capacity'),
+      workingHours: t('clubs.TraditionalLocation.parking.paid.workingHours')
     },
     free: {
-      location: 'Улици в района',
-      distance: 'Различни разстояния',
-      note: 'Търсете безплатни места наоколо'
+      location: t('clubs.TraditionalLocation.parking.free.location'),
+      distance: t('clubs.TraditionalLocation.parking.free.distance'),
+      note: t('clubs.TraditionalLocation.parking.free.note')
     }
-  };
+  });
 
-  const accessibilityFeatures = [
+  const getAccessibilityFeatures = () => [
     {
-      feature: 'Достъп с инвалидна количка',
+      feature: t('clubs.TraditionalLocation.accessibility.wheelchair'),
       available: venue.accessibility !== false,
       icon: faWheelchair,
-      description: venue.accessibility !== false ? 'Проверете на място за достъпност' : 'Ограничен достъп'
+      description: venue.accessibility !== false ? 
+        t('clubs.TraditionalLocation.accessibility.wheelchairAvailable') : 
+        t('clubs.TraditionalLocation.accessibility.wheelchairLimited')
     },
     {
-      feature: 'Удобен вход',
+      feature: t('clubs.TraditionalLocation.accessibility.entrance'),
       available: true,
       icon: faStairs,
-      description: 'Проверете условията на място'
+      description: t('clubs.TraditionalLocation.accessibility.entranceDescription')
     },
     {
-      feature: 'Обществен достъп',
+      feature: t('clubs.TraditionalLocation.accessibility.publicAccess'),
       available: true,
       icon: faElevator,
-      description: 'Отворен за посетители според работното време'
+      description: t('clubs.TraditionalLocation.accessibility.publicAccessDescription')
     }
   ];
 
@@ -185,7 +181,6 @@ export const TraditionalLocation = ({ club }) => {
     setMapLoaded(true);
   }, []);
 
-  // Copy to clipboard function
   const copyToClipboard = async (text, type) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -201,14 +196,14 @@ export const TraditionalLocation = ({ club }) => {
         });
       }, 2000);
     } catch (error) {
-      console.error('Грешка при копиране:', error);
-      alert('Грешка при копиране. Моля опитайте отново.');
+      console.error('Copy error:', error);
+      alert(t('clubs.TraditionalLocation.messages.copyError'));
     }
   };
 
   const handleDirections = (platform) => {
     const coords = `${coordinates.lat},${coordinates.lng}`;
-    const address = encodeURIComponent(`${location.address || 'адрес не е посочен'}, ${location.city || 'България'}`);
+    const address = encodeURIComponent(`${location.address || t('clubs.TraditionalLocation.messages.addressNotSpecified')}, ${location.city || t('clubs.TraditionalLocation.messages.defaultCountry')}`);
     
     switch(platform) {
       case 'google':
@@ -221,21 +216,21 @@ export const TraditionalLocation = ({ club }) => {
         window.open(`https://waze.com/ul?navigate=yes&ll=${coords}`, '_blank');
         break;
       default:
-        alert('Отваряне на карта...');
+        alert(t('clubs.TraditionalLocation.messages.openingMap'));
     }
   };
 
   const handleShare = () => {
-    const locationText = `${location.address || 'Адресът не е посочен'}, ${location.city || ''}`;
+    const locationText = `${location.address || t('clubs.TraditionalLocation.messages.addressNotSpecified')}, ${location.city || ''}`;
     if (navigator.share) {
       navigator.share({
-        title: `Локация на ${club.name}`,
+        title: t('clubs.TraditionalLocation.messages.shareTitle', { clubName: club.name }),
         text: locationText,
         url: window.location.href
       });
     } else {
       copyToClipboard(locationText, 'share');
-      alert('Адресът е копиран в клипборда!');
+      alert(t('clubs.TraditionalLocation.messages.addressCopied'));
     }
   };
 
@@ -243,35 +238,37 @@ export const TraditionalLocation = ({ club }) => {
     window.open(`tel:${phone}`);
   };
 
+  const transportOptions = getTransportOptions();
+  const parkingInfo = getParkingInfo();
+  const accessibilityFeatures = getAccessibilityFeatures();
+
   return (
     <section id="traditional-location" className="traditional-location-main-section">
       <div className="traditional-location-container">
         
-        {/* Header */}
         <div className="traditional-location-header">
           <div className="traditional-location-badge">
             <FontAwesomeIcon icon={faMapMarkerAlt} />
-            <span>Местоположение</span>
+            <span>{t('clubs.TraditionalLocation.header.badge')}</span>
           </div>
-          <h2 className="traditional-location-title">Къде ни намирате</h2>
+          <h2 className="traditional-location-title">{t('clubs.TraditionalLocation.header.title')}</h2>
           <p className="traditional-location-subtitle">
-            Подробна информация за локацията, транспорт и удобства
+            {t('clubs.TraditionalLocation.header.subtitle')}
           </p>
         </div>
 
-        {/* Quick Info */}
         <div className="traditional-location-quick-info">
           <div className="traditional-location-address-card">
             <div className="traditional-location-address-icon">
               <FontAwesomeIcon icon={faMapMarkerAlt} />
             </div>
             <div className="traditional-location-address-info">
-              <h3>Нашият адрес</h3>
+              <h3>{t('clubs.TraditionalLocation.address.title')}</h3>
               <div className="traditional-location-full-address">
                 {location.address && <div>{location.address}</div>}
                 {location.city && <div>{location.city}{location.postalCode && ` ${location.postalCode}`}</div>}
                 {location.region && <div>{location.region}</div>}
-                {!location.address && <div>Адресът ще бъде обявен скоро</div>}
+                {!location.address && <div>{t('clubs.TraditionalLocation.address.comingSoon')}</div>}
               </div>
             </div>
             <div className="traditional-location-address-actions">
@@ -280,14 +277,14 @@ export const TraditionalLocation = ({ club }) => {
                 onClick={() => handleDirections('google')}
               >
                 <FontAwesomeIcon icon={faDirections} />
-                Маршрут
+                {t('clubs.TraditionalLocation.actions.directions')}
               </button>
               <button 
                 className="traditional-location-action-btn secondary"
                 onClick={handleShare}
               >
                 <FontAwesomeIcon icon={faShareAlt} />
-                Споделяне
+                {t('clubs.TraditionalLocation.actions.share')}
               </button>
               {location.address && (
                 <button 
@@ -295,52 +292,48 @@ export const TraditionalLocation = ({ club }) => {
                   onClick={() => copyToClipboard(`${location.address}, ${location.city || ''}`, 'address')}
                 >
                   <FontAwesomeIcon icon={copiedItems['address'] ? faCheckCircle : faCopy} />
-                  {copiedItems['address'] ? 'Копирано!' : 'Копирай'}
+                  {copiedItems['address'] ? t('clubs.TraditionalLocation.actions.copied') : t('clubs.TraditionalLocation.actions.copy')}
                 </button>
               )}
             </div>
           </div>
         </div>
 
-        {/* Main Content Tabs */}
         <div className="traditional-location-tabs">
           <button
             className={`traditional-location-tab ${activeTab === 'map' ? 'active' : ''}`}
             onClick={() => setActiveTab('map')}
           >
             <FontAwesomeIcon icon={faMapMarkerAlt} />
-            Карта
+            {t('clubs.TraditionalLocation.tabs.map')}
           </button>
           <button
             className={`traditional-location-tab ${activeTab === 'transport' ? 'active' : ''}`}
             onClick={() => setActiveTab('transport')}
           >
             <FontAwesomeIcon icon={faBus} />
-            Транспорт
+            {t('clubs.TraditionalLocation.tabs.transport')}
           </button>
           <button
             className={`traditional-location-tab ${activeTab === 'parking' ? 'active' : ''}`}
             onClick={() => setActiveTab('parking')}
           >
             <FontAwesomeIcon icon={faParking} />
-            Паркиране
+            {t('clubs.TraditionalLocation.tabs.parking')}
           </button>
-          {/* Показваме таба "В района" САМО ако има реални данни */}
           {nearbyPlaces.length > 0 && (
             <button
               className={`traditional-location-tab ${activeTab === 'nearby' ? 'active' : ''}`}
               onClick={() => setActiveTab('nearby')}
             >
               <FontAwesomeIcon icon={faCompass} />
-              В района
+              {t('clubs.TraditionalLocation.tabs.nearby')}
             </button>
           )}
         </div>
 
-        {/* Tab Content */}
         <div className="traditional-location-content">
           
-          {/* Map Tab */}
           {activeTab === 'map' && (
             <div className="traditional-location-map-section">
               <div className="traditional-location-map-container">
@@ -356,7 +349,6 @@ export const TraditionalLocation = ({ club }) => {
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
                     
-                    {/* Main club marker */}
                     <Marker 
                       position={[coordinates.lat, coordinates.lng]}
                       icon={clubIcon}
@@ -369,7 +361,7 @@ export const TraditionalLocation = ({ club }) => {
                           <div className="traditional-location-popup-actions">
                             <button onClick={() => handleDirections('google')}>
                               <FontAwesomeIcon icon={faDirections} />
-                              Маршрут
+                              {t('clubs.TraditionalLocation.actions.directions')}
                             </button>
                           </div>
                         </div>
@@ -379,7 +371,6 @@ export const TraditionalLocation = ({ club }) => {
                       </Tooltip>
                     </Marker>
 
-                    {/* САМО реални nearby places markers ако има такива */}
                     {nearbyPlaces.map((place, index) => (
                       <Marker 
                         key={index}
@@ -389,13 +380,12 @@ export const TraditionalLocation = ({ club }) => {
                           <div className="traditional-location-popup">
                             <h4>{place.name}</h4>
                             <p>{place.description}</p>
-                            {place.distance && <p><strong>Разстояние:</strong> {place.distance}</p>}
+                            {place.distance && <p><strong>{t('clubs.TraditionalLocation.nearby.distance')}:</strong> {place.distance}</p>}
                           </div>
                         </Popup>
                       </Marker>
                     ))}
 
-                    {/* Walking radius circle */}
                     <Circle
                       center={[coordinates.lat, coordinates.lng]}
                       radius={250}
@@ -405,7 +395,7 @@ export const TraditionalLocation = ({ club }) => {
                       weight={2}
                     >
                       <Tooltip>
-                        250м от клуба
+                        {t('clubs.TraditionalLocation.map.radiusTooltip')}
                       </Tooltip>
                     </Circle>
                   </MapContainer>
@@ -415,7 +405,7 @@ export const TraditionalLocation = ({ club }) => {
                   <div className="traditional-location-map-legend">
                     <div className="traditional-location-legend-item">
                       <div className="traditional-location-legend-icon club"></div>
-                      <span>Клуб</span>
+                      <span>{t('clubs.TraditionalLocation.map.legend.club')}</span>
                     </div>
                   </div>
                   
@@ -437,37 +427,36 @@ export const TraditionalLocation = ({ club }) => {
               </div>
               
               <div className="traditional-location-venue-info">
-                <h3>Информация за мястото</h3>
+                <h3>{t('clubs.TraditionalLocation.venue.title')}</h3>
                 <div className="traditional-location-venue-details">
                   {venue.type && (
                     <div className="traditional-location-venue-item">
                       <FontAwesomeIcon icon={faInfoCircle} />
-                      <span>Тип: {venue.type === 'municipal' ? 'Общинска сграда' : venue.type}</span>
+                      <span>{t('clubs.TraditionalLocation.venue.type')}: {venue.type === 'municipal' ? t('clubs.TraditionalLocation.venue.municipal') : venue.type}</span>
                     </div>
                   )}
                   {venue.size && (
                     <div className="traditional-location-venue-item">
                       <FontAwesomeIcon icon={faMapSigns} />
-                      <span>Площ: {venue.size}</span>
+                      <span>{t('clubs.TraditionalLocation.venue.size')}: {venue.size}</span>
                     </div>
                   )}
                   {venue.capacity && (
                     <div className="traditional-location-venue-item">
                       <FontAwesomeIcon icon={faUsers} />
-                      <span>Капацитет: {venue.capacity} души</span>
+                      <span>{t('clubs.TraditionalLocation.venue.capacity')}: {venue.capacity} {t('clubs.TraditionalLocation.venue.people')}</span>
                     </div>
                   )}
                   
-                  {/* Default venue info if none provided */}
                   {!venue.type && !venue.size && !venue.capacity && (
                     <>
                       <div className="traditional-location-venue-item">
                         <FontAwesomeIcon icon={faInfoCircle} />
-                        <span>Традиционен културен център</span>
+                        <span>{t('clubs.TraditionalLocation.venue.defaultType')}</span>
                       </div>
                       <div className="traditional-location-venue-item">
                         <FontAwesomeIcon icon={faUsers} />
-                        <span>Подходящ за групови дейности</span>
+                        <span>{t('clubs.TraditionalLocation.venue.defaultDescription')}</span>
                       </div>
                     </>
                   )}
@@ -475,7 +464,7 @@ export const TraditionalLocation = ({ club }) => {
                 
                 {venue.facilities && venue.facilities.length > 0 && (
                   <div className="traditional-location-facilities">
-                    <h4>Удобства</h4>
+                    <h4>{t('clubs.TraditionalLocation.venue.facilities')}</h4>
                     <div className="traditional-location-facilities-list">
                       {venue.facilities.map((facility, index) => (
                         <span key={index} className="traditional-location-facility-tag">
@@ -489,7 +478,6 @@ export const TraditionalLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Transport Tab */}
           {activeTab === 'transport' && (
             <div className="traditional-location-transport-section">
               <div className="traditional-location-transport-options">
@@ -523,7 +511,7 @@ export const TraditionalLocation = ({ club }) => {
                     <div key={option.id} className="traditional-location-instructions">
                       <div className="traditional-location-instructions-header">
                         <FontAwesomeIcon icon={option.icon} style={{ color: option.color }} />
-                        <h3>Инструкции за {option.name}</h3>
+                        <h3>{t('clubs.TraditionalLocation.transport.instructionsFor')} {option.name}</h3>
                       </div>
                       <ul className="traditional-location-instructions-list">
                         {option.instructions.map((instruction, index) => (
@@ -537,30 +525,29 @@ export const TraditionalLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Parking Tab */}
           {activeTab === 'parking' && (
             <div className="traditional-location-parking-section">
               <div className="traditional-location-parking-grid">
                 <div className="traditional-location-parking-card">
                   <div className="traditional-location-parking-header">
                     <FontAwesomeIcon icon={faRoad} />
-                    <h3>Улично паркиране</h3>
+                    <h3>{t('clubs.TraditionalLocation.parking.street.title')}</h3>
                   </div>
                   <div className="traditional-location-parking-details">
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Тип:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.type')}:</span>
                       <span>{parkingInfo.street.type}</span>
                     </div>
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Цена:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.price')}:</span>
                       <span>{parkingInfo.street.price}</span>
                     </div>
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Максимално време:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.maxTime')}:</span>
                       <span>{parkingInfo.street.maxTime}</span>
                     </div>
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Работно време:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.workingHours')}:</span>
                       <span>{parkingInfo.street.workingHours}</span>
                     </div>
                   </div>
@@ -569,23 +556,23 @@ export const TraditionalLocation = ({ club }) => {
                 <div className="traditional-location-parking-card">
                   <div className="traditional-location-parking-header">
                     <FontAwesomeIcon icon={faParking} />
-                    <h3>Платени паркинги</h3>
+                    <h3>{t('clubs.TraditionalLocation.parking.paid.title')}</h3>
                   </div>
                   <div className="traditional-location-parking-details">
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Тип:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.type')}:</span>
                       <span>{parkingInfo.paid.name}</span>
                     </div>
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Разстояние:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.distance')}:</span>
                       <span>{parkingInfo.paid.distance}</span>
                     </div>
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Цена:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.price')}:</span>
                       <span>{parkingInfo.paid.price}</span>
                     </div>
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Капацитет:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.capacity')}:</span>
                       <span>{parkingInfo.paid.capacity}</span>
                     </div>
                   </div>
@@ -594,15 +581,15 @@ export const TraditionalLocation = ({ club }) => {
                 <div className="traditional-location-parking-card">
                   <div className="traditional-location-parking-header">
                     <FontAwesomeIcon icon={faLocationArrow} />
-                    <h3>Безплатно паркиране</h3>
+                    <h3>{t('clubs.TraditionalLocation.parking.free.title')}</h3>
                   </div>
                   <div className="traditional-location-parking-details">
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Локация:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.location')}:</span>
                       <span>{parkingInfo.free.location}</span>
                     </div>
                     <div className="traditional-location-parking-item">
-                      <span className="traditional-location-parking-label">Разстояние:</span>
+                      <span className="traditional-location-parking-label">{t('clubs.TraditionalLocation.parking.labels.distance')}:</span>
                       <span>{parkingInfo.free.distance}</span>
                     </div>
                     <div className="traditional-location-parking-note">
@@ -615,7 +602,6 @@ export const TraditionalLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Nearby Tab - показва се САМО ако има реални данни */}
           {activeTab === 'nearby' && nearbyPlaces.length > 0 && (
             <div className="traditional-location-nearby-section">
               <div className="traditional-location-nearby-grid">
@@ -636,12 +622,11 @@ export const TraditionalLocation = ({ club }) => {
           )}
         </div>
 
-        {/* Accessibility Section */}
         <div className="traditional-location-accessibility">
           <div className="traditional-location-accessibility-header">
             <FontAwesomeIcon icon={faWheelchair} />
-            <h3>Достъпност</h3>
-            <p>Информация за хора с увреждания и ограничена подвижност</p>
+            <h3>{t('clubs.TraditionalLocation.accessibility.title')}</h3>
+            <p>{t('clubs.TraditionalLocation.accessibility.subtitle')}</p>
           </div>
           
           <div className="traditional-location-accessibility-grid">
@@ -661,11 +646,10 @@ export const TraditionalLocation = ({ club }) => {
           </div>
         </div>
 
-        {/* Contact & Help */}
         <div className="traditional-location-help">
           <div className="traditional-location-help-content">
-            <h3>Нужна ви е помощ?</h3>
-            <p>Ако имате затруднения с намирането на клуба или ако се нуждаете от допълнителна информация</p>
+            <h3>{t('clubs.TraditionalLocation.help.title')}</h3>
+            <p>{t('clubs.TraditionalLocation.help.subtitle')}</p>
             <div className="traditional-location-help-buttons">
               {contacts.phone && (
                 <button 
@@ -673,7 +657,7 @@ export const TraditionalLocation = ({ club }) => {
                   onClick={() => handleCallPhone(contacts.phone)}
                 >
                   <FontAwesomeIcon icon={faPhone} />
-                  Обадете се: {contacts.phone}
+                  {t('clubs.TraditionalLocation.help.call')}: {contacts.phone}
                 </button>
               )}
               <button 
@@ -681,7 +665,7 @@ export const TraditionalLocation = ({ club }) => {
                 onClick={() => handleDirections('google')}
               >
                 <FontAwesomeIcon icon={faDirections} />
-                Навигация в реално време
+                {t('clubs.TraditionalLocation.help.realTimeNavigation')}
               </button>
             </div>
           </div>

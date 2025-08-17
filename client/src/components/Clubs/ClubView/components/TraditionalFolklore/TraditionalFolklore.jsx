@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faMusic,
@@ -32,6 +33,7 @@ import {
 import './traditionalFolklore.css';
 
 export const TraditionalFolklore = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -45,16 +47,12 @@ export const TraditionalFolklore = ({ club }) => {
     activity: '',
     message: ''
   });
-  const [formStatus, setFormStatus] = useState(null); // 'sending', 'sent', 'error'
+  const [formStatus, setFormStatus] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // ИЗПОЛЗВАМЕ РЕАЛНИТЕ ДАННИ ОТ MOCK ФАЙЛА
-
-  // Музикални и танцови дейности
   const folkloreActivities = club.activities?.regular?.filter(activity => 
     activity.name.toLowerCase().includes('хор') ||
     activity.name.toLowerCase().includes('танци') ||
@@ -64,7 +62,6 @@ export const TraditionalFolklore = ({ club }) => {
     activity.name.toLowerCase().includes('родопски')
   ) || [];
 
-  // Културни и фолклорни събития
   const folkloreEvents = club.activities?.events?.filter(event =>
     event.type === 'cultural' || 
     event.type === 'traditional' ||
@@ -73,7 +70,6 @@ export const TraditionalFolklore = ({ club }) => {
     event.title.toLowerCase().includes('танц')
   ) || [];
 
-  // Видео записи
   const folkloreVideos = club.media?.videos?.filter(video =>
     video.type === 'cultural' ||
     video.type === 'event' ||
@@ -82,10 +78,8 @@ export const TraditionalFolklore = ({ club }) => {
     video.alt.toLowerCase().includes('концерт')
   ) || [];
 
-  // Аудио файлове
   const folkloreAudio = club.media?.audioFiles || [];
 
-  // Награди свързани с култура
   const culturalAwards = club.achievements?.awards?.filter(award =>
     award.name.toLowerCase().includes('култур') ||
     award.name.toLowerCase().includes('фолклор') ||
@@ -93,14 +87,12 @@ export const TraditionalFolklore = ({ club }) => {
     award.name.toLowerCase().includes('танц')
   ) || [];
 
-  // Статистики свързани с изпълнения - САМО ако има реални данни
   const performanceStats = {
     performances: club.stats?.performances || 0,
     members: club.stats?.totalMembers || 0,
     years: club.stats?.yearsActive || 0
   };
 
-  // Ако няма фолклорно съдържание, не показваме компонента
   const hasFolkloreContent = folkloreActivities.length > 0 ||
                             folkloreEvents.length > 0 ||
                             folkloreVideos.length > 0 ||
@@ -111,7 +103,6 @@ export const TraditionalFolklore = ({ club }) => {
     return null;
   }
 
-  // Проверяваме дали има поне една статистика за показване
   const hasStats = performanceStats.performances > 0 || 
                    performanceStats.members > 0 || 
                    performanceStats.years > 0;
@@ -123,7 +114,25 @@ export const TraditionalFolklore = ({ club }) => {
     return faDrum;
   };
 
-  // ФУНКЦИОНИРАЩИ HANDLERS
+  const getExperienceOptions = () => [
+    { value: '', label: t('clubs.TraditionalFolklore.registrationModal.form.selectExperience') },
+    { value: 'beginner', label: t('clubs.TraditionalFolklore.registrationModal.form.experience.beginner') },
+    { value: 'intermediate', label: t('clubs.TraditionalFolklore.registrationModal.form.experience.intermediate') },
+    { value: 'advanced', label: t('clubs.TraditionalFolklore.registrationModal.form.experience.advanced') },
+    { value: 'professional', label: t('clubs.TraditionalFolklore.registrationModal.form.experience.professional') }
+  ];
+
+  const getActivityOptions = () => {
+    const options = [
+      { value: '', label: t('clubs.TraditionalFolklore.registrationModal.form.selectActivity') },
+      ...folkloreActivities.map((activity, index) => ({
+        value: activity.name,
+        label: activity.name
+      })),
+      { value: 'any', label: t('clubs.TraditionalFolklore.registrationModal.form.anyActivity') }
+    ];
+    return options;
+  };
 
   const handleVideoPlay = (video) => {
     setSelectedVideo(video);
@@ -137,9 +146,9 @@ export const TraditionalFolklore = ({ club }) => {
 
   const handleAudioPlay = (audioIndex) => {
     if (currentlyPlaying === audioIndex) {
-      setCurrentlyPlaying(null); // Pause
+      setCurrentlyPlaying(null);
     } else {
-      setCurrentlyPlaying(audioIndex); // Play
+      setCurrentlyPlaying(audioIndex);
     }
   };
 
@@ -150,14 +159,14 @@ export const TraditionalFolklore = ({ club }) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `${media.caption || 'файл'}.${media.type === 'video' ? 'mp4' : 'mp3'}`;
+      link.download = `${media.caption || t('clubs.TraditionalFolklore.media.defaultFileName')}.${media.type === 'video' ? 'mp4' : 'mp3'}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Грешка при изтегляне:', error);
-      alert('Възникна грешка при изтеглянето');
+      console.error('Download error:', error);
+      alert(t('clubs.TraditionalFolklore.messages.downloadError'));
     }
   };
 
@@ -173,11 +182,10 @@ export const TraditionalFolklore = ({ club }) => {
       });
     } else {
       navigator.clipboard.writeText(`${text}\n${url}`);
-      alert('Информацията е копирана в клипборда!');
+      alert(t('clubs.TraditionalFolklore.messages.shareSuccess'));
     }
   };
 
-  // Registration modal handlers
   const openRegistrationModal = () => {
     setIsRegistrationModalOpen(true);
   };
@@ -208,25 +216,17 @@ export const TraditionalFolklore = ({ club }) => {
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Записване за фолклорни дейности - ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Заявка за записване в фолклорна формация:
-
-Име: ${registrationForm.name}
-Имейл: ${registrationForm.email}
-Телефон: ${registrationForm.phone || 'Не е посочен'}
-Възраст: ${registrationForm.age || 'Не е посочена'}
-Опит: ${registrationForm.experience || 'Без опит'}
-Предпочитана дейност: ${registrationForm.activity || 'Всяка'}
-
-Съобщение:
-${registrationForm.message || 'Няма допълнително съобщение'}
-
----
-Изпратено от сайта на ${club.name}
-      `);
+      const subject = encodeURIComponent(t('clubs.TraditionalFolklore.registrationModal.emailSubject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.TraditionalFolklore.registrationModal.emailBody', {
+        name: registrationForm.name,
+        email: registrationForm.email,
+        phone: registrationForm.phone || t('clubs.TraditionalFolklore.registrationModal.notSpecified'),
+        age: registrationForm.age || t('clubs.TraditionalFolklore.registrationModal.notSpecified'),
+        experience: registrationForm.experience || t('clubs.TraditionalFolklore.registrationModal.noExperience'),
+        activity: registrationForm.activity || t('clubs.TraditionalFolklore.registrationModal.anyActivity'),
+        message: registrationForm.message || t('clubs.TraditionalFolklore.registrationModal.noMessage'),
+        clubName: club.name
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -246,7 +246,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
     if (folkloreVideos.length > 0) {
       handleVideoPlay(folkloreVideos[0]);
     } else {
-      alert('В момента няма налични видеа.');
+      alert(t('clubs.TraditionalFolklore.messages.noVideosAvailable'));
     }
   };
 
@@ -254,19 +254,17 @@ ${registrationForm.message || 'Няма допълнително съобщен�
     <section id="traditional-folklore" className="traditional-folklore-main-section">
       <div className="traditional-folklore-container">
         
-        {/* Header */}
         <div className="traditional-folklore-header">
           <div className="traditional-folklore-badge">
             <FontAwesomeIcon icon={faTheaterMasks} />
-            <span>Български фолклор</span>
+            <span>{t('clubs.TraditionalFolklore.header.badge')}</span>
           </div>
-          <h2 className="traditional-folklore-title">Музика, танци и изпълнения</h2>
+          <h2 className="traditional-folklore-title">{t('clubs.TraditionalFolklore.header.title')}</h2>
           <p className="traditional-folklore-subtitle">
-            Автентични български песни и танци, предавани през поколенията
+            {t('clubs.TraditionalFolklore.header.subtitle')}
           </p>
         </div>
 
-        {/* Performance Stats - показва се САМО ако има данни */}
         {hasStats && (
           <div className="traditional-folklore-stats">
             <div className="traditional-folklore-stats-grid">
@@ -277,7 +275,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                   </div>
                   <div className="traditional-folklore-stat-content">
                     <div className="traditional-folklore-stat-value">{performanceStats.performances}+</div>
-                    <div className="traditional-folklore-stat-label">Изпълнения</div>
+                    <div className="traditional-folklore-stat-label">{t('clubs.TraditionalFolklore.stats.performances')}</div>
                   </div>
                 </div>
               )}
@@ -288,7 +286,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                   </div>
                   <div className="traditional-folklore-stat-content">
                     <div className="traditional-folklore-stat-value">{performanceStats.members}</div>
-                    <div className="traditional-folklore-stat-label">Участници</div>
+                    <div className="traditional-folklore-stat-label">{t('clubs.TraditionalFolklore.stats.participants')}</div>
                   </div>
                 </div>
               )}
@@ -299,7 +297,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                   </div>
                   <div className="traditional-folklore-stat-content">
                     <div className="traditional-folklore-stat-value">{performanceStats.years}</div>
-                    <div className="traditional-folklore-stat-label">Години опит</div>
+                    <div className="traditional-folklore-stat-label">{t('clubs.TraditionalFolklore.stats.yearsExperience')}</div>
                   </div>
                 </div>
               )}
@@ -307,16 +305,14 @@ ${registrationForm.message || 'Няма допълнително съобщен�
           </div>
         )}
 
-        {/* Main Content Grid */}
         <div className="traditional-folklore-main-grid">
           
-          {/* Folklore Activities - показва се САМО ако има дейности */}
           {folkloreActivities.length > 0 && (
             <div className="traditional-folklore-section">
               <div className="traditional-folklore-section-header">
                 <FontAwesomeIcon icon={faMusic} />
-                <h3>Фолклорни формации</h3>
-                <p>Нашите музикални и танцови групи</p>
+                <h3>{t('clubs.TraditionalFolklore.activities.title')}</h3>
+                <p>{t('clubs.TraditionalFolklore.activities.subtitle')}</p>
               </div>
               
               <div className="traditional-folklore-cards">
@@ -329,7 +325,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                       <h4>{activity.name}</h4>
                       <div className="traditional-folklore-schedule">
                         <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span><strong>{activity.day}</strong> от {activity.time}</span>
+                        <span><strong>{activity.day}</strong> {t('clubs.TraditionalFolklore.activities.from')} {activity.time}</span>
                       </div>
                       {activity.description && (
                         <p>{activity.description}</p>
@@ -338,13 +334,13 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                         {activity.instructor && (
                           <div className="traditional-folklore-instructor">
                             <FontAwesomeIcon icon={faMicrophone} />
-                            <span>Инструктор: {activity.instructor}</span>
+                            <span>{t('clubs.TraditionalFolklore.activities.instructor')}: {activity.instructor}</span>
                           </div>
                         )}
                         {activity.participants && (
                           <div className="traditional-folklore-participants">
                             <FontAwesomeIcon icon={faUsers} />
-                            <span>{activity.participants} участници</span>
+                            <span>{t('clubs.TraditionalFolklore.common.participants', { count: activity.participants })}</span>
                           </div>
                         )}
                       </div>
@@ -355,13 +351,12 @@ ${registrationForm.message || 'Няма допълнително съобщен�
             </div>
           )}
 
-          {/* Folklore Events - показва се САМО ако има събития */}
           {folkloreEvents.length > 0 && (
             <div className="traditional-folklore-section">
               <div className="traditional-folklore-section-header">
                 <FontAwesomeIcon icon={faStar} />
-                <h3>Културни събития</h3>
-                <p>Концерти, фестивали и представления</p>
+                <h3>{t('clubs.TraditionalFolklore.events.title')}</h3>
+                <p>{t('clubs.TraditionalFolklore.events.subtitle')}</p>
               </div>
               
               <div className="traditional-folklore-cards">
@@ -374,7 +369,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                       <h4>{event.title}</h4>
                       <div className="traditional-folklore-event-date">
                         <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span>{event.date} в {event.time}</span>
+                        <span>{t('clubs.TraditionalFolklore.events.dateTime', { date: event.date, time: event.time })}</span>
                       </div>
                       {event.description && (
                         <p>{event.description}</p>
@@ -384,7 +379,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                         {event.participants && (
                           <div className="traditional-folklore-audience">
                             <FontAwesomeIcon icon={faUsers} />
-                            <span>{event.participants} зрители</span>
+                            <span>{t('clubs.TraditionalFolklore.events.audience', { count: event.participants })}</span>
                           </div>
                         )}
                       </div>
@@ -395,13 +390,12 @@ ${registrationForm.message || 'Няма допълнително съобщен�
             </div>
           )}
 
-          {/* Video Gallery - показва се САМО ако има видеа */}
           {folkloreVideos.length > 0 && (
             <div className="traditional-folklore-section">
               <div className="traditional-folklore-section-header">
                 <FontAwesomeIcon icon={faPlay} />
-                <h3>Видео галерия</h3>
-                <p>Записи от нашите изпълнения</p>
+                <h3>{t('clubs.TraditionalFolklore.videos.title')}</h3>
+                <p>{t('clubs.TraditionalFolklore.videos.subtitle')}</p>
               </div>
               
               <div className="traditional-folklore-videos">
@@ -432,14 +426,14 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                             onClick={() => handleVideoPlay(video)}
                           >
                             <FontAwesomeIcon icon={faPlay} />
-                            Гледай
+                            {t('clubs.TraditionalFolklore.videos.watch')}
                           </button>
                           <button 
                             className="traditional-folklore-action-btn"
                             onClick={() => handleShare(video)}
                           >
                             <FontAwesomeIcon icon={faShare} />
-                            Сподели
+                            {t('clubs.TraditionalFolklore.videos.share')}
                           </button>
                         </div>
                       </div>
@@ -450,13 +444,12 @@ ${registrationForm.message || 'Няма допълнително съобщен�
             </div>
           )}
 
-          {/* Audio Collection - показва се САМО ако има аудио */}
           {folkloreAudio.length > 0 && (
             <div className="traditional-folklore-section">
               <div className="traditional-folklore-section-header">
                 <FontAwesomeIcon icon={faVolumeUp} />
-                <h3>Аудио колекция</h3>
-                <p>Традиционни песни и музика</p>
+                <h3>{t('clubs.TraditionalFolklore.audio.title')}</h3>
+                <p>{t('clubs.TraditionalFolklore.audio.subtitle')}</p>
               </div>
               
               <div className="traditional-folklore-audio">
@@ -495,13 +488,12 @@ ${registrationForm.message || 'Няма допълнително съобщен�
             </div>
           )}
 
-          {/* Cultural Awards - показва се САМО ако има награди */}
           {culturalAwards.length > 0 && (
             <div className="traditional-folklore-section">
               <div className="traditional-folklore-section-header">
                 <FontAwesomeIcon icon={faAward} />
-                <h3>Културни награди</h3>
-                <p>Признание за нашата фолклорна дейност</p>
+                <h3>{t('clubs.TraditionalFolklore.awards.title')}</h3>
+                <p>{t('clubs.TraditionalFolklore.awards.subtitle')}</p>
               </div>
               
               <div className="traditional-folklore-awards">
@@ -525,32 +517,30 @@ ${registrationForm.message || 'Няма допълнително съобщен�
           )}
         </div>
 
-        {/* Call to Action */}
         <div className="traditional-folklore-cta">
           <div className="traditional-folklore-cta-content">
-            <h3>Присъединете се към фолклорната традиция</h3>
-            <p>Научете автентични български песни и танци в нашите формации</p>
+            <h3>{t('clubs.TraditionalFolklore.cta.title')}</h3>
+            <p>{t('clubs.TraditionalFolklore.cta.subtitle')}</p>
             <div className="traditional-folklore-cta-buttons">
               <button 
                 className="traditional-folklore-cta-primary"
                 onClick={openRegistrationModal}
               >
                 <FontAwesomeIcon icon={faMusic} />
-                Запишете се
+                {t('clubs.TraditionalFolklore.cta.register')}
               </button>
               <button 
                 className="traditional-folklore-cta-secondary"
                 onClick={handleWatchVideos}
               >
                 <FontAwesomeIcon icon={faEye} />
-                Гледайте видеа
+                {t('clubs.TraditionalFolklore.cta.watchVideos')}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* VIDEO MODAL */}
       {isVideoModalOpen && selectedVideo && (
         <div className="traditional-folklore-video-modal">
           <div className="traditional-folklore-video-modal-overlay" onClick={closeVideoModal}></div>
@@ -567,7 +557,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                 poster={selectedVideo.thumbnail}
               >
                 <source src={selectedVideo.src} type="video/mp4" />
-                Вашият браузър не поддържа video елемента.
+                {t('clubs.TraditionalFolklore.videoModal.notSupported')}
               </video>
             </div>
             
@@ -580,14 +570,14 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                   onClick={() => handleDownload(selectedVideo)}
                 >
                   <FontAwesomeIcon icon={faDownload} />
-                  Изтегли
+                  {t('clubs.TraditionalFolklore.videoModal.download')}
                 </button>
                 <button 
                   className="traditional-folklore-modal-btn secondary"
                   onClick={() => handleShare(selectedVideo)}
                 >
                   <FontAwesomeIcon icon={faShare} />
-                  Сподели
+                  {t('clubs.TraditionalFolklore.videoModal.share')}
                 </button>
               </div>
             </div>
@@ -595,7 +585,6 @@ ${registrationForm.message || 'Няма допълнително съобщен�
         </div>
       )}
 
-      {/* REGISTRATION MODAL */}
       {isRegistrationModalOpen && (
         <div className="traditional-folklore-registration-modal">
           <div className="traditional-folklore-registration-modal-overlay" onClick={closeRegistrationModal}></div>
@@ -606,21 +595,21 @@ ${registrationForm.message || 'Няма допълнително съобщен�
             
             <div className="traditional-folklore-registration-header">
               <FontAwesomeIcon icon={faMusic} />
-              <h3>Запишете се за фолклорни дейности</h3>
-              <p>Присъединете се към нашите автентични български традиции</p>
+              <h3>{t('clubs.TraditionalFolklore.registrationModal.title')}</h3>
+              <p>{t('clubs.TraditionalFolklore.registrationModal.subtitle')}</p>
             </div>
             
             {formStatus === 'sent' ? (
               <div className="traditional-folklore-form-success">
                 <FontAwesomeIcon icon={faCheck} />
-                <h4>Заявката е изпратена!</h4>
-                <p>Благодарим ви! Ще се свържем с вас скоро за потвърждение.</p>
+                <h4>{t('clubs.TraditionalFolklore.registrationModal.success.title')}</h4>
+                <p>{t('clubs.TraditionalFolklore.registrationModal.success.message')}</p>
               </div>
             ) : formStatus === 'error' ? (
               <div className="traditional-folklore-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.TraditionalFolklore.registrationModal.error.title')}</h4>
+                <p>{t('clubs.TraditionalFolklore.registrationModal.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleFormSubmit} className="traditional-folklore-registration-form">
@@ -628,7 +617,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                   <div className="traditional-folklore-form-group">
                     <label htmlFor="name">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.TraditionalFolklore.registrationModal.form.name')} *
                     </label>
                     <input
                       type="text"
@@ -636,14 +625,14 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                       value={registrationForm.name}
                       onChange={(e) => handleFormChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.TraditionalFolklore.registrationModal.form.namePlaceholder')}
                     />
                   </div>
                   
                   <div className="traditional-folklore-form-group">
                     <label htmlFor="email">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.TraditionalFolklore.registrationModal.form.email')} *
                     </label>
                     <input
                       type="email"
@@ -651,7 +640,7 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                       value={registrationForm.email}
                       onChange={(e) => handleFormChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.TraditionalFolklore.registrationModal.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -660,28 +649,28 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                   <div className="traditional-folklore-form-group">
                     <label htmlFor="phone">
                       <FontAwesomeIcon icon={faPhone} />
-                      Телефон
+                      {t('clubs.TraditionalFolklore.registrationModal.form.phone')}
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       value={registrationForm.phone}
                       onChange={(e) => handleFormChange('phone', e.target.value)}
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.TraditionalFolklore.registrationModal.form.phonePlaceholder')}
                     />
                   </div>
                   
                   <div className="traditional-folklore-form-group">
                     <label htmlFor="age">
                       <FontAwesomeIcon icon={faUsers} />
-                      Възраст
+                      {t('clubs.TraditionalFolklore.registrationModal.form.age')}
                     </label>
                     <input
                       type="number"
                       id="age"
                       value={registrationForm.age}
                       onChange={(e) => handleFormChange('age', e.target.value)}
-                      placeholder="Въведете вашата възраст"
+                      placeholder={t('clubs.TraditionalFolklore.registrationModal.form.agePlaceholder')}
                     />
                   </div>
                 </div>
@@ -690,36 +679,32 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                   <div className="traditional-folklore-form-group">
                     <label htmlFor="experience">
                       <FontAwesomeIcon icon={faAward} />
-                      Опит във фолклора
+                      {t('clubs.TraditionalFolklore.registrationModal.form.experienceLabel')}
                     </label>
                     <select
                       id="experience"
                       value={registrationForm.experience}
                       onChange={(e) => handleFormChange('experience', e.target.value)}
                     >
-                      <option value="">Изберете опит</option>
-                      <option value="beginner">Начинаещ</option>
-                      <option value="intermediate">Средно ниво</option>
-                      <option value="advanced">Напреднал</option>
-                      <option value="professional">Професионалист</option>
+                      {getExperienceOptions().map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
                     </select>
                   </div>
                   
                   <div className="traditional-folklore-form-group">
                     <label htmlFor="activity">
                       <FontAwesomeIcon icon={faTheaterMasks} />
-                      Предпочитана дейност
+                      {t('clubs.TraditionalFolklore.registrationModal.form.activityLabel')}
                     </label>
                     <select
                       id="activity"
                       value={registrationForm.activity}
                       onChange={(e) => handleFormChange('activity', e.target.value)}
                     >
-                      <option value="">Изберете дейност</option>
-                      {folkloreActivities.map((activity, index) => (
-                        <option key={index} value={activity.name}>{activity.name}</option>
+                      {getActivityOptions().map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
                       ))}
-                      <option value="any">Каквото е подходящо</option>
                     </select>
                   </div>
                 </div>
@@ -727,13 +712,13 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                 <div className="traditional-folklore-form-group">
                   <label htmlFor="message">
                     <FontAwesomeIcon icon={faEnvelope} />
-                    Допълнително съобщение
+                    {t('clubs.TraditionalFolklore.registrationModal.form.message')}
                   </label>
                   <textarea
                     id="message"
                     value={registrationForm.message}
                     onChange={(e) => handleFormChange('message', e.target.value)}
-                    placeholder="Разкажете ни повече за вашия интерес към фолклора..."
+                    placeholder={t('clubs.TraditionalFolklore.registrationModal.form.messagePlaceholder')}
                     rows="4"
                   />
                 </div>
@@ -745,14 +730,16 @@ ${registrationForm.message || 'Няма допълнително съобщен�
                     disabled={formStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faEnvelope} />
-                    {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявката'}
+                    {formStatus === 'sending' ? 
+                      t('clubs.TraditionalFolklore.registrationModal.form.sending') : 
+                      t('clubs.TraditionalFolklore.registrationModal.form.submit')}
                   </button>
                   <button 
                     type="button" 
                     onClick={closeRegistrationModal}
                     className="traditional-folklore-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.TraditionalFolklore.registrationModal.form.cancel')}
                   </button>
                 </div>
               </form>

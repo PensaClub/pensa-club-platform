@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faTheaterMasks,
@@ -30,6 +31,7 @@ import {
 import './traditionalPerformances.css';
 
 export const TraditionalPerformances = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
@@ -42,19 +44,16 @@ export const TraditionalPerformances = ({ club }) => {
     message: ''
   });
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Извличаме данни от клуба
   const allEvents = club.activities?.events || [];
   const regularActivities = club.activities?.regular || [];
   const performanceVideos = club.media?.videos || [];
   const stats = club.stats || {};
   const awards = club.achievements?.awards || [];
 
-  // Филтрираме културни събития
   const performanceEvents = allEvents.filter(event =>
     event.type === 'cultural' || 
     event.type === 'traditional' ||
@@ -65,7 +64,6 @@ export const TraditionalPerformances = ({ club }) => {
     event.title?.toLowerCase().includes('песен')
   );
 
-  // Филтрираме музикални дейности
   const performanceActivities = regularActivities.filter(activity => 
     activity.name?.toLowerCase().includes('хор') ||
     activity.name?.toLowerCase().includes('танци') ||
@@ -73,7 +71,6 @@ export const TraditionalPerformances = ({ club }) => {
     activity.name?.toLowerCase().includes('песни')
   );
 
-  // Филтрираме награди за представления
   const performanceAwards = awards.filter(award =>
     award.name?.toLowerCase().includes('култур') ||
     award.name?.toLowerCase().includes('представление') ||
@@ -82,7 +79,6 @@ export const TraditionalPerformances = ({ club }) => {
     award.name?.toLowerCase().includes('танц')
   );
 
-  // Проверяваме дали има съдържание за показване
   const hasPerformanceContent = 
     performanceEvents.length > 0 ||
     performanceActivities.length > 0 ||
@@ -94,7 +90,6 @@ export const TraditionalPerformances = ({ club }) => {
     return null;
   }
 
-  // Разделяме събитията по време
   const now = new Date();
   const upcomingEvents = performanceEvents
     .filter(event => new Date(event.date) >= now)
@@ -104,7 +99,6 @@ export const TraditionalPerformances = ({ club }) => {
     .filter(event => new Date(event.date) < now)
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // Създаваме календарни данни от всички дейности
   const calendarData = [
     ...performanceEvents.map(event => ({
       title: event.title,
@@ -123,7 +117,6 @@ export const TraditionalPerformances = ({ club }) => {
     }))
   ];
 
-  // Помощни функции
   const getEventIcon = (type, title) => {
     if (title?.toLowerCase().includes('концерт')) return faMusic;
     if (title?.toLowerCase().includes('танц')) return faTheaterMasks;
@@ -142,7 +135,9 @@ export const TraditionalPerformances = ({ club }) => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', { 
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    return date.toLocaleDateString(locale, { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric' 
@@ -150,19 +145,22 @@ export const TraditionalPerformances = ({ club }) => {
   };
 
   const getDayName = (day) => {
-    const days = {
-      'понеделник': 'Понеделник',
-      'вторник': 'Вторник', 
-      'сряда': 'Сряда',
-      'четвъртък': 'Четвъртък',
-      'петък': 'Петък',
-      'събота': 'Събота',
-      'неделя': 'Неделя'
-    };
-    return days[day?.toLowerCase()] || day;
+    const dayKey = day?.toLowerCase();
+    return t(`clubs.TraditionalPerformances.days.${dayKey}`, { defaultValue: day });
   };
 
-  // Функции за видео
+  const getActivityOptions = () => {
+    const options = [
+      { value: '', label: t('clubs.TraditionalPerformances.registrationModal.form.selectActivity') },
+      ...performanceActivities.map((activity) => ({
+        value: activity.name,
+        label: activity.name
+      })),
+      { value: 'other', label: t('clubs.TraditionalPerformances.registrationModal.form.other') }
+    ];
+    return options;
+  };
+
   const handleVideoPlay = (video) => {
     setCurrentVideo(video);
     setIsVideoModalOpen(true);
@@ -173,10 +171,9 @@ export const TraditionalPerformances = ({ club }) => {
     setCurrentVideo(null);
   };
 
-  // ПОПРАВЕНА функция за изтегляне
   const handleVideoDownload = async (video) => {
     if (!video.src) {
-      alert('Видеото не е налично за изтегляне');
+      alert(t('clubs.TraditionalPerformances.messages.videoNotAvailable'));
       return;
     }
 
@@ -192,13 +189,13 @@ export const TraditionalPerformances = ({ club }) => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Грешка при изтегляне:', error);
-      alert('Възникна грешка при изтеглянето на видеото');
+      console.error('Download error:', error);
+      alert(t('clubs.TraditionalPerformances.messages.downloadError'));
     }
   };
 
   const handleShare = (item) => {
-    const text = item.title || item.caption || 'Споделяне от клуба';
+    const text = item.title || item.caption || t('clubs.TraditionalPerformances.messages.shareDefault');
     const url = window.location.href;
     
     if (navigator.share) {
@@ -209,15 +206,18 @@ export const TraditionalPerformances = ({ club }) => {
       });
     } else {
       navigator.clipboard.writeText(url);
-      alert('Линкът е копиран в клипборда!');
+      alert(t('clubs.TraditionalPerformances.messages.linkCopied'));
     }
   };
 
   const handleReservation = (event) => {
-    alert(`Резервация за "${event.title}" на ${formatDate(event.date)} в ${event.time}`);
+    alert(t('clubs.TraditionalPerformances.messages.reservation', {
+      title: event.title,
+      date: formatDate(event.date),
+      time: event.time
+    }));
   };
 
-  // Функции за календар
   const openCalendar = () => {
     setIsCalendarModalOpen(true);
   };
@@ -226,7 +226,6 @@ export const TraditionalPerformances = ({ club }) => {
     setIsCalendarModalOpen(false);
   };
 
-  // Функции за регистрация
   const openRegistration = () => {
     setIsRegistrationModalOpen(true);
   };
@@ -245,30 +244,20 @@ export const TraditionalPerformances = ({ club }) => {
   const handleRegistrationSubmit = (e) => {
     e.preventDefault();
     
-    // Създаваме mailto link
-    const subject = encodeURIComponent(`Заявка за записване в ${club.name}`);
-    const body = encodeURIComponent(`
-Здравейте,
-
-Бих искал/а да се запиша в клуба с следните данни:
-
-Име: ${registrationForm.name}
-Имейл: ${registrationForm.email}
-Телефон: ${registrationForm.phone}
-Интересува ме: ${registrationForm.activity}
-
-Съобщение:
-${registrationForm.message}
-
-С уважение,
-${registrationForm.name}
-    `);
+    const subject = encodeURIComponent(t('clubs.TraditionalPerformances.registrationModal.emailSubject', { clubName: club.name }));
+    const body = encodeURIComponent(t('clubs.TraditionalPerformances.registrationModal.emailBody', {
+      name: registrationForm.name,
+      email: registrationForm.email,
+      phone: registrationForm.phone,
+      activity: registrationForm.activity,
+      message: registrationForm.message
+    }));
     
     const mailtoLink = `mailto:${club.contacts?.email}?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
     
     closeRegistration();
-    alert('Имейлът е подготвен за изпращане!');
+    alert(t('clubs.TraditionalPerformances.messages.emailPrepared'));
   };
 
   const handleRegistrationChange = (field, value) => {
@@ -282,19 +271,17 @@ ${registrationForm.name}
     <section id="traditional-performances" className="traditional-performances-main-section">
       <div className="traditional-performances-container">
         
-        {/* Header */}
         <div className="traditional-performances-header">
           <div className="traditional-performances-badge">
             <FontAwesomeIcon icon={faFilm} />
-            <span>Представления и изпълнения</span>
+            <span>{t('clubs.TraditionalPerformances.header.badge')}</span>
           </div>
-          <h2 className="traditional-performances-title">Нашата сцена и публика</h2>
+          <h2 className="traditional-performances-title">{t('clubs.TraditionalPerformances.header.title')}</h2>
           <p className="traditional-performances-subtitle">
-            Споделяме красотата на българския фолклор чрез автентични представления
+            {t('clubs.TraditionalPerformances.header.subtitle')}
           </p>
         </div>
 
-        {/* Performance Stats */}
         {(stats.performances > 0 || stats.totalMembers > 0 || stats.yearsActive > 0) && (
           <div className="traditional-performances-stats">
             <div className="traditional-performances-stats-grid">
@@ -305,7 +292,7 @@ ${registrationForm.name}
                   </div>
                   <div className="traditional-performances-stat-content">
                     <div className="traditional-performances-stat-value">{stats.performances}+</div>
-                    <div className="traditional-performances-stat-label">Представления</div>
+                    <div className="traditional-performances-stat-label">{t('clubs.TraditionalPerformances.stats.performances')}</div>
                   </div>
                 </div>
               )}
@@ -316,7 +303,7 @@ ${registrationForm.name}
                   </div>
                   <div className="traditional-performances-stat-content">
                     <div className="traditional-performances-stat-value">{stats.totalMembers}</div>
-                    <div className="traditional-performances-stat-label">Изпълнители</div>
+                    <div className="traditional-performances-stat-label">{t('clubs.TraditionalPerformances.stats.performers')}</div>
                   </div>
                 </div>
               )}
@@ -327,7 +314,7 @@ ${registrationForm.name}
                   </div>
                   <div className="traditional-performances-stat-content">
                     <div className="traditional-performances-stat-value">{stats.yearsActive}</div>
-                    <div className="traditional-performances-stat-label">Години на сцената</div>
+                    <div className="traditional-performances-stat-label">{t('clubs.TraditionalPerformances.stats.yearsOnStage')}</div>
                   </div>
                 </div>
               )}
@@ -338,7 +325,7 @@ ${registrationForm.name}
                   </div>
                   <div className="traditional-performances-stat-content">
                     <div className="traditional-performances-stat-value">{performanceEvents.length}</div>
-                    <div className="traditional-performances-stat-label">События тази година</div>
+                    <div className="traditional-performances-stat-label">{t('clubs.TraditionalPerformances.stats.eventsThisYear')}</div>
                   </div>
                 </div>
               )}
@@ -348,13 +335,12 @@ ${registrationForm.name}
 
         <div className="traditional-performances-main-grid">
           
-          {/* Upcoming Performances */}
           {upcomingEvents.length > 0 && (
             <div className="traditional-performances-section">
               <div className="traditional-performances-section-header">
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                <h3>Предстоящи представления</h3>
-                <p>Не пропускайте нашите бъдещи изпълнения</p>
+                <h3>{t('clubs.TraditionalPerformances.upcoming.title')}</h3>
+                <p>{t('clubs.TraditionalPerformances.upcoming.subtitle')}</p>
               </div>
               
               <div className="traditional-performances-events">
@@ -384,7 +370,7 @@ ${registrationForm.name}
                         {event.participants && (
                           <div className="traditional-performances-event-audience">
                             <FontAwesomeIcon icon={faUsers} />
-                            <span>До {event.participants} места</span>
+                            <span>{t('clubs.TraditionalPerformances.upcoming.seats', { count: event.participants })}</span>
                           </div>
                         )}
                       </div>
@@ -397,14 +383,14 @@ ${registrationForm.name}
                           onClick={() => handleReservation(event)}
                         >
                           <FontAwesomeIcon icon={faTicketAlt} />
-                          Резервирайте място
+                          {t('clubs.TraditionalPerformances.upcoming.reserve')}
                         </button>
                         <button 
                           className="traditional-performances-action-btn secondary"
                           onClick={() => handleShare(event)}
                         >
                           <FontAwesomeIcon icon={faShare} />
-                          Споделете
+                          {t('clubs.TraditionalPerformances.upcoming.share')}
                         </button>
                       </div>
                     </div>
@@ -414,13 +400,12 @@ ${registrationForm.name}
             </div>
           )}
 
-          {/* Regular Performance Groups */}
           {performanceActivities.length > 0 && (
             <div className="traditional-performances-section">
               <div className="traditional-performances-section-header">
                 <FontAwesomeIcon icon={faUsers} />
-                <h3>Нашите формации</h3>
-                <p>Постоянни състави и групи</p>
+                <h3>{t('clubs.TraditionalPerformances.groups.title')}</h3>
+                <p>{t('clubs.TraditionalPerformances.groups.subtitle')}</p>
               </div>
               
               <div className="traditional-performances-groups">
@@ -433,7 +418,7 @@ ${registrationForm.name}
                       <h4>{activity.name}</h4>
                       <div className="traditional-performances-group-schedule">
                         <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span><strong>{getDayName(activity.day)}</strong> от {activity.time}</span>
+                        <span><strong>{getDayName(activity.day)}</strong> {t('clubs.TraditionalPerformances.groups.from')} {activity.time}</span>
                       </div>
                       {activity.description && (
                         <p>{activity.description}</p>
@@ -442,13 +427,13 @@ ${registrationForm.name}
                         {activity.instructor && (
                           <div className="traditional-performances-instructor">
                             <FontAwesomeIcon icon={faMicrophone} />
-                            <span>Ръководител: {activity.instructor}</span>
+                            <span>{t('clubs.TraditionalPerformances.groups.leader')}: {activity.instructor}</span>
                           </div>
                         )}
                         {activity.participants && (
                           <div className="traditional-performances-participants">
                             <FontAwesomeIcon icon={faUsers} />
-                            <span>{activity.participants} изпълнители</span>
+                            <span>{t('clubs.TraditionalPerformances.groups.performers', { count: activity.participants })}</span>
                           </div>
                         )}
                       </div>
@@ -459,13 +444,12 @@ ${registrationForm.name}
             </div>
           )}
 
-          {/* Performance Videos */}
           {performanceVideos.length > 0 && (
             <div className="traditional-performances-section">
               <div className="traditional-performances-section-header">
                 <FontAwesomeIcon icon={faVideo} />
-                <h3>Записи от представления</h3>
-                <p>Гледайте нашите изпълнения</p>
+                <h3>{t('clubs.TraditionalPerformances.videos.title')}</h3>
+                <p>{t('clubs.TraditionalPerformances.videos.subtitle')}</p>
               </div>
               
               <div className="traditional-performances-videos">
@@ -496,14 +480,14 @@ ${registrationForm.name}
                             onClick={() => handleVideoPlay(video)}
                           >
                             <FontAwesomeIcon icon={faPlay} />
-                            Гледай
+                            {t('clubs.TraditionalPerformances.videos.watch')}
                           </button>
                           <button 
                             className="traditional-performances-video-btn download"
                             onClick={() => handleVideoDownload(video)}
                           >
                             <FontAwesomeIcon icon={faDownload} />
-                            Изтегли
+                            {t('clubs.TraditionalPerformances.videos.download')}
                           </button>
                         </div>
                       </div>
@@ -514,13 +498,12 @@ ${registrationForm.name}
             </div>
           )}
 
-          {/* Past Performances */}
           {pastEvents.length > 0 && (
             <div className="traditional-performances-section">
               <div className="traditional-performances-section-header">
                 <FontAwesomeIcon icon={faCamera} />
-                <h3>Минали представления</h3>
-                <p>Нашите успешни изпълнения</p>
+                <h3>{t('clubs.TraditionalPerformances.past.title')}</h3>
+                <p>{t('clubs.TraditionalPerformances.past.subtitle')}</p>
               </div>
               
               <div className="traditional-performances-past-events">
@@ -540,7 +523,7 @@ ${registrationForm.name}
                       {event.participants && (
                         <div className="traditional-performances-past-audience">
                           <FontAwesomeIcon icon={faEye} />
-                          <span>{event.participants} зрители</span>
+                          <span>{t('clubs.TraditionalPerformances.past.viewers', { count: event.participants })}</span>
                         </div>
                       )}
                     </div>
@@ -550,13 +533,12 @@ ${registrationForm.name}
             </div>
           )}
 
-          {/* Performance Awards */}
           {performanceAwards.length > 0 && (
             <div className="traditional-performances-section">
               <div className="traditional-performances-section-header">
                 <FontAwesomeIcon icon={faAward} />
-                <h3>Награди за представления</h3>
-                <p>Признание за нашите изпълнения</p>
+                <h3>{t('clubs.TraditionalPerformances.awards.title')}</h3>
+                <p>{t('clubs.TraditionalPerformances.awards.subtitle')}</p>
               </div>
               
               <div className="traditional-performances-awards">
@@ -580,31 +562,29 @@ ${registrationForm.name}
           )}
         </div>
 
-        {/* Call to Action */}
         <div className="traditional-performances-cta">
           <div className="traditional-performances-cta-content">
-            <h3>Станете част от представленията</h3>
-            <p>Присъединете се към нашите формации и изкуството на българския фолклор</p>
+            <h3>{t('clubs.TraditionalPerformances.cta.title')}</h3>
+            <p>{t('clubs.TraditionalPerformances.cta.subtitle')}</p>
             <div className="traditional-performances-cta-buttons">
               <button 
                 className="traditional-performances-cta-primary"
                 onClick={openRegistration}
               >
                 <FontAwesomeIcon icon={faTheaterMasks} />
-                Запишете се
+                {t('clubs.TraditionalPerformances.cta.register')}
               </button>
               <button 
                 className="traditional-performances-cta-secondary"
                 onClick={openCalendar}
               >
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                Вижте програмата
+                {t('clubs.TraditionalPerformances.cta.viewSchedule')}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Decorative Pattern */}
         <div className="traditional-performances-decorative">
           <div className="traditional-performances-pattern">
             <FontAwesomeIcon icon={faGem} />
@@ -616,7 +596,6 @@ ${registrationForm.name}
         </div>
       </div>
 
-      {/* ВИДЕО МОДАЛ */}
       {isVideoModalOpen && currentVideo && (
         <div className="traditional-performances-video-modal">
           <div className="traditional-performances-video-modal-overlay" onClick={closeVideoModal}></div>
@@ -633,7 +612,7 @@ ${registrationForm.name}
                 poster={currentVideo.thumbnail}
               >
                 <source src={currentVideo.src} type="video/mp4" />
-                Вашият браузър не поддържа video елемента.
+                {t('clubs.TraditionalPerformances.videoModal.notSupported')}
               </video>
             </div>
             
@@ -644,13 +623,13 @@ ${registrationForm.name}
                 {currentVideo.duration && (
                   <span className="traditional-performances-video-modal-duration">
                     <FontAwesomeIcon icon={faClock} />
-                    Продължителност: {currentVideo.duration}
+                    {t('clubs.TraditionalPerformances.videoModal.duration')}: {currentVideo.duration}
                   </span>
                 )}
                 {currentVideo.type && (
                   <span className="traditional-performances-video-modal-type">
                     <FontAwesomeIcon icon={faVideo} />
-                    Тип: {currentVideo.type}
+                    {t('clubs.TraditionalPerformances.videoModal.type')}: {currentVideo.type}
                   </span>
                 )}
               </div>
@@ -660,14 +639,14 @@ ${registrationForm.name}
                   onClick={() => handleVideoDownload(currentVideo)}
                 >
                   <FontAwesomeIcon icon={faDownload} />
-                  Изтегли видео
+                  {t('clubs.TraditionalPerformances.videoModal.downloadVideo')}
                 </button>
                 <button 
                   className="traditional-performances-modal-btn secondary"
                   onClick={() => handleShare(currentVideo)}
                 >
                   <FontAwesomeIcon icon={faShare} />
-                  Сподели
+                  {t('clubs.TraditionalPerformances.videoModal.share')}
                 </button>
               </div>
             </div>
@@ -675,7 +654,6 @@ ${registrationForm.name}
         </div>
       )}
 
-      {/* КАЛЕНДАР МОДАЛ */}
       {isCalendarModalOpen && (
         <div className="traditional-performances-calendar-modal">
           <div className="traditional-performances-calendar-modal-overlay" onClick={closeCalendar}></div>
@@ -686,12 +664,12 @@ ${registrationForm.name}
             
             <div className="traditional-performances-calendar-header">
               <FontAwesomeIcon icon={faCalendar} />
-              <h3>Програма на {club.name}</h3>
+              <h3>{t('clubs.TraditionalPerformances.calendarModal.title', { clubName: club.name })}</h3>
             </div>
             
             <div className="traditional-performances-calendar-content">
               <div className="traditional-performances-calendar-section">
-                <h4>Редовни дейности</h4>
+                <h4>{t('clubs.TraditionalPerformances.calendarModal.regularActivities')}</h4>
                 <div className="traditional-performances-calendar-activities">
                   {performanceActivities.map((activity, index) => (
                     <div key={index} className="traditional-performances-calendar-item">
@@ -718,7 +696,7 @@ ${registrationForm.name}
               
               {upcomingEvents.length > 0 && (
                 <div className="traditional-performances-calendar-section">
-                  <h4>Предстоящи събития</h4>
+                  <h4>{t('clubs.TraditionalPerformances.calendarModal.upcomingEvents')}</h4>
                   <div className="traditional-performances-calendar-events">
                     {upcomingEvents.map((event, index) => (
                       <div key={index} className="traditional-performances-calendar-item">
@@ -747,7 +725,6 @@ ${registrationForm.name}
         </div>
       )}
 
-      {/* РЕГИСТРАЦИЯ МОДАЛ */}
       {isRegistrationModalOpen && (
         <div className="traditional-performances-registration-modal">
           <div className="traditional-performances-registration-modal-overlay" onClick={closeRegistration}></div>
@@ -758,15 +735,15 @@ ${registrationForm.name}
             
             <div className="traditional-performances-registration-header">
               <FontAwesomeIcon icon={faUser} />
-              <h3>Запишете се в {club.name}</h3>
-              <p>Моля попълнете формата по-долу</p>
+              <h3>{t('clubs.TraditionalPerformances.registrationModal.title', { clubName: club.name })}</h3>
+              <p>{t('clubs.TraditionalPerformances.registrationModal.subtitle')}</p>
             </div>
             
             <form onSubmit={handleRegistrationSubmit} className="traditional-performances-registration-form">
               <div className="traditional-performances-form-group">
                 <label htmlFor="name">
                   <FontAwesomeIcon icon={faUser} />
-                  Вашето име *
+                  {t('clubs.TraditionalPerformances.registrationModal.form.name')} *
                 </label>
                 <input
                   type="text"
@@ -774,14 +751,14 @@ ${registrationForm.name}
                   value={registrationForm.name}
                   onChange={(e) => handleRegistrationChange('name', e.target.value)}
                   required
-                  placeholder="Въведете вашето име"
+                  placeholder={t('clubs.TraditionalPerformances.registrationModal.form.namePlaceholder')}
                 />
               </div>
               
               <div className="traditional-performances-form-group">
                 <label htmlFor="email">
                   <FontAwesomeIcon icon={faEnvelope} />
-                  Имейл адрес *
+                  {t('clubs.TraditionalPerformances.registrationModal.form.email')} *
                 </label>
                 <input
                   type="email"
@@ -789,54 +766,52 @@ ${registrationForm.name}
                   value={registrationForm.email}
                   onChange={(e) => handleRegistrationChange('email', e.target.value)}
                   required
-                  placeholder="Въведете вашия имейл"
+                  placeholder={t('clubs.TraditionalPerformances.registrationModal.form.emailPlaceholder')}
                 />
               </div>
               
               <div className="traditional-performances-form-group">
                 <label htmlFor="phone">
                   <FontAwesomeIcon icon={faPhone} />
-                  Телефон
+                  {t('clubs.TraditionalPerformances.registrationModal.form.phone')}
                 </label>
                 <input
                   type="tel"
                   id="phone"
                   value={registrationForm.phone}
                   onChange={(e) => handleRegistrationChange('phone', e.target.value)}
-                  placeholder="Въведете вашия телефон"
+                  placeholder={t('clubs.TraditionalPerformances.registrationModal.form.phonePlaceholder')}
                 />
               </div>
               
               <div className="traditional-performances-form-group">
                 <label htmlFor="activity">
                   <FontAwesomeIcon icon={faTheaterMasks} />
-                  Интересува ви
+                  {t('clubs.TraditionalPerformances.registrationModal.form.interest')}
                 </label>
                 <select
                   id="activity"
                   value={registrationForm.activity}
                   onChange={(e) => handleRegistrationChange('activity', e.target.value)}
                 >
-                  <option value="">Изберете дейност</option>
-                  {performanceActivities.map((activity, index) => (
-                    <option key={index} value={activity.name}>
-                      {activity.name}
+                  {getActivityOptions().map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
                     </option>
                   ))}
-                  <option value="other">Друго</option>
                 </select>
               </div>
               
               <div className="traditional-performances-form-group">
                 <label htmlFor="message">
                   <FontAwesomeIcon icon={faEnvelope} />
-                  Допълнително съобщение
+                  {t('clubs.TraditionalPerformances.registrationModal.form.message')}
                 </label>
                 <textarea
                   id="message"
                   value={registrationForm.message}
                   onChange={(e) => handleRegistrationChange('message', e.target.value)}
-                  placeholder="Разкажете ни повече за вашия интерес..."
+                  placeholder={t('clubs.TraditionalPerformances.registrationModal.form.messagePlaceholder')}
                   rows="4"
                 />
               </div>
@@ -844,10 +819,10 @@ ${registrationForm.name}
               <div className="traditional-performances-form-actions">
                 <button type="submit" className="traditional-performances-submit-btn">
                   <FontAwesomeIcon icon={faEnvelope} />
-                  Изпрати заявката
+                  {t('clubs.TraditionalPerformances.registrationModal.form.submit')}
                 </button>
                 <button type="button" onClick={closeRegistration} className="traditional-performances-cancel-btn">
-                  Отказ
+                  {t('clubs.TraditionalPerformances.registrationModal.form.cancel')}
                 </button>
               </div>
             </form>

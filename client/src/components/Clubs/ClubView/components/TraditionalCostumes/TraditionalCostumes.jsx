@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faTshirt,
@@ -15,21 +16,19 @@ import {
 import './traditionalCostumes.css';
 
 export const TraditionalCostumes = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Извличаме САМО реални данни от клуба
   const gallery = club.gallery || [];
   const allEvents = club.activities?.events || [];
   const awards = club.achievements?.awards || [];
 
-  // Филтрираме събития свързани с носии/традиции САМО ако наистина има такива
   const costumeEvents = allEvents.filter(event =>
     event.title?.toLowerCase().includes('носи') ||
     event.title?.toLowerCase().includes('костюм') ||
@@ -38,7 +37,6 @@ export const TraditionalCostumes = ({ club }) => {
     event.type === 'traditional'
   );
 
-  // Филтрираме награди за традиции/носии САМО ако наистина има такива
   const costumeAwards = awards.filter(award =>
     award.name?.toLowerCase().includes('традицион') ||
     award.name?.toLowerCase().includes('носи') ||
@@ -47,7 +45,6 @@ export const TraditionalCostumes = ({ club }) => {
     award.name?.toLowerCase().includes('култур')
   );
 
-  // Проверяваме дали има РЕАЛНО съдържание за показване
   const hasCostumeContent = 
     gallery.length > 0 ||
     costumeEvents.length > 0 ||
@@ -57,7 +54,17 @@ export const TraditionalCostumes = ({ club }) => {
     return null;
   }
 
-  // Функции за галерия
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    return date.toLocaleDateString(locale, { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
   const openGallery = (image, index) => {
     setCurrentImage(image);
     setCurrentImageIndex(index);
@@ -92,8 +99,8 @@ export const TraditionalCostumes = ({ club }) => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Грешка при изтегляне:', error);
-      alert('Възникна грешка при изтеглянето на изображението');
+      console.error('Download error:', error);
+      alert(t('clubs.TraditionalCostumes.messages.downloadError'));
     }
   };
 
@@ -104,56 +111,51 @@ export const TraditionalCostumes = ({ club }) => {
     if (navigator.share) {
       navigator.share({
         title: text,
-        text: item?.description || `Галерия от ${club.name}`,
+        text: item?.description || t('clubs.TraditionalCostumes.messages.galleryFrom', { clubName: club.name }),
         url: url
       });
     } else {
       navigator.clipboard.writeText(url);
-      alert('Линкът е копиран в клипборда!');
+      alert(t('clubs.TraditionalCostumes.messages.linkCopied'));
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
   };
 
   return (
     <section id="traditional-costumes" className="traditional-costumes-main-section">
       <div className="traditional-costumes-container">
         
-        {/* Header - показва се само ако има съдържание */}
         <div className="traditional-costumes-header">
           <div className="traditional-costumes-badge">
             <FontAwesomeIcon icon={faTshirt} />
-            <span>Традиции и носии</span>
+            <span>{t('clubs.TraditionalCostumes.header.badge')}</span>
           </div>
-          <h2 className="traditional-costumes-title">Нашето културно наследство</h2>
+          <h2 className="traditional-costumes-title">{t('clubs.TraditionalCostumes.header.title')}</h2>
           <p className="traditional-costumes-subtitle">
-            Съхраняваме и представяме традициите на българската култура
+            {t('clubs.TraditionalCostumes.header.subtitle')}
           </p>
         </div>
 
         <div className="traditional-costumes-main-grid">
           
-          {/* Gallery - показва се САМО ако има снимки */}
           {gallery.length > 0 && (
             <div className="traditional-costumes-section">
               <div className="traditional-costumes-section-header">
                 <FontAwesomeIcon icon={faImages} />
-                <h3>Галерия</h3>
-                <p>Снимки от нашите традиционни мероприятия и дейности</p>
+                <h3>{t('clubs.TraditionalCostumes.gallery.title')}</h3>
+                <p>{t('clubs.TraditionalCostumes.gallery.subtitle')}</p>
               </div>
               
               <div className="traditional-costumes-gallery">
                 {gallery.map((imageSrc, index) => (
                   <div key={index} className="traditional-costumes-gallery-item">
                     <div className="traditional-costumes-image-container">
-                      <img src={imageSrc} alt={`Снимка ${index + 1} от ${club.name}`} />
+                      <img 
+                        src={imageSrc} 
+                        alt={t('clubs.TraditionalCostumes.gallery.imageAlt', { 
+                          index: index + 1, 
+                          clubName: club.name 
+                        })} 
+                      />
                       <div className="traditional-costumes-image-overlay">
                         <button 
                           className="traditional-costumes-overlay-btn view"
@@ -175,13 +177,12 @@ export const TraditionalCostumes = ({ club }) => {
             </div>
           )}
 
-          {/* Traditional Events - показва се САМО ако има традиционни събития */}
           {costumeEvents.length > 0 && (
             <div className="traditional-costumes-section">
               <div className="traditional-costumes-section-header">
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                <h3>Традиционни събития</h3>
-                <p>Мероприятия свързани с нашите традиции</p>
+                <h3>{t('clubs.TraditionalCostumes.events.title')}</h3>
+                <p>{t('clubs.TraditionalCostumes.events.subtitle')}</p>
               </div>
               
               <div className="traditional-costumes-events">
@@ -194,7 +195,7 @@ export const TraditionalCostumes = ({ club }) => {
                       <h4>{event.title}</h4>
                       <div className="traditional-costumes-event-date">
                         {formatDate(event.date)}
-                        {event.time && ` в ${event.time}`}
+                        {event.time && t('clubs.TraditionalCostumes.events.timeAt', { time: event.time })}
                       </div>
                       {event.description && (
                         <p>{event.description}</p>
@@ -203,7 +204,7 @@ export const TraditionalCostumes = ({ club }) => {
                         {event.participants && (
                           <span className="traditional-costumes-event-participants">
                             <FontAwesomeIcon icon={faUsers} />
-                            {event.participants} участници
+                            {t('clubs.TraditionalCostumes.events.participants', { count: event.participants })}
                           </span>
                         )}
                         <span className="traditional-costumes-event-type">{event.type}</span>
@@ -215,13 +216,12 @@ export const TraditionalCostumes = ({ club }) => {
             </div>
           )}
 
-          {/* Awards - показва се САМО ако има награди за традиции */}
           {costumeAwards.length > 0 && (
             <div className="traditional-costumes-section">
               <div className="traditional-costumes-section-header">
                 <FontAwesomeIcon icon={faAward} />
-                <h3>Признания за традициите</h3>
-                <p>Нашите постижения в областта на традиционната култура</p>
+                <h3>{t('clubs.TraditionalCostumes.awards.title')}</h3>
+                <p>{t('clubs.TraditionalCostumes.awards.subtitle')}</p>
               </div>
               
               <div className="traditional-costumes-awards">
@@ -250,7 +250,6 @@ export const TraditionalCostumes = ({ club }) => {
         </div>
       </div>
 
-      {/* ГАЛЕРИЯ МОДАЛ - показва се само при отваряне */}
       {isGalleryModalOpen && currentImage && (
         <div className="traditional-costumes-gallery-modal">
           <div className="traditional-costumes-gallery-modal-overlay" onClick={closeGallery}></div>
@@ -259,7 +258,6 @@ export const TraditionalCostumes = ({ club }) => {
               <FontAwesomeIcon icon={faTimes} />
             </button>
             
-            {/* Navigation - показва се само ако има повече от 1 снимка */}
             {gallery.length > 1 && (
               <>
                 <button 
@@ -278,30 +276,36 @@ export const TraditionalCostumes = ({ club }) => {
             )}
             
             <div className="traditional-costumes-gallery-image-container">
-              <img src={currentImage} alt={`Снимка от ${club.name}`} />
+              <img 
+                src={currentImage} 
+                alt={t('clubs.TraditionalCostumes.galleryModal.imageAlt', { clubName: club.name })} 
+              />
             </div>
             
             <div className="traditional-costumes-gallery-modal-info">
-              <h3>Снимка от {club.name}</h3>
+              <h3>{t('clubs.TraditionalCostumes.galleryModal.title', { clubName: club.name })}</h3>
               <div className="traditional-costumes-gallery-modal-actions">
                 <button 
                   className="traditional-costumes-modal-btn primary"
                   onClick={() => handleImageDownload(currentImage)}
                 >
                   <FontAwesomeIcon icon={faDownload} />
-                  Изтегли
+                  {t('clubs.TraditionalCostumes.galleryModal.download')}
                 </button>
                 <button 
                   className="traditional-costumes-modal-btn secondary"
-                  onClick={() => handleShare({ title: `Снимка от ${club.name}` })}
+                  onClick={() => handleShare({ title: t('clubs.TraditionalCostumes.galleryModal.shareTitle', { clubName: club.name }) })}
                 >
                   <FontAwesomeIcon icon={faShare} />
-                  Сподели
+                  {t('clubs.TraditionalCostumes.galleryModal.share')}
                 </button>
               </div>
               {gallery.length > 1 && (
                 <div className="traditional-costumes-gallery-counter">
-                  {currentImageIndex + 1} от {gallery.length}
+                  {t('clubs.TraditionalCostumes.galleryModal.counter', { 
+                    current: currentImageIndex + 1, 
+                    total: gallery.length 
+                  })}
                 </div>
               )}
             </div>

@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faMusic,
@@ -20,6 +21,7 @@ import {
 import './traditionalMusic.css';
 
 export const TraditionalMusic = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [currentAudio, setCurrentAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -30,19 +32,16 @@ export const TraditionalMusic = ({ club }) => {
   
   const audioRef = useRef(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Извличаме САМО реални данни от клуба
   const audioFiles = club.media?.audioFiles || [];
   const videos = club.media?.videos || [];
   const regularActivities = club.activities?.regular || [];
   const allEvents = club.activities?.events || [];
   const awards = club.achievements?.awards || [];
 
-  // Филтрираме музикални дейности
   const musicActivities = regularActivities.filter(activity => 
     activity.name?.toLowerCase().includes('хор') ||
     activity.name?.toLowerCase().includes('музик') ||
@@ -51,7 +50,6 @@ export const TraditionalMusic = ({ club }) => {
     activity.name?.toLowerCase().includes('ансамбъл')
   );
 
-  // Филтрираме музикални събития
   const musicEvents = allEvents.filter(event =>
     event.title?.toLowerCase().includes('концерт') ||
     event.title?.toLowerCase().includes('музик') ||
@@ -60,7 +58,6 @@ export const TraditionalMusic = ({ club }) => {
     event.type === 'cultural'
   );
 
-  // Филтрираме музикални видеа
   const musicVideos = videos.filter(video =>
     video.caption?.toLowerCase().includes('музик') ||
     video.caption?.toLowerCase().includes('песен') ||
@@ -70,7 +67,6 @@ export const TraditionalMusic = ({ club }) => {
     video.alt?.toLowerCase().includes('песен')
   );
 
-  // Филтрираме награди за музика
   const musicAwards = awards.filter(award =>
     award.name?.toLowerCase().includes('музик') ||
     award.name?.toLowerCase().includes('песен') ||
@@ -79,7 +75,6 @@ export const TraditionalMusic = ({ club }) => {
     award.name?.toLowerCase().includes('фолклор')
   );
 
-  // Проверяваме дали има РЕАЛНО съдържание за показване
   const hasMusicContent = 
     audioFiles.length > 0 ||
     musicActivities.length > 0 ||
@@ -91,7 +86,22 @@ export const TraditionalMusic = ({ club }) => {
     return null;
   }
 
-  // Audio Player функции
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    return date.toLocaleDateString(locale, { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const getDayName = (day) => {
+    const dayKey = day?.toLowerCase();
+    return t(`clubs.TraditionalMusic.days.${dayKey}`, { defaultValue: day });
+  };
+
   const playAudio = (audioFile, index) => {
     if (currentAudio === audioFile.src && isPlaying) {
       pauseAudio();
@@ -161,7 +171,6 @@ export const TraditionalMusic = ({ club }) => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Download функция
   const handleAudioDownload = async (audioFile) => {
     try {
       const response = await fetch(audioFile.src);
@@ -175,12 +184,11 @@ export const TraditionalMusic = ({ club }) => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Грешка при изтегляне:', error);
-      alert('Възникна грешка при изтеглянето на аудиото');
+      console.error('Download error:', error);
+      alert(t('clubs.TraditionalMusic.messages.downloadError'));
     }
   };
 
-  // Video функции
   const handleVideoPlay = (video) => {
     setCurrentVideo(video);
     setIsVideoModalOpen(true);
@@ -192,7 +200,7 @@ export const TraditionalMusic = ({ club }) => {
   };
 
   const handleShare = (item) => {
-    const text = item.caption || item.title || item.name || 'Музика от клуба';
+    const text = item.caption || item.title || item.name || t('clubs.TraditionalMusic.messages.musicFromClub');
     const url = window.location.href;
     
     if (navigator.share) {
@@ -203,57 +211,33 @@ export const TraditionalMusic = ({ club }) => {
       });
     } else {
       navigator.clipboard.writeText(url);
-      alert('Линкът е копиран в клипборда!');
+      alert(t('clubs.TraditionalMusic.messages.linkCopied'));
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
-
-  const getDayName = (day) => {
-    const days = {
-      'понеделник': 'Понеделник',
-      'вторник': 'Вторник', 
-      'сряда': 'Сряда',
-      'четвъртък': 'Четвъртък',
-      'петък': 'Петък',
-      'събота': 'Събота',
-      'неделя': 'Неделя'
-    };
-    return days[day?.toLowerCase()] || day;
   };
 
   return (
     <section id="traditional-music" className="traditional-music-main-section">
       <div className="traditional-music-container">
         
-        {/* Header */}
         <div className="traditional-music-header">
           <div className="traditional-music-badge">
             <FontAwesomeIcon icon={faMusic} />
-            <span>Музика и песни</span>
+            <span>{t('clubs.TraditionalMusic.header.badge')}</span>
           </div>
-          <h2 className="traditional-music-title">Звуците на традицията</h2>
+          <h2 className="traditional-music-title">{t('clubs.TraditionalMusic.header.title')}</h2>
           <p className="traditional-music-subtitle">
-            Съхраняваме и представяме музикалното наследство на българската култура
+            {t('clubs.TraditionalMusic.header.subtitle')}
           </p>
         </div>
 
         <div className="traditional-music-main-grid">
           
-          {/* Audio Player - показва се САМО ако има аудио файлове */}
           {audioFiles.length > 0 && (
             <div className="traditional-music-section">
               <div className="traditional-music-section-header">
                 <FontAwesomeIcon icon={faVolumeUp} />
-                <h3>Аудио записи</h3>
-                <p>Слушайте нашите музикални изпълнения</p>
+                <h3>{t('clubs.TraditionalMusic.audio.title')}</h3>
+                <p>{t('clubs.TraditionalMusic.audio.subtitle')}</p>
               </div>
               
               <audio
@@ -306,7 +290,6 @@ export const TraditionalMusic = ({ club }) => {
                 ))}
               </div>
 
-              {/* Audio Controls - показва се само ако се възпроизвежда аудио */}
               {currentAudio && (
                 <div className="traditional-music-controls">
                   <div className="traditional-music-track-title">
@@ -345,13 +328,12 @@ export const TraditionalMusic = ({ club }) => {
             </div>
           )}
 
-          {/* Music Activities - показва се САМО ако има музикални дейности */}
           {musicActivities.length > 0 && (
             <div className="traditional-music-section">
               <div className="traditional-music-section-header">
                 <FontAwesomeIcon icon={faUsers} />
-                <h3>Музикални формации</h3>
-                <p>Нашите редовни музикални дейности</p>
+                <h3>{t('clubs.TraditionalMusic.activities.title')}</h3>
+                <p>{t('clubs.TraditionalMusic.activities.subtitle')}</p>
               </div>
               
               <div className="traditional-music-activities">
@@ -364,7 +346,7 @@ export const TraditionalMusic = ({ club }) => {
                       <h4>{activity.name}</h4>
                       <div className="traditional-music-activity-schedule">
                         <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span><strong>{getDayName(activity.day)}</strong> от {activity.time}</span>
+                        <span><strong>{getDayName(activity.day)}</strong> {t('clubs.TraditionalMusic.activities.from')} {activity.time}</span>
                       </div>
                       {activity.description && (
                         <p>{activity.description}</p>
@@ -373,13 +355,13 @@ export const TraditionalMusic = ({ club }) => {
                         {activity.instructor && (
                           <div className="traditional-music-instructor">
                             <FontAwesomeIcon icon={faMicrophone} />
-                            <span>Ръководител: {activity.instructor}</span>
+                            <span>{t('clubs.TraditionalMusic.activities.leader')}: {activity.instructor}</span>
                           </div>
                         )}
                         {activity.participants && (
                           <div className="traditional-music-participants">
                             <FontAwesomeIcon icon={faUsers} />
-                            <span>{activity.participants} участници</span>
+                            <span>{t('clubs.TraditionalMusic.activities.participants', { count: activity.participants })}</span>
                           </div>
                         )}
                       </div>
@@ -390,13 +372,12 @@ export const TraditionalMusic = ({ club }) => {
             </div>
           )}
 
-          {/* Music Events - показва се САМО ако има музикални събития */}
           {musicEvents.length > 0 && (
             <div className="traditional-music-section">
               <div className="traditional-music-section-header">
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                <h3>Музикални събития</h3>
-                <p>Концерти и музикални мероприятия</p>
+                <h3>{t('clubs.TraditionalMusic.events.title')}</h3>
+                <p>{t('clubs.TraditionalMusic.events.subtitle')}</p>
               </div>
               
               <div className="traditional-music-events">
@@ -409,7 +390,7 @@ export const TraditionalMusic = ({ club }) => {
                       <h4>{event.title}</h4>
                       <div className="traditional-music-event-date">
                         {formatDate(event.date)}
-                        {event.time && ` в ${event.time}`}
+                        {event.time && t('clubs.TraditionalMusic.events.timeAt', { time: event.time })}
                       </div>
                       {event.description && (
                         <p>{event.description}</p>
@@ -418,7 +399,7 @@ export const TraditionalMusic = ({ club }) => {
                         {event.participants && (
                           <span className="traditional-music-event-participants">
                             <FontAwesomeIcon icon={faUsers} />
-                            {event.participants} участници
+                            {t('clubs.TraditionalMusic.events.participants', { count: event.participants })}
                           </span>
                         )}
                         <span className="traditional-music-event-type">{event.type}</span>
@@ -430,13 +411,12 @@ export const TraditionalMusic = ({ club }) => {
             </div>
           )}
 
-          {/* Music Videos - показва се САМО ако има музикални видеа */}
           {musicVideos.length > 0 && (
             <div className="traditional-music-section">
               <div className="traditional-music-section-header">
                 <FontAwesomeIcon icon={faVideo} />
-                <h3>Видео записи</h3>
-                <p>Гледайте нашите музикални изпълнения</p>
+                <h3>{t('clubs.TraditionalMusic.videos.title')}</h3>
+                <p>{t('clubs.TraditionalMusic.videos.subtitle')}</p>
               </div>
               
               <div className="traditional-music-videos">
@@ -467,7 +447,7 @@ export const TraditionalMusic = ({ club }) => {
                             onClick={() => handleVideoPlay(video)}
                           >
                             <FontAwesomeIcon icon={faPlay} />
-                            Гледай
+                            {t('clubs.TraditionalMusic.videos.watch')}
                           </button>
                         </div>
                       </div>
@@ -478,13 +458,12 @@ export const TraditionalMusic = ({ club }) => {
             </div>
           )}
 
-          {/* Music Awards - показва се САМО ако има награди за музика */}
           {musicAwards.length > 0 && (
             <div className="traditional-music-section">
               <div className="traditional-music-section-header">
                 <FontAwesomeIcon icon={faAward} />
-                <h3>Музикални постижения</h3>
-                <p>Нашите награди в областта на музиката</p>
+                <h3>{t('clubs.TraditionalMusic.awards.title')}</h3>
+                <p>{t('clubs.TraditionalMusic.awards.subtitle')}</p>
               </div>
               
               <div className="traditional-music-awards">
@@ -513,7 +492,6 @@ export const TraditionalMusic = ({ club }) => {
         </div>
       </div>
 
-      {/* ВИДЕО МОДАЛ */}
       {isVideoModalOpen && currentVideo && (
         <div className="traditional-music-video-modal">
           <div className="traditional-music-video-modal-overlay" onClick={closeVideoModal}></div>
@@ -530,7 +508,7 @@ export const TraditionalMusic = ({ club }) => {
                 poster={currentVideo.thumbnail}
               >
                 <source src={currentVideo.src} type="video/mp4" />
-                Вашият браузър не поддържа video елемента.
+                {t('clubs.TraditionalMusic.videoModal.notSupported')}
               </video>
             </div>
             
@@ -543,7 +521,7 @@ export const TraditionalMusic = ({ club }) => {
                   onClick={() => handleShare(currentVideo)}
                 >
                   <FontAwesomeIcon icon={faShare} />
-                  Сподели
+                  {t('clubs.TraditionalMusic.videoModal.share')}
                 </button>
               </div>
             </div>

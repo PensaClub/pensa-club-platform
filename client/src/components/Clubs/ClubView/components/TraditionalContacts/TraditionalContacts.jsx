@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faPhone,
@@ -19,6 +20,7 @@ import {
 import './traditionalContacts.css';
 
 export const TraditionalContacts = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -28,14 +30,12 @@ export const TraditionalContacts = ({ club }) => {
     message: ''
   });
   const [formStatus, setFormStatus] = useState(null);
-  const [copiedItems, setCopiedItems] = useState({}); // Tracking copied items
+  const [copiedItems, setCopiedItems] = useState({});
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Извличаме САМО реални данни от клуба
   const contacts = club.contacts || {};
   const location = club.location || {};
   const management = club.management || {};
@@ -43,7 +43,6 @@ export const TraditionalContacts = ({ club }) => {
   const workingHours = contacts.workingHours || {};
   const socialMedia = contacts.socialMedia || {};
 
-  // Проверяваме дали има РЕАЛНО съдържание за показване
   const hasContactContent = 
     contacts.phone ||
     contacts.mobile ||
@@ -58,19 +57,16 @@ export const TraditionalContacts = ({ club }) => {
     return null;
   }
 
-  // Copy to clipboard function
   const copyToClipboard = async (text, type, id = 'main') => {
     try {
       await navigator.clipboard.writeText(text);
       
-      // Mark as copied with unique ID
       const copyId = `${type}-${id}`;
       setCopiedItems(prev => ({
         ...prev,
         [copyId]: true
       }));
       
-      // Remove copied status after 2 seconds
       setTimeout(() => {
         setCopiedItems(prev => {
           const newState = { ...prev };
@@ -80,38 +76,22 @@ export const TraditionalContacts = ({ club }) => {
       }, 2000);
       
     } catch (error) {
-      console.error('Грешка при копиране:', error);
-      alert('Грешка при копиране. Моля опитайте отново.');
+      console.error('Copy error:', error);
+      alert(t('clubs.TraditionalContacts.messages.copyError'));
     }
   };
 
-  // Помощни функции
   const formatPhoneNumber = (phone) => {
     if (!phone) return '';
     return phone.replace(/(\d{2})(\d{3})(\d{3})/, '$1 $2 $3');
   };
 
   const getDayName = (day) => {
-    const days = {
-      'monday': 'Понеделник',
-      'tuesday': 'Вторник',
-      'wednesday': 'Сряда',
-      'thursday': 'Четвъртък',
-      'friday': 'Петък',
-      'saturday': 'Събота',
-      'sunday': 'Неделя'
-    };
-    return days[day] || day;
+    return t(`clubs.TraditionalContacts.days.${day}`, { defaultValue: day });
   };
 
   const getSocialIcon = (platform) => {
-    switch (platform.toLowerCase()) {
-      case 'facebook': return faGlobe;
-      case 'twitter': return faGlobe;
-      case 'instagram': return faGlobe;
-      case 'linkedin': return faGlobe;
-      default: return faGlobe;
-    }
+    return faGlobe;
   };
 
   const isCurrentlyOpen = () => {
@@ -131,7 +111,6 @@ export const TraditionalContacts = ({ club }) => {
     return currentTime >= openHour && currentTime <= closeHour;
   };
 
-  // Форма функции
   const openContactForm = () => {
     setIsContactFormOpen(true);
   };
@@ -159,18 +138,14 @@ export const TraditionalContacts = ({ club }) => {
     e.preventDefault();
     setFormStatus('sending');
 
-    const subject = encodeURIComponent(contactForm.subject || `Съобщение от ${contactForm.name}`);
-    const body = encodeURIComponent(`
-Име: ${contactForm.name}
-Имейл: ${contactForm.email}
-Телефон: ${contactForm.phone || 'Не е посочен'}
-
-Съобщение:
-${contactForm.message}
-
----
-Изпратено от контактната форма на ${club.name}
-    `);
+    const subject = encodeURIComponent(contactForm.subject || t('clubs.TraditionalContacts.form.defaultSubject', { name: contactForm.name }));
+    const body = encodeURIComponent(t('clubs.TraditionalContacts.form.emailBody', {
+      name: contactForm.name,
+      email: contactForm.email,
+      phone: contactForm.phone || t('clubs.TraditionalContacts.form.notSpecified'),
+      message: contactForm.message,
+      clubName: club.name
+    }));
     
     const mailtoLink = `mailto:${contacts.email}?subject=${subject}&body=${body}`;
     
@@ -211,38 +186,35 @@ ${contactForm.message}
     <section id="traditional-contacts" className="traditional-contacts-main-section">
       <div className="traditional-contacts-container">
         
-        {/* Header */}
         <div className="traditional-contacts-header">
           <div className="traditional-contacts-badge">
             <FontAwesomeIcon icon={faPhone} />
-            <span>Свържете се с нас</span>
+            <span>{t('clubs.TraditionalContacts.header.badge')}</span>
           </div>
-          <h2 className="traditional-contacts-title">Контакти</h2>
+          <h2 className="traditional-contacts-title">{t('clubs.TraditionalContacts.header.title')}</h2>
           <p className="traditional-contacts-subtitle">
-            Ще се радваме да отговорим на вашите въпроси и да ви помогнем
+            {t('clubs.TraditionalContacts.header.subtitle')}
           </p>
         </div>
 
         <div className="traditional-contacts-main-grid">
           
-          {/* Main Contact Info */}
           <div className="traditional-contacts-section">
             <div className="traditional-contacts-section-header">
               <FontAwesomeIcon icon={faPhone} />
-              <h3>Основни контакти</h3>
-              <p>Как можете да се свържете с нас</p>
+              <h3>{t('clubs.TraditionalContacts.main.title')}</h3>
+              <p>{t('clubs.TraditionalContacts.main.subtitle')}</p>
             </div>
             
             <div className="traditional-contacts-info-grid">
               
-              {/* Phone */}
               {contacts.phone && (
                 <div className="traditional-contacts-info-card">
                   <div className="traditional-contacts-info-icon">
                     <FontAwesomeIcon icon={faPhone} />
                   </div>
                   <div className="traditional-contacts-info-content">
-                    <h4>Телефон</h4>
+                    <h4>{t('clubs.TraditionalContacts.contactTypes.phone')}</h4>
                     <p>{formatPhoneNumber(contacts.phone)}</p>
                     <div className="traditional-contacts-action-buttons">
                       <button 
@@ -250,29 +222,28 @@ ${contactForm.message}
                         onClick={() => handleCallPhone(contacts.phone)}
                       >
                         <FontAwesomeIcon icon={faPhone} />
-                        Обадете се
+                        {t('clubs.TraditionalContacts.actions.call')}
                       </button>
                       <button 
                         className={`traditional-contacts-copy-btn ${copiedItems['phone-main'] ? 'copied' : ''}`}
                         onClick={() => copyToClipboard(contacts.phone, 'phone', 'main')}
-                        title="Копирай телефона"
+                        title={t('clubs.TraditionalContacts.actions.copyPhone')}
                       >
                         <FontAwesomeIcon icon={copiedItems['phone-main'] ? faCheckCircle : faCopy} />
-                        {copiedItems['phone-main'] ? 'Копирано!' : 'Копирай'}
+                        {copiedItems['phone-main'] ? t('clubs.TraditionalContacts.actions.copied') : t('clubs.TraditionalContacts.actions.copy')}
                       </button>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Mobile */}
               {contacts.mobile && (
                 <div className="traditional-contacts-info-card">
                   <div className="traditional-contacts-info-icon">
                     <FontAwesomeIcon icon={faMobile} />
                   </div>
                   <div className="traditional-contacts-info-content">
-                    <h4>Мобилен</h4>
+                    <h4>{t('clubs.TraditionalContacts.contactTypes.mobile')}</h4>
                     <p>{formatPhoneNumber(contacts.mobile)}</p>
                     <div className="traditional-contacts-action-buttons">
                       <button 
@@ -280,29 +251,28 @@ ${contactForm.message}
                         onClick={() => handleCallPhone(contacts.mobile)}
                       >
                         <FontAwesomeIcon icon={faPhone} />
-                        Обадете се
+                        {t('clubs.TraditionalContacts.actions.call')}
                       </button>
                       <button 
                         className={`traditional-contacts-copy-btn ${copiedItems['mobile-main'] ? 'copied' : ''}`}
                         onClick={() => copyToClipboard(contacts.mobile, 'mobile', 'main')}
-                        title="Копирай мобилния"
+                        title={t('clubs.TraditionalContacts.actions.copyMobile')}
                       >
                         <FontAwesomeIcon icon={copiedItems['mobile-main'] ? faCheckCircle : faCopy} />
-                        {copiedItems['mobile-main'] ? 'Копирано!' : 'Копирай'}
+                        {copiedItems['mobile-main'] ? t('clubs.TraditionalContacts.actions.copied') : t('clubs.TraditionalContacts.actions.copy')}
                       </button>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Email */}
               {contacts.email && (
                 <div className="traditional-contacts-info-card">
                   <div className="traditional-contacts-info-icon">
                     <FontAwesomeIcon icon={faEnvelope} />
                   </div>
                   <div className="traditional-contacts-info-content">
-                    <h4>Имейл</h4>
+                    <h4>{t('clubs.TraditionalContacts.contactTypes.email')}</h4>
                     <p>{contacts.email}</p>
                     <div className="traditional-contacts-action-buttons">
                       <button 
@@ -310,29 +280,28 @@ ${contactForm.message}
                         onClick={() => handleSendEmail(contacts.email)}
                       >
                         <FontAwesomeIcon icon={faEnvelope} />
-                        Изпратете имейл
+                        {t('clubs.TraditionalContacts.actions.sendEmail')}
                       </button>
                       <button 
                         className={`traditional-contacts-copy-btn ${copiedItems['email-main'] ? 'copied' : ''}`}
                         onClick={() => copyToClipboard(contacts.email, 'email', 'main')}
-                        title="Копирай имейла"
+                        title={t('clubs.TraditionalContacts.actions.copyEmail')}
                       >
                         <FontAwesomeIcon icon={copiedItems['email-main'] ? faCheckCircle : faCopy} />
-                        {copiedItems['email-main'] ? 'Копирано!' : 'Копирай'}
+                        {copiedItems['email-main'] ? t('clubs.TraditionalContacts.actions.copied') : t('clubs.TraditionalContacts.actions.copy')}
                       </button>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Website */}
               {contacts.website && (
                 <div className="traditional-contacts-info-card">
                   <div className="traditional-contacts-info-icon">
                     <FontAwesomeIcon icon={faGlobe} />
                   </div>
                   <div className="traditional-contacts-info-content">
-                    <h4>Уебсайт</h4>
+                    <h4>{t('clubs.TraditionalContacts.contactTypes.website')}</h4>
                     <p>{contacts.website}</p>
                     <div className="traditional-contacts-action-buttons">
                       <button 
@@ -340,29 +309,28 @@ ${contactForm.message}
                         onClick={() => handleOpenWebsite(contacts.website)}
                       >
                         <FontAwesomeIcon icon={faGlobe} />
-                        Посетете
+                        {t('clubs.TraditionalContacts.actions.visit')}
                       </button>
                       <button 
                         className={`traditional-contacts-copy-btn ${copiedItems['website-main'] ? 'copied' : ''}`}
                         onClick={() => copyToClipboard(contacts.website, 'website', 'main')}
-                        title="Копирай уебсайта"
+                        title={t('clubs.TraditionalContacts.actions.copyWebsite')}
                       >
                         <FontAwesomeIcon icon={copiedItems['website-main'] ? faCheckCircle : faCopy} />
-                        {copiedItems['website-main'] ? 'Копирано!' : 'Копирай'}
+                        {copiedItems['website-main'] ? t('clubs.TraditionalContacts.actions.copied') : t('clubs.TraditionalContacts.actions.copy')}
                       </button>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Address */}
               {location.address && (
                 <div className="traditional-contacts-info-card full-width">
                   <div className="traditional-contacts-info-icon">
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
                   </div>
                   <div className="traditional-contacts-info-content">
-                    <h4>Адрес</h4>
+                    <h4>{t('clubs.TraditionalContacts.contactTypes.address')}</h4>
                     <p>
                       {location.address}
                       {location.city && `, ${location.city}`}
@@ -374,15 +342,15 @@ ${contactForm.message}
                         onClick={handleOpenMap}
                       >
                         <FontAwesomeIcon icon={faMapMarkerAlt} />
-                        Покажи на картата
+                        {t('clubs.TraditionalContacts.actions.showOnMap')}
                       </button>
                       <button 
                         className={`traditional-contacts-copy-btn ${copiedItems['address-main'] ? 'copied' : ''}`}
                         onClick={() => copyToClipboard(`${location.address}${location.city ? `, ${location.city}` : ''}${location.postalCode ? ` ${location.postalCode}` : ''}`, 'address', 'main')}
-                        title="Копирай адреса"
+                        title={t('clubs.TraditionalContacts.actions.copyAddress')}
                       >
                         <FontAwesomeIcon icon={copiedItems['address-main'] ? faCheckCircle : faCopy} />
-                        {copiedItems['address-main'] ? 'Копирано!' : 'Копирай'}
+                        {copiedItems['address-main'] ? t('clubs.TraditionalContacts.actions.copied') : t('clubs.TraditionalContacts.actions.copy')}
                       </button>
                     </div>
                   </div>
@@ -391,16 +359,18 @@ ${contactForm.message}
             </div>
           </div>
 
-          {/* Working Hours - показва се САМО ако има работно време */}
           {Object.keys(workingHours).length > 0 && (
             <div className="traditional-contacts-section">
               <div className="traditional-contacts-section-header">
                 <FontAwesomeIcon icon={faClock} />
-                <h3>Работно време</h3>
-                <p>Кога можете да ни намерите</p>
+                <h3>{t('clubs.TraditionalContacts.workingHours.title')}</h3>
+                <p>{t('clubs.TraditionalContacts.workingHours.subtitle')}</p>
                 {currentlyOpen !== null && (
                   <div className={`traditional-contacts-status ${currentlyOpen ? 'open' : 'closed'}`}>
-                    {currentlyOpen ? 'Сега сме отворени' : 'Сега сме затворени'}
+                    {currentlyOpen ? 
+                      t('clubs.TraditionalContacts.workingHours.currentlyOpen') : 
+                      t('clubs.TraditionalContacts.workingHours.currentlyClosed')
+                    }
                   </div>
                 )}
               </div>
@@ -412,7 +382,7 @@ ${contactForm.message}
                       {getDayName(day)}
                     </div>
                     <div className="traditional-contacts-time">
-                      {hours === 'closed' ? 'Затворено' : hours}
+                      {hours === 'closed' ? t('clubs.TraditionalContacts.workingHours.closed') : hours}
                     </div>
                   </div>
                 ))}
@@ -420,13 +390,12 @@ ${contactForm.message}
             </div>
           )}
 
-          {/* Management Board - показва се САМО ако има ръководство */}
           {board.length > 0 && (
             <div className="traditional-contacts-section">
               <div className="traditional-contacts-section-header">
                 <FontAwesomeIcon icon={faUsers} />
-                <h3>Ръководство</h3>
-                <p>Хора които можете да потърсите</p>
+                <h3>{t('clubs.TraditionalContacts.management.title')}</h3>
+                <p>{t('clubs.TraditionalContacts.management.subtitle')}</p>
               </div>
               
               <div className="traditional-contacts-board">
@@ -456,7 +425,7 @@ ${contactForm.message}
                             <button 
                               className={`traditional-contacts-member-copy-btn ${copiedItems[`phone-${index}`] ? 'copied' : ''}`}
                               onClick={() => copyToClipboard(member.phone, 'phone', index)}
-                              title="Копирай телефона"
+                              title={t('clubs.TraditionalContacts.actions.copyPhone')}
                             >
                               <FontAwesomeIcon icon={copiedItems[`phone-${index}`] ? faCheckCircle : faCopy} />
                             </button>
@@ -474,7 +443,7 @@ ${contactForm.message}
                             <button 
                               className={`traditional-contacts-member-copy-btn ${copiedItems[`email-${index}`] ? 'copied' : ''}`}
                               onClick={() => copyToClipboard(member.email, 'email', index)}
-                              title="Копирай имейла"
+                              title={t('clubs.TraditionalContacts.actions.copyEmail')}
                             >
                               <FontAwesomeIcon icon={copiedItems[`email-${index}`] ? faCheckCircle : faCopy} />
                             </button>
@@ -488,13 +457,12 @@ ${contactForm.message}
             </div>
           )}
 
-          {/* Social Media - показва се САМО ако има социални мрежи */}
           {Object.keys(socialMedia).length > 0 && (
             <div className="traditional-contacts-section">
               <div className="traditional-contacts-section-header">
                 <FontAwesomeIcon icon={faGlobe} />
-                <h3>Социални мрежи</h3>
-                <p>Последвайте ни онлайн</p>
+                <h3>{t('clubs.TraditionalContacts.socialMedia.title')}</h3>
+                <p>{t('clubs.TraditionalContacts.socialMedia.subtitle')}</p>
               </div>
               
               <div className="traditional-contacts-social">
@@ -514,19 +482,18 @@ ${contactForm.message}
             </div>
           )}
 
-          {/* Contact Form CTA - показва се САМО ако има имейл */}
           {contacts.email && (
             <div className="traditional-contacts-section">
               <div className="traditional-contacts-cta">
                 <div className="traditional-contacts-cta-content">
-                  <h3>Изпратете ни съобщение</h3>
-                  <p>Имате въпрос или искате повече информация? Свържете се с нас!</p>
+                  <h3>{t('clubs.TraditionalContacts.cta.title')}</h3>
+                  <p>{t('clubs.TraditionalContacts.cta.subtitle')}</p>
                   <button 
                     className="traditional-contacts-cta-btn"
                     onClick={openContactForm}
                   >
                     <FontAwesomeIcon icon={faPaperPlane} />
-                    Свържете се с нас
+                    {t('clubs.TraditionalContacts.cta.contactUs')}
                   </button>
                 </div>
               </div>
@@ -535,7 +502,6 @@ ${contactForm.message}
         </div>
       </div>
 
-      {/* CONTACT FORM MODAL */}
       {isContactFormOpen && (
         <div className="traditional-contacts-form-modal">
           <div className="traditional-contacts-form-modal-overlay" onClick={closeContactForm}></div>
@@ -546,26 +512,26 @@ ${contactForm.message}
             
             <div className="traditional-contacts-form-header">
               <FontAwesomeIcon icon={faPaperPlane} />
-              <h3>Свържете се с {club.name}</h3>
-              <p>Изпратете ни вашето съобщение и ще се свържем с вас</p>
+              <h3>{t('clubs.TraditionalContacts.form.title', { clubName: club.name })}</h3>
+              <p>{t('clubs.TraditionalContacts.form.subtitle')}</p>
             </div>
             
             {formStatus === 'sent' ? (
               <div className="traditional-contacts-form-success">
                 <FontAwesomeIcon icon={faCheck} />
-                <h4>Съобщението е изпратено!</h4>
-                <p>Благодарим ви! Ще се свържем с вас скоро.</p>
+                <h4>{t('clubs.TraditionalContacts.form.success.title')}</h4>
+                <p>{t('clubs.TraditionalContacts.form.success.message')}</p>
               </div>
             ) : formStatus === 'error' ? (
               <div className="traditional-contacts-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.TraditionalContacts.form.error.title')}</h4>
+                <p>{t('clubs.TraditionalContacts.form.error.message')}</p>
                 <button 
                   className="traditional-contacts-retry-btn"
                   onClick={() => setFormStatus(null)}
                 >
-                  Опитайте отново
+                  {t('clubs.TraditionalContacts.form.error.retry')}
                 </button>
               </div>
             ) : (
@@ -574,7 +540,7 @@ ${contactForm.message}
                   <div className="traditional-contacts-form-group">
                     <label htmlFor="name">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.TraditionalContacts.form.fields.name')} *
                     </label>
                     <input
                       type="text"
@@ -582,14 +548,14 @@ ${contactForm.message}
                       value={contactForm.name}
                       onChange={(e) => handleFormChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.TraditionalContacts.form.placeholders.name')}
                     />
                   </div>
                   
                   <div className="traditional-contacts-form-group">
                     <label htmlFor="email">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.TraditionalContacts.form.fields.email')} *
                     </label>
                     <input
                       type="email"
@@ -597,7 +563,7 @@ ${contactForm.message}
                       value={contactForm.email}
                       onChange={(e) => handleFormChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.TraditionalContacts.form.placeholders.email')}
                     />
                   </div>
                 </div>
@@ -606,28 +572,28 @@ ${contactForm.message}
                   <div className="traditional-contacts-form-group">
                     <label htmlFor="phone">
                       <FontAwesomeIcon icon={faPhone} />
-                      Телефон
+                      {t('clubs.TraditionalContacts.form.fields.phone')}
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       value={contactForm.phone}
                       onChange={(e) => handleFormChange('phone', e.target.value)}
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.TraditionalContacts.form.placeholders.phone')}
                     />
                   </div>
                   
                   <div className="traditional-contacts-form-group">
                     <label htmlFor="subject">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Тема
+                      {t('clubs.TraditionalContacts.form.fields.subject')}
                     </label>
                     <input
                       type="text"
                       id="subject"
                       value={contactForm.subject}
                       onChange={(e) => handleFormChange('subject', e.target.value)}
-                      placeholder="Тема на съобщението"
+                      placeholder={t('clubs.TraditionalContacts.form.placeholders.subject')}
                     />
                   </div>
                 </div>
@@ -635,14 +601,14 @@ ${contactForm.message}
                 <div className="traditional-contacts-form-group">
                   <label htmlFor="message">
                     <FontAwesomeIcon icon={faPaperPlane} />
-                    Съобщение *
+                    {t('clubs.TraditionalContacts.form.fields.message')} *
                   </label>
                   <textarea
                     id="message"
                     value={contactForm.message}
                     onChange={(e) => handleFormChange('message', e.target.value)}
                     required
-                    placeholder="Напишете вашето съобщение тук..."
+                    placeholder={t('clubs.TraditionalContacts.form.placeholders.message')}
                     rows="5"
                   />
                 </div>
@@ -654,14 +620,17 @@ ${contactForm.message}
                     disabled={formStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faPaperPlane} />
-                    {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщението'}
+                    {formStatus === 'sending' ? 
+                      t('clubs.TraditionalContacts.form.sending') : 
+                      t('clubs.TraditionalContacts.form.submit')
+                    }
                   </button>
                   <button 
                     type="button" 
                     onClick={closeContactForm}
                     className="traditional-contacts-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.TraditionalContacts.form.cancel')}
                   </button>
                 </div>
               </form>
