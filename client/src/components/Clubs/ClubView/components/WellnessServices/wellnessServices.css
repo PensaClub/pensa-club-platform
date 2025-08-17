@@ -1,0 +1,1285 @@
+.wellness-services-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 30%, #e879f9 70%, #c084fc 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.wellness-services-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.wellness-services-section::after {
+  content: '';
+  position: absolute;
+  top: 5%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  background: conic-gradient(from 180deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.08), rgba(34, 197, 94, 0.06), rgba(168, 85, 247, 0.1));
+  border-radius: 50%;
+  animation: wellnessRotate 60s linear infinite;
+  z-index: 1;
+}
+
+@keyframes wellnessRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.wellness-services-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.wellness-services-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 
+    0 20px 60px rgba(168, 85, 247, 0.15),
+    0 0 0 1px rgba(168, 85, 247, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.wellness-services-header::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(236, 72, 153, 0.06));
+  border-radius: 50%;
+  animation: wellnessHeaderFloat 10s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes wellnessHeaderFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.7;
+  }
+  33% {
+    transform: translateY(-10px) scale(1.05);
+    opacity: 1;
+  }
+  66% {
+    transform: translateY(5px) scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+.wellness-services-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 2;
+}
+
+.wellness-services-badge svg {
+  font-size: 1.2rem;
+  animation: wellnessGlow 2s ease-in-out infinite;
+}
+
+@keyframes wellnessGlow {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  }
+  50% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+  }
+}
+
+.wellness-services-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  line-height: 1.1;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 2;
+}
+
+.wellness-services-subtitle {
+  font-size: 1.2rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Overview Cards */
+.wellness-services-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.wellness-services-overview-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  animation: wellnessOverviewIn 0.6s ease var(--category-delay) both;
+}
+
+@keyframes wellnessOverviewIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.wellness-services-overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+  transition: left 0.6s;
+}
+
+.wellness-services-overview-card:hover::before {
+  left: 100%;
+}
+
+.wellness-services-overview-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(168, 85, 247, 0.25);
+  border-color: #a855f7;
+}
+
+.wellness-services-overview-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.wellness-services-overview-icon::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  animation: wellnessIconSweep 4s ease-in-out infinite;
+}
+
+@keyframes wellnessIconSweep {
+  0%, 100% {
+    transform: rotate(45deg) translate(-150%, -150%);
+  }
+  50% {
+    transform: rotate(45deg) translate(150%, 150%);
+  }
+}
+
+.wellness-services-overview-content {
+  flex: 1;
+}
+
+.wellness-services-overview-content h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.wellness-services-overview-count {
+  color: #a855f7;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.wellness-services-overview-arrow {
+  color: #a855f7;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-overview-card:hover .wellness-services-overview-arrow {
+  transform: translateX(5px) scale(1.2);
+}
+
+/* Navigation */
+.wellness-services-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 50px rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.1);
+  flex-wrap: wrap;
+}
+
+.wellness-services-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 15px;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.wellness-services-nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.wellness-services-nav-btn:hover::before {
+  left: 100%;
+}
+
+.wellness-services-nav-btn:hover {
+  color: #a855f7;
+  border-color: rgba(168, 85, 247, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.2);
+}
+
+.wellness-services-nav-btn.active {
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  border-color: #a855f7;
+  color: white;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 35px rgba(168, 85, 247, 0.4);
+}
+
+.wellness-services-nav-btn svg {
+  font-size: 1.2rem;
+}
+
+.wellness-services-nav-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 28px;
+  text-align: center;
+}
+
+.wellness-services-nav-btn:not(.active) .wellness-services-nav-count {
+  background: #a855f7;
+  color: white;
+}
+
+/* Content Container */
+.wellness-services-content {
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.1);
+  min-height: 500px;
+}
+
+/* Section Headers */
+.wellness-services-support-header,
+.wellness-services-mental-header,
+.wellness-services-social-header,
+.wellness-services-accessibility-header,
+.wellness-services-cognitive-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.wellness-services-support-header h3,
+.wellness-services-mental-header h3,
+.wellness-services-social-header h3,
+.wellness-services-accessibility-header h3,
+.wellness-services-cognitive-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.wellness-services-support-header p,
+.wellness-services-mental-header p,
+.wellness-services-social-header p,
+.wellness-services-accessibility-header p,
+.wellness-services-cognitive-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Support Services */
+.wellness-services-support-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.wellness-services-service-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.wellness-services-service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--service-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.wellness-services-service-card:hover::before {
+  transform: scaleX(1);
+}
+
+.wellness-services-service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border-color: var(--service-color);
+}
+
+.wellness-services-service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+}
+
+.wellness-services-service-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--service-color);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.wellness-services-service-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #22c55e;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.wellness-services-service-status svg {
+  font-size: 1.1rem;
+}
+
+.wellness-services-service-content {
+  padding: 2rem;
+}
+
+.wellness-services-service-content h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.wellness-services-service-content p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.wellness-services-service-footer {
+  padding: 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.wellness-services-service-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem;
+  background: var(--service-color);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-service-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.1);
+}
+
+/* Mental Health */
+.wellness-services-mental-section {
+  margin-bottom: 3rem;
+}
+
+.wellness-services-mental-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 2rem 0;
+}
+
+.wellness-services-mental-section h4 svg {
+  color: #ec4899;
+  font-size: 1.3rem;
+}
+
+.wellness-services-mental-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.wellness-services-mental-card {
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border: 2px solid #f9a8d4;
+  border-radius: 18px;
+  padding: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-mental-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(236, 72, 153, 0.2);
+  border-color: #ec4899;
+}
+
+.wellness-services-mental-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.wellness-services-mental-content h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  text-transform: capitalize;
+}
+
+.wellness-services-mental-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.wellness-services-mental-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #be185d;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.wellness-services-mental-detail svg {
+  font-size: 0.8rem;
+  width: 14px;
+}
+
+.wellness-services-mental-focus {
+  color: #831843;
+  font-style: italic;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Memory Activities */
+.wellness-services-memory-section {
+  margin-bottom: 2rem;
+}
+
+.wellness-services-memory-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 2rem 0;
+}
+
+.wellness-services-memory-section h4 svg {
+  color: #7c3aed;
+  font-size: 1.3rem;
+}
+
+.wellness-services-memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.wellness-services-memory-card {
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  border: 2px solid #c4b5fd;
+  border-radius: 18px;
+  padding: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-memory-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(124, 58, 237, 0.2);
+  border-color: #7c3aed;
+}
+
+.wellness-services-memory-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.wellness-services-memory-content h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.75rem 0;
+}
+
+.wellness-services-memory-content p {
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.wellness-services-memory-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wellness-services-memory-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #5b21b6;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.wellness-services-memory-detail svg {
+  font-size: 0.8rem;
+  width: 14px;
+}
+
+/* Social Services */
+.wellness-services-intergenerational-section,
+.wellness-services-volunteer-section {
+  margin-bottom: 3rem;
+}
+
+.wellness-services-intergenerational-section h4,
+.wellness-services-isolation-section h4,
+.wellness-services-volunteer-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 2rem 0;
+}
+
+.wellness-services-intergenerational-section h4 svg,
+.wellness-services-isolation-section h4 svg,
+.wellness-services-volunteer-section h4 svg {
+  color: #059669;
+  font-size: 1.3rem;
+}
+
+.wellness-services-intergenerational-grid,
+.wellness-services-volunteer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.wellness-services-intergenerational-card,
+.wellness-services-volunteer-card {
+  background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+  border: 2px solid #5eead4;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-intergenerational-card:hover,
+.wellness-services-volunteer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(20, 184, 166, 0.2);
+  border-color: #14b8a6;
+}
+
+.wellness-services-intergenerational-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #ccfbf1, #99f6e4);
+}
+
+.wellness-services-intergenerational-icon,
+.wellness-services-volunteer-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3rem;
+}
+
+.wellness-services-intergenerational-age {
+  background: #0d9488;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.wellness-services-intergenerational-content,
+.wellness-services-volunteer-content {
+  padding: 2rem;
+}
+
+.wellness-services-intergenerational-content h5,
+.wellness-services-volunteer-content h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.75rem 0;
+}
+
+.wellness-services-intergenerational-content p,
+.wellness-services-volunteer-content p {
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.wellness-services-intergenerational-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wellness-services-intergenerational-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #047857;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.wellness-services-intergenerational-detail svg {
+  font-size: 0.8rem;
+  width: 14px;
+}
+
+.wellness-services-volunteer-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.wellness-services-volunteer-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #047857;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.wellness-services-volunteer-stat svg {
+  font-size: 0.8rem;
+}
+
+/* Isolation Prevention */
+.wellness-services-isolation-section {
+  margin-bottom: 3rem;
+}
+
+.wellness-services-isolation-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.wellness-services-isolation-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-isolation-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+}
+
+.wellness-services-isolation-item svg {
+  color: #22c55e;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.wellness-services-isolation-item span {
+  color: #15803d;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Accessibility */
+.wellness-services-accessibility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.wellness-services-accessibility-card {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #93c5fd;
+  border-radius: 18px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-accessibility-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+}
+
+.wellness-services-accessibility-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.wellness-services-accessibility-content {
+  flex: 1;
+}
+
+.wellness-services-accessibility-content h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.wellness-services-accessibility-content p {
+  color: #1e40af;
+  margin: 0;
+  line-height: 1.4;
+  font-size: 0.95rem;
+}
+
+.wellness-services-accessibility-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #22c55e;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.wellness-services-accessibility-status svg {
+  font-size: 1.2rem;
+}
+
+/* Cognitive Activities */
+.wellness-services-cognitive-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.wellness-services-cognitive-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #fefce8, #fef3c7);
+  border: 2px solid #fde047;
+  border-radius: 18px;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-cognitive-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(234, 179, 8, 0.2);
+  border-color: #eab308;
+}
+
+.wellness-services-cognitive-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #eab308, #d97706);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.wellness-services-cognitive-content {
+  flex: 1;
+}
+
+.wellness-services-cognitive-content h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.wellness-services-cognitive-badge {
+  color: #f59e0b;
+  font-size: 1.3rem;
+}
+
+/* Modal Styles */
+.wellness-services-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 2rem;
+  animation: wellnessModalIn 0.3s ease;
+}
+
+@keyframes wellnessModalIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(15px);
+  }
+}
+
+.wellness-services-modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: wellnessModalSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes wellnessModalSlide {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.wellness-services-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 3001;
+}
+
+.wellness-services-modal-close:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.1) rotate(90deg);
+}
+
+.wellness-services-modal-header {
+  text-align: center;
+  padding: 3rem 3rem 2rem 3rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.wellness-services-modal-header svg {
+  font-size: 3rem;
+  color: #a855f7;
+  margin-bottom: 1rem;
+}
+
+.wellness-services-modal-header h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.wellness-services-modal-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.wellness-services-modal-body {
+  padding: 2rem 3rem 3rem 3rem;
+}
+
+.wellness-services-service-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+}
+
+.wellness-services-service-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.wellness-services-service-info li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.wellness-services-service-info li::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #a855f7;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.wellness-services-contact-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+}
+
+.wellness-services-contact-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.wellness-services-contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.wellness-services-contact-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .wellness-services-overview {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .wellness-services-mental-card,
+  .wellness-services-memory-card,
+  .wellness-services-intergenerational-card,
+  .wellness-services-volunteer-card,
+  .wellness-services-accessibility-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .wellness-services-section {
+    padding: 4rem 0;
+  }
+  
+  .wellness-services-container {
+    padding: 0 1rem;
+  }
+  
+  .wellness-services-header {
+    padding: 2rem;
+  }
+  
+  .wellness-services-content {
+    padding: 2rem;
+  }
+  
+  .wellness-services-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .wellness-services-nav-btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+  
+  .wellness-services-overview {
+    grid-template-columns: 1fr;
+  }
+  
+  .wellness-services-overview-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .wellness-services-support-grid,
+  .wellness-services-mental-grid,
+  .wellness-services-memory-grid,
+  .wellness-services-intergenerational-grid,
+  .wellness-services-volunteer-grid,
+  .wellness-services-accessibility-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .wellness-services-isolation-list,
+  .wellness-services-cognitive-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .wellness-services-mental-card,
+  .wellness-services-memory-card,
+  .wellness-services-accessibility-card,
+  .wellness-services-cognitive-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .wellness-services-modal {
+    padding: 1rem;
+  }
+  
+  .wellness-services-modal-content {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+  
+  .wellness-services-modal-header,
+  .wellness-services-modal-body {
+    padding: 2rem;
+  }
+  
+  .wellness-services-contact-options {
+    flex-direction: column;
+  }
+  
+  .wellness-services-contact-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .wellness-services-title {
+    font-size: 2rem;
+  }
+  
+  .wellness-services-subtitle {
+    font-size: 1rem;
+  }
+  
+  .wellness-services-overview-icon,
+  .wellness-services-service-icon,
+  .wellness-services-mental-icon,
+  .wellness-services-memory-icon,
+  .wellness-services-intergenerational-icon,
+  .wellness-services-volunteer-icon,
+  .wellness-services-accessibility-icon,
+  .wellness-services-cognitive-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+}

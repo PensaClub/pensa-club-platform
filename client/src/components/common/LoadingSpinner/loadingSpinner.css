@@ -1,0 +1,165 @@
+/* components/common/LoadingSpinner/loadingSpinner.css */
+.loading-spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  position: relative;
+  display: inline-block;
+}
+
+/* Размери */
+.loading-spinner-small {
+  width: 24px;
+  height: 24px;
+}
+
+.loading-spinner-medium {
+  width: 40px;
+  height: 40px;
+}
+
+.loading-spinner-large {
+  width: 60px;
+  height: 60px;
+}
+
+.loading-spinner-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.loading-spinner-circle {
+  position: absolute;
+  border-radius: 50%;
+  animation: loadingPulse 1.2s ease-in-out infinite both;
+}
+
+/* Позициониране на кръговете */
+.loading-spinner-circle:nth-child(1) {
+  top: 0;
+  left: 0;
+  animation-delay: -0.45s;
+}
+
+.loading-spinner-circle:nth-child(2) {
+  top: 0;
+  right: 0;
+  animation-delay: -0.3s;
+}
+
+.loading-spinner-circle:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  animation-delay: -0.15s;
+}
+
+.loading-spinner-circle:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  animation-delay: 0s;
+}
+
+/* Цветови схеми */
+.loading-spinner-primary .loading-spinner-circle {
+  background: linear-gradient(135deg, #3182ce, #4299e1);
+}
+
+.loading-spinner-secondary .loading-spinner-circle {
+  background: linear-gradient(135deg, #4a5568, #718096);
+}
+
+.loading-spinner-success .loading-spinner-circle {
+  background: linear-gradient(135deg, #38a169, #48bb78);
+}
+
+.loading-spinner-warning .loading-spinner-circle {
+  background: linear-gradient(135deg, #d69e2e, #ecc94b);
+}
+
+.loading-spinner-danger .loading-spinner-circle {
+  background: linear-gradient(135deg, #e53e3e, #f56565);
+}
+
+.loading-spinner-white .loading-spinner-circle {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Размери кръгове според размера на spinner-а */
+.loading-spinner-small .loading-spinner-circle {
+  width: 8px;
+  height: 8px;
+}
+
+.loading-spinner-medium .loading-spinner-circle {
+  width: 12px;
+  height: 12px;
+}
+
+.loading-spinner-large .loading-spinner-circle {
+  width: 18px;
+  height: 18px;
+}
+
+.loading-spinner-text {
+  color: #4a5568;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+}
+
+/* Анимации */
+@keyframes loadingPulse {
+  0%, 80%, 100% { 
+    transform: scale(0);
+    opacity: 0.5;
+  } 
+  40% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Допълнителен spinner стил - rotating */
+.loading-spinner-rotating {
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid #3182ce;
+  border-radius: 50%;
+  animation: loadingSpin 1s linear infinite;
+}
+
+.loading-spinner-rotating .loading-spinner-inner {
+  display: none;
+}
+
+@keyframes loadingSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Вариации за различни contexts */
+.loading-spinner-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.loading-spinner-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loading-spinner-inline .loading-spinner-container {
+  flex-direction: row;
+  gap: 0.5rem;
+}

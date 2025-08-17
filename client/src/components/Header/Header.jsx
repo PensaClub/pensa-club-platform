@@ -175,6 +175,12 @@ export const Header = ({ additionalClasses }) => {
             >
               {t("header.ad-create")}
             </NavLink>
+            <NavLink
+              to="/clubs"
+              className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+            >
+              {t("header.clubs")}
+            </NavLink>
              <NavLink
               to="/games"
               className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
@@ -423,6 +429,14 @@ export const Header = ({ additionalClasses }) => {
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor" />
               </svg>
               {t("header.ad-create")}
+            </NavLink>
+            <NavLink
+              to="/clubs"
+              className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
+              onClick={toggleMobileMenu}
+            >
+               <FontAwesomeIcon icon={faGamepad} />
+              {t("header.clubs")}
             </NavLink>
              <NavLink
               to="/games"

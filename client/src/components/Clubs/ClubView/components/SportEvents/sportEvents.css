@@ -1,0 +1,1304 @@
+/* components/SportEvents/sportEvents.css */
+.sport-events-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #fef7ff 0%, #fae8ff 30%, #e879f9 70%, #c026d3 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.sport-events-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 15% 25%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 85% 75%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 10%, rgba(249, 115, 22, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.sport-events-section::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  right: -5%;
+  width: 500px;
+  height: 500px;
+  background: conic-gradient(from 225deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.1), rgba(192, 38, 211, 0.08), rgba(139, 92, 246, 0.15));
+  border-radius: 50%;
+  animation: sportEventsRotate 50s linear infinite;
+  z-index: 1;
+}
+
+@keyframes sportEventsRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sport-events-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.sport-events-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 
+    0 20px 60px rgba(139, 92, 246, 0.2),
+    0 0 0 1px rgba(139, 92, 246, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.sport-events-header::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(45deg, rgba(139, 92, 246, 0.08), rgba(236, 72, 153, 0.06));
+  border-radius: 50%;
+  animation: sportEventsHeaderFloat 10s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes sportEventsHeaderFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+  }
+}
+
+.sport-events-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 2;
+}
+
+.sport-events-badge svg {
+  font-size: 1.2rem;
+  animation: sportEventsIconBounce 2s ease-in-out infinite;
+}
+
+@keyframes sportEventsIconBounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.sport-events-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  line-height: 1.1;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 2;
+}
+
+.sport-events-subtitle {
+  font-size: 1.2rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Stats */
+.sport-events-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.sport-events-stat-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.4s ease;
+  animation: sportEventsStatIn 0.6s ease var(--stat-delay) both;
+}
+
+@keyframes sportEventsStatIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.sport-events-stat-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+  background: white;
+  border-color: var(--stat-color);
+}
+
+.sport-events-stat-icon {
+  width: 70px;
+  height: 70px;
+  background: var(--stat-color);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.sport-events-stat-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  animation: sportEventsIconShine 4s ease-in-out infinite;
+}
+
+@keyframes sportEventsIconShine {
+  0%, 100% {
+    transform: rotate(45deg) translate(-50%, -50%);
+  }
+  50% {
+    transform: rotate(45deg) translate(50%, 50%);
+  }
+}
+
+.sport-events-stat-content {
+  flex: 1;
+}
+
+.sport-events-stat-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.sport-events-stat-label {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Filters */
+.sport-events-filters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.sport-events-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.sport-events-filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.sport-events-filter-btn:hover::before {
+  left: 100%;
+}
+
+.sport-events-filter-btn:hover {
+  color: var(--filter-color);
+  border-color: var(--filter-color);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.sport-events-filter-btn.active {
+  background: var(--filter-color);
+  border-color: var(--filter-color);
+  color: white;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.sport-events-filter-btn svg {
+  font-size: 1.2rem;
+}
+
+.sport-events-filter-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 28px;
+  text-align: center;
+}
+
+.sport-events-filter-btn:not(.active) .sport-events-filter-count {
+  background: var(--filter-color);
+  color: white;
+}
+
+/* Content */
+.sport-events-content {
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  min-height: 400px;
+}
+
+.sport-events-section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sport-events-section-header h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.sport-events-section-header h3 svg {
+  color: #8b5cf6;
+  font-size: 1.8rem;
+}
+
+.sport-events-section-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Upcoming Events */
+.sport-events-upcoming {
+  margin-bottom: 4rem;
+}
+
+.sport-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 2rem;
+}
+
+.sport-events-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  position: relative;
+  animation: sportEventsCardIn 0.5s ease var(--event-delay) both;
+}
+
+@keyframes sportEventsCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.sport-events-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--event-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.sport-events-card:hover::before {
+  transform: scaleX(1);
+}
+
+.sport-events-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+  border-color: var(--event-color);
+}
+
+.sport-events-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sport-events-card-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--event-color);
+  color: white;
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  min-width: 80px;
+}
+
+.sport-events-date-day {
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.sport-events-date-month {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.sport-events-date-year {
+  font-size: 0.7rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.sport-events-card-icon {
+  width: 70px;
+  height: 70px;
+  background: var(--event-color);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.sport-events-card-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.sport-events-upcoming-badge {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+/* Card Content */
+.sport-events-card-content {
+  padding: 2rem;
+}
+
+.sport-events-card-content h4 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.sport-events-card-description {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.sport-events-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sport-events-card-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.sport-events-card-detail svg {
+  color: var(--event-color);
+  font-size: 0.8rem;
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.sport-events-card-detail.price {
+  color: #f97316;
+  font-weight: 700;
+}
+
+.sport-events-card-detail.price svg {
+  color: #f97316;
+}
+
+/* Card Footer */
+.sport-events-card-footer {
+  padding: 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.sport-events-register-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1.25rem;
+  background: var(--event-color);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.sport-events-register-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.1);
+}
+
+.sport-events-register-btn svg {
+  font-size: 1.1rem;
+}
+
+/* Achievements */
+.sport-events-achievements {
+  margin-bottom: 2rem;
+}
+
+.sport-events-awards {
+  margin-bottom: 3rem;
+}
+
+.sport-events-awards h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 2rem 0;
+}
+
+.sport-events-awards h4 svg {
+  color: #eab308;
+  font-size: 1.3rem;
+}
+
+.sport-events-awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.sport-events-award-card {
+  background: linear-gradient(135deg, #fefce8, #fef3c7);
+  border: 2px solid #facc15;
+  border-radius: 18px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.4s ease;
+  animation: sportEventsAwardIn 0.5s ease var(--award-delay) both;
+}
+
+@keyframes sportEventsAwardIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.sport-events-award-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 50px rgba(234, 179, 8, 0.3);
+  border-color: #eab308;
+}
+
+.sport-events-award-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #eab308, #ca8a04);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 25px rgba(234, 179, 8, 0.3);
+  flex-shrink: 0;
+}
+
+.sport-events-award-content {
+  flex: 1;
+}
+
+.sport-events-award-content h5 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+}
+
+.sport-events-award-details {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.sport-events-award-year {
+  background: #eab308;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.sport-events-award-by {
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sport-events-award-content p {
+  color: #78716c;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Past Events */
+.sport-events-past {
+  margin-bottom: 3rem;
+}
+
+.sport-events-past h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 2rem 0;
+}
+
+.sport-events-past h4 svg {
+  color: #6b7280;
+  font-size: 1.3rem;
+}
+
+.sport-events-past-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1rem;
+}
+
+.sport-events-past-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  animation: sportEventsPastIn 0.3s ease var(--past-delay) both;
+}
+
+@keyframes sportEventsPastIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sport-events-past-item:hover {
+  background: white;
+  border-color: #8b5cf6;
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.1);
+}
+
+.sport-events-past-icon {
+  width: 50px;
+  height: 50px;
+  background: #6b7280;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sport-events-past-content {
+  flex: 1;
+}
+
+.sport-events-past-content h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.sport-events-past-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.sport-events-past-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.sport-events-past-meta svg {
+  font-size: 0.7rem;
+}
+
+.sport-events-past-status {
+  color: #22c55e;
+  font-size: 1.2rem;
+}
+
+/* Recognitions */
+.sport-events-recognitions h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 2rem 0;
+}
+
+.sport-events-recognitions h4 svg {
+  color: #f59e0b;
+  font-size: 1.3rem;
+}
+
+.sport-events-recognitions-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.sport-events-recognition-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  animation: sportEventsRecognitionIn 0.4s ease var(--recognition-delay) both;
+}
+
+@keyframes sportEventsRecognitionIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sport-events-recognition-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+}
+
+.sport-events-recognition-item svg {
+  color: #f59e0b;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.sport-events-recognition-item span {
+  color: #92400e;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* No Results */
+.sport-events-no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #64748b;
+}
+
+.sport-events-no-results svg {
+  font-size: 4rem;
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+}
+
+.sport-events-no-results h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #475569;
+  margin: 0 0 1rem 0;
+}
+
+.sport-events-no-results p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Modal Styles */
+.sport-events-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 2rem;
+  animation: sportEventsModalIn 0.3s ease;
+}
+
+@keyframes sportEventsModalIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(15px);
+  }
+}
+
+.sport-events-modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: sportEventsModalSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes sportEventsModalSlide {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.sport-events-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 3001;
+}
+
+.sport-events-modal-close:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.1) rotate(90deg);
+}
+
+.sport-events-modal-header {
+  text-align: center;
+  padding: 3rem 3rem 2rem 3rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sport-events-modal-header svg {
+  font-size: 3rem;
+  color: #8b5cf6;
+  margin-bottom: 1rem;
+}
+
+.sport-events-modal-header h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.sport-events-modal-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Form Styles */
+.sport-events-form {
+  padding: 2rem 3rem 3rem 3rem;
+}
+
+.sport-events-selected-event {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  border: 1px solid #c4b5fd;
+  border-radius: 15px;
+}
+
+.sport-events-selected-event h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+}
+
+.sport-events-event-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sport-events-event-summary svg {
+  font-size: 1.5rem;
+  color: #8b5cf6;
+  flex-shrink: 0;
+}
+
+.sport-events-event-summary div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sport-events-event-summary strong {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 1.1rem;
+}
+
+.sport-events-event-summary span {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.sport-events-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.sport-events-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sport-events-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.sport-events-form-group label svg {
+  color: #8b5cf6;
+  font-size: 0.9rem;
+}
+
+.sport-events-form-group input,
+.sport-events-form-group select,
+.sport-events-form-group textarea {
+  padding: 1rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.sport-events-form-group input:focus,
+.sport-events-form-group select:focus,
+.sport-events-form-group textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 
+    0 0 0 4px rgba(139, 92, 246, 0.1),
+    0 4px 15px rgba(139, 92, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.sport-events-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Form Actions */
+.sport-events-form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.sport-events-submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+}
+
+.sport-events-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+}
+
+.sport-events-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sport-events-cancel-btn {
+  padding: 1rem 2rem;
+  background: transparent;
+  color: #6b7280;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sport-events-cancel-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+/* Form Success/Error States */
+.sport-events-form-success,
+.sport-events-form-error {
+  text-align: center;
+  padding: 3rem;
+}
+
+.sport-events-form-success svg,
+.sport-events-form-error svg {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.sport-events-form-success svg {
+  color: #22c55e;
+}
+
+.sport-events-form-error svg {
+  color: #ef4444;
+}
+
+.sport-events-form-success h4,
+.sport-events-form-error h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.sport-events-form-success h4 {
+  color: #16a34a;
+}
+
+.sport-events-form-error h4 {
+  color: #dc2626;
+}
+
+.sport-events-form-success p,
+.sport-events-form-error p {
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .sport-events-grid {
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .sport-events-section {
+    padding: 4rem 0;
+  }
+  
+  .sport-events-container {
+    padding: 0 1rem;
+  }
+  
+  .sport-events-header {
+    padding: 2rem;
+  }
+  
+  .sport-events-content {
+    padding: 2rem;
+  }
+  
+  .sport-events-stats {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .sport-events-stat-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .sport-events-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sport-events-filter-btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+  
+  .sport-events-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sport-events-card-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .sport-events-awards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sport-events-award-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .sport-events-past-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .sport-events-modal {
+    padding: 1rem;
+  }
+  
+  .sport-events-modal-content {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+  
+  .sport-events-modal-header,
+  .sport-events-form {
+    padding: 2rem;
+  }
+  
+  .sport-events-form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .sport-events-form-actions {
+    flex-direction: column;
+  }
+  
+  .sport-events-submit-btn,
+  .sport-events-cancel-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .sport-events-title {
+    font-size: 2rem;
+  }
+  
+  .sport-events-subtitle {
+    font-size: 1rem;
+  }
+  
+  .sport-events-stat-value {
+    font-size: 2rem;
+  }
+  
+  .sport-events-card-content h4 {
+    font-size: 1.2rem;
+  }
+  
+  .sport-events-card-date {
+    min-width: 70px;
+    padding: 0.75rem;
+  }
+  
+  .sport-events-date-day {
+    font-size: 1.5rem;
+  }
+  
+  .sport-events-card-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+}

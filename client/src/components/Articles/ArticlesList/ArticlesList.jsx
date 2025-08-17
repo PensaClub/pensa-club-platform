@@ -16,6 +16,7 @@ import { filterArticles } from '../articleUtils/search';
 import { useTranslation } from 'react-i18next';
 import EliteCardPromo from './ClubCardPromo/EliteCardPromo/EliteCardPromo';
 import ArticlesListSkeleton from './ArticlesListSkeleton/ArticlesListSkeleton';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 const ArticlesList = () => {
   const { t, i18n } = useTranslation();
@@ -366,6 +367,7 @@ const metaData = getMetaData();
         })}
       </script>
     </Helmet>
+    <TextZoom />
     <div className="articles-list-container">
       {showSkeleton ? (
         <ArticlesListSkeleton />
