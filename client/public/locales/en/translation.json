@@ -3410,7 +3410,15 @@
       "title": "Edit Publication",
       "description": "Transform the good into perfect - refine and enhance your publication",
       "saveChanges": "Save Changes",
-      "updatePublication": "Update Publication"
+      "updatePublication": "Update Publication",
+      "updateDraft": "Update Draft",
+      "publishDraft": "Publish Draft",
+      "convertToDraft": "Convert to Draft",
+      "updatePublished": "Update Published",
+      "editDraft": "Edit Draft",
+      "editPublished": "Edit Published Publication",
+      "editDraftDescription": "Refine and improve your draft before publishing",
+      "editPublishedDescription": "Update and enhance your published publication"
     },
     "preview": {
       "loading": "Loading preview...",

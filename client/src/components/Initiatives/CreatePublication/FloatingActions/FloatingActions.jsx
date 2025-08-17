@@ -4,93 +4,66 @@ import {
     faSave,
     faEye,
     faShare,
-    faSpinner
+    faSpinner,
+    faEdit
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import './floatingActions.css';
 
 const FloatingActions = ({
-    draftId,
-    editId,
-    hasTitle,
     onSaveDraft,
     onPreview,
-    onPublish,
-    onUpdate,
     onCreate,
+    onToggleDraft,
     isSaving = false,
-    isEditMode = false // Add this prop
+    isEditMode = false,
+    isDraft = false
 }) => {
     const { t } = useTranslation();
 
-    // Determine the main action button based on state
-    const getMainActionButton = () => {
-        if (isEditMode) {
-            // EDIT MODE - update existing publication
-            return (
+    // CREATE MODE
+    if (!isEditMode) {
+        return (
+            <div className="publication-floating-actions">
+                {/* Preview button */}
                 <button
                     type="button"
-                    className="publication-floating-btn publish"
-                    onClick={onUpdate}
-                    title={t('publications.edit.updatePublication')}
+                    className="publication-floating-btn preview"
+                    onClick={onPreview}
+                    disabled={isSaving}
+                    title={t('publications.common.preview')}
                 >
-                    <FontAwesomeIcon icon={faShare} />
+                    <FontAwesomeIcon icon={faEye} />
                 </button>
-            );
-        } else if (draftId && !editId) {
-            // DRAFT MODE - can publish draft
-            return (
-                <button
-                    type="button"
-                    className="publication-floating-btn publish"
-                    onClick={onPublish}
-                    title={t('publications.create.publishPublication')}
-                >
-                    <FontAwesomeIcon icon={faShare} />
-                </button>
-            );
-        } else if (editId) {
-            // EDIT MODE - update existing publication
-            return (
-                <button
-                    type="button"
-                    className="publication-floating-btn publish"
-                    onClick={onUpdate}
-                    title={t('publications.edit.updatePublication')}
-                >
-                    <FontAwesomeIcon icon={faShare} />
-                </button>
-            );
-        } else {
-            // NEW PUBLICATION MODE - create new publication
-            return (
-                <button
-                    type="button"
-                    className="publication-floating-btn publish"
-                    onClick={onCreate}
-                    title={t('publications.create.createPublication')}
-                >
-                    <FontAwesomeIcon icon={faShare} />
-                </button>
-            );
-        }
-    };
 
-    return (
-        <div className="publication-floating-actions">
-            {/* Save as Draft button - only show when NOT in edit mode */}
-            {!isEditMode && !editId && (
+                {/* Save as Draft button */}
                 <button
                     type="button"
                     className="publication-floating-btn draft"
                     onClick={onSaveDraft}
-                    disabled={isSaving || !hasTitle}
-                    title={draftId ? t('publications.create.updateDraft') : t('publications.create.saveDraft')}
+                    disabled={isSaving}
+                    title={t('publications.create.saveDraft')}
                 >
                     <FontAwesomeIcon icon={isSaving ? faSpinner : faSave} className={isSaving ? 'fa-spin' : ''} />
                 </button>
-            )}
 
+                {/* Publish button */}
+                <button
+                    type="button"
+                    className="publication-floating-btn publish"
+                    onClick={onCreate}
+                    disabled={isSaving}
+                    title={t('publications.create.publishPublication')}
+                >
+                    <FontAwesomeIcon icon={isSaving ? faSpinner : faShare} className={isSaving ? 'fa-spin' : ''} />
+                </button>
+            </div>
+        );
+    }
+
+    // EDIT MODE
+    return (
+        <div className="publication-floating-actions">
             {/* Preview button */}
             <button
                 type="button"
@@ -102,8 +75,57 @@ const FloatingActions = ({
                 <FontAwesomeIcon icon={faEye} />
             </button>
 
-            {/* Main action button */}
-            {getMainActionButton()}
+            {isDraft ? (
+                // EDITING A DRAFT
+                <>
+                    {/* Update Draft button */}
+                    <button
+                        type="button"
+                        className="publication-floating-btn draft"
+                        onClick={onSaveDraft}
+                        disabled={isSaving}
+                        title={t('publications.edit.updateDraft')}
+                    >
+                        <FontAwesomeIcon icon={isSaving ? faSpinner : faSave} className={isSaving ? 'fa-spin' : ''} />
+                    </button>
+
+                    {/* Publish Draft button */}
+                    <button
+                        type="button"
+                        className="publication-floating-btn publish"
+                        onClick={onCreate}
+                        disabled={isSaving}
+                        title={t('publications.edit.publishDraft')}
+                    >
+                        <FontAwesomeIcon icon={isSaving ? faSpinner : faShare} className={isSaving ? 'fa-spin' : ''} />
+                    </button>
+                </>
+            ) : (
+                // EDITING A PUBLISHED PUBLICATION
+                <>
+                    {/* Convert to Draft button */}
+                    <button
+                        type="button"
+                        className="publication-floating-btn draft"
+                        onClick={onToggleDraft}
+                        disabled={isSaving}
+                        title={t('publications.edit.convertToDraft')}
+                    >
+                        <FontAwesomeIcon icon={faEdit} />
+                    </button>
+
+                    {/* Update Published Publication button */}
+                    <button
+                        type="button"
+                        className="publication-floating-btn publish"
+                        onClick={onCreate}
+                        disabled={isSaving}
+                        title={t('publications.edit.updatePublished')}
+                    >
+                        <FontAwesomeIcon icon={isSaving ? faSpinner : faShare} className={isSaving ? 'fa-spin' : ''} />
+                    </button>
+                </>
+            )}
         </div>
     );
 };

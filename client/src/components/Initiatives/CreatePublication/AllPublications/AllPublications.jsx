@@ -1,48 +1,61 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import './allPublications.css';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { PublicationsSearchAdmin } from './PublicationsSearchAdmin/PublicationsSearchAdmin';
 import { PublicationsHeaderAdmin } from './PublicationsHeaderAdmin/PublicationsHeaderAdmin';
 import { notify } from '../../../../utils/notify';
-import PublicationCreateForm from '../MainForm/MainFormPublication';
+import PublicationForm from '../MainForm/MainFormPublication';
 import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const AllPublications = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const {
         getAllPublications,
         publications = [],
         publicationsHasMore = false,
         publicationsCurrentPage = 1,
         isLoading: contextLoading = false,
-        getAllPublicationDrafts,
-        publicationDrafts = [],
-        publicationDraftsHasMore = false,
-        publicationDraftsCurrentPage = 1,
         deletePublication,
-        deletePublicationDraft,
         togglePublicationDraftStatus,
     } = useInitiativeContext();
 
-    const location = useLocation();
     const [viewMode, setViewMode] = useState('publications');
-    const [filteredItems, setFilteredItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filters, setFilters] = useState({
         category: 'all',
         sortBy: 'newest'
     });
     const [openDropdownId, setOpenDropdownId] = useState(null);
-    const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [previewData, setPreviewData] = useState(null);
 
+    // Form state - simplified
+    const [formMode, setFormMode] = useState(null); // null, 'create', or 'edit'
+    const [editingItem, setEditingItem] = useState(null);
+
+    // Load data when viewMode changes
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                if (viewMode === 'create') {
+                    return; // Don't load data for create mode
+                }
+
+                const isDraft = viewMode === 'drafts';
+                await getAllPublications(1, true, isDraft);
+            } catch (error) {
+                console.error('Error loading publications:', error);
+            }
+        };
+
+        loadData();
+    }, [viewMode]);
+
+    // Handle escape key and outside clicks for preview
     useEffect(() => {
         const handleEscape = (event) => {
             if (event.key === 'Escape' && showPreview) {
@@ -69,24 +82,7 @@ export const AllPublications = () => {
         };
     }, [showPreview]);
 
-    useEffect(() => {
-        const wasEditing = sessionStorage.getItem('wasEditingDraft');
-
-        if (wasEditing) {
-            sessionStorage.removeItem('wasEditingDraft');
-        }
-    }, [location.pathname, viewMode]);
-
-    useEffect(() => {
-        if (viewMode === 'publications' && !hasLoadedInitial) {
-            getAllPublications(1, true);
-            setHasLoadedInitial(true);
-        } else if (viewMode === 'drafts' && !hasLoadedInitial) {
-            getAllPublicationDrafts(1, true);
-            setHasLoadedInitial(true);
-        }
-    }, [viewMode, hasLoadedInitial, getAllPublications, getAllPublicationDrafts]);
-
+    // Handle global clicks to close dropdowns
     useEffect(() => {
         const handleGlobalClick = (event) => {
             if (!event.target.closest('.all-publications-card-actions')) {
@@ -98,15 +94,16 @@ export const AllPublications = () => {
         return () => document.removeEventListener('click', handleGlobalClick);
     }, []);
 
+    // Scroll to top when publications change
     useEffect(() => {
-        if (publications.length > 0 || publicationDrafts.length > 0) {
+        if (publications.length > 0) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    }, [publications.length, publicationDrafts.length]);
+    }, [publications.length]);
 
-    useEffect(() => {
-        const items = viewMode === 'publications' ? publications : publicationDrafts;
-        let filtered = [...items];
+    // Filter and sort publications
+    const filteredItems = useMemo(() => {
+        let filtered = [...publications];
 
         if (searchTerm) {
             filtered = filtered.filter(item =>
@@ -123,13 +120,19 @@ export const AllPublications = () => {
         filtered.sort((a, b) => {
             switch (filters.sortBy) {
                 case 'newest':
-                    return new Date(b.createdAt) - new Date(a.createdAt);
+                    const dateA = a.publishedAt ? new Date(a.publishedAt) : new Date(a.createdAt);
+                    const dateB = b.publishedAt ? new Date(b.publishedAt) : new Date(b.createdAt);
+                    return dateB - dateA;
                 case 'oldest':
-                    return new Date(a.createdAt) - new Date(b.createdAt);
+                    const dateAOld = a.publishedAt ? new Date(a.publishedAt) : new Date(a.createdAt);
+                    const dateBOld = b.publishedAt ? new Date(b.publishedAt) : new Date(b.createdAt);
+                    return dateAOld - dateBOld;
                 case 'updated':
                     return new Date(b.updatedAt) - new Date(a.updatedAt);
                 case 'published':
-                    return new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0);
+                    const pubDateA = a.publishedAt ? new Date(a.publishedAt) : new Date(0);
+                    const pubDateB = b.publishedAt ? new Date(b.publishedAt) : new Date(0);
+                    return pubDateB - pubDateA;
                 case 'likes':
                     return (b.likes || 0) - (a.likes || 0);
                 case 'views':
@@ -141,33 +144,46 @@ export const AllPublications = () => {
             }
         });
 
-        setFilteredItems(filtered);
-    }, [viewMode, publications, publicationDrafts, searchTerm, filters]);
+        return filtered;
+    }, [publications, searchTerm, filters]);
 
-    const handleSearch = (term) => {
-        setSearchTerm(term);
-    };
-
-    const handleFilterChange = (newFilters) => {
-        setFilters(newFilters);
-    };
-
+    // Handle view mode changes
     const handleViewModeChange = (mode) => {
+        if (mode === 'create') {
+            setFormMode('create');
+            setEditingItem(null);
+            setViewMode('create');
+            return;
+        }
+
         setViewMode(mode);
+        setFormMode(null);
         setSearchTerm('');
         setFilters({
             category: 'all',
             sortBy: 'newest'
         });
-        setHasLoadedInitial(false);
-
-        if (mode === 'publications') {
-            getAllPublications(1, true);
-        } else if (mode === 'drafts') {
-            getAllPublicationDrafts(1, true);
-        }
     };
 
+    // Handle search
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+    };
+
+    // Handle filter changes
+    const handleFilterChange = (newFilters) => {
+        setFilters(newFilters);
+    };
+
+    // Load more publications
+    const handleLoadMore = useCallback(() => {
+        if (publicationsHasMore && !contextLoading && viewMode !== 'create') {
+            const isDraft = viewMode === 'drafts';
+            getAllPublications(publicationsCurrentPage + 1, false, isDraft);
+        }
+    }, [viewMode, publicationsHasMore, publicationsCurrentPage, contextLoading, getAllPublications]);
+
+    // Format date
     const formatDate = (dateString) => {
         if (!dateString) return t('publications.admin.noDate');
         const date = new Date(dateString);
@@ -178,151 +194,13 @@ export const AllPublications = () => {
         });
     };
 
-    const handleLoadMore = useCallback(() => {
-        if (viewMode === 'publications' && publicationsHasMore && !contextLoading) {
-            getAllPublications(publicationsCurrentPage + 1);
-        } else if (viewMode === 'drafts' && publicationDraftsHasMore && !contextLoading) {
-            getAllPublicationDrafts(publicationDraftsCurrentPage + 1);
-        }
-    }, [
-        viewMode,
-        publicationsHasMore,
-        publicationsCurrentPage,
-        publicationDraftsHasMore,
-        publicationDraftsCurrentPage,
-        contextLoading,
-        getAllPublications,
-        getAllPublicationDrafts
-    ]);
-
-    const handleShowPreview = (item) => {
-        const transformedData = {
-            id: item.id || 'preview-' + Date.now(),
-            title: item.title || 'Untitled Publication',
-            shortDescription: item.shortDescription || 'No description provided',
-            description: item.shortDescription || 'No description provided',
-            publishedAt: item.publishedAt || new Date().toISOString(),
-            author: item.userEmail || 'Unknown Author',
-            authorEmail: item.userEmail || null,
-            authorImage: null,
-            readTime: item.readTime || '5',
-            category: item.category || 'General',
-            tags: item.tags || [],
-            image: {
-                src: item.image?.src || item.mainImage?.src || '',
-                alt: item.image?.alt || item.mainImage?.alt || item.title || 'Publication',
-                caption: item.image?.caption || item.mainImage?.caption || ''
-            },
-            mainImage: item.mainImage || item.image || null,
-            sections: item.sections || [],
-            downloadUrl: item.downloadUrl || '',
-            fileType: item.fileType || 'PDF',
-            fileSize: item.fileSize || 'Unknown',
-            commentsEnabled: item.commentsEnabled !== false,
-            views: item.views || 0,
-            downloads: item.downloads || 0,
-            likes: item.likes || 0,
-            isLiked: false,
-            initiative: item.initiative || null,
-            slug: item.slug || 'preview-slug'
-        };
-
-        setPreviewData(transformedData);
-        setShowPreview(true);
-    };
-
-    const closePreview = () => {
-        setShowPreview(false);
-        setPreviewData(null);
-    };
-
-    const performAction = async (action, item) => {
-        setOpenDropdownId(null);
-        const identifier = item.slug || item.id;
-
-        try {
-            switch (action) {
-                case 'view':
-                    handleShowPreview(item);
-                    break;
-                case 'edit':
-                    if (viewMode === 'drafts') {
-                        sessionStorage.setItem('wasEditingDraft', 'true');
-                        navigate(`/profile/publication-create?draftId=${identifier}`);
-                    } else {
-                        navigate(`/publications/edit/${identifier}`);
-                    }
-                    break;
-
-                case 'delete':
-                    const isDraft = viewMode === 'drafts';
-                    const confirmMessage = isDraft
-                        ? t('publications.admin.confirmDeleteDraft')
-                        : t('publications.admin.confirmDeletePublication');
-
-                    if (window.confirm(confirmMessage)) {
-                        if (isDraft) {
-                            notify('success', t('publications.admin.draftDeletedSuccess'));
-                            await deletePublicationDraft(identifier);
-                        } else {
-                            notify('success', t('publications.admin.publicationDeletedSuccess'));
-                            await deletePublication(identifier);
-                        }
-                    }
-                    break;
-
-                case 'publish':
-                    if (window.confirm(t('publications.admin.confirmPublishDraft'))) {
-                        notify('success', t('publications.admin.draftPublishedSuccess'));
-                        await togglePublicationDraftStatus(identifier);
-                        setViewMode('publications');
-                    }
-                    break;
-
-                case 'convertToDraft':
-                    if (window.confirm(t('publications.admin.confirmConvertToDraft'))) {
-                        await togglePublicationDraftStatus(identifier);
-                        setViewMode('drafts');
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        } catch (error) {
-            console.error(`Error performing ${action}:`, error);
-            notify('error', t('publications.admin.actionError'));
-        }
-    };
-
-    const getStatusBadge = (item) => {
-        if (viewMode === 'drafts') {
-            return <span className="all-publications-status-badge draft">{t('publications.admin.statusDraft')}</span>;
-        }
-
-        if (item.publishedAt) {
-            return <span className="all-publications-status-badge active">{t('publications.admin.statusPublished')}</span>;
-        } else {
-            return <span className="all-publications-status-badge draft">{t('publications.admin.statusDraft')}</span>;
-        }
-    };
-
-    const getDefaultImage = () => {
-        return `data:image/svg+xml,${encodeURIComponent(`
-    <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100%" height="100%" fill="#1e293b"/>
-      <text x="50%" y="50%" font-family="Arial" font-size="18" fill="#64748b" text-anchor="middle" dy=".3em">
-        ${t('publications.preview.noImageAvailable')}
-      </text>
-    </svg>
-  `)}`;
-    };
-
+    // Optimize preview data - single function that handles everything
     const getOptimizedPreviewData = (item) => {
         return {
             id: item.id || 'preview-' + Date.now(),
             title: item.title || t('publications.admin.preview.noTitle'),
             shortDescription: item.shortDescription || t('publications.admin.preview.noDescription'),
+            description: item.shortDescription || t('publications.admin.preview.noDescription'),
             publishedAt: item.publishedAt || new Date().toISOString(),
             slug: item.slug || 'preview-slug',
             author: item.userEmail || t('publications.admin.preview.noAuthor'),
@@ -342,9 +220,9 @@ export const AllPublications = () => {
             fileType: item.downloadUrl ? (item.fileType || 'PDF') : null,
             fileSize: item.downloadUrl ? (item.fileSize || t('publications.admin.preview.unknownSize')) : null,
             commentsEnabled: item.commentsEnabled !== false,
-            views: null,
-            downloads: null,
-            likes: null,
+            views: item.views || null,
+            downloads: item.downloads || null,
+            likes: item.likes || null,
             isLiked: false,
             initiatives: item.initiatives || null,
             projects: item.projects || null,
@@ -352,6 +230,102 @@ export const AllPublications = () => {
         };
     };
 
+    // Show preview modal
+    const handleShowPreview = (item) => {
+        setPreviewData(getOptimizedPreviewData(item));
+        setShowPreview(true);
+    };
+
+    // Close preview modal
+    const closePreview = () => {
+        setShowPreview(false);
+        setPreviewData(null);
+    };
+
+    // Perform actions on publications
+    const performAction = async (action, item) => {
+        setOpenDropdownId(null);
+        const identifier = item.id;
+
+        try {
+            switch (action) {
+                case 'view':
+                    handleShowPreview(item);
+                    break;
+
+                case 'edit':
+                    setEditingItem(item);
+                    setFormMode('edit');
+                    break;
+
+                case 'delete':
+                    const isDraft = item.isDraft;
+                    const confirmMessage = isDraft
+                        ? t('publications.admin.confirmDeleteDraft')
+                        : t('publications.admin.confirmDeletePublication');
+
+                    if (window.confirm(confirmMessage)) {
+                        await deletePublication(identifier);
+                        notify('success', isDraft
+                            ? t('publications.admin.draftDeletedSuccess')
+                            : t('publications.admin.publicationDeletedSuccess')
+                        );
+                    }
+                    break;
+
+                case 'toggleDraft':
+                    await togglePublicationDraftStatus(identifier);
+                    notify('success', t('publications.admin.statusUpdatedSuccess'));
+                    const isDraftView = viewMode === 'drafts';
+                    await getAllPublications(1, true, isDraftView);
+                    break;
+
+                default:
+                    break;
+            }
+        } catch (error) {
+            console.error(`Error performing ${action}:`, error);
+            notify('error', t('publications.admin.actionError'));
+        }
+    };
+
+    // Close form
+    const handleCloseForm = async () => {
+        setFormMode(null);
+        setEditingItem(null);
+        setViewMode('publications'); // Changed to match header component
+
+        // Refetch data after form is closed
+        try {
+            const isDraft = viewMode === 'drafts';
+            await getAllPublications(1, true, isDraft);
+        } catch (error) {
+            console.error('Error refetching publications after form close:', error);
+        }
+    };
+
+    // Get status badge
+    const getStatusBadge = (item) => {
+        if (item.isDraft) {
+            return <span className="all-publications-status-badge draft">{t('publications.admin.statusDraft')}</span>;
+        } else {
+            return <span className="all-publications-status-badge active">{t('publications.admin.statusPublished')}</span>;
+        }
+    };
+
+    // Get default image
+    const getDefaultImage = () => {
+        return `data:image/svg+xml,${encodeURIComponent(`
+    <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#1e293b"/>
+      <text x="50%" y="50%" font-family="Arial" font-size="18" fill="#64748b" text-anchor="middle" dy=".3em">
+        ${t('publications.preview.noImageAvailable')}
+      </text>
+    </svg>
+  `)}`;
+    };
+
+    // Get category translation
     const getCategoryTranslation = (categoryKey) => {
         if (!categoryKey) return t('publications.categories.other');
 
@@ -367,19 +341,35 @@ export const AllPublications = () => {
 
     return (
         <div className="all-publications-admin-container">
-            <PublicationsHeaderAdmin
-                totalCount={viewMode === 'publications' ? publications.length : publicationDrafts.length}
-                viewMode={viewMode}
-                onViewModeChange={handleViewModeChange}
-                isLoading={contextLoading}
-            />
-
-            {viewMode === 'create' ? (
-                <div className="all-publications-create-container">
-                    <PublicationCreateForm />
-                </div>
-            ) : (
+            {formMode && (
                 <>
+                    {formMode === 'create' && (
+                        <PublicationsHeaderAdmin
+                            totalCount={0}
+                            viewMode="create"
+                            onViewModeChange={handleViewModeChange}
+                            isLoading={false}
+                        />
+                    )}
+
+                    <PublicationForm
+                        mode={formMode}
+                        initialValues={editingItem}
+                        onCancel={handleCloseForm}
+                        showBackButton={true}
+                    />
+                </>
+            )}
+
+            {!formMode && (
+                <>
+                    <PublicationsHeaderAdmin
+                        totalCount={publications.length}
+                        viewMode={viewMode}
+                        onViewModeChange={handleViewModeChange}
+                        isLoading={contextLoading}
+                    />
+
                     <PublicationsSearchAdmin
                         onSearch={handleSearch}
                         onFilterChange={handleFilterChange}
@@ -507,31 +497,16 @@ export const AllPublications = () => {
                                                         {t('publications.common.edit')}
                                                     </button>
 
-                                                    {viewMode === 'drafts' && (
-                                                        <button
-                                                            className="all-publications-dropdown-item publish"
-                                                            onMouseDown={() => performAction('publish', item)}
-                                                        >
-                                                            <svg viewBox="0 0 24 24" fill="none">
-                                                                <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                            </svg>
-                                                            {t('publications.common.publish')}
-                                                        </button>
-                                                    )}
-
-
-                                                    {viewMode === 'publications' && (
-                                                        <button
-                                                            className="all-publications-dropdown-item convert"
-                                                            onMouseDown={() => performAction('convertToDraft', item)}
-                                                        >
-                                                            <svg viewBox="0 0 24 24" fill="none">
-                                                                <path d="M9 14L4 9L9 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                                <path d="M4 9H16C18.2091 9 20 10.7909 20 13C20 15.2091 18.2091 17 16 17H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                            </svg>
-                                                            {t('publications.common.convertToDraft')}
-                                                        </button>
-                                                    )}
+                                                    <button
+                                                        className="all-publications-dropdown-item toggle"
+                                                        onMouseDown={() => performAction('toggleDraft', item)}
+                                                    >
+                                                        <svg viewBox="0 0 24 24" fill="none">
+                                                            <path d="M9 14L4 9L9 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                            <path d="M4 9H16C18.2091 9 20 10.7909 20 13C20 15.2091 18.2091 17 16 17H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        </svg>
+                                                        {item.isDraft ? t('publications.common.publish') : t('publications.common.convertToDraft')}
+                                                    </button>
 
                                                     <button
                                                         className="all-publications-dropdown-item delete"
@@ -552,7 +527,7 @@ export const AllPublications = () => {
                         ))}
                     </div>
 
-                    {((viewMode === 'publications' && publicationsHasMore) || (viewMode === 'drafts' && publicationDraftsHasMore)) && !contextLoading && (
+                    {publicationsHasMore && !contextLoading && (
                         <div className="all-publications-load-more-container">
                             <button
                                 className="all-publications-load-more-btn"
@@ -582,6 +557,7 @@ export const AllPublications = () => {
                 </>
             )}
 
+            {/* Preview Modal */}
             {showPreview && previewData && (
                 <div className="publication-preview-modal-overlay">
                     <div className="publication-preview-modal-content">
@@ -591,7 +567,7 @@ export const AllPublications = () => {
                                 onClick={closePreview}
                             >
                                 <FontAwesomeIcon icon={faArrowLeft} />
-                                {t('publications.preview.backToEditing')}
+                                {t('publications.common.back')}
                             </button>
                             <h2>{t('publications.preview.previewMode')}</h2>
                         </div>
@@ -599,7 +575,7 @@ export const AllPublications = () => {
                             <StoryPubView
                                 type="publication"
                                 previewMode={true}
-                                previewData={getOptimizedPreviewData(previewData)}
+                                previewData={previewData}
                             />
                         </div>
                     </div>

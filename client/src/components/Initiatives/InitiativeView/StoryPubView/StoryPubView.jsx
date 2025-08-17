@@ -33,7 +33,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
     const {
         getStoryBySlug,
-        getPublicationBySlug,
+        getPublicationById,
         getRelatedContent,
         likePublication,
         currentPublication,
@@ -51,25 +51,29 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                 } else if (type === 'story') {
                     data = await getStoryBySlug(slug);
                 } else {
-                    data = await getPublicationBySlug(slug);
+                    data = await getPublicationById(slug); // Use getPublicationById with slug
                 }
 
                 setContent(data);
 
-                // Only load related content and analytics for non-preview mode
-                if (data && !previewMode) {
-                    await trackStoryOrPublication(data.id, data.title, type);
+                // Load related content for both preview and normal mode
+                if (data) {
+                    if (!previewMode) {
+                        // Only load analytics for non-preview mode
+                        await trackStoryOrPublication(data.id, data.title, type);
 
-                    const updatedData = await getPublicationBySlug(slug);
-                    setContent(updatedData);
+                        const updatedData = await getPublicationById(slug); // Use getPublicationById with slug
+                        setContent(updatedData);
 
-                    await loadContentViewCounts([data.id], type);
-                    // Зарежда download counts за publications
-                    if (type === 'publication') {
-                        await loadDownloadCounts([data.id], type);
+                        await loadContentViewCounts([data.id], type);
+                        // Зарежда download counts за publications
+                        if (type === 'publication') {
+                            await loadDownloadCounts([data.id], type);
+                        }
+                        await loadShareCounts([data.id], type);
                     }
-                    await loadShareCounts([data.id], type);
 
+                    // Load related content for both modes
                     const related = await getRelatedContent(type, data.id);
                     setRelatedContent(related);
                 }
@@ -82,9 +86,16 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         };
 
         if (previewMode && previewData) {
-            // For preview mode, set content immediately
+            // For preview mode, set content immediately and load related content
             setContent(previewData);
             setIsLoading(false);
+
+            // Load related content for preview mode
+            if (previewData.id) {
+                getRelatedContent(type, previewData.id)
+                    .then(related => setRelatedContent(related))
+                    .catch(error => console.error('Error loading related content for preview:', error));
+            }
         } else if (slug) {
             fetchContent();
         }
@@ -233,14 +244,18 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         );
     }
 
-    // Don't render breadcrumbs, actions, comments, or related content in preview mode
     const shouldShowActions = !previewMode;
     const shouldShowComments = !previewMode && content?.commentsEnabled;
-    const shouldShowRelated = !previewMode && relatedContent.length > 0;
-    // Fix TOC logic - show if there are sections with titles
+    const shouldShowRelated = relatedContent.length > 0; // Remove !previewMode condition
+
     const shouldShowTOC = content.sections && content.sections.length > 0 &&
                          content.sections.some(section => section.title && section.title.trim());
-    const shouldShowConnections = !previewMode && hasConnections();
+
+    const shouldShowConnections = hasConnections();
+
+    const shouldShowSidebar = shouldShowTOC || shouldShowConnections ||
+                             (type === 'publication' && content.downloadUrl) ||
+                             shouldShowRelated;
 
     return (
         <article className="story-pub-view">
@@ -422,10 +437,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                         </div>
 
                         {/* Sidebar */}
-                        {(shouldShowRelated || shouldShowTOC || shouldShowConnections || (type === 'publication' && content.downloadUrl && !previewMode)) && (
+                        {shouldShowSidebar && (
                             <aside className="story-pub-sidebar">
                                 {/* Download Button for Publications - Top of sidebar */}
-                                {type === 'publication' && content.downloadUrl && !previewMode && (
+                                {type === 'publication' && content.downloadUrl && (
                                     <div className="story-pub-download-sidebar">
                                         <h3 className="download-sidebar-title">
                                             {t('publications.view.download.title')}

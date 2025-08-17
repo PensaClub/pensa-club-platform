@@ -46,63 +46,43 @@ const transformPublication = async (pub) => {
 
     const plainPublication = pub.get({ plain: true });
 
-    // Remove junction table data, isDraft flag, and likedBy for security
-    const {
-        publication_bookmarks,
-        publication_likes,
-        related_publications,
-        project_publications,
-        initiative_publications,
-        isDraft,
-        likedBy,
-        ...publicationData
-    } = plainPublication;
+    const { publication_bookmarks, publication_likes, related_publications, project_publications, initiative_publications, likedBy, ...publicationData } =
+        plainPublication;
 
-    // Add userEmail from creator and remove creator object
     if (publicationData.creator) {
         publicationData.userEmail = publicationData.creator.email;
         delete publicationData.creator;
         delete publicationData.creatorId;
     }
 
-    // Filter connections based on current publication's draft status
-    const currentPublicationIsDraft = plainPublication.isDraft;
+    const currentPublicationIsDraft = publicationData.isDraft;
 
-    // Filter initiatives: if current publication is published, only show published initiatives
     if (publicationData.initiatives) {
         publicationData.initiatives = publicationData.initiatives.filter((initiative) => {
             if (currentPublicationIsDraft) {
-                // If current publication is draft, show all initiatives (draft and published)
                 return true;
             } else {
-                // If current publication is published, only show published initiatives
                 return !initiative.isDraft;
             }
         });
     }
 
-    // Filter projects: if current publication is published, only show published projects
     if (publicationData.projects) {
         publicationData.projects = publicationData.projects.filter((project) => {
             if (currentPublicationIsDraft) {
-                // If current publication is draft, show all projects (draft and published)
                 return true;
             } else {
-                // If current publication is published, only show published projects
                 return !project.isDraft;
             }
         });
     }
 
-    // Filter related publications: if current publication is published, only show published related publications
     if (publicationData.relatedPublications) {
         publicationData.relatedPublications = publicationData.relatedPublications
             .filter((relatedPub) => {
                 if (currentPublicationIsDraft) {
-                    // If current publication is draft, show all related publications (draft and published)
                     return true;
                 } else {
-                    // If current publication is published, only show published related publications
                     return !relatedPub.isDraft;
                 }
             })
@@ -112,19 +92,10 @@ const transformPublication = async (pub) => {
             });
     }
 
-    // Transform sections
     if (publicationData.sections) {
         publicationData.sections = publicationData.sections.map((section) => {
-            let sectionImage = null;
-
             if (section.sectionImage) {
-                sectionImage = section.sectionImage;
-            } else if (section.sectionImages && Array.isArray(section.sectionImages) && section.sectionImages.length > 0) {
-                sectionImage = section.sectionImages[0];
-            }
-
-            if (sectionImage) {
-                const { sectionImage: _, sectionImages: __, ...singleSection } = section;
+                const { sectionImage, ...singleSection } = section;
                 return {
                     ...singleSection,
                     image: sectionImage,

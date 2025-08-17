@@ -1627,10 +1627,10 @@ export const InitiativeProvider = ({ children }) => {
   }, [isAuthentication, initiativeService, getProjectComments]);
 
   // =================
-  // PUBLICATION FUNCTIONS (REPLACED OLD MOCK DATA FUNCTIONS)
+  // PUBLICATION FUNCTIONS
   // =================
 
-  const getAllPublications = useCallback(async (page = 1, forceRefresh = false) => {
+  const getAllPublications = useCallback(async (page = 1, forceRefresh = false, isDraft = null) => {
     if (page === 1 && publications.length > 0 && publicationsLoaded && !forceRefresh) {
       return {
         data: publications,
@@ -1641,7 +1641,7 @@ export const InitiativeProvider = ({ children }) => {
 
     try {
       setIsLoading(true);
-      const response = await storyPubService.getAllPublications(page, 6);
+      const response = await storyPubService.getAllPublications(page, 6, isDraft);
 
       const responseData = {
         data: response.data || response,
@@ -1671,27 +1671,27 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [publications.length, publicationsLoaded, publicationsHasMore, publicationsCurrentPage, storyPubService, showErrorAndSetTimeouts]);
 
-  const getPublicationBySlug = useCallback(async (slug) => {
-    if (!slug || slug === 'undefined' || slug === 'null') {
-      const error = new Error(`Invalid publication slug: ${slug}`);
-      console.error('getPublicationBySlug called with invalid slug:', slug);
+  const getPublicationById = useCallback(async (id) => {
+    if (!id || id === 'undefined' || id === 'null') {
+      const error = new Error(`Invalid publication ID: ${id}`);
+      console.error('getPublicationById called with invalid ID:', id);
       throw error;
     }
 
     try {
       setIsLoading(true);
-      const response = await storyPubService.getPublicationBySlug(slug);
+      const response = await storyPubService.getPublicationById(id);
 
       const publication = response.data || response;
 
       if (!publication) {
-        throw new Error(`Publication not found with slug: ${slug}`);
+        throw new Error(`Publication not found with ID: ${id}`);
       }
 
       setCurrentPublication(publication);
       return publication;
     } catch (e) {
-      console.error('Error fetching publication by slug:', e);
+      console.error('Error fetching publication by ID:', e);
       notify('error', e.message || 'Failed to fetch publication');
       showErrorAndSetTimeouts(e.message);
       throw e;
@@ -1700,223 +1700,166 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, [storyPubService, showErrorAndSetTimeouts]);
 
-  const getPublicationsByInitiative = useCallback(async (initiativeId) => {
+  const createPublication = useCallback(async (publicationData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
     try {
-      const response = await storyPubService.getPublicationsByInitiative(initiativeId);
+      setIsLoading(true);
+      const response = await storyPubService.createPublication(publicationData);
+
+      // Add to publications list
+      setPublications(prev => [response.data || response, ...prev]);
+
+      notify('success', 'Publication created successfully!');
       return response;
-    } catch (e) {
-      console.error('Error fetching publications by initiative:', e);
-      notify('error', e.message || 'Failed to fetch initiative publications');
-      throw e;
-    }
-  }, [storyPubService]);
-
-  // Publication comments - FIXED TO FOLLOW SAME PATTERN AS PROJECTS
-  const getPublicationComments = useCallback(async (publicationId) => {
-    try {
-      setCommentsLoading(true);
-
-      const response = await storyPubService.getPublicationComments(publicationId);
-
-      let commentsData = [];
-      if (Array.isArray(response)) {
-        commentsData = response;
-      } else if (response.data && Array.isArray(response.data)) {
-        commentsData = response.data;
-      } else if (response.comments && Array.isArray(response.comments)) {
-        commentsData = response.comments;
-      }
-
-      const processedComments = commentsData
-        .filter(comment => !comment.parentId)
-        .map(comment => {
-          // Сортираме replies по дата ВЪЗХОДЯЩО
-          if (comment.replies && comment.replies.length > 0) {
-            return {
-              ...comment,
-              replies: comment.replies.sort((a, b) =>
-                new Date(a.createdAt) - new Date(b.createdAt)
-              )
-            };
-          }
-          return comment;
-        })
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-      const pubKey = `publication-${publicationId}`;
-      setComments(prev => ({
-        ...prev,
-        [pubKey]: processedComments
-      }));
-
-      return processedComments;
     } catch (error) {
-      console.error('Error getting publication comments:', error);
-      notify('error', 'Failed to load comments');
-
-      const pubKey = `publication-${publicationId}`;
-      setComments(prev => ({
-        ...prev,
-        [pubKey]: []
-      }));
-
-      return [];
+      console.error('Error creating publication:', error);
+      notify('error', 'Failed to create publication');
+      throw error;
     } finally {
-      setCommentsLoading(false);
+      setIsLoading(false);
     }
-  }, []);
+  }, [isAuthentication, storyPubService]);
 
-  const addPublicationComment = useCallback(async (publicationId, content, parentId = null) => {
+  const updatePublication = useCallback(async (id, publicationData) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
     try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
+      setIsLoading(true);
+      const response = await storyPubService.updatePublication(id, publicationData);
+
+      // Update in local state
+      setPublications(prev => prev.map(pub =>
+        pub.id === id ? (response.data || response) : pub
+      ));
+
+      // Update current publication if it's the one being edited
+      if (currentPublication && currentPublication.id === id) {
+        setCurrentPublication(response.data || response);
       }
 
-      const commentData = {
-        content: content,
-        commentableId: Number(publicationId),
-        commentsLinkConnection: 'publication',
-        ...(parentId && { parentId: Number(parentId) })
-      };
-
-      const response = await storyPubService.addPublicationComment(commentData);
-      const newComment = response.data || response;
-
-      // Презареждаме коментарите от сървъра след кратка пауза
-      setTimeout(async () => {
-        await getPublicationComments(publicationId);
-      }, 10);
-
-      notify('success', 'Comment added successfully');
-      return newComment;
+      notify('success', 'Publication updated successfully!');
+      return response;
     } catch (error) {
-      console.error('Error adding publication comment:', error);
-      notify('error', error.response?.data?.message || 'Failed to add comment');
+      console.error('Error updating publication:', error);
+      notify('error', 'Failed to update publication');
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-  }, [isAuthentication, storyPubService, getPublicationComments]);
+  }, [isAuthentication, storyPubService, currentPublication]);
 
-  const updatePublicationComment = useCallback(async (publicationId, commentId, newContent) => {
+  const deletePublication = useCallback(async (id) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
     try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
+      setIsLoading(true);
+      await storyPubService.deletePublication(id);
+
+      // Remove from local state
+      setPublications(prev => prev.filter(pub => pub.id !== id));
+
+      // Clear current publication if it's the one being deleted
+      if (currentPublication && currentPublication.id === id) {
+        setCurrentPublication(null);
       }
 
-      const response = await storyPubService.updatePublicationComment(commentId, newContent);
-      await getPublicationComments(publicationId);
-
-      notify('success', 'Comment updated successfully');
-      return response.data || response;
+      notify('success', 'Publication deleted successfully!');
     } catch (error) {
-      console.error('Error updating publication comment:', error);
-      notify('error', 'Failed to update comment');
+      console.error('Error deleting publication:', error);
+      notify('error', 'Failed to delete publication');
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-  }, [isAuthentication, storyPubService, getPublicationComments]);
+  }, [isAuthentication, storyPubService, currentPublication]);
 
-  const deletePublicationComment = useCallback(async (publicationId, commentId) => {
+  const togglePublicationDraftStatus = useCallback(async (id) => {
+    if (!isAuthentication) {
+      notify('error', 'Authentication required');
+      return;
+    }
+
     try {
-      if (!isAuthentication) {
-        throw new Error('Authentication required');
-      }
+      setIsLoading(true);
+      const response = await storyPubService.togglePublicationDraftStatus(id);
 
-      await storyPubService.deletePublicationComment(commentId);
-      await getPublicationComments(publicationId);
+      // Refresh both publications and drafts lists
+      await getAllPublications(1, true);
 
-      notify('success', 'Comment deleted successfully');
+      notify('success', 'Publication status updated successfully!');
+      return response;
     } catch (error) {
-      console.error('Error deleting publication comment:', error);
-      notify('error', 'Failed to delete comment');
+      console.error('Error toggling publication draft status:', error);
+      notify('error', 'Failed to update publication status');
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-  }, [isAuthentication, storyPubService, getPublicationComments]);
+  }, [isAuthentication, storyPubService, getAllPublications]);
 
-  const likePublicationComment = useCallback(async (publicationId, commentId) => {
+  const likePublication = useCallback(async (publicationId, onUpdate = null) => {
     try {
       if (!isAuthentication) {
         throw new Error('Authentication required');
       }
 
-      const response = await storyPubService.likePublicationComment(commentId);
+      const response = await storyPubService.likePublication(publicationId);
       const likeData = response.data || response;
 
-      // Презареждаме коментарите
-      setTimeout(async () => {
-        await getPublicationComments(publicationId);
-      }, 30);
+      // Update the current publication's like status and count locally
+      const updatedPublication = {
+        ...currentPublication,
+        isLiked: likeData.liked,
+        likes: likeData.likes
+      };
 
-      // Проверяваме дали потребителят вече е харесал
-      if (likeData.liked === false && likeData.likes?.includes(userEmail)) {
-        notify('info', 'Вече сте харесали този коментар');
+      setCurrentPublication(updatedPublication);
+
+      // Update the publication in the publications list if it exists
+      setPublications(prev =>
+        prev.map(pub =>
+          pub.id === publicationId
+            ? {
+              ...pub,
+              isLiked: likeData.liked,
+              likes: likeData.likes
+            }
+            : pub
+        )
+      );
+
+      // Call the callback if provided (for updating local component state)
+      if (onUpdate && typeof onUpdate === 'function') {
+        onUpdate(updatedPublication);
+      }
+
+      if (likeData.liked) {
+        notify('success', 'Успешно харесахте публикацията');
       } else {
-        notify('success', 'Успешно харесахте коментара');
+        notify('info', 'Премахнахте харесването от публикацията');
       }
 
       return likeData;
     } catch (error) {
-      console.error('Error in likePublicationComment - full error:', error);
+      console.error('Error in likePublication - full error:', error);
       console.error('Error response:', error.response);
 
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to like comment';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to like publication';
       notify('error', `Like error: ${errorMessage}`);
 
       return null;
     }
-  }, [isAuthentication, storyPubService, getPublicationComments, userEmail]);
-
-  const likePublication = useCallback(async (publicationId, onUpdate = null) => {
-    try {
-        if (!isAuthentication) {
-            throw new Error('Authentication required');
-        }
-
-        const response = await storyPubService.likePublication(publicationId);
-        const likeData = response.data || response;
-
-        // Update the current publication's like status and count locally
-        const updatedPublication = {
-            ...currentPublication,
-            isLiked: likeData.liked,
-            likes: likeData.likes
-        };
-
-        setCurrentPublication(updatedPublication);
-
-        // Update the publication in the publications list if it exists
-        setPublications(prev =>
-            prev.map(pub =>
-                pub.id === publicationId
-                    ? {
-                        ...pub,
-                        isLiked: likeData.liked,
-                        likes: likeData.likes
-                    }
-                    : pub
-            )
-        );
-
-        // Call the callback if provided (for updating local component state)
-        if (onUpdate && typeof onUpdate === 'function') {
-            onUpdate(updatedPublication);
-        }
-
-        if (likeData.liked) {
-            notify('success', 'Успешно харесахте публикацията');
-        } else {
-            notify('info', 'Премахнахте харесването от публикацията');
-        }
-
-        return likeData;
-    } catch (error) {
-        console.error('Error in likePublication - full error:', error);
-        console.error('Error response:', error.response);
-
-        const errorMessage = error.response?.data?.message || error.message || 'Failed to like publication';
-        notify('error', `Like error: ${errorMessage}`);
-
-        return null;
-    }
-}, [isAuthentication, storyPubService, currentPublication]);
+  }, [isAuthentication, storyPubService, currentPublication]);
 
   //STORIES AND PUBLICATIONS
   //Stories functions
@@ -2080,133 +2023,163 @@ export const InitiativeProvider = ({ children }) => {
     }
   }, []);
 
-  // Add state at the top with other publication states
-  const [publicationDrafts, setPublicationDrafts] = useState([]);
-  const [publicationDraftsHasMore, setPublicationDraftsHasMore] = useState(false);
-  const [publicationDraftsCurrentPage, setPublicationDraftsCurrentPage] = useState(1);
-  const [publicationDraftsLoaded, setPublicationDraftsLoaded] = useState(false);
-
-  // Add the function, mirroring getAllPublicationsTemporary
-  const getAllPublicationDrafts = useCallback(async (page = 1, forceRefresh = false) => {
-    if (page === 1 && publicationDrafts.length > 0 && publicationDraftsLoaded && !forceRefresh) {
-      return {
-        data: publicationDrafts,
-        hasMore: publicationDraftsHasMore,
-        currentPage: publicationDraftsCurrentPage
-      };
-    }
-
+  // Publication Comments functions
+  const getPublicationComments = useCallback(async (publicationId) => {
     try {
-      setIsLoading(true);
-      const response = await storyPubService.getAllPublicationDrafts(page, 6);
+      setCommentsLoading(true);
 
-      const responseData = {
-        data: response.data || response,
-        hasMore: response.pagination?.hasNextPage || false,
-        totalCount: response.pagination?.totalPublications || 0,
-        currentPage: response.pagination?.page || page
-      };
+      const response = await storyPubService.getPublicationComments(publicationId);
 
-      if (page === 1) {
-        setPublicationDrafts(responseData.data);
-      } else {
-        setPublicationDrafts(prev => [...prev, ...responseData.data]);
+      // Extract data correctly
+      let commentsData = [];
+      if (Array.isArray(response)) {
+        commentsData = response;
+      } else if (response.data && Array.isArray(response.data)) {
+        commentsData = response.data;
+      } else if (response.comments && Array.isArray(response.comments)) {
+        commentsData = response.comments;
       }
 
-      setPublicationDraftsHasMore(responseData.hasMore);
-      setPublicationDraftsCurrentPage(responseData.currentPage);
-      setPublicationDraftsLoaded(true);
+      // Process comments
+      const processedComments = commentsData
+        .filter(comment => !comment.parentId) // Only main comments
+        .map(comment => {
+          // Sort replies by date ASCENDING (oldest first)
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: comment.replies.sort((a, b) =>
+                new Date(a.createdAt) - new Date(b.createdAt)
+              )
+            };
+          }
+          return comment;
+        })
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Main comments - newest first
 
-      return responseData;
-    } catch (e) {
-      console.error('Error fetching publication drafts:', e);
-      notify('error', e.message || 'Failed to fetch publication drafts');
-      showErrorAndSetTimeouts(e.message);
-      return { data: [], hasMore: false, currentPage: page };
-    } finally {
-      setIsLoading(false);
-    }
-  }, [publicationDrafts.length, publicationDraftsLoaded, publicationDraftsHasMore, publicationDraftsCurrentPage, storyPubService, showErrorAndSetTimeouts]);
+      setComments(prev => ({
+        ...prev,
+        [`publication-${publicationId}`]: processedComments
+      }));
 
-  const deletePublication = useCallback(async (identifier) => {
-    if (!isAuthentication) {
-      notify('error', 'Authentication required');
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-
-      await storyPubService.deletePublication(identifier);
-
-      // Remove from local state
-      setPublications(prev => prev.filter(publication =>
-        publication.id !== identifier &&
-        publication.slug !== identifier &&
-        publication.id.toString() !== identifier.toString()
-      ));
-
-      notify('success', 'Publication deleted successfully!');
+      return processedComments;
     } catch (error) {
-      console.error('Error deleting publication:', error);
-      notify('error', 'Failed to delete publication');
-      throw error;
+      console.error('Error getting publication comments:', error);
+      notify('error', 'Failed to load comments');
+
+      setComments(prev => ({
+        ...prev,
+        [`publication-${publicationId}`]: []
+      }));
+
+      return [];
     } finally {
-      setIsLoading(false);
+      setCommentsLoading(false);
     }
-  }, [isAuthentication, storyPubService]);
+  }, []);
 
-  const deletePublicationDraft = useCallback(async (identifier) => {
-    if (!isAuthentication) {
-      notify('error', 'Authentication required');
-      return;
-    }
-
+  const addPublicationComment = useCallback(async (publicationId, content, parentId = null) => {
     try {
-      setIsLoading(true);
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
 
-      await storyPubService.deletePublicationDraft(identifier);
+      const commentData = {
+        content: content,
+        commentableId: Number(publicationId),
+        commentsLinkConnection: 'publication',
+        ...(parentId && { parentId: Number(parentId) })
+      };
 
-      // Remove from local state
-      setPublicationDrafts(prev => prev.filter(draft =>
-        draft.id !== identifier &&
-        draft.slug !== identifier &&
-        draft.id.toString() !== identifier.toString()
-      ));
+      const response = await storyPubService.addPublicationComment(commentData);
+      const newComment = response.data || response;
 
-      notify('success', 'Publication draft deleted successfully!');
+      // Reload comments after adding
+      setTimeout(async () => {
+        await getPublicationComments(publicationId);
+      }, 10);
+
+      notify('success', 'Comment added successfully');
+      return newComment;
     } catch (error) {
-      console.error('Error deleting publication draft:', error);
-      notify('error', 'Failed to delete publication draft');
+      console.error('Error adding publication comment:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to add comment';
+      notify('error', errorMessage);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
-  }, [isAuthentication, storyPubService]);
+  }, [isAuthentication, storyPubService, getPublicationComments]);
 
-  const togglePublicationDraftStatus = useCallback(async (identifier) => {
-    if (!isAuthentication) {
-      notify('error', 'Authentication required');
-      return;
-    }
-
+  const updatePublicationComment = useCallback(async (publicationId, commentId, newContent) => {
     try {
-      setIsLoading(true);
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
 
-      await storyPubService.togglePublicationDraftStatus(identifier);
+      const response = await storyPubService.updatePublicationComment(commentId, newContent);
 
-      await getAllPublications(1, true);
-      await getAllPublicationDrafts(1, true);
+      // Reload comments after updating
+      await getPublicationComments(publicationId);
 
-      notify('success', 'Publication status updated successfully!');
+      notify('success', 'Comment updated successfully');
+      return response.data || response;
     } catch (error) {
-      console.error('Error toggling publication draft status:', error);
-      notify('error', 'Failed to update publication status');
+      console.error('Error updating publication comment:', error);
+      notify('error', 'Failed to update comment');
       throw error;
-    } finally {
-      setIsLoading(false);
     }
-  }, [isAuthentication, storyPubService, getAllPublications, getAllPublicationDrafts]);
+  }, [isAuthentication, storyPubService, getPublicationComments]);
+
+  const deletePublicationComment = useCallback(async (publicationId, commentId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      await storyPubService.deletePublicationComment(commentId);
+
+      // Reload comments after deleting
+      await getPublicationComments(publicationId);
+
+      notify('success', 'Comment deleted successfully');
+    } catch (error) {
+      console.error('Error deleting publication comment:', error);
+      notify('error', 'Failed to delete comment');
+      throw error;
+    }
+  }, [isAuthentication, storyPubService, getPublicationComments]);
+
+  const likePublicationComment = useCallback(async (publicationId, commentId) => {
+    try {
+      if (!isAuthentication) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await storyPubService.likePublicationComment(commentId);
+      const likeData = response.data || response;
+
+      // Reload comments after liking
+      setTimeout(async () => {
+        await getPublicationComments(publicationId);
+      }, 30);
+
+      // Check if user already liked
+      if (likeData.liked === false && likeData.likes?.includes(userEmail)) {
+        notify('info', 'Вече сте харесали този коментар');
+      } else {
+        notify('success', 'Успешно харесахте коментара');
+      }
+
+      return likeData;
+    } catch (error) {
+      console.error('Error in likePublicationComment - full error:', error);
+      console.error('Error response:', error.response);
+
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to like comment';
+      notify('error', `Like error: ${errorMessage}`);
+
+      return null;
+    }
+  }, [isAuthentication, storyPubService, getPublicationComments, userEmail]);
 
   const contextService = {
     // Existing initiative functions
@@ -2293,10 +2266,10 @@ export const InitiativeProvider = ({ children }) => {
     applyToProject,
     hasUserAppliedToProject,
     userApplications,
-    getAllApplications,     // За админи
-    updateApplicationStatus, // За админи
-    deleteApplication, // За админи
-    sendApplicationEmails,     // За админи
+    getAllApplications,
+    updateApplicationStatus,
+    deleteApplication,
+    sendApplicationEmails,
     updateInitiativeWithProject, // Обновява инициатива с нов проект
     //Stories functions
     getStoryBySlug,
@@ -2305,13 +2278,11 @@ export const InitiativeProvider = ({ children }) => {
 
     // Publications functions (REPLACED OLD MOCK DATA FUNCTIONS)
     getAllPublications,
-    getPublicationBySlug,
-    getPublicationsByInitiative,
-    getPublicationComments,
-    addPublicationComment,
-    updatePublicationComment,
-    deletePublicationComment,
-    likePublicationComment,
+    getPublicationById, // Changed from getPublicationBySlug
+    createPublication,
+    updatePublication,
+    deletePublication,
+    togglePublicationDraftStatus,
     likePublication,
     publications,
     currentPublication,
@@ -2319,20 +2290,16 @@ export const InitiativeProvider = ({ children }) => {
     publicationsHasMore,
     publicationsCurrentPage,
 
-    // Publication drafts
-    getAllPublicationDrafts,
-    publicationDrafts,
-    publicationDraftsHasMore,
-    publicationDraftsCurrentPage,
-    publicationDraftsLoaded,
-
     // Related content
     getRelatedContent,
 
     // New functions for deleting publications
     deletePublication,
-    deletePublicationDraft,
-    togglePublicationDraftStatus,
+    getPublicationComments,
+    addPublicationComment,
+    updatePublicationComment,
+    deletePublicationComment,
+    likePublicationComment,
   };
   const pagesWithLazyLoading = ['/articles'];
 

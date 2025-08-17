@@ -110,6 +110,7 @@ const BasicInfoSection = ({
                     <label htmlFor="shortDescription" className="publication-field-label">
                         <FontAwesomeIcon icon={faAlignLeft} />
                         {t('publications.basic.shortDescription')}
+                        <span className="publication-required-indicator">*</span>
                     </label>
                     <textarea
                         id="shortDescription"
@@ -118,6 +119,7 @@ const BasicInfoSection = ({
                         onChange={onChangeHandler}
                         placeholder={t('publications.basic.shortDescriptionPlaceholder')}
                         rows="3"
+                        required
                     />
                 </div>
 

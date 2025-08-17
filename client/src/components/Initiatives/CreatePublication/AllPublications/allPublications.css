@@ -536,3 +536,60 @@
     gap: 2.5rem;
   }
 }
+
+/* Edit container styles */
+.all-publications-edit-container {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--background-color, #ffffff);
+}
+
+.all-publications-edit-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    background: var(--card-background, #ffffff);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.all-publications-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--secondary-color, #64748b);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.all-publications-back-btn:hover {
+    background: var(--secondary-color-dark, #475569);
+    transform: translateX(-2px);
+}
+
+.all-publications-edit-header h2 {
+    margin: 0;
+    color: var(--text-color, #1e293b);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Ensure the edit form takes full width */
+.all-publications-edit-container .publication-create-container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hide header when editing inline */
+.all-publications-edit-container .publication-form-header {
+    display: none;
+}

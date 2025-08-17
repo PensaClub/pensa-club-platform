@@ -22,21 +22,63 @@ import { isSlateEmpty } from '../../../../utils/slateToHtml';
 import ConnectionSection from "../Sections/ConnectionSection/ConnectionSection";
 import { notify } from '../../../../utils/notify';
 
-const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
+const PublicationForm = ({
+    mode = 'create', // 'create' or 'edit'
+    initialValues = null,
+    onCancel = null,
+    showBackButton = true
+}) => {
     const { t } = useTranslation();
     const { userEmail, username } = useAuthContext();
     const navigate = useNavigate();
-    const { slug } = useParams();
+    const { slug } = useParams(); // Keep using slug for URL compatibility
     const [publication, setPublication] = useState(null);
     const [loading, setLoading] = useState(false);
     const [activeSection, setActiveSection] = useState('basic-info');
     const [newTag, setNewTag] = useState('');
     const [showPreview, setShowPreview] = useState(false);
-    const [draftId, setDraftId] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
 
     const token = localStorage.getItem('token');
     const publicationService = initiativeServiceFactory(token);
+
+    // Determine if we're in edit mode
+    const isEditMode = mode === 'edit' || !!slug;
+
+    // Add debugging
+    console.log('MainFormPublication debug:', {
+        mode,
+        slug,
+        isEditMode,
+        publication: publication,
+        publicationId: publication?.id,
+        initialValues: initialValues
+    });
+
+    // Define onSubmitHandler function
+    const onSubmitHandler = async (data) => {
+        try {
+            if (isEditMode && publication?.id) {
+                // Update existing publication
+                await publicationService.updatePublication(publication.id, data);
+                notify('success', t('publications.admin.publicationUpdatedSuccess'));
+            } else {
+                // Create new publication
+                await publicationService.createPublication(data);
+                notify('success', t('publications.admin.publicationCreatedSuccess'));
+            }
+
+            // If we have an onCancel callback (inline editing), use it instead of navigation
+            if (onCancel) {
+                onCancel();
+            } else {
+                navigate('/profile/publications');
+            }
+        } catch (error) {
+            console.error('Failed to submit publication:', error);
+            notify('error', error.message || 'Failed to submit publication');
+        }
+    };
 
     useEffect(() => {
         const handleEscape = (event) => {
@@ -83,17 +125,107 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
         updateMainImageCaption
     } = useCreatePublication(initialValues, onSubmitHandler);
 
+    // Transform server data to form format
+    const transformPublicationForForm = (publicationData) => {
+        if (!publicationData) return {};
+
+        // Helper function to convert string content to Slate format
+        const convertStringToSlateContent = (content) => {
+            if (!content) return [];
+            if (Array.isArray(content)) return content;
+
+            // If it's a string, convert it to Slate format
+            return [
+                {
+                    type: 'paragraph',
+                    children: [{ text: content }]
+                }
+            ];
+        };
+
+        // Helper function to normalize image data
+        const normalizeImageData = (imageData) => {
+            if (!imageData) return null;
+
+            // Handle different image data structures
+            if (typeof imageData === 'string') {
+                return { src: imageData, alt: '', caption: '' };
+            }
+
+            if (imageData.src || imageData.url) {
+                return {
+                    src: imageData.src || imageData.url,
+                    alt: imageData.alt || '',
+                    caption: imageData.caption || ''
+                };
+            }
+
+            return null;
+        };
+
+        console.log('Transforming publication data:', publicationData); // Debug log
+
+        const transformed = {
+            title: publicationData.title || '',
+            slug: publicationData.slug || '',
+            shortDescription: publicationData.shortDescription || '',
+            category: publicationData.category || '',
+            tags: publicationData.tags || [],
+            readTime: publicationData.readTime || '',
+            commentsEnabled: publicationData.commentsEnabled ?? true,
+            showAuthor: publicationData.showAuthor ?? true,
+
+            mainImage: normalizeImageData(publicationData.image),
+
+            fileType: publicationData.fileType || '',
+            fileSize: publicationData.fileSize || '',
+            downloadUrl: publicationData.downloadUrl || '',
+
+            sections: publicationData.sections?.map((section, index) => ({
+                id: section.id || `section-${index + 1}`,
+                title: section.title || '',
+                titleSlug: section.titleSlug || section.slug || '',
+                content: convertStringToSlateContent(section.content),
+                order: index + 1,
+                image: normalizeImageData(section.image)
+            })) || [],
+
+            relatedPublications: publicationData.relatedPublications?.map(pub => pub.id) || [],
+            connectedInitiativeIds: publicationData.initiatives?.map(init => init.id) || [],
+            connectedProjectIds: publicationData.projects?.map(proj => proj.id) || []
+        };
+
+        return transformed;
+    };
+
+    useEffect(() => {
+        if (isEditMode && initialValues) {
+            // This is inline editing mode - transform the data
+            const transformedData = transformPublicationForForm(initialValues);
+            setValues(transformedData);
+        }
+    }, [isEditMode, initialValues, setValues]);
 
     useEffect(() => {
         const fetchPublication = async () => {
             if (isEditMode && slug) {
+                // This is route-based editing mode - we need to get publication by slug first
                 setLoading(true);
                 try {
-                    const token = localStorage.getItem('token');
-                    const publicationService = initiativeServiceFactory(token);
-                    const data = await publicationService.getPublicationBySlug(slug);
-                    setPublication(data);
-                    setValues(data);
+                    // Since we don't have a getPublicationBySlug endpoint, we'll need to get all publications
+                    // and find the one with matching slug. This is not ideal but works for now.
+                    // TODO: Add getPublicationBySlug endpoint to the backend
+                    const allPublications = await publicationService.getAllPublications(1, 1000);
+                    const foundPublication = allPublications.find(pub => pub.slug === slug);
+
+                    if (foundPublication) {
+                        setPublication(foundPublication);
+                        // Transform the data before setting it
+                        const transformedData = transformPublicationForForm(foundPublication);
+                        setValues(transformedData);
+                    } else {
+                        notify('error', t('publications.edit.notFound'));
+                    }
                 } catch (err) {
                     console.error('Error fetching publication:', err);
                     notify('error', t('publications.edit.notFound'));
@@ -104,7 +236,7 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
         };
 
         fetchPublication();
-    }, [isEditMode, slug, setValues, t]);
+    }, [isEditMode, slug, setValues, t, publicationService]);
 
     if (loading) {
         return <div className="loading">Loading...</div>;
@@ -151,6 +283,17 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
             return value;
         };
 
+        // Extract file name from download URL if available
+        const getFileNameFromUrl = (url) => {
+            if (!url) return null;
+            try {
+                const urlParts = url.split('/');
+                return urlParts[urlParts.length - 1] || null;
+            } catch {
+                return null;
+            }
+        };
+
         return {
             title: values.title,
             slug: values.slug,
@@ -162,9 +305,11 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
             fileType: nullIfEmpty(values.fileType),
             fileSize: nullIfEmpty(values.fileSize),
             downloadUrl: nullIfEmpty(values.downloadUrl),
+            fileName: getFileNameFromUrl(values.downloadUrl), // Add file name
             commentsEnabled: values.commentsEnabled ?? true,
             showAuthor: values.showAuthor ?? true,
-            publishedAt: new Date().toISOString(),
+            isDraft: true, // Default to draft for safety
+            // Don't set publishedAt here - let the backend handle it
             mainImage: values.mainImage?.src ? {
                 src: values.mainImage.src,
                 alt: nullIfEmpty(values.mainImage.alt),
@@ -196,7 +341,7 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
                     title: nullIfEmpty(section.title),
                     titleSlug: sectionTitleSlug,
                     content: nullIfEmpty(content),
-                    order: index + 1,
+                    order: section.order || index + 1, // Use the actual order property
                     image: section.image?.src ? {
                         src: section.image.src,
                         alt: nullIfEmpty(section.image.alt),
@@ -219,18 +364,32 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
 
         setIsSaving(true);
         try {
-            const publicationData = preparePublicationData();
+            const publicationData = {
+                ...preparePublicationData(),
+                isDraft: true // Always save as draft
+            };
 
-            if (!draftId) {
-                await publicationService.savePublicationDraft(publicationData);
+            if (isEditMode && publication?.id) {
+                // Update existing publication
+                await publicationService.updatePublication(publication.id, publicationData);
+                notify('success', t('publications.admin.draftUpdatedSuccess'));
             } else {
-                await publicationService.updatePublicationDraft(draftId, publicationData);
+                // Create new publication (will be saved as draft by default)
+                await publicationService.createPublication(publicationData);
+                notify('success', t('publications.admin.draftCreatedSuccess'));
             }
 
             setIsSaving(false);
-            navigate('/profile/publications');
+
+            // If we have an onCancel callback (inline editing), use it instead of navigation
+            if (onCancel) {
+                onCancel();
+            } else {
+                navigate('/profile/publications');
+            }
         } catch (error) {
             setIsSaving(false);
+            notify('error', error.message || 'Failed to save draft');
         }
     };
 
@@ -242,12 +401,68 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
 
         setIsSaving(true);
         try {
-            const publicationData = preparePublicationData();
-            await publicationService.createPublication(publicationData);
+            const publicationData = {
+                ...preparePublicationData(),
+                isDraft: false // Publish immediately
+            };
+
+            // Enhanced debugging
+            console.log('handleCreatePublication debug:', {
+                isEditMode,
+                mode,
+                slug,
+                publication: publication,
+                publicationId: publication?.id,
+                initialValues: initialValues,
+                editingItem: initialValues
+            });
+
+            let publicationId = publication?.id;
+
+            // If we're in edit mode but don't have the publication ID, try to find it by slug
+            if (isEditMode && !publicationId && slug) {
+                try {
+                    const allPublications = await publicationService.getAllPublications(1, 1000);
+                    const foundPublication = allPublications.find(pub => pub.slug === slug);
+                    if (foundPublication) {
+                        publicationId = foundPublication.id;
+                        setPublication(foundPublication); // Update the state
+                    }
+                } catch (error) {
+                    console.error('Error finding publication by slug:', error);
+                }
+            }
+
+            // If we're in edit mode and have initialValues with an ID, use that
+            if (isEditMode && !publicationId && initialValues?.id) {
+                publicationId = initialValues.id;
+                setPublication(initialValues); // Update the state
+            }
+
+            if (isEditMode && publicationId) {
+                // Update existing publication
+                console.log('Updating publication with ID:', publicationId);
+                await publicationService.updatePublication(publicationId, publicationData);
+                notify('success', t('publications.admin.publicationUpdatedSuccess'));
+            } else {
+                // Create new publication
+                console.log('Creating new publication');
+                await publicationService.createPublication(publicationData);
+                notify('success', t('publications.admin.publicationCreatedSuccess'));
+            }
+
             setIsSaving(false);
-            navigate('/profile/publications');
+
+            // If we have an onCancel callback (inline editing), use it instead of navigation
+            if (onCancel) {
+                onCancel();
+            } else {
+                navigate('/profile/publications');
+            }
         } catch (error) {
             setIsSaving(false);
+            console.error('Error in handleCreatePublication:', error);
+            notify('error', error.message || 'Failed to create publication');
         }
     };
 
@@ -256,6 +471,11 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
     };
 
     const handlePublish = async () => {
+        if (!publication?.id) {
+            notify('error', 'No publication ID for publishing');
+            return;
+        }
+
         if (!values.title || !values.slug || !values.shortDescription) {
             notify('error', 'Please provide title, slug, and short description before publishing');
             return;
@@ -263,52 +483,26 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
 
         setIsSaving(true);
         try {
+            // Convert published publication to draft by updating with isDraft: true
             const publicationData = {
-                ...values,
-                userEmail: userEmail,
-                isDraft: false,
+                ...preparePublicationData(),
+                isDraft: true
             };
 
-            const response = await publicationService.createPublication(publicationData);
-            notify('success', 'Publication published successfully!');
-            console.log('Publication published successfully:', response);
+            await publicationService.updatePublication(publication.id, publicationData);
+            setIsSaving(false);
 
-            if (onSubmitHandler) {
-                await onSubmitHandler(response);
+            notify('success', t('publications.admin.publicationConvertedToDraft'));
+
+            // If we have an onCancel callback (inline editing), use it instead of navigation
+            if (onCancel) {
+                onCancel();
+            } else {
+                navigate('/profile/publications');
             }
         } catch (error) {
-            console.error('Failed to publish publication:', error);
-            notify('error', error.message || 'Failed to publish publication');
-        } finally {
             setIsSaving(false);
-        }
-    };
-
-    const handleUpdate = async () => {
-        if (!publication?.id) {
-            notify('error', 'No publication ID for update');
-            return;
-        }
-
-        setIsSaving(true);
-        try {
-            const publicationData = {
-                ...values,
-                userEmail: userEmail,
-            };
-
-            const response = await publicationService.updatePublication(publication.id, publicationData);
-            notify('success', 'Publication updated successfully!');
-            console.log('Publication updated successfully:', response);
-
-            if (onSubmitHandler) {
-                await onSubmitHandler(response);
-            }
-        } catch (error) {
-            console.error('Failed to update publication:', error);
-            notify('error', error.message || 'Failed to update publication');
-        } finally {
-            setIsSaving(false);
+            notify('error', error.message || 'Failed to convert publication to draft');
         }
     };
 
@@ -383,6 +577,41 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
     };
 
     const getOptimizedPreviewData = () => {
+        // Get actual connection data from the service
+        const getConnectionData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const service = initiativeServiceFactory(token);
+
+                let initiatives = [];
+                let projects = [];
+
+                if (values.connectedInitiativeIds?.length > 0) {
+                    const initiativesResponse = await service.getAllInitiativesForConnections();
+                    if (initiativesResponse?.data) {
+                        initiatives = initiativesResponse.data.filter(init =>
+                            values.connectedInitiativeIds.includes(init.id)
+                        );
+                    }
+                }
+
+                if (values.connectedProjectIds?.length > 0) {
+                    const projectsResponse = await service.getAllProjectsForConnections();
+                    if (projectsResponse?.data) {
+                        projects = projectsResponse.data.filter(proj =>
+                            values.connectedProjectIds.includes(proj.id)
+                        );
+                    }
+                }
+
+                return { initiatives, projects };
+            } catch (error) {
+                console.error('Error fetching connection data for preview:', error);
+                return { initiatives: [], projects: [] };
+            }
+        };
+
+        // For now, return placeholder data - we'll enhance this later
         return {
             id: publication?.id || 'preview-' + Date.now(),
             title: values.title || t('publications.preview.noTitle'),
@@ -418,9 +647,22 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
             likes: null,
             isLiked: false,
 
-            relatedPublications: values.relatedPublications?.length > 0 ? [] : null,
-            initiatives: values.connectedInitiativeIds?.length > 0 ? [] : null,
-            projects: values.connectedProjectIds?.length > 0 ? [] : null,
+            // Include connections for preview - for now using placeholder data
+            // In a real implementation, you'd fetch the actual connection data
+            initiatives: values.connectedInitiativeIds?.length > 0 ?
+                values.connectedInitiativeIds.map(id => ({
+                    id: id,
+                    title: `Initiative ${id}`,
+                    slug: `initiative-${id}`,
+                    isDraft: false
+                })) : [],
+            projects: values.connectedProjectIds?.length > 0 ?
+                values.connectedProjectIds.map(id => ({
+                    id: id,
+                    title: `Project ${id}`,
+                    slug: `project-${id}`,
+                    isDraft: false
+                })) : [],
 
             type: 'publication'
         };
@@ -428,26 +670,36 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
 
     return (
         <div className="publication-create-container">
-            {/* Header */}
-            <div className="publication-form-header">
-                {/* Add back navigation for edit mode */}
-                {isEditMode && (
-                    <div className="publication-form-back-nav">
-                        <button
-                            className="publication-form-back-btn"
-                            onClick={() => navigate('/profile/publications')}
-                        >
-                            <FontAwesomeIcon icon={faArrowLeft} />
-                            {t('publications.common.back')}
-                        </button>
-                    </div>
-                )}
+            {/* Show back button only in edit mode - at the top */}
+            {isEditMode && (
+                <div className="publication-form-back-nav">
+                    <button
+                        className="publication-form-back-btn"
+                        onClick={onCancel || (() => navigate('/profile/publications'))}
+                    >
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                        {t('publications.common.back')}
+                    </button>
+                </div>
+            )}
 
+            {/* Show header for both create and edit modes */}
+            <div className="publication-form-header">
                 <h1 className="publication-form-title">
-                    {isEditMode ? t('publications.edit.title') : t('publications.create.title')}
+                    {isEditMode
+                        ? (publication?.isDraft
+                            ? t('publications.edit.editDraft')
+                            : t('publications.edit.editPublished'))
+                        : t('publications.create.title')
+                    }
                 </h1>
                 <p className="publication-form-subtitle">
-                    {isEditMode ? t('publications.edit.description') : t('publications.create.description')}
+                    {isEditMode
+                        ? (publication?.isDraft
+                            ? t('publications.edit.editDraftDescription')
+                            : t('publications.edit.editPublishedDescription'))
+                        : t('publications.create.description')
+                    }
                 </p>
             </div>
 
@@ -579,15 +831,13 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
 
             {/* Floating Actions */}
             <FloatingActions
-                draftId={draftId}
-                editId={publication?.id}
-                hasTitle={!!values.title}
-                onSaveDraft={handleSaveDraft}
                 onPreview={handlePreview}
-                onPublish={handlePublish}
-                onUpdate={handleUpdate}
+                onSaveDraft={handleSaveDraft}
                 onCreate={handleCreatePublication}
+                onToggleDraft={handlePublish}
                 isSaving={isSaving}
+                isDraft={publication?.isDraft}
+                isEditMode={isEditMode}
             />
 
             {/* Preview Modal */}
@@ -600,7 +850,7 @@ const PublicationForm = ({ initialValues, onSubmitHandler, isEditMode = false })
                                 onClick={closePreview}
                             >
                                 <FontAwesomeIcon icon={faArrowLeft} />
-                                {t('publications.preview.backToEditing')}
+                                {t('publications.common.back')}
                             </button>
                             <h2>{t('publications.preview.previewMode')}</h2>
                         </div>

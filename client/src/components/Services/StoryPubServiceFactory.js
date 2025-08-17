@@ -5,165 +5,153 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export const initiativeServiceFactory = (token) => {
   const requester = requestFactory(token);
 
-   return {
-    // Stories
-getStoryBySlug: async (slug) => {
-  return requester.get(`${apiUrl}/stories/single/${slug}`);
-},
+  return {
+    // ========================================
+    // PUBLICATIONS
+    // ========================================
 
-getAllStories: async (page = 1, limit = 10) => {
-  return requester.get(`${apiUrl}/stories/all?page=${page}&limit=${limit}`);
-},
+    getPublicationById: async (id) => {
+      return requester.get(`${apiUrl}/publications/single/${id}`);
+    },
 
-getStoriesByInitiative: async (initiativeId) => {
-  return requester.get(`${apiUrl}/stories/initiative/${initiativeId}`);
-},
+    getAllPublications: async (page = 1, limit = 10, isDraft = null) => {
+      const params = new URLSearchParams({ page, limit });
+      if (isDraft !== null) params.append('isDraft', isDraft);
+      return requester.get(`${apiUrl}/publications/all?${params}`);
+    },
 
-// Story comments
-getStoryComments: async (storyId) => {
-  return requester.get(`${apiUrl}/stories/${storyId}/comments`);
-},
+    createPublication: async (publicationData) => {
+      return requester.post(`${apiUrl}/publications/create`, publicationData);
+    },
 
-addStoryComment: async (storyId, commentData) => {
-  return requester.post(`${apiUrl}/stories/${storyId}/comments`, commentData);
-},
+    updatePublication: async (id, publicationData) => {
+      return requester.patch(`${apiUrl}/publications/${id}`, publicationData);
+    },
 
-updateStoryComment: async (storyId, commentId, commentData) => {
-  return requester.patch(`${apiUrl}/stories/${storyId}/comments/${commentId}`, commentData);
-},
+    deletePublication: async (id) => {
+      return requester.del(`${apiUrl}/publications/${id}`);
+    },
 
-deleteStoryComment: async (storyId, commentId) => {
-  return requester.del(`${apiUrl}/stories/${storyId}/comments/${commentId}`);
-},
+    togglePublicationDraftStatus: async (id) => {
+      return requester.patch(`${apiUrl}/publications/toggle-draft/${id}`);
+    },
 
-likeStoryComment: async (storyId, commentId) => {
-  return requester.post(`${apiUrl}/stories/${storyId}/comments/${commentId}/like`);
-},
+    // Publication interactions
+    likePublication: async (publicationId) => {
+      return requester.post(`${apiUrl}/publications/${publicationId}/like`);
+    },
 
-// Story interactions
-likeStory: async (storyId) => {
-  return requester.post(`${apiUrl}/stories/${storyId}/like`);
-},
+    trackPublicationView: async (publicationId) => {
+      return requester.patch(`${apiUrl}/publications/${publicationId}/view`);
+    },
 
-trackStoryView: async (storyId) => {
-  return requester.post(`${apiUrl}/stories/${storyId}/view`);
-},
-// Publications
-getPublicationBySlug: async (slug) => {
-  return requester.get(`${apiUrl}/publications/single/${slug}`);
-},
+    downloadPublication: async (publicationId) => {
+      return requester.patch(`${apiUrl}/publications/${publicationId}/download`);
+    },
 
-getAllPublications: async (page = 1, limit = 10) => {
-  return requester.get(`${apiUrl}/publications/all?page=${page}&limit=${limit}`);
-},
+    // Publication bookmarks
+    togglePublicationBookmark: async (publicationId) => {
+      return requester.post(`${apiUrl}/publications/bookmark/${publicationId}`);
+    },
 
-getPublicationsByInitiative: async (initiativeId) => {
-  return requester.get(`${apiUrl}/publications/initiative/${initiativeId}`);
-},
+    getUserPublications: async (email) => {
+      return requester.get(`${apiUrl}/publications/user-publications/${email}`);
+    },
 
-getAllPublicationDrafts: async (page = 1, limit = 10) => {
-  return requester.get(`${apiUrl}/publications/drafts?page=${page}&limit=${limit}`);
-},
+    // Publication connections
+    getAllPublicationsForConnections: async () => {
+      return requester.get(`${apiUrl}/publications/all-for-connections`);
+    },
 
-// Publication comments - SIMPLIFIED ENDPOINTS
-getPublicationComments: async (publicationId) => {
-  return requester.get(`${apiUrl}/comments/all/publication/${publicationId}`);
-},
 
-addPublicationComment: async (commentData) => {
-  return requester.post(`${apiUrl}/comments/create`, commentData);
-},
+    // ========================================
+    // STORIES
+    // ========================================
 
-updatePublicationComment: async (commentId, content) => {
-  return requester.patch(`${apiUrl}/comments/${commentId}`, { content });
-},
+    getStoryBySlug: async (slug) => {
+      return requester.get(`${apiUrl}/stories/single/${slug}`);
+    },
 
-deletePublicationComment: async (commentId) => {
-  return requester.del(`${apiUrl}/comments/${commentId}`);
-},
+    getAllStories: async (page = 1, limit = 10) => {
+      return requester.get(`${apiUrl}/stories/all?page=${page}&limit=${limit}`);
+    },
 
-likePublicationComment: async (commentId) => {
-  return requester.post(`${apiUrl}/comments/like/${commentId}`);
-},
+    getStoriesByInitiative: async (initiativeId) => {
+      return requester.get(`${apiUrl}/stories/initiative/${initiativeId}`);
+    },
 
-// Publication interactions
-likePublication: async (publicationId) => {
-  return requester.post(`${apiUrl}/publications/${publicationId}/like`);
-},
+    // Story interactions
+    likeStory: async (storyId) => {
+      return requester.post(`${apiUrl}/stories/${storyId}/like`);
+    },
 
-trackPublicationView: async (publicationId) => {
-  return requester.post(`${apiUrl}/publications/${publicationId}/view`);
-},
+    trackStoryView: async (storyId) => {
+      return requester.post(`${apiUrl}/stories/${storyId}/view`);
+    },
 
-trackStoryView: async (storyId) => {
-  return requester.post(`${apiUrl}/stories/${storyId}/view`);
-},
+    // Story bookmarks
+    toggleStoryBookmark: async (storyId) => {
+      return requester.post(`${apiUrl}/stories/bookmark/${storyId}`);
+    },
 
-downloadPublication: async (publicationId) => {
-  return requester.post(`${apiUrl}/publications/${publicationId}/download`);
-},
-// Story bookmarks
-toggleStoryBookmark: async (storyId) => {
-  return requester.post(`${apiUrl}/stories/bookmark/${storyId}`);
-},
+    getUserStories: async (email) => {
+      return requester.get(`${apiUrl}/stories/user-stories/${email}`);
+    },
 
-getUserStories: async (email) => {
-  return requester.get(`${apiUrl}/stories/user-stories/${email}`);
-},
+    // ========================================
+    // COMMENTS
+    // ========================================
 
-// Publication bookmarks
-togglePublicationBookmark: async (publicationId) => {
-  return requester.post(`${apiUrl}/publications/bookmark/${publicationId}`);
-},
+    getPublicationComments: async (publicationId) => {
+      return requester.get(`${apiUrl}/comments/all/publication/${publicationId}`);
+    },
 
-getUserPublications: async (email) => {
-  return requester.get(`${apiUrl}/publications/user-publications/${email}`);
-},
+    getStoryComments: async (storyId) => {
+      return requester.get(`${apiUrl}/stories/${storyId}/comments`);
+    },
 
-// Add these missing endpoints
-createPublication: async (publicationData) => {
-  return requester.post(`${apiUrl}/publications/create`, publicationData);
-},
+    addPublicationComment: async (commentData) => {
+      return requester.post(`${apiUrl}/comments/create`, commentData);
+    },
 
-savePublicationDraft: async (draftData) => {
-  return requester.post(`${apiUrl}/publications/draft/save`, draftData);
-},
+    addStoryComment: async (storyId, commentData) => {
+      return requester.post(`${apiUrl}/stories/${storyId}/comments`, commentData);
+    },
 
-updatePublicationDraft: async (id, draftData) => {
-  return requester.post(`${apiUrl}/publications/draft/save/${id}`, draftData);
-},
+    updatePublicationComment: async (commentId, content) => {
+      return requester.patch(`${apiUrl}/comments/${commentId}`, { content });
+    },
 
-getPublicationDraft: async (id) => {
-  return requester.get(`${apiUrl}/publications/draft/${id}`);
-},
+    updateStoryComment: async (storyId, commentId, commentData) => {
+      return requester.patch(`${apiUrl}/stories/${storyId}/comments/${commentId}`, commentData);
+    },
 
-updatePublication: async (id, publicationData) => {
-  return requester.put(`${apiUrl}/publications/${id}`, publicationData);
-},
+    deletePublicationComment: async (commentId) => {
+      return requester.del(`${apiUrl}/comments/${commentId}`);
+    },
 
-deletePublication: async (id) => {
-  return requester.del(`${apiUrl}/publications/${id}`);
-},
+    deleteStoryComment: async (storyId, commentId) => {
+      return requester.del(`${apiUrl}/stories/${storyId}/comments/${commentId}`);
+    },
 
-deletePublicationDraft: async (id) => {
-  return requester.del(`${apiUrl}/publications/draft/${id}`);
-},
+    likePublicationComment: async (commentId) => {
+      return requester.post(`${apiUrl}/comments/like/${commentId}`);
+    },
 
-togglePublicationDraftStatus: async (id) => {
-  return requester.patch(`${apiUrl}/publications/toggle-draft/${id}`);
-},
+    likeStoryComment: async (storyId, commentId) => {
+      return requester.post(`${apiUrl}/stories/${storyId}/comments/${commentId}/like`);
+    },
 
-// NEW: Connection endpoints
-getAllInitiativesForConnections: async () => {
-  return requester.get(`${apiUrl}/initiatives/all-for-connections`);
-},
+    // ========================================
+    // CONNECTIONS
+    // ========================================
 
-getAllProjectsForConnections: async () => {
-  return requester.get(`${apiUrl}/projects/all-for-connections`);
-},
+    getAllInitiativesForConnections: async () => {
+      return requester.get(`${apiUrl}/initiatives/all-for-connections`);
+    },
 
-getAllPublicationsForConnections: async () => {
-  return requester.get(`${apiUrl}/publications/all-for-connections`);
-},
-   }
+    getAllProjectsForConnections: async () => {
+      return requester.get(`${apiUrl}/projects/all-for-connections`);
+    },
+  };
 };
