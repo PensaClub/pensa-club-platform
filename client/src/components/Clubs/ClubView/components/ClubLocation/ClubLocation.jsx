@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
@@ -73,6 +74,7 @@ const MapController = ({ center, zoom }) => {
 };
 
 export const ClubLocation = ({ club }) => {
+  const { t } = useTranslation();
   const [mapExpanded, setMapExpanded] = useState(false);
   const [selectedTransport, setSelectedTransport] = useState('walking');
   const [showVenueModal, setShowVenueModal] = useState(false);
@@ -88,35 +90,37 @@ export const ClubLocation = ({ club }) => {
     return null;
   }
 
-  const transportOptions = [
+  const getTransportOptions = () => [
     { 
       id: 'walking', 
       icon: faWalking, 
-      label: 'Пеша', 
-      time: '10-15 мин', 
-      info: 'Лесно достъпен пеша от центъра',
+      label: t('clubs.ClubLocation.transport.walking.label'),
+      time: t('clubs.ClubLocation.transport.walking.time'),
+      info: t('clubs.ClubLocation.transport.walking.info'),
       color: '#10b981',
-      description: 'Пешеходен достъп с удобни тротоари и пешеходни пътеки. Подходящо за всички възрасти.'
+      description: t('clubs.ClubLocation.transport.walking.description')
     },
     { 
       id: 'bus', 
       icon: faBus, 
-      label: 'Автобус', 
-      time: '5-20 мин', 
-      info: 'Градски транспорт с намалени цени за пенсионери',
+      label: t('clubs.ClubLocation.transport.bus.label'),
+      time: t('clubs.ClubLocation.transport.bus.time'),
+      info: t('clubs.ClubLocation.transport.bus.info'),
       color: '#3b82f6',
-      description: 'Редовни автобусни линии с ниски цени за пенсионери. Спирки в близост до клуба.'
+      description: t('clubs.ClubLocation.transport.bus.description')
     },
     { 
       id: 'car', 
       icon: faCar, 
-      label: 'Кола', 
-      time: '5-10 мин', 
-      info: 'Безплатен паркинг на улицата',
+      label: t('clubs.ClubLocation.transport.car.label'),
+      time: t('clubs.ClubLocation.transport.car.time'),
+      info: t('clubs.ClubLocation.transport.car.info'),
       color: '#f59e0b',
-      description: 'Лесен достъп с автомобил. Налични безплатни паркоместа в района.'
+      description: t('clubs.ClubLocation.transport.car.description')
     }
   ];
+
+  const transportOptions = getTransportOptions();
 
   // Координати на клуба
   const clubPosition = [club.location.coordinates.lat, club.location.coordinates.lng];
@@ -132,27 +136,41 @@ export const ClubLocation = ({ club }) => {
   };
 
   const handleShare = () => {
-    const text = `${club.name} - ${club.location.address}, ${club.location.city}`;
+    const text = t('clubs.ClubLocation.actions.shareText', { 
+      clubName: club.name, 
+      address: club.location.address, 
+      city: club.location.city 
+    });
     if (navigator.share) {
       navigator.share({
-        title: `${club.name} - Местоположение`,
+        title: t('clubs.ClubLocation.actions.shareTitle', { clubName: club.name }),
         text: text,
         url: window.location.href
       });
     } else {
       navigator.clipboard.writeText(`${text} - ${window.location.href}`);
-      alert('Информацията е копирана в клипборда!');
+      alert(t('clubs.ClubLocation.messages.infoCopied'));
     }
   };
 
   const getFacilityIcon = (facility) => {
     const facilityIcons = {
       'паркинг': faParking,
+      'parking': faParking,
+      'parkplatz': faParking,
       'wifi': faWifi,
       'тоалетни': faRestroom,
+      'restroom': faRestroom,
+      'toilette': faRestroom,
       'кафе': faCoffee,
+      'cafe': faCoffee,
+      'café': faCoffee,
       'асансьор': faElevator,
-      'достъпност': faUniversalAccess
+      'elevator': faElevator,
+      'aufzug': faElevator,
+      'достъпност': faUniversalAccess,
+      'accessibility': faUniversalAccess,
+      'barrierefreiheit': faUniversalAccess
     };
     
     const key = Object.keys(facilityIcons).find(k => 
@@ -163,15 +181,14 @@ export const ClubLocation = ({ club }) => {
   };
 
   const getVenueTypeLabel = (type) => {
-    const types = {
-      'municipal': 'Общинска сграда',
-      'rented': 'Наета сграда', 
-      'cultural_center': 'Културен дом',
-      'sports_center': 'Спортен център',
-      'community_center': 'Местен център',
-      'private': 'Частна сграда'
-    };
-    return types[type] || 'Сграда';
+    return t(`clubs.ClubLocation.venueTypes.${type}`, { 
+      defaultValue: t('clubs.ClubLocation.venueTypes.default') 
+    });
+  };
+
+  const getDayName = (day, short = false) => {
+    const suffix = short ? 'Short' : '';
+    return t(`clubs.ClubLocation.days.${day}${suffix}`);
   };
 
   return (
@@ -182,11 +199,11 @@ export const ClubLocation = ({ club }) => {
         <div className="general-location-header">
           <div className="general-location-badge">
             <FontAwesomeIcon icon={faLocationDot} />
-            <span>Местоположение и достъп</span>
+            <span>{t('clubs.ClubLocation.header.badge')}</span>
           </div>
-          <h2 className="general-location-title">Как да ни намерите</h2>
+          <h2 className="general-location-title">{t('clubs.ClubLocation.header.title')}</h2>
           <p className="general-location-subtitle">
-            Подробна информация за местоположението, транспорт и удобства
+            {t('clubs.ClubLocation.header.subtitle')}
           </p>
           
           {/* Quick Actions */}
@@ -207,14 +224,14 @@ export const ClubLocation = ({ club }) => {
               className="general-quick-action directions"
             >
               <FontAwesomeIcon icon={faRoute} />
-              Маршрут
+              {t('clubs.ClubLocation.actions.directions')}
             </a>
             <button 
               className="general-quick-action share"
               onClick={handleShare}
             >
               <FontAwesomeIcon icon={faShare} />
-              Споделяне
+              {t('clubs.ClubLocation.actions.share')}
             </button>
           </div>
         </div>
@@ -226,13 +243,13 @@ export const ClubLocation = ({ club }) => {
             <div className="general-map-header">
               <h3>
                 <FontAwesomeIcon icon={faMapPin} />
-                Интерактивна карта
+                {t('clubs.ClubLocation.map.title')}
               </h3>
               <div className="general-map-actions">
                 <button 
                   className="general-map-action"
                   onClick={() => setMapExpanded(!mapExpanded)}
-                  title={mapExpanded ? 'Намали картата' : 'Разшири картата'}
+                  title={mapExpanded ? t('clubs.ClubLocation.map.compress') : t('clubs.ClubLocation.map.expand')}
                 >
                   <FontAwesomeIcon icon={mapExpanded ? faCompress : faExpand} />
                 </button>
@@ -241,7 +258,7 @@ export const ClubLocation = ({ club }) => {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="general-map-action"
-                  title="Отвори в Google Maps"
+                  title={t('clubs.ClubLocation.map.openInGoogleMaps')}
                 >
                   <FontAwesomeIcon icon={faExternalLinkAlt} />
                 </a>
@@ -276,7 +293,7 @@ export const ClubLocation = ({ club }) => {
                             className="general-popup-btn"
                           >
                             <FontAwesomeIcon icon={faRoute} />
-                            Маршрут
+                            {t('clubs.ClubLocation.actions.directions')}
                           </a>
                           <a 
                             href={getGoogleMapsUrl()} 
@@ -303,7 +320,7 @@ export const ClubLocation = ({ club }) => {
             <div className="general-info-card address">
               <div className="general-card-header">
                 <FontAwesomeIcon icon={faMapMarkerAlt} />
-                <h3>Адрес на клуба</h3>
+                <h3>{t('clubs.ClubLocation.address.title')}</h3>
               </div>
               <div className="general-address-info">
                 <p className="general-main-address">{club.location.address}</p>
@@ -319,12 +336,12 @@ export const ClubLocation = ({ club }) => {
               <div className="general-address-details">
                 <div className="general-address-item">
                   <FontAwesomeIcon icon={faBuilding} />
-                  <span>Тип: {getVenueTypeLabel(club.location.venue?.type)}</span>
+                  <span>{t('clubs.ClubLocation.address.type')}: {getVenueTypeLabel(club.location.venue?.type)}</span>
                 </div>
                 {club.location.venue?.floor && (
                   <div className="general-address-item">
                     <FontAwesomeIcon icon={faElevator} />
-                    <span>Етаж: {club.location.venue.floor}</span>
+                    <span>{t('clubs.ClubLocation.address.floor')}: {club.location.venue.floor}</span>
                   </div>
                 )}
               </div>
@@ -334,7 +351,7 @@ export const ClubLocation = ({ club }) => {
             <div className="general-info-card transport">
               <div className="general-card-header">
                 <FontAwesomeIcon icon={faDirections} />
-                <h3>Как да стигнете</h3>
+                <h3>{t('clubs.ClubLocation.transport.title')}</h3>
               </div>
               
               <div className="general-transport-options">
@@ -364,7 +381,7 @@ export const ClubLocation = ({ club }) => {
 
               {selectedTransport && (
                 <div className="general-transport-details">
-                  <h4>Подробности</h4>
+                  <h4>{t('clubs.ClubLocation.transport.details')}</h4>
                   <p>{transportOptions.find(t => t.id === selectedTransport)?.description}</p>
                 </div>
               )}
@@ -375,7 +392,7 @@ export const ClubLocation = ({ club }) => {
               <div className="general-info-card venue">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faBuilding} />
-                  <h3>Информация за сградата</h3>
+                  <h3>{t('clubs.ClubLocation.venue.title')}</h3>
                   <button 
                     className="general-card-action"
                     onClick={() => setShowVenueModal(true)}
@@ -386,25 +403,28 @@ export const ClubLocation = ({ club }) => {
                 
                 <div className="general-venue-summary">
                   <div className="general-venue-stat">
-                    <span className="general-stat-label">Площ</span>
-                    <span className="general-stat-value">{club.location.venue.size || 'Не е посочена'}</span>
+                    <span className="general-stat-label">{t('clubs.ClubLocation.venue.area')}</span>
+                    <span className="general-stat-value">{club.location.venue.size || t('clubs.ClubLocation.venue.notSpecified')}</span>
                   </div>
                   <div className="general-venue-stat">
-                    <span className="general-stat-label">Капацитет</span>
-                    <span className="general-stat-value">{club.location.venue.capacity || 0} места</span>
+                    <span className="general-stat-label">{t('clubs.ClubLocation.venue.capacity')}</span>
+                    <span className="general-stat-value">{club.location.venue.capacity || 0} {t('clubs.ClubLocation.venue.seats')}</span>
                   </div>
                   <div className="general-venue-stat accessibility">
-                    <span className="general-stat-label">Достъпност</span>
+                    <span className="general-stat-label">{t('clubs.ClubLocation.venue.accessibility')}</span>
                     <span className={`general-stat-value ${club.location.venue.accessibility ? 'yes' : 'no'}`}>
                       <FontAwesomeIcon icon={faUniversalAccess} />
-                      {club.location.venue.accessibility ? 'Достъпна' : 'Не е достъпна'}
+                      {club.location.venue.accessibility 
+                        ? t('clubs.ClubLocation.venue.accessible') 
+                        : t('clubs.ClubLocation.venue.notAccessible')
+                      }
                     </span>
                   </div>
                 </div>
 
                 {club.location.venue.facilities && club.location.venue.facilities.length > 0 && (
                   <div className="general-facilities-preview">
-                    <h4>Удобства</h4>
+                    <h4>{t('clubs.ClubLocation.venue.facilities')}</h4>
                     <div className="general-facilities-grid">
                       {club.location.venue.facilities.slice(0, 4).map((facility, index) => (
                         <div key={index} className="general-facility-item">
@@ -414,7 +434,7 @@ export const ClubLocation = ({ club }) => {
                       ))}
                       {club.location.venue.facilities.length > 4 && (
                         <div className="general-facility-more">
-                          +{club.location.venue.facilities.length - 4} още
+                          +{club.location.venue.facilities.length - 4} {t('clubs.ClubLocation.venue.more')}
                         </div>
                       )}
                     </div>
@@ -431,29 +451,17 @@ export const ClubLocation = ({ club }) => {
                 <div className="general-info-card hours">
                   <div className="general-card-header">
                     <FontAwesomeIcon icon={faClock} />
-                    <h3>Работно време</h3>
+                    <h3>{t('clubs.ClubLocation.hours.title')}</h3>
                   </div>
                   <div className="general-hours-list">
-                    {Object.entries(club.contacts.workingHours).map(([day, hours]) => {
-                      const dayNames = {
-                        monday: 'Пон',
-                        tuesday: 'Вто',
-                        wednesday: 'Сря',
-                        thursday: 'Чет',
-                        friday: 'Пет',
-                        saturday: 'Съб',
-                        sunday: 'Нед'
-                      };
-                      
-                      return (
-                        <div key={day} className="general-hours-row">
-                          <span className="general-day">{dayNames[day]}</span>
-                          <span className={`general-hours ${hours === 'closed' ? 'closed' : ''}`}>
-                            {hours === 'closed' ? 'Затворено' : hours}
-                          </span>
-                        </div>
-                      );
-                    })}
+                    {Object.entries(club.contacts.workingHours).map(([day, hours]) => (
+                      <div key={day} className="general-hours-row">
+                        <span className="general-day">{getDayName(day, true)}</span>
+                        <span className={`general-hours ${hours === 'closed' ? 'closed' : ''}`}>
+                          {hours === 'closed' ? t('clubs.ClubLocation.hours.closed') : hours}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
@@ -463,7 +471,7 @@ export const ClubLocation = ({ club }) => {
                 <div className="general-info-card contacts">
                   <div className="general-card-header">
                     <FontAwesomeIcon icon={faPhoneAlt} />
-                    <h3>Бързи контакти</h3>
+                    <h3>{t('clubs.ClubLocation.contacts.title')}</h3>
                     <button 
                       className="general-card-action"
                       onClick={() => setShowContactModal(true)}
@@ -499,7 +507,7 @@ export const ClubLocation = ({ club }) => {
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faBuilding} />
-                Детайли за сградата
+                {t('clubs.ClubLocation.modals.venue.title')}
               </h3>
               <button className="general-modal-close" onClick={() => setShowVenueModal(false)}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -512,7 +520,7 @@ export const ClubLocation = ({ club }) => {
                   <div className="general-venue-detail">
                     <FontAwesomeIcon icon={faBuilding} />
                     <div>
-                      <span className="general-detail-label">Тип сграда</span>
+                      <span className="general-detail-label">{t('clubs.ClubLocation.modals.venue.buildingType')}</span>
                       <span className="general-detail-value">{getVenueTypeLabel(club.location.venue.type)}</span>
                     </div>
                   </div>
@@ -520,15 +528,15 @@ export const ClubLocation = ({ club }) => {
                   <div className="general-venue-detail">
                     <FontAwesomeIcon icon={faUserFriends} />
                     <div>
-                      <span className="general-detail-label">Капацитет</span>
-                      <span className="general-detail-value">{club.location.venue.capacity} места</span>
+                      <span className="general-detail-label">{t('clubs.ClubLocation.venue.capacity')}</span>
+                      <span className="general-detail-value">{club.location.venue.capacity} {t('clubs.ClubLocation.venue.seats')}</span>
                     </div>
                   </div>
                   
                   <div className="general-venue-detail">
                     <FontAwesomeIcon icon={faBuilding} />
                     <div>
-                      <span className="general-detail-label">Площ</span>
+                      <span className="general-detail-label">{t('clubs.ClubLocation.venue.area')}</span>
                       <span className="general-detail-value">{club.location.venue.size}</span>
                     </div>
                   </div>
@@ -536,9 +544,12 @@ export const ClubLocation = ({ club }) => {
                   <div className="general-venue-detail accessibility">
                     <FontAwesomeIcon icon={faUniversalAccess} />
                     <div>
-                      <span className="general-detail-label">Достъпност</span>
+                      <span className="general-detail-label">{t('clubs.ClubLocation.venue.accessibility')}</span>
                       <span className={`general-detail-value ${club.location.venue.accessibility ? 'accessible' : 'not-accessible'}`}>
-                        {club.location.venue.accessibility ? 'Достъпна за хора с увреждания' : 'Не е достъпна'}
+                        {club.location.venue.accessibility 
+                          ? t('clubs.ClubLocation.modals.venue.accessibleForDisabled') 
+                          : t('clubs.ClubLocation.venue.notAccessible')
+                        }
                       </span>
                     </div>
                   </div>
@@ -546,7 +557,7 @@ export const ClubLocation = ({ club }) => {
 
                 {club.location.venue.facilities && club.location.venue.facilities.length > 0 && (
                   <div className="general-facilities-section">
-                    <h4>Удобства и услуги</h4>
+                    <h4>{t('clubs.ClubLocation.modals.venue.facilitiesAndServices')}</h4>
                     <div className="general-facilities-list">
                       {club.location.venue.facilities.map((facility, index) => (
                         <div key={index} className="general-facility-tag">
@@ -560,7 +571,7 @@ export const ClubLocation = ({ club }) => {
 
                 {club.location.venue.description && (
                   <div className="general-venue-description">
-                    <h4>Описание</h4>
+                    <h4>{t('clubs.ClubLocation.modals.venue.description')}</h4>
                     <p>{club.location.venue.description}</p>
                   </div>
                 )}
@@ -577,7 +588,7 @@ export const ClubLocation = ({ club }) => {
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faPhoneAlt} />
-                Контактна информация
+                {t('clubs.ClubLocation.modals.contact.title')}
               </h3>
               <button className="general-modal-close" onClick={() => setShowContactModal(false)}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -592,7 +603,7 @@ export const ClubLocation = ({ club }) => {
                       <FontAwesomeIcon icon={faPhoneAlt} />
                     </div>
                     <div className="general-contact-info">
-                      <span className="general-contact-label">Основен телефон</span>
+                      <span className="general-contact-label">{t('clubs.ClubLocation.modals.contact.mainPhone')}</span>
                       <a href={`tel:${club.contacts.phone}`} className="general-contact-value">
                         {club.contacts.phone}
                       </a>
@@ -606,7 +617,7 @@ export const ClubLocation = ({ club }) => {
                       <FontAwesomeIcon icon={faPhoneAlt} />
                     </div>
                     <div className="general-contact-info">
-                      <span className="general-contact-label">Мобилен телефон</span>
+                      <span className="general-contact-label">{t('clubs.ClubLocation.modals.contact.mobilePhone')}</span>
                       <a href={`tel:${club.contacts.mobile}`} className="general-contact-value">
                         {club.contacts.mobile}
                       </a>
@@ -620,7 +631,7 @@ export const ClubLocation = ({ club }) => {
                       <FontAwesomeIcon icon={faEnvelope} />
                     </div>
                     <div className="general-contact-info">
-                      <span className="general-contact-label">Имейл адрес</span>
+                      <span className="general-contact-label">{t('clubs.ClubLocation.modals.contact.emailAddress')}</span>
                       <a href={`mailto:${club.contacts.email}`} className="general-contact-value">
                         {club.contacts.email}
                       </a>
@@ -630,28 +641,16 @@ export const ClubLocation = ({ club }) => {
 
                 {club.contacts.workingHours && (
                   <div className="general-working-hours-section">
-                    <h4>Подробно работно време</h4>
+                    <h4>{t('clubs.ClubLocation.modals.contact.detailedWorkingHours')}</h4>
                     <div className="general-hours-detailed">
-                      {Object.entries(club.contacts.workingHours).map(([day, hours]) => {
-                        const dayNames = {
-                          monday: 'Понеделник',
-                          tuesday: 'Вторник',
-                          wednesday: 'Сряда',
-                          thursday: 'Четвъртък',
-                          friday: 'Петък',
-                          saturday: 'Събота',
-                          sunday: 'Неделя'
-                        };
-                        
-                        return (
-                          <div key={day} className="general-hours-detail">
-                            <span className="general-hours-day">{dayNames[day]}</span>
-                            <span className={`general-hours-time ${hours === 'closed' ? 'closed' : ''}`}>
-                              {hours === 'closed' ? 'Затворено' : hours}
-                            </span>
-                          </div>
-                        );
-                      })}
+                      {Object.entries(club.contacts.workingHours).map(([day, hours]) => (
+                        <div key={day} className="general-hours-detail">
+                          <span className="general-hours-day">{getDayName(day)}</span>
+                          <span className={`general-hours-time ${hours === 'closed' ? 'closed' : ''}`}>
+                            {hours === 'closed' ? t('clubs.ClubLocation.hours.closed') : hours}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}

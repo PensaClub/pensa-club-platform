@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faUsers, 
@@ -34,6 +35,7 @@ import {
 import './clubHero.css';
 
 export const ClubHero = ({ club }) => {
+  const { t } = useTranslation();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [memberSearchTerm, setMemberSearchTerm] = useState('');
@@ -88,16 +90,9 @@ export const ClubHero = ({ club }) => {
   };
 
   const getCategoryLabel = (category) => {
-    const labels = {
-      'cultural': 'Културен клуб',
-      'sports': 'Спортен клуб', 
-      'traditional': 'Традиционен клуб',
-      'social': 'Социален клуб',
-      'educational': 'Образователен клуб',
-      'active': 'Активен клуб',
-      'general': 'Клуб на пенсионера'
-    };
-    return labels[category] || 'Клуб на пенсионера';
+    return t(`clubs.ClubHero.categories.${category}`, { 
+      defaultValue: t('clubs.ClubHero.categories.general') 
+    });
   };
 
   const renderStars = (rating) => {
@@ -161,7 +156,7 @@ export const ClubHero = ({ club }) => {
           members.push({
             id: member.id,
             name: `${member.firstName} ${member.lastName}`,
-            role: member.role || 'Член',
+            role: member.role || t('clubs.ClubHero.members.defaultRole', { defaultValue: 'Член' }),
             phone: member.phone,
             email: member.email,
             address: member.address,
@@ -185,7 +180,7 @@ export const ClubHero = ({ club }) => {
         if (!existingMember) {
           members.push({
             name: boardMember.name,
-            role: boardMember.role || 'Член на борда',
+            role: boardMember.role || t('clubs.ClubHero.members.boardMember', { defaultValue: 'Член на борда' }),
             phone: boardMember.phone,
             email: boardMember.email,
             address: boardMember.address,
@@ -210,8 +205,8 @@ export const ClubHero = ({ club }) => {
       
       for (let i = 0; i < Math.min(8, stats.totalMembers); i++) {
         members.push({
-          name: sampleNames[i] || `Член ${i + 1}`,
-          role: i === 0 ? 'Председател' : 'Член',
+          name: sampleNames[i] || `${t('clubs.ClubHero.members.defaultRole', { defaultValue: 'Член' })} ${i + 1}`,
+          role: i === 0 ? 'Председател' : t('clubs.ClubHero.members.defaultRole', { defaultValue: 'Член' }),
           isBoard: i < 3,
           memberSince: 2018 + Math.floor(Math.random() * 6)
         });
@@ -242,7 +237,7 @@ export const ClubHero = ({ club }) => {
     if (phone) {
       window.location.href = `tel:${phone}`;
     } else {
-      alert('Телефонен номер не е наличен');
+      alert(t('clubs.ClubHero.messages.phoneNotAvailable'));
     }
   };
 
@@ -250,7 +245,7 @@ export const ClubHero = ({ club }) => {
     if (club.contacts?.email) {
       window.location.href = `mailto:${club.contacts.email}`;
     } else {
-      alert('Имейл адрес не е наличен');
+      alert(t('clubs.ClubHero.messages.emailNotAvailable'));
     }
   };
 
@@ -258,7 +253,7 @@ export const ClubHero = ({ club }) => {
     if (club.contacts?.website) {
       window.open(`https://${club.contacts.website}`, '_blank');
     } else {
-      alert('Уебсайт не е наличен');
+      alert(t('clubs.ClubHero.messages.websiteNotAvailable'));
     }
   };
 
@@ -267,7 +262,7 @@ export const ClubHero = ({ club }) => {
     if (socialUrl) {
       window.open(socialUrl.startsWith('http') ? socialUrl : `https://${socialUrl}`, '_blank');
     } else {
-      alert(`${platform} профил не е наличен`);
+      alert(`${platform} ${t('clubs.ClubHero.messages.socialNotAvailable')}`);
     }
   };
 
@@ -280,7 +275,7 @@ export const ClubHero = ({ club }) => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert('Линкът е копиран в клипборда!');
+      alert(t('clubs.ClubHero.messages.linkCopied'));
     }
   };
 
@@ -303,7 +298,7 @@ export const ClubHero = ({ club }) => {
           <div className="general-hero-badges">
             <span className="general-status-badge active">
               <div className="general-status-dot"></div>
-              Активен клуб
+              {t('clubs.ClubHero.status.activeClub')}
             </span>
             <span className="general-category-badge">
               {getCategoryLabel(club.category)}
@@ -313,11 +308,11 @@ export const ClubHero = ({ club }) => {
           <div className="general-hero-actions">
             <button className="general-action-btn" onClick={handleShare}>
               <FontAwesomeIcon icon={faShare} />
-              Споделяне
+              {t('clubs.ClubHero.actions.share')}
             </button>
             <button className="general-action-btn favorite">
               <FontAwesomeIcon icon={faHeart} />
-              Харесай
+              {t('clubs.ClubHero.actions.like')}
             </button>
           </div>
         </div>
@@ -344,7 +339,7 @@ export const ClubHero = ({ club }) => {
                   </div>
                   <span className="general-rating-value">{club.metadata.rating}</span>
                   <span className="general-rating-count">
-                    ({club.metadata.views || 0} прегледа)
+                    ({club.metadata.views || 0} {t('clubs.ClubHero.stats.views')})
                   </span>
                 </div>
               )}
@@ -361,7 +356,7 @@ export const ClubHero = ({ club }) => {
             )}
 
             <p className="general-club-description">
-              {club.shortDescription || club.description || 'Добре дошли в нашия клуб!'}
+              {club.shortDescription || club.description || t('clubs.ClubHero.messages.defaultDescription')}
             </p>
 
             {/* Статистики в карточки */}
@@ -372,7 +367,7 @@ export const ClubHero = ({ club }) => {
                 </div>
                 <div className="general-stat-content">
                   <div className="general-stat-value">{stats.totalMembers}</div>
-                  <div className="general-hero-stat-label">Членове</div>
+                  <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.members')}</div>
                 </div>
                 <div className="general-stat-action">
                   <FontAwesomeIcon icon={faEye} />
@@ -385,7 +380,7 @@ export const ClubHero = ({ club }) => {
                 </div>
                 <div className="general-stat-content">
                   <div className="general-stat-value">{stats.yearsActive}</div>
-                  <div className="general-hero-stat-label">Години</div>
+                  <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.years')}</div>
                 </div>
               </div>
               
@@ -395,7 +390,7 @@ export const ClubHero = ({ club }) => {
                 </div>
                 <div className="general-stat-content">
                   <div className="general-stat-value">{stats.activitiesCount}</div>
-                  <div className="general-hero-stat-label">Дейности</div>
+                  <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.activities')}</div>
                 </div>
               </div>
 
@@ -405,7 +400,7 @@ export const ClubHero = ({ club }) => {
                 </div>
                 <div className="general-stat-content">
                   <div className="general-stat-value">{stats.eventsCount}</div>
-                  <div className="general-hero-stat-label">Събития</div>
+                  <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.events')}</div>
                 </div>
               </div>
             </div>
@@ -414,26 +409,26 @@ export const ClubHero = ({ club }) => {
             <div className="general-hero-bottom-section">
               {/* Бързи контакти */}
               <div className="general-quick-contacts">
-                <h3>Свържете се с нас</h3>
+                <h3>{t('clubs.ClubHero.contact.title')}</h3>
                 <div className="general-contact-buttons">
                   {club.contacts?.phone && (
                     <button className="general-contact-btn phone" onClick={handleCall}>
                       <FontAwesomeIcon icon={faPhone} />
-                      <span>Обади се</span>
+                      <span>{t('clubs.ClubHero.actions.call')}</span>
                     </button>
                   )}
                   
                   {club.contacts?.email && (
                     <button className="general-contact-btn email" onClick={handleEmail}>
                       <FontAwesomeIcon icon={faEnvelope} />
-                      <span>Имейл</span>
+                      <span>{t('clubs.ClubHero.actions.email')}</span>
                     </button>
                   )}
                   
                   {club.contacts?.website && (
                     <button className="general-contact-btn website" onClick={handleWebsite}>
                       <FontAwesomeIcon icon={faGlobe} />
-                      <span>Сайт</span>
+                      <span>{t('clubs.ClubHero.actions.website')}</span>
                     </button>
                   )}
                   
@@ -451,7 +446,7 @@ export const ClubHero = ({ club }) => {
                 <div className="general-membership-card">
                   <div className="general-membership-header">
                     <FontAwesomeIcon icon={faUserPlus} />
-                    <h3>Станете член</h3>
+                    <h3>{t('clubs.ClubHero.membership.title')}</h3>
                   </div>
                   
                   {club.membership.membershipFee && (
@@ -460,7 +455,7 @@ export const ClubHero = ({ club }) => {
                         {club.membership.membershipFee.monthly || 'По договаряне'}
                         {club.membership.membershipFee.monthly && ' лв.'}
                       </span>
-                      <span className="general-fee-period">месечно</span>
+                      <span className="general-fee-period">{t('clubs.ClubHero.membership.monthly')}</span>
                     </div>
                   )}
                   
@@ -473,7 +468,7 @@ export const ClubHero = ({ club }) => {
                       ))}
                       {club.membership.benefits.length > 3 && (
                         <div className="general-more-benefits">
-                          +{club.membership.benefits.length - 3} още предимства
+                          +{club.membership.benefits.length - 3} {t('clubs.ClubHero.membership.moreParticipants')}
                         </div>
                       )}
                     </div>
@@ -536,7 +531,7 @@ export const ClubHero = ({ club }) => {
                     <FontAwesomeIcon icon={faUsers} className="general-placeholder-icon" />
                   )}
                   <h3>{club.name}</h3>
-                  <p>Очаквайте скоро снимки от нашите дейности</p>
+                  <p>{t('clubs.ClubHero.gallery.placeholder')}</p>
                 </div>
               </div>
             )}
@@ -551,7 +546,7 @@ export const ClubHero = ({ club }) => {
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faUsers} />
-                Членове на {club.name}
+                {t('clubs.ClubHero.members.title')} {club.name}
               </h3>
               <button className="general-modal-close" onClick={closeMembersModal}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -564,7 +559,7 @@ export const ClubHero = ({ club }) => {
                   <FontAwesomeIcon icon={faSearch} />
                   <input
                     type="text"
-                    placeholder="Търсене на член..."
+                    placeholder={t('clubs.ClubHero.members.searchPlaceholder')}
                     value={memberSearchTerm}
                     onChange={(e) => setMemberSearchTerm(e.target.value)}
                   />
@@ -599,7 +594,7 @@ export const ClubHero = ({ club }) => {
                         {member.memberSince && (
                           <span>
                             <FontAwesomeIcon icon={faIdCard} />
-                            От {member.memberSince}
+                            {t('clubs.ClubHero.members.memberSince')} {member.memberSince}
                           </span>
                         )}
                         {member.phone && (
@@ -630,7 +625,7 @@ export const ClubHero = ({ club }) => {
               {filteredMembers.length === 0 && memberSearchTerm && (
                 <div className="general-no-results">
                   <FontAwesomeIcon icon={faInfoCircle} />
-                  <p>Няма намерени членове по това търсене</p>
+                  <p>{t('clubs.ClubHero.members.noResults')}</p>
                 </div>
               )}
             </div>

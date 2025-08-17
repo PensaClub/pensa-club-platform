@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faImages,
@@ -28,13 +29,13 @@ import {
 import './socialGallery.css';
 
 export const SocialGallery = ({ club }) => {
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'masonry'
+  const { t, i18n } = useTranslation();
+  const [viewMode, setViewMode] = useState('grid');
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Проверяваме дали има необходимите данни
   if (!club?.gallery?.photos && 
       !club?.gallery?.videos && 
       !club?.events?.photos &&
@@ -43,14 +44,12 @@ export const SocialGallery = ({ club }) => {
     return null;
   }
 
-  // Събираме всички снимки и видеа
   const galleryPhotos = club.gallery?.photos || [];
   const galleryVideos = club.gallery?.videos || [];
   const eventPhotos = club.events?.photos || [];
   const impactPhotos = club.socialImpact?.photos || [];
   const activityPhotos = club.activities?.photos || [];
 
-  // Създаваме обединен списък с медия
   const allMedia = [
     ...galleryPhotos.map(photo => ({
       ...photo,
@@ -89,52 +88,44 @@ export const SocialGallery = ({ club }) => {
     }))
   ];
 
-  // Ако няма медия, не показваме компонента
   if (allMedia.length === 0) {
     return null;
   }
 
-  // Helper функции
-  function getCategoryIcon(category) {
-    switch(category) {
-      case 'events': return faCalendarAlt;
-      case 'impact': return faHeart;
-      case 'activities': return faUsers;
-      case 'general': return faImage;
-      default: return faImage;
-    }
-  }
+  const getCategoryIcon = (category) => {
+    const iconMap = {
+      events: faCalendarAlt,
+      impact: faHeart,
+      activities: faUsers,
+      general: faImage
+    };
+    return iconMap[category] || faImage;
+  };
 
-  function getCategoryColor(category) {
-    switch(category) {
-      case 'events': return '#f59e0b';
-      case 'impact': return '#ef4444';
-      case 'activities': return '#10b981';
-      case 'general': return '#6366f1';
-      default: return '#6b7280';
-    }
-  }
+  const getCategoryColor = (category) => {
+    const colorMap = {
+      events: '#f59e0b',
+      impact: '#ef4444',
+      activities: '#10b981',
+      general: '#6366f1'
+    };
+    return colorMap[category] || '#6b7280';
+  };
 
-  function getCategoryLabel(category) {
-    switch(category) {
-      case 'events': return 'События';
-      case 'impact': return 'Въздействие';
-      case 'activities': return 'Дейности';
-      case 'general': return 'Общи';
-      default: return 'Други';
-    }
-  }
+  const getCategoryLabel = (category) => {
+    return t(`clubs.SocialGallery.categories.${category}`, category);
+  };
 
-  // Категории за филтриране
-  const categories = [
-    { key: 'all', label: 'Всички', icon: faImages },
-    { key: 'events', label: 'Събития', icon: faCalendarAlt },
-    { key: 'impact', label: 'Въздействие', icon: faHeart },
-    { key: 'activities', label: 'Дейности', icon: faUsers },
-    { key: 'general', label: 'Общи', icon: faImage }
+  const getCategories = () => [
+    { key: 'all', label: t('clubs.SocialGallery.categories.all'), icon: faImages },
+    { key: 'events', label: t('clubs.SocialGallery.categories.events'), icon: faCalendarAlt },
+    { key: 'impact', label: t('clubs.SocialGallery.categories.impact'), icon: faHeart },
+    { key: 'activities', label: t('clubs.SocialGallery.categories.activities'), icon: faUsers },
+    { key: 'general', label: t('clubs.SocialGallery.categories.general'), icon: faImage }
   ];
 
-  // Филтриране на медия
+  const categories = getCategories();
+
   const filteredMedia = allMedia.filter(item => {
     const matchesCategory = activeFilter === 'all' || item.category === activeFilter;
     const matchesSearch = item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -168,78 +159,86 @@ export const SocialGallery = ({ club }) => {
   const formatDate = (dateString) => {
     if (!dateString) return null;
     const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    
+    return date.toLocaleDateString(locale, {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
     });
   };
 
+  const getDefaultAltText = (media) => {
+    return media.type === 'photo' ? 
+      t('clubs.SocialGallery.defaultAlt.photo') : 
+      t('clubs.SocialGallery.defaultAlt.video');
+  };
+
+  const resetFilters = () => {
+    setActiveFilter('all');
+    setSearchTerm('');
+  };
+
   return (
     <section id="social-gallery" className="social-gallery-section">
       <div className="social-gallery-container">
         
-        {/* Header */}
         <div className="social-gallery-header">
           <div className="social-gallery-header-content">
             <div className="social-gallery-badge">
               <FontAwesomeIcon icon={faImages} />
-              <span>Нашата галерия</span>
+              <span>{t('clubs.SocialGallery.header.badge')}</span>
             </div>
             <h2 className="social-gallery-title">
-              Моменти които споделяме заедно
+              {t('clubs.SocialGallery.header.title')}
             </h2>
             <p className="social-gallery-subtitle">
-              Разгледайте снимки и видеа от нашите събития, дейности и ежедневието в клуба
+              {t('clubs.SocialGallery.header.subtitle')}
             </p>
           </div>
           
-          {/* Quick Stats */}
           <div className="social-gallery-stats">
             <div className="social-gallery-stat">
               <span className="social-gallery-stat-number">{allMedia.filter(m => m.type === 'photo').length}</span>
-              <span className="social-gallery-stat-label">Снимки</span>
+              <span className="social-gallery-stat-label">{t('clubs.SocialGallery.stats.photos')}</span>
             </div>
             <div className="social-gallery-stat">
               <span className="social-gallery-stat-number">{allMedia.filter(m => m.type === 'video').length}</span>
-              <span className="social-gallery-stat-label">Видеа</span>
+              <span className="social-gallery-stat-label">{t('clubs.SocialGallery.stats.videos')}</span>
             </div>
           </div>
         </div>
 
-        {/* Controls */}
         <div className="social-gallery-controls">
-          {/* Search Bar */}
           <div className="social-gallery-search-bar">
             <FontAwesomeIcon icon={faSearch} />
             <input
               type="text"
-              placeholder="Търсете снимки и видеа..."
+              placeholder={t('clubs.SocialGallery.search.placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           
           <div className="social-gallery-toolbar">
-            {/* View Mode Toggle */}
             <div className="social-gallery-view-toggle">
               <button 
                 onClick={() => setViewMode('grid')}
                 className={`social-gallery-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
               >
                 <FontAwesomeIcon icon={faTh} />
-                <span>Решетка</span>
+                <span>{t('clubs.SocialGallery.viewModes.grid')}</span>
               </button>
               <button 
                 onClick={() => setViewMode('masonry')}
                 className={`social-gallery-view-btn ${viewMode === 'masonry' ? 'active' : ''}`}
               >
                 <FontAwesomeIcon icon={faPhotoVideo} />
-                <span>Мозайка</span>
+                <span>{t('clubs.SocialGallery.viewModes.masonry')}</span>
               </button>
             </div>
             
-            {/* Category Filter */}
             <div className="social-gallery-category-filters">
               {categories.map(category => (
                 <button
@@ -255,7 +254,6 @@ export const SocialGallery = ({ club }) => {
           </div>
         </div>
 
-        {/* Gallery Grid */}
         <div className={`social-gallery-grid ${viewMode}`}>
           {filteredMedia.map((media, index) => (
             <div 
@@ -268,14 +266,14 @@ export const SocialGallery = ({ club }) => {
                 {media.type === 'photo' ? (
                   <img 
                     src={media.url || media.src} 
-                    alt={media.alt || media.title || 'Снимка от галерията'} 
+                    alt={media.alt || media.title || getDefaultAltText(media)} 
                     className="social-gallery-image"
                   />
                 ) : (
                   <div className="social-gallery-video-thumbnail">
                     <img 
                       src={media.thumbnail || media.url} 
-                      alt={media.alt || media.title || 'Видео от галерията'} 
+                      alt={media.alt || media.title || getDefaultAltText(media)} 
                       className="social-gallery-image"
                     />
                     <div className="social-gallery-play-button">
@@ -316,22 +314,20 @@ export const SocialGallery = ({ club }) => {
           ))}
         </div>
 
-        {/* No Results */}
         {filteredMedia.length === 0 && (
           <div className="social-gallery-no-results">
             <FontAwesomeIcon icon={faImages} />
-            <h3>Няма намерени снимки или видеа</h3>
-            <p>Опитайте с различни критерии за търсене</p>
+            <h3>{t('clubs.SocialGallery.noResults.title')}</h3>
+            <p>{t('clubs.SocialGallery.noResults.message')}</p>
             <button 
-              onClick={() => {setActiveFilter('all'); setSearchTerm('');}}
+              onClick={resetFilters}
               className="social-gallery-reset-btn"
             >
-              Покажи всички
+              {t('clubs.SocialGallery.noResults.showAll')}
             </button>
           </div>
         )}
 
-        {/* Lightbox */}
         {selectedImage && (
           <div className="social-gallery-lightbox" onClick={closeLightbox}>
             <div className="social-gallery-lightbox-content" onClick={(e) => e.stopPropagation()}>
@@ -354,7 +350,7 @@ export const SocialGallery = ({ club }) => {
                 {selectedImage.type === 'photo' ? (
                   <img 
                     src={selectedImage.url || selectedImage.src} 
-                    alt={selectedImage.alt || selectedImage.title || 'Снимка от галерията'} 
+                    alt={selectedImage.alt || selectedImage.title || getDefaultAltText(selectedImage)} 
                   />
                 ) : (
                   <video 
@@ -398,7 +394,10 @@ export const SocialGallery = ({ club }) => {
                 </div>
                 
                 <div className="social-gallery-lightbox-counter">
-                  {currentImageIndex + 1} от {filteredMedia.length}
+                  {t('clubs.SocialGallery.lightbox.counter', { 
+                    current: currentImageIndex + 1, 
+                    total: filteredMedia.length 
+                  })}
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
-// components/Clubs/AllClubs/RecentArticles/RecentArticles.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalendarAlt,
@@ -12,6 +12,7 @@ import './recentArticles.css';
 import { useArticleContext } from '../../../contexts/ArticleContext';
 
 export const RecentArticles = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { getAllArticles, articles, articlesLoaded } = useArticleContext();
   const [recentArticles, setRecentArticles] = useState([]);
@@ -26,18 +27,22 @@ export const RecentArticles = () => {
         }
         setRecentArticles(articles.slice(0, 5));
       } catch (error) {
-        console.error('Грешка при зареждане на статиите:', error);
+        console.error(t('clubs.RecentArticles.errors.loadingArticles'), error);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchArticles();
-  }, [articles, articlesLoaded]);
+  }, [articles, articlesLoaded, t]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    
+    return date.toLocaleDateString(locale, {
       day: 'numeric',
       month: 'short',
       year: 'numeric'
@@ -83,13 +88,13 @@ export const RecentArticles = () => {
       <div className="clubs-articles-header">
         <h3>
           <FontAwesomeIcon icon={faNewspaper} />
-          Последни статии
+          {t('clubs.RecentArticles.title')}
         </h3>
         <button 
           className="clubs-articles-view-all"
           onClick={() => navigate('/articles')}
         >
-          Виж всички
+          {t('clubs.RecentArticles.viewAll')}
           <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </div>
@@ -137,7 +142,7 @@ export const RecentArticles = () => {
 
       {recentArticles.length === 0 && !isLoading && (
         <div className="clubs-articles-empty">
-          <p>Няма налични статии</p>
+          <p>{t('clubs.RecentArticles.noArticles')}</p>
         </div>
       )}
     </div>

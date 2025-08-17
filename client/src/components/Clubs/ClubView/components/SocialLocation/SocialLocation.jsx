@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faMapMarkerAlt,
@@ -28,42 +29,38 @@ import {
 import './socialLocation.css';
 
 export const SocialLocation = ({ club }) => {
+  const { t } = useTranslation();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeInfoSection, setActiveInfoSection] = useState('address');
   const [copiedText, setCopiedText] = useState('');
 
-  // Проверяваме дали има необходимите данни
   if (!club?.location?.address && 
       !club?.contacts?.address &&
       !club?.address) {
     return null;
   }
 
-  // Събираме location данни
   const location = club.location || {};
   const contacts = club.contacts || {};
   const address = location.address || contacts.address || club.address;
   const coordinates = location.coordinates || {};
   const neighborhood = location.neighborhood || location.area;
-  const city = location.city || 'София';
+  const city = location.city || t('clubs.SocialLocation.defaultCity');
   const postalCode = location.postalCode || location.zip;
 
-  // Ако няма адрес, не показваме компонента
   if (!address) {
     return null;
   }
 
-  // Working hours (ако са налични)
   const workingHours = location.workingHours || club.workingHours;
 
-  // Helper функции
   const copyToClipboard = async (text, label) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedText(label);
       setTimeout(() => setCopiedText(''), 2000);
     } catch (err) {
-      console.error('Неуспешно копиране:', err);
+      console.error('Copy failed:', err);
     }
   };
 
@@ -81,53 +78,57 @@ export const SocialLocation = ({ club }) => {
     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
   };
 
+  const getCopyLabel = (type) => {
+    return t(`clubs.SocialLocation.copyLabels.${type}`);
+  };
+
+  const getCopySuccessMessage = (label) => {
+    return t('clubs.SocialLocation.copySuccess', { item: label });
+  };
+
   return (
     <section id="social-location" className="social-location-section">
       <div className="social-location-container">
         
-        {/* Header */}
         <div className="social-location-header">
           <div className="social-location-header-content">
             <div className="social-location-badge">
               <FontAwesomeIcon icon={faMapMarkerAlt} />
-              <span>Нашето местоположение</span>
+              <span>{t('clubs.SocialLocation.header.badge')}</span>
             </div>
             <h2 className="social-location-title">
-              Лесно ни намерете
+              {t('clubs.SocialLocation.header.title')}
             </h2>
             <p className="social-location-subtitle">
-              Разгледайте нашето местоположение и как можете да стигнете до нас
+              {t('clubs.SocialLocation.header.subtitle')}
             </p>
           </div>
           
-          {/* Quick Actions */}
           <div className="social-location-quick-actions">
             <button 
               onClick={getDirections}
               className="social-location-quick-btn primary"
             >
               <FontAwesomeIcon icon={faDirections} />
-              <span>Навигация</span>
+              <span>{t('clubs.SocialLocation.actions.directions')}</span>
             </button>
             <button 
               onClick={openInMaps}
               className="social-location-quick-btn secondary"
             >
               <FontAwesomeIcon icon={faExternalLinkAlt} />
-              <span>Google Maps</span>
+              <span>{t('clubs.SocialLocation.actions.googleMaps')}</span>
             </button>
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="social-location-content">
           
-          {/* Map Section */}
           <div className={`social-location-map-section ${isFullscreen ? 'fullscreen' : ''}`}>
             <div className="social-location-map-controls">
               <div className="social-location-map-title">
                 <FontAwesomeIcon icon={faMap} />
-                <span>Местоположение</span>
+                <span>{t('clubs.SocialLocation.map.title')}</span>
               </div>
               
               <button 
@@ -148,31 +149,29 @@ export const SocialLocation = ({ club }) => {
                   <p>{address}</p>
                   <button onClick={openInMaps} className="social-location-map-link">
                     <FontAwesomeIcon icon={faExternalLinkAlt} />
-                    <span>Отвори в Google Maps</span>
+                    <span>{t('clubs.SocialLocation.map.openInMaps')}</span>
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Info Section */}
           <div className="social-location-info-section">
             
-            {/* Info Tabs */}
             <div className="social-location-info-tabs">
               <button 
                 onClick={() => setActiveInfoSection('address')}
                 className={`social-location-info-tab ${activeInfoSection === 'address' ? 'active' : ''}`}
               >
                 <FontAwesomeIcon icon={faMapPin} />
-                <span>Адрес</span>
+                <span>{t('clubs.SocialLocation.tabs.address')}</span>
               </button>
               <button 
                 onClick={() => setActiveInfoSection('contact')}
                 className={`social-location-info-tab ${activeInfoSection === 'contact' ? 'active' : ''}`}
               >
                 <FontAwesomeIcon icon={faPhone} />
-                <span>Контакти</span>
+                <span>{t('clubs.SocialLocation.tabs.contact')}</span>
               </button>
               {workingHours && (
                 <button 
@@ -180,29 +179,28 @@ export const SocialLocation = ({ club }) => {
                   className={`social-location-info-tab ${activeInfoSection === 'hours' ? 'active' : ''}`}
                 >
                   <FontAwesomeIcon icon={faClock} />
-                  <span>Работно време</span>
+                  <span>{t('clubs.SocialLocation.tabs.hours')}</span>
                 </button>
               )}
             </div>
 
-            {/* Address Info */}
             {activeInfoSection === 'address' && (
               <div className="social-location-address-info">
                 <div className="social-location-address-card">
                   <div className="social-location-address-header">
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
-                    <h3>Нашият адрес</h3>
+                    <h3>{t('clubs.SocialLocation.address.title')}</h3>
                   </div>
                   
                   <div className="social-location-address-details">
                     <div className="social-location-address-line">
                       <strong>{address}</strong>
                       <button 
-                        onClick={() => copyToClipboard(address, 'адрес')}
+                        onClick={() => copyToClipboard(address, getCopyLabel('address'))}
                         className="social-location-copy-btn"
-                        title="Копирай адреса"
+                        title={t('clubs.SocialLocation.tooltips.copyAddress')}
                       >
-                        <FontAwesomeIcon icon={copiedText === 'адрес' ? faCheckCircle : faCopy} />
+                        <FontAwesomeIcon icon={copiedText === getCopyLabel('address') ? faCheckCircle : faCopy} />
                       </button>
                     </div>
                     {neighborhood && (
@@ -220,15 +218,15 @@ export const SocialLocation = ({ club }) => {
                   <div className="social-location-address-actions">
                     <button onClick={getDirections} className="social-location-action-btn">
                       <FontAwesomeIcon icon={faDirections} />
-                      <span>Навигация</span>
+                      <span>{t('clubs.SocialLocation.actions.directions')}</span>
                     </button>
                     {coordinates.lat && coordinates.lng && (
                       <button 
-                        onClick={() => copyToClipboard(`${coordinates.lat}, ${coordinates.lng}`, 'координати')}
+                        onClick={() => copyToClipboard(`${coordinates.lat}, ${coordinates.lng}`, getCopyLabel('coordinates'))}
                         className="social-location-action-btn"
                       >
-                        <FontAwesomeIcon icon={copiedText === 'координати' ? faCheckCircle : faLocationArrow} />
-                        <span>Копирай координати</span>
+                        <FontAwesomeIcon icon={copiedText === getCopyLabel('coordinates') ? faCheckCircle : faLocationArrow} />
+                        <span>{t('clubs.SocialLocation.actions.copyCoordinates')}</span>
                       </button>
                     )}
                   </div>
@@ -236,20 +234,19 @@ export const SocialLocation = ({ club }) => {
                   {copiedText && (
                     <div className="social-location-copy-success">
                       <FontAwesomeIcon icon={faCheckCircle} />
-                      <span>Копирахте {copiedText}!</span>
+                      <span>{getCopySuccessMessage(copiedText)}</span>
                     </div>
                   )}
                 </div>
               </div>
             )}
 
-            {/* Contact Info */}
             {activeInfoSection === 'contact' && (
               <div className="social-location-contact-info">
                 <div className="social-location-contact-card">
                   <div className="social-location-contact-header">
                     <FontAwesomeIcon icon={faPhone} />
-                    <h3>Свържете се с нас</h3>
+                    <h3>{t('clubs.SocialLocation.contact.title')}</h3>
                   </div>
                   
                   {contacts.phone && (
@@ -257,18 +254,18 @@ export const SocialLocation = ({ club }) => {
                       <div className="social-location-contact-main">
                         <FontAwesomeIcon icon={faPhone} />
                         <div className="social-location-contact-details">
-                          <span className="social-location-contact-label">Телефон</span>
+                          <span className="social-location-contact-label">{t('clubs.SocialLocation.contact.phone')}</span>
                           <a href={`tel:${contacts.phone}`} className="social-location-contact-value">
                             {contacts.phone}
                           </a>
                         </div>
                       </div>
                       <button 
-                        onClick={() => copyToClipboard(contacts.phone, 'телефон')}
+                        onClick={() => copyToClipboard(contacts.phone, getCopyLabel('phone'))}
                         className="social-location-copy-btn"
-                        title="Копирай телефона"
+                        title={t('clubs.SocialLocation.tooltips.copyPhone')}
                       >
-                        <FontAwesomeIcon icon={copiedText === 'телефон' ? faCheckCircle : faCopy} />
+                        <FontAwesomeIcon icon={copiedText === getCopyLabel('phone') ? faCheckCircle : faCopy} />
                       </button>
                     </div>
                   )}
@@ -278,18 +275,18 @@ export const SocialLocation = ({ club }) => {
                       <div className="social-location-contact-main">
                         <FontAwesomeIcon icon={faEnvelope} />
                         <div className="social-location-contact-details">
-                          <span className="social-location-contact-label">Имейл</span>
+                          <span className="social-location-contact-label">{t('clubs.SocialLocation.contact.email')}</span>
                           <a href={`mailto:${contacts.email}`} className="social-location-contact-value">
                             {contacts.email}
                           </a>
                         </div>
                       </div>
                       <button 
-                        onClick={() => copyToClipboard(contacts.email, 'имейл')}
+                        onClick={() => copyToClipboard(contacts.email, getCopyLabel('email'))}
                         className="social-location-copy-btn"
-                        title="Копирай имейла"
+                        title={t('clubs.SocialLocation.tooltips.copyEmail')}
                       >
-                        <FontAwesomeIcon icon={copiedText === 'имейл' ? faCheckCircle : faCopy} />
+                        <FontAwesomeIcon icon={copiedText === getCopyLabel('email') ? faCheckCircle : faCopy} />
                       </button>
                     </div>
                   )}
@@ -297,20 +294,19 @@ export const SocialLocation = ({ club }) => {
                   {copiedText && (
                     <div className="social-location-copy-success">
                       <FontAwesomeIcon icon={faCheckCircle} />
-                      <span>Копирахте {copiedText}!</span>
+                      <span>{getCopySuccessMessage(copiedText)}</span>
                     </div>
                   )}
                 </div>
               </div>
             )}
 
-            {/* Working Hours */}
             {activeInfoSection === 'hours' && workingHours && (
               <div className="social-location-hours-info">
                 <div className="social-location-hours-card">
                   <div className="social-location-hours-header">
                     <FontAwesomeIcon icon={faClock} />
-                    <h3>Работно време</h3>
+                    <h3>{t('clubs.SocialLocation.hours.title')}</h3>
                   </div>
                   
                   <div className="social-location-hours-list">
@@ -324,7 +320,7 @@ export const SocialLocation = ({ club }) => {
                   
                   <div className="social-location-hours-note">
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    <p>Моля, свържете се с нас преди посещение за актуална информация</p>
+                    <p>{t('clubs.SocialLocation.hours.note')}</p>
                   </div>
                 </div>
               </div>

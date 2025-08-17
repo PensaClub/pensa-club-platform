@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faTheaterMasks,
@@ -29,6 +30,7 @@ import {
 import './culturalHero.css';
 
 export const CulturalHero = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -114,9 +116,27 @@ export const CulturalHero = ({ club }) => {
         });
       }, 2000);
     } catch (error) {
-      console.error('Грешка при копиране:', error);
-      alert('Грешка при копиране. Моля опитайте отново.');
+      console.error(t('clubs.CulturalHero.errors.copyError'), error);
+      alert(t('clubs.CulturalHero.errors.copyErrorMessage'));
     }
+  };
+
+  // Функция за форматиране на дати
+  const formatDate = (dateString) => {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    
+    return new Date(dateString).toLocaleDateString(locale);
+  };
+
+  // Функция за plural форми на членове
+  const getMembersText = (count) => {
+    return t('clubs.CulturalHero.membersCount', { 
+      count,
+      defaultValue_one: `${count} член`,
+      defaultValue_other: `${count} членове`
+    });
   };
 
   useEffect(() => {
@@ -150,7 +170,7 @@ export const CulturalHero = ({ club }) => {
   };
 
   const handleJoinClick = () => {
-    alert('Присъединяване към клуба!');
+    alert(t('clubs.CulturalHero.actions.joinClub'));
   };
 
   const handleEventsClick = () => {
@@ -161,7 +181,7 @@ export const CulturalHero = ({ club }) => {
   };
 
   const handleTourClick = () => {
-    alert('Виртуална обиколка!');
+    alert(t('clubs.CulturalHero.actions.virtualTour'));
   };
 
   const handleQuickLink = (sectionId) => {
@@ -234,7 +254,7 @@ export const CulturalHero = ({ club }) => {
           <div className="cultural-hero-main-info">
             <div className="cultural-hero-club-badge">
               <FontAwesomeIcon icon={faTheaterMasks} />
-              <span>Културен клуб</span>
+              <span>{t('clubs.CulturalHero.badge.culturalClub')}</span>
             </div>
 
             <h1 className="cultural-hero-club-title">{club.name}</h1>
@@ -251,46 +271,31 @@ export const CulturalHero = ({ club }) => {
             <div className="cultural-hero-action-buttons">
               <button className="cultural-hero-btn-primary" onClick={handleJoinClick}>
                 <FontAwesomeIcon icon={faUsers} />
-                Присъедини се
+                {t('clubs.CulturalHero.buttons.join')}
               </button>
               
               <button className="cultural-hero-btn-secondary" onClick={handleEventsClick}>
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                Събития
+                {t('clubs.CulturalHero.buttons.events')}
               </button>
 
               <button className="cultural-hero-btn-outline" onClick={handleTourClick}>
                 <FontAwesomeIcon icon={faExpand} />
-                Обиколка
+                {t('clubs.CulturalHero.buttons.tour')}
               </button>
 
               {members.length > 0 && (
                 <button className="cultural-hero-btn-secondary" onClick={() => setShowMembersModal(true)}>
                   <FontAwesomeIcon icon={faUserFriends} />
-                  Членове ({members.length})
+                  {t('clubs.CulturalHero.buttons.members')} ({members.length})
                 </button>
               )}
             </div>
-{/* 
-            <div className="cultural-hero-quick-navigation">
-              <button onClick={() => handleQuickLink('club-about')} className="cultural-hero-nav-link">
-                За клуба
-              </button>
-              <button onClick={() => handleQuickLink('club-activities')} className="cultural-hero-nav-link">
-                Дейности
-              </button>
-              <button onClick={() => handleQuickLink('club-events')} className="cultural-hero-nav-link">
-                Събития
-              </button>
-              <button onClick={() => handleQuickLink('club-management')} className="cultural-hero-nav-link">
-                Ръководство
-              </button>
-            </div> */}
           </div>
 
           {/* Right Side - Stats */}
           <div className="cultural-hero-stats-panel">
-            <h3>Статистика</h3>
+            <h3>{t('clubs.CulturalHero.stats.title')}</h3>
             
             <div className="cultural-hero-stat-card">
               <div className="cultural-hero-stat-icon">
@@ -298,7 +303,7 @@ export const CulturalHero = ({ club }) => {
               </div>
               <div className="cultural-hero-stat-info">
                 <div className="cultural-hero-stat-number">{club.membership?.totalMembers || '67'}</div>
-                <div className="cultural-hero-stat-label">Активни членове</div>
+                <div className="cultural-hero-stat-label">{t('clubs.CulturalHero.stats.activeMembers')}</div>
               </div>
             </div>
             
@@ -308,7 +313,7 @@ export const CulturalHero = ({ club }) => {
               </div>
               <div className="cultural-hero-stat-info">
                 <div className="cultural-hero-stat-number">{club.activities?.regular?.length || '4'}</div>
-                <div className="cultural-hero-stat-label">Редовни програми</div>
+                <div className="cultural-hero-stat-label">{t('clubs.CulturalHero.stats.regularPrograms')}</div>
               </div>
             </div>
             
@@ -318,16 +323,18 @@ export const CulturalHero = ({ club }) => {
               </div>
               <div className="cultural-hero-stat-info">
                 <div className="cultural-hero-stat-number">{club.activities?.events?.length || '2'}</div>
-                <div className="cultural-hero-stat-label">Предстоящи събития</div>
+                <div className="cultural-hero-stat-label">{t('clubs.CulturalHero.stats.upcomingEvents')}</div>
               </div>
             </div>
 
             <div className="cultural-hero-established-info">
               <div className="cultural-hero-established-year">
-                Основан {club.foundedYear || '2010'}
+                {t('clubs.CulturalHero.stats.founded')} {club.foundedYear || '2010'}
               </div>
               <div className="cultural-hero-years-active">
-                {new Date().getFullYear() - (club.foundedYear || 2010)} години опит
+                {t('clubs.CulturalHero.stats.yearsExperience', { 
+                  years: new Date().getFullYear() - (club.foundedYear || 2010) 
+                })}
               </div>
             </div>
           </div>
@@ -369,8 +376,11 @@ export const CulturalHero = ({ club }) => {
             
             <div className="cultural-hero-members-header">
               <FontAwesomeIcon icon={faTheaterMasks} />
-              <h3>Членове на клуба</h3>
-              <p>Нашата творческа общност от {members.length} {members.length === 1 ? 'член' : 'членове'}</p>
+              <h3>{t('clubs.CulturalHero.modal.title')}</h3>
+              <p>{t('clubs.CulturalHero.modal.subtitle', { 
+                count: members.length,
+                members: getMembersText(members.length)
+              })}</p>
             </div>
 
             {/* Search Section */}
@@ -380,7 +390,7 @@ export const CulturalHero = ({ club }) => {
                   <FontAwesomeIcon icon={faSearch} className="cultural-hero-search-icon" />
                   <input
                     type="text"
-                    placeholder="Търсене по име, телефон или имейл..."
+                    placeholder={t('clubs.CulturalHero.modal.searchPlaceholder')}
                     value={memberSearchTerm}
                     onChange={(e) => setMemberSearchTerm(e.target.value)}
                     className="cultural-hero-search-input"
@@ -389,7 +399,7 @@ export const CulturalHero = ({ club }) => {
                     <button 
                       onClick={clearSearch}
                       className="cultural-hero-search-clear"
-                      title="Изчисти търсенето"
+                      title={t('clubs.CulturalHero.modal.clearSearch')}
                     >
                       <FontAwesomeIcon icon={faTimesCircle} />
                     </button>
@@ -400,14 +410,13 @@ export const CulturalHero = ({ club }) => {
                   <div className="cultural-hero-search-results">
                     {filteredMembers.length === 0 ? (
                       <span className="cultural-hero-no-results">
-                        Няма намерени резултати за "{memberSearchTerm}"
+                        {t('clubs.CulturalHero.modal.noResultsFor', { term: memberSearchTerm })}
                       </span>
                     ) : (
                       <span className="cultural-hero-results-count">
-                        {filteredMembers.length === 1 
-                          ? `Намерен 1 член` 
-                          : `Намерени ${filteredMembers.length} членове`
-                        }
+                        {t('clubs.CulturalHero.modal.foundMembers', { 
+                          count: filteredMembers.length 
+                        })}
                       </span>
                     )}
                   </div>
@@ -419,17 +428,17 @@ export const CulturalHero = ({ club }) => {
               {filteredMembers.length === 0 && !memberSearchTerm ? (
                 <div className="cultural-hero-no-members">
                   <FontAwesomeIcon icon={faUsers} />
-                  <h4>Няма регистрирани членове</h4>
-                  <p>Все още няма добавени членове в системата.</p>
+                  <h4>{t('clubs.CulturalHero.modal.noRegisteredMembers.title')}</h4>
+                  <p>{t('clubs.CulturalHero.modal.noRegisteredMembers.subtitle')}</p>
                 </div>
               ) : filteredMembers.length === 0 && memberSearchTerm ? (
                 <div className="cultural-hero-no-members">
                   <FontAwesomeIcon icon={faSearch} />
-                  <h4>Няма намерени резултати</h4>
-                  <p>Опитайте с различни ключови думи или изчистете търсенето.</p>
+                  <h4>{t('clubs.CulturalHero.modal.noSearchResults.title')}</h4>
+                  <p>{t('clubs.CulturalHero.modal.noSearchResults.subtitle')}</p>
                   <button onClick={clearSearch} className="cultural-hero-clear-search-btn">
                     <FontAwesomeIcon icon={faTimesCircle} />
-                    Изчисти търсенето
+                    {t('clubs.CulturalHero.modal.clearSearchButton')}
                   </button>
                 </div>
               ) : (
@@ -448,7 +457,7 @@ export const CulturalHero = ({ club }) => {
                             <FontAwesomeIcon icon={faUser} />
                           </div>
                         )}
-                        {member.role && member.role !== 'член' && (
+                        {member.role && member.role !== 'член' && member.role !== 'member' && member.role !== 'mitglied' && (
                           <div className="cultural-hero-member-role">
                             <FontAwesomeIcon icon={faAward} />
                             <span>{member.role}</span>
@@ -473,7 +482,7 @@ export const CulturalHero = ({ club }) => {
                           <button
                             className={`cultural-hero-copy-icon ${copiedItems[`${member.id}-name`] ? 'copied' : ''}`}
                             onClick={() => copyMemberData(`${member.firstName} ${member.lastName}`, 'name', member.id)}
-                            title="Копирай името"
+                            title={t('clubs.CulturalHero.modal.copyName')}
                           >
                             <FontAwesomeIcon icon={copiedItems[`${member.id}-name`] ? faCheckCircle : faCopy} />
                           </button>
@@ -498,7 +507,7 @@ export const CulturalHero = ({ club }) => {
                               <button
                                 className={`cultural-hero-copy-icon ${copiedItems[`${member.id}-phone`] ? 'copied' : ''}`}
                                 onClick={() => copyMemberData(member.phone, 'phone', member.id)}
-                                title="Копирай телефона"
+                                title={t('clubs.CulturalHero.modal.copyPhone')}
                               >
                                 <FontAwesomeIcon icon={copiedItems[`${member.id}-phone`] ? faCheckCircle : faCopy} />
                               </button>
@@ -523,7 +532,7 @@ export const CulturalHero = ({ club }) => {
                               <button
                                 className={`cultural-hero-copy-icon ${copiedItems[`${member.id}-email`] ? 'copied' : ''}`}
                                 onClick={() => copyMemberData(member.email, 'email', member.id)}
-                                title="Копирай имейла"
+                                title={t('clubs.CulturalHero.modal.copyEmail')}
                               >
                                 <FontAwesomeIcon icon={copiedItems[`${member.id}-email`] ? faCheckCircle : faCopy} />
                               </button>
@@ -537,7 +546,7 @@ export const CulturalHero = ({ club }) => {
                               <button
                                 className={`cultural-hero-copy-icon ${copiedItems[`${member.id}-address`] ? 'copied' : ''}`}
                                 onClick={() => copyMemberData(member.address, 'address', member.id)}
-                                title="Копирай адреса"
+                                title={t('clubs.CulturalHero.modal.copyAddress')}
                               >
                                 <FontAwesomeIcon icon={copiedItems[`${member.id}-address`] ? faCheckCircle : faCopy} />
                               </button>
@@ -547,7 +556,7 @@ export const CulturalHero = ({ club }) => {
                           {member.joinDate && (
                             <div className="cultural-hero-member-detail">
                               <FontAwesomeIcon icon={faCalendarAlt} />
-                              <span>Член от {new Date(member.joinDate).toLocaleDateString('bg-BG')}</span>
+                              <span>{t('clubs.CulturalHero.modal.memberSince')} {formatDate(member.joinDate)}</span>
                             </div>
                           )}
                         </div>

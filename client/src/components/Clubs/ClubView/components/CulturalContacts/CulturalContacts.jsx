@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faPhone,
@@ -28,6 +29,7 @@ import {
 import './culturalContacts.css';
 
 export const CulturalContacts = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [contactForm, setContactForm] = useState({
     name: '',
     email: '',
@@ -39,7 +41,6 @@ export const CulturalContacts = ({ club }) => {
 
   const [formStatus, setFormStatus] = useState(null);
 
-  // ПРОВЕРКА ЗА ДАННИ - ако няма контакти, не показваме компонента
   if (!club?.contacts || (!club.contacts.phone && !club.contacts.email)) {
     return null;
   }
@@ -53,43 +54,40 @@ export const CulturalContacts = ({ club }) => {
     workingHours: club.contacts.workingHours || {}
   };
 
-  // Спешни контакти от реални данни
   const getEmergencyContacts = () => {
     const emergencyList = [];
     
     if (club.contacts?.emergency) {
       emergencyList.push(...club.contacts.emergency);
     } else {
-      // Ако няма специални спешни контакти, използваме основните
       if (contacts.phone) {
         emergencyList.push({
-          title: "Основен телефон",
-          name: "Клубна рецепция",
+          title: t('clubs.CulturalContacts.emergency.mainPhone'),
+          name: t('clubs.CulturalContacts.emergency.reception'),
           phone: contacts.phone,
-          available: "работно време",
+          available: t('clubs.CulturalContacts.emergency.workingHours'),
           icon: faPhone
         });
       }
       
       if (contacts.mobile) {
         emergencyList.push({
-          title: "Мобилен телефон",
-          name: "Дежурен",
+          title: t('clubs.CulturalContacts.emergency.mobilePhone'),
+          name: t('clubs.CulturalContacts.emergency.onDuty'),
           phone: contacts.mobile,
-          available: "извън работно време",
+          available: t('clubs.CulturalContacts.emergency.afterHours'),
           icon: faMobile
         });
       }
 
-      // Добавяме председателя ако има данни
       if (club.management?.board?.[0]) {
         const president = club.management.board[0];
         if (president.phone) {
           emergencyList.push({
-            title: "Председател",
+            title: t('clubs.CulturalContacts.emergency.chairman'),
             name: president.name,
             phone: president.phone,
-            available: "09:00-20:00",
+            available: '09:00-20:00',
             icon: faUser
           });
         }
@@ -101,44 +99,45 @@ export const CulturalContacts = ({ club }) => {
 
   const emergencyContacts = getEmergencyContacts();
 
-  const contactMethods = [
+  const getContactMethods = () => [
     {
       id: 'visit',
-      title: 'Посетете ни',
-      description: 'Елате в клуба за лична среща',
+      title: t('clubs.CulturalContacts.methods.visit.title'),
+      description: t('clubs.CulturalContacts.methods.visit.description'),
       icon: faMapMarkerAlt,
       color: '#ef4444',
       details: club.location?.address ? 
         `${club.location.address}, ${club.location.city || ''}` : 
-        'Работно време: по договаряне'
+        t('clubs.CulturalContacts.methods.visit.byAppointment')
     },
     contacts.phone ? {
       id: 'call',
-      title: 'Обадете се',
-      description: 'Моментален контакт по телефон',
+      title: t('clubs.CulturalContacts.methods.call.title'),
+      description: t('clubs.CulturalContacts.methods.call.description'),
       icon: faPhone,
       color: '#10b981',
       details: contacts.phone
     } : null,
     contacts.email ? {
       id: 'email',
-      title: 'Пишете email',
-      description: 'Детайлни запитвания и документи',
+      title: t('clubs.CulturalContacts.methods.email.title'),
+      description: t('clubs.CulturalContacts.methods.email.description'),
       icon: faEnvelope,
       color: '#3b82f6',
       details: contacts.email
     } : null,
     contacts.website ? {
       id: 'online',
-      title: 'Посетете сайта',
-      description: 'Онлайн информация и ресурси',
+      title: t('clubs.CulturalContacts.methods.online.title'),
+      description: t('clubs.CulturalContacts.methods.online.description'),
       icon: faGlobe,
       color: '#8b5cf6',
       details: contacts.website
     } : null
   ].filter(Boolean);
 
-  // Социални медии с реални данни
+  const contactMethods = getContactMethods();
+
   const socialMedia = [
     contacts.socialMedia?.facebook ? {
       platform: 'Facebook',
@@ -166,7 +165,6 @@ export const CulturalContacts = ({ club }) => {
     } : null
   ].filter(Boolean);
 
-  // Работно време с реални данни
   const getWorkingHours = () => {
     const defaultHours = {
       monday: '09:00-17:00',
@@ -175,67 +173,86 @@ export const CulturalContacts = ({ club }) => {
       thursday: '09:00-17:00',
       friday: '09:00-17:00',
       saturday: '10:00-15:00',
-      sunday: 'затворено'
+      sunday: t('clubs.CulturalContacts.workingHours.closed')
+    };
+
+    const dayNames = {
+      monday: t('clubs.CulturalContacts.workingHours.days.monday'),
+      tuesday: t('clubs.CulturalContacts.workingHours.days.tuesday'),
+      wednesday: t('clubs.CulturalContacts.workingHours.days.wednesday'),
+      thursday: t('clubs.CulturalContacts.workingHours.days.thursday'),
+      friday: t('clubs.CulturalContacts.workingHours.days.friday'),
+      saturday: t('clubs.CulturalContacts.workingHours.days.saturday'),
+      sunday: t('clubs.CulturalContacts.workingHours.days.sunday')
     };
 
     return [
-      { day: 'Понеделник', time: contacts.workingHours?.monday || defaultHours.monday },
-      { day: 'Вторник', time: contacts.workingHours?.tuesday || defaultHours.tuesday },
-      { day: 'Сряда', time: contacts.workingHours?.wednesday || defaultHours.wednesday },
-      { day: 'Четвъртък', time: contacts.workingHours?.thursday || defaultHours.thursday },
-      { day: 'Петък', time: contacts.workingHours?.friday || defaultHours.friday },
-      { day: 'Събота', time: contacts.workingHours?.saturday || defaultHours.saturday },
-      { day: 'Неделя', time: contacts.workingHours?.sunday || defaultHours.sunday }
+      { day: dayNames.monday, time: contacts.workingHours?.monday || defaultHours.monday },
+      { day: dayNames.tuesday, time: contacts.workingHours?.tuesday || defaultHours.tuesday },
+      { day: dayNames.wednesday, time: contacts.workingHours?.wednesday || defaultHours.wednesday },
+      { day: dayNames.thursday, time: contacts.workingHours?.thursday || defaultHours.thursday },
+      { day: dayNames.friday, time: contacts.workingHours?.friday || defaultHours.friday },
+      { day: dayNames.saturday, time: contacts.workingHours?.saturday || defaultHours.saturday },
+      { day: dayNames.sunday, time: contacts.workingHours?.sunday || defaultHours.sunday }
     ];
   };
 
   const workingHours = getWorkingHours();
 
-  // FAQ с реални данни
   const getFaqItems = () => {
     if (club.faq && Array.isArray(club.faq)) {
       return club.faq;
     }
 
-    // Генерираме FAQ базирано на наличните данни
     const faqList = [
       {
-        question: "Как мога да стана член на клуба?",
+        question: t('clubs.CulturalContacts.faq.membership.question'),
         answer: club.membership ? 
-          `Можете да се запишете като попълните формата за членство или да дойдете лично в клуба. Месечната такса е ${club.membership.membershipFee?.monthly || 'по договаряне'} лв.` :
-          "Можете да се запишете като попълните формата за членство или да дойдете лично в клуба през работно време."
+          t('clubs.CulturalContacts.faq.membership.answerWithFee', { 
+            fee: club.membership.membershipFee?.monthly || t('clubs.CulturalContacts.faq.byAgreement') 
+          }) :
+          t('clubs.CulturalContacts.faq.membership.answerGeneral')
       }
     ];
 
     if (club.membership?.membershipFee) {
+      const monthlyFee = club.membership.membershipFee.monthly || t('clubs.CulturalContacts.faq.byAgreement');
+      const yearlyFee = club.membership.membershipFee.yearly;
+      
       faqList.push({
-        question: "Колко струва месечната такса?",
-        answer: `Месечната такса е ${club.membership.membershipFee.monthly || 'по договаряне'} лв.${club.membership.membershipFee.yearly ? `, а годишната е ${club.membership.membershipFee.yearly} лв.` : ''}`
+        question: t('clubs.CulturalContacts.faq.fees.question'),
+        answer: yearlyFee ? 
+          t('clubs.CulturalContacts.faq.fees.answerWithYearly', { monthly: monthlyFee, yearly: yearlyFee }) :
+          t('clubs.CulturalContacts.faq.fees.answerMonthly', { monthly: monthlyFee })
       });
     }
 
     if (club.membership?.requirements?.minAge) {
       faqList.push({
-        question: "Има ли възрастови ограничения?",
-        answer: `Минималната възраст за членство е ${club.membership.requirements.minAge} години.`
+        question: t('clubs.CulturalContacts.faq.ageLimit.question'),
+        answer: t('clubs.CulturalContacts.faq.ageLimit.answerWithAge', { 
+          age: club.membership.requirements.minAge 
+        })
       });
     } else {
       faqList.push({
-        question: "Има ли възрастови ограничения?",
-        answer: "Клубът е предназначен за хора над 55 години, но приемаме и по-млади членове при специални обстоятелства."
+        question: t('clubs.CulturalContacts.faq.ageLimit.question'),
+        answer: t('clubs.CulturalContacts.faq.ageLimit.answerDefault')
       });
     }
 
     if (club.activities) {
       const activities = [];
-      if (club.activities.events?.length) activities.push('събития');
-      if (club.activities.trips?.length) activities.push('екскурзии');
-      if (club.activities.classes?.length) activities.push('занятия');
+      if (club.activities.events?.length) activities.push(t('clubs.CulturalContacts.faq.activities.events'));
+      if (club.activities.trips?.length) activities.push(t('clubs.CulturalContacts.faq.activities.trips'));
+      if (club.activities.classes?.length) activities.push(t('clubs.CulturalContacts.faq.activities.classes'));
       
       if (activities.length > 0) {
         faqList.push({
-          question: "Какви дейности предлагате?",
-          answer: `Предлагаме ${activities.join(', ')} и много други културни дейности.`
+          question: t('clubs.CulturalContacts.faq.activities.question'),
+          answer: t('clubs.CulturalContacts.faq.activities.answer', { 
+            activities: activities.join(', ') 
+          })
         });
       }
     }
@@ -245,34 +262,48 @@ export const CulturalContacts = ({ club }) => {
 
   const faqItems = getFaqItems();
 
+  const getSubjectOptions = () => [
+    { value: '', label: t('clubs.CulturalContacts.form.subjectPlaceholder') },
+    { value: 'membership', label: t('clubs.CulturalContacts.form.subjects.membership') },
+    { value: 'activities', label: t('clubs.CulturalContacts.form.subjects.activities') },
+    { value: 'events', label: t('clubs.CulturalContacts.form.subjects.events') },
+    { value: 'volunteering', label: t('clubs.CulturalContacts.form.subjects.volunteering') },
+    { value: 'complaint', label: t('clubs.CulturalContacts.form.subjects.complaint') },
+    { value: 'other', label: t('clubs.CulturalContacts.form.subjects.other') }
+  ];
+
+  const subjectOptions = getSubjectOptions();
+
   const handleInputChange = (field, value) => {
     setContactForm(prev => ({ ...prev, [field]: value }));
   };
 
-  // ФУНКЦИОНАЛНА ФОРМА
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormStatus('sending');
     
     if (contacts.email) {
-      const subject = encodeURIComponent(`${contactForm.subject || 'Запитване'} - ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте съобщение от ${club.name}:
-
-Име: ${contactForm.name}
-Email: ${contactForm.email}
-Телефон: ${contactForm.phone || 'Не е посочен'}
-Тема: ${contactForm.subject}
-Предпочитан отговор: ${contactForm.contactMethod === 'email' ? 'Email' : 'Телефон'}
-
-Съобщение:
-${contactForm.message}
-
----
-Изпратено от контактната форма на ${club.name}
-      `);
+      const selectedSubject = subjectOptions.find(opt => opt.value === contactForm.subject);
+      const subjectLabel = selectedSubject ? selectedSubject.label : contactForm.subject;
+      
+      const subject = encodeURIComponent(t('clubs.CulturalContacts.form.emailSubject', { 
+        subject: subjectLabel || t('clubs.CulturalContacts.form.inquiry'),
+        clubName: club.name 
+      }));
+      
+      const contactMethodLabel = contactForm.contactMethod === 'email' ? 
+        t('clubs.CulturalContacts.form.contactMethods.email') : 
+        t('clubs.CulturalContacts.form.contactMethods.phone');
+      
+      const body = encodeURIComponent(t('clubs.CulturalContacts.form.emailBody', {
+        clubName: club.name,
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone || t('clubs.CulturalContacts.form.notSpecified'),
+        subject: subjectLabel,
+        contactMethod: contactMethodLabel,
+        message: contactForm.message
+      }));
       
       try {
         window.location.href = `mailto:${contacts.email}?subject=${subject}&body=${body}`;
@@ -297,13 +328,12 @@ ${contactForm.message}
     }
   };
 
-  // ФУНКЦИОНАЛНИ БУТОНИ
   const handleCall = () => {
     const phone = contacts.phone || contacts.mobile;
     if (phone) {
       window.location.href = `tel:${phone}`;
     } else {
-      alert('Телефонен номер не е наличен');
+      alert(t('clubs.CulturalContacts.actions.noPhone'));
     }
   };
 
@@ -315,7 +345,7 @@ ${contactForm.message}
       const address = encodeURIComponent(`${club.location.address}, ${club.location.city || ''}`);
       window.open(`https://www.google.com/maps/search/${address}`, '_blank');
     } else {
-      alert('Адресът не е наличен');
+      alert(t('clubs.CulturalContacts.actions.noAddress'));
     }
   };
 
@@ -327,7 +357,8 @@ ${contactForm.message}
   const isOpenNow = () => {
     const currentDay = getCurrentDay();
     const todayHours = contacts.workingHours?.[currentDay];
-    if (!todayHours || todayHours === 'closed' || todayHours === 'затворено') return false;
+    const closedValue = t('clubs.CulturalContacts.workingHours.closed');
+    if (!todayHours || todayHours === 'closed' || todayHours === closedValue) return false;
     
     try {
       const now = new Date();
@@ -347,25 +378,23 @@ ${contactForm.message}
     <section id="cultural-contacts" className="cultural-contacts-main-section">
       <div className="cultural-contacts-container">
         
-        {/* Header */}
         <div className="cultural-contacts-header">
           <div className="cultural-contacts-badge">
             <FontAwesomeIcon icon={faComments} />
-            <span>Контакти и връзка</span>
+            <span>{t('clubs.CulturalContacts.header.badge')}</span>
           </div>
-          <h2 className="cultural-contacts-title">Свържете се с нас</h2>
+          <h2 className="cultural-contacts-title">{t('clubs.CulturalContacts.header.title')}</h2>
           <p className="cultural-contacts-subtitle">
-            Търсите информация или искате да се присъедините? Ние сме тук, за да ви помогнем!
+            {t('clubs.CulturalContacts.header.subtitle')}
           </p>
         </div>
 
-        {/* Quick Contact Info */}
         <div className="cultural-contacts-quick-info">
           {Object.keys(contacts.workingHours).length > 0 && (
             <div className="cultural-contacts-status">
               <div className={`cultural-contacts-status-indicator ${isOpenNow() ? 'open' : 'closed'}`}>
                 <div className="cultural-contacts-status-dot"></div>
-                <span>{isOpenNow() ? 'Отворено сега' : 'Затворено сега'}</span>
+                <span>{isOpenNow() ? t('clubs.CulturalContacts.status.open') : t('clubs.CulturalContacts.status.closed')}</span>
               </div>
             </div>
           )}
@@ -375,7 +404,7 @@ ${contactForm.message}
               <div className="cultural-contacts-quick-item" onClick={handleCall} style={{cursor: 'pointer'}}>
                 <FontAwesomeIcon icon={faPhone} />
                 <div>
-                  <span className="cultural-contacts-quick-label">Телефон</span>
+                  <span className="cultural-contacts-quick-label">{t('clubs.CulturalContacts.quickInfo.phone')}</span>
                   <span className="cultural-contacts-quick-value">{contacts.phone}</span>
                 </div>
               </div>
@@ -385,7 +414,7 @@ ${contactForm.message}
               <div className="cultural-contacts-quick-item" onClick={() => window.location.href = `tel:${contacts.mobile}`} style={{cursor: 'pointer'}}>
                 <FontAwesomeIcon icon={faMobile} />
                 <div>
-                  <span className="cultural-contacts-quick-label">Мобилен</span>
+                  <span className="cultural-contacts-quick-label">{t('clubs.CulturalContacts.quickInfo.mobile')}</span>
                   <span className="cultural-contacts-quick-value">{contacts.mobile}</span>
                 </div>
               </div>
@@ -395,7 +424,7 @@ ${contactForm.message}
               <div className="cultural-contacts-quick-item" onClick={() => window.location.href = `mailto:${contacts.email}`} style={{cursor: 'pointer'}}>
                 <FontAwesomeIcon icon={faEnvelope} />
                 <div>
-                  <span className="cultural-contacts-quick-label">Email</span>
+                  <span className="cultural-contacts-quick-label">{t('clubs.CulturalContacts.quickInfo.email')}</span>
                   <span className="cultural-contacts-quick-value">{contacts.email}</span>
                 </div>
               </div>
@@ -405,7 +434,7 @@ ${contactForm.message}
               <div className="cultural-contacts-quick-item" onClick={() => window.open(`https://${contacts.website}`, '_blank')} style={{cursor: 'pointer'}}>
                 <FontAwesomeIcon icon={faGlobe} />
                 <div>
-                  <span className="cultural-contacts-quick-label">Уебсайт</span>
+                  <span className="cultural-contacts-quick-label">{t('clubs.CulturalContacts.quickInfo.website')}</span>
                   <span className="cultural-contacts-quick-value">{contacts.website}</span>
                 </div>
               </div>
@@ -413,12 +442,10 @@ ${contactForm.message}
           </div>
         </div>
 
-        {/* Main Content Grid */}
         <div className="cultural-contacts-main-grid">
           
-          {/* Contact Methods */}
           <div className="cultural-contacts-methods">
-            <h3>Начини за връзка</h3>
+            <h3>{t('clubs.CulturalContacts.methods.title')}</h3>
             <div className="cultural-contacts-methods-grid">
               {contactMethods.map(method => (
                 <div key={method.id} className="cultural-contacts-method-card">
@@ -438,30 +465,29 @@ ${contactForm.message}
             </div>
           </div>
 
-          {/* Contact Form - показваме само ако има имейл */}
           {contacts.email && (
             <div className="cultural-contacts-form-section">
-              <h3>Изпратете съобщение</h3>
+              <h3>{t('clubs.CulturalContacts.form.title')}</h3>
               <form onSubmit={handleSubmit} className="cultural-contacts-form">
                 <div className="cultural-contacts-form-row">
                   <div className="cultural-contacts-form-group">
-                    <label>Име и фамилия *</label>
+                    <label>{t('clubs.CulturalContacts.form.name')} *</label>
                     <input
                       type="text"
                       value={contactForm.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
-                      placeholder="Вашето име"
+                      placeholder={t('clubs.CulturalContacts.form.namePlaceholder')}
                       required
                     />
                   </div>
                   
                   <div className="cultural-contacts-form-group">
-                    <label>Email адрес *</label>
+                    <label>{t('clubs.CulturalContacts.form.email')} *</label>
                     <input
                       type="email"
                       value={contactForm.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      placeholder="email@example.com"
+                      placeholder={t('clubs.CulturalContacts.form.emailPlaceholder')}
                       required
                     />
                   </div>
@@ -469,35 +495,33 @@ ${contactForm.message}
                 
                 <div className="cultural-contacts-form-row">
                   <div className="cultural-contacts-form-group">
-                    <label>Телефон</label>
+                    <label>{t('clubs.CulturalContacts.form.phone')}</label>
                     <input
                       type="tel"
                       value={contactForm.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      placeholder="0888 123 456"
+                      placeholder={t('clubs.CulturalContacts.form.phonePlaceholder')}
                     />
                   </div>
                   
                   <div className="cultural-contacts-form-group">
-                    <label>Тема *</label>
+                    <label>{t('clubs.CulturalContacts.form.subject')} *</label>
                     <select
                       value={contactForm.subject}
                       onChange={(e) => handleInputChange('subject', e.target.value)}
                       required
                     >
-                      <option value="">Изберете тема</option>
-                      <option value="Информация за членство">Информация за членство</option>
-                      <option value="Дейности и програми">Дейности и програми</option>
-                      <option value="Събития и мероприятия">Събития и мероприятия</option>
-                      <option value="Доброволчество">Доброволчество</option>
-                      <option value="Оплакване или предложение">Оплакване или предложение</option>
-                      <option value="Друго">Друго</option>
+                      {subjectOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
                 
                 <div className="cultural-contacts-form-group">
-                  <label>Предпочитан начин за отговор</label>
+                  <label>{t('clubs.CulturalContacts.form.preferredResponse')}</label>
                   <div className="cultural-contacts-radio-group">
                     <label className="cultural-contacts-radio-label">
                       <input
@@ -506,7 +530,7 @@ ${contactForm.message}
                         checked={contactForm.contactMethod === 'email'}
                         onChange={(e) => handleInputChange('contactMethod', e.target.value)}
                       />
-                      <span>Email</span>
+                      <span>{t('clubs.CulturalContacts.form.contactMethods.email')}</span>
                     </label>
                     {(contacts.phone || contacts.mobile) && (
                       <label className="cultural-contacts-radio-label">
@@ -516,18 +540,18 @@ ${contactForm.message}
                           checked={contactForm.contactMethod === 'phone'}
                           onChange={(e) => handleInputChange('contactMethod', e.target.value)}
                         />
-                        <span>Телефон</span>
+                        <span>{t('clubs.CulturalContacts.form.contactMethods.phone')}</span>
                       </label>
                     )}
                   </div>
                 </div>
                 
                 <div className="cultural-contacts-form-group">
-                  <label>Съобщение *</label>
+                  <label>{t('clubs.CulturalContacts.form.message')} *</label>
                   <textarea
                     value={contactForm.message}
                     onChange={(e) => handleInputChange('message', e.target.value)}
-                    placeholder="Напишете вашето съобщение тук..."
+                    placeholder={t('clubs.CulturalContacts.form.messagePlaceholder')}
                     rows="5"
                     required
                   />
@@ -541,12 +565,12 @@ ${contactForm.message}
                   {formStatus === 'sending' ? (
                     <>
                       <div className="cultural-contacts-spinner"></div>
-                      Изпраща се...
+                      {t('clubs.CulturalContacts.form.sending')}
                     </>
                   ) : (
                     <>
                       <FontAwesomeIcon icon={faPaperPlane} />
-                      Изпрати съобщение
+                      {t('clubs.CulturalContacts.form.submit')}
                     </>
                   )}
                 </button>
@@ -554,14 +578,14 @@ ${contactForm.message}
                 {formStatus === 'success' && (
                   <div className="cultural-contacts-success-message">
                     <FontAwesomeIcon icon={faCheckCircle} />
-                    Съобщението е изпратено успешно! Ще ви отговорим в рамките на 24 часа.
+                    {t('clubs.CulturalContacts.form.success')}
                   </div>
                 )}
 
                 {formStatus === 'error' && (
                   <div className="cultural-contacts-error-message">
                     <FontAwesomeIcon icon={faExclamationTriangle} />
-                    Възникна грешка при изпращането. Моля опитайте отново.
+                    {t('clubs.CulturalContacts.form.error')}
                   </div>
                 )}
               </form>
@@ -569,15 +593,13 @@ ${contactForm.message}
           )}
         </div>
 
-        {/* Working Hours & Emergency & Social */}
         <div className="cultural-contacts-info-grid">
           
-          {/* Working Hours - показваме само ако има данни */}
           {Object.keys(contacts.workingHours).length > 0 && (
             <div className="cultural-contacts-hours-card">
               <div className="cultural-contacts-hours-header">
                 <FontAwesomeIcon icon={faClock} />
-                <h3>Работно време</h3>
+                <h3>{t('clubs.CulturalContacts.workingHours.title')}</h3>
               </div>
               <div className="cultural-contacts-hours-list">
                 {workingHours.map((day, index) => (
@@ -589,9 +611,10 @@ ${contactForm.message}
                   >
                     <span className="cultural-contacts-day">{day.day}</span>
                     <span className={`cultural-contacts-time ${
-                      day.time === 'затворено' ? 'closed' : ''
+                      day.time === t('clubs.CulturalContacts.workingHours.closed') ? 'closed' : ''
                     }`}>
-                      {day.time === 'затворено' ? 'Затворено' : day.time}
+                      {day.time === t('clubs.CulturalContacts.workingHours.closed') ? 
+                        t('clubs.CulturalContacts.workingHours.closed') : day.time}
                     </span>
                   </div>
                 ))}
@@ -599,12 +622,11 @@ ${contactForm.message}
             </div>
           )}
 
-          {/* Emergency Contacts - показваме само ако има данни */}
           {emergencyContacts.length > 0 && (
             <div className="cultural-contacts-emergency-card">
               <div className="cultural-contacts-emergency-header">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h3>Важни контакти</h3>
+                <h3>{t('clubs.CulturalContacts.emergency.title')}</h3>
               </div>
               <div className="cultural-contacts-emergency-list">
                 {emergencyContacts.map((contact, index) => (
@@ -630,12 +652,11 @@ ${contactForm.message}
             </div>
           )}
 
-          {/* Social Media - показваме само ако има данни */}
           {socialMedia.length > 0 && (
             <div className="cultural-contacts-social-card">
               <div className="cultural-contacts-social-header">
                 <FontAwesomeIcon icon={faUsers} />
-                <h3>Социални мрежи</h3>
+                <h3>{t('clubs.CulturalContacts.social.title')}</h3>
               </div>
               <div className="cultural-contacts-social-list">
                 {socialMedia.map((social, index) => (
@@ -653,7 +674,7 @@ ${contactForm.message}
                         target="_blank" 
                         rel="noopener noreferrer"
                       >
-                        Последвайте ни
+                        {t('clubs.CulturalContacts.social.follow')}
                       </a>
                     </div>
                   </div>
@@ -663,13 +684,12 @@ ${contactForm.message}
           )}
         </div>
 
-        {/* FAQ Section - показваме само ако има данни */}
         {faqItems.length > 0 && (
           <div className="cultural-contacts-faq">
             <div className="cultural-contacts-faq-header">
               <FontAwesomeIcon icon={faQuestionCircle} />
-              <h3>Често задавани въпроси</h3>
-              <p>Намерете бързи отговори на най-честите въпроси</p>
+              <h3>{t('clubs.CulturalContacts.faq.title')}</h3>
+              <p>{t('clubs.CulturalContacts.faq.subtitle')}</p>
             </div>
             <div className="cultural-contacts-faq-grid">
               {faqItems.map((item, index) => (
@@ -685,22 +705,21 @@ ${contactForm.message}
           </div>
         )}
 
-        {/* Call to Action */}
         <div className="cultural-contacts-cta">
           <div className="cultural-contacts-cta-content">
-            <h3>Все още имате въпроси?</h3>
-            <p>Нашият екип е готов да ви помогне и да отговори на всички ваши въпроси</p>
+            <h3>{t('clubs.CulturalContacts.cta.title')}</h3>
+            <p>{t('clubs.CulturalContacts.cta.subtitle')}</p>
             <div className="cultural-contacts-cta-buttons">
               {(contacts.phone || contacts.mobile) && (
                 <button className="cultural-contacts-cta-primary" onClick={handleCall}>
                   <FontAwesomeIcon icon={faPhone} />
-                  Обадете се сега
+                  {t('clubs.CulturalContacts.cta.callNow')}
                 </button>
               )}
               {club.location && (
                 <button className="cultural-contacts-cta-secondary" onClick={handleVisit}>
                   <FontAwesomeIcon icon={faMapMarkerAlt} />
-                  Посетете ни
+                  {t('clubs.CulturalContacts.cta.visitUs')}
                 </button>
               )}
             </div>

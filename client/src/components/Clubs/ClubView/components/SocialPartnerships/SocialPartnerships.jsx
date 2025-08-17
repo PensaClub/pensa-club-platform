@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHandshake,
@@ -38,12 +39,12 @@ import {
 import './socialPartnerships.css';
 
 export const SocialPartnerships = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedPartner, setExpandedPartner] = useState(null);
-  const [viewMode, setViewMode] = useState('cards'); // 'cards' or 'network'
+  const [viewMode, setViewMode] = useState('cards');
 
-  // Проверяваме дали има необходимите данни
   if (!club?.socialImpact?.partnerships && 
       !club?.partnerships && 
       !club?.collaborations &&
@@ -51,13 +52,38 @@ export const SocialPartnerships = ({ club }) => {
     return null;
   }
 
-  // Събираме всички партньорства
   const socialPartnerships = club.socialImpact?.partnerships || [];
   const generalPartnerships = club.partnerships || [];
   const collaborations = club.collaborations || [];
   const sponsors = club.sponsors || [];
 
-  // Създаваме обединен списък с партньори
+  const getPartnershipCategory = (partnerName, partnerType) => {
+    const name = partnerName?.toLowerCase() || '';
+    const type = partnerType?.toLowerCase() || '';
+    
+    const categoryTerms = t('clubs.SocialPartnerships.categoryTerms', { returnObjects: true });
+    
+    for (const [categoryKey, terms] of Object.entries(categoryTerms)) {
+      const typeTerms = terms.type || [];
+      const nameTerms = terms.name || [];
+      
+      if (typeTerms.some(term => type.includes(term)) || nameTerms.some(term => name.includes(term))) {
+        return categoryKey;
+      }
+    }
+    
+    return 'business';
+  };
+
+  const getPriorityLevel = (type) => {
+    const typeStr = type?.toLowerCase() || '';
+    const priorityTerms = t('clubs.SocialPartnerships.priorityTerms', { returnObjects: true });
+    
+    if (priorityTerms.high.some(term => typeStr.includes(term))) return 'high';
+    if (priorityTerms.medium.some(term => typeStr.includes(term))) return 'medium';
+    return 'normal';
+  };
+
   const allPartnerships = [
     ...socialPartnerships.map(partnership => ({
       ...partnership,
@@ -93,109 +119,71 @@ export const SocialPartnerships = ({ club }) => {
     }))
   ];
 
-  // Ако няма партньорства, не показваме компонента
   if (allPartnerships.length === 0) {
     return null;
   }
 
-  // Helper функции
-  function getPartnershipCategory(partnerName, partnerType) {
-    const name = partnerName?.toLowerCase() || '';
-    const type = partnerType?.toLowerCase() || '';
-    
-    if (type.includes('спонсор') || type.includes('sponsor')) return 'sponsor';
-    if (type.includes('държав') || type.includes('общин') || type.includes('government')) return 'government';
-    if (type.includes('медицин') || type.includes('болниц') || type.includes('health')) return 'healthcare';
-    if (type.includes('образов') || type.includes('школа') || type.includes('университ')) return 'education';
-    if (type.includes('бизнес') || type.includes('фирма') || type.includes('компани')) return 'business';
-    if (type.includes('нпо') || type.includes('ngo') || type.includes('organization')) return 'ngo';
-    if (type.includes('култур') || type.includes('изкуств') || type.includes('culture')) return 'culture';
-    
-    // Fallback based on name
-    if (name.includes('общин') || name.includes('кметств')) return 'government';
-    if (name.includes('болниц') || name.includes('поликлиник')) return 'healthcare';
-    if (name.includes('училищ') || name.includes('университ')) return 'education';
-    if (name.includes('клуб') || name.includes('сдружение')) return 'ngo';
-    
-    return 'business';
-  }
+  const getCategoryIcon = (category) => {
+    const iconMap = {
+      government: faUniversity,
+      healthcare: faHospital,
+      education: faGraduationCap,
+      business: faBuilding,
+      ngo: faHeart,
+      culture: faPalette,
+      sponsor: faTrophy
+    };
+    return iconMap[category] || faHandshake;
+  };
 
-  function getPriorityLevel(type) {
-    const typeStr = type?.toLowerCase() || '';
-    if (typeStr.includes('стратег') || typeStr.includes('strategic')) return 'high';
-    if (typeStr.includes('спонсор') || typeStr.includes('sponsor')) return 'high';
-    if (typeStr.includes('дългосроч') || typeStr.includes('long-term')) return 'medium';
-    return 'normal';
-  }
+  const getCategoryColor = (category) => {
+    const colorMap = {
+      government: '#dc2626',
+      healthcare: '#059669',
+      education: '#2563eb',
+      business: '#7c3aed',
+      ngo: '#ea580c',
+      culture: '#c026d3',
+      sponsor: '#ca8a04'
+    };
+    return colorMap[category] || '#6b7280';
+  };
 
-  function getCategoryIcon(category) {
-    switch(category) {
-      case 'government': return faUniversity;
-      case 'healthcare': return faHospital;
-      case 'education': return faGraduationCap;
-      case 'business': return faBuilding;
-      case 'ngo': return faHeart;
-      case 'culture': return faPalette;
-      case 'sponsor': return faTrophy;
-      default: return faHandshake;
-    }
-  }
+  const getCategoryLabel = (category) => {
+    return t(`clubs.SocialPartnerships.categories.${category}`, category);
+  };
 
-  function getCategoryColor(category) {
-    switch(category) {
-      case 'government': return '#dc2626';
-      case 'healthcare': return '#059669';
-      case 'education': return '#2563eb';
-      case 'business': return '#7c3aed';
-      case 'ngo': return '#ea580c';
-      case 'culture': return '#c026d3';
-      case 'sponsor': return '#ca8a04';
-      default: return '#6b7280';
-    }
-  }
+  const getPriorityIcon = (priority) => {
+    const iconMap = {
+      high: faStar,
+      medium: faAward,
+      normal: faCheckCircle
+    };
+    return iconMap[priority] || faCheckCircle;
+  };
 
-  function getCategoryLabel(category) {
-    switch(category) {
-      case 'government': return 'Държавни';
-      case 'healthcare': return 'Здравеопазване';
-      case 'education': return 'Образование';
-      case 'business': return 'Бизнес';
-      case 'ngo': return 'НПО';
-      case 'culture': return 'Култура';
-      case 'sponsor': return 'Спонсори';
-      default: return 'Други';
-    }
-  }
+  const getPriorityColor = (priority) => {
+    const colorMap = {
+      high: '#f59e0b',
+      medium: '#8b5cf6',
+      normal: '#10b981'
+    };
+    return colorMap[priority] || '#10b981';
+  };
 
-  function getPriorityIcon(priority) {
-    switch(priority) {
-      case 'high': return faStar;
-      case 'medium': return faAward;
-      default: return faCheckCircle;
-    }
-  }
-
-  function getPriorityColor(priority) {
-    switch(priority) {
-      case 'high': return '#f59e0b';
-      case 'medium': return '#8b5cf6';
-      default: return '#10b981';
-    }
-  }
-
-  // Категории за филтриране
-  const categories = [
-    { key: 'all', label: 'Всички', icon: faHandshake },
-    { key: 'government', label: 'Държавни', icon: faUniversity },
-    { key: 'healthcare', label: 'Здравеопазване', icon: faHospital },
-    { key: 'education', label: 'Образование', icon: faGraduationCap },
-    { key: 'business', label: 'Бизнес', icon: faBuilding },
-    { key: 'ngo', label: 'НПО', icon: faHeart },
-    { key: 'culture', label: 'Култура', icon: faPalette },
-    { key: 'sponsor', label: 'Спонсори', icon: faTrophy }
+  const getCategories = () => [
+    { key: 'all', label: t('clubs.SocialPartnerships.categories.all'), icon: faHandshake },
+    { key: 'government', label: t('clubs.SocialPartnerships.categories.government'), icon: faUniversity },
+    { key: 'healthcare', label: t('clubs.SocialPartnerships.categories.healthcare'), icon: faHospital },
+    { key: 'education', label: t('clubs.SocialPartnerships.categories.education'), icon: faGraduationCap },
+    { key: 'business', label: t('clubs.SocialPartnerships.categories.business'), icon: faBuilding },
+    { key: 'ngo', label: t('clubs.SocialPartnerships.categories.ngo'), icon: faHeart },
+    { key: 'culture', label: t('clubs.SocialPartnerships.categories.culture'), icon: faPalette },
+    { key: 'sponsor', label: t('clubs.SocialPartnerships.categories.sponsor'), icon: faTrophy }
   ];
 
-  // Филтриране на партньорства
+  const categories = getCategories();
+
   const filteredPartnerships = allPartnerships.filter(partnership => {
     const matchesCategory = activeCategory === 'all' || partnership.category === activeCategory;
     const matchesSearch = partnership.partner?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -204,7 +192,6 @@ export const SocialPartnerships = ({ club }) => {
     return matchesCategory && matchesSearch;
   });
 
-  // Сортиране по приоритет и име
   const sortedPartnerships = filteredPartnerships.sort((a, b) => {
     const priorityOrder = { 'high': 3, 'medium': 2, 'normal': 1 };
     const aPriority = priorityOrder[a.priority] || 1;
@@ -224,80 +211,82 @@ export const SocialPartnerships = ({ club }) => {
   const formatDate = (dateString) => {
     if (!dateString) return null;
     const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    
+    return date.toLocaleDateString(locale, {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
     });
   };
 
+  const resetFilters = () => {
+    setActiveCategory('all');
+    setSearchTerm('');
+  };
+
   return (
     <section id="social-partnerships" className="social-partnerships-section">
       <div className="social-partnerships-container">
         
-        {/* Header */}
         <div className="social-partnerships-header">
           <div className="social-partnerships-header-content">
             <div className="social-partnerships-badge">
               <FontAwesomeIcon icon={faNetworkWired} />
-              <span>Нашите партньори</span>
+              <span>{t('clubs.SocialPartnerships.header.badge')}</span>
             </div>
             <h2 className="social-partnerships-title">
-              Заедно сме по-силни
+              {t('clubs.SocialPartnerships.header.title')}
             </h2>
             <p className="social-partnerships-subtitle">
-              Открийте организациите и институциите, с които работим за постигане на нашите цели
+              {t('clubs.SocialPartnerships.header.subtitle')}
             </p>
           </div>
           
-          {/* Partnership Stats */}
           <div className="social-partnerships-stats">
             <div className="social-partnerships-stat">
               <span className="social-partnerships-stat-number">{allPartnerships.length}</span>
-              <span className="social-partnerships-stat-label">Партньори</span>
+              <span className="social-partnerships-stat-label">{t('clubs.SocialPartnerships.stats.partners')}</span>
             </div>
             <div className="social-partnerships-stat">
               <span className="social-partnerships-stat-number">
                 {allPartnerships.filter(p => p.priority === 'high').length}
               </span>
-              <span className="social-partnerships-stat-label">Стратегически</span>
+              <span className="social-partnerships-stat-label">{t('clubs.SocialPartnerships.stats.strategic')}</span>
             </div>
           </div>
         </div>
 
-        {/* Controls */}
         <div className="social-partnerships-controls">
-          {/* Search Bar */}
           <div className="social-partnerships-search-bar">
             <FontAwesomeIcon icon={faSearch} />
             <input
               type="text"
-              placeholder="Търсете партньор или организация..."
+              placeholder={t('clubs.SocialPartnerships.search.placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           
           <div className="social-partnerships-toolbar">
-            {/* View Mode Toggle */}
             <div className="social-partnerships-view-toggle">
               <button 
                 onClick={() => setViewMode('cards')}
                 className={`social-partnerships-view-btn ${viewMode === 'cards' ? 'active' : ''}`}
               >
                 <FontAwesomeIcon icon={faUsers} />
-                <span>Карти</span>
+                <span>{t('clubs.SocialPartnerships.viewModes.cards')}</span>
               </button>
               <button 
                 onClick={() => setViewMode('network')}
                 className={`social-partnerships-view-btn ${viewMode === 'network' ? 'active' : ''}`}
               >
                 <FontAwesomeIcon icon={faNetworkWired} />
-                <span>Мрежа</span>
+                <span>{t('clubs.SocialPartnerships.viewModes.network')}</span>
               </button>
             </div>
             
-            {/* Category Filter */}
             <div className="social-partnerships-category-filters">
               {categories.map(category => (
                 <button
@@ -313,7 +302,6 @@ export const SocialPartnerships = ({ club }) => {
           </div>
         </div>
 
-        {/* Partnerships Display */}
         {viewMode === 'cards' ? (
           <div className="social-partnerships-grid">
             {sortedPartnerships.map((partnership, index) => (
@@ -366,7 +354,7 @@ export const SocialPartnerships = ({ club }) => {
                     {partnership.since && (
                       <div className="social-partnerships-card-detail">
                         <FontAwesomeIcon icon={faHistory} />
-                        <span>От {formatDate(partnership.since) || partnership.since}</span>
+                        <span>{t('clubs.SocialPartnerships.details.since')} {formatDate(partnership.since) || partnership.since}</span>
                       </div>
                     )}
                     {partnership.location && (
@@ -384,7 +372,9 @@ export const SocialPartnerships = ({ club }) => {
                       className="social-partnerships-expand-btn"
                     >
                       <span>
-                        {expandedPartner === partnership.id ? 'Скрий детайли' : 'Вижте повече'}
+                        {expandedPartner === partnership.id ? 
+                          t('clubs.SocialPartnerships.actions.hideDetails') : 
+                          t('clubs.SocialPartnerships.actions.showMore')}
                       </span>
                       <FontAwesomeIcon 
                         icon={expandedPartner === partnership.id ? faChevronUp : faChevronDown} 
@@ -396,7 +386,7 @@ export const SocialPartnerships = ({ club }) => {
                     <div className="social-partnerships-expanded-content">
                       {partnership.projects && (
                         <div className="social-partnerships-projects">
-                          <h4>Общи проекти:</h4>
+                          <h4>{t('clubs.SocialPartnerships.details.jointProjects')}:</h4>
                           <ul>
                             {partnership.projects.map((project, idx) => (
                               <li key={idx}>{project}</li>
@@ -407,7 +397,7 @@ export const SocialPartnerships = ({ club }) => {
                       
                       {partnership.achievements && (
                         <div className="social-partnerships-achievements">
-                          <h4>Постижения:</h4>
+                          <h4>{t('clubs.SocialPartnerships.details.achievements')}:</h4>
                           <ul>
                             {partnership.achievements.map((achievement, idx) => (
                               <li key={idx}>{achievement}</li>
@@ -425,7 +415,7 @@ export const SocialPartnerships = ({ club }) => {
                             className="social-partnerships-contact-link"
                           >
                             <FontAwesomeIcon icon={faExternalLinkAlt} />
-                            <span>Уебсайт</span>
+                            <span>{t('clubs.SocialPartnerships.contact.website')}</span>
                           </a>
                         )}
                         {partnership.email && (
@@ -434,7 +424,7 @@ export const SocialPartnerships = ({ club }) => {
                             className="social-partnerships-contact-link"
                           >
                             <FontAwesomeIcon icon={faEnvelope} />
-                            <span>Имейл</span>
+                            <span>{t('clubs.SocialPartnerships.contact.email')}</span>
                           </a>
                         )}
                         {partnership.phone && (
@@ -443,7 +433,7 @@ export const SocialPartnerships = ({ club }) => {
                             className="social-partnerships-contact-link"
                           >
                             <FontAwesomeIcon icon={faPhone} />
-                            <span>Телефон</span>
+                            <span>{t('clubs.SocialPartnerships.contact.phone')}</span>
                           </a>
                         )}
                       </div>
@@ -485,17 +475,16 @@ export const SocialPartnerships = ({ club }) => {
           </div>
         )}
 
-        {/* No Results */}
         {filteredPartnerships.length === 0 && (
           <div className="social-partnerships-no-results">
             <FontAwesomeIcon icon={faHandshake} />
-            <h3>Няма намерени партньори</h3>
-            <p>Опитайте с различни критерии за търсене</p>
+            <h3>{t('clubs.SocialPartnerships.noResults.title')}</h3>
+            <p>{t('clubs.SocialPartnerships.noResults.message')}</p>
             <button 
-              onClick={() => {setActiveCategory('all'); setSearchTerm('');}}
+              onClick={resetFilters}
               className="social-partnerships-reset-btn"
             >
-              Покажи всички партньори
+              {t('clubs.SocialPartnerships.noResults.showAll')}
             </button>
           </div>
         )}

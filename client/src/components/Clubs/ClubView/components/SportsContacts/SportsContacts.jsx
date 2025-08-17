@@ -1,5 +1,5 @@
-// components/SportsContacts/SportsContacts.jsx
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faPhone,
@@ -18,7 +18,6 @@ import {
   faTrophy,
   faFire,
   faBolt,
-
   faRocket,
   faStopwatch,
   faThumbsUp,
@@ -37,6 +36,7 @@ import './sportsContacts.css';
 import { faFacebook, faInstagram, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
 export const SportsContacts = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -48,7 +48,6 @@ export const SportsContacts = ({ club }) => {
   const [formStatus, setFormStatus] = useState(null);
   const [copiedItems, setCopiedItems] = useState({});
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
@@ -58,7 +57,6 @@ export const SportsContacts = ({ club }) => {
   const workingHours = contacts.workingHours || {};
   const socialMedia = contacts.socialMedia || {};
 
-  // Проверяваме дали има РЕАЛНО съдържание за показване
   const hasContactContent = 
     contacts.phone ||
     contacts.mobile ||
@@ -71,36 +69,36 @@ export const SportsContacts = ({ club }) => {
     return null;
   }
 
-  // Contact reasons for sports club
-  const contactReasons = [
-    { value: 'general', label: 'Обща информация', icon: faInfoCircle },
-    { value: 'membership', label: 'Членство и цени', icon: faUsers },
-    { value: 'training', label: 'Тренировки и програми', icon: faDumbbell },
-    { value: 'events', label: 'События и състезания', icon: faTrophy },
-    { value: 'facilities', label: 'Съоръжения и оборудване', icon: faFlag },
-    { value: 'emergency', label: 'Спешни въпроси', icon: faAmbulance }
+  const getContactReasons = () => [
+    { value: 'general', label: t('clubs.SportsContacts.contactReasons.general'), icon: faInfoCircle },
+    { value: 'membership', label: t('clubs.SportsContacts.contactReasons.membership'), icon: faUsers },
+    { value: 'training', label: t('clubs.SportsContacts.contactReasons.training'), icon: faDumbbell },
+    { value: 'events', label: t('clubs.SportsContacts.contactReasons.events'), icon: faTrophy },
+    { value: 'facilities', label: t('clubs.SportsContacts.contactReasons.facilities'), icon: faFlag },
+    { value: 'emergency', label: t('clubs.SportsContacts.contactReasons.emergency'), icon: faAmbulance }
   ];
 
-  // Working hours days
-  const workingDays = [
-    { key: 'monday', label: 'Понеделник' },
-    { key: 'tuesday', label: 'Вторник' },
-    { key: 'wednesday', label: 'Сряда' },
-    { key: 'thursday', label: 'Четвъртък' },
-    { key: 'friday', label: 'Петък' },
-    { key: 'saturday', label: 'Събота' },
-    { key: 'sunday', label: 'Неделя' }
+  const getWorkingDays = () => [
+    { key: 'monday', label: t('clubs.SportsContacts.workingDays.monday') },
+    { key: 'tuesday', label: t('clubs.SportsContacts.workingDays.tuesday') },
+    { key: 'wednesday', label: t('clubs.SportsContacts.workingDays.wednesday') },
+    { key: 'thursday', label: t('clubs.SportsContacts.workingDays.thursday') },
+    { key: 'friday', label: t('clubs.SportsContacts.workingDays.friday') },
+    { key: 'saturday', label: t('clubs.SportsContacts.workingDays.saturday') },
+    { key: 'sunday', label: t('clubs.SportsContacts.workingDays.sunday') }
   ];
 
-  // Social media platforms
-  const socialPlatforms = [
+  const getSocialPlatforms = () => [
     { key: 'facebook', label: 'Facebook', icon: faFacebook, color: '#1877f2' },
     { key: 'instagram', label: 'Instagram', icon: faInstagram, color: '#e4405f' },
     { key: 'youtube', label: 'YouTube', icon: faYoutube, color: '#ff0000' },
     { key: 'twitter', label: 'Twitter', icon: faTwitter, color: '#1da1f2' }
   ];
 
-  // Copy to clipboard function
+  const contactReasons = getContactReasons();
+  const workingDays = getWorkingDays();
+  const socialPlatforms = getSocialPlatforms();
+
   const copyToClipboard = async (text, type) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -116,12 +114,11 @@ export const SportsContacts = ({ club }) => {
         });
       }, 2000);
     } catch (error) {
-      console.error('Грешка при копиране:', error);
-      alert('Грешка при копиране. Моля опитайте отново.');
+      console.error('Copy error:', error);
+      alert(t('clubs.SportsContacts.messages.copyError'));
     }
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -130,12 +127,10 @@ export const SportsContacts = ({ club }) => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormStatus('sending');
 
-    // Simulate form submission
     setTimeout(() => {
       setFormStatus('success');
       setFormData({
@@ -153,7 +148,6 @@ export const SportsContacts = ({ club }) => {
     }, 2000);
   };
 
-  // Handle quick actions
   const handleCall = (phone) => {
     window.open(`tel:${phone}`, '_self');
   };
@@ -177,7 +171,7 @@ export const SportsContacts = ({ club }) => {
       const coords = `${location.coordinates.lat},${location.coordinates.lng}`;
       window.open(`https://www.google.com/maps/dir/?api=1&destination=${coords}`, '_blank');
     } else if (location.address) {
-      const address = encodeURIComponent(`${location.address}, ${location.city || 'България'}`);
+      const address = encodeURIComponent(`${location.address}, ${location.city || t('clubs.SportsContacts.defaultCountry')}`);
       window.open(`https://www.google.com/maps/search/${address}`, '_blank');
     }
   };
@@ -186,22 +180,20 @@ export const SportsContacts = ({ club }) => {
     <section id="sports-contacts" className="sports-contacts-section">
       <div className="sports-contacts-container">
         
-        {/* Header */}
         <div className="sports-contacts-header">
           <div className="sports-contacts-badge">
             <FontAwesomeIcon icon={faRocket} />
-            <span>Връзка</span>
+            <span>{t('clubs.SportsContacts.header.badge')}</span>
           </div>
           <h2 className="sports-contacts-title">
             <FontAwesomeIcon icon={faBolt} className="sports-contacts-title-icon" />
-            Свържете се с нас
+            {t('clubs.SportsContacts.header.title')}
           </h2>
           <p className="sports-contacts-subtitle">
-            Готови сме да отговорим на всички ваши въпроси за спорт, тренировки и членство
+            {t('clubs.SportsContacts.header.subtitle')}
           </p>
         </div>
 
-        {/* Quick Contact Cards */}
         <div className="sports-contacts-quick">
           {contacts.phone && (
             <div className="sports-contacts-quick-card phone">
@@ -210,9 +202,9 @@ export const SportsContacts = ({ club }) => {
                 <div className="sports-contacts-icon-pulse"></div>
               </div>
               <div className="sports-contacts-quick-info">
-                <h3>Обадете се</h3>
+                <h3>{t('clubs.SportsContacts.quickCards.phone.title')}</h3>
                 <p>{contacts.phone}</p>
-                <span className="sports-contacts-quick-note">Директна линия</span>
+                <span className="sports-contacts-quick-note">{t('clubs.SportsContacts.quickCards.phone.note')}</span>
               </div>
               <div className="sports-contacts-quick-actions">
                 <button 
@@ -220,7 +212,7 @@ export const SportsContacts = ({ club }) => {
                   onClick={() => handleCall(contacts.phone)}
                 >
                   <FontAwesomeIcon icon={faPhoneAlt} />
-                  Обади се
+                  {t('clubs.SportsContacts.actions.call')}
                 </button>
                 <button 
                   className={`sports-contacts-copy-btn ${copiedItems['phone'] ? 'copied' : ''}`}
@@ -239,9 +231,9 @@ export const SportsContacts = ({ club }) => {
                 <div className="sports-contacts-icon-pulse"></div>
               </div>
               <div className="sports-contacts-quick-info">
-                <h3>Изпратете имейл</h3>
+                <h3>{t('clubs.SportsContacts.quickCards.email.title')}</h3>
                 <p>{contacts.email}</p>
-                <span className="sports-contacts-quick-note">24/7 достъпност</span>
+                <span className="sports-contacts-quick-note">{t('clubs.SportsContacts.quickCards.email.note')}</span>
               </div>
               <div className="sports-contacts-quick-actions">
                 <button 
@@ -249,7 +241,7 @@ export const SportsContacts = ({ club }) => {
                   onClick={() => handleEmail(contacts.email)}
                 >
                   <FontAwesomeIcon icon={faEnvelopeOpen} />
-                  Изпрати
+                  {t('clubs.SportsContacts.actions.send')}
                 </button>
                 <button 
                   className={`sports-contacts-copy-btn ${copiedItems['email'] ? 'copied' : ''}`}
@@ -268,7 +260,7 @@ export const SportsContacts = ({ club }) => {
                 <div className="sports-contacts-icon-pulse"></div>
               </div>
               <div className="sports-contacts-quick-info">
-                <h3>Посетете ни</h3>
+                <h3>{t('clubs.SportsContacts.quickCards.location.title')}</h3>
                 <p>{location.address}</p>
                 <span className="sports-contacts-quick-note">{location.city}</span>
               </div>
@@ -278,7 +270,7 @@ export const SportsContacts = ({ club }) => {
                   onClick={handleDirections}
                 >
                   <FontAwesomeIcon icon={faLocationArrow} />
-                  Маршрут
+                  {t('clubs.SportsContacts.actions.directions')}
                 </button>
                 <button 
                   className={`sports-contacts-copy-btn ${copiedItems['address'] ? 'copied' : ''}`}
@@ -291,15 +283,13 @@ export const SportsContacts = ({ club }) => {
           )}
         </div>
 
-        {/* Main Content Grid */}
         <div className="sports-contacts-main">
           
-          {/* Contact Form */}
           <div className="sports-contacts-form-section">
             <div className="sports-contacts-form-header">
               <FontAwesomeIcon icon={faFire} />
-              <h3>Изпратете съобщение</h3>
-              <p>Попълнете формата и ще се свържем с вас възможно най-скоро</p>
+              <h3>{t('clubs.SportsContacts.form.title')}</h3>
+              <p>{t('clubs.SportsContacts.form.subtitle')}</p>
             </div>
 
             <form className="sports-contacts-form" onSubmit={handleSubmit}>
@@ -307,7 +297,7 @@ export const SportsContacts = ({ club }) => {
                 <div className="sports-contacts-form-group">
                   <label htmlFor="name">
                     <FontAwesomeIcon icon={faUser} />
-                    Вашето име *
+                    {t('clubs.SportsContacts.form.fields.name.label')} *
                   </label>
                   <input
                     type="text"
@@ -316,14 +306,14 @@ export const SportsContacts = ({ club }) => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    placeholder="Въведете вашето име"
+                    placeholder={t('clubs.SportsContacts.form.fields.name.placeholder')}
                   />
                 </div>
                 
                 <div className="sports-contacts-form-group">
                   <label htmlFor="email">
                     <FontAwesomeIcon icon={faEnvelope} />
-                    Имейл адрес *
+                    {t('clubs.SportsContacts.form.fields.email.label')} *
                   </label>
                   <input
                     type="email"
@@ -332,7 +322,7 @@ export const SportsContacts = ({ club }) => {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    placeholder="your@email.com"
+                    placeholder={t('clubs.SportsContacts.form.fields.email.placeholder')}
                   />
                 </div>
               </div>
@@ -341,7 +331,7 @@ export const SportsContacts = ({ club }) => {
                 <div className="sports-contacts-form-group">
                   <label htmlFor="phone">
                     <FontAwesomeIcon icon={faPhone} />
-                    Телефон
+                    {t('clubs.SportsContacts.form.fields.phone.label')}
                   </label>
                   <input
                     type="tel"
@@ -349,14 +339,14 @@ export const SportsContacts = ({ club }) => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder="+359 ..."
+                    placeholder={t('clubs.SportsContacts.form.fields.phone.placeholder')}
                   />
                 </div>
                 
                 <div className="sports-contacts-form-group">
                   <label htmlFor="contactReason">
                     <FontAwesomeIcon icon={faFlag} />
-                    Причина за контакт
+                    {t('clubs.SportsContacts.form.fields.reason.label')}
                   </label>
                   <select
                     id="contactReason"
@@ -376,7 +366,7 @@ export const SportsContacts = ({ club }) => {
               <div className="sports-contacts-form-group">
                 <label htmlFor="subject">
                   <FontAwesomeIcon icon={faComment} />
-                  Заглавие на съобщението
+                  {t('clubs.SportsContacts.form.fields.subject.label')}
                 </label>
                 <input
                   type="text"
@@ -384,14 +374,14 @@ export const SportsContacts = ({ club }) => {
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  placeholder="Кратко заглавие на вашия въпрос"
+                  placeholder={t('clubs.SportsContacts.form.fields.subject.placeholder')}
                 />
               </div>
 
               <div className="sports-contacts-form-group">
                 <label htmlFor="message">
                   <FontAwesomeIcon icon={faComment} />
-                  Съобщение *
+                  {t('clubs.SportsContacts.form.fields.message.label')} *
                 </label>
                 <textarea
                   id="message"
@@ -400,7 +390,7 @@ export const SportsContacts = ({ club }) => {
                   onChange={handleInputChange}
                   required
                   rows={5}
-                  placeholder="Опишете вашия въпрос или заявка подробно..."
+                  placeholder={t('clubs.SportsContacts.form.fields.message.placeholder')}
                 />
               </div>
 
@@ -412,19 +402,19 @@ export const SportsContacts = ({ club }) => {
                 {formStatus === 'sending' && (
                   <>
                     <FontAwesomeIcon icon={faStopwatch} className="spin" />
-                    Изпращане...
+                    {t('clubs.SportsContacts.form.status.sending')}
                   </>
                 )}
                 {formStatus === 'success' && (
                   <>
                     <FontAwesomeIcon icon={faCheckCircle} />
-                    Изпратено успешно!
+                    {t('clubs.SportsContacts.form.status.success')}
                   </>
                 )}
                 {!formStatus && (
                   <>
                     <FontAwesomeIcon icon={faPaperPlane} />
-                    Изпрати съобщението
+                    {t('clubs.SportsContacts.form.submit')}
                     <div className="sports-contacts-btn-energy"></div>
                   </>
                 )}
@@ -432,15 +422,13 @@ export const SportsContacts = ({ club }) => {
             </form>
           </div>
 
-          {/* Contact Info Sidebar */}
           <div className="sports-contacts-info-section">
             
-            {/* Working Hours */}
             {Object.keys(workingHours).length > 0 && (
               <div className="sports-contacts-info-card">
                 <div className="sports-contacts-info-header">
                   <FontAwesomeIcon icon={faClock} />
-                  <h4>Работно време</h4>
+                  <h4>{t('clubs.SportsContacts.info.workingHours.title')}</h4>
                 </div>
                 <div className="sports-contacts-hours-list">
                   {workingDays.map(day => {
@@ -451,7 +439,7 @@ export const SportsContacts = ({ club }) => {
                       <div key={day.key} className="sports-contacts-hours-item">
                         <span className="sports-contacts-day">{day.label}</span>
                         <span className="sports-contacts-time">
-                          {hours === 'closed' ? 'Затворено' : hours}
+                          {hours === 'closed' ? t('clubs.SportsContacts.info.workingHours.closed') : hours}
                         </span>
                       </div>
                     );
@@ -460,18 +448,17 @@ export const SportsContacts = ({ club }) => {
               </div>
             )}
 
-            {/* Additional Contact Info */}
             <div className="sports-contacts-info-card">
               <div className="sports-contacts-info-header">
                 <FontAwesomeIcon icon={faInfoCircle} />
-                <h4>Допълнителна информация</h4>
+                <h4>{t('clubs.SportsContacts.info.additional.title')}</h4>
               </div>
               <div className="sports-contacts-extra-info">
                 {contacts.mobile && (
                   <div className="sports-contacts-extra-item">
                     <FontAwesomeIcon icon={faPhoneAlt} />
                     <div>
-                      <strong>Мобилен:</strong>
+                      <strong>{t('clubs.SportsContacts.info.additional.mobile')}:</strong>
                       <span>{contacts.mobile}</span>
                     </div>
                     <button onClick={() => handleCall(contacts.mobile)}>
@@ -484,7 +471,7 @@ export const SportsContacts = ({ club }) => {
                   <div className="sports-contacts-extra-item">
                     <FontAwesomeIcon icon={faGlobe} />
                     <div>
-                      <strong>Уебсайт:</strong>
+                      <strong>{t('clubs.SportsContacts.info.additional.website')}:</strong>
                       <span>{contacts.website}</span>
                     </div>
                     <button onClick={() => handleWebsite(contacts.website)}>
@@ -497,8 +484,8 @@ export const SportsContacts = ({ club }) => {
                   <div className="sports-contacts-extra-item">
                     <FontAwesomeIcon icon={faUsers} />
                     <div>
-                      <strong>Капацитет:</strong>
-                      <span>{location.venue.capacity} души</span>
+                      <strong>{t('clubs.SportsContacts.info.additional.capacity')}:</strong>
+                      <span>{location.venue.capacity} {t('clubs.SportsContacts.info.additional.people')}</span>
                     </div>
                   </div>
                 )}
@@ -507,7 +494,7 @@ export const SportsContacts = ({ club }) => {
                   <div className="sports-contacts-extra-item">
                     <FontAwesomeIcon icon={faTrophy} />
                     <div>
-                      <strong>Активни членове:</strong>
+                      <strong>{t('clubs.SportsContacts.info.additional.activeMembers')}:</strong>
                       <span>{club.membership.totalMembers}</span>
                     </div>
                   </div>
@@ -515,12 +502,11 @@ export const SportsContacts = ({ club }) => {
               </div>
             </div>
 
-            {/* Social Media */}
             {Object.keys(socialMedia).some(key => socialMedia[key]) && (
               <div className="sports-contacts-info-card">
                 <div className="sports-contacts-info-header">
                   <FontAwesomeIcon icon={faShareAlt} />
-                  <h4>Последвайте ни</h4>
+                  <h4>{t('clubs.SportsContacts.info.social.title')}</h4>
                 </div>
                 <div className="sports-contacts-social-grid">
                   {socialPlatforms.map(platform => {
@@ -544,20 +530,19 @@ export const SportsContacts = ({ club }) => {
               </div>
             )}
 
-            {/* Emergency Info */}
             <div className="sports-contacts-info-card emergency">
               <div className="sports-contacts-info-header">
                 <FontAwesomeIcon icon={faAmbulance} />
-                <h4>Спешна информация</h4>
+                <h4>{t('clubs.SportsContacts.info.emergency.title')}</h4>
               </div>
               <div className="sports-contacts-emergency-info">
                 <div className="sports-contacts-emergency-item">
                   <FontAwesomeIcon icon={faShieldAlt} />
                   <div>
-                    <strong>Спешна помощ:</strong>
-                    <span>150</span>
+                    <strong>{t('clubs.SportsContacts.info.emergency.general')}:</strong>
+                    <span>{t('clubs.SportsContacts.info.emergency.generalNumber')}</span>
                   </div>
-                  <button onClick={() => handleCall('150')}>
+                  <button onClick={() => handleCall(t('clubs.SportsContacts.info.emergency.generalNumber'))}>
                     <FontAwesomeIcon icon={faPhone} />
                   </button>
                 </div>
@@ -566,7 +551,7 @@ export const SportsContacts = ({ club }) => {
                   <div className="sports-contacts-emergency-item">
                     <FontAwesomeIcon icon={faHeartbeat} />
                     <div>
-                      <strong>Клуб спешно:</strong>
+                      <strong>{t('clubs.SportsContacts.info.emergency.club')}:</strong>
                       <span>{contacts.phone}</span>
                     </div>
                     <button onClick={() => handleCall(contacts.phone)}>
@@ -579,21 +564,18 @@ export const SportsContacts = ({ club }) => {
           </div>
         </div>
 
-        {/* Bottom CTA */}
         <div className="sports-contacts-cta">
           <div className="sports-contacts-cta-content">
             <FontAwesomeIcon icon={faTrophy} className="sports-contacts-cta-icon" />
-            <h3>Готови за нови предизвикателства?</h3>
-            <p>
-              Присъединете се към нашата спортна общност и започнете вашето фитнес пътешествие днес!
-            </p>
+            <h3>{t('clubs.SportsContacts.cta.title')}</h3>
+            <p>{t('clubs.SportsContacts.cta.subtitle')}</p>
             <div className="sports-contacts-cta-buttons">
               <button 
                 className="sports-contacts-cta-btn primary"
                 onClick={() => handleCall(contacts.phone || contacts.mobile)}
               >
                 <FontAwesomeIcon icon={faRocket} />
-                Започнете сега
+                {t('clubs.SportsContacts.cta.startNow')}
                 <div className="sports-contacts-btn-energy"></div>
               </button>
               <button 
@@ -601,7 +583,7 @@ export const SportsContacts = ({ club }) => {
                 onClick={handleDirections}
               >
                 <FontAwesomeIcon icon={faLocationArrow} />
-                Посетете ни
+                {t('clubs.SportsContacts.cta.visitUs')}
               </button>
             </div>
           </div>
@@ -611,19 +593,19 @@ export const SportsContacts = ({ club }) => {
               <span className="sports-contacts-cta-stat-number">
                 {club.stats?.yearsActive || '10'}+
               </span>
-              <span className="sports-contacts-cta-stat-label">Години опит</span>
+              <span className="sports-contacts-cta-stat-label">{t('clubs.SportsContacts.cta.stats.yearsExperience')}</span>
             </div>
             <div className="sports-contacts-cta-stat">
               <span className="sports-contacts-cta-stat-number">
                 {club.membership?.totalMembers || '100'}+
               </span>
-              <span className="sports-contacts-cta-stat-label">Доволни членове</span>
+              <span className="sports-contacts-cta-stat-label">{t('clubs.SportsContacts.cta.stats.happyMembers')}</span>
             </div>
             <div className="sports-contacts-cta-stat">
               <span className="sports-contacts-cta-stat-number">
                 {club.stats?.programs || '15'}+
               </span>
-              <span className="sports-contacts-cta-stat-label">Програми</span>
+              <span className="sports-contacts-cta-stat-label">{t('clubs.SportsContacts.cta.stats.programs')}</span>
             </div>
           </div>
           

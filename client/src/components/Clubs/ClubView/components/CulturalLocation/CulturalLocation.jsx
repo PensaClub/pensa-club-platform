@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup, Circle, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -90,20 +91,26 @@ const parkingIcon = new L.Icon({
 });
 
 export const CulturalLocation = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('map');
   const [selectedTransport, setSelectedTransport] = useState('walking');
   const [mapLoaded, setMapLoaded] = useState(false);
 
-  // ПРОВЕРКА ЗА ДАННИ - ако няма локация, не показваме компонента
   if (!club?.location || !club.location.coordinates) {
     return null;
   }
 
+  const getDefaultCity = () => {
+    return i18n.language === 'bg' ? 'София' :
+           i18n.language === 'en' ? 'Sofia' :
+           'Sofia';
+  };
+
   const location = {
-    address: club.location.address || 'Адресът не е посочен',
-    city: club.location.city || 'София',
-    municipality: club.location.municipality || 'Столична',
-    region: club.location.region || 'София-град',
+    address: club.location.address || t('clubs.CulturalLocation.location.defaultAddress'),
+    city: club.location.city || getDefaultCity(),
+    municipality: club.location.municipality || t('clubs.CulturalLocation.location.defaultMunicipality'),
+    region: club.location.region || t('clubs.CulturalLocation.location.defaultRegion'),
     postalCode: club.location.postalCode || '',
     coordinates: {
       lat: club.location.coordinates.lat || 42.6777,
@@ -113,27 +120,36 @@ export const CulturalLocation = ({ club }) => {
 
   const venue = {
     type: club.location?.venue?.type || 'municipal',
-    size: club.location?.venue?.size || 'Не е посочена площ',
-    capacity: club.location?.venue?.capacity || 'Не е посочен капацитет',
-    facilities: club.location?.venue?.facilities || ['Основна зала'],
+    size: club.location?.venue?.size || t('clubs.CulturalLocation.venue.noSize'),
+    capacity: club.location?.venue?.capacity || t('clubs.CulturalLocation.venue.noCapacity'),
+    facilities: club.location?.venue?.facilities || [t('clubs.CulturalLocation.venue.defaultFacility')],
     accessibility: club.location?.venue?.accessibility !== false
   };
 
-  // Генерираме околни места на база координатите
+  const getVenueTypeTranslation = (type) => {
+    const types = {
+      'municipal': t('clubs.CulturalLocation.venue.types.municipal'),
+      'community': t('clubs.CulturalLocation.venue.types.community'),
+      'cultural': t('clubs.CulturalLocation.venue.types.cultural'),
+      'school': t('clubs.CulturalLocation.venue.types.school'),
+      'private': t('clubs.CulturalLocation.venue.types.private')
+    };
+    return types[type] || type;
+  };
+
   const generateNearbyPlaces = (baseCoords) => {
     const places = [];
     
-    // Добавяме места ако има информация за тях
     if (club.location?.nearbyPlaces && Array.isArray(club.location.nearbyPlaces)) {
       club.location.nearbyPlaces.forEach((place, index) => {
         places.push({
           name: place.name,
-          distance: place.distance || `${Math.floor(Math.random() * 300 + 100)}м`,
+          distance: place.distance || `${Math.floor(Math.random() * 300 + 100)}${t('clubs.CulturalLocation.units.meters')}`,
           type: place.type || 'general',
           icon: place.type === 'hospital' ? hospitalIcon : 
                 place.type === 'transport' ? busIcon :
                 place.type === 'parking' ? parkingIcon : busIcon,
-          description: place.description || 'Информация не е налична',
+          description: place.description || t('clubs.CulturalLocation.nearbyPlaces.noInfo'),
           coordinates: place.coordinates || {
             lat: baseCoords.lat + (Math.random() - 0.5) * 0.005,
             lng: baseCoords.lng + (Math.random() - 0.5) * 0.005
@@ -141,14 +157,13 @@ export const CulturalLocation = ({ club }) => {
         });
       });
     } else {
-      // Генерираме основни места наблизо
       const defaultPlaces = [
         {
-          name: 'Спирка на градския транспорт',
-          distance: '150м',
+          name: t('clubs.CulturalLocation.nearbyPlaces.default.transport.name'),
+          distance: `150${t('clubs.CulturalLocation.units.meters')}`,
           type: 'transport',
           icon: busIcon,
-          description: 'Автобусни линии',
+          description: t('clubs.CulturalLocation.nearbyPlaces.default.transport.description'),
           coordinates: { 
             lat: baseCoords.lat + 0.001, 
             lng: baseCoords.lng - 0.001 
@@ -156,14 +171,13 @@ export const CulturalLocation = ({ club }) => {
         }
       ];
 
-      // Добавяме болница ако е в град
-      if (location.city.toLowerCase().includes('софия')) {
+      if (location.city.toLowerCase().includes('sofia') || location.city.toLowerCase().includes('софия')) {
         defaultPlaces.push({
-          name: 'Медицински център',
-          distance: '300м',
+          name: t('clubs.CulturalLocation.nearbyPlaces.default.hospital.name'),
+          distance: `300${t('clubs.CulturalLocation.units.meters')}`,
           type: 'hospital',
           icon: hospitalIcon,
-          description: 'Спешна медицинска помощ',
+          description: t('clubs.CulturalLocation.nearbyPlaces.default.hospital.description'),
           coordinates: { 
             lat: baseCoords.lat + 0.002, 
             lng: baseCoords.lng + 0.001 
@@ -179,69 +193,69 @@ export const CulturalLocation = ({ club }) => {
 
   const nearbyPlaces = generateNearbyPlaces(location.coordinates);
 
-  // Транспортни опции с реални данни
-  const transportOptions = [
+  const getTransportOptions = () => [
     {
       id: 'walking',
-      name: 'Пеша',
+      name: t('clubs.CulturalLocation.transport.walking.name'),
       icon: faWalking,
       color: '#10b981',
-      duration: '5-15 мин',
-      description: `От центъра на ${location.city}`,
+      duration: t('clubs.CulturalLocation.transport.walking.duration'),
+      description: t('clubs.CulturalLocation.transport.walking.description', { city: location.city }),
       instructions: club.location?.transport?.walking || [
-        'Следвайте указателните табели',
-        `Адрес: ${location.address}`,
-        'Търсете входа на сградата'
+        t('clubs.CulturalLocation.transport.walking.instructions.0'),
+        t('clubs.CulturalLocation.transport.walking.instructions.1', { address: location.address }),
+        t('clubs.CulturalLocation.transport.walking.instructions.2')
       ]
     },
     {
       id: 'bus',
-      name: 'Автобус',
+      name: t('clubs.CulturalLocation.transport.bus.name'),
       icon: faBus,
       color: '#3b82f6',
-      duration: '10-20 мин',
-      description: 'Градски транспорт',
+      duration: t('clubs.CulturalLocation.transport.bus.duration'),
+      description: t('clubs.CulturalLocation.transport.bus.description'),
       instructions: club.location?.transport?.bus || [
-        'Използвайте градския транспорт',
-        'Слезте на най-близката спирка',
-        `Адрес: ${location.address}`
+        t('clubs.CulturalLocation.transport.bus.instructions.0'),
+        t('clubs.CulturalLocation.transport.bus.instructions.1'),
+        t('clubs.CulturalLocation.transport.bus.instructions.2', { address: location.address })
       ]
     },
     {
       id: 'metro',
-      name: 'Метро',
+      name: t('clubs.CulturalLocation.transport.metro.name'),
       icon: faSubway,
       color: '#ef4444',
-      duration: '15-25 мин',
-      description: 'Метро система',
+      duration: t('clubs.CulturalLocation.transport.metro.duration'),
+      description: t('clubs.CulturalLocation.transport.metro.description'),
       instructions: club.location?.transport?.metro || [
-        'Използвайте метро системата',
-        'Слезте на най-близката станция',
-        'Продължете пеша до адреса'
+        t('clubs.CulturalLocation.transport.metro.instructions.0'),
+        t('clubs.CulturalLocation.transport.metro.instructions.1'),
+        t('clubs.CulturalLocation.transport.metro.instructions.2')
       ]
     },
     {
       id: 'car',
-      name: 'Автомобил',
+      name: t('clubs.CulturalLocation.transport.car.name'),
       icon: faCar,
       color: '#8b5cf6',
-      duration: '5-30 мин',
-      description: 'В зависимост от трафика',
+      duration: t('clubs.CulturalLocation.transport.car.duration'),
+      description: t('clubs.CulturalLocation.transport.car.description'),
       instructions: club.location?.transport?.car || [
-        'Използвайте GPS навигация',
-        `Адрес: ${location.address}, ${location.city}`,
-        'Търсете паркомясто наблизо'
+        t('clubs.CulturalLocation.transport.car.instructions.0'),
+        t('clubs.CulturalLocation.transport.car.instructions.1', { address: location.address, city: location.city }),
+        t('clubs.CulturalLocation.transport.car.instructions.2')
       ]
     }
   ];
 
-  // Информация за паркиране
-  const parkingInfo = {
+  const transportOptions = getTransportOptions();
+
+  const getParkingInfo = () => ({
     street: {
-      type: club.location?.parking?.street?.type || 'Улично паркиране',
-      price: club.location?.parking?.street?.price || 'Проверете местните тарифи',
-      maxTime: club.location?.parking?.street?.maxTime || 'Според ограниченията',
-      workingHours: club.location?.parking?.street?.workingHours || 'Проверете знаците'
+      type: club.location?.parking?.street?.type || t('clubs.CulturalLocation.parking.street.defaultType'),
+      price: club.location?.parking?.street?.price || t('clubs.CulturalLocation.parking.street.defaultPrice'),
+      maxTime: club.location?.parking?.street?.maxTime || t('clubs.CulturalLocation.parking.street.defaultMaxTime'),
+      workingHours: club.location?.parking?.street?.workingHours || t('clubs.CulturalLocation.parking.street.defaultHours')
     },
     underground: club.location?.parking?.underground ? {
       name: club.location.parking.underground.name,
@@ -255,36 +269,41 @@ export const CulturalLocation = ({ club }) => {
       distance: club.location.parking.free.distance,
       note: club.location.parking.free.note
     } : {
-      location: 'Улици в района',
-      distance: 'Различно разстояние',
-      note: 'Търсете безплатни места в близките улици'
+      location: t('clubs.CulturalLocation.parking.free.defaultLocation'),
+      distance: t('clubs.CulturalLocation.parking.free.defaultDistance'),
+      note: t('clubs.CulturalLocation.parking.free.defaultNote')
     }
-  };
+  });
 
-  // Информация за достъпност
-  const accessibilityFeatures = [
+  const parkingInfo = getParkingInfo();
+
+  const getAccessibilityFeatures = () => [
     {
-      feature: 'Достъп с инвалидна количка',
+      feature: t('clubs.CulturalLocation.accessibility.wheelchair.name'),
       available: venue.accessibility,
       icon: faWheelchair,
       description: venue.accessibility ? 
-        club.location?.accessibility?.wheelchair || 'Достъп осигурен' : 
-        'Ограничен достъп'
+        club.location?.accessibility?.wheelchair || t('clubs.CulturalLocation.accessibility.wheelchair.available') : 
+        t('clubs.CulturalLocation.accessibility.wheelchair.limited')
     },
     {
-      feature: 'Асансьор',
+      feature: t('clubs.CulturalLocation.accessibility.elevator.name'),
       available: club.location?.accessibility?.elevator !== false,
       icon: faElevator,
       description: club.location?.accessibility?.elevatorDescription || 
-        (club.location?.accessibility?.elevator !== false ? 'Асансьор наличен' : 'Без асансьор')
+        (club.location?.accessibility?.elevator !== false ? 
+          t('clubs.CulturalLocation.accessibility.elevator.available') : 
+          t('clubs.CulturalLocation.accessibility.elevator.unavailable'))
     },
     {
-      feature: 'Безопасност',
+      feature: t('clubs.CulturalLocation.accessibility.safety.name'),
       available: true,
       icon: faStairs,
-      description: club.location?.accessibility?.safety || 'Основни мерки за безопасност'
+      description: club.location?.accessibility?.safety || t('clubs.CulturalLocation.accessibility.safety.basic')
     }
   ];
+
+  const accessibilityFeatures = getAccessibilityFeatures();
 
   useEffect(() => {
     setMapLoaded(true);
@@ -292,7 +311,6 @@ export const CulturalLocation = ({ club }) => {
 
   const handleDirections = (transport) => {
     const coords = `${location.coordinates.lat},${location.coordinates.lng}`;
-    const address = encodeURIComponent(`${location.address}, ${location.city}`);
     
     switch(transport) {
       case 'google':
@@ -305,20 +323,20 @@ export const CulturalLocation = ({ club }) => {
         window.open(`https://waze.com/ul?navigate=yes&ll=${coords}`, '_blank');
         break;
       default:
-        alert('Отваряне на карта...');
+        alert(t('clubs.CulturalLocation.actions.openingMap'));
     }
   };
 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `Локация на ${club.name}`,
+        title: t('clubs.CulturalLocation.share.title', { clubName: club.name }),
         text: `${location.address}, ${location.city}`,
         url: window.location.href
       });
     } else {
       navigator.clipboard.writeText(`${location.address}, ${location.city}`);
-      alert('Адресът е копиран в клипборда!');
+      alert(t('clubs.CulturalLocation.actions.addressCopied'));
     }
   };
 
@@ -327,7 +345,7 @@ export const CulturalLocation = ({ club }) => {
     if (phone) {
       window.location.href = `tel:${phone}`;
     } else {
-      alert('Телефонен номер не е наличен');
+      alert(t('clubs.CulturalLocation.actions.noPhone'));
     }
   };
 
@@ -335,19 +353,17 @@ export const CulturalLocation = ({ club }) => {
     <section id="cultural-location" className="cultural-location-main-section">
       <div className="cultural-location-container">
         
-        {/* Header */}
         <div className="cultural-location-header">
           <div className="cultural-location-badge">
             <FontAwesomeIcon icon={faMapMarkerAlt} />
-            <span>Локация и достъп</span>
+            <span>{t('clubs.CulturalLocation.header.badge')}</span>
           </div>
-          <h2 className="cultural-location-title">Как да ни намерите</h2>
+          <h2 className="cultural-location-title">{t('clubs.CulturalLocation.header.title')}</h2>
           <p className="cultural-location-subtitle">
-            Подробна информация за локацията, транспорт и удобства в района
+            {t('clubs.CulturalLocation.header.subtitle')}
           </p>
         </div>
 
-        {/* Quick Info */}
         <div className="cultural-location-quick-info">
           <div className="cultural-location-address-card">
             <div className="cultural-location-address-icon">
@@ -367,41 +383,40 @@ export const CulturalLocation = ({ club }) => {
                 onClick={() => handleDirections('google')}
               >
                 <FontAwesomeIcon icon={faDirections} />
-                Маршрут
+                {t('clubs.CulturalLocation.actions.route')}
               </button>
               <button 
                 className="cultural-location-action-btn"
                 onClick={handleShare}
               >
                 <FontAwesomeIcon icon={faShareAlt} />
-                Споделяне
+                {t('clubs.CulturalLocation.actions.share')}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Main Content Tabs */}
         <div className="cultural-location-tabs">
           <button
             className={`cultural-location-tab ${activeTab === 'map' ? 'active' : ''}`}
             onClick={() => setActiveTab('map')}
           >
             <FontAwesomeIcon icon={faMapMarkerAlt} />
-            Карта
+            {t('clubs.CulturalLocation.tabs.map')}
           </button>
           <button
             className={`cultural-location-tab ${activeTab === 'transport' ? 'active' : ''}`}
             onClick={() => setActiveTab('transport')}
           >
             <FontAwesomeIcon icon={faBus} />
-            Транспорт
+            {t('clubs.CulturalLocation.tabs.transport')}
           </button>
           <button
             className={`cultural-location-tab ${activeTab === 'parking' ? 'active' : ''}`}
             onClick={() => setActiveTab('parking')}
           >
             <FontAwesomeIcon icon={faParking} />
-            Паркиране
+            {t('clubs.CulturalLocation.tabs.parking')}
           </button>
           {nearbyPlaces.length > 0 && (
             <button
@@ -409,15 +424,13 @@ export const CulturalLocation = ({ club }) => {
               onClick={() => setActiveTab('nearby')}
             >
               <FontAwesomeIcon icon={faCompass} />
-              В района
+              {t('clubs.CulturalLocation.tabs.nearby')}
             </button>
           )}
         </div>
 
-        {/* Tab Content */}
         <div className="cultural-location-content">
           
-          {/* Map Tab */}
           {activeTab === 'map' && (
             <div className="cultural-location-map-section">
               <div className="cultural-location-map-container">
@@ -433,7 +446,6 @@ export const CulturalLocation = ({ club }) => {
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
                     
-                    {/* Main club marker */}
                     <Marker 
                       position={[location.coordinates.lat, location.coordinates.lng]}
                       icon={clubIcon}
@@ -446,7 +458,7 @@ export const CulturalLocation = ({ club }) => {
                           <div className="cultural-location-popup-actions">
                             <button onClick={() => handleDirections('google')}>
                               <FontAwesomeIcon icon={faDirections} />
-                              Маршрут
+                              {t('clubs.CulturalLocation.actions.route')}
                             </button>
                           </div>
                         </div>
@@ -456,7 +468,6 @@ export const CulturalLocation = ({ club }) => {
                       </Tooltip>
                     </Marker>
 
-                    {/* Nearby places markers */}
                     {nearbyPlaces.map((place, index) => (
                       <Marker 
                         key={index}
@@ -467,13 +478,12 @@ export const CulturalLocation = ({ club }) => {
                           <div className="cultural-location-popup">
                             <h4>{place.name}</h4>
                             <p>{place.description}</p>
-                            <p><strong>Разстояние:</strong> {place.distance}</p>
+                            <p><strong>{t('clubs.CulturalLocation.map.distance')}:</strong> {place.distance}</p>
                           </div>
                         </Popup>
                       </Marker>
                     ))}
 
-                    {/* Walking radius circle */}
                     <Circle
                       center={[location.coordinates.lat, location.coordinates.lng]}
                       radius={200}
@@ -483,7 +493,7 @@ export const CulturalLocation = ({ club }) => {
                       weight={2}
                     >
                       <Tooltip>
-                        200м пеша от клуба
+                        {t('clubs.CulturalLocation.map.walkingRadius')}
                       </Tooltip>
                     </Circle>
                   </MapContainer>
@@ -493,24 +503,24 @@ export const CulturalLocation = ({ club }) => {
                   <div className="cultural-location-map-legend">
                     <div className="cultural-location-legend-item">
                       <div className="cultural-location-legend-icon club"></div>
-                      <span>Клуб</span>
+                      <span>{t('clubs.CulturalLocation.map.legend.club')}</span>
                     </div>
                     {nearbyPlaces.some(p => p.type === 'hospital') && (
                       <div className="cultural-location-legend-item">
                         <div className="cultural-location-legend-icon hospital"></div>
-                        <span>Здравеопазване</span>
+                        <span>{t('clubs.CulturalLocation.map.legend.healthcare')}</span>
                       </div>
                     )}
                     {nearbyPlaces.some(p => p.type === 'transport') && (
                       <div className="cultural-location-legend-item">
                         <div className="cultural-location-legend-icon transport"></div>
-                        <span>Транспорт</span>
+                        <span>{t('clubs.CulturalLocation.map.legend.transport')}</span>
                       </div>
                     )}
                     {nearbyPlaces.some(p => p.type === 'parking') && (
                       <div className="cultural-location-legend-item">
                         <div className="cultural-location-legend-icon parking"></div>
-                        <span>Паркинг</span>
+                        <span>{t('clubs.CulturalLocation.map.legend.parking')}</span>
                       </div>
                     )}
                   </div>
@@ -533,29 +543,29 @@ export const CulturalLocation = ({ club }) => {
               </div>
               
               <div className="cultural-location-venue-info">
-                <h3>Информация за мястото</h3>
+                <h3>{t('clubs.CulturalLocation.venue.title')}</h3>
                 <div className="cultural-location-venue-details">
                   <div className="cultural-location-venue-item">
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    <span>Тип: {venue.type === 'municipal' ? 'Общинска сграда' : venue.type}</span>
+                    <span>{t('clubs.CulturalLocation.venue.type')}: {getVenueTypeTranslation(venue.type)}</span>
                   </div>
-                  {venue.size !== 'Не е посочена площ' && (
+                  {venue.size !== t('clubs.CulturalLocation.venue.noSize') && (
                     <div className="cultural-location-venue-item">
                       <FontAwesomeIcon icon={faExpand} />
-                      <span>Площ: {venue.size}</span>
+                      <span>{t('clubs.CulturalLocation.venue.area')}: {venue.size}</span>
                     </div>
                   )}
-                  {venue.capacity !== 'Не е посочен капацитет' && (
+                  {venue.capacity !== t('clubs.CulturalLocation.venue.noCapacity') && (
                     <div className="cultural-location-venue-item">
                       <FontAwesomeIcon icon={faUsers} />
-                      <span>Капацитет: {venue.capacity} души</span>
+                      <span>{t('clubs.CulturalLocation.venue.capacity')}: {venue.capacity} {t('clubs.CulturalLocation.units.people')}</span>
                     </div>
                   )}
                 </div>
                 
                 {venue.facilities && venue.facilities.length > 0 && (
                   <div className="cultural-location-facilities">
-                    <h4>Удобства</h4>
+                    <h4>{t('clubs.CulturalLocation.venue.facilities')}</h4>
                     <div className="cultural-location-facilities-list">
                       {venue.facilities.map((facility, index) => (
                         <span key={index} className="cultural-location-facility-tag">
@@ -569,7 +579,6 @@ export const CulturalLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Transport Tab */}
           {activeTab === 'transport' && (
             <div className="cultural-location-transport-section">
               <div className="cultural-location-transport-options">
@@ -603,7 +612,7 @@ export const CulturalLocation = ({ club }) => {
                     <div key={option.id} className="cultural-location-instructions">
                       <div className="cultural-location-instructions-header">
                         <FontAwesomeIcon icon={option.icon} style={{ color: option.color }} />
-                        <h3>Инструкции за {option.name}</h3>
+                        <h3>{t('clubs.CulturalLocation.transport.instructionsTitle', { method: option.name })}</h3>
                       </div>
                       <ul className="cultural-location-instructions-list">
                         {option.instructions.map((instruction, index) => (
@@ -617,30 +626,29 @@ export const CulturalLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Parking Tab */}
           {activeTab === 'parking' && (
             <div className="cultural-location-parking-section">
               <div className="cultural-location-parking-grid">
                 <div className="cultural-location-parking-card">
                   <div className="cultural-location-parking-header">
                     <FontAwesomeIcon icon={faRoad} />
-                    <h3>Улично паркиране</h3>
+                    <h3>{t('clubs.CulturalLocation.parking.street.title')}</h3>
                   </div>
                   <div className="cultural-location-parking-details">
                     <div className="cultural-location-parking-item">
-                      <span className="cultural-location-parking-label">Тип:</span>
+                      <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.type')}:</span>
                       <span>{parkingInfo.street.type}</span>
                     </div>
                     <div className="cultural-location-parking-item">
-                      <span className="cultural-location-parking-label">Цена:</span>
+                      <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.price')}:</span>
                       <span>{parkingInfo.street.price}</span>
                     </div>
                     <div className="cultural-location-parking-item">
-                      <span className="cultural-location-parking-label">Макс. време:</span>
+                      <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.maxTime')}:</span>
                       <span>{parkingInfo.street.maxTime}</span>
                     </div>
                     <div className="cultural-location-parking-item">
-                      <span className="cultural-location-parking-label">Работно време:</span>
+                      <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.workingHours')}:</span>
                       <span>{parkingInfo.street.workingHours}</span>
                     </div>
                   </div>
@@ -650,23 +658,23 @@ export const CulturalLocation = ({ club }) => {
                   <div className="cultural-location-parking-card">
                     <div className="cultural-location-parking-header">
                       <FontAwesomeIcon icon={faParking} />
-                      <h3>Подземен паркинг</h3>
+                      <h3>{t('clubs.CulturalLocation.parking.underground.title')}</h3>
                     </div>
                     <div className="cultural-location-parking-details">
                       <div className="cultural-location-parking-item">
-                        <span className="cultural-location-parking-label">Име:</span>
+                        <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.name')}:</span>
                         <span>{parkingInfo.underground.name}</span>
                       </div>
                       <div className="cultural-location-parking-item">
-                        <span className="cultural-location-parking-label">Разстояние:</span>
+                        <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.distance')}:</span>
                         <span>{parkingInfo.underground.distance}</span>
                       </div>
                       <div className="cultural-location-parking-item">
-                        <span className="cultural-location-parking-label">Цена:</span>
+                        <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.price')}:</span>
                         <span>{parkingInfo.underground.price}</span>
                       </div>
                       <div className="cultural-location-parking-item">
-                        <span className="cultural-location-parking-label">Капацитет:</span>
+                        <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.capacity')}:</span>
                         <span>{parkingInfo.underground.capacity}</span>
                       </div>
                     </div>
@@ -676,15 +684,15 @@ export const CulturalLocation = ({ club }) => {
                 <div className="cultural-location-parking-card">
                   <div className="cultural-location-parking-header">
                     <FontAwesomeIcon icon={faLocationArrow} />
-                    <h3>Безплатно паркиране</h3>
+                    <h3>{t('clubs.CulturalLocation.parking.free.title')}</h3>
                   </div>
                   <div className="cultural-location-parking-details">
                     <div className="cultural-location-parking-item">
-                      <span className="cultural-location-parking-label">Локация:</span>
+                      <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.location')}:</span>
                       <span>{parkingInfo.free.location}</span>
                     </div>
                     <div className="cultural-location-parking-item">
-                      <span className="cultural-location-parking-label">Разстояние:</span>
+                      <span className="cultural-location-parking-label">{t('clubs.CulturalLocation.parking.distance')}:</span>
                       <span>{parkingInfo.free.distance}</span>
                     </div>
                     <div className="cultural-location-parking-note">
@@ -697,7 +705,6 @@ export const CulturalLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Nearby Tab - само ако има места */}
           {activeTab === 'nearby' && nearbyPlaces.length > 0 && (
             <div className="cultural-location-nearby-section">
               <div className="cultural-location-nearby-grid">
@@ -726,13 +733,12 @@ export const CulturalLocation = ({ club }) => {
           )}
         </div>
 
-        {/* Accessibility Section - само ако има информация */}
         {(venue.accessibility || club.location?.accessibility) && (
           <div className="cultural-location-accessibility">
             <div className="cultural-location-accessibility-header">
               <FontAwesomeIcon icon={faWheelchair} />
-              <h3>Достъпност</h3>
-              <p>Информация за хора с увреждания и ограничена подвижност</p>
+              <h3>{t('clubs.CulturalLocation.accessibility.title')}</h3>
+              <p>{t('clubs.CulturalLocation.accessibility.subtitle')}</p>
             </div>
             
             <div className="cultural-location-accessibility-grid">
@@ -753,16 +759,15 @@ export const CulturalLocation = ({ club }) => {
           </div>
         )}
 
-        {/* Contact & Help */}
         <div className="cultural-location-help">
           <div className="cultural-location-help-content">
-            <h3>Нужна ви е помощ?</h3>
-            <p>Ако имате затруднения с намирането на клуба или нуждаете от допълнителна информация</p>
+            <h3>{t('clubs.CulturalLocation.help.title')}</h3>
+            <p>{t('clubs.CulturalLocation.help.subtitle')}</p>
             <div className="cultural-location-help-buttons">
               {club.contacts?.phone && (
                 <button className="cultural-location-help-btn primary" onClick={handleCall}>
                   <FontAwesomeIcon icon={faPhone} />
-                  Обадете се: {club.contacts.phone}
+                  {t('clubs.CulturalLocation.help.call')}: {club.contacts.phone}
                 </button>
               )}
               <button 
@@ -770,7 +775,7 @@ export const CulturalLocation = ({ club }) => {
                 onClick={() => handleDirections('google')}
               >
                 <FontAwesomeIcon icon={faDirections} />
-                Навигация в реално време
+                {t('clubs.CulturalLocation.help.realTimeNavigation')}
               </button>
             </div>
           </div>

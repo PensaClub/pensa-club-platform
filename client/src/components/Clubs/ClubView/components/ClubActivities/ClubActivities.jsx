@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalendarWeek, 
@@ -26,6 +27,7 @@ import {
 import './clubActivities.css';
 
 export const ClubActivities = ({ club }) => {
+  const { t } = useTranslation();
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [registrationForm, setRegistrationForm] = useState({
@@ -55,21 +57,29 @@ export const ClubActivities = ({ club }) => {
   const getActivityIcon = (activityName) => {
     const name = activityName.toLowerCase();
     
-    if (name.includes('хор') || name.includes('пеене') || name.includes('музика')) {
+    if (name.includes('хор') || name.includes('пеене') || name.includes('музика') || 
+        name.includes('choir') || name.includes('music') || name.includes('singing')) {
       return faMusic;
-    } else if (name.includes('танц') || name.includes('народни')) {
+    } else if (name.includes('танц') || name.includes('народни') || 
+               name.includes('dance') || name.includes('traditional')) {
       return faTheaterMasks;
-    } else if (name.includes('рисуване') || name.includes('изкуство') || name.includes('творчески')) {
+    } else if (name.includes('рисуване') || name.includes('изкуство') || name.includes('творчески') ||
+               name.includes('art') || name.includes('drawing') || name.includes('creative')) {
       return faPalette;
-    } else if (name.includes('четене') || name.includes('книги') || name.includes('литература')) {
+    } else if (name.includes('четене') || name.includes('книги') || name.includes('литература') ||
+               name.includes('reading') || name.includes('books') || name.includes('literature')) {
       return faBookOpen;
-    } else if (name.includes('готвене') || name.includes('кулинария') || name.includes('храна')) {
+    } else if (name.includes('готвене') || name.includes('кулинария') || name.includes('храна') ||
+               name.includes('cooking') || name.includes('culinary') || name.includes('food')) {
       return faUtensils;
-    } else if (name.includes('гимнастика') || name.includes('упражнения') || name.includes('фитнес')) {
+    } else if (name.includes('гимнастика') || name.includes('упражнения') || name.includes('фитнес') ||
+               name.includes('gym') || name.includes('exercise') || name.includes('fitness')) {
       return faDumbbell;
-    } else if (name.includes('разходка') || name.includes('туризъм') || name.includes('спорт')) {
+    } else if (name.includes('разходка') || name.includes('туризъм') || name.includes('спорт') ||
+               name.includes('walk') || name.includes('tourism') || name.includes('sport')) {
       return faRunning;
-    } else if (name.includes('образование') || name.includes('курс') || name.includes('обучение')) {
+    } else if (name.includes('образование') || name.includes('курс') || name.includes('обучение') ||
+               name.includes('education') || name.includes('course') || name.includes('learning')) {
       return faGraduationCap;
     } else {
       return faHeart; // За общи дейности
@@ -77,16 +87,10 @@ export const ClubActivities = ({ club }) => {
   };
 
   const getDayInBulgarian = (day) => {
-    const days = {
-      'monday': 'Понеделник',
-      'tuesday': 'Вторник', 
-      'wednesday': 'Сряда',
-      'thursday': 'Четвъртък',
-      'friday': 'Петък',
-      'saturday': 'Събота',
-      'sunday': 'Неделя'
-    };
-    return days[day?.toLowerCase()] || day || 'Не е посочен';
+    if (!day) return t('clubs.ClubActivities.schedule.noDay');
+    return t(`clubs.ClubActivities.days.${day.toLowerCase()}`, { 
+      defaultValue: day 
+    });
   };
 
   // Групиране на дейности по дни
@@ -144,25 +148,23 @@ export const ClubActivities = ({ club }) => {
     const recipientEmail = club.contacts?.email;
     
     if (recipientEmail) {
-      const subject = encodeURIComponent(`Заявка за записване - ${selectedActivity.name}`);
-      const body = encodeURIComponent(`
-Заявка за записване в дейност
-
-Име: ${registrationForm.firstName} ${registrationForm.lastName}
-Телефон: ${registrationForm.phone}
-Email: ${registrationForm.email}
-
-Дейност: ${selectedActivity.name}
-Ден: ${getDayInBulgarian(selectedActivity.day)}
-Час: ${selectedActivity.time}
-Инструктор: ${selectedActivity.instructor || 'Не е посочен'}
-
-Опит: ${registrationForm.experience || 'Не е посочен'}
-Допълнителни бележки: ${registrationForm.notes || 'Няма'}
-
----
-Изпратено от ${club.name}
-      `);
+      const subject = encodeURIComponent(t('clubs.ClubActivities.registration.emailSubject', { 
+        activityName: selectedActivity.name 
+      }));
+      
+      const body = encodeURIComponent(t('clubs.ClubActivities.registration.emailBody', {
+        firstName: registrationForm.firstName,
+        lastName: registrationForm.lastName,
+        phone: registrationForm.phone,
+        email: registrationForm.email,
+        activityName: selectedActivity.name,
+        day: getDayInBulgarian(selectedActivity.day),
+        time: selectedActivity.time,
+        instructor: selectedActivity.instructor || t('clubs.ClubActivities.registration.notSpecified'),
+        experience: registrationForm.experience ? t(`clubs.ClubActivities.experience.${registrationForm.experience}`) : t('clubs.ClubActivities.registration.notSpecified'),
+        notes: registrationForm.notes || t('clubs.ClubActivities.registration.none'),
+        clubName: club.name
+      }));
 
       try {
         window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
@@ -189,26 +191,26 @@ Email: ${registrationForm.email}
         <div className="general-activities-header">
           <div className="general-activities-badge">
             <FontAwesomeIcon icon={faCalendarWeek} />
-            <span>Редовни дейности</span>
+            <span>{t('clubs.ClubActivities.header.badge')}</span>
           </div>
-          <h2 className="general-activities-title">Нашите дейности</h2>
+          <h2 className="general-activities-title">{t('clubs.ClubActivities.header.title')}</h2>
           <p className="general-activities-subtitle">
-            Разнообразни активности всяка седмица за всички членове на клуба
+            {t('clubs.ClubActivities.header.subtitle')}
           </p>
           
           {/* Stats overview */}
           <div className="general-activities-stats">
             <div className="general-activities-stat">
               <span>{activities.length}</span>
-              <label>активности</label>
+              <label>{t('clubs.ClubActivities.stats.activities')}</label>
             </div>
             <div className="general-activities-stat">
               <span>{activities.reduce((sum, act) => sum + (act.participants || 0), 0)}</span>
-              <label>участници</label>
+              <label>{t('clubs.ClubActivities.stats.participants')}</label>
             </div>
             <div className="general-activities-stat">
               <span>{new Set(activities.map(act => act.day)).size}</span>
-              <label>дни в седмицата</label>
+              <label>{t('clubs.ClubActivities.stats.daysPerWeek')}</label>
             </div>
           </div>
         </div>
@@ -232,7 +234,7 @@ Email: ${registrationForm.email}
                     </div>
                     <div className="general-schedule-item">
                       <FontAwesomeIcon icon={faClock} />
-                      <span>{activity.time || 'Час не е посочен'}</span>
+                      <span>{activity.time || t('clubs.ClubActivities.schedule.noTime')}</span>
                     </div>
                   </div>
                   
@@ -249,7 +251,7 @@ Email: ${registrationForm.email}
                   
                   <div className="general-activity-participants">
                     <FontAwesomeIcon icon={faUsers} />
-                    <span>{activity.participants || 0} участници</span>
+                    <span>{activity.participants || 0} {t('clubs.ClubActivities.activity.participants')}</span>
                   </div>
                 </div>
               </div>
@@ -260,7 +262,7 @@ Email: ${registrationForm.email}
                   onClick={() => openRegistrationModal(activity)}
                 >
                   <FontAwesomeIcon icon={faUserPlus} />
-                  Запиши се
+                  {t('clubs.ClubActivities.activity.register')}
                 </button>
               </div>
             </div>
@@ -271,7 +273,7 @@ Email: ${registrationForm.email}
         <div className="general-weekly-schedule">
           <h3>
             <FontAwesomeIcon icon={faCalendarWeek} />
-            Седмична програма
+            {t('clubs.ClubActivities.weeklySchedule.title')}
           </h3>
           
           <div className="general-schedule-grid">
@@ -293,14 +295,14 @@ Email: ${registrationForm.email}
                         </div>
                         {activity.participants && (
                           <div className="general-schedule-participants">
-                            {activity.participants} души
+                            {activity.participants} {t('clubs.ClubActivities.weeklySchedule.people')}
                           </div>
                         )}
                       </div>
                     ))
                   ) : (
                     <div className="general-no-activity">
-                      Няма дейности
+                      {t('clubs.ClubActivities.weeklySchedule.noActivities')}
                     </div>
                   )}
                 </div>
@@ -317,7 +319,7 @@ Email: ${registrationForm.email}
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faUserPlus} />
-                Записване за дейност
+                {t('clubs.ClubActivities.modal.title')}
               </h3>
               <button className="general-modal-close" onClick={closeRegistrationModal}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -346,23 +348,23 @@ Email: ${registrationForm.email}
               <form onSubmit={handleRegistrationSubmit} className="general-registration-form">
                 <div className="general-form-row">
                   <div className="general-form-group">
-                    <label>Име *</label>
+                    <label>{t('clubs.ClubActivities.form.firstName')} *</label>
                     <input
                       type="text"
                       value={registrationForm.firstName}
                       onChange={(e) => handleFormChange('firstName', e.target.value)}
-                      placeholder="Вашето име"
+                      placeholder={t('clubs.ClubActivities.form.firstNamePlaceholder')}
                       required
                     />
                   </div>
                   
                   <div className="general-form-group">
-                    <label>Фамилия *</label>
+                    <label>{t('clubs.ClubActivities.form.lastName')} *</label>
                     <input
                       type="text"
                       value={registrationForm.lastName}
                       onChange={(e) => handleFormChange('lastName', e.target.value)}
-                      placeholder="Вашата фамилия"
+                      placeholder={t('clubs.ClubActivities.form.lastNamePlaceholder')}
                       required
                     />
                   </div>
@@ -370,47 +372,47 @@ Email: ${registrationForm.email}
                 
                 <div className="general-form-row">
                   <div className="general-form-group">
-                    <label>Телефон *</label>
+                    <label>{t('clubs.ClubActivities.form.phone')} *</label>
                     <input
                       type="tel"
                       value={registrationForm.phone}
                       onChange={(e) => handleFormChange('phone', e.target.value)}
-                      placeholder="0888 123 456"
+                      placeholder={t('clubs.ClubActivities.form.phonePlaceholder')}
                       required
                     />
                   </div>
                   
                   <div className="general-form-group">
-                    <label>Email</label>
+                    <label>{t('clubs.ClubActivities.form.email')}</label>
                     <input
                       type="email"
                       value={registrationForm.email}
                       onChange={(e) => handleFormChange('email', e.target.value)}
-                      placeholder="email@example.com"
+                      placeholder={t('clubs.ClubActivities.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
                 
                 <div className="general-form-group">
-                  <label>Предишен опит</label>
+                  <label>{t('clubs.ClubActivities.form.experience')}</label>
                   <select
                     value={registrationForm.experience}
                     onChange={(e) => handleFormChange('experience', e.target.value)}
                   >
-                    <option value="">Изберете ниво</option>
-                    <option value="none">Без опит</option>
-                    <option value="beginner">Начинаещ</option>
-                    <option value="intermediate">Среден</option>
-                    <option value="advanced">Напреднал</option>
+                    <option value="">{t('clubs.ClubActivities.form.selectLevel')}</option>
+                    <option value="none">{t('clubs.ClubActivities.experience.none')}</option>
+                    <option value="beginner">{t('clubs.ClubActivities.experience.beginner')}</option>
+                    <option value="intermediate">{t('clubs.ClubActivities.experience.intermediate')}</option>
+                    <option value="advanced">{t('clubs.ClubActivities.experience.advanced')}</option>
                   </select>
                 </div>
                 
                 <div className="general-form-group">
-                  <label>Допълнителни бележки</label>
+                  <label>{t('clubs.ClubActivities.form.notes')}</label>
                   <textarea
                     value={registrationForm.notes}
                     onChange={(e) => handleFormChange('notes', e.target.value)}
-                    placeholder="Имате ли въпроси или специални изисквания?"
+                    placeholder={t('clubs.ClubActivities.form.notesPlaceholder')}
                     rows="3"
                   />
                 </div>
@@ -423,12 +425,12 @@ Email: ${registrationForm.email}
                   {formStatus === 'sending' ? (
                     <>
                       <div className="general-spinner"></div>
-                      Изпращам...
+                      {t('clubs.ClubActivities.form.sending')}
                     </>
                   ) : (
                     <>
                       <FontAwesomeIcon icon={faCheck} />
-                      Изпрати заявка
+                      {t('clubs.ClubActivities.form.submit')}
                     </>
                   )}
                 </button>
@@ -436,21 +438,21 @@ Email: ${registrationForm.email}
                 {formStatus === 'success' && (
                   <div className="general-success-message">
                     <FontAwesomeIcon icon={faCheck} />
-                    Заявката е изпратена успешно! Ще се свържем с вас скоро.
+                    {t('clubs.ClubActivities.messages.success')}
                   </div>
                 )}
 
                 {formStatus === 'error' && (
                   <div className="general-error-message">
                     <FontAwesomeIcon icon={faExclamationTriangle} />
-                    Възникна грешка. Моля опитайте отново или се свържете директно с нас.
+                    {t('clubs.ClubActivities.messages.error')}
                   </div>
                 )}
               </form>
 
               {/* Contact info */}
               <div className="general-contact-info">
-                <p>Можете да се свържете и директно:</p>
+                <p>{t('clubs.ClubActivities.contact.directContact')}</p>
                 <div className="general-contact-methods">
                   {club.contacts?.phone && (
                     <a href={`tel:${club.contacts.phone}`} className="general-contact-method">

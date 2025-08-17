@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHandHoldingHeart,
@@ -23,24 +24,66 @@ import {
   faFilter,
   faSearch,
   faEye,
-  faArrowRight
+  faArrowRight,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import './socialProjects.css';
 
 export const SocialProjects = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.socialImpact?.communityProjects && !club?.socialImpact?.volunteering && !club?.activities?.events) {
     return null;
   }
 
-  // Събираме всички проекти от различни источни
+  const formatDate = (dateString) => {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    return new Date(dateString).toLocaleDateString(locale);
+  };
+
+  const getCommunityCategory = (name) => {
+    const lowerName = name.toLowerCase();
+    const healthTerms = t('clubs.SocialProjects.categories.healthTerms', { returnObjects: true });
+    const educationTerms = t('clubs.SocialProjects.categories.educationTerms', { returnObjects: true });
+    const supportTerms = t('clubs.SocialProjects.categories.supportTerms', { returnObjects: true });
+    
+    if (healthTerms.some(term => lowerName.includes(term))) return 'health';
+    if (educationTerms.some(term => lowerName.includes(term))) return 'education';
+    if (supportTerms.some(term => lowerName.includes(term))) return 'support';
+    return 'community';
+  };
+
+  const getVolunteerCategory = (project) => {
+    const lowerProject = project.toLowerCase();
+    const supportTerms = t('clubs.SocialProjects.categories.volunteerSupportTerms', { returnObjects: true });
+    const healthTerms = t('clubs.SocialProjects.categories.volunteerHealthTerms', { returnObjects: true });
+    
+    if (supportTerms.some(term => lowerProject.includes(term))) return 'support';
+    if (healthTerms.some(term => lowerProject.includes(term))) return 'health';
+    return 'volunteering';
+  };
+
+  const getProjectStatusTranslation = (status) => {
+    const statusMap = {
+      'активен': t('clubs.SocialProjects.status.active'),
+      'планиран': t('clubs.SocialProjects.status.planned'),
+      'завършен': t('clubs.SocialProjects.status.completed'),
+      'сезонен': t('clubs.SocialProjects.status.seasonal'),
+      'active': t('clubs.SocialProjects.status.active'),
+      'planned': t('clubs.SocialProjects.status.planned'),
+      'completed': t('clubs.SocialProjects.status.completed'),
+      'seasonal': t('clubs.SocialProjects.status.seasonal')
+    };
+    return statusMap[status] || status;
+  };
+
   const allProjects = [];
 
-  // Community Projects
   if (club.socialImpact?.communityProjects) {
     club.socialImpact.communityProjects.forEach(project => {
       allProjects.push({
@@ -48,43 +91,41 @@ export const SocialProjects = ({ club }) => {
         title: project.name,
         description: project.description,
         type: 'community',
-        status: project.status || 'активен',
+        status: project.status || 'active',
         beneficiaries: project.beneficiaries,
         budget: project.budget,
         category: getCommunityCategory(project.name),
         details: {
-          duration: 'Постоянен',
-          coordinator: 'Ръководство на клуба',
-          impact: `${project.beneficiaries} помогнати хора`
+          [t('clubs.SocialProjects.details.duration')]: t('clubs.SocialProjects.details.permanent'),
+          [t('clubs.SocialProjects.details.coordinator')]: t('clubs.SocialProjects.details.clubManagement'),
+          [t('clubs.SocialProjects.details.impact')]: t('clubs.SocialProjects.details.helpedPeople', { count: project.beneficiaries })
         }
       });
     });
   }
 
-  // Volunteering Projects
   if (club.socialImpact?.volunteering) {
     club.socialImpact.volunteering.forEach(volunteer => {
       allProjects.push({
         id: `volunteer-${volunteer.project}`,
         title: volunteer.project,
-        description: volunteer.description || `Доброволческа дейност с ${volunteer.participants} участници`,
+        description: volunteer.description || t('clubs.SocialProjects.volunteer.description', { participants: volunteer.participants }),
         type: 'volunteering',
-        status: 'активен',
+        status: 'active',
         beneficiaries: null,
         participants: volunteer.participants,
         coordinator: volunteer.coordinator,
         hoursPerMonth: volunteer.hoursPerMonth,
         category: getVolunteerCategory(volunteer.project),
         details: {
-          duration: 'Постоянен',
-          coordinator: volunteer.coordinator,
-          impact: `${volunteer.hoursPerMonth} часа месечно`
+          [t('clubs.SocialProjects.details.duration')]: t('clubs.SocialProjects.details.permanent'),
+          [t('clubs.SocialProjects.details.coordinator')]: volunteer.coordinator,
+          [t('clubs.SocialProjects.details.impact')]: t('clubs.SocialProjects.details.hoursPerMonth', { hours: volunteer.hoursPerMonth })
         }
       });
     });
   }
 
-  // Events that are social/charity type
   if (club.activities?.events) {
     club.activities.events
       .filter(event => event.type === 'charity' || event.type === 'social' || event.type === 'community')
@@ -94,37 +135,36 @@ export const SocialProjects = ({ club }) => {
           title: event.title,
           description: event.description,
           type: 'event',
-          status: 'планиран',
+          status: 'planned',
           date: event.date,
           participants: event.participants,
           category: event.type,
           details: {
-            duration: 'Еднократно',
-            date: event.date,
-            time: event.time,
-            impact: `${event.participants} участници`
+            [t('clubs.SocialProjects.details.duration')]: t('clubs.SocialProjects.details.oneTime'),
+            [t('clubs.SocialProjects.details.date')]: event.date,
+            [t('clubs.SocialProjects.details.time')]: event.time,
+            [t('clubs.SocialProjects.details.impact')]: t('clubs.SocialProjects.details.participants', { count: event.participants })
           }
         });
       });
   }
 
-  // Ако няма проекти, не показваме компонента
   if (allProjects.length === 0) {
     return null;
   }
 
-  // Categories за филтриране
-  const categories = [
-    { key: 'all', label: 'Всички', icon: faHandsHelping },
-    { key: 'community', label: 'Общностни', icon: faUsers },
-    { key: 'volunteering', label: 'Доброволчески', icon: faHeart },
-    { key: 'event', label: 'Събития', icon: faCalendarAlt },
-    { key: 'health', label: 'Здравеопазване', icon: faMedkit },
-    { key: 'support', label: 'Подкрепа', icon: faHome },
-    { key: 'education', label: 'Образование', icon: faGraduationCap }
+  const getCategories = () => [
+    { key: 'all', label: t('clubs.SocialProjects.filters.all'), icon: faHandsHelping },
+    { key: 'community', label: t('clubs.SocialProjects.filters.community'), icon: faUsers },
+    { key: 'volunteering', label: t('clubs.SocialProjects.filters.volunteering'), icon: faHeart },
+    { key: 'event', label: t('clubs.SocialProjects.filters.events'), icon: faCalendarAlt },
+    { key: 'health', label: t('clubs.SocialProjects.filters.health'), icon: faMedkit },
+    { key: 'support', label: t('clubs.SocialProjects.filters.support'), icon: faHome },
+    { key: 'education', label: t('clubs.SocialProjects.filters.education'), icon: faGraduationCap }
   ];
 
-  // Филтриране на проекти
+  const categories = getCategories();
+
   const filteredProjects = allProjects.filter(project => {
     const matchesFilter = activeFilter === 'all' || project.category === activeFilter || project.type === activeFilter;
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -132,22 +172,7 @@ export const SocialProjects = ({ club }) => {
     return matchesFilter && matchesSearch;
   });
 
-  // Helper функции за категоризиране
-  function getCommunityCategory(name) {
-    if (name.toLowerCase().includes('здрав') || name.toLowerCase().includes('медицин')) return 'health';
-    if (name.toLowerCase().includes('образование') || name.toLowerCase().includes('учене')) return 'education';
-    if (name.toLowerCase().includes('дом') || name.toLowerCase().includes('подкрепа')) return 'support';
-    return 'community';
-  }
-
-  function getVolunteerCategory(project) {
-    if (project.toLowerCase().includes('самотни') || project.toLowerCase().includes('дом')) return 'support';
-    if (project.toLowerCase().includes('храна') || project.toLowerCase().includes('обяд')) return 'support';
-    if (project.toLowerCase().includes('лекарство') || project.toLowerCase().includes('здрав')) return 'health';
-    return 'volunteering';
-  }
-
-  function getProjectIcon(category) {
+  const getProjectIcon = (category) => {
     switch(category) {
       case 'health': return faMedkit;
       case 'education': return faGraduationCap;
@@ -157,17 +182,21 @@ export const SocialProjects = ({ club }) => {
       case 'event': return faCalendarAlt;
       default: return faHandsHelping;
     }
-  }
+  };
 
-  function getStatusColor(status) {
+  const getStatusColor = (status) => {
     switch(status) {
-      case 'активен': return '#10b981';
-      case 'планиран': return '#3b82f6';
-      case 'завършен': return '#64748b';
-      case 'сезонен': return '#f59e0b';
+      case 'активен':
+      case 'active': return '#10b981';
+      case 'планиран':
+      case 'planned': return '#3b82f6';
+      case 'завършен':
+      case 'completed': return '#64748b';
+      case 'сезонен':
+      case 'seasonal': return '#f59e0b';
       default: return '#6b7280';
     }
-  }
+  };
 
   const openProjectModal = (project) => {
     setSelectedProject(project);
@@ -177,11 +206,19 @@ export const SocialProjects = ({ club }) => {
     setSelectedProject(null);
   };
 
+  const resetFilters = () => {
+    setActiveFilter('all');
+    setSearchTerm('');
+  };
+
+  const getCurrencySymbol = () => {
+    return club.membership?.membershipFee?.currency || t('clubs.SocialProjects.currency');
+  };
+
   return (
     <section id="social-projects" className="social-projects-section">
       <div className="social-projects-container">
         
-        {/* Section Header - уникален дизайн с wave ефект */}
         <div className="social-projects-header">
           <div className="social-projects-wave-bg">
             <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -194,16 +231,15 @@ export const SocialProjects = ({ club }) => {
           <div className="social-projects-header-content">
             <div className="social-projects-badge">
               <FontAwesomeIcon icon={faHandHoldingHeart} />
-              <span>Нашите проекти</span>
+              <span>{t('clubs.SocialProjects.header.badge')}</span>
             </div>
-            <h2 className="social-projects-title">Как правим разлика</h2>
+            <h2 className="social-projects-title">{t('clubs.SocialProjects.header.title')}</h2>
             <p className="social-projects-subtitle">
-              Открийте начините, по които нашият клуб помага на общността и прави света по-добро място
+              {t('clubs.SocialProjects.header.subtitle')}
             </p>
           </div>
         </div>
 
-        {/* Stats Cards - хоризонтален дизайн с градиенти */}
         <div className="social-projects-stats-ribbon">
           <div className="social-projects-stat-card">
             <div className="social-projects-stat-icon">
@@ -211,7 +247,7 @@ export const SocialProjects = ({ club }) => {
             </div>
             <div className="social-projects-stat-content">
               <span className="social-projects-stat-number">{allProjects.length}</span>
-              <span className="social-projects-stat-label">Активни проекта</span>
+              <span className="social-projects-stat-label">{t('clubs.SocialProjects.stats.activeProjects')}</span>
             </div>
           </div>
           
@@ -222,7 +258,7 @@ export const SocialProjects = ({ club }) => {
               </div>
               <div className="social-projects-stat-content">
                 <span className="social-projects-stat-number">{club.stats.projectsBeneficiaries}+</span>
-                <span className="social-projects-stat-label">Помогнати хора</span>
+                <span className="social-projects-stat-label">{t('clubs.SocialProjects.stats.helpedPeople')}</span>
               </div>
             </div>
           )}
@@ -234,19 +270,18 @@ export const SocialProjects = ({ club }) => {
               </div>
               <div className="social-projects-stat-content">
                 <span className="social-projects-stat-number">{club.stats.donationsDistributed}</span>
-                <span className="social-projects-stat-label">лв. дарения</span>
+                <span className="social-projects-stat-label">{getCurrencySymbol()} {t('clubs.SocialProjects.stats.donations')}</span>
               </div>
             </div>
           )}
         </div>
 
-        {/* Filter & Search Bar - модерен дизайн */}
         <div className="social-projects-controls">
           <div className="social-projects-search-wrapper">
             <FontAwesomeIcon icon={faSearch} />
             <input
               type="text"
-              placeholder="Търсете проект..."
+              placeholder={t('clubs.SocialProjects.search.placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="social-projects-search"
@@ -270,7 +305,6 @@ export const SocialProjects = ({ club }) => {
           </div>
         </div>
 
-        {/* Projects Grid - мозайка дизайн */}
         <div className="social-projects-grid">
           {filteredProjects.map((project, index) => (
             <article 
@@ -278,7 +312,6 @@ export const SocialProjects = ({ club }) => {
               className={`social-projects-card ${project.type} card-${(index % 3) + 1}`}
               onClick={() => openProjectModal(project)}
             >
-              {/* Card Header */}
               <div className="social-projects-card-header">
                 <div className="social-projects-card-icon">
                   <FontAwesomeIcon icon={getProjectIcon(project.category)} />
@@ -287,49 +320,46 @@ export const SocialProjects = ({ club }) => {
                   className="social-projects-card-status"
                   style={{ backgroundColor: getStatusColor(project.status) }}
                 >
-                  {project.status}
+                  {getProjectStatusTranslation(project.status)}
                 </div>
               </div>
 
-              {/* Card Content */}
               <div className="social-projects-card-content">
                 <h3 className="social-projects-card-title">{project.title}</h3>
                 <p className="social-projects-card-description">{project.description}</p>
                 
-                {/* Project Metrics */}
                 <div className="social-projects-card-metrics">
                   {project.beneficiaries && (
                     <div className="social-projects-metric">
                       <FontAwesomeIcon icon={faUsers} />
-                      <span>{project.beneficiaries} човека</span>
+                      <span>{t('clubs.SocialProjects.metrics.people', { count: project.beneficiaries })}</span>
                     </div>
                   )}
                   {project.participants && (
                     <div className="social-projects-metric">
                       <FontAwesomeIcon icon={faUserFriends} />
-                      <span>{project.participants} участници</span>
+                      <span>{t('clubs.SocialProjects.metrics.participants', { count: project.participants })}</span>
                     </div>
                   )}
                   {project.budget && (
                     <div className="social-projects-metric">
                       <FontAwesomeIcon icon={faEuroSign} />
-                      <span>{project.budget} лв.</span>
+                      <span>{project.budget} {getCurrencySymbol()}</span>
                     </div>
                   )}
                   {project.date && (
                     <div className="social-projects-metric">
                       <FontAwesomeIcon icon={faCalendarAlt} />
-                      <span>{new Date(project.date).toLocaleDateString('bg-BG')}</span>
+                      <span>{formatDate(project.date)}</span>
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Card Footer */}
               <div className="social-projects-card-footer">
                 <button className="social-projects-view-btn">
                   <FontAwesomeIcon icon={faEye} />
-                  <span>Вижте повече</span>
+                  <span>{t('clubs.SocialProjects.actions.viewMore')}</span>
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
               </div>
@@ -337,22 +367,20 @@ export const SocialProjects = ({ club }) => {
           ))}
         </div>
 
-        {/* No Results */}
         {filteredProjects.length === 0 && (
           <div className="social-projects-no-results">
             <FontAwesomeIcon icon={faSearch} />
-            <h3>Няма намерени проекти</h3>
-            <p>Опитайте с различни критерии за търсене</p>
+            <h3>{t('clubs.SocialProjects.noResults.title')}</h3>
+            <p>{t('clubs.SocialProjects.noResults.message')}</p>
             <button 
-              onClick={() => {setActiveFilter('all'); setSearchTerm('');}}
+              onClick={resetFilters}
               className="social-projects-reset-btn"
             >
-              Покажи всички проекти
+              {t('clubs.SocialProjects.noResults.showAll')}
             </button>
           </div>
         )}
 
-        {/* Project Modal */}
         {selectedProject && (
           <div className="social-projects-modal" onClick={closeProjectModal}>
             <div className="social-projects-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -370,7 +398,7 @@ export const SocialProjects = ({ club }) => {
                     className="social-projects-modal-status"
                     style={{ backgroundColor: getStatusColor(selectedProject.status) }}
                   >
-                    {selectedProject.status}
+                    {getProjectStatusTranslation(selectedProject.status)}
                   </div>
                 </div>
               </div>
@@ -389,7 +417,7 @@ export const SocialProjects = ({ club }) => {
                 {selectedProject.coordinator && (
                   <div className="social-projects-coordinator">
                     <FontAwesomeIcon icon={faUser} />
-                    <span>Координатор: {selectedProject.coordinator}</span>
+                    <span>{t('clubs.SocialProjects.modal.coordinator')}: {selectedProject.coordinator}</span>
                   </div>
                 )}
               </div>

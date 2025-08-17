@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faPhone,
@@ -20,10 +21,6 @@ import {
   faShare,
   faCopy,
   faExternalLinkAlt,
-  faFax,
-  faGlobe,
-  faBuilding,
-  faDirections,
   faPaperPlane,
   faHandsHelping,
   faHeart,
@@ -42,6 +39,7 @@ import {
 import './socialContacts.css';
 
 export const SocialContacts = ({ club }) => {
+  const { t } = useTranslation();
   const [showContactForm, setShowContactForm] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [contactForm, setContactForm] = useState({
@@ -55,7 +53,6 @@ export const SocialContacts = ({ club }) => {
   const [contactStatus, setContactStatus] = useState(null);
   const [copiedText, setCopiedText] = useState('');
 
-  // Проверяваме дали има необходимите данни
   if (!club?.contacts && 
       !club?.location?.address && 
       !club?.socialMedia &&
@@ -63,71 +60,72 @@ export const SocialContacts = ({ club }) => {
     return null;
   }
 
-  // Събираме contact данни
   const contacts = club.contacts || {};
   const location = club.location || {};
   const socialMedia = club.socialMedia || {};
   const management = club.management || {};
   const board = management.board || [];
 
-  // Ако няма никакви контакти, не показваме компонента
   if (!contacts.phone && !contacts.email && !location.address && 
       Object.keys(socialMedia).length === 0) {
     return null;
   }
 
-  // Contact types за формата
-  const contactTypes = [
-    { key: 'general', label: 'Общ въпрос', icon: faQuestionCircle },
-    { key: 'membership', label: 'Членство', icon: faUsers },
-    { key: 'services', label: 'Услуги', icon: faHandsHelping },
-    { key: 'events', label: 'События', icon: faCalendarAlt },
-    { key: 'support', label: 'Подкрепа', icon: faHeart },
-    { key: 'other', label: 'Друго', icon: faComments }
+  const getContactTypes = () => [
+    { key: 'general', label: t('clubs.SocialContacts.contactTypes.general'), icon: faQuestionCircle },
+    { key: 'membership', label: t('clubs.SocialContacts.contactTypes.membership'), icon: faUsers },
+    { key: 'services', label: t('clubs.SocialContacts.contactTypes.services'), icon: faHandsHelping },
+    { key: 'events', label: t('clubs.SocialContacts.contactTypes.events'), icon: faCalendarAlt },
+    { key: 'support', label: t('clubs.SocialContacts.contactTypes.support'), icon: faHeart },
+    { key: 'other', label: t('clubs.SocialContacts.contactTypes.other'), icon: faComments }
   ];
 
-  // FAQ данни (ако са налични)
-  const faqData = club.faq || [
+  const contactTypes = getContactTypes();
+
+  const getDefaultFaq = () => [
     {
-      question: 'Как мога да стана член на клуба?',
-      answer: 'Свържете се с нас по телефон или имейл за информация относно процедурата за членство.'
+      question: t('clubs.SocialContacts.defaultFaq.membership.question'),
+      answer: t('clubs.SocialContacts.defaultFaq.membership.answer')
     },
     {
-      question: 'Какви услуги предлагате?',
-      answer: 'Предлагаме широк спектър от услуги за нашите членове. За повече информация разгледайте секцията "Наши услуги".'
+      question: t('clubs.SocialContacts.defaultFaq.services.question'),
+      answer: t('clubs.SocialContacts.defaultFaq.services.answer')
     },
     {
-      question: 'Какво е работното време?',
-      answer: 'Работното ни време можете да видите в секцията с контакти или да се свържете с нас директно.'
+      question: t('clubs.SocialContacts.defaultFaq.hours.question'),
+      answer: t('clubs.SocialContacts.defaultFaq.hours.answer')
     }
   ];
 
-  // Social media links
-  const socialLinks = [
-    { key: 'facebook', icon: faFacebook, color: '#1877f2', url: socialMedia.facebook },
-    { key: 'instagram', icon: faInstagram, color: '#e4405f', url: socialMedia.instagram },
-    { key: 'youtube', icon: faYoutube, color: '#ff0000', url: socialMedia.youtube },
-    { key: 'linkedin', icon: faLinkedin, color: '#0077b5', url: socialMedia.linkedin },
-    { key: 'twitter', icon: faTwitter, color: '#1da1f2', url: socialMedia.twitter }
+  const faqData = club.faq || getDefaultFaq();
+
+  const getSocialLinks = () => [
+    { key: 'facebook', icon: faFacebook, color: '#1877f2', url: socialMedia.facebook, label: 'Facebook' },
+    { key: 'instagram', icon: faInstagram, color: '#e4405f', url: socialMedia.instagram, label: 'Instagram' },
+    { key: 'youtube', icon: faYoutube, color: '#ff0000', url: socialMedia.youtube, label: 'YouTube' },
+    { key: 'linkedin', icon: faLinkedin, color: '#0077b5', url: socialMedia.linkedin, label: 'LinkedIn' },
+    { key: 'twitter', icon: faTwitter, color: '#1da1f2', url: socialMedia.twitter, label: 'Twitter' }
   ].filter(link => link.url);
 
-  // Working hours
-  const workingHours = contacts.workingHours || location.workingHours || [
-    { day: 'Понеделник', hours: '9:00 - 17:00' },
-    { day: 'Вторник', hours: '9:00 - 17:00' },
-    { day: 'Сряда', hours: '9:00 - 17:00' },
-    { day: 'Четвъртък', hours: '9:00 - 17:00' },
-    { day: 'Петък', hours: '9:00 - 17:00' }
+  const socialLinks = getSocialLinks();
+
+  const getDefaultWorkingHours = () => [
+    { day: t('clubs.SocialContacts.workingHours.monday'), hours: '9:00 - 17:00' },
+    { day: t('clubs.SocialContacts.workingHours.tuesday'), hours: '9:00 - 17:00' },
+    { day: t('clubs.SocialContacts.workingHours.wednesday'), hours: '9:00 - 17:00' },
+    { day: t('clubs.SocialContacts.workingHours.thursday'), hours: '9:00 - 17:00' },
+    { day: t('clubs.SocialContacts.workingHours.friday'), hours: '9:00 - 17:00' }
   ];
 
-  // Helper функции
+  const workingHours = contacts.workingHours || location.workingHours || getDefaultWorkingHours();
+
   const copyToClipboard = async (text, label) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedText(label);
       setTimeout(() => setCopiedText(''), 2000);
     } catch (err) {
-      console.error('Неуспешно копиране:', err);
+      console.error('Copy failed:', err);
     }
   };
 
@@ -143,25 +141,17 @@ export const SocialContacts = ({ club }) => {
     setContactStatus('sending');
 
     if (contacts.email) {
-      const subject = encodeURIComponent(`${contactForm.subject} - ${contactTypes.find(t => t.key === contactForm.type)?.label}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте ново съобщение от сайта:
-
-Име: ${contactForm.name}
-Имейл: ${contactForm.email}
-Телефон: ${contactForm.phone}
-Тип запитване: ${contactTypes.find(t => t.key === contactForm.type)?.label}
-
-Тема: ${contactForm.subject}
-
-Съобщение:
-${contactForm.message}
-
----
-Изпратено от сайта на ${club.name}
-      `);
+      const contactType = contactTypes.find(t => t.key === contactForm.type);
+      const subject = encodeURIComponent(`${contactForm.subject} - ${contactType?.label}`);
+      const body = encodeURIComponent(t('clubs.SocialContacts.emailTemplate', {
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        type: contactType?.label,
+        subject: contactForm.subject,
+        message: contactForm.message,
+        clubName: club.name
+      }));
       
       try {
         window.location.href = `mailto:${contacts.email}?subject=${subject}&body=${body}`;
@@ -190,31 +180,37 @@ ${contactForm.message}
     setExpandedFaq(expandedFaq === index ? null : index);
   };
 
+  const getCopyLabel = (type) => {
+    return t(`clubs.SocialContacts.copyLabels.${type}`);
+  };
+
+  const getCopySuccessMessage = (label) => {
+    return t('clubs.SocialContacts.copySuccess', { item: label });
+  };
+
   return (
     <section id="social-contacts" className="social-contacts-section">
       <div className="social-contacts-container">
         
-        {/* Header */}
         <div className="social-contacts-header">
           <div className="social-contacts-header-content">
             <div className="social-contacts-badge">
               <FontAwesomeIcon icon={faHeadset} />
-              <span>Свържете се с нас</span>
+              <span>{t('clubs.SocialContacts.header.badge')}</span>
             </div>
             <h2 className="social-contacts-title">
-              Тук сме, за да ви помогнем
+              {t('clubs.SocialContacts.header.title')}
             </h2>
             <p className="social-contacts-subtitle">
-              Имате въпроси или нужда от помощ? Свържете се с нас по удобния за вас начин
+              {t('clubs.SocialContacts.header.subtitle')}
             </p>
           </div>
           
-          {/* Quick Contact */}
           <div className="social-contacts-quick">
             {contacts.phone && (
               <a href={`tel:${contacts.phone}`} className="social-contacts-quick-btn">
                 <FontAwesomeIcon icon={faPhone} />
-                <span>Обадете се</span>
+                <span>{t('clubs.SocialContacts.quickActions.call')}</span>
               </a>
             )}
             <button 
@@ -222,19 +218,17 @@ ${contactForm.message}
               className="social-contacts-quick-btn primary"
             >
               <FontAwesomeIcon icon={faComments} />
-              <span>Пишете ни</span>
+              <span>{t('clubs.SocialContacts.quickActions.writeToUs')}</span>
             </button>
           </div>
         </div>
 
-        {/* Contact Methods */}
         <div className="social-contacts-methods">
           
-          {/* Primary Contacts */}
           <div className="social-contacts-primary">
             <h3 className="social-contacts-section-title">
               <FontAwesomeIcon icon={faPhone} />
-              Основни контакти
+              {t('clubs.SocialContacts.sections.primaryContacts')}
             </h3>
             
             <div className="social-contacts-cards">
@@ -244,18 +238,18 @@ ${contactForm.message}
                     <FontAwesomeIcon icon={faPhone} />
                   </div>
                   <div className="social-contacts-card-content">
-                    <h4>Телефон</h4>
+                    <h4>{t('clubs.SocialContacts.contact.phone')}</h4>
                     <div className="social-contacts-card-value">
                       <a href={`tel:${contacts.phone}`}>{contacts.phone}</a>
                       <button 
-                        onClick={() => copyToClipboard(contacts.phone, 'телефон')}
+                        onClick={() => copyToClipboard(contacts.phone, getCopyLabel('phone'))}
                         className="social-contacts-copy-btn"
-                        title="Копирай телефона"
+                        title={t('clubs.SocialContacts.tooltips.copyPhone')}
                       >
-                        <FontAwesomeIcon icon={copiedText === 'телефон' ? faCheckCircle : faCopy} />
+                        <FontAwesomeIcon icon={copiedText === getCopyLabel('phone') ? faCheckCircle : faCopy} />
                       </button>
                     </div>
-                    <p>Обадете се за бърза помощ</p>
+                    <p>{t('clubs.SocialContacts.contact.phoneDescription')}</p>
                   </div>
                 </div>
               )}
@@ -266,18 +260,18 @@ ${contactForm.message}
                     <FontAwesomeIcon icon={faEnvelope} />
                   </div>
                   <div className="social-contacts-card-content">
-                    <h4>Имейл</h4>
+                    <h4>{t('clubs.SocialContacts.contact.email')}</h4>
                     <div className="social-contacts-card-value">
                       <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
                       <button 
-                        onClick={() => copyToClipboard(contacts.email, 'имейл')}
+                        onClick={() => copyToClipboard(contacts.email, getCopyLabel('email'))}
                         className="social-contacts-copy-btn"
-                        title="Копирай имейла"
+                        title={t('clubs.SocialContacts.tooltips.copyEmail')}
                       >
-                        <FontAwesomeIcon icon={copiedText === 'имейл' ? faCheckCircle : faCopy} />
+                        <FontAwesomeIcon icon={copiedText === getCopyLabel('email') ? faCheckCircle : faCopy} />
                       </button>
                     </div>
-                    <p>Пишете ни за детайлни въпроси</p>
+                    <p>{t('clubs.SocialContacts.contact.emailDescription')}</p>
                   </div>
                 </div>
               )}
@@ -288,18 +282,18 @@ ${contactForm.message}
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
                   </div>
                   <div className="social-contacts-card-content">
-                    <h4>Адрес</h4>
+                    <h4>{t('clubs.SocialContacts.contact.address')}</h4>
                     <div className="social-contacts-card-value">
                       <span>{location.address || contacts.address}</span>
                       <button 
-                        onClick={() => copyToClipboard(location.address || contacts.address, 'адрес')}
+                        onClick={() => copyToClipboard(location.address || contacts.address, getCopyLabel('address'))}
                         className="social-contacts-copy-btn"
-                        title="Копирай адреса"
+                        title={t('clubs.SocialContacts.tooltips.copyAddress')}
                       >
-                        <FontAwesomeIcon icon={copiedText === 'адрес' ? faCheckCircle : faCopy} />
+                        <FontAwesomeIcon icon={copiedText === getCopyLabel('address') ? faCheckCircle : faCopy} />
                       </button>
                     </div>
-                    <p>Посетете ни на място</p>
+                    <p>{t('clubs.SocialContacts.contact.addressDescription')}</p>
                   </div>
                 </div>
               )}
@@ -308,20 +302,18 @@ ${contactForm.message}
             {copiedText && (
               <div className="social-contacts-copy-success">
                 <FontAwesomeIcon icon={faCheckCircle} />
-                <span>Копирахте {copiedText}!</span>
+                <span>{getCopySuccessMessage(copiedText)}</span>
               </div>
             )}
           </div>
 
-          {/* Additional Info */}
           <div className="social-contacts-additional">
             
-            {/* Working Hours */}
             {workingHours.length > 0 && (
               <div className="social-contacts-hours">
                 <h4>
                   <FontAwesomeIcon icon={faClock} />
-                  Работно време
+                  {t('clubs.SocialContacts.sections.workingHours')}
                 </h4>
                 <div className="social-contacts-hours-list">
                   {workingHours.map((schedule, index) => (
@@ -334,12 +326,11 @@ ${contactForm.message}
               </div>
             )}
 
-            {/* Key Contacts */}
             {board.length > 0 && (
               <div className="social-contacts-team">
                 <h4>
                   <FontAwesomeIcon icon={faUserTie} />
-                  Ключови контакти
+                  {t('clubs.SocialContacts.sections.keyContacts')}
                 </h4>
                 <div className="social-contacts-team-list">
                   {board.slice(0, 3).map((member, index) => (
@@ -364,12 +355,11 @@ ${contactForm.message}
               </div>
             )}
 
-            {/* Social Media */}
             {socialLinks.length > 0 && (
               <div className="social-contacts-social">
                 <h4>
                   <FontAwesomeIcon icon={faShare} />
-                  Социални мрежи
+                  {t('clubs.SocialContacts.sections.socialMedia')}
                 </h4>
                 <div className="social-contacts-social-links">
                   {socialLinks.map(link => (
@@ -380,6 +370,7 @@ ${contactForm.message}
                       rel="noopener noreferrer"
                       className="social-contacts-social-link"
                       style={{ '--social-color': link.color }}
+                      title={link.label}
                     >
                       <FontAwesomeIcon icon={link.icon} />
                     </a>
@@ -390,12 +381,11 @@ ${contactForm.message}
           </div>
         </div>
 
-        {/* FAQ Section */}
         {faqData.length > 0 && (
           <div className="social-contacts-faq">
             <h3 className="social-contacts-section-title">
               <FontAwesomeIcon icon={faQuestionCircle} />
-              Често задавани въпроси
+              {t('clubs.SocialContacts.sections.faq')}
             </h3>
             
             <div className="social-contacts-faq-list">
@@ -421,7 +411,6 @@ ${contactForm.message}
           </div>
         )}
 
-        {/* Contact Form Modal */}
         {showContactForm && (
           <div className="social-contacts-modal" onClick={() => setShowContactForm(false)}>
             <div className="social-contacts-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -434,21 +423,21 @@ ${contactForm.message}
               
               <div className="social-contacts-modal-header">
                 <FontAwesomeIcon icon={faComments} />
-                <h3>Свържете се с нас</h3>
-                <p>Изпратете ни съобщение и ще ви отговорим възможно най-скоро</p>
+                <h3>{t('clubs.SocialContacts.form.title')}</h3>
+                <p>{t('clubs.SocialContacts.form.subtitle')}</p>
               </div>
               
               {contactStatus === 'sent' ? (
                 <div className="social-contacts-form-success">
                   <FontAwesomeIcon icon={faCheckCircle} />
-                  <h4>Съобщението е изпратено успешно!</h4>
-                  <p>Благодарим ви! Ще се свържем с вас възможно най-скоро.</p>
+                  <h4>{t('clubs.SocialContacts.form.success.title')}</h4>
+                  <p>{t('clubs.SocialContacts.form.success.message')}</p>
                 </div>
               ) : contactStatus === 'error' ? (
                 <div className="social-contacts-form-error">
                   <FontAwesomeIcon icon={faTimes} />
-                  <h4>Възникна грешка</h4>
-                  <p>Моля опитайте отново или се свържете с нас директно.</p>
+                  <h4>{t('clubs.SocialContacts.form.error.title')}</h4>
+                  <p>{t('clubs.SocialContacts.form.error.message')}</p>
                 </div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="social-contacts-form">
@@ -456,7 +445,7 @@ ${contactForm.message}
                     <div className="social-contacts-form-group">
                       <label htmlFor="contact-name">
                         <FontAwesomeIcon icon={faUser} />
-                        Вашето име *
+                        {t('clubs.SocialContacts.form.name')} *
                       </label>
                       <input
                         type="text"
@@ -464,14 +453,14 @@ ${contactForm.message}
                         value={contactForm.name}
                         onChange={(e) => handleContactChange('name', e.target.value)}
                         required
-                        placeholder="Въведете вашето име"
+                        placeholder={t('clubs.SocialContacts.form.namePlaceholder')}
                       />
                     </div>
                     
                     <div className="social-contacts-form-group">
                       <label htmlFor="contact-email">
                         <FontAwesomeIcon icon={faEnvelope} />
-                        Имейл адрес *
+                        {t('clubs.SocialContacts.form.email')} *
                       </label>
                       <input
                         type="email"
@@ -479,7 +468,7 @@ ${contactForm.message}
                         value={contactForm.email}
                         onChange={(e) => handleContactChange('email', e.target.value)}
                         required
-                        placeholder="Въведете вашия имейл"
+                        placeholder={t('clubs.SocialContacts.form.emailPlaceholder')}
                       />
                     </div>
                   </div>
@@ -488,21 +477,21 @@ ${contactForm.message}
                     <div className="social-contacts-form-group">
                       <label htmlFor="contact-phone">
                         <FontAwesomeIcon icon={faPhone} />
-                        Телефон
+                        {t('clubs.SocialContacts.form.phone')}
                       </label>
                       <input
                         type="tel"
                         id="contact-phone"
                         value={contactForm.phone}
                         onChange={(e) => handleContactChange('phone', e.target.value)}
-                        placeholder="Въведете вашия телефон"
+                        placeholder={t('clubs.SocialContacts.form.phonePlaceholder')}
                       />
                     </div>
                     
                     <div className="social-contacts-form-group">
                       <label htmlFor="contact-type">
                         <FontAwesomeIcon icon={faFileAlt} />
-                        Тип запитване *
+                        {t('clubs.SocialContacts.form.type')} *
                       </label>
                       <select
                         id="contact-type"
@@ -522,7 +511,7 @@ ${contactForm.message}
                   <div className="social-contacts-form-group">
                     <label htmlFor="contact-subject">
                       <FontAwesomeIcon icon={faLightbulb} />
-                      Тема *
+                      {t('clubs.SocialContacts.form.subject')} *
                     </label>
                     <input
                       type="text"
@@ -530,21 +519,21 @@ ${contactForm.message}
                       value={contactForm.subject}
                       onChange={(e) => handleContactChange('subject', e.target.value)}
                       required
-                      placeholder="Темата на вашето съобщение"
+                      placeholder={t('clubs.SocialContacts.form.subjectPlaceholder')}
                     />
                   </div>
                   
                   <div className="social-contacts-form-group">
                     <label htmlFor="contact-message">
                       <FontAwesomeIcon icon={faComments} />
-                      Съобщение *
+                      {t('clubs.SocialContacts.form.message')} *
                     </label>
                     <textarea
                       id="contact-message"
                       value={contactForm.message}
                       onChange={(e) => handleContactChange('message', e.target.value)}
                       required
-                      placeholder="Напишете вашето съобщение тук..."
+                      placeholder={t('clubs.SocialContacts.form.messagePlaceholder')}
                       rows="5"
                     />
                   </div>
@@ -556,14 +545,16 @@ ${contactForm.message}
                       disabled={contactStatus === 'sending'}
                     >
                       <FontAwesomeIcon icon={faPaperPlane} />
-                      {contactStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщението'}
+                      {contactStatus === 'sending' ? 
+                        t('clubs.SocialContacts.form.sending') : 
+                        t('clubs.SocialContacts.form.submit')}
                     </button>
                     <button 
                       type="button" 
                       onClick={() => setShowContactForm(false)}
                       className="social-contacts-cancel-btn"
                     >
-                      Отказ
+                      {t('clubs.SocialContacts.form.cancel')}
                     </button>
                   </div>
                 </form>

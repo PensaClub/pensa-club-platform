@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faTheaterMasks,
@@ -23,6 +24,7 @@ import {
 import './culturalAbout.css';
 
 export const CulturalAbout = ({ club }) => {
+  const { t } = useTranslation();
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [joinForm, setJoinForm] = useState({
     name: '',
@@ -31,9 +33,8 @@ export const CulturalAbout = ({ club }) => {
     message: '',
     interests: []
   });
-  const [formStatus, setFormStatus] = useState(null); // 'sending', 'sent', 'error'
+  const [formStatus, setFormStatus] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
@@ -41,18 +42,14 @@ export const CulturalAbout = ({ club }) => {
   const currentYear = new Date().getFullYear();
   const yearsActive = currentYear - (club.foundedYear || currentYear);
 
-  // Само реални данни от club
   const achievements = club.achievements?.awards || [];
   const hasAchievements = achievements.length > 0;
 
-  // Проверяваме дали има статистики
   const hasStats = club.membership?.totalMembers || club.activities?.regular?.length || hasAchievements || yearsActive > 0;
 
-  // Проверяваме дали има принос към общността
   const communityImpact = club.stats?.communityImpact || {};
   const hasCommunityImpact = Object.keys(communityImpact).length > 0;
 
-  // Функции за форма
   const openJoinModal = () => {
     setShowJoinModal(true);
   };
@@ -90,23 +87,16 @@ export const CulturalAbout = ({ club }) => {
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Заявка за присъединяване към ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте заявка за присъединяване към ${club.name}:
-
-Име: ${joinForm.name}
-Имейл: ${joinForm.email}
-Телефон: ${joinForm.phone || 'Не е посочен'}
-Интереси: ${joinForm.interests.join(', ') || 'Няма посочени'}
-
-Съобщение:
-${joinForm.message || 'Няма допълнително съобщение'}
-
----
-Изпратено от ${joinForm.email}
-      `);
+      const subject = encodeURIComponent(t('clubs.CulturalAbout.modal.emailSubject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.CulturalAbout.modal.emailBody', {
+        clubName: club.name,
+        name: joinForm.name,
+        email: joinForm.email,
+        phone: joinForm.phone || t('clubs.CulturalAbout.modal.notSpecified'),
+        interests: joinForm.interests.join(', ') || t('clubs.CulturalAbout.modal.noInterests'),
+        message: joinForm.message || t('clubs.CulturalAbout.modal.noMessage'),
+        senderEmail: joinForm.email
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -129,38 +119,41 @@ ${joinForm.message || 'Няма допълнително съобщение'}
     }
   };
 
-  const availableInterests = ['Хорово пеене', 'Народни танци', 'Изобразително изкуство', 'Литературни четения', 'Музика', 'Театър'];
+  const getAvailableInterests = () => [
+    t('clubs.CulturalAbout.interests.choralSinging'),
+    t('clubs.CulturalAbout.interests.folkDances'),
+    t('clubs.CulturalAbout.interests.visualArts'),
+    t('clubs.CulturalAbout.interests.literaryReadings'),
+    t('clubs.CulturalAbout.interests.music'),
+    t('clubs.CulturalAbout.interests.theater')
+  ];
 
   return (
     <section id="cultural-about" className="cultural-about-main-section">
       <div className="cultural-about-container">
         
-        {/* Header */}
         <div className="cultural-about-header">
           <div className="cultural-about-badge">
             <FontAwesomeIcon icon={faBookOpen} />
-            <span>За клуба</span>
+            <span>{t('clubs.CulturalAbout.header.badge')}</span>
           </div>
-          <h2 className="cultural-about-title">Нашата история и мисия</h2>
+          <h2 className="cultural-about-title">{t('clubs.CulturalAbout.header.title')}</h2>
           {yearsActive > 0 && (
             <p className="cultural-about-subtitle">
-              Повече от {yearsActive} години създаваме незабравими моменти и съхраняваме българската култура
+              {t('clubs.CulturalAbout.header.subtitle', { years: yearsActive })}
             </p>
           )}
         </div>
 
-        {/* Main Content Grid */}
         <div className="cultural-about-content-grid">
           
-          {/* Left Column - Story & Mission */}
           <div className="cultural-about-main-content">
             
-            {/* Club Story */}
             {(club.fullDescription || club.foundedYear) && (
               <div className="cultural-about-story-card">
                 <div className="cultural-about-story-header">
                   <FontAwesomeIcon icon={faBookOpen} />
-                  <h3>Нашата история</h3>
+                  <h3>{t('clubs.CulturalAbout.story.title')}</h3>
                 </div>
                 <div className="cultural-about-story-content">
                   {club.fullDescription && (
@@ -172,19 +165,18 @@ ${joinForm.message || 'Няма допълнително съобщение'}
                   {club.foundedYear && (
                     <div className="cultural-about-timeline-highlight">
                       <div className="cultural-about-timeline-year">{club.foundedYear}</div>
-                      <div className="cultural-about-timeline-event">Основаване на клуба</div>
+                      <div className="cultural-about-timeline-event">{t('clubs.CulturalAbout.story.founded')}</div>
                     </div>
                   )}
                 </div>
               </div>
             )}
 
-            {/* Mission & Values */}
             {club.mission && (
               <div className="cultural-about-mission-card">
                 <div className="cultural-about-mission-header">
                   <FontAwesomeIcon icon={faGem} />
-                  <h3>Нашата мисия</h3>
+                  <h3>{t('clubs.CulturalAbout.mission.title')}</h3>
                 </div>
                 <div className="cultural-about-mission-content">
                   <p className="cultural-about-mission-text">{club.mission}</p>
@@ -192,69 +184,65 @@ ${joinForm.message || 'Няма допълнително съобщение'}
               </div>
             )}
 
-            {/* Quote Section */}
             {(club.testimonials?.length > 0 || club.management?.board?.[0]?.name) && (
               <div className="cultural-about-quote-card">
                 <div className="cultural-about-quote-content">
                   <FontAwesomeIcon icon={faQuoteLeft} className="cultural-about-quote-icon" />
                   <blockquote>
                     {club.testimonials?.[0]?.text || 
-                     "Културата е мостът между поколенията. В нашия клуб всеки ден строим този мост с песни, танци и топли усмивки."
+                     t('clubs.CulturalAbout.quote.defaultText')
                     }
                   </blockquote>
                   <cite>
-                    - {club.testimonials?.[0]?.author || club.management?.board?.[0]?.name || 'Председател на клуба'}
+                    - {club.testimonials?.[0]?.author || club.management?.board?.[0]?.name || t('clubs.CulturalAbout.quote.defaultAuthor')}
                   </cite>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Right Column - Stats & Achievements */}
           <div className="cultural-about-sidebar">
             
-            {/* Key Numbers */}
             {hasStats && (
               <div className="cultural-about-stats-card">
                 <div className="cultural-about-stats-header">
                   <FontAwesomeIcon icon={faStar} />
-                  <h3>Ключови цифри</h3>
+                  <h3>{t('clubs.CulturalAbout.stats.title')}</h3>
                 </div>
                 <div className="cultural-about-stats-list">
                   {club.membership?.totalMembers && (
                     <div className="cultural-about-stat-item">
                       <div className="cultural-about-stat-number">{club.membership.totalMembers}</div>
-                      <div className="cultural-about-stat-label">Активни членове</div>
+                      <div className="cultural-about-stat-label">{t('clubs.CulturalAbout.stats.activeMembers')}</div>
                     </div>
                   )}
                   {yearsActive > 0 && (
                     <div className="cultural-about-stat-item">
                       <div className="cultural-about-stat-number">{yearsActive}</div>
-                      <div className="cultural-about-stat-label">Години опит</div>
+                      <div className="cultural-about-stat-label">{t('clubs.CulturalAbout.stats.yearsExperience')}</div>
                     </div>
                   )}
                   {club.activities?.regular?.length && (
                     <div className="cultural-about-stat-item">
                       <div className="cultural-about-stat-number">{club.activities.regular.length}</div>
-                      <div className="cultural-about-stat-label">Редовни програми</div>
+                      <div className="cultural-about-stat-label">{t('clubs.CulturalAbout.stats.regularPrograms')}</div>
                     </div>
                   )}
                   {hasAchievements && (
                     <div className="cultural-about-stat-item">
                       <div className="cultural-about-stat-number">{achievements.length}</div>
-                      <div className="cultural-about-stat-label">Престижни награди</div>
+                      <div className="cultural-about-stat-label">{t('clubs.CulturalAbout.stats.prestigiousAwards')}</div>
                     </div>
                   )}
                 </div>
               </div>
             )}
 
-            {/* Achievements */}
             {hasAchievements && (
               <div className="cultural-about-achievements-card">
                 <div className="cultural-about-achievements-header">
                   <FontAwesomeIcon icon={faAward} />
-                  <h3>Постижения</h3>
+                  <h3>{t('clubs.CulturalAbout.achievements.title')}</h3>
                 </div>
                 <div className="cultural-about-achievements-list">
                   {achievements.map((achievement, index) => (
@@ -270,12 +258,11 @@ ${joinForm.message || 'Няма допълнително съобщение'}
               </div>
             )}
 
-            {/* Specialties from activities */}
             {club.activities?.regular?.length > 0 && (
               <div className="cultural-about-specialties-card">
                 <div className="cultural-about-specialties-header">
                   <FontAwesomeIcon icon={faPalette} />
-                  <h3>Нашите специалности</h3>
+                  <h3>{t('clubs.CulturalAbout.specialties.title')}</h3>
                 </div>
                 <div className="cultural-about-specialties-list">
                   {club.activities.regular.slice(0, 4).map((activity, index) => (
@@ -295,62 +282,59 @@ ${joinForm.message || 'Няма допълнително съобщение'}
           </div>
         </div>
 
-        {/* Community Impact */}
         {hasCommunityImpact && (
           <div className="cultural-about-community-impact">
             <div className="cultural-about-impact-header">
               <FontAwesomeIcon icon={faHandsHelping} />
-              <h3>Нашият принос към общността</h3>
+              <h3>{t('clubs.CulturalAbout.communityImpact.title')}</h3>
             </div>
             <div className="cultural-about-impact-grid">
               {communityImpact.events && (
                 <div className="cultural-about-impact-item">
                   <div className="cultural-about-impact-number">{communityImpact.events}+</div>
-                  <div className="cultural-about-impact-label">Културни eventi годишно</div>
+                  <div className="cultural-about-impact-label">{t('clubs.CulturalAbout.communityImpact.eventsYearly')}</div>
                 </div>
               )}
               {communityImpact.visitors && (
                 <div className="cultural-about-impact-item">
                   <div className="cultural-about-impact-number">{communityImpact.visitors}+</div>
-                  <div className="cultural-about-impact-label">Посетители на концерти</div>
+                  <div className="cultural-about-impact-label">{t('clubs.CulturalAbout.communityImpact.concertVisitors')}</div>
                 </div>
               )}
               {communityImpact.initiatives && (
                 <div className="cultural-about-impact-item">
                   <div className="cultural-about-impact-number">{communityImpact.initiatives}+</div>
-                  <div className="cultural-about-impact-label">Доброволни инициативи</div>
+                  <div className="cultural-about-impact-label">{t('clubs.CulturalAbout.communityImpact.volunteerInitiatives')}</div>
                 </div>
               )}
               {communityImpact.familiesSupported && (
                 <div className="cultural-about-impact-item">
                   <div className="cultural-about-impact-number">{communityImpact.familiesSupported}+</div>
-                  <div className="cultural-about-impact-label">Семейства подкрепени</div>
+                  <div className="cultural-about-impact-label">{t('clubs.CulturalAbout.communityImpact.familiesSupported')}</div>
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {/* Call to Action */}
         <div className="cultural-about-cta-section">
           <div className="cultural-about-cta-content">
-            <h3>Станете част от нашето културно семейство</h3>
-            <p>Присъединете се към нас и откройте красотата на българската култура заедно с нови приятели</p>
+            <h3>{t('clubs.CulturalAbout.cta.title')}</h3>
+            <p>{t('clubs.CulturalAbout.cta.subtitle')}</p>
             <div className="cultural-about-cta-buttons">
               <button className="cultural-about-btn-primary" onClick={openJoinModal}>
                 <FontAwesomeIcon icon={faUsers} />
-                Присъединете се
+                {t('clubs.CulturalAbout.cta.joinButton')}
               </button>
               <button className="cultural-about-btn-secondary" onClick={handleViewActivities}>
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                Разгледайте програмата
+                {t('clubs.CulturalAbout.cta.viewProgramButton')}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Join Modal */}
       {showJoinModal && (
         <div className="cultural-about-join-modal">
           <div className="cultural-about-join-modal-overlay" onClick={closeJoinModal}></div>
@@ -361,21 +345,21 @@ ${joinForm.message || 'Няма допълнително съобщение'}
             
             <div className="cultural-about-join-header">
               <FontAwesomeIcon icon={faUsers} />
-              <h3>Присъединете се към {club.name}</h3>
-              <p>Попълнете формата и ще се свържем с вас скоро</p>
+              <h3>{t('clubs.CulturalAbout.modal.title', { clubName: club.name })}</h3>
+              <p>{t('clubs.CulturalAbout.modal.subtitle')}</p>
             </div>
             
             {formStatus === 'sent' ? (
               <div className="cultural-about-form-success">
                 <FontAwesomeIcon icon={faCheck} />
-                <h4>Заявката е изпратена!</h4>
-                <p>Благодарим ви за интереса! Ще се свържем с вас скоро.</p>
+                <h4>{t('clubs.CulturalAbout.modal.success.title')}</h4>
+                <p>{t('clubs.CulturalAbout.modal.success.message')}</p>
               </div>
             ) : formStatus === 'error' ? (
               <div className="cultural-about-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.CulturalAbout.modal.error.title')}</h4>
+                <p>{t('clubs.CulturalAbout.modal.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleJoinSubmit} className="cultural-about-join-form">
@@ -383,7 +367,7 @@ ${joinForm.message || 'Няма допълнително съобщение'}
                   <div className="cultural-about-form-group">
                     <label htmlFor="joinName">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.CulturalAbout.modal.form.name')} *
                     </label>
                     <input
                       type="text"
@@ -391,14 +375,14 @@ ${joinForm.message || 'Няма допълнително съобщение'}
                       value={joinForm.name}
                       onChange={(e) => handleFormChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.CulturalAbout.modal.form.namePlaceholder')}
                     />
                   </div>
                   
                   <div className="cultural-about-form-group">
                     <label htmlFor="joinEmail">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.CulturalAbout.modal.form.email')} *
                     </label>
                     <input
                       type="email"
@@ -406,7 +390,7 @@ ${joinForm.message || 'Няма допълнително съобщение'}
                       value={joinForm.email}
                       onChange={(e) => handleFormChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.CulturalAbout.modal.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -414,25 +398,24 @@ ${joinForm.message || 'Няма допълнително съобщение'}
                 <div className="cultural-about-form-group">
                   <label htmlFor="joinPhone">
                     <FontAwesomeIcon icon={faPhone} />
-                    Телефон (по желание)
+                    {t('clubs.CulturalAbout.modal.form.phone')}
                   </label>
                   <input
                     type="tel"
                     id="joinPhone"
                     value={joinForm.phone}
                     onChange={(e) => handleFormChange('phone', e.target.value)}
-                    placeholder="Въведете вашия телефон"
+                    placeholder={t('clubs.CulturalAbout.modal.form.phonePlaceholder')}
                   />
                 </div>
 
-                {/* Interest Selection */}
                 <div className="cultural-about-form-group">
                   <label>
                     <FontAwesomeIcon icon={faHeart} />
-                    Какво ви интересува? (изберете едно или повече)
+                    {t('clubs.CulturalAbout.modal.form.interests')}
                   </label>
                   <div className="cultural-about-interests-grid">
-                    {availableInterests.map((interest) => (
+                    {getAvailableInterests().map((interest) => (
                       <button
                         key={interest}
                         type="button"
@@ -448,13 +431,13 @@ ${joinForm.message || 'Няма допълнително съобщение'}
                 <div className="cultural-about-form-group">
                   <label htmlFor="joinMessage">
                     <FontAwesomeIcon icon={faEnvelope} />
-                    Допълнително съобщение (по желание)
+                    {t('clubs.CulturalAbout.modal.form.message')}
                   </label>
                   <textarea
                     id="joinMessage"
                     value={joinForm.message}
                     onChange={(e) => handleFormChange('message', e.target.value)}
-                    placeholder="Разкажете ни повече за себе си или задайте въпрос..."
+                    placeholder={t('clubs.CulturalAbout.modal.form.messagePlaceholder')}
                     rows="4"
                   />
                 </div>
@@ -466,14 +449,14 @@ ${joinForm.message || 'Няма допълнително съобщение'}
                     disabled={formStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faUsers} />
-                    {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявка'}
+                    {formStatus === 'sending' ? t('clubs.CulturalAbout.modal.form.sending') : t('clubs.CulturalAbout.modal.form.submit')}
                   </button>
                   <button 
                     type="button" 
                     onClick={closeJoinModal}
                     className="cultural-about-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.CulturalAbout.modal.form.cancel')}
                   </button>
                 </div>
               </form>

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -57,6 +58,7 @@ import ShareModal from './components/ShareModal/ShareModal';
 export const ClubView = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { getClubBySlug, currentClub, isLoading } = useClubContext();
     const [club, setClub] = useState(null);
     const [notFound, setNotFound] = useState(false);
@@ -68,24 +70,76 @@ export const ClubView = () => {
     const [navCollapsed, setNavCollapsed] = useState(true);
     const [availableNavItems, setAvailableNavItems] = useState([]);
 
-    // 🎯 SEO Meta данни функция
+    const allNavItems = useMemo(() => [
+        { id: 'general-club-hero', label: t('clubs.ClubView.navigation.home'), icon: faUsers },
+        { id: 'general-club-about', label: t('clubs.ClubView.navigation.aboutClub'), icon: faInfoCircle },
+        { id: 'general-activities', label: t('clubs.ClubView.navigation.activities'), icon: faRunning },
+        { id: 'general-events', label: t('clubs.ClubView.navigation.events'), icon: faCalendarAlt },
+        { id: 'general-management', label: t('clubs.ClubView.navigation.management'), icon: faCrown },
+        { id: 'general-location', label: t('clubs.ClubView.navigation.location'), icon: faMapPin },
+        { id: 'general-contact', label: t('clubs.ClubView.navigation.contacts'), icon: faEnvelope },
+        { id: 'cultural-hero', label: t('clubs.ClubView.navigation.home'), icon: faTheaterMasks },
+        { id: 'cultural-about', label: t('clubs.ClubView.navigation.aboutClub'), icon: faInfoCircle },
+        { id: 'cultural-activities', label: t('clubs.ClubView.navigation.activities'), icon: faRunning },
+        { id: 'cultural-events', label: t('clubs.ClubView.navigation.events'), icon: faCalendarAlt },
+        { id: 'cultural-management', label: t('clubs.ClubView.navigation.management'), icon: faCrown },
+        { id: 'cultural-gallery', label: t('clubs.ClubView.navigation.gallery'), icon: faCamera },
+        { id: 'cultural-location', label: t('clubs.ClubView.navigation.location'), icon: faMapPin },
+        { id: 'cultural-contacts', label: t('clubs.ClubView.navigation.contacts'), icon: faEnvelope },
+        { id: 'traditional-hero', label: t('clubs.ClubView.navigation.home'), icon: faHome },
+        { id: 'traditional-about', label: t('clubs.ClubView.navigation.aboutClub'), icon: faHistory },
+        { id: 'traditional-traditions', label: t('clubs.ClubView.navigation.traditions'), icon: faCrown },
+        { id: 'traditional-folklore', label: t('clubs.ClubView.navigation.folklore'), icon: faMusic },
+        { id: 'traditional-performances', label: t('clubs.ClubView.navigation.performances'), icon: faTheaterMasks },
+        { id: 'traditional-costumes', label: t('clubs.ClubView.navigation.costumes'), icon: faUsers },
+        { id: 'traditional-music', label: t('clubs.ClubView.navigation.music'), icon: faMusic },
+        { id: 'traditional-calendar', label: t('clubs.ClubView.navigation.calendar'), icon: faCalendarAlt },
+        { id: 'traditional-gallery', label: t('clubs.ClubView.navigation.gallery'), icon: faCamera },
+        { id: 'traditional-contacts', label: t('clubs.ClubView.navigation.contacts'), icon: faEnvelope },
+        { id: 'traditional-location', label: t('clubs.ClubView.navigation.location'), icon: faMapPin },
+        { id: 'social-hero', label: t('clubs.ClubView.navigation.home'), icon: faHeart },
+        { id: 'social-about', label: t('clubs.ClubView.navigation.aboutClub'), icon: faInfoCircle },
+        { id: 'social-projects', label: t('clubs.ClubView.navigation.projects'), icon: faLightbulb },
+        { id: 'social-volunteering', label: t('clubs.ClubView.navigation.volunteering'), icon: faHandsHelping },
+        { id: 'social-support', label: t('clubs.ClubView.navigation.support'), icon: faHeartbeat },
+        { id: 'community-events', label: t('clubs.ClubView.navigation.events'), icon: faCalendarAlt },
+        { id: 'social-gallery', label: t('clubs.ClubView.navigation.gallery'), icon: faImages },
+        { id: 'social-partnerships', label: t('clubs.ClubView.navigation.partners'), icon: faHandshake },
+        { id: 'social-location', label: t('clubs.ClubView.navigation.location'), icon: faMapPin },
+        { id: 'social-contacts', label: t('clubs.ClubView.navigation.contacts'), icon: faHeadset },
+        { id: 'sports-hero', label: t('clubs.ClubView.navigation.home'), icon: faRunning },
+        { id: 'sports-about', label: t('clubs.ClubView.navigation.aboutClub'), icon: faInfoCircle },
+        { id: 'fitness-programs', label: t('clubs.ClubView.navigation.fitnessPrograms'), icon: faDumbbell },
+        { id: 'health-activities', label: t('clubs.ClubView.navigation.healthActivities'), icon: faHeartbeat },
+        { id: 'wellness-services', label: t('clubs.ClubView.navigation.wellnessServices'), icon: faLeaf },
+        { id: 'sport-events', label: t('clubs.ClubView.navigation.sportsEvents'), icon: faTrophy },
+        { id: 'sports-health-tracking', label: t('clubs.ClubView.navigation.progressTracking'), icon: faChartLine },
+        { id: 'sports-gallery', label: t('clubs.ClubView.navigation.gallery'), icon: faImages },
+        { id: 'sports-partners', label: t('clubs.ClubView.navigation.partners'), icon: faHandshake },
+        { id: 'sports-location', label: t('clubs.ClubView.navigation.location'), icon: faMapPin },
+        { id: 'sports-contacts', label: t('clubs.ClubView.navigation.contacts'), icon: faHeadset }
+    ], [t]);
+
     const generateSEOData = (club) => {
         if (!club) return {};
 
-        const title = `${club.name} - Клуб за пенсионери в ${club.location.city}`;
+        const title = t('clubs.ClubView.seo.clubTitle', { clubName: club.name, city: club.location.city });
         const description = club.shortDescription || club.fullDescription?.substring(0, 160) || 
-            `Активен клуб за пенсионери в ${club.location.city}. Присъединете се към нашата общност за ${club.category === 'sports' ? 'спорт и активност' : club.category === 'cultural' ? 'култура и изкуство' : 'социални дейности'}.`;
+            t('clubs.ClubView.seo.clubDescription', { 
+                city: club.location.city,
+                activity: t(`clubs.ClubView.seo.activities.${club.category}`, { defaultValue: t('clubs.ClubView.seo.activities.general') })
+            });
         
         const keywords = [
-            'клуб за пенсионери',
-            'пенсионерски клуб',
+            t('clubs.ClubView.seo.keywords.clubForPensioners'),
+            t('clubs.ClubView.seo.keywords.pensionersClub'),
             club.location.city,
             club.location.region,
             club.category,
             ...(club.metadata?.tags || []),
-            'активни пенсионери',
-            'социални дейности',
-            'третата възраст'
+            t('clubs.ClubView.seo.keywords.activePensioners'),
+            t('clubs.ClubView.seo.keywords.socialActivities'),
+            t('clubs.ClubView.seo.keywords.thirdAge')
         ].join(', ');
 
         const canonicalUrl = `${window.location.origin}/clubs/${club.slug}`;
@@ -126,7 +180,7 @@ export const ClubView = () => {
                 "foundingDate": club.foundedYear ? `${club.foundedYear}-01-01` : undefined,
                 "memberOf": {
                     "@type": "Organization",
-                    "name": "Български клубове за пенсионери"
+                    "name": t('clubs.ClubView.seo.organizationName')
                 },
                 "aggregateRating": club.metadata?.rating ? {
                     "@type": "AggregateRating",
@@ -137,65 +191,6 @@ export const ClubView = () => {
         };
     };
 
-    // Всички възможни навигационни елементи с техните конфигурации
-    const allNavItems = [
-        // General template
-        { id: 'general-club-hero', label: 'Начало', icon: faUsers },
-        { id: 'general-club-about', label: 'За клуба', icon: faInfoCircle },
-        { id: 'general-activities', label: 'Дейности', icon: faRunning },
-        { id: 'general-events', label: 'Събития', icon: faCalendarAlt },
-        { id: 'general-management', label: 'Ръководство', icon: faCrown },
-        { id: 'general-location', label: 'Локация', icon: faMapPin },
-        { id: 'general-contact', label: 'Контакти', icon: faEnvelope },
-
-        // Cultural template  
-        { id: 'cultural-hero', label: 'Начало', icon: faTheaterMasks },
-        { id: 'cultural-about', label: 'За клуба', icon: faInfoCircle },
-        { id: 'cultural-activities', label: 'Дейности', icon: faRunning },
-        { id: 'cultural-events', label: 'Събития', icon: faCalendarAlt },
-        { id: 'cultural-management', label: 'Ръководство', icon: faCrown },
-        { id: 'cultural-gallery', label: 'Галерия', icon: faCamera },
-        { id: 'cultural-location', label: 'Локация', icon: faMapPin },
-        { id: 'cultural-contacts', label: 'Контакти', icon: faEnvelope },
-
-        // Traditional template
-        { id: 'traditional-hero', label: 'Начало', icon: faHome },
-        { id: 'traditional-about', label: 'За клуба', icon: faHistory },
-        { id: 'traditional-traditions', label: 'Традиции', icon: faCrown },
-        { id: 'traditional-folklore', label: 'Фолклор', icon: faMusic },
-        { id: 'traditional-performances', label: 'Изпълнения', icon: faTheaterMasks },
-        { id: 'traditional-costumes', label: 'Носии', icon: faUsers },
-        { id: 'traditional-music', label: 'Музика', icon: faMusic },
-        { id: 'traditional-calendar', label: 'Календар', icon: faCalendarAlt },
-        { id: 'traditional-gallery', label: 'Галерия', icon: faCamera },
-        { id: 'traditional-contacts', label: 'Контакти', icon: faEnvelope },
-        { id: 'traditional-location', label: 'Локация', icon: faMapPin },
-        // Social template
-        { id: 'social-hero', label: 'Начало', icon: faHeart },
-        { id: 'social-about', label: 'За клуба', icon: faInfoCircle },
-        { id: 'social-projects', label: 'Проекти', icon: faLightbulb },
-        { id: 'social-volunteering', label: 'Доброволчество', icon: faHandsHelping },
-        { id: 'social-support', label: 'Подкрепа', icon: faHeartbeat },
-        { id: 'community-events', label: 'Събития', icon: faCalendarAlt },
-        { id: 'social-gallery', label: 'Галерия', icon: faImages },
-        { id: 'social-partnerships', label: 'Партньори', icon: faHandshake },
-        { id: 'social-location', label: 'Локация', icon: faMapPin },
-        { id: 'social-contacts', label: 'Контакти', icon: faHeadset },
-        // Sports/Active template
-        { id: 'sports-hero', label: 'Начало', icon: faRunning },
-        { id: 'sports-about', label: 'За клуба', icon: faInfoCircle },
-        { id: 'fitness-programs', label: 'Фитнес програми', icon: faDumbbell },
-        { id: 'health-activities', label: 'Здравни дейности', icon: faHeartbeat },
-        { id: 'wellness-services', label: 'Wellness услуги', icon: faLeaf },
-        { id: 'sport-events', label: 'Спортни събития', icon: faTrophy },
-        { id: 'sports-health-tracking', label: 'Следене прогрес', icon: faChartLine },
-        { id: 'sports-gallery', label: 'Галерия', icon: faImages },
-        { id: 'sports-partners', label: 'Партньори', icon: faHandshake },
-        { id: 'sports-location', label: 'Локация', icon: faMapPin },
-        { id: 'sports-contacts', label: 'Контакти', icon: faHeadset }
-    ];
-
-    // Функция за проверка на налични секции в DOM
     const updateAvailableNavItems = () => {
         const existingSections = allNavItems.filter(item => {
             const element = document.getElementById(item.id);
@@ -204,9 +199,25 @@ export const ClubView = () => {
 
         setAvailableNavItems(existingSections);
 
-        // Задаваме първата налична секция като активна ако няма активна
         if (existingSections.length > 0 && !activeSection) {
             setActiveSection(existingSections[0].id);
+        }
+    };
+
+    const findActiveSection = () => {
+        const scrollPosition = window.scrollY + 250;
+        
+        for (let i = availableNavItems.length - 1; i >= 0; i--) {
+            const item = availableNavItems[i];
+            const element = document.getElementById(item.id);
+            
+            if (element) {
+                const { offsetTop } = element;
+                if (scrollPosition >= offsetTop) {
+                    setActiveSection(item.id);
+                    break;
+                }
+            }
         }
     };
 
@@ -223,7 +234,6 @@ export const ClubView = () => {
                     setClub(clubData);
                     setNotFound(false);
 
-                    // Проверяваме дали е в любими (от localStorage)
                     const favorites = JSON.parse(localStorage.getItem('favoriteClubs') || '[]');
                     setIsFavorited(favorites.includes(clubData.id));
                 } else {
@@ -239,56 +249,30 @@ export const ClubView = () => {
     }, [slug]);
 
     useEffect(() => {
-        // Изчакваме малко преди да проверим DOM-а за секциите
         const checkSections = () => {
             setTimeout(() => {
                 updateAvailableNavItems();
-            }, 100);
+            }, 200);
         };
 
         checkSections();
 
-        // Проверяваме отново когато се промени клуба
         if (club) {
             checkSections();
         }
-    }, [club]);
+    }, [club, allNavItems]);
 
     useEffect(() => {
         if (availableNavItems.length === 0) return;
 
-        const observerOptions = {
-            root: null,
-            rootMargin: '-20% 0px -60% 0px',
-            threshold: 0.1
-        };
-
-        const observerCallback = (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    setActiveSection(entry.target.id);
-                }
-            });
-        };
-
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-        // Наблюдаваме само наличните секции
-        availableNavItems.forEach(item => {
-            const element = document.getElementById(item.id);
-            if (element) {
-                observer.observe(element);
-            }
-        });
-
         const handleScroll = () => {
             setShowBackToTop(window.scrollY > 300);
+            findActiveSection();
         };
 
         window.addEventListener('scroll', handleScroll);
 
         return () => {
-            observer.disconnect();
             window.removeEventListener('scroll', handleScroll);
         };
     }, [availableNavItems]);
@@ -296,7 +280,7 @@ export const ClubView = () => {
     const scrollToSection = (sectionId) => {
         const element = document.getElementById(sectionId);
         if (element) {
-            const yOffset = -100;
+            const yOffset = -120;
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
             window.scrollTo({
@@ -304,6 +288,7 @@ export const ClubView = () => {
                 behavior: 'smooth'
             });
 
+            setActiveSection(sectionId);
             setShowQuickNav(false);
         }
     };
@@ -312,7 +297,6 @@ export const ClubView = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Избираме правилния темплейт според категорията
     const getTemplate = (club) => {
         if (!club) return null;
 
@@ -361,56 +345,51 @@ export const ClubView = () => {
         const favorites = JSON.parse(localStorage.getItem('favoriteClubs') || '[]');
 
         if (isFavorited) {
-            // Премахваме от любими
             const newFavorites = favorites.filter(id => id !== club.id);
             localStorage.setItem('favoriteClubs', JSON.stringify(newFavorites));
             setIsFavorited(false);
         } else {
-            // Добавяме в любими
             const newFavorites = [...favorites, club.id];
             localStorage.setItem('favoriteClubs', JSON.stringify(newFavorites));
             setIsFavorited(true);
         }
     };
 
-    // 🎯 Генерираме SEO данните
     const seoData = club ? generateSEOData(club) : {};
 
-    // Loading състояние
     if (isLoading) {
         return (
             <>
                 <Helmet>
-                    <title>Зареждане... - Pensa Club</title>
-                    <meta name="description" content="Зареждане на клуб за пенсионери" />
+                    <title>{t('clubs.ClubView.loading.title')}</title>
+                    <meta name="description" content={t('clubs.ClubView.loading.description')} />
                 </Helmet>
                 <div className="club-view-loading">
                     <div className="club-view-loading-content">
                         <div className="loading-spinner-large"></div>
-                        <p>Зареждане на клуба...</p>
+                        <p>{t('clubs.ClubView.loading.text')}</p>
                     </div>
                 </div>
             </>
         );
     }
 
-    // Клубът не е намерен
     if (notFound || !club) {
         return (
             <>
                 <Helmet>
-                    <title>Клуб не е намерен - Pensa Club</title>
-                    <meta name="description" content="Съжаляваме, но клубът който търсите не съществува или е бил премахнат." />
+                    <title>{t('clubs.ClubView.notFound.title')}</title>
+                    <meta name="description" content={t('clubs.ClubView.notFound.description')} />
                     <meta name="robots" content="noindex, nofollow" />
                 </Helmet>
                 <div className="club-view-not-found">
                     <div className="not-found-content">
                         <FontAwesomeIcon icon={faExclamationTriangle} className="not-found-icon" />
-                        <h2>Клубът не беше намерен</h2>
-                        <p>Съжаляваме, но клубът който търсите не съществува или е бил премахнат.</p>
+                        <h2>{t('clubs.ClubView.notFound.heading')}</h2>
+                        <p>{t('clubs.ClubView.notFound.message')}</p>
                         <button onClick={handleBack} className="back-to-clubs-btn">
                             <FontAwesomeIcon icon={faArrowLeft} />
-                            Обратно към клубовете
+                            {t('clubs.ClubView.notFound.backButton')}
                         </button>
                     </div>
                 </div>
@@ -418,18 +397,13 @@ export const ClubView = () => {
         );
     }
 
-    // Основният markup
     return (
         <div className="club-view-container">
-            {/* 🎯 SEO Meta данни с Helmet */}
             <Helmet>
-                {/* Основни мета тагове */}
                 <title>{seoData.title}</title>
                 <meta name="description" content={seoData.description} />
                 <meta name="keywords" content={seoData.keywords} />
                 <link rel="canonical" href={seoData.canonicalUrl} />
-                
-                {/* Open Graph тагове за Facebook/LinkedIn */}
                 <meta property="og:title" content={seoData.ogTitle} />
                 <meta property="og:description" content={seoData.ogDescription} />
                 <meta property="og:url" content={seoData.ogUrl} />
@@ -439,20 +413,14 @@ export const ClubView = () => {
                 <meta property="og:image:height" content="630" />
                 <meta property="og:locale" content="bg_BG" />
                 <meta property="og:site_name" content="Pensa Club" />
-                
-                {/* Twitter Card тагове */}
                 <meta name="twitter:card" content={seoData.twitterCard} />
                 <meta name="twitter:title" content={seoData.ogTitle} />
                 <meta name="twitter:description" content={seoData.ogDescription} />
                 <meta name="twitter:image" content={seoData.ogImage} />
-                
-                {/* Допълнителни SEO тагове */}
                 <meta name="author" content={club.name} />
                 <meta name="publisher" content="Pensa Club" />
                 <meta name="robots" content="index, follow, max-image-preview:large" />
                 <meta name="googlebot" content="index, follow" />
-                
-                {/* Geographic SEO */}
                 <meta name="geo.region" content={`BG-${club.location.region}`} />
                 <meta name="geo.placename" content={club.location.city} />
                 {club.location.coordinates && (
@@ -461,37 +429,26 @@ export const ClubView = () => {
                         <meta name="ICBM" content={`${club.location.coordinates.lat}, ${club.location.coordinates.lng}`} />
                     </>
                 )}
-                
-                {/* Schema.org Structured Data */}
                 <script type="application/ld+json">
                     {JSON.stringify(seoData.schemaOrg)}
                 </script>
-                
-                {/* Favicons и theme */}
                 <meta name="theme-color" content="#2563eb" />
                 <meta name="msapplication-TileColor" content="#2563eb" />
-                
-                {/* Mobile optimizations */}
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
                 <meta name="format-detection" content="telephone=yes" />
                 <meta name="format-detection" content="address=yes" />
-                
-                {/* Preload критични ресурси */}
                 {club.mainImage && (
                     <link rel="preload" as="image" href={club.mainImage} />
                 )}
-                
-                {/* Alternative language versions (if applicable) */}
                 <link rel="alternate" hrefLang="bg" href={seoData.canonicalUrl} />
                 <link rel="alternate" hrefLang="x-default" href={seoData.canonicalUrl} />
             </Helmet>
 
-            {/* Фиксиран header с навигация */}
             <div className="club-view-header">
                 <div className="club-view-header-content">
                     <button onClick={handleBack} className="club-back-btn">
                         <FontAwesomeIcon icon={faArrowLeft} />
-                        <span>Всички клубове</span>
+                        <span>{t('clubs.ClubView.actions.allClubs')}</span>
                     </button>
 
                     <div className="club-header-info">
@@ -506,7 +463,7 @@ export const ClubView = () => {
                         <button
                             onClick={handleFavorite}
                             className={`club-action-btn ${isFavorited ? 'favorited' : ''}`}
-                            title={isFavorited ? 'Премахни от любими' : 'Добави в любими'}
+                            title={isFavorited ? t('clubs.ClubView.actions.removeFromFavorites') : t('clubs.ClubView.actions.addToFavorites')}
                         >
                             <FontAwesomeIcon icon={faHeart} />
                         </button>
@@ -514,7 +471,7 @@ export const ClubView = () => {
                         <button
                             onClick={handleShare}
                             className="club-action-btn"
-                            title="Сподели клуба"
+                            title={t('clubs.ClubView.actions.shareClub')}
                         >
                             <FontAwesomeIcon icon={faShare} />
                         </button>
@@ -522,12 +479,10 @@ export const ClubView = () => {
                 </div>
             </div>
 
-            {/* Основното съдържание */}
             <main className="club-view-main">
                 {getTemplate(club)}
             </main>
 
-            {/* Desktop Navigation - Collapsible Sidebar - показва само налични секции */}
             {availableNavItems.length > 0 && (
                 <nav className={`club-nav-sidebar ${navCollapsed ? 'club-collapsed' : 'club-expanded'}`}>
                     <button
@@ -553,7 +508,6 @@ export const ClubView = () => {
                 </nav>
             )}
 
-            {/* Mobile Navigation FAB - показва само налични секции */}
             {availableNavItems.length > 0 && (
                 <div className="club-mobile-nav-fab">
                     <button
@@ -568,7 +522,7 @@ export const ClubView = () => {
                             <div className="club-nav-backdrop" onClick={() => setShowQuickNav(false)}></div>
                             <div className="club-mobile-nav-panel">
                                 <div className="club-panel-header">
-                                    <h3>Навигация</h3>
+                                    <h3>{t('clubs.ClubView.navigation.title')}</h3>
                                     <button onClick={() => setShowQuickNav(false)}>
                                         <FontAwesomeIcon icon={faTimes} />
                                     </button>
@@ -591,6 +545,12 @@ export const ClubView = () => {
                 </div>
             )}
 
+            {showBackToTop && (
+                <button onClick={scrollToTop} className="club-back-to-top">
+                    <FontAwesomeIcon icon={faArrowUp} />
+                </button>
+            )}
+
             {showShareModal && (
                 <ShareModal
                     isOpen={showShareModal}
@@ -598,7 +558,6 @@ export const ClubView = () => {
                     club={club}
                 />
             )}
-            <ScrollToTop />
         </div>
     );
 };

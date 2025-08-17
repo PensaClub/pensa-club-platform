@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faDumbbell,
@@ -37,6 +38,7 @@ import {
 import './fitnessPrograms.css';
 
 export const FitnessPrograms = ({ club }) => {
+  const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [showEnrollModal, setShowEnrollModal] = useState(false);
@@ -50,13 +52,11 @@ export const FitnessPrograms = ({ club }) => {
   });
   const [enrollStatus, setEnrollStatus] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.activities?.regular?.length && 
       !club?.pensionersSpecific?.ageSpecificNeeds?.lowImpactActivities?.length) {
     return null;
   }
 
-  // Събираме данни
   const activities = club.activities || {};
   const regularActivities = activities.regular || [];
   const pensionersSpecific = club.pensionersSpecific || {};
@@ -64,7 +64,94 @@ export const FitnessPrograms = ({ club }) => {
   const lowImpactActivities = ageSpecificNeeds.lowImpactActivities || [];
   const contacts = club.contacts || {};
 
-  // Комбинираме всички програми
+  const getIntensityFromName = (name) => {
+    const lowerName = name.toLowerCase();
+    const intensityTerms = t('clubs.FitnessPrograms.intensityTerms', { returnObjects: true });
+    
+    if (intensityTerms.low.some(term => lowerName.includes(term))) {
+      return t('clubs.FitnessPrograms.intensityLevels.low');
+    }
+    if (intensityTerms.high.some(term => lowerName.includes(term))) {
+      return t('clubs.FitnessPrograms.intensityLevels.high');
+    }
+    return t('clubs.FitnessPrograms.intensityLevels.medium');
+  };
+
+  const getCategoryFromName = (name) => {
+    const lowerName = name.toLowerCase();
+    const categoryTerms = t('clubs.FitnessPrograms.categoryTerms', { returnObjects: true });
+    
+    for (const [categoryKey, terms] of Object.entries(categoryTerms)) {
+      if (terms.some(term => lowerName.includes(term))) {
+        return categoryKey;
+      }
+    }
+    return 'fitness';
+  };
+
+  const getActivityIcon = (name) => {
+    const lowerName = name.toLowerCase();
+    const iconTerms = t('clubs.FitnessPrograms.activityIconTerms', { returnObjects: true });
+    
+    for (const [iconKey, terms] of Object.entries(iconTerms)) {
+      if (terms.some(term => lowerName.includes(term))) {
+        const iconMap = {
+          wellness: faLeaf,
+          aquatic: faSwimmer,
+          strength: faDumbbell,
+          cardio: faHeartbeat,
+          dance: faFire,
+          walking: faRunning
+        };
+        return iconMap[iconKey] || faDumbbell;
+      }
+    }
+    return faDumbbell;
+  };
+
+  const getActivityColor = (name) => {
+    const lowerName = name.toLowerCase();
+    const colorTerms = t('clubs.FitnessPrograms.activityColorTerms', { returnObjects: true });
+    
+    for (const [colorKey, terms] of Object.entries(colorTerms)) {
+      if (terms.some(term => lowerName.includes(term))) {
+        const colorMap = {
+          wellness: '#22c55e',
+          aquatic: '#06b6d4',
+          strength: '#f97316',
+          cardio: '#ef4444',
+          dance: '#8b5cf6',
+          walking: '#059669'
+        };
+        return colorMap[colorKey] || '#6b7280';
+      }
+    }
+    return '#6b7280';
+  };
+
+  const getIntensityColor = (intensity) => {
+    const intensityMap = {
+      [t('clubs.FitnessPrograms.intensityLevels.low')]: '#22c55e',
+      [t('clubs.FitnessPrograms.intensityLevels.medium')]: '#f59e0b',
+      [t('clubs.FitnessPrograms.intensityLevels.high')]: '#ef4444'
+    };
+    return intensityMap[intensity] || '#6b7280';
+  };
+
+  const extractDuration = (timeString) => {
+    if (!timeString) return null;
+    const match = timeString.match(/(\d+):(\d+)-(\d+):(\d+)/);
+    if (match) {
+      const startHour = parseInt(match[1]);
+      const startMin = parseInt(match[2]);
+      const endHour = parseInt(match[3]);
+      const endMin = parseInt(match[4]);
+      const duration = (endHour * 60 + endMin) - (startHour * 60 + startMin);
+      return t('clubs.FitnessPrograms.duration', { minutes: duration });
+    }
+    return null;
+  };
+
   const allPrograms = [
     ...regularActivities.map(activity => ({
       ...activity,
@@ -74,119 +161,67 @@ export const FitnessPrograms = ({ club }) => {
       icon: getActivityIcon(activity.name),
       color: getActivityColor(activity.name),
       suitableFor: [],
-      duration: extractDuration(activity.time) || '60 мин'
+      duration: extractDuration(activity.time) || t('clubs.FitnessPrograms.defaultDuration')
     })),
     ...lowImpactActivities.map(activity => ({
       name: activity.name,
-      intensity: activity.intensity || 'ниска',
+      intensity: activity.intensity || t('clubs.FitnessPrograms.intensityLevels.low'),
       suitableFor: activity.suitableFor || [],
       type: 'low-impact',
       category: 'wellness',
       icon: getActivityIcon(activity.name),
       color: getActivityColor(activity.name),
-      description: `Щадяща програма подходяща за ${activity.suitableFor?.join(', ') || 'всички'}`,
-      duration: '45 мин',
+      description: t('clubs.FitnessPrograms.lowImpactDescription', { 
+        suitableFor: activity.suitableFor?.join(', ') || t('clubs.FitnessPrograms.everyone') 
+      }),
+      duration: t('clubs.FitnessPrograms.shortDuration'),
       participants: 0,
-      day: 'Гъвкаво',
-      time: 'По договорка'
+      day: t('clubs.FitnessPrograms.flexible'),
+      time: t('clubs.FitnessPrograms.byAgreement')
     }))
   ];
 
-  // Ако няма програми, не показваме компонента
   if (allPrograms.length === 0) {
     return null;
   }
 
-  // Филтри за програмите
-  const programFilters = [
-    { key: 'all', label: 'Всички програми', icon: faDumbbell, color: '#6b7280' },
-    { key: 'fitness', label: 'Фитнес', icon: faDumbbell, color: '#f97316' },
-    { key: 'cardio', label: 'Кардио', icon: faHeartbeat, color: '#ef4444' },
-    { key: 'wellness', label: 'Уелнес', icon: faLeaf, color: '#22c55e' },
-    { key: 'aquatic', label: 'Водни спортове', icon: faSwimmer, color: '#06b6d4' },
-    { key: 'dance', label: 'Танци', icon: faFire, color: '#8b5cf6' }
+  const getProgramFilters = () => [
+    { key: 'all', label: t('clubs.FitnessPrograms.filters.all'), icon: faDumbbell, color: '#6b7280' },
+    { key: 'fitness', label: t('clubs.FitnessPrograms.filters.fitness'), icon: faDumbbell, color: '#f97316' },
+    { key: 'cardio', label: t('clubs.FitnessPrograms.filters.cardio'), icon: faHeartbeat, color: '#ef4444' },
+    { key: 'wellness', label: t('clubs.FitnessPrograms.filters.wellness'), icon: faLeaf, color: '#22c55e' },
+    { key: 'aquatic', label: t('clubs.FitnessPrograms.filters.aquatic'), icon: faSwimmer, color: '#06b6d4' },
+    { key: 'dance', label: t('clubs.FitnessPrograms.filters.dance'), icon: faFire, color: '#8b5cf6' }
   ];
 
-  // Helper функции
-  function getIntensityFromName(name) {
-    const lowerName = name.toLowerCase();
-    if (lowerName.includes('лека') || lowerName.includes('йога') || lowerName.includes('медитация')) {
-      return 'ниска';
-    }
-    if (lowerName.includes('интензивн') || lowerName.includes('силов') || lowerName.includes('бягане')) {
-      return 'висока';
-    }
-    return 'средна';
-  }
+  const programFilters = getProgramFilters();
 
-  function getCategoryFromName(name) {
-    const lowerName = name.toLowerCase();
-    if (lowerName.includes('басейн') || lowerName.includes('плуване') || lowerName.includes('аеробика')) {
-      return 'aquatic';
-    }
-    if (lowerName.includes('танц')) {
-      return 'dance';
-    }
-    if (lowerName.includes('йога') || lowerName.includes('медитация') || lowerName.includes('лека')) {
-      return 'wellness';
-    }
-    if (lowerName.includes('бягане') || lowerName.includes('гимнастика')) {
-      return 'cardio';
-    }
-    return 'fitness';
-  }
-
-  function getActivityIcon(name) {
-    const lowerName = name.toLowerCase();
-    if (lowerName.includes('йога') || lowerName.includes('медитация')) return faLeaf;
-    if (lowerName.includes('басейн') || lowerName.includes('плуване')) return faSwimmer;
-    if (lowerName.includes('силов') || lowerName.includes('фитнес')) return faDumbbell;
-    if (lowerName.includes('бягане') || lowerName.includes('гимнастика')) return faHeartbeat;
-    if (lowerName.includes('танц')) return faFire;
-    if (lowerName.includes('разходки')) return faRunning;
-    return faDumbbell;
-  }
-
-  function getActivityColor(name) {
-    const lowerName = name.toLowerCase();
-    if (lowerName.includes('йога') || lowerName.includes('медитация')) return '#22c55e';
-    if (lowerName.includes('басейн') || lowerName.includes('плуване')) return '#06b6d4';
-    if (lowerName.includes('силов') || lowerName.includes('фитнес')) return '#f97316';
-    if (lowerName.includes('бягане') || lowerName.includes('гимнастика')) return '#ef4444';
-    if (lowerName.includes('танц')) return '#8b5cf6';
-    if (lowerName.includes('разходки')) return '#059669';
-    return '#6b7280';
-  }
-
-  function getIntensityColor(intensity) {
-    switch(intensity) {
-      case 'ниска': return '#22c55e';
-      case 'средна': return '#f59e0b';
-      case 'висока': return '#ef4444';
-      default: return '#6b7280';
-    }
-  }
-
-  function extractDuration(timeString) {
-    if (!timeString) return null;
-    const match = timeString.match(/(\d+):(\d+)-(\d+):(\d+)/);
-    if (match) {
-      const startHour = parseInt(match[1]);
-      const startMin = parseInt(match[2]);
-      const endHour = parseInt(match[3]);
-      const endMin = parseInt(match[4]);
-      const duration = (endHour * 60 + endMin) - (startHour * 60 + startMin);
-      return `${duration} мин`;
-    }
-    return null;
-  }
-
-  // Филтрираме програмите
   const filteredPrograms = allPrograms.filter(program => {
     return activeFilter === 'all' || program.category === activeFilter;
   });
 
-  // Enroll form handlers
+  const getFitnessLevels = () => [
+    { value: '', label: t('clubs.FitnessPrograms.fitnessLevels.select') },
+    { value: 'Начинаещ', label: t('clubs.FitnessPrograms.fitnessLevels.beginner') },
+    { value: 'Средно ниво', label: t('clubs.FitnessPrograms.fitnessLevels.intermediate') },
+    { value: 'Напреднал', label: t('clubs.FitnessPrograms.fitnessLevels.advanced') },
+    { value: 'Експерт', label: t('clubs.FitnessPrograms.fitnessLevels.expert') }
+  ];
+
+  const getGoalOptions = () => [
+    { value: '', label: t('clubs.FitnessPrograms.goals.select') },
+    { value: 'Отслабване', label: t('clubs.FitnessPrograms.goals.weightLoss') },
+    { value: 'Покачване на мускулна маса', label: t('clubs.FitnessPrograms.goals.muscleGain') },
+    { value: 'Подобряване на кондицията', label: t('clubs.FitnessPrograms.goals.fitnessImprovement') },
+    { value: 'Поддържане на здравето', label: t('clubs.FitnessPrograms.goals.healthMaintenance') },
+    { value: 'Релаксация и стрес', label: t('clubs.FitnessPrograms.goals.relaxation') },
+    { value: 'Рехабилитация', label: t('clubs.FitnessPrograms.goals.rehabilitation') },
+    { value: 'Социализация', label: t('clubs.FitnessPrograms.goals.socialization') }
+  ];
+
+  const fitnessLevels = getFitnessLevels();
+  const goalOptions = getGoalOptions();
+
   const handleEnrollChange = (field, value) => {
     setEnrollForm(prev => ({
       ...prev,
@@ -199,32 +234,25 @@ export const FitnessPrograms = ({ club }) => {
     setEnrollStatus('sending');
 
     if (contacts.email && selectedProgram) {
-      const subject = encodeURIComponent(`Заявка за записване - ${selectedProgram.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте нова заявка за записване във фитнес програма:
-
-ПРОГРАМА: ${selectedProgram.name}
-Категория: ${programFilters.find(f => f.key === selectedProgram.category)?.label || 'Фитнес'}
-Интензивност: ${selectedProgram.intensity}
-${selectedProgram.day ? `Ден: ${selectedProgram.day}` : ''}
-${selectedProgram.time ? `Час: ${selectedProgram.time}` : ''}
-${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instructor}` : ''}
-
-ДАННИ НА КАНДИДАТА:
-Име: ${enrollForm.name}
-Имейл: ${enrollForm.email}
-Телефон: ${enrollForm.phone}
-Фитнес ниво: ${enrollForm.fitnessLevel || 'Не е посочено'}
-Цели: ${enrollForm.goals || 'Не са посочени'}
-Допълнителни бележки: ${enrollForm.notes || 'Няма'}
-
-Моля, свържете се с кандидата за финализиране на записването.
-
----
-Изпратено от сайта на ${club.name}
-      `);
+      const categoryLabel = programFilters.find(f => f.key === selectedProgram.category)?.label || t('clubs.FitnessPrograms.filters.fitness');
+      const subject = encodeURIComponent(t('clubs.FitnessPrograms.enrollEmail.subject', { 
+        programName: selectedProgram.name 
+      }));
+      const body = encodeURIComponent(t('clubs.FitnessPrograms.enrollEmail.body', {
+        programName: selectedProgram.name,
+        category: categoryLabel,
+        intensity: selectedProgram.intensity,
+        day: selectedProgram.day || '',
+        time: selectedProgram.time || '',
+        instructor: selectedProgram.instructor || '',
+        name: enrollForm.name,
+        email: enrollForm.email,
+        phone: enrollForm.phone,
+        fitnessLevel: enrollForm.fitnessLevel || t('clubs.FitnessPrograms.enrollEmail.notSpecified'),
+        goals: enrollForm.goals || t('clubs.FitnessPrograms.enrollEmail.notSpecified'),
+        notes: enrollForm.notes || t('clubs.FitnessPrograms.enrollEmail.none'),
+        clubName: club.name
+      }));
       
       try {
         window.location.href = `mailto:${contacts.email}?subject=${subject}&body=${body}`;
@@ -248,7 +276,6 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
     setShowEnrollModal(true);
   };
 
-  // Статистики за програмите
   const programStats = programFilters.slice(1).map(filter => ({
     ...filter,
     count: allPrograms.filter(p => p.category === filter.key).length
@@ -258,21 +285,19 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
     <section id="fitness-programs" className="fitness-programs-section">
       <div className="fitness-programs-container">
         
-        {/* Header */}
         <div className="fitness-programs-header">
           <div className="fitness-programs-badge">
             <FontAwesomeIcon icon={faDumbbell} />
-            <span>Фитнес програми</span>
+            <span>{t('clubs.FitnessPrograms.header.badge')}</span>
           </div>
           <h2 className="fitness-programs-title">
-            Тренировки за всяко ниво и възраст
+            {t('clubs.FitnessPrograms.header.title')}
           </h2>
           <p className="fitness-programs-subtitle">
-            Открийте перфектната програма за вашите цели и възможности
+            {t('clubs.FitnessPrograms.header.subtitle')}
           </p>
         </div>
 
-        {/* Program Stats */}
         <div className="fitness-programs-stats">
           <div className="fitness-programs-total-stat">
             <div className="fitness-programs-total-icon">
@@ -280,7 +305,7 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
             </div>
             <div className="fitness-programs-total-content">
               <div className="fitness-programs-total-number">{allPrograms.length}</div>
-              <div className="fitness-programs-total-label">Активни програми</div>
+              <div className="fitness-programs-total-label">{t('clubs.FitnessPrograms.stats.activePrograms')}</div>
             </div>
           </div>
           
@@ -301,7 +326,6 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
           ))}
         </div>
 
-        {/* Program Filters */}
         <div className="fitness-programs-filters">
           {programFilters.map(filter => {
             const count = filter.key === 'all' ? allPrograms.length : 
@@ -322,7 +346,6 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
           })}
         </div>
 
-        {/* Programs Grid */}
         <div className="fitness-programs-content">
           {filteredPrograms.length > 0 ? (
             <div className="fitness-programs-grid">
@@ -348,7 +371,7 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                       </span>
                       {program.type === 'low-impact' && (
                         <span className="fitness-programs-type-badge">
-                          Щадящо
+                          {t('clubs.FitnessPrograms.badges.gentle')}
                         </span>
                       )}
                     </div>
@@ -369,13 +392,13 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                           <span>{program.duration}</span>
                         </div>
                       )}
-                      {program.day && program.day !== 'Гъвкаво' && (
+                      {program.day && program.day !== t('clubs.FitnessPrograms.flexible') && (
                         <div className="fitness-programs-card-detail">
                           <FontAwesomeIcon icon={faCalendarAlt} />
                           <span>{program.day}</span>
                         </div>
                       )}
-                      {program.time && program.time !== 'По договорка' && (
+                      {program.time && program.time !== t('clubs.FitnessPrograms.byAgreement') && (
                         <div className="fitness-programs-card-detail">
                           <FontAwesomeIcon icon={faStopwatch} />
                           <span>{program.time}</span>
@@ -390,14 +413,14 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                       {program.participants > 0 && (
                         <div className="fitness-programs-card-detail">
                           <FontAwesomeIcon icon={faUsers} />
-                          <span>{program.participants} участници</span>
+                          <span>{t('clubs.FitnessPrograms.participants', { count: program.participants })}</span>
                         </div>
                       )}
                     </div>
                     
                     {program.suitableFor?.length > 0 && (
                       <div className="fitness-programs-card-suitable">
-                        <h6>Подходящо за:</h6>
+                        <h6>{t('clubs.FitnessPrograms.suitableFor')}:</h6>
                         <div className="fitness-programs-suitable-tags">
                           {program.suitableFor.slice(0, 2).map((condition, idx) => (
                             <span key={idx} className="fitness-programs-suitable-tag">
@@ -420,7 +443,7 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                       className="fitness-programs-enroll-btn"
                     >
                       <FontAwesomeIcon icon={faPlus} />
-                      <span>Запиши се</span>
+                      <span>{t('clubs.FitnessPrograms.actions.enroll')}</span>
                     </button>
                   </div>
                 </div>
@@ -429,14 +452,13 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
           ) : (
             <div className="fitness-programs-no-results">
               <FontAwesomeIcon icon={faInfoCircle} />
-              <h4>Няма програми в тази категория</h4>
-              <p>Изберете друга категория или се свържете с нас за персонализирани програми</p>
+              <h4>{t('clubs.FitnessPrograms.noResults.title')}</h4>
+              <p>{t('clubs.FitnessPrograms.noResults.message')}</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Enroll Modal */}
       {showEnrollModal && (
         <div className="fitness-programs-modal" onClick={() => setShowEnrollModal(false)}>
           <div className="fitness-programs-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -449,35 +471,35 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
             
             <div className="fitness-programs-modal-header">
               <FontAwesomeIcon icon={faDumbbell} />
-              <h3>Запишете се за {selectedProgram?.name}</h3>
-              <p>Започнете своето фитнес пътуване с нас още днес!</p>
+              <h3>{t('clubs.FitnessPrograms.enrollModal.title', { programName: selectedProgram?.name })}</h3>
+              <p>{t('clubs.FitnessPrograms.enrollModal.subtitle')}</p>
             </div>
             
             {enrollStatus === 'sent' ? (
               <div className="fitness-programs-form-success">
                 <FontAwesomeIcon icon={faCheckCircle} />
-                <h4>Заявката е изпратена успешно!</h4>
-                <p>Благодарим ви! Ще се свържем с вас за първата тренировка.</p>
+                <h4>{t('clubs.FitnessPrograms.enrollModal.success.title')}</h4>
+                <p>{t('clubs.FitnessPrograms.enrollModal.success.message')}</p>
               </div>
             ) : enrollStatus === 'error' ? (
               <div className="fitness-programs-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.FitnessPrograms.enrollModal.error.title')}</h4>
+                <p>{t('clubs.FitnessPrograms.enrollModal.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleEnrollSubmit} className="fitness-programs-form">
                 {selectedProgram && (
                   <div className="fitness-programs-selected-program">
-                    <h4>Избрана програма:</h4>
+                    <h4>{t('clubs.FitnessPrograms.enrollModal.selectedProgram')}:</h4>
                     <div className="fitness-programs-program-summary">
                       <FontAwesomeIcon icon={selectedProgram.icon} />
                       <div>
                         <strong>{selectedProgram.name}</strong>
-                        <span>Интензивност: {selectedProgram.intensity}</span>
+                        <span>{t('clubs.FitnessPrograms.enrollModal.intensity')}: {selectedProgram.intensity}</span>
                         {selectedProgram.day && <span>{selectedProgram.day}</span>}
                         {selectedProgram.time && <span>{selectedProgram.time}</span>}
-                        {selectedProgram.duration && <span>Продължителност: {selectedProgram.duration}</span>}
+                        {selectedProgram.duration && <span>{t('clubs.FitnessPrograms.enrollModal.duration')}: {selectedProgram.duration}</span>}
                       </div>
                     </div>
                   </div>
@@ -487,7 +509,7 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                   <div className="fitness-programs-form-group">
                     <label htmlFor="fitness-name">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.FitnessPrograms.enrollModal.form.name')} *
                     </label>
                     <input
                       type="text"
@@ -495,14 +517,14 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                       value={enrollForm.name}
                       onChange={(e) => handleEnrollChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.FitnessPrograms.enrollModal.form.namePlaceholder')}
                     />
                   </div>
                   
                   <div className="fitness-programs-form-group">
                     <label htmlFor="fitness-email">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.FitnessPrograms.enrollModal.form.email')} *
                     </label>
                     <input
                       type="email"
@@ -510,7 +532,7 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                       value={enrollForm.email}
                       onChange={(e) => handleEnrollChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.FitnessPrograms.enrollModal.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -519,7 +541,7 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                   <div className="fitness-programs-form-group">
                     <label htmlFor="fitness-phone">
                       <FontAwesomeIcon icon={faMobile} />
-                      Телефон *
+                      {t('clubs.FitnessPrograms.enrollModal.form.phone')} *
                     </label>
                     <input
                       type="tel"
@@ -527,25 +549,25 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                       value={enrollForm.phone}
                       onChange={(e) => handleEnrollChange('phone', e.target.value)}
                       required
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.FitnessPrograms.enrollModal.form.phonePlaceholder')}
                     />
                   </div>
                   
                   <div className="fitness-programs-form-group">
                     <label htmlFor="fitness-level">
                       <FontAwesomeIcon icon={faTrophy} />
-                      Фитнес ниво
+                      {t('clubs.FitnessPrograms.enrollModal.form.fitnessLevel')}
                     </label>
                     <select
                       id="fitness-level"
                       value={enrollForm.fitnessLevel}
                       onChange={(e) => handleEnrollChange('fitnessLevel', e.target.value)}
                     >
-                      <option value="">Изберете ниво</option>
-                      <option value="Начинаещ">Начинаещ</option>
-                      <option value="Средно ниво">Средно ниво</option>
-                      <option value="Напреднал">Напреднал</option>
-                      <option value="Експерт">Експерт</option>
+                      {fitnessLevels.map(level => (
+                        <option key={level.value} value={level.value}>
+                          {level.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -553,34 +575,31 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                 <div className="fitness-programs-form-group">
                   <label htmlFor="fitness-goals">
                     <FontAwesomeIcon icon={faFlag} />
-                    Вашите цели
+                    {t('clubs.FitnessPrograms.enrollModal.form.goals')}
                   </label>
                   <select
                     id="fitness-goals"
                     value={enrollForm.goals}
                     onChange={(e) => handleEnrollChange('goals', e.target.value)}
                   >
-                    <option value="">Изберете цел</option>
-                    <option value="Отслабване">Отслабване</option>
-                    <option value="Покачване на мускулна маса">Покачване на мускулна маса</option>
-                    <option value="Подобряване на кондицията">Подобряване на кондицията</option>
-                    <option value="Поддържане на здравето">Поддържане на здравето</option>
-                    <option value="Релаксация и стрес">Релаксация и стрес</option>
-                    <option value="Рехабилитация">Рехабилитация</option>
-                    <option value="Социализация">Социализация</option>
+                    {goalOptions.map(goal => (
+                      <option key={goal.value} value={goal.value}>
+                        {goal.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 
                 <div className="fitness-programs-form-group">
                   <label htmlFor="fitness-notes">
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    Допълнителни бележки
+                    {t('clubs.FitnessPrograms.enrollModal.form.notes')}
                   </label>
                   <textarea
                     id="fitness-notes"
                     value={enrollForm.notes}
                     onChange={(e) => handleEnrollChange('notes', e.target.value)}
-                    placeholder="Споменете ако имате здравословни ограничения или специални изисквания"
+                    placeholder={t('clubs.FitnessPrograms.enrollModal.form.notesPlaceholder')}
                     rows="3"
                   />
                 </div>
@@ -592,14 +611,16 @@ ${selectedProgram.instructor ? `Инструктор: ${selectedProgram.instruct
                     disabled={enrollStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faPaperPlane} />
-                    {enrollStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявката'}
+                    {enrollStatus === 'sending' ? 
+                      t('clubs.FitnessPrograms.enrollModal.form.sending') : 
+                      t('clubs.FitnessPrograms.enrollModal.form.submit')}
                   </button>
                   <button 
                     type="button" 
                     onClick={() => setShowEnrollModal(false)}
                     className="fitness-programs-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.FitnessPrograms.enrollModal.form.cancel')}
                   </button>
                 </div>
               </form>

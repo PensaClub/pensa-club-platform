@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHandHoldingHeart,
@@ -35,9 +36,9 @@ import {
 import './wellnessServices.css';
 
 export const WellnessServices = ({ club }) => {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('support');
 
-  // Проверяваме дали има необходимите данни
   if (!club?.pensionersSpecific?.supportServices && 
       !club?.pensionersSpecific?.specialPrograms && 
       !club?.pensionersSpecific?.accessibility &&
@@ -45,7 +46,6 @@ export const WellnessServices = ({ club }) => {
     return null;
   }
 
-  // Събираме данни
   const pensionersSpecific = club.pensionersSpecific || {};
   const supportServices = pensionersSpecific.supportServices || {};
   const specialPrograms = pensionersSpecific.specialPrograms || {};
@@ -53,35 +53,22 @@ export const WellnessServices = ({ club }) => {
   const ageSpecificNeeds = pensionersSpecific.ageSpecificNeeds || {};
   const contacts = club.contacts || {};
 
-  // Подкрепящи услуги - само boolean стойности
   const availableSupport = Object.entries(supportServices)
     .filter(([key, value]) => value === true)
     .map(([key]) => key);
 
-  // Психологическа подкрепа
   const mentalHealthSupport = specialPrograms.mentalHealthSupport || [];
-
-  // Дейности за памет
   const memoryActivities = specialPrograms.memoryActivities || [];
-
-  // Междупоколенчески програми
   const intergenerationalPrograms = specialPrograms.intergenerationalPrograms || [];
-
-  // Доброволчески програми
   const volunteerPrograms = specialPrograms.volunteerPrograms || [];
 
-  // Достъпност - само boolean стойности
   const availableAccessibility = Object.entries(accessibility)
     .filter(([key, value]) => value === true)
     .map(([key]) => key);
 
-  // Социална изолация превенция
   const socialIsolationPrevention = ageSpecificNeeds.socialIsolationPrevention || [];
-
-  // Когнитивна стимулация
   const cognitiveStimulation = ageSpecificNeeds.cognitiveStimulation || [];
 
-  // Ако няма wellness данни, не показваме компонента
   if (availableSupport.length === 0 && 
       mentalHealthSupport.length === 0 && 
       memoryActivities.length === 0 && 
@@ -93,69 +80,83 @@ export const WellnessServices = ({ club }) => {
     return null;
   }
 
-  // Категории за навигация
-  const wellnessCategories = [
+  const getWellnessCategories = () => [
     { 
       key: 'support', 
-      label: 'Подкрепящи услуги', 
+      label: t('clubs.WellnessServices.categories.support'), 
       icon: faHandHoldingHeart,
       count: availableSupport.length
     },
     { 
       key: 'mental', 
-      label: 'Психично здраве', 
+      label: t('clubs.WellnessServices.categories.mental'), 
       icon: faBrain,
       count: mentalHealthSupport.length + memoryActivities.length
     },
     { 
       key: 'social', 
-      label: 'Социални услуги', 
+      label: t('clubs.WellnessServices.categories.social'), 
       icon: faUsers,
       count: intergenerationalPrograms.length + socialIsolationPrevention.length + volunteerPrograms.length
     },
     { 
       key: 'accessibility', 
-      label: 'Достъпност', 
+      label: t('clubs.WellnessServices.categories.accessibility'), 
       icon: faUniversalAccess,
       count: availableAccessibility.length
     },
     { 
       key: 'cognitive', 
-      label: 'Когнитивни дейности', 
+      label: t('clubs.WellnessServices.categories.cognitive'), 
       icon: faLightbulb,
       count: cognitiveStimulation.length
     }
   ].filter(category => category.count > 0);
 
-  // Helper функции
-  function getFrequencyText(frequency) {
+  const wellnessCategories = getWellnessCategories();
+
+  const getFrequencyText = (frequency) => {
     if (!frequency) return '';
     const freq = frequency.toLowerCase();
-    if (freq.includes('седмично')) return 'Седмично';
-    if (freq.includes('месечно')) return 'Месечно';
-    if (freq.includes('ежедневно') || freq.includes('дневно')) return 'Ежедневно';
+    const frequencyMap = t('clubs.WellnessServices.frequencies', { returnObjects: true });
+    
+    for (const [key, terms] of Object.entries(frequencyMap)) {
+      if (terms.some(term => freq.includes(term))) {
+        return t(`clubs.WellnessServices.frequencyLabels.${key}`);
+      }
+    }
     return frequency;
-  }
+  };
+
+  const getSupportServiceLabel = (serviceKey) => {
+    return t(`clubs.WellnessServices.supportServiceLabels.${serviceKey}`, serviceKey);
+  };
+
+  const getAccessibilityLabel = (accessKey) => {
+    return t(`clubs.WellnessServices.accessibilityLabels.${accessKey}`, accessKey);
+  };
+
+  const getServiceCountText = (count) => {
+    return count === 1 ? t('clubs.WellnessServices.serviceCount.single') : t('clubs.WellnessServices.serviceCount.plural');
+  };
 
   return (
     <section id="wellness-services" className="wellness-services-section">
       <div className="wellness-services-container">
         
-        {/* Header */}
         <div className="wellness-services-header">
           <div className="wellness-services-badge">
             <FontAwesomeIcon icon={faHandHoldingHeart} />
-            <span>Wellness услуги</span>
+            <span>{t('clubs.WellnessServices.header.badge')}</span>
           </div>
           <h2 className="wellness-services-title">
-            Грижа за цялостното ви благополучие
+            {t('clubs.WellnessServices.header.title')}
           </h2>
           <p className="wellness-services-subtitle">
-            Комплексни услуги за физическо, психично и социално благосъстояние
+            {t('clubs.WellnessServices.header.subtitle')}
           </p>
         </div>
 
-        {/* Wellness Overview */}
         {wellnessCategories.length > 0 && (
           <div className="wellness-services-overview">
             {wellnessCategories.map((category, index) => (
@@ -171,7 +172,7 @@ export const WellnessServices = ({ club }) => {
                 <div className="wellness-services-overview-content">
                   <h4>{category.label}</h4>
                   <div className="wellness-services-overview-count">
-                    {category.count} {category.count === 1 ? 'услуга' : 'услуги'}
+                    {category.count} {getServiceCountText(category.count)}
                   </div>
                 </div>
               </div>
@@ -179,7 +180,6 @@ export const WellnessServices = ({ club }) => {
           </div>
         )}
 
-        {/* Navigation */}
         <div className="wellness-services-nav">
           {wellnessCategories.map(category => (
             <button
@@ -194,41 +194,38 @@ export const WellnessServices = ({ club }) => {
           ))}
         </div>
 
-        {/* Content */}
         <div className="wellness-services-content">
           
-          {/* Support Services */}
           {activeCategory === 'support' && availableSupport.length > 0 && (
             <div className="wellness-services-support">
               <div className="wellness-services-support-header">
-                <h3>Подкрепящи услуги</h3>
-                <p>Налични услуги за подкрепа</p>
+                <h3>{t('clubs.WellnessServices.supportTab.title')}</h3>
+                <p>{t('clubs.WellnessServices.supportTab.subtitle')}</p>
               </div>
               
               <div className="wellness-services-support-list">
                 {availableSupport.map((serviceKey, index) => (
                   <div key={serviceKey} className="wellness-services-support-item">
                     <FontAwesomeIcon icon={faCheckCircle} />
-                    <span>{serviceKey}</span>
+                    <span>{getSupportServiceLabel(serviceKey)}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Mental Health */}
           {activeCategory === 'mental' && (mentalHealthSupport.length > 0 || memoryActivities.length > 0) && (
             <div className="wellness-services-mental">
               <div className="wellness-services-mental-header">
-                <h3>Психично здраве и когнитивни дейности</h3>
-                <p>Грижа за умственото благополучие и паметта</p>
+                <h3>{t('clubs.WellnessServices.mentalTab.title')}</h3>
+                <p>{t('clubs.WellnessServices.mentalTab.subtitle')}</p>
               </div>
               
               {mentalHealthSupport.length > 0 && (
                 <div className="wellness-services-mental-section">
                   <h4>
                     <FontAwesomeIcon icon={faHeart} />
-                    Психологическа подкрепа
+                    {t('clubs.WellnessServices.mentalTab.psychologicalSupport')}
                   </h4>
                   <div className="wellness-services-mental-grid">
                     {mentalHealthSupport.map((support, index) => (
@@ -254,7 +251,7 @@ export const WellnessServices = ({ club }) => {
                             {support.participants && (
                               <div className="wellness-services-mental-detail">
                                 <FontAwesomeIcon icon={faUsers} />
-                                <span>{support.participants} участници</span>
+                                <span>{t('clubs.WellnessServices.participants', { count: support.participants })}</span>
                               </div>
                             )}
                           </div>
@@ -272,7 +269,7 @@ export const WellnessServices = ({ club }) => {
                 <div className="wellness-services-memory-section">
                   <h4>
                     <FontAwesomeIcon icon={faPuzzlePiece} />
-                    Дейности за памет
+                    {t('clubs.WellnessServices.mentalTab.memoryActivities')}
                   </h4>
                   <div className="wellness-services-memory-grid">
                     {memoryActivities.map((activity, index) => (
@@ -299,7 +296,7 @@ export const WellnessServices = ({ club }) => {
                             {activity.participants && (
                               <div className="wellness-services-memory-detail">
                                 <FontAwesomeIcon icon={faUsers} />
-                                <span>{activity.participants} участници</span>
+                                <span>{t('clubs.WellnessServices.participants', { count: activity.participants })}</span>
                               </div>
                             )}
                           </div>
@@ -312,19 +309,18 @@ export const WellnessServices = ({ club }) => {
             </div>
           )}
 
-          {/* Social Services */}
           {activeCategory === 'social' && (intergenerationalPrograms.length > 0 || socialIsolationPrevention.length > 0 || volunteerPrograms.length > 0) && (
             <div className="wellness-services-social">
               <div className="wellness-services-social-header">
-                <h3>Социални услуги и програми</h3>
-                <p>Връзки между хората и превенция на изолацията</p>
+                <h3>{t('clubs.WellnessServices.socialTab.title')}</h3>
+                <p>{t('clubs.WellnessServices.socialTab.subtitle')}</p>
               </div>
               
               {intergenerationalPrograms.length > 0 && (
                 <div className="wellness-services-intergenerational-section">
                   <h4>
                     <FontAwesomeIcon icon={faChild} />
-                    Междупоколенчески програми
+                    {t('clubs.WellnessServices.socialTab.intergenerationalPrograms')}
                   </h4>
                   <div className="wellness-services-intergenerational-grid">
                     {intergenerationalPrograms.map((program, index) => (
@@ -352,7 +348,7 @@ export const WellnessServices = ({ club }) => {
                             {program.participants && (
                               <div className="wellness-services-intergenerational-detail">
                                 <FontAwesomeIcon icon={faUsers} />
-                                <span>{program.participants} участници</span>
+                                <span>{t('clubs.WellnessServices.participants', { count: program.participants })}</span>
                               </div>
                             )}
                             {program.coordinator && (
@@ -373,7 +369,7 @@ export const WellnessServices = ({ club }) => {
                 <div className="wellness-services-isolation-section">
                   <h4>
                     <FontAwesomeIcon icon={faHandsHelping} />
-                    Превенция на изолацията
+                    {t('clubs.WellnessServices.socialTab.isolationPrevention')}
                   </h4>
                   <div className="wellness-services-isolation-list">
                     {socialIsolationPrevention.map((prevention, index) => (
@@ -390,7 +386,7 @@ export const WellnessServices = ({ club }) => {
                 <div className="wellness-services-volunteer-section">
                   <h4>
                     <FontAwesomeIcon icon={faHandsHelping} />
-                    Доброволчески програми
+                    {t('clubs.WellnessServices.socialTab.volunteerPrograms')}
                   </h4>
                   <div className="wellness-services-volunteer-grid">
                     {volunteerPrograms.map((program, index) => (
@@ -405,13 +401,13 @@ export const WellnessServices = ({ club }) => {
                             {program.volunteers && (
                               <div className="wellness-services-volunteer-stat">
                                 <FontAwesomeIcon icon={faUsers} />
-                                <span>{program.volunteers} доброволци</span>
+                                <span>{t('clubs.WellnessServices.socialTab.volunteers', { count: program.volunteers })}</span>
                               </div>
                             )}
                             {program.hoursPerWeek && (
                               <div className="wellness-services-volunteer-stat">
                                 <FontAwesomeIcon icon={faClock} />
-                                <span>{program.hoursPerWeek}ч/седмица</span>
+                                <span>{t('clubs.WellnessServices.socialTab.hoursPerWeek', { hours: program.hoursPerWeek })}</span>
                               </div>
                             )}
                           </div>
@@ -424,31 +420,29 @@ export const WellnessServices = ({ club }) => {
             </div>
           )}
 
-          {/* Accessibility */}
           {activeCategory === 'accessibility' && availableAccessibility.length > 0 && (
             <div className="wellness-services-accessibility">
               <div className="wellness-services-accessibility-header">
-                <h3>Достъпност и удобства</h3>
-                <p>Налични възможности за достъпност</p>
+                <h3>{t('clubs.WellnessServices.accessibilityTab.title')}</h3>
+                <p>{t('clubs.WellnessServices.accessibilityTab.subtitle')}</p>
               </div>
               
               <div className="wellness-services-accessibility-list">
                 {availableAccessibility.map((accessKey, index) => (
                   <div key={accessKey} className="wellness-services-accessibility-item">
                     <FontAwesomeIcon icon={faCheckCircle} />
-                    <span>{accessKey}</span>
+                    <span>{getAccessibilityLabel(accessKey)}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Cognitive Activities */}
           {activeCategory === 'cognitive' && cognitiveStimulation.length > 0 && (
             <div className="wellness-services-cognitive">
               <div className="wellness-services-cognitive-header">
-                <h3>Когнитивни дейности</h3>
-                <p>Налични дейности за умствена стимулация</p>
+                <h3>{t('clubs.WellnessServices.cognitiveTab.title')}</h3>
+                <p>{t('clubs.WellnessServices.cognitiveTab.subtitle')}</p>
               </div>
               
               <div className="wellness-services-cognitive-list">

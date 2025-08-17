@@ -1,6 +1,6 @@
-// components/Clubs/AllClubs/ClubCard/ClubCard.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faUsers, 
@@ -19,6 +19,7 @@ import {
 import './clubCard.css';
 
 export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -51,7 +52,11 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('bg-BG', {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    
+    return new Date(dateString).toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long'
     });
@@ -69,14 +74,9 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
   };
 
   const getCategoryLabel = (category) => {
-    const labels = {
-      'cultural': 'Културен',
-      'general': 'Общ',
-      'sports': 'Спортен', 
-      'educational': 'Образователен',
-      'traditional': 'Традиционен'
-    };
-    return labels[category] || category;
+    return t(`clubs.ClubCard.categories.${category}`, { 
+      defaultValue: t('clubs.ClubCard.categories.general') 
+    });
   };
 
   const getStatusColor = (status) => {
@@ -89,12 +89,9 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
   };
 
   const getStatusLabel = (status) => {
-    const labels = {
-      'active': 'Активен',
-      'inactive': 'Неактивен',
-      'suspended': 'Спрян'
-    };
-    return labels[status] || status;
+    return t(`clubs.ClubCard.status.${status}`, { 
+      defaultValue: status 
+    });
   };
 
   const renderStars = (rating) => {
@@ -125,7 +122,11 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
   };
 
   // Намираме председателя
-  const chairman = club.management.board.find(member => member.role === 'председател');
+  const chairman = club.management?.board?.find(member => 
+    member.role?.toLowerCase().includes('председател') || 
+    member.role?.toLowerCase().includes('president') || 
+    member.role?.toLowerCase().includes('präsident')
+  );
 
   return (
     <div 
@@ -151,7 +152,7 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
             />
             <div className="club-card-image-placeholder" style={{ display: 'none' }}>
               <FontAwesomeIcon icon={faUsers} />
-              <span>Няма изображение</span>
+              <span>{t('clubs.ClubCard.image.noImage')}</span>
             </div>
             
             {/* Overlay информация */}
@@ -169,14 +170,14 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
               <button 
                 className={`club-card-select-btn ${isOpeningMap ? 'map-opening' : ''}`}
                 onClick={handleShowOnMap}
-                title="Покажи на картата"
+                title={t('clubs.ClubCard.actions.showOnMap')}
                 disabled={isOpeningMap}
               >
                 <FontAwesomeIcon icon={faMapMarkerAlt} />
               </button>
               <button 
                 className="club-card-favorite-btn" 
-                title="Добави в любими"
+                title={t('clubs.ClubCard.actions.addToFavorites')}
                 onClick={handleSelectClick}
               >
                 <FontAwesomeIcon icon={faHeart} />
@@ -188,18 +189,18 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
           <div className="club-card-stats">
             <div className="club-card-stat">
               <FontAwesomeIcon icon={faUsers} className="club-card-stat-icon" />
-              <span className="club-card-stat-value">{club.membership.totalMembers}</span>
-              <span className="club-card-stat-label">членове</span>
+              <span className="club-card-stat-value">{club.membership?.totalMembers || 0}</span>
+              <span className="club-card-stat-label">{t('clubs.ClubCard.stats.members')}</span>
             </div>
             <div className="club-card-stat">
               <FontAwesomeIcon icon={faCalendarAlt} className="club-card-stat-icon" />
-              <span className="club-card-stat-value">{club.activities.regular.length}</span>
-              <span className="club-card-stat-label">дейности</span>
+              <span className="club-card-stat-value">{club.activities?.regular?.length || 0}</span>
+              <span className="club-card-stat-label">{t('clubs.ClubCard.stats.activities')}</span>
             </div>
             <div className="club-card-stat">
               <FontAwesomeIcon icon={faEye} className="club-card-stat-icon" />
-              <span className="club-card-stat-value">{club.metadata.views}</span>
-              <span className="club-card-stat-label">прегледи</span>
+              <span className="club-card-stat-value">{club.metadata?.views || 0}</span>
+              <span className="club-card-stat-label">{t('clubs.ClubCard.stats.views')}</span>
             </div>
           </div>
         </div>
@@ -210,19 +211,23 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
           {/* Header */}
           <div className="club-card-header">
             <h3 className="club-card-title">{club.name}</h3>
-            <div className="club-card-rating">
-              <div className="club-card-stars">
-                {renderStars(club.metadata.rating)}
+            {club.metadata?.rating && (
+              <div className="club-card-rating">
+                <div className="club-card-stars">
+                  {renderStars(club.metadata.rating)}
+                </div>
+                <span className="club-card-rating-value">{club.metadata.rating}</span>
               </div>
-              <span className="club-card-rating-value">{club.metadata.rating}</span>
-            </div>
+            )}
           </div>
 
           {/* Локация */}
-          <div className="club-card-location">
-            <FontAwesomeIcon icon={faMapMarkerAlt} className="club-card-location-icon" />
-            <span>{club.location.address}, {club.location.city}</span>
-          </div>
+          {club.location && (
+            <div className="club-card-location">
+              <FontAwesomeIcon icon={faMapMarkerAlt} className="club-card-location-icon" />
+              <span>{club.location.address}, {club.location.city}</span>
+            </div>
+          )}
 
           {/* Описание */}
           <p className="club-card-description">
@@ -232,11 +237,11 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
           {/* Средна секция */}
           <div className="club-card-middle">
             {/* Популярни дейности */}
-            {club.activities.regular.length > 0 && (
+            {club.activities?.regular?.length > 0 && (
               <div className="club-card-activities">
                 <h4 className="club-card-activities-title">
                   <FontAwesomeIcon icon={faMusic} />
-                  Популярни дейности
+                  {t('clubs.ClubCard.activities.title')}
                 </h4>
                 <div className="club-card-activities-list">
                   {club.activities.regular.slice(0, 2).map((activity, idx) => (
@@ -247,7 +252,9 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
                   ))}
                   {club.activities.regular.length > 2 && (
                     <div className="club-card-activities-more">
-                      +{club.activities.regular.length - 2} още дейности
+                      {t('clubs.ClubCard.activities.moreActivities', { 
+                        count: club.activities.regular.length - 2 
+                      })}
                     </div>
                   )}
                 </div>
@@ -262,7 +269,7 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
                   <span className="club-card-chairman-name">
                     {chairman.name}
                   </span>
-                  <span className="club-card-chairman-role">Председател</span>
+                  <span className="club-card-chairman-role">{t('clubs.ClubCard.chairman.title')}</span>
                 </div>
               </div>
             )}
@@ -271,34 +278,34 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
           {/* Footer */}
           <div className="club-card-footer">
             <div className="club-card-contacts">
-              {club.contacts.phone && (
+              {club.contacts?.phone && (
                 <a 
                   href={`tel:${club.contacts.phone}`} 
                   className="club-card-contact-item"
                   onClick={(e) => e.stopPropagation()}
-                  title={`Обади се: ${club.contacts.phone}`}
+                  title={t('clubs.ClubCard.contacts.phone', { phone: club.contacts.phone })}
                 >
                   <FontAwesomeIcon icon={faPhone} />
                 </a>
               )}
-              {club.contacts.email && (
+              {club.contacts?.email && (
                 <a 
                   href={`mailto:${club.contacts.email}`} 
                   className="club-card-contact-item"
                   onClick={(e) => e.stopPropagation()}
-                  title={`Изпрати имейл: ${club.contacts.email}`}
+                  title={t('clubs.ClubCard.contacts.email', { email: club.contacts.email })}
                 >
                   <FontAwesomeIcon icon={faEnvelope} />
                 </a>
               )}
-              {club.contacts.website && (
+              {club.contacts?.website && (
                 <a 
                   href={club.contacts.website} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="club-card-contact-item"
                   onClick={(e) => e.stopPropagation()}
-                  title={`Посети сайт: ${club.contacts.website}`}
+                  title={t('clubs.ClubCard.contacts.website', { website: club.contacts.website })}
                 >
                   <FontAwesomeIcon icon={faGlobe} />
                 </a>
@@ -307,10 +314,10 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
             
             <div className="club-card-meta">
               <div className="club-card-founded">
-                Основан: {club.foundedYear}
+                {t('clubs.ClubCard.founded')}: {club.foundedYear}
               </div>
               <button className="club-card-view-btn">
-                <span>Виж повече</span>
+                <span>{t('clubs.ClubCard.actions.viewMore')}</span>
                 <FontAwesomeIcon icon={faArrowRight} className="club-card-arrow" />
               </button>
             </div>

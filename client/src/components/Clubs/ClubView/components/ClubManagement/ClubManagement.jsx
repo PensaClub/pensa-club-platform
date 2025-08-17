@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faUsers, 
@@ -27,6 +28,7 @@ import {
 import './clubManagement.css';
 
 export const ClubManagement = ({ club }) => {
+  const { t } = useTranslation();
   const [showAllMembers, setShowAllMembers] = useState(false);
   const [showMemberModal, setShowMemberModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -46,67 +48,84 @@ export const ClubManagement = ({ club }) => {
   }
 
   const getRoleIcon = (role) => {
+    const normalizedRole = role.toLowerCase();
     const roleIcons = {
       'председател': faCrown,
+      'president': faCrown,
+      'präsident': faCrown,
       'заместник-председател': faUserTie,
+      'vice-president': faUserTie,
+      'vizepräsident': faUserTie,
       'секретар': faUsers,
+      'secretary': faUsers,
+      'sekretär': faUsers,
       'касиер': faUsers,
+      'treasurer': faUsers,
+      'schatzmeister': faUsers,
       'културен деец': faGraduationCap,
+      'cultural coordinator': faGraduationCap,
+      'kulturkoordinator': faGraduationCap,
       'спортен координатор': faAward,
+      'sports coordinator': faAward,
+      'sportkoordinator': faAward,
       'треньор': faHandshake,
+      'trainer': faHandshake,
       'медицински консултант': faUserShield,
+      'medical consultant': faUserShield,
+      'medizinischer berater': faUserShield,
       'арт директор': faGraduationCap,
+      'art director': faGraduationCap,
+      'kunstdirektor': faGraduationCap,
       'режисьор': faGraduationCap,
-      'член': faUsers
+      'director': faGraduationCap,
+      'член': faUsers,
+      'member': faUsers,
+      'mitglied': faUsers
     };
-    return roleIcons[role.toLowerCase()] || faUsers;
+    return roleIcons[normalizedRole] || faUsers;
   };
 
   const getRoleInfo = (role) => {
-    const roleData = {
-      'председател': { 
-        color: '#f59e0b', 
-        bgColor: '#fef3c7', 
-        priority: 1,
-        description: 'Ръководи дейността на клуба и представлява клуба пред трети лица'
-      },
-      'заместник-председател': { 
-        color: '#3b82f6', 
-        bgColor: '#dbeafe', 
-        priority: 2,
-        description: 'Помага на председателя и го замества при необходимост'
-      },
-      'секретар': { 
-        color: '#8b5cf6', 
-        bgColor: '#ede9fe', 
-        priority: 3,
-        description: 'Води протоколите и документацията на клуба'
-      },
-      'касиер': { 
-        color: '#ef4444', 
-        bgColor: '#fee2e2', 
-        priority: 4,
-        description: 'Отговаря за финансовата дейност и бюджета'
-      },
-      'културен деец': { 
-        color: '#10b981', 
-        bgColor: '#d1fae5', 
-        priority: 5,
-        description: 'Организира културни дейности и събития'
-      },
-      'спортен координатор': { 
-        color: '#f97316', 
-        bgColor: '#fed7aa', 
-        priority: 6,
-        description: 'Координира спортните дейности и активности'
-      }
+    const normalizedRole = role.toLowerCase();
+    const baseRoleData = {
+      'председател': { priority: 1, key: 'president' },
+      'president': { priority: 1, key: 'president' },
+      'präsident': { priority: 1, key: 'president' },
+      'заместник-председател': { priority: 2, key: 'vicePresident' },
+      'vice-president': { priority: 2, key: 'vicePresident' },
+      'vizepräsident': { priority: 2, key: 'vicePresident' },
+      'секретар': { priority: 3, key: 'secretary' },
+      'secretary': { priority: 3, key: 'secretary' },
+      'sekretär': { priority: 3, key: 'secretary' },
+      'касиер': { priority: 4, key: 'treasurer' },
+      'treasurer': { priority: 4, key: 'treasurer' },
+      'schatzmeister': { priority: 4, key: 'treasurer' },
+      'културен деец': { priority: 5, key: 'culturalCoordinator' },
+      'cultural coordinator': { priority: 5, key: 'culturalCoordinator' },
+      'kulturkoordinator': { priority: 5, key: 'culturalCoordinator' },
+      'спортен координатор': { priority: 6, key: 'sportsCoordinator' },
+      'sports coordinator': { priority: 6, key: 'sportsCoordinator' },
+      'sportkoordinator': { priority: 6, key: 'sportsCoordinator' }
     };
     
-    return roleData[role.toLowerCase()] || { 
-      color: '#6b7280', 
-      bgColor: '#f3f4f6', 
-      priority: 10,
-      description: 'Член на управителния съвет'
+    const roleData = baseRoleData[normalizedRole] || { priority: 10, key: 'member' };
+    
+    const colors = {
+      president: { color: '#f59e0b', bgColor: '#fef3c7' },
+      vicePresident: { color: '#3b82f6', bgColor: '#dbeafe' },
+      secretary: { color: '#8b5cf6', bgColor: '#ede9fe' },
+      treasurer: { color: '#ef4444', bgColor: '#fee2e2' },
+      culturalCoordinator: { color: '#10b981', bgColor: '#d1fae5' },
+      sportsCoordinator: { color: '#f97316', bgColor: '#fed7aa' },
+      member: { color: '#6b7280', bgColor: '#f3f4f6' }
+    };
+    
+    const colorInfo = colors[roleData.key] || colors.member;
+    
+    return {
+      ...colorInfo,
+      priority: roleData.priority,
+      description: t(`clubs.ClubManagement.roles.${roleData.key}.description`)
     };
   };
 
@@ -157,16 +176,20 @@ export const ClubManagement = ({ club }) => {
   };
 
   const handleShare = (member) => {
-    const text = `${member.name} - ${member.role} в ${club.name}`;
+    const text = t('clubs.ClubManagement.shareText', { 
+      name: member.name, 
+      role: member.role, 
+      clubName: club.name 
+    });
     if (navigator.share) {
       navigator.share({
-        title: `${member.name}`,
+        title: member.name,
         text: text,
         url: window.location.href
       });
     } else {
       navigator.clipboard.writeText(text);
-      alert('Информацията е копирана в клипборда!');
+      alert(t('clubs.ClubManagement.messages.infoCopied'));
     }
   };
 
@@ -184,26 +207,26 @@ export const ClubManagement = ({ club }) => {
         <div className="general-management-header">
           <div className="general-management-badge">
             <FontAwesomeIcon icon={faUserShield} />
-            <span>Ръководство на клуба</span>
+            <span>{t('clubs.ClubManagement.header.badge')}</span>
           </div>
-          <h2 className="general-management-title">Нашето ръководство</h2>
+          <h2 className="general-management-title">{t('clubs.ClubManagement.header.title')}</h2>
           <p className="general-management-subtitle">
-            Запознайте се с хората, които водят клуба и организират дейностите
+            {t('clubs.ClubManagement.header.subtitle')}
           </p>
           
           {/* Stats */}
           <div className="general-management-stats">
             <div className="general-management-stat">
               <span>{boardMembers.length}</span>
-              <label>членове в борда</label>
+              <label>{t('clubs.ClubManagement.stats.boardMembers')}</label>
             </div>
             <div className="general-management-stat">
               <span>{new Set(boardMembers.map(m => getRoleInfo(m.role).priority <= 4 ? 'exec' : 'member')).size}</span>
-              <label>нива управление</label>
+              <label>{t('clubs.ClubManagement.stats.managementLevels')}</label>
             </div>
             <div className="general-management-stat">
               <span>{club.foundedYear ? new Date().getFullYear() - club.foundedYear : '—'}</span>
-              <label>години опит</label>
+              <label>{t('clubs.ClubManagement.stats.yearsExperience')}</label>
             </div>
           </div>
         </div>
@@ -247,14 +270,14 @@ export const ClubManagement = ({ club }) => {
                     <button 
                       className="general-action-btn"
                       onClick={() => handleShare(member)}
-                      title="Споделяне"
+                      title={t('clubs.ClubManagement.actions.share')}
                     >
                       <FontAwesomeIcon icon={faShare} />
                     </button>
                     <button 
                       className="general-action-btn"
                       onClick={() => openMemberModal(member)}
-                      title="Повече информация"
+                      title={t('clubs.ClubManagement.actions.moreInfo')}
                     >
                       <FontAwesomeIcon icon={faInfoCircle} />
                     </button>
@@ -270,7 +293,10 @@ export const ClubManagement = ({ club }) => {
                       icon={showContactDetails[member.name] ? faEyeSlash : faEye} 
                     />
                     <span>
-                      {showContactDetails[member.name] ? 'Скрий контакти' : 'Покажи контакти'}
+                      {showContactDetails[member.name] 
+                        ? t('clubs.ClubManagement.contact.hideContacts') 
+                        : t('clubs.ClubManagement.contact.showContacts')
+                      }
                     </span>
                   </button>
 
@@ -283,7 +309,7 @@ export const ClubManagement = ({ club }) => {
                           <button 
                             className="general-contact-action"
                             onClick={() => handleCall(member.phone)}
-                            title="Обади се"
+                            title={t('clubs.ClubManagement.contact.call')}
                           >
                             <FontAwesomeIcon icon={faPhone} />
                           </button>
@@ -297,7 +323,7 @@ export const ClubManagement = ({ club }) => {
                           <button 
                             className="general-contact-action"
                             onClick={() => handleEmail(member.email)}
-                            title="Изпрати имейл"
+                            title={t('clubs.ClubManagement.contact.sendEmail')}
                           >
                             <FontAwesomeIcon icon={faEnvelope} />
                           </button>
@@ -327,8 +353,8 @@ export const ClubManagement = ({ club }) => {
             >
               <span>
                 {showAllMembers 
-                  ? 'Покажи по-малко' 
-                  : `Покажи всички (${boardMembers.length - 4} още)`
+                  ? t('clubs.ClubManagement.actions.showLess') 
+                  : t('clubs.ClubManagement.actions.showAll', { count: boardMembers.length - 4 })
                 }
               </span>
               <FontAwesomeIcon 
@@ -342,7 +368,7 @@ export const ClubManagement = ({ club }) => {
         <div className="general-management-structure">
           <h3>
             <FontAwesomeIcon icon={faBuilding} />
-            Структура на управлението
+            {t('clubs.ClubManagement.structure.title')}
           </h3>
           <div className="general-structure-chart">
             {sortedMembers.map((member, index) => {
@@ -371,7 +397,7 @@ export const ClubManagement = ({ club }) => {
         <div className="general-contact-section">
           <h3>
             <FontAwesomeIcon icon={faHandshake} />
-            Как да се свържете с ръководството
+            {t('clubs.ClubManagement.contactSection.title')}
           </h3>
           
           <div className="general-contact-methods">
@@ -381,8 +407,8 @@ export const ClubManagement = ({ club }) => {
                   <FontAwesomeIcon icon={faPhone} />
                 </div>
                 <div className="general-contact-content">
-                  <h4>Телефон на клуба</h4>
-                  <p>Основният телефон за връзка с клуба</p>
+                  <h4>{t('clubs.ClubManagement.contactSection.clubPhone')}</h4>
+                  <p>{t('clubs.ClubManagement.contactSection.clubPhoneDesc')}</p>
                   <a href={`tel:${club.contacts.phone}`}>{club.contacts.phone}</a>
                 </div>
               </div>
@@ -394,8 +420,8 @@ export const ClubManagement = ({ club }) => {
                   <FontAwesomeIcon icon={faEnvelope} />
                 </div>
                 <div className="general-contact-content">
-                  <h4>Общ имейл</h4>
-                  <p>За общи въпроси и информация</p>
+                  <h4>{t('clubs.ClubManagement.contactSection.generalEmail')}</h4>
+                  <p>{t('clubs.ClubManagement.contactSection.generalEmailDesc')}</p>
                   <a href={`mailto:${club.contacts.email}`}>{club.contacts.email}</a>
                 </div>
               </div>
@@ -407,8 +433,8 @@ export const ClubManagement = ({ club }) => {
                   <FontAwesomeIcon icon={faMapMarkerAlt} />
                 </div>
                 <div className="general-contact-content">
-                  <h4>Адрес на клуба</h4>
-                  <p>Където можете да ни намерите</p>
+                  <h4>{t('clubs.ClubManagement.contactSection.clubAddress')}</h4>
+                  <p>{t('clubs.ClubManagement.contactSection.clubAddressDesc')}</p>
                   <span>
                     {club.location.address}
                     {club.location.city && `, ${club.location.city}`}
@@ -427,7 +453,7 @@ export const ClubManagement = ({ club }) => {
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faIdCard} />
-                Информация за член
+                {t('clubs.ClubManagement.modal.title')}
               </h3>
               <button className="general-modal-close" onClick={closeMemberModal}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -455,7 +481,7 @@ export const ClubManagement = ({ club }) => {
                   
                   {selectedMember.bio && (
                     <div className="general-profile-bio">
-                      <h5>Биография</h5>
+                      <h5>{t('clubs.ClubManagement.modal.biography')}</h5>
                       <p>{selectedMember.bio}</p>
                     </div>
                   )}
@@ -463,7 +489,7 @@ export const ClubManagement = ({ club }) => {
               </div>
 
               <div className="general-profile-details">
-                <h5>Контактна информация</h5>
+                <h5>{t('clubs.ClubManagement.modal.contactInfo')}</h5>
                 <div className="general-profile-contacts">
                   {selectedMember.phone && (
                     <div className="general-profile-contact">
@@ -473,7 +499,7 @@ export const ClubManagement = ({ club }) => {
                         className="general-profile-action"
                         onClick={() => handleCall(selectedMember.phone)}
                       >
-                        Обади се
+                        {t('clubs.ClubManagement.contact.call')}
                       </button>
                     </div>
                   )}
@@ -486,7 +512,7 @@ export const ClubManagement = ({ club }) => {
                         className="general-profile-action"
                         onClick={() => handleEmail(selectedMember.email)}
                       >
-                        Изпрати имейл
+                        {t('clubs.ClubManagement.contact.sendEmail')}
                       </button>
                     </div>
                   )}
@@ -501,7 +527,7 @@ export const ClubManagement = ({ club }) => {
               </div>
 
               <div className="general-profile-role-info">
-                <h5>За ролята</h5>
+                <h5>{t('clubs.ClubManagement.modal.aboutRole')}</h5>
                 <p>{getRoleInfo(selectedMember.role).description}</p>
               </div>
 
@@ -511,7 +537,7 @@ export const ClubManagement = ({ club }) => {
                   onClick={() => handleShare(selectedMember)}
                 >
                   <FontAwesomeIcon icon={faShare} />
-                  Споделяне
+                  {t('clubs.ClubManagement.actions.share')}
                 </button>
                 {selectedMember.phone && (
                   <button 
@@ -519,7 +545,7 @@ export const ClubManagement = ({ club }) => {
                     onClick={() => handleCall(selectedMember.phone)}
                   >
                     <FontAwesomeIcon icon={faPhone} />
-                    Обади се
+                    {t('clubs.ClubManagement.contact.call')}
                   </button>
                 )}
                 {selectedMember.email && (
@@ -528,7 +554,7 @@ export const ClubManagement = ({ club }) => {
                     onClick={() => handleEmail(selectedMember.email)}
                   >
                     <FontAwesomeIcon icon={faEnvelope} />
-                    Изпрати имейл
+                    {t('clubs.ClubManagement.contact.sendEmail')}
                   </button>
                 )}
               </div>

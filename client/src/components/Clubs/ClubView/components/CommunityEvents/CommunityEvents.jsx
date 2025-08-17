@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalendarAlt,
@@ -39,8 +40,9 @@ import {
 import './communityEvents.css';
 
 export const CommunityEvents = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('all');
-  const [viewMode, setViewMode] = useState('timeline'); // 'timeline' or 'calendar'
+  const [viewMode, setViewMode] = useState('timeline');
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -54,7 +56,6 @@ export const CommunityEvents = ({ club }) => {
   });
   const [contactStatus, setContactStatus] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.events?.upcoming && 
       !club?.events?.recurring && 
       !club?.activities?.regular && 
@@ -62,13 +63,53 @@ export const CommunityEvents = ({ club }) => {
     return null;
   }
 
-  // Събираме всички събития
   const upcomingEvents = club.events?.upcoming || [];
   const recurringEvents = club.events?.recurring || [];
   const regularActivities = club.activities?.regular || [];
   const seasonalActivities = club.activities?.seasonal || [];
 
-  // Създаваме обединен списък със събития
+  const getEventCategory = (eventName) => {
+    const name = eventName.toLowerCase();
+    const categories = t('clubs.CommunityEvents.categoryTerms', { returnObjects: true });
+    
+    for (const [categoryKey, terms] of Object.entries(categories)) {
+      if (terms.some(term => name.includes(term.toLowerCase()))) {
+        return categoryKey;
+      }
+    }
+    return 'general';
+  };
+
+  const getEventStatus = (eventDate) => {
+    if (!eventDate) return 'unknown';
+    const today = new Date();
+    const event = new Date(eventDate);
+    
+    if (event < today) return 'past';
+    if (event.toDateString() === today.toDateString()) return 'today';
+    
+    const diffTime = event - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays <= 7) return 'soon';
+    return 'upcoming';
+  };
+
+  const getSeasonalStatus = (season) => {
+    const currentMonth = new Date().getMonth();
+    const seasonMonths = t('clubs.CommunityEvents.seasonMonths', { returnObjects: true });
+    
+    const seasonKey = Object.keys(seasonMonths).find(key => 
+      season?.toLowerCase().includes(key) || 
+      t(`clubs.CommunityEvents.seasons.${key}`).toLowerCase() === season?.toLowerCase()
+    );
+    
+    if (!seasonKey) return 'inactive';
+    
+    const months = seasonMonths[seasonKey] || [];
+    return months.includes(currentMonth) ? 'active' : 'inactive';
+  };
+
   const allEvents = [
     ...upcomingEvents.map(event => ({
       ...event,
@@ -108,136 +149,87 @@ export const CommunityEvents = ({ club }) => {
     }))
   ];
 
-  // Ако няма събития, не показваме компонента
   if (allEvents.length === 0) {
     return null;
   }
 
-  // Helper функции
-  function getEventCategory(eventName) {
-    const name = eventName.toLowerCase();
-    if (name.includes('концерт') || name.includes('музик')) return 'music';
-    if (name.includes('храна') || name.includes('обяд') || name.includes('кулинар')) return 'food';
-    if (name.includes('здрав') || name.includes('лекция') || name.includes('медицин')) return 'health';
-    if (name.includes('образование') || name.includes('урок') || name.includes('курс')) return 'education';
-    if (name.includes('игр') || name.includes('забавление') || name.includes('конкурс')) return 'entertainment';
-    if (name.includes('празник') || name.includes('рожден') || name.includes('тържеств')) return 'celebration';
-    if (name.includes('доброволч') || name.includes('помощ') || name.includes('благотворителн')) return 'volunteer';
-    if (name.includes('спорт') || name.includes('физическ') || name.includes('упражнения')) return 'sports';
-    if (name.includes('изложба') || name.includes('театър') || name.includes('културн')) return 'culture';
-    if (name.includes('природа') || name.includes('разходка') || name.includes('екскурзия')) return 'nature';
-    return 'general';
-  }
-
-  function getEventStatus(eventDate) {
-    if (!eventDate) return 'unknown';
-    const today = new Date();
-    const event = new Date(eventDate);
-    
-    if (event < today) return 'past';
-    if (event.toDateString() === today.toDateString()) return 'today';
-    
-    const diffTime = event - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays <= 7) return 'soon';
-    return 'upcoming';
-  }
-
-  function getSeasonalStatus(season) {
-    const currentMonth = new Date().getMonth();
-    const seasonMonths = {
-      'пролет': [2, 3, 4], // март, април, май
-      'лято': [5, 6, 7],   // юни, юли, август
-      'есен': [8, 9, 10],  // септември, октомври, ноември
-      'зима': [11, 0, 1]   // декември, януари, февруари
+  const getCategoryIcon = (category) => {
+    const iconMap = {
+      music: faMusic,
+      food: faUtensils,
+      health: faMedkit,
+      education: faGraduationCap,
+      entertainment: faGamepad,
+      celebration: faBirthdayCake,
+      volunteer: faHandsHelping,
+      sports: faDumbbell,
+      culture: faTheaterMasks,
+      nature: faTree,
+      general: faCalendarAlt
     };
-    
-    const months = seasonMonths[season?.toLowerCase()] || [];
-    return months.includes(currentMonth) ? 'active' : 'inactive';
-  }
+    return iconMap[category] || faCalendarAlt;
+  };
 
-  function getCategoryIcon(category) {
-    switch(category) {
-      case 'music': return faMusic;
-      case 'food': return faUtensils;
-      case 'health': return faMedkit;
-      case 'education': return faGraduationCap;
-      case 'entertainment': return faGamepad;
-      case 'celebration': return faBirthdayCake;
-      case 'volunteer': return faHandsHelping;
-      case 'sports': return faDumbbell;
-      case 'culture': return faTheaterMasks;
-      case 'nature': return faTree;
-      default: return faCalendarAlt;
-    }
-  }
+  const getCategoryColor = (category) => {
+    const colorMap = {
+      music: '#8b5cf6',
+      food: '#f59e0b',
+      health: '#ef4444',
+      education: '#3b82f6',
+      entertainment: '#10b981',
+      celebration: '#ec4899',
+      volunteer: '#6366f1',
+      sports: '#14b8a6',
+      culture: '#f97316',
+      nature: '#22c55e',
+      general: '#6b7280'
+    };
+    return colorMap[category] || '#6b7280';
+  };
 
-  function getCategoryColor(category) {
-    switch(category) {
-      case 'music': return '#8b5cf6';
-      case 'food': return '#f59e0b';
-      case 'health': return '#ef4444';
-      case 'education': return '#3b82f6';
-      case 'entertainment': return '#10b981';
-      case 'celebration': return '#ec4899';
-      case 'volunteer': return '#6366f1';
-      case 'sports': return '#14b8a6';
-      case 'culture': return '#f97316';
-      case 'nature': return '#22c55e';
-      default: return '#6b7280';
-    }
-  }
+  const getStatusColor = (status) => {
+    const colorMap = {
+      today: '#ef4444',
+      soon: '#f59e0b',
+      upcoming: '#3b82f6',
+      recurring: '#8b5cf6',
+      ongoing: '#10b981',
+      active: '#22c55e',
+      inactive: '#6b7280',
+      past: '#94a3b8',
+      unknown: '#6b7280'
+    };
+    return colorMap[status] || '#6b7280';
+  };
 
-  function getStatusColor(status) {
-    switch(status) {
-      case 'today': return '#ef4444';
-      case 'soon': return '#f59e0b';
-      case 'upcoming': return '#3b82f6';
-      case 'recurring': return '#8b5cf6';
-      case 'ongoing': return '#10b981';
-      case 'active': return '#22c55e';
-      case 'inactive': return '#6b7280';
-      case 'past': return '#94a3b8';
-      default: return '#6b7280';
-    }
-  }
+  const getStatusLabel = (status) => {
+    return t(`clubs.CommunityEvents.statuses.${status}`, status);
+  };
 
-  function getStatusLabel(status) {
-    switch(status) {
-      case 'today': return 'Днес';
-      case 'soon': return 'Скоро';
-      case 'upcoming': return 'Предстоящо';
-      case 'recurring': return 'Редовно';
-      case 'ongoing': return 'Активно';
-      case 'active': return 'В сезон';
-      case 'inactive': return 'Извън сезон';
-      case 'past': return 'Минало';
-      default: return 'Неизвестно';
-    }
-  }
+  const getTypeLabel = (type) => {
+    return t(`clubs.CommunityEvents.types.${type}`, type);
+  };
 
-  // Категории за филтриране
-  const categories = [
-    { key: 'all', label: 'Всички', icon: faCalendarAlt },
-    { key: 'music', label: 'Музика', icon: faMusic },
-    { key: 'food', label: 'Храна', icon: faUtensils },
-    { key: 'health', label: 'Здраве', icon: faMedkit },
-    { key: 'education', label: 'Образование', icon: faGraduationCap },
-    { key: 'entertainment', label: 'Забавление', icon: faGamepad },
-    { key: 'celebration', label: 'Празници', icon: faBirthdayCake },
-    { key: 'volunteer', label: 'Доброволчество', icon: faHandsHelping },
-    { key: 'sports', label: 'Спорт', icon: faDumbbell },
-    { key: 'culture', label: 'Култура', icon: faTheaterMasks },
-    { key: 'nature', label: 'Природа', icon: faTree }
+  const getCategories = () => [
+    { key: 'all', label: t('clubs.CommunityEvents.categories.all'), icon: faCalendarAlt },
+    { key: 'music', label: t('clubs.CommunityEvents.categories.music'), icon: faMusic },
+    { key: 'food', label: t('clubs.CommunityEvents.categories.food'), icon: faUtensils },
+    { key: 'health', label: t('clubs.CommunityEvents.categories.health'), icon: faMedkit },
+    { key: 'education', label: t('clubs.CommunityEvents.categories.education'), icon: faGraduationCap },
+    { key: 'entertainment', label: t('clubs.CommunityEvents.categories.entertainment'), icon: faGamepad },
+    { key: 'celebration', label: t('clubs.CommunityEvents.categories.celebration'), icon: faBirthdayCake },
+    { key: 'volunteer', label: t('clubs.CommunityEvents.categories.volunteer'), icon: faHandsHelping },
+    { key: 'sports', label: t('clubs.CommunityEvents.categories.sports'), icon: faDumbbell },
+    { key: 'culture', label: t('clubs.CommunityEvents.categories.culture'), icon: faTheaterMasks },
+    { key: 'nature', label: t('clubs.CommunityEvents.categories.nature'), icon: faTree }
   ];
 
-  // Филтриране на събития
+  const categories = getCategories();
+
   const filteredEvents = allEvents.filter(event => {
     return activeFilter === 'all' || event.category === activeFilter;
   });
 
-  // Сортиране по статус и дата
   const sortedEvents = filteredEvents.sort((a, b) => {
     const statusPriority = {
       'today': 1,
@@ -261,11 +253,12 @@ export const CommunityEvents = ({ club }) => {
     setSelectedEvent(null);
   };
 
-  // Contact Modal Functions
   const openContactModal = (eventName = '') => {
     setContactForm(prev => ({
       ...prev,
-      subject: eventName ? `Интерес към ${eventName}` : 'Въпрос относно събития'
+      subject: eventName ? 
+        t('clubs.CommunityEvents.contact.subjectWithEvent', { eventName }) : 
+        t('clubs.CommunityEvents.contact.subjectGeneral')
     }));
     setShowContactModal(true);
   };
@@ -295,23 +288,14 @@ export const CommunityEvents = ({ club }) => {
 
     if (club.contacts?.email) {
       const subject = encodeURIComponent(contactForm.subject);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте ново съобщение от сайта:
-
-Име: ${contactForm.name}
-Имейл: ${contactForm.email}
-Телефон: ${contactForm.phone}
-
-Тема: ${contactForm.subject}
-
-Съобщение:
-${contactForm.message}
-
----
-Изпратено от сайта на ${club.name}
-      `);
+      const body = encodeURIComponent(t('clubs.CommunityEvents.contact.emailBody', {
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        subject: contactForm.subject,
+        message: contactForm.message,
+        clubName: club.name
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -330,7 +314,10 @@ ${contactForm.message}
   const formatDate = (dateString) => {
     if (!dateString) return null;
     const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    
+    return date.toLocaleDateString(locale, {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
@@ -343,61 +330,73 @@ ${contactForm.message}
     return timeString;
   };
 
+  const formatCalendarMonth = () => {
+    const date = new Date(selectedYear, selectedMonth);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    
+    return date.toLocaleDateString(locale, { 
+      month: 'long', 
+      year: 'numeric' 
+    });
+  };
+
+  const navigateMonth = (direction) => {
+    const newDate = new Date(selectedYear, selectedMonth + direction);
+    setSelectedMonth(newDate.getMonth());
+    setSelectedYear(newDate.getFullYear());
+  };
+
   return (
     <section id="community-events" className="community-events-section">
       <div className="community-events-container">
         
-        {/* Header */}
         <div className="community-events-header">
           <div className="community-events-header-content">
             <div className="community-events-badge">
               <FontAwesomeIcon icon={faCalendarAlt} />
-              <span>Събития и дейности</span>
+              <span>{t('clubs.CommunityEvents.header.badge')}</span>
             </div>
             <h2 className="community-events-title">
-              Заедно правим всеки ден по-специален
+              {t('clubs.CommunityEvents.header.title')}
             </h2>
             <p className="community-events-subtitle">
-              Открийте всички събития, дейности и програми, които Ви очакват в нашия клуб
+              {t('clubs.CommunityEvents.header.subtitle')}
             </p>
           </div>
           
-          {/* Quick Stats */}
           <div className="community-events-stats">
             <div className="community-events-stat">
               <span className="community-events-stat-number">{allEvents.length}</span>
-              <span className="community-events-stat-label">Общо събития</span>
+              <span className="community-events-stat-label">{t('clubs.CommunityEvents.stats.totalEvents')}</span>
             </div>
             <div className="community-events-stat">
               <span className="community-events-stat-number">
                 {allEvents.filter(e => e.status === 'today' || e.status === 'soon').length}
               </span>
-              <span className="community-events-stat-label">Предстоящи</span>
+              <span className="community-events-stat-label">{t('clubs.CommunityEvents.stats.upcoming')}</span>
             </div>
           </div>
         </div>
 
-        {/* Controls */}
         <div className="community-events-controls">
-          {/* View Mode Toggle */}
           <div className="community-events-view-toggle">
             <button 
               onClick={() => setViewMode('timeline')}
               className={`community-events-view-btn ${viewMode === 'timeline' ? 'active' : ''}`}
             >
               <FontAwesomeIcon icon={faListAlt} />
-              <span>Списък</span>
+              <span>{t('clubs.CommunityEvents.viewModes.list')}</span>
             </button>
             <button 
               onClick={() => setViewMode('calendar')}
               className={`community-events-view-btn ${viewMode === 'calendar' ? 'active' : ''}`}
             >
               <FontAwesomeIcon icon={faCalendar} />
-              <span>Календар</span>
+              <span>{t('clubs.CommunityEvents.viewModes.calendar')}</span>
             </button>
           </div>
           
-          {/* Category Filter */}
           <div className="community-events-category-filters">
             {categories.map(category => (
               <button
@@ -412,7 +411,6 @@ ${contactForm.message}
           </div>
         </div>
 
-        {/* Events Display */}
         {viewMode === 'timeline' ? (
           <div className="community-events-timeline">
             {sortedEvents.map((event, index) => (
@@ -444,10 +442,7 @@ ${contactForm.message}
                     </div>
                     
                     <div className="community-events-event-type">
-                      {event.type === 'upcoming' && 'Събитие'}
-                      {event.type === 'recurring' && 'Редовно'}
-                      {event.type === 'regular' && 'Дейност'}
-                      {event.type === 'seasonal' && 'Сезонно'}
+                      {getTypeLabel(event.type)}
                     </div>
                   </div>
                   
@@ -483,7 +478,7 @@ ${contactForm.message}
                     {event.participants && (
                       <div className="community-events-event-detail">
                         <FontAwesomeIcon icon={faUsers} />
-                        <span>{event.participants} участници</span>
+                        <span>{t('clubs.CommunityEvents.details.participants', { count: event.participants })}</span>
                       </div>
                     )}
                     {event.season && (
@@ -501,29 +496,18 @@ ${contactForm.message}
           <div className="community-events-calendar">
             <div className="community-events-calendar-header">
               <button 
-                onClick={() => {
-                  const newDate = new Date(selectedYear, selectedMonth - 1);
-                  setSelectedMonth(newDate.getMonth());
-                  setSelectedYear(newDate.getFullYear());
-                }}
+                onClick={() => navigateMonth(-1)}
                 className="community-events-calendar-nav"
               >
                 <FontAwesomeIcon icon={faChevronLeft} />
               </button>
               
               <h3 className="community-events-calendar-title">
-                {new Date(selectedYear, selectedMonth).toLocaleDateString('bg-BG', { 
-                  month: 'long', 
-                  year: 'numeric' 
-                })}
+                {formatCalendarMonth()}
               </h3>
               
               <button 
-                onClick={() => {
-                  const newDate = new Date(selectedYear, selectedMonth + 1);
-                  setSelectedMonth(newDate.getMonth());
-                  setSelectedYear(newDate.getFullYear());
-                }}
+                onClick={() => navigateMonth(1)}
                 className="community-events-calendar-nav"
               >
                 <FontAwesomeIcon icon={faChevronRight} />
@@ -531,37 +515,34 @@ ${contactForm.message}
             </div>
             
             <div className="community-events-calendar-grid">
-              {/* Calendar implementation would go here */}
               <div className="community-events-calendar-placeholder">
                 <FontAwesomeIcon icon={faCalendarAlt} />
-                <p>Календарен изглед ще бъде добавен скоро</p>
+                <p>{t('clubs.CommunityEvents.calendar.comingSoon')}</p>
                 <button 
                   onClick={() => setViewMode('timeline')}
                   className="community-events-back-btn"
                 >
-                  Върни се към списъка
+                  {t('clubs.CommunityEvents.calendar.backToList')}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* No Events */}
         {filteredEvents.length === 0 && (
           <div className="community-events-no-events">
             <FontAwesomeIcon icon={faCalendarAlt} />
-            <h3>Няма събития в тази категория</h3>
-            <p>Опитайте с различен филтър или се свържете с нас за предстоящи дейности</p>
+            <h3>{t('clubs.CommunityEvents.noEvents.title')}</h3>
+            <p>{t('clubs.CommunityEvents.noEvents.message')}</p>
             <button 
               onClick={() => setActiveFilter('all')}
               className="community-events-reset-btn"
             >
-              Покажи всички събития
+              {t('clubs.CommunityEvents.noEvents.showAll')}
             </button>
           </div>
         )}
 
-        {/* Event Modal */}
         {selectedEvent && (
           <div className="community-events-modal" onClick={closeEventModal}>
             <div className="community-events-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -620,7 +601,7 @@ ${contactForm.message}
                   {selectedEvent.participants && (
                     <div className="community-events-modal-detail">
                       <FontAwesomeIcon icon={faUsers} />
-                      <span>{selectedEvent.participants} участници</span>
+                      <span>{t('clubs.CommunityEvents.details.participants', { count: selectedEvent.participants })}</span>
                     </div>
                   )}
                 </div>
@@ -632,7 +613,7 @@ ${contactForm.message}
                       className="community-events-modal-btn primary"
                     >
                       <FontAwesomeIcon icon={faPhone} />
-                      <span>Обадете се</span>
+                      <span>{t('clubs.CommunityEvents.modal.callUs')}</span>
                     </a>
                   )}
                   <button 
@@ -643,7 +624,7 @@ ${contactForm.message}
                     className="community-events-modal-btn secondary"
                   >
                     <FontAwesomeIcon icon={faEnvelope} />
-                    <span>Пишете ни</span>
+                    <span>{t('clubs.CommunityEvents.modal.writeToUs')}</span>
                   </button>
                 </div>
               </div>
@@ -651,7 +632,6 @@ ${contactForm.message}
           </div>
         )}
 
-        {/* Contact Modal */}
         {showContactModal && (
           <div className="community-events-contact-modal" onClick={closeContactModal}>
             <div className="community-events-contact-content" onClick={(e) => e.stopPropagation()}>
@@ -661,21 +641,21 @@ ${contactForm.message}
               
               <div className="community-events-contact-header">
                 <FontAwesomeIcon icon={faComments} />
-                <h3>Свържете се с нас</h3>
-                <p>Имате въпроси за нашите събития? Пишете ни!</p>
+                <h3>{t('clubs.CommunityEvents.contact.title')}</h3>
+                <p>{t('clubs.CommunityEvents.contact.subtitle')}</p>
               </div>
               
               {contactStatus === 'sent' ? (
                 <div className="community-events-contact-success">
                   <FontAwesomeIcon icon={faCheckCircle} />
-                  <h4>Съобщението е изпратено успешно!</h4>
-                  <p>Благодарим ви за интереса! Ще се свържем с вас възможно най-скоро.</p>
+                  <h4>{t('clubs.CommunityEvents.contact.success.title')}</h4>
+                  <p>{t('clubs.CommunityEvents.contact.success.message')}</p>
                 </div>
               ) : contactStatus === 'error' ? (
                 <div className="community-events-contact-error">
                   <FontAwesomeIcon icon={faTimes} />
-                  <h4>Възникна грешка</h4>
-                  <p>Моля опитайте отново или се свържете с нас директно.</p>
+                  <h4>{t('clubs.CommunityEvents.contact.error.title')}</h4>
+                  <p>{t('clubs.CommunityEvents.contact.error.message')}</p>
                 </div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="community-events-contact-form">
@@ -683,7 +663,7 @@ ${contactForm.message}
                     <div className="community-events-form-group">
                       <label htmlFor="contact-name">
                         <FontAwesomeIcon icon={faUser} />
-                        Вашето име *
+                        {t('clubs.CommunityEvents.contact.form.name')} *
                       </label>
                       <input
                         type="text"
@@ -691,14 +671,14 @@ ${contactForm.message}
                         value={contactForm.name}
                         onChange={(e) => handleContactChange('name', e.target.value)}
                         required
-                        placeholder="Въведете вашето име"
+                        placeholder={t('clubs.CommunityEvents.contact.form.namePlaceholder')}
                       />
                     </div>
                     
                     <div className="community-events-form-group">
                       <label htmlFor="contact-email">
                         <FontAwesomeIcon icon={faEnvelope} />
-                        Имейл адрес *
+                        {t('clubs.CommunityEvents.contact.form.email')} *
                       </label>
                       <input
                         type="email"
@@ -706,7 +686,7 @@ ${contactForm.message}
                         value={contactForm.email}
                         onChange={(e) => handleContactChange('email', e.target.value)}
                         required
-                        placeholder="Въведете вашия имейл"
+                        placeholder={t('clubs.CommunityEvents.contact.form.emailPlaceholder')}
                       />
                     </div>
                   </div>
@@ -715,21 +695,21 @@ ${contactForm.message}
                     <div className="community-events-form-group">
                       <label htmlFor="contact-phone">
                         <FontAwesomeIcon icon={faPhone} />
-                        Телефон
+                        {t('clubs.CommunityEvents.contact.form.phone')}
                       </label>
                       <input
                         type="tel"
                         id="contact-phone"
                         value={contactForm.phone}
                         onChange={(e) => handleContactChange('phone', e.target.value)}
-                        placeholder="Въведете вашия телефон"
+                        placeholder={t('clubs.CommunityEvents.contact.form.phonePlaceholder')}
                       />
                     </div>
                     
                     <div className="community-events-form-group">
                       <label htmlFor="contact-subject">
                         <FontAwesomeIcon icon={faInfoCircle} />
-                        Тема *
+                        {t('clubs.CommunityEvents.contact.form.subject')} *
                       </label>
                       <input
                         type="text"
@@ -737,7 +717,7 @@ ${contactForm.message}
                         value={contactForm.subject}
                         onChange={(e) => handleContactChange('subject', e.target.value)}
                         required
-                        placeholder="Темата на вашето съобщение"
+                        placeholder={t('clubs.CommunityEvents.contact.form.subjectPlaceholder')}
                       />
                     </div>
                   </div>
@@ -745,14 +725,14 @@ ${contactForm.message}
                   <div className="community-events-form-group">
                     <label htmlFor="contact-message">
                       <FontAwesomeIcon icon={faComments} />
-                      Съобщение *
+                      {t('clubs.CommunityEvents.contact.form.message')} *
                     </label>
                     <textarea
                       id="contact-message"
                       value={contactForm.message}
                       onChange={(e) => handleContactChange('message', e.target.value)}
                       required
-                      placeholder="Напишете вашето съобщение тук..."
+                      placeholder={t('clubs.CommunityEvents.contact.form.messagePlaceholder')}
                       rows="5"
                     />
                   </div>
@@ -764,14 +744,16 @@ ${contactForm.message}
                       disabled={contactStatus === 'sending'}
                     >
                       <FontAwesomeIcon icon={faEnvelope} />
-                      {contactStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщението'}
+                      {contactStatus === 'sending' ? 
+                        t('clubs.CommunityEvents.contact.form.sending') : 
+                        t('clubs.CommunityEvents.contact.form.submit')}
                     </button>
                     <button 
                       type="button" 
                       onClick={closeContactModal}
                       className="community-events-cancel-btn"
                     >
-                      Отказ
+                      {t('clubs.CommunityEvents.contact.form.cancel')}
                     </button>
                   </div>
                 </form>

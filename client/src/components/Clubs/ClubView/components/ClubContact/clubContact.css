@@ -137,7 +137,7 @@
   margin-bottom: 2rem;
 }
 
-.general-card-header svg {
+.general-contact-card.hours .general-card-header svg {
   color: #10b981;
   font-size: 1.3rem;
   margin-right: 1rem;
@@ -576,7 +576,7 @@
   line-height: 1.6;
 }
 
-.general-field-icon {
+.general-form-field svg.general-field-icon  {
   position: absolute;
   left: 1.25rem;
   top: 2.25rem;

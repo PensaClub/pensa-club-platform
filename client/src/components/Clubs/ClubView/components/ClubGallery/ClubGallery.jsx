@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faImages,
@@ -27,6 +28,7 @@ import {
 import './clubGallery.css';
 
 export const ClubGallery = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [filter, setFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
   const [showLightbox, setShowLightbox] = useState(false);
@@ -61,10 +63,10 @@ export const ClubGallery = ({ club }) => {
           type: 'image',
           src: image,
           thumbnail: image,
-          title: `Снимка ${index + 1}`,
+          title: t('clubs.ClubGallery.media.imageTitle', { number: index + 1 }),
           category: 'gallery',
-          categoryLabel: 'Галерия',
-          alt: `Снимка от клуба ${index + 1}`,
+          categoryLabel: t('clubs.ClubGallery.categories.gallery'),
+          alt: t('clubs.ClubGallery.media.imageAlt', { number: index + 1, clubName: club.name }),
           date: null,
           location: null,
           photographer: null
@@ -80,9 +82,9 @@ export const ClubGallery = ({ club }) => {
           type: 'video',
           src: video.src,
           thumbnail: video.thumbnail,
-          title: video.caption || video.alt || `Видео ${index + 1}`,
+          title: video.caption || video.alt || t('clubs.ClubGallery.media.videoTitle', { number: index + 1 }),
           category: 'videos',
-          categoryLabel: 'Видеа',
+          categoryLabel: t('clubs.ClubGallery.categories.videos'),
           alt: video.alt,
           duration: video.duration,
           videoType: video.type,
@@ -103,9 +105,12 @@ export const ClubGallery = ({ club }) => {
               type: 'image',
               src: image.src,
               thumbnail: image.src,
-              title: image.caption || `${event.title} - Снимка ${index + 1}`,
+              title: image.caption || t('clubs.ClubGallery.media.eventImageTitle', { 
+                eventTitle: event.title, 
+                number: index + 1 
+              }),
               category: 'events',
-              categoryLabel: 'События',
+              categoryLabel: t('clubs.ClubGallery.categories.events'),
               alt: image.alt,
               eventTitle: event.title,
               eventDate: event.date,
@@ -123,9 +128,12 @@ export const ClubGallery = ({ club }) => {
               type: 'video',
               src: video.src,
               thumbnail: video.thumbnail,
-              title: video.caption || `${event.title} - Видео ${index + 1}`,
+              title: video.caption || t('clubs.ClubGallery.media.eventVideoTitle', { 
+                eventTitle: event.title, 
+                number: index + 1 
+              }),
               category: 'events',
-              categoryLabel: 'События',
+              categoryLabel: t('clubs.ClubGallery.categories.events'),
               alt: video.alt,
               duration: video.duration,
               eventTitle: event.title,
@@ -231,7 +239,10 @@ export const ClubGallery = ({ club }) => {
 
   // Споделяне
   const handleShare = (media) => {
-    const text = `${media.title} от ${club.name}`;
+    const text = t('clubs.ClubGallery.actions.shareText', { 
+      title: media.title, 
+      clubName: club.name 
+    });
     if (navigator.share) {
       navigator.share({
         title: media.title,
@@ -240,7 +251,7 @@ export const ClubGallery = ({ club }) => {
       });
     } else {
       navigator.clipboard.writeText(`${text} - ${window.location.href}`);
-      alert('Линкът е копиран в клипборда!');
+      alert(t('clubs.ClubGallery.messages.linkCopied'));
     }
   };
 
@@ -254,7 +265,13 @@ export const ClubGallery = ({ club }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('bg-BG', {
+    
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    
+    return date.toLocaleDateString(locale, {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
@@ -269,11 +286,11 @@ export const ClubGallery = ({ club }) => {
         <div className="general-gallery-header">
           <div className="general-gallery-badge">
             <FontAwesomeIcon icon={faImages} />
-            <span>Галерия</span>
+            <span>{t('clubs.ClubGallery.header.badge')}</span>
           </div>
-          <h2 className="general-gallery-title">Нашите спомени</h2>
+          <h2 className="general-gallery-title">{t('clubs.ClubGallery.header.title')}</h2>
           <p className="general-gallery-subtitle">
-            Разгледайте снимки и видеа от нашите дейности и събития
+            {t('clubs.ClubGallery.header.subtitle')}
           </p>
           
           {/* Stats */}
@@ -281,22 +298,22 @@ export const ClubGallery = ({ club }) => {
             <div className="general-gallery-stat">
               <FontAwesomeIcon icon={faImages} />
               <span>{stats.images}</span>
-              <label>снимки</label>
+              <label>{t('clubs.ClubGallery.stats.images')}</label>
             </div>
             <div className="general-gallery-stat">
               <FontAwesomeIcon icon={faVideo} />
               <span>{stats.videos}</span>
-              <label>видеа</label>
+              <label>{t('clubs.ClubGallery.stats.videos')}</label>
             </div>
             <div className="general-gallery-stat">
               <FontAwesomeIcon icon={faCalendarAlt} />
               <span>{stats.events}</span>
-              <label>от събития</label>
+              <label>{t('clubs.ClubGallery.stats.fromEvents')}</label>
             </div>
             <div className="general-gallery-stat">
               <FontAwesomeIcon icon={faEye} />
               <span>{stats.total}</span>
-              <label>общо файлове</label>
+              <label>{t('clubs.ClubGallery.stats.totalFiles')}</label>
             </div>
           </div>
         </div>
@@ -307,7 +324,7 @@ export const ClubGallery = ({ club }) => {
             <FontAwesomeIcon icon={faSearch} />
             <input
               type="text"
-              placeholder="Търсене в галерията..."
+              placeholder={t('clubs.ClubGallery.search.placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -319,28 +336,28 @@ export const ClubGallery = ({ club }) => {
               onClick={() => setFilter('all')}
             >
               <FontAwesomeIcon icon={faFilter} />
-              Всички ({stats.total})
+              {t('clubs.ClubGallery.filters.all')} ({stats.total})
             </button>
             <button
               className={`general-filter-btn ${filter === 'images' ? 'active' : ''}`}
               onClick={() => setFilter('images')}
             >
               <FontAwesomeIcon icon={faImages} />
-              Снимки ({stats.images})
+              {t('clubs.ClubGallery.filters.images')} ({stats.images})
             </button>
             <button
               className={`general-filter-btn ${filter === 'videos' ? 'active' : ''}`}
               onClick={() => setFilter('videos')}
             >
               <FontAwesomeIcon icon={faVideo} />
-              Видеа ({stats.videos})
+              {t('clubs.ClubGallery.filters.videos')} ({stats.videos})
             </button>
             <button
               className={`general-filter-btn ${filter === 'events' ? 'active' : ''}`}
               onClick={() => setFilter('events')}
             >
               <FontAwesomeIcon icon={faCalendarAlt} />
-              От събития ({stats.events})
+              {t('clubs.ClubGallery.filters.fromEvents')} ({stats.events})
             </button>
           </div>
 
@@ -348,14 +365,14 @@ export const ClubGallery = ({ club }) => {
             <button
               className={`general-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
               onClick={() => setViewMode('grid')}
-              title="Grid изглед"
+              title={t('clubs.ClubGallery.viewModes.grid')}
             >
               <FontAwesomeIcon icon={faTh} />
             </button>
             <button
               className={`general-view-btn ${viewMode === 'list' ? 'active' : ''}`}
               onClick={() => setViewMode('list')}
-              title="Списък изглед"
+              title={t('clubs.ClubGallery.viewModes.list')}
             >
               <FontAwesomeIcon icon={faList} />
             </button>
@@ -387,7 +404,7 @@ export const ClubGallery = ({ club }) => {
                           e.stopPropagation();
                           openLightbox(media, index);
                         }}
-                        title="Преглед"
+                        title={t('clubs.ClubGallery.actions.view')}
                       >
                         <FontAwesomeIcon icon={media.type === 'video' ? faPlay : faExpand} />
                       </button>
@@ -397,7 +414,7 @@ export const ClubGallery = ({ club }) => {
                           e.stopPropagation();
                           handleShare(media);
                         }}
-                        title="Споделяне"
+                        title={t('clubs.ClubGallery.actions.share')}
                       >
                         <FontAwesomeIcon icon={faShare} />
                       </button>
@@ -407,7 +424,7 @@ export const ClubGallery = ({ club }) => {
                           e.stopPropagation();
                           handleDownload(media);
                         }}
-                        title="Сваляне"
+                        title={t('clubs.ClubGallery.actions.download')}
                       >
                         <FontAwesomeIcon icon={faDownload} />
                       </button>
@@ -462,7 +479,7 @@ export const ClubGallery = ({ club }) => {
 
                   {media.eventTitle && (
                     <div className="general-event-link">
-                      <span>От събитие: {media.eventTitle}</span>
+                      <span>{t('clubs.ClubGallery.media.fromEvent')}: {media.eventTitle}</span>
                     </div>
                   )}
                 </div>
@@ -472,8 +489,8 @@ export const ClubGallery = ({ club }) => {
         ) : (
           <div className="general-no-media">
             <FontAwesomeIcon icon={faImages} />
-            <h3>Няма намерени файлове</h3>
-            <p>Опитайте различен филтър или търсене</p>
+            <h3>{t('clubs.ClubGallery.noMedia.title')}</h3>
+            <p>{t('clubs.ClubGallery.noMedia.subtitle')}</p>
           </div>
         )}
       </div>
@@ -532,7 +549,10 @@ export const ClubGallery = ({ club }) => {
 
             <div className="general-lightbox-footer">
               <div className="general-image-counter">
-                {currentIndex + 1} от {filteredMedia.filter(item => item.type === 'image').length}
+                {t('clubs.ClubGallery.lightbox.counter', { 
+                  current: currentIndex + 1, 
+                  total: filteredMedia.filter(item => item.type === 'image').length 
+                })}
               </div>
             </div>
           </div>
@@ -557,16 +577,16 @@ export const ClubGallery = ({ club }) => {
                 autoPlay
                 className="general-video-element"
               >
-                Вашият браузър не поддържа видео елемента.
+                {t('clubs.ClubGallery.video.notSupported')}
               </video>
             </div>
 
             <div className="general-video-info">
               {selectedVideo.eventTitle && (
-                <p>От събитие: <strong>{selectedVideo.eventTitle}</strong></p>
+                <p>{t('clubs.ClubGallery.media.fromEvent')}: <strong>{selectedVideo.eventTitle}</strong></p>
               )}
               {selectedVideo.duration && (
-                <p><FontAwesomeIcon icon={faClock} /> Продължителност: {selectedVideo.duration}</p>
+                <p><FontAwesomeIcon icon={faClock} /> {t('clubs.ClubGallery.video.duration')}: {selectedVideo.duration}</p>
               )}
             </div>
           </div>

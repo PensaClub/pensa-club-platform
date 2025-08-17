@@ -1,5 +1,5 @@
-// components/SportsPartners/SportsPartners.jsx
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHandshake,
@@ -40,25 +40,57 @@ import {
 import './sportsPartners.css';
 
 export const SportsPartners = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedPartner, setSelectedPartner] = useState(null);
   const [showContactModal, setShowContactModal] = useState(false);
 
-  // Проверяваме дали има партньори
   if (!club?.finances?.sponsors?.length && 
       !club?.socialImpact?.partnerships?.length && 
       !club?.pensionersSpecific?.healthServices?.medicalPartners?.length) {
     return null;
   }
 
-  // Събираме всички партньори от различните секции
   const sponsors = club.finances?.sponsors || [];
   const partnerships = club.socialImpact?.partnerships || [];
   const medicalPartners = club.pensionersSpecific?.healthServices?.medicalPartners || [];
 
-  // Създаваме унифицирана структура за всички партньори
+  const getPartnershipCategoryMapping = () => {
+    const healthTerms = t('clubs.SportsPartners.partnershipTerms.health', { returnObjects: true });
+    const sportsTerms = t('clubs.SportsPartners.partnershipTerms.sports', { returnObjects: true });
+    const educationTerms = t('clubs.SportsPartners.partnershipTerms.education', { returnObjects: true });
+    
+    return { healthTerms, sportsTerms, educationTerms };
+  };
+
+  const getPartnershipCategory = (partnershipType) => {
+    const { healthTerms, sportsTerms, educationTerms } = getPartnershipCategoryMapping();
+    
+    if (healthTerms.includes(partnershipType)) return 'medical';
+    if (sportsTerms.includes(partnershipType)) return 'sports';
+    if (educationTerms.includes(partnershipType)) return 'education';
+    return 'other';
+  };
+
+  const getPartnershipIcon = (partnershipType) => {
+    const { healthTerms, sportsTerms, educationTerms } = getPartnershipCategoryMapping();
+    
+    if (healthTerms.includes(partnershipType)) return faStethoscope;
+    if (sportsTerms.includes(partnershipType)) return faTrophy;
+    if (educationTerms.includes(partnershipType)) return faGraduationCap;
+    return faBuilding;
+  };
+
+  const getPartnershipColor = (partnershipType) => {
+    const { healthTerms, sportsTerms, educationTerms } = getPartnershipCategoryMapping();
+    
+    if (healthTerms.includes(partnershipType)) return '#ef4444';
+    if (sportsTerms.includes(partnershipType)) return '#10b981';
+    if (educationTerms.includes(partnershipType)) return '#3b82f6';
+    return '#6b7280';
+  };
+
   const allPartners = [
-    // Спонсори
     ...sponsors.map(sponsor => ({
       id: `sponsor-${sponsor.name}`,
       name: sponsor.name,
@@ -77,25 +109,17 @@ export const SportsPartners = ({ club }) => {
       color: '#f59e0b'
     })),
     
-    // Партньорства
     ...partnerships.map(partnership => ({
       id: `partnership-${partnership.partner}`,
       name: partnership.partner,
       type: 'partnership',
-      category: partnership.type === 'здравно' ? 'medical' :
-                partnership.type === 'спортно' ? 'sports' :
-                partnership.type === 'образователно' ? 'education' : 'other',
+      category: getPartnershipCategory(partnership.type),
       description: partnership.description,
       partnershipType: partnership.type,
-      icon: partnership.type === 'здравно' ? faStethoscope :
-            partnership.type === 'спортно' ? faTrophy :
-            partnership.type === 'образователно' ? faGraduationCap : faBuilding,
-      color: partnership.type === 'здравно' ? '#ef4444' :
-             partnership.type === 'спортно' ? '#10b981' :
-             partnership.type === 'образователно' ? '#3b82f6' : '#6b7280'
+      icon: getPartnershipIcon(partnership.type),
+      color: getPartnershipColor(partnership.type)
     })),
     
-    // Медицински партньори
     ...medicalPartners.map(partner => ({
       id: `medical-${partner.name}`,
       name: partner.name,
@@ -112,30 +136,58 @@ export const SportsPartners = ({ club }) => {
     }))
   ];
 
-  // Ако няма партньори, не показваме компонента
   if (allPartners.length === 0) {
     return null;
   }
 
-  // Категории за филтриране
-  const categories = [
-    { key: 'all', label: 'Всички партньори', icon: faUsers, color: '#6366f1' },
-    { key: 'financial', label: 'Спонсори', icon: faMoneyBillWave, color: '#f59e0b' },
-    { key: 'medical', label: 'Медицински', icon: faStethoscope, color: '#ef4444' },
-    { key: 'sports', label: 'Спортни', icon: faTrophy, color: '#10b981' },
-    { key: 'education', label: 'Образователни', icon: faGraduationCap, color: '#3b82f6' },
-    { key: 'other', label: 'Други', icon: faBuilding, color: '#6b7280' }
+  const getCategories = () => [
+    { 
+      key: 'all', 
+      label: t('clubs.SportsPartners.categories.all'), 
+      icon: faUsers, 
+      color: '#6366f1' 
+    },
+    { 
+      key: 'financial', 
+      label: t('clubs.SportsPartners.categories.financial'), 
+      icon: faMoneyBillWave, 
+      color: '#f59e0b' 
+    },
+    { 
+      key: 'medical', 
+      label: t('clubs.SportsPartners.categories.medical'), 
+      icon: faStethoscope, 
+      color: '#ef4444' 
+    },
+    { 
+      key: 'sports', 
+      label: t('clubs.SportsPartners.categories.sports'), 
+      icon: faTrophy, 
+      color: '#10b981' 
+    },
+    { 
+      key: 'education', 
+      label: t('clubs.SportsPartners.categories.education'), 
+      icon: faGraduationCap, 
+      color: '#3b82f6' 
+    },
+    { 
+      key: 'other', 
+      label: t('clubs.SportsPartners.categories.other'), 
+      icon: faBuilding, 
+      color: '#6b7280' 
+    }
   ].filter(category => {
     if (category.key === 'all') return true;
     return allPartners.some(partner => partner.category === category.key);
   });
 
-  // Филтрираме партньорите
+  const categories = getCategories();
+
   const filteredPartners = activeCategory === 'all' 
     ? allPartners 
     : allPartners.filter(partner => partner.category === activeCategory);
 
-  // Статистики
   const stats = {
     totalPartners: allPartners.length,
     sponsors: sponsors.length,
@@ -143,7 +195,6 @@ export const SportsPartners = ({ club }) => {
     partnerships: partnerships.length
   };
 
-  // Handler функции
   const handleCall = (phoneNumber) => {
     if (phoneNumber) {
       window.open(`tel:${phoneNumber}`, '_self');
@@ -154,10 +205,9 @@ export const SportsPartners = ({ club }) => {
     if (phoneNumber) {
       try {
         await navigator.clipboard.writeText(phoneNumber);
-        // Можем да добавим toast notification тук
-        alert('Телефонният номер е копиран!');
+        alert(t('clubs.SportsPartners.messages.phoneCopied'));
       } catch (err) {
-        console.error('Грешка при копиране:', err);
+        console.error('Copy error:', err);
       }
     }
   };
@@ -181,22 +231,53 @@ export const SportsPartners = ({ club }) => {
     return partner.contact || partner.address || partner.website || partner.workingHours;
   };
 
+  const getPartnerTypeLabel = (partner) => {
+    if (partner.type === 'sponsor') return t('clubs.SportsPartners.partnerTypes.sponsor');
+    if (partner.type === 'partnership') return t('clubs.SportsPartners.partnerTypes.partnership');
+    if (partner.type === 'medical') return t('clubs.SportsPartners.partnerTypes.medical');
+    return '';
+  };
+
+  const getContributionTypeLabel = (contributionType) => {
+    const typeMap = {
+      'services': t('clubs.SportsPartners.contributionTypes.services'),
+      'goods': t('clubs.SportsPartners.contributionTypes.goods'),
+      'discounts': t('clubs.SportsPartners.contributionTypes.discounts'),
+      'financial': t('clubs.SportsPartners.contributionTypes.financial')
+    };
+    return typeMap[contributionType] || contributionType;
+  };
+
+  const getPartnershipTypeLabel = (partnershipType) => {
+    const { healthTerms, sportsTerms, educationTerms } = getPartnershipCategoryMapping();
+    
+    if (healthTerms.includes(partnershipType)) {
+      return t('clubs.SportsPartners.partnershipTypes.health');
+    }
+    if (sportsTerms.includes(partnershipType)) {
+      return t('clubs.SportsPartners.partnershipTypes.sports');
+    }
+    if (educationTerms.includes(partnershipType)) {
+      return t('clubs.SportsPartners.partnershipTypes.education');
+    }
+    return partnershipType;
+  };
+
   return (
     <section id="sports-partners" className="sports-partners-section">
       <div className="sports-partners-container">
         
-        {/* Header */}
         <div className="sports-partners-header">
           <div className="sports-partners-header-content">
             <div className="sports-partners-badge">
               <FontAwesomeIcon icon={faGem} />
-              <span>Нашата мрежа</span>
+              <span>{t('clubs.SportsPartners.header.badge')}</span>
             </div>
             <h2 className="sports-partners-title">
-              Партньори и спонсори
+              {t('clubs.SportsPartners.header.title')}
             </h2>
             <p className="sports-partners-subtitle">
-              Благодарим на всички партньори, които подкрепят нашата мисия за активно и здравословно стареене
+              {t('clubs.SportsPartners.header.subtitle')}
             </p>
           </div>
           
@@ -207,7 +288,7 @@ export const SportsPartners = ({ club }) => {
               </div>
               <div className="sports-partners-stat-content">
                 <span className="sports-partners-stat-number">{stats.totalPartners}</span>
-                <span className="sports-partners-stat-label">Партньори</span>
+                <span className="sports-partners-stat-label">{t('clubs.SportsPartners.stats.partners')}</span>
               </div>
             </div>
             
@@ -218,7 +299,7 @@ export const SportsPartners = ({ club }) => {
                 </div>
                 <div className="sports-partners-stat-content">
                   <span className="sports-partners-stat-number">{stats.sponsors}</span>
-                  <span className="sports-partners-stat-label">Спонсори</span>
+                  <span className="sports-partners-stat-label">{t('clubs.SportsPartners.stats.sponsors')}</span>
                 </div>
               </div>
             )}
@@ -230,14 +311,13 @@ export const SportsPartners = ({ club }) => {
                 </div>
                 <div className="sports-partners-stat-content">
                   <span className="sports-partners-stat-number">{stats.medicalPartners}</span>
-                  <span className="sports-partners-stat-label">Медицински</span>
+                  <span className="sports-partners-stat-label">{t('clubs.SportsPartners.stats.medical')}</span>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Category Filters */}
         <div className="sports-partners-filters">
           {categories.map(category => {
             const count = category.key === 'all' ? allPartners.length :
@@ -258,7 +338,6 @@ export const SportsPartners = ({ club }) => {
           })}
         </div>
 
-        {/* Partners Grid */}
         <div className="sports-partners-content">
           <div className="sports-partners-grid">
             {filteredPartners.map((partner, index) => (
@@ -267,7 +346,6 @@ export const SportsPartners = ({ club }) => {
                 className="sports-partners-card"
                 style={{ '--card-delay': `${index * 0.1}s` }}
               >
-                {/* Partner Header */}
                 <div className="sports-partners-card-header">
                   <div 
                     className="sports-partners-card-icon"
@@ -279,9 +357,7 @@ export const SportsPartners = ({ club }) => {
                   <div className="sports-partners-card-title">
                     <h3>{partner.name}</h3>
                     <div className="sports-partners-card-type">
-                      {partner.type === 'sponsor' && 'Спонсор'}
-                      {partner.type === 'partnership' && 'Партньор'}
-                      {partner.type === 'medical' && 'Медицински партньор'}
+                      {getPartnerTypeLabel(partner)}
                     </div>
                   </div>
                   
@@ -290,13 +366,11 @@ export const SportsPartners = ({ club }) => {
                   </div>
                 </div>
 
-                {/* Partner Content */}
                 <div className="sports-partners-card-content">
                   <p className="sports-partners-card-description">
                     {partner.description}
                   </p>
 
-                  {/* Contact Details */}
                   {(partner.contact || partner.address || partner.workingHours) && (
                     <div className="sports-partners-contact-details">
                       {partner.contact && (
@@ -323,65 +397,58 @@ export const SportsPartners = ({ club }) => {
                       {partner.discount && (
                         <div className="sports-partners-discount">
                           <FontAwesomeIcon icon={faPercent} />
-                          <span>Отстъпка: {partner.discount}</span>
+                          <span>{t('clubs.SportsPartners.labels.discount')}: {partner.discount}</span>
                         </div>
                       )}
                     </div>
                   )}
 
-                  {/* Contribution/Service Details */}
                   {partner.type === 'sponsor' && (
                     <div className="sports-partners-contribution">
                       <div className="sports-partners-contribution-label">
                         <FontAwesomeIcon icon={faGift} />
-                        Приносът:
+                        {t('clubs.SportsPartners.labels.contribution')}:
                       </div>
                       <div className="sports-partners-contribution-value">
                         {partner.contribution}
                       </div>
                       {partner.contributionType && (
                         <div className="sports-partners-contribution-type">
-                          {partner.contributionType === 'services' && 'Услуги'}
-                          {partner.contributionType === 'goods' && 'Стоки'}
-                          {partner.contributionType === 'discounts' && 'Отстъпки'}
-                          {partner.contributionType === 'financial' && 'Финансова подкрепа'}
+                          {getContributionTypeLabel(partner.contributionType)}
                         </div>
                       )}
                     </div>
                   )}
 
-                  {/* Partnership Details */}
                   {partner.type === 'partnership' && (
                     <div className="sports-partners-partnership-details">
                       <div className="sports-partners-partnership-type">
                         <FontAwesomeIcon icon={faHandshake} />
                         <span>
-                          {partner.partnershipType === 'здравно' && 'Здравно партньорство'}
-                          {partner.partnershipType === 'спортно' && 'Спортно партньорство'}
-                          {partner.partnershipType === 'образователно' && 'Образователно партньорство'}
+                          {getPartnershipTypeLabel(partner.partnershipType)}
                         </span>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* Partner Actions */}
                 <div className="sports-partners-card-actions">
                   {partner.contact && (
                     <>
                       <button 
                         className="sports-partners-action-btn primary"
                         onClick={() => handleCall(partner.contact)}
+                        title={t('clubs.SportsPartners.actions.call')}
                       >
                         <FontAwesomeIcon icon={faPhone} />
-                        <span>Обади се</span>
+                        <span>{t('clubs.SportsPartners.actions.call')}</span>
                       </button>
                       <button 
                         className="sports-partners-action-btn secondary"
                         onClick={() => handleCopyPhone(partner.contact)}
+                        title={t('clubs.SportsPartners.actions.copy')}
                       >
                         <FontAwesomeIcon icon={faCopy} />
-                        {/* <span>Копирай</span> */}
                       </button>
                     </>
                   )}
@@ -390,9 +457,10 @@ export const SportsPartners = ({ club }) => {
                     <button 
                       className="sports-partners-action-btn primary"
                       onClick={() => handleWebsite(partner.website)}
+                      title={t('clubs.SportsPartners.actions.website')}
                     >
                       <FontAwesomeIcon icon={faGlobe} />
-                      <span>Уебсайт</span>
+                      <span>{t('clubs.SportsPartners.actions.website')}</span>
                     </button>
                   )}
                   
@@ -400,9 +468,10 @@ export const SportsPartners = ({ club }) => {
                     <button 
                       className="sports-partners-action-btn secondary"
                       onClick={() => handleShowDetails(partner)}
+                      title={t('clubs.SportsPartners.actions.details')}
                     >
                       <FontAwesomeIcon icon={faInfoCircle} />
-                      <span>Детайли</span>
+                      <span>{t('clubs.SportsPartners.actions.details')}</span>
                     </button>
                   )}
                 </div>
@@ -411,11 +480,10 @@ export const SportsPartners = ({ club }) => {
           </div>
         </div>
 
-        {/* Partnership Benefits */}
         <div className="sports-partners-benefits">
           <div className="sports-partners-benefits-header">
-            <h3>Предимства за нашите членове</h3>
-            <p>Благодарение на партньорствата ни, членовете получават:</p>
+            <h3>{t('clubs.SportsPartners.benefits.title')}</h3>
+            <p>{t('clubs.SportsPartners.benefits.subtitle')}</p>
           </div>
           
           <div className="sports-partners-benefits-grid">
@@ -423,58 +491,54 @@ export const SportsPartners = ({ club }) => {
               <div className="sports-partners-benefit-icon">
                 <FontAwesomeIcon icon={faPercent} />
               </div>
-              <h4>Отстъпки</h4>
-              <p>Специални цени за спортни стоки, медицински услуги и хранителни добавки</p>
+              <h4>{t('clubs.SportsPartners.benefits.discounts.title')}</h4>
+              <p>{t('clubs.SportsPartners.benefits.discounts.description')}</p>
             </div>
             
             <div className="sports-partners-benefit-card">
               <div className="sports-partners-benefit-icon">
                 <FontAwesomeIcon icon={faStethoscope} />
               </div>
-              <h4>Здравни услуги</h4>
-              <p>Достъп до специализирани медицински прегледи и консултации</p>
+              <h4>{t('clubs.SportsPartners.benefits.healthServices.title')}</h4>
+              <p>{t('clubs.SportsPartners.benefits.healthServices.description')}</p>
             </div>
             
             <div className="sports-partners-benefit-card">
               <div className="sports-partners-benefit-icon">
                 <FontAwesomeIcon icon={faTrophy} />
               </div>
-              <h4>Спортни съоръжения</h4>
-              <p>Безплатен или преференциален достъп до спортни зали и басейни</p>
+              <h4>{t('clubs.SportsPartners.benefits.sportsFacilities.title')}</h4>
+              <p>{t('clubs.SportsPartners.benefits.sportsFacilities.description')}</p>
             </div>
             
             <div className="sports-partners-benefit-card">
               <div className="sports-partners-benefit-icon">
                 <FontAwesomeIcon icon={faGraduationCap} />
               </div>
-              <h4>Обучения</h4>
-              <p>Участие в специализирани курсове и семинари за здравословен живот</p>
+              <h4>{t('clubs.SportsPartners.benefits.training.title')}</h4>
+              <p>{t('clubs.SportsPartners.benefits.training.description')}</p>
             </div>
           </div>
         </div>
 
-        {/* Partnership Call to Action */}
         <div className="sports-partners-cta">
           <div className="sports-partners-cta-content">
-            <h3>Искате да станете наш партньор?</h3>
-            <p>
-              Присъединете се към нашата мисия за подкрепа на активния и здравословен начин на живот
-              сред възрастните хора в нашия регион.
-            </p>
+            <h3>{t('clubs.SportsPartners.cta.title')}</h3>
+            <p>{t('clubs.SportsPartners.cta.subtitle')}</p>
             <div className="sports-partners-cta-actions">
               <button 
                 className="sports-partners-cta-btn primary"
                 onClick={handleContactUs}
               >
                 <FontAwesomeIcon icon={faHandshake} />
-                <span>Станете партньор</span>
+                <span>{t('clubs.SportsPartners.cta.becomePartner')}</span>
               </button>
               <button 
                 className="sports-partners-cta-btn secondary"
                 onClick={handleContactUs}
               >
                 <FontAwesomeIcon icon={faEnvelope} />
-                <span>Свържете се с нас</span>
+                <span>{t('clubs.SportsPartners.cta.contactUs')}</span>
               </button>
             </div>
           </div>
@@ -482,21 +546,20 @@ export const SportsPartners = ({ club }) => {
           <div className="sports-partners-cta-stats">
             <div className="sports-partners-cta-stat">
               <span className="sports-partners-cta-stat-number">{club.membership?.totalMembers || 0}</span>
-              <span className="sports-partners-cta-stat-label">Активни членове</span>
+              <span className="sports-partners-cta-stat-label">{t('clubs.SportsPartners.cta.stats.activeMembers')}</span>
             </div>
             <div className="sports-partners-cta-stat">
               <span className="sports-partners-cta-stat-number">{club.stats?.yearsActive || 0}</span>
-              <span className="sports-partners-cta-stat-label">Години опит</span>
+              <span className="sports-partners-cta-stat-label">{t('clubs.SportsPartners.cta.stats.yearsExperience')}</span>
             </div>
             <div className="sports-partners-cta-stat">
               <span className="sports-partners-cta-stat-number">{club.metadata?.rating || 0}</span>
-              <span className="sports-partners-cta-stat-label">Рейтинг</span>
+              <span className="sports-partners-cta-stat-label">{t('clubs.SportsPartners.cta.stats.rating')}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Partner Details Modal */}
       {selectedPartner && (
         <div className="sports-partners-modal-overlay" onClick={() => setSelectedPartner(null)}>
           <div className="sports-partners-modal" onClick={(e) => e.stopPropagation()}>
@@ -505,6 +568,7 @@ export const SportsPartners = ({ club }) => {
               <button 
                 onClick={() => setSelectedPartner(null)}
                 className="sports-partners-modal-close"
+                title={t('clubs.SportsPartners.modal.close')}
               >
                 <FontAwesomeIcon icon={faTimes} />
               </button>
@@ -516,11 +580,17 @@ export const SportsPartners = ({ club }) => {
               {selectedPartner.contact && (
                 <div className="sports-partners-modal-detail">
                   <FontAwesomeIcon icon={faPhone} />
-                  <span>Телефон: {selectedPartner.contact}</span>
-                  <button onClick={() => handleCall(selectedPartner.contact)}>
+                  <span>{t('clubs.SportsPartners.modal.phone')}: {selectedPartner.contact}</span>
+                  <button 
+                    onClick={() => handleCall(selectedPartner.contact)}
+                    title={t('clubs.SportsPartners.actions.call')}
+                  >
                     <FontAwesomeIcon icon={faPhone} />
                   </button>
-                  <button onClick={() => handleCopyPhone(selectedPartner.contact)}>
+                  <button 
+                    onClick={() => handleCopyPhone(selectedPartner.contact)}
+                    title={t('clubs.SportsPartners.actions.copy')}
+                  >
                     <FontAwesomeIcon icon={faCopy} />
                   </button>
                 </div>
@@ -529,22 +599,25 @@ export const SportsPartners = ({ club }) => {
               {selectedPartner.address && (
                 <div className="sports-partners-modal-detail">
                   <FontAwesomeIcon icon={faMapMarkerAlt} />
-                  <span>Адрес: {selectedPartner.address}</span>
+                  <span>{t('clubs.SportsPartners.modal.address')}: {selectedPartner.address}</span>
                 </div>
               )}
               
               {selectedPartner.workingHours && (
                 <div className="sports-partners-modal-detail">
                   <FontAwesomeIcon icon={faClock} />
-                  <span>Работно време: {selectedPartner.workingHours}</span>
+                  <span>{t('clubs.SportsPartners.modal.workingHours')}: {selectedPartner.workingHours}</span>
                 </div>
               )}
               
               {selectedPartner.website && (
                 <div className="sports-partners-modal-detail">
                   <FontAwesomeIcon icon={faGlobe} />
-                  <span>Уебсайт: {selectedPartner.website}</span>
-                  <button onClick={() => handleWebsite(selectedPartner.website)}>
+                  <span>{t('clubs.SportsPartners.modal.website')}: {selectedPartner.website}</span>
+                  <button 
+                    onClick={() => handleWebsite(selectedPartner.website)}
+                    title={t('clubs.SportsPartners.actions.website')}
+                  >
                     <FontAwesomeIcon icon={faExternalLinkAlt} />
                   </button>
                 </div>
@@ -553,7 +626,7 @@ export const SportsPartners = ({ club }) => {
               {selectedPartner.discount && (
                 <div className="sports-partners-modal-detail">
                   <FontAwesomeIcon icon={faPercent} />
-                  <span>Отстъпка: {selectedPartner.discount}</span>
+                  <span>{t('clubs.SportsPartners.modal.discount')}: {selectedPartner.discount}</span>
                 </div>
               )}
             </div>
@@ -561,31 +634,37 @@ export const SportsPartners = ({ club }) => {
         </div>
       )}
 
-      {/* Contact Modal */}
       {showContactModal && (
         <div className="sports-partners-modal-overlay" onClick={() => setShowContactModal(false)}>
           <div className="sports-partners-modal" onClick={(e) => e.stopPropagation()}>
             <div className="sports-partners-modal-header">
-              <h3>Свържете се с нас</h3>
+              <h3>{t('clubs.SportsPartners.contactModal.title')}</h3>
               <button 
                 onClick={() => setShowContactModal(false)}
                 className="sports-partners-modal-close"
+                title={t('clubs.SportsPartners.modal.close')}
               >
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
             
             <div className="sports-partners-modal-content">
-              <p>За повече информация за партньорство се свържете с нас:</p>
+              <p>{t('clubs.SportsPartners.contactModal.subtitle')}</p>
               
               {club.contacts?.phone && (
                 <div className="sports-partners-modal-detail">
                   <FontAwesomeIcon icon={faPhone} />
-                  <span>Телефон: {club.contacts.phone}</span>
-                  <button onClick={() => handleCall(club.contacts.phone)}>
+                  <span>{t('clubs.SportsPartners.modal.phone')}: {club.contacts.phone}</span>
+                  <button 
+                    onClick={() => handleCall(club.contacts.phone)}
+                    title={t('clubs.SportsPartners.actions.call')}
+                  >
                     <FontAwesomeIcon icon={faPhone} />
                   </button>
-                  <button onClick={() => handleCopyPhone(club.contacts.phone)}>
+                  <button 
+                    onClick={() => handleCopyPhone(club.contacts.phone)}
+                    title={t('clubs.SportsPartners.actions.copy')}
+                  >
                     <FontAwesomeIcon icon={faCopy} />
                   </button>
                 </div>
@@ -594,8 +673,11 @@ export const SportsPartners = ({ club }) => {
               {club.contacts?.email && (
                 <div className="sports-partners-modal-detail">
                   <FontAwesomeIcon icon={faEnvelope} />
-                  <span>Имейл: {club.contacts.email}</span>
-                  <button onClick={() => window.open(`mailto:${club.contacts.email}`, '_self')}>
+                  <span>{t('clubs.SportsPartners.modal.email')}: {club.contacts.email}</span>
+                  <button 
+                    onClick={() => window.open(`mailto:${club.contacts.email}`, '_self')}
+                    title={t('clubs.SportsPartners.actions.email')}
+                  >
                     <FontAwesomeIcon icon={faEnvelope} />
                   </button>
                 </div>
@@ -604,7 +686,7 @@ export const SportsPartners = ({ club }) => {
               {club.location?.address && (
                 <div className="sports-partners-modal-detail">
                   <FontAwesomeIcon icon={faMapMarkerAlt} />
-                  <span>Адрес: {club.location.address}</span>
+                  <span>{t('clubs.SportsPartners.modal.address')}: {club.location.address}</span>
                 </div>
               )}
             </div>

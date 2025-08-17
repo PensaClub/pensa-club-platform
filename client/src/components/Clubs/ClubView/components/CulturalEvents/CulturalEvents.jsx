@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalendarAlt,
@@ -30,6 +31,7 @@ import {
 import './culturalEvents.css';
 
 export const CulturalEvents = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('upcoming');
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
@@ -63,17 +65,29 @@ export const CulturalEvents = ({ club }) => {
   });
   const [formStatus, setFormStatus] = useState(null);
 
-  // Проверяваме дали има събития
   const events = club?.activities?.events || [];
   const trips = club?.activities?.trips || [];
   
-  // Комбинираме събития и екскурзии
+  const getEventTypes = () => ({
+    'cultural': { icon: faTheaterMasks, color: '#8b5cf6', label: t('clubs.CulturalEvents.eventTypes.cultural') },
+    'social': { icon: faUsers, color: '#10b981', label: t('clubs.CulturalEvents.eventTypes.social') },
+    'educational': { icon: faGraduationCap, color: '#3b82f6', label: t('clubs.CulturalEvents.eventTypes.educational') },
+    'traditional': { icon: faTree, color: '#f59e0b', label: t('clubs.CulturalEvents.eventTypes.traditional') },
+    'celebration': { icon: faBirthdayCake, color: '#ef4444', label: t('clubs.CulturalEvents.eventTypes.celebration') },
+    'charity': { icon: faHeart, color: '#ec4899', label: t('clubs.CulturalEvents.eventTypes.charity') },
+    'community': { icon: faUsers, color: '#06b6d4', label: t('clubs.CulturalEvents.eventTypes.community') },
+    'sports_competition': { icon: faStar, color: '#f97316', label: t('clubs.CulturalEvents.eventTypes.sports') },
+    'wellness_event': { icon: faHeart, color: '#84cc16', label: t('clubs.CulturalEvents.eventTypes.wellness') },
+    'sports_festival': { icon: faUsers, color: '#8b5cf6', label: t('clubs.CulturalEvents.eventTypes.sportsGames') },
+    'swimming_competition': { icon: faUsers, color: '#0ea5e9', label: t('clubs.CulturalEvents.eventTypes.swimming') },
+    'trip': { icon: faMapMarkerAlt, color: '#84cc16', label: t('clubs.CulturalEvents.eventTypes.trips') }
+  });
+
   const allEvents = [
     ...events.map(event => ({
       ...event,
       isTrip: false,
-      location: event.location || club?.location?.address || 'Не е посочена',
-      // ПОПРАВЕНО: Използваме правилните снимки от събитието
+      location: event.location || club?.location?.address || t('clubs.CulturalEvents.notSpecified'),
       images: event.images && event.images.length > 0 ? event.images : (event.image ? [{
         src: event.image,
         alt: event.title,
@@ -89,38 +103,23 @@ export const CulturalEvents = ({ club }) => {
     ...trips.map(trip => ({
       ...trip,
       isTrip: true,
-      title: `Екскурзия до ${trip.destination}`,
+      title: t('clubs.CulturalEvents.tripTo', { destination: trip.destination }),
       type: 'trip',
       location: trip.destination,
       images: trip.images && trip.images.length > 0 ? trip.images : [{
         src: `https://picsum.photos/800/600?random=${Math.floor(Math.random() * 1000)}`,
-        alt: `Екскурзия до ${trip.destination}`,
-        caption: `Екскурзия до ${trip.destination}`,
+        alt: t('clubs.CulturalEvents.tripTo', { destination: trip.destination }),
+        caption: t('clubs.CulturalEvents.tripTo', { destination: trip.destination }),
         isMain: true
       }]
     }))
   ];
 
-  // Ако няма събития, не показваме компонента
   if (allEvents.length === 0) {
     return null;
   }
 
-  const eventTypes = {
-    'cultural': { icon: faTheaterMasks, color: '#8b5cf6', label: 'Културни' },
-    'social': { icon: faUsers, color: '#10b981', label: 'Социални' },
-    'educational': { icon: faGraduationCap, color: '#3b82f6', label: 'Образователни' },
-    'traditional': { icon: faTree, color: '#f59e0b', label: 'Традиционни' },
-    'celebration': { icon: faBirthdayCake, color: '#ef4444', label: 'Празници' },
-    'charity': { icon: faHeart, color: '#ec4899', label: 'Благотворителни' },
-    'community': { icon: faUsers, color: '#06b6d4', label: 'Общностни' },
-    'sports_competition': { icon: faStar, color: '#f97316', label: 'Спортни' },
-    'wellness_event': { icon: faHeart, color: '#84cc16', label: 'Wellness' },
-    'sports_festival': { icon: faUsers, color: '#8b5cf6', label: 'Спортни игри' },
-    'swimming_competition': { icon: faUsers, color: '#0ea5e9', label: 'Плуване' },
-    'trip': { icon: faMapMarkerAlt, color: '#84cc16', label: 'Екскурзии' }
-  };
-
+  const eventTypes = getEventTypes();
   const currentDate = new Date();
   const upcomingEvents = allEvents.filter(event => new Date(event.date) >= currentDate);
   const pastEvents = allEvents.filter(event => new Date(event.date) < currentDate);
@@ -145,11 +144,24 @@ export const CulturalEvents = ({ club }) => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', { 
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    
+    return date.toLocaleDateString(locale, { 
       day: 'numeric', 
       month: 'long', 
       year: 'numeric' 
     });
+  };
+
+  const formatShortMonth = (dateString) => {
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    
+    return date.toLocaleDateString(locale, { month: 'short' });
   };
 
   const isUpcoming = (dateString) => {
@@ -164,9 +176,7 @@ export const CulturalEvents = ({ club }) => {
     return mainImg ? mainImg.src : event.images[0].src;
   };
 
-  // НАПЪЛНО ПОПРАВЕНА Gallery Functions
   const openGallery = (event) => {
-    console.log('Opening gallery for event:', event);
     setGalleryEvent(event);
     setCurrentMediaIndex(0);
     setShowGalleryModal(true);
@@ -182,13 +192,11 @@ export const CulturalEvents = ({ club }) => {
     setImageLoading(false);
   };
 
-  // НАПЪЛНО ПОПРАВЕНА getAllMedia функция
   const getAllMedia = (event) => {
     if (!event) return [];
     
     const media = [];
     
-    // Добавяме снимките от събитието
     if (event.images && Array.isArray(event.images) && event.images.length > 0) {
       event.images.forEach((img, index) => {
         media.push({ 
@@ -200,7 +208,6 @@ export const CulturalEvents = ({ club }) => {
       });
     }
     
-    // Добавяме видеата от събитието
     if (event.videos && Array.isArray(event.videos) && event.videos.length > 0) {
       event.videos.forEach((video, index) => {
         media.push({ 
@@ -212,7 +219,6 @@ export const CulturalEvents = ({ club }) => {
       });
     }
     
-    console.log('All media for event:', media);
     return media;
   };
 
@@ -227,15 +233,12 @@ export const CulturalEvents = ({ club }) => {
       newIndex = (currentMediaIndex - 1 + allMedia.length) % allMedia.length;
     }
     
-    console.log('Navigating to index:', newIndex);
     setCurrentMediaIndex(newIndex);
     setIsVideoPlaying(false);
     setImageLoading(true);
   };
 
-  // ПОПРАВЕНА setCurrentMediaIndex за миниатюрите
   const selectMedia = (index) => {
-    console.log('Selecting media at index:', index);
     setCurrentMediaIndex(index);
     setIsVideoPlaying(false);
     setImageLoading(true);
@@ -253,7 +256,6 @@ export const CulturalEvents = ({ club }) => {
     setImageLoading(false);
   };
 
-  // Event Actions
   const handleRegisterForEvent = (event) => {
     setSelectedEvent(event);
     setRegisterForm(prev => ({
@@ -265,7 +267,6 @@ export const CulturalEvents = ({ club }) => {
 
   const handleEventInfo = (event) => {
     setSelectedEvent(event);
-    // Show detailed info - можеш да добавиш отделен модал за детайли
   };
 
   const handleShareEvent = (event) => {
@@ -278,11 +279,10 @@ export const CulturalEvents = ({ club }) => {
     } else {
       const shareUrl = window.location.href;
       navigator.clipboard.writeText(`${event.title} - ${shareUrl}`);
-      alert('Линкът е копиран в клипборда!');
+      alert(t('clubs.CulturalEvents.messages.linkCopied'));
     }
   };
 
-  // Subscribe Modal
   const openSubscribeModal = () => {
     setShowSubscribeModal(true);
   };
@@ -298,7 +298,6 @@ export const CulturalEvents = ({ club }) => {
     setFormStatus(null);
   };
 
-  // Contact Modal
   const openContactModal = () => {
     setShowContactModal(true);
   };
@@ -328,7 +327,6 @@ export const CulturalEvents = ({ club }) => {
     setFormStatus(null);
   };
 
-  // Form handlers
   const handleSubscribeFormChange = (field, value) => {
     setSubscribeForm(prev => ({
       ...prev,
@@ -364,20 +362,15 @@ export const CulturalEvents = ({ club }) => {
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Абониране за бюлетин - ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте заявка за абониране за бюлетин от ${club.name}:
-
-Име: ${subscribeForm.name}
-Имейл: ${subscribeForm.email}
-Телефон: ${subscribeForm.phone || 'Не е посочен'}
-Интереси: ${subscribeForm.interests.join(', ') || 'Всички събития'}
-
----
-Изпратено от ${subscribeForm.email}
-      `);
+      const subject = encodeURIComponent(t('clubs.CulturalEvents.modals.subscribe.emailSubject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.CulturalEvents.modals.subscribe.emailBody', {
+        clubName: club.name,
+        name: subscribeForm.name,
+        email: subscribeForm.email,
+        phone: subscribeForm.phone || t('clubs.CulturalEvents.form.notSpecified'),
+        interests: subscribeForm.interests.join(', ') || t('clubs.CulturalEvents.modals.subscribe.allEvents'),
+        senderEmail: subscribeForm.email
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -398,23 +391,16 @@ export const CulturalEvents = ({ club }) => {
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Записване за събитие - ${registerForm.eventTitle}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте заявка за записване за събитие от ${club.name}:
-
-Събитие: ${registerForm.eventTitle}
-Име: ${registerForm.name}
-Имейл: ${registerForm.email}
-Телефон: ${registerForm.phone || 'Не е посочен'}
-
-Съобщение:
-${registerForm.message || 'Няма допълнително съобщение'}
-
----
-Изпратено от ${registerForm.email}
-      `);
+      const subject = encodeURIComponent(t('clubs.CulturalEvents.modals.register.emailSubject', { eventTitle: registerForm.eventTitle }));
+      const body = encodeURIComponent(t('clubs.CulturalEvents.modals.register.emailBody', {
+        clubName: club.name,
+        eventTitle: registerForm.eventTitle,
+        name: registerForm.name,
+        email: registerForm.email,
+        phone: registerForm.phone || t('clubs.CulturalEvents.form.notSpecified'),
+        message: registerForm.message || t('clubs.CulturalEvents.form.noMessage'),
+        senderEmail: registerForm.email
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -435,23 +421,16 @@ ${registerForm.message || 'Няма допълнително съобщение'
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(contactForm.subject || `Запитване за събития - ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте запитване за събития от ${club.name}:
-
-Име: ${contactForm.name}
-Имейл: ${contactForm.email}
-Телефон: ${contactForm.phone || 'Не е посочен'}
-Тема: ${contactForm.subject || 'Общо запитване'}
-
-Съобщение:
-${contactForm.message}
-
----
-Изпратено от ${contactForm.email}
-      `);
+      const subject = encodeURIComponent(contactForm.subject || t('clubs.CulturalEvents.modals.contact.defaultSubject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.CulturalEvents.modals.contact.emailBody', {
+        clubName: club.name,
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone || t('clubs.CulturalEvents.form.notSpecified'),
+        subject: contactForm.subject || t('clubs.CulturalEvents.modals.contact.generalInquiry'),
+        message: contactForm.message,
+        senderEmail: contactForm.email
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -471,26 +450,24 @@ ${contactForm.message}
     <section id="cultural-events" className="cultural-events-main-section">
       <div className="cultural-events-container">
         
-        {/* Header */}
         <div className="cultural-events-header">
           <div className="cultural-events-badge">
             <FontAwesomeIcon icon={faCalendarAlt} />
-            <span>Събития и мероприятия</span>
+            <span>{t('clubs.CulturalEvents.header.badge')}</span>
           </div>
-          <h2 className="cultural-events-title">Културният ни календар</h2>
+          <h2 className="cultural-events-title">{t('clubs.CulturalEvents.header.title')}</h2>
           <p className="cultural-events-subtitle">
-            Открийте вълнуващи събития, концерти и празненства през цялата година
+            {t('clubs.CulturalEvents.header.subtitle')}
           </p>
         </div>
 
-        {/* Featured Event */}
         {featuredEvent && (
           <div className="cultural-events-featured">
             <div className="cultural-events-featured-content">
               <div className="cultural-events-featured-info">
                 <div className="cultural-events-featured-badge">
                   <FontAwesomeIcon icon={faStar} />
-                  <span>Препоръчано събитие</span>
+                  <span>{t('clubs.CulturalEvents.featured.badge')}</span>
                 </div>
                 <h3>{featuredEvent.title}</h3>
                 <p>{featuredEvent.description}</p>
@@ -498,7 +475,7 @@ ${contactForm.message}
                 <div className="cultural-events-featured-details">
                   <div className="cultural-events-featured-detail">
                     <FontAwesomeIcon icon={faCalendarAlt} />
-                    <span>{formatDate(featuredEvent.date)} {featuredEvent.time && `в ${featuredEvent.time}`}</span>
+                    <span>{formatDate(featuredEvent.date)} {featuredEvent.time && t('clubs.CulturalEvents.featured.timeAt', { time: featuredEvent.time })}</span>
                   </div>
                   <div className="cultural-events-featured-detail">
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
@@ -507,7 +484,7 @@ ${contactForm.message}
                   {featuredEvent.participants && (
                     <div className="cultural-events-featured-detail">
                       <FontAwesomeIcon icon={faUsers} />
-                      <span>{featuredEvent.participants} участници</span>
+                      <span>{featuredEvent.participants} {t('clubs.CulturalEvents.participants')}</span>
                     </div>
                   )}
                   {featuredEvent.price && (
@@ -535,7 +512,7 @@ ${contactForm.message}
                       onClick={() => handleRegisterForEvent(featuredEvent)}
                     >
                       <FontAwesomeIcon icon={faTicketAlt} />
-                      Запишете се
+                      {t('clubs.CulturalEvents.buttons.register')}
                     </button>
                   )}
                   <button 
@@ -543,7 +520,7 @@ ${contactForm.message}
                     onClick={() => openGallery(featuredEvent)}
                   >
                     <FontAwesomeIcon icon={faImages} />
-                    Галерия
+                    {t('clubs.CulturalEvents.buttons.gallery')}
                   </button>
                 </div>
               </div>
@@ -566,14 +543,13 @@ ${contactForm.message}
           </div>
         )}
 
-        {/* Filter Tabs */}
         <div className="cultural-events-filters">
           <button 
             className={`cultural-events-filter ${activeFilter === 'upcoming' ? 'active' : ''}`}
             onClick={() => setActiveFilter('upcoming')}
           >
             <FontAwesomeIcon icon={faCalendarAlt} />
-            Предстоящи ({upcomingEvents.length})
+            {t('clubs.CulturalEvents.filters.upcoming')} ({upcomingEvents.length})
           </button>
           {pastEvents.length > 0 && (
             <button 
@@ -581,7 +557,7 @@ ${contactForm.message}
               onClick={() => setActiveFilter('past')}
             >
               <FontAwesomeIcon icon={faImages} />
-              Минали събития ({pastEvents.length})
+              {t('clubs.CulturalEvents.filters.past')} ({pastEvents.length})
             </button>
           )}
           {allEvents.some(e => e.type === 'cultural') && (
@@ -590,7 +566,7 @@ ${contactForm.message}
               onClick={() => setActiveFilter('cultural')}
             >
               <FontAwesomeIcon icon={faTheaterMasks} />
-              Културни
+              {t('clubs.CulturalEvents.filters.cultural')}
             </button>
           )}
           {allEvents.some(e => e.type === 'traditional') && (
@@ -599,12 +575,11 @@ ${contactForm.message}
               onClick={() => setActiveFilter('traditional')}
             >
               <FontAwesomeIcon icon={faTree} />
-              Традиционни
+              {t('clubs.CulturalEvents.filters.traditional')}
             </button>
           )}
         </div>
 
-        {/* Events Grid */}
         <div className="cultural-events-grid">
           {getEventsToShow().map((event) => (
             <div key={event.id} className="cultural-events-card">
@@ -629,7 +604,7 @@ ${contactForm.message}
                     {new Date(event.date).getDate()}
                   </div>
                   <div className="cultural-events-card-month">
-                    {new Date(event.date).toLocaleDateString('bg-BG', { month: 'short' })}
+                    {formatShortMonth(event.date)}
                   </div>
                 </div>
                 
@@ -651,7 +626,7 @@ ${contactForm.message}
                     {event.participants && (
                       <div className="cultural-events-card-detail">
                         <FontAwesomeIcon icon={faUsers} />
-                        <span>{event.participants} участници</span>
+                        <span>{event.participants} {t('clubs.CulturalEvents.participants')}</span>
                       </div>
                     )}
                     {event.price && (
@@ -669,7 +644,7 @@ ${contactForm.message}
                   <button 
                     className="cultural-events-card-btn primary"
                     onClick={() => handleRegisterForEvent(event)}
-                    title="Запишете се за събитието"
+                    title={t('clubs.CulturalEvents.tooltips.register')}
                   >
                     <FontAwesomeIcon icon={faTicketAlt} />
                   </button>
@@ -677,21 +652,21 @@ ${contactForm.message}
                 <button 
                   className="cultural-events-card-btn secondary"
                   onClick={() => openGallery(event)}
-                  title="Вижте галерията"
+                  title={t('clubs.CulturalEvents.tooltips.gallery')}
                 >
                   <FontAwesomeIcon icon={faImages} />
                 </button>
                 <button 
                   className="cultural-events-card-btn secondary"
                   onClick={() => handleShareEvent(event)}
-                  title="Споделете събитието"
+                  title={t('clubs.CulturalEvents.tooltips.share')}
                 >
                   <FontAwesomeIcon icon={faShare} />
                 </button>
                 <button 
                   className="cultural-events-card-btn secondary"
                   onClick={() => handleEventInfo(event)}
-                  title="Повече информация"
+                  title={t('clubs.CulturalEvents.tooltips.info')}
                 >
                   <FontAwesomeIcon icon={faInfoCircle} />
                 </button>
@@ -700,7 +675,6 @@ ${contactForm.message}
           ))}
         </div>
 
-        {/* Statistics - само ако има данни */}
         {(club.stats || events.length > 0) && (
           <div className="cultural-events-stats">
             <div className="cultural-events-stats-grid">
@@ -710,7 +684,7 @@ ${contactForm.message}
                 </div>
                 <div className="cultural-events-stat-info">
                   <div className="cultural-events-stat-number">{allEvents.length}+</div>
-                  <div className="cultural-events-stat-label">Събития годишно</div>
+                  <div className="cultural-events-stat-label">{t('clubs.CulturalEvents.stats.eventsYearly')}</div>
                 </div>
               </div>
               
@@ -721,7 +695,7 @@ ${contactForm.message}
                   </div>
                   <div className="cultural-events-stat-info">
                     <div className="cultural-events-stat-number">{club.stats.events}+</div>
-                    <div className="cultural-events-stat-label">Общо участници</div>
+                    <div className="cultural-events-stat-label">{t('clubs.CulturalEvents.stats.totalParticipants')}</div>
                   </div>
                 </div>
               )}
@@ -733,7 +707,7 @@ ${contactForm.message}
                   </div>
                   <div className="cultural-events-stat-info">
                     <div className="cultural-events-stat-number">{club.stats.performances}+</div>
-                    <div className="cultural-events-stat-label">Концерти и представления</div>
+                    <div className="cultural-events-stat-label">{t('clubs.CulturalEvents.stats.concerts')}</div>
                   </div>
                 </div>
               )}
@@ -745,7 +719,7 @@ ${contactForm.message}
                   </div>
                   <div className="cultural-events-stat-info">
                     <div className="cultural-events-stat-number">{club.metadata.rating}</div>
-                    <div className="cultural-events-stat-label">Средна оценка</div>
+                    <div className="cultural-events-stat-label">{t('clubs.CulturalEvents.stats.averageRating')}</div>
                   </div>
                 </div>
               )}
@@ -753,29 +727,27 @@ ${contactForm.message}
           </div>
         )}
 
-        {/* Call to Action */}
         <div className="cultural-events-cta">
           <div className="cultural-events-cta-content">
-            <h3>Не пропускайте нито едно събитие!</h3>
-            <p>Абонирайте се за нашия бюлетин и бъдете първите, които ще научат за новите събития</p>
+            <h3>{t('clubs.CulturalEvents.cta.title')}</h3>
+            <p>{t('clubs.CulturalEvents.cta.subtitle')}</p>
             <div className="cultural-events-cta-buttons">
               <button className="cultural-events-cta-primary" onClick={openSubscribeModal}>
                 <FontAwesomeIcon icon={faHeart} />
-                Абонирайте се
+                {t('clubs.CulturalEvents.cta.subscribe')}
               </button>
               <button 
                 className="cultural-events-cta-secondary"
                 onClick={openContactModal}
               >
                 <FontAwesomeIcon icon={faEnvelope} />
-                Свържете се с нас
+                {t('clubs.CulturalEvents.cta.contact')}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* НАПЪЛНО ПОПРАВЕНА Gallery Modal */}
       {showGalleryModal && galleryEvent && (
         <div className="cultural-events-gallery-modal" onClick={closeGallery}>
           <div className="cultural-events-gallery-container" onClick={(e) => e.stopPropagation()}>
@@ -812,7 +784,7 @@ ${contactForm.message}
                   const currentMedia = allMedia[currentMediaIndex];
                   
                   if (!currentMedia) {
-                    return <div className="cultural-events-no-media">Няма налични медийни файлове</div>;
+                    return <div className="cultural-events-no-media">{t('clubs.CulturalEvents.gallery.noMedia')}</div>;
                   }
                   
                   if (currentMedia.type === 'video') {
@@ -882,7 +854,7 @@ ${contactForm.message}
                     <div className="cultural-events-thumb-video">
                       <img 
                         src={media.thumbnail || `https://picsum.photos/80/60?random=${index}`} 
-                        alt={media.alt || `Video ${index + 1}`} 
+                        alt={media.alt || t('clubs.CulturalEvents.gallery.videoAlt', { index: index + 1 })} 
                       />
                       <div className="cultural-events-thumb-play">
                         <FontAwesomeIcon icon={faPlay} />
@@ -891,7 +863,7 @@ ${contactForm.message}
                   ) : (
                     <img 
                       src={media.src} 
-                      alt={media.alt || media.caption || `Image ${index + 1}`} 
+                      alt={media.alt || media.caption || t('clubs.CulturalEvents.gallery.imageAlt', { index: index + 1 })} 
                     />
                   )}
                 </button>
@@ -901,7 +873,6 @@ ${contactForm.message}
         </div>
       )}
 
-      {/* Subscribe Modal */}
       {showSubscribeModal && (
         <div className="cultural-events-modal-overlay" onClick={closeSubscribeModal}>
           <div className="cultural-events-modal" onClick={(e) => e.stopPropagation()}>
@@ -912,21 +883,21 @@ ${contactForm.message}
             <div className="cultural-events-modal-content">
               <div className="cultural-events-modal-header">
                 <FontAwesomeIcon icon={faHeart} />
-                <h3>Абонирайте се за нашия бюлетин</h3>
-                <p>Получавайте новини за всички събития директно в имейла си</p>
+                <h3>{t('clubs.CulturalEvents.modals.subscribe.title')}</h3>
+                <p>{t('clubs.CulturalEvents.modals.subscribe.subtitle')}</p>
               </div>
               
               {formStatus === 'sent' ? (
                 <div className="cultural-events-form-success">
                   <FontAwesomeIcon icon={faCheck} />
-                  <h4>Успешно се абонирахте!</h4>
-                  <p>Благодарим ви! Ще получавате новини за нашите събития.</p>
+                  <h4>{t('clubs.CulturalEvents.modals.subscribe.success.title')}</h4>
+                  <p>{t('clubs.CulturalEvents.modals.subscribe.success.message')}</p>
                 </div>
               ) : formStatus === 'error' ? (
                 <div className="cultural-events-form-error">
                   <FontAwesomeIcon icon={faExclamationTriangle} />
-                  <h4>Възникна грешка</h4>
-                  <p>Моля опитайте отново или се свържете с нас директно.</p>
+                  <h4>{t('clubs.CulturalEvents.form.error.title')}</h4>
+                  <p>{t('clubs.CulturalEvents.form.error.message')}</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubscribeSubmit} className="cultural-events-modal-form">
@@ -934,7 +905,7 @@ ${contactForm.message}
                     <div className="cultural-events-form-group">
                       <label htmlFor="subscribeName">
                         <FontAwesomeIcon icon={faUserCircle} />
-                        Вашето име *
+                        {t('clubs.CulturalEvents.form.name')} *
                       </label>
                       <input
                         type="text"
@@ -942,14 +913,14 @@ ${contactForm.message}
                         value={subscribeForm.name}
                         onChange={(e) => handleSubscribeFormChange('name', e.target.value)}
                         required
-                        placeholder="Въведете вашето име"
+                        placeholder={t('clubs.CulturalEvents.form.namePlaceholder')}
                       />
                     </div>
                     
                     <div className="cultural-events-form-group">
                       <label htmlFor="subscribeEmail">
                         <FontAwesomeIcon icon={faEnvelope} />
-                        Имейл адрес *
+                        {t('clubs.CulturalEvents.form.email')} *
                       </label>
                       <input
                         type="email"
@@ -957,7 +928,7 @@ ${contactForm.message}
                         value={subscribeForm.email}
                         onChange={(e) => handleSubscribeFormChange('email', e.target.value)}
                         required
-                        placeholder="Въведете вашия имейл"
+                        placeholder={t('clubs.CulturalEvents.form.emailPlaceholder')}
                       />
                     </div>
                   </div>
@@ -965,21 +936,21 @@ ${contactForm.message}
                   <div className="cultural-events-form-group">
                     <label htmlFor="subscribePhone">
                       <FontAwesomeIcon icon={faPhone} />
-                      Телефон (по желание)
+                      {t('clubs.CulturalEvents.form.phoneOptional')}
                     </label>
                     <input
                       type="tel"
                       id="subscribePhone"
                       value={subscribeForm.phone}
                       onChange={(e) => handleSubscribeFormChange('phone', e.target.value)}
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.CulturalEvents.form.phonePlaceholder')}
                     />
                   </div>
 
                   <div className="cultural-events-form-group">
                     <label>
                       <FontAwesomeIcon icon={faHeart} />
-                      Какво ви интересува? (изберете едно или повече)
+                      {t('clubs.CulturalEvents.modals.subscribe.interestsLabel')}
                     </label>
                     <div className="cultural-events-interests-grid">
                       {Object.values(eventTypes).map((type) => (
@@ -1002,14 +973,14 @@ ${contactForm.message}
                       disabled={formStatus === 'sending'}
                     >
                       <FontAwesomeIcon icon={faHeart} />
-                      {formStatus === 'sending' ? 'Изпраща се...' : 'Абонирайте се'}
+                      {formStatus === 'sending' ? t('clubs.CulturalEvents.form.sending') : t('clubs.CulturalEvents.form.subscribe')}
                     </button>
                     <button 
                       type="button" 
                       onClick={closeSubscribeModal}
                       className="cultural-events-cancel-btn"
                     >
-                      Отказ
+                      {t('clubs.CulturalEvents.form.cancel')}
                     </button>
                   </div>
                 </form>
@@ -1019,7 +990,6 @@ ${contactForm.message}
         </div>
       )}
 
-      {/* Contact Modal */}
       {showContactModal && (
         <div className="cultural-events-modal-overlay" onClick={closeContactModal}>
           <div className="cultural-events-modal" onClick={(e) => e.stopPropagation()}>
@@ -1030,21 +1000,21 @@ ${contactForm.message}
             <div className="cultural-events-modal-content">
               <div className="cultural-events-modal-header">
                 <FontAwesomeIcon icon={faEnvelope} />
-                <h3>Свържете се с нас</h3>
-                <p>Задайте вашия въпрос за събитията и ще ви отговорим възможно най-скоро</p>
+                <h3>{t('clubs.CulturalEvents.modals.contact.title')}</h3>
+                <p>{t('clubs.CulturalEvents.modals.contact.subtitle')}</p>
               </div>
               
               {formStatus === 'sent' ? (
                 <div className="cultural-events-form-success">
                   <FontAwesomeIcon icon={faCheck} />
-                  <h4>Съобщението е изпратено!</h4>
-                  <p>Благодарим ви! Ще се свържем с вас скоро.</p>
+                  <h4>{t('clubs.CulturalEvents.modals.contact.success.title')}</h4>
+                  <p>{t('clubs.CulturalEvents.modals.contact.success.message')}</p>
                 </div>
               ) : formStatus === 'error' ? (
                 <div className="cultural-events-form-error">
                   <FontAwesomeIcon icon={faExclamationTriangle} />
-                  <h4>Възникна грешка</h4>
-                  <p>Моля опитайте отново или се свържете с нас директно.</p>
+                  <h4>{t('clubs.CulturalEvents.form.error.title')}</h4>
+                  <p>{t('clubs.CulturalEvents.form.error.message')}</p>
                 </div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="cultural-events-modal-form">
@@ -1052,7 +1022,7 @@ ${contactForm.message}
                     <div className="cultural-events-form-group">
                       <label htmlFor="contactName">
                         <FontAwesomeIcon icon={faUserCircle} />
-                        Вашето име *
+                        {t('clubs.CulturalEvents.form.name')} *
                       </label>
                       <input
                         type="text"
@@ -1060,14 +1030,14 @@ ${contactForm.message}
                         value={contactForm.name}
                         onChange={(e) => handleContactFormChange('name', e.target.value)}
                         required
-                        placeholder="Въведете вашето име"
+                        placeholder={t('clubs.CulturalEvents.form.namePlaceholder')}
                       />
                     </div>
                     
                     <div className="cultural-events-form-group">
                       <label htmlFor="contactEmail">
                         <FontAwesomeIcon icon={faEnvelope} />
-                        Имейл адрес *
+                        {t('clubs.CulturalEvents.form.email')} *
                       </label>
                       <input
                         type="email"
@@ -1075,7 +1045,7 @@ ${contactForm.message}
                         value={contactForm.email}
                         onChange={(e) => handleContactFormChange('email', e.target.value)}
                         required
-                        placeholder="Въведете вашия имейл"
+                        placeholder={t('clubs.CulturalEvents.form.emailPlaceholder')}
                       />
                     </div>
                   </div>
@@ -1083,21 +1053,21 @@ ${contactForm.message}
                   <div className="cultural-events-form-group">
                     <label htmlFor="contactPhone">
                       <FontAwesomeIcon icon={faPhone} />
-                      Телефон (по желание)
+                      {t('clubs.CulturalEvents.form.phoneOptional')}
                     </label>
                     <input
                       type="tel"
                       id="contactPhone"
                       value={contactForm.phone}
                       onChange={(e) => handleContactFormChange('phone', e.target.value)}
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.CulturalEvents.form.phonePlaceholder')}
                     />
                   </div>
 
                   <div className="cultural-events-form-group">
                     <label htmlFor="contactSubject">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Тема на запитването *
+                      {t('clubs.CulturalEvents.modals.contact.subjectLabel')} *
                     </label>
                     <input
                       type="text"
@@ -1105,21 +1075,21 @@ ${contactForm.message}
                       value={contactForm.subject}
                       onChange={(e) => handleContactFormChange('subject', e.target.value)}
                       required
-                      placeholder="Кратко опишете темата"
+                      placeholder={t('clubs.CulturalEvents.modals.contact.subjectPlaceholder')}
                     />
                   </div>
                   
                   <div className="cultural-events-form-group">
                     <label htmlFor="contactMessage">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Съобщение *
+                      {t('clubs.CulturalEvents.form.messageRequired')} *
                     </label>
                     <textarea
                       id="contactMessage"
                       value={contactForm.message}
                       onChange={(e) => handleContactFormChange('message', e.target.value)}
                       required
-                      placeholder="Какво бихте искали да знаете за нашите събития?"
+                      placeholder={t('clubs.CulturalEvents.modals.contact.messagePlaceholder')}
                       rows="4"
                     />
                   </div>
@@ -1131,14 +1101,14 @@ ${contactForm.message}
                       disabled={formStatus === 'sending'}
                     >
                       <FontAwesomeIcon icon={faEnvelope} />
-                      {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщение'}
+                      {formStatus === 'sending' ? t('clubs.CulturalEvents.form.sending') : t('clubs.CulturalEvents.form.sendMessage')}
                     </button>
                     <button 
                       type="button" 
                       onClick={closeContactModal}
                       className="cultural-events-cancel-btn"
                     >
-                      Отказ
+                      {t('clubs.CulturalEvents.form.cancel')}
                     </button>
                   </div>
                 </form>
@@ -1148,7 +1118,6 @@ ${contactForm.message}
         </div>
       )}
 
-      {/* Event Registration Modal */}
       {showEventModal && selectedEvent && (
         <div className="cultural-events-modal-overlay" onClick={closeEventModal}>
           <div className="cultural-events-modal" onClick={(e) => e.stopPropagation()}>
@@ -1159,21 +1128,21 @@ ${contactForm.message}
             <div className="cultural-events-modal-content">
               <div className="cultural-events-modal-header">
                 <FontAwesomeIcon icon={faTicketAlt} />
-                <h3>Записване за {selectedEvent.title}</h3>
-                <p>Попълнете формата и ще се свържем с вас за потвърждение</p>
+                <h3>{t('clubs.CulturalEvents.modals.register.title', { eventTitle: selectedEvent.title })}</h3>
+                <p>{t('clubs.CulturalEvents.modals.register.subtitle')}</p>
               </div>
               
               {formStatus === 'sent' ? (
                 <div className="cultural-events-form-success">
                   <FontAwesomeIcon icon={faCheck} />
-                  <h4>Заявката е изпратена!</h4>
-                  <p>Благодарим ви! Ще се свържем с вас скоро за потвърждение на записването.</p>
+                  <h4>{t('clubs.CulturalEvents.modals.register.success.title')}</h4>
+                  <p>{t('clubs.CulturalEvents.modals.register.success.message')}</p>
                 </div>
               ) : formStatus === 'error' ? (
                 <div className="cultural-events-form-error">
                   <FontAwesomeIcon icon={faExclamationTriangle} />
-                  <h4>Възникна грешка</h4>
-                  <p>Моля опитайте отново или се свържете с нас директно.</p>
+                  <h4>{t('clubs.CulturalEvents.form.error.title')}</h4>
+                  <p>{t('clubs.CulturalEvents.form.error.message')}</p>
                 </div>
               ) : (
                 <form onSubmit={handleRegisterSubmit} className="cultural-events-modal-form">
@@ -1181,7 +1150,7 @@ ${contactForm.message}
                     <div className="cultural-events-form-group">
                       <label htmlFor="registerName">
                         <FontAwesomeIcon icon={faUserCircle} />
-                        Вашето име *
+                        {t('clubs.CulturalEvents.form.name')} *
                       </label>
                       <input
                         type="text"
@@ -1189,14 +1158,14 @@ ${contactForm.message}
                         value={registerForm.name}
                         onChange={(e) => handleRegisterFormChange('name', e.target.value)}
                         required
-                        placeholder="Въведете вашето име"
+                        placeholder={t('clubs.CulturalEvents.form.namePlaceholder')}
                       />
                     </div>
                     
                     <div className="cultural-events-form-group">
                       <label htmlFor="registerEmail">
                         <FontAwesomeIcon icon={faEnvelope} />
-                        Имейл адрес *
+                        {t('clubs.CulturalEvents.form.email')} *
                       </label>
                       <input
                         type="email"
@@ -1204,7 +1173,7 @@ ${contactForm.message}
                         value={registerForm.email}
                         onChange={(e) => handleRegisterFormChange('email', e.target.value)}
                         required
-                        placeholder="Въведете вашия имейл"
+                        placeholder={t('clubs.CulturalEvents.form.emailPlaceholder')}
                       />
                     </div>
                   </div>
@@ -1212,7 +1181,7 @@ ${contactForm.message}
                   <div className="cultural-events-form-group">
                     <label htmlFor="registerPhone">
                       <FontAwesomeIcon icon={faPhone} />
-                      Телефон *
+                      {t('clubs.CulturalEvents.form.phoneRequired')} *
                     </label>
                     <input
                       type="tel"
@@ -1220,20 +1189,20 @@ ${contactForm.message}
                       value={registerForm.phone}
                       onChange={(e) => handleRegisterFormChange('phone', e.target.value)}
                       required
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.CulturalEvents.form.phonePlaceholder')}
                     />
                   </div>
                   
                   <div className="cultural-events-form-group">
                     <label htmlFor="registerMessage">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Допълнително съобщение (по желание)
+                      {t('clubs.CulturalEvents.modals.register.messageLabel')}
                     </label>
                     <textarea
                       id="registerMessage"
                       value={registerForm.message}
                       onChange={(e) => handleRegisterFormChange('message', e.target.value)}
-                      placeholder="Имате ли специални изисквания или въпроси?"
+                      placeholder={t('clubs.CulturalEvents.modals.register.messagePlaceholder')}
                       rows="4"
                     />
                   </div>
@@ -1245,14 +1214,14 @@ ${contactForm.message}
                       disabled={formStatus === 'sending'}
                     >
                       <FontAwesomeIcon icon={faTicketAlt} />
-                      {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявка'}
+                      {formStatus === 'sending' ? t('clubs.CulturalEvents.form.sending') : t('clubs.CulturalEvents.form.submitRequest')}
                     </button>
                     <button 
                       type="button" 
                       onClick={closeEventModal}
                       className="cultural-events-cancel-btn"
                     >
-                      Отказ
+                      {t('clubs.CulturalEvents.form.cancel')}
                     </button>
                   </div>
                 </form>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHandHoldingHeart,
@@ -40,217 +41,216 @@ import {
 import './socialSupport.css';
 
 export const SocialSupport = ({ club }) => {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedService, setExpandedService] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.pensionersSpecific?.supportServices && 
       !club?.pensionersSpecific?.healthServices && 
       !club?.pensionersSpecific?.accessibility) {
     return null;
   }
 
-  // Събираме всички услуги
   const supportServices = club.pensionersSpecific?.supportServices || {};
   const healthServices = club.pensionersSpecific?.healthServices || {};
   const accessibility = club.pensionersSpecific?.accessibility || {};
 
-  // Създаваме масив с всички налични услуги
-  const allServices = [];
+  const getServiceDefinitions = () => {
+    const services = [];
 
-  // Support Services
-  if (supportServices.homeVisits) {
-    allServices.push({
-      id: 'home-visits',
-      name: 'Домашни посещения',
-      description: 'Редовни посещения в дома за компания и подкрепа',
-      category: 'home',
-      icon: faHome,
-      available: true,
-      details: 'Нашите доброволци посещават самотни членове за разговор и моральна подкрепа'
-    });
-  }
+    if (supportServices.homeVisits) {
+      services.push({
+        id: 'home-visits',
+        name: t('clubs.SocialSupport.services.homeVisits.name'),
+        description: t('clubs.SocialSupport.services.homeVisits.description'),
+        category: 'home',
+        icon: faHome,
+        available: true,
+        details: t('clubs.SocialSupport.services.homeVisits.details')
+      });
+    }
 
-  if (supportServices.shoppingAssistance) {
-    allServices.push({
-      id: 'shopping',
-      name: 'Помощ при пазаруване',
-      description: 'Придружаване или пазаруване вместо вас',
-      category: 'daily',
-      icon: faShoppingCart,
-      available: true,
-      details: 'Помагаме с ежедневните покупки и придружаваме до магазини'
-    });
-  }
+    if (supportServices.shoppingAssistance) {
+      services.push({
+        id: 'shopping',
+        name: t('clubs.SocialSupport.services.shopping.name'),
+        description: t('clubs.SocialSupport.services.shopping.description'),
+        category: 'daily',
+        icon: faShoppingCart,
+        available: true,
+        details: t('clubs.SocialSupport.services.shopping.details')
+      });
+    }
 
-  if (supportServices.documentHelp) {
-    allServices.push({
-      id: 'documents',
-      name: 'Помощ с документи',
-      description: 'Съдействие при попълване на документи и заявления',
-      category: 'admin',
-      icon: faFileAlt,
-      available: true,
-      details: 'Помагаме с административни процедури и документи'
-    });
-  }
+    if (supportServices.documentHelp) {
+      services.push({
+        id: 'documents',
+        name: t('clubs.SocialSupport.services.documents.name'),
+        description: t('clubs.SocialSupport.services.documents.description'),
+        category: 'admin',
+        icon: faFileAlt,
+        available: true,
+        details: t('clubs.SocialSupport.services.documents.details')
+      });
+    }
 
-  if (supportServices.companionship) {
-    allServices.push({
-      id: 'companionship',
-      name: 'Придружаване',
-      description: 'Компания при посещения и разходки',
-      category: 'social',
-      icon: faUserFriends,
-      available: true,
-      details: 'Придружаваме при посещения на лекар, срещи или разходки'
-    });
-  }
+    if (supportServices.companionship) {
+      services.push({
+        id: 'companionship',
+        name: t('clubs.SocialSupport.services.companionship.name'),
+        description: t('clubs.SocialSupport.services.companionship.description'),
+        category: 'social',
+        icon: faUserFriends,
+        available: true,
+        details: t('clubs.SocialSupport.services.companionship.details')
+      });
+    }
 
-  if (supportServices.transportService) {
-    allServices.push({
-      id: 'transport',
-      name: 'Транспортни услуги',
-      description: 'Превоз до важни дестинации',
-      category: 'transport',
-      icon: faCar,
-      available: true,
-      details: 'Осигуряваме транспорт до болница, аптека и други важни места'
-    });
-  }
+    if (supportServices.transportService) {
+      services.push({
+        id: 'transport',
+        name: t('clubs.SocialSupport.services.transport.name'),
+        description: t('clubs.SocialSupport.services.transport.description'),
+        category: 'transport',
+        icon: faCar,
+        available: true,
+        details: t('clubs.SocialSupport.services.transport.details')
+      });
+    }
 
-  if (supportServices.mealDelivery) {
-    allServices.push({
-      id: 'meals',
-      name: 'Доставка на храна',
-      description: 'Топла храна доставена в дома',
-      category: 'daily',
-      icon: faUtensils,
-      available: true,
-      details: 'Приготвяме и доставяме топли обяди за нуждаещи се членове'
-    });
-  }
+    if (supportServices.mealDelivery) {
+      services.push({
+        id: 'meals',
+        name: t('clubs.SocialSupport.services.meals.name'),
+        description: t('clubs.SocialSupport.services.meals.description'),
+        category: 'daily',
+        icon: faUtensils,
+        available: true,
+        details: t('clubs.SocialSupport.services.meals.details')
+      });
+    }
 
-  if (supportServices.cleaningHelp) {
-    allServices.push({
-      id: 'cleaning',
-      name: 'Помощ за почистване',
-      description: 'Съдействие при домашните дейности',
-      category: 'home',
-      icon: faBroom,
-      available: true,
-      details: 'Помагаме с основно почистване и домашни задачи'
-    });
-  }
+    if (supportServices.cleaningHelp) {
+      services.push({
+        id: 'cleaning',
+        name: t('clubs.SocialSupport.services.cleaning.name'),
+        description: t('clubs.SocialSupport.services.cleaning.description'),
+        category: 'home',
+        icon: faBroom,
+        available: true,
+        details: t('clubs.SocialSupport.services.cleaning.details')
+      });
+    }
 
-  if (supportServices.techSupport) {
-    allServices.push({
-      id: 'tech',
-      name: 'Техническа помощ',
-      description: 'Помощ с компютри и технологии',
-      category: 'tech',
-      icon: faLaptop,
-      available: true,
-      details: 'Обучение и помощ при използване на технологии'
-    });
-  }
+    if (supportServices.techSupport) {
+      services.push({
+        id: 'tech',
+        name: t('clubs.SocialSupport.services.tech.name'),
+        description: t('clubs.SocialSupport.services.tech.description'),
+        category: 'tech',
+        icon: faLaptop,
+        available: true,
+        details: t('clubs.SocialSupport.services.tech.details')
+      });
+    }
 
-  // Health Services
-  if (healthServices.regularCheckups) {
-    allServices.push({
-      id: 'checkups',
-      name: 'Редовни здравни прегледи',
-      description: 'Организирани медицински прегледи',
-      category: 'health',
-      icon: faStethoscope,
-      available: true,
-      details: 'Координираме редовни здравни прегледи с медицински партньори'
-    });
-  }
+    if (healthServices.regularCheckups) {
+      services.push({
+        id: 'checkups',
+        name: t('clubs.SocialSupport.services.checkups.name'),
+        description: t('clubs.SocialSupport.services.checkups.description'),
+        category: 'health',
+        icon: faStethoscope,
+        available: true,
+        details: t('clubs.SocialSupport.services.checkups.details')
+      });
+    }
 
-  if (healthServices.bloodPressureMonitoring) {
-    allServices.push({
-      id: 'blood-pressure',
-      name: 'Измерване на кръвно налягане',
-      description: 'Редовно наблюдение на кръвното налягане',
-      category: 'health',
-      icon: faHeartbeat,
-      available: true,
-      details: 'Безплатно измерване и проследяване на кръвното налягане'
-    });
-  }
+    if (healthServices.bloodPressureMonitoring) {
+      services.push({
+        id: 'blood-pressure',
+        name: t('clubs.SocialSupport.services.bloodPressure.name'),
+        description: t('clubs.SocialSupport.services.bloodPressure.description'),
+        category: 'health',
+        icon: faHeartbeat,
+        available: true,
+        details: t('clubs.SocialSupport.services.bloodPressure.details')
+      });
+    }
 
-  if (healthServices.healthLectures?.length > 0) {
-    allServices.push({
-      id: 'health-lectures',
-      name: 'Здравни лекции',
-      description: 'Образователни лекции за здравето',
-      category: 'health',
-      icon: faGraduationCap,
-      available: true,
-      details: `Провеждаме ${healthServices.healthLectures.length} вида здравни лекции`,
-      lectures: healthServices.healthLectures
-    });
-  }
+    if (healthServices.healthLectures?.length > 0) {
+      services.push({
+        id: 'health-lectures',
+        name: t('clubs.SocialSupport.services.healthLectures.name'),
+        description: t('clubs.SocialSupport.services.healthLectures.description'),
+        category: 'health',
+        icon: faGraduationCap,
+        available: true,
+        details: t('clubs.SocialSupport.services.healthLectures.details', { count: healthServices.healthLectures.length }),
+        lectures: healthServices.healthLectures
+      });
+    }
 
-  // Accessibility Services
-  const accessibilityServices = [];
-  if (accessibility.wheelchairAccess) accessibilityServices.push('Достъп с инвалидна количка');
-  if (accessibility.elevatorAccess) accessibilityServices.push('Асансьорен достъп');
-  if (accessibility.hearingLoop) accessibilityServices.push('Слухово оборудване');
-  if (accessibility.largeTextMaterials) accessibilityServices.push('Материали с едър шрифт');
-  if (accessibility.handrails) accessibilityServices.push('Парапети и опори');
-  if (accessibility.nonSlipFloors) accessibilityServices.push('Нехлъзгащи подове');
-  if (accessibility.goodLighting) accessibilityServices.push('Добро осветление');
-  if (accessibility.restingAreas) accessibilityServices.push('Места за почивка');
+    const accessibilityFeatures = [];
+    if (accessibility.wheelchairAccess) accessibilityFeatures.push(t('clubs.SocialSupport.accessibility.wheelchairAccess'));
+    if (accessibility.elevatorAccess) accessibilityFeatures.push(t('clubs.SocialSupport.accessibility.elevatorAccess'));
+    if (accessibility.hearingLoop) accessibilityFeatures.push(t('clubs.SocialSupport.accessibility.hearingLoop'));
+    if (accessibility.largeTextMaterials) accessibilityFeatures.push(t('clubs.SocialSupport.accessibility.largeTextMaterials'));
+    if (accessibility.handrails) accessibilityFeatures.push(t('clubs.SocialSupport.accessibility.handrails'));
+    if (accessibility.nonSlipFloors) accessibilityFeatures.push(t('clubs.SocialSupport.accessibility.nonSlipFloors'));
+    if (accessibility.goodLighting) accessibilityFeatures.push(t('clubs.SocialSupport.accessibility.goodLighting'));
+    if (accessibility.restingAreas) accessibilityFeatures.push(t('clubs.SocialSupport.accessibility.restingAreas'));
 
-  if (accessibilityServices.length > 0) {
-    allServices.push({
-      id: 'accessibility',
-      name: 'Достъпност и удобства',
-      description: 'Приспособления за хора с увреждания',
-      category: 'accessibility',
-      icon: faWheelchair,
-      available: true,
-      details: 'Нашият клуб е оборудван с удобства за всички',
-      features: accessibilityServices
-    });
-  }
+    if (accessibilityFeatures.length > 0) {
+      services.push({
+        id: 'accessibility',
+        name: t('clubs.SocialSupport.services.accessibility.name'),
+        description: t('clubs.SocialSupport.services.accessibility.description'),
+        category: 'accessibility',
+        icon: faWheelchair,
+        available: true,
+        details: t('clubs.SocialSupport.services.accessibility.details'),
+        features: accessibilityFeatures
+      });
+    }
 
-  // Emergency Services
-  const emergencyProtocol = healthServices.emergencyProtocol;
-  if (emergencyProtocol?.hasEmergencyPlan) {
-    allServices.push({
-      id: 'emergency',
-      name: 'Спешна помощ',
-      description: 'Протокол за спешни случаи',
-      category: 'emergency',
-      icon: faAmbulance,
-      available: true,
-      details: 'Имаме установен протокол за действие при спешни случаи',
-      protocol: emergencyProtocol
-    });
-  }
+    const emergencyProtocol = healthServices.emergencyProtocol;
+    if (emergencyProtocol?.hasEmergencyPlan) {
+      services.push({
+        id: 'emergency',
+        name: t('clubs.SocialSupport.services.emergency.name'),
+        description: t('clubs.SocialSupport.services.emergency.description'),
+        category: 'emergency',
+        icon: faAmbulance,
+        available: true,
+        details: t('clubs.SocialSupport.services.emergency.details'),
+        protocol: emergencyProtocol
+      });
+    }
 
-  // Ако няма услуги, не показваме компонента
+    return services;
+  };
+
+  const allServices = getServiceDefinitions();
+
   if (allServices.length === 0) {
     return null;
   }
 
-  // Категории за филтриране
-  const categories = [
-    { key: 'all', label: 'Всички', icon: faHandHoldingHeart },
-    { key: 'health', label: 'Здравеопазване', icon: faMedkit },
-    { key: 'home', label: 'Домашни услуги', icon: faHome },
-    { key: 'daily', label: 'Ежедневни нужди', icon: faShoppingCart },
-    { key: 'social', label: 'Социални', icon: faUserFriends },
-    { key: 'transport', label: 'Транспорт', icon: faCar },
-    { key: 'emergency', label: 'Спешни', icon: faAmbulance },
-    { key: 'accessibility', label: 'Достъпност', icon: faWheelchair }
+  const getCategories = () => [
+    { key: 'all', label: t('clubs.SocialSupport.categories.all'), icon: faHandHoldingHeart },
+    { key: 'health', label: t('clubs.SocialSupport.categories.health'), icon: faMedkit },
+    { key: 'home', label: t('clubs.SocialSupport.categories.home'), icon: faHome },
+    { key: 'daily', label: t('clubs.SocialSupport.categories.daily'), icon: faShoppingCart },
+    { key: 'social', label: t('clubs.SocialSupport.categories.social'), icon: faUserFriends },
+    { key: 'transport', label: t('clubs.SocialSupport.categories.transport'), icon: faCar },
+    { key: 'emergency', label: t('clubs.SocialSupport.categories.emergency'), icon: faAmbulance },
+    { key: 'accessibility', label: t('clubs.SocialSupport.categories.accessibility'), icon: faWheelchair }
   ];
 
-  // Филтриране на услуги
+  const categories = getCategories();
+
   const filteredServices = allServices.filter(service => {
     const matchesCategory = activeCategory === 'all' || service.category === activeCategory;
     const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -262,7 +262,7 @@ export const SocialSupport = ({ club }) => {
     setExpandedService(expandedService === serviceId ? null : serviceId);
   };
 
-  function getCategoryColor(category) {
+  const getCategoryColor = (category) => {
     switch(category) {
       case 'health': return '#ef4444';
       case 'home': return '#10b981';
@@ -275,47 +275,49 @@ export const SocialSupport = ({ club }) => {
       case 'tech': return '#06b6d4';
       default: return '#6b7280';
     }
-  }
+  };
+
+  const resetFilters = () => {
+    setActiveCategory('all');
+    setSearchTerm('');
+  };
 
   return (
     <section id="social-support" className="social-support-section">
       <div className="social-support-container">
         
-        {/* Header */}
         <div className="social-support-header">
           <div className="social-support-header-content">
             <div className="social-support-badge">
               <FontAwesomeIcon icon={faShieldAlt} />
-              <span>Наши услуги</span>
+              <span>{t('clubs.SocialSupport.header.badge')}</span>
             </div>
             <h2 className="social-support-title">
-              Грижим се за вашите нужди
+              {t('clubs.SocialSupport.header.title')}
             </h2>
             <p className="social-support-subtitle">
-              Откриите всички услуги и подкрепа която предлагаме на нашите членове
+              {t('clubs.SocialSupport.header.subtitle')}
             </p>
           </div>
           
-          {/* Quick Stats */}
           <div className="social-support-quick-stats">
             <div className="social-support-stat">
               <span className="social-support-stat-number">{allServices.length}</span>
-              <span className="social-support-stat-label">Налични услуги</span>
+              <span className="social-support-stat-label">{t('clubs.SocialSupport.stats.availableServices')}</span>
             </div>
             <div className="social-support-stat">
               <span className="social-support-stat-number">24/7</span>
-              <span className="social-support-stat-label">Спешна помощ</span>
+              <span className="social-support-stat-label">{t('clubs.SocialSupport.stats.emergencyHelp')}</span>
             </div>
           </div>
         </div>
 
-        {/* Controls */}
         <div className="social-support-controls">
           <div className="social-support-search-bar">
             <FontAwesomeIcon icon={faSearch} />
             <input
               type="text"
-              placeholder="Търсете услуга..."
+              placeholder={t('clubs.SocialSupport.search.placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -335,7 +337,6 @@ export const SocialSupport = ({ club }) => {
           </div>
         </div>
 
-        {/* Services Grid */}
         <div className="social-support-services-grid">
           {filteredServices.map((service) => (
             <div 
@@ -363,7 +364,7 @@ export const SocialSupport = ({ club }) => {
                 <p className="social-support-service-description">{service.description}</p>
                 
                 <button className="social-support-expand-btn">
-                  <span>Научете повече</span>
+                  <span>{t('clubs.SocialSupport.actions.learnMore')}</span>
                   <FontAwesomeIcon 
                     icon={expandedService === service.id ? faChevronDown : faChevronRight} 
                   />
@@ -377,13 +378,13 @@ export const SocialSupport = ({ club }) => {
                     
                     {service.lectures && (
                       <div className="social-support-lectures">
-                        <h4>Налични лекции:</h4>
+                        <h4>{t('clubs.SocialSupport.details.availableLectures')}:</h4>
                         <ul>
                           {service.lectures.map((lecture, index) => (
                             <li key={index}>
                               <strong>{lecture.topic}</strong>
-                              <span>Лектор: {lecture.lecturer}</span>
-                              <span>Честота: {lecture.frequency}</span>
+                              <span>{t('clubs.SocialSupport.details.lecturer')}: {lecture.lecturer}</span>
+                              <span>{t('clubs.SocialSupport.details.frequency')}: {lecture.frequency}</span>
                             </li>
                           ))}
                         </ul>
@@ -392,7 +393,7 @@ export const SocialSupport = ({ club }) => {
                     
                     {service.features && (
                       <div className="social-support-features">
-                        <h4>Налични удобства:</h4>
+                        <h4>{t('clubs.SocialSupport.details.availableFeatures')}:</h4>
                         <ul>
                           {service.features.map((feature, index) => (
                             <li key={index}>
@@ -406,7 +407,7 @@ export const SocialSupport = ({ club }) => {
                     
                     {service.protocol && (
                       <div className="social-support-protocol">
-                        <h4>Спешни контакти:</h4>
+                        <h4>{t('clubs.SocialSupport.emergency.contacts')}:</h4>
                         <div className="social-support-emergency-contacts">
                           {service.protocol.emergencyContacts?.map((contact, index) => (
                             <a key={index} href={`tel:${contact}`} className="social-support-emergency-btn">
@@ -418,7 +419,7 @@ export const SocialSupport = ({ club }) => {
                         {service.protocol.nearestHospital && (
                           <div className="social-support-hospital">
                             <FontAwesomeIcon icon={faHospital} />
-                            <span>Най-близка болница: {service.protocol.nearestHospital}</span>
+                            <span>{t('clubs.SocialSupport.emergency.nearestHospital')}: {service.protocol.nearestHospital}</span>
                           </div>
                         )}
                       </div>
@@ -430,34 +431,32 @@ export const SocialSupport = ({ club }) => {
           ))}
         </div>
 
-        {/* No Results */}
         {filteredServices.length === 0 && (
           <div className="social-support-no-results">
             <FontAwesomeIcon icon={faQuestionCircle} />
-            <h3>Няма намерени услуги</h3>
-            <p>Опитайте с различни критерии за търсене</p>
+            <h3>{t('clubs.SocialSupport.noResults.title')}</h3>
+            <p>{t('clubs.SocialSupport.noResults.message')}</p>
             <button 
-              onClick={() => {setActiveCategory('all'); setSearchTerm('');}}
+              onClick={resetFilters}
               className="social-support-reset-btn"
             >
-              Покажи всички услуги
+              {t('clubs.SocialSupport.noResults.showAll')}
             </button>
           </div>
         )}
 
-        {/* Emergency Contact Bar */}
         {club.contacts && (
           <div className="social-support-emergency-bar">
             <div className="social-support-emergency-content">
               <div className="social-support-emergency-header">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h3>При спешност</h3>
+                <h3>{t('clubs.SocialSupport.emergency.title')}</h3>
               </div>
               <div className="social-support-emergency-actions">
                 <a href="tel:150" className="social-support-emergency-action primary">
                   <FontAwesomeIcon icon={faAmbulance} />
                   <div>
-                    <span>Спешна помощ</span>
+                    <span>{t('clubs.SocialSupport.emergency.ambulance')}</span>
                     <strong>150</strong>
                   </div>
                 </a>
@@ -465,7 +464,7 @@ export const SocialSupport = ({ club }) => {
                   <a href={`tel:${club.contacts.phone}`} className="social-support-emergency-action secondary">
                     <FontAwesomeIcon icon={faPhone} />
                     <div>
-                      <span>Клуб {club.name}</span>
+                      <span>{t('clubs.SocialSupport.emergency.club')} {club.name}</span>
                       <strong>{club.contacts.phone}</strong>
                     </div>
                   </a>

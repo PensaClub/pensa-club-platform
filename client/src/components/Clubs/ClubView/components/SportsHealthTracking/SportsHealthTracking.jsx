@@ -1,5 +1,5 @@
-// components/SportsHealthTracking/SportsHealthTracking.jsx
 import { useState, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHeartbeat,
@@ -56,9 +56,10 @@ import {
 import './sportsHealthTracking.css';
 
 export const SportsHealthTracking = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMetric, setSelectedMetric] = useState('heartRate');
-  const [timeframe, setTimeframe] = useState('week'); // 'week', 'month', '3months', 'year'
+  const [timeframe, setTimeframe] = useState('week');
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingGoal, setEditingGoal] = useState(null);
   const [newEntry, setNewEntry] = useState({
@@ -69,7 +70,6 @@ export const SportsHealthTracking = ({ club }) => {
     notes: ''
   });
 
-  // Симулирани данни за здравословно проследяване
   const [healthData, setHealthData] = useState({
     metrics: {
       heartRate: [
@@ -131,10 +131,10 @@ export const SportsHealthTracking = ({ club }) => {
       {
         id: 1,
         type: 'steps',
-        title: 'Дневни стъпки',
+        title: t('clubs.SportsHealthTracking.goalTypes.dailySteps'),
         target: 10000,
         current: 8500,
-        unit: 'стъпки',
+        unit: t('clubs.SportsHealthTracking.units.steps'),
         icon: faRunning,
         color: '#ef4444',
         deadline: '2025-08-31'
@@ -142,10 +142,10 @@ export const SportsHealthTracking = ({ club }) => {
       {
         id: 2,
         type: 'weight',
-        title: 'Целево тегло',
+        title: t('clubs.SportsHealthTracking.goalTypes.targetWeight'),
         target: 74.0,
         current: 75.2,
-        unit: 'кг',
+        unit: t('clubs.SportsHealthTracking.units.kg'),
         icon: faWeight,
         color: '#8b5cf6',
         deadline: '2025-12-31'
@@ -153,10 +153,10 @@ export const SportsHealthTracking = ({ club }) => {
       {
         id: 3,
         type: 'water',
-        title: 'Дневна хидратация',
+        title: t('clubs.SportsHealthTracking.goalTypes.dailyHydration'),
         target: 2.5,
         current: 2.1,
-        unit: 'литра',
+        unit: t('clubs.SportsHealthTracking.units.liters'),
         icon: faWater,
         color: '#06b6d4',
         deadline: '2025-08-31'
@@ -164,10 +164,10 @@ export const SportsHealthTracking = ({ club }) => {
       {
         id: 4,
         type: 'sleep',
-        title: 'Качествен сън',
+        title: t('clubs.SportsHealthTracking.goalTypes.qualitySleep'),
         target: 8.0,
         current: 7.5,
-        unit: 'часа',
+        unit: t('clubs.SportsHealthTracking.units.hours'),
         icon: faBed,
         color: '#6366f1',
         deadline: '2025-08-31'
@@ -175,128 +175,141 @@ export const SportsHealthTracking = ({ club }) => {
     ]
   });
 
-  // Проверяваме дали има данни
   if (!club?.pensionersSpecific?.healthServices && !club?.activities) {
     return null;
   }
 
-  // Събираме данни за здравните услуги
   const healthServices = club.pensionersSpecific?.healthServices || {};
   const healthLectures = healthServices.healthLectures || [];
   const medicalServices = healthServices.medicalServices || [];
 
-  // Табове
-  const tabs = [
-    { key: 'overview', label: 'Преглед', icon: faChartLine },
-    { key: 'metrics', label: 'Показатели', icon: faHeartbeat },
-    { key: 'goals', label: 'Цели', icon: faFlag },
-    { key: 'insights', label: 'Анализи', icon: faLightbulb },
-    { key: 'services', label: 'Услуги', icon: faMedkit }
+  const getTabs = () => [
+    { key: 'overview', label: t('clubs.SportsHealthTracking.tabs.overview'), icon: faChartLine },
+    { key: 'metrics', label: t('clubs.SportsHealthTracking.tabs.metrics'), icon: faHeartbeat },
+    { key: 'goals', label: t('clubs.SportsHealthTracking.tabs.goals'), icon: faFlag },
+    { key: 'insights', label: t('clubs.SportsHealthTracking.tabs.insights'), icon: faLightbulb },
+    { key: 'services', label: t('clubs.SportsHealthTracking.tabs.services'), icon: faMedkit }
   ];
 
-  // Здравословни показатели
-  const healthMetrics = [
+  const getHealthMetrics = () => [
     {
       key: 'heartRate',
-      title: 'Пулс',
+      title: t('clubs.SportsHealthTracking.metrics.heartRate.title'),
       icon: faHeartbeat,
       color: '#ef4444',
-      unit: 'удара/мин',
+      unit: t('clubs.SportsHealthTracking.units.bpm'),
       normalRange: [60, 100],
       gradient: 'linear-gradient(135deg, #ef4444, #f87171)'
     },
     {
       key: 'bloodPressure',
-      title: 'Кръвно налягане',
+      title: t('clubs.SportsHealthTracking.metrics.bloodPressure.title'),
       icon: faThermometerHalf,
       color: '#8b5cf6',
-      unit: 'mmHg',
+      unit: t('clubs.SportsHealthTracking.units.mmHg'),
       normalRange: [120, 80],
       gradient: 'linear-gradient(135deg, #8b5cf6, #a855f7)'
     },
     {
       key: 'weight',
-      title: 'Тегло',
+      title: t('clubs.SportsHealthTracking.metrics.weight.title'),
       icon: faWeight,
       color: '#06b6d4',
-      unit: 'кг',
+      unit: t('clubs.SportsHealthTracking.units.kg'),
       normalRange: [70, 80],
       gradient: 'linear-gradient(135deg, #06b6d4, #22d3ee)'
     },
     {
       key: 'steps',
-      title: 'Стъпки',
+      title: t('clubs.SportsHealthTracking.metrics.steps.title'),
       icon: faRunning,
       color: '#10b981',
-      unit: 'стъпки',
+      unit: t('clubs.SportsHealthTracking.units.steps'),
       normalRange: [8000, 12000],
       gradient: 'linear-gradient(135deg, #10b981, #34d399)'
     },
     {
       key: 'sleep',
-      title: 'Сън',
+      title: t('clubs.SportsHealthTracking.metrics.sleep.title'),
       icon: faBed,
       color: '#6366f1',
-      unit: 'часа',
+      unit: t('clubs.SportsHealthTracking.units.hours'),
       normalRange: [7, 9],
       gradient: 'linear-gradient(135deg, #6366f1, #818cf8)'
     },
     {
       key: 'water',
-      title: 'Вода',
+      title: t('clubs.SportsHealthTracking.metrics.water.title'),
       icon: faWater,
       color: '#0ea5e9',
-      unit: 'литра',
+      unit: t('clubs.SportsHealthTracking.units.liters'),
       normalRange: [2, 3],
       gradient: 'linear-gradient(135deg, #0ea5e9, #38bdf8)'
     }
   ];
 
-  // Здравословни съвети
-  const healthTips = [
+  const getHealthTips = () => [
     {
       id: 1,
       category: 'cardio',
-      title: 'Кардио тренировки',
-      tip: 'Редовните кардио упражнения укрепват сърцето и подобряват кръвообращението.',
+      title: t('clubs.SportsHealthTracking.tips.cardio.title'),
+      tip: t('clubs.SportsHealthTracking.tips.cardio.content'),
       icon: faHeartbeat,
       color: '#ef4444'
     },
     {
       id: 2,
       category: 'nutrition',
-      title: 'Здравословно хранене',
-      tip: 'Консумирайте повече плодове, зеленчуци и цельнозърнести храни.',
+      title: t('clubs.SportsHealthTracking.tips.nutrition.title'),
+      tip: t('clubs.SportsHealthTracking.tips.nutrition.content'),
       icon: faAppleAlt,
       color: '#10b981'
     },
     {
       id: 3,
       category: 'hydration',
-      title: 'Хидратация',
-      tip: 'Пийте поне 8 чаши вода дневно за оптимална хидратация.',
+      title: t('clubs.SportsHealthTracking.tips.hydration.title'),
+      tip: t('clubs.SportsHealthTracking.tips.hydration.content'),
       icon: faWater,
       color: '#0ea5e9'
     },
     {
       id: 4,
       category: 'sleep',
-      title: 'Качествен сън',
-      tip: 'Спете 7-9 часа нощно за пълноценна възстановка.',
+      title: t('clubs.SportsHealthTracking.tips.sleep.title'),
+      tip: t('clubs.SportsHealthTracking.tips.sleep.content'),
       icon: faBed,
       color: '#6366f1'
     },
     {
       id: 5,
       category: 'stress',
-      title: 'Управление на стреса',
-      tip: 'Практикувайте медитация и дълбоко дишане за намаляване на стреса.',
+      title: t('clubs.SportsHealthTracking.tips.stress.title'),
+      tip: t('clubs.SportsHealthTracking.tips.stress.content'),
       icon: faLeaf,
       color: '#059669'
     }
   ];
 
-  // Изчисляваме средни стойности и тенденции
+  const getTimeframePeriods = () => [
+    { key: 'week', label: t('clubs.SportsHealthTracking.timeframes.week') },
+    { key: 'month', label: t('clubs.SportsHealthTracking.timeframes.month') },
+    { key: '3months', label: t('clubs.SportsHealthTracking.timeframes.threeMonths') },
+    { key: 'year', label: t('clubs.SportsHealthTracking.timeframes.year') }
+  ];
+
+  const tabs = getTabs();
+  const healthMetrics = getHealthMetrics();
+  const healthTips = getHealthTips();
+  const timeframePeriods = getTimeframePeriods();
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    return date.toLocaleDateString(locale);
+  };
+
   const getCurrentMetrics = () => {
     const metrics = {};
     
@@ -329,13 +342,21 @@ export const SportsHealthTracking = ({ club }) => {
 
   const currentMetrics = getCurrentMetrics();
 
-  // Изчисляваме прогреса на целите
   const getGoalProgress = (goal) => {
     const progress = (goal.current / goal.target) * 100;
     return Math.min(progress, 100);
   };
 
-  // Handlers
+  const getTrendLabel = (trend) => {
+    return t(`clubs.SportsHealthTracking.trends.${trend}`);
+  };
+
+  const getChangeText = (change, trend) => {
+    return t('clubs.SportsHealthTracking.changeFromYesterday', { 
+      change: (trend === 'up' ? '+' : '-') + change 
+    });
+  };
+
   const handleAddEntry = (e) => {
     e.preventDefault();
     
@@ -380,7 +401,6 @@ export const SportsHealthTracking = ({ club }) => {
     setEditingGoal(null);
   };
 
-  // Ако няма здравни данни, не показваме компонента
   if (healthLectures.length === 0 && medicalServices.length === 0) {
     return null;
   }
@@ -389,18 +409,17 @@ export const SportsHealthTracking = ({ club }) => {
     <section id="sports-health-tracking" className="sports-health-tracking-section">
       <div className="sports-health-tracking-container">
         
-        {/* Header */}
         <div className="sports-health-tracking-header">
           <div className="sports-health-tracking-header-content">
             <div className="sports-health-tracking-badge">
               <FontAwesomeIcon icon={faShieldAlt} />
-              <span>Здравословно проследяване</span>
+              <span>{t('clubs.SportsHealthTracking.header.badge')}</span>
             </div>
             <h2 className="sports-health-tracking-title">
-              Следете здравето си всеки ден
+              {t('clubs.SportsHealthTracking.header.title')}
             </h2>
             <p className="sports-health-tracking-subtitle">
-              Интелигентно проследяване на здравословни показатели с персонализирани цели и съвети
+              {t('clubs.SportsHealthTracking.header.subtitle')}
             </p>
           </div>
           
@@ -413,7 +432,9 @@ export const SportsHealthTracking = ({ club }) => {
                 <span className="sports-health-tracking-stat-number">
                   {currentMetrics.heartRate?.current || '72'}
                 </span>
-                <span className="sports-health-tracking-stat-label">BPM</span>
+                <span className="sports-health-tracking-stat-label">
+                  {t('clubs.SportsHealthTracking.units.bpm')}
+                </span>
               </div>
             </div>
             <div className="sports-health-tracking-quick-stat">
@@ -424,7 +445,9 @@ export const SportsHealthTracking = ({ club }) => {
                 <span className="sports-health-tracking-stat-number">
                   {currentMetrics.steps?.current || '8,500'}
                 </span>
-                <span className="sports-health-tracking-stat-label">Стъпки</span>
+                <span className="sports-health-tracking-stat-label">
+                  {t('clubs.SportsHealthTracking.units.steps')}
+                </span>
               </div>
             </div>
             <div className="sports-health-tracking-quick-stat">
@@ -435,13 +458,14 @@ export const SportsHealthTracking = ({ club }) => {
                 <span className="sports-health-tracking-stat-number">
                   {healthData.goals.filter(g => getGoalProgress(g) >= 100).length}
                 </span>
-                <span className="sports-health-tracking-stat-label">Цели</span>
+                <span className="sports-health-tracking-stat-label">
+                  {t('clubs.SportsHealthTracking.stats.goalsAchieved')}
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
         <div className="sports-health-tracking-tabs">
           {tabs.map(tab => (
             <button
@@ -455,14 +479,11 @@ export const SportsHealthTracking = ({ club }) => {
           ))}
         </div>
 
-        {/* Content */}
         <div className="sports-health-tracking-content">
           
-          {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div className="sports-health-tracking-overview">
               
-              {/* Metrics Grid */}
               <div className="sports-health-tracking-metrics-grid">
                 {healthMetrics.slice(0, 4).map(metric => {
                   const data = currentMetrics[metric.key];
@@ -494,7 +515,7 @@ export const SportsHealthTracking = ({ club }) => {
                         </div>
                         {data?.change > 0 && (
                           <div className="sports-health-tracking-metric-change">
-                            {data.trend === 'up' ? '+' : '-'}{data.change} от вчера
+                            {getChangeText(data.change, data.trend)}
                           </div>
                         )}
                       </div>
@@ -503,15 +524,14 @@ export const SportsHealthTracking = ({ club }) => {
                 })}
               </div>
 
-              {/* Goals Progress */}
               <div className="sports-health-tracking-goals-overview">
                 <div className="sports-health-tracking-section-header">
-                  <h3>Прогрес на целите</h3>
+                  <h3>{t('clubs.SportsHealthTracking.overview.goalsProgress')}</h3>
                   <button 
                     onClick={() => setActiveTab('goals')}
                     className="sports-health-tracking-view-all-btn"
                   >
-                    <span>Виж всички</span>
+                    <span>{t('clubs.SportsHealthTracking.actions.viewAll')}</span>
                     <FontAwesomeIcon icon={faArrowUp} />
                   </button>
                 </div>
@@ -550,10 +570,9 @@ export const SportsHealthTracking = ({ club }) => {
                 </div>
               </div>
 
-              {/* Health Tips */}
               <div className="sports-health-tracking-tips-section">
                 <div className="sports-health-tracking-section-header">
-                  <h3>Здравословни съвети</h3>
+                  <h3>{t('clubs.SportsHealthTracking.overview.healthTips')}</h3>
                 </div>
                 
                 <div className="sports-health-tracking-tips-grid">
@@ -573,11 +592,9 @@ export const SportsHealthTracking = ({ club }) => {
             </div>
           )}
 
-          {/* Metrics Tab */}
           {activeTab === 'metrics' && (
             <div className="sports-health-tracking-metrics">
               
-              {/* Metric Selector */}
               <div className="sports-health-tracking-metric-selector">
                 {healthMetrics.map(metric => (
                   <button
@@ -592,14 +609,8 @@ export const SportsHealthTracking = ({ club }) => {
                 ))}
               </div>
 
-              {/* Timeframe Selector */}
               <div className="sports-health-tracking-timeframe-selector">
-                {[
-                  { key: 'week', label: '7 дни' },
-                  { key: 'month', label: '30 дни' },
-                  { key: '3months', label: '3 месеца' },
-                  { key: 'year', label: '1 година' }
-                ].map(period => (
+                {timeframePeriods.map(period => (
                   <button
                     key={period.key}
                     onClick={() => setTimeframe(period.key)}
@@ -610,35 +621,34 @@ export const SportsHealthTracking = ({ club }) => {
                 ))}
               </div>
 
-              {/* Chart Placeholder */}
               <div className="sports-health-tracking-chart-container">
                 <div className="sports-health-tracking-chart-placeholder">
                   <FontAwesomeIcon icon={faChartLine} />
-                  <h4>Графика за {healthMetrics.find(m => m.key === selectedMetric)?.title}</h4>
-                  <p>Тук ще се покаже детайлна графика с данни за избрания период</p>
+                  <h4>{t('clubs.SportsHealthTracking.metrics.chartTitle', { 
+                    metric: healthMetrics.find(m => m.key === selectedMetric)?.title 
+                  })}</h4>
+                  <p>{t('clubs.SportsHealthTracking.metrics.chartDescription')}</p>
                 </div>
               </div>
 
-              {/* Add Entry Button */}
               <div className="sports-health-tracking-actions">
                 <button 
                   onClick={() => setShowAddModal(true)}
                   className="sports-health-tracking-add-btn"
                 >
                   <FontAwesomeIcon icon={faPlus} />
-                  <span>Добави запис</span>
+                  <span>{t('clubs.SportsHealthTracking.actions.addEntry')}</span>
                 </button>
               </div>
             </div>
           )}
 
-          {/* Goals Tab */}
           {activeTab === 'goals' && (
             <div className="sports-health-tracking-goals">
               
               <div className="sports-health-tracking-goals-header">
-                <h3>Здравословни цели</h3>
-                <p>Поставете си реалистични цели и следете прогреса си</p>
+                <h3>{t('clubs.SportsHealthTracking.goals.title')}</h3>
+                <p>{t('clubs.SportsHealthTracking.goals.subtitle')}</p>
               </div>
 
               <div className="sports-health-tracking-goals-grid">
@@ -698,9 +708,7 @@ export const SportsHealthTracking = ({ club }) => {
                                 </button>
                               </div>
                             ) : (
-                              <>
-                                <span>цел: {goal.target} {goal.unit}</span>
-                              </>
+                              <span>{t('clubs.SportsHealthTracking.goals.target', { target: goal.target, unit: goal.unit })}</span>
                             )}
                           </div>
                         </div>
@@ -717,10 +725,10 @@ export const SportsHealthTracking = ({ club }) => {
                           </div>
                           <div className="sports-health-tracking-goal-progress-info">
                             <span className="sports-health-tracking-goal-progress-percent">
-                              {Math.round(progress)}% постигнато
+                              {t('clubs.SportsHealthTracking.goals.achieved', { progress: Math.round(progress) })}
                             </span>
                             <span className="sports-health-tracking-goal-deadline">
-                              до {new Date(goal.deadline).toLocaleDateString('bg-BG')}
+                              {t('clubs.SportsHealthTracking.goals.by')} {formatDate(goal.deadline)}
                             </span>
                           </div>
                         </div>
@@ -732,87 +740,82 @@ export const SportsHealthTracking = ({ club }) => {
             </div>
           )}
 
-          {/* Insights Tab */}
           {activeTab === 'insights' && (
             <div className="sports-health-tracking-insights">
               
               <div className="sports-health-tracking-insights-header">
-                <h3>Здравословни анализи</h3>
-                <p>Персонализирани препоръки базирани на вашите данни</p>
+                <h3>{t('clubs.SportsHealthTracking.insights.title')}</h3>
+                <p>{t('clubs.SportsHealthTracking.insights.subtitle')}</p>
               </div>
 
               <div className="sports-health-tracking-insights-grid">
                 
-                {/* Trends Analysis */}
                 <div className="sports-health-tracking-insight-card trends">
                   <div className="sports-health-tracking-insight-header">
                     <FontAwesomeIcon icon={faChartLine} />
-                    <h4>Тенденции</h4>
+                    <h4>{t('clubs.SportsHealthTracking.insights.trends.title')}</h4>
                   </div>
                   <div className="sports-health-tracking-insight-content">
                     <div className="sports-health-tracking-trend-item positive">
                       <FontAwesomeIcon icon={faArrowUp} />
-                      <span>Активността ви се е увеличила с 15% този месец</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.trends.activityIncrease')}</span>
                     </div>
                     <div className="sports-health-tracking-trend-item neutral">
                       <FontAwesomeIcon icon={faMinus} />
-                      <span>Пулсът в покой остава стабилен</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.trends.heartRateStable')}</span>
                     </div>
                     <div className="sports-health-tracking-trend-item negative">
                       <FontAwesomeIcon icon={faArrowDown} />
-                      <span>Качеството на съня се е влошило леко</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.trends.sleepDecline')}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Recommendations */}
                 <div className="sports-health-tracking-insight-card recommendations">
                   <div className="sports-health-tracking-insight-header">
                     <FontAwesomeIcon icon={faLightbulb} />
-                    <h4>Препоръки</h4>
+                    <h4>{t('clubs.SportsHealthTracking.insights.recommendations.title')}</h4>
                   </div>
                   <div className="sports-health-tracking-insight-content">
                     <div className="sports-health-tracking-recommendation">
                       <FontAwesomeIcon icon={faWater} />
-                      <span>Увеличете приема на вода с 0.5л дневно</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.recommendations.increaseWater')}</span>
                     </div>
                     <div className="sports-health-tracking-recommendation">
                       <FontAwesomeIcon icon={faBed} />
-                      <span>Опитайте да заспивате 30 мин по-рано</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.recommendations.sleepEarlier')}</span>
                     </div>
                     <div className="sports-health-tracking-recommendation">
                       <FontAwesomeIcon icon={faRunning} />
-                      <span>Добавете още 1500 стъпки дневно</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.recommendations.moreSteps')}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Achievements */}
                 <div className="sports-health-tracking-insight-card achievements">
                   <div className="sports-health-tracking-insight-header">
                     <FontAwesomeIcon icon={faTrophy} />
-                    <h4>Постижения</h4>
+                    <h4>{t('clubs.SportsHealthTracking.insights.achievements.title')}</h4>
                   </div>
                   <div className="sports-health-tracking-insight-content">
                     <div className="sports-health-tracking-achievement">
                       <FontAwesomeIcon icon={faAward} />
-                      <span>7 дни поред над 8000 стъпки</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.achievements.sevenDaysSteps')}</span>
                     </div>
                     <div className="sports-health-tracking-achievement">
                       <FontAwesomeIcon icon={faStar} />
-                      <span>Постигната цел за хидратация</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.achievements.hydrationGoal')}</span>
                     </div>
                     <div className="sports-health-tracking-achievement">
                       <FontAwesomeIcon icon={faCrown} />
-                      <span>Най-добър месец за активност</span>
+                      <span>{t('clubs.SportsHealthTracking.insights.achievements.bestMonth')}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Health Tips */}
               <div className="sports-health-tracking-all-tips">
-                <h4>Всички здравословни съвети</h4>
+                <h4>{t('clubs.SportsHealthTracking.insights.allTips')}</h4>
                 <div className="sports-health-tracking-tips-list">
                   {healthTips.map(tip => (
                     <div key={tip.id} className="sports-health-tracking-tip-item">
@@ -830,19 +833,17 @@ export const SportsHealthTracking = ({ club }) => {
             </div>
           )}
 
-          {/* Services Tab */}
           {activeTab === 'services' && (
             <div className="sports-health-tracking-services">
               
               <div className="sports-health-tracking-services-header">
-                <h3>Здравни услуги</h3>
-                <p>Професионални здравни услуги и лекции в нашия клуб</p>
+                <h3>{t('clubs.SportsHealthTracking.services.title')}</h3>
+                <p>{t('clubs.SportsHealthTracking.services.subtitle')}</p>
               </div>
 
-              {/* Health Lectures */}
               {healthLectures.length > 0 && (
                 <div className="sports-health-tracking-service-section">
-                  <h4>Здравни лекции</h4>
+                  <h4>{t('clubs.SportsHealthTracking.services.healthLectures')}</h4>
                   <div className="sports-health-tracking-lectures-grid">
                     {healthLectures.map((lecture, index) => (
                       <div key={index} className="sports-health-tracking-lecture-card">
@@ -867,7 +868,7 @@ export const SportsHealthTracking = ({ club }) => {
                             {lecture.nextDate && (
                               <div className="sports-health-tracking-lecture-detail">
                                 <FontAwesomeIcon icon={faCalendarAlt} />
-                                <span>{new Date(lecture.nextDate).toLocaleDateString('bg-BG')}</span>
+                                <span>{formatDate(lecture.nextDate)}</span>
                               </div>
                             )}
                           </div>
@@ -878,10 +879,9 @@ export const SportsHealthTracking = ({ club }) => {
                 </div>
               )}
 
-              {/* Medical Services */}
               {medicalServices.length > 0 && (
                 <div className="sports-health-tracking-service-section">
-                  <h4>Медицински услуги</h4>
+                  <h4>{t('clubs.SportsHealthTracking.services.medicalServices')}</h4>
                   <div className="sports-health-tracking-services-grid">
                     {medicalServices.map((service, index) => (
                       <div key={index} className="sports-health-tracking-service-card">
@@ -914,20 +914,19 @@ export const SportsHealthTracking = ({ club }) => {
                 </div>
               )}
 
-              {/* Emergency Info */}
               <div className="sports-health-tracking-emergency-info">
                 <div className="sports-health-tracking-emergency-header">
                   <FontAwesomeIcon icon={faExclamationTriangle} />
-                  <h4>Спешна информация</h4>
+                  <h4>{t('clubs.SportsHealthTracking.services.emergencyInfo')}</h4>
                 </div>
                 <div className="sports-health-tracking-emergency-content">
-                  <p>При спешни случаи свържете се с:</p>
+                  <p>{t('clubs.SportsHealthTracking.services.emergencyContact')}:</p>
                   <div className="sports-health-tracking-emergency-contacts">
                     <div className="sports-health-tracking-emergency-contact">
-                      <strong>Спешна помощ: 112</strong>
+                      <strong>{t('clubs.SportsHealthTracking.services.emergencyNumber')}: 112</strong>
                     </div>
                     <div className="sports-health-tracking-emergency-contact">
-                      <strong>Клубен лекар: {club.contacts?.phone || 'Няма данни'}</strong>
+                      <strong>{t('clubs.SportsHealthTracking.services.clubDoctor')}: {club.contacts?.phone || t('clubs.SportsHealthTracking.services.noData')}</strong>
                     </div>
                   </div>
                 </div>
@@ -937,12 +936,11 @@ export const SportsHealthTracking = ({ club }) => {
         </div>
       </div>
 
-      {/* Add Entry Modal */}
       {showAddModal && (
         <div className="sports-health-tracking-modal-overlay" onClick={() => setShowAddModal(false)}>
           <div className="sports-health-tracking-modal" onClick={(e) => e.stopPropagation()}>
             <div className="sports-health-tracking-modal-header">
-              <h3>Добави нов запис</h3>
+              <h3>{t('clubs.SportsHealthTracking.modal.addEntry')}</h3>
               <button 
                 onClick={() => setShowAddModal(false)}
                 className="sports-health-tracking-modal-close"
@@ -953,7 +951,7 @@ export const SportsHealthTracking = ({ club }) => {
             
             <form onSubmit={handleAddEntry} className="sports-health-tracking-modal-form">
               <div className="sports-health-tracking-form-group">
-                <label>Тип показател</label>
+                <label>{t('clubs.SportsHealthTracking.modal.metricType')}</label>
                 <select 
                   value={newEntry.type}
                   onChange={(e) => setNewEntry(prev => ({ ...prev, type: e.target.value }))}
@@ -968,7 +966,7 @@ export const SportsHealthTracking = ({ club }) => {
               
               <div className="sports-health-tracking-form-row">
                 <div className="sports-health-tracking-form-group">
-                  <label>Дата</label>
+                  <label>{t('clubs.SportsHealthTracking.modal.date')}</label>
                   <input
                     type="date"
                     value={newEntry.date}
@@ -977,7 +975,7 @@ export const SportsHealthTracking = ({ club }) => {
                   />
                 </div>
                 <div className="sports-health-tracking-form-group">
-                  <label>Час</label>
+                  <label>{t('clubs.SportsHealthTracking.modal.time')}</label>
                   <input
                     type="time"
                     value={newEntry.time}
@@ -989,11 +987,13 @@ export const SportsHealthTracking = ({ club }) => {
               
               <div className="sports-health-tracking-form-group">
                 <label>
-                  Стойност ({healthMetrics.find(m => m.key === newEntry.type)?.unit})
+                  {t('clubs.SportsHealthTracking.modal.value')} ({healthMetrics.find(m => m.key === newEntry.type)?.unit})
                 </label>
                 <input
                   type={newEntry.type === 'bloodPressure' ? 'text' : 'number'}
-                  placeholder={newEntry.type === 'bloodPressure' ? '120/80' : 'Въведете стойност'}
+                  placeholder={newEntry.type === 'bloodPressure' ? 
+                    t('clubs.SportsHealthTracking.modal.bloodPressurePlaceholder') : 
+                    t('clubs.SportsHealthTracking.modal.valuePlaceholder')}
                   value={newEntry.value}
                   onChange={(e) => setNewEntry(prev => ({ ...prev, value: e.target.value }))}
                   required
@@ -1001,9 +1001,9 @@ export const SportsHealthTracking = ({ club }) => {
               </div>
               
               <div className="sports-health-tracking-form-group">
-                <label>Бележки (по желание)</label>
+                <label>{t('clubs.SportsHealthTracking.modal.notes')}</label>
                 <textarea
-                  placeholder="Допълнителна информация..."
+                  placeholder={t('clubs.SportsHealthTracking.modal.notesPlaceholder')}
                   value={newEntry.notes}
                   onChange={(e) => setNewEntry(prev => ({ ...prev, notes: e.target.value }))}
                   rows="3"
@@ -1013,14 +1013,14 @@ export const SportsHealthTracking = ({ club }) => {
               <div className="sports-health-tracking-form-actions">
                 <button type="submit" className="sports-health-tracking-submit-btn">
                   <FontAwesomeIcon icon={faSave} />
-                  <span>Запази</span>
+                  <span>{t('clubs.SportsHealthTracking.actions.save')}</span>
                 </button>
                 <button 
                   type="button" 
                   onClick={() => setShowAddModal(false)}
                   className="sports-health-tracking-cancel-btn"
                 >
-                  Отказ
+                  {t('clubs.SportsHealthTracking.actions.cancel')}
                 </button>
               </div>
             </form>

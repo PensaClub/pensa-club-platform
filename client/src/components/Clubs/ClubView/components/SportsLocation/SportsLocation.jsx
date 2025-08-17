@@ -1,5 +1,5 @@
-// components/SportsLocation/SportsLocation.jsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup, Circle, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -41,7 +41,6 @@ import {
 import 'leaflet/dist/leaflet.css';
 import './sportsLocation.css';
 
-// Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -49,7 +48,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom sports club icon
 const sportsClubIcon = new L.Icon({
   iconUrl: 'data:image/svg+xml;base64,' + btoa(`
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#3b82f6" width="36" height="36">
@@ -62,21 +60,19 @@ const sportsClubIcon = new L.Icon({
 });
 
 export const SportsLocation = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('map');
   const [selectedTransport, setSelectedTransport] = useState('running');
   const [mapLoaded, setMapLoaded] = useState(false);
   const [copiedItems, setCopiedItems] = useState({});
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Извличаме САМО реални данни от клуба
   const location = club.location || {};
   const contacts = club.contacts || {};
 
-  // Проверяваме дали има РЕАЛНО съдържание за показване
   const hasLocationContent = 
     location.address ||
     location.city ||
@@ -88,142 +84,119 @@ export const SportsLocation = ({ club }) => {
     return null;
   }
 
-  // Default координати ако няма реални
   const coordinates = location.coordinates || { lat: 42.6777, lng: 23.3219 };
   const venue = location.venue || {};
-
-  // Извличаме реални близки места САМО ако има такива данни
   const nearbyPlaces = club.location?.nearbyPlaces || [];
 
-  const sportsTransportOptions = [
+  const getSportsTransportOptions = () => [
     {
       id: 'running',
-      name: 'Бягане',
+      name: t('clubs.SportsLocation.transport.running.name'),
       icon: faRunning,
       color: '#ef4444',
-      duration: '10-20 мин',
-      description: 'Активно пристигане',
-      instructions: [
-        'Отлична кардио тренировка преди клуба',
-        'Използвайте безопасни пешеходни зони',
-        'Носете спортни дрехи и обувки',
-        'Планирайте маршрут през парковете'
-      ]
+      duration: t('clubs.SportsLocation.transport.running.duration'),
+      description: t('clubs.SportsLocation.transport.running.description'),
+      instructions: t('clubs.SportsLocation.transport.running.instructions', { returnObjects: true })
     },
     {
       id: 'cycling',
-      name: 'Колоездене',
+      name: t('clubs.SportsLocation.transport.cycling.name'),
       icon: faBicycle,
       color: '#10b981',
-      duration: '5-15 мин',
-      description: 'Еко и здравословно',
-      instructions: [
-        'Проверете велосипедните алеи',
-        'Носете каска за безопасност',
-        'Търсете места за заключване на велосипеда',
-        'Следвайте правилата за движение'
-      ]
+      duration: t('clubs.SportsLocation.transport.cycling.duration'),
+      description: t('clubs.SportsLocation.transport.cycling.description'),
+      instructions: t('clubs.SportsLocation.transport.cycling.instructions', { returnObjects: true })
     },
     {
       id: 'walking',
-      name: 'Спортна разходка',
+      name: t('clubs.SportsLocation.transport.walking.name'),
       icon: faWalking,
       color: '#059669',
-      duration: '15-25 мин',
-      description: 'Загряване преди тренировка',
-      instructions: [
-        'Бърза спортна разходка като загряване',
-        'Използвайте удобни спортни обувки',
-        'Правете разтягания по пътя',
-        'Хидратирайте се добре'
-      ]
+      duration: t('clubs.SportsLocation.transport.walking.duration'),
+      description: t('clubs.SportsLocation.transport.walking.description'),
+      instructions: t('clubs.SportsLocation.transport.walking.instructions', { returnObjects: true })
     },
     {
       id: 'bus',
-      name: 'Градски транспорт',
+      name: t('clubs.SportsLocation.transport.bus.name'),
       icon: faBus,
       color: '#3b82f6',
-      duration: '15-30 мин',
-      description: 'Удобен достъп',
-      instructions: [
-        'Проверете разписанията на автобусите',
-        'Използвайте спортна чанта за удобство',
-        'Планирайте времето за пристигане',
-        'Запазете енергия за тренировката'
-      ]
+      duration: t('clubs.SportsLocation.transport.bus.duration'),
+      description: t('clubs.SportsLocation.transport.bus.description'),
+      instructions: t('clubs.SportsLocation.transport.bus.instructions', { returnObjects: true })
     },
     {
       id: 'car',
-      name: 'Автомобил',
+      name: t('clubs.SportsLocation.transport.car.name'),
       icon: faCar,
       color: '#8b5cf6',
-      duration: '10-40 мин',
-      description: 'Бърз достъп',
-      instructions: [
-        'Потърсете близо паркиране',
-        'Проверете за спортни съоръжения наблизо',
-        'Използвайте GPS за най-бързия път',
-        'Носете спортната си екипировка в колата'
-      ]
+      duration: t('clubs.SportsLocation.transport.car.duration'),
+      description: t('clubs.SportsLocation.transport.car.description'),
+      instructions: t('clubs.SportsLocation.transport.car.instructions', { returnObjects: true })
     }
   ];
 
-  const sportsParkingInfo = {
+  const getSportsParkingInfo = () => ({
     sports: {
-      type: 'Спортен комплекс паркинг',
-      price: 'Обикновено безплатен',
-      maxTime: 'Според тренировките',
-      workingHours: 'Според работното време на комплекса',
-      features: ['Охрана', 'Видеонаблюдение', 'Близо до съблекални']
+      type: t('clubs.SportsLocation.parking.sports.type'),
+      price: t('clubs.SportsLocation.parking.sports.price'),
+      maxTime: t('clubs.SportsLocation.parking.sports.maxTime'),
+      workingHours: t('clubs.SportsLocation.parking.sports.workingHours'),
+      features: t('clubs.SportsLocation.parking.sports.features', { returnObjects: true })
     },
     street: {
-      type: 'Улично паркиране',
-      price: 'Според зоната',
-      maxTime: 'Според регулациите',
-      workingHours: 'Проверете пътните знаци',
-      features: ['Различни зони', 'Променливи цени', 'Ограничено време']
+      type: t('clubs.SportsLocation.parking.street.type'),
+      price: t('clubs.SportsLocation.parking.street.price'),
+      maxTime: t('clubs.SportsLocation.parking.street.maxTime'),
+      workingHours: t('clubs.SportsLocation.parking.street.workingHours'),
+      features: t('clubs.SportsLocation.parking.street.features', { returnObjects: true })
     },
     underground: {
-      type: 'Подземен паркинг',
-      price: 'Платен',
-      maxTime: 'Без ограничение',
-      workingHours: '24/7',
-      features: ['Сигурност', 'Защита от времето', 'Резервация възможна']
+      type: t('clubs.SportsLocation.parking.underground.type'),
+      price: t('clubs.SportsLocation.parking.underground.price'),
+      maxTime: t('clubs.SportsLocation.parking.underground.maxTime'),
+      workingHours: t('clubs.SportsLocation.parking.underground.workingHours'),
+      features: t('clubs.SportsLocation.parking.underground.features', { returnObjects: true })
     }
-  };
+  });
 
-  const sportsAccessibilityFeatures = [
+  const getSportsAccessibilityFeatures = () => [
     {
-      feature: 'Спортен достъп с инвалидна количка',
+      feature: t('clubs.SportsLocation.accessibility.wheelchair.feature'),
       available: venue.accessibility !== false,
       icon: faWheelchair,
-      description: venue.accessibility !== false ? 'Адаптирани спортни съоръжения' : 'Ограничен спортен достъп'
+      description: venue.accessibility !== false ? 
+        t('clubs.SportsLocation.accessibility.wheelchair.available') : 
+        t('clubs.SportsLocation.accessibility.wheelchair.limited')
     },
     {
-      feature: 'Фитнес лифт',
+      feature: t('clubs.SportsLocation.accessibility.elevator.feature'),
       available: venue.elevatorAccess !== false,
       icon: faElevator,
-      description: 'Лесен достъп до всички етажи на спортния комплекс'
+      description: t('clubs.SportsLocation.accessibility.elevator.description')
     },
     {
-      feature: 'Спортни стълби',
+      feature: t('clubs.SportsLocation.accessibility.stairs.feature'),
       available: true,
       icon: faStairs,
-      description: 'Стълбите също са част от тренировката!'
+      description: t('clubs.SportsLocation.accessibility.stairs.description')
     },
     {
-      feature: 'Безопасни зони',
+      feature: t('clubs.SportsLocation.accessibility.safety.feature'),
       available: true,
       icon: faHeartbeat,
-      description: 'Медицинска помощ и безопасност по време на тренировки'
+      description: t('clubs.SportsLocation.accessibility.safety.description')
     }
   ];
+
+  const sportsTransportOptions = getSportsTransportOptions();
+  const sportsParkingInfo = getSportsParkingInfo();
+  const sportsAccessibilityFeatures = getSportsAccessibilityFeatures();
 
   useEffect(() => {
     setMapLoaded(true);
   }, []);
 
-  // Copy to clipboard function
   const copyToClipboard = async (text, type) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -239,8 +212,8 @@ export const SportsLocation = ({ club }) => {
         });
       }, 2000);
     } catch (error) {
-      console.error('Грешка при копиране:', error);
-      alert('Грешка при копиране. Моля опитайте отново.');
+      console.error('Copy error:', error);
+      alert(t('clubs.SportsLocation.messages.copyError'));
     }
   };
 
@@ -258,21 +231,21 @@ export const SportsLocation = ({ club }) => {
         window.open(`https://waze.com/ul?navigate=yes&ll=${coords}`, '_blank');
         break;
       default:
-        alert('Отваряне на карта...');
+        alert(t('clubs.SportsLocation.messages.openingMap'));
     }
   };
 
   const handleShare = () => {
-    const locationText = `${location.address || 'Адресът не е посочен'}, ${location.city || ''}`;
+    const locationText = `${location.address || t('clubs.SportsLocation.messages.noAddress')}, ${location.city || ''}`;
     if (navigator.share) {
       navigator.share({
-        title: `Локация на ${club.name}`,
+        title: t('clubs.SportsLocation.share.title', { clubName: club.name }),
         text: locationText,
         url: window.location.href
       });
     } else {
       copyToClipboard(locationText, 'share');
-      alert('Адресът е копиран в клипборда!');
+      alert(t('clubs.SportsLocation.messages.addressCopied'));
     }
   };
 
@@ -280,26 +253,31 @@ export const SportsLocation = ({ club }) => {
     window.open(`tel:${phone}`);
   };
 
+  const getVenueTypeLabel = (type) => {
+    if (type === 'sports_complex') {
+      return t('clubs.SportsLocation.venue.types.sportsComplex');
+    }
+    return t('clubs.SportsLocation.venue.types.sportsFacility');
+  };
+
   return (
     <section id="sports-location" className="sports-location-main-section">
       <div className="sports-location-container">
         
-        {/* Header */}
         <div className="sports-location-header">
           <div className="sports-location-badge">
             <FontAwesomeIcon icon={faFlag} />
-            <span>Дестинация</span>
+            <span>{t('clubs.SportsLocation.header.badge')}</span>
           </div>
           <h2 className="sports-location-title">
             <FontAwesomeIcon icon={faBolt} className="sports-location-title-icon" />
-            Къде тренираме
+            {t('clubs.SportsLocation.header.title')}
           </h2>
           <p className="sports-location-subtitle">
-            Намерете най-бързия и най-активния път до вашия спортен клуб
+            {t('clubs.SportsLocation.header.subtitle')}
           </p>
         </div>
 
-        {/* Quick Sports Info */}
         <div className="sports-location-quick-info">
           <div className="sports-location-address-card">
             <div className="sports-location-address-icon">
@@ -309,17 +287,17 @@ export const SportsLocation = ({ club }) => {
             <div className="sports-location-address-info">
               <h3>
                 <FontAwesomeIcon icon={faTrophy} />
-                Нашия спортен център
+                {t('clubs.SportsLocation.quickInfo.title')}
               </h3>
               <div className="sports-location-full-address">
                 {location.address && <div>{location.address}</div>}
                 {location.city && <div>{location.city}{location.postalCode && ` ${location.postalCode}`}</div>}
                 {location.region && <div>{location.region}</div>}
-                {!location.address && <div>Адресът ще бъде обявен скоро</div>}
+                {!location.address && <div>{t('clubs.SportsLocation.quickInfo.addressSoon')}</div>}
               </div>
               <div className="sports-location-venue-type">
                 <FontAwesomeIcon icon={faFire} />
-                <span>{venue.type === 'sports_complex' ? 'Спортен комплекс' : 'Спортно съоръжение'}</span>
+                <span>{getVenueTypeLabel(venue.type)}</span>
               </div>
             </div>
             <div className="sports-location-address-actions">
@@ -328,7 +306,7 @@ export const SportsLocation = ({ club }) => {
                 onClick={() => handleDirections('google')}
               >
                 <FontAwesomeIcon icon={faDirections} />
-                <span>Навигация</span>
+                <span>{t('clubs.SportsLocation.actions.navigation')}</span>
                 <div className="sports-location-btn-energy"></div>
               </button>
               <button 
@@ -336,7 +314,7 @@ export const SportsLocation = ({ club }) => {
                 onClick={handleShare}
               >
                 <FontAwesomeIcon icon={faShareAlt} />
-                Споделяне
+                {t('clubs.SportsLocation.actions.share')}
               </button>
               {location.address && (
                 <button 
@@ -344,21 +322,20 @@ export const SportsLocation = ({ club }) => {
                   onClick={() => copyToClipboard(`${location.address}, ${location.city || ''}`, 'address')}
                 >
                   <FontAwesomeIcon icon={copiedItems['address'] ? faCheckCircle : faCopy} />
-                  {copiedItems['address'] ? 'Копирано!' : 'Копирай'}
+                  {copiedItems['address'] ? t('clubs.SportsLocation.actions.copied') : t('clubs.SportsLocation.actions.copy')}
                 </button>
               )}
             </div>
           </div>
         </div>
 
-        {/* Sports Tabs */}
         <div className="sports-location-tabs">
           <button
             className={`sports-location-tab ${activeTab === 'map' ? 'active' : ''}`}
             onClick={() => setActiveTab('map')}
           >
             <FontAwesomeIcon icon={faMapMarkerAlt} />
-            <span>Карта</span>
+            <span>{t('clubs.SportsLocation.tabs.map')}</span>
             <div className="sports-location-tab-energy"></div>
           </button>
           <button
@@ -366,7 +343,7 @@ export const SportsLocation = ({ club }) => {
             onClick={() => setActiveTab('transport')}
           >
             <FontAwesomeIcon icon={faRunning} />
-            <span>Активен транспорт</span>
+            <span>{t('clubs.SportsLocation.tabs.transport')}</span>
             <div className="sports-location-tab-energy"></div>
           </button>
           <button
@@ -374,7 +351,7 @@ export const SportsLocation = ({ club }) => {
             onClick={() => setActiveTab('parking')}
           >
             <FontAwesomeIcon icon={faParking} />
-            <span>Паркиране</span>
+            <span>{t('clubs.SportsLocation.tabs.parking')}</span>
             <div className="sports-location-tab-energy"></div>
           </button>
           {nearbyPlaces.length > 0 && (
@@ -383,16 +360,14 @@ export const SportsLocation = ({ club }) => {
               onClick={() => setActiveTab('nearby')}
             >
               <FontAwesomeIcon icon={faCompass} />
-              <span>Спортни обекти</span>
+              <span>{t('clubs.SportsLocation.tabs.nearby')}</span>
               <div className="sports-location-tab-energy"></div>
             </button>
           )}
         </div>
 
-        {/* Tab Content */}
         <div className="sports-location-content">
           
-          {/* Map Tab */}
           {activeTab === 'map' && (
             <div className="sports-location-map-section">
               <div className="sports-location-map-container">
@@ -408,7 +383,6 @@ export const SportsLocation = ({ club }) => {
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
                     
-                    {/* Main sports club marker */}
                     <Marker 
                       position={[coordinates.lat, coordinates.lng]}
                       icon={sportsClubIcon}
@@ -424,7 +398,7 @@ export const SportsLocation = ({ club }) => {
                           <div className="sports-location-popup-actions">
                             <button onClick={() => handleDirections('google')}>
                               <FontAwesomeIcon icon={faDirections} />
-                              Навигация
+                              {t('clubs.SportsLocation.actions.navigation')}
                             </button>
                           </div>
                         </div>
@@ -436,7 +410,6 @@ export const SportsLocation = ({ club }) => {
                       </Tooltip>
                     </Marker>
 
-                    {/* Nearby places markers */}
                     {nearbyPlaces.map((place, index) => (
                       <Marker 
                         key={index}
@@ -446,13 +419,12 @@ export const SportsLocation = ({ club }) => {
                           <div className="sports-location-popup">
                             <h4>{place.name}</h4>
                             <p>{place.description}</p>
-                            {place.distance && <p><strong>Разстояние:</strong> {place.distance}</p>}
+                            {place.distance && <p><strong>{t('clubs.SportsLocation.map.distance')}:</strong> {place.distance}</p>}
                           </div>
                         </Popup>
                       </Marker>
                     ))}
 
-                    {/* Sports training radius circle */}
                     <Circle
                       center={[coordinates.lat, coordinates.lng]}
                       radius={500}
@@ -462,7 +434,7 @@ export const SportsLocation = ({ club }) => {
                       weight={3}
                     >
                       <Tooltip>
-                        500м спортна зона
+                        {t('clubs.SportsLocation.map.trainingZone')}
                       </Tooltip>
                     </Circle>
                   </MapContainer>
@@ -472,11 +444,11 @@ export const SportsLocation = ({ club }) => {
                   <div className="sports-location-map-legend">
                     <div className="sports-location-legend-item">
                       <div className="sports-location-legend-icon sports-club"></div>
-                      <span>Спортен клуб</span>
+                      <span>{t('clubs.SportsLocation.map.legend.sportsClub')}</span>
                     </div>
                     <div className="sports-location-legend-item">
                       <div className="sports-location-legend-icon training-zone"></div>
-                      <span>Тренировъчна зона</span>
+                      <span>{t('clubs.SportsLocation.map.legend.trainingZone')}</span>
                     </div>
                   </div>
                   
@@ -500,25 +472,25 @@ export const SportsLocation = ({ club }) => {
               <div className="sports-location-venue-info">
                 <div className="sports-location-venue-header">
                   <FontAwesomeIcon icon={faFire} />
-                  <h3>Спортни съоръжения</h3>
+                  <h3>{t('clubs.SportsLocation.venue.title')}</h3>
                 </div>
                 <div className="sports-location-venue-details">
                   {venue.type && (
                     <div className="sports-location-venue-item">
                       <FontAwesomeIcon icon={faInfoCircle} />
-                      <span>Тип: {venue.type === 'sports_complex' ? 'Спортен комплекс' : venue.type}</span>
+                      <span>{t('clubs.SportsLocation.venue.type')}: {getVenueTypeLabel(venue.type)}</span>
                     </div>
                   )}
                   {venue.size && (
                     <div className="sports-location-venue-item">
                       <FontAwesomeIcon icon={faMapSigns} />
-                      <span>Площ: {venue.size}</span>
+                      <span>{t('clubs.SportsLocation.venue.size')}: {venue.size}</span>
                     </div>
                   )}
                   {venue.capacity && (
                     <div className="sports-location-venue-item">
                       <FontAwesomeIcon icon={faUsers} />
-                      <span>Капацитет: {venue.capacity} спортисти</span>
+                      <span>{t('clubs.SportsLocation.venue.capacity')}: {venue.capacity} {t('clubs.SportsLocation.venue.athletes')}</span>
                     </div>
                   )}
                   
@@ -526,11 +498,11 @@ export const SportsLocation = ({ club }) => {
                     <>
                       <div className="sports-location-venue-item">
                         <FontAwesomeIcon icon={faDumbbell} />
-                        <span>Модерен спортен център</span>
+                        <span>{t('clubs.SportsLocation.venue.modern')}</span>
                       </div>
                       <div className="sports-location-venue-item">
                         <FontAwesomeIcon icon={faUsers} />
-                        <span>Подходящ за всички възрасти</span>
+                        <span>{t('clubs.SportsLocation.venue.allAges')}</span>
                       </div>
                     </>
                   )}
@@ -540,7 +512,7 @@ export const SportsLocation = ({ club }) => {
                   <div className="sports-location-facilities">
                     <h4>
                       <FontAwesomeIcon icon={faTrophy} />
-                      Спортни удобства
+                      {t('clubs.SportsLocation.venue.facilities')}
                     </h4>
                     <div className="sports-location-facilities-list">
                       {venue.facilities.map((facility, index) => (
@@ -556,13 +528,12 @@ export const SportsLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Transport Tab */}
           {activeTab === 'transport' && (
             <div className="sports-location-transport-section">
               <div className="sports-location-transport-header">
                 <FontAwesomeIcon icon={faHeartbeat} />
-                <h3>Изберете вашия активен начин</h3>
-                <p>Всеки път до клуба може да бъде част от тренировката!</p>
+                <h3>{t('clubs.SportsLocation.transport.title')}</h3>
+                <p>{t('clubs.SportsLocation.transport.subtitle')}</p>
               </div>
               
               <div className="sports-location-transport-options">
@@ -600,7 +571,7 @@ export const SportsLocation = ({ club }) => {
                     <div key={option.id} className="sports-location-instructions">
                       <div className="sports-location-instructions-header">
                         <FontAwesomeIcon icon={option.icon} style={{ color: option.color }} />
-                        <h3>Спортни съвети за {option.name}</h3>
+                        <h3>{t('clubs.SportsLocation.transport.tipsFor')} {option.name}</h3>
                         <FontAwesomeIcon icon={faFire} className="sports-location-fire-icon" />
                       </div>
                       <ul className="sports-location-instructions-list">
@@ -618,13 +589,12 @@ export const SportsLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Parking Tab */}
           {activeTab === 'parking' && (
             <div className="sports-location-parking-section">
               <div className="sports-location-parking-header">
                 <FontAwesomeIcon icon={faParking} />
-                <h3>Паркиране за спортисти</h3>
-                <p>Информация за паркиране в близост до спортния комплекс</p>
+                <h3>{t('clubs.SportsLocation.parking.title')}</h3>
+                <p>{t('clubs.SportsLocation.parking.subtitle')}</p>
               </div>
               
               <div className="sports-location-parking-grid">
@@ -638,20 +608,20 @@ export const SportsLocation = ({ club }) => {
                     </div>
                     <div className="sports-location-parking-details">
                       <div className="sports-location-parking-item">
-                        <span className="sports-location-parking-label">Цена:</span>
+                        <span className="sports-location-parking-label">{t('clubs.SportsLocation.parking.price')}:</span>
                         <span>{parking.price}</span>
                       </div>
                       <div className="sports-location-parking-item">
-                        <span className="sports-location-parking-label">Максимално време:</span>
+                        <span className="sports-location-parking-label">{t('clubs.SportsLocation.parking.maxTime')}:</span>
                         <span>{parking.maxTime}</span>
                       </div>
                       <div className="sports-location-parking-item">
-                        <span className="sports-location-parking-label">Работно време:</span>
+                        <span className="sports-location-parking-label">{t('clubs.SportsLocation.parking.workingHours')}:</span>
                         <span>{parking.workingHours}</span>
                       </div>
                       
                       <div className="sports-location-parking-features">
-                        <h4>Предимства:</h4>
+                        <h4>{t('clubs.SportsLocation.parking.advantages')}:</h4>
                         <div className="sports-location-features-list">
                           {parking.features.map((feature, index) => (
                             <span key={index} className="sports-location-feature-tag">
@@ -668,13 +638,12 @@ export const SportsLocation = ({ club }) => {
             </div>
           )}
 
-          {/* Nearby Tab */}
           {activeTab === 'nearby' && nearbyPlaces.length > 0 && (
             <div className="sports-location-nearby-section">
               <div className="sports-location-nearby-header">
                 <FontAwesomeIcon icon={faCompass} />
-                <h3>Спортни обекти в района</h3>
-                <p>Други спортни възможности в близост до нашия клуб</p>
+                <h3>{t('clubs.SportsLocation.nearby.title')}</h3>
+                <p>{t('clubs.SportsLocation.nearby.subtitle')}</p>
               </div>
               
               <div className="sports-location-nearby-grid">
@@ -701,12 +670,11 @@ export const SportsLocation = ({ club }) => {
           )}
         </div>
 
-        {/* Sports Accessibility */}
         <div className="sports-location-accessibility">
           <div className="sports-location-accessibility-header">
             <FontAwesomeIcon icon={faHeartbeat} />
-            <h3>Спортна достъпност</h3>
-            <p>Информация за достъпността на спортните съоръжения</p>
+            <h3>{t('clubs.SportsLocation.accessibility.title')}</h3>
+            <p>{t('clubs.SportsLocation.accessibility.subtitle')}</p>
           </div>
           
           <div className="sports-location-accessibility-grid">
@@ -727,12 +695,11 @@ export const SportsLocation = ({ club }) => {
           </div>
         </div>
 
-        {/* Sports Help */}
         <div className="sports-location-help">
           <div className="sports-location-help-content">
             <FontAwesomeIcon icon={faTrophy} className="sports-location-help-trophy" />
-            <h3>Готови за тренировка?</h3>
-            <p>Ако имате въпроси за достъпа до спортния комплекс или се нуждаете от помощ</p>
+            <h3>{t('clubs.SportsLocation.help.title')}</h3>
+            <p>{t('clubs.SportsLocation.help.subtitle')}</p>
             <div className="sports-location-help-buttons">
               {contacts.phone && (
                 <button 
@@ -740,7 +707,7 @@ export const SportsLocation = ({ club }) => {
                   onClick={() => handleCallPhone(contacts.phone)}
                 >
                   <FontAwesomeIcon icon={faPhone} />
-                  Обадете се: {contacts.phone}
+                  {t('clubs.SportsLocation.help.callUs')}: {contacts.phone}
                   <div className="sports-location-btn-energy"></div>
                 </button>
               )}
@@ -749,7 +716,7 @@ export const SportsLocation = ({ club }) => {
                 onClick={() => handleDirections('google')}
               >
                 <FontAwesomeIcon icon={faDirections} />
-                Навигация в реално време
+                {t('clubs.SportsLocation.help.realTimeNavigation')}
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHeartbeat,
@@ -30,15 +31,15 @@ import {
   faAppleAlt,
   faHome,
   faBuilding,
-  faMobile // заменил faPhone с faMobile
+  faMobile
 } from '@fortawesome/free-solid-svg-icons';
 import './sportsAbout.css';
 
 export const SportsAbout = ({ club }) => {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState('mission');
   const [expandedFacility, setExpandedFacility] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.fullDescription && 
       !club?.shortDescription &&
       !club?.foundedYear && 
@@ -49,7 +50,6 @@ export const SportsAbout = ({ club }) => {
     return null;
   }
 
-  // Събираме данни
   const description = club.fullDescription || club.shortDescription;
   const membership = club.membership || {};
   const location = club.location || {};
@@ -63,109 +63,127 @@ export const SportsAbout = ({ club }) => {
   const accessibility = pensionersSpecific.accessibility || {};
   const ageSpecificNeeds = pensionersSpecific.ageSpecificNeeds || {};
 
-  // Ако няма основно описание, не показваме компонента
   if (!description && !club.foundedYear && !venue.facilities?.length) {
     return null;
   }
 
-  // Секции за показване
-  const sections = [
-    { key: 'mission', label: 'Мисия', icon: faHeartbeat },
-    { key: 'facilities', label: 'Съоръжения', icon: faBuilding },
-    { key: 'safety', label: 'Безопасност', icon: faShieldAlt },
-    { key: 'instructors', label: 'Екип', icon: faUserMd }
+  const getSections = () => [
+    { key: 'mission', label: t('clubs.SportsAbout.sections.mission'), icon: faHeartbeat },
+    { key: 'facilities', label: t('clubs.SportsAbout.sections.facilities'), icon: faBuilding },
+    { key: 'safety', label: t('clubs.SportsAbout.sections.safety'), icon: faShieldAlt },
+    { key: 'instructors', label: t('clubs.SportsAbout.sections.instructors'), icon: faUserMd }
   ];
 
-  // Спортни съоръжения и оборудване
+  const sections = getSections();
+
   const facilities = venue.facilities || [];
-  const sportsFacilities = [
-    ...facilities.map(facility => ({
-      name: facility,
-      type: getFacilityType(facility),
-      icon: getFacilityIcon(facility),
-      description: getFacilityDescription(facility)
-    }))
-  ];
 
-  // Helper функции
-  function getFacilityType(facilityName) {
+  const getFacilityType = (facilityName) => {
     const name = facilityName.toLowerCase();
-    if (name.includes('басейн') || name.includes('вода')) return 'aquatic';
-    if (name.includes('фитнес') || name.includes('зала') || name.includes('тренажор')) return 'fitness';
-    if (name.includes('сауна') || name.includes('спа') || name.includes('масаж')) return 'wellness';
-    if (name.includes('съблекални') || name.includes('стая') || name.includes('офис')) return 'support';
-    return 'general';
-  }
-
-  function getFacilityIcon(facilityName) {
-    const name = facilityName.toLowerCase();
-    if (name.includes('басейн')) return faSwimmer;
-    if (name.includes('фитнес') || name.includes('тренажор')) return faDumbbell;
-    if (name.includes('сауна') || name.includes('спа')) return faLeaf;
-    if (name.includes('салон') || name.includes('зала')) return faRunning;
-    if (name.includes('съблекални')) return faUsers;
-    if (name.includes('терапевтичен') || name.includes('медицинск')) return faStethoscope;
-    return faBuilding;
-  }
-
-  function getFacilityDescription(facilityName) {
-    const name = facilityName.toLowerCase();
-    if (name.includes('басейн')) return 'Подходящ за водна аеробика и плуване';
-    if (name.includes('фитнес')) return 'Модерно оборудване за силови тренировки';
-    if (name.includes('сауна')) return 'За релаксация и възстановяване';
-    if (name.includes('салон')) return 'Просторна зала за групови занимания';
-    if (name.includes('съблекални')) return 'Удобни помещения с душове';
-    if (name.includes('терапевтичен')) return 'За рехабилитация и лечебна гимнастика';
-    return 'Част от спортния комплекс';
-  }
-
-  function getFacilityColor(type) {
-    switch(type) {
-      case 'aquatic': return '#06b6d4';
-      case 'fitness': return '#f97316';
-      case 'wellness': return '#22c55e';
-      case 'support': return '#8b5cf6';
-      default: return '#6b7280';
+    const facilityTerms = t('clubs.SportsAbout.facilityTerms', { returnObjects: true });
+    
+    for (const [typeKey, terms] of Object.entries(facilityTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        return typeKey;
+      }
     }
-  }
+    return 'general';
+  };
 
-  // Инструктори от борда
-  const instructors = board.filter(member => 
-    member.role && (
-      member.role.includes('треньор') || 
-      member.role.includes('инструктор') ||
-      member.bio?.toLowerCase().includes('треньор') ||
-      member.bio?.toLowerCase().includes('инструктор') ||
-      member.bio?.toLowerCase().includes('фитнес') ||
-      member.bio?.toLowerCase().includes('спорт')
-    )
-  );
+  const getFacilityIcon = (facilityName) => {
+    const name = facilityName.toLowerCase();
+    const iconTerms = t('clubs.SportsAbout.facilityIconTerms', { returnObjects: true });
+    
+    for (const [iconKey, terms] of Object.entries(iconTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        const iconMap = {
+          swimming: faSwimmer,
+          fitness: faDumbbell,
+          wellness: faLeaf,
+          sports: faRunning,
+          changing: faUsers,
+          medical: faStethoscope
+        };
+        return iconMap[iconKey] || faBuilding;
+      }
+    }
+    return faBuilding;
+  };
 
-  // Здравни и безопасности мерки
-  const safetyFeatures = [
+  const getFacilityDescription = (facilityName) => {
+    const name = facilityName.toLowerCase();
+    const descriptionMap = t('clubs.SportsAbout.facilityDescriptions', { returnObjects: true });
+    
+    for (const [key, terms] of Object.entries(t('clubs.SportsAbout.facilityIconTerms', { returnObjects: true }))) {
+      if (terms.some(term => name.includes(term))) {
+        return descriptionMap[key];
+      }
+    }
+    return descriptionMap.default;
+  };
+
+  const getFacilityColor = (type) => {
+    const colorMap = {
+      aquatic: '#06b6d4',
+      fitness: '#f97316',
+      wellness: '#22c55e',
+      support: '#8b5cf6',
+      general: '#6b7280'
+    };
+    return colorMap[type] || '#6b7280';
+  };
+
+  const sportsFacilities = facilities.map(facility => ({
+    name: facility,
+    type: getFacilityType(facility),
+    icon: getFacilityIcon(facility),
+    description: getFacilityDescription(facility)
+  }));
+
+  const getInstructorKeywords = () => t('clubs.SportsAbout.instructorKeywords', { returnObjects: true });
+
+  const instructors = board.filter(member => {
+    const keywords = getInstructorKeywords();
+    return member.role && keywords.some(keyword => 
+      member.role.includes(keyword) || 
+      member.bio?.toLowerCase().includes(keyword)
+    );
+  });
+
+  const getSafetyFeatures = () => [
     healthServices.regularCheckups && {
       icon: faStethoscope,
-      text: 'Редовни здравни прегледи'
+      text: t('clubs.SportsAbout.safetyFeatures.regularCheckups')
     },
     healthServices.bloodPressureMonitoring && {
       icon: faHeartbeat,
-      text: 'Мониторинг на кръвното налягане'
+      text: t('clubs.SportsAbout.safetyFeatures.bloodPressureMonitoring')
     },
     healthServices.emergencyProtocol?.hasEmergencyPlan && {
       icon: faShieldAlt,
-      text: 'Спешен план за действие'
+      text: t('clubs.SportsAbout.safetyFeatures.emergencyPlan')
     },
     accessibility.wheelchairAccess && {
       icon: faWheelchair,
-      text: 'Достъп за хора с увреждания'
+      text: t('clubs.SportsAbout.safetyFeatures.wheelchairAccess')
     },
     venue.accessibility && {
       icon: faShieldAlt,
-      text: 'Безбариерна среда'
+      text: t('clubs.SportsAbout.safetyFeatures.barrierFree')
     }
   ].filter(Boolean);
 
-  // Специализирани програми
+  const safetyFeatures = getSafetyFeatures();
+
+  const getActivityIconByIntensity = (intensity) => {
+    const intensityMap = {
+      [t('clubs.SportsAbout.intensityLevels.low')]: faLeaf,
+      [t('clubs.SportsAbout.intensityLevels.medium')]: faWalking,
+      [t('clubs.SportsAbout.intensityLevels.high')]: faRunning
+    };
+    return intensityMap[intensity] || faHeartbeat;
+  };
+
   const specialPrograms = [
     ...ageSpecificNeeds.lowImpactActivities?.map(activity => ({
       name: activity.name,
@@ -175,15 +193,6 @@ export const SportsAbout = ({ club }) => {
     })) || []
   ];
 
-  function getActivityIconByIntensity(intensity) {
-    switch(intensity) {
-      case 'ниска': return faLeaf;
-      case 'средна': return faWalking;
-      case 'висока': return faRunning;
-      default: return faHeartbeat;
-    }
-  }
-
   const toggleFacility = (index) => {
     setExpandedFacility(expandedFacility === index ? null : index);
   };
@@ -192,28 +201,29 @@ export const SportsAbout = ({ club }) => {
     if (!club.foundedYear) return null;
     const currentYear = new Date().getFullYear();
     const yearsActive = currentYear - club.foundedYear;
-    return `Основан през ${club.foundedYear} г. (${yearsActive} години активност)`;
+    return t('clubs.SportsAbout.foundedYear', { 
+      year: club.foundedYear, 
+      yearsActive 
+    });
   };
 
   return (
     <section id="sports-about" className="sports-about-section">
       <div className="sports-about-container">
         
-        {/* Header */}
         <div className="sports-about-header">
           <div className="sports-about-badge">
             <FontAwesomeIcon icon={faHeartbeat} />
-            <span>За нашия клуб</span>
+            <span>{t('clubs.SportsAbout.header.badge')}</span>
           </div>
           <h2 className="sports-about-title">
-            Вашето здраве е нашият приоритет
+            {t('clubs.SportsAbout.header.title')}
           </h2>
           <p className="sports-about-subtitle">
-            Открийте как помагаме на нашите членове да останат активни, здрави и щастливи
+            {t('clubs.SportsAbout.header.subtitle')}
           </p>
         </div>
 
-        {/* Navigation Tabs */}
         <div className="sports-about-nav">
           {sections.map(section => (
             <button
@@ -227,15 +237,13 @@ export const SportsAbout = ({ club }) => {
           ))}
         </div>
 
-        {/* Content Sections */}
         <div className="sports-about-content">
           
-          {/* Mission Section */}
           {activeSection === 'mission' && (
             <div className="sports-about-mission">
               <div className="sports-about-mission-main">
                 <div className="sports-about-mission-text">
-                  <h3>Нашата мисия</h3>
+                  <h3>{t('clubs.SportsAbout.mission.title')}</h3>
                   {description && <p>{description}</p>}
                   
                   {club.foundedYear && (
@@ -260,12 +268,11 @@ export const SportsAbout = ({ club }) => {
                 )}
               </div>
 
-              {/* Membership Benefits */}
               {membership.benefits?.length > 0 && (
                 <div className="sports-about-benefits">
                   <h4>
                     <FontAwesomeIcon icon={faTrophy} />
-                    Предимства за членовете
+                    {t('clubs.SportsAbout.mission.membershipBenefits')}
                   </h4>
                   <div className="sports-about-benefits-grid">
                     {membership.benefits.map((benefit, index) => (
@@ -278,12 +285,11 @@ export const SportsAbout = ({ club }) => {
                 </div>
               )}
 
-              {/* Special Programs */}
               {specialPrograms.length > 0 && (
                 <div className="sports-about-programs">
                   <h4>
                     <FontAwesomeIcon icon={faLeaf} />
-                    Специализирани програми
+                    {t('clubs.SportsAbout.mission.specialPrograms')}
                   </h4>
                   <div className="sports-about-programs-grid">
                     {specialPrograms.map((program, index) => (
@@ -294,11 +300,11 @@ export const SportsAbout = ({ club }) => {
                         <div className="sports-about-program-content">
                           <h5>{program.name}</h5>
                           <span className="sports-about-program-intensity">
-                            Интензитет: {program.intensity}
+                            {t('clubs.SportsAbout.mission.intensity')}: {program.intensity}
                           </span>
                           {program.suitableFor.length > 0 && (
                             <div className="sports-about-program-suitable">
-                              Подходящо за: {program.suitableFor.join(', ')}
+                              {t('clubs.SportsAbout.mission.suitableFor')}: {program.suitableFor.join(', ')}
                             </div>
                           )}
                         </div>
@@ -310,12 +316,11 @@ export const SportsAbout = ({ club }) => {
             </div>
           )}
 
-          {/* Facilities Section */}
           {activeSection === 'facilities' && (
             <div className="sports-about-facilities">
               <div className="sports-about-facilities-header">
-                <h3>Нашите съоръжения</h3>
-                <p>Модерно оборудване и удобства за всички ваши спортни нужди</p>
+                <h3>{t('clubs.SportsAbout.facilities.title')}</h3>
+                <p>{t('clubs.SportsAbout.facilities.subtitle')}</p>
               </div>
 
               {venue.size && (
@@ -324,7 +329,7 @@ export const SportsAbout = ({ club }) => {
                     <FontAwesomeIcon icon={faBuilding} />
                     <div>
                       <span className="sports-about-venue-value">{venue.size}</span>
-                      <span className="sports-about-venue-label">Обща площ</span>
+                      <span className="sports-about-venue-label">{t('clubs.SportsAbout.facilities.totalArea')}</span>
                     </div>
                   </div>
                   {venue.capacity && (
@@ -332,7 +337,7 @@ export const SportsAbout = ({ club }) => {
                       <FontAwesomeIcon icon={faUsers} />
                       <div>
                         <span className="sports-about-venue-value">{venue.capacity}</span>
-                        <span className="sports-about-venue-label">Капацитет</span>
+                        <span className="sports-about-venue-label">{t('clubs.SportsAbout.facilities.capacity')}</span>
                       </div>
                     </div>
                   )}
@@ -374,17 +379,16 @@ export const SportsAbout = ({ club }) => {
             </div>
           )}
 
-          {/* Safety Section */}
           {activeSection === 'safety' && (
             <div className="sports-about-safety">
               <div className="sports-about-safety-header">
-                <h3>Безопасност и здраве</h3>
-                <p>Вашата сигурност и здраве са нашият главен приоритет</p>
+                <h3>{t('clubs.SportsAbout.safety.title')}</h3>
+                <p>{t('clubs.SportsAbout.safety.subtitle')}</p>
               </div>
 
               {safetyFeatures.length > 0 && (
                 <div className="sports-about-safety-features">
-                  <h4>Мерки за безопасност</h4>
+                  <h4>{t('clubs.SportsAbout.safety.measures')}</h4>
                   <div className="sports-about-safety-grid">
                     {safetyFeatures.map((feature, index) => (
                       <div key={index} className="sports-about-safety-item">
@@ -400,7 +404,7 @@ export const SportsAbout = ({ club }) => {
 
               {healthServices.medicalPartners?.length > 0 && (
                 <div className="sports-about-medical-partners">
-                  <h4>Медицински партньори</h4>
+                  <h4>{t('clubs.SportsAbout.safety.medicalPartners')}</h4>
                   <div className="sports-about-partners-list">
                     {healthServices.medicalPartners.map((partner, index) => (
                       <div key={index} className="sports-about-partner-card">
@@ -425,11 +429,11 @@ export const SportsAbout = ({ club }) => {
 
               {healthServices.emergencyProtocol?.nearestHospital && (
                 <div className="sports-about-emergency">
-                  <h4>Спешна помощ</h4>
+                  <h4>{t('clubs.SportsAbout.safety.emergencyHelp')}</h4>
                   <div className="sports-about-emergency-info">
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
                     <div>
-                      <strong>Най-близка болница:</strong>
+                      <strong>{t('clubs.SportsAbout.safety.nearestHospital')}:</strong>
                       <span>{healthServices.emergencyProtocol.nearestHospital}</span>
                     </div>
                   </div>
@@ -438,12 +442,11 @@ export const SportsAbout = ({ club }) => {
             </div>
           )}
 
-          {/* Instructors Section */}
           {activeSection === 'instructors' && (
             <div className="sports-about-instructors">
               <div className="sports-about-instructors-header">
-                <h3>Нашият екип</h3>
-                <p>Професионални инструктори и специалисти грижещи се за вашето здраве</p>
+                <h3>{t('clubs.SportsAbout.instructors.title')}</h3>
+                <p>{t('clubs.SportsAbout.instructors.subtitle')}</p>
               </div>
 
               {instructors.length > 0 ? (
@@ -474,20 +477,20 @@ export const SportsAbout = ({ club }) => {
               ) : (
                 <div className="sports-about-no-instructors">
                   <FontAwesomeIcon icon={faUsers} />
-                  <h4>Нашият екип</h4>
-                  <p>Имаме опитни специалисти, които ще ви помогнат да постигнете целите си.</p>
+                  <h4>{t('clubs.SportsAbout.instructors.ourTeam')}</h4>
+                  <p>{t('clubs.SportsAbout.instructors.teamDescription')}</p>
                 </div>
               )}
 
               {regularActivities.length > 0 && (
                 <div className="sports-about-activities-preview">
-                  <h4>Активности с инструктори</h4>
+                  <h4>{t('clubs.SportsAbout.instructors.activitiesWithInstructors')}</h4>
                   <div className="sports-about-activities-list">
                     {regularActivities.filter(activity => activity.instructor).map((activity, index) => (
                       <div key={index} className="sports-about-activity-item">
                         <div className="sports-about-activity-info">
                           <h5>{activity.name}</h5>
-                          <span>Инструктор: {activity.instructor}</span>
+                          <span>{t('clubs.SportsAbout.instructors.instructor')}: {activity.instructor}</span>
                         </div>
                         <div className="sports-about-activity-schedule">
                           <FontAwesomeIcon icon={faClock} />

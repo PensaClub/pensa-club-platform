@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalendarAlt,
@@ -40,6 +41,7 @@ import {
 import './sportsActivities.css';
 
 export const SportsActivities = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('weekly');
   const [selectedDay, setSelectedDay] = useState(new Date().getDay());
   const [searchTerm, setSearchTerm] = useState('');
@@ -55,7 +57,6 @@ export const SportsActivities = ({ club }) => {
   });
   const [enrollStatus, setEnrollStatus] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.activities?.regular?.length && 
       !club?.activities?.events?.length && 
       !club?.activities?.trips?.length && 
@@ -63,7 +64,6 @@ export const SportsActivities = ({ club }) => {
     return null;
   }
 
-  // Събираме данни
   const activities = club.activities || {};
   const regularActivities = activities.regular || [];
   const events = activities.events || [];
@@ -73,35 +73,35 @@ export const SportsActivities = ({ club }) => {
   const pensionersSpecific = club.pensionersSpecific || {};
   const lowImpactActivities = pensionersSpecific.ageSpecificNeeds?.lowImpactActivities || [];
 
-  // Ако няма активности, не показваме компонента
   if (regularActivities.length === 0 && events.length === 0 && trips.length === 0 && courses.length === 0) {
     return null;
   }
 
-  // Дни от седмицата
-  const weekDays = [
-    { key: 'sunday', label: 'Неделя', short: 'Нед' },
-    { key: 'monday', label: 'Понеделник', short: 'Пон' },
-    { key: 'tuesday', label: 'Вторник', short: 'Вто' },
-    { key: 'wednesday', label: 'Сряда', short: 'Сря' },
-    { key: 'thursday', label: 'Четвъртък', short: 'Чет' },
-    { key: 'friday', label: 'Петък', short: 'Пет' },
-    { key: 'saturday', label: 'Събота', short: 'Съб' }
+  const getWeekDays = () => [
+    { key: 'sunday', label: t('clubs.SportsActivities.weekDays.sunday'), short: t('clubs.SportsActivities.weekDaysShort.sunday') },
+    { key: 'monday', label: t('clubs.SportsActivities.weekDays.monday'), short: t('clubs.SportsActivities.weekDaysShort.monday') },
+    { key: 'tuesday', label: t('clubs.SportsActivities.weekDays.tuesday'), short: t('clubs.SportsActivities.weekDaysShort.tuesday') },
+    { key: 'wednesday', label: t('clubs.SportsActivities.weekDays.wednesday'), short: t('clubs.SportsActivities.weekDaysShort.wednesday') },
+    { key: 'thursday', label: t('clubs.SportsActivities.weekDays.thursday'), short: t('clubs.SportsActivities.weekDaysShort.thursday') },
+    { key: 'friday', label: t('clubs.SportsActivities.weekDays.friday'), short: t('clubs.SportsActivities.weekDaysShort.friday') },
+    { key: 'saturday', label: t('clubs.SportsActivities.weekDays.saturday'), short: t('clubs.SportsActivities.weekDaysShort.saturday') }
   ];
 
-  // Mapваме дните на български
-  const dayMapping = {
-    'понеделник': 'monday',
-    'вторник': 'tuesday', 
-    'сряда': 'wednesday',
-    'четвъртък': 'thursday',
-    'петък': 'friday',
-    'събота': 'saturday',
-    'неделя': 'sunday',
-    'всеки ден': 'daily'
+  const weekDays = getWeekDays();
+
+  const getDayMapping = () => {
+    const mapping = {};
+    const dayMappings = t('clubs.SportsActivities.dayMappings', { returnObjects: true });
+    
+    Object.keys(dayMappings).forEach(localDay => {
+      mapping[localDay.toLowerCase()] = dayMappings[localDay];
+    });
+    
+    return mapping;
   };
 
-  // Групираме активностите по дни
+  const dayMapping = getDayMapping();
+
   const activitiesByDay = useMemo(() => {
     const grouped = {};
     weekDays.forEach(day => {
@@ -111,7 +111,6 @@ export const SportsActivities = ({ club }) => {
     regularActivities.forEach(activity => {
       const dayKey = dayMapping[activity.day?.toLowerCase()];
       if (dayKey === 'daily') {
-        // Добавяме във всички дни
         weekDays.forEach(day => {
           grouped[day.key].push({
             ...activity,
@@ -129,58 +128,81 @@ export const SportsActivities = ({ club }) => {
     });
 
     return grouped;
-  }, [regularActivities]);
+  }, [regularActivities, dayMapping, weekDays]);
 
-  // Helper функции
-  function getActivityIcon(activityName) {
+  const getActivityIcon = (activityName) => {
     const name = activityName.toLowerCase();
-    if (name.includes('йога') || name.includes('медитация')) return faLeaf;
-    if (name.includes('аеробика') || name.includes('басейн') || name.includes('плуване')) return faSwimmer;
-    if (name.includes('силов') || name.includes('фитнес') || name.includes('тренажор')) return faDumbbell;
-    if (name.includes('разходки') || name.includes('бягане') || name.includes('маратон')) return faRunning;
-    if (name.includes('танц')) return faFire;
-    if (name.includes('гимнастика')) return faHeartbeat;
-    if (name.includes('планина') || name.includes('туризъм')) return faMountain;
+    const iconTerms = t('clubs.SportsActivities.activityIconTerms', { returnObjects: true });
+    
+    for (const [iconKey, terms] of Object.entries(iconTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        const iconMap = {
+          yoga: faLeaf,
+          cardio: faSwimmer,
+          strength: faDumbbell,
+          running: faRunning,
+          dance: faFire,
+          gymnastics: faHeartbeat,
+          mountain: faMountain
+        };
+        return iconMap[iconKey] || faUsers;
+      }
+    }
     return faUsers;
-  }
+  };
 
-  function getActivityColor(activityName) {
+  const getActivityColor = (activityName) => {
     const name = activityName.toLowerCase();
-    if (name.includes('йога') || name.includes('медитация')) return '#22c55e';
-    if (name.includes('аеробика') || name.includes('басейн')) return '#06b6d4';
-    if (name.includes('силов') || name.includes('фитнес')) return '#f97316';
-    if (name.includes('разходки') || name.includes('бягане')) return '#ef4444';
-    if (name.includes('танц')) return '#8b5cf6';
-    if (name.includes('гимнастика')) return '#ec4899';
+    const colorTerms = t('clubs.SportsActivities.activityColorTerms', { returnObjects: true });
+    
+    for (const [colorKey, terms] of Object.entries(colorTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        const colorMap = {
+          yoga: '#22c55e',
+          cardio: '#06b6d4',
+          strength: '#f97316',
+          running: '#ef4444',
+          dance: '#8b5cf6',
+          gymnastics: '#ec4899'
+        };
+        return colorMap[colorKey] || '#6b7280';
+      }
+    }
     return '#6b7280';
-  }
+  };
 
-  function getIntensityLevel(activityName) {
+  const getIntensityLevel = (activityName) => {
     const name = activityName.toLowerCase();
-    if (name.includes('йога') || name.includes('медитация') || name.includes('лека')) return 'low';
-    if (name.includes('силов') || name.includes('бягане') || name.includes('интензивн')) return 'high';
+    const intensityTerms = t('clubs.SportsActivities.intensityTerms', { returnObjects: true });
+    
+    if (intensityTerms.low.some(term => name.includes(term))) return 'low';
+    if (intensityTerms.high.some(term => name.includes(term))) return 'high';
     return 'medium';
-  }
+  };
 
-  function getIntensityLabel(level) {
-    switch(level) {
-      case 'low': return 'Ниска';
-      case 'medium': return 'Средна';
-      case 'high': return 'Висока';
-      default: return 'Средна';
-    }
-  }
+  const getIntensityLabel = (level) => {
+    return t(`clubs.SportsActivities.intensityLabels.${level}`);
+  };
 
-  function getIntensityColor(level) {
-    switch(level) {
-      case 'low': return '#22c55e';
-      case 'medium': return '#f59e0b';
-      case 'high': return '#ef4444';
-      default: return '#6b7280';
-    }
-  }
+  const getIntensityColor = (level) => {
+    const colorMap = {
+      low: '#22c55e',
+      medium: '#f59e0b',
+      high: '#ef4444'
+    };
+    return colorMap[level] || '#6b7280';
+  };
 
-  // Филтрираме активностите
+  const getExperienceLevels = () => [
+    { value: '', label: t('clubs.SportsActivities.experienceLevels.select') },
+    { value: 'Начинаещ', label: t('clubs.SportsActivities.experienceLevels.beginner') },
+    { value: 'Средно ниво', label: t('clubs.SportsActivities.experienceLevels.intermediate') },
+    { value: 'Напреднал', label: t('clubs.SportsActivities.experienceLevels.advanced') },
+    { value: 'Експерт', label: t('clubs.SportsActivities.experienceLevels.expert') }
+  ];
+
+  const experienceLevels = getExperienceLevels();
+
   const filteredRegularActivities = regularActivities.filter(activity => {
     const matchesSearch = activity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          activity.instructor?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -192,7 +214,6 @@ export const SportsActivities = ({ club }) => {
     return matchesSearch && matchesIntensity;
   });
 
-  // Enroll form handlers
   const handleEnrollChange = (field, value) => {
     setEnrollForm(prev => ({
       ...prev,
@@ -205,29 +226,21 @@ export const SportsActivities = ({ club }) => {
     setEnrollStatus('sending');
 
     if (contacts.email && selectedActivity) {
-      const subject = encodeURIComponent(`Заявка за записване - ${selectedActivity.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте нова заявка за записване в активност:
-
-АКТИВНОСТ: ${selectedActivity.name}
-${selectedActivity.day ? `Ден: ${selectedActivity.day}` : ''}
-${selectedActivity.time ? `Час: ${selectedActivity.time}` : ''}
-${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instructor}` : ''}
-
-ДАННИ НА КАНДИДАТА:
-Име: ${enrollForm.name}
-Имейл: ${enrollForm.email}
-Телефон: ${enrollForm.phone}
-Опит: ${enrollForm.experience || 'Не е посочен'}
-Допълнителни бележки: ${enrollForm.notes || 'Няма'}
-
-Моля, свържете се с кандидата за финализиране на записването.
-
----
-Изпратено от сайта на ${club.name}
-      `);
+      const subject = encodeURIComponent(t('clubs.SportsActivities.enrollEmail.subject', { 
+        activityName: selectedActivity.name 
+      }));
+      const body = encodeURIComponent(t('clubs.SportsActivities.enrollEmail.body', {
+        activityName: selectedActivity.name,
+        day: selectedActivity.day || '',
+        time: selectedActivity.time || '',
+        instructor: selectedActivity.instructor || '',
+        name: enrollForm.name,
+        email: enrollForm.email,
+        phone: enrollForm.phone,
+        experience: enrollForm.experience || t('clubs.SportsActivities.enrollEmail.noExperience'),
+        notes: enrollForm.notes || t('clubs.SportsActivities.enrollEmail.noNotes'),
+        clubName: club.name
+      }));
       
       try {
         window.location.href = `mailto:${contacts.email}?subject=${subject}&body=${body}`;
@@ -251,65 +264,79 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
     setShowEnrollModal(true);
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    
+    return date.toLocaleDateString(locale);
+  };
+
+  const formatDateShort = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    
+    return date.toLocaleDateString(locale, { month: 'short' });
+  };
+
   return (
     <section id="sports-activities" className="sports-activities-section">
       <div className="sports-activities-container">
         
-        {/* Header */}
         <div className="sports-activities-header">
           <div className="sports-activities-badge">
             <FontAwesomeIcon icon={faCalendarAlt} />
-            <span>Програми и активности</span>
+            <span>{t('clubs.SportsActivities.header.badge')}</span>
           </div>
           <h2 className="sports-activities-title">
-            Разнообразни програми за всички нива
+            {t('clubs.SportsActivities.header.title')}
           </h2>
           <p className="sports-activities-subtitle">
-            Открийте активностите, които ви подхождат и започнете тренировките си днес
+            {t('clubs.SportsActivities.header.subtitle')}
           </p>
         </div>
 
-        {/* Navigation Tabs */}
         <div className="sports-activities-nav">
           <button
             onClick={() => setActiveTab('weekly')}
             className={`sports-activities-nav-btn ${activeTab === 'weekly' ? 'active' : ''}`}
           >
             <FontAwesomeIcon icon={faCalendarAlt} />
-            <span>Седмичен график</span>
+            <span>{t('clubs.SportsActivities.tabs.weekly')}</span>
           </button>
           <button
             onClick={() => setActiveTab('all')}
             className={`sports-activities-nav-btn ${activeTab === 'all' ? 'active' : ''}`}
           >
             <FontAwesomeIcon icon={faDumbbell} />
-            <span>Всички програми</span>
+            <span>{t('clubs.SportsActivities.tabs.all')}</span>
           </button>
           <button
             onClick={() => setActiveTab('events')}
             className={`sports-activities-nav-btn ${activeTab === 'events' ? 'active' : ''}`}
           >
             <FontAwesomeIcon icon={faTrophy} />
-            <span>Събития</span>
+            <span>{t('clubs.SportsActivities.tabs.events')}</span>
           </button>
           <button
             onClick={() => setActiveTab('courses')}
             className={`sports-activities-nav-btn ${activeTab === 'courses' ? 'active' : ''}`}
           >
             <FontAwesomeIcon icon={faGraduationCap} />
-            <span>Курсове</span>
+            <span>{t('clubs.SportsActivities.tabs.courses')}</span>
           </button>
         </div>
 
-        {/* Content */}
         <div className="sports-activities-content">
           
-          {/* Weekly Schedule */}
           {activeTab === 'weekly' && (
             <div className="sports-activities-weekly">
               <div className="sports-activities-week-header">
-                <h3>Седмичен график на тренировките</h3>
-                <p>Изберете ден за да видите активностите</p>
+                <h3>{t('clubs.SportsActivities.weekly.title')}</h3>
+                <p>{t('clubs.SportsActivities.weekly.subtitle')}</p>
               </div>
               
               <div className="sports-activities-week-navigation">
@@ -342,7 +369,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                       >
                         <div className="sports-activities-timeline-time">
                           <FontAwesomeIcon icon={faClock} />
-                          <span>{activity.time || 'Гъвкаво време'}</span>
+                          <span>{activity.time || t('clubs.SportsActivities.weekly.flexibleTime')}</span>
                         </div>
                         <div className="sports-activities-timeline-content">
                           <div className="sports-activities-timeline-header">
@@ -379,7 +406,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                             className="sports-activities-enroll-btn"
                           >
                             <FontAwesomeIcon icon={faPlus} />
-                            <span>Запиши се</span>
+                            <span>{t('clubs.SportsActivities.actions.enroll')}</span>
                           </button>
                         </div>
                       </div>
@@ -388,15 +415,14 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                 ) : (
                   <div className="sports-activities-no-activities">
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    <h5>Няма планирани активности</h5>
-                    <p>В този ден няма тренировки или те са с гъвкаво време</p>
+                    <h5>{t('clubs.SportsActivities.weekly.noActivities')}</h5>
+                    <p>{t('clubs.SportsActivities.weekly.noActivitiesDescription')}</p>
                   </div>
                 )}
               </div>
             </div>
           )}
 
-          {/* All Programs */}
           {activeTab === 'all' && (
             <div className="sports-activities-all">
               <div className="sports-activities-filters">
@@ -404,7 +430,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                   <FontAwesomeIcon icon={faSearch} />
                   <input
                     type="text"
-                    placeholder="Търсете активност, инструктор..."
+                    placeholder={t('clubs.SportsActivities.all.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -421,10 +447,10 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                     value={intensityFilter} 
                     onChange={(e) => setIntensityFilter(e.target.value)}
                   >
-                    <option value="all">Всички нива</option>
-                    <option value="low">Ниска интензивност</option>
-                    <option value="medium">Средна интензивност</option>
-                    <option value="high">Висока интензивност</option>
+                    <option value="all">{t('clubs.SportsActivities.all.filters.allLevels')}</option>
+                    <option value="low">{t('clubs.SportsActivities.all.filters.lowIntensity')}</option>
+                    <option value="medium">{t('clubs.SportsActivities.all.filters.mediumIntensity')}</option>
+                    <option value="high">{t('clubs.SportsActivities.all.filters.highIntensity')}</option>
                   </select>
                 </div>
               </div>
@@ -478,7 +504,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                         {activity.participants && (
                           <div className="sports-activities-program-detail">
                             <FontAwesomeIcon icon={faUsers} />
-                            <span>{activity.participants} участници</span>
+                            <span>{t('clubs.SportsActivities.all.participants', { count: activity.participants })}</span>
                           </div>
                         )}
                       </div>
@@ -490,7 +516,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                         className="sports-activities-program-btn"
                       >
                         <FontAwesomeIcon icon={faPlus} />
-                        <span>Запиши се</span>
+                        <span>{t('clubs.SportsActivities.actions.enroll')}</span>
                       </button>
                     </div>
                   </div>
@@ -500,19 +526,18 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
               {filteredRegularActivities.length === 0 && (
                 <div className="sports-activities-no-results">
                   <FontAwesomeIcon icon={faSearch} />
-                  <h4>Няма намерени програми</h4>
-                  <p>Опитайте с различни критерии за търсене</p>
+                  <h4>{t('clubs.SportsActivities.all.noResults')}</h4>
+                  <p>{t('clubs.SportsActivities.all.noResultsDescription')}</p>
                 </div>
               )}
             </div>
           )}
 
-          {/* Events */}
           {activeTab === 'events' && (
             <div className="sports-activities-events">
               <div className="sports-activities-events-header">
-                <h3>Предстоящи събития</h3>
-                <p>Специални активности и състезания</p>
+                <h3>{t('clubs.SportsActivities.events.title')}</h3>
+                <p>{t('clubs.SportsActivities.events.subtitle')}</p>
               </div>
               
               {events.length > 0 ? (
@@ -524,13 +549,13 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                           {new Date(event.date).getDate()}
                         </div>
                         <div className="sports-activities-event-month">
-                          {new Date(event.date).toLocaleDateString('bg-BG', { month: 'short' })}
+                          {formatDateShort(event.date)}
                         </div>
                       </div>
                       <div className="sports-activities-event-content">
                         <div className="sports-activities-event-type">
                           <FontAwesomeIcon icon={faTrophy} />
-                          <span>{event.type || 'Събитие'}</span>
+                          <span>{event.type || t('clubs.SportsActivities.events.defaultType')}</span>
                         </div>
                         <h4>{event.title}</h4>
                         {event.description && <p>{event.description}</p>}
@@ -544,7 +569,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                           {event.participants && (
                             <span>
                               <FontAwesomeIcon icon={faUsers} />
-                              {event.participants} участници
+                              {t('clubs.SportsActivities.events.participants', { count: event.participants })}
                             </span>
                           )}
                         </div>
@@ -555,8 +580,8 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
               ) : (
                 <div className="sports-activities-no-events">
                   <FontAwesomeIcon icon={faCalendarAlt} />
-                  <h4>Няма планирани събития</h4>
-                  <p>Следете за нови спортни събития и състезания</p>
+                  <h4>{t('clubs.SportsActivities.events.noEvents')}</h4>
+                  <p>{t('clubs.SportsActivities.events.noEventsDescription')}</p>
                 </div>
               )}
               
@@ -564,7 +589,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                 <div className="sports-activities-trips">
                   <h4>
                     <FontAwesomeIcon icon={faMountain} />
-                    Спортни екскурзии
+                    {t('clubs.SportsActivities.events.sportsTrips')}
                   </h4>
                   <div className="sports-activities-trips-list">
                     {trips.map((trip, index) => (
@@ -575,15 +600,15 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                           <div className="sports-activities-trip-details">
                             <span>
                               <FontAwesomeIcon icon={faCalendarAlt} />
-                              {new Date(trip.date).toLocaleDateString('bg-BG')}
+                              {formatDate(trip.date)}
                             </span>
                             <span>
                               <FontAwesomeIcon icon={faUsers} />
-                              {trip.participants} участници
+                              {t('clubs.SportsActivities.events.participants', { count: trip.participants })}
                             </span>
                             {trip.price && (
                               <span className="sports-activities-trip-price">
-                                {trip.price} лв.
+                                {trip.price} {t('clubs.SportsActivities.events.currency')}
                               </span>
                             )}
                           </div>
@@ -596,12 +621,11 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
             </div>
           )}
 
-          {/* Courses */}
           {activeTab === 'courses' && (
             <div className="sports-activities-courses">
               <div className="sports-activities-courses-header">
-                <h3>Специализирани курсове</h3>
-                <p>Обучения и образователни програми</p>
+                <h3>{t('clubs.SportsActivities.courses.title')}</h3>
+                <p>{t('clubs.SportsActivities.courses.subtitle')}</p>
               </div>
               
               {courses.length > 0 ? (
@@ -629,7 +653,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                           {course.participants && (
                             <div className="sports-activities-course-detail">
                               <FontAwesomeIcon icon={faUsers} />
-                              <span>{course.participants} участници</span>
+                              <span>{t('clubs.SportsActivities.courses.participants', { count: course.participants })}</span>
                             </div>
                           )}
                         </div>
@@ -638,7 +662,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                           className="sports-activities-course-btn"
                         >
                           <FontAwesomeIcon icon={faBook} />
-                          <span>Запиши се</span>
+                          <span>{t('clubs.SportsActivities.actions.enroll')}</span>
                         </button>
                       </div>
                     </div>
@@ -647,8 +671,8 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
               ) : (
                 <div className="sports-activities-no-courses">
                   <FontAwesomeIcon icon={faBook} />
-                  <h4>Няма активни курсове</h4>
-                  <p>Следете за нови образователни програми</p>
+                  <h4>{t('clubs.SportsActivities.courses.noCourses')}</h4>
+                  <p>{t('clubs.SportsActivities.courses.noCoursesDescription')}</p>
                 </div>
               )}
             </div>
@@ -656,7 +680,6 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
         </div>
       </div>
 
-      {/* Enroll Modal */}
       {showEnrollModal && (
         <div className="sports-activities-modal" onClick={() => setShowEnrollModal(false)}>
           <div className="sports-activities-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -669,34 +692,34 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
             
             <div className="sports-activities-modal-header">
               <FontAwesomeIcon icon={faUsers} />
-              <h3>Запишете се за {selectedActivity?.name}</h3>
-              <p>Попълнете формата за да се запишете за тази активност</p>
+              <h3>{t('clubs.SportsActivities.enrollModal.title', { activityName: selectedActivity?.name })}</h3>
+              <p>{t('clubs.SportsActivities.enrollModal.subtitle')}</p>
             </div>
             
             {enrollStatus === 'sent' ? (
               <div className="sports-activities-form-success">
                 <FontAwesomeIcon icon={faCheckCircle} />
-                <h4>Заявката е изпратена успешно!</h4>
-                <p>Благодарим ви! Ще се свържем с вас за потвърждение на записването.</p>
+                <h4>{t('clubs.SportsActivities.enrollModal.success.title')}</h4>
+                <p>{t('clubs.SportsActivities.enrollModal.success.message')}</p>
               </div>
             ) : enrollStatus === 'error' ? (
               <div className="sports-activities-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.SportsActivities.enrollModal.error.title')}</h4>
+                <p>{t('clubs.SportsActivities.enrollModal.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleEnrollSubmit} className="sports-activities-form">
                 {selectedActivity && (
                   <div className="sports-activities-selected-activity">
-                    <h4>Избрана активност:</h4>
+                    <h4>{t('clubs.SportsActivities.enrollModal.selectedActivity')}:</h4>
                     <div className="sports-activities-activity-summary">
                       <FontAwesomeIcon icon={getActivityIcon(selectedActivity.name)} />
                       <div>
                         <strong>{selectedActivity.name}</strong>
                         {selectedActivity.day && <span>{selectedActivity.day}</span>}
                         {selectedActivity.time && <span>{selectedActivity.time}</span>}
-                        {selectedActivity.instructor && <span>Инструктор: {selectedActivity.instructor}</span>}
+                        {selectedActivity.instructor && <span>{t('clubs.SportsActivities.enrollModal.instructor')}: {selectedActivity.instructor}</span>}
                       </div>
                     </div>
                   </div>
@@ -706,7 +729,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                   <div className="sports-activities-form-group">
                     <label htmlFor="enroll-name">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.SportsActivities.enrollModal.form.name')} *
                     </label>
                     <input
                       type="text"
@@ -714,14 +737,14 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                       value={enrollForm.name}
                       onChange={(e) => handleEnrollChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.SportsActivities.enrollModal.form.namePlaceholder')}
                     />
                   </div>
                   
                   <div className="sports-activities-form-group">
                     <label htmlFor="enroll-email">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.SportsActivities.enrollModal.form.email')} *
                     </label>
                     <input
                       type="email"
@@ -729,7 +752,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                       value={enrollForm.email}
                       onChange={(e) => handleEnrollChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.SportsActivities.enrollModal.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -738,7 +761,7 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                   <div className="sports-activities-form-group">
                     <label htmlFor="enroll-phone">
                       <FontAwesomeIcon icon={faMobile} />
-                      Телефон *
+                      {t('clubs.SportsActivities.enrollModal.form.phone')} *
                     </label>
                     <input
                       type="tel"
@@ -746,25 +769,25 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                       value={enrollForm.phone}
                       onChange={(e) => handleEnrollChange('phone', e.target.value)}
                       required
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.SportsActivities.enrollModal.form.phonePlaceholder')}
                     />
                   </div>
                   
                   <div className="sports-activities-form-group">
                     <label htmlFor="enroll-experience">
                       <FontAwesomeIcon icon={faTrophy} />
-                      Опит в спорта
+                      {t('clubs.SportsActivities.enrollModal.form.experience')}
                     </label>
                     <select
                       id="enroll-experience"
                       value={enrollForm.experience}
                       onChange={(e) => handleEnrollChange('experience', e.target.value)}
                     >
-                      <option value="">Изберете ниво</option>
-                      <option value="Начинаещ">Начинаещ</option>
-                      <option value="Средно ниво">Средно ниво</option>
-                      <option value="Напреднал">Напреднал</option>
-                      <option value="Експерт">Експерт</option>
+                      {experienceLevels.map(level => (
+                        <option key={level.value} value={level.value}>
+                          {level.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -772,13 +795,13 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                 <div className="sports-activities-form-group">
                   <label htmlFor="enroll-notes">
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    Допълнителни бележки
+                    {t('clubs.SportsActivities.enrollModal.form.notes')}
                   </label>
                   <textarea
                     id="enroll-notes"
                     value={enrollForm.notes}
                     onChange={(e) => handleEnrollChange('notes', e.target.value)}
-                    placeholder="Споменете ако имате въпроси или специални изисквания"
+                    placeholder={t('clubs.SportsActivities.enrollModal.form.notesPlaceholder')}
                     rows="3"
                   />
                 </div>
@@ -790,14 +813,16 @@ ${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instru
                     disabled={enrollStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faPaperPlane} />
-                    {enrollStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявката'}
+                    {enrollStatus === 'sending' ? 
+                      t('clubs.SportsActivities.enrollModal.form.sending') : 
+                      t('clubs.SportsActivities.enrollModal.form.submit')}
                   </button>
                   <button 
                     type="button" 
                     onClick={() => setShowEnrollModal(false)}
                     className="sports-activities-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.SportsActivities.enrollModal.form.cancel')}
                   </button>
                 </div>
               </form>

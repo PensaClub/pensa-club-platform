@@ -1339,9 +1339,9 @@
       "faq-answer-help": "Подробен отговор на въпроса (10-5000 символа)",
       "close-to-limit": "близо до лимита"
     },
-  "preview":{
-    "backToForm": "Назад към формата"
-  },
+    "preview": {
+      "backToForm": "Назад към формата"
+    },
     "admin": {
       "title": "Управление на инициативи",
       "published": "Публикувани",
@@ -3116,7 +3116,6 @@
       "skull": "Череп"
     }
   },
-  
   "games": {
     "title": "Забавления и игри",
     "subtitle": "Открийте най-популярните онлайн игри! Шах, судоку, пасианс и много други класически игри за всички възрасти.",
@@ -3128,7 +3127,7 @@
       "allAges": "За всички възрасти",
       "available24_7": "24/7 достъпни"
     },
-     "tooltips": {
+    "tooltips": {
       "chess": "Стратегическа игра за двама играча с фигури върху дъска 8x8. Целта е да поставиш вражеския крал в мат.",
       "sudoku": "Логическа игра с числа от 1 до 9. Попълни всички клетки без да повтаряш числа в редове, колони или квадрати.",
       "solitaire": "Карточна игра за един играч. Подреди всички карти по мастове от ас до крал.",
@@ -3190,6 +3189,5107 @@
       "description": "Опитайте с различни критерии за търсене или изберете друга категория.",
       "resetButton": "Изчисти филтрите"
     }
-  }
+  },
+  "clubs": {
+    "ClubView": {
+      "loading": {
+        "title": "Зареждане... - Pensa Club",
+        "description": "Зареждане на клуб за пенсионери",
+        "text": "Зареждане на клуба..."
+      },
+      "notFound": {
+        "title": "Клуб не е намерен - Pensa Club",
+        "description": "Съжаляваме, но клубът който търсите не съществува или е бил премахнат.",
+        "heading": "Клубът не беше намерен",
+        "message": "Съжаляваме, но клубът който търсите не съществува или е бил премахнат.",
+        "backButton": "Обратно към клубовете"
+      },
+      "actions": {
+        "allClubs": "Всички клубове",
+        "addToFavorites": "Добави в любими",
+        "removeFromFavorites": "Премахни от любими",
+        "shareClub": "Сподели клуба"
+      },
+      "navigation": {
+        "title": "Навигация",
+        "home": "Начало",
+        "aboutClub": "За клуба",
+        "activities": "Дейности",
+        "events": "Събития",
+        "management": "Ръководство",
+        "location": "Локация",
+        "contacts": "Контакти",
+        "gallery": "Галерия",
+        "traditions": "Традиции",
+        "folklore": "Фолклор",
+        "performances": "Изпълнения",
+        "costumes": "Носии",
+        "music": "Музика",
+        "calendar": "Календар",
+        "projects": "Проекти",
+        "volunteering": "Доброволчество",
+        "support": "Подкрепа",
+        "partners": "Партньори",
+        "fitnessPrograms": "Фитнес програми",
+        "healthActivities": "Здравни дейности",
+        "wellnessServices": "Wellness услуги",
+        "sportsEvents": "Спортни събития",
+        "progressTracking": "Следене прогрес"
+      },
+      "seo": {
+        "clubTitle": "{{clubName}} - Клуб за пенсионери в {{city}}",
+        "clubDescription": "Активен клуб за пенсионери в {{city}}. Присъединете се към нашата общност за {{activity}}.",
+        "organizationName": "Български клубове за пенсионери",
+        "activities": {
+          "sports": "спорт и активност",
+          "cultural": "култура и изкуство",
+          "social": "социални дейности",
+          "general": "активно стареене"
+        },
+        "keywords": {
+          "clubForPensioners": "клуб за пенсионери",
+          "pensionersClub": "пенсионерски клуб",
+          "activePensioners": "активни пенсионери",
+          "socialActivities": "социални дейности",
+          "thirdAge": "третата възраст"
+        }
+      }
+    },
+    "ClubHero": {
+      "status": {
+        "activeClub": "Активен клуб"
+      },
+      "categories": {
+        "cultural": "Културен клуб",
+        "sports": "Спортен клуб",
+        "traditional": "Традиционен клуб",
+        "social": "Социален клуб",
+        "educational": "Образователен клуб",
+        "active": "Активен клуб",
+        "general": "Клуб на пенсионера"
+      },
+      "actions": {
+        "share": "Споделяне",
+        "like": "Харесай",
+        "call": "Обади се",
+        "email": "Имейл",
+        "website": "Сайт"
+      },
+      "stats": {
+        "members": "Членове",
+        "years": "Години",
+        "activities": "Дейности",
+        "events": "Събития",
+        "views": "прегледа"
+      },
+      "contact": {
+        "title": "Свържете се с нас"
+      },
+      "membership": {
+        "title": "Станете член",
+        "monthly": "месечно",
+        "moreParticipants": "още предимства"
+      },
+      "gallery": {
+        "placeholder": "Очаквайте скоро снимки от нашите дейности"
+      },
+      "members": {
+        "title": "Членове на",
+        "searchPlaceholder": "Търсене на член...",
+        "memberSince": "От",
+        "noResults": "Няма намерени членове по това търсене"
+      },
+      "messages": {
+        "defaultDescription": "Добре дошли в нашия клуб!",
+        "phoneNotAvailable": "Телефонен номер не е наличен",
+        "emailNotAvailable": "Имейл адрес не е наличен",
+        "websiteNotAvailable": "Уебсайт не е наличен",
+        "socialNotAvailable": "профил не е наличен",
+        "linkCopied": "Линкът е копиран в клипборда!"
+      }
+    },
+    "ClubAbout": {
+      "header": {
+        "badge": "За нашия клуб",
+        "title": "Научете повече за нас",
+        "subtitle": "Историята, мисията и всичко, което прави клуба ни специален"
+      },
+      "stats": {
+        "years": "години",
+        "members": "членове",
+        "city": "град"
+      },
+      "sections": {
+        "description": {
+          "title": "История и описание"
+        },
+        "achievements": {
+          "title": "Постижения и награди"
+        },
+        "socialImpact": {
+          "title": "Социално въздействие"
+        },
+        "services": {
+          "title": "Услуги и грижи"
+        },
+        "regional": {
+          "title": "Регионална информация"
+        }
+      },
+      "facts": {
+        "founded": "Основан",
+        "year": "г.",
+        "yearsActivity": "години активност",
+        "location": "Локация",
+        "members": "Членове",
+        "people": "души",
+        "venue": "Помещение",
+        "seats": "места"
+      },
+      "demographics": {
+        "title": "Възрастова структура",
+        "years": "години",
+        "people": "души"
+      },
+      "achievements": {
+        "recognition": "Признание",
+        "year": "г.",
+        "issued": "Издаден",
+        "validUntil": "Валиден до"
+      },
+      "socialImpact": {
+        "coordinator": "Координатор",
+        "volunteering": {
+          "title": "Доброволчески проекти",
+          "volunteers": "доброволци",
+          "hoursPerMonth": "ч/месец"
+        },
+        "communityProjects": {
+          "title": "Проекти за общността",
+          "beneficiaries": "ползватели"
+        },
+        "partnerships": {
+          "title": "Партньорства"
+        }
+      },
+      "services": {
+        "categories": {
+          "health": "Здравни услуги",
+          "support": "Помощни услуги",
+          "accessibility": "Достъпност"
+        },
+        "health": {
+          "regularCheckups": "Редовни здравни прегледи",
+          "bloodPressureMonitoring": "Измерване на кръвно налягане",
+          "healthLectures": "Здравни лекции"
+        },
+        "support": {
+          "homeVisits": "Домашни посещения",
+          "shoppingAssistance": "Помощ при пазаруване",
+          "documentHelp": "Помощ с документи",
+          "companionship": "Придружаване",
+          "transportService": "Транспортни услуги",
+          "mealDelivery": "Доставка на храна",
+          "cleaningHelp": "Помощ за почистване",
+          "techSupport": "Техническа подкрепа"
+        },
+        "accessibility": {
+          "wheelchairAccess": "Достъп с инвалидна количка",
+          "elevatorAccess": "Асансьор",
+          "hearingLoop": "Слухово оборудване",
+          "largeTextMaterials": "Материали с едър шрифт",
+          "handrails": "Парапети и опори",
+          "nonSlipFloors": "Нехлъзгащи подове",
+          "goodLighting": "Добро осветление",
+          "restingAreas": "Места за почивка"
+        }
+      },
+      "regional": {
+        "clubType": "Тип клуб",
+        "centralClub": "Централен клуб",
+        "localClub": "Местен клуб",
+        "coverageArea": "Обслужвана област",
+        "affiliatedClubs": "Свързани клубове",
+        "clubsInNetwork": "клуба в мрежата"
+      }
+    },
+    "ClubActivities": {
+      "header": {
+        "badge": "Редовни дейности",
+        "title": "Нашите дейности",
+        "subtitle": "Разнообразни активности всяка седмица за всички членове на клуба"
+      },
+      "stats": {
+        "activities": "активности",
+        "participants": "участници",
+        "daysPerWeek": "дни в седмицата"
+      },
+      "days": {
+        "monday": "Понеделник",
+        "tuesday": "Вторник",
+        "wednesday": "Сряда",
+        "thursday": "Четвъртък",
+        "friday": "Петък",
+        "saturday": "Събота",
+        "sunday": "Неделя"
+      },
+      "schedule": {
+        "noDay": "Не е посочен",
+        "noTime": "Час не е посочен"
+      },
+      "activity": {
+        "participants": "участници",
+        "register": "Запиши се"
+      },
+      "weeklySchedule": {
+        "title": "Седмична програма",
+        "people": "души",
+        "noActivities": "Няма дейности"
+      },
+      "modal": {
+        "title": "Записване за дейност"
+      },
+      "form": {
+        "firstName": "Име",
+        "firstNamePlaceholder": "Вашето име",
+        "lastName": "Фамилия",
+        "lastNamePlaceholder": "Вашата фамилия",
+        "phone": "Телефон",
+        "phonePlaceholder": "0888 123 456",
+        "email": "Email",
+        "emailPlaceholder": "email@example.com",
+        "experience": "Предишен опит",
+        "selectLevel": "Изберете ниво",
+        "notes": "Допълнителни бележки",
+        "notesPlaceholder": "Имате ли въпроси или специални изисквания?",
+        "sending": "Изпращам...",
+        "submit": "Изпрати заявка"
+      },
+      "experience": {
+        "none": "Без опит",
+        "beginner": "Начинаещ",
+        "intermediate": "Среден",
+        "advanced": "Напреднал"
+      },
+      "registration": {
+        "emailSubject": "Заявка за записване - {{activityName}}",
+        "emailBody": "Заявка за записване в дейност\n\nИме: {{firstName}} {{lastName}}\nТелефон: {{phone}}\nEmail: {{email}}\n\nДейност: {{activityName}}\nДен: {{day}}\nЧас: {{time}}\nИнструктор: {{instructor}}\n\nОпит: {{experience}}\nДопълнителни бележки: {{notes}}\n\n---\nИзпратено от {{clubName}}",
+        "notSpecified": "Не е посочен",
+        "none": "Няма"
+      },
+      "messages": {
+        "success": "Заявката е изпратена успешно! Ще се свържем с вас скоро.",
+        "error": "Възникна грешка. Моля опитайте отново или се свържете директно с нас."
+      },
+      "contact": {
+        "directContact": "Можете да се свържете и директно:"
+      }
+    },
+    "ClubEvents": {
+      "header": {
+        "badge": "Събития и мероприятия",
+        "title": "Нашите събития",
+        "subtitle": "Открийте интересни събития, екскурзии и курсове в нашия клуб"
+      },
+      "date": {
+        "language": "bg",
+        "notSpecified": "Дата не е посочена"
+      },
+      "eventTypes": {
+        "cultural": "Културно",
+        "social": "Социално",
+        "traditional": "Традиционно",
+        "sports": "Спортно",
+        "educational": "Образователно",
+        "health": "Здравословно",
+        "default": "Събитие"
+      },
+      "stats": {
+        "events": "събития",
+        "trips": "екскурзии",
+        "courses": "курсове"
+      },
+      "tabs": {
+        "upcoming": "Предстоящи",
+        "past": "Минали"
+      },
+      "event": {
+        "noTime": "Час не е посочен",
+        "participants": "участници",
+        "details": "Подробности"
+      },
+      "noContent": {
+        "upcomingTitle": "Няма предстоящи събития",
+        "upcomingText": "Проверете отново скоро за нови обяви",
+        "pastTitle": "Няма минали събития",
+        "pastText": "Историята на събитията започва тук"
+      },
+      "trips": {
+        "title": "Предстоящи екскурзии",
+        "currency": "лв.",
+        "registered": "записани",
+        "register": "Запиши се",
+        "emailSubject": "Заявка за екскурзия - {{destination}}",
+        "emailBody": "Заявка за записване в екскурзия\n\nИме: {{firstName}} {{lastName}}\nТелефон: {{phone}}\nEmail: {{email}}\n\nЕкскурзия: {{destination}}\nДата: {{date}}\nЦена: {{price}} лв.\n\nДопълнителни бележки: {{notes}}\n\n---\nИзпратено от {{clubName}}"
+      },
+      "courses": {
+        "title": "Активни курсове",
+        "noDuration": "Продължителност не е посочена",
+        "participants": "участници",
+        "learnMore": "Научи повече"
+      },
+      "form": {
+        "firstName": "Име",
+        "firstNamePlaceholder": "Вашето име",
+        "lastName": "Фамилия",
+        "lastNamePlaceholder": "Вашата фамилия",
+        "phone": "Телефон",
+        "phonePlaceholder": "0888 123 456",
+        "email": "Email",
+        "emailPlaceholder": "email@example.com",
+        "notes": "Бележки",
+        "notesPlaceholder": "Допълнителни бележки или въпроси",
+        "sending": "Изпращам...",
+        "submit": "Изпрати заявка",
+        "none": "Няма"
+      },
+      "modals": {
+        "eventDetails": {
+          "title": "Детайли за събитието",
+          "organizer": "Организатор",
+          "highlights": "Акценти"
+        },
+        "tripRegistration": {
+          "title": "Записване за екскурзия"
+        },
+        "courseDetails": {
+          "title": "Информация за курса",
+          "instructor": "Инструктор"
+        }
+      },
+      "messages": {
+        "linkCopied": "Линкът е копиран в клипборда!",
+        "success": "Заявката е изпратена успешно!",
+        "error": "Възникна грешка. Моля опитайте отново."
+      },
+      "contact": {
+        "forRegistration": "За записване се свържете с нас:"
+      }
+    },
+    "ClubManagement": {
+      "header": {
+        "badge": "Ръководство на клуба",
+        "title": "Нашето ръководство",
+        "subtitle": "Запознайте се с хората, които водят клуба и организират дейностите"
+      },
+      "stats": {
+        "boardMembers": "членове в борда",
+        "managementLevels": "нива управление",
+        "yearsExperience": "години опит"
+      },
+      "roles": {
+        "president": {
+          "description": "Ръководи дейността на клуба и представлява клуба пред трети лица"
+        },
+        "vicePresident": {
+          "description": "Помага на председателя и го замества при необходимост"
+        },
+        "secretary": {
+          "description": "Води протоколите и документацията на клуба"
+        },
+        "treasurer": {
+          "description": "Отговаря за финансовата дейност и бюджета"
+        },
+        "culturalCoordinator": {
+          "description": "Организира културни дейности и събития"
+        },
+        "sportsCoordinator": {
+          "description": "Координира спортните дейности и активности"
+        },
+        "member": {
+          "description": "Член на управителния съвет"
+        }
+      },
+      "actions": {
+        "share": "Споделяне",
+        "moreInfo": "Повече информация",
+        "showLess": "Покажи по-малко",
+        "showAll": "Покажи всички ({{count}} още)"
+      },
+      "contact": {
+        "hideContacts": "Скрий контакти",
+        "showContacts": "Покажи контакти",
+        "call": "Обади се",
+        "sendEmail": "Изпрати имейл"
+      },
+      "structure": {
+        "title": "Структура на управлението"
+      },
+      "contactSection": {
+        "title": "Как да се свържете с ръководството",
+        "clubPhone": "Телефон на клуба",
+        "clubPhoneDesc": "Основният телефон за връзка с клуба",
+        "generalEmail": "Общ имейл",
+        "generalEmailDesc": "За общи въпроси и информация",
+        "clubAddress": "Адрес на клуба",
+        "clubAddressDesc": "Където можете да ни намерите"
+      },
+      "modal": {
+        "title": "Информация за член",
+        "biography": "Биография",
+        "contactInfo": "Контактна информация",
+        "aboutRole": "За ролята"
+      },
+      "messages": {
+        "infoCopied": "Информацията е копирана в клипборда!"
+      },
+      "shareText": "{{name}} - {{role}} в {{clubName}}"
+    },
+    "ClubGallery": {
+      "header": {
+        "badge": "Галерия",
+        "title": "Нашите спомени",
+        "subtitle": "Разгледайте снимки и видеа от нашите дейности и събития"
+      },
+      "stats": {
+        "images": "снимки",
+        "videos": "видеа",
+        "fromEvents": "от събития",
+        "totalFiles": "общо файлове"
+      },
+      "search": {
+        "placeholder": "Търсене в галерията..."
+      },
+      "filters": {
+        "all": "Всички",
+        "images": "Снимки",
+        "videos": "Видеа",
+        "fromEvents": "От събития"
+      },
+      "viewModes": {
+        "grid": "Grid изглед",
+        "list": "Списък изглед"
+      },
+      "categories": {
+        "gallery": "Галерия",
+        "videos": "Видеа",
+        "events": "События"
+      },
+      "media": {
+        "imageTitle": "Снимка {{number}}",
+        "videoTitle": "Видео {{number}}",
+        "imageAlt": "Снимка от клуба {{number}}",
+        "eventImageTitle": "{{eventTitle}} - Снимка {{number}}",
+        "eventVideoTitle": "{{eventTitle}} - Видео {{number}}",
+        "fromEvent": "От събитие"
+      },
+      "actions": {
+        "view": "Преглед",
+        "share": "Споделяне",
+        "download": "Сваляне",
+        "shareText": "{{title}} от {{clubName}}"
+      },
+      "noMedia": {
+        "title": "Няма намерени файлове",
+        "subtitle": "Опитайте различен филтър или търсене"
+      },
+      "lightbox": {
+        "counter": "{{current}} от {{total}}"
+      },
+      "video": {
+        "notSupported": "Вашият браузър не поддържа видео елемента.",
+        "duration": "Продължителност"
+      },
+      "messages": {
+        "linkCopied": "Линкът е копиран в клипборда!"
+      }
+    },
+    "ClubLocation": {
+      "header": {
+        "badge": "Местоположение и достъп",
+        "title": "Как да ни намерите",
+        "subtitle": "Подробна информация за местоположението, транспорт и удобства"
+      },
+      "actions": {
+        "directions": "Маршрут",
+        "share": "Споделяне",
+        "shareText": "{{clubName}} - {{address}}, {{city}}",
+        "shareTitle": "{{clubName}} - Местоположение"
+      },
+      "map": {
+        "title": "Интерактивна карта",
+        "expand": "Разшири картата",
+        "compress": "Намали картата",
+        "openInGoogleMaps": "Отвори в Google Maps"
+      },
+      "address": {
+        "title": "Адрес на клуба",
+        "type": "Тип",
+        "floor": "Етаж"
+      },
+      "transport": {
+        "title": "Как да стигнете",
+        "details": "Подробности",
+        "walking": {
+          "label": "Пеша",
+          "time": "10-15 мин",
+          "info": "Лесно достъпен пеша от центъра",
+          "description": "Пешеходен достъп с удобни тротоари и пешеходни пътеки. Подходящо за всички възрасти."
+        },
+        "bus": {
+          "label": "Автобус",
+          "time": "5-20 мин",
+          "info": "Градски транспорт с намалени цени за пенсионери",
+          "description": "Редовни автобусни линии с ниски цени за пенсионери. Спирки в близост до клуба."
+        },
+        "car": {
+          "label": "Кола",
+          "time": "5-10 мин",
+          "info": "Безплатен паркинг на улицата",
+          "description": "Лесен достъп с автомобил. Налични безплатни паркоместа в района."
+        }
+      },
+      "venue": {
+        "title": "Информация за сградата",
+        "area": "Площ",
+        "capacity": "Капацитет",
+        "seats": "места",
+        "accessibility": "Достъпност",
+        "accessible": "Достъпна",
+        "notAccessible": "Не е достъпна",
+        "facilities": "Удобства",
+        "more": "още",
+        "notSpecified": "Не е посочена"
+      },
+      "venueTypes": {
+        "municipal": "Общинска сграда",
+        "rented": "Наета сграда",
+        "cultural_center": "Културен дом",
+        "sports_center": "Спортен център",
+        "community_center": "Местен център",
+        "private": "Частна сграда",
+        "default": "Сграда"
+      },
+      "hours": {
+        "title": "Работно време",
+        "closed": "Затворено"
+      },
+      "contacts": {
+        "title": "Бързи контакти"
+      },
+      "days": {
+        "monday": "Понеделник",
+        "tuesday": "Вторник",
+        "wednesday": "Сряда",
+        "thursday": "Четвъртък",
+        "friday": "Петък",
+        "saturday": "Събота",
+        "sunday": "Неделя",
+        "mondayShort": "Пон",
+        "tuesdayShort": "Вто",
+        "wednesdayShort": "Сря",
+        "thursdayShort": "Чет",
+        "fridayShort": "Пет",
+        "saturdayShort": "Съб",
+        "sundayShort": "Нед"
+      },
+      "modals": {
+        "venue": {
+          "title": "Детайли за сградата",
+          "buildingType": "Тип сграда",
+          "facilitiesAndServices": "Удобства и услуги",
+          "description": "Описание",
+          "accessibleForDisabled": "Достъпна за хора с увреждания"
+        },
+        "contact": {
+          "title": "Контактна информация",
+          "mainPhone": "Основен телефон",
+          "mobilePhone": "Мобилен телефон",
+          "emailAddress": "Имейл адрес",
+          "detailedWorkingHours": "Подробно работно време"
+        }
+      },
+      "messages": {
+        "infoCopied": "Информацията е копирана в клипборда!"
+      }
+    },
+    "ClubContact": {
+      "header": {
+        "badge": "Свържете се с нас",
+        "title": "Тук сме за вас",
+        "subtitle": "Готови сме да отговорим на всички ваши въпроси и да ви помогнем"
+      },
+      "actions": {
+        "faq": "Често задавани въпроси",
+        "share": "Споделяне",
+        "shareText": "Свържете се с {{clubName}}"
+      },
+      "contactMethods": {
+        "primary": {
+          "title": "Основни контакти"
+        },
+        "phone": {
+          "label": "Телефон",
+          "description": "Обадете се директно"
+        },
+        "mobile": {
+          "label": "Мобилен",
+          "description": "SMS и обаждания"
+        },
+        "email": {
+          "label": "Email",
+          "description": "Изпратете съобщение"
+        },
+        "website": {
+          "label": "Уебсайт",
+          "description": "Посетете сайта ни"
+        }
+      },
+      "workingHours": {
+        "title": "Работно време",
+        "detailed": "Подробно работно време",
+        "openNow": "Отворено сега",
+        "closed": "Затворено",
+        "today": "Днес",
+        "notSpecified": "Не е посочено",
+        "note": "Работното време може да се променя по време на празници. За актуална информация се свържете с нас."
+      },
+      "location": {
+        "title": "Нашето местоположение",
+        "directions": "Маршрут"
+      },
+      "socialMedia": {
+        "title": "Социални мрежи"
+      },
+      "days": {
+        "monday": "Понеделник",
+        "tuesday": "Вторник",
+        "wednesday": "Сряда",
+        "thursday": "Четвъртък",
+        "friday": "Петък",
+        "saturday": "Събота",
+        "sunday": "Неделя"
+      },
+      "form": {
+        "title": "Изпратете съобщение",
+        "subtitle": "Ще ви отговорим в рамките на 24 часа",
+        "email": "Email",
+        "phone": "Телефон",
+        "notSpecified": "Не е посочен",
+        "fields": {
+          "name": "Име",
+          "email": "Email",
+          "phone": "Телефон",
+          "preferredContact": "Предпочитан контакт",
+          "subject": "Тема",
+          "message": "Съобщение"
+        },
+        "placeholders": {
+          "name": "Вашето име",
+          "email": "email@example.com",
+          "phone": "0888 123 456",
+          "message": "Напишете вашето съобщение тук..."
+        },
+        "subjects": {
+          "membership": "Членство в клуба",
+          "activities": "Дейности и програми",
+          "events": "События",
+          "volunteer": "Доброволчество",
+          "partnership": "Партньорство",
+          "donation": "Дарение/спонсорство",
+          "general": "Общи въпроси",
+          "complaint": "Жалба/предложение"
+        },
+        "validation": {
+          "required": "Моля попълнете всички задължителни полета"
+        },
+        "messages": {
+          "success": "Email клиентът ви е отворен! Изпратете съобщението за да го получим.",
+          "error": "Възникна грешка. Моля опитайте отново или ни се обадете директно."
+        },
+        "submitting": "Изпращане...",
+        "submit": "Изпрати съобщение",
+        "emailBody": "Име: {{name}}\nEmail: {{email}}\nТелефон: {{phone}}\nПредпочитан контакт: {{preferredContact}}\n\nТема: {{subject}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{clubName}} уебсайт\nДата: {{date}}"
+      },
+      "faq": {
+        "title": "Често задавани въпроси",
+        "questions": {
+          "howToBecomeMember": "Как мога да стана член на клуба?",
+          "membershipCost": "Колко струва членството?",
+          "membershipRequirements": "Какви са изискванията за членство?",
+          "membershipBenefits": "Какво включва членството?",
+          "visitBeforeMembership": "Мога ли да посетя клуба преди да стана член?"
+        },
+        "answers": {
+          "howToBecomeMember": "За да станете член, трябва да попълните заявление и да заплатите членския внос. Свържете се с нас за повече информация.",
+          "membershipCostWithPrices": "Месечният внос е {{monthly}} {{currency}}, а годишният - {{yearly}} {{currency}}.",
+          "membershipCostGeneral": "Свържете се с нас за информация за цените.",
+          "membershipRequirements": "Свържете се с нас за подробна информация за изискванията.",
+          "membershipBenefits": "Участие в всички дейности и събития на клуба.",
+          "visitBeforeMembership": "Разбира се! Заповядайте в работното ни време или се свържете с нас да уговорим среща."
+        },
+        "footer": {
+          "question": "Не намирате отговор на въпроса си?",
+          "contactUs": "Свържете се с нас"
+        }
+      },
+      "messages": {
+        "contactInfoCopied": "Контактната информация е копирана в клипборда!"
+      }
+    },
+    "ClubCard": {
+      "image": {
+        "noImage": "Няма изображение"
+      },
+      "categories": {
+        "cultural": "Културен",
+        "general": "Общ",
+        "sports": "Спортен",
+        "educational": "Образователен",
+        "traditional": "Традиционен"
+      },
+      "status": {
+        "active": "Активен",
+        "inactive": "Неактивен",
+        "suspended": "Спрян"
+      },
+      "actions": {
+        "showOnMap": "Покажи на картата",
+        "addToFavorites": "Добави в любими",
+        "viewMore": "Виж повече"
+      },
+      "stats": {
+        "members": "членове",
+        "activities": "дейности",
+        "views": "прегледи"
+      },
+      "activities": {
+        "title": "Популярни дейности",
+        "moreActivities": "+{{count}} още дейности"
+      },
+      "chairman": {
+        "title": "Председател"
+      },
+      "contacts": {
+        "phone": "Обади се: {{phone}}",
+        "email": "Изпрати имейл: {{email}}",
+        "website": "Посети сайт: {{website}}"
+      },
+      "founded": "Основан"
+    },
+    "ClubsHero": {
+      "title": {
+        "prefix": "Открийте своя",
+        "highlight": "клуб"
+      },
+      "subtitle": "Присъединете се към активната общност от пенсионери в България. Намерете близо до вас клуб с интересни дейности и нови приятелства.",
+      "stats": {
+        "activeClubs": "Активни клубове",
+        "cities": "Града в България",
+        "activeMembers": "Активни членове"
+      }
+    },
+    "ClubsMap": {
+      "title": "Карта на клубовете",
+      "categories": {
+        "cultural": "Културни",
+        "general": "Общи",
+        "sports": "Спортни",
+        "educational": "Образователни",
+        "traditional": "Традиционни"
+      },
+      "legend": {
+        "cultural": "Културни",
+        "general": "Общи",
+        "sports": "Спортни",
+        "educational": "Образователни",
+        "traditional": "Традиционни"
+      },
+      "popup": {
+        "viewDetails": "Виж детайли"
+      },
+      "loading": "Зареждане на картата...",
+      "info": {
+        "shown": "Показани {{count}} клуба в България"
+      }
+    },
+    "ClubsSearch": {
+      "title": "Търсене",
+      "results_one": "{{count}} резултат",
+      "results_other": "{{count}} резултата",
+      "results": "{{count}} резултата",
+      "searchPlaceholder": "Търси клуб...",
+      "filters": {
+        "title": "Филтри",
+        "city": {
+          "label": "Град",
+          "all": "Всички градове"
+        },
+        "category": {
+          "label": "Категория",
+          "all": "Всички категории"
+        },
+        "sort": {
+          "label": "Сортиране",
+          "name": "По име",
+          "members": "По членове",
+          "rating": "По рейтинг",
+          "newest": "Най-нови"
+        }
+      },
+      "categories": {
+        "cultural": "Културни",
+        "general": "Общи",
+        "sports": "Спортни",
+        "educational": "Образователни",
+        "traditional": "Традиционни"
+      },
+      "actions": {
+        "showMap": "Покажи на карта",
+        "hideMap": "Скрий картата",
+        "clearFilters": "Изчисти филтрите"
+      },
+      "recent": {
+        "title": "Последни публикации",
+        "digitalLiteracy": "ДИГИТАЛНА ГРАМОТНОСТ",
+        "example1": "Наемете сега с онлайн отстъпка",
+        "example2": "тест1000",
+        "example3": "тест1001"
+      }
+    },
+    "RecentArticles": {
+      "title": "Последни статии",
+      "viewAll": "Виж всички",
+      "noArticles": "Няма налични статии",
+      "errors": {
+        "loadingArticles": "Грешка при зареждане на статиите:"
+      }
+    },
+    "AllClubs": {
+      "header": {
+        "title": "Открийте своето място в общността",
+        "subtitle": "\"Заедно сме по-силни\" - всеки клуб е портал към нови приятелства и възможности"
+      },
+      "stats": {
+        "clubs": "Клуба",
+        "members": "Членове",
+        "active": "Активни",
+        "cities": "Града"
+      },
+      "categories": {
+        "cultural": "културни",
+        "general": "общи",
+        "sports": "спортни",
+        "educational": "образователни",
+        "traditional": "традиционни"
+      },
+      "noResults": {
+        "title": "Няма намерени клубове",
+        "subtitle": "Опитайте с различни критерии за търсене"
+      },
+      "loading": {
+        "title": "Зареждане на клубове... | Клубове на пенсионерите",
+        "description": "Моля изчакайте, зареждаме списъка с всички клубове за пенсионери в България.",
+        "text": "Зареждаме клубовете..."
+      },
+      "errors": {
+        "loadingClubs": "Грешка при зареждане на клубове:"
+      },
+      "meta": {
+        "baseTitle": "Всички клубове на пенсионерите в България",
+        "baseDescription": "Открийте своето място в общността! Разгледайте всички клубове за пенсионери в България.",
+        "fullTitle": "{{baseTitle}} - {{totalClubs}} клуба, {{totalMembers}} членове",
+        "fullDescription": "{{baseDescription}} {{totalClubs}} активни клуба в {{cities}} града с общо {{totalMembers}} членове.",
+        "filteredTitle": "Клубове за пенсионери {{filters}} - {{count}} резултата",
+        "filteredDescription": "Намерени са {{count}} клуба за пенсионери {{filters}}. Разгледайте подробна информация, контакти и дейности.",
+        "inCity": "в {{city}}",
+        "keywords": "клубове за пенсионери, третата възраст, активно стареене, социални дейности, България, общност, приятелства, здраве, култура, спорт",
+        "siteName": "Клубове на пенсионерите",
+        "memberOf": "Клубове на пенсионерите в България"
+      },
+      "breadcrumb": "Всички клубове"
+    },
+    "CulturalHero": {
+      "badge": {
+        "culturalClub": "Културен клуб"
+      },
+      "buttons": {
+        "join": "Присъедини се",
+        "events": "Събития",
+        "tour": "Обиколка",
+        "members": "Членове"
+      },
+      "stats": {
+        "title": "Статистика",
+        "activeMembers": "Активни членове",
+        "regularPrograms": "Редовни програми",
+        "upcomingEvents": "Предстоящи събития",
+        "founded": "Основан",
+        "yearsExperience": "{{years}} години опит"
+      },
+      "actions": {
+        "joinClub": "Присъединяване към клуба!",
+        "virtualTour": "Виртуална обиколка!"
+      },
+      "membersCount_one": "{{count}} член",
+      "membersCount_other": "{{count}} членове",
+      "modal": {
+        "title": "Членове на клуба",
+        "subtitle": "Нашата творческа общност от {{members}}",
+        "searchPlaceholder": "Търсене по име, телефон или имейл...",
+        "clearSearch": "Изчисти търсенето",
+        "noResultsFor": "Няма намерени резултати за \"{{term}}\"",
+        "foundMembers_one": "Намерен {{count}} член",
+        "foundMembers_other": "Намерени {{count}} членове",
+        "noRegisteredMembers": {
+          "title": "Няма регистрирани членове",
+          "subtitle": "Все още няма добавени членове в системата."
+        },
+        "noSearchResults": {
+          "title": "Няма намерени резултати",
+          "subtitle": "Опитайте с различни ключови думи или изчистете търсенето."
+        },
+        "clearSearchButton": "Изчисти търсенето",
+        "copyName": "Копирай името",
+        "copyPhone": "Копирай телефона",
+        "copyEmail": "Копирай имейла",
+        "copyAddress": "Копирай адреса",
+        "memberSince": "Член от"
+      },
+      "errors": {
+        "copyError": "Грешка при копиране:",
+        "copyErrorMessage": "Грешка при копиране. Моля опитайте отново."
+      }
+    },
+     "CulturalAbout": {
+      "header": {
+        "badge": "За клуба",
+        "title": "Нашата история и мисия",
+        "subtitle": "Повече от {{years}} години създаваме незабравими моменти и съхраняваме българската култура"
+      },
+      "story": {
+        "title": "Нашата история",
+        "founded": "Основаване на клуба"
+      },
+      "mission": {
+        "title": "Нашата мисия"
+      },
+      "quote": {
+        "defaultText": "Културата е мостът между поколенията. В нашия клуб всеки ден строим този мост с песни, танци и топли усмивки.",
+        "defaultAuthor": "Председател на клуба"
+      },
+      "stats": {
+        "title": "Ключови цифри",
+        "activeMembers": "Активни членове",
+        "yearsExperience": "Години опит",
+        "regularPrograms": "Редовни програми",
+        "prestigiousAwards": "Престижни награди"
+      },
+      "achievements": {
+        "title": "Постижения"
+      },
+      "specialties": {
+        "title": "Нашите специалности"
+      },
+      "communityImpact": {
+        "title": "Нашият принос към общността",
+        "eventsYearly": "Културни събития годишно",
+        "concertVisitors": "Посетители на концерти",
+        "volunteerInitiatives": "Доброволни инициативи",
+        "familiesSupported": "Семейства подкрепени"
+      },
+      "cta": {
+        "title": "Станете част от нашето културно семейство",
+        "subtitle": "Присъединете се към нас и открийте красотата на българската култура заедно с нови приятели",
+        "joinButton": "Присъединете се",
+        "viewProgramButton": "Разгледайте програмата"
+      },
+      "interests": {
+        "choralSinging": "Хорово пеене",
+        "folkDances": "Народни танци",
+        "visualArts": "Изобразително изкуство",
+        "literaryReadings": "Литературни четения",
+        "music": "Музика",
+        "theater": "Театър"
+      },
+      "modal": {
+        "title": "Присъединете се към {{clubName}}",
+        "subtitle": "Попълнете формата и ще се свържем с вас скоро",
+        "success": {
+          "title": "Заявката е изпратена!",
+          "message": "Благодарим ви за интереса! Ще се свържем с вас скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        },
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон (по желание)",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "interests": "Какво ви интересува? (изберете едно или повече)",
+          "message": "Допълнително съобщение (по желание)",
+          "messagePlaceholder": "Разкажете ни повече за себе си или задайте въпрос...",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати заявка",
+          "cancel": "Отказ"
+        },
+        "emailSubject": "Заявка за присъединяване към {{clubName}}",
+        "emailBody": "Здравейте,\n\nПолучихте заявка за присъединяване към {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nИнтереси: {{interests}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}",
+        "notSpecified": "Не е посочен",
+        "noInterests": "Няма посочени",
+        "noMessage": "Няма допълнително съобщение"
+      }
+    },
+    "CulturalActivities": {
+      "header": {
+        "badge": "Дейности и програми",
+        "title": "Нашите културни дейности",
+        "subtitle": "Открийте богатството на българската култура чрез разнообразни програми и работилници"
+      },
+      "tabs": {
+        "regular": "Редовни дейности",
+        "courses": "Курсове и обучения", 
+        "special": "Специални програми"
+      },
+      "activity": {
+        "instructor": "Инструктор",
+        "participants": "участници",
+        "level": "Ниво",
+        "duration": "Продължителност",
+        "buttons": {
+          "register": "Записване",
+          "more": "Повече"
+        }
+      },
+      "course": {
+        "teacher": "Преподавател",
+        "schedule": "График",
+        "starts": "Започва",
+        "buttons": {
+          "details": "Детайли"
+        }
+      },
+      "special": {
+        "learnMore": "Научете повече"
+      },
+      "schedule": {
+        "title": "Седмична програма",
+        "subtitle": "Преглед на всички дейности по дни",
+        "noActivities": "Няма планирани дейности"
+      },
+      "weekDays": {
+        "monday": "понеделник",
+        "tuesday": "вторник",
+        "wednesday": "сряда",
+        "thursday": "четвъртък",
+        "friday": "петък",
+        "saturday": "събота",
+        "sunday": "неделя"
+      },
+      "cta": {
+        "title": "Готови да се включите?",
+        "subtitle": "Присъединете се към някоя от нашите програми и открийте нови таланти и приятели",
+        "registerNow": "Запишете се сега",
+        "contactUs": "Свържете се с нас"
+      },
+      "form": {
+        "name": "Вашето име",
+        "namePlaceholder": "Въведете вашето име",
+        "email": "Имейл адрес",
+        "emailPlaceholder": "Въведете вашия имейл",
+        "phoneRequired": "Телефон",
+        "phoneOptional": "Телефон (по желание)",
+        "phonePlaceholder": "Въведете вашия телефон",
+        "messageOptional": "Допълнително съобщение (по желание)",
+        "messageRequired": "Съобщение",
+        "messagePlaceholder": "Опишете нивото си на опит или задайте въпрос...",
+        "sending": "Изпраща се...",
+        "submitRequest": "Изпрати заявка",
+        "sendMessage": "Изпрати съобщение",
+        "cancel": "Отказ",
+        "notSpecified": "Не е посочен",
+        "noMessage": "Няма допълнително съобщение",
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "modals": {
+        "join": {
+          "title": "Записване за {{activityName}}",
+          "subtitle": "Попълнете формата и ще се свържем с вас за потвърждение",
+          "success": {
+            "title": "Заявката е изпратена!",
+            "message": "Благодарим ви! Ще се свържем с вас скоро за потвърждение на записването."
+          },
+          "emailSubject": "Записване за дейност в {{clubName}}",
+          "emailBody": "Здравейте,\n\nПолучихте заявка за записване за дейност от {{clubName}}:\n\nДейност: {{activityName}}\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}"
+        },
+        "contact": {
+          "title": "Свържете се с нас",
+          "subtitle": "Задайте вашия въпрос и ще ви отговорим възможно най-скоро",
+          "messagePlaceholder": "Какво бихте искали да знаете?",
+          "infoRequestMessage": "Моля, изпратете ми повече информация за \"{{activityName}}\".",
+          "success": {
+            "title": "Съобщението е изпратено!",
+            "message": "Благодарим ви! Ще се свържем с вас скоро."
+          },
+          "emailSubject": "Запитване за дейности от {{clubName}}",
+          "emailBody": "Здравейте,\n\nПолучихте запитване за дейности от {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}"
+        }
+      }
+    },
+     "CulturalEvents": {
+      "header": {
+        "badge": "Събития и мероприятия",
+        "title": "Културният ни календар",
+        "subtitle": "Открийте вълнуващи събития, концерти и празненства през цялата година"
+      },
+      "eventTypes": {
+        "cultural": "Културни",
+        "social": "Социални",
+        "educational": "Образователни",
+        "traditional": "Традиционни",
+        "celebration": "Празници",
+        "charity": "Благотворителни",
+        "community": "Общностни",
+        "sports": "Спортни",
+        "wellness": "Wellness",
+        "sportsGames": "Спортни игри",
+        "swimming": "Плуване",
+        "trips": "Екскурзии"
+      },
+      "featured": {
+        "badge": "Препоръчано събитие",
+        "timeAt": "в {{time}}"
+      },
+      "filters": {
+        "upcoming": "Предстоящи",
+        "past": "Минали събития",
+        "cultural": "Културни",
+        "traditional": "Традиционни"
+      },
+      "buttons": {
+        "register": "Запишете се",
+        "gallery": "Галерия"
+      },
+      "tooltips": {
+        "register": "Запишете се за събитието",
+        "gallery": "Вижте галерията",
+        "share": "Споделете събитието",
+        "info": "Повече информация"
+      },
+      "stats": {
+        "eventsYearly": "Събития годишно",
+        "totalParticipants": "Общо участници",
+        "concerts": "Концерти и представления",
+        "averageRating": "Средна оценка"
+      },
+      "cta": {
+        "title": "Не пропускайте нито едно събитие!",
+        "subtitle": "Абонирайте се за нашия бюлетин и бъдете първите, които ще научат за новите събития",
+        "subscribe": "Абонирайте се",
+        "contact": "Свържете се с нас"
+      },
+      "gallery": {
+        "noMedia": "Няма налични медийни файлове",
+        "videoAlt": "Видео {{index}}",
+        "imageAlt": "Изображение {{index}}"
+      },
+      "form": {
+        "name": "Вашето име",
+        "namePlaceholder": "Въведете вашето име",
+        "email": "Имейл адрес",
+        "emailPlaceholder": "Въведете вашия имейл",
+        "phoneOptional": "Телефон (по желание)",
+        "phoneRequired": "Телефон",
+        "phonePlaceholder": "Въведете вашия телефон",
+        "messageRequired": "Съобщение",
+        "sending": "Изпраща се...",
+        "subscribe": "Абонирайте се",
+        "sendMessage": "Изпрати съобщение",
+        "submitRequest": "Изпрати заявка",
+        "cancel": "Отказ",
+        "notSpecified": "Не е посочен",
+        "noMessage": "Няма допълнително съобщение",
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "modals": {
+        "subscribe": {
+          "title": "Абонирайте се за нашия бюлетин",
+          "subtitle": "Получавайте новини за всички събития директно в имейла си",
+          "interestsLabel": "Какво ви интересува? (изберете едно или повече)",
+          "success": {
+            "title": "Успешно се абонирахте!",
+            "message": "Благодарим ви! Ще получавате новини за нашите събития."
+          },
+          "emailSubject": "Абониране за бюлетин - {{clubName}}",
+          "emailBody": "Здравейте,\n\nПолучихте заявка за абониране за бюлетин от {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nИнтереси: {{interests}}\n\n---\nИзпратено от {{senderEmail}}",
+          "allEvents": "Всички събития"
+        },
+        "contact": {
+          "title": "Свържете се с нас",
+          "subtitle": "Задайте вашия въпрос за събитията и ще ви отговорим възможно най-скоро",
+          "subjectLabel": "Тема на запитването",
+          "subjectPlaceholder": "Кратко опишете темата",
+          "messagePlaceholder": "Какво бихте искали да знаете за нашите събития?",
+          "success": {
+            "title": "Съобщението е изпратено!",
+            "message": "Благодарим ви! Ще се свържем с вас скоро."
+          },
+          "defaultSubject": "Запитване за събития - {{clubName}}",
+          "generalInquiry": "Общо запитване",
+          "emailBody": "Здравейте,\n\nПолучихте запитване за събития от {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nТема: {{subject}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}"
+        },
+        "register": {
+          "title": "Записване за {{eventTitle}}",
+          "subtitle": "Попълнете формата и ще се свържем с вас за потвърждение",
+          "messageLabel": "Допълнително съобщение (по желание)",
+          "messagePlaceholder": "Имате ли специални изисквания или въпроси?",
+          "success": {
+            "title": "Заявката е изпратена!",
+            "message": "Благодарим ви! Ще се свържем с вас скоро за потвърждение на записването."
+          },
+          "emailSubject": "Записване за събитие - {{eventTitle}}",
+          "emailBody": "Здравейте,\n\nПолучихте заявка за записване за събитие от {{clubName}}:\n\nСъбитие: {{eventTitle}}\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}"
+        }
+      },
+      "participants": "участници",
+      "tripTo": "Екскурзия до {{destination}}",
+      "notSpecified": "Не е посочена",
+      "messages": {
+        "linkCopied": "Линкът е копиран в клипборда!"
+      }
+    },
+    "CulturalManagement": {
+      "header": {
+        "badge": "Ръководство и управление",
+        "title": "Нашето ръководство",
+        "subtitle": "Запознайте се с хората, които водят клуба напред с отдаденост и опит"
+      },
+      "board": {
+        "title": "Управителен съвет",
+        "subtitle": "Нашият опитен екип, който осигурява отличната работа на клуба"
+      },
+      "roles": {
+        "chairman": "Председател",
+        "secretary": "Секретар",
+        "treasurer": "Касиер",
+        "viceChairman": "Заместник-председател",
+        "culturalOfficer": "Културен деец",
+        "member": "Член"
+      },
+      "specialties": {
+        "organization": "Организация",
+        "culturalEvents": "Културни събития",
+        "education": "Образование",
+        "documentation": "Документооборот",
+        "administration": "Администрация",
+        "communications": "Комуникации",
+        "finance": "Финанси",
+        "budget": "Бюджет",
+        "accounting": "Счетоводство"
+      },
+      "experience": {
+        "threeYears": "3 години",
+        "fourYears": "4 години",
+        "fiveYears": "5 години"
+      },
+      "defaultBios": {
+        "chairman": "Пенсионирана учителка по история с 35-годишен стаж. Председател на клуба от 2022 г.",
+        "secretary": "Бивш счетоводител, отговаря за документооборота и комуникацията",
+        "treasurer": "Пенсионирана банкерка, управлява финансите на клуба"
+      },
+      "defaultAddresses": {
+        "address1": "ул. Витоша 45, София",
+        "address2": "ул. Раковски 12, София",
+        "address3": "бул. Стамболийски 78, София"
+      },
+      "defaultOffice": {
+        "address": "ул. Витоша 127, ет. 2",
+        "city": "София"
+      },
+      "defaultClubName": "Клуб 'Златна есен'",
+      "member": {
+        "experience": "Опит",
+        "contact": "Свържете се"
+      },
+      "office": {
+        "title": "Офис и контакти",
+        "address": {
+          "title": "Адрес"
+        },
+        "contacts": {
+          "title": "Контакти",
+          "phone": "Тел",
+          "mobile": "Моб"
+        },
+        "workingHours": {
+          "title": "Работно време"
+        }
+      },
+      "workingHours": {
+        "days": {
+          "monday": "Понеделник",
+          "tuesday": "Вторник",
+          "wednesday": "Сряда",
+          "thursday": "Четвъртък",
+          "friday": "Петък",
+          "saturday": "Събота",
+          "sunday": "Неделя"
+        },
+        "closed": "Затворено"
+      },
+      "contactForm": {
+        "title": "Свържете се с нас",
+        "subtitle": "Имате въпроси? Пишете ни и ще ви отговорим възможно най-скоро"
+      },
+      "form": {
+        "name": "Име и фамилия",
+        "namePlaceholder": "Вашето име",
+        "email": "Email адрес",
+        "emailPlaceholder": "email@example.com",
+        "phone": "Телефон",
+        "phonePlaceholder": "0888 123 456",
+        "subject": "Тема",
+        "subjectPlaceholder": "Изберете тема",
+        "message": "Съобщение",
+        "messagePlaceholder": "Напишете вашето съобщение тук...",
+        "submit": "Изпрати съобщение",
+        "sending": "Изпраща се...",
+        "notSpecified": "Не е посочен",
+        "subjects": {
+          "membership": "Членство",
+          "activities": "Дейности",
+          "events": "Събития",
+          "volunteering": "Доброволчество",
+          "other": "Друго"
+        },
+        "success": {
+          "title": "Съобщението е изпратено!",
+          "message": "Благодарим ви! Ще се свържем с вас възможно най-скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "quickContact": {
+        "title": "Бързи контакти",
+        "chairman": "Председател",
+        "finance": "Финанси",
+        "events": "Събития",
+        "culturalDepartment": "Културен отдел"
+      },
+      "modal": {
+        "contacts": "Контакти",
+        "specialties": "Специалности",
+        "buttons": {
+          "call": "Обадете се",
+          "email": "Пишете email"
+        }
+      },
+      "modals": {
+        "contact": {
+          "emailSubject": "Запитване от {{clubName}} - {{subject}}",
+          "emailBody": "Здравейте,\n\nПолучихте запитване от {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nТема: {{subject}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}"
+        }
+      }
+    },
+    "CulturalGallery": {
+      "header": {
+        "badge": "Галерия и спомени",
+        "title": "Нашите незабравими моменти",
+        "subtitle": "Разгледайте снимки и видеа от нашите събития, концерти и ежедневния живот в клуба"
+      },
+      "categories": {
+        "all": "Всички",
+        "concerts": "Концерти",
+        "events": "Събития",
+        "workshops": "Работилници",
+        "trips": "Екскурзии",
+        "gallery": "Галерия",
+        "other": "Други"
+      },
+      "interests": {
+        "choir": "Хор",
+        "dance": "Танци",
+        "creative": "Творческо",
+        "trips": "Екскурзии",
+        "social": "Социални дейности",
+        "educational": "Образователни лекции"
+      },
+      "actions": {
+        "like": "Харесване",
+        "share": "Споделяне",
+        "download": "Изтегляне",
+        "likedMessage": "Харесахте материала с ID: {{itemId}}",
+        "linkCopied": "Линкът е копиран в клипборда!"
+      },
+      "stats": {
+        "images": "Снимки в архива",
+        "videos": "Видео записи",
+        "events": "Документирани събития",
+        "views": "Общо гледания"
+      },
+      "testimonials": {
+        "title": "Какво казват нашите членове",
+        "subtitle": "Историите на хората, които правят нашия клуб специално място",
+        "memberInfo": "{{age}} години • Член от {{memberSince}}",
+        "default": {
+          "maria": "В този клуб намерих не само хобита, но и истински приятели. Всеки ден тук е като празник!",
+          "georgi": "Хорът ми дава сили и радост. Никога не съм се чувствал толкова жив и активен!",
+          "elena": "Творческите работилници развиха таланти, за които не знаех, че имам. Препоръчвам на всички!"
+        }
+      },
+      "cta": {
+        "title": "Искате да сте част от следващите снимки?",
+        "subtitle": "Присъединете се към нашия клуб и създайте незабравими спомени заедно с нас",
+        "becomeMember": "Станете член",
+        "sendPhotos": "Изпратете снимки"
+      },
+      "form": {
+        "name": "Вашето име",
+        "namePlaceholder": "Въведете вашето име",
+        "email": "Имейл адрес",
+        "emailPlaceholder": "Въведете вашия имейл",
+        "phone": "Телефон",
+        "phonePlaceholder": "Въведете вашия телефон",
+        "age": "Възраст",
+        "agePlaceholder": "Вашата възраст",
+        "experience": "Опит/умения (по желание)",
+        "experiencePlaceholder": "Имате ли опит в някоя от дейностите?",
+        "message": "Допълнително съобщение",
+        "messagePlaceholder": "Разкажете ни малко за себе си",
+        "sending": "Изпраща се...",
+        "submitRequest": "Изпрати заявка",
+        "sendMessage": "Изпрати съобщение",
+        "cancel": "Отказ",
+        "noMessage": "Няма допълнително съобщение",
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "modals": {
+        "membership": {
+          "title": "Заявка за членство",
+          "subtitle": "Попълнете формата за да станете част от нашето семейство",
+          "interestsLabel": "Какво ви интересува?",
+          "success": {
+            "title": "Заявката е изпратена!",
+            "message": "Благодарим ви! Ще се свържем с вас скоро."
+          },
+          "emailSubject": "Заявка за членство - {{clubName}}",
+          "emailBody": "Здравейте,\n\nПолучихте заявка за членство в {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nВъзраст: {{age}}\nИнтереси: {{interests}}\nОпит: {{experience}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}"
+        },
+        "photos": {
+          "title": "Изпратете снимки",
+          "subtitle": "Споделете ваши снимки от събития в клуба",
+          "eventLabel": "Събитие/Повод",
+          "eventPlaceholder": "От кое събитие са снимките?",
+          "descriptionLabel": "Описание на снимките",
+          "descriptionPlaceholder": "Какво показват снимките?",
+          "messagePlaceholder": "Как ще изпратите снимките? (имейл, USB, облак и др.)",
+          "success": {
+            "title": "Съобщението е изпратено!",
+            "message": "Благодарим ви! Ще се свържем с вас за снимките."
+          },
+          "emailSubject": "Изпращане на снимки - {{clubName}}",
+          "emailBody": "Здравейте,\n\nПолучихте заявка за изпращане на снимки за {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nСъбитие: {{eventName}}\nОписание: {{description}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}\n\nМоля свържете се с {{contactName}} за получаване на снимките."
+        }
+      },
+      "defaultLocation": "Клубна зала",
+      "defaultClubLocation": "Клуб",
+      "defaultImageTitle": "Клубна снимка",
+      "defaultImageDescription": "Спомен от клуба",
+      "tripTitle": "Екскурзия до {{destination}}"
+    },
+     "CulturalLocation": {
+      "header": {
+        "badge": "Локация и достъп",
+        "title": "Как да ни намерите",
+        "subtitle": "Подробна информация за локацията, транспорт и удобства в района"
+      },
+      "location": {
+        "defaultAddress": "Адресът не е посочен",
+        "defaultMunicipality": "Столична",
+        "defaultRegion": "София-град"
+      },
+      "venue": {
+        "title": "Информация за мястото",
+        "type": "Тип",
+        "area": "Площ",
+        "capacity": "Капацитет",
+        "facilities": "Удобства",
+        "noSize": "Не е посочена площ",
+        "noCapacity": "Не е посочен капацитет",
+        "defaultFacility": "Основна зала",
+        "types": {
+          "municipal": "Общинска сграда",
+          "community": "Общностен център",
+          "cultural": "Културен център",
+          "school": "Училищна сграда",
+          "private": "Частна сграда"
+        }
+      },
+      "tabs": {
+        "map": "Карта",
+        "transport": "Транспорт",
+        "parking": "Паркиране",
+        "nearby": "В района"
+      },
+      "transport": {
+        "instructionsTitle": "Инструкции за {{method}}",
+        "walking": {
+          "name": "Пеша",
+          "duration": "5-15 мин",
+          "description": "От центъра на {{city}}",
+          "instructions": [
+            "Следвайте указателните табели",
+            "Адрес: {{address}}",
+            "Търсете входа на сградата"
+          ]
+        },
+        "bus": {
+          "name": "Автобус",
+          "duration": "10-20 мин",
+          "description": "Градски транспорт",
+          "instructions": [
+            "Използвайте градския транспорт",
+            "Слезте на най-близката спирка",
+            "Адрес: {{address}}"
+          ]
+        },
+        "metro": {
+          "name": "Метро",
+          "duration": "15-25 мин",
+          "description": "Метро система",
+          "instructions": [
+            "Използвайте метро системата",
+            "Слезте на най-близката станция",
+            "Продължете пеша до адреса"
+          ]
+        },
+        "car": {
+          "name": "Автомобил",
+          "duration": "5-30 мин",
+          "description": "В зависимост от трафика",
+          "instructions": [
+            "Използвайте GPS навигация",
+            "Адрес: {{address}}, {{city}}",
+            "Търсете паркомясто наблизо"
+          ]
+        }
+      },
+      "parking": {
+        "type": "Тип",
+        "price": "Цена",
+        "maxTime": "Макс. време",
+        "workingHours": "Работно време",
+        "name": "Име",
+        "distance": "Разстояние",
+        "capacity": "Капацитет",
+        "location": "Локация",
+        "street": {
+          "title": "Улично паркиране",
+          "defaultType": "Улично паркиране",
+          "defaultPrice": "Проверете местните тарифи",
+          "defaultMaxTime": "Според ограниченията",
+          "defaultHours": "Проверете знаците"
+        },
+        "underground": {
+          "title": "Подземен паркинг"
+        },
+        "free": {
+          "title": "Безплатно паркиране",
+          "defaultLocation": "Улици в района",
+          "defaultDistance": "Различно разстояние",
+          "defaultNote": "Търсете безплатни места в близките улици"
+        }
+      },
+      "accessibility": {
+        "title": "Достъпност",
+        "subtitle": "Информация за хора с увреждания и ограничена подвижност",
+        "wheelchair": {
+          "name": "Достъп с инвалидна количка",
+          "available": "Достъп осигурен",
+          "limited": "Ограничен достъп"
+        },
+        "elevator": {
+          "name": "Асансьор",
+          "available": "Асансьор наличен",
+          "unavailable": "Без асансьор"
+        },
+        "safety": {
+          "name": "Безопасност",
+          "basic": "Основни мерки за безопасност"
+        }
+      },
+      "nearbyPlaces": {
+        "noInfo": "Информация не е налична",
+        "default": {
+          "transport": {
+            "name": "Спирка на градския транспорт",
+            "description": "Автобусни линии"
+          },
+          "hospital": {
+            "name": "Медицински център",
+            "description": "Спешна медицинска помощ"
+          }
+        }
+      },
+      "map": {
+        "distance": "Разстояние",
+        "walkingRadius": "200м пеша от клуба",
+        "legend": {
+          "club": "Клуб",
+          "healthcare": "Здравеопазване",
+          "transport": "Транспорт",
+          "parking": "Паркинг"
+        }
+      },
+      "actions": {
+        "route": "Маршрут",
+        "share": "Споделяне",
+        "openingMap": "Отваряне на карта...",
+        "addressCopied": "Адресът е копиран в клипборда!",
+        "noPhone": "Телефонен номер не е наличен"
+      },
+      "share": {
+        "title": "Локация на {{clubName}}"
+      },
+      "help": {
+        "title": "Нужна ви е помощ?",
+        "subtitle": "Ако имате затруднения с намирането на клуба или нуждаете от допълнителна информация",
+        "call": "Обадете се",
+        "realTimeNavigation": "Навигация в реално време"
+      },
+      "units": {
+        "meters": "м",
+        "people": "души"
+      }
+    },
+    "CulturalContacts": {
+      "header": {
+        "badge": "Контакти и връзка",
+        "title": "Свържете се с нас",
+        "subtitle": "Търсите информация или искате да се присъедините? Ние сме тук, за да ви помогнем!"
+      },
+      "status": {
+        "open": "Отворено сега",
+        "closed": "Затворено сега"
+      },
+      "quickInfo": {
+        "phone": "Телефон",
+        "mobile": "Мобилен",
+        "email": "Email",
+        "website": "Уебсайт"
+      },
+      "methods": {
+        "title": "Начини за връзка",
+        "visit": {
+          "title": "Посетете ни",
+          "description": "Елате в клуба за лична среща",
+          "byAppointment": "Работно време: по договаряне"
+        },
+        "call": {
+          "title": "Обадете се",
+          "description": "Моментален контакт по телефон"
+        },
+        "email": {
+          "title": "Пишете email",
+          "description": "Детайлни запитвания и документи"
+        },
+        "online": {
+          "title": "Посетете сайта",
+          "description": "Онлайн информация и ресурси"
+        }
+      },
+      "form": {
+        "title": "Изпратете съобщение",
+        "name": "Име и фамилия",
+        "namePlaceholder": "Вашето име",
+        "email": "Email адрес",
+        "emailPlaceholder": "email@example.com",
+        "phone": "Телефон",
+        "phonePlaceholder": "0888 123 456",
+        "subject": "Тема",
+        "subjectPlaceholder": "Изберете тема",
+        "message": "Съобщение",
+        "messagePlaceholder": "Напишете вашето съобщение тук...",
+        "preferredResponse": "Предпочитан начин за отговор",
+        "contactMethods": {
+          "email": "Email",
+          "phone": "Телефон"
+        },
+        "subjects": {
+          "membership": "Информация за членство",
+          "activities": "Дейности и програми",
+          "events": "Събития и мероприятия",
+          "volunteering": "Доброволчество",
+          "complaint": "Оплакване или предложение",
+          "other": "Друго"
+        },
+        "sending": "Изпраща се...",
+        "submit": "Изпрати съобщение",
+        "success": "Съобщението е изпратено успешно! Ще ви отговорим в рамките на 24 часа.",
+        "error": "Възникна грешка при изпращането. Моля опитайте отново.",
+        "notSpecified": "Не е посочен",
+        "inquiry": "Запитване",
+        "emailSubject": "{{subject}} - {{clubName}}",
+        "emailBody": "Здравейте,\n\nПолучихте съобщение от {{clubName}}:\n\nИме: {{name}}\nEmail: {{email}}\nТелефон: {{phone}}\nТема: {{subject}}\nПредпочитан отговор: {{contactMethod}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от контактната форма на {{clubName}}"
+      },
+      "workingHours": {
+        "title": "Работно време",
+        "closed": "Затворено",
+        "days": {
+          "monday": "Понеделник",
+          "tuesday": "Вторник",
+          "wednesday": "Сряда",
+          "thursday": "Четвъртък",
+          "friday": "Петък",
+          "saturday": "Събота",
+          "sunday": "Неделя"
+        }
+      },
+      "emergency": {
+        "title": "Важни контакти",
+        "mainPhone": "Основен телефон",
+        "reception": "Клубна рецепция",
+        "workingHours": "работно време",
+        "mobilePhone": "Мобилен телефон",
+        "onDuty": "Дежурен",
+        "afterHours": "извън работно време",
+        "chairman": "Председател"
+      },
+      "social": {
+        "title": "Социални мрежи",
+        "follow": "Последвайте ни"
+      },
+      "faq": {
+        "title": "Често задавани въпроси",
+        "subtitle": "Намерете бързи отговори на най-честите въпроси",
+        "byAgreement": "по договаряне",
+        "membership": {
+          "question": "Как мога да стана член на клуба?",
+          "answerWithFee": "Можете да се запишете като попълните формата за членство или да дойдете лично в клуба. Месечната такса е {{fee}} лв.",
+          "answerGeneral": "Можете да се запишете като попълните формата за членство или да дойдете лично в клуба през работно време."
+        },
+        "fees": {
+          "question": "Колко струва месечната такса?",
+          "answerWithYearly": "Месечната такса е {{monthly}} лв., а годишната е {{yearly}} лв.",
+          "answerMonthly": "Месечната такса е {{monthly}} лв."
+        },
+        "ageLimit": {
+          "question": "Има ли възрастови ограничения?",
+          "answerWithAge": "Минималната възраст за членство е {{age}} години.",
+          "answerDefault": "Клубът е предназначен за хора над 55 години, но приемаме и по-млади членове при специални обстоятелства."
+        },
+        "activities": {
+          "question": "Какви дейности предлагате?",
+          "answer": "Предлагаме {{activities}} и много други културни дейности.",
+          "events": "събития",
+          "trips": "екскурзии",
+          "classes": "занятия"
+        }
+      },
+      "cta": {
+        "title": "Все още имате въпроси?",
+        "subtitle": "Нашият екип е готов да ви помогне и да отговори на всички ваши въпроси",
+        "callNow": "Обадете се сега",
+        "visitUs": "Посетете ни"
+      },
+      "actions": {
+        "noPhone": "Телефонен номер не е наличен",
+        "noAddress": "Адресът не е наличен"
+      }
+    },
+     "SocialHero": {
+      "badge": "Социален клуб за пенсионери",
+      "stats": {
+        "members": "Членове",
+        "founded": "Основан",
+        "helped": "Помогнати",
+        "donationsDistributed": "Раздадени лв."
+      },
+      "actions": {
+        "watchVideo": "Гледайте видео",
+        "visitUs": "Посетете ни",
+        "writeUs": "Пишете ни",
+        "locationInfo": "Информация за локацията може да бъде намерена в контактните данни."
+      },
+      "scroll": {
+        "learnMore": "Научете повече"
+      },
+      "video": {
+        "notSupported": "Вашият браузър не поддържа video елемента.",
+        "defaultTitle": "Видео от клуба",
+        "duration": "Продължителност",
+        "type": "Тип"
+      },
+      "email": {
+        "subject": "Запитване до {{clubName}}",
+        "body": "Здравейте,\n\nПолучихте ново съобщение от сайта на {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}",
+        "modal": {
+          "title": "Свържете се с нас",
+          "subtitle": "Изпратете ни съобщение и ще ви отговорим възможно най-скоро"
+        }
+      },
+      "form": {
+        "name": "Вашето име",
+        "namePlaceholder": "Въведете вашето име",
+        "email": "Имейл адрес",
+        "emailPlaceholder": "Въведете вашия имейл",
+        "phone": "Телефон (по желание)",
+        "phonePlaceholder": "Въведете вашия телефон",
+        "message": "Съобщение",
+        "messagePlaceholder": "Какво бихте искали да ни споделите?",
+        "sending": "Изпраща се...",
+        "submit": "Изпрати съобщение",
+        "cancel": "Отказ",
+        "notSpecified": "Не е посочен",
+        "success": {
+          "title": "Съобщението е изпратено!",
+          "message": "Благодарим ви! Ще се свържем с вас скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "members": {
+        "ourMembers": "Нашите членове",
+        "copyError": "Грешка при копиране:",
+        "copyName": "Копирай името",
+        "copyPhone": "Копирай телефона",
+        "copyEmail": "Копирай имейла",
+        "copyAddress": "Копирай адреса",
+        "memberSince": "Член от",
+        "modal": {
+          "title": "Членове на клуба",
+          "subtitle": "Нашата дружна общност от {{count}} {{memberWord}}"
+        },
+        "search": {
+          "placeholder": "Търсене по име, телефон или имейл...",
+          "clear": "Изчисти търсенето",
+          "noResults": "Няма намерени резултати за \"{{term}}\"",
+          "foundOne": "Намерен 1 член",
+          "foundMany": "Намерени {{count}} членове",
+          "noResultsTitle": "Няма намерени резултати",
+          "noResultsMessage": "Опитайте с различни ключови думи или изчистете търсенето.",
+          "clearSearch": "Изчисти търсенето"
+        },
+        "noMembers": {
+          "title": "Няма регистрирани членове",
+          "message": "Все още няма добавени членове в системата."
+        }
+      }
+    },
+    "SocialAbout": {
+      "header": {
+        "badge": "За нашия клуб",
+        "title": "Нашата мисия и ценности"
+      },
+      "story": {
+        "title": "Нашата история",
+        "foundedIn": "Основан през {{year}} година"
+      },
+      "stats": {
+        "title": "Нашето въздействие",
+        "activeMembers": "Активни членове",
+        "yearsActive": "Години дейност",
+        "programs": "Програми",
+        "helpedPeople": "Помогнати хора"
+      },
+      "benefits": {
+        "title": "Ползи от членството"
+      },
+      "membership": {
+        "title": "Как да се присъедините",
+        "fee": {
+          "title": "Членски внос",
+          "monthly": "месечно",
+          "yearly": "годишно"
+        }
+      },
+      "services": {
+        "title": "Нашите услуги",
+        "homeVisits": "Домашни посещения",
+        "shoppingAssistance": "Помощ при пазаруване",
+        "documentHelp": "Помощ с документи",
+        "companionship": "Придружаване",
+        "transportService": "Транспортни услуги",
+        "mealDelivery": "Доставка на храна",
+        "cleaningHelp": "Помощ за почистване",
+        "healthServices": "Здравни услуги"
+      },
+      "impact": {
+        "title": "Нашето социално въздействие",
+        "subtitle": "Как правим разлика в общността",
+        "volunteering": {
+          "title": "Доброволчество",
+          "participants": "{{count}} участници",
+          "coordinator": "Координатор",
+          "hoursPerMonth": "{{hours}} часа месечно"
+        },
+        "projects": {
+          "title": "Общностни проекти",
+          "beneficiaries": "{{count}} бенефициенти"
+        },
+        "projectStatus": {
+          "active": "активен",
+          "completed": "завършен",
+          "pending": "предстоящ",
+          "cancelled": "отменен"
+        }
+      },
+      "achievements": {
+        "title": "Нашите постижения",
+        "subtitle": "Признание за нашата дейност",
+        "awards": {
+          "title": "Награди"
+        },
+        "recognitions": {
+          "title": "Признания"
+        }
+      }
+    },
+    "SocialProjects": {
+      "header": {
+        "badge": "Нашите проекти",
+        "title": "Как правим разлика",
+        "subtitle": "Открийте начините, по които нашият клуб помага на общността и прави света по-добро място"
+      },
+      "stats": {
+        "activeProjects": "Активни проекта",
+        "helpedPeople": "Помогнати хора",
+        "donations": "дарения"
+      },
+      "search": {
+        "placeholder": "Търсете проект..."
+      },
+      "filters": {
+        "all": "Всички",
+        "community": "Общностни",
+        "volunteering": "Доброволчески",
+        "events": "Събития",
+        "health": "Здравеопазване",
+        "support": "Подкрепа",
+        "education": "Образование"
+      },
+      "status": {
+        "active": "активен",
+        "planned": "планиран",
+        "completed": "завършен",
+        "seasonal": "сезонен"
+      },
+      "metrics": {
+        "people": "{{count}} човека",
+        "participants": "{{count}} участници"
+      },
+      "actions": {
+        "viewMore": "Вижте повече"
+      },
+      "details": {
+        "duration": "Продължителност",
+        "coordinator": "Координатор",
+        "impact": "Въздействие",
+        "date": "Дата",
+        "time": "Час",
+        "permanent": "Постоянен",
+        "oneTime": "Еднократно",
+        "clubManagement": "Ръководство на клуба",
+        "helpedPeople": "{{count}} помогнати хора",
+        "hoursPerMonth": "{{hours}} часа месечно",
+        "participants": "{{count}} участници"
+      },
+      "volunteer": {
+        "description": "Доброволческа дейност с {{participants}} участници"
+      },
+      "categories": {
+        "healthTerms": ["здрав", "медицин"],
+        "educationTerms": ["образование", "учене"],
+        "supportTerms": ["дом", "подкрепа"],
+        "volunteerSupportTerms": ["самотни", "дом", "храна", "обяд"],
+        "volunteerHealthTerms": ["лекарство", "здрав"]
+      },
+      "noResults": {
+        "title": "Няма намерени проекти",
+        "message": "Опитайте с различни критерии за търсене",
+        "showAll": "Покажи всички проекти"
+      },
+      "modal": {
+        "coordinator": "Координатор"
+      },
+      "currency": "лв."
+    },
+     "SocialVolunteering": {
+      "header": {
+        "badge": "Доброволчество",
+        "title": "Заедно правим разлика",
+        "subtitle": "Нашите доброволци са сърцето на всяка промяна в общността"
+      },
+      "stats": {
+        "volunteers": "Доброволци",
+        "hoursPerMonth": "Часа месечно",
+        "activePrograms": "Активни програми"
+      },
+      "tabs": {
+        "programs": "Наши програми",
+        "volunteers": "Нашите доброволци",
+        "join": "Включете се"
+      },
+      "programTypes": {
+        "community": "Общностен",
+        "special": "Специален"
+      },
+      "impact": {
+        "hoursPerMonth": "{{hours}} часа месечно",
+        "hoursPerWeek": "{{hours}} часа седмично",
+        "permanent": "Постоянна дейност"
+      },
+      "metrics": {
+        "volunteers": "{{count}} доброволци",
+        "coordinator": "Координатор"
+      },
+      "categories": {
+        "elderlyTerms": ["самотни", "възрастни"],
+        "foodTerms": ["храна", "обяд"],
+        "healthTerms": ["лекарство", "здрав"],
+        "homeTerms": ["дом", "почистване"]
+      },
+      "volunteers": {
+        "introTitle": "Запознайте се с нашите координатори",
+        "introSubtitle": "Хората, които правят възможни нашите доброволчески програми",
+        "noVolunteers": {
+          "title": "Информацията за доброволците не е налична",
+          "message": "Свържете се с нас за повече информация за нашите доброволци"
+        }
+      },
+      "join": {
+        "header": {
+          "title": "Станете част от промяната",
+          "subtitle": "Всеки може да направи разлика в живота на друг човек"
+        },
+        "steps": {
+          "step1": {
+            "title": "Запишете се",
+            "description": "Попълнете формата за записване и споделете за вашите интереси"
+          },
+          "step2": {
+            "title": "Ще се свържем с вас",
+            "description": "Ще ви контактираме за да обсъдим възможностите и отговорим на въпросите ви"
+          },
+          "step3": {
+            "title": "Започнете да помагате",
+            "description": "Започнете своето пътуване като доброволец и направете разлика"
+          }
+        },
+        "cta": {
+          "title": "Готови ли сте да се включите?",
+          "register": "Запишете се",
+          "call": "Обадете се",
+          "email": "Пишете ни",
+          "emailSubject": "Искам да стана доброволец",
+          "note": "Не е нужен предварителен опит - ще ви обучим за всичко необходимо!"
+        }
+      },
+      "modal": {
+        "coordinatesPrograms": "Координира програми",
+        "contact": "Контакт"
+      },
+      "form": {
+        "title": "Запишете се като доброволец",
+        "subtitle": "Споделете повече за себе си и как искате да помогнете",
+        "name": "Вашето име",
+        "namePlaceholder": "Въведете вашето име",
+        "email": "Имейл адрес",
+        "emailPlaceholder": "Въведете вашия имейл",
+        "phone": "Телефон",
+        "phonePlaceholder": "Въведете вашия телефон",
+        "age": "Възраст",
+        "agePlaceholder": "Вашата възраст",
+        "experience": "Предишен опит като доброволец",
+        "experiencePlaceholder": "Разкажете за предишния си опит (или напишете 'Няма' ако сте начинаещ)",
+        "interestsLabel": "В какви области искате да помагате?",
+        "interests": {
+          "elderlycare": "Грижа за възрастни хора",
+          "foodHelp": "Помощ с храна и покупки",
+          "transport": "Транспорт и придружаване",
+          "health": "Здравна помощ",
+          "homeHelp": "Домашна помощ",
+          "education": "Образователни дейности",
+          "events": "Организиране на събития",
+          "technical": "Техническа поддръжка"
+        },
+        "availabilityLabel": "Кога сте налични?",
+        "availability": {
+          "placeholder": "Изберете наличност",
+          "weekdays": "Работни дни",
+          "weekends": "Уикенди",
+          "evenings": "Вечери",
+          "flexible": "Гъвкаво време",
+          "emergency": "При спешност"
+        },
+        "message": "Допълнително съобщение",
+        "messagePlaceholder": "Споделете какво ви мотивира да станете доброволец...",
+        "sending": "Изпраща се...",
+        "submit": "Изпрати заявката",
+        "cancel": "Отказ",
+        "success": {
+          "title": "Заявката е изпратена успешно!",
+          "message": "Благодарим ви за интереса! Ще се свържем с вас възможно най-скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "email": {
+        "subject": "Заявка за доброволчество - {{name}}",
+        "body": "Здравейте,\n\nПолучихте нова заявка за доброволчество:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nВъзраст: {{age}}\n\nПредишен опит: {{experience}}\nОбласти на интерес: {{interests}}\nНаличност: {{availability}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от сайта на {{clubName}}"
+      }
+    },
+    "SocialSupport": {
+      "header": {
+        "badge": "Наши услуги",
+        "title": "Грижим се за вашите нужди",
+        "subtitle": "Открийте всички услуги и подкрепа която предлагаме на нашите членове"
+      },
+      "stats": {
+        "availableServices": "Налични услуги",
+        "emergencyHelp": "Спешна помощ"
+      },
+      "search": {
+        "placeholder": "Търсете услуга..."
+      },
+      "categories": {
+        "all": "Всички",
+        "health": "Здравеопазване",
+        "home": "Домашни услуги",
+        "daily": "Ежедневни нужди",
+        "social": "Социални",
+        "transport": "Транспорт",
+        "emergency": "Спешни",
+        "accessibility": "Достъпност"
+      },
+      "services": {
+        "homeVisits": {
+          "name": "Домашни посещения",
+          "description": "Редовни посещения в дома за компания и подкрепа",
+          "details": "Нашите доброволци посещават самотни членове за разговор и моральна подкрепа"
+        },
+        "shopping": {
+          "name": "Помощ при пазаруване",
+          "description": "Придружаване или пазаруване вместо вас",
+          "details": "Помагаме с ежедневните покупки и придружаваме до магазини"
+        },
+        "documents": {
+          "name": "Помощ с документи",
+          "description": "Съдействие при попълване на документи и заявления",
+          "details": "Помагаме с административни процедури и документи"
+        },
+        "companionship": {
+          "name": "Придружаване",
+          "description": "Компания при посещения и разходки",
+          "details": "Придружаваме при посещения на лекар, срещи или разходки"
+        },
+        "transport": {
+          "name": "Транспортни услуги",
+          "description": "Превоз до важни дестинации",
+          "details": "Осигуряваме транспорт до болница, аптека и други важни места"
+        },
+        "meals": {
+          "name": "Доставка на храна",
+          "description": "Топла храна доставена в дома",
+          "details": "Приготвяме и доставяме топли обяди за нуждаещи се членове"
+        },
+        "cleaning": {
+          "name": "Помощ за почистване",
+          "description": "Съдействие при домашните дейности",
+          "details": "Помагаме с основно почистване и домашни задачи"
+        },
+        "tech": {
+          "name": "Техническа помощ",
+          "description": "Помощ с компютри и технологии",
+          "details": "Обучение и помощ при използване на технологии"
+        },
+        "checkups": {
+          "name": "Редовни здравни прегледи",
+          "description": "Организирани медицински прегледи",
+          "details": "Координираме редовни здравни прегледи с медицински партньори"
+        },
+        "bloodPressure": {
+          "name": "Измерване на кръвно налягане",
+          "description": "Редовно наблюдение на кръвното налягане",
+          "details": "Безплатно измерване и проследяване на кръвното налягане"
+        },
+        "healthLectures": {
+          "name": "Здравни лекции",
+          "description": "Образователни лекции за здравето",
+          "details": "Провеждаме {{count}} вида здравни лекции"
+        },
+        "accessibility": {
+          "name": "Достъпност и удобства",
+          "description": "Приспособления за хора с увреждания",
+          "details": "Нашият клуб е оборудван с удобства за всички"
+        },
+        "emergency": {
+          "name": "Спешна помощ",
+          "description": "Протокол за спешни случаи",
+          "details": "Имаме установен протокол за действие при спешни случаи"
+        }
+      },
+      "accessibility": {
+        "wheelchairAccess": "Достъп с инвалидна количка",
+        "elevatorAccess": "Асансьорен достъп",
+        "hearingLoop": "Слухово оборудване",
+        "largeTextMaterials": "Материали с едър шрифт",
+        "handrails": "Парапети и опори",
+        "nonSlipFloors": "Нехлъзгащи подове",
+        "goodLighting": "Добро осветление",
+        "restingAreas": "Места за почивка"
+      },
+      "actions": {
+        "learnMore": "Научете повече"
+      },
+      "details": {
+        "availableLectures": "Налични лекции",
+        "lecturer": "Лектор",
+        "frequency": "Честота",
+        "availableFeatures": "Налични удобства"
+      },
+      "emergency": {
+        "title": "При спешност",
+        "contacts": "Спешни контакти",
+        "nearestHospital": "Най-близка болница",
+        "ambulance": "Спешна помощ",
+        "club": "Клуб"
+      },
+      "noResults": {
+        "title": "Няма намерени услуги",
+        "message": "Опитайте с различни критерии за търсене",
+        "showAll": "Покажи всички услуги"
+      }
+    },
+    "SocialImpact": {
+      "header": {
+        "badge": "Нашето въздействие",
+        "title": "Мериме промяната която правим",
+        "subtitle": "Всяка цифра разказва история за хора, които сме помогнали и общността, която сме подкрепили"
+      },
+      "yearsActive": "години активност",
+      "metrics": {
+        "beneficiaries": {
+          "label": "Помогнати хора",
+          "description": "Общ брой хора, които са получили помощ от нашите програми",
+          "period": "тази година"
+        },
+        "volunteers": {
+          "label": "Активни доброволци",
+          "description": "Брой хора, които активно участват в доброволческите ни програми",
+          "period": "спрямо миналата година"
+        },
+        "hours": {
+          "label": "Доброволчески часове",
+          "description": "Общо отработени часове от доброволци през годината",
+          "period": "средно месечно"
+        },
+        "projects": {
+          "label": "Активни проекти",
+          "description": "Брой програми и проекти, които в момента се изпълняват",
+          "period": "нови проекти"
+        }
+      },
+      "projects": {
+        "title": "Проекти с въздействие",
+        "beneficiaries": "{{count}} човека"
+      },
+      "partnerships": {
+        "title": "Мрежа от партньори"
+      },
+      "timeline": {
+        "title": "Нашето развитие през годините",
+        "founding": {
+          "title": "Основаване на клуба",
+          "description": "Започнахме нашето пътуване с мисията да помагаме на общността"
+        },
+        "awardedBy": "от",
+        "current": {
+          "title": "Продължаваме напред",
+          "description": "С {{beneficiaries}} помогнати хора и {{programs}} активни програми",
+          "many": "много"
+        }
+      },
+      "projectStatus": {
+        "active": "активен",
+        "completed": "завършен",
+        "planned": "планиран"
+      },
+      "categories": {
+        "homeTerms": ["дом", "топъл"],
+        "foodTerms": ["храна", "обяд"],
+        "healthTerms": ["здрав", "медицин"],
+        "educationTerms": ["образование", "учене"],
+        "environmentTerms": ["околна", "парк"]
+      },
+      "cta": {
+        "title": "Станете част от промяната",
+        "description": "Всяка цифра представлява реален човек, който е получил помощ. Присъединете се към нас и помогнете да увеличим тези числа.",
+        "joinUs": "Включете се",
+        "learnMore": "Научете повече"
+      },
+      "modals": {
+        "join": {
+          "title": "Включете се в промяната",
+          "description": "Изберете как искате да помогнете на нашата кауза",
+          "becomeVolunteer": "Стана доброволец",
+          "callUs": "Обадете се",
+          "financialSupport": "Финансова подкрепа",
+          "volunteerEmailSubject": "Искам да се включа като доброволец",
+          "volunteerEmailBody": "Здравейте,\n\nИскам да се включа като доброволец в дейностите на клуба.\n\nМоля свържете се с мен за повече информация.\n\nБлагодаря!",
+          "donationEmailSubject": "Искам да подкрепя финансово",
+          "donationEmailBody": "Здравейте,\n\nИскам да подкрепя финансово дейностите на клуба.\n\nМоля дайте ми информация за начините за дарение.\n\nБлагодаря!"
+        },
+        "info": {
+          "title": "Научете повече за нашето въздействие",
+          "description": "Открийте как работим и как можете да се включите",
+          "howWeWork": {
+            "title": "Как работим",
+            "description": "Ние работим директно с общността, предоставяйки услуги и подкрепа където има най-голяма нужда. Всички наши програми са насочени към подобряване качеството на живот на членовете ни."
+          },
+          "yourContribution": {
+            "title": "Вашият принос",
+            "description": "Всяко дарение и всеки доброволчески час се използва максимално ефективно за помощ на нуждаещите се. Прозрачността е важен принцип в нашата работа."
+          },
+          "results": {
+            "title": "Резултати",
+            "description": "Благодарение на подкрепата на хора като вас, успяваме да променяме живота на все повече хора всяка година."
+          },
+          "writeToUs": "Пишете ни",
+          "emailSubject": "Искам повече информация",
+          "emailBody": "Здравейте,\n\nИскам да получа повече информация за дейностите на клуба и начините за включване.\n\nБлагодаря!"
+        }
+      },
+      "currency": "лв."
+    },
+    "CommunityEvents": {
+      "header": {
+        "badge": "Събития и дейности",
+        "title": "Заедно правим всеки ден по-специален",
+        "subtitle": "Открийте всички събития, дейности и програми, които Ви очакват в нашия клуб"
+      },
+      "stats": {
+        "totalEvents": "Общо събития",
+        "upcoming": "Предстоящи"
+      },
+      "viewModes": {
+        "list": "Списък",
+        "calendar": "Календар"
+      },
+      "categories": {
+        "all": "Всички",
+        "music": "Музика",
+        "food": "Храна",
+        "health": "Здраве",
+        "education": "Образование",
+        "entertainment": "Забавление",
+        "celebration": "Празници",
+        "volunteer": "Доброволчество",
+        "sports": "Спорт",
+        "culture": "Култура",
+        "nature": "Природа"
+      },
+      "categoryTerms": {
+        "music": ["концерт", "музик"],
+        "food": ["храна", "обяд", "кулинар"],
+        "health": ["здрав", "лекция", "медицин"],
+        "education": ["образование", "урок", "курс"],
+        "entertainment": ["игр", "забавление", "конкурс"],
+        "celebration": ["празник", "рожден", "тържеств"],
+        "volunteer": ["доброволч", "помощ", "благотворителн"],
+        "sports": ["спорт", "физическ", "упражнения"],
+        "culture": ["изложба", "театър", "културн"],
+        "nature": ["природа", "разходка", "екскурзия"]
+      },
+      "statuses": {
+        "today": "Днес",
+        "soon": "Скоро",
+        "upcoming": "Предстоящо",
+        "recurring": "Редовно",
+        "ongoing": "Активно",
+        "active": "В сезон",
+        "inactive": "Извън сезон",
+        "past": "Минало",
+        "unknown": "Неизвестно"
+      },
+      "types": {
+        "upcoming": "Събитие",
+        "recurring": "Редовно",
+        "regular": "Дейност",
+        "seasonal": "Сезонно"
+      },
+      "seasons": {
+        "spring": "пролет",
+        "summer": "лято",
+        "autumn": "есен",
+        "winter": "зима"
+      },
+      "seasonMonths": {
+        "spring": [2, 3, 4],
+        "summer": [5, 6, 7],
+        "autumn": [8, 9, 10],
+        "winter": [11, 0, 1]
+      },
+      "details": {
+        "participants": "{{count}} участници"
+      },
+      "calendar": {
+        "comingSoon": "Календарен изглед ще бъде добавен скоро",
+        "backToList": "Върни се към списъка"
+      },
+      "noEvents": {
+        "title": "Няма събития в тази категория",
+        "message": "Опитайте с различен филтър или се свържете с нас за предстоящи дейности",
+        "showAll": "Покажи всички събития"
+      },
+      "modal": {
+        "callUs": "Обадете се",
+        "writeToUs": "Пишете ни"
+      },
+      "contact": {
+        "title": "Свържете се с нас",
+        "subtitle": "Имате въпроси за нашите събития? Пишете ни!",
+        "subjectWithEvent": "Интерес към {{eventName}}",
+        "subjectGeneral": "Въпрос относно събития",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "subject": "Тема",
+          "subjectPlaceholder": "Темата на вашето съобщение",
+          "message": "Съобщение",
+          "messagePlaceholder": "Напишете вашето съобщение тук...",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати съобщението",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Съобщението е изпратено успешно!",
+          "message": "Благодарим ви за интереса! Ще се свържем с вас възможно най-скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        },
+        "emailBody": "Здравейте,\n\nПолучихте ново съобщение от сайта:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\n\nТема: {{subject}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от сайта на {{clubName}}"
+      }
+    },
+     "SocialGallery": {
+      "header": {
+        "badge": "Нашата галерия",
+        "title": "Моменти които споделяме заедно",
+        "subtitle": "Разгледайте снимки и видеа от нашите събития, дейности и ежедневието в клуба"
+      },
+      "stats": {
+        "photos": "Снимки",
+        "videos": "Видеа"
+      },
+      "search": {
+        "placeholder": "Търсете снимки и видеа..."
+      },
+      "viewModes": {
+        "grid": "Решетка",
+        "masonry": "Мозайка"
+      },
+      "categories": {
+        "all": "Всички",
+        "events": "Събития",
+        "impact": "Въздействие",
+        "activities": "Дейности",
+        "general": "Общи"
+      },
+      "defaultAlt": {
+        "photo": "Снимка от галерията",
+        "video": "Видео от галерията"
+      },
+      "noResults": {
+        "title": "Няма намерени снимки или видеа",
+        "message": "Опитайте с различни критерии за търсене",
+        "showAll": "Покажи всички"
+      },
+      "lightbox": {
+        "counter": "{{current}} от {{total}}"
+      }
+    },
+     "SocialPartnerships": {
+      "header": {
+        "badge": "Нашите партньори",
+        "title": "Заедно сме по-силни",
+        "subtitle": "Открийте организациите и институциите, с които работим за постигане на нашите цели"
+      },
+      "stats": {
+        "partners": "Партньори",
+        "strategic": "Стратегически"
+      },
+      "search": {
+        "placeholder": "Търсете партньор или организация..."
+      },
+      "viewModes": {
+        "cards": "Карти",
+        "network": "Мрежа"
+      },
+      "categories": {
+        "all": "Всички",
+        "government": "Държавни",
+        "healthcare": "Здравеопазване",
+        "education": "Образование",
+        "business": "Бизнес",
+        "ngo": "НПО",
+        "culture": "Култура",
+        "sponsor": "Спонсори"
+      },
+      "categoryTerms": {
+        "sponsor": {
+          "type": ["спонсор", "sponsor"],
+          "name": []
+        },
+        "government": {
+          "type": ["държав", "общин", "government"],
+          "name": ["общин", "кметств"]
+        },
+        "healthcare": {
+          "type": ["медицин", "болниц", "health"],
+          "name": ["болниц", "поликлиник"]
+        },
+        "education": {
+          "type": ["образов", "школа", "университ"],
+          "name": ["училищ", "университ"]
+        },
+        "business": {
+          "type": ["бизнес", "фирма", "компани"],
+          "name": []
+        },
+        "ngo": {
+          "type": ["нпо", "ngo", "organization"],
+          "name": ["клуб", "сдружение"]
+        },
+        "culture": {
+          "type": ["култур", "изкуств", "culture"],
+          "name": []
+        }
+      },
+      "priorityTerms": {
+        "high": ["стратег", "strategic", "спонсор", "sponsor"],
+        "medium": ["дългосроч", "long-term"]
+      },
+      "details": {
+        "since": "От",
+        "jointProjects": "Общи проекти",
+        "achievements": "Постижения"
+      },
+      "actions": {
+        "showMore": "Вижте повече",
+        "hideDetails": "Скрий детайли"
+      },
+      "contact": {
+        "website": "Уебсайт",
+        "email": "Имейл",
+        "phone": "Телефон"
+      },
+      "noResults": {
+        "title": "Няма намерени партньори",
+        "message": "Опитайте с различни критерии за търсене",
+        "showAll": "Покажи всички партньори"
+      }
+    },
+    "SocialLocation": {
+      "defaultCity": "София",
+      "header": {
+        "badge": "Нашето местоположение",
+        "title": "Лесно ни намерете",
+        "subtitle": "Разгледайте нашето местоположение и как можете да стигнете до нас"
+      },
+      "actions": {
+        "directions": "Навигация",
+        "googleMaps": "Google Maps",
+        "copyCoordinates": "Копирай координати"
+      },
+      "map": {
+        "title": "Местоположение",
+        "openInMaps": "Отвори в Google Maps"
+      },
+      "tabs": {
+        "address": "Адрес",
+        "contact": "Контакти",
+        "hours": "Работно време"
+      },
+      "address": {
+        "title": "Нашият адрес"
+      },
+      "contact": {
+        "title": "Свържете се с нас",
+        "phone": "Телефон",
+        "email": "Имейл"
+      },
+      "hours": {
+        "title": "Работно време",
+        "note": "Моля, свържете се с нас преди посещение за актуална информация"
+      },
+      "tooltips": {
+        "copyAddress": "Копирай адреса",
+        "copyPhone": "Копирай телефона",
+        "copyEmail": "Копирай имейла"
+      },
+      "copyLabels": {
+        "address": "адрес",
+        "phone": "телефон",
+        "email": "имейл",
+        "coordinates": "координати"
+      },
+      "copySuccess": "Копирахте {{item}}!"
+    },
+    "SocialContacts": {
+      "header": {
+        "badge": "Свържете се с нас",
+        "title": "Тук сме, за да ви помогнем",
+        "subtitle": "Имате въпроси или нужда от помощ? Свържете се с нас по удобния за вас начин"
+      },
+      "quickActions": {
+        "call": "Обадете се",
+        "writeToUs": "Пишете ни"
+      },
+      "sections": {
+        "primaryContacts": "Основни контакти",
+        "workingHours": "Работно време",
+        "keyContacts": "Ключови контакти",
+        "socialMedia": "Социални мрежи",
+        "faq": "Често задавани въпроси"
+      },
+      "contact": {
+        "phone": "Телефон",
+        "phoneDescription": "Обадете се за бърза помощ",
+        "email": "Имейл",
+        "emailDescription": "Пишете ни за детайлни въпроси",
+        "address": "Адрес",
+        "addressDescription": "Посетете ни на място"
+      },
+      "tooltips": {
+        "copyPhone": "Копирай телефона",
+        "copyEmail": "Копирай имейла",
+        "copyAddress": "Копирай адреса"
+      },
+      "copyLabels": {
+        "phone": "телефон",
+        "email": "имейл",
+        "address": "адрес"
+      },
+      "copySuccess": "Копирахте {{item}}!",
+      "workingHours": {
+        "monday": "Понеделник",
+        "tuesday": "Вторник",
+        "wednesday": "Сряда",
+        "thursday": "Четвъртък",
+        "friday": "Петък",
+        "saturday": "Събота",
+        "sunday": "Неделя"
+      },
+      "contactTypes": {
+        "general": "Общ въпрос",
+        "membership": "Членство",
+        "services": "Услуги",
+        "events": "Събития",
+        "support": "Подкрепа",
+        "other": "Друго"
+      },
+      "defaultFaq": {
+        "membership": {
+          "question": "Как мога да стана член на клуба?",
+          "answer": "Свържете се с нас по телефон или имейл за информация относно процедурата за членство."
+        },
+        "services": {
+          "question": "Какви услуги предлагате?",
+          "answer": "Предлагаме широк спектър от услуги за нашите членове. За повече информация разгледайте секцията \"Наши услуги\"."
+        },
+        "hours": {
+          "question": "Какво е работното време?",
+          "answer": "Работното ни време можете да видите в секцията с контакти или да се свържете с нас директно."
+        }
+      },
+      "form": {
+        "title": "Свържете се с нас",
+        "subtitle": "Изпратете ни съобщение и ще ви отговорим възможно най-скоро",
+        "name": "Вашето име",
+        "namePlaceholder": "Въведете вашето име",
+        "email": "Имейл адрес",
+        "emailPlaceholder": "Въведете вашия имейл",
+        "phone": "Телефон",
+        "phonePlaceholder": "Въведете вашия телефон",
+        "type": "Тип запитване",
+        "subject": "Тема",
+        "subjectPlaceholder": "Темата на вашето съобщение",
+        "message": "Съобщение",
+        "messagePlaceholder": "Напишете вашето съобщение тук...",
+        "sending": "Изпраща се...",
+        "submit": "Изпрати съобщението",
+        "cancel": "Отказ",
+        "success": {
+          "title": "Съобщението е изпратено успешно!",
+          "message": "Благодарим ви! Ще се свържем с вас възможно най-скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "emailTemplate": "Здравейте,\n\nПолучихте ново съобщение от сайта:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nТип запитване: {{type}}\n\nТема: {{subject}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от сайта на {{clubName}}"
+    },
+    "SportsHero": {
+      "badge": "Активно стареене",
+      "actions": {
+        "writeToUs": "Пишете ни",
+        "callUs": "Обади се"
+      },
+      "quickInfo": {
+        "open": "Отворено"
+      },
+      "placeholder": {
+        "title": "Спорт за всички",
+        "subtitle": "Заедно към по-здравословен живот"
+      },
+      "defaultAchievement": "Сертифициран спортен клуб",
+      "stats": {
+        "activeMembers": "Активни членове",
+        "programs": "Програми",
+        "competitions": "Състезания",
+        "workoutsPerWeek": "Тренировки/седмица",
+        "yearsActive": "Години активност"
+      },
+      "activityIconTerms": {
+        "yoga": ["йога", "медитация"],
+        "cardio": ["аеробика", "басейн"],
+        "strength": ["силов", "фитнес"],
+        "running": ["разходки", "бягане"],
+        "dance": ["танц"]
+      },
+      "membersButton": "Членове ({{count}})",
+      "members": {
+        "single": "член",
+        "plural": "членове"
+      },
+      "popularPrograms": {
+        "title": "Популярни програми",
+        "participants": "{{count}} участници",
+        "enrollTooltip": "Запишете се за тренировка"
+      },
+      "videos": {
+        "title": "Вижте нас в действие"
+      },
+      "cta": {
+        "title": "Готови за промяна?",
+        "subtitle": "Започнете своето пътуване към по-здравословен и активен живот",
+        "writeToUs": "Пишете ни",
+        "enrollForWorkout": "Запишете се за тренировка"
+      },
+      "contactModal": {
+        "title": "Свържете се с нас",
+        "subtitle": "Имате въпроси? Пишете ни и ще ви отговорим възможно най-скоро!",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "message": "Съобщение",
+          "messagePlaceholder": "Напишете вашето съобщение тук...",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати съобщението",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Съобщението е изпратено успешно!",
+          "message": "Благодарим ви! Ще се свържем с вас възможно най-скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "enrollModal": {
+        "title": "Запишете се за тренировка",
+        "selectedProgram": "Заявка за записване в <strong>{{programName}}</strong>",
+        "selectProgram": "Изберете програма и попълнете формата за записване",
+        "chooseProgram": "Изберете програма",
+        "chosenProgram": "Избрана програма",
+        "instructor": "Инструктор",
+        "changeProgram": "Промени",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "age": "Възраст",
+          "agePlaceholder": "Вашата възраст",
+          "experience": "Опит в спорта",
+          "healthRestrictions": "Здравословни ограничения",
+          "healthPlaceholder": "Споменете ако имате здравословни проблеми или ограничения (незадължително)",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати заявката",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Заявката е изпратена успешно!",
+          "message": "Благодарим ви! Ще се свържем с вас за потвърждение на записването."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "experienceLevels": {
+        "select": "Изберете ниво",
+        "beginner": "Начинаещ",
+        "intermediate": "Средно ниво",
+        "advanced": "Напреднал",
+        "expert": "Експерт"
+      },
+      "membersModal": {
+        "title": "Членове на клуба",
+        "total": "Общо {{count}} {{label}}",
+        "copyName": "Копирай името",
+        "copyPhone": "Копирай телефона",
+        "copyEmail": "Копирай имейла",
+        "copyAddress": "Копирай адреса",
+        "memberSince": "Член от"
+      },
+      "contactEmail": {
+        "subject": "Запитване от {{name}} - {{clubName}}",
+        "body": "Здравейте,\n\nПолучихте ново съобщение от сайта:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от сайта на {{clubName}}"
+      },
+      "enrollEmail": {
+        "subject": "Заявка за записване - {{programName}}",
+        "body": "Здравейте,\n\nПолучихте нова заявка за записване в програма:\n\nПРОГРАМА: {{programName}}\nДен: {{day}}\nЧас: {{time}}\nИнструктор: {{instructor}}\n\nДАННИ НА КАНДИДАТА:\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nВъзраст: {{age}}\nОпит в спорта: {{experience}}\nЗдравословни проблеми: {{healthConditions}}\n\nМоля, свържете се с кандидата за финализиране на записването.\n\n---\nИзпратено от сайта на {{clubName}}",
+        "noInstructor": "Не е посочен",
+        "noHealthIssues": "Няма"
+      }
+    },
+     "SportsAbout": {
+      "header": {
+        "badge": "За нашия клуб",
+        "title": "Вашето здраве е нашият приоритет",
+        "subtitle": "Открийте как помагаме на нашите членове да останат активни, здрави и щастливи"
+      },
+      "sections": {
+        "mission": "Мисия",
+        "facilities": "Съоръжения",
+        "safety": "Безопасност",
+        "instructors": "Екип"
+      },
+      "foundedYear": "Основан през {{year}} г. ({{yearsActive}} години активност)",
+      "facilityTerms": {
+        "aquatic": ["басейн", "вода"],
+        "fitness": ["фитнес", "зала", "тренажор"],
+        "wellness": ["сауна", "спа", "масаж"],
+        "support": ["съблекални", "стая", "офис"]
+      },
+      "facilityIconTerms": {
+        "swimming": ["басейн"],
+        "fitness": ["фитнес", "тренажор"],
+        "wellness": ["сауна", "спа"],
+        "sports": ["салон", "зала"],
+        "changing": ["съблекални"],
+        "medical": ["терапевтичен", "медицинск"]
+      },
+      "facilityDescriptions": {
+        "swimming": "Подходящ за водна аеробика и плуване",
+        "fitness": "Модерно оборудване за силови тренировки",
+        "wellness": "За релаксация и възстановяване",
+        "sports": "Просторна зала за групови занимания",
+        "changing": "Удобни помещения с душове",
+        "medical": "За рехабилитация и лечебна гимнастика",
+        "default": "Част от спортния комплекс"
+      },
+      "instructorKeywords": ["треньор", "инструктор", "фитнес", "спорт"],
+      "intensityLevels": {
+        "low": "ниска",
+        "medium": "средна",
+        "high": "висока"
+      },
+      "safetyFeatures": {
+        "regularCheckups": "Редовни здравни прегледи",
+        "bloodPressureMonitoring": "Мониторинг на кръвното налягане",
+        "emergencyPlan": "Спешен план за действие",
+        "wheelchairAccess": "Достъп за хора с увреждания",
+        "barrierFree": "Безбариерна среда"
+      },
+      "mission": {
+        "title": "Нашата мисия",
+        "membershipBenefits": "Предимства за членовете",
+        "specialPrograms": "Специализирани програми",
+        "intensity": "Интензитет",
+        "suitableFor": "Подходящо за"
+      },
+      "facilities": {
+        "title": "Нашите съоръжения",
+        "subtitle": "Модерно оборудване и удобства за всички ваши спортни нужди",
+        "totalArea": "Обща площ",
+        "capacity": "Капацитет"
+      },
+      "safety": {
+        "title": "Безопасност и здраве",
+        "subtitle": "Вашата сигурност и здраве са нашият главен приоритет",
+        "measures": "Мерки за безопасност",
+        "medicalPartners": "Медицински партньори",
+        "emergencyHelp": "Спешна помощ",
+        "nearestHospital": "Най-близка болница"
+      },
+      "instructors": {
+        "title": "Нашият екип",
+        "subtitle": "Професионални инструктори и специалисти грижещи се за вашето здраве",
+        "ourTeam": "Нашият екип",
+        "teamDescription": "Имаме опитни специалисти, които ще ви помогнат да постигнете целите си.",
+        "activitiesWithInstructors": "Активности с инструктори",
+        "instructor": "Инструктор"
+      }
+    },
+    "SportsActivities": {
+      "header": {
+        "badge": "Програми и активности",
+        "title": "Разнообразни програми за всички нива",
+        "subtitle": "Открийте активностите, които ви подхождат и започнете тренировките си днес"
+      },
+      "tabs": {
+        "weekly": "Седмичен график",
+        "all": "Всички програми",
+        "events": "Събития",
+        "courses": "Курсове"
+      },
+      "weekDays": {
+        "sunday": "Неделя",
+        "monday": "Понеделник",
+        "tuesday": "Вторник",
+        "wednesday": "Сряда",
+        "thursday": "Четвъртък",
+        "friday": "Петък",
+        "saturday": "Събота"
+      },
+      "weekDaysShort": {
+        "sunday": "Нед",
+        "monday": "Пон",
+        "tuesday": "Вто",
+        "wednesday": "Сря",
+        "thursday": "Чет",
+        "friday": "Пет",
+        "saturday": "Съб"
+      },
+      "dayMappings": {
+        "понеделник": "monday",
+        "вторник": "tuesday",
+        "сряда": "wednesday",
+        "четвъртък": "thursday",
+        "петък": "friday",
+        "събота": "saturday",
+        "неделя": "sunday",
+        "всеки ден": "daily"
+      },
+      "activityIconTerms": {
+        "yoga": ["йога", "медитация"],
+        "cardio": ["аеробика", "басейн", "плуване"],
+        "strength": ["силов", "фитнес", "тренажор"],
+        "running": ["разходки", "бягане", "маратон"],
+        "dance": ["танц"],
+        "gymnastics": ["гимнастика"],
+        "mountain": ["планина", "туризъм"]
+      },
+      "activityColorTerms": {
+        "yoga": ["йога", "медитация"],
+        "cardio": ["аеробика", "басейн"],
+        "strength": ["силов", "фитнес"],
+        "running": ["разходки", "бягане"],
+        "dance": ["танц"],
+        "gymnastics": ["гимнастика"]
+      },
+      "intensityTerms": {
+        "low": ["йога", "медитация", "лека"],
+        "high": ["силов", "бягане", "интензивн"]
+      },
+      "intensityLabels": {
+        "low": "Ниска",
+        "medium": "Средна",
+        "high": "Висока"
+      },
+      "experienceLevels": {
+        "select": "Изберете ниво",
+        "beginner": "Начинаещ",
+        "intermediate": "Средно ниво",
+        "advanced": "Напреднал",
+        "expert": "Експерт"
+      },
+      "actions": {
+        "enroll": "Запиши се"
+      },
+      "weekly": {
+        "title": "Седмичен график на тренировките",
+        "subtitle": "Изберете ден за да видите активностите",
+        "flexibleTime": "Гъвкаво време",
+        "noActivities": "Няма планирани активности",
+        "noActivitiesDescription": "В този ден няма тренировки или те са с гъвкаво време"
+      },
+      "all": {
+        "searchPlaceholder": "Търсете активност, инструктор...",
+        "filters": {
+          "allLevels": "Всички нива",
+          "lowIntensity": "Ниска интензивност",
+          "mediumIntensity": "Средна интензивност",
+          "highIntensity": "Висока интензивност"
+        },
+        "participants": "{{count}} участници",
+        "noResults": "Няма намерени програми",
+        "noResultsDescription": "Опитайте с различни критерии за търсене"
+      },
+      "events": {
+        "title": "Предстоящи събития",
+        "subtitle": "Специални активности и състезания",
+        "defaultType": "Събитие",
+        "participants": "{{count}} участници",
+        "noEvents": "Няма планирани събития",
+        "noEventsDescription": "Следете за нови спортни събития и състезания",
+        "sportsTrips": "Спортни екскурзии",
+        "currency": "лв."
+      },
+      "courses": {
+        "title": "Специализирани курсове",
+        "subtitle": "Обучения и образователни програми",
+        "participants": "{{count}} участници",
+        "noCourses": "Няма активни курсове",
+        "noCoursesDescription": "Следете за нови образователни програми"
+      },
+      "enrollModal": {
+        "title": "Запишете се за {{activityName}}",
+        "subtitle": "Попълнете формата за да се запишете за тази активност",
+        "selectedActivity": "Избрана активност",
+        "instructor": "Инструктор",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "experience": "Опит в спорта",
+          "notes": "Допълнителни бележки",
+          "notesPlaceholder": "Споменете ако имате въпроси или специални изисквания",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати заявката",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Заявката е изпратена успешно!",
+          "message": "Благодарим ви! Ще се свържем с вас за потвърждение на записването."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "enrollEmail": {
+        "subject": "Заявка за записване - {{activityName}}",
+        "body": "Здравейте,\n\nПолучихте нова заявка за записване в активност:\n\nАКТИВНОСТ: {{activityName}}\n{{day ? `Ден: ${day}` : ''}}\n{{time ? `Час: ${time}` : ''}}\n{{instructor ? `Инструктор: ${instructor}` : ''}}\n\nДАННИ НА КАНДИДАТА:\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nОпит: {{experience}}\nДопълнителни бележки: {{notes}}\n\nМоля, свържете се с кандидата за финализиране на записването.\n\n---\nИзпратено от сайта на {{clubName}}",
+        "noExperience": "Не е посочен",
+        "noNotes": "Няма"
+      }
+    },
+     "FitnessPrograms": {
+      "header": {
+        "badge": "Фитнес програми",
+        "title": "Тренировки за всяко ниво и възраст",
+        "subtitle": "Открийте перфектната програма за вашите цели и възможности"
+      },
+      "stats": {
+        "activePrograms": "Активни програми"
+      },
+      "filters": {
+        "all": "Всички програми",
+        "fitness": "Фитнес",
+        "cardio": "Кардио",
+        "wellness": "Уелнес",
+        "aquatic": "Водни спортове",
+        "dance": "Танци"
+      },
+      "intensityTerms": {
+        "low": ["лека", "йога", "медитация"],
+        "high": ["интензивн", "силов", "бягане"]
+      },
+      "intensityLevels": {
+        "low": "ниска",
+        "medium": "средна",
+        "high": "висока"
+      },
+      "categoryTerms": {
+        "aquatic": ["басейн", "плуване", "аеробика"],
+        "dance": ["танц"],
+        "wellness": ["йога", "медитация", "лека"],
+        "cardio": ["бягане", "гимнастика"]
+      },
+      "activityIconTerms": {
+        "wellness": ["йога", "медитация"],
+        "aquatic": ["басейн", "плуване"],
+        "strength": ["силов", "фитнес"],
+        "cardio": ["бягане", "гимнастика"],
+        "dance": ["танц"],
+        "walking": ["разходки"]
+      },
+      "activityColorTerms": {
+        "wellness": ["йога", "медитация"],
+        "aquatic": ["басейн", "плуване"],
+        "strength": ["силов", "фитнес"],
+        "cardio": ["бягане", "гимнастика"],
+        "dance": ["танц"],
+        "walking": ["разходки"]
+      },
+      "duration": "{{minutes}} мин",
+      "defaultDuration": "60 мин",
+      "shortDuration": "45 мин",
+      "lowImpactDescription": "Щадяща програма подходяща за {{suitableFor}}",
+      "everyone": "всички",
+      "flexible": "Гъвкаво",
+      "byAgreement": "По договорка",
+      "participants": "{{count}} участници",
+      "suitableFor": "Подходящо за",
+      "badges": {
+        "gentle": "Щадящо"
+      },
+      "actions": {
+        "enroll": "Запиши се"
+      },
+      "noResults": {
+        "title": "Няма програми в тази категория",
+        "message": "Изберете друга категория или се свържете с нас за персонализирани програми"
+      },
+      "fitnessLevels": {
+        "select": "Изберете ниво",
+        "beginner": "Начинаещ",
+        "intermediate": "Средно ниво",
+        "advanced": "Напреднал",
+        "expert": "Експерт"
+      },
+      "goals": {
+        "select": "Изберете цел",
+        "weightLoss": "Отслабване",
+        "muscleGain": "Покачване на мускулна маса",
+        "fitnessImprovement": "Подобряване на кондицията",
+        "healthMaintenance": "Поддържане на здравето",
+        "relaxation": "Релаксация и стрес",
+        "rehabilitation": "Рехабилитация",
+        "socialization": "Социализация"
+      },
+      "enrollModal": {
+        "title": "Запишете се за {{programName}}",
+        "subtitle": "Започнете своето фитнес пътуване с нас още днес!",
+        "selectedProgram": "Избрана програма",
+        "intensity": "Интензивност",
+        "duration": "Продължителност",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "fitnessLevel": "Фитнес ниво",
+          "goals": "Вашите цели",
+          "notes": "Допълнителни бележки",
+          "notesPlaceholder": "Споменете ако имате здравословни ограничения или специални изисквания",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати заявката",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Заявката е изпратена успешно!",
+          "message": "Благодарим ви! Ще се свържем с вас за първата тренировка."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "enrollEmail": {
+        "subject": "Заявка за записване - {{programName}}",
+        "body": "Здравейте,\n\nПолучихте нова заявка за записване във фитнес програма:\n\nПРОГРАМА: {{programName}}\nКатегория: {{category}}\nИнтензивност: {{intensity}}\n{{day ? `Ден: ${day}` : ''}}\n{{time ? `Час: ${time}` : ''}}\n{{instructor ? `Инструктор: ${instructor}` : ''}}\n\nДАННИ НА КАНДИДАТА:\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nФитнес ниво: {{fitnessLevel}}\nЦели: {{goals}}\nДопълнителни бележки: {{notes}}\n\nМоля, свържете се с кандидата за финализиране на записването.\n\n---\nИзпратено от сайта на {{clubName}}",
+        "notSpecified": "Не е посочено",
+        "none": "Няма"
+      }
+    },
+    "HealthActivities": {
+      "header": {
+        "badge": "Здравни дейности",
+        "title": "Грижа за вашето здраве и благополучие",
+        "subtitle": "Комплексни здравни услуги и превантивни програми за активна и здравословна старост"
+      },
+      "tabs": {
+        "services": "Услуги",
+        "education": "Образование",
+        "partners": "Партньори",
+        "nutrition": "Хранене",
+        "safety": "Безопасност"
+      },
+      "status": {
+        "active": "Активно"
+      },
+      "services": {
+        "checkups": {
+          "title": "Редовни прегледи",
+          "description": "Професионални здравни прегледи за всички членове",
+          "benefits": [
+            "Ранно откриване на здравословни проблеми",
+            "Персонализирани препоръки за здраве",
+            "Редовно проследяване на здравословното състояние"
+          ]
+        },
+        "pressure": {
+          "title": "Мониторинг на кръвното",
+          "description": "Редовно следене на кръвното налягане",
+          "benefits": [
+            "Ежедневен мониторинг на кръвното налягане",
+            "Спешно уведомяване при отклонения",
+            "Връзка с лекуващия лекар"
+          ]
+        },
+        "medication": {
+          "title": "Напомняния за лекарства",
+          "description": "Система за напомняне на лекарствени дози",
+          "benefits": [
+            "Навременно приемане на лекарства",
+            "Предотвратяване на пропуски",
+            "Следене на лекарствени взаимодействия"
+          ]
+        },
+        "emergency": {
+          "title": "Спешен протокол",
+          "description": "Готовност за спешни медицински случаи",
+          "benefits": [
+            "Бърза реакция при спешни случаи",
+            "Обучен персонал за първа помощ",
+            "Директна връзка със спешни служби"
+          ]
+        }
+      },
+      "benefits": "Предимства",
+      "frequencies": {
+        "weekly": ["седмично"],
+        "monthly": ["месечно"],
+        "quarterly": ["тримесечно"],
+        "yearly": ["годишно"]
+      },
+      "frequencyLabels": {
+        "weekly": "Седмично",
+        "monthly": "Месечно",
+        "quarterly": "Тримесечно",
+        "yearly": "Годишно"
+      },
+      "servicesTab": {
+        "title": "Здравни услуги",
+        "subtitle": "Професионална грижа за вашето здраве и превенция"
+      },
+      "educationTab": {
+        "title": "Здравно образование",
+        "subtitle": "Лекции и семинари за здравословен начин на живот"
+      },
+      "partnersTab": {
+        "title": "Медицински партньори",
+        "subtitle": "Професионални здравни услуги от наши партньори"
+      },
+      "nutritionTab": {
+        "title": "Хранителна подкрепа",
+        "subtitle": "Здравословно хранене за активна старост"
+      },
+      "safetyTab": {
+        "title": "Безопасност и превенция",
+        "subtitle": "Мерки за безопасност и спешни протоколи",
+        "fallPrevention": "Превенция на падания",
+        "emergencyProtocol": "Спешен протокол",
+        "nearestHospital": "Най-близка болница",
+        "emergencyContacts": "Спешни контакти",
+        "specialEquipment": "Специално оборудване"
+      },
+      "actions": {
+        "schedule": "График",
+        "call": "Обади се"
+      },
+      "scheduleModal": {
+        "title": "График на лекцията",
+        "lecturer": "Лектор",
+        "duration": "Продължителност",
+        "frequency": "Честота",
+        "nextLecture": "Следваща лекция",
+        "contactInfo": "За повече информация се свържете с нас"
+      }
+    },
+    "WellnessServices": {
+      "header": {
+        "badge": "Wellness услуги",
+        "title": "Грижа за цялостното ви благополучие",
+        "subtitle": "Комплексни услуги за физическо, психично и социално благосъстояние"
+      },
+      "categories": {
+        "support": "Подкрепящи услуги",
+        "mental": "Психично здраве",
+        "social": "Социални услуги",
+        "accessibility": "Достъпност",
+        "cognitive": "Когнитивни дейности"
+      },
+      "serviceCount": {
+        "single": "услуга",
+        "plural": "услуги"
+      },
+      "participants": "{{count}} участници",
+      "frequencies": {
+        "weekly": ["седмично"],
+        "monthly": ["месечно"],
+        "daily": ["ежедневно", "дневно"]
+      },
+      "frequencyLabels": {
+        "weekly": "Седмично",
+        "monthly": "Месечно",
+        "daily": "Ежедневно"
+      },
+      "supportTab": {
+        "title": "Подкрепящи услуги",
+        "subtitle": "Налични услуги за подкрепа"
+      },
+      "supportServiceLabels": {
+        "homeAssistance": "Домашна помощ",
+        "shoppingAssistance": "Помощ за пазаруване",
+        "medicationManagement": "Управление на лекарства",
+        "transportationHelp": "Транспортна помощ",
+        "mealPreparation": "Приготвяне на храна",
+        "companionship": "Придружител",
+        "emergencyResponse": "Спешна помощ",
+        "healthMonitoring": "Здравен мониторинг"
+      },
+      "mentalTab": {
+        "title": "Психично здраве и когнитивни дейности",
+        "subtitle": "Грижа за умственото благополучие и паметта",
+        "psychologicalSupport": "Психологическа подкрепа",
+        "memoryActivities": "Дейности за памет"
+      },
+      "socialTab": {
+        "title": "Социални услуги и програми",
+        "subtitle": "Връзки между хората и превенция на изолацията",
+        "intergenerationalPrograms": "Междупоколенчески програми",
+        "isolationPrevention": "Превенция на изолацията",
+        "volunteerPrograms": "Доброволчески програми",
+        "volunteers": "{{count}} доброволци",
+        "hoursPerWeek": "{{hours}}ч/седмица"
+      },
+      "accessibilityTab": {
+        "title": "Достъпност и удобства",
+        "subtitle": "Налични възможности за достъпност"
+      },
+      "accessibilityLabels": {
+        "wheelchairAccess": "Достъп за инвалидни колички",
+        "hearingSupport": "Поддръжка за слуха",
+        "visualSupport": "Поддръжка за зрението",
+        "assistiveDevices": "Помощни устройства",
+        "accessibleParking": "Достъпно паркиране",
+        "elevatorAccess": "Достъп до асансьор",
+        "accessibleBathrooms": "Достъпни тоалетни",
+        "signLanguageSupport": "Поддръжка на знаков език"
+      },
+      "cognitiveTab": {
+        "title": "Когнитивни дейности",
+        "subtitle": "Налични дейности за умствена стимулация"
+      }
+    },
+    "SportEvents": {
+      "header": {
+        "badge": "Спортни събития",
+        "title": "Състезания, турнири и спортни празници",
+        "subtitle": "Участвайте в нашите спортни събития и покажете своите умения"
+      },
+      "filters": {
+        "all": "Всички събития",
+        "fitness": "Фитнес",
+        "aquatic": "Водни спортове",
+        "team": "Отборни",
+        "outdoor": "На открито",
+        "competition": "Състезания",
+        "trip": "Екскурзии"
+      },
+      "stats": {
+        "totalEvents": "Общо събития",
+        "upcoming": "Предстоящи",
+        "competitions": "Състезания",
+        "awards": "Награди"
+      },
+      "categoryTerms": {
+        "aquatic": ["плуване", "басейн", "водн"],
+        "team": ["футбол", "волейбол", "баскетбол"],
+        "fitness": ["бягане", "фитнес", "маратон"],
+        "outdoor": ["планина", "екскурзия", "поход"],
+        "competition": ["състезание", "турнир", "първенство"]
+      },
+      "iconTerms": {
+        "swimming": ["плуване", "басейн"],
+        "football": ["футбол"],
+        "volleyball": ["волейбол"],
+        "basketball": ["баскетбол"],
+        "tennis": ["тенис"],
+        "bowling": ["боулинг"],
+        "running": ["бягане", "маратон"],
+        "cycling": ["велосипед", "колоездене"],
+        "hiking": ["планина", "поход"],
+        "competition": ["състезание", "турнир"]
+      },
+      "colorTerms": {
+        "aquatic": ["плуване", "басейн"],
+        "team": ["футбол", "волейбол"],
+        "running": ["бягане", "маратон"],
+        "cycling": ["велосипед"],
+        "outdoor": ["планина", "поход"],
+        "competition": ["състезание", "турнир"]
+      },
+      "tripTitle": "Спортна екскурзия до {{destination}}",
+      "defaultEventType": "Спортно събитие",
+      "currency": "лв.",
+      "participants": "{{count}} участници",
+      "badges": {
+        "upcoming": "Предстоящо"
+      },
+      "actions": {
+        "register": "Регистрирай се"
+      },
+      "upcomingEvents": {
+        "title": "Предстоящи събития",
+        "subtitle": "Регистрирайте се за участие в нашите спортни събития"
+      },
+      "achievements": {
+        "title": "Постижения и награди",
+        "subtitle": "Нашите спортни успехи и признания",
+        "awardsReceived": "Получени награди",
+        "pastEvents": "Проведени събития",
+        "recognitions": "Признания"
+      },
+      "noResults": {
+        "title": "Няма събития в тази категория",
+        "message": "Изберете друга категория или следете за нови спортни събития"
+      },
+      "experienceLevels": {
+        "select": "Изберете ниво",
+        "beginner": "Начинаещ",
+        "intermediate": "Средно ниво",
+        "advanced": "Напреднал",
+        "professional": "Професионален"
+      },
+      "participationCategories": {
+        "select": "Изберете категория",
+        "individual": "Индивидуално участие",
+        "team": "Отборно участие",
+        "family": "Семейно участие",
+        "friends": "Приятелско участие"
+      },
+      "registerModal": {
+        "title": "Регистрация за {{eventTitle}}",
+        "subtitle": "Попълнете формата за да се регистрирате за това събитие",
+        "selectedEvent": "Избрано събитие",
+        "price": "Цена",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "experience": "Спортен опит",
+          "category": "Категория участие",
+          "notes": "Допълнителни бележки",
+          "notesPlaceholder": "Споменете ако имате въпроси или специални изисквания",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати регистрацията",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Регистрацията е изпратена успешно!",
+          "message": "Благодарим ви! Ще се свържем с вас за потвърждение на участието."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "registerEmail": {
+        "subject": "Заявка за участие - {{eventTitle}}",
+        "body": "Здравейте,\n\nПолучихте нова заявка за участие в спортно събитие:\n\nСЪБИТИЕ: {{eventTitle}}\nДата: {{date}}\n{{time ? `Час: ${time}` : ''}}\nТип: {{type}}\n{{price ? `Цена: ${price} ${currency}` : ''}}\n\nДАННИ НА УЧАСТНИКА:\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nСпортен опит: {{experience}}\nКатегория участие: {{category}}\nДопълнителни бележки: {{notes}}\n\nМоля, свържете се с участника за потвърждение на регистрацията.\n\n---\nИзпратено от сайта на {{clubName}}",
+        "notSpecified": "Не е посочен",
+        "standard": "Стандартна",
+        "none": "Няма"
+      }
+    },
+    "SportsEventsCalendar": {
+      "header": {
+        "badge": "Динамичен календар",
+        "title": "Никога не пропускайте важно събитие",
+        "subtitle": "Интерактивен календар с всички дейности, събития и възможности за записване"
+      },
+      "stats": {
+        "plannedEvents": "Планирани събития",
+        "regularActivities": "Редовни дейности"
+      },
+      "searchPlaceholder": "Търсете дейност, инструктор...",
+      "viewModes": {
+        "timeline": "Таймлайн",
+        "grid": "Календар",
+        "list": "Списък"
+      },
+      "filters": {
+        "all": "Всички",
+        "sports": "Спорт",
+        "cultural": "Култура",
+        "health": "Здраве",
+        "education": "Образование",
+        "trips": "Екскурзии"
+      },
+      "weekDaysShort": ["Нед", "Пон", "Вто", "Сря", "Чет", "Пет", "Съб"],
+      "monthNames": [
+        "Януари", "Февруари", "Март", "Април", "Май", "Юни",
+        "Юли", "Август", "Септември", "Октомври", "Ноември", "Декември"
+      ],
+      "dayMapping": {
+        "неделя": 0,
+        "понеделник": 1,
+        "вторник": 2,
+        "сряда": 3,
+        "четвъртък": 4,
+        "петък": 5,
+        "събота": 6
+      },
+      "everyDay": "всеки ден",
+      "categoryTerms": {
+        "sports": ["спорт", "гимнастика", "йога", "фитнес", "бягане", "плуване", "тренировка"],
+        "cultural": ["хор", "танц", "музика", "концерт", "представление"],
+        "health": ["здрав", "лекция", "медицин", "преглед"],
+        "education": ["курс", "обучение", "компютър", "образован"],
+        "trips": ["екскурзия", "пътуване", "поход"]
+      },
+      "priorityTerms": {
+        "high": ["специал", "турнир", "състезание"],
+        "medium": ["курс", "лекция", "екскурзия"]
+      },
+      "iconTerms": {
+        "yoga": ["йога"],
+        "swimming": ["плуване"],
+        "gymnastics": ["гимнастика"],
+        "choir": ["хор"],
+        "dance": ["танц"],
+        "trip": ["екскурзия"]
+      },
+      "tripTitle": "Екскурзия: {{destination}}",
+      "healthLectureDescription": "Здравна лекция: {{topic}}",
+      "timeline": {
+        "title": "Следващите 7 дни",
+        "subtitle": "Преглед на предстоящите дейности",
+        "today": "Днес",
+        "noEvents": "Няма планирани дейности",
+        "showMore": "+{{count}} още"
+      },
+      "grid": {
+        "title": "Месечен календар",
+        "inDevelopment": "Календарен изглед в разработка..."
+      },
+      "list": {
+        "title": "Всички събития",
+        "subtitle": "Хронологичен списък с всички планирани дейности",
+        "eventSingle": "събитие",
+        "eventPlural": "събития",
+        "participants": "{{count}} места"
+      },
+      "actions": {
+        "register": "Запиши се"
+      },
+      "modal": {
+        "registerFor": "Запишете се за",
+        "form": {
+          "name": "Име",
+          "namePlaceholder": "Вашето име",
+          "email": "Имейл",
+          "emailPlaceholder": "your@email.com",
+          "phone": "Телефон",
+          "phonePlaceholder": "0888 123 456",
+          "notes": "Бележки",
+          "notesPlaceholder": "Въпроси или специални изисквания...",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати заявката"
+        },
+        "success": {
+          "title": "Заявката е изпратена!",
+          "message": "Ще се свържем с вас за потвърждение"
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново"
+        }
+      },
+      "registerEmail": {
+        "subject": "Заявка за записване - {{eventTitle}}",
+        "body": "Здравейте,\n\nПолучихте нова заявка за записване:\n\nДЕЙНОСТ: {{eventTitle}}\nДата: {{date}}\n{{time ? `Час: ${time}` : ''}}\n{{instructor ? `Инструктор: ${instructor}` : ''}}\n\nДАННИ НА УЧАСТНИКА:\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nБележки: {{notes}}\n\n---\nИзпратено от сайта на {{clubName}}",
+        "noNotes": "Няма"
+      }
+    },
+    "SportsHealthTracking": {
+      "header": {
+        "badge": "Здравословно проследяване",
+        "title": "Следете здравето си всеки ден",
+        "subtitle": "Интелигентно проследяване на здравословни показатели с персонализирани цели и съвети"
+      },
+      "tabs": {
+        "overview": "Преглед",
+        "metrics": "Показатели",
+        "goals": "Цели",
+        "insights": "Анализи",
+        "services": "Услуги"
+      },
+      "units": {
+        "bpm": "удара/мин",
+        "mmHg": "mmHg",
+        "kg": "кг",
+        "steps": "стъпки",
+        "hours": "часа",
+        "liters": "литра"
+      },
+      "metrics": {
+        "heartRate": {
+          "title": "Пулс"
+        },
+        "bloodPressure": {
+          "title": "Кръвно налягане"
+        },
+        "weight": {
+          "title": "Тегло"
+        },
+        "steps": {
+          "title": "Стъпки"
+        },
+        "sleep": {
+          "title": "Сън"
+        },
+        "water": {
+          "title": "Вода"
+        },
+        "chartTitle": "Графика за {{metric}}",
+        "chartDescription": "Тук ще се покаже детайлна графика с данни за избрания период"
+      },
+      "goalTypes": {
+        "dailySteps": "Дневни стъпки",
+        "targetWeight": "Целево тегло",
+        "dailyHydration": "Дневна хидратация",
+        "qualitySleep": "Качествен сън"
+      },
+      "timeframes": {
+        "week": "7 дни",
+        "month": "30 дни",
+        "threeMonths": "3 месеца",
+        "year": "1 година"
+      },
+      "trends": {
+        "up": "нарастване",
+        "down": "спад",
+        "stable": "стабилно"
+      },
+      "changeFromYesterday": "{{change}} от вчера",
+      "stats": {
+        "goalsAchieved": "Цели"
+      },
+      "overview": {
+        "goalsProgress": "Прогрес на целите",
+        "healthTips": "Здравословни съвети"
+      },
+      "goals": {
+        "title": "Здравословни цели",
+        "subtitle": "Поставете си реалистични цели и следете прогреса си",
+        "target": "цел: {{target}} {{unit}}",
+        "achieved": "{{progress}}% постигнато",
+        "by": "до"
+      },
+      "insights": {
+        "title": "Здравословни анализи",
+        "subtitle": "Персонализирани препоръки базирани на вашите данни",
+        "trends": {
+          "title": "Тенденции",
+          "activityIncrease": "Активността ви се е увеличила с 15% този месец",
+          "heartRateStable": "Пулсът в покой остава стабилен",
+          "sleepDecline": "Качеството на съня се е влошило леко"
+        },
+        "recommendations": {
+          "title": "Препоръки",
+          "increaseWater": "Увеличете приема на вода с 0.5л дневно",
+          "sleepEarlier": "Опитайте да заспивате 30 мин по-рано",
+          "moreSteps": "Добавете още 1500 стъпки дневно"
+        },
+        "achievements": {
+          "title": "Постижения",
+          "sevenDaysSteps": "7 дни поред над 8000 стъпки",
+          "hydrationGoal": "Постигната цел за хидратация",
+          "bestMonth": "Най-добър месец за активност"
+        },
+        "allTips": "Всички здравословни съвети"
+      },
+      "services": {
+        "title": "Здравни услуги",
+        "subtitle": "Професионални здравни услуги и лекции в нашия клуб",
+        "healthLectures": "Здравни лекции",
+        "medicalServices": "Медицински услуги",
+        "emergencyInfo": "Спешна информация",
+        "emergencyContact": "При спешни случаи свържете се с",
+        "emergencyNumber": "Спешна помощ",
+        "clubDoctor": "Клубен лекар",
+        "noData": "Няма данни"
+      },
+      "tips": {
+        "cardio": {
+          "title": "Кардио тренировки",
+          "content": "Редовните кардио упражнения укрепват сърцето и подобряват кръвообращението."
+        },
+        "nutrition": {
+          "title": "Здравословно хранене",
+          "content": "Консумирайте повече плодове, зеленчуци и цельнозърнести храни."
+        },
+        "hydration": {
+          "title": "Хидратация",
+          "content": "Пийте поне 8 чаши вода дневно за оптимална хидратация."
+        },
+        "sleep": {
+          "title": "Качествен сън",
+          "content": "Спете 7-9 часа нощно за пълноценна възстановка."
+        },
+        "stress": {
+          "title": "Управление на стреса",
+          "content": "Практикувайте медитация и дълбоко дишане за намаляване на стреса."
+        }
+      },
+      "actions": {
+        "viewAll": "Виж всички",
+        "addEntry": "Добави запис",
+        "save": "Запази",
+        "cancel": "Отказ"
+      },
+      "modal": {
+        "addEntry": "Добави нов запис",
+        "metricType": "Тип показател",
+        "date": "Дата",
+        "time": "Час",
+        "value": "Стойност",
+        "bloodPressurePlaceholder": "120/80",
+        "valuePlaceholder": "Въведете стойност",
+        "notes": "Бележки (по желание)",
+        "notesPlaceholder": "Допълнителна информация..."
+      }
+    },
+        "SportsGallery": {
+      "header": {
+        "badge": "Нашата галерия",
+        "title": "Моменти от живота на клуба",
+        "subtitle": "Разгледайте снимки и видеа от нашите дейности, събития и постижения"
+      },
+      "stats": {
+        "photos": "Снимки",
+        "videos": "Видеа",
+        "events": "Събития"
+      },
+      "searchPlaceholder": "Търсете в галерията...",
+      "viewModes": {
+        "grid": "Мрежа",
+        "masonry": "Мозайка",
+        "list": "Списък"
+      },
+      "filters": {
+        "all": "Всички",
+        "gallery": "Галерия",
+        "videos": "Видеа",
+        "events": "Събития",
+        "achievements": "Постижения",
+        "fitness": "Фитнес",
+        "aquaFitness": "Водна аеробика",
+        "yoga": "Йога"
+      },
+      "sortOptions": {
+        "newest": "Най-нови",
+        "oldest": "Най-стари",
+        "name": "По име"
+      },
+      "categories": {
+        "gallery": "галерия",
+        "video": "видео",
+        "event": "събитие",
+        "award": "награда",
+        "achievement": "постижение",
+        "general": "общи"
+      },
+      "defaultTitles": {
+        "photo": "Снимка {{number}}",
+        "video": "Видео {{number}}"
+      },
+      "actions": {
+        "like": "Харесай",
+        "share": "Сподели"
+      },
+      "results": {
+        "showing": "Показване на {{filtered}} от {{total}} елемента{{search}}",
+        "forSearch": " за \"{{term}}\""
+      },
+      "lightbox": {
+        "close": "Затвори",
+        "previous": "Предишна",
+        "next": "Следваща"
+      },
+      "messages": {
+        "linkCopied": "Линкът е копиран в clipboard!"
+      }
+    },
+    "SportsPartners": {
+      "header": {
+        "badge": "Нашата мрежа",
+        "title": "Партньори и спонсори",
+        "subtitle": "Благодарим на всички партньори, които подкрепят нашата мисия за активно и здравословно стареене"
+      },
+      "stats": {
+        "partners": "Партньори",
+        "sponsors": "Спонсори",
+        "medical": "Медицински"
+      },
+      "categories": {
+        "all": "Всички партньори",
+        "financial": "Спонсори",
+        "medical": "Медицински",
+        "sports": "Спортни",
+        "education": "Образователни",
+        "other": "Други"
+      },
+      "partnerTypes": {
+        "sponsor": "Спонсор",
+        "partnership": "Партньор",
+        "medical": "Медицински партньор"
+      },
+      "contributionTypes": {
+        "services": "Услуги",
+        "goods": "Стоки",
+        "discounts": "Отстъпки",
+        "financial": "Финансова подкрепа"
+      },
+      "partnershipTypes": {
+        "health": "Здравно партньорство",
+        "sports": "Спортно партньорство",
+        "education": "Образователно партньорство"
+      },
+      "partnershipTerms": {
+        "health": ["здравно"],
+        "sports": ["спортно"],
+        "education": ["образователно"]
+      },
+      "labels": {
+        "discount": "Отстъпка",
+        "contribution": "Приносът"
+      },
+      "actions": {
+        "call": "Обади се",
+        "copy": "Копирай",
+        "website": "Уебсайт",
+        "details": "Детайли",
+        "email": "Имейл"
+      },
+      "benefits": {
+        "title": "Предимства за нашите членове",
+        "subtitle": "Благодарение на партньорствата ни, членовете получават:",
+        "discounts": {
+          "title": "Отстъпки",
+          "description": "Специални цени за спортни стоки, медицински услуги и хранителни добавки"
+        },
+        "healthServices": {
+          "title": "Здравни услуги",
+          "description": "Достъп до специализирани медицински прегледи и консултации"
+        },
+        "sportsFacilities": {
+          "title": "Спортни съоръжения",
+          "description": "Безплатен или преференциален достъп до спортни зали и басейни"
+        },
+        "training": {
+          "title": "Обучения",
+          "description": "Участие в специализирани курсове и семинари за здравословен живот"
+        }
+      },
+      "cta": {
+        "title": "Искате да станете наш партньор?",
+        "subtitle": "Присъединете се към нашата мисия за подкрепа на активния и здравословен начин на живот сред възрастните хора в нашия регион.",
+        "becomePartner": "Станете партньор",
+        "contactUs": "Свържете се с нас",
+        "stats": {
+          "activeMembers": "Активни членове",
+          "yearsExperience": "Години опит",
+          "rating": "Рейтинг"
+        }
+      },
+      "modal": {
+        "close": "Затвори",
+        "phone": "Телефон",
+        "address": "Адрес",
+        "workingHours": "Работно време",
+        "website": "Уебсайт",
+        "discount": "Отстъпка",
+        "email": "Имейл"
+      },
+      "contactModal": {
+        "title": "Свържете се с нас",
+        "subtitle": "За повече информация за партньорство се свържете с нас:"
+      },
+      "messages": {
+        "phoneCopied": "Телефонният номер е копиран!"
+      }
+    },
+    "SportsLocation": {
+      "header": {
+        "badge": "Дестинация",
+        "title": "Къде тренираме",
+        "subtitle": "Намерете най-бързия и най-активния път до вашия спортен клуб"
+      },
+      "quickInfo": {
+        "title": "Нашия спортен център",
+        "addressSoon": "Адресът ще бъде обявен скоро"
+      },
+      "tabs": {
+        "map": "Карта",
+        "transport": "Активен транспорт",
+        "parking": "Паркиране",
+        "nearby": "Спортни обекти"
+      },
+      "actions": {
+        "navigation": "Навигация",
+        "share": "Споделяне",
+        "copy": "Копирай",
+        "copied": "Копирано!"
+      },
+      "transport": {
+        "title": "Изберете вашия активен начин",
+        "subtitle": "Всеки път до клуба може да бъде част от тренировката!",
+        "tipsFor": "Спортни съвети за",
+        "running": {
+          "name": "Бягане",
+          "duration": "10-20 мин",
+          "description": "Активно пристигане",
+          "instructions": [
+            "Отлична кардио тренировка преди клуба",
+            "Използвайте безопасни пешеходни зони",
+            "Носете спортни дрехи и обувки",
+            "Планирайте маршрут през парковете"
+          ]
+        },
+        "cycling": {
+          "name": "Колоездене",
+          "duration": "5-15 мин",
+          "description": "Еко и здравословно",
+          "instructions": [
+            "Проверете велосипедните алеи",
+            "Носете каска за безопасност",
+            "Търсете места за заключване на велосипеда",
+            "Следвайте правилата за движение"
+          ]
+        },
+        "walking": {
+          "name": "Спортна разходка",
+          "duration": "15-25 мин",
+          "description": "Загряване преди тренировка",
+          "instructions": [
+            "Бърза спортна разходка като загряване",
+            "Използвайте удобни спортни обувки",
+            "Правете разтягания по пътя",
+            "Хидратирайте се добре"
+          ]
+        },
+        "bus": {
+          "name": "Градски транспорт",
+          "duration": "15-30 мин",
+          "description": "Удобен достъп",
+          "instructions": [
+            "Проверете разписанията на автобусите",
+            "Използвайте спортна чанта за удобство",
+            "Планирайте времето за пристигане",
+            "Запазете енергия за тренировката"
+          ]
+        },
+        "car": {
+          "name": "Автомобил",
+          "duration": "10-40 мин",
+          "description": "Бърз достъп",
+          "instructions": [
+            "Потърсете близо паркиране",
+            "Проверете за спортни съоръжения наблизо",
+            "Използвайте GPS за най-бързия път",
+            "Носете спортната си екипировка в колата"
+          ]
+        }
+      },
+      "parking": {
+        "title": "Паркиране за спортисти",
+        "subtitle": "Информация за паркиране в близост до спортния комплекс",
+        "price": "Цена",
+        "maxTime": "Максимално време",
+        "workingHours": "Работно време",
+        "advantages": "Предимства",
+        "sports": {
+          "type": "Спортен комплекс паркинг",
+          "price": "Обикновено безплатен",
+          "maxTime": "Според тренировките",
+          "workingHours": "Според работното време на комплекса",
+          "features": ["Охрана", "Видеонаблюдение", "Близо до съблекални"]
+        },
+        "street": {
+          "type": "Улично паркиране",
+          "price": "Според зоната",
+          "maxTime": "Според регулациите",
+          "workingHours": "Проверете пътните знаци",
+          "features": ["Различни зони", "Променливи цени", "Ограничено време"]
+        },
+        "underground": {
+          "type": "Подземен паркинг",
+          "price": "Платен",
+          "maxTime": "Без ограничение",
+          "workingHours": "24/7",
+          "features": ["Сигурност", "Защита от времето", "Резервация възможна"]
+        }
+      },
+      "nearby": {
+        "title": "Спортни обекти в района",
+        "subtitle": "Други спортни възможности в близост до нашия клуб"
+      },
+      "map": {
+        "distance": "Разстояние",
+        "trainingZone": "500м спортна зона",
+        "legend": {
+          "sportsClub": "Спортен клуб",
+          "trainingZone": "Тренировъчна зона"
+        }
+      },
+      "venue": {
+        "title": "Спортни съоръжения",
+        "type": "Тип",
+        "size": "Площ",
+        "capacity": "Капацитет",
+        "athletes": "спортисти",
+        "modern": "Модерен спортен център",
+        "allAges": "Подходящ за всички възрасти",
+        "facilities": "Спортни удобства",
+        "types": {
+          "sportsComplex": "Спортен комплекс",
+          "sportsFacility": "Спортно съоръжение"
+        }
+      },
+      "accessibility": {
+        "title": "Спортна достъпност",
+        "subtitle": "Информация за достъпността на спортните съоръжения",
+        "wheelchair": {
+          "feature": "Спортен достъп с инвалидна количка",
+          "available": "Адаптирани спортни съоръжения",
+          "limited": "Ограничен спортен достъп"
+        },
+        "elevator": {
+          "feature": "Фитнес лифт",
+          "description": "Лесен достъп до всички етажи на спортния комплекс"
+        },
+        "stairs": {
+          "feature": "Спортни стълби",
+          "description": "Стълбите също са част от тренировката!"
+        },
+        "safety": {
+          "feature": "Безопасни зони",
+          "description": "Медицинска помощ и безопасност по време на тренировки"
+        }
+      },
+      "help": {
+        "title": "Готови за тренировка?",
+        "subtitle": "Ако имате въпроси за достъпа до спортния комплекс или се нуждаете от помощ",
+        "callUs": "Обадете се",
+        "realTimeNavigation": "Навигация в реално време"
+      },
+      "share": {
+        "title": "Локация на {{clubName}}"
+      },
+      "messages": {
+        "copyError": "Грешка при копиране. Моля опитайте отново.",
+        "openingMap": "Отваряне на карта...",
+        "noAddress": "Адресът не е посочен",
+        "addressCopied": "Адресът е копиран в клипборда!"
+      }
+    },
+    "SportsContacts": {
+      "header": {
+        "badge": "Връзка",
+        "title": "Свържете се с нас",
+        "subtitle": "Готови сме да отговорим на всички ваши въпроси за спорт, тренировки и членство"
+      },
+      "quickCards": {
+        "phone": {
+          "title": "Обадете се",
+          "note": "Директна линия"
+        },
+        "email": {
+          "title": "Изпратете имейл",
+          "note": "24/7 достъпност"
+        },
+        "location": {
+          "title": "Посетете ни",
+          "note": ""
+        }
+      },
+      "actions": {
+        "call": "Обади се",
+        "send": "Изпрати",
+        "directions": "Маршрут"
+      },
+      "form": {
+        "title": "Изпратете съобщение",
+        "subtitle": "Попълнете формата и ще се свържем с вас възможно най-скоро",
+        "fields": {
+          "name": {
+            "label": "Вашето име",
+            "placeholder": "Въведете вашето име"
+          },
+          "email": {
+            "label": "Имейл адрес",
+            "placeholder": "your@email.com"
+          },
+          "phone": {
+            "label": "Телефон",
+            "placeholder": "+359 ..."
+          },
+          "reason": {
+            "label": "Причина за контакт"
+          },
+          "subject": {
+            "label": "Заглавие на съобщението",
+            "placeholder": "Кратко заглавие на вашия въпрос"
+          },
+          "message": {
+            "label": "Съобщение",
+            "placeholder": "Опишете вашия въпрос или заявка подробно..."
+          }
+        },
+        "submit": "Изпрати съобщението",
+        "status": {
+          "sending": "Изпращане...",
+          "success": "Изпратено успешно!"
+        }
+      },
+      "contactReasons": {
+        "general": "Обща информация",
+        "membership": "Членство и цени",
+        "training": "Тренировки и програми",
+        "events": "События и състезания",
+        "facilities": "Съоръжения и оборудване",
+        "emergency": "Спешни въпроси"
+      },
+      "workingDays": {
+        "monday": "Понеделник",
+        "tuesday": "Вторник",
+        "wednesday": "Сряда",
+        "thursday": "Четвъртък",
+        "friday": "Петък",
+        "saturday": "Събота",
+        "sunday": "Неделя"
+      },
+      "info": {
+        "workingHours": {
+          "title": "Работно време",
+          "closed": "Затворено"
+        },
+        "additional": {
+          "title": "Допълнителна информация",
+          "mobile": "Мобилен",
+          "website": "Уебсайт",
+          "capacity": "Капацитет",
+          "people": "души",
+          "activeMembers": "Активни членове"
+        },
+        "social": {
+          "title": "Последвайте ни"
+        },
+        "emergency": {
+          "title": "Спешна информация",
+          "general": "Спешна помощ",
+          "generalNumber": "150",
+          "club": "Клуб спешно"
+        }
+      },
+      "cta": {
+        "title": "Готови за нови предизвикателства?",
+        "subtitle": "Присъединете се към нашата спортна общност и започнете вашето фитнес пътешествие днес!",
+        "startNow": "Започнете сега",
+        "visitUs": "Посетете ни",
+        "stats": {
+          "yearsExperience": "Години опит",
+          "happyMembers": "Доволни членове",
+          "programs": "Програми"
+        }
+      },
+      "defaultCountry": "България",
+      "messages": {
+        "copyError": "Грешка при копиране. Моля опитайте отново."
+      }
+    },
+    "TraditionalHero": {
+      "badge": "Традиционен български клуб",
+      "stats": {
+        "members": "Членове",
+        "founded": "Основан",
+        "performances": "Изпълнения", 
+        "yearsExperience": "Години опит"
+      },
+      "actions": {
+        "watchVideo": "Гледайте видео",
+        "visitUs": "Посетете ни",
+        "ourMembers": "Нашите членове ({{count}})",
+        "writeToUs": "Пишете ни"
+      },
+      "scrollIndicator": "Научете повече",
+      "video": {
+        "notSupported": "Вашият браузър не поддържа video елемента.",
+        "defaultTitle": "Видео от клуба",
+        "duration": "Продължителност",
+        "type": "Тип"
+      },
+      "emailModal": {
+        "title": "Свържете се с нас",
+        "subtitle": "Изпратете ни съобщение и ще ви отговорим възможно най-скоро",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон (по желание)",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "message": "Съобщение",
+          "messagePlaceholder": "Какво бихте искали да ни споделите?",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати съобщение",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Съобщението е изпратено!",
+          "message": "Благодарим ви! Ще се свържем с вас скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        }
+      },
+      "membersModal": {
+        "title": "Членове на клуба",
+        "subtitle": "Нашата традиционна общност от {{count}} {{memberText}}",
+        "memberSingle": "член",
+        "memberPlural": "членове",
+        "searchPlaceholder": "Търсене по име, телефон или имейл...",
+        "clearSearch": "Изчисти търсенето",
+        "noResultsFor": "Няма намерени резултати за \"{{term}}\"",
+        "foundOne": "Намерен 1 член",
+        "foundMany": "Намерени {{count}} членове",
+        "noMembers": {
+          "title": "Няма регистрирани членове",
+          "message": "Все още няма добавени членове в системата."
+        },
+        "noResults": {
+          "title": "Няма намерени резултати",
+          "message": "Опитайте с различни ключови думи или изчистете търсенето."
+        },
+        "defaultRole": "член",
+        "memberSince": "Член от",
+        "copyName": "Копирай името",
+        "copyPhone": "Копирай телефона",
+        "copyEmail": "Копирай имейла",
+        "copyAddress": "Копирай адреса"
+      },
+      "email": {
+        "subject": "Запитване до {{clubName}}",
+        "body": "Здравейте,\n\nПолучихте ново съобщение от сайта на {{clubName}}:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от {{senderEmail}}",
+        "noPhone": "Не е посочен"
+      },
+      "messages": {
+        "locationInfo": "Информация за локацията може да бъде намерена в контактните данни."
+      }
+    },
+    "TraditionalAbout": {
+      "header": {
+        "badge": "За нашия клуб",
+        "title": "Нашата история и мисия"
+      },
+      "story": {
+        "title": "Нашата история",
+        "founded": "Основан през {{year}} година"
+      },
+      "stats": {
+        "title": "Нашите числа",
+        "activeMembers": "Активни членове",
+        "yearsTradition": "Години традиция",
+        "programs": "Програми",
+        "eventsYearly": "Събития годишно"
+      },
+      "demographics": {
+        "title": "Нашите членове",
+        "ageRange": "{{range}} години",
+        "people": "{{count}} души"
+      },
+      "benefits": {
+        "title": "Ползи от членството"
+      },
+      "requirements": {
+        "title": "Как да се присъедините"
+      },
+      "membershipFee": {
+        "title": "Членски внос",
+        "monthly": "месечно",
+        "yearly": "годишно"
+      },
+      "achievements": {
+        "title": "Нашите постижения",
+        "subtitle": "Признание за нашата дейност през годините",
+        "awards": "Награди",
+        "recognitions": "Признания"
+      },
+      "impact": {
+        "title": "Нашето въздействие",
+        "subtitle": "Как допринасяме за общността",
+        "volunteering": "Доброволчество",
+        "partnerships": "Партньорства",
+        "participants": "{{count}} участници",
+        "coordinator": "Координатор"
+      }
+    },
+    "TraditionalTraditions": {
+      "header": {
+        "badge": "Традиции и култура",
+        "title": "Нашите корени и обичаи",
+        "subtitle": "Съхраняваме и предаваме българската култура и традиции"
+      },
+      "events": {
+        "title": "Традиционни събития",
+        "subtitle": "Празници и културни мероприятия",
+        "dateTime": "{{date}} в {{time}}"
+      },
+      "activities": {
+        "title": "Традиционни дейности",
+        "subtitle": "Редовни културни занимания",
+        "from": "от",
+        "instructor": "Инструктор"
+      },
+      "trips": {
+        "title": "Културни екскурзии",
+        "subtitle": "Посещения на традиционни места",
+        "price": "Цена"
+      },
+      "heritage": {
+        "title": "Регионално наследство",
+        "subtitle": "Местни традиции и култура",
+        "ourRegion": "Наш регион",
+        "defaultCountry": "България",
+        "coverage": "Обхватваме",
+        "role": "Роля",
+        "centralClub": "Централен клуб",
+        "localClub": "Местен клуб"
+      },
+      "projects": {
+        "title": "Културни проекти",
+        "subtitle": "Нашите инициативи за съхраняване на традициите",
+        "beneficiaries": "{{count}} бенефициенти"
+      },
+      "partnerships": {
+        "title": "Културни партньорства",
+        "subtitle": "Сътрудничество с институции"
+      },
+      "common": {
+        "participants": "{{count}} участници"
+      },
+      "currency": "лв.",
+      "cta": {
+        "title": "Станете част от традицията",
+        "subtitle": "Присъединете се към нас и помогнете за съхраняването на българската култура",
+        "becomeMember": "Станете член",
+        "upcomingEvents": "Предстоящи събития"
+      },
+      "membershipModal": {
+        "title": "Станете член на {{clubName}}",
+        "subtitle": "Присъединете се към нашата общност и съхранявайте традициите заедно с нас",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "age": "Възраст",
+          "agePlaceholder": "Въведете вашата възраст",
+          "interests": "Интереси в традиционната култура",
+          "interestsPlaceholder": "Напр. фолклор, занаяти, кулинария...",
+          "motivation": "Защо искате да станете член?",
+          "motivationPlaceholder": "Разкажете ни повече за вашата мотивация...",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати заявката",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Заявката е изпратена!",
+          "message": "Благодарим ви! Ще се свържем с вас скоро за потвърждение."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        },
+        "emailSubject": "Заявка за членство в {{clubName}}",
+        "emailBody": "Здравейте,\n\nЗаявка за членство:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nВъзраст: {{age}}\nИнтереси: {{interests}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от сайта на {{clubName}}",
+        "notSpecified": "Не е посочен",
+        "generalInterests": "Общи",
+        "defaultMessage": "Искам да стана член на клуба"
+      },
+      "messages": {
+        "upcomingEvents": "Предстоящи традиционни събития:\n\n{{events}}",
+        "noEvents": "В момента няма предстоящи традиционни събития."
+      }
+    },
+    "TraditionalFolklore": {
+      "header": {
+        "badge": "Български фолклор",
+        "title": "Музика, танци и изпълнения",
+        "subtitle": "Автентични български песни и танци, предавани през поколенията"
+      },
+      "stats": {
+        "performances": "Изпълнения",
+        "participants": "Участници",
+        "yearsExperience": "Години опит"
+      },
+      "activities": {
+        "title": "Фолклорни формации",
+        "subtitle": "Нашите музикални и танцови групи",
+        "from": "от",
+        "instructor": "Инструктор"
+      },
+      "events": {
+        "title": "Културни събития",
+        "subtitle": "Концерти, фестивали и представления",
+        "dateTime": "{{date}} в {{time}}",
+        "audience": "{{count}} зрители"
+      },
+      "videos": {
+        "title": "Видео галерия",
+        "subtitle": "Записи от нашите изпълнения",
+        "watch": "Гледай",
+        "share": "Сподели"
+      },
+      "audio": {
+        "title": "Аудио колекция",
+        "subtitle": "Традиционни песни и музика"
+      },
+      "awards": {
+        "title": "Културни награди",
+        "subtitle": "Признание за нашата фолклорна дейност"
+      },
+      "common": {
+        "participants": "{{count}} участници"
+      },
+      "cta": {
+        "title": "Присъединете се към фолклорната традиция",
+        "subtitle": "Научете автентични български песни и танци в нашите формации",
+        "register": "Запишете се",
+        "watchVideos": "Гледайте видеа"
+      },
+      "videoModal": {
+        "notSupported": "Вашият браузър не поддържа video елемента.",
+        "download": "Изтегли",
+        "share": "Сподели"
+      },
+      "registrationModal": {
+        "title": "Запишете се за фолклорни дейности",
+        "subtitle": "Присъединете се към нашите автентични български традиции",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "age": "Възраст",
+          "agePlaceholder": "Въведете вашата възраст",
+          "experienceLabel": "Опит във фолклора",
+          "selectExperience": "Изберете опит",
+          "experience": {
+            "beginner": "Начинаещ",
+            "intermediate": "Средно ниво",
+            "advanced": "Напреднал",
+            "professional": "Професионалист"
+          },
+          "activityLabel": "Предпочитана дейност",
+          "selectActivity": "Изберете дейност",
+          "anyActivity": "Каквото е подходящо",
+          "message": "Допълнително съобщение",
+          "messagePlaceholder": "Разкажете ни повече за вашия интерес към фолклора...",
+          "sending": "Изпраща се...",
+          "submit": "Изпрати заявката",
+          "cancel": "Отказ"
+        },
+        "success": {
+          "title": "Заявката е изпратена!",
+          "message": "Благодарим ви! Ще се свържем с вас скоро за потвърждение."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно."
+        },
+        "emailSubject": "Записване за фолклорни дейности - {{clubName}}",
+        "emailBody": "Здравейте,\n\nЗаявка за записване в фолклорна формация:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nВъзраст: {{age}}\nОпит: {{experience}}\nПредпочитана дейност: {{activity}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от сайта на {{clubName}}",
+        "notSpecified": "Не е посочен",
+        "noExperience": "Без опит",
+        "noMessage": "Няма допълнително съобщение"
+      },
+      "media": {
+        "defaultFileName": "файл"
+      },
+      "messages": {
+        "downloadError": "Възникна грешка при изтеглянето",
+        "shareSuccess": "Информацията е копирана в клипборда!",
+        "noVideosAvailable": "В момента няма налични видеа."
+      }
+    },
+    "TraditionalPerformances": {
+      "header": {
+        "badge": "Представления и изпълнения",
+        "title": "Нашата сцена и публика",
+        "subtitle": "Споделяме красотата на българския фолклор чрез автентични представления"
+      },
+      "stats": {
+        "performances": "Представления",
+        "performers": "Изпълнители",
+        "yearsOnStage": "Години на сцената",
+        "eventsThisYear": "События тази година"
+      },
+      "upcoming": {
+        "title": "Предстоящи представления",
+        "subtitle": "Не пропускайте нашите бъдещи изпълнения",
+        "seats": "До {{count}} места",
+        "reserve": "Резервирайте място",
+        "share": "Споделете"
+      },
+      "groups": {
+        "title": "Нашите формации",
+        "subtitle": "Постоянни състави и групи",
+        "from": "от",
+        "leader": "Ръководител",
+        "performers": "{{count}} изпълнители"
+      },
+      "videos": {
+        "title": "Записи от представления",
+        "subtitle": "Гледайте нашите изпълнения",
+        "watch": "Гледай",
+        "download": "Изтегли"
+      },
+      "past": {
+        "title": "Минали представления",
+        "subtitle": "Нашите успешни изпълнения",
+        "viewers": "{{count}} зрители"
+      },
+      "awards": {
+        "title": "Награди за представления",
+        "subtitle": "Признание за нашите изпълнения"
+      },
+      "cta": {
+        "title": "Станете част от представленията",
+        "subtitle": "Присъединете се към нашите формации и изкуството на българския фолклор",
+        "register": "Запишете се",
+        "viewSchedule": "Вижте програмата"
+      },
+      "videoModal": {
+        "notSupported": "Вашият браузър не поддържа video елемента.",
+        "duration": "Продължителност",
+        "type": "Тип",
+        "downloadVideo": "Изтегли видео",
+        "share": "Сподели"
+      },
+      "calendarModal": {
+        "title": "Програма на {{clubName}}",
+        "regularActivities": "Редовни дейности",
+        "upcomingEvents": "Предстоящи събития"
+      },
+      "registrationModal": {
+        "title": "Запишете се в {{clubName}}",
+        "subtitle": "Моля попълнете формата по-долу",
+        "form": {
+          "name": "Вашето име",
+          "namePlaceholder": "Въведете вашето име",
+          "email": "Имейл адрес",
+          "emailPlaceholder": "Въведете вашия имейл",
+          "phone": "Телефон",
+          "phonePlaceholder": "Въведете вашия телефон",
+          "interest": "Интересува ви",
+          "selectActivity": "Изберете дейност",
+          "other": "Друго",
+          "message": "Допълнително съобщение",
+          "messagePlaceholder": "Разкажете ни повече за вашия интерес...",
+          "submit": "Изпрати заявката",
+          "cancel": "Отказ"
+        },
+        "emailSubject": "Заявка за записване в {{clubName}}",
+        "emailBody": "Здравейте,\n\nБих искал/а да се запиша в клуба с следните данни:\n\nИме: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\nИнтересува ме: {{activity}}\n\nСъобщение:\n{{message}}\n\nС уважение,\n{{name}}"
+      },
+      "days": {
+        "понеделник": "Понеделник",
+        "вторник": "Вторник",
+        "сряда": "Сряда",
+        "четвъртък": "Четвъртък",
+        "петък": "Петък",
+        "събота": "Събота",
+        "неделя": "Неделя"
+      },
+      "messages": {
+        "videoNotAvailable": "Видеото не е налично за изтегляне",
+        "downloadError": "Възникна грешка при изтеглянето на видеото",
+        "shareDefault": "Споделяне от клуба",
+        "linkCopied": "Линкът е копиран в клипборда!",
+        "reservation": "Резервация за \"{{title}}\" на {{date}} в {{time}}",
+        "emailPrepared": "Имейлът е подготвен за изпращане!"
+      }
+    },
+    "TraditionalCostumes": {
+      "header": {
+        "badge": "Традиции и носии",
+        "title": "Нашето културно наследство",
+        "subtitle": "Съхраняваме и представяме традициите на българската култура"
+      },
+      "gallery": {
+        "title": "Галерия",
+        "subtitle": "Снимки от нашите традиционни мероприятия и дейности",
+        "imageAlt": "Снимка {{index}} от {{clubName}}"
+      },
+      "events": {
+        "title": "Традиционни събития",
+        "subtitle": "Мероприятия свързани с нашите традиции",
+        "timeAt": " в {{time}}",
+        "participants": "{{count}} участници"
+      },
+      "awards": {
+        "title": "Признания за традициите",
+        "subtitle": "Нашите постижения в областта на традиционната култура"
+      },
+      "galleryModal": {
+        "title": "Снимка от {{clubName}}",
+        "imageAlt": "Снимка от {{clubName}}",
+        "download": "Изтегли",
+        "share": "Сподели",
+        "shareTitle": "Снимка от {{clubName}}",
+        "counter": "{{current}} от {{total}}"
+      },
+      "messages": {
+        "downloadError": "Възникна грешка при изтеглянето на изображението",
+        "galleryFrom": "Галерия от {{clubName}}",
+        "linkCopied": "Линкът е копиран в клипборда!"
+      }
+    },
+    "TraditionalMusic": {
+      "header": {
+        "badge": "Музика и песни",
+        "title": "Звуците на традицията",
+        "subtitle": "Съхраняваме и представяме музикалното наследство на българската култура"
+      },
+      "audio": {
+        "title": "Аудио записи",
+        "subtitle": "Слушайте нашите музикални изпълнения"
+      },
+      "activities": {
+        "title": "Музикални формации",
+        "subtitle": "Нашите редовни музикални дейности",
+        "from": "от",
+        "leader": "Ръководител",
+        "participants": "{{count}} участници"
+      },
+      "events": {
+        "title": "Музикални събития",
+        "subtitle": "Концерти и музикални мероприятия",
+        "timeAt": " в {{time}}",
+        "participants": "{{count}} участници"
+      },
+      "videos": {
+        "title": "Видео записи",
+        "subtitle": "Гледайте нашите музикални изпълнения",
+        "watch": "Гледай"
+      },
+      "awards": {
+        "title": "Музикални постижения",
+        "subtitle": "Нашите награди в областта на музиката"
+      },
+      "videoModal": {
+        "notSupported": "Вашият браузър не поддържа video елемента.",
+        "share": "Сподели"
+      },
+      "days": {
+        "понеделник": "Понеделник",
+        "вторник": "Вторник",
+        "сряда": "Сряда",
+        "четвъртък": "Четвъртък",
+        "петък": "Петък",
+        "събота": "Събота",
+        "неделя": "Неделя"
+      },
+      "messages": {
+        "downloadError": "Възникна грешка при изтеглянето на аудиото",
+        "musicFromClub": "Музика от клуба",
+        "linkCopied": "Линкът е копиран в клипборда!"
+      }
+    },
+    "TraditionalCalendar": {
+      "header": {
+        "badge": "Календар с дейности",
+        "title": "Нашата програма",
+        "subtitle": "Следете всички предстоящи събития и редовни дейности"
+      },
+      "controls": {
+        "today": "Днес",
+        "month": "Месец",
+        "list": "Списък"
+      },
+      "eventTypes": {
+        "event": "Събитие",
+        "activity": "Редовна дейност",
+        "trip": "Екскурзия",
+        "course": "Курс"
+      },
+      "upcoming": {
+        "title": "Предстоящи събития",
+        "subtitle": "Най-близките дейности и мероприятия"
+      },
+      "legend": {
+        "title": "Легенда",
+        "subtitle": "Видове дейности в календара",
+        "events": "Специални събития",
+        "activities": "Редовни дейности",
+        "trips": "Екскурзии",
+        "courses": "Курсове"
+      },
+      "eventModal": {
+        "instructor": "Ръководител",
+        "destination": "Дестинация",
+        "price": "Цена",
+        "duration": "Продължителност",
+        "description": "Описание",
+        "register": "Запишете се",
+        "share": "Споделете",
+        "call": "Обадете се"
+      },
+      "tripTitle": "Екскурзия до {{destination}}",
+      "eventTooltip": "{{title}} в {{time}}",
+      "eventDateTime": "{{date}} в {{time}}",
+      "participantsCount": "{{count}} участници",
+      "recurring": "Редовна дейност",
+      "noEvents": "Няма събития за този месец",
+      "currency": "лв.",
+      "shareText": "{{title}} - {{date}} в {{time}}",
+      "reservation": {
+        "subject": "Записване за {{title}}",
+        "body": "Здравейте,\n\nБих искал/а да се запиша за \"{{title}}\" на {{date}} в {{time}}.\n\nМоля потвърдете записването ми.\n\nС уважение"
+      },
+      "messages": {
+        "shareSuccess": "Информацията е копирана в клипборда!"
+      }
+    },
+    "TraditionalGallery": {
+      "header": {
+        "badge": "Галерия",
+        "title": "Нашите спомени",
+        "subtitle": "Разгледайте снимки и видеа от нашите дейности и мероприятия"
+      },
+      "controls": {
+        "searchPlaceholder": "Търсете в галерията...",
+        "itemCount": "{{count}} елементи"
+      },
+      "categories": {
+        "all": "Всички",
+        "main": "Главна",
+        "gallery": "Галерия",
+        "video": "Видеа"
+      },
+      "mediaTypes": {
+        "video": "Видео",
+        "image": "Снимка"
+      },
+      "items": {
+        "mainImageTitle": "Главна снимка на {{clubName}}",
+        "mainImageDescription": "Представителна снимка на {{clubName}}",
+        "mainImageAlt": "{{clubName}} - главна снимка",
+        "galleryImageTitle": "Снимка {{index}}",
+        "galleryImageDescription": "Снимка от дейностите на {{clubName}}",
+        "galleryImageAlt": "Снимка {{index}} от {{clubName}}",
+        "videoTitle": "Видео {{index}}",
+        "videoDescription": "Видео запис от {{clubName}}",
+        "videoAlt": "Видео {{index}} от {{clubName}}"
+      },
+      "noResults": {
+        "title": "Няма намерени резултати",
+        "subtitle": "Опитайте с различни критерии за търсене",
+        "clearFilters": "Изчистете филтрите"
+      },
+      "modal": {
+        "videoNotSupported": "Вашият браузър не поддържа video елемента.",
+        "download": "Изтегли",
+        "share": "Сподели",
+        "counter": "{{current}} от {{total}}"
+      },
+      "shareText": "{{title}} - {{clubName}}",
+      "messages": {
+        "downloadError": "Възникна грешка при изтеглянето",
+        "shareSuccess": "Информацията е копирана в клипборда!"
+      }
+    },
+    "TraditionalContacts": {
+      "header": {
+        "badge": "Свържете се с нас",
+        "title": "Контакти",
+        "subtitle": "Ще се радваме да отговорим на вашите въпроси и да ви помогнем"
+      },
+      "main": {
+        "title": "Основни контакти",
+        "subtitle": "Как можете да се свържете с нас"
+      },
+      "contactTypes": {
+        "phone": "Телефон",
+        "mobile": "Мобилен",
+        "email": "Имейл",
+        "website": "Уебсайт",
+        "address": "Адрес"
+      },
+      "actions": {
+        "call": "Обадете се",
+        "sendEmail": "Изпратете имейл",
+        "visit": "Посетете",
+        "showOnMap": "Покажи на картата",
+        "copy": "Копирай",
+        "copied": "Копирано!",
+        "copyPhone": "Копирай телефона",
+        "copyMobile": "Копирай мобилния",
+        "copyEmail": "Копирай имейла",
+        "copyWebsite": "Копирай уебсайта",
+        "copyAddress": "Копирай адреса"
+      },
+      "workingHours": {
+        "title": "Работно време",
+        "subtitle": "Кога можете да ни намерите",
+        "currentlyOpen": "Сега сме отворени",
+        "currentlyClosed": "Сега сме затворени",
+        "closed": "Затворено"
+      },
+      "management": {
+        "title": "Ръководство",
+        "subtitle": "Хора които можете да потърсите"
+      },
+      "socialMedia": {
+        "title": "Социални мрежи",
+        "subtitle": "Последвайте ни онлайн"
+      },
+      "cta": {
+        "title": "Изпратете ни съобщение",
+        "subtitle": "Имате въпрос или искате повече информация? Свържете се с нас!",
+        "contactUs": "Свържете се с нас"
+      },
+      "form": {
+        "title": "Свържете се с {{clubName}}",
+        "subtitle": "Изпратете ни вашето съобщение и ще се свържем с вас",
+        "fields": {
+          "name": "Вашето име",
+          "email": "Имейл адрес",
+          "phone": "Телефон",
+          "subject": "Тема",
+          "message": "Съобщение"
+        },
+        "placeholders": {
+          "name": "Въведете вашето име",
+          "email": "Въведете вашия имейл",
+          "phone": "Въведете вашия телефон",
+          "subject": "Тема на съобщението",
+          "message": "Напишете вашето съобщение тук..."
+        },
+        "sending": "Изпраща се...",
+        "submit": "Изпрати съобщението",
+        "cancel": "Отказ",
+        "defaultSubject": "Съобщение от {{name}}",
+        "notSpecified": "Не е посочен",
+        "emailBody": "Име: {{name}}\nИмейл: {{email}}\nТелефон: {{phone}}\n\nСъобщение:\n{{message}}\n\n---\nИзпратено от контактната форма на {{clubName}}",
+        "success": {
+          "title": "Съобщението е изпратено!",
+          "message": "Благодарим ви! Ще се свържем с вас скоро."
+        },
+        "error": {
+          "title": "Възникна грешка",
+          "message": "Моля опитайте отново или се свържете с нас директно.",
+          "retry": "Опитайте отново"
+        }
+      },
+      "days": {
+        "monday": "Понеделник",
+        "tuesday": "Вторник",
+        "wednesday": "Сряда",
+        "thursday": "Четвъртък",
+        "friday": "Петък",
+        "saturday": "Събота",
+        "sunday": "Неделя"
+      },
+      "messages": {
+        "copyError": "Грешка при копиране. Моля опитайте отново."
+      }
+    },
+    "TraditionalLocation": {
+      "header": {
+        "badge": "Местоположение",
+        "title": "Къде ни намирате",
+        "subtitle": "Подробна информация за локацията, транспорт и удобства"
+      },
+      "address": {
+        "title": "Нашият адрес",
+        "comingSoon": "Адресът ще бъде обявен скоро"
+      },
+      "actions": {
+        "directions": "Маршрут",
+        "share": "Споделяне",
+        "copy": "Копирай",
+        "copied": "Копирано!"
+      },
+      "tabs": {
+        "map": "Карта",
+        "transport": "Транспорт",
+        "parking": "Паркиране",
+        "nearby": "В района"
+      },
+      "map": {
+        "radiusTooltip": "250м от клуба",
+        "legend": {
+          "club": "Клуб"
+        }
+      },
+      "venue": {
+        "title": "Информация за мястото",
+        "type": "Тип",
+        "municipal": "Общинска сграда",
+        "size": "Площ",
+        "capacity": "Капацитет",
+        "people": "души",
+        "defaultType": "Традиционен културен център",
+        "defaultDescription": "Подходящ за групови дейности",
+        "facilities": "Удобства"
+      },
+      "transport": {
+        "instructionsFor": "Инструкции за",
+        "walking": {
+          "name": "Пеша",
+          "duration": "5-15 мин",
+          "description": "От центъра на града",
+          "instruction1": "От градския център - 10 минути пеша",
+          "instruction2": "Следвайте главната улица",
+          "instruction3": "Търсете указателните табели"
+        },
+        "bus": {
+          "name": "Автобус",
+          "duration": "15-25 мин",
+          "description": "Градски транспорт",
+          "instruction1": "Използвайте градския транспорт",
+          "instruction2": "Проверете разписанието на спирките",
+          "instruction3": "Следвайте указанията за посока"
+        },
+        "metro": {
+          "name": "Метро",
+          "duration": "20-30 мин",
+          "description": "Бърз градски транспорт",
+          "instruction1": "Използвайте метрото ако има станция наблизо",
+          "instruction2": "Проверете картата на метрото",
+          "instruction3": "Планирайте най-краткия маршрут"
+        },
+        "car": {
+          "name": "Автомобил",
+          "duration": "10-40 мин",
+          "description": "В зависимост от трафика",
+          "instruction1": "Проверете за места за паркиране",
+          "instruction2": "Използвайте GPS навигация",
+          "instruction3": "Внимавайте за ограниченията в движението"
+        }
+      },
+      "parking": {
+        "labels": {
+          "type": "Тип",
+          "price": "Цена",
+          "maxTime": "Максимално време",
+          "workingHours": "Работно време",
+          "distance": "Разстояние",
+          "capacity": "Капацитет",
+          "location": "Локация"
+        },
+        "street": {
+          "title": "Улично паркиране",
+          "type": "Улично паркиране",
+          "price": "Според местните такси",
+          "maxTime": "Според регулациите",
+          "workingHours": "Проверете местните знаци"
+        },
+        "paid": {
+          "title": "Платени паркинги",
+          "name": "Платени паркинги в района",
+          "distance": "Различни разстояния",
+          "price": "Според тарифите",
+          "capacity": "Различен капацитет",
+          "workingHours": "Различно работно време"
+        },
+        "free": {
+          "title": "Безплатно паркиране",
+          "location": "Улици в района",
+          "distance": "Различни разстояния",
+          "note": "Търсете безплатни места наоколо"
+        }
+      },
+      "nearby": {
+        "distance": "Разстояние"
+      },
+      "accessibility": {
+        "title": "Достъпност",
+        "subtitle": "Информация за хора с увреждания и ограничена подвижност",
+        "wheelchair": "Достъп с инвалидна количка",
+        "wheelchairAvailable": "Проверете на място за достъпност",
+        "wheelchairLimited": "Ограничен достъп",
+        "entrance": "Удобен вход",
+        "entranceDescription": "Проверете условията на място",
+        "publicAccess": "Обществен достъп",
+        "publicAccessDescription": "Отворен за посетители според работното време"
+      },
+      "help": {
+        "title": "Нужна ви е помощ?",
+        "subtitle": "Ако имате затруднения с намирането на клуба или ако се нуждаете от допълнителна информация",
+        "call": "Обадете се",
+        "realTimeNavigation": "Навигация в реално време"
+      },
+      "messages": {
+        "copyError": "Грешка при копиране. Моля опитайте отново.",
+        "addressNotSpecified": "адрес не е посочен",
+        "defaultCountry": "България",
+        "openingMap": "Отваряне на карта...",
+        "shareTitle": "Локация на {{clubName}}",
+        "addressCopied": "Адресът е копиран в клипборда!"
+      }
+    }
 
+  },
+  "common": {
+    "navigation": {
+      "home": "Начало"
+    }
+  }
 }

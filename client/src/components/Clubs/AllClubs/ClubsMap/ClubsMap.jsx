@@ -1,5 +1,5 @@
-// components/Clubs/AllClubs/ClubsMap/ClubsMap.jsx
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
@@ -87,15 +87,12 @@ const MapController = ({ selectedClub, clubs }) => {
 
 // Popup компонент за клуб
 const ClubPopup = ({ club, onSelect, onViewDetails }) => {
+  const { t } = useTranslation();
+
   const getCategoryLabel = (category) => {
-    const labels = {
-      'cultural': 'Културен',
-      'general': 'Общ',
-      'sports': 'Спортен', 
-      'educational': 'Образователен',
-      'traditional': 'Традиционен'
-    };
-    return labels[category] || category;
+    return t(`clubs.ClubsMap.categories.${category}`, { 
+      defaultValue: t('clubs.ClubsMap.categories.general') 
+    });
   };
 
   const renderStars = (rating) => {
@@ -145,12 +142,14 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
       <div className="club-popup-content">
         <h3 className="club-popup-title">{club.name}</h3>
         
-        <div className="club-popup-rating">
-          <div className="club-popup-stars">
-            {renderStars(club.metadata.rating)}
+        {club.metadata?.rating && (
+          <div className="club-popup-rating">
+            <div className="club-popup-stars">
+              {renderStars(club.metadata.rating)}
+            </div>
+            <span className="club-popup-rating-value">{club.metadata.rating}</span>
           </div>
-          <span className="club-popup-rating-value">{club.metadata.rating}</span>
-        </div>
+        )}
         
         <div className="club-popup-location">
           <FontAwesomeIcon icon={faMapMarkerAlt} />
@@ -158,27 +157,16 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
         </div>
         
         <p className="club-popup-description">
-          {club.shortDescription.slice(0, 100)}...
+          {club.shortDescription?.slice(0, 100)}...
         </p>
         
-        {/* <div className="club-popup-stats">
-          <div className="club-popup-stat">
-            <FontAwesomeIcon icon={faUsers} />
-            <span>{club.membership.totalMembers} членове</span>
-          </div>
-          <div className="club-popup-stat">
-            <FontAwesomeIcon icon={faMapPin} />
-            <span>{club.activities.regular.length} дейности</span>
-          </div>
-        </div> */}
-        
         <div className="club-popup-contacts">
-          {club.contacts.phone && (
+          {club.contacts?.phone && (
             <a href={`tel:${club.contacts.phone}`} className="club-popup-contact">
               <FontAwesomeIcon icon={faPhone} />
             </a>
           )}
-          {club.contacts.email && (
+          {club.contacts?.email && (
             <a href={`mailto:${club.contacts.email}`} className="club-popup-contact">
               <FontAwesomeIcon icon={faEnvelope} />
             </a>
@@ -186,17 +174,11 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
         </div>
         
         <div className="club-popup-actions">
-          {/* <button 
-            onClick={() => onSelect(club)}
-            className="club-popup-btn secondary"
-          >
-            Избери клуб
-          </button> */}
           <button 
             onClick={() => onViewDetails(club)}
             className="club-popup-btn primary"
           >
-            <span>Виж детайли</span>
+            <span>{t('clubs.ClubsMap.popup.viewDetails')}</span>
             <FontAwesomeIcon icon={faArrowRight} />
           </button>
         </div>
@@ -206,6 +188,7 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
 };
 
 export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
+  const { t } = useTranslation();
   const [mapReady, setMapReady] = useState(false);
   const markerRefs = useRef({});
   const previousSelectedClubId = useRef(null);
@@ -220,7 +203,6 @@ export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
   const handleViewDetails = (club) => {
     window.open(`/clubs/${club.slug}`, '_blank');
   };
-
 
   useEffect(() => {
     const currentSelectedId = selectedClub?.id;
@@ -253,28 +235,28 @@ export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
       <div className="clubs-map-header">
         <h3 className="clubs-map-title">
           <FontAwesomeIcon icon={faMapMarkerAlt} />
-          Карта на клубовете
+          {t('clubs.ClubsMap.title')}
         </h3>
         <div className="clubs-map-legend">
           <div className="legend-item">
             <div className="legend-marker cultural"></div>
-            <span>Културни</span>
+            <span>{t('clubs.ClubsMap.legend.cultural')}</span>
           </div>
           <div className="legend-item">
             <div className="legend-marker general"></div>
-            <span>Общи</span>
+            <span>{t('clubs.ClubsMap.legend.general')}</span>
           </div>
           <div className="legend-item">
             <div className="legend-marker sports"></div>
-            <span>Спортни</span>
+            <span>{t('clubs.ClubsMap.legend.sports')}</span>
           </div>
           <div className="legend-item">
             <div className="legend-marker educational"></div>
-            <span>Образователни</span>
+            <span>{t('clubs.ClubsMap.legend.educational')}</span>
           </div>
           <div className="legend-item">
             <div className="legend-marker traditional"></div>
-            <span>Традиционни</span>
+            <span>{t('clubs.ClubsMap.legend.traditional')}</span>
           </div>
         </div>
       </div>
@@ -312,7 +294,7 @@ export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
             }}
           >
             {clubs.map((club) => {
-              if (!club.location.coordinates.lat || !club.location.coordinates.lng) {
+              if (!club.location?.coordinates?.lat || !club.location?.coordinates?.lng) {
                 return null;
               }
               
@@ -354,7 +336,7 @@ export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
         {!mapReady && (
           <div className="clubs-map-loading">
             <div className="loading-spinner"></div>
-            <p>Зареждане на картата...</p>
+            <p>{t('clubs.ClubsMap.loading')}</p>
           </div>
         )}
       </div>
@@ -362,7 +344,7 @@ export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
       <div className="clubs-map-info">
         <p>
           <FontAwesomeIcon icon={faMapPin} />
-          Показани {clubs.length} клуба в България
+          {t('clubs.ClubsMap.info.shown', { count: clubs.length })}
         </p>
       </div>
     </div>

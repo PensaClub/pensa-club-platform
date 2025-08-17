@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlay,
@@ -24,17 +25,18 @@ import {
   faUser,
   faCheck,
   faExclamationTriangle,
-  faUserFriends, // Добави това
-  faIdCard,      // Добави това
-  faAddressCard, // Добави това
-  faCopy,        // Добави това
-  faCheckCircle, // Добави това
-  faSearch,      // Добави това
-  faTimesCircle  // Добави това
+  faUserFriends,
+  faIdCard,
+  faAddressCard,
+  faCopy,
+  faCheckCircle,
+  faSearch,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import './traditionalHero.css';
 
 export const TraditionalHero = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -47,71 +49,82 @@ export const TraditionalHero = ({ club }) => {
     phone: '',
     message: ''
   });
-  const [formStatus, setFormStatus] = useState(null); // 'sending', 'sent', 'error'
+  const [formStatus, setFormStatus] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.name) {
     return null;
   }
 
-  // Строим hero данни от основните клуб данни
   const heroImages = [];
 
-  // Добавяме main image ако има
   if (club.mainImage) {
     heroImages.push(club.mainImage);
   }
 
-  // Добавяме gallery images ако има
   if (club.gallery && club.gallery.length > 0) {
     heroImages.push(...club.gallery);
   }
 
-  // Ако няма никакви изображения, използваме placeholder
   if (heroImages.length === 0) {
     heroImages.push('https://picsum.photos/1920/1080?random=501');
   }
 
-  // Статистики от club.stats - САМО реални данни
-  const availableStats = [];
-  if (club.stats?.totalMembers) {
-    availableStats.push({
-      icon: faUsers,
-      label: 'Членове',
-      value: `${club.stats.totalMembers}+`,
-      color: '#dc2626'
-    });
-  }
-  if (club.foundedYear) {
-    availableStats.push({
-      icon: faCalendarAlt,
-      label: 'Основан',
-      value: club.foundedYear,
-      color: '#d97706'
-    });
-  }
-  if (club.stats?.performances) {
-    availableStats.push({
-      icon: faTheaterMasks,
-      label: 'Изпълнения',
-      value: `${club.stats.performances}+`,
-      color: '#059669'
-    });
-  }
-  if (club.stats?.yearsActive) {
-    availableStats.push({
-      icon: faAward,
-      label: 'Години опит',
-      value: club.stats.yearsActive,
-      color: '#7c3aed'
-    });
-  }
+  const getAvailableStats = () => {
+    const stats = [];
+    if (club.stats?.totalMembers) {
+      stats.push({
+        icon: faUsers,
+        label: t('clubs.TraditionalHero.stats.members'),
+        value: `${club.stats.totalMembers}+`,
+        color: '#dc2626'
+      });
+    }
+    if (club.foundedYear) {
+      stats.push({
+        icon: faCalendarAlt,
+        label: t('clubs.TraditionalHero.stats.founded'),
+        value: club.foundedYear,
+        color: '#d97706'
+      });
+    }
+    if (club.stats?.performances) {
+      stats.push({
+        icon: faTheaterMasks,
+        label: t('clubs.TraditionalHero.stats.performances'),
+        value: `${club.stats.performances}+`,
+        color: '#059669'
+      });
+    }
+    if (club.stats?.yearsActive) {
+      stats.push({
+        icon: faAward,
+        label: t('clubs.TraditionalHero.stats.yearsExperience'),
+        value: club.stats.yearsActive,
+        color: '#7c3aed'
+      });
+    }
+    return stats;
+  };
 
-  // Първото видео от media ако има
+  const availableStats = getAvailableStats();
   const firstVideo = club.media?.videos && club.media.videos.length > 0 ? club.media.videos[0] : null;
-
-  // Проверяваме дали има контактна информация
   const hasContacts = club.contacts?.phone || club.contacts?.mobile || club.contacts?.email;
+  const members = club.members || [];
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    return date.toLocaleDateString(locale);
+  };
+
+  const filteredMembers = members.filter(member => {
+    const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
+    const searchLower = memberSearchTerm.toLowerCase();
+    return fullName.includes(searchLower) || 
+           member.phone?.includes(searchLower) ||
+           member.email?.toLowerCase().includes(searchLower);
+  });
 
   useEffect(() => {
     if (heroImages.length > 1) {
@@ -127,7 +140,6 @@ export const TraditionalHero = ({ club }) => {
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: 'smooth' });
     } else {
-      // Scroll down by viewport height if no about section
       window.scrollBy({
         top: window.innerHeight,
         behavior: 'smooth'
@@ -145,7 +157,6 @@ export const TraditionalHero = ({ club }) => {
     setIsVideoModalOpen(false);
   };
 
-  // Email modal handlers
   const openEmailModal = () => {
     setIsEmailModalOpen(true);
   };
@@ -173,22 +184,15 @@ export const TraditionalHero = ({ club }) => {
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Запитване до ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте ново съобщение от сайта на ${club.name}:
-
-Име: ${emailForm.name}
-Имейл: ${emailForm.email}
-Телефон: ${emailForm.phone || 'Не е посочен'}
-
-Съобщение:
-${emailForm.message}
-
----
-Изпратено от ${emailForm.email}
-      `);
+      const subject = encodeURIComponent(t('clubs.TraditionalHero.email.subject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.TraditionalHero.email.body', {
+        clubName: club.name,
+        name: emailForm.name,
+        email: emailForm.email,
+        phone: emailForm.phone || t('clubs.TraditionalHero.email.noPhone'),
+        message: emailForm.message,
+        senderEmail: emailForm.email
+      }));
 
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -219,7 +223,7 @@ ${emailForm.message}
         if (locationSection) {
           locationSection.scrollIntoView({ behavior: 'smooth' });
         } else {
-          alert('Информация за локацията може да бъде намерена в контактните данни.');
+          alert(t('clubs.TraditionalHero.messages.locationInfo'));
         }
         break;
       default:
@@ -227,16 +231,6 @@ ${emailForm.message}
     }
   };
 
-  const members = club.members || [];
-  const filteredMembers = members.filter(member => {
-  const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
-  const searchLower = memberSearchTerm.toLowerCase();
-  return fullName.includes(searchLower) || 
-         member.phone?.includes(searchLower) ||
-         member.email?.toLowerCase().includes(searchLower);
-});
-
-  // Функции за търсене и копиране:
   const clearSearch = () => {
     setMemberSearchTerm('');
   };
@@ -261,12 +255,12 @@ ${emailForm.message}
         });
       }, 2000);
     } catch (error) {
-      console.error('Грешка при копиране:', error);
+      console.error('Copy error:', error);
     }
   };
+
   return (
     <section className="traditional-hero-main-section">
-      {/* Background Slideshow */}
       <div className="traditional-hero-background">
         {heroImages.map((image, index) => (
           <div
@@ -279,11 +273,10 @@ ${emailForm.message}
       </div>
 
       <div className="traditional-hero-container">
-        {/* Main Content */}
         <div className="traditional-hero-content">
           <div className="traditional-hero-badge">
             <FontAwesomeIcon icon={faCrown} />
-            <span>Традиционен български клуб</span>
+            <span>{t('clubs.TraditionalHero.badge')}</span>
           </div>
 
           <h1 className="traditional-hero-title">
@@ -302,7 +295,6 @@ ${emailForm.message}
             </p>
           )}
 
-          {/* Action Buttons - показваме само ако има действия */}
           {(firstVideo || club.location || club.contacts) && (
             <div className="traditional-hero-actions">
               {firstVideo && (
@@ -311,7 +303,7 @@ ${emailForm.message}
                   onClick={handleVideoPlay}
                 >
                   <FontAwesomeIcon icon={faPlay} />
-                  Гледайте видео
+                  {t('clubs.TraditionalHero.actions.watchVideo')}
                 </button>
               )}
               <button
@@ -319,7 +311,7 @@ ${emailForm.message}
                 onClick={() => handleContactAction('visit')}
               >
                 <FontAwesomeIcon icon={faMapMarkerAlt} />
-                Посетете ни
+                {t('clubs.TraditionalHero.actions.visitUs')}
               </button>
               {members.length > 0 && (
                 <button
@@ -327,13 +319,12 @@ ${emailForm.message}
                   onClick={() => setShowMembersModal(true)}
                 >
                   <FontAwesomeIcon icon={faUserFriends} />
-                  Нашите членове ({members.length})
+                  {t('clubs.TraditionalHero.actions.ourMembers', { count: members.length })}
                 </button>
               )}
             </div>
           )}
 
-          {/* Quick Contact - показваме само ако има контакти */}
           {hasContacts && (
             <div className="traditional-hero-quick-contact">
               {(club.contacts?.phone || club.contacts?.mobile) && (
@@ -351,14 +342,13 @@ ${emailForm.message}
                   onClick={() => handleContactAction('email')}
                 >
                   <FontAwesomeIcon icon={faEnvelope} />
-                  <span>Пишете ни</span>
+                  <span>{t('clubs.TraditionalHero.actions.writeToUs')}</span>
                 </button>
               )}
             </div>
           )}
         </div>
 
-        {/* Stats Cards - показваме само ако има статистики */}
         {availableStats.length > 0 && (
           <div className="traditional-hero-stats">
             {availableStats.map((stat, index) => (
@@ -379,15 +369,13 @@ ${emailForm.message}
         )}
       </div>
 
-      {/* Scroll Indicator */}
       <div className="traditional-hero-scroll-indicator">
         <button onClick={handleScrollToContent}>
           <FontAwesomeIcon icon={faChevronDown} />
-          <span>Научете повече</span>
+          <span>{t('clubs.TraditionalHero.scrollIndicator')}</span>
         </button>
       </div>
 
-      {/* Video Modal - показваме само ако има видео */}
       {isVideoModalOpen && firstVideo && (
         <div className="traditional-hero-video-modal" onClick={closeVideoModal}>
           <div className="traditional-hero-video-container" onClick={(e) => e.stopPropagation()}>
@@ -395,7 +383,6 @@ ${emailForm.message}
               <FontAwesomeIcon icon={faTimes} />
             </button>
 
-            {/* РЕАЛЕН VIDEO PLAYER */}
             <div className="traditional-hero-video-player">
               <video
                 controls
@@ -405,25 +392,24 @@ ${emailForm.message}
                 poster={firstVideo.thumbnail}
               >
                 <source src={firstVideo.src} type="video/mp4" />
-                Вашият браузър не поддържа video елемента.
+                {t('clubs.TraditionalHero.video.notSupported')}
               </video>
             </div>
 
-            {/* Информация за видеото */}
             <div className="traditional-hero-video-info-section">
-              <h3>{firstVideo.caption || 'Видео от клуба'}</h3>
+              <h3>{firstVideo.caption || t('clubs.TraditionalHero.video.defaultTitle')}</h3>
               {firstVideo.alt && <p>{firstVideo.alt}</p>}
               <div className="traditional-hero-video-details">
                 {firstVideo.duration && (
                   <span className="traditional-hero-video-duration">
                     <FontAwesomeIcon icon={faClock} />
-                    Продължителност: {firstVideo.duration}
+                    {t('clubs.TraditionalHero.video.duration')}: {firstVideo.duration}
                   </span>
                 )}
                 {firstVideo.type && (
                   <span className="traditional-hero-video-type">
                     <FontAwesomeIcon icon={faTag} />
-                    Тип: {firstVideo.type}
+                    {t('clubs.TraditionalHero.video.type')}: {firstVideo.type}
                   </span>
                 )}
               </div>
@@ -432,7 +418,6 @@ ${emailForm.message}
         </div>
       )}
 
-      {/* EMAIL MODAL */}
       {isEmailModalOpen && (
         <div className="traditional-hero-email-modal">
           <div className="traditional-hero-email-modal-overlay" onClick={closeEmailModal}></div>
@@ -443,21 +428,21 @@ ${emailForm.message}
 
             <div className="traditional-hero-email-header">
               <FontAwesomeIcon icon={faEnvelope} />
-              <h3>Свържете се с нас</h3>
-              <p>Изпратете ни съобщение и ще ви отговорим възможно най-скоро</p>
+              <h3>{t('clubs.TraditionalHero.emailModal.title')}</h3>
+              <p>{t('clubs.TraditionalHero.emailModal.subtitle')}</p>
             </div>
 
             {formStatus === 'sent' ? (
               <div className="traditional-hero-form-success">
                 <FontAwesomeIcon icon={faCheck} />
-                <h4>Съобщението е изпратено!</h4>
-                <p>Благодарим ви! Ще се свържем с вас скоро.</p>
+                <h4>{t('clubs.TraditionalHero.emailModal.success.title')}</h4>
+                <p>{t('clubs.TraditionalHero.emailModal.success.message')}</p>
               </div>
             ) : formStatus === 'error' ? (
               <div className="traditional-hero-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.TraditionalHero.emailModal.error.title')}</h4>
+                <p>{t('clubs.TraditionalHero.emailModal.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleEmailSubmit} className="traditional-hero-email-form">
@@ -465,7 +450,7 @@ ${emailForm.message}
                   <div className="traditional-hero-form-group">
                     <label htmlFor="name">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.TraditionalHero.emailModal.form.name')} *
                     </label>
                     <input
                       type="text"
@@ -473,14 +458,14 @@ ${emailForm.message}
                       value={emailForm.name}
                       onChange={(e) => handleFormChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.TraditionalHero.emailModal.form.namePlaceholder')}
                     />
                   </div>
 
                   <div className="traditional-hero-form-group">
                     <label htmlFor="email">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.TraditionalHero.emailModal.form.email')} *
                     </label>
                     <input
                       type="email"
@@ -488,7 +473,7 @@ ${emailForm.message}
                       value={emailForm.email}
                       onChange={(e) => handleFormChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.TraditionalHero.emailModal.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -496,28 +481,28 @@ ${emailForm.message}
                 <div className="traditional-hero-form-group">
                   <label htmlFor="phone">
                     <FontAwesomeIcon icon={faPhone} />
-                    Телефон (по желание)
+                    {t('clubs.TraditionalHero.emailModal.form.phone')}
                   </label>
                   <input
                     type="tel"
                     id="phone"
                     value={emailForm.phone}
                     onChange={(e) => handleFormChange('phone', e.target.value)}
-                    placeholder="Въведете вашия телефон"
+                    placeholder={t('clubs.TraditionalHero.emailModal.form.phonePlaceholder')}
                   />
                 </div>
 
                 <div className="traditional-hero-form-group">
                   <label htmlFor="message">
                     <FontAwesomeIcon icon={faEnvelope} />
-                    Съобщение *
+                    {t('clubs.TraditionalHero.emailModal.form.message')} *
                   </label>
                   <textarea
                     id="message"
                     value={emailForm.message}
                     onChange={(e) => handleFormChange('message', e.target.value)}
                     required
-                    placeholder="Какво бихте искали да ни споделите?"
+                    placeholder={t('clubs.TraditionalHero.emailModal.form.messagePlaceholder')}
                     rows="4"
                   />
                 </div>
@@ -529,14 +514,16 @@ ${emailForm.message}
                     disabled={formStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faEnvelope} />
-                    {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщение'}
+                    {formStatus === 'sending' ? 
+                      t('clubs.TraditionalHero.emailModal.form.sending') : 
+                      t('clubs.TraditionalHero.emailModal.form.submit')}
                   </button>
                   <button
                     type="button"
                     onClick={closeEmailModal}
                     className="traditional-hero-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.TraditionalHero.emailModal.form.cancel')}
                   </button>
                 </div>
               </form>
@@ -545,7 +532,6 @@ ${emailForm.message}
         </div>
       )}
 
-      {/* Slide Indicators - показваме само ако има повече от 1 снимка */}
       {heroImages.length > 1 && (
         <div className="traditional-hero-slide-indicators">
           {heroImages.map((_, index) => (
@@ -557,211 +543,215 @@ ${emailForm.message}
           ))}
         </div>
       )}
-      {/* Members Modal */}
-{showMembersModal && (
-  <div className="traditional-hero-email-modal">
-    <div className="traditional-hero-email-modal-overlay" onClick={closeMembersModal}></div>
-    <div className="traditional-hero-email-modal-container traditional-hero-members-modal">
-      <button 
-        className="traditional-hero-email-modal-close" 
-        onClick={closeMembersModal}
-      >
-        <FontAwesomeIcon icon={faTimes} />
-      </button>
-      
-      <div className="traditional-hero-email-header">
-        <FontAwesomeIcon icon={faCrown} />
-        <h3>Членове на клуба</h3>
-        <p>Нашата традиционна общност от {members.length} {members.length === 1 ? 'член' : 'членове'}</p>
-      </div>
 
-      {/* Search Section */}
-      <div className="traditional-hero-members-search">
-        <div className="traditional-hero-search-container">
-          <div className="traditional-hero-search-input-wrapper">
-            <FontAwesomeIcon icon={faSearch} className="traditional-hero-search-icon" />
-            <input
-              type="text"
-              placeholder="Търсене по име, телефон или имейл..."
-              value={memberSearchTerm}
-              onChange={(e) => setMemberSearchTerm(e.target.value)}
-              className="traditional-hero-search-input"
-            />
-            {memberSearchTerm && (
-              <button 
-                onClick={clearSearch}
-                className="traditional-hero-search-clear"
-                title="Изчисти търсенето"
-              >
-                <FontAwesomeIcon icon={faTimesCircle} />
-              </button>
-            )}
-          </div>
-          
-          {memberSearchTerm && (
-            <div className="traditional-hero-search-results">
-              {filteredMembers.length === 0 ? (
-                <span className="traditional-hero-no-results">
-                  Няма намерени резултати за "{memberSearchTerm}"
-                </span>
-              ) : (
-                <span className="traditional-hero-results-count">
-                  {filteredMembers.length === 1 
-                    ? `Намерен 1 член` 
-                    : `Намерени ${filteredMembers.length} членове`
-                  }
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <div className="traditional-hero-members-container">
-        {filteredMembers.length === 0 && !memberSearchTerm ? (
-          <div className="traditional-hero-no-members">
-            <FontAwesomeIcon icon={faUsers} />
-            <h4>Няма регистрирани членове</h4>
-            <p>Все още няма добавени членове в системата.</p>
-          </div>
-        ) : filteredMembers.length === 0 && memberSearchTerm ? (
-          <div className="traditional-hero-no-members">
-            <FontAwesomeIcon icon={faSearch} />
-            <h4>Няма намерени резултати</h4>
-            <p>Опитайте с различни ключови думи или изчистете търсенето.</p>
-            <button onClick={clearSearch} className="traditional-hero-clear-search-btn">
-              <FontAwesomeIcon icon={faTimesCircle} />
-              Изчисти търсенето
+      {showMembersModal && (
+        <div className="traditional-hero-email-modal">
+          <div className="traditional-hero-email-modal-overlay" onClick={closeMembersModal}></div>
+          <div className="traditional-hero-email-modal-container traditional-hero-members-modal">
+            <button 
+              className="traditional-hero-email-modal-close" 
+              onClick={closeMembersModal}
+            >
+              <FontAwesomeIcon icon={faTimes} />
             </button>
-          </div>
-        ) : (
-          <div className="traditional-hero-members-grid">
-            {filteredMembers.map((member) => (
-              <div key={member.id} className="traditional-hero-member-card">
-                <div className="traditional-hero-member-photo">
-                  {member.photo ? (
-                    <img 
-                      src={member.photo.src} 
-                      alt={member.photo.alt}
-                      className="traditional-hero-member-image"
-                    />
-                  ) : (
-                    <div className="traditional-hero-member-placeholder">
-                      <FontAwesomeIcon icon={faUser} />
-                    </div>
-                  )}
-                  {member.role && member.role !== 'член' && (
-                    <div className="traditional-hero-member-role">
-                      <FontAwesomeIcon icon={faAward} />
-                      <span>{member.role}</span>
-                    </div>
+            
+            <div className="traditional-hero-email-header">
+              <FontAwesomeIcon icon={faCrown} />
+              <h3>{t('clubs.TraditionalHero.membersModal.title')}</h3>
+              <p>{t('clubs.TraditionalHero.membersModal.subtitle', { 
+                count: members.length,
+                memberText: members.length === 1 ? 
+                  t('clubs.TraditionalHero.membersModal.memberSingle') : 
+                  t('clubs.TraditionalHero.membersModal.memberPlural')
+              })}</p>
+            </div>
+
+            <div className="traditional-hero-members-search">
+              <div className="traditional-hero-search-container">
+                <div className="traditional-hero-search-input-wrapper">
+                  <FontAwesomeIcon icon={faSearch} className="traditional-hero-search-icon" />
+                  <input
+                    type="text"
+                    placeholder={t('clubs.TraditionalHero.membersModal.searchPlaceholder')}
+                    value={memberSearchTerm}
+                    onChange={(e) => setMemberSearchTerm(e.target.value)}
+                    className="traditional-hero-search-input"
+                  />
+                  {memberSearchTerm && (
+                    <button 
+                      onClick={clearSearch}
+                      className="traditional-hero-search-clear"
+                      title={t('clubs.TraditionalHero.membersModal.clearSearch')}
+                    >
+                      <FontAwesomeIcon icon={faTimesCircle} />
+                    </button>
                   )}
                 </div>
                 
-                <div className="traditional-hero-member-info">
-                  <div className="traditional-hero-member-name">
-                    <h4>
-                      {memberSearchTerm ? (
-                        <span dangerouslySetInnerHTML={{
-                          __html: `${member.firstName} ${member.lastName}`.replace(
-                            new RegExp(`(${memberSearchTerm})`, 'gi'),
-                            '<mark>$1</mark>'
-                          )
-                        }} />
-                      ) : (
-                        `${member.firstName} ${member.lastName}`
-                      )}
-                    </h4>
-                    <button
-                      className={`traditional-hero-copy-icon ${copiedItems[`${member.id}-name`] ? 'copied' : ''}`}
-                      onClick={() => copyMemberData(`${member.firstName} ${member.lastName}`, 'name', member.id)}
-                      title="Копирай името"
-                    >
-                      <FontAwesomeIcon icon={copiedItems[`${member.id}-name`] ? faCheckCircle : faCopy} />
-                    </button>
-                  </div>
-                  
-                  <div className="traditional-hero-member-details">
-                    {member.phone && (
-                      <div className="traditional-hero-member-detail">
-                        <FontAwesomeIcon icon={faPhone} />
-                        <span>
-                          {memberSearchTerm ? (
-                            <span dangerouslySetInnerHTML={{
-                              __html: member.phone.replace(
-                                new RegExp(`(${memberSearchTerm})`, 'gi'),
-                                '<mark>$1</mark>'
-                              )
-                            }} />
-                          ) : (
-                            member.phone
-                          )}
-                        </span>
-                        <button
-                          className={`traditional-hero-copy-icon ${copiedItems[`${member.id}-phone`] ? 'copied' : ''}`}
-                          onClick={() => copyMemberData(member.phone, 'phone', member.id)}
-                          title="Копирай телефона"
-                        >
-                          <FontAwesomeIcon icon={copiedItems[`${member.id}-phone`] ? faCheckCircle : faCopy} />
-                        </button>
-                      </div>
-                    )}
-                    
-                    {member.email && (
-                      <div className="traditional-hero-member-detail">
-                        <FontAwesomeIcon icon={faEnvelope} />
-                        <span>
-                          {memberSearchTerm ? (
-                            <span dangerouslySetInnerHTML={{
-                              __html: member.email.replace(
-                                new RegExp(`(${memberSearchTerm})`, 'gi'),
-                                '<mark>$1</mark>'
-                              )
-                            }} />
-                          ) : (
-                            member.email
-                          )}
-                        </span>
-                        <button
-                          className={`traditional-hero-copy-icon ${copiedItems[`${member.id}-email`] ? 'copied' : ''}`}
-                          onClick={() => copyMemberData(member.email, 'email', member.id)}
-                          title="Копирай имейла"
-                        >
-                          <FontAwesomeIcon icon={copiedItems[`${member.id}-email`] ? faCheckCircle : faCopy} />
-                        </button>
-                      </div>
-                    )}
-                    
-                    {member.address && (
-                      <div className="traditional-hero-member-detail">
-                        <FontAwesomeIcon icon={faMapMarkerAlt} />
-                        <span>{member.address}</span>
-                        <button
-                          className={`traditional-hero-copy-icon ${copiedItems[`${member.id}-address`] ? 'copied' : ''}`}
-                          onClick={() => copyMemberData(member.address, 'address', member.id)}
-                          title="Копирай адреса"
-                        >
-                          <FontAwesomeIcon icon={copiedItems[`${member.id}-address`] ? faCheckCircle : faCopy} />
-                        </button>
-                      </div>
-                    )}
-                    
-                    {member.joinDate && (
-                      <div className="traditional-hero-member-detail">
-                        <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span>Член от {new Date(member.joinDate).toLocaleDateString('bg-BG')}</span>
-                      </div>
+                {memberSearchTerm && (
+                  <div className="traditional-hero-search-results">
+                    {filteredMembers.length === 0 ? (
+                      <span className="traditional-hero-no-results">
+                        {t('clubs.TraditionalHero.membersModal.noResultsFor', { term: memberSearchTerm })}
+                      </span>
+                    ) : (
+                      <span className="traditional-hero-results-count">
+                        {filteredMembers.length === 1 
+                          ? t('clubs.TraditionalHero.membersModal.foundOne')
+                          : t('clubs.TraditionalHero.membersModal.foundMany', { count: filteredMembers.length })
+                        }
+                      </span>
                     )}
                   </div>
-                </div>
+                )}
               </div>
-            ))}
+            </div>
+            
+            <div className="traditional-hero-members-container">
+              {filteredMembers.length === 0 && !memberSearchTerm ? (
+                <div className="traditional-hero-no-members">
+                  <FontAwesomeIcon icon={faUsers} />
+                  <h4>{t('clubs.TraditionalHero.membersModal.noMembers.title')}</h4>
+                  <p>{t('clubs.TraditionalHero.membersModal.noMembers.message')}</p>
+                </div>
+              ) : filteredMembers.length === 0 && memberSearchTerm ? (
+                <div className="traditional-hero-no-members">
+                  <FontAwesomeIcon icon={faSearch} />
+                  <h4>{t('clubs.TraditionalHero.membersModal.noResults.title')}</h4>
+                  <p>{t('clubs.TraditionalHero.membersModal.noResults.message')}</p>
+                  <button onClick={clearSearch} className="traditional-hero-clear-search-btn">
+                    <FontAwesomeIcon icon={faTimesCircle} />
+                    {t('clubs.TraditionalHero.membersModal.clearSearch')}
+                  </button>
+                </div>
+              ) : (
+                <div className="traditional-hero-members-grid">
+                  {filteredMembers.map((member) => (
+                    <div key={member.id} className="traditional-hero-member-card">
+                      <div className="traditional-hero-member-photo">
+                        {member.photo ? (
+                          <img 
+                            src={member.photo.src} 
+                            alt={member.photo.alt}
+                            className="traditional-hero-member-image"
+                          />
+                        ) : (
+                          <div className="traditional-hero-member-placeholder">
+                            <FontAwesomeIcon icon={faUser} />
+                          </div>
+                        )}
+                        {member.role && member.role !== t('clubs.TraditionalHero.membersModal.defaultRole') && (
+                          <div className="traditional-hero-member-role">
+                            <FontAwesomeIcon icon={faAward} />
+                            <span>{member.role}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="traditional-hero-member-info">
+                        <div className="traditional-hero-member-name">
+                          <h4>
+                            {memberSearchTerm ? (
+                              <span dangerouslySetInnerHTML={{
+                                __html: `${member.firstName} ${member.lastName}`.replace(
+                                  new RegExp(`(${memberSearchTerm})`, 'gi'),
+                                  '<mark>$1</mark>'
+                                )
+                              }} />
+                            ) : (
+                              `${member.firstName} ${member.lastName}`
+                            )}
+                          </h4>
+                          <button
+                            className={`traditional-hero-copy-icon ${copiedItems[`${member.id}-name`] ? 'copied' : ''}`}
+                            onClick={() => copyMemberData(`${member.firstName} ${member.lastName}`, 'name', member.id)}
+                            title={t('clubs.TraditionalHero.membersModal.copyName')}
+                          >
+                            <FontAwesomeIcon icon={copiedItems[`${member.id}-name`] ? faCheckCircle : faCopy} />
+                          </button>
+                        </div>
+                        
+                        <div className="traditional-hero-member-details">
+                          {member.phone && (
+                            <div className="traditional-hero-member-detail">
+                              <FontAwesomeIcon icon={faPhone} />
+                              <span>
+                                {memberSearchTerm ? (
+                                  <span dangerouslySetInnerHTML={{
+                                    __html: member.phone.replace(
+                                      new RegExp(`(${memberSearchTerm})`, 'gi'),
+                                      '<mark>$1</mark>'
+                                    )
+                                  }} />
+                                ) : (
+                                  member.phone
+                                )}
+                              </span>
+                              <button
+                                className={`traditional-hero-copy-icon ${copiedItems[`${member.id}-phone`] ? 'copied' : ''}`}
+                                onClick={() => copyMemberData(member.phone, 'phone', member.id)}
+                                title={t('clubs.TraditionalHero.membersModal.copyPhone')}
+                              >
+                                <FontAwesomeIcon icon={copiedItems[`${member.id}-phone`] ? faCheckCircle : faCopy} />
+                              </button>
+                            </div>
+                          )}
+                          
+                          {member.email && (
+                            <div className="traditional-hero-member-detail">
+                              <FontAwesomeIcon icon={faEnvelope} />
+                              <span>
+                                {memberSearchTerm ? (
+                                  <span dangerouslySetInnerHTML={{
+                                    __html: member.email.replace(
+                                      new RegExp(`(${memberSearchTerm})`, 'gi'),
+                                      '<mark>$1</mark>'
+                                    )
+                                  }} />
+                                ) : (
+                                  member.email
+                                )}
+                              </span>
+                              <button
+                                className={`traditional-hero-copy-icon ${copiedItems[`${member.id}-email`] ? 'copied' : ''}`}
+                                onClick={() => copyMemberData(member.email, 'email', member.id)}
+                                title={t('clubs.TraditionalHero.membersModal.copyEmail')}
+                              >
+                                <FontAwesomeIcon icon={copiedItems[`${member.id}-email`] ? faCheckCircle : faCopy} />
+                              </button>
+                            </div>
+                          )}
+                          
+                          {member.address && (
+                            <div className="traditional-hero-member-detail">
+                              <FontAwesomeIcon icon={faMapMarkerAlt} />
+                              <span>{member.address}</span>
+                              <button
+                                className={`traditional-hero-copy-icon ${copiedItems[`${member.id}-address`] ? 'copied' : ''}`}
+                                onClick={() => copyMemberData(member.address, 'address', member.id)}
+                                title={t('clubs.TraditionalHero.membersModal.copyAddress')}
+                              >
+                                <FontAwesomeIcon icon={copiedItems[`${member.id}-address`] ? faCheckCircle : faCopy} />
+                              </button>
+                            </div>
+                          )}
+                          
+                          {member.joinDate && (
+                            <div className="traditional-hero-member-detail">
+                              <FontAwesomeIcon icon={faCalendarAlt} />
+                              <span>{t('clubs.TraditionalHero.membersModal.memberSince')} {formatDate(member.joinDate)}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-    </div>
-  </div>
-)}
+        </div>
+      )}
     </section>
   );
 };

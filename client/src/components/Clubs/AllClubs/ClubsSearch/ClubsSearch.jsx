@@ -1,5 +1,5 @@
-// components/Clubs/AllClubs/ClubsSearch/ClubsSearch.jsx
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faSearch, 
@@ -20,6 +20,7 @@ export const ClubsSearch = ({
   showMap,
   onToggleMap 
 }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCity, setSelectedCity] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -50,20 +51,23 @@ export const ClubsSearch = ({
   const hasActiveFilters = searchTerm || selectedCity !== 'all' || selectedCategory !== 'all';
 
   const getCategoryLabel = (category) => {
-    const labels = {
-      'cultural': 'Културни',
-      'general': 'Общи',
-      'sports': 'Спортни',
-      'educational': 'Образователни'
-    };
-    return labels[category] || category;
+    return t(`clubs.ClubsSearch.categories.${category}`, { 
+      defaultValue: t('clubs.ClubsSearch.categories.general') 
+    });
+  };
+
+  const getResultsText = (count) => {
+    return t('clubs.ClubsSearch.results', { 
+      count, 
+      defaultValue_other: `${count} резултата` 
+    });
   };
 
   return (
     <div className="clubs-search-sidebar">
       <div className="clubs-search-header">
-        <h3>Търсене</h3>
-        <span className="clubs-search-results">{resultsCount} резултата</span>
+        <h3>{t('clubs.ClubsSearch.title')}</h3>
+        <span className="clubs-search-results">{getResultsText(resultsCount)}</span>
       </div>
 
       {/* Търсачка */}
@@ -72,7 +76,7 @@ export const ClubsSearch = ({
           <FontAwesomeIcon icon={faSearch} className="clubs-search-icon" />
           <input
             type="text"
-            placeholder="Търси клуб..."
+            placeholder={t('clubs.ClubsSearch.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="clubs-search-input"
@@ -92,12 +96,12 @@ export const ClubsSearch = ({
       <div className="clubs-search-filters">
         <h4 className="clubs-search-filters-title">
           <FontAwesomeIcon icon={faFilter} />
-          Филтри
+          {t('clubs.ClubsSearch.filters.title')}
         </h4>
 
         {/* Град */}
         <div className="clubs-filter-group">
-          <label>Град</label>
+          <label>{t('clubs.ClubsSearch.filters.city.label')}</label>
           <div className="clubs-filter-select-wrapper">
             <FontAwesomeIcon icon={faMapMarkerAlt} className="clubs-filter-icon" />
             <select
@@ -105,7 +109,7 @@ export const ClubsSearch = ({
               onChange={(e) => setSelectedCity(e.target.value)}
               className="clubs-filter-select"
             >
-              <option value="all">Всички градове</option>
+              <option value="all">{t('clubs.ClubsSearch.filters.city.all')}</option>
               {availableCities.map(city => (
                 <option key={city} value={city}>{city}</option>
               ))}
@@ -115,7 +119,7 @@ export const ClubsSearch = ({
 
         {/* Категория */}
         <div className="clubs-filter-group">
-          <label>Категория</label>
+          <label>{t('clubs.ClubsSearch.filters.category.label')}</label>
           <div className="clubs-filter-select-wrapper">
             <FontAwesomeIcon icon={faLayerGroup} className="clubs-filter-icon" />
             <select
@@ -123,7 +127,7 @@ export const ClubsSearch = ({
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="clubs-filter-select"
             >
-              <option value="all">Всички категории</option>
+              <option value="all">{t('clubs.ClubsSearch.filters.category.all')}</option>
               {availableCategories.map(category => (
                 <option key={category} value={category}>
                   {getCategoryLabel(category)}
@@ -135,7 +139,7 @@ export const ClubsSearch = ({
 
         {/* Сортиране */}
         <div className="clubs-filter-group">
-          <label>Сортиране</label>
+          <label>{t('clubs.ClubsSearch.filters.sort.label')}</label>
           <div className="clubs-filter-select-wrapper">
             <FontAwesomeIcon icon={faSort} className="clubs-filter-icon" />
             <select
@@ -143,10 +147,10 @@ export const ClubsSearch = ({
               onChange={(e) => setSortBy(e.target.value)}
               className="clubs-filter-select"
             >
-              <option value="name">По име</option>
-              <option value="members">По членове</option>
-              <option value="rating">По рейтинг</option>
-              <option value="newest">Най-нови</option>
+              <option value="name">{t('clubs.ClubsSearch.filters.sort.name')}</option>
+              <option value="members">{t('clubs.ClubsSearch.filters.sort.members')}</option>
+              <option value="rating">{t('clubs.ClubsSearch.filters.sort.rating')}</option>
+              <option value="newest">{t('clubs.ClubsSearch.filters.sort.newest')}</option>
             </select>
           </div>
         </div>
@@ -159,7 +163,7 @@ export const ClubsSearch = ({
           className={`clubs-action-btn ${showMap ? 'active' : ''}`}
         >
           <FontAwesomeIcon icon={faMap} />
-          {showMap ? 'Скрий картата' : 'Покажи на карта'}
+          {showMap ? t('clubs.ClubsSearch.actions.hideMap') : t('clubs.ClubsSearch.actions.showMap')}
         </button>
 
         {hasActiveFilters && (
@@ -168,27 +172,26 @@ export const ClubsSearch = ({
             className="clubs-action-btn clubs-clear-btn"
           >
             <FontAwesomeIcon icon={faTimes} />
-            Изчисти филтрите
+            {t('clubs.ClubsSearch.actions.clearFilters')}
           </button>
         )}
       </div>
 
-      {/* Последни публикации секция (като от снимката) */}
+      {/* Последни публикации секция */}
       <div className="clubs-recent-section">
-        <h4 className="clubs-recent-title">Последни публикации</h4>
+        <h4 className="clubs-recent-title">{t('clubs.ClubsSearch.recent.title')}</h4>
         <div className="clubs-recent-items">
-          {/* Примерни последни клубове */}
           <div className="clubs-recent-item">
-            <span className="clubs-recent-category">ДИГИТАЛНА ГРАМОТНОСТ</span>
-            <p className="clubs-recent-name">Наемете сега с онлайн отстъпка</p>
+            <span className="clubs-recent-category">{t('clubs.ClubsSearch.recent.digitalLiteracy')}</span>
+            <p className="clubs-recent-name">{t('clubs.ClubsSearch.recent.example1')}</p>
           </div>
           <div className="clubs-recent-item">
-            <span className="clubs-recent-category">ДИГИТАЛНА ГРАМОТНОСТ</span>
-            <p className="clubs-recent-name">тест1000</p>
+            <span className="clubs-recent-category">{t('clubs.ClubsSearch.recent.digitalLiteracy')}</span>
+            <p className="clubs-recent-name">{t('clubs.ClubsSearch.recent.example2')}</p>
           </div>
           <div className="clubs-recent-item">
-            <span className="clubs-recent-category">ДИГИТАЛНА ГРАМОТНОСТ</span>
-            <p className="clubs-recent-name">тест1001</p>
+            <span className="clubs-recent-category">{t('clubs.ClubsSearch.recent.digitalLiteracy')}</span>
+            <p className="clubs-recent-name">{t('clubs.ClubsSearch.recent.example3')}</p>
           </div>
         </div>
       </div>

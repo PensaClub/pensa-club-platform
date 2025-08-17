@@ -1,5 +1,5 @@
-// components/SportsGallery/SportsGallery.jsx
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faImages,
@@ -44,7 +44,8 @@ import {
 import './sportsGallery.css';
 
 export const SportsGallery = ({ club }) => {
-  const [viewMode, setViewMode] = useState('grid'); // 'grid', 'masonry', 'list'
+  const { t, i18n } = useTranslation();
+  const [viewMode, setViewMode] = useState('grid');
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMedia, setSelectedMedia] = useState(null);
@@ -53,7 +54,6 @@ export const SportsGallery = ({ club }) => {
   const [likedItems, setLikedItems] = useState(new Set());
   const [sortBy, setSortBy] = useState('newest');
 
-  // Правилна проверка - показваме ако има ПОНЕ ЕДНО от тези неща
   if (!club?.gallery?.length && 
       !club?.media?.videos?.length && 
       !club?.activities?.events?.length &&
@@ -61,67 +61,61 @@ export const SportsGallery = ({ club }) => {
     return null;
   }
 
-  // Събираме реалните данни от club-а според структурата
   const galleryPhotos = club.gallery || [];
   const mediaVideos = club.media?.videos || [];
   const events = club.activities?.events || [];
   const awards = club.achievements?.awards || [];
 
-  // Създаваме медия от снимките в галерията
   const photoMedia = galleryPhotos.map((photo, index) => ({
     id: `photo-${index}`,
     type: 'photo',
     url: photo,
     thumbnail: photo,
-    title: `Снимка ${index + 1}`,
+    title: t('clubs.SportsGallery.defaultTitles.photo', { number: index + 1 }),
     description: '',
     category: 'gallery',
     date: new Date().toISOString().split('T')[0],
-    tags: ['галерия']
+    tags: [t('clubs.SportsGallery.categories.gallery')]
   }));
 
-  // Създаваме медия от видеата
   const videoMedia = mediaVideos.map((video, index) => ({
     id: `video-${index}`,
     type: 'video',
     url: video.src,
     thumbnail: video.thumbnail,
-    title: video.alt || `Видео ${index + 1}`,
+    title: video.alt || t('clubs.SportsGallery.defaultTitles.video', { number: index + 1 }),
     description: video.caption || '',
     category: video.type || 'general',
     date: new Date().toISOString().split('T')[0],
     duration: video.duration,
-    tags: [video.type || 'видео']
+    tags: [video.type || t('clubs.SportsGallery.categories.video')]
   }));
 
-  // Създаваме медия от събитията (ако имат снимки)
   const eventMedia = events.map(event => ({
     id: `event-${event.id}`,
     type: 'photo',
-    url: '/api/placeholder/800/600', // placeholder за събития
+    url: '/api/placeholder/800/600',
     thumbnail: '/api/placeholder/400/300',
     title: event.title,
     description: event.description,
     category: 'event',
     date: event.date,
     location: '',
-    tags: [event.type || 'събитие']
+    tags: [event.type || t('clubs.SportsGallery.categories.event')]
   }));
 
-  // Създаваме медия от наградите (ако имат снимки)
   const awardMedia = awards.map(award => ({
     id: `award-${award.name}`,
     type: 'photo',
-    url: '/api/placeholder/800/600', // placeholder за награди
+    url: '/api/placeholder/800/600',
     thumbnail: '/api/placeholder/400/300',
     title: award.name,
     description: award.description,
     category: 'achievement',
     date: `${award.year}-01-01`,
-    tags: ['награда', 'постижение']
+    tags: [t('clubs.SportsGallery.categories.award'), t('clubs.SportsGallery.categories.achievement')]
   }));
 
-  // Обединяваме всички медии
   const allMedia = [
     ...photoMedia,
     ...videoMedia,
@@ -129,36 +123,94 @@ export const SportsGallery = ({ club }) => {
     ...awardMedia
   ];
 
-  // Ако няма медия въобще, не показваме компонента
   if (allMedia.length === 0) {
     return null;
   }
 
-  // Филтри за категории
-  const categoryFilters = [
-    { key: 'all', label: 'Всички', icon: faImages, color: '#6366f1' },
-    { key: 'gallery', label: 'Галерия', icon: faCamera, color: '#64748b' },
-    { key: 'general', label: 'Видеа', icon: faVideo, color: '#06b6d4' },
-    { key: 'event', label: 'Събития', icon: faStar, color: '#8b5cf6' },
-    { key: 'achievement', label: 'Постижения', icon: faAward, color: '#10b981' },
-    { key: 'fitness', label: 'Фитнес', icon: faBolt, color: '#ef4444' },
-    { key: 'aqua_fitness', label: 'Водна аеробика', icon: faTrophy, color: '#f59e0b' },
-    { key: 'yoga', label: 'Йога', icon: faShieldAlt, color: '#84cc16' }
+  const getCategoryFilters = () => [
+    { 
+      key: 'all', 
+      label: t('clubs.SportsGallery.filters.all'), 
+      icon: faImages, 
+      color: '#6366f1' 
+    },
+    { 
+      key: 'gallery', 
+      label: t('clubs.SportsGallery.filters.gallery'), 
+      icon: faCamera, 
+      color: '#64748b' 
+    },
+    { 
+      key: 'general', 
+      label: t('clubs.SportsGallery.filters.videos'), 
+      icon: faVideo, 
+      color: '#06b6d4' 
+    },
+    { 
+      key: 'event', 
+      label: t('clubs.SportsGallery.filters.events'), 
+      icon: faStar, 
+      color: '#8b5cf6' 
+    },
+    { 
+      key: 'achievement', 
+      label: t('clubs.SportsGallery.filters.achievements'), 
+      icon: faAward, 
+      color: '#10b981' 
+    },
+    { 
+      key: 'fitness', 
+      label: t('clubs.SportsGallery.filters.fitness'), 
+      icon: faBolt, 
+      color: '#ef4444' 
+    },
+    { 
+      key: 'aqua_fitness', 
+      label: t('clubs.SportsGallery.filters.aquaFitness'), 
+      icon: faTrophy, 
+      color: '#f59e0b' 
+    },
+    { 
+      key: 'yoga', 
+      label: t('clubs.SportsGallery.filters.yoga'), 
+      icon: faShieldAlt, 
+      color: '#84cc16' 
+    }
   ].filter(filter => {
     if (filter.key === 'all') return true;
     return allMedia.some(item => item.category === filter.key);
   });
 
-  // Филтрираме и сортираме медията
+  const getSortOptions = () => [
+    { value: 'newest', label: t('clubs.SportsGallery.sortOptions.newest') },
+    { value: 'oldest', label: t('clubs.SportsGallery.sortOptions.oldest') },
+    { value: 'name', label: t('clubs.SportsGallery.sortOptions.name') }
+  ];
+
+  const getViewModes = () => [
+    { key: 'grid', label: t('clubs.SportsGallery.viewModes.grid'), icon: faTh },
+    { key: 'masonry', label: t('clubs.SportsGallery.viewModes.masonry'), icon: faColumns },
+    { key: 'list', label: t('clubs.SportsGallery.viewModes.list'), icon: faList }
+  ];
+
+  const categoryFilters = getCategoryFilters();
+  const sortOptions = getSortOptions();
+  const viewModes = getViewModes();
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    return date.toLocaleDateString(locale);
+  };
+
   const filteredMedia = useMemo(() => {
     let filtered = allMedia;
 
-    // Филтър по категория
     if (activeFilter !== 'all') {
       filtered = filtered.filter(item => item.category === activeFilter);
     }
 
-    // Филтър по търсене
     if (searchTerm) {
       const search = searchTerm.toLowerCase();
       filtered = filtered.filter(item => 
@@ -168,7 +220,6 @@ export const SportsGallery = ({ club }) => {
       );
     }
 
-    // Сортиране
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'newest':
@@ -185,7 +236,6 @@ export const SportsGallery = ({ club }) => {
     return filtered;
   }, [allMedia, activeFilter, searchTerm, sortBy]);
 
-  // Handlers
   const handleLike = (itemId) => {
     const newLiked = new Set(likedItems);
     if (newLiked.has(itemId)) {
@@ -200,14 +250,12 @@ export const SportsGallery = ({ club }) => {
     setSelectedMedia(item);
     setCurrentIndex(index);
     setShowLightbox(true);
-    // Предотвратяваме скролирането на страницата
     document.body.style.overflow = 'hidden';
   };
 
   const closeLightbox = () => {
     setShowLightbox(false);
     setSelectedMedia(null);
-    // Възвръщаме скролирането
     document.body.style.overflow = 'unset';
   };
 
@@ -232,10 +280,9 @@ export const SportsGallery = ({ club }) => {
         console.log('Sharing failed:', error);
       }
     } else {
-      // Fallback - копиране в clipboard
       try {
         await navigator.clipboard.writeText(window.location.href);
-        alert('Линкът е копиран в clipboard!');
+        alert(t('clubs.SportsGallery.messages.linkCopied'));
       } catch (error) {
         console.log('Copy failed:', error);
       }
@@ -251,10 +298,9 @@ export const SportsGallery = ({ club }) => {
 
   const getCategoryLabel = (category) => {
     const filter = categoryFilters.find(f => f.key === category);
-    return filter ? filter.label : 'Общи';
+    return filter ? filter.label : t('clubs.SportsGallery.categories.general');
   };
 
-  // Статистики
   const stats = {
     totalPhotos: allMedia.filter(item => item.type === 'photo').length,
     totalVideos: allMedia.filter(item => item.type === 'video').length,
@@ -266,18 +312,17 @@ export const SportsGallery = ({ club }) => {
     <section id="sports-gallery" className="sports-gallery-section">
       <div className="sports-gallery-container">
         
-        {/* Header */}
         <div className="sports-gallery-header">
           <div className="sports-gallery-header-content">
             <div className="sports-gallery-badge">
               <FontAwesomeIcon icon={faGem} />
-              <span>Нашата галерия</span>
+              <span>{t('clubs.SportsGallery.header.badge')}</span>
             </div>
             <h2 className="sports-gallery-title">
-              Моменти от живота на клуба
+              {t('clubs.SportsGallery.header.title')}
             </h2>
             <p className="sports-gallery-subtitle">
-              Разгледайте снимки и видеа от нашите дейности, събития и постижения
+              {t('clubs.SportsGallery.header.subtitle')}
             </p>
           </div>
           
@@ -289,7 +334,7 @@ export const SportsGallery = ({ club }) => {
                 </div>
                 <div className="sports-gallery-stat-content">
                   <span className="sports-gallery-stat-number">{stats.totalPhotos}</span>
-                  <span className="sports-gallery-stat-label">Снимки</span>
+                  <span className="sports-gallery-stat-label">{t('clubs.SportsGallery.stats.photos')}</span>
                 </div>
               </div>
             )}
@@ -300,7 +345,7 @@ export const SportsGallery = ({ club }) => {
                 </div>
                 <div className="sports-gallery-stat-content">
                   <span className="sports-gallery-stat-number">{stats.totalVideos}</span>
-                  <span className="sports-gallery-stat-label">Видеа</span>
+                  <span className="sports-gallery-stat-label">{t('clubs.SportsGallery.stats.videos')}</span>
                 </div>
               </div>
             )}
@@ -311,23 +356,21 @@ export const SportsGallery = ({ club }) => {
                 </div>
                 <div className="sports-gallery-stat-content">
                   <span className="sports-gallery-stat-number">{stats.totalEvents}</span>
-                  <span className="sports-gallery-stat-label">Събития</span>
+                  <span className="sports-gallery-stat-label">{t('clubs.SportsGallery.stats.events')}</span>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Controls */}
         <div className="sports-gallery-controls">
           
-          {/* Search and Sort */}
           <div className="sports-gallery-search-sort">
             <div className="sports-gallery-search">
               <FontAwesomeIcon icon={faSearch} />
               <input
                 type="text"
-                placeholder="Търсете в галерията..."
+                placeholder={t('clubs.SportsGallery.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -338,40 +381,29 @@ export const SportsGallery = ({ club }) => {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
-                <option value="newest">Най-нови</option>
-                <option value="oldest">Най-стари</option>
-                <option value="name">По име</option>
+                {sortOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
           
-          {/* View Mode Buttons */}
           <div className="sports-gallery-view-modes">
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`sports-gallery-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-            >
-              <FontAwesomeIcon icon={faTh} />
-              <span>Мрежа</span>
-            </button>
-            <button
-              onClick={() => setViewMode('masonry')}
-              className={`sports-gallery-view-btn ${viewMode === 'masonry' ? 'active' : ''}`}
-            >
-              <FontAwesomeIcon icon={faColumns} />
-              <span>Мозайка</span>
-            </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`sports-gallery-view-btn ${viewMode === 'list' ? 'active' : ''}`}
-            >
-              <FontAwesomeIcon icon={faList} />
-              <span>Списък</span>
-            </button>
+            {viewModes.map(mode => (
+              <button
+                key={mode.key}
+                onClick={() => setViewMode(mode.key)}
+                className={`sports-gallery-view-btn ${viewMode === mode.key ? 'active' : ''}`}
+              >
+                <FontAwesomeIcon icon={mode.icon} />
+                <span>{mode.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Category Filters */}
         <div className="sports-gallery-filters">
           {categoryFilters.map(filter => {
             const count = filter.key === 'all' ? allMedia.length :
@@ -392,10 +424,8 @@ export const SportsGallery = ({ club }) => {
           })}
         </div>
 
-        {/* Gallery Content */}
         <div className="sports-gallery-content">
           
-          {/* Grid View */}
           {viewMode === 'grid' && (
             <div className="sports-gallery-grid">
               {filteredMedia.map((item, index) => (
@@ -424,6 +454,7 @@ export const SportsGallery = ({ club }) => {
                             handleLike(item.id);
                           }}
                           className={`sports-gallery-action-btn ${likedItems.has(item.id) ? 'liked' : ''}`}
+                          title={t('clubs.SportsGallery.actions.like')}
                         >
                           <FontAwesomeIcon icon={faHeart} />
                         </button>
@@ -433,6 +464,7 @@ export const SportsGallery = ({ club }) => {
                             handleShare(item);
                           }}
                           className="sports-gallery-action-btn"
+                          title={t('clubs.SportsGallery.actions.share')}
                         >
                           <FontAwesomeIcon icon={faShare} />
                         </button>
@@ -449,7 +481,7 @@ export const SportsGallery = ({ club }) => {
                       </div>
                       {item.date && (
                         <div className="sports-gallery-item-date">
-                          {new Date(item.date).toLocaleDateString('bg-BG')}
+                          {formatDate(item.date)}
                         </div>
                       )}
                     </div>
@@ -459,7 +491,6 @@ export const SportsGallery = ({ club }) => {
             </div>
           )}
 
-          {/* Masonry View */}
           {viewMode === 'masonry' && (
             <div className="sports-gallery-masonry">
               {filteredMedia.map((item, index) => (
@@ -489,7 +520,6 @@ export const SportsGallery = ({ club }) => {
             </div>
           )}
 
-          {/* List View */}
           {viewMode === 'list' && (
             <div className="sports-gallery-list">
               {filteredMedia.map((item, index) => (
@@ -527,7 +557,7 @@ export const SportsGallery = ({ club }) => {
                       {item.date && (
                         <span>
                           <FontAwesomeIcon icon={faCalendarAlt} />
-                          {new Date(item.date).toLocaleDateString('bg-BG')}
+                          {formatDate(item.date)}
                         </span>
                       )}
                       {item.location && (
@@ -546,6 +576,7 @@ export const SportsGallery = ({ club }) => {
                         handleLike(item.id);
                       }}
                       className={`sports-gallery-action-btn ${likedItems.has(item.id) ? 'liked' : ''}`}
+                      title={t('clubs.SportsGallery.actions.like')}
                     >
                       <FontAwesomeIcon icon={faHeart} />
                     </button>
@@ -555,6 +586,7 @@ export const SportsGallery = ({ club }) => {
                         handleShare(item);
                       }}
                       className="sports-gallery-action-btn"
+                      title={t('clubs.SportsGallery.actions.share')}
                     >
                       <FontAwesomeIcon icon={faShare} />
                     </button>
@@ -565,47 +597,48 @@ export const SportsGallery = ({ club }) => {
           )}
         </div>
 
-        {/* Results Info */}
         <div className="sports-gallery-results">
           <p>
-            Показване на {filteredMedia.length} от {allMedia.length} елемента
-            {searchTerm && ` за "${searchTerm}"`}
+            {t('clubs.SportsGallery.results.showing', {
+              filtered: filteredMedia.length,
+              total: allMedia.length,
+              search: searchTerm ? t('clubs.SportsGallery.results.forSearch', { term: searchTerm }) : ''
+            })}
           </p>
         </div>
       </div>
 
-      {/* Lightbox Modal */}
       {showLightbox && selectedMedia && (
         <div className="sports-gallery-lightbox" onClick={closeLightbox}>
           <div className="sports-gallery-lightbox-content" onClick={(e) => e.stopPropagation()}>
             
-            {/* Close Button */}
             <button 
               onClick={closeLightbox}
               className="sports-gallery-lightbox-close"
+              title={t('clubs.SportsGallery.lightbox.close')}
             >
               <FontAwesomeIcon icon={faTimes} />
             </button>
             
-            {/* Navigation */}
             {filteredMedia.length > 1 && (
               <>
                 <button 
                   onClick={() => navigateLightbox('prev')}
                   className="sports-gallery-lightbox-nav prev"
+                  title={t('clubs.SportsGallery.lightbox.previous')}
                 >
                   <FontAwesomeIcon icon={faArrowLeft} />
                 </button>
                 <button 
                   onClick={() => navigateLightbox('next')}
                   className="sports-gallery-lightbox-nav next"
+                  title={t('clubs.SportsGallery.lightbox.next')}
                 >
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
               </>
             )}
             
-            {/* Media Content */}
             <div className="sports-gallery-lightbox-media">
               {selectedMedia.type === 'video' ? (
                 <video 
@@ -624,7 +657,6 @@ export const SportsGallery = ({ club }) => {
               )}
             </div>
             
-            {/* Media Info */}
             <div className="sports-gallery-lightbox-info">
               <div className="sports-gallery-lightbox-header">
                 <h3>{selectedMedia.title}</h3>
@@ -634,14 +666,14 @@ export const SportsGallery = ({ club }) => {
                     className={`sports-gallery-lightbox-action ${likedItems.has(selectedMedia.id) ? 'liked' : ''}`}
                   >
                     <FontAwesomeIcon icon={faHeart} />
-                    <span>Харесай</span>
+                    <span>{t('clubs.SportsGallery.actions.like')}</span>
                   </button>
                   <button 
                     onClick={() => handleShare(selectedMedia)}
                     className="sports-gallery-lightbox-action"
                   >
                     <FontAwesomeIcon icon={faShare} />
-                    <span>Сподели</span>
+                    <span>{t('clubs.SportsGallery.actions.share')}</span>
                   </button>
                 </div>
               </div>
@@ -660,7 +692,7 @@ export const SportsGallery = ({ club }) => {
                 {selectedMedia.date && (
                   <div className="sports-gallery-lightbox-meta-item">
                     <FontAwesomeIcon icon={faCalendarAlt} />
-                    <span>{new Date(selectedMedia.date).toLocaleDateString('bg-BG')}</span>
+                    <span>{formatDate(selectedMedia.date)}</span>
                   </div>
                 )}
                 {selectedMedia.duration && (

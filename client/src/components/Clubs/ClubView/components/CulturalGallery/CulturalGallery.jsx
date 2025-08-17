@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faImages,
@@ -34,6 +35,7 @@ import {
 import './culturalGallery.css';
 
 export const CulturalGallery = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -59,14 +61,11 @@ export const CulturalGallery = ({ club }) => {
     message: ''
   });
 
-  // ИЗВЛИЧАМЕ ДАННИ ОТ КЛУБА
   const getAllMediaFromClub = () => {
     const mediaItems = [];
     
-    // Извличаме от събития
     const events = club?.activities?.events || [];
     events.forEach(event => {
-      // Добавяме снимки от событие
       if (event.images && Array.isArray(event.images)) {
         event.images.forEach((image, index) => {
           mediaItems.push({
@@ -77,7 +76,7 @@ export const CulturalGallery = ({ club }) => {
             title: image.caption || event.title,
             description: image.alt || event.description,
             date: event.date,
-            location: event.location || 'Клубна зала',
+            location: event.location || t('clubs.CulturalGallery.defaultLocation'),
             category: event.type || 'events',
             eventTitle: event.title,
             views: Math.floor(Math.random() * 300) + 50,
@@ -86,7 +85,6 @@ export const CulturalGallery = ({ club }) => {
         });
       }
       
-      // Добавяме видеа от событие
       if (event.videos && Array.isArray(event.videos)) {
         event.videos.forEach((video, index) => {
           mediaItems.push({
@@ -97,7 +95,7 @@ export const CulturalGallery = ({ club }) => {
             title: video.caption || event.title,
             description: video.alt || event.description,
             date: event.date,
-            location: event.location || 'Клубна зала',
+            location: event.location || t('clubs.CulturalGallery.defaultLocation'),
             category: event.type || 'events',
             eventTitle: event.title,
             duration: video.duration || '3:45',
@@ -108,7 +106,6 @@ export const CulturalGallery = ({ club }) => {
       }
     });
 
-    // Извличаме от галерията на клуба (ако има)
     if (club?.gallery && Array.isArray(club.gallery)) {
       club.gallery.forEach((item, index) => {
         mediaItems.push({
@@ -116,10 +113,10 @@ export const CulturalGallery = ({ club }) => {
           type: item.type || 'image',
           src: item.src || item.url,
           thumbnail: item.thumbnail || item.src || item.url,
-          title: item.title || item.caption || 'Клубна снимка',
-          description: item.description || item.alt || 'Спомен от клуба',
+          title: item.title || item.caption || t('clubs.CulturalGallery.defaultImageTitle'),
+          description: item.description || item.alt || t('clubs.CulturalGallery.defaultImageDescription'),
           date: item.date || new Date().toISOString(),
-          location: item.location || 'Клуб',
+          location: item.location || t('clubs.CulturalGallery.defaultClubLocation'),
           category: item.category || 'gallery',
           duration: item.duration,
           views: item.views || Math.floor(Math.random() * 150) + 20,
@@ -128,7 +125,6 @@ export const CulturalGallery = ({ club }) => {
       });
     }
 
-    // Извличаме от екскурзии
     const trips = club?.activities?.trips || [];
     trips.forEach(trip => {
       if (trip.images && Array.isArray(trip.images)) {
@@ -138,7 +134,7 @@ export const CulturalGallery = ({ club }) => {
             type: 'image',
             src: image.src,
             thumbnail: image.src,
-            title: image.caption || `Екскурзия до ${trip.destination}`,
+            title: image.caption || t('clubs.CulturalGallery.tripTitle', { destination: trip.destination }),
             description: image.alt || trip.description,
             date: trip.date,
             location: trip.destination,
@@ -156,18 +152,17 @@ export const CulturalGallery = ({ club }) => {
 
   const galleryItems = getAllMediaFromClub();
 
-  // Ако няма медийни файлове, не показваме компонента
   if (!galleryItems || galleryItems.length === 0) {
     return null;
   }
 
-  const testimonials = club?.testimonials || [
+  const getDefaultTestimonials = () => [
     {
       id: 1,
       name: "Мария Стоянова",
       age: 68,
       avatar: "https://picsum.photos/100/100?random=201",
-      text: "В този клуб намерих не само хобита, но и истински приятели. Всеки ден тук е като празник!",
+      text: t('clubs.CulturalGallery.testimonials.default.maria'),
       rating: 5,
       memberSince: "2020"
     },
@@ -176,7 +171,7 @@ export const CulturalGallery = ({ club }) => {
       name: "Георги Петков", 
       age: 72,
       avatar: "https://picsum.photos/100/100?random=202",
-      text: "Хорът ми дава сили и радост. Никога не съм се чувствал толкова жив и активен!",
+      text: t('clubs.CulturalGallery.testimonials.default.georgi'),
       rating: 5,
       memberSince: "2018"
     },
@@ -185,19 +180,19 @@ export const CulturalGallery = ({ club }) => {
       name: "Елена Николова",
       age: 65,
       avatar: "https://picsum.photos/100/100?random=203",
-      text: "Творческите работилници развиха таланти, за които не знаех, че имам. Препоръчвам на всички!",
+      text: t('clubs.CulturalGallery.testimonials.default.elena'),
       rating: 5,
       memberSince: "2021"
     }
   ];
 
-  // Категории базирани на реалните данни
+  const testimonials = club?.testimonials || getDefaultTestimonials();
+
   const getAllCategories = () => {
     const categories = {
-      all: { label: 'Всички', icon: faImages, count: galleryItems.length }
+      all: { label: t('clubs.CulturalGallery.categories.all'), icon: faImages, count: galleryItems.length }
     };
 
-    // Добавяме категории базирани на реалните данни
     const uniqueCategories = [...new Set(galleryItems.map(item => item.category))];
     
     uniqueCategories.forEach(cat => {
@@ -206,23 +201,23 @@ export const CulturalGallery = ({ club }) => {
       switch(cat) {
         case 'cultural':
         case 'concerts':
-          categories.concerts = { label: 'Концерти', icon: faMusic, count };
+          categories.concerts = { label: t('clubs.CulturalGallery.categories.concerts'), icon: faMusic, count };
           break;
         case 'traditional':
         case 'events':
-          categories.events = { label: 'Събития', icon: faBirthdayCake, count };
+          categories.events = { label: t('clubs.CulturalGallery.categories.events'), icon: faBirthdayCake, count };
           break;
         case 'workshops':
-          categories.workshops = { label: 'Работилници', icon: faPalette, count };
+          categories.workshops = { label: t('clubs.CulturalGallery.categories.workshops'), icon: faPalette, count };
           break;
         case 'trips':
-          categories.trips = { label: 'Екскурзии', icon: faMapMarkerAlt, count };
+          categories.trips = { label: t('clubs.CulturalGallery.categories.trips'), icon: faMapMarkerAlt, count };
           break;
         case 'gallery':
-          categories.gallery = { label: 'Галерия', icon: faCamera, count };
+          categories.gallery = { label: t('clubs.CulturalGallery.categories.gallery'), icon: faCamera, count };
           break;
         default:
-          categories.other = { label: 'Други', icon: faImages, count };
+          categories.other = { label: t('clubs.CulturalGallery.categories.other'), icon: faImages, count };
       }
     });
 
@@ -240,7 +235,15 @@ export const CulturalGallery = ({ club }) => {
     });
   };
 
-  // ФУНКЦИОНАЛНИ БУТОНИ
+  const getInterestOptions = () => [
+    t('clubs.CulturalGallery.interests.choir'),
+    t('clubs.CulturalGallery.interests.dance'),
+    t('clubs.CulturalGallery.interests.creative'),
+    t('clubs.CulturalGallery.interests.trips'),
+    t('clubs.CulturalGallery.interests.social'),
+    t('clubs.CulturalGallery.interests.educational')
+  ];
+
   const handleJoinClub = () => {
     setShowMemberModal(true);
   };
@@ -249,7 +252,6 @@ export const CulturalGallery = ({ club }) => {
     setShowPhotoModal(true);
   };
 
-  // Form handlers
   const handleMemberFormChange = (field, value) => {
     setMemberForm(prev => ({
       ...prev,
@@ -278,25 +280,18 @@ export const CulturalGallery = ({ club }) => {
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Заявка за членство - ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте заявка за членство в ${club.name}:
-
-Име: ${memberForm.name}
-Имейл: ${memberForm.email}
-Телефон: ${memberForm.phone}
-Възраст: ${memberForm.age}
-Интереси: ${memberForm.interests.join(', ')}
-Опит: ${memberForm.experience}
-
-Съобщение:
-${memberForm.message || 'Няма допълнително съобщение'}
-
----
-Изпратено от ${memberForm.email}
-      `);
+      const subject = encodeURIComponent(t('clubs.CulturalGallery.modals.membership.emailSubject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.CulturalGallery.modals.membership.emailBody', {
+        clubName: club.name,
+        name: memberForm.name,
+        email: memberForm.email,
+        phone: memberForm.phone,
+        age: memberForm.age,
+        interests: memberForm.interests.join(', '),
+        experience: memberForm.experience,
+        message: memberForm.message || t('clubs.CulturalGallery.form.noMessage'),
+        senderEmail: memberForm.email
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -321,25 +316,17 @@ ${memberForm.message || 'Няма допълнително съобщение'}
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Изпращане на снимки - ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте заявка за изпращане на снимки за ${club.name}:
-
-Име: ${photoForm.name}
-Имейл: ${photoForm.email}
-Събитие: ${photoForm.eventName}
-Описание: ${photoForm.description}
-
-Съобщение:
-${photoForm.message}
-
----
-Изпратено от ${photoForm.email}
-
-Моля свържете се с ${photoForm.name} за получаване на снимките.
-      `);
+      const subject = encodeURIComponent(t('clubs.CulturalGallery.modals.photos.emailSubject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.CulturalGallery.modals.photos.emailBody', {
+        clubName: club.name,
+        name: photoForm.name,
+        email: photoForm.email,
+        eventName: photoForm.eventName,
+        description: photoForm.description,
+        message: photoForm.message,
+        senderEmail: photoForm.email,
+        contactName: photoForm.name
+      }));
       
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -375,9 +362,8 @@ ${photoForm.message}
     });
   };
 
-  // Media actions
   const handleLike = (itemId) => {
-    alert(`Харесахте материала с ID: ${itemId}`);
+    alert(t('clubs.CulturalGallery.actions.likedMessage', { itemId }));
   };
 
   const handleShare = (item) => {
@@ -389,7 +375,7 @@ ${photoForm.message}
       });
     } else {
       navigator.clipboard.writeText(`${item.title} - ${window.location.href}`);
-      alert('Линкът е копиран в клипборда!');
+      alert(t('clubs.CulturalGallery.actions.linkCopied'));
     }
   };
 
@@ -428,14 +414,17 @@ ${photoForm.message}
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('bg-BG', { 
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    
+    return new Date(dateString).toLocaleDateString(locale, { 
       day: 'numeric', 
       month: 'long', 
       year: 'numeric' 
     });
   };
 
-  // Статистики базирани на реалните данни
   const getStatistics = () => {
     const imageCount = galleryItems.filter(item => item.type === 'image').length;
     const videoCount = galleryItems.filter(item => item.type === 'video').length;
@@ -456,19 +445,17 @@ ${photoForm.message}
     <section id="cultural-gallery" className="cultural-gallery-main-section">
       <div className="cultural-gallery-container">
         
-        {/* Header */}
         <div className="cultural-gallery-header">
           <div className="cultural-gallery-badge">
             <FontAwesomeIcon icon={faImages} />
-            <span>Галерия и спомени</span>
+            <span>{t('clubs.CulturalGallery.header.badge')}</span>
           </div>
-          <h2 className="cultural-gallery-title">Нашите незабравими моменти</h2>
+          <h2 className="cultural-gallery-title">{t('clubs.CulturalGallery.header.title')}</h2>
           <p className="cultural-gallery-subtitle">
-            Разгледайте снимки и видеа от нашите събития, концерти и ежедневния живот в клуба
+            {t('clubs.CulturalGallery.header.subtitle')}
           </p>
         </div>
 
-        {/* Filter Tabs */}
         <div className="cultural-gallery-filters">
           {Object.entries(categories).map(([key, category]) => (
             <button
@@ -483,7 +470,6 @@ ${photoForm.message}
           ))}
         </div>
 
-        {/* Gallery Grid */}
         <div className="cultural-gallery-grid">
           {getFilteredItems().map((item, index) => (
             <div key={item.id} className="cultural-gallery-item">
@@ -538,18 +524,21 @@ ${photoForm.message}
                   <button 
                     className="cultural-gallery-action-btn like"
                     onClick={() => handleLike(item.id)}
+                    title={t('clubs.CulturalGallery.actions.like')}
                   >
                     <FontAwesomeIcon icon={faHeart} />
                   </button>
                   <button 
                     className="cultural-gallery-action-btn share"
                     onClick={() => handleShare(item)}
+                    title={t('clubs.CulturalGallery.actions.share')}
                   >
                     <FontAwesomeIcon icon={faShare} />
                   </button>
                   <button 
                     className="cultural-gallery-action-btn download"
                     onClick={() => handleDownload(item)}
+                    title={t('clubs.CulturalGallery.actions.download')}
                   >
                     <FontAwesomeIcon icon={faDownload} />
                   </button>
@@ -559,7 +548,6 @@ ${photoForm.message}
           ))}
         </div>
 
-        {/* Statistics - Динамични статистики */}
         <div className="cultural-gallery-stats-section">
           <div className="cultural-gallery-stats-grid">
             <div className="cultural-gallery-stat-card">
@@ -568,7 +556,7 @@ ${photoForm.message}
               </div>
               <div className="cultural-gallery-stat-info">
                 <div className="cultural-gallery-stat-number">{stats.images}+</div>
-                <div className="cultural-gallery-stat-label">Снимки в архива</div>
+                <div className="cultural-gallery-stat-label">{t('clubs.CulturalGallery.stats.images')}</div>
               </div>
             </div>
             
@@ -578,7 +566,7 @@ ${photoForm.message}
               </div>
               <div className="cultural-gallery-stat-info">
                 <div className="cultural-gallery-stat-number">{stats.videos}</div>
-                <div className="cultural-gallery-stat-label">Видео записи</div>
+                <div className="cultural-gallery-stat-label">{t('clubs.CulturalGallery.stats.videos')}</div>
               </div>
             </div>
             
@@ -588,7 +576,7 @@ ${photoForm.message}
               </div>
               <div className="cultural-gallery-stat-info">
                 <div className="cultural-gallery-stat-number">{stats.events}</div>
-                <div className="cultural-gallery-stat-label">Документирани събития</div>
+                <div className="cultural-gallery-stat-label">{t('clubs.CulturalGallery.stats.events')}</div>
               </div>
             </div>
             
@@ -598,18 +586,17 @@ ${photoForm.message}
               </div>
               <div className="cultural-gallery-stat-info">
                 <div className="cultural-gallery-stat-number">{Math.floor(stats.views / 1000)}K+</div>
-                <div className="cultural-gallery-stat-label">Общо гледания</div>
+                <div className="cultural-gallery-stat-label">{t('clubs.CulturalGallery.stats.views')}</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Testimonials - само ако има */}
         {testimonials && testimonials.length > 0 && (
           <div className="cultural-gallery-testimonials">
             <div className="cultural-gallery-testimonials-header">
-              <h3>Какво казват нашите членове</h3>
-              <p>Историите на хората, които правят нашия клуб специално място</p>
+              <h3>{t('clubs.CulturalGallery.testimonials.title')}</h3>
+              <p>{t('clubs.CulturalGallery.testimonials.subtitle')}</p>
             </div>
             
             <div className="cultural-gallery-testimonials-grid">
@@ -633,7 +620,10 @@ ${photoForm.message}
                     <img src={testimonial.avatar} alt={testimonial.name} />
                     <div className="cultural-gallery-author-info">
                       <h4>{testimonial.name}</h4>
-                      <p>{testimonial.age} години • Член от {testimonial.memberSince}</p>
+                      <p>{t('clubs.CulturalGallery.testimonials.memberInfo', { 
+                        age: testimonial.age, 
+                        memberSince: testimonial.memberSince 
+                      })}</p>
                     </div>
                   </div>
                 </div>
@@ -642,26 +632,24 @@ ${photoForm.message}
           </div>
         )}
 
-        {/* Call to Action - ФУНКЦИОНАЛНИ БУТОНИ */}
         <div className="cultural-gallery-cta">
           <div className="cultural-gallery-cta-content">
-            <h3>Искате да сте част от следващите снимки?</h3>
-            <p>Присъединете се към нашия клуб и създайте незабравими спомени заедно с нас</p>
+            <h3>{t('clubs.CulturalGallery.cta.title')}</h3>
+            <p>{t('clubs.CulturalGallery.cta.subtitle')}</p>
             <div className="cultural-gallery-cta-buttons">
               <button className="cultural-gallery-cta-primary" onClick={handleJoinClub}>
                 <FontAwesomeIcon icon={faUsers} />
-                Станете член
+                {t('clubs.CulturalGallery.cta.becomeMember')}
               </button>
               <button className="cultural-gallery-cta-secondary" onClick={handleSendPhotos}>
                 <FontAwesomeIcon icon={faCamera} />
-                Изпратете снимки
+                {t('clubs.CulturalGallery.cta.sendPhotos')}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Lightbox Modal */}
       {selectedMedia && (
         <div className="cultural-gallery-lightbox" onClick={closeLightbox}>
           <div className="cultural-gallery-lightbox-content" onClick={(e) => e.stopPropagation()}>
@@ -703,7 +691,6 @@ ${photoForm.message}
         </div>
       )}
 
-      {/* МОДАЛ ЗА ЧЛЕНСТВО */}
       {showMemberModal && (
         <div className="cultural-gallery-modal-overlay" onClick={closeMemberModal}>
           <div className="cultural-gallery-modal" onClick={(e) => e.stopPropagation()}>
@@ -714,21 +701,21 @@ ${photoForm.message}
             <div className="cultural-gallery-modal-content">
               <div className="cultural-gallery-modal-header">
                 <FontAwesomeIcon icon={faUsers} />
-                <h3>Заявка за членство</h3>
-                <p>Попълнете формата за да станете част от нашето семейство</p>
+                <h3>{t('clubs.CulturalGallery.modals.membership.title')}</h3>
+                <p>{t('clubs.CulturalGallery.modals.membership.subtitle')}</p>
               </div>
               
               {formStatus === 'sent' ? (
                 <div className="cultural-gallery-form-success">
                   <FontAwesomeIcon icon={faCheck} />
-                  <h4>Заявката е изпратена!</h4>
-                  <p>Благодарим ви! Ще се свържем с вас скоро.</p>
+                  <h4>{t('clubs.CulturalGallery.modals.membership.success.title')}</h4>
+                  <p>{t('clubs.CulturalGallery.modals.membership.success.message')}</p>
                 </div>
               ) : formStatus === 'error' ? (
                 <div className="cultural-gallery-form-error">
                   <FontAwesomeIcon icon={faExclamationTriangle} />
-                  <h4>Възникна грешка</h4>
-                  <p>Моля опитайте отново или се свържете с нас директно.</p>
+                  <h4>{t('clubs.CulturalGallery.form.error.title')}</h4>
+                  <p>{t('clubs.CulturalGallery.form.error.message')}</p>
                 </div>
               ) : (
                 <form onSubmit={handleMemberSubmit} className="cultural-gallery-modal-form">
@@ -736,7 +723,7 @@ ${photoForm.message}
                     <div className="cultural-gallery-form-group">
                       <label htmlFor="memberName">
                         <FontAwesomeIcon icon={faUserCircle} />
-                        Вашето име *
+                        {t('clubs.CulturalGallery.form.name')} *
                       </label>
                       <input
                         type="text"
@@ -744,14 +731,14 @@ ${photoForm.message}
                         value={memberForm.name}
                         onChange={(e) => handleMemberFormChange('name', e.target.value)}
                         required
-                        placeholder="Въведете вашето име"
+                        placeholder={t('clubs.CulturalGallery.form.namePlaceholder')}
                       />
                     </div>
                     
                     <div className="cultural-gallery-form-group">
                       <label htmlFor="memberAge">
                         <FontAwesomeIcon icon={faUsers} />
-                        Възраст *
+                        {t('clubs.CulturalGallery.form.age')} *
                       </label>
                       <input
                         type="number"
@@ -761,7 +748,7 @@ ${photoForm.message}
                         value={memberForm.age}
                         onChange={(e) => handleMemberFormChange('age', e.target.value)}
                         required
-                        placeholder="Вашата възраст"
+                        placeholder={t('clubs.CulturalGallery.form.agePlaceholder')}
                       />
                     </div>
                   </div>
@@ -770,7 +757,7 @@ ${photoForm.message}
                     <div className="cultural-gallery-form-group">
                       <label htmlFor="memberEmail">
                         <FontAwesomeIcon icon={faEnvelope} />
-                        Имейл адрес *
+                        {t('clubs.CulturalGallery.form.email')} *
                       </label>
                       <input
                         type="email"
@@ -778,14 +765,14 @@ ${photoForm.message}
                         value={memberForm.email}
                         onChange={(e) => handleMemberFormChange('email', e.target.value)}
                         required
-                        placeholder="Въведете вашия имейл"
+                        placeholder={t('clubs.CulturalGallery.form.emailPlaceholder')}
                       />
                     </div>
                     
                     <div className="cultural-gallery-form-group">
                       <label htmlFor="memberPhone">
                         <FontAwesomeIcon icon={faPhone} />
-                        Телефон *
+                        {t('clubs.CulturalGallery.form.phone')} *
                       </label>
                       <input
                         type="tel"
@@ -793,7 +780,7 @@ ${photoForm.message}
                         value={memberForm.phone}
                         onChange={(e) => handleMemberFormChange('phone', e.target.value)}
                         required
-                        placeholder="Въведете вашия телефон"
+                        placeholder={t('clubs.CulturalGallery.form.phonePlaceholder')}
                       />
                     </div>
                   </div>
@@ -801,10 +788,10 @@ ${photoForm.message}
                   <div className="cultural-gallery-form-group">
                     <label>
                       <FontAwesomeIcon icon={faHeart} />
-                      Какво ви интересува?
+                      {t('clubs.CulturalGallery.modals.membership.interestsLabel')}
                     </label>
                     <div className="cultural-gallery-interests-grid">
-                      {['Хор', 'Танци', 'Творческо', 'Екскурзии', 'Социални дейности', 'Образователни лекции'].map((interest) => (
+                      {getInterestOptions().map((interest) => (
                         <button
                           key={interest}
                           type="button"
@@ -820,27 +807,27 @@ ${photoForm.message}
                   <div className="cultural-gallery-form-group">
                     <label htmlFor="memberExperience">
                       <FontAwesomeIcon icon={faStar} />
-                      Опит/умения (по желание)
+                      {t('clubs.CulturalGallery.form.experience')}
                     </label>
                     <input
                       type="text"
                       id="memberExperience"
                       value={memberForm.experience}
                       onChange={(e) => handleMemberFormChange('experience', e.target.value)}
-                      placeholder="Имате ли опит в някоя от дейностите?"
+                      placeholder={t('clubs.CulturalGallery.form.experiencePlaceholder')}
                     />
                   </div>
                   
                   <div className="cultural-gallery-form-group">
                     <label htmlFor="memberMessage">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Допълнително съобщение
+                      {t('clubs.CulturalGallery.form.message')}
                     </label>
                     <textarea
                       id="memberMessage"
                       value={memberForm.message}
                       onChange={(e) => handleMemberFormChange('message', e.target.value)}
-                      placeholder="Разкажете ни малко за себе си"
+                      placeholder={t('clubs.CulturalGallery.form.messagePlaceholder')}
                       rows="3"
                     />
                   </div>
@@ -852,14 +839,14 @@ ${photoForm.message}
                       disabled={formStatus === 'sending'}
                     >
                       <FontAwesomeIcon icon={faUsers} />
-                      {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявка'}
+                      {formStatus === 'sending' ? t('clubs.CulturalGallery.form.sending') : t('clubs.CulturalGallery.form.submitRequest')}
                     </button>
                     <button 
                       type="button" 
                       onClick={closeMemberModal}
                       className="cultural-gallery-cancel-btn"
                     >
-                      Отказ
+                      {t('clubs.CulturalGallery.form.cancel')}
                     </button>
                   </div>
                 </form>
@@ -869,7 +856,6 @@ ${photoForm.message}
         </div>
       )}
 
-      {/* МОДАЛ ЗА СНИМКИ */}
       {showPhotoModal && (
         <div className="cultural-gallery-modal-overlay" onClick={closePhotoModal}>
           <div className="cultural-gallery-modal" onClick={(e) => e.stopPropagation()}>
@@ -880,21 +866,21 @@ ${photoForm.message}
             <div className="cultural-gallery-modal-content">
               <div className="cultural-gallery-modal-header">
                 <FontAwesomeIcon icon={faCamera} />
-                <h3>Изпратете снимки</h3>
-                <p>Споделете ваши снимки от събития в клуба</p>
+                <h3>{t('clubs.CulturalGallery.modals.photos.title')}</h3>
+                <p>{t('clubs.CulturalGallery.modals.photos.subtitle')}</p>
               </div>
               
               {formStatus === 'sent' ? (
                 <div className="cultural-gallery-form-success">
                   <FontAwesomeIcon icon={faCheck} />
-                  <h4>Съобщението е изпратено!</h4>
-                  <p>Благодарим ви! Ще се свържем с вас за снимките.</p>
+                  <h4>{t('clubs.CulturalGallery.modals.photos.success.title')}</h4>
+                  <p>{t('clubs.CulturalGallery.modals.photos.success.message')}</p>
                 </div>
               ) : formStatus === 'error' ? (
                 <div className="cultural-gallery-form-error">
                   <FontAwesomeIcon icon={faExclamationTriangle} />
-                  <h4>Възникна грешка</h4>
-                  <p>Моля опитайте отново или се свържете с нас директно.</p>
+                  <h4>{t('clubs.CulturalGallery.form.error.title')}</h4>
+                  <p>{t('clubs.CulturalGallery.form.error.message')}</p>
                 </div>
               ) : (
                 <form onSubmit={handlePhotoSubmit} className="cultural-gallery-modal-form">
@@ -902,7 +888,7 @@ ${photoForm.message}
                     <div className="cultural-gallery-form-group">
                       <label htmlFor="photoName">
                         <FontAwesomeIcon icon={faUserCircle} />
-                        Вашето име *
+                        {t('clubs.CulturalGallery.form.name')} *
                       </label>
                       <input
                         type="text"
@@ -910,14 +896,14 @@ ${photoForm.message}
                         value={photoForm.name}
                         onChange={(e) => handlePhotoFormChange('name', e.target.value)}
                         required
-                        placeholder="Въведете вашето име"
+                        placeholder={t('clubs.CulturalGallery.form.namePlaceholder')}
                       />
                     </div>
                     
                     <div className="cultural-gallery-form-group">
                       <label htmlFor="photoEmail">
                         <FontAwesomeIcon icon={faEnvelope} />
-                        Имейл адрес *
+                        {t('clubs.CulturalGallery.form.email')} *
                       </label>
                       <input
                         type="email"
@@ -925,7 +911,7 @@ ${photoForm.message}
                         value={photoForm.email}
                         onChange={(e) => handlePhotoFormChange('email', e.target.value)}
                         required
-                        placeholder="Въведете вашия имейл"
+                        placeholder={t('clubs.CulturalGallery.form.emailPlaceholder')}
                       />
                     </div>
                   </div>
@@ -933,22 +919,22 @@ ${photoForm.message}
                   <div className="cultural-gallery-form-group">
                     <label htmlFor="photoEvent">
                       <FontAwesomeIcon icon={faCalendarAlt} />
-                      Събитие/Повод *
+                      {t('clubs.CulturalGallery.modals.photos.eventLabel')} *
                     </label>
                     <input
                       type="text"
                       id="photoEvent"
-      value={photoForm.eventName}
+                      value={photoForm.eventName}
                       onChange={(e) => handlePhotoFormChange('eventName', e.target.value)}
                       required
-                      placeholder="От кое събитие са снимките?"
+                      placeholder={t('clubs.CulturalGallery.modals.photos.eventPlaceholder')}
                     />
                   </div>
                   
                   <div className="cultural-gallery-form-group">
                     <label htmlFor="photoDescription">
                       <FontAwesomeIcon icon={faImages} />
-                      Описание на снимките *
+                      {t('clubs.CulturalGallery.modals.photos.descriptionLabel')} *
                     </label>
                     <input
                       type="text"
@@ -956,20 +942,20 @@ ${photoForm.message}
                       value={photoForm.description}
                       onChange={(e) => handlePhotoFormChange('description', e.target.value)}
                       required
-                      placeholder="Какво показват снимките?"
+                      placeholder={t('clubs.CulturalGallery.modals.photos.descriptionPlaceholder')}
                     />
                   </div>
                   
                   <div className="cultural-gallery-form-group">
                     <label htmlFor="photoMessage">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Съобщение
+                      {t('clubs.CulturalGallery.form.message')}
                     </label>
                     <textarea
                       id="photoMessage"
                       value={photoForm.message}
                       onChange={(e) => handlePhotoFormChange('message', e.target.value)}
-                      placeholder="Как ще изпратите снимките? (имейл, USB, облак и др.)"
+                      placeholder={t('clubs.CulturalGallery.modals.photos.messagePlaceholder')}
                       rows="3"
                     />
                   </div>
@@ -981,14 +967,14 @@ ${photoForm.message}
                       disabled={formStatus === 'sending'}
                     >
                       <FontAwesomeIcon icon={faCamera} />
-                      {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщение'}
+                      {formStatus === 'sending' ? t('clubs.CulturalGallery.form.sending') : t('clubs.CulturalGallery.form.sendMessage')}
                     </button>
                     <button 
                       type="button" 
                       onClick={closePhotoModal}
                       className="cultural-gallery-cancel-btn"
                     >
-                      Отказ
+                      {t('clubs.CulturalGallery.form.cancel')}
                     </button>
                   </div>
                 </form>

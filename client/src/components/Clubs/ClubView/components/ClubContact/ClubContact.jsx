@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faEnvelope,
@@ -38,6 +39,7 @@ import {
 import './clubContact.css';
 
 export const ClubContact = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -73,7 +75,7 @@ export const ClubContact = ({ club }) => {
     if (!formData.name || !formData.email || !formData.message) {
       setFormStatus({
         type: 'error',
-        message: 'Моля попълнете всички задължителни полета'
+        message: t('clubs.ClubContact.form.validation.required')
       });
       setIsSubmitting(false);
       return;
@@ -82,21 +84,16 @@ export const ClubContact = ({ club }) => {
     // Изпращане на имейл чрез mailto
     const recipientEmail = club.contacts.email;
     const subject = encodeURIComponent(`${getSubjectLabel(formData.subject)} - ${formData.name}`);
-    const body = encodeURIComponent(`
-Име: ${formData.name}
-Email: ${formData.email}
-Телефон: ${formData.phone || 'Не е посочен'}
-Предпочитан контакт: ${formData.preferredContact === 'email' ? 'Email' : 'Телефон'}
-
-Тема: ${getSubjectLabel(formData.subject)}
-
-Съобщение:
-${formData.message}
-
----
-Изпратено от ${club.name} уебсайт
-Дата: ${new Date().toLocaleDateString('bg-BG')}
-    `);
+    const body = encodeURIComponent(t('clubs.ClubContact.form.emailBody', {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone || t('clubs.ClubContact.form.notSpecified'),
+      preferredContact: formData.preferredContact === 'email' ? t('clubs.ClubContact.form.email') : t('clubs.ClubContact.form.phone'),
+      subject: getSubjectLabel(formData.subject),
+      message: formData.message,
+      clubName: club.name,
+      date: new Date().toLocaleDateString(i18n.language === 'bg' ? 'bg-BG' : i18n.language === 'en' ? 'en-US' : 'de-DE')
+    }));
 
     try {
       // Симулация на изпращане
@@ -109,7 +106,7 @@ ${formData.message}
       
       setFormStatus({
         type: 'success',
-        message: 'Email клиентът ви е отворен! Изпратете съобщението за да го получим.'
+        message: t('clubs.ClubContact.form.messages.success')
       });
       
       // Изчистване на формата след успех
@@ -128,7 +125,7 @@ ${formData.message}
     } catch (error) {
       setFormStatus({
         type: 'error',
-        message: 'Възникна грешка. Моля опитайте отново или ни се обадете директно.'
+        message: t('clubs.ClubContact.form.messages.error')
       });
     } finally {
       setIsSubmitting(false);
@@ -136,17 +133,7 @@ ${formData.message}
   };
 
   const getSubjectLabel = (subject) => {
-    const subjects = {
-      'membership': 'Членство в клуба',
-      'activities': 'Дейности и програми',
-      'events': 'События',
-      'volunteer': 'Доброволчество',
-      'general': 'Общи въпроси',
-      'complaint': 'Жалба/предложение',
-      'partnership': 'Партньорство',
-      'donation': 'Дарение/спонсорство'
-    };
-    return subjects[subject] || 'Общ въпрос';
+    return t(`clubs.ClubContact.form.subjects.${subject}`);
   };
 
   const getSocialIcon = (platform) => {
@@ -175,7 +162,7 @@ ${formData.message}
   };
 
   const getTodayHours = () => {
-    if (!club.contacts?.workingHours) return 'Не е посочено';
+    if (!club.contacts?.workingHours) return t('clubs.ClubContact.workingHours.notSpecified');
     
     const today = new Date().getDay();
     const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
@@ -183,12 +170,17 @@ ${formData.message}
   };
 
   const getTodayName = () => {
-    const days = ['Неделя', 'Понеделник', 'Вторник', 'Сряда', 'Четвъртък', 'Петък', 'Събота'];
-    return days[new Date().getDay()];
+    const today = new Date().getDay();
+    const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
+    return t(`clubs.ClubContact.days.${dayIndex}`);
+  };
+
+  const getDayName = (day) => {
+    return t(`clubs.ClubContact.days.${day}`);
   };
 
   const handleShare = () => {
-    const text = `Свържете се с ${club.name}`;
+    const text = t('clubs.ClubContact.actions.shareText', { clubName: club.name });
     const contactInfo = `📞 ${club.contacts.phone || ''} 📧 ${club.contacts.email || ''}`;
     
     if (navigator.share) {
@@ -199,39 +191,45 @@ ${formData.message}
       });
     } else {
       navigator.clipboard.writeText(`${text}\n${contactInfo}\n${window.location.href}`);
-      alert('Контактната информация е копирана в клипборда!');
+      alert(t('clubs.ClubContact.messages.contactInfoCopied'));
     }
   };
 
   // FAQ данни
-  const faqData = [
+  const getFaqData = () => [
     {
-      question: "Как мога да стана член на клуба?",
-      answer: "За да станете член, трябва да попълните заявление и да заплатите членския внос. Свържете се с нас за повече информация."
+      question: t('clubs.ClubContact.faq.questions.howToBecomeMember'),
+      answer: t('clubs.ClubContact.faq.answers.howToBecomeMember')
     },
     {
-      question: "Колко струва членството?",
+      question: t('clubs.ClubContact.faq.questions.membershipCost'),
       answer: club.membership?.membershipFee ? 
-        `Месечният внос е ${club.membership.membershipFee.monthly} ${club.membership.membershipFee.currency}, а годишният - ${club.membership.membershipFee.yearly} ${club.membership.membershipFee.currency}.` :
-        "Свържете се с нас за информация за цените."
+        t('clubs.ClubContact.faq.answers.membershipCostWithPrices', {
+          monthly: club.membership.membershipFee.monthly,
+          currency: club.membership.membershipFee.currency,
+          yearly: club.membership.membershipFee.yearly
+        }) :
+        t('clubs.ClubContact.faq.answers.membershipCostGeneral')
     },
     {
-      question: "Какви са изискванията за членство?",
+      question: t('clubs.ClubContact.faq.questions.membershipRequirements'),
       answer: club.membership?.requirements?.length > 0 ?
         club.membership.requirements.join(', ') :
-        "Свържете се с нас за подробна информация за изискванията."
+        t('clubs.ClubContact.faq.answers.membershipRequirements')
     },
     {
-      question: "Какво включва членството?",
+      question: t('clubs.ClubContact.faq.questions.membershipBenefits'),
       answer: club.membership?.benefits?.length > 0 ?
         club.membership.benefits.join(', ') :
-        "Участие в всички дейности и събития на клуба."
+        t('clubs.ClubContact.faq.answers.membershipBenefits')
     },
     {
-      question: "Мога ли да посетя клуба преди да стана член?",
-      answer: "Разбира се! Заповядайте в работното ни време или се свържете с нас да уговорим среща."
+      question: t('clubs.ClubContact.faq.questions.visitBeforeMembership'),
+      answer: t('clubs.ClubContact.faq.answers.visitBeforeMembership')
     }
   ];
+
+  const faqData = getFaqData();
 
   return (
     <section id="general-contact" className="general-contact-main">
@@ -241,11 +239,11 @@ ${formData.message}
         <div className="general-contact-header">
           <div className="general-contact-badge">
             <FontAwesomeIcon icon={faHeadset} />
-            <span>Свържете се с нас</span>
+            <span>{t('clubs.ClubContact.header.badge')}</span>
           </div>
-          <h2 className="general-contact-title">Тук сме за вас</h2>
+          <h2 className="general-contact-title">{t('clubs.ClubContact.header.title')}</h2>
           <p className="general-contact-subtitle">
-            Готови сме да отговорим на всички ваши въпроси и да ви помогнем
+            {t('clubs.ClubContact.header.subtitle')}
           </p>
           
           {/* Quick actions */}
@@ -255,14 +253,14 @@ ${formData.message}
               onClick={() => setShowFAQ(true)}
             >
               <FontAwesomeIcon icon={faQuestionCircle} />
-              Често задавани въпроси
+              {t('clubs.ClubContact.actions.faq')}
             </button>
             <button 
               className="general-quick-action share"
               onClick={handleShare}
             >
               <FontAwesomeIcon icon={faShare} />
-              Споделяне
+              {t('clubs.ClubContact.actions.share')}
             </button>
           </div>
         </div>
@@ -276,7 +274,7 @@ ${formData.message}
             <div className="general-contact-card primary">
               <div className="general-card-header">
                 <FontAwesomeIcon icon={faHeadset} />
-                <h3>Основни контакти</h3>
+                <h3>{t('clubs.ClubContact.contactMethods.primary.title')}</h3>
               </div>
               
               <div className="general-contact-options">
@@ -286,9 +284,9 @@ ${formData.message}
                       <FontAwesomeIcon icon={faPhone} />
                     </div>
                     <div className="general-option-content">
-                      <span className="general-option-label">Телефон</span>
+                      <span className="general-option-label">{t('clubs.ClubContact.contactMethods.phone.label')}</span>
                       <span className="general-option-value">{club.contacts.phone}</span>
-                      <span className="general-option-desc">Обадете се директно</span>
+                      <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.phone.description')}</span>
                     </div>
                   </a>
                 )}
@@ -299,9 +297,9 @@ ${formData.message}
                       <FontAwesomeIcon icon={faMobileAlt} />
                     </div>
                     <div className="general-option-content">
-                      <span className="general-option-label">Мобилен</span>
+                      <span className="general-option-label">{t('clubs.ClubContact.contactMethods.mobile.label')}</span>
                       <span className="general-option-value">{club.contacts.mobile}</span>
-                      <span className="general-option-desc">SMS и обаждания</span>
+                      <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.mobile.description')}</span>
                     </div>
                   </a>
                 )}
@@ -312,9 +310,9 @@ ${formData.message}
                       <FontAwesomeIcon icon={faEnvelope} />
                     </div>
                     <div className="general-option-content">
-                      <span className="general-option-label">Email</span>
+                      <span className="general-option-label">{t('clubs.ClubContact.contactMethods.email.label')}</span>
                       <span className="general-option-value">{club.contacts.email}</span>
-                      <span className="general-option-desc">Изпратете съобщение</span>
+                      <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.email.description')}</span>
                     </div>
                   </a>
                 )}
@@ -325,9 +323,9 @@ ${formData.message}
                       <FontAwesomeIcon icon={faGlobe} />
                     </div>
                     <div className="general-option-content">
-                      <span className="general-option-label">Уебсайт</span>
+                      <span className="general-option-label">{t('clubs.ClubContact.contactMethods.website.label')}</span>
                       <span className="general-option-value">{club.contacts.website}</span>
-                      <span className="general-option-desc">Посетете сайта ни</span>
+                      <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.website.description')}</span>
                     </div>
                   </a>
                 )}
@@ -339,11 +337,11 @@ ${formData.message}
               <div className="general-contact-card hours">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faBusinessTime} />
-                  <h3>Работно време</h3>
+                  <h3>{t('clubs.ClubContact.workingHours.title')}</h3>
                   <button 
                     className="general-card-action"
                     onClick={() => setShowHoursModal(true)}
-                    title="Подробно работно време"
+                    title={t('clubs.ClubContact.workingHours.detailed')}
                   >
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </button>
@@ -353,21 +351,21 @@ ${formData.message}
                   <div className="general-today-info">
                     <span className="general-today-label">{getTodayName()}</span>
                     <span className={`general-today-hours ${getTodayHours() === 'closed' ? 'closed' : 'open'}`}>
-                      {getTodayHours() === 'closed' ? 'Затворено' : getTodayHours()}
+                      {getTodayHours() === 'closed' ? t('clubs.ClubContact.workingHours.closed') : getTodayHours()}
                     </span>
                   </div>
                   
                   {getTodayHours() !== 'closed' && (
                     <div className="general-status-indicator open">
                       <div className="general-status-dot"></div>
-                      <span>Отворено сега</span>
+                      <span>{t('clubs.ClubContact.workingHours.openNow')}</span>
                     </div>
                   )}
                   
                   {getTodayHours() === 'closed' && (
                     <div className="general-status-indicator closed">
                       <div className="general-status-dot"></div>
-                      <span>Затворено</span>
+                      <span>{t('clubs.ClubContact.workingHours.closed')}</span>
                     </div>
                   )}
                 </div>
@@ -379,7 +377,7 @@ ${formData.message}
               <div className="general-contact-card location">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faLocationDot} />
-                  <h3>Нашето местоположение</h3>
+                  <h3>{t('clubs.ClubContact.location.title')}</h3>
                 </div>
                 
                 <div className="general-location-info">
@@ -410,7 +408,7 @@ ${formData.message}
                         className="general-location-btn directions"
                       >
                         <FontAwesomeIcon icon={faRoute} />
-                        Маршрут
+                        {t('clubs.ClubContact.location.directions')}
                       </a>
                     )}
                   </div>
@@ -423,13 +421,12 @@ ${formData.message}
               <div className="general-contact-card social">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faUserFriends} />
-                  <h3>Социални мрежи</h3>
+                  <h3>{t('clubs.ClubContact.socialMedia.title')}</h3>
                 </div>
                 
                 <div className="general-social-links">
                   {Object.entries(club.contacts.socialMedia).map(([platform, handle]) => (
-                    
-                     <a key={platform}
+                    <a key={platform}
                       href={getSocialUrl(platform, handle)}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -450,97 +447,97 @@ ${formData.message}
               <div className="general-form-header">
                 <h3>
                   <FontAwesomeIcon icon={faPaperPlane} />
-                  Изпратете съобщение
+                  {t('clubs.ClubContact.form.title')}
                 </h3>
-                <p>Ще ви отговорим в рамките на 24 часа</p>
+                <p>{t('clubs.ClubContact.form.subtitle')}</p>
               </div>
               
               <form onSubmit={handleSubmit} className="general-contact-form">
                 <div className="general-form-grid">
                   <div className="general-form-field">
-                    <label htmlFor="name">Име *</label>
+                    <label htmlFor="name">{t('clubs.ClubContact.form.fields.name')} *</label>
                     <input
                       type="text"
                       id="name"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      placeholder="Вашето име"
+                      placeholder={t('clubs.ClubContact.form.placeholders.name')}
                       required
                     />
                     <FontAwesomeIcon icon={faUser} className="general-field-icon" />
                   </div>
                   
                   <div className="general-form-field">
-                    <label htmlFor="email">Email *</label>
+                    <label htmlFor="email">{t('clubs.ClubContact.form.fields.email')} *</label>
                     <input
                       type="email"
                       id="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="email@example.com"
+                      placeholder={t('clubs.ClubContact.form.placeholders.email')}
                       required
                     />
                     <FontAwesomeIcon icon={faEnvelope} className="general-field-icon" />
                   </div>
 
                   <div className="general-form-field">
-                    <label htmlFor="phone">Телефон</label>
+                    <label htmlFor="phone">{t('clubs.ClubContact.form.fields.phone')}</label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      placeholder="0888 123 456"
+                      placeholder={t('clubs.ClubContact.form.placeholders.phone')}
                     />
                     <FontAwesomeIcon icon={faPhone} className="general-field-icon" />
                   </div>
                   
                   <div className="general-form-field">
-                    <label htmlFor="preferredContact">Предпочитан контакт</label>
+                    <label htmlFor="preferredContact">{t('clubs.ClubContact.form.fields.preferredContact')}</label>
                     <select
                       id="preferredContact"
                       name="preferredContact"
                       value={formData.preferredContact}
                       onChange={handleInputChange}
                     >
-                      <option value="email">Email</option>
-                      <option value="phone">Телефон</option>
+                      <option value="email">{t('clubs.ClubContact.form.email')}</option>
+                      <option value="phone">{t('clubs.ClubContact.form.phone')}</option>
                     </select>
                     <FontAwesomeIcon icon={faHandshake} className="general-field-icon" />
                   </div>
                 </div>
 
                 <div className="general-form-field">
-                  <label htmlFor="subject">Тема</label>
+                  <label htmlFor="subject">{t('clubs.ClubContact.form.fields.subject')}</label>
                   <select
                     id="subject"
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
                   >
-                    <option value="membership">Членство в клуба</option>
-                    <option value="activities">Дейности и програми</option>
-                    <option value="events">События</option>
-                    <option value="volunteer">Доброволчество</option>
-                    <option value="partnership">Партньорство</option>
-                    <option value="donation">Дарение/спонсорство</option>
-                    <option value="general">Общи въпроси</option>
-                    <option value="complaint">Жалба/предложение</option>
+                    <option value="membership">{t('clubs.ClubContact.form.subjects.membership')}</option>
+                    <option value="activities">{t('clubs.ClubContact.form.subjects.activities')}</option>
+                    <option value="events">{t('clubs.ClubContact.form.subjects.events')}</option>
+                    <option value="volunteer">{t('clubs.ClubContact.form.subjects.volunteer')}</option>
+                    <option value="partnership">{t('clubs.ClubContact.form.subjects.partnership')}</option>
+                    <option value="donation">{t('clubs.ClubContact.form.subjects.donation')}</option>
+                    <option value="general">{t('clubs.ClubContact.form.subjects.general')}</option>
+                    <option value="complaint">{t('clubs.ClubContact.form.subjects.complaint')}</option>
                   </select>
                   <FontAwesomeIcon icon={faTag} className="general-field-icon" />
                 </div>
 
                 <div className="general-form-field">
-                  <label htmlFor="message">Съобщение *</label>
+                  <label htmlFor="message">{t('clubs.ClubContact.form.fields.message')} *</label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    placeholder="Напишете вашето съобщение тук..."
+                    placeholder={t('clubs.ClubContact.form.placeholders.message')}
                     rows="5"
                     required
                   ></textarea>
@@ -564,12 +561,12 @@ ${formData.message}
                   {isSubmitting ? (
                     <>
                       <FontAwesomeIcon icon={faSpinner} className="general-spinning" />
-                      Изпращане...
+                      {t('clubs.ClubContact.form.submitting')}
                     </>
                   ) : (
                     <>
                       <FontAwesomeIcon icon={faPaperPlane} />
-                      Изпрати съобщение
+                      {t('clubs.ClubContact.form.submit')}
                     </>
                   )}
                 </button>
@@ -586,7 +583,7 @@ ${formData.message}
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faQuestionCircle} />
-                Често задавани въпроси
+                {t('clubs.ClubContact.faq.title')}
               </h3>
               <button className="general-modal-close" onClick={() => setShowFAQ(false)}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -617,13 +614,13 @@ ${formData.message}
               </div>
               
               <div className="general-faq-footer">
-                <p>Не намирате отговор на въпроса си?</p>
+                <p>{t('clubs.ClubContact.faq.footer.question')}</p>
                 <button 
                   className="general-contact-us-btn"
                   onClick={() => setShowFAQ(false)}
                 >
                   <FontAwesomeIcon icon={faEnvelope} />
-                  Свържете се с нас
+                  {t('clubs.ClubContact.faq.footer.contactUs')}
                 </button>
               </div>
             </div>
@@ -638,7 +635,7 @@ ${formData.message}
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faBusinessTime} />
-                Подробно работно време
+                {t('clubs.ClubContact.workingHours.detailed')}
               </h3>
               <button className="general-modal-close" onClick={() => setShowHoursModal(false)}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -648,16 +645,6 @@ ${formData.message}
             <div className="general-modal-content">
               <div className="general-hours-detailed">
                 {Object.entries(club.contacts.workingHours).map(([day, hours]) => {
-                  const dayNames = {
-                    monday: 'Понеделник',
-                    tuesday: 'Вторник',
-                    wednesday: 'Сряда',
-                    thursday: 'Четвъртък',
-                    friday: 'Петък',
-                    saturday: 'Събота',
-                    sunday: 'Неделя'
-                  };
-                  
                   const today = new Date().getDay();
                   const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
                   const isToday = day === dayIndex;
@@ -666,11 +653,11 @@ ${formData.message}
                     <div key={day} className={`general-hours-row ${isToday ? 'today' : ''}`}>
                       <div className="general-hours-day">
                         <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span>{dayNames[day]}</span>
-                        {isToday && <span className="general-today-badge">Днес</span>}
+                        <span>{getDayName(day)}</span>
+                        {isToday && <span className="general-today-badge">{t('clubs.ClubContact.workingHours.today')}</span>}
                       </div>
                       <div className={`general-hours-time ${hours === 'closed' ? 'closed' : 'open'}`}>
-                        {hours === 'closed' ? 'Затворено' : hours}
+                        {hours === 'closed' ? t('clubs.ClubContact.workingHours.closed') : hours}
                       </div>
                     </div>
                   );
@@ -679,7 +666,7 @@ ${formData.message}
               
               <div className="general-hours-note">
                 <FontAwesomeIcon icon={faInfoCircle} />
-                <p>Работното време може да се променя по време на празници. За актуална информация се свържете с нас.</p>
+                <p>{t('clubs.ClubContact.workingHours.note')}</p>
               </div>
             </div>
           </div>

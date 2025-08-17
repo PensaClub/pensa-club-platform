@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faUsers,
@@ -27,73 +28,151 @@ import {
 import './socialAbout.css';
 
 export const SocialAbout = ({ club }) => {
-  // Проверяваме дали има необходимите данни
+  const { t, i18n } = useTranslation();
+
   if (!club?.name) {
     return null;
   }
 
-  // Основна информация
   const hasBasicInfo = club.fullDescription || club.shortDescription;
   
-  // Статистики за about секцията - САМО с реални данни
-  const aboutStats = [];
-  if (club.stats?.totalMembers) {
-    aboutStats.push({
-      icon: faUsers,
-      label: 'Активни членове',
-      value: club.stats.totalMembers,
-      color: '#16a34a'
-    });
-  }
-  if (club.foundedYear) {
-    const yearsActive = new Date().getFullYear() - club.foundedYear;
-    aboutStats.push({
-      icon: faCalendarAlt,
-      label: 'Години дейност',
-      value: yearsActive,
-      color: '#0891b2'
-    });
-  }
-  if (club.stats?.programs) {
-    aboutStats.push({
-      icon: faListCheck,
-      label: 'Програми',
-      value: club.stats.programs,
-      color: '#dc2626'
-    });
-  }
-  if (club.stats?.projectsBeneficiaries) {
-    aboutStats.push({
-      icon: faHandHoldingHeart,
-      label: 'Помогнати хора',
-      value: club.stats.projectsBeneficiaries,
-      color: '#7c3aed'
-    });
-  }
+  const getAboutStats = () => {
+    const stats = [];
+    if (club.stats?.totalMembers) {
+      stats.push({
+        icon: faUsers,
+        label: t('clubs.SocialAbout.stats.activeMembers'),
+        value: club.stats.totalMembers,
+        color: '#16a34a'
+      });
+    }
+    if (club.foundedYear) {
+      const yearsActive = new Date().getFullYear() - club.foundedYear;
+      stats.push({
+        icon: faCalendarAlt,
+        label: t('clubs.SocialAbout.stats.yearsActive'),
+        value: yearsActive,
+        color: '#0891b2'
+      });
+    }
+    if (club.stats?.programs) {
+      stats.push({
+        icon: faListCheck,
+        label: t('clubs.SocialAbout.stats.programs'),
+        value: club.stats.programs,
+        color: '#dc2626'
+      });
+    }
+    if (club.stats?.projectsBeneficiaries) {
+      stats.push({
+        icon: faHandHoldingHeart,
+        label: t('clubs.SocialAbout.stats.helpedPeople'),
+        value: club.stats.projectsBeneficiaries,
+        color: '#7c3aed'
+      });
+    }
+    return stats;
+  };
 
-  // Ползи от членството - САМО ако има данни
+  const aboutStats = getAboutStats();
   const benefits = club.membership?.benefits || [];
-
-  // Изисквания за членство - САМО ако има данни
   const requirements = club.membership?.requirements || [];
-
-  // Награди и постижения - САМО ако има данни
   const achievements = club.achievements?.awards || [];
   const recognitions = club.achievements?.recognitions || [];
-
-  // Социално въздействие - САМО ако има данни
   const volunteering = club.socialImpact?.volunteering || [];
   const communityProjects = club.socialImpact?.communityProjects || [];
-
-  // Специални услуги за пенсионери - САМО ако има данни
   const supportServices = club.pensionersSpecific?.supportServices;
   const healthServices = club.pensionersSpecific?.healthServices;
+  
   const hasSpecialPrograms = club.pensionersSpecific?.specialPrograms && 
     (club.pensionersSpecific.specialPrograms.memoryActivities?.length > 0 ||
      club.pensionersSpecific.specialPrograms.intergenerationalPrograms?.length > 0 ||
      club.pensionersSpecific.specialPrograms.volunteerPrograms?.length > 0);
 
-  // Ако няма почти нищо за показване, не показваме компонента
+  const getFoundedText = () => {
+    if (!club.foundedYear) return '';
+    return t('clubs.SocialAbout.story.foundedIn', { year: club.foundedYear });
+  };
+
+  const getServiceItems = () => {
+    const services = [];
+    
+    if (supportServices?.homeVisits) {
+      services.push({
+        icon: faHome,
+        label: t('clubs.SocialAbout.services.homeVisits')
+      });
+    }
+    if (supportServices?.shoppingAssistance) {
+      services.push({
+        icon: faHandsHelping,
+        label: t('clubs.SocialAbout.services.shoppingAssistance')
+      });
+    }
+    if (supportServices?.documentHelp) {
+      services.push({
+        icon: faListCheck,
+        label: t('clubs.SocialAbout.services.documentHelp')
+      });
+    }
+    if (supportServices?.companionship) {
+      services.push({
+        icon: faUserFriends,
+        label: t('clubs.SocialAbout.services.companionship')
+      });
+    }
+    if (supportServices?.transportService) {
+      services.push({
+        icon: faMapMarkerAlt,
+        label: t('clubs.SocialAbout.services.transportService')
+      });
+    }
+    if (supportServices?.mealDelivery) {
+      services.push({
+        icon: faHeart,
+        label: t('clubs.SocialAbout.services.mealDelivery')
+      });
+    }
+    if (supportServices?.cleaningHelp) {
+      services.push({
+        icon: faHome,
+        label: t('clubs.SocialAbout.services.cleaningHelp')
+      });
+    }
+    if (healthServices?.regularCheckups || healthServices?.bloodPressureMonitoring || healthServices?.healthLectures?.length > 0) {
+      services.push({
+        icon: faMedkit,
+        label: t('clubs.SocialAbout.services.healthServices')
+      });
+    }
+    
+    return services;
+  };
+
+  const serviceItems = getServiceItems();
+
+  const getProjectStatusTranslation = (status) => {
+    const statusMap = {
+      'active': t('clubs.SocialAbout.impact.projectStatus.active'),
+      'completed': t('clubs.SocialAbout.impact.projectStatus.completed'),
+      'pending': t('clubs.SocialAbout.impact.projectStatus.pending'),
+      'cancelled': t('clubs.SocialAbout.impact.projectStatus.cancelled'),
+      'активен': t('clubs.SocialAbout.impact.projectStatus.active'),
+      'завършен': t('clubs.SocialAbout.impact.projectStatus.completed'),
+      'предстоящ': t('clubs.SocialAbout.impact.projectStatus.pending'),
+      'отменен': t('clubs.SocialAbout.impact.projectStatus.cancelled')
+    };
+    return statusMap[status] || status;
+  };
+
+  const getMembershipFeeLabels = () => ({
+    monthly: t('clubs.SocialAbout.membership.fee.monthly'),
+    yearly: t('clubs.SocialAbout.membership.fee.yearly'),
+    currency: club.membership?.membershipFee?.currency || 'лв.'
+  });
+
+  const feeLabels = getMembershipFeeLabels();
+
   if (!hasBasicInfo && aboutStats.length === 0 && benefits.length === 0 && 
       achievements.length === 0 && volunteering.length === 0 && 
       communityProjects.length === 0 && !supportServices && !healthServices) {
@@ -104,13 +183,12 @@ export const SocialAbout = ({ club }) => {
     <section id="social-about" className="social-about-main-section">
       <div className="social-about-container">
         
-        {/* Header */}
         <div className="social-about-header">
           <div className="social-about-badge">
             <FontAwesomeIcon icon={faHeart} />
-            <span>За нашия клуб</span>
+            <span>{t('clubs.SocialAbout.header.badge')}</span>
           </div>
-          <h2 className="social-about-title">Нашата мисия и ценности</h2>
+          <h2 className="social-about-title">{t('clubs.SocialAbout.header.title')}</h2>
           {club.shortDescription && (
             <p className="social-about-subtitle">
               {club.shortDescription}
@@ -118,32 +196,29 @@ export const SocialAbout = ({ club }) => {
           )}
         </div>
 
-        {/* Main Content Grid */}
         <div className="social-about-main-grid">
           
-          {/* Story Section - показва се САМО ако има описание */}
           {club.fullDescription && (
             <div className="social-about-story">
               <div className="social-about-story-header">
                 <FontAwesomeIcon icon={faQuoteLeft} />
-                <h3>Нашата история</h3>
+                <h3>{t('clubs.SocialAbout.story.title')}</h3>
               </div>
               <div className="social-about-story-content">
                 <p>{club.fullDescription}</p>
                 {club.foundedYear && (
                   <div className="social-about-founded">
                     <FontAwesomeIcon icon={faCalendarAlt} />
-                    <span>Основан през {club.foundedYear} година</span>
+                    <span>{getFoundedText()}</span>
                   </div>
                 )}
               </div>
             </div>
           )}
 
-          {/* Stats Grid - показва се САМО ако има статистики */}
           {aboutStats.length > 0 && (
             <div className="social-about-stats">
-              <h3>Нашето въздействие</h3>
+              <h3>{t('clubs.SocialAbout.stats.title')}</h3>
               <div className="social-about-stats-grid">
                 {aboutStats.map((stat, index) => (
                   <div key={index} className="social-about-stat-card">
@@ -164,16 +239,14 @@ export const SocialAbout = ({ club }) => {
           )}
         </div>
 
-        {/* Additional Info Grid - показва се САМО при наличие на данни */}
-        {(benefits.length > 0 || requirements.length > 0 || (supportServices && Object.values(supportServices).some(v => v === true))) && (
+        {(benefits.length > 0 || requirements.length > 0 || serviceItems.length > 0) && (
           <div className="social-about-info-grid">
             
-            {/* Benefits - показва се САМО ако има ползи */}
             {benefits.length > 0 && (
               <div className="social-about-benefits">
                 <div className="social-about-section-header">
                   <FontAwesomeIcon icon={faGem} />
-                  <h3>Ползи от членството</h3>
+                  <h3>{t('clubs.SocialAbout.benefits.title')}</h3>
                 </div>
                 <div className="social-about-benefits-list">
                   {benefits.map((benefit, index) => (
@@ -186,12 +259,11 @@ export const SocialAbout = ({ club }) => {
               </div>
             )}
 
-            {/* Requirements - показва се САМО ако има изисквания */}
             {requirements.length > 0 && (
               <div className="social-about-requirements">
                 <div className="social-about-section-header">
                   <FontAwesomeIcon icon={faHandshake} />
-                  <h3>Как да се присъедините</h3>
+                  <h3>{t('clubs.SocialAbout.membership.title')}</h3>
                 </div>
                 <div className="social-about-requirements-list">
                   {requirements.map((requirement, index) => (
@@ -201,25 +273,24 @@ export const SocialAbout = ({ club }) => {
                     </div>
                   ))}
                 </div>
-                {/* Membership Fee - показва се САМО ако има данни за такса */}
                 {club.membership?.membershipFee && (
                   <div className="social-about-membership-fee">
-                    <h4>Членски внос</h4>
+                    <h4>{t('clubs.SocialAbout.membership.fee.title')}</h4>
                     <div className="social-about-fee-options">
                       {club.membership.membershipFee.monthly && (
                         <div className="social-about-fee-option">
                           <span className="social-about-fee-amount">
-                            {club.membership.membershipFee.monthly} {club.membership.membershipFee.currency}
+                            {club.membership.membershipFee.monthly} {feeLabels.currency}
                           </span>
-                          <span className="social-about-fee-period">месечно</span>
+                          <span className="social-about-fee-period">{feeLabels.monthly}</span>
                         </div>
                       )}
                       {club.membership.membershipFee.yearly && (
                         <div className="social-about-fee-option">
                           <span className="social-about-fee-amount">
-                            {club.membership.membershipFee.yearly} {club.membership.membershipFee.currency}
+                            {club.membership.membershipFee.yearly} {feeLabels.currency}
                           </span>
-                          <span className="social-about-fee-period">годишно</span>
+                          <span className="social-about-fee-period">{feeLabels.yearly}</span>
                         </div>
                       )}
                     </div>
@@ -228,95 +299,50 @@ export const SocialAbout = ({ club }) => {
               </div>
             )}
 
-            {/* Support Services - показва се САМО ако има услуги */}
-            {supportServices && Object.values(supportServices).some(v => v === true) && (
+            {serviceItems.length > 0 && (
               <div className="social-about-support-services">
                 <div className="social-about-section-header">
                   <FontAwesomeIcon icon={faHandHoldingHeart} />
-                  <h3>Нашите услуги</h3>
+                  <h3>{t('clubs.SocialAbout.services.title')}</h3>
                 </div>
                 <div className="social-about-services-grid">
-                  {supportServices.homeVisits && (
-                    <div className="social-about-service-item">
-                      <FontAwesomeIcon icon={faHome} />
-                      <span>Домашни посещения</span>
+                  {serviceItems.map((service, index) => (
+                    <div key={index} className="social-about-service-item">
+                      <FontAwesomeIcon icon={service.icon} />
+                      <span>{service.label}</span>
                     </div>
-                  )}
-                  {supportServices.shoppingAssistance && (
-                    <div className="social-about-service-item">
-                      <FontAwesomeIcon icon={faHandsHelping} />
-                      <span>Помощ при пазаруване</span>
-                    </div>
-                  )}
-                  {supportServices.documentHelp && (
-                    <div className="social-about-service-item">
-                      <FontAwesomeIcon icon={faListCheck} />
-                      <span>Помощ с документи</span>
-                    </div>
-                  )}
-                  {supportServices.companionship && (
-                    <div className="social-about-service-item">
-                      <FontAwesomeIcon icon={faUserFriends} />
-                      <span>Придружаване</span>
-                    </div>
-                  )}
-                  {supportServices.transportService && (
-                    <div className="social-about-service-item">
-                      <FontAwesomeIcon icon={faMapMarkerAlt} />
-                      <span>Транспортни услуги</span>
-                    </div>
-                  )}
-                  {supportServices.mealDelivery && (
-                    <div className="social-about-service-item">
-                      <FontAwesomeIcon icon={faHeart} />
-                      <span>Доставка на храна</span>
-                    </div>
-                  )}
-                  {supportServices.cleaningHelp && (
-                    <div className="social-about-service-item">
-                      <FontAwesomeIcon icon={faHome} />
-                      <span>Помощ за почистване</span>
-                    </div>
-                  )}
-                  {(healthServices?.regularCheckups || healthServices?.bloodPressureMonitoring || healthServices?.healthLectures?.length > 0) && (
-                    <div className="social-about-service-item">
-                      <FontAwesomeIcon icon={faMedkit} />
-                      <span>Здравни услуги</span>
-                    </div>
-                  )}
+                  ))}
                 </div>
               </div>
             )}
           </div>
         )}
 
-        {/* Social Impact Section - показва се САМО ако има въздействие */}
         {(volunteering.length > 0 || communityProjects.length > 0) && (
           <div className="social-about-impact">
             <div className="social-about-impact-header">
               <FontAwesomeIcon icon={faGlobe} />
-              <h3>Нашето социално въздействие</h3>
-              <p>Как правим разлика в общността</p>
+              <h3>{t('clubs.SocialAbout.impact.title')}</h3>
+              <p>{t('clubs.SocialAbout.impact.subtitle')}</p>
             </div>
             
             <div className="social-about-impact-grid">
-              {/* Volunteering - показва се САМО ако има доброволческа дейност */}
               {volunteering.length > 0 && (
                 <div className="social-about-volunteering">
-                  <h4>Доброволчество</h4>
+                  <h4>{t('clubs.SocialAbout.impact.volunteering.title')}</h4>
                   <div className="social-about-volunteering-list">
                     {volunteering.map((project, index) => (
                       <div key={index} className="social-about-volunteer-project">
                         <h5>{project.project}</h5>
-                        <p>{project.description || `${project.participants} участници`}</p>
+                        <p>{project.description || t('clubs.SocialAbout.impact.volunteering.participants', { count: project.participants })}</p>
                         {project.coordinator && (
                           <div className="social-about-coordinator">
-                            Координатор: {project.coordinator}
+                            {t('clubs.SocialAbout.impact.volunteering.coordinator')}: {project.coordinator}
                           </div>
                         )}
                         {project.hoursPerMonth && (
                           <div className="social-about-hours">
-                            {project.hoursPerMonth} часа месечно
+                            {t('clubs.SocialAbout.impact.volunteering.hoursPerMonth', { hours: project.hoursPerMonth })}
                           </div>
                         )}
                       </div>
@@ -325,10 +351,9 @@ export const SocialAbout = ({ club }) => {
                 </div>
               )}
 
-              {/* Community Projects - показва се САМО ако има проекти */}
               {communityProjects.length > 0 && (
                 <div className="social-about-projects">
-                  <h4>Общностни проекти</h4>
+                  <h4>{t('clubs.SocialAbout.impact.projects.title')}</h4>
                   <div className="social-about-projects-list">
                     {communityProjects.map((project, index) => (
                       <div key={index} className="social-about-project-item">
@@ -338,11 +363,11 @@ export const SocialAbout = ({ club }) => {
                           {project.beneficiaries && (
                             <span className="social-about-beneficiaries">
                               <FontAwesomeIcon icon={faUsers} />
-                              {project.beneficiaries} бенефициенти
+                              {t('clubs.SocialAbout.impact.projects.beneficiaries', { count: project.beneficiaries })}
                             </span>
                           )}
                           <span className={`social-about-status ${project.status}`}>
-                            {project.status}
+                            {getProjectStatusTranslation(project.status)}
                           </span>
                         </div>
                       </div>
@@ -354,20 +379,18 @@ export const SocialAbout = ({ club }) => {
           </div>
         )}
 
-        {/* Achievements Section - показва се САМО ако има награди/признания */}
         {(achievements.length > 0 || recognitions.length > 0) && (
           <div className="social-about-achievements">
             <div className="social-about-achievements-header">
               <FontAwesomeIcon icon={faCrown} />
-              <h3>Нашите постижения</h3>
-              <p>Признание за нашата дейност</p>
+              <h3>{t('clubs.SocialAbout.achievements.title')}</h3>
+              <p>{t('clubs.SocialAbout.achievements.subtitle')}</p>
             </div>
             
             <div className="social-about-achievements-grid">
-              {/* Awards - показва се САМО ако има награди */}
               {achievements.length > 0 && (
                 <div className="social-about-awards">
-                  <h4>Награди</h4>
+                  <h4>{t('clubs.SocialAbout.achievements.awards.title')}</h4>
                   <div className="social-about-awards-list">
                     {achievements.map((award, index) => (
                       <div key={index} className="social-about-award-item">
@@ -389,10 +412,9 @@ export const SocialAbout = ({ club }) => {
                 </div>
               )}
 
-              {/* Recognitions - показва се САМО ако има признания */}
               {recognitions.length > 0 && (
                 <div className="social-about-recognitions">
-                  <h4>Признания</h4>
+                  <h4>{t('clubs.SocialAbout.achievements.recognitions.title')}</h4>
                   <div className="social-about-recognitions-list">
                     {recognitions.map((recognition, index) => (
                       <div key={index} className="social-about-recognition-item">

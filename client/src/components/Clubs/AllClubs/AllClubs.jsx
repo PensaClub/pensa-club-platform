@@ -1,6 +1,6 @@
-// components/Clubs/AllClubs/AllClubs.jsx
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import { ClubsSearch } from './ClubsSearch/ClubsSearch';
 import { ClubsMap } from './ClubsMap/ClubsMap';
 import { ClubCard } from './ClubCard/ClubCard';
@@ -11,6 +11,7 @@ import { RecentArticles } from './RecentArticles/RecentArticles';
 import { TextZoom } from '../../TextZoom/TextZoom';
 
 export const AllClubs = () => {
+  const { t, i18n } = useTranslation();
   const [clubs, setClubs] = useState([]);
   const [filteredClubs, setFilteredClubs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,11 +34,11 @@ export const AllClubs = () => {
       setClubs(mockClubsData);
       setFilteredClubs(mockClubsData);
     } catch (error) {
-      console.error('Грешка при зареждане на клубове:', error);
+      console.error(t('clubs.AllClubs.errors.loadingClubs'), error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     fetchClubs();
@@ -93,36 +94,29 @@ export const AllClubs = () => {
   }, []);
 
   const toggleMapView = useCallback(() => {
-  setShowMap(prev => {
-    const newShowMap = !prev;
-    
-    if (newShowMap) {
-      // Използваме requestAnimationFrame за по-гладко скролване
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          if (mapRef.current) {
-            const headerHeight = 90; // височината на sticky header-а
-            const elementTop = mapRef.current.offsetTop - headerHeight;
-            
-            window.scrollTo({
-              top: elementTop,
-              behavior: 'smooth'
-            });
-            
-            // Алтернативно: използване на scrollIntoView
-            // mapRef.current.scrollIntoView({ 
-            //   behavior: 'smooth', 
-            //   block: 'start',
-            //   inline: 'nearest'
-            // });
-          }
-        }, 150);
-      });
-    }
-    
-    return newShowMap;
-  });
-}, []);
+    setShowMap(prev => {
+      const newShowMap = !prev;
+      
+      if (newShowMap) {
+        // Използваме requestAnimationFrame за по-гладко скролване
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            if (mapRef.current) {
+              const headerHeight = 90; // височината на sticky header-а
+              const elementTop = mapRef.current.offsetTop - headerHeight;
+              
+              window.scrollTo({
+                top: elementTop,
+                behavior: 'smooth'
+              });
+            }
+          }, 150);
+        });
+      }
+      
+      return newShowMap;
+    });
+  }, []);
 
   // Мемоизирани градове и категории за филтрите
   const availableCities = useMemo(() => {
@@ -146,55 +140,56 @@ export const AllClubs = () => {
       cities
     };
   }, [clubs]);
-const handleClubSelectOnMap = useCallback((club) => {
-  setSelectedClub(club);
-  setShowMap(true);
-  
-setTimeout(() => {
-          if (mapRef.current) {
-            const headerHeight = 90; // височината на sticky header-а
-            const elementTop = mapRef.current.offsetTop - headerHeight;
-            
-            window.scrollTo({
-              top: elementTop,
-              behavior: 'smooth'
-            });
-            
-            // Алтернативно: използване на scrollIntoView
-            // mapRef.current.scrollIntoView({ 
-            //   behavior: 'smooth', 
-            //   block: 'start',
-            //   inline: 'nearest'
-            // });
-          }
-        }, 150);
-}, []);
+
+  const handleClubSelectOnMap = useCallback((club) => {
+    setSelectedClub(club);
+    setShowMap(true);
+    
+    setTimeout(() => {
+      if (mapRef.current) {
+        const headerHeight = 90; // височината на sticky header-а
+        const elementTop = mapRef.current.offsetTop - headerHeight;
+        
+        window.scrollTo({
+          top: elementTop,
+          behavior: 'smooth'
+        });
+      }
+    }, 150);
+  }, []);
+
+  // Функция за получаване на переведено име на категория
+  const getCategoryLabel = useCallback((category) => {
+    return t(`clubs.AllClubs.categories.${category}`, { 
+      defaultValue: category 
+    });
+  }, [t]);
 
   // Генериране на динамични мета данни
   const metaData = useMemo(() => {
-    const baseTitle = "Всички клубове на пенсионерите в България";
-    const baseDescription = "Открийте своето място в общността! Разгледайте всички клубове за пенсионери в България.";
+    const baseTitle = t('clubs.AllClubs.meta.baseTitle');
+    const baseDescription = t('clubs.AllClubs.meta.baseDescription');
     
     if (searchFilters.searchTerm || searchFilters.city || searchFilters.category) {
       const filterParts = [];
       if (searchFilters.city && searchFilters.city !== 'all') {
-        filterParts.push(`в ${searchFilters.city}`);
+        filterParts.push(t('clubs.AllClubs.meta.inCity', { city: searchFilters.city }));
       }
       if (searchFilters.category && searchFilters.category !== 'all') {
-        const categoryNames = {
-          'cultural': 'културни',
-          'sports': 'спортни', 
-          'general': 'общи',
-          'traditional': 'традиционни'
-        };
-        filterParts.push(categoryNames[searchFilters.category] || searchFilters.category);
+        filterParts.push(getCategoryLabel(searchFilters.category));
       }
       if (searchFilters.searchTerm) {
         filterParts.push(`"${searchFilters.searchTerm}"`);
       }
 
-      const filteredTitle = `Клубове за пенсионери ${filterParts.join(' ')} - ${filteredClubs.length} резултата`;
-      const filteredDescription = `Намерени са ${filteredClubs.length} клуба за пенсионери ${filterParts.join(' ')}. Разгледайте подробна информация, контакти и дейности.`;
+      const filteredTitle = t('clubs.AllClubs.meta.filteredTitle', {
+        filters: filterParts.join(' '),
+        count: filteredClubs.length
+      });
+      const filteredDescription = t('clubs.AllClubs.meta.filteredDescription', {
+        count: filteredClubs.length,
+        filters: filterParts.join(' ')
+      });
       
       return {
         title: filteredTitle,
@@ -203,22 +198,36 @@ setTimeout(() => {
     }
 
     return {
-      title: `${baseTitle} - ${statistics.totalClubs} клуба, ${statistics.totalMembers} членове`,
-      description: `${baseDescription} ${statistics.totalClubs} активни клуба в ${statistics.cities} града с общо ${statistics.totalMembers} членове.`
+      title: t('clubs.AllClubs.meta.fullTitle', {
+        baseTitle,
+        totalClubs: statistics.totalClubs,
+        totalMembers: statistics.totalMembers
+      }),
+      description: t('clubs.AllClubs.meta.fullDescription', {
+        baseDescription,
+        totalClubs: statistics.totalClubs,
+        cities: statistics.cities,
+        totalMembers: statistics.totalMembers
+      })
     };
-  }, [searchFilters, filteredClubs.length, statistics]);
+  }, [searchFilters, filteredClubs.length, statistics, t, getCategoryLabel]);
+
+  // Get current language for URLs and meta
+  const currentLang = i18n.language;
+  const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
+  const currentUrl = `${currentOrigin}/${currentLang === 'bg' ? '' : currentLang + '/'}clubs`;
 
   if (isLoading) {
     return (
       <>
         <Helmet>
-          <title>Зареждане на клубове... | Клубове на пенсионерите</title>
-          <meta name="description" content="Моля изчакайте, зареждаме списъка с всички клубове за пенсионери в България." />
+          <title>{t('clubs.AllClubs.loading.title')}</title>
+          <meta name="description" content={t('clubs.AllClubs.loading.description')} />
           <meta name="robots" content="noindex" />
         </Helmet>
         <div className="all-clubs-loading-container">
           <LoadingSpinner />
-          <p className="all-clubs-loading-text">Зареждаме клубовете...</p>
+          <p className="all-clubs-loading-text">{t('clubs.AllClubs.loading.text')}</p>
         </div>
       </>
     );
@@ -231,15 +240,15 @@ setTimeout(() => {
         <meta name="description" content={metaData.description} />
         
         {/* Keywords */}
-        <meta name="keywords" content="клубове за пенсионери, третата възраст, активно стареене, социални дейности, България, общност, приятелства, здраве, култура, спорт" />
+        <meta name="keywords" content={t('clubs.AllClubs.meta.keywords')} />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content={metaData.title} />
         <meta property="og:description" content={metaData.description} />
         <meta property="og:image" content="/images/og-clubs-list.jpg" />
-        <meta property="og:url" content={`${window.location.origin}/clubs`} />
-        <meta property="og:site_name" content="Клубове на пенсионерите" />
+        <meta property="og:url" content={currentUrl} />
+        <meta property="og:site_name" content={t('clubs.AllClubs.meta.siteName')} />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -248,12 +257,12 @@ setTimeout(() => {
         <meta name="twitter:image" content="/images/twitter-clubs-list.jpg" />
         
         {/* Additional meta tags */}
-        <meta name="author" content="Клубове на пенсионерите" />
+        <meta name="author" content={t('clubs.AllClubs.meta.siteName')} />
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
         
         {/* Canonical URL */}
-        <link rel="canonical" href={`${window.location.origin}/clubs`} />
+        <link rel="canonical" href={currentUrl} />
         
         {/* Structured data for better SEO */}
         <script type="application/ld+json">
@@ -262,7 +271,8 @@ setTimeout(() => {
             "@type": "CollectionPage",
             "name": metaData.title,
             "description": metaData.description,
-            "url": `${window.location.origin}/clubs`,
+            "url": currentUrl,
+            "inLanguage": currentLang,
             "mainEntity": {
               "@type": "ItemList",
               "numberOfItems": statistics.totalClubs,
@@ -279,7 +289,7 @@ setTimeout(() => {
                   "addressCountry": "BG"
                 },
                 "foundingDate": club.foundedYear.toString(),
-                "memberOf": "Клубове на пенсионерите в България"
+                "memberOf": t('clubs.AllClubs.meta.memberOf')
               }))
             },
             "breadcrumb": {
@@ -288,21 +298,22 @@ setTimeout(() => {
                 {
                   "@type": "ListItem",
                   "position": 1,
-                  "name": "Начало",
-                  "item": window.location.origin
+                  "name": t('common.navigation.home'),
+                  "item": currentOrigin
                 },
                 {
                   "@type": "ListItem", 
                   "position": 2,
-                  "name": "Всички клубове",
-                  "item": `${window.location.origin}/clubs`
+                  "name": t('clubs.AllClubs.breadcrumb'),
+                  "item": currentUrl
                 }
               ]
             }
           })}
         </script>
       </Helmet>
-<TextZoom />
+      
+      <TextZoom />
       <div className="all-clubs-container">
         {/* Фонов слой със снимки */}
         <div className="all-clubs-bg-layer">
@@ -341,10 +352,10 @@ setTimeout(() => {
             <div className="all-clubs-header-container">
               <div className="all-clubs-header-content">
                 <h1 className="all-clubs-main-title">
-                  Открийте своето място в общността
+                  {t('clubs.AllClubs.header.title')}
                 </h1>
                 <p className="all-clubs-subtitle">
-                  "Заедно сме по-силни" - всеки клуб е портал към нови приятелства и възможности
+                  {t('clubs.AllClubs.header.subtitle')}
                 </p>
               </div>
               
@@ -352,19 +363,19 @@ setTimeout(() => {
               <div className="all-clubs-stats">
                 <div className="stat-card-clubs">
                   <div className="stat-value">{statistics.totalClubs}</div>
-                  <div className="stat-label">Клуба</div>
+                  <div className="stat-label">{t('clubs.AllClubs.stats.clubs')}</div>
                 </div>
                 <div className="stat-card-clubs">
                   <div className="stat-value">{statistics.totalMembers}</div>
-                  <div className="stat-label">Членове</div>
+                  <div className="stat-label">{t('clubs.AllClubs.stats.members')}</div>
                 </div>
                 <div className="stat-card-clubs">
                   <div className="stat-value">{statistics.activeClubs}</div>
-                  <div className="stat-label">Активни</div>
+                  <div className="stat-label">{t('clubs.AllClubs.stats.active')}</div>
                 </div>
                 <div className="stat-card-clubs">
                   <div className="stat-value">{statistics.cities}</div>
-                  <div className="stat-label">Града</div>
+                  <div className="stat-label">{t('clubs.AllClubs.stats.cities')}</div>
                 </div>
               </div>
             </div>
@@ -373,9 +384,7 @@ setTimeout(() => {
 
           {/* Карта на цялата ширина - ако е включена */}
           {showMap && (
-            <div  id="clubs-map-section"
-              ref={mapRef}
-              className="all-clubs-map-full-width">
+            <div id="clubs-map-section" ref={mapRef} className="all-clubs-map-full-width">
               <ClubsMap
                 clubs={filteredClubs}
                 selectedClub={selectedClub}
@@ -400,8 +409,8 @@ setTimeout(() => {
                   {filteredClubs.length === 0 ? (
                     <div className="all-clubs-no-clubs-found">
                       <div className="all-clubs-no-clubs-icon">🏛️</div>
-                      <h3>Няма намерени клубове</h3>
-                      <p>Опитайте с различни критерии за търсене</p>
+                      <h3>{t('clubs.AllClubs.noResults.title')}</h3>
+                      <p>{t('clubs.AllClubs.noResults.subtitle')}</p>
                     </div>
                   ) : (
                     <div className="all-clubs-grid">

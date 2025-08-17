@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHeartbeat,
@@ -43,72 +44,61 @@ import {
 import './healthActivities.css';
 
 export const HealthActivities = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('services');
   const [expandedService, setExpandedService] = useState(null);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
   const [selectedLecture, setSelectedLecture] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.pensionersSpecific?.healthServices && 
       !club?.pensionersSpecific?.ageSpecificNeeds?.nutritionSupport?.length &&
       !club?.pensionersSpecific?.ageSpecificNeeds?.fallPrevention?.length) {
     return null;
   }
 
-  // Събираме данни
   const pensionersSpecific = club.pensionersSpecific || {};
   const healthServices = pensionersSpecific.healthServices || {};
   const ageSpecificNeeds = pensionersSpecific.ageSpecificNeeds || {};
   const contacts = club.contacts || {};
 
-  // Здравни услуги
-  const healthFeatures = [
+  const getHealthFeatures = () => [
     healthServices.regularCheckups && {
       key: 'checkups',
       icon: faStethoscope,
-      title: 'Редовни прегледи',
-      description: 'Професионални здравни прегледи за всички членове',
+      title: t('clubs.HealthActivities.services.checkups.title'),
+      description: t('clubs.HealthActivities.services.checkups.description'),
       color: '#3b82f6'
     },
     healthServices.bloodPressureMonitoring && {
       key: 'pressure',
       icon: faHeartbeat,
-      title: 'Мониторинг на кръвното',
-      description: 'Редовно следене на кръвното налягане',
+      title: t('clubs.HealthActivities.services.pressure.title'),
+      description: t('clubs.HealthActivities.services.pressure.description'),
       color: '#ef4444'
     },
     ageSpecificNeeds.medicationReminders && {
       key: 'medication',
       icon: faPills,
-      title: 'Напомняния за лекарства',
-      description: 'Система за напомняне на лекарствени дози',
+      title: t('clubs.HealthActivities.services.medication.title'),
+      description: t('clubs.HealthActivities.services.medication.description'),
       color: '#8b5cf6'
     },
     healthServices.emergencyProtocol?.hasEmergencyPlan && {
       key: 'emergency',
       icon: faAmbulance,
-      title: 'Спешен протокол',
-      description: 'Готовност за спешни медицински случаи',
+      title: t('clubs.HealthActivities.services.emergency.title'),
+      description: t('clubs.HealthActivities.services.emergency.description'),
       color: '#f59e0b'
     }
   ].filter(Boolean);
 
-  // Здравни лекции
+  const healthFeatures = getHealthFeatures();
   const healthLectures = healthServices.healthLectures || [];
-
-  // Медицински партньори
   const medicalPartners = healthServices.medicalPartners || [];
-
-  // Хранителна подкрепа
   const nutritionSupport = ageSpecificNeeds.nutritionSupport || [];
-
-  // Превенция на падания
   const fallPrevention = ageSpecificNeeds.fallPrevention || [];
-
-  // Спешна информация
   const emergencyInfo = healthServices.emergencyProtocol || {};
 
-  // Ако няма здравни данни, не показваме компонента
   if (healthFeatures.length === 0 && 
       healthLectures.length === 0 && 
       medicalPartners.length === 0 && 
@@ -117,30 +107,36 @@ export const HealthActivities = ({ club }) => {
     return null;
   }
 
-  // Табове за навигация
-  const healthTabs = [
-    { key: 'services', label: 'Услуги', icon: faStethoscope },
-    { key: 'education', label: 'Образование', icon: faGraduationCap },
-    { key: 'partners', label: 'Партньори', icon: faHospital },
-    { key: 'nutrition', label: 'Хранене', icon: faAppleAlt },
-    { key: 'safety', label: 'Безопасност', icon: faShieldAlt }
+  const getHealthTabs = () => [
+    { key: 'services', label: t('clubs.HealthActivities.tabs.services'), icon: faStethoscope },
+    { key: 'education', label: t('clubs.HealthActivities.tabs.education'), icon: faGraduationCap },
+    { key: 'partners', label: t('clubs.HealthActivities.tabs.partners'), icon: faHospital },
+    { key: 'nutrition', label: t('clubs.HealthActivities.tabs.nutrition'), icon: faAppleAlt },
+    { key: 'safety', label: t('clubs.HealthActivities.tabs.safety'), icon: faShieldAlt }
   ];
 
-  // Helper функции
-  function getFrequencyText(frequency) {
-    const freq = frequency.toLowerCase();
-    if (freq.includes('седмично')) return 'Седмично';
-    if (freq.includes('месечно')) return 'Месечно';
-    if (freq.includes('тримесечно')) return 'Тримесечно';
-    if (freq.includes('годишно')) return 'Годишно';
-    return frequency;
-  }
+  const healthTabs = getHealthTabs();
 
-  function formatNextDate(dateString) {
+  const getFrequencyText = (frequency) => {
+    const freq = frequency.toLowerCase();
+    const frequencyMap = t('clubs.HealthActivities.frequencies', { returnObjects: true });
+    
+    for (const [key, terms] of Object.entries(frequencyMap)) {
+      if (terms.some(term => freq.includes(term))) {
+        return t(`clubs.HealthActivities.frequencyLabels.${key}`);
+      }
+    }
+    return frequency;
+  };
+
+  const formatNextDate = (dateString) => {
     if (!dateString) return null;
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('bg-BG', {
+      const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                     i18n.language === 'de' ? 'de-DE' : 'en-US';
+      
+      return date.toLocaleDateString(locale, {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
@@ -148,7 +144,11 @@ export const HealthActivities = ({ club }) => {
     } catch {
       return dateString;
     }
-  }
+  };
+
+  const getServiceBenefits = (serviceKey) => {
+    return t(`clubs.HealthActivities.services.${serviceKey}.benefits`, { returnObjects: true });
+  };
 
   const toggleService = (index) => {
     setExpandedService(expandedService === index ? null : index);
@@ -163,21 +163,19 @@ export const HealthActivities = ({ club }) => {
     <section id="health-activities" className="health-activities-section">
       <div className="health-activities-container">
         
-        {/* Header */}
         <div className="health-activities-header">
           <div className="health-activities-badge">
             <FontAwesomeIcon icon={faHeartbeat} />
-            <span>Здравни дейности</span>
+            <span>{t('clubs.HealthActivities.header.badge')}</span>
           </div>
           <h2 className="health-activities-title">
-            Грижа за вашето здраве и благополучие
+            {t('clubs.HealthActivities.header.title')}
           </h2>
           <p className="health-activities-subtitle">
-            Комплексни здравни услуги и превантивни програми за активна и здравословна старост
+            {t('clubs.HealthActivities.header.subtitle')}
           </p>
         </div>
 
-        {/* Health Overview Cards */}
         {healthFeatures.length > 0 && (
           <div className="health-activities-overview">
             {healthFeatures.map((feature, index) => (
@@ -198,14 +196,13 @@ export const HealthActivities = ({ club }) => {
                 </div>
                 <div className="health-activities-overview-status">
                   <FontAwesomeIcon icon={faCheckCircle} />
-                  <span>Активно</span>
+                  <span>{t('clubs.HealthActivities.status.active')}</span>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Navigation Tabs */}
         <div className="health-activities-nav">
           {healthTabs.map(tab => {
             let hasContent = false;
@@ -241,15 +238,13 @@ export const HealthActivities = ({ club }) => {
           })}
         </div>
 
-        {/* Content */}
         <div className="health-activities-content">
           
-          {/* Services Tab */}
           {activeTab === 'services' && healthFeatures.length > 0 && (
             <div className="health-activities-services">
               <div className="health-activities-services-header">
-                <h3>Здравни услуги</h3>
-                <p>Професионална грижа за вашето здраве и превенция</p>
+                <h3>{t('clubs.HealthActivities.servicesTab.title')}</h3>
+                <p>{t('clubs.HealthActivities.servicesTab.subtitle')}</p>
               </div>
               
               <div className="health-activities-services-grid">
@@ -280,36 +275,11 @@ export const HealthActivities = ({ club }) => {
                     {expandedService === index && (
                       <div className="health-activities-service-details">
                         <div className="health-activities-service-benefits">
-                          <h5>Предимства:</h5>
+                          <h5>{t('clubs.HealthActivities.benefits')}:</h5>
                           <ul>
-                            {service.key === 'checkups' && (
-                              <>
-                                <li>Ранно откриване на здравословни проблеми</li>
-                                <li>Персонализирани препоръки за здраве</li>
-                                <li>Редовно проследяване на здравословното състояние</li>
-                              </>
-                            )}
-                            {service.key === 'pressure' && (
-                              <>
-                                <li>Ежедневен мониторинг на кръвното налягане</li>
-                                <li>Спешно уведомяване при отклонения</li>
-                                <li>Връзка с лекуващия лекар</li>
-                              </>
-                            )}
-                            {service.key === 'medication' && (
-                              <>
-                                <li>Навременно приемане на лекарства</li>
-                                <li>Предотвратяване на пропуски</li>
-                                <li>Следене на лекарствени взаимодействия</li>
-                              </>
-                            )}
-                            {service.key === 'emergency' && (
-                              <>
-                                <li>Бърза реакция при спешни случаи</li>
-                                <li>Обучен персонал за първа помощ</li>
-                                <li>Директна връзка със спешни служби</li>
-                              </>
-                            )}
+                            {getServiceBenefits(service.key).map((benefit, idx) => (
+                              <li key={idx}>{benefit}</li>
+                            ))}
                           </ul>
                         </div>
                       </div>
@@ -320,12 +290,11 @@ export const HealthActivities = ({ club }) => {
             </div>
           )}
 
-          {/* Education Tab */}
           {activeTab === 'education' && healthLectures.length > 0 && (
             <div className="health-activities-education">
               <div className="health-activities-education-header">
-                <h3>Здравно образование</h3>
-                <p>Лекции и семинари за здравословен начин на живот</p>
+                <h3>{t('clubs.HealthActivities.educationTab.title')}</h3>
+                <p>{t('clubs.HealthActivities.educationTab.subtitle')}</p>
               </div>
               
               <div className="health-activities-lectures-grid">
@@ -366,7 +335,7 @@ export const HealthActivities = ({ club }) => {
                         className="health-activities-lecture-btn"
                       >
                         <FontAwesomeIcon icon={faCalendarCheck} />
-                        <span>График</span>
+                        <span>{t('clubs.HealthActivities.actions.schedule')}</span>
                       </button>
                     </div>
                   </div>
@@ -375,12 +344,11 @@ export const HealthActivities = ({ club }) => {
             </div>
           )}
 
-          {/* Partners Tab */}
           {activeTab === 'partners' && medicalPartners.length > 0 && (
             <div className="health-activities-partners">
               <div className="health-activities-partners-header">
-                <h3>Медицински партньори</h3>
-                <p>Професионални здравни услуги от наши партньори</p>
+                <h3>{t('clubs.HealthActivities.partnersTab.title')}</h3>
+                <p>{t('clubs.HealthActivities.partnersTab.subtitle')}</p>
               </div>
               
               <div className="health-activities-partners-grid">
@@ -430,7 +398,7 @@ export const HealthActivities = ({ club }) => {
                           className="health-activities-partner-btn"
                         >
                           <FontAwesomeIcon icon={faPhoneAlt} />
-                          <span>Обади се</span>
+                          <span>{t('clubs.HealthActivities.actions.call')}</span>
                         </a>
                       </div>
                     )}
@@ -440,12 +408,11 @@ export const HealthActivities = ({ club }) => {
             </div>
           )}
 
-          {/* Nutrition Tab */}
           {activeTab === 'nutrition' && nutritionSupport.length > 0 && (
             <div className="health-activities-nutrition">
               <div className="health-activities-nutrition-header">
-                <h3>Хранителна подкрепа</h3>
-                <p>Здравословно хранене за активна старост</p>
+                <h3>{t('clubs.HealthActivities.nutritionTab.title')}</h3>
+                <p>{t('clubs.HealthActivities.nutritionTab.subtitle')}</p>
               </div>
               
               <div className="health-activities-nutrition-grid">
@@ -484,19 +451,18 @@ export const HealthActivities = ({ club }) => {
             </div>
           )}
 
-          {/* Safety Tab */}
           {activeTab === 'safety' && (fallPrevention.length > 0 || emergencyInfo.hasEmergencyPlan) && (
             <div className="health-activities-safety">
               <div className="health-activities-safety-header">
-                <h3>Безопасност и превенция</h3>
-                <p>Мерки за безопасност и спешни протоколи</p>
+                <h3>{t('clubs.HealthActivities.safetyTab.title')}</h3>
+                <p>{t('clubs.HealthActivities.safetyTab.subtitle')}</p>
               </div>
               
               {fallPrevention.length > 0 && (
                 <div className="health-activities-prevention">
                   <h4>
                     <FontAwesomeIcon icon={faShieldAlt} />
-                    Превенция на падания
+                    {t('clubs.HealthActivities.safetyTab.fallPrevention')}
                   </h4>
                   <div className="health-activities-prevention-list">
                     {fallPrevention.map((measure, index) => (
@@ -513,7 +479,7 @@ export const HealthActivities = ({ club }) => {
                 <div className="health-activities-emergency">
                   <h4>
                     <FontAwesomeIcon icon={faAmbulance} />
-                    Спешен протокол
+                    {t('clubs.HealthActivities.safetyTab.emergencyProtocol')}
                   </h4>
                   <div className="health-activities-emergency-content">
                     {emergencyInfo.nearestHospital && (
@@ -522,7 +488,7 @@ export const HealthActivities = ({ club }) => {
                           <FontAwesomeIcon icon={faHospital} />
                         </div>
                         <div>
-                          <strong>Най-близка болница:</strong>
+                          <strong>{t('clubs.HealthActivities.safetyTab.nearestHospital')}:</strong>
                           <span>{emergencyInfo.nearestHospital}</span>
                         </div>
                       </div>
@@ -534,7 +500,7 @@ export const HealthActivities = ({ club }) => {
                           <FontAwesomeIcon icon={faPhoneAlt} />
                         </div>
                         <div>
-                          <strong>Спешни контакти:</strong>
+                          <strong>{t('clubs.HealthActivities.safetyTab.emergencyContacts')}:</strong>
                           <div className="health-activities-emergency-contacts">
                             {emergencyInfo.emergencyContacts.map((contact, idx) => (
                               <a key={idx} href={`tel:${contact}`} className="health-activities-emergency-contact">
@@ -552,7 +518,7 @@ export const HealthActivities = ({ club }) => {
                           <FontAwesomeIcon icon={faFirstAid} />
                         </div>
                         <div>
-                          <strong>Специално оборудване:</strong>
+                          <strong>{t('clubs.HealthActivities.safetyTab.specialEquipment')}:</strong>
                           <ul>
                             {emergencyInfo.specialNeeds.map((need, idx) => (
                               <li key={idx}>{need}</li>
@@ -569,7 +535,6 @@ export const HealthActivities = ({ club }) => {
         </div>
       </div>
 
-      {/* Schedule Modal */}
       {showScheduleModal && selectedLecture && (
         <div className="health-activities-modal" onClick={() => setShowScheduleModal(false)}>
           <div className="health-activities-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -582,7 +547,7 @@ export const HealthActivities = ({ club }) => {
             
             <div className="health-activities-modal-header">
               <FontAwesomeIcon icon={faCalendarCheck} />
-              <h3>График на лекцията</h3>
+              <h3>{t('clubs.HealthActivities.scheduleModal.title')}</h3>
               <p>{selectedLecture.topic}</p>
             </div>
             
@@ -591,7 +556,7 @@ export const HealthActivities = ({ club }) => {
                 <div className="health-activities-schedule-item">
                   <FontAwesomeIcon icon={faUserMd} />
                   <div>
-                    <strong>Лектор:</strong>
+                    <strong>{t('clubs.HealthActivities.scheduleModal.lecturer')}:</strong>
                     <span>{selectedLecture.lecturer}</span>
                   </div>
                 </div>
@@ -599,7 +564,7 @@ export const HealthActivities = ({ club }) => {
                 <div className="health-activities-schedule-item">
                   <FontAwesomeIcon icon={faClock} />
                   <div>
-                    <strong>Продължителност:</strong>
+                    <strong>{t('clubs.HealthActivities.scheduleModal.duration')}:</strong>
                     <span>{selectedLecture.duration}</span>
                   </div>
                 </div>
@@ -607,7 +572,7 @@ export const HealthActivities = ({ club }) => {
                 <div className="health-activities-schedule-item">
                   <FontAwesomeIcon icon={faCalendarCheck} />
                   <div>
-                    <strong>Честота:</strong>
+                    <strong>{t('clubs.HealthActivities.scheduleModal.frequency')}:</strong>
                     <span>{getFrequencyText(selectedLecture.frequency)}</span>
                   </div>
                 </div>
@@ -616,7 +581,7 @@ export const HealthActivities = ({ club }) => {
                   <div className="health-activities-schedule-item">
                     <FontAwesomeIcon icon={faCalendarCheck} />
                     <div>
-                      <strong>Следваща лекция:</strong>
+                      <strong>{t('clubs.HealthActivities.scheduleModal.nextLecture')}:</strong>
                       <span>{formatNextDate(selectedLecture.nextDate)}</span>
                     </div>
                   </div>
@@ -625,7 +590,7 @@ export const HealthActivities = ({ club }) => {
               
               {contacts.phone && (
                 <div className="health-activities-modal-footer">
-                  <p>За повече информация се свържете с нас:</p>
+                  <p>{t('clubs.HealthActivities.scheduleModal.contactInfo')}:</p>
                   <a href={`tel:${contacts.phone}`} className="health-activities-contact-btn">
                     <FontAwesomeIcon icon={faPhoneAlt} />
                     <span>{contacts.phone}</span>

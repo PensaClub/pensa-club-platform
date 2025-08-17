@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faUsers,
@@ -22,69 +23,62 @@ import {
 import './traditionalAbout.css';
 
 export const TraditionalAbout = ({ club }) => {
-  // Проверяваме дали има необходимите данни
+  const { t, i18n } = useTranslation();
+
   if (!club?.name) {
     return null;
   }
 
-  // Основна информация
   const hasBasicInfo = club.fullDescription || club.shortDescription;
   
-  // Статистики за about секцията - САМО с реални данни
-  const aboutStats = [];
-  if (club.membership?.totalMembers) {
-    aboutStats.push({
-      icon: faUsers,
-      label: 'Активни членове',
-      value: club.membership.totalMembers,
-      color: '#dc2626'
-    });
-  }
-  if (club.foundedYear) {
-    const yearsActive = new Date().getFullYear() - club.foundedYear;
-    aboutStats.push({
-      icon: faCalendarAlt,
-      label: 'Години традиция',
-      value: yearsActive,
-      color: '#d97706'
-    });
-  }
-  if (club.stats?.programs) {
-    aboutStats.push({
-      icon: faListCheck,
-      label: 'Програми',
-      value: club.stats.programs,
-      color: '#059669'
-    });
-  }
-  if (club.stats?.events) {
-    aboutStats.push({
-      icon: faAward,
-      label: 'Събития годишно',
-      value: club.stats.events,
-      color: '#7c3aed'
-    });
-  }
+  const getAboutStats = () => {
+    const stats = [];
+    if (club.membership?.totalMembers) {
+      stats.push({
+        icon: faUsers,
+        label: t('clubs.TraditionalAbout.stats.activeMembers'),
+        value: club.membership.totalMembers,
+        color: '#dc2626'
+      });
+    }
+    if (club.foundedYear) {
+      const yearsActive = new Date().getFullYear() - club.foundedYear;
+      stats.push({
+        icon: faCalendarAlt,
+        label: t('clubs.TraditionalAbout.stats.yearsTradition'),
+        value: yearsActive,
+        color: '#d97706'
+      });
+    }
+    if (club.stats?.programs) {
+      stats.push({
+        icon: faListCheck,
+        label: t('clubs.TraditionalAbout.stats.programs'),
+        value: club.stats.programs,
+        color: '#059669'
+      });
+    }
+    if (club.stats?.events) {
+      stats.push({
+        icon: faAward,
+        label: t('clubs.TraditionalAbout.stats.eventsYearly'),
+        value: club.stats.events,
+        color: '#7c3aed'
+      });
+    }
+    return stats;
+  };
 
-  // Възрастови групи - САМО ако има данни
+  const aboutStats = getAboutStats();
   const ageGroups = club.membership?.ageGroups;
   const hasAgeGroups = ageGroups && Object.keys(ageGroups).length > 0;
-
-  // Ползи от членството - САМО ако има данни
   const benefits = club.membership?.benefits || [];
-
-  // Изисквания за членство - САМО ако има данни
   const requirements = club.membership?.requirements || [];
-
-  // Награди и постижения - САМО ако има данни
   const achievements = club.achievements?.awards || [];
   const recognitions = club.achievements?.recognitions || [];
-
-  // Социално въздействие - САМО ако има данни
   const volunteering = club.socialImpact?.volunteering || [];
   const partnerships = club.socialImpact?.partnerships || [];
 
-  // Ако няма почти нищо за показване, не показваме компонента
   if (!hasBasicInfo && aboutStats.length === 0 && !hasAgeGroups && benefits.length === 0) {
     return null;
   }
@@ -93,13 +87,12 @@ export const TraditionalAbout = ({ club }) => {
     <section id="traditional-about" className="traditional-about-main-section">
       <div className="traditional-about-container">
         
-        {/* Header */}
         <div className="traditional-about-header">
           <div className="traditional-about-badge">
             <FontAwesomeIcon icon={faHistory} />
-            <span>За нашия клуб</span>
+            <span>{t('clubs.TraditionalAbout.header.badge')}</span>
           </div>
-          <h2 className="traditional-about-title">Нашата история и мисия</h2>
+          <h2 className="traditional-about-title">{t('clubs.TraditionalAbout.header.title')}</h2>
           {club.shortDescription && (
             <p className="traditional-about-subtitle">
               {club.shortDescription}
@@ -107,32 +100,29 @@ export const TraditionalAbout = ({ club }) => {
           )}
         </div>
 
-        {/* Main Content Grid */}
         <div className="traditional-about-main-grid">
           
-          {/* Story Section - показва се САМО ако има описание */}
           {club.fullDescription && (
             <div className="traditional-about-story">
               <div className="traditional-about-story-header">
                 <FontAwesomeIcon icon={faQuoteLeft} />
-                <h3>Нашата история</h3>
+                <h3>{t('clubs.TraditionalAbout.story.title')}</h3>
               </div>
               <div className="traditional-about-story-content">
                 <p>{club.fullDescription}</p>
                 {club.foundedYear && (
                   <div className="traditional-about-founded">
                     <FontAwesomeIcon icon={faCalendarAlt} />
-                    <span>Основан през {club.foundedYear} година</span>
+                    <span>{t('clubs.TraditionalAbout.story.founded', { year: club.foundedYear })}</span>
                   </div>
                 )}
               </div>
             </div>
           )}
 
-          {/* Stats Grid - показва се САМО ако има статистики */}
           {aboutStats.length > 0 && (
             <div className="traditional-about-stats">
-              <h3>Нашите числа</h3>
+              <h3>{t('clubs.TraditionalAbout.stats.title')}</h3>
               <div className="traditional-about-stats-grid">
                 {aboutStats.map((stat, index) => (
                   <div key={index} className="traditional-about-stat-card">
@@ -153,22 +143,24 @@ export const TraditionalAbout = ({ club }) => {
           )}
         </div>
 
-        {/* Additional Info Grid - показва се САМО при наличие на данни */}
         {(hasAgeGroups || benefits.length > 0 || requirements.length > 0) && (
           <div className="traditional-about-info-grid">
             
-            {/* Age Groups - показва се САМО ако има възрастови групи */}
             {hasAgeGroups && (
               <div className="traditional-about-demographics">
                 <div className="traditional-about-section-header">
                   <FontAwesomeIcon icon={faUsers} />
-                  <h3>Нашите членове</h3>
+                  <h3>{t('clubs.TraditionalAbout.demographics.title')}</h3>
                 </div>
                 <div className="traditional-about-age-groups">
                   {Object.entries(ageGroups).map(([range, count]) => (
                     <div key={range} className="traditional-about-age-group">
-                      <div className="traditional-about-age-range">{range} години</div>
-                      <div className="traditional-about-age-count">{count} души</div>
+                      <div className="traditional-about-age-range">
+                        {t('clubs.TraditionalAbout.demographics.ageRange', { range })}
+                      </div>
+                      <div className="traditional-about-age-count">
+                        {t('clubs.TraditionalAbout.demographics.people', { count })}
+                      </div>
                       <div 
                         className="traditional-about-age-bar"
                         style={{ 
@@ -181,12 +173,11 @@ export const TraditionalAbout = ({ club }) => {
               </div>
             )}
 
-            {/* Benefits - показва се САМО ако има ползи */}
             {benefits.length > 0 && (
               <div className="traditional-about-benefits">
                 <div className="traditional-about-section-header">
                   <FontAwesomeIcon icon={faGem} />
-                  <h3>Ползи от членството</h3>
+                  <h3>{t('clubs.TraditionalAbout.benefits.title')}</h3>
                 </div>
                 <div className="traditional-about-benefits-list">
                   {benefits.map((benefit, index) => (
@@ -199,12 +190,11 @@ export const TraditionalAbout = ({ club }) => {
               </div>
             )}
 
-            {/* Requirements - показва се САМО ако има изисквания */}
             {requirements.length > 0 && (
               <div className="traditional-about-requirements">
                 <div className="traditional-about-section-header">
                   <FontAwesomeIcon icon={faHandshake} />
-                  <h3>Как да се присъедините</h3>
+                  <h3>{t('clubs.TraditionalAbout.requirements.title')}</h3>
                 </div>
                 <div className="traditional-about-requirements-list">
                   {requirements.map((requirement, index) => (
@@ -214,17 +204,18 @@ export const TraditionalAbout = ({ club }) => {
                     </div>
                   ))}
                 </div>
-                {/* Membership Fee - показва се САМО ако има данни за такса */}
                 {club.membership?.membershipFee && (
                   <div className="traditional-about-membership-fee">
-                    <h4>Членски внос</h4>
+                    <h4>{t('clubs.TraditionalAbout.membershipFee.title')}</h4>
                     <div className="traditional-about-fee-options">
                       {club.membership.membershipFee.monthly && (
                         <div className="traditional-about-fee-option">
                           <span className="traditional-about-fee-amount">
                             {club.membership.membershipFee.monthly} {club.membership.membershipFee.currency}
                           </span>
-                          <span className="traditional-about-fee-period">месечно</span>
+                          <span className="traditional-about-fee-period">
+                            {t('clubs.TraditionalAbout.membershipFee.monthly')}
+                          </span>
                         </div>
                       )}
                       {club.membership.membershipFee.yearly && (
@@ -232,7 +223,9 @@ export const TraditionalAbout = ({ club }) => {
                           <span className="traditional-about-fee-amount">
                             {club.membership.membershipFee.yearly} {club.membership.membershipFee.currency}
                           </span>
-                          <span className="traditional-about-fee-period">годишно</span>
+                          <span className="traditional-about-fee-period">
+                            {t('clubs.TraditionalAbout.membershipFee.yearly')}
+                          </span>
                         </div>
                       )}
                     </div>
@@ -243,20 +236,18 @@ export const TraditionalAbout = ({ club }) => {
           </div>
         )}
 
-        {/* Achievements Section - показва се САМО ако има награди/признания */}
         {(achievements.length > 0 || recognitions.length > 0) && (
           <div className="traditional-about-achievements">
             <div className="traditional-about-achievements-header">
               <FontAwesomeIcon icon={faCrown} />
-              <h3>Нашите постижения</h3>
-              <p>Признание за нашата дейност през годините</p>
+              <h3>{t('clubs.TraditionalAbout.achievements.title')}</h3>
+              <p>{t('clubs.TraditionalAbout.achievements.subtitle')}</p>
             </div>
             
             <div className="traditional-about-achievements-grid">
-              {/* Awards - показва се САМО ако има награди */}
               {achievements.length > 0 && (
                 <div className="traditional-about-awards">
-                  <h4>Награди</h4>
+                  <h4>{t('clubs.TraditionalAbout.achievements.awards')}</h4>
                   <div className="traditional-about-awards-list">
                     {achievements.map((award, index) => (
                       <div key={index} className="traditional-about-award-item">
@@ -278,10 +269,9 @@ export const TraditionalAbout = ({ club }) => {
                 </div>
               )}
 
-              {/* Recognitions - показва се САМО ако има признания */}
               {recognitions.length > 0 && (
                 <div className="traditional-about-recognitions">
-                  <h4>Признания</h4>
+                  <h4>{t('clubs.TraditionalAbout.achievements.recognitions')}</h4>
                   <div className="traditional-about-recognitions-list">
                     {recognitions.map((recognition, index) => (
                       <div key={index} className="traditional-about-recognition-item">
@@ -296,28 +286,26 @@ export const TraditionalAbout = ({ club }) => {
           </div>
         )}
 
-        {/* Social Impact - показва се САМО ако има доброволчество/партньорства */}
         {(volunteering.length > 0 || partnerships.length > 0) && (
           <div className="traditional-about-impact">
             <div className="traditional-about-impact-header">
               <FontAwesomeIcon icon={faGlobe} />
-              <h3>Нашето въздействие</h3>
-              <p>Как допринасяме за общността</p>
+              <h3>{t('clubs.TraditionalAbout.impact.title')}</h3>
+              <p>{t('clubs.TraditionalAbout.impact.subtitle')}</p>
             </div>
             
             <div className="traditional-about-impact-grid">
-              {/* Volunteering - показва се САМО ако има доброволческа дейност */}
               {volunteering.length > 0 && (
                 <div className="traditional-about-volunteering">
-                  <h4>Доброволчество</h4>
+                  <h4>{t('clubs.TraditionalAbout.impact.volunteering')}</h4>
                   <div className="traditional-about-volunteering-list">
                     {volunteering.map((project, index) => (
                       <div key={index} className="traditional-about-volunteer-project">
                         <h5>{project.project}</h5>
-                        <p>{project.description || `${project.participants} участници`}</p>
+                        <p>{project.description || t('clubs.TraditionalAbout.impact.participants', { count: project.participants })}</p>
                         {project.coordinator && (
                           <div className="traditional-about-coordinator">
-                            Координатор: {project.coordinator}
+                            {t('clubs.TraditionalAbout.impact.coordinator')}: {project.coordinator}
                           </div>
                         )}
                       </div>
@@ -326,10 +314,9 @@ export const TraditionalAbout = ({ club }) => {
                 </div>
               )}
 
-              {/* Partnerships - показва се САМО ако има партньорства */}
               {partnerships.length > 0 && (
                 <div className="traditional-about-partnerships">
-                  <h4>Партньорства</h4>
+                  <h4>{t('clubs.TraditionalAbout.impact.partnerships')}</h4>
                   <div className="traditional-about-partnerships-list">
                     {partnerships.map((partnership, index) => (
                       <div key={index} className="traditional-about-partnership-item">

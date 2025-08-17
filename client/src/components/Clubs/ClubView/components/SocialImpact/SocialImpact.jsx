@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faChartLine,
@@ -36,12 +37,12 @@ import {
 import './socialImpact.css';
 
 export const SocialImpact = ({ club }) => {
+  const { t } = useTranslation();
   const [selectedMetric, setSelectedMetric] = useState(null);
   const [animatedNumbers, setAnimatedNumbers] = useState({});
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.socialImpact?.communityProjects && 
       !club?.socialImpact?.volunteering && 
       !club?.socialImpact?.partnerships && 
@@ -49,73 +50,70 @@ export const SocialImpact = ({ club }) => {
     return null;
   }
 
-  // Събираме данни за въздействието
   const communityProjects = club.socialImpact?.communityProjects || [];
   const volunteering = club.socialImpact?.volunteering || [];
   const partnerships = club.socialImpact?.partnerships || [];
   const stats = club.stats || {};
 
-  // Изчисляваме метрики
   const totalBeneficiaries = communityProjects.reduce((sum, project) => sum + (project.beneficiaries || 0), 0);
   const totalVolunteers = volunteering.reduce((sum, vol) => sum + (vol.participants || 0), 0);
-  const totalHours = volunteering.reduce((sum, vol) => sum + (vol.hoursPerMonth || 0), 0) * 12; // годишно
-  const activeCommunityProjects = communityProjects.filter(p => p.status === 'активен').length;
+  const totalHours = volunteering.reduce((sum, vol) => sum + (vol.hoursPerMonth || 0), 0) * 12;
+  const activeCommunityProjects = communityProjects.filter(p => 
+    p.status === 'активен' || p.status === 'active'
+  ).length;
   const totalBudget = communityProjects.reduce((sum, project) => sum + (project.budget || 0), 0);
   const yearsActive = club.foundedYear ? new Date().getFullYear() - club.foundedYear : 0;
 
-  // Главни метрики
-  const keyMetrics = [
+  const getKeyMetrics = () => [
     {
       id: 'beneficiaries',
-      label: 'Помогнати хора',
+      label: t('clubs.SocialImpact.metrics.beneficiaries.label'),
       value: totalBeneficiaries || stats.projectsBeneficiaries || 0,
       icon: faUsers,
       color: '#3b82f6',
-      description: 'Общ брой хора, които са получили помощ от нашите програми',
+      description: t('clubs.SocialImpact.metrics.beneficiaries.description'),
       trend: '+15%',
-      period: 'тази година'
+      period: t('clubs.SocialImpact.metrics.beneficiaries.period')
     },
     {
       id: 'volunteers',
-      label: 'Активни доброволци',
+      label: t('clubs.SocialImpact.metrics.volunteers.label'),
       value: totalVolunteers || stats.totalMembers || 0,
       icon: faHandsHelping,
       color: '#10b981',
-      description: 'Брой хора, които активно участват в доброволческите ни програми',
+      description: t('clubs.SocialImpact.metrics.volunteers.description'),
       trend: '+23%',
-      period: 'спрямо миналата година'
+      period: t('clubs.SocialImpact.metrics.volunteers.period')
     },
     {
       id: 'hours',
-      label: 'Доброволчески часове',
+      label: t('clubs.SocialImpact.metrics.hours.label'),
       value: totalHours || 0,
       icon: faClock,
       color: '#f59e0b',
-      description: 'Общо отработени часове от доброволци през годината',
+      description: t('clubs.SocialImpact.metrics.hours.description'),
       trend: '+8%',
-      period: 'средно месечно'
+      period: t('clubs.SocialImpact.metrics.hours.period')
     },
     {
       id: 'projects',
-      label: 'Активни проекти',
+      label: t('clubs.SocialImpact.metrics.projects.label'),
       value: activeCommunityProjects || stats.programs || 0,
       icon: faLightbulb,
       color: '#8b5cf6',
-      description: 'Брой програми и проекти, които в момента се изпълняват',
+      description: t('clubs.SocialImpact.metrics.projects.description'),
       trend: '+12%',
-      period: 'нови проекти'
+      period: t('clubs.SocialImpact.metrics.projects.period')
     }
   ];
 
-  // Филтрираме метриките които имат стойност > 0
+  const keyMetrics = getKeyMetrics();
   const validMetrics = keyMetrics.filter(metric => metric.value > 0);
 
-  // Ако няма валидни метрики, не показваме компонента
   if (validMetrics.length === 0) {
     return null;
   }
 
-  // Анимация на числата
   useEffect(() => {
     const animateNumber = (finalValue, duration = 2000) => {
       const increment = finalValue / (duration / 16);
@@ -133,7 +131,6 @@ export const SocialImpact = ({ club }) => {
       return timer;
     };
 
-    // Стартираме анимацията за всяка метрика
     validMetrics.forEach(metric => {
       const timer = animateNumber(metric.value);
       setAnimatedNumbers(prev => ({
@@ -142,7 +139,6 @@ export const SocialImpact = ({ club }) => {
       }));
     });
 
-    // Cleanup
     return () => {
       Object.values(animatedNumbers).forEach(item => {
         if (item.timer) clearInterval(item.timer);
@@ -150,7 +146,6 @@ export const SocialImpact = ({ club }) => {
     };
   }, []);
 
-  // Helper функции
   const formatNumber = (num) => {
     if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'K';
@@ -160,57 +155,118 @@ export const SocialImpact = ({ club }) => {
 
   const getCategoryIcon = (projectName) => {
     const name = projectName.toLowerCase();
-    if (name.includes('дом') || name.includes('топъл')) return faHome;
-    if (name.includes('храна') || name.includes('обяд')) return faUtensils;
-    if (name.includes('здрав') || name.includes('медицин')) return faMedkit;
-    if (name.includes('образование') || name.includes('учене')) return faGraduationCap;
-    if (name.includes('околна') || name.includes('парк')) return faTree;
+    const homeTerms = t('clubs.SocialImpact.categories.homeTerms', { returnObjects: true });
+    const foodTerms = t('clubs.SocialImpact.categories.foodTerms', { returnObjects: true });
+    const healthTerms = t('clubs.SocialImpact.categories.healthTerms', { returnObjects: true });
+    const educationTerms = t('clubs.SocialImpact.categories.educationTerms', { returnObjects: true });
+    const environmentTerms = t('clubs.SocialImpact.categories.environmentTerms', { returnObjects: true });
+    
+    if (homeTerms.some(term => name.includes(term))) return faHome;
+    if (foodTerms.some(term => name.includes(term))) return faUtensils;
+    if (healthTerms.some(term => name.includes(term))) return faMedkit;
+    if (educationTerms.some(term => name.includes(term))) return faGraduationCap;
+    if (environmentTerms.some(term => name.includes(term))) return faTree;
     return faHeart;
   };
 
   const getCategoryColor = (projectName) => {
     const name = projectName.toLowerCase();
-    if (name.includes('дом') || name.includes('топъл')) return '#10b981';
-    if (name.includes('храна') || name.includes('обяд')) return '#f59e0b';
-    if (name.includes('здрав') || name.includes('медицин')) return '#ef4444';
-    if (name.includes('образование') || name.includes('учене')) return '#3b82f6';
-    if (name.includes('околна') || name.includes('парк')) return '#22c55e';
+    const homeTerms = t('clubs.SocialImpact.categories.homeTerms', { returnObjects: true });
+    const foodTerms = t('clubs.SocialImpact.categories.foodTerms', { returnObjects: true });
+    const healthTerms = t('clubs.SocialImpact.categories.healthTerms', { returnObjects: true });
+    const educationTerms = t('clubs.SocialImpact.categories.educationTerms', { returnObjects: true });
+    const environmentTerms = t('clubs.SocialImpact.categories.environmentTerms', { returnObjects: true });
+    
+    if (homeTerms.some(term => name.includes(term))) return '#10b981';
+    if (foodTerms.some(term => name.includes(term))) return '#f59e0b';
+    if (healthTerms.some(term => name.includes(term))) return '#ef4444';
+    if (educationTerms.some(term => name.includes(term))) return '#3b82f6';
+    if (environmentTerms.some(term => name.includes(term))) return '#22c55e';
     return '#8b5cf6';
+  };
+
+  const getProjectStatusTranslation = (status) => {
+    const statusMap = {
+      'активен': t('clubs.SocialImpact.projectStatus.active'),
+      'завършен': t('clubs.SocialImpact.projectStatus.completed'),
+      'планиран': t('clubs.SocialImpact.projectStatus.planned'),
+      'active': t('clubs.SocialImpact.projectStatus.active'),
+      'completed': t('clubs.SocialImpact.projectStatus.completed'),
+      'planned': t('clubs.SocialImpact.projectStatus.planned')
+    };
+    return statusMap[status] || status;
+  };
+
+  const getProjectStatusColor = (status) => {
+    switch(status) {
+      case 'активен':
+      case 'active': return '#10b981';
+      case 'завършен':
+      case 'completed': return '#64748b';
+      case 'планиран':
+      case 'planned': return '#f59e0b';
+      default: return '#f59e0b';
+    }
+  };
+
+  const getCurrencySymbol = () => {
+    return club.membership?.membershipFee?.currency || t('clubs.SocialImpact.currency');
   };
 
   const handleMetricClick = (metric) => {
     setSelectedMetric(selectedMetric?.id === metric.id ? null : metric);
   };
 
+  const getVolunteerEmailSubject = () => {
+    return encodeURIComponent(t('clubs.SocialImpact.modals.join.volunteerEmailSubject'));
+  };
+
+  const getVolunteerEmailBody = () => {
+    return encodeURIComponent(t('clubs.SocialImpact.modals.join.volunteerEmailBody'));
+  };
+
+  const getDonationEmailSubject = () => {
+    return encodeURIComponent(t('clubs.SocialImpact.modals.join.donationEmailSubject'));
+  };
+
+  const getDonationEmailBody = () => {
+    return encodeURIComponent(t('clubs.SocialImpact.modals.join.donationEmailBody'));
+  };
+
+  const getInfoEmailSubject = () => {
+    return encodeURIComponent(t('clubs.SocialImpact.modals.info.emailSubject'));
+  };
+
+  const getInfoEmailBody = () => {
+    return encodeURIComponent(t('clubs.SocialImpact.modals.info.emailBody'));
+  };
+
   return (
     <section id="social-impact" className="social-impact-section">
       <div className="social-impact-container">
         
-        {/* Header */}
         <div className="social-impact-header">
           <div className="social-impact-header-content">
             <div className="social-impact-badge">
               <FontAwesomeIcon icon={faChartLine} />
-              <span>Нашето въздействие</span>
+              <span>{t('clubs.SocialImpact.header.badge')}</span>
             </div>
             <h2 className="social-impact-title">
-              Мериме промяната която правим
+              {t('clubs.SocialImpact.header.title')}
             </h2>
             <p className="social-impact-subtitle">
-              Всяка цифра разказва история за хора, които сме помогнали и общността, която сме подкрепили
+              {t('clubs.SocialImpact.header.subtitle')}
             </p>
           </div>
           
-          {/* Years Active */}
           {yearsActive > 0 && (
             <div className="social-impact-years-badge">
               <div className="social-impact-years-number">{yearsActive}</div>
-              <div className="social-impact-years-label">години активност</div>
+              <div className="social-impact-years-label">{t('clubs.SocialImpact.yearsActive')}</div>
             </div>
           )}
         </div>
 
-        {/* Key Metrics Dashboard */}
         <div className="social-impact-metrics-dashboard">
           {validMetrics.map((metric, index) => (
             <div 
@@ -253,12 +309,11 @@ export const SocialImpact = ({ club }) => {
           ))}
         </div>
 
-        {/* Projects Impact Grid */}
         {communityProjects.length > 0 && (
           <div className="social-impact-projects-section">
             <h3 className="social-impact-section-title">
               <FontAwesomeIcon icon={faFlag} />
-              Проекти с въздействие
+              {t('clubs.SocialImpact.projects.title')}
             </h3>
             
             <div className="social-impact-projects-grid">
@@ -277,12 +332,9 @@ export const SocialImpact = ({ club }) => {
                     </div>
                     <div 
                       className="social-impact-project-status"
-                      style={{ 
-                        backgroundColor: project.status === 'активен' ? '#10b981' : 
-                                        project.status === 'завършен' ? '#64748b' : '#f59e0b'
-                      }}
+                      style={{ backgroundColor: getProjectStatusColor(project.status) }}
                     >
-                      {project.status}
+                      {getProjectStatusTranslation(project.status)}
                     </div>
                   </div>
                   
@@ -294,13 +346,13 @@ export const SocialImpact = ({ club }) => {
                       {project.beneficiaries && (
                         <div className="social-impact-project-metric">
                           <FontAwesomeIcon icon={faUsers} />
-                          <span>{project.beneficiaries} човека</span>
+                          <span>{t('clubs.SocialImpact.projects.beneficiaries', { count: project.beneficiaries })}</span>
                         </div>
                       )}
                       {project.budget && (
                         <div className="social-impact-project-metric">
                           <FontAwesomeIcon icon={faEuroSign} />
-                          <span>{project.budget} лв.</span>
+                          <span>{project.budget} {getCurrencySymbol()}</span>
                         </div>
                       )}
                     </div>
@@ -311,12 +363,11 @@ export const SocialImpact = ({ club }) => {
           </div>
         )}
 
-        {/* Partnerships Network */}
         {partnerships.length > 0 && (
           <div className="social-impact-partnerships-section">
             <h3 className="social-impact-section-title">
               <FontAwesomeIcon icon={faHandshake} />
-              Мрежа от партньори
+              {t('clubs.SocialImpact.partnerships.title')}
             </h3>
             
             <div className="social-impact-partnerships-grid">
@@ -341,20 +392,19 @@ export const SocialImpact = ({ club }) => {
           </div>
         )}
 
-        {/* Impact Timeline */}
         {yearsActive > 0 && (
           <div className="social-impact-timeline-section">
             <h3 className="social-impact-section-title">
               <FontAwesomeIcon icon={faCalendar} />
-              Нашето развитие през годините
+              {t('clubs.SocialImpact.timeline.title')}
             </h3>
             
             <div className="social-impact-timeline">
               <div className="social-impact-timeline-item">
                 <div className="social-impact-timeline-year">{club.foundedYear}</div>
                 <div className="social-impact-timeline-content">
-                  <h4>Основаване на клуба</h4>
-                  <p>Започнахме нашето пътуване с мисията да помагаме на общността</p>
+                  <h4>{t('clubs.SocialImpact.timeline.founding.title')}</h4>
+                  <p>{t('clubs.SocialImpact.timeline.founding.description')}</p>
                 </div>
               </div>
               
@@ -364,7 +414,7 @@ export const SocialImpact = ({ club }) => {
                   <div className="social-impact-timeline-content">
                     <h4>{award.name}</h4>
                     <p>{award.description}</p>
-                    <span className="social-impact-timeline-source">от {award.awardedBy}</span>
+                    <span className="social-impact-timeline-source">{t('clubs.SocialImpact.timeline.awardedBy')} {award.awardedBy}</span>
                   </div>
                 </div>
               ))}
@@ -372,27 +422,29 @@ export const SocialImpact = ({ club }) => {
               <div className="social-impact-timeline-item current">
                 <div className="social-impact-timeline-year">{new Date().getFullYear()}</div>
                 <div className="social-impact-timeline-content">
-                  <h4>Продължаваме напред</h4>
-                  <p>С {totalBeneficiaries > 0 ? totalBeneficiaries : 'много'} помогнати хора и {validMetrics.length} активни програми</p>
+                  <h4>{t('clubs.SocialImpact.timeline.current.title')}</h4>
+                  <p>{t('clubs.SocialImpact.timeline.current.description', { 
+                    beneficiaries: totalBeneficiaries > 0 ? totalBeneficiaries : t('clubs.SocialImpact.timeline.current.many'),
+                    programs: validMetrics.length 
+                  })}</p>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Call to Action */}
         <div className="social-impact-cta-section">
           <div className="social-impact-cta-content">
             <FontAwesomeIcon icon={faHandHoldingHeart} />
-            <h3>Станете част от промяната</h3>
-            <p>Всяка цифра представлява реален човек, който е получил помощ. Присъединете се към нас и помогнете да увеличим тези числа.</p>
+            <h3>{t('clubs.SocialImpact.cta.title')}</h3>
+            <p>{t('clubs.SocialImpact.cta.description')}</p>
             <div className="social-impact-cta-buttons">
               <button 
                 onClick={() => setShowJoinModal(true)}
                 className="social-impact-cta-btn primary"
               >
                 <FontAwesomeIcon icon={faUsers} />
-                <span>Включете се</span>
+                <span>{t('clubs.SocialImpact.cta.joinUs')}</span>
               </button>
               
               <button 
@@ -400,13 +452,12 @@ export const SocialImpact = ({ club }) => {
                 className="social-impact-cta-btn secondary"
               >
                 <FontAwesomeIcon icon={faHeart} />
-                <span>Научете повече</span>
+                <span>{t('clubs.SocialImpact.cta.learnMore')}</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Join Modal */}
         {showJoinModal && (
           <div className="social-impact-modal" onClick={() => setShowJoinModal(false)}>
             <div className="social-impact-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -416,18 +467,18 @@ export const SocialImpact = ({ club }) => {
               
               <div className="social-impact-modal-header">
                 <FontAwesomeIcon icon={faHandHoldingHeart} />
-                <h3>Включете се в промяната</h3>
-                <p>Изберете как искате да помогнете на нашата кауза</p>
+                <h3>{t('clubs.SocialImpact.modals.join.title')}</h3>
+                <p>{t('clubs.SocialImpact.modals.join.description')}</p>
               </div>
               
               <div className="social-impact-modal-actions">
                 {club.contacts?.email && (
                   <a 
-                    href={`mailto:${club.contacts.email}?subject=Искам да се включа като доброволец&body=Здравейте,%0D%0A%0D%0AИскам да се включа като доброволец в дейностите на клуба.%0D%0A%0D%0AМоля свържете се с мен за повече информация.%0D%0A%0D%0AБлагодаря!`}
+                    href={`mailto:${club.contacts.email}?subject=${getVolunteerEmailSubject()}&body=${getVolunteerEmailBody()}`}
                     className="social-impact-modal-btn primary"
                   >
                     <FontAwesomeIcon icon={faHandsHelping} />
-                    <span>Стана доброволец</span>
+                    <span>{t('clubs.SocialImpact.modals.join.becomeVolunteer')}</span>
                   </a>
                 )}
                 {club.contacts?.phone && (
@@ -436,16 +487,16 @@ export const SocialImpact = ({ club }) => {
                     className="social-impact-modal-btn secondary"
                   >
                     <FontAwesomeIcon icon={faPhone} />
-                    <span>Обадете се</span>
+                    <span>{t('clubs.SocialImpact.modals.join.callUs')}</span>
                   </a>
                 )}
                 {club.contacts?.email && (
                   <a 
-                    href={`mailto:${club.contacts.email}?subject=Искам да подкрепя финансово&body=Здравейте,%0D%0A%0D%0AИскам да подкрепя финансово дейностите на клуба.%0D%0A%0D%0AМоля дайте ми информация за начините за дарение.%0D%0A%0D%0AБлагодаря!`}
+                    href={`mailto:${club.contacts.email}?subject=${getDonationEmailSubject()}&body=${getDonationEmailBody()}`}
                     className="social-impact-modal-btn secondary"
                   >
                     <FontAwesomeIcon icon={faHeart} />
-                    <span>Финансова подкрепа</span>
+                    <span>{t('clubs.SocialImpact.modals.join.financialSupport')}</span>
                   </a>
                 )}
               </div>
@@ -453,7 +504,6 @@ export const SocialImpact = ({ club }) => {
           </div>
         )}
 
-        {/* Info Modal */}
         {showInfoModal && (
           <div className="social-impact-modal" onClick={() => setShowInfoModal(false)}>
             <div className="social-impact-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -463,34 +513,34 @@ export const SocialImpact = ({ club }) => {
               
               <div className="social-impact-modal-header">
                 <FontAwesomeIcon icon={faChartLine} />
-                <h3>Научете повече за нашето въздействие</h3>
-                <p>Открийте как работим и как можете да се включите</p>
+                <h3>{t('clubs.SocialImpact.modals.info.title')}</h3>
+                <p>{t('clubs.SocialImpact.modals.info.description')}</p>
               </div>
               
               <div className="social-impact-modal-info">
                 <div className="social-impact-info-section">
-                  <h4>Как работим</h4>
-                  <p>Ние работим директно с общността, предоставяйки услуги и подкрепа където има най-голяма нужда. Всички наши програми са насочени към подобряване качеството на живот на членовете ни.</p>
+                  <h4>{t('clubs.SocialImpact.modals.info.howWeWork.title')}</h4>
+                  <p>{t('clubs.SocialImpact.modals.info.howWeWork.description')}</p>
                 </div>
                 
                 <div className="social-impact-info-section">
-                  <h4>Вашият принос</h4>
-                  <p>Всяко дарение и всеки доброволчески час се използва максимално ефективно за помощ на нуждаещите се. Прозрачността е важен принцип в нашата работа.</p>
+                  <h4>{t('clubs.SocialImpact.modals.info.yourContribution.title')}</h4>
+                  <p>{t('clubs.SocialImpact.modals.info.yourContribution.description')}</p>
                 </div>
                 
                 <div className="social-impact-info-section">
-                  <h4>Резултати</h4>
-                  <p>Благодарение на подкрепата на хора като вас, успяваме да променяме живота на все повече хора всяка година.</p>
+                  <h4>{t('clubs.SocialImpact.modals.info.results.title')}</h4>
+                  <p>{t('clubs.SocialImpact.modals.info.results.description')}</p>
                 </div>
                 
                 <div className="social-impact-modal-actions">
                   {club.contacts?.email && (
                     <a 
-                      href={`mailto:${club.contacts.email}?subject=Искам повече информация&body=Здравейте,%0D%0A%0D%0AИскам да получа повече информация за дейностите на клуба и начините за включване.%0D%0A%0D%0AБлагодаря!`}
+                      href={`mailto:${club.contacts.email}?subject=${getInfoEmailSubject()}&body=${getInfoEmailBody()}`}
                       className="social-impact-modal-btn primary"
                     >
                       <FontAwesomeIcon icon={faEnvelope} />
-                      <span>Пишете ни</span>
+                      <span>{t('clubs.SocialImpact.modals.info.writeToUs')}</span>
                     </a>
                   )}
                 </div>

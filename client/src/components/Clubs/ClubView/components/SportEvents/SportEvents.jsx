@@ -1,5 +1,5 @@
-// components/SportEvents/SportEvents.jsx
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faTrophy,
@@ -42,6 +42,7 @@ import {
 import './sportEvents.css';
 
 export const SportEvents = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('all');
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -55,7 +56,6 @@ export const SportEvents = ({ club }) => {
   });
   const [registerStatus, setRegisterStatus] = useState(null);
 
-  // Проверяваме дали има необходимите данни
   if (!club?.activities?.events?.length && 
       !club?.activities?.trips?.length && 
       !club?.achievements?.awards?.length && 
@@ -63,7 +63,6 @@ export const SportEvents = ({ club }) => {
     return null;
   }
 
-  // Събираме данни
   const activities = club.activities || {};
   const events = activities.events || [];
   const trips = activities.trips || [];
@@ -73,12 +72,87 @@ export const SportEvents = ({ club }) => {
   const recognitions = achievements.recognitions || [];
   const contacts = club.contacts || {};
 
-  // Ако няма събития и награди, не показваме компонента
   if (events.length === 0 && trips.length === 0 && awards.length === 0) {
     return null;
   }
 
-  // Комбинираме всички събития
+  const getSportCategory = (eventName) => {
+    const name = eventName.toLowerCase();
+    const categoryTerms = t('clubs.SportEvents.categoryTerms', { returnObjects: true });
+    
+    for (const [categoryKey, terms] of Object.entries(categoryTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        return categoryKey;
+      }
+    }
+    return 'fitness';
+  };
+
+  const getSportIcon = (eventName) => {
+    const name = eventName.toLowerCase();
+    const iconTerms = t('clubs.SportEvents.iconTerms', { returnObjects: true });
+    
+    for (const [iconKey, terms] of Object.entries(iconTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        const iconMap = {
+          swimming: faSwimmer,
+          football: faFutbol,
+          volleyball: faVolleyballBall,
+          basketball: faBasketballBall,
+          tennis: faTableTennis,
+          bowling: faBowlingBall,
+          running: faRunning,
+          cycling: faBicycle,
+          hiking: faHiking,
+          competition: faMedal
+        };
+        return iconMap[iconKey] || faTrophy;
+      }
+    }
+    return faTrophy;
+  };
+
+  const getSportColor = (eventName) => {
+    const name = eventName.toLowerCase();
+    const colorTerms = t('clubs.SportEvents.colorTerms', { returnObjects: true });
+    
+    for (const [colorKey, terms] of Object.entries(colorTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        const colorMap = {
+          aquatic: '#06b6d4',
+          team: '#f97316',
+          running: '#ef4444',
+          cycling: '#8b5cf6',
+          outdoor: '#059669',
+          competition: '#eab308'
+        };
+        return colorMap[colorKey] || '#6b7280';
+      }
+    }
+    return '#6b7280';
+  };
+
+  const formatEventDate = (dateString) => {
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    
+    return {
+      day: date.getDate(),
+      month: date.toLocaleDateString(locale, { month: 'short' }),
+      year: date.getFullYear(),
+      weekday: date.toLocaleDateString(locale, { weekday: 'short' })
+    };
+  };
+
+  const formatFullDate = (dateString) => {
+    const date = new Date(dateString);
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    
+    return date.toLocaleDateString(locale);
+  };
+
   const allEvents = [
     ...events.map(event => ({
       ...event,
@@ -90,7 +164,7 @@ export const SportEvents = ({ club }) => {
     })),
     ...trips.map(trip => ({
       id: `trip-${trip.destination}`,
-      title: `Спортна екскурзия до ${trip.destination}`,
+      title: t('clubs.SportEvents.tripTitle', { destination: trip.destination }),
       date: trip.date,
       description: trip.description,
       participants: trip.participants,
@@ -103,74 +177,44 @@ export const SportEvents = ({ club }) => {
     }))
   ];
 
-  // Филтри за събитията
-  const eventFilters = [
-    { key: 'all', label: 'Всички събития', icon: faTrophy, color: '#6b7280' },
-    { key: 'fitness', label: 'Фитнес', icon: faRunning, color: '#ef4444' },
-    { key: 'aquatic', label: 'Водни спортове', icon: faSwimmer, color: '#06b6d4' },
-    { key: 'team', label: 'Отборни', icon: faUsers, color: '#f97316' },
-    { key: 'outdoor', label: 'На открито', icon: faHiking, color: '#059669' },
-    { key: 'competition', label: 'Състезания', icon: faMedal, color: '#8b5cf6' },
-    { key: 'trip', label: 'Екскурзии', icon: faBicycle, color: '#ec4899' }
+  const getEventFilters = () => [
+    { key: 'all', label: t('clubs.SportEvents.filters.all'), icon: faTrophy, color: '#6b7280' },
+    { key: 'fitness', label: t('clubs.SportEvents.filters.fitness'), icon: faRunning, color: '#ef4444' },
+    { key: 'aquatic', label: t('clubs.SportEvents.filters.aquatic'), icon: faSwimmer, color: '#06b6d4' },
+    { key: 'team', label: t('clubs.SportEvents.filters.team'), icon: faUsers, color: '#f97316' },
+    { key: 'outdoor', label: t('clubs.SportEvents.filters.outdoor'), icon: faHiking, color: '#059669' },
+    { key: 'competition', label: t('clubs.SportEvents.filters.competition'), icon: faMedal, color: '#8b5cf6' },
+    { key: 'trip', label: t('clubs.SportEvents.filters.trip'), icon: faBicycle, color: '#ec4899' }
   ];
 
-  // Helper функции
-  function getSportCategory(eventName) {
-    const name = eventName.toLowerCase();
-    if (name.includes('плуване') || name.includes('басейн') || name.includes('водн')) return 'aquatic';
-    if (name.includes('футбол') || name.includes('волейбол') || name.includes('баскетбол')) return 'team';
-    if (name.includes('бягане') || name.includes('фитнес') || name.includes('маратон')) return 'fitness';
-    if (name.includes('планина') || name.includes('екскурзия') || name.includes('поход')) return 'outdoor';
-    if (name.includes('състезание') || name.includes('турнир') || name.includes('първенство')) return 'competition';
-    return 'fitness';
-  }
+  const eventFilters = getEventFilters();
 
-  function getSportIcon(eventName) {
-    const name = eventName.toLowerCase();
-    if (name.includes('плуване') || name.includes('басейн')) return faSwimmer;
-    if (name.includes('футбол')) return faFutbol;
-    if (name.includes('волейбол')) return faVolleyballBall;
-    if (name.includes('баскетбол')) return faBasketballBall;
-    if (name.includes('тенис')) return faTableTennis;
-    if (name.includes('боулинг')) return faBowlingBall;
-    if (name.includes('бягане') || name.includes('маратон')) return faRunning;
-    if (name.includes('велосипед') || name.includes('колоездене')) return faBicycle;
-    if (name.includes('планина') || name.includes('поход')) return faHiking;
-    if (name.includes('състезание') || name.includes('турнир')) return faMedal;
-    return faTrophy;
-  }
-
-  function getSportColor(eventName) {
-    const name = eventName.toLowerCase();
-    if (name.includes('плуване') || name.includes('басейн')) return '#06b6d4';
-    if (name.includes('футбол') || name.includes('волейбол')) return '#f97316';
-    if (name.includes('бягане') || name.includes('маратон')) return '#ef4444';
-    if (name.includes('велосипед')) return '#8b5cf6';
-    if (name.includes('планина') || name.includes('поход')) return '#059669';
-    if (name.includes('състезание') || name.includes('турнир')) return '#eab308';
-    return '#6b7280';
-  }
-
-  function formatEventDate(dateString) {
-    const date = new Date(dateString);
-    return {
-      day: date.getDate(),
-      month: date.toLocaleDateString('bg-BG', { month: 'short' }),
-      year: date.getFullYear(),
-      weekday: date.toLocaleDateString('bg-BG', { weekday: 'short' })
-    };
-  }
-
-  // Филтрираме събитията
   const filteredEvents = allEvents.filter(event => {
     return activeFilter === 'all' || event.category === activeFilter || event.type === activeFilter;
   });
 
-  // Разделяме на предстоящи и минали
   const upcomingEvents = filteredEvents.filter(event => event.isUpcoming);
   const pastEvents = filteredEvents.filter(event => !event.isUpcoming);
 
-  // Register form handlers
+  const getExperienceLevels = () => [
+    { value: '', label: t('clubs.SportEvents.experienceLevels.select') },
+    { value: 'Начинаещ', label: t('clubs.SportEvents.experienceLevels.beginner') },
+    { value: 'Средно ниво', label: t('clubs.SportEvents.experienceLevels.intermediate') },
+    { value: 'Напреднал', label: t('clubs.SportEvents.experienceLevels.advanced') },
+    { value: 'Професионален', label: t('clubs.SportEvents.experienceLevels.professional') }
+  ];
+
+  const getParticipationCategories = () => [
+    { value: '', label: t('clubs.SportEvents.participationCategories.select') },
+    { value: 'Индивидуално', label: t('clubs.SportEvents.participationCategories.individual') },
+    { value: 'Отборно', label: t('clubs.SportEvents.participationCategories.team') },
+    { value: 'Семейно', label: t('clubs.SportEvents.participationCategories.family') },
+    { value: 'Приятелско', label: t('clubs.SportEvents.participationCategories.friends') }
+  ];
+
+  const experienceLevels = getExperienceLevels();
+  const participationCategories = getParticipationCategories();
+
   const handleRegisterChange = (field, value) => {
     setRegisterForm(prev => ({
       ...prev,
@@ -183,31 +227,25 @@ export const SportEvents = ({ club }) => {
     setRegisterStatus('sending');
 
     if (contacts.email && selectedEvent) {
-      const subject = encodeURIComponent(`Заявка за участие - ${selectedEvent.title}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте нова заявка за участие в спортно събитие:
-
-СЪБИТИЕ: ${selectedEvent.title}
-Дата: ${new Date(selectedEvent.date).toLocaleDateString('bg-BG')}
-${selectedEvent.time ? `Час: ${selectedEvent.time}` : ''}
-Тип: ${eventFilters.find(f => f.key === selectedEvent.category)?.label || 'Спортно събитие'}
-${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
-
-ДАННИ НА УЧАСТНИКА:
-Име: ${registerForm.name}
-Имейл: ${registerForm.email}
-Телефон: ${registerForm.phone}
-Спортен опит: ${registerForm.experience || 'Не е посочен'}
-Категория участие: ${registerForm.category || 'Стандартна'}
-Допълнителни бележки: ${registerForm.notes || 'Няма'}
-
-Моля, свържете се с участника за потвърждение на регистрацията.
-
----
-Изпратено от сайта на ${club.name}
-      `);
+      const categoryLabel = eventFilters.find(f => f.key === selectedEvent.category)?.label || t('clubs.SportEvents.defaultEventType');
+      const subject = encodeURIComponent(t('clubs.SportEvents.registerEmail.subject', { 
+        eventTitle: selectedEvent.title 
+      }));
+      const body = encodeURIComponent(t('clubs.SportEvents.registerEmail.body', {
+        eventTitle: selectedEvent.title,
+        date: formatFullDate(selectedEvent.date),
+        time: selectedEvent.time || '',
+        type: categoryLabel,
+        price: selectedEvent.price || '',
+        currency: t('clubs.SportEvents.currency'),
+        name: registerForm.name,
+        email: registerForm.email,
+        phone: registerForm.phone,
+        experience: registerForm.experience || t('clubs.SportEvents.registerEmail.notSpecified'),
+        category: registerForm.category || t('clubs.SportEvents.registerEmail.standard'),
+        notes: registerForm.notes || t('clubs.SportEvents.registerEmail.none'),
+        clubName: club.name
+      }));
       
       try {
         window.location.href = `mailto:${contacts.email}?subject=${subject}&body=${body}`;
@@ -231,30 +269,29 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
     setShowRegisterModal(true);
   };
 
-  // Статистики за събитията
   const eventStats = [
     {
       icon: faTrophy,
       value: allEvents.length,
-      label: 'Общо събития',
+      label: t('clubs.SportEvents.stats.totalEvents'),
       color: '#f97316'
     },
     {
       icon: faCalendarAlt,
       value: upcomingEvents.length,
-      label: 'Предстоящи',
+      label: t('clubs.SportEvents.stats.upcoming'),
       color: '#22c55e'
     },
     {
       icon: faMedal,
       value: stats.competitions || pastEvents.filter(e => e.category === 'competition').length,
-      label: 'Състезания',
+      label: t('clubs.SportEvents.stats.competitions'),
       color: '#8b5cf6'
     },
     {
       icon: faAward,
       value: awards.length,
-      label: 'Награди',
+      label: t('clubs.SportEvents.stats.awards'),
       color: '#eab308'
     }
   ];
@@ -263,21 +300,19 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
     <section id="sport-events" className="sport-events-section">
       <div className="sport-events-container">
         
-        {/* Header */}
         <div className="sport-events-header">
           <div className="sport-events-badge">
             <FontAwesomeIcon icon={faTrophy} />
-            <span>Спортни събития</span>
+            <span>{t('clubs.SportEvents.header.badge')}</span>
           </div>
           <h2 className="sport-events-title">
-            Състезания, турнири и спортни празници
+            {t('clubs.SportEvents.header.title')}
           </h2>
           <p className="sport-events-subtitle">
-            Участвайте в нашите спортни събития и покажете своите умения
+            {t('clubs.SportEvents.header.subtitle')}
           </p>
         </div>
 
-        {/* Event Stats */}
         <div className="sport-events-stats">
           {eventStats.map((stat, index) => (
             <div 
@@ -296,7 +331,6 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
           ))}
         </div>
 
-        {/* Event Filters */}
         <div className="sport-events-filters">
           {eventFilters.map(filter => {
             const count = filter.key === 'all' ? allEvents.length : 
@@ -317,18 +351,16 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
           })}
         </div>
 
-        {/* Events Content */}
         <div className="sport-events-content">
           
-          {/* Upcoming Events */}
           {upcomingEvents.length > 0 && (
             <div className="sport-events-upcoming">
               <div className="sport-events-section-header">
                 <h3>
                   <FontAwesomeIcon icon={faCalendarAlt} />
-                  Предстоящи събития
+                  {t('clubs.SportEvents.upcomingEvents.title')}
                 </h3>
-                <p>Регистрирайте се за участие в нашите спортни събития</p>
+                <p>{t('clubs.SportEvents.upcomingEvents.subtitle')}</p>
               </div>
               
               <div className="sport-events-grid">
@@ -354,7 +386,7 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                         </div>
                         <div className="sport-events-card-status">
                           <span className="sport-events-upcoming-badge">
-                            Предстоящо
+                            {t('clubs.SportEvents.badges.upcoming')}
                           </span>
                         </div>
                       </div>
@@ -377,13 +409,13 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                           {event.participants && (
                             <div className="sport-events-card-detail">
                               <FontAwesomeIcon icon={faUsers} />
-                              <span>{event.participants} участници</span>
+                              <span>{t('clubs.SportEvents.participants', { count: event.participants })}</span>
                             </div>
                           )}
                           {event.price && (
                             <div className="sport-events-card-detail price">
                               <FontAwesomeIcon icon={faTicketAlt} />
-                              <span>{event.price} лв.</span>
+                              <span>{event.price} {t('clubs.SportEvents.currency')}</span>
                             </div>
                           )}
                         </div>
@@ -395,7 +427,7 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                           className="sport-events-register-btn"
                         >
                           <FontAwesomeIcon icon={faHandPaper} />
-                          <span>Регистрирай се</span>
+                          <span>{t('clubs.SportEvents.actions.register')}</span>
                         </button>
                       </div>
                     </div>
@@ -405,23 +437,21 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
             </div>
           )}
 
-          {/* Past Events & Achievements */}
           {(pastEvents.length > 0 || awards.length > 0) && (
             <div className="sport-events-achievements">
               <div className="sport-events-section-header">
                 <h3>
                   <FontAwesomeIcon icon={faMedal} />
-                  Постижения и награди
+                  {t('clubs.SportEvents.achievements.title')}
                 </h3>
-                <p>Нашите спортни успехи и признания</p>
+                <p>{t('clubs.SportEvents.achievements.subtitle')}</p>
               </div>
               
-              {/* Awards */}
               {awards.length > 0 && (
                 <div className="sport-events-awards">
                   <h4>
                     <FontAwesomeIcon icon={faAward} />
-                    Получени награди
+                    {t('clubs.SportEvents.achievements.awardsReceived')}
                   </h4>
                   <div className="sport-events-awards-grid">
                     {awards.map((award, index) => (
@@ -449,12 +479,11 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                 </div>
               )}
 
-              {/* Past Events */}
               {pastEvents.length > 0 && (
                 <div className="sport-events-past">
                   <h4>
                     <FontAwesomeIcon icon={faClock} />
-                    Проведени събития
+                    {t('clubs.SportEvents.achievements.pastEvents')}
                   </h4>
                   <div className="sport-events-past-list">
                     {pastEvents.slice(0, 6).map((event, index) => {
@@ -475,7 +504,7 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                               {event.participants && (
                                 <span>
                                   <FontAwesomeIcon icon={faUsers} />
-                                  {event.participants} участници
+                                  {t('clubs.SportEvents.participants', { count: event.participants })}
                                 </span>
                               )}
                             </div>
@@ -490,12 +519,11 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                 </div>
               )}
 
-              {/* Recognitions */}
               {recognitions.length > 0 && (
                 <div className="sport-events-recognitions">
                   <h4>
                     <FontAwesomeIcon icon={faStar} />
-                    Признания
+                    {t('clubs.SportEvents.achievements.recognitions')}
                   </h4>
                   <div className="sport-events-recognitions-list">
                     {recognitions.map((recognition, index) => (
@@ -514,18 +542,16 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
             </div>
           )}
 
-          {/* No Events */}
           {filteredEvents.length === 0 && (
             <div className="sport-events-no-results">
               <FontAwesomeIcon icon={faInfoCircle} />
-              <h4>Няма събития в тази категория</h4>
-              <p>Изберете друга категория или следете за нови спортни събития</p>
+              <h4>{t('clubs.SportEvents.noResults.title')}</h4>
+              <p>{t('clubs.SportEvents.noResults.message')}</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Register Modal */}
       {showRegisterModal && (
         <div className="sport-events-modal" onClick={() => setShowRegisterModal(false)}>
           <div className="sport-events-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -538,34 +564,34 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
             
             <div className="sport-events-modal-header">
               <FontAwesomeIcon icon={faTrophy} />
-              <h3>Регистрация за {selectedEvent?.title}</h3>
-              <p>Попълнете формата за да се регистрирате за това събитие</p>
+              <h3>{t('clubs.SportEvents.registerModal.title', { eventTitle: selectedEvent?.title })}</h3>
+              <p>{t('clubs.SportEvents.registerModal.subtitle')}</p>
             </div>
             
             {registerStatus === 'sent' ? (
               <div className="sport-events-form-success">
                 <FontAwesomeIcon icon={faCheckCircle} />
-                <h4>Регистрацията е изпратена успешно!</h4>
-                <p>Благодарим ви! Ще се свържем с вас за потвърждение на участието.</p>
+                <h4>{t('clubs.SportEvents.registerModal.success.title')}</h4>
+                <p>{t('clubs.SportEvents.registerModal.success.message')}</p>
               </div>
             ) : registerStatus === 'error' ? (
               <div className="sport-events-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.SportEvents.registerModal.error.title')}</h4>
+                <p>{t('clubs.SportEvents.registerModal.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleRegisterSubmit} className="sport-events-form">
                 {selectedEvent && (
                   <div className="sport-events-selected-event">
-                    <h4>Избрано събитие:</h4>
+                    <h4>{t('clubs.SportEvents.registerModal.selectedEvent')}:</h4>
                     <div className="sport-events-event-summary">
                       <FontAwesomeIcon icon={selectedEvent.icon} />
                       <div>
                         <strong>{selectedEvent.title}</strong>
-                        <span>{new Date(selectedEvent.date).toLocaleDateString('bg-BG')}</span>
+                        <span>{formatFullDate(selectedEvent.date)}</span>
                         {selectedEvent.time && <span>{selectedEvent.time}</span>}
-                        {selectedEvent.price && <span>Цена: {selectedEvent.price} лв.</span>}
+                        {selectedEvent.price && <span>{t('clubs.SportEvents.registerModal.price')}: {selectedEvent.price} {t('clubs.SportEvents.currency')}</span>}
                       </div>
                     </div>
                   </div>
@@ -575,7 +601,7 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                   <div className="sport-events-form-group">
                     <label htmlFor="register-name">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.SportEvents.registerModal.form.name')} *
                     </label>
                     <input
                       type="text"
@@ -583,14 +609,14 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                       value={registerForm.name}
                       onChange={(e) => handleRegisterChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.SportEvents.registerModal.form.namePlaceholder')}
                     />
                   </div>
                   
                   <div className="sport-events-form-group">
                     <label htmlFor="register-email">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.SportEvents.registerModal.form.email')} *
                     </label>
                     <input
                       type="email"
@@ -598,7 +624,7 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                       value={registerForm.email}
                       onChange={(e) => handleRegisterChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.SportEvents.registerModal.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -607,7 +633,7 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                   <div className="sport-events-form-group">
                     <label htmlFor="register-phone">
                       <FontAwesomeIcon icon={faMobile} />
-                      Телефон *
+                      {t('clubs.SportEvents.registerModal.form.phone')} *
                     </label>
                     <input
                       type="tel"
@@ -615,25 +641,25 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                       value={registerForm.phone}
                       onChange={(e) => handleRegisterChange('phone', e.target.value)}
                       required
-                      placeholder="Въведете вашия телефон"
+                      placeholder={t('clubs.SportEvents.registerModal.form.phonePlaceholder')}
                     />
                   </div>
                   
                   <div className="sport-events-form-group">
                     <label htmlFor="register-experience">
                       <FontAwesomeIcon icon={faTrophy} />
-                      Спортен опит
+                      {t('clubs.SportEvents.registerModal.form.experience')}
                     </label>
                     <select
                       id="register-experience"
                       value={registerForm.experience}
                       onChange={(e) => handleRegisterChange('experience', e.target.value)}
                     >
-                      <option value="">Изберете ниво</option>
-                      <option value="Начинаещ">Начинаещ</option>
-                      <option value="Средно ниво">Средно ниво</option>
-                      <option value="Напреднал">Напреднал</option>
-                      <option value="Професионален">Професионален</option>
+                      {experienceLevels.map(level => (
+                        <option key={level.value} value={level.value}>
+                          {level.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -641,31 +667,31 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                 <div className="sport-events-form-group">
                   <label htmlFor="register-category">
                     <FontAwesomeIcon icon={faFlag} />
-                    Категория участие
+                    {t('clubs.SportEvents.registerModal.form.category')}
                   </label>
                   <select
                     id="register-category"
                     value={registerForm.category}
                     onChange={(e) => handleRegisterChange('category', e.target.value)}
                   >
-                    <option value="">Изберете категория</option>
-                    <option value="Индивидуално">Индивидуално участие</option>
-                    <option value="Отборно">Отборно участие</option>
-                    <option value="Семейно">Семейно участие</option>
-                    <option value="Приятелско">Приятелско участие</option>
+                    {participationCategories.map(category => (
+                      <option key={category.value} value={category.value}>
+                        {category.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 
                 <div className="sport-events-form-group">
                   <label htmlFor="register-notes">
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    Допълнителни бележки
+                    {t('clubs.SportEvents.registerModal.form.notes')}
                   </label>
                   <textarea
                     id="register-notes"
                     value={registerForm.notes}
                     onChange={(e) => handleRegisterChange('notes', e.target.value)}
-                    placeholder="Споменете ако имате въпроси или специални изисквания"
+                    placeholder={t('clubs.SportEvents.registerModal.form.notesPlaceholder')}
                     rows="3"
                   />
                 </div>
@@ -677,14 +703,16 @@ ${selectedEvent.price ? `Цена: ${selectedEvent.price} лв.` : ''}
                     disabled={registerStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faPaperPlane} />
-                    {registerStatus === 'sending' ? 'Изпраща се...' : 'Изпрати регистрацията'}
+                    {registerStatus === 'sending' ? 
+                      t('clubs.SportEvents.registerModal.form.sending') : 
+                      t('clubs.SportEvents.registerModal.form.submit')}
                   </button>
                   <button 
                     type="button" 
                     onClick={() => setShowRegisterModal(false)}
                     className="sport-events-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.SportEvents.registerModal.form.cancel')}
                   </button>
                 </div>
               </form>

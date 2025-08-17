@@ -65,7 +65,7 @@
   gap: 0.5rem;
 }
 
-.general-gallery-stat svg {
+.general-gallery-header .general-gallery-stat svg {
   color: #6366f1;
   font-size: 2rem;
 }

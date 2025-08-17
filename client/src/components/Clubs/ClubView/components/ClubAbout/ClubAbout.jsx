@@ -24,9 +24,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import './clubAbout.css';
 
 export const ClubAbout = ({ club }) => {
+  const { t } = useTranslation();
   const [expandedSection, setExpandedSection] = useState('description');
 
   // ОСНОВНА ПРОВЕРКА - ако няма достатъчно данни, не показваме компонента
@@ -103,33 +105,6 @@ export const ClubAbout = ({ club }) => {
     const supportServices = pensionersSpecific.supportServices || {};
     const accessibility = pensionersSpecific.accessibility || {};
 
-    const serviceLabels = {
-      // Health services
-      regularCheckups: 'Редовни здравни прегледи',
-      bloodPressureMonitoring: 'Измерване на кръвно налягане',
-      healthLectures: 'Здравни лекции',
-      
-      // Support services
-      homeVisits: 'Домашни посещения',
-      shoppingAssistance: 'Помощ при пазаруване',
-      documentHelp: 'Помощ с документи',
-      companionship: 'Придружаване',
-      transportService: 'Транспортни услуги',
-      mealDelivery: 'Доставка на храна',
-      cleaningHelp: 'Помощ за почистване',
-      techSupport: 'Техническа подкрепа',
-      
-      // Accessibility
-      wheelchairAccess: 'Достъп с инвалидна количка',
-      elevatorAccess: 'Асансьор',
-      hearingLoop: 'Слухово оборудване',
-      largeTextMaterials: 'Материали с едър шрифт',
-      handrails: 'Парапети и опори',
-      nonSlipFloors: 'Нехлъзгащи подове',
-      goodLighting: 'Добро осветление',
-      restingAreas: 'Места за почивка'
-    };
-
     const services = {
       health: [],
       support: [],
@@ -139,7 +114,7 @@ export const ClubAbout = ({ club }) => {
     // Health services
     Object.entries(healthServices).forEach(([key, value]) => {
       if (value === true || (Array.isArray(value) && value.length > 0)) {
-        const label = serviceLabels[key];
+        const label = t(`clubs.ClubAbout.services.health.${key}`);
         if (label) {
           services.health.push({
             key,
@@ -154,7 +129,7 @@ export const ClubAbout = ({ club }) => {
     // Support services
     Object.entries(supportServices).forEach(([key, value]) => {
       if (value === true) {
-        const label = serviceLabels[key];
+        const label = t(`clubs.ClubAbout.services.support.${key}`);
         if (label) {
           services.support.push({
             key,
@@ -167,7 +142,7 @@ export const ClubAbout = ({ club }) => {
 
     // Accessibility
     Object.entries(accessibility).forEach(([key, value]) => {
-      const label = serviceLabels[key];
+      const label = t(`clubs.ClubAbout.services.accessibility.${key}`);
       if (label) {
         services.accessibility.push({
           key,
@@ -191,11 +166,11 @@ export const ClubAbout = ({ club }) => {
           <div className="general-about-header-content">
             <div className="general-about-badge">
               <FontAwesomeIcon icon={faInfoCircle} />
-              <span>За нашия клуб</span>
+              <span>{t('clubs.ClubAbout.header.badge')}</span>
             </div>
-            <h2 className="general-about-title">Научете повече за нас</h2>
+            <h2 className="general-about-title">{t('clubs.ClubAbout.header.title')}</h2>
             <p className="general-about-subtitle">
-              Историята, мисията и всичко, което прави клуба ни специален
+              {t('clubs.ClubAbout.header.subtitle')}
             </p>
           </div>
           
@@ -204,17 +179,17 @@ export const ClubAbout = ({ club }) => {
             <div className="general-about-stat">
               <FontAwesomeIcon icon={faHistory} />
               <span>{club.foundedYear ? new Date().getFullYear() - club.foundedYear : '—'}</span>
-              <label>години</label>
+              <label>{t('clubs.ClubAbout.stats.years')}</label>
             </div>
             <div className="general-about-stat">
               <FontAwesomeIcon icon={faUsers} />
               <span>{club.membership?.totalMembers || '—'}</span>
-              <label>членове</label>
+              <label>{t('clubs.ClubAbout.stats.members')}</label>
             </div>
             <div className="general-about-stat">
               <FontAwesomeIcon icon={faMapMarkerAlt} />
               <span>{club.location?.city || '—'}</span>
-              <label>град</label>
+              <label>{t('clubs.ClubAbout.stats.city')}</label>
             </div>
           </div>
         </div>
@@ -229,7 +204,7 @@ export const ClubAbout = ({ club }) => {
             >
               <div className="general-section-title">
                 <FontAwesomeIcon icon={faUsers} />
-                <h3>История и описание</h3>
+                <h3>{t('clubs.ClubAbout.sections.description.title')}</h3>
               </div>
               <FontAwesomeIcon 
                 icon={expandedSection === 'description' ? faChevronUp : faChevronDown}
@@ -255,9 +230,9 @@ export const ClubAbout = ({ club }) => {
                             <FontAwesomeIcon icon={faHistory} />
                           </div>
                           <div className="general-fact-content">
-                            <span className="general-fact-label">Основан</span>
+                            <span className="general-fact-label">{t('clubs.ClubAbout.facts.founded')}</span>
                             <span className="general-fact-value">
-                              {club.foundedYear} г. ({new Date().getFullYear() - club.foundedYear} години активност)
+                              {club.foundedYear} {t('clubs.ClubAbout.facts.year')} ({new Date().getFullYear() - club.foundedYear} {t('clubs.ClubAbout.facts.yearsActivity')})
                             </span>
                           </div>
                         </div>
@@ -269,7 +244,7 @@ export const ClubAbout = ({ club }) => {
                             <FontAwesomeIcon icon={faMapMarkerAlt} />
                           </div>
                           <div className="general-fact-content">
-                            <span className="general-fact-label">Локация</span>
+                            <span className="general-fact-label">{t('clubs.ClubAbout.facts.location')}</span>
                             <span className="general-fact-value">
                               {club.location.city}{club.location.region && `, ${club.location.region}`}
                             </span>
@@ -283,8 +258,8 @@ export const ClubAbout = ({ club }) => {
                             <FontAwesomeIcon icon={faUsers} />
                           </div>
                           <div className="general-fact-content">
-                            <span className="general-fact-label">Членове</span>
-                            <span className="general-fact-value">{club.membership.totalMembers} души</span>
+                            <span className="general-fact-label">{t('clubs.ClubAbout.facts.members')}</span>
+                            <span className="general-fact-value">{club.membership.totalMembers} {t('clubs.ClubAbout.facts.people')}</span>
                           </div>
                         </div>
                       )}
@@ -295,9 +270,9 @@ export const ClubAbout = ({ club }) => {
                             <FontAwesomeIcon icon={faBuilding} />
                           </div>
                           <div className="general-fact-content">
-                            <span className="general-fact-label">Помещение</span>
+                            <span className="general-fact-label">{t('clubs.ClubAbout.facts.venue')}</span>
                             <span className="general-fact-value">
-                              {club.location.venue.size} • {club.location.venue.capacity} места
+                              {club.location.venue.size} • {club.location.venue.capacity} {t('clubs.ClubAbout.facts.seats')}
                             </span>
                           </div>
                         </div>
@@ -310,13 +285,13 @@ export const ClubAbout = ({ club }) => {
                     <div className="general-age-demographics">
                       <h4>
                         <FontAwesomeIcon icon={faCalendarAlt} />
-                        Възрастова структура
+                        {t('clubs.ClubAbout.demographics.title')}
                       </h4>
                       <div className="general-age-chart">
                         {ageData.map(({ range, count, percentage }) => (
                           <div key={range} className="general-age-group">
                             <div className="general-age-info">
-                              <span className="general-age-range">{range} години</span>
+                              <span className="general-age-range">{range} {t('clubs.ClubAbout.demographics.years')}</span>
                               <span className="general-age-percentage">{percentage}%</span>
                             </div>
                             <div className="general-age-bar">
@@ -325,7 +300,7 @@ export const ClubAbout = ({ club }) => {
                                 style={{ width: `${percentage}%` }}
                               />
                             </div>
-                            <span className="general-age-count">{count} души</span>
+                            <span className="general-age-count">{count} {t('clubs.ClubAbout.demographics.people')}</span>
                           </div>
                         ))}
                       </div>
@@ -345,7 +320,7 @@ export const ClubAbout = ({ club }) => {
               >
                 <div className="general-section-title">
                   <FontAwesomeIcon icon={faTrophy} />
-                  <h3>Постижения и награди</h3>
+                  <h3>{t('clubs.ClubAbout.sections.achievements.title')}</h3>
                   <span className="general-section-count">
                     {achievements.awards.length + achievements.recognitions.length + achievements.certificates.length}
                   </span>
@@ -370,7 +345,7 @@ export const ClubAbout = ({ club }) => {
                           <h4>{award.name}</h4>
                           <p>{award.description}</p>
                           <div className="general-achievement-meta">
-                            {award.year && <span>📅 {award.year} г.</span>}
+                            {award.year && <span>📅 {award.year} {t('clubs.ClubAbout.achievements.year')}</span>}
                             {award.awardedBy && <span>🏛️ {award.awardedBy}</span>}
                           </div>
                         </div>
@@ -384,7 +359,7 @@ export const ClubAbout = ({ club }) => {
                           <FontAwesomeIcon icon={faAward} />
                         </div>
                         <div className="general-achievement-content">
-                          <h4>Признание</h4>
+                          <h4>{t('clubs.ClubAbout.achievements.recognition')}</h4>
                           <p>{recognition}</p>
                         </div>
                       </div>
@@ -399,9 +374,9 @@ export const ClubAbout = ({ club }) => {
                         <div className="general-achievement-content">
                           <h4>{certificate.name}</h4>
                           <div className="general-achievement-meta">
-                            {certificate.issueDate && <span>📅 Издаден: {new Date(certificate.issueDate).getFullYear()}</span>}
+                            {certificate.issueDate && <span>📅 {t('clubs.ClubAbout.achievements.issued')}: {new Date(certificate.issueDate).getFullYear()}</span>}
                             {certificate.issuedBy && <span>🏛️ {certificate.issuedBy}</span>}
-                            {certificate.validUntil && <span>⏰ Валиден до: {new Date(certificate.validUntil).getFullYear()}</span>}
+                            {certificate.validUntil && <span>⏰ {t('clubs.ClubAbout.achievements.validUntil')}: {new Date(certificate.validUntil).getFullYear()}</span>}
                           </div>
                         </div>
                       </div>
@@ -421,7 +396,7 @@ export const ClubAbout = ({ club }) => {
               >
                 <div className="general-section-title">
                   <FontAwesomeIcon icon={faHandsHelping} />
-                  <h3>Социално въздействие</h3>
+                  <h3>{t('clubs.ClubAbout.sections.socialImpact.title')}</h3>
                   <span className="general-section-count">
                     {socialImpact.volunteering.length + socialImpact.communityProjects.length + socialImpact.partnerships.length}
                   </span>
@@ -441,7 +416,7 @@ export const ClubAbout = ({ club }) => {
                       <div className="general-impact-category">
                         <h4>
                           <FontAwesomeIcon icon={faHandHoldingHeart} />
-                          Доброволчески проекти
+                          {t('clubs.ClubAbout.socialImpact.volunteering.title')}
                         </h4>
                         <div className="general-impact-items">
                           {socialImpact.volunteering.map((project, index) => (
@@ -449,12 +424,12 @@ export const ClubAbout = ({ club }) => {
                               <div className="general-impact-header">
                                 <h5>{project.project}</h5>
                                 <div className="general-impact-stats">
-                                  <span>👥 {project.participants} доброволци</span>
-                                  {project.hoursPerMonth && <span>⏱️ {project.hoursPerMonth}ч/месец</span>}
+                                  <span>👥 {project.participants} {t('clubs.ClubAbout.socialImpact.volunteering.volunteers')}</span>
+                                  {project.hoursPerMonth && <span>⏱️ {project.hoursPerMonth}{t('clubs.ClubAbout.socialImpact.volunteering.hoursPerMonth')}</span>}
                                 </div>
                               </div>
                               {project.coordinator && (
-                                <p>Координатор: <strong>{project.coordinator}</strong></p>
+                                <p>{t('clubs.ClubAbout.socialImpact.coordinator')}: <strong>{project.coordinator}</strong></p>
                               )}
                             </div>
                           ))}
@@ -467,7 +442,7 @@ export const ClubAbout = ({ club }) => {
                       <div className="general-impact-category">
                         <h4>
                           <FontAwesomeIcon icon={faUsers} />
-                          Проекти за общността
+                          {t('clubs.ClubAbout.socialImpact.communityProjects.title')}
                         </h4>
                         <div className="general-impact-items">
                           {socialImpact.communityProjects.map((project, index) => (
@@ -475,7 +450,7 @@ export const ClubAbout = ({ club }) => {
                               <div className="general-impact-header">
                                 <h5>{project.name}</h5>
                                 <div className="general-impact-stats">
-                                  {project.beneficiaries && <span>👥 {project.beneficiaries} ползватели</span>}
+                                  {project.beneficiaries && <span>👥 {project.beneficiaries} {t('clubs.ClubAbout.socialImpact.communityProjects.beneficiaries')}</span>}
                                   {project.status && (
                                     <span className={`general-status ${project.status.toLowerCase()}`}>
                                       {project.status}
@@ -495,7 +470,7 @@ export const ClubAbout = ({ club }) => {
                       <div className="general-impact-category">
                         <h4>
                           <FontAwesomeIcon icon={faHandsHelping} />
-                          Партньорства
+                          {t('clubs.ClubAbout.socialImpact.partnerships.title')}
                         </h4>
                         <div className="general-impact-items">
                           {socialImpact.partnerships.map((partnership, index) => (
@@ -525,7 +500,7 @@ export const ClubAbout = ({ club }) => {
               >
                 <div className="general-section-title">
                   <FontAwesomeIcon icon={faHeart} />
-                  <h3>Услуги и грижи</h3>
+                  <h3>{t('clubs.ClubAbout.sections.services.title')}</h3>
                 </div>
                 <FontAwesomeIcon 
                   icon={expandedSection === 'services' ? faChevronUp : faChevronDown}
@@ -542,7 +517,7 @@ export const ClubAbout = ({ club }) => {
                       <div className="general-service-category">
                         <h4>
                           <FontAwesomeIcon icon={faHeartbeat} />
-                          Здравни услуги
+                          {t('clubs.ClubAbout.services.categories.health')}
                         </h4>
                         <div className="general-service-list">
                           {activeServices.health.map((service, index) => (
@@ -560,7 +535,7 @@ export const ClubAbout = ({ club }) => {
                       <div className="general-service-category">
                         <h4>
                           <FontAwesomeIcon icon={faHome} />
-                          Помощни услуги
+                          {t('clubs.ClubAbout.services.categories.support')}
                         </h4>
                         <div className="general-service-list">
                           {activeServices.support.map((service, index) => (
@@ -578,7 +553,7 @@ export const ClubAbout = ({ club }) => {
                       <div className="general-service-category">
                         <h4>
                           <FontAwesomeIcon icon={faUniversalAccess} />
-                          Достъпност
+                          {t('clubs.ClubAbout.services.categories.accessibility')}
                         </h4>
                         <div className="general-service-list">
                           {activeServices.accessibility.map((service, index) => (
@@ -605,7 +580,7 @@ export const ClubAbout = ({ club }) => {
               >
                 <div className="general-section-title">
                   <FontAwesomeIcon icon={faMapMarkerAlt} />
-                  <h3>Регионална информация</h3>
+                  <h3>{t('clubs.ClubAbout.sections.regional.title')}</h3>
                 </div>
                 <FontAwesomeIcon 
                   icon={expandedSection === 'regional' ? faChevronUp : faChevronDown}
@@ -622,9 +597,9 @@ export const ClubAbout = ({ club }) => {
                           <FontAwesomeIcon icon={faUserShield} />
                         </div>
                         <div className="general-regional-content">
-                          <span className="general-regional-label">Тип клуб</span>
+                          <span className="general-regional-label">{t('clubs.ClubAbout.regional.clubType')}</span>
                           <span className={`general-club-type ${regionalInfo.regionalRole}`}>
-                            {regionalInfo.isCentralClub ? 'Централен клуб' : 'Местен клуб'}
+                            {regionalInfo.isCentralClub ? t('clubs.ClubAbout.regional.centralClub') : t('clubs.ClubAbout.regional.localClub')}
                           </span>
                         </div>
                       </div>
@@ -634,7 +609,7 @@ export const ClubAbout = ({ club }) => {
                           <FontAwesomeIcon icon={faMapMarkerAlt} />
                         </div>
                         <div className="general-regional-content">
-                          <span className="general-regional-label">Обслужвана област</span>
+                          <span className="general-regional-label">{t('clubs.ClubAbout.regional.coverageArea')}</span>
                           <span className="general-regional-value">{regionalInfo.coverageArea}</span>
                         </div>
                       </div>
@@ -645,9 +620,9 @@ export const ClubAbout = ({ club }) => {
                             <FontAwesomeIcon icon={faUsers} />
                           </div>
                           <div className="general-regional-content">
-                            <span className="general-regional-label">Свързани клубове</span>
+                            <span className="general-regional-label">{t('clubs.ClubAbout.regional.affiliatedClubs')}</span>
                             <span className="general-regional-value">
-                              {regionalInfo.affiliatedClubs.length} клуба в мрежата
+                              {regionalInfo.affiliatedClubs.length} {t('clubs.ClubAbout.regional.clubsInNetwork')}
                             </span>
                           </div>
                         </div>

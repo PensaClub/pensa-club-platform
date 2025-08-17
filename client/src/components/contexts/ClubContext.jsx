@@ -4,6 +4,7 @@ import { notify } from "../../utils/notify.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "./UserContext";
 import { mockClubsData } from "../Clubs/data/mockClubsData.js";
+import clubServiceFactory from "../Services/clubServiceFactory.js";
 
 export const ClubContext = createContext();
 
@@ -14,9 +15,12 @@ export const ClubProvider = ({ children }) => {
   const [clubsLoaded, setClubsLoaded] = useState(false);
   const [currentClub, setCurrentClub] = useState(null);
   const [regionalClubs, setRegionalClubs] = useState([]);
-  const { isAdmin } = useAuthContext();
+  const { isAdmin, user } = useAuthContext(); // 👈 Добавяме user за token
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 🔧 Създаваме clubService инстанция
+  const clubService = clubServiceFactory(user?.token);
 
   const showErrorAndSetTimeouts = (error) => {
     setErrorMessage(error);
@@ -28,11 +32,15 @@ export const ClubProvider = ({ children }) => {
   };
 
   // Симулация на async операция с mock data
-  const simulateApiCall = (data, delay = 500) => {
+  const simulateApiCall = (data, delay = 100) => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(data), delay);
     });
   };
+
+  // ===============================
+  // 🔄 CRUD ОПЕРАЦИИ - АКТУАЛИЗИРАНИ
+  // ===============================
 
   const createClub = async (clubData) => {
     if (!isAdmin) {
@@ -44,27 +52,11 @@ export const ClubProvider = ({ children }) => {
     try {
       setIsLoading(true);
 
-      // Симулираме API заявка
-      const newClub = {
-        ...clubData,
-        id: `club-${Date.now()}`, // Временно ID
-        metadata: {
-          ...clubData.metadata,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          createdBy: "current-admin", // TODO: вземи от auth context
-          isVerified: false,
-          isPublic: true,
-          views: 0,
-          followers: 0
-        }
-      };
-
-      await simulateApiCall(newClub);
+      // 🌐 Използваме реалния API
+      const newClub = await clubService.createClub(clubData);
 
       // Добавяме в локалното състояние
       setClubs(prevClubs => [newClub, ...prevClubs]);
-      setIsLoading(false);
       invalidateClubsCache();
       notify('club-created-success');
       navigate('/clubs');
@@ -78,6 +70,7 @@ export const ClubProvider = ({ children }) => {
     }
   };
 
+  // 📌 ЗАПАЗВАМЕ СТАРИТЕ МЕТОДИ (mock data)
   const getAllClubs = async (forceRefresh = false) => {
     if (clubs.length > 0 && clubsLoaded && !forceRefresh) {
       return clubs;
@@ -157,7 +150,7 @@ export const ClubProvider = ({ children }) => {
     }
   };
 
-  const updateClub = async (id, clubData) => {
+  const updateClub = async (identifier, clubData) => {
     if (!isAdmin) {
       console.warn('Потребителят не е администратор, не може да редактира клуб');
       notify('unauthorized-action');
@@ -167,25 +160,18 @@ export const ClubProvider = ({ children }) => {
     try {
       setIsLoading(true);
       
-      const updatedClub = {
-        ...clubData,
-        metadata: {
-          ...clubData.metadata,
-          updatedAt: new Date().toISOString()
-        }
-      };
-
-      await simulateApiCall(updatedClub);
+      // 🌐 Използваме реалния API
+      const updatedClub = await clubService.updateClub(identifier, clubData);
       
-      // Актуализиране на списъка с клубове
+      // Актуализиране на локалното състояние
       setClubs(prevClubs => 
         prevClubs.map(club => 
-          club.id === id ? updatedClub : club
+          club.id === identifier || club.slug === identifier ? updatedClub : club
         )
       );
       
       // Ако редактираме текущо избрания клуб
-      if (currentClub && currentClub.id === id) {
+      if (currentClub && (currentClub.id === identifier || currentClub.slug === identifier)) {
         setCurrentClub(updatedClub);
       }
       
@@ -202,7 +188,7 @@ export const ClubProvider = ({ children }) => {
     }
   };
 
-  const deleteClub = async (id) => {
+  const deleteClub = async (identifier) => {
     if (!isAdmin) {
       console.warn('Потребителят не е администратор, не може да изтрие клуб');
       notify('unauthorized-action');
@@ -212,14 +198,16 @@ export const ClubProvider = ({ children }) => {
     try {
       setIsLoading(true);
 
-      // Симулираме API заявка за изтриване
-      await simulateApiCall({ success: true });
+      // 🌐 Използваме реалния API
+      await clubService.deleteClub(identifier);
       
       // Премахваме от локалното състояние
-      setClubs(prevClubs => prevClubs.filter(club => club.id !== id));
+      setClubs(prevClubs => 
+        prevClubs.filter(club => club.id !== identifier && club.slug !== identifier)
+      );
       
       // Ако изтриваме текущо избрания клуб
-      if (currentClub && currentClub.id === id) {
+      if (currentClub && (currentClub.id === identifier || currentClub.slug === identifier)) {
         setCurrentClub(null);
       }
       
@@ -233,6 +221,333 @@ export const ClubProvider = ({ children }) => {
       return false;
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // ===============================
+  // 🆕 DRAFT ФУНКЦИОНАЛНОСТИ
+  // ===============================
+
+  const saveDraftClub = async (draftData) => {
+    try {
+      setIsLoading(true);
+      const savedDraft = await clubService.saveDraftClub(draftData);
+      notify('draft-saved-success');
+      return savedDraft;
+    } catch (e) {
+      console.error('Грешка при запазване на чернова:', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateDraftClub = async (id, draftData) => {
+    try {
+      setIsLoading(true);
+      const updatedDraft = await clubService.updateDraftClub(id, draftData);
+      notify('draft-updated-success');
+      return updatedDraft;
+    } catch (e) {
+      console.error('Грешка при обновяване на чернова:', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getAllDrafts = async (page = 1, limit = 12) => {
+    try {
+      setIsLoading(true);
+      const drafts = await clubService.getAllDrafts(page, limit);
+      return drafts;
+    } catch (e) {
+      console.error('Грешка при получаване на чернови:', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getDraftById = async (id) => {
+    try {
+      setIsLoading(true);
+      const draft = await clubService.getDraftById(id);
+      return draft;
+    } catch (e) {
+      console.error('Грешка при получаване на чернова:', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deleteDraftClub = async (draftId) => {
+    try {
+      setIsLoading(true);
+      await clubService.deleteDraftClub(draftId);
+      notify('draft-deleted-success');
+      return true;
+    } catch (e) {
+      console.error('Грешка при изтриване на чернова:', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const toggleDraftStatus = async (identifier) => {
+    try {
+      setIsLoading(true);
+      const result = await clubService.toggleDraftStatus(identifier);
+      notify('draft-status-changed');
+      return result;
+    } catch (e) {
+      console.error('Грешка при промяна на статус на чернова:', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // ===============================
+  // 🆕 FAVORITES/BOOKMARKS
+  // ===============================
+
+  const toggleBookmarkClub = async (slug) => {
+    try {
+      const result = await clubService.toggleBookmarkClub(slug);
+      notify(result.bookmarked ? 'club-bookmarked' : 'club-unbookmarked');
+      return result;
+    } catch (e) {
+      console.error('Грешка при промяна на отметка:', e);
+      notify('error', e);
+      return false;
+    }
+  };
+
+  const getAllBookmarkedClubs = async (email) => {
+    try {
+      const bookmarkedClubs = await clubService.getAllBookmarkedClubs(email);
+      return bookmarkedClubs;
+    } catch (e) {
+      console.error('Грешка при получаване на отметнати клубове:', e);
+      notify('error', e);
+      return [];
+    }
+  };
+
+  const getUserClubs = async (email) => {
+    try {
+      const userClubs = await clubService.getUserClubs(email);
+      return userClubs;
+    } catch (e) {
+      console.error('Грешка при получаване на потребителски клубове:', e);
+      notify('error', e);
+      return [];
+    }
+  };
+
+  // ===============================
+  // 🆕 ТЪРСЕНЕ И ФИЛТРИРАНЕ
+  // ===============================
+
+  const searchClubs = async (searchParams) => {
+    try {
+      if (!searchParams.query?.trim() && !searchParams.category && !searchParams.city) {
+        return clubs;
+      }
+
+      const results = await clubService.searchClubs(searchParams);
+      return results;
+    } catch (e) {
+      console.error('Грешка при търсене на клубове:', e);
+      return [];
+    }
+  };
+
+  const getClubsByCategory = async (category, page = 1, limit = 12) => {
+    try {
+      const results = await clubService.getClubsByCategory(category, page, limit);
+      return results;
+    } catch (e) {
+      console.error('Грешка при филтриране по категория:', e);
+      return [];
+    }
+  };
+
+  const getClubsByRegion = async (region, page = 1, limit = 12) => {
+    try {
+      const results = await clubService.getClubsByRegion(region, page, limit);
+      return results;
+    } catch (e) {
+      console.error('Грешка при филтриране по регион:', e);
+      return [];
+    }
+  };
+
+  const getClubsByCity = async (city, page = 1, limit = 12) => {
+    try {
+      const results = await clubService.getClubsByCity(city, page, limit);
+      return results;
+    } catch (e) {
+      console.error('Грешка при филтриране по град:', e);
+      return [];
+    }
+  };
+
+  const getFeaturedClubs = async (limit = 6) => {
+    try {
+      const results = await clubService.getFeaturedClubs(limit);
+      return results;
+    } catch (e) {
+      console.error('Грешка при получаване на препоръчани клубове:', e);
+      return [];
+    }
+  };
+
+  const getActiveClubs = async (page = 1, limit = 12) => {
+    try {
+      const results = await clubService.getActiveClubs(page, limit);
+      return results;
+    } catch (e) {
+      console.error('Грешка при получаване на активни клубове:', e);
+      return [];
+    }
+  };
+
+  // ===============================
+  // 🆕 MAILING СИСТЕМА
+  // ===============================
+
+  const sendContactForm = async (clubId, contactData) => {
+    try {
+      setIsLoading(true);
+      await clubService.sendContactForm(clubId, contactData);
+      notify('contact-form-sent');
+      return true;
+    } catch (e) {
+      console.error('Грешка при изпращане на контактна форма:', e);
+      notify('error', e);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendMembershipApplication = async (clubId, applicationData) => {
+    try {
+      setIsLoading(true);
+      await clubService.sendMembershipApplication(clubId, applicationData);
+      notify('membership-application-sent');
+      return true;
+    } catch (e) {
+      console.error('Грешка при кандидатстване за членство:', e);
+      notify('error', e);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const subscribeToNewsletter = async (clubId, subscriptionData) => {
+    try {
+      await clubService.subscribeToNewsletter(clubId, subscriptionData);
+      notify('newsletter-subscribed');
+      return true;
+    } catch (e) {
+      console.error('Грешка при абониране за newsletter:', e);
+      notify('error', e);
+      return false;
+    }
+  };
+
+  const sendVolunteerApplication = async (clubId, volunteerData) => {
+    try {
+      setIsLoading(true);
+      await clubService.sendVolunteerApplication(clubId, volunteerData);
+      notify('volunteer-application-sent');
+      return true;
+    } catch (e) {
+      console.error('Грешка при кандидатстване за доброволчество:', e);
+      notify('error', e);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendPartnershipInquiry = async (clubId, partnershipData) => {
+    try {
+      setIsLoading(true);
+      await clubService.sendPartnershipInquiry(clubId, partnershipData);
+      notify('partnership-inquiry-sent');
+      return true;
+    } catch (e) {
+      console.error('Грешка при запитване за партньорство:', e);
+      notify('error', e);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const registerForEvent = async (clubId, eventId, registrationData) => {
+    try {
+      setIsLoading(true);
+      await clubService.registerForEvent(clubId, eventId, registrationData);
+      notify('event-registration-sent');
+      return true;
+    } catch (e) {
+      console.error('Грешка при записване за събитие:', e);
+      notify('error', e);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // ===============================
+  // 📌 ЗАПАЗВАМЕ СТАРИТЕ МЕТОДИ (временно)
+  // ===============================
+
+  const filterClubsByCategory = async (category) => {
+    try {
+      if (category === 'all') {
+        return clubs;
+      }
+
+      const filtered = mockClubsData.filter(club => club.category === category);
+      return await simulateApiCall(filtered, 200);
+    } catch (e) {
+      console.error('Грешка при филтриране по категория:', e);
+      return [];
+    }
+  };
+
+  const filterClubsByCity = async (city) => {
+    try {
+      if (city === 'all') {
+        return clubs;
+      }
+
+      const filtered = mockClubsData.filter(club => club.location.city === city);
+      return await simulateApiCall(filtered, 200);
+    } catch (e) {
+      console.error('Грешка при филтриране по град:', e);
+      return [];
     }
   };
 
@@ -295,54 +610,6 @@ export const ClubProvider = ({ children }) => {
     }
   };
 
-  const searchClubs = async (searchTerm) => {
-    try {
-      if (!searchTerm.trim()) {
-        return clubs;
-      }
-
-      const filtered = mockClubsData.filter(club => 
-        club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        club.shortDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        club.location.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        club.metadata.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
-
-      return await simulateApiCall(filtered, 200);
-    } catch (e) {
-      console.error('Грешка при търсене на клубове:', e);
-      return [];
-    }
-  };
-
-  const filterClubsByCategory = async (category) => {
-    try {
-      if (category === 'all') {
-        return clubs;
-      }
-
-      const filtered = mockClubsData.filter(club => club.category === category);
-      return await simulateApiCall(filtered, 200);
-    } catch (e) {
-      console.error('Грешка при филтриране по категория:', e);
-      return [];
-    }
-  };
-
-  const filterClubsByCity = async (city) => {
-    try {
-      if (city === 'all') {
-        return clubs;
-      }
-
-      const filtered = mockClubsData.filter(club => club.location.city === city);
-      return await simulateApiCall(filtered, 200);
-    } catch (e) {
-      console.error('Грешка при филтриране по град:', e);
-      return [];
-    }
-  };
-
   const getAvailableCities = () => {
     const cities = [...new Set(mockClubsData.map(club => club.location.city))];
     return cities.sort();
@@ -363,36 +630,85 @@ export const ClubProvider = ({ children }) => {
 
   // Context service обект
   const contextService = {
-    // CRUD операции
+    // ===============================
+    // ОСНОВНИ CRUD ОПЕРАЦИИ
+    // ===============================
     createClub,
-    getAllClubs,
-    getClubBySlug,
-    getClubById,
-    updateClub,
-    deleteClub,
+    getAllClubs,           // 📌 Mock data (запазен)
+    getClubBySlug,         // 📌 Mock data (запазен)
+    getClubById,           // 📌 Mock data (запазен)
+    updateClub,            // 🌐 API
+    deleteClub,            // 🌐 API
     
-    // Регионални функции
-    getRegionalClubs,
-    getCentralClub,
+    // ===============================
+    // DRAFT ФУНКЦИОНАЛНОСТИ
+    // ===============================
+    saveDraftClub,         // 🆕 API
+    updateDraftClub,       // 🆕 API
+    getAllDrafts,          // 🆕 API
+    getDraftById,          // 🆕 API
+    deleteDraftClub,       // 🆕 API
+    toggleDraftStatus,     // 🆕 API
+
+    // ===============================
+    // FAVORITES/BOOKMARKS
+    // ===============================
+    toggleBookmarkClub,    // 🆕 API
+    getAllBookmarkedClubs, // 🆕 API
+    getUserClubs,          // 🆕 API
+
+    // ===============================
+    // ТЪРСЕНЕ И ФИЛТРИРАНЕ
+    // ===============================
+    searchClubs,           // 🌐 API (обновен)
+    getClubsByCategory,    // 🆕 API
+    getClubsByRegion,      // 🆕 API
+    getClubsByCity,        // 🆕 API
+    getFeaturedClubs,      // 🆕 API
+    getActiveClubs,        // 🆕 API
     
-    // Търсене и филтриране
-    searchClubs,
-    filterClubsByCategory,
-    filterClubsByCity,
-    getAvailableCities,
-    getAvailableCategories,
+    // 📌 Запазени методи (временно)
+    filterClubsByCategory, // 📌 Mock data
+    filterClubsByCity,     // 📌 Mock data
+
+    // ===============================
+    // MAILING СИСТЕМА
+    // ===============================
+    sendContactForm,           // 🆕 API
+    sendMembershipApplication, // 🆕 API
+    subscribeToNewsletter,     // 🆕 API
+    sendVolunteerApplication,  // 🆕 API
+    sendPartnershipInquiry,    // 🆕 API
+    registerForEvent,          // 🆕 API
     
-    // Utility функции
+    // ===============================
+    // РЕГИОНАЛНИ ФУНКЦИИ
+    // ===============================
+    getRegionalClubs,      // 📌 Mock data (запазен)
+    getCentralClub,        // 📌 Mock data (запазен)
+    
+    // ===============================
+    // UTILITY ФУНКЦИИ
+    // ===============================
+    getAvailableCities,    // 📌 Mock data (запазен)
+    getAvailableCategories,// 📌 Mock data (запазен)
     invalidateClubsCache,
     clearCurrentClub,
     
-    // State
+    // ===============================
+    // STATE
+    // ===============================
     clubs,
     currentClub,
     regionalClubs,
     isLoading,
     clubsLoaded,
-    errorMessage
+    errorMessage,
+
+    // ===============================
+    // 🆕 ДИРЕКТЕН ДОСТЪП ДО SERVICE
+    // ===============================
+    clubService // За директни повиквания когато е нужно
   };
 
   // Страници с lazy loading (където не показваме loader)

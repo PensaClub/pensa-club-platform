@@ -1,8 +1,9 @@
-// components/Clubs/AllClubs/ClubsHero/ClubsHero.jsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './clubsHero.css';
 
 export const ClubsHero = ({ totalClubs }) => {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -20,26 +21,25 @@ export const ClubsHero = ({ totalClubs }) => {
       <div className="clubs-hero-content">
         <div className="clubs-hero-text-content">
           <h1 className="clubs-hero-title">
-            Открийте своя <span className="clubs-hero-title-highlight">клуб</span>
+            {t('clubs.ClubsHero.title.prefix')} <span className="clubs-hero-title-highlight">{t('clubs.ClubsHero.title.highlight')}</span>
           </h1>
           <p className="clubs-hero-subtitle">
-            Присъединете се към активната общност от пенсионери в България. 
-            Намерете близо до вас клуб с интересни дейности и нови приятелства.
+            {t('clubs.ClubsHero.subtitle')}
           </p>
           <div className="clubs-hero-stats">
             <div className="clubs-hero-stat-item">
               <span className="clubs-hero-stat-number">{totalClubs}</span>
-              <span className="clubs-hero-stat-label">Активни клубове</span>
+              <span className="clubs-hero-stat-label">{t('clubs.ClubsHero.stats.activeClubs')}</span>
             </div>
             <div className="clubs-hero-stat-divider"></div>
             <div className="clubs-hero-stat-item">
               <span className="clubs-hero-stat-number">50+</span>
-              <span className="clubs-hero-stat-label">Града в България</span>
+              <span className="clubs-hero-stat-label">{t('clubs.ClubsHero.stats.cities')}</span>
             </div>
             <div className="clubs-hero-stat-divider"></div>
             <div className="clubs-hero-stat-item">
               <span className="clubs-hero-stat-number">2000+</span>
-              <span className="clubs-hero-stat-label">Активни членове</span>
+              <span className="clubs-hero-stat-label">{t('clubs.ClubsHero.stats.activeMembers')}</span>
             </div>
           </div>
         </div>

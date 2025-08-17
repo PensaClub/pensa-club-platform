@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlay,
@@ -24,12 +25,13 @@ import {
   faCopy,
   faCheckCircle,
   faAward,
-   faSearch,
+  faSearch,
   faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import './socialHero.css';
 
 export const SocialHero = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -39,73 +41,100 @@ export const SocialHero = ({ club }) => {
     phone: '',
     message: ''
   });
-  const [formStatus, setFormStatus] = useState(null); // 'sending', 'sent', 'error'
+  const [formStatus, setFormStatus] = useState(null);
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [copiedItems, setCopiedItems] = useState({});
   const [memberSearchTerm, setMemberSearchTerm] = useState('');
-  // Проверяваме дали има необходимите данни
+
   if (!club?.name) {
     return null;
   }
 
-  // Строим hero данни от основните клуб данни
   const heroImages = [];
 
-  // Добавяме main image ако има
   if (club.mainImage) {
     heroImages.push(club.mainImage);
   }
 
-  // Добавяме gallery images ако има
   if (club.gallery && club.gallery.length > 0) {
     heroImages.push(...club.gallery);
   }
 
-  // Ако няма никакви изображения, използваме placeholder
   if (heroImages.length === 0) {
     heroImages.push('https://picsum.photos/1920/1080?random=501');
   }
 
-  // Статистики от club.stats - САМО реални данни
-  const availableStats = [];
-  if (club.stats?.totalMembers) {
-    availableStats.push({
-      icon: faUsers,
-      label: 'Членове',
-      value: `${club.stats.totalMembers}+`,
-      color: '#16a34a'
-    });
-  }
-  if (club.foundedYear) {
-    availableStats.push({
-      icon: faCalendarAlt,
-      label: 'Основан',
-      value: club.foundedYear,
-      color: '#0891b2'
-    });
-  }
-  if (club.stats?.projectsBeneficiaries) {
-    availableStats.push({
-      icon: faHandHoldingHeart,
-      label: 'Помогнати',
-      value: `${club.stats.projectsBeneficiaries}+`,
-      color: '#dc2626'
-    });
-  }
-  if (club.stats?.donationsDistributed) {
-    availableStats.push({
-      icon: faHeart,
-      label: 'Раздадени лв.',
-      value: `${club.stats.donationsDistributed}+`,
-      color: '#7c3aed'
-    });
-  }
+  const getAvailableStats = () => {
+    const stats = [];
+    if (club.stats?.totalMembers) {
+      stats.push({
+        icon: faUsers,
+        label: t('clubs.SocialHero.stats.members'),
+        value: `${club.stats.totalMembers}+`,
+        color: '#16a34a'
+      });
+    }
+    if (club.foundedYear) {
+      stats.push({
+        icon: faCalendarAlt,
+        label: t('clubs.SocialHero.stats.founded'),
+        value: club.foundedYear,
+        color: '#0891b2'
+      });
+    }
+    if (club.stats?.projectsBeneficiaries) {
+      stats.push({
+        icon: faHandHoldingHeart,
+        label: t('clubs.SocialHero.stats.helped'),
+        value: `${club.stats.projectsBeneficiaries}+`,
+        color: '#dc2626'
+      });
+    }
+    if (club.stats?.donationsDistributed) {
+      stats.push({
+        icon: faHeart,
+        label: t('clubs.SocialHero.stats.donationsDistributed'),
+        value: `${club.stats.donationsDistributed}+`,
+        color: '#7c3aed'
+      });
+    }
+    return stats;
+  };
 
-  // Първото видео от media ако има
+  const availableStats = getAvailableStats();
   const firstVideo = club.media?.videos && club.media.videos.length > 0 ? club.media.videos[0] : null;
-
-  // Проверяваме дали има контактна информация
   const hasContacts = club.contacts?.phone || club.contacts?.mobile || club.contacts?.email;
+  const members = club.members || [];
+
+  const formatJoinDate = (dateString) => {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'en' ? 'en-US' : 
+                   'de-DE';
+    
+    return new Date(dateString).toLocaleDateString(locale);
+  };
+
+  const getFilteredMembers = () => {
+    return members.filter(member => {
+      const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
+      const searchLower = memberSearchTerm.toLowerCase();
+      return fullName.includes(searchLower) || 
+             member.phone?.includes(searchLower) ||
+             member.email?.toLowerCase().includes(searchLower);
+    });
+  };
+
+  const filteredMembers = getFilteredMembers();
+
+  const getMemberCountLabel = (count) => {
+    if (i18n.language === 'bg') {
+      return count === 1 ? 'член' : 'членове';
+    } else if (i18n.language === 'en') {
+      return count === 1 ? 'member' : 'members';
+    } else {
+      return count === 1 ? 'Mitglied' : 'Mitglieder';
+    }
+  };
 
   useEffect(() => {
     if (heroImages.length > 1) {
@@ -121,7 +150,6 @@ export const SocialHero = ({ club }) => {
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: 'smooth' });
     } else {
-      // Scroll down by viewport height if no about section
       window.scrollBy({
         top: window.innerHeight,
         behavior: 'smooth'
@@ -139,7 +167,6 @@ export const SocialHero = ({ club }) => {
     setIsVideoModalOpen(false);
   };
 
-  // Email modal handlers
   const openEmailModal = () => {
     setIsEmailModalOpen(true);
   };
@@ -167,22 +194,15 @@ export const SocialHero = ({ club }) => {
     setFormStatus('sending');
 
     if (club.contacts?.email) {
-      const subject = encodeURIComponent(`Запитване до ${club.name}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте ново съобщение от сайта на ${club.name}:
-
-Име: ${emailForm.name}
-Имейл: ${emailForm.email}
-Телефон: ${emailForm.phone || 'Не е посочен'}
-
-Съобщение:
-${emailForm.message}
-
----
-Изпратено от ${emailForm.email}
-      `);
+      const subject = encodeURIComponent(t('clubs.SocialHero.email.subject', { clubName: club.name }));
+      const body = encodeURIComponent(t('clubs.SocialHero.email.body', {
+        clubName: club.name,
+        name: emailForm.name,
+        email: emailForm.email,
+        phone: emailForm.phone || t('clubs.SocialHero.form.notSpecified'),
+        message: emailForm.message,
+        senderEmail: emailForm.email
+      }));
 
       try {
         window.location.href = `mailto:${club.contacts.email}?subject=${subject}&body=${body}`;
@@ -213,34 +233,22 @@ ${emailForm.message}
         if (locationSection) {
           locationSection.scrollIntoView({ behavior: 'smooth' });
         } else {
-          alert('Информация за локацията може да бъде намерена в контактните данни.');
+          alert(t('clubs.SocialHero.actions.locationInfo'));
         }
         break;
       default:
         break;
     }
   };
-  const members = club.members || [];
 
-  // Функция за филтриране на членовете:
-const filteredMembers = members.filter(member => {
-  const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
-  const searchLower = memberSearchTerm.toLowerCase();
-  return fullName.includes(searchLower) || 
-         member.phone?.includes(searchLower) ||
-         member.email?.toLowerCase().includes(searchLower);
-});
+  const clearSearch = () => {
+    setMemberSearchTerm('');
+  };
 
-// Функция за изчистване на търсенето:
-const clearSearch = () => {
-  setMemberSearchTerm('');
-};
-
-// Функция за затваряне на модала (reset search):
-const closeMembersModal = () => {
-  setShowMembersModal(false);
-  setMemberSearchTerm('');
-};
+  const closeMembersModal = () => {
+    setShowMembersModal(false);
+    setMemberSearchTerm('');
+  };
 
   const copyMemberData = async (data, type, memberName) => {
     try {
@@ -257,13 +265,21 @@ const closeMembersModal = () => {
         });
       }, 2000);
     } catch (error) {
-      console.error('Грешка при копиране:', error);
+      console.error(t('clubs.SocialHero.members.copyError'), error);
     }
+  };
+
+  const highlightSearchTerm = (text, searchTerm) => {
+    if (!searchTerm) return text;
+    
+    return text.replace(
+      new RegExp(`(${searchTerm})`, 'gi'),
+      '<mark>$1</mark>'
+    );
   };
 
   return (
     <section id="social-hero" className="social-hero-main-section">
-      {/* Background Slideshow */}
       <div className="social-hero-background">
         {heroImages.map((image, index) => (
           <div
@@ -276,11 +292,10 @@ const closeMembersModal = () => {
       </div>
 
       <div className="social-hero-container">
-        {/* Main Content */}
         <div className="social-hero-content">
           <div className="social-hero-badge">
             <FontAwesomeIcon icon={faHandsHelping} />
-            <span>Социален клуб за пенсионери</span>
+            <span>{t('clubs.SocialHero.badge')}</span>
           </div>
 
           <h1 className="social-hero-title">
@@ -299,7 +314,6 @@ const closeMembersModal = () => {
             </p>
           )}
 
-          {/* Action Buttons - показваме само ако има действия */}
           {(firstVideo || club.location || club.contacts) && (
             <div className="social-hero-actions">
               {firstVideo && (
@@ -308,7 +322,7 @@ const closeMembersModal = () => {
                   onClick={handleVideoPlay}
                 >
                   <FontAwesomeIcon icon={faPlay} />
-                  Гледайте видео
+                  {t('clubs.SocialHero.actions.watchVideo')}
                 </button>
               )}
               <button
@@ -316,12 +330,11 @@ const closeMembersModal = () => {
                 onClick={() => handleContactAction('visit')}
               >
                 <FontAwesomeIcon icon={faMapMarkerAlt} />
-                Посетете ни
+                {t('clubs.SocialHero.actions.visitUs')}
               </button>
             </div>
           )}
 
-          {/* Quick Contact - показваме само ако има контакти */}
           {hasContacts && (
             <div className="social-hero-quick-contact">
               {(club.contacts?.phone || club.contacts?.mobile) && (
@@ -339,14 +352,13 @@ const closeMembersModal = () => {
                   onClick={() => handleContactAction('email')}
                 >
                   <FontAwesomeIcon icon={faEnvelope} />
-                  <span>Пишете ни</span>
+                  <span>{t('clubs.SocialHero.actions.writeUs')}</span>
                 </button>
               )}
             </div>
           )}
         </div>
 
-        {/* Stats Cards - показваме само ако има статистики */}
         {availableStats.length > 0 && (
           <div className="social-hero-stats">
             {availableStats.map((stat, index) => (
@@ -361,7 +373,6 @@ const closeMembersModal = () => {
                   <div className="social-hero-stat-value">{stat.value}</div>
                   <div className="social-hero-stat-label">{stat.label}</div>
                 </div>
-
               </div>
             ))}
             {members.length > 0 && (
@@ -370,24 +381,20 @@ const closeMembersModal = () => {
                 onClick={() => setShowMembersModal(true)}
               >
                 <FontAwesomeIcon icon={faUserFriends} />
-                Нашите членове ({members.length})
+                {t('clubs.SocialHero.members.ourMembers')} ({members.length})
               </button>
             )}
           </div>
-
         )}
-
       </div>
 
-      {/* Scroll Indicator */}
       <div className="social-hero-scroll-indicator">
         <button onClick={handleScrollToContent}>
           <FontAwesomeIcon icon={faChevronDown} />
-          <span>Научете повече</span>
+          <span>{t('clubs.SocialHero.scroll.learnMore')}</span>
         </button>
       </div>
 
-      {/* Video Modal - показваме само ако има видео */}
       {isVideoModalOpen && firstVideo && (
         <div className="social-hero-video-modal" onClick={closeVideoModal}>
           <div className="social-hero-video-container" onClick={(e) => e.stopPropagation()}>
@@ -395,7 +402,6 @@ const closeMembersModal = () => {
               <FontAwesomeIcon icon={faTimes} />
             </button>
 
-            {/* РЕАЛЕН VIDEO PLAYER */}
             <div className="social-hero-video-player">
               <video
                 controls
@@ -405,25 +411,24 @@ const closeMembersModal = () => {
                 poster={firstVideo.thumbnail}
               >
                 <source src={firstVideo.src} type="video/mp4" />
-                Вашият браузър не поддържа video елемента.
+                {t('clubs.SocialHero.video.notSupported')}
               </video>
             </div>
 
-            {/* Информация за видеото */}
             <div className="social-hero-video-info-section">
-              <h3>{firstVideo.caption || 'Видео от клуба'}</h3>
+              <h3>{firstVideo.caption || t('clubs.SocialHero.video.defaultTitle')}</h3>
               {firstVideo.alt && <p>{firstVideo.alt}</p>}
               <div className="social-hero-video-details">
                 {firstVideo.duration && (
                   <span className="social-hero-video-duration">
                     <FontAwesomeIcon icon={faClock} />
-                    Продължителност: {firstVideo.duration}
+                    {t('clubs.SocialHero.video.duration')}: {firstVideo.duration}
                   </span>
                 )}
                 {firstVideo.type && (
                   <span className="social-hero-video-type">
                     <FontAwesomeIcon icon={faTag} />
-                    Тип: {firstVideo.type}
+                    {t('clubs.SocialHero.video.type')}: {firstVideo.type}
                   </span>
                 )}
               </div>
@@ -432,7 +437,6 @@ const closeMembersModal = () => {
         </div>
       )}
 
-      {/* EMAIL MODAL */}
       {isEmailModalOpen && (
         <div className="social-hero-email-modal">
           <div className="social-hero-email-modal-overlay" onClick={closeEmailModal}></div>
@@ -443,21 +447,21 @@ const closeMembersModal = () => {
 
             <div className="social-hero-email-header">
               <FontAwesomeIcon icon={faEnvelope} />
-              <h3>Свържете се с нас</h3>
-              <p>Изпратете ни съобщение и ще ви отговорим възможно най-скоро</p>
+              <h3>{t('clubs.SocialHero.email.modal.title')}</h3>
+              <p>{t('clubs.SocialHero.email.modal.subtitle')}</p>
             </div>
 
             {formStatus === 'sent' ? (
               <div className="social-hero-form-success">
                 <FontAwesomeIcon icon={faCheck} />
-                <h4>Съобщението е изпратено!</h4>
-                <p>Благодарим ви! Ще се свържем с вас скоро.</p>
+                <h4>{t('clubs.SocialHero.form.success.title')}</h4>
+                <p>{t('clubs.SocialHero.form.success.message')}</p>
               </div>
             ) : formStatus === 'error' ? (
               <div className="social-hero-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново или се свържете с нас директно.</p>
+                <h4>{t('clubs.SocialHero.form.error.title')}</h4>
+                <p>{t('clubs.SocialHero.form.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleEmailSubmit} className="social-hero-email-form">
@@ -465,7 +469,7 @@ const closeMembersModal = () => {
                   <div className="social-hero-form-group">
                     <label htmlFor="name">
                       <FontAwesomeIcon icon={faUser} />
-                      Вашето име *
+                      {t('clubs.SocialHero.form.name')} *
                     </label>
                     <input
                       type="text"
@@ -473,14 +477,14 @@ const closeMembersModal = () => {
                       value={emailForm.name}
                       onChange={(e) => handleFormChange('name', e.target.value)}
                       required
-                      placeholder="Въведете вашето име"
+                      placeholder={t('clubs.SocialHero.form.namePlaceholder')}
                     />
                   </div>
 
                   <div className="social-hero-form-group">
                     <label htmlFor="email">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл адрес *
+                      {t('clubs.SocialHero.form.email')} *
                     </label>
                     <input
                       type="email"
@@ -488,7 +492,7 @@ const closeMembersModal = () => {
                       value={emailForm.email}
                       onChange={(e) => handleFormChange('email', e.target.value)}
                       required
-                      placeholder="Въведете вашия имейл"
+                      placeholder={t('clubs.SocialHero.form.emailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -496,28 +500,28 @@ const closeMembersModal = () => {
                 <div className="social-hero-form-group">
                   <label htmlFor="phone">
                     <FontAwesomeIcon icon={faPhone} />
-                    Телефон (по желание)
+                    {t('clubs.SocialHero.form.phone')}
                   </label>
                   <input
                     type="tel"
                     id="phone"
                     value={emailForm.phone}
                     onChange={(e) => handleFormChange('phone', e.target.value)}
-                    placeholder="Въведете вашия телефон"
+                    placeholder={t('clubs.SocialHero.form.phonePlaceholder')}
                   />
                 </div>
 
                 <div className="social-hero-form-group">
                   <label htmlFor="message">
                     <FontAwesomeIcon icon={faEnvelope} />
-                    Съобщение *
+                    {t('clubs.SocialHero.form.message')} *
                   </label>
                   <textarea
                     id="message"
                     value={emailForm.message}
                     onChange={(e) => handleFormChange('message', e.target.value)}
                     required
-                    placeholder="Какво бихте искали да ни споделите?"
+                    placeholder={t('clubs.SocialHero.form.messagePlaceholder')}
                     rows="4"
                   />
                 </div>
@@ -529,14 +533,14 @@ const closeMembersModal = () => {
                     disabled={formStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faEnvelope} />
-                    {formStatus === 'sending' ? 'Изпраща се...' : 'Изпрати съобщение'}
+                    {formStatus === 'sending' ? t('clubs.SocialHero.form.sending') : t('clubs.SocialHero.form.submit')}
                   </button>
                   <button
                     type="button"
                     onClick={closeEmailModal}
                     className="social-hero-cancel-btn"
                   >
-                    Отказ
+                    {t('clubs.SocialHero.form.cancel')}
                   </button>
                 </div>
               </form>
@@ -545,7 +549,6 @@ const closeMembersModal = () => {
         </div>
       )}
 
-      {/* Slide Indicators - показваме само ако има повече от 1 снимка */}
       {heroImages.length > 1 && (
         <div className="social-hero-slide-indicators">
           {heroImages.map((_, index) => (
@@ -557,212 +560,207 @@ const closeMembersModal = () => {
           ))}
         </div>
       )}
-    {/* Members Modal */}
-{showMembersModal && (
-  <div className="social-hero-email-modal">
-    <div className="social-hero-email-modal-overlay" onClick={closeMembersModal}></div>
-    <div className="social-hero-email-modal-container social-hero-members-modal">
-      <button 
-        className="social-hero-email-modal-close" 
-        onClick={closeMembersModal}
-      >
-        <FontAwesomeIcon icon={faTimes} />
-      </button>
-      
-      <div className="social-hero-email-header">
-        <FontAwesomeIcon icon={faUserFriends} />
-        <h3>Членове на клуба</h3>
-        <p>Нашата дружна общност от {members.length} {members.length === 1 ? 'член' : 'членове'}</p>
-      </div>
 
-      {/* Search Section */}
-      <div className="social-hero-members-search">
-        <div className="social-hero-search-container">
-          <div className="social-hero-search-input-wrapper">
-            <FontAwesomeIcon icon={faSearch} className="social-hero-search-icon" />
-            <input
-              type="text"
-              placeholder="Търсене по име, телефон или имейл..."
-              value={memberSearchTerm}
-              onChange={(e) => setMemberSearchTerm(e.target.value)}
-              className="social-hero-search-input"
-            />
-            {memberSearchTerm && (
-              <button 
-                onClick={clearSearch}
-                className="social-hero-search-clear"
-                title="Изчисти търсенето"
-              >
-                <FontAwesomeIcon icon={faTimesCircle} />
-              </button>
-            )}
-          </div>
-          
-          {memberSearchTerm && (
-            <div className="social-hero-search-results">
-              {filteredMembers.length === 0 ? (
-                <span className="social-hero-no-results">
-                  Няма намерени резултати за "{memberSearchTerm}"
-                </span>
-              ) : (
-                <span className="social-hero-results-count">
-                  {filteredMembers.length === 1 
-                    ? `Намерен 1 член` 
-                    : `Намерени ${filteredMembers.length} членове`
-                  }
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <div className="social-hero-members-container">
-        {filteredMembers.length === 0 && !memberSearchTerm ? (
-          <div className="social-hero-no-members">
-            <FontAwesomeIcon icon={faUsers} />
-            <h4>Няма регистрирани членове</h4>
-            <p>Все още няма добавени членове в системата.</p>
-          </div>
-        ) : filteredMembers.length === 0 && memberSearchTerm ? (
-          <div className="social-hero-no-members">
-            <FontAwesomeIcon icon={faSearch} />
-            <h4>Няма намерени резултати</h4>
-            <p>Опитайте с различни ключови думи или изчистете търсенето.</p>
-            <button onClick={clearSearch} className="social-hero-clear-search-btn">
-              <FontAwesomeIcon icon={faTimesCircle} />
-              Изчисти търсенето
+      {showMembersModal && (
+        <div className="social-hero-email-modal">
+          <div className="social-hero-email-modal-overlay" onClick={closeMembersModal}></div>
+          <div className="social-hero-email-modal-container social-hero-members-modal">
+            <button 
+              className="social-hero-email-modal-close" 
+              onClick={closeMembersModal}
+            >
+              <FontAwesomeIcon icon={faTimes} />
             </button>
-          </div>
-        ) : (
-          <div className="social-hero-members-grid">
-            {filteredMembers.map((member) => (
-              <div key={member.id} className="social-hero-member-card">
-                <div className="social-hero-member-photo">
-                  {member.photo ? (
-                    <img 
-                      src={member.photo.src} 
-                      alt={member.photo.alt}
-                      className="social-hero-member-image"
-                    />
-                  ) : (
-                    <div className="social-hero-member-placeholder">
-                      <FontAwesomeIcon icon={faUser} />
-                    </div>
-                  )}
-                  {member.role && member.role !== 'член' && (
-                    <div className="social-hero-member-role">
-                      <FontAwesomeIcon icon={faAward} />
-                      <span>{member.role}</span>
-                    </div>
+            
+            <div className="social-hero-email-header">
+              <FontAwesomeIcon icon={faUserFriends} />
+              <h3>{t('clubs.SocialHero.members.modal.title')}</h3>
+              <p>{t('clubs.SocialHero.members.modal.subtitle', { 
+                count: members.length, 
+                memberWord: getMemberCountLabel(members.length) 
+              })}</p>
+            </div>
+
+            <div className="social-hero-members-search">
+              <div className="social-hero-search-container">
+                <div className="social-hero-search-input-wrapper">
+                  <FontAwesomeIcon icon={faSearch} className="social-hero-search-icon" />
+                  <input
+                    type="text"
+                    placeholder={t('clubs.SocialHero.members.search.placeholder')}
+                    value={memberSearchTerm}
+                    onChange={(e) => setMemberSearchTerm(e.target.value)}
+                    className="social-hero-search-input"
+                  />
+                  {memberSearchTerm && (
+                    <button 
+                      onClick={clearSearch}
+                      className="social-hero-search-clear"
+                      title={t('clubs.SocialHero.members.search.clear')}
+                    >
+                      <FontAwesomeIcon icon={faTimesCircle} />
+                    </button>
                   )}
                 </div>
                 
-                <div className="social-hero-member-info">
-                  <div className="social-hero-member-name">
-                    <h4>
-                      {/* Highlight search term in name */}
-                      {memberSearchTerm ? (
-                        <span dangerouslySetInnerHTML={{
-                          __html: `${member.firstName} ${member.lastName}`.replace(
-                            new RegExp(`(${memberSearchTerm})`, 'gi'),
-                            '<mark>$1</mark>'
-                          )
-                        }} />
-                      ) : (
-                        `${member.firstName} ${member.lastName}`
-                      )}
-                    </h4>
-                    <button
-                      className={`social-hero-copy-icon ${copiedItems[`${member.id}-name`] ? 'copied' : ''}`}
-                      onClick={() => copyMemberData(`${member.firstName} ${member.lastName}`, 'name', member.id)}
-                      title="Копирай името"
-                    >
-                      <FontAwesomeIcon icon={copiedItems[`${member.id}-name`] ? faCheckCircle : faCopy} />
-                    </button>
-                  </div>
-                  
-                  <div className="social-hero-member-details">
-                    {member.phone && (
-                      <div className="social-hero-member-detail">
-                        <FontAwesomeIcon icon={faPhone} />
-                        <span>
-                          {memberSearchTerm ? (
-                            <span dangerouslySetInnerHTML={{
-                              __html: member.phone.replace(
-                                new RegExp(`(${memberSearchTerm})`, 'gi'),
-                                '<mark>$1</mark>'
-                              )
-                            }} />
-                          ) : (
-                            member.phone
-                          )}
-                        </span>
-                        <button
-                          className={`social-hero-copy-icon ${copiedItems[`${member.id}-phone`] ? 'copied' : ''}`}
-                          onClick={() => copyMemberData(member.phone, 'phone', member.id)}
-                          title="Копирай телефона"
-                        >
-                          <FontAwesomeIcon icon={copiedItems[`${member.id}-phone`] ? faCheckCircle : faCopy} />
-                        </button>
-                      </div>
-                    )}
-                    
-                    {member.email && (
-                      <div className="social-hero-member-detail">
-                        <FontAwesomeIcon icon={faEnvelope} />
-                        <span>
-                          {memberSearchTerm ? (
-                            <span dangerouslySetInnerHTML={{
-                              __html: member.email.replace(
-                                new RegExp(`(${memberSearchTerm})`, 'gi'),
-                                '<mark>$1</mark>'
-                              )
-                            }} />
-                          ) : (
-                            member.email
-                          )}
-                        </span>
-                        <button
-                          className={`social-hero-copy-icon ${copiedItems[`${member.id}-email`] ? 'copied' : ''}`}
-                          onClick={() => copyMemberData(member.email, 'email', member.id)}
-                          title="Копирай имейла"
-                        >
-                          <FontAwesomeIcon icon={copiedItems[`${member.id}-email`] ? faCheckCircle : faCopy} />
-                        </button>
-                      </div>
-                    )}
-                    
-                    {member.address && (
-                      <div className="social-hero-member-detail">
-                        <FontAwesomeIcon icon={faMapMarkerAlt} />
-                        <span>{member.address}</span>
-                        <button
-                          className={`social-hero-copy-icon ${copiedItems[`${member.id}-address`] ? 'copied' : ''}`}
-                          onClick={() => copyMemberData(member.address, 'address', member.id)}
-                          title="Копирай адреса"
-                        >
-                          <FontAwesomeIcon icon={copiedItems[`${member.id}-address`] ? faCheckCircle : faCopy} />
-                        </button>
-                      </div>
-                    )}
-                    
-                    {member.joinDate && (
-                      <div className="social-hero-member-detail">
-                        <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span>Член от {new Date(member.joinDate).toLocaleDateString('bg-BG')}</span>
-                      </div>
+                {memberSearchTerm && (
+                  <div className="social-hero-search-results">
+                    {filteredMembers.length === 0 ? (
+                      <span className="social-hero-no-results">
+                        {t('clubs.SocialHero.members.search.noResults', { term: memberSearchTerm })}
+                      </span>
+                    ) : (
+                      <span className="social-hero-results-count">
+                        {filteredMembers.length === 1 
+                          ? t('clubs.SocialHero.members.search.foundOne')
+                          : t('clubs.SocialHero.members.search.foundMany', { count: filteredMembers.length })
+                        }
+                      </span>
                     )}
                   </div>
-                </div>
+                )}
               </div>
-            ))}
+            </div>
+            
+            <div className="social-hero-members-container">
+              {filteredMembers.length === 0 && !memberSearchTerm ? (
+                <div className="social-hero-no-members">
+                  <FontAwesomeIcon icon={faUsers} />
+                  <h4>{t('clubs.SocialHero.members.noMembers.title')}</h4>
+                  <p>{t('clubs.SocialHero.members.noMembers.message')}</p>
+                </div>
+              ) : filteredMembers.length === 0 && memberSearchTerm ? (
+                <div className="social-hero-no-members">
+                  <FontAwesomeIcon icon={faSearch} />
+                  <h4>{t('clubs.SocialHero.members.search.noResultsTitle')}</h4>
+                  <p>{t('clubs.SocialHero.members.search.noResultsMessage')}</p>
+                  <button onClick={clearSearch} className="social-hero-clear-search-btn">
+                    <FontAwesomeIcon icon={faTimesCircle} />
+                    {t('clubs.SocialHero.members.search.clearSearch')}
+                  </button>
+                </div>
+              ) : (
+                <div className="social-hero-members-grid">
+                  {filteredMembers.map((member) => (
+                    <div key={member.id} className="social-hero-member-card">
+                      <div className="social-hero-member-photo">
+                        {member.photo ? (
+                          <img 
+                            src={member.photo.src} 
+                            alt={member.photo.alt}
+                            className="social-hero-member-image"
+                          />
+                        ) : (
+                          <div className="social-hero-member-placeholder">
+                            <FontAwesomeIcon icon={faUser} />
+                          </div>
+                        )}
+                        {member.role && member.role !== 'член' && member.role !== 'member' && member.role !== 'Mitglied' && (
+                          <div className="social-hero-member-role">
+                            <FontAwesomeIcon icon={faAward} />
+                            <span>{member.role}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="social-hero-member-info">
+                        <div className="social-hero-member-name">
+                          <h4>
+                            {memberSearchTerm ? (
+                              <span dangerouslySetInnerHTML={{
+                                __html: highlightSearchTerm(
+                                  `${member.firstName} ${member.lastName}`,
+                                  memberSearchTerm
+                                )
+                              }} />
+                            ) : (
+                              `${member.firstName} ${member.lastName}`
+                            )}
+                          </h4>
+                          <button
+                            className={`social-hero-copy-icon ${copiedItems[`${member.id}-name`] ? 'copied' : ''}`}
+                            onClick={() => copyMemberData(`${member.firstName} ${member.lastName}`, 'name', member.id)}
+                            title={t('clubs.SocialHero.members.copyName')}
+                          >
+                            <FontAwesomeIcon icon={copiedItems[`${member.id}-name`] ? faCheckCircle : faCopy} />
+                          </button>
+                        </div>
+                        
+                        <div className="social-hero-member-details">
+                          {member.phone && (
+                            <div className="social-hero-member-detail">
+                              <FontAwesomeIcon icon={faPhone} />
+                              <span>
+                                {memberSearchTerm ? (
+                                  <span dangerouslySetInnerHTML={{
+                                    __html: highlightSearchTerm(member.phone, memberSearchTerm)
+                                  }} />
+                                ) : (
+                                  member.phone
+                                )}
+                              </span>
+                              <button
+                                className={`social-hero-copy-icon ${copiedItems[`${member.id}-phone`] ? 'copied' : ''}`}
+                                onClick={() => copyMemberData(member.phone, 'phone', member.id)}
+                                title={t('clubs.SocialHero.members.copyPhone')}
+                              >
+                                <FontAwesomeIcon icon={copiedItems[`${member.id}-phone`] ? faCheckCircle : faCopy} />
+                              </button>
+                            </div>
+                          )}
+                          
+                          {member.email && (
+                            <div className="social-hero-member-detail">
+                              <FontAwesomeIcon icon={faEnvelope} />
+                              <span>
+                                {memberSearchTerm ? (
+                                  <span dangerouslySetInnerHTML={{
+                                    __html: highlightSearchTerm(member.email, memberSearchTerm)
+                                  }} />
+                                ) : (
+                                  member.email
+                                )}
+                              </span>
+                              <button
+                                className={`social-hero-copy-icon ${copiedItems[`${member.id}-email`] ? 'copied' : ''}`}
+                                onClick={() => copyMemberData(member.email, 'email', member.id)}
+                                title={t('clubs.SocialHero.members.copyEmail')}
+                              >
+                                <FontAwesomeIcon icon={copiedItems[`${member.id}-email`] ? faCheckCircle : faCopy} />
+                              </button>
+                            </div>
+                          )}
+                          
+                          {member.address && (
+                            <div className="social-hero-member-detail">
+                              <FontAwesomeIcon icon={faMapMarkerAlt} />
+                              <span>{member.address}</span>
+                              <button
+                                className={`social-hero-copy-icon ${copiedItems[`${member.id}-address`] ? 'copied' : ''}`}
+                                onClick={() => copyMemberData(member.address, 'address', member.id)}
+                                title={t('clubs.SocialHero.members.copyAddress')}
+                              >
+                                <FontAwesomeIcon icon={copiedItems[`${member.id}-address`] ? faCheckCircle : faCopy} />
+                              </button>
+                            </div>
+                          )}
+                          
+                          {member.joinDate && (
+                            <div className="social-hero-member-detail">
+                              <FontAwesomeIcon icon={faCalendarAlt} />
+                              <span>{t('clubs.SocialHero.members.memberSince')} {formatJoinDate(member.joinDate)}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-    </div>
-  </div>
-)}
+        </div>
+      )}
     </section>
   );
 };

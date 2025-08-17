@@ -526,7 +526,7 @@
 }
 
 .club-nav-sidebar.club-expanded {
-  width: 200px;
+  width: 300px;
 }
 
 .club-nav-toggle-btn {
@@ -612,8 +612,8 @@
 }
 
 .club-nav-fab {
-  width: 56px;
-  height: 56px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
@@ -808,7 +808,7 @@
   }
   
   .club-back-to-top {
-    bottom: 4rem;
+    bottom: 6rem;
   }
 }
 

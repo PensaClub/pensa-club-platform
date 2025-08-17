@@ -1,5 +1,5 @@
-// components/SportsEventsCalendar/SportsEventsCalendar.jsx
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalendarAlt,
@@ -50,8 +50,9 @@ import {
 import './sportsEventsCalendar.css';
 
 export const SportsEventsCalendar = ({ club }) => {
+  const { t, i18n } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState('timeline'); // 'timeline', 'grid', 'list'
+  const [viewMode, setViewMode] = useState('timeline');
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -65,12 +66,10 @@ export const SportsEventsCalendar = ({ club }) => {
   });
   const [registerStatus, setRegisterStatus] = useState(null);
 
-  // Проверяваме дали има данни
   if (!club?.activities && !club?.pensionersSpecific) {
     return null;
   }
 
-  // Събираме данни
   const activities = club.activities || {};
   const regularActivities = activities.regular || [];
   const events = activities.events || [];
@@ -80,102 +79,112 @@ export const SportsEventsCalendar = ({ club }) => {
   const healthLectures = pensionersSpecific.healthServices?.healthLectures || [];
   const contacts = club.contacts || {};
 
-  // Дни от седмицата
-  const weekDays = ['Нед', 'Пон', 'Вто', 'Сря', 'Чет', 'Пет', 'Съб'];
-  const monthNames = [
-    'Януари', 'Февруари', 'Март', 'Април', 'Май', 'Юни',
-    'Юли', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември'
-  ];
-
-  // Мапинг на дни на български към индекси
-  const dayMapping = {
-    'неделя': 0,
-    'понеделник': 1,
-    'вторник': 2,
-    'сряда': 3,
-    'четвъртък': 4,
-    'петък': 5,
-    'събота': 6
+  const getWeekDays = () => {
+    return t('clubs.SportsEventsCalendar.weekDaysShort', { returnObjects: true });
   };
 
-  // Филтри за събития
-  const eventFilters = [
-    { key: 'all', label: 'Всички', icon: faRocket, color: '#7c3aed', gradient: 'linear-gradient(135deg, #7c3aed, #a855f7)' },
-    { key: 'sports', label: 'Спорт', icon: faRunning, color: '#dc2626', gradient: 'linear-gradient(135deg, #dc2626, #ef4444)' },
-    { key: 'cultural', label: 'Култура', icon: faTheaterMasks, color: '#9333ea', gradient: 'linear-gradient(135deg, #9333ea, #a855f7)' },
-    { key: 'health', label: 'Здраве', icon: faHeartbeat, color: '#059669', gradient: 'linear-gradient(135deg, #059669, #10b981)' },
-    { key: 'education', label: 'Образование', icon: faGraduationCap, color: '#ea580c', gradient: 'linear-gradient(135deg, #ea580c, #f97316)' },
-    { key: 'trips', label: 'Екскурзии', icon: faMountain, color: '#0284c7', gradient: 'linear-gradient(135deg, #0284c7, #0ea5e9)' }
+  const getMonthNames = () => {
+    return t('clubs.SportsEventsCalendar.monthNames', { returnObjects: true });
+  };
+
+  const getDayMapping = () => {
+    return t('clubs.SportsEventsCalendar.dayMapping', { returnObjects: true });
+  };
+
+  const weekDays = getWeekDays();
+  const monthNames = getMonthNames();
+  const dayMapping = getDayMapping();
+
+  const getEventFilters = () => [
+    { key: 'all', label: t('clubs.SportsEventsCalendar.filters.all'), icon: faRocket, color: '#7c3aed', gradient: 'linear-gradient(135deg, #7c3aed, #a855f7)' },
+    { key: 'sports', label: t('clubs.SportsEventsCalendar.filters.sports'), icon: faRunning, color: '#dc2626', gradient: 'linear-gradient(135deg, #dc2626, #ef4444)' },
+    { key: 'cultural', label: t('clubs.SportsEventsCalendar.filters.cultural'), icon: faTheaterMasks, color: '#9333ea', gradient: 'linear-gradient(135deg, #9333ea, #a855f7)' },
+    { key: 'health', label: t('clubs.SportsEventsCalendar.filters.health'), icon: faHeartbeat, color: '#059669', gradient: 'linear-gradient(135deg, #059669, #10b981)' },
+    { key: 'education', label: t('clubs.SportsEventsCalendar.filters.education'), icon: faGraduationCap, color: '#ea580c', gradient: 'linear-gradient(135deg, #ea580c, #f97316)' },
+    { key: 'trips', label: t('clubs.SportsEventsCalendar.filters.trips'), icon: faMountain, color: '#0284c7', gradient: 'linear-gradient(135deg, #0284c7, #0ea5e9)' }
   ];
 
-  // Helper функции
-  function getEventCategory(activityName, activityType = '') {
+  const eventFilters = getEventFilters();
+
+  const getEventCategory = (activityName, activityType = '') => {
     const name = activityName.toLowerCase();
-    const type = activityType.toLowerCase();
+    const categoryTerms = t('clubs.SportsEventsCalendar.categoryTerms', { returnObjects: true });
     
-    if (name.includes('спорт') || name.includes('гимнастика') || name.includes('йога') || name.includes('фитнес') || name.includes('бягане') || name.includes('плуване') || name.includes('тренировка')) {
-      return 'sports';
-    }
-    if (name.includes('хор') || name.includes('танц') || name.includes('музика') || name.includes('концерт') || name.includes('представление')) {
-      return 'cultural';
-    }
-    if (name.includes('здрав') || name.includes('лекция') || name.includes('медицин') || name.includes('преглед')) {
-      return 'health';
-    }
-    if (name.includes('курс') || name.includes('обучение') || name.includes('компютър') || name.includes('образован')) {
-      return 'education';
-    }
-    if (name.includes('екскурзия') || name.includes('пътуване') || name.includes('поход')) {
-      return 'trips';
+    for (const [categoryKey, terms] of Object.entries(categoryTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        return categoryKey;
+      }
     }
     return 'cultural';
-  }
+  };
 
-  function getEventPriority(activityName) {
+  const getEventPriority = (activityName) => {
     const name = activityName.toLowerCase();
-    if (name.includes('специал') || name.includes('турнир') || name.includes('състезание')) return 'high';
-    if (name.includes('курс') || name.includes('лекция') || name.includes('екскурзия')) return 'medium';
+    const priorityTerms = t('clubs.SportsEventsCalendar.priorityTerms', { returnObjects: true });
+    
+    if (priorityTerms.high.some(term => name.includes(term))) return 'high';
+    if (priorityTerms.medium.some(term => name.includes(term))) return 'medium';
     return 'normal';
-  }
+  };
 
-  function getEventIcon(category, activityName = '') {
+  const getEventIcon = (category, activityName = '') => {
     const name = activityName.toLowerCase();
+    const iconTerms = t('clubs.SportsEventsCalendar.iconTerms', { returnObjects: true });
     
-    if (name.includes('йога')) return faGem;
-    if (name.includes('плуване')) return faSwimmer;
-    if (name.includes('гимнастика')) return faDumbbell;
-    if (name.includes('хор')) return faMusic;
-    if (name.includes('танц')) return faFire;
-    if (name.includes('екскурзия')) return faMountain;
-    
-    switch(category) {
-      case 'sports': return faRunning;
-      case 'cultural': return faTheaterMasks;
-      case 'health': return faHeartbeat;
-      case 'education': return faGraduationCap;
-      case 'trips': return faMountain;
-      default: return faCalendarAlt;
+    for (const [iconKey, terms] of Object.entries(iconTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        const iconMap = {
+          yoga: faGem,
+          swimming: faSwimmer,
+          gymnastics: faDumbbell,
+          choir: faMusic,
+          dance: faFire,
+          trip: faMountain
+        };
+        if (iconMap[iconKey]) return iconMap[iconKey];
+      }
     }
-  }
+    
+    const categoryIconMap = {
+      sports: faRunning,
+      cultural: faTheaterMasks,
+      health: faHeartbeat,
+      education: faGraduationCap,
+      trips: faMountain
+    };
+    
+    return categoryIconMap[category] || faCalendarAlt;
+  };
 
-  function getEventGradient(category) {
+  const getEventGradient = (category) => {
     const filter = eventFilters.find(f => f.key === category);
     return filter ? filter.gradient : 'linear-gradient(135deg, #6b7280, #9ca3af)';
-  }
+  };
 
-  // Генерираме всички събития за следващите 30 дни
+  const formatDate = (date, options = {}) => {
+    const locale = i18n.language === 'bg' ? 'bg-BG' : 
+                   i18n.language === 'de' ? 'de-DE' : 'en-US';
+    return date.toLocaleDateString(locale, options);
+  };
+
+  const formatFullDate = (date) => {
+    return formatDate(date, { 
+      weekday: 'long', 
+      day: 'numeric', 
+      month: 'long' 
+    });
+  };
+
   const allEvents = useMemo(() => {
     const events = [];
     const today = new Date();
     const endDate = new Date();
-    endDate.setDate(endDate.getDate() + 30); // 30 дни напред
+    endDate.setDate(endDate.getDate() + 30);
 
-    // Редовни дейности - генерираме за следващите 30 дни
     regularActivities.forEach(activity => {
       const dayKey = activity.day?.toLowerCase();
       
-      if (dayKey === 'всеки ден') {
-        // Всеки ден
+      if (dayKey === t('clubs.SportsEventsCalendar.everyDay').toLowerCase()) {
         for (let d = new Date(today); d <= endDate; d.setDate(d.getDate() + 1)) {
           events.push({
             id: `regular-${activity.name}-${d.toISOString().split('T')[0]}`,
@@ -219,7 +228,6 @@ export const SportsEventsCalendar = ({ club }) => {
       }
     });
 
-    // Специални събития (само бъдещи)
     activities.events?.forEach(event => {
       const eventDate = new Date(event.date);
       if (eventDate > today) {
@@ -241,13 +249,12 @@ export const SportsEventsCalendar = ({ club }) => {
       }
     });
 
-    // Екскурзии
     trips.forEach(trip => {
       const tripDate = new Date(trip.date);
       if (tripDate > today) {
         events.push({
           id: `trip-${trip.destination}`,
-          title: `Екскурзия: ${trip.destination}`,
+          title: t('clubs.SportsEventsCalendar.tripTitle', { destination: trip.destination }),
           date: tripDate,
           type: 'trip',
           category: 'trips',
@@ -263,7 +270,6 @@ export const SportsEventsCalendar = ({ club }) => {
       }
     });
 
-    // Курсове
     courses.forEach(course => {
       const courseStart = new Date(today);
       courseStart.setDate(courseStart.getDate() + 7);
@@ -285,7 +291,6 @@ export const SportsEventsCalendar = ({ club }) => {
       });
     });
 
-    // Здравни лекции
     healthLectures.forEach(lecture => {
       const lectureDate = lecture.nextDate ? new Date(lecture.nextDate) : new Date(today.getTime() + 10 * 24 * 60 * 60 * 1000);
       
@@ -299,7 +304,7 @@ export const SportsEventsCalendar = ({ club }) => {
           priority: 'medium',
           instructor: lecture.lecturer,
           duration: lecture.duration,
-          description: `Здравна лекция: ${lecture.topic}`,
+          description: t('clubs.SportsEventsCalendar.healthLectureDescription', { topic: lecture.topic }),
           icon: faMedkit,
           gradient: getEventGradient('health'),
           isRecurring: false
@@ -308,9 +313,8 @@ export const SportsEventsCalendar = ({ club }) => {
     });
 
     return events.sort((a, b) => a.date - b.date);
-  }, [regularActivities, activities.events, trips, courses, healthLectures]);
+  }, [regularActivities, activities.events, trips, courses, healthLectures, t, dayMapping]);
 
-  // Филтрираме събитията
   const filteredEvents = allEvents.filter(event => {
     const matchesFilter = activeFilter === 'all' || event.category === activeFilter;
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -319,7 +323,6 @@ export const SportsEventsCalendar = ({ club }) => {
     return matchesFilter && matchesSearch;
   });
 
-  // Групираме по дни за timeline изгледа
   const eventsByDay = useMemo(() => {
     const grouped = {};
     filteredEvents.forEach(event => {
@@ -332,7 +335,6 @@ export const SportsEventsCalendar = ({ club }) => {
     return grouped;
   }, [filteredEvents]);
 
-  // Следващите 7 дни
   const nextWeekDays = useMemo(() => {
     const days = [];
     const today = new Date();
@@ -351,7 +353,6 @@ export const SportsEventsCalendar = ({ club }) => {
     return days;
   }, [filteredEvents]);
 
-  // Handlers
   const toggleFavorite = (eventId) => {
     const newFavorites = new Set(favoriteEvents);
     if (newFavorites.has(eventId)) {
@@ -380,26 +381,20 @@ export const SportsEventsCalendar = ({ club }) => {
     setRegisterStatus('sending');
 
     if (contacts.email && selectedEvent) {
-      const subject = encodeURIComponent(`Заявка за записване - ${selectedEvent.title}`);
-      const body = encodeURIComponent(`
-Здравейте,
-
-Получихте нова заявка за записване:
-
-ДЕЙНОСТ: ${selectedEvent.title}
-Дата: ${selectedEvent.date.toLocaleDateString('bg-BG')}
-${selectedEvent.time ? `Час: ${selectedEvent.time}` : ''}
-${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}` : ''}
-
-ДАННИ НА УЧАСТНИКА:
-Име: ${registerForm.name}
-Имейл: ${registerForm.email}
-Телефон: ${registerForm.phone}
-Бележки: ${registerForm.notes || 'Няма'}
-
----
-Изпратено от сайта на ${club.name}
-      `);
+      const subject = encodeURIComponent(t('clubs.SportsEventsCalendar.registerEmail.subject', { 
+        eventTitle: selectedEvent.title 
+      }));
+      const body = encodeURIComponent(t('clubs.SportsEventsCalendar.registerEmail.body', {
+        eventTitle: selectedEvent.title,
+        date: formatDate(selectedEvent.date),
+        time: selectedEvent.time || '',
+        instructor: selectedEvent.instructor || '',
+        name: registerForm.name,
+        email: registerForm.email,
+        phone: registerForm.phone,
+        notes: registerForm.notes || t('clubs.SportsEventsCalendar.registerEmail.noNotes'),
+        clubName: club.name
+      }));
       
       try {
         window.location.href = `mailto:${contacts.email}?subject=${subject}&body=${body}`;
@@ -423,7 +418,6 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
     setShowRegisterModal(true);
   };
 
-  // Ако няма събития, не показваме компонента
   if (allEvents.length === 0) {
     return null;
   }
@@ -432,18 +426,17 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
     <section id="sports-events-calendar" className="sports-events-calendar-section">
       <div className="sports-events-calendar-container">
         
-        {/* Hero Header */}
         <div className="sports-events-calendar-hero">
           <div className="sports-events-calendar-hero-content">
             <div className="sports-events-calendar-hero-badge">
               <FontAwesomeIcon icon={faBolt} />
-              <span>Динамичен календар</span>
+              <span>{t('clubs.SportsEventsCalendar.header.badge')}</span>
             </div>
             <h2 className="sports-events-calendar-hero-title">
-              Никога не пропускайте важно събитие
+              {t('clubs.SportsEventsCalendar.header.title')}
             </h2>
             <p className="sports-events-calendar-hero-subtitle">
-              Интерактивен календар с всички дейности, събития и възможности за записване
+              {t('clubs.SportsEventsCalendar.header.subtitle')}
             </p>
           </div>
           
@@ -454,7 +447,7 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
               </div>
               <div className="sports-events-calendar-stat-content">
                 <span className="sports-events-calendar-stat-number">{allEvents.length}</span>
-                <span className="sports-events-calendar-stat-label">Планирани събития</span>
+                <span className="sports-events-calendar-stat-label">{t('clubs.SportsEventsCalendar.stats.plannedEvents')}</span>
               </div>
             </div>
             <div className="sports-events-calendar-stat-card">
@@ -463,19 +456,18 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
               </div>
               <div className="sports-events-calendar-stat-content">
                 <span className="sports-events-calendar-stat-number">{regularActivities.length}</span>
-                <span className="sports-events-calendar-stat-label">Редовни дейности</span>
+                <span className="sports-events-calendar-stat-label">{t('clubs.SportsEventsCalendar.stats.regularActivities')}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Controls */}
         <div className="sports-events-calendar-controls">
           <div className="sports-events-calendar-search">
             <FontAwesomeIcon icon={faSearch} />
             <input
               type="text"
-              placeholder="Търсете дейност, инструктор..."
+              placeholder={t('clubs.SportsEventsCalendar.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -487,26 +479,25 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
               className={`sports-events-calendar-view-btn ${viewMode === 'timeline' ? 'active' : ''}`}
             >
               <FontAwesomeIcon icon={faCalendarWeek} />
-              <span>Таймлайн</span>
+              <span>{t('clubs.SportsEventsCalendar.viewModes.timeline')}</span>
             </button>
             <button
               onClick={() => setViewMode('grid')}
               className={`sports-events-calendar-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
             >
               <FontAwesomeIcon icon={faCalendarAlt} />
-              <span>Календар</span>
+              <span>{t('clubs.SportsEventsCalendar.viewModes.grid')}</span>
             </button>
             <button
               onClick={() => setViewMode('list')}
               className={`sports-events-calendar-view-btn ${viewMode === 'list' ? 'active' : ''}`}
             >
               <FontAwesomeIcon icon={faCalendarDay} />
-              <span>Списък</span>
+              <span>{t('clubs.SportsEventsCalendar.viewModes.list')}</span>
             </button>
           </div>
         </div>
 
-        {/* Filters */}
         <div className="sports-events-calendar-filters">
           {eventFilters.map(filter => {
             const count = filter.key === 'all' ? allEvents.length : 
@@ -527,15 +518,13 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
           })}
         </div>
 
-        {/* Content */}
         <div className="sports-events-calendar-content">
           
-          {/* Timeline View */}
           {viewMode === 'timeline' && (
             <div className="sports-events-calendar-timeline">
               <div className="sports-events-calendar-timeline-header">
-                <h3>Следващите 7 дни</h3>
-                <p>Преглед на предстоящите дейности</p>
+                <h3>{t('clubs.SportsEventsCalendar.timeline.title')}</h3>
+                <p>{t('clubs.SportsEventsCalendar.timeline.subtitle')}</p>
               </div>
               
               <div className="sports-events-calendar-timeline-days">
@@ -559,7 +548,7 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
                       {day.isToday && (
                         <div className="sports-events-calendar-today-badge">
                           <FontAwesomeIcon icon={faBolt} />
-                          <span>Днес</span>
+                          <span>{t('clubs.SportsEventsCalendar.timeline.today')}</span>
                         </div>
                       )}
                     </div>
@@ -625,14 +614,14 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
                       ) : (
                         <div className="sports-events-calendar-no-events">
                           <FontAwesomeIcon icon={faCalendarDay} />
-                          <span>Няма планирани дейности</span>
+                          <span>{t('clubs.SportsEventsCalendar.timeline.noEvents')}</span>
                         </div>
                       )}
                       
                       {day.events.length > 3 && (
                         <button className="sports-events-calendar-show-more">
                           <FontAwesomeIcon icon={faArrowRight} />
-                          <span>+{day.events.length - 3} още</span>
+                          <span>{t('clubs.SportsEventsCalendar.timeline.showMore', { count: day.events.length - 3 })}</span>
                         </button>
                       )}
                     </div>
@@ -642,11 +631,10 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
             </div>
           )}
 
-          {/* Grid View */}
           {viewMode === 'grid' && (
             <div className="sports-events-calendar-grid">
               <div className="sports-events-calendar-grid-header">
-                <h3>Месечен календар</h3>
+                <h3>{t('clubs.SportsEventsCalendar.grid.title')}</h3>
                 <div className="sports-events-calendar-navigation">
                   <button onClick={() => navigateMonth(-1)}>
                     <FontAwesomeIcon icon={faChevronLeft} />
@@ -659,18 +647,16 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
               </div>
               
               <div className="sports-events-calendar-grid-content">
-                {/* Календарен грид код тук */}
-                <p>Календарен изглед в разработка...</p>
+                <p>{t('clubs.SportsEventsCalendar.grid.inDevelopment')}</p>
               </div>
             </div>
           )}
 
-          {/* List View */}
           {viewMode === 'list' && (
             <div className="sports-events-calendar-list">
               <div className="sports-events-calendar-list-header">
-                <h3>Всички събития</h3>
-                <p>Хронологичен списък с всички планирани дейности</p>
+                <h3>{t('clubs.SportsEventsCalendar.list.title')}</h3>
+                <p>{t('clubs.SportsEventsCalendar.list.subtitle')}</p>
               </div>
               
               <div className="sports-events-calendar-list-content">
@@ -678,14 +664,12 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
                   <div key={dateKey} className="sports-events-calendar-list-day">
                     <div className="sports-events-calendar-list-day-header">
                       <div className="sports-events-calendar-list-date">
-                        {new Date(dateKey).toLocaleDateString('bg-BG', { 
-                          weekday: 'long', 
-                          day: 'numeric', 
-                          month: 'long' 
-                        })}
+                        {formatFullDate(new Date(dateKey))}
                       </div>
                       <span className="sports-events-calendar-list-count">
-                        {dayEvents.length} {dayEvents.length === 1 ? 'събитие' : 'събития'}
+                        {dayEvents.length} {dayEvents.length === 1 ? 
+                          t('clubs.SportsEventsCalendar.list.eventSingle') : 
+                          t('clubs.SportsEventsCalendar.list.eventPlural')}
                       </span>
                     </div>
                     
@@ -719,7 +703,7 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
                                   {event.participants && (
                                     <span>
                                       <FontAwesomeIcon icon={faUsers} />
-                                      {event.participants} места
+                                      {t('clubs.SportsEventsCalendar.list.participants', { count: event.participants })}
                                     </span>
                                   )}
                                 </div>
@@ -745,7 +729,7 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
                               className="sports-events-calendar-action-btn primary"
                             >
                               <FontAwesomeIcon icon={faPlus} />
-                              <span>Запиши се</span>
+                              <span>{t('clubs.SportsEventsCalendar.actions.register')}</span>
                             </button>
                           </div>
                         </div>
@@ -759,7 +743,6 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
         </div>
       </div>
 
-      {/* Register Modal */}
       {showRegisterModal && (
         <div className="sports-events-calendar-modal-overlay" onClick={() => setShowRegisterModal(false)}>
           <div className="sports-events-calendar-modal" onClick={(e) => e.stopPropagation()}>
@@ -774,42 +757,38 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
               <div className="sports-events-calendar-modal-icon">
                 <FontAwesomeIcon icon={selectedEvent?.icon || faCalendarAlt} />
               </div>
-              <h3>Запишете се за</h3>
+              <h3>{t('clubs.SportsEventsCalendar.modal.registerFor')}</h3>
               <h2>{selectedEvent?.title}</h2>
               {selectedEvent?.date && (
-                <p>{selectedEvent.date.toLocaleDateString('bg-BG', { 
-                  weekday: 'long', 
-                  day: 'numeric', 
-                  month: 'long' 
-                })}</p>
+                <p>{formatFullDate(selectedEvent.date)}</p>
               )}
             </div>
             
             {registerStatus === 'sent' ? (
               <div className="sports-events-calendar-form-success">
                 <FontAwesomeIcon icon={faCheckCircle} />
-                <h4>Заявката е изпратена!</h4>
-                <p>Ще се свържем с вас за потвърждение</p>
+                <h4>{t('clubs.SportsEventsCalendar.modal.success.title')}</h4>
+                <p>{t('clubs.SportsEventsCalendar.modal.success.message')}</p>
               </div>
             ) : registerStatus === 'error' ? (
               <div className="sports-events-calendar-form-error">
                 <FontAwesomeIcon icon={faExclamationTriangle} />
-                <h4>Възникна грешка</h4>
-                <p>Моля опитайте отново</p>
+                <h4>{t('clubs.SportsEventsCalendar.modal.error.title')}</h4>
+                <p>{t('clubs.SportsEventsCalendar.modal.error.message')}</p>
               </div>
             ) : (
               <form onSubmit={handleRegisterSubmit} className="sports-events-calendar-form">
                 <div className="sports-events-calendar-form-group">
                   <label>
                     <FontAwesomeIcon icon={faUser} />
-                    Име *
+                    {t('clubs.SportsEventsCalendar.modal.form.name')} *
                   </label>
                   <input
                     type="text"
                     value={registerForm.name}
                     onChange={(e) => handleRegisterChange('name', e.target.value)}
                     required
-                    placeholder="Вашето име"
+                    placeholder={t('clubs.SportsEventsCalendar.modal.form.namePlaceholder')}
                   />
                 </div>
                 
@@ -817,28 +796,28 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
                   <div className="sports-events-calendar-form-group">
                     <label>
                       <FontAwesomeIcon icon={faEnvelope} />
-                      Имейл *
+                      {t('clubs.SportsEventsCalendar.modal.form.email')} *
                     </label>
                     <input
                       type="email"
                       value={registerForm.email}
                       onChange={(e) => handleRegisterChange('email', e.target.value)}
                       required
-                      placeholder="your@email.com"
+                      placeholder={t('clubs.SportsEventsCalendar.modal.form.emailPlaceholder')}
                     />
                   </div>
                   
                   <div className="sports-events-calendar-form-group">
                     <label>
                       <FontAwesomeIcon icon={faMobile} />
-                      Телефон *
+                      {t('clubs.SportsEventsCalendar.modal.form.phone')} *
                     </label>
                     <input
                       type="tel"
                       value={registerForm.phone}
                       onChange={(e) => handleRegisterChange('phone', e.target.value)}
                       required
-                      placeholder="0888 123 456"
+                      placeholder={t('clubs.SportsEventsCalendar.modal.form.phonePlaceholder')}
                     />
                   </div>
                 </div>
@@ -846,12 +825,12 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
                 <div className="sports-events-calendar-form-group">
                   <label>
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    Бележки
+                    {t('clubs.SportsEventsCalendar.modal.form.notes')}
                   </label>
                   <textarea
                     value={registerForm.notes}
                     onChange={(e) => handleRegisterChange('notes', e.target.value)}
-                    placeholder="Въпроси или специални изисквания..."
+                    placeholder={t('clubs.SportsEventsCalendar.modal.form.notesPlaceholder')}
                     rows="3"
                   />
                 </div>
@@ -863,7 +842,9 @@ ${selectedEvent.instructor ? `Инструктор: ${selectedEvent.instructor}`
                     disabled={registerStatus === 'sending'}
                   >
                     <FontAwesomeIcon icon={faPaperPlane} />
-                    {registerStatus === 'sending' ? 'Изпраща се...' : 'Изпрати заявката'}
+                    {registerStatus === 'sending' ? 
+                      t('clubs.SportsEventsCalendar.modal.form.sending') : 
+                      t('clubs.SportsEventsCalendar.modal.form.submit')}
                   </button>
                 </div>
               </form>
