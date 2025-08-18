@@ -58,23 +58,41 @@ const transformPublication = async (pub) => {
     const currentPublicationIsDraft = publicationData.isDraft;
 
     if (publicationData.initiatives) {
-        publicationData.initiatives = publicationData.initiatives.filter((initiative) => {
-            if (currentPublicationIsDraft) {
-                return true;
-            } else {
-                return !initiative.isDraft;
-            }
-        });
+        publicationData.initiatives = publicationData.initiatives
+            .filter((initiative) => {
+                if (currentPublicationIsDraft) {
+                    return true;
+                } else {
+                    return !initiative.isDraft;
+                }
+            })
+            .map((initiative) => {
+                const { initiative_publications, ...cleanInitiative } = initiative;
+                return {
+                    id: cleanInitiative.id,
+                    title: cleanInitiative.title,
+                    slug: cleanInitiative.slug,
+                };
+            });
     }
 
     if (publicationData.projects) {
-        publicationData.projects = publicationData.projects.filter((project) => {
-            if (currentPublicationIsDraft) {
-                return true;
-            } else {
-                return !project.isDraft;
-            }
-        });
+        publicationData.projects = publicationData.projects
+            .filter((project) => {
+                if (currentPublicationIsDraft) {
+                    return true;
+                } else {
+                    return !project.isDraft;
+                }
+            })
+            .map((project) => {
+                const { project_publications, ...cleanProject } = project;
+                return {
+                    id: cleanProject.id,
+                    title: cleanProject.title,
+                    slug: cleanProject.slug,
+                };
+            });
     }
 
     if (publicationData.relatedPublications) {
@@ -88,7 +106,11 @@ const transformPublication = async (pub) => {
             })
             .map((relatedPub) => {
                 const { related_publications, ...cleanRelatedPub } = relatedPub;
-                return cleanRelatedPub.id;
+                return {
+                    id: cleanRelatedPub.id,
+                    title: cleanRelatedPub.title,
+                    slug: cleanRelatedPub.slug,
+                };
             });
     }
 

@@ -2293,8 +2293,7 @@ export const InitiativeProvider = ({ children }) => {
     // Related content
     getRelatedContent,
 
-    // New functions for deleting publications
-    deletePublication,
+    // Publication comments
     getPublicationComments,
     addPublicationComment,
     updatePublicationComment,

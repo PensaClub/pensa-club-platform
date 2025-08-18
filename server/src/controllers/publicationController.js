@@ -107,14 +107,7 @@ publicationController.patch('/:id', isAuth, checkPermission('publications', 'upd
 
         const result = await publication.sequelize.transaction(async (t) => {
             const foundPublication = await publication.findByPk(publicationId, {
-                include: [
-                    ...publicationConfig,
-                    {
-                        model: user_account,
-                        as: 'creator',
-                        attributes: ['id', 'email'],
-                    },
-                ],
+                include: publicationConfig,
                 transaction: t,
             });
 
@@ -328,7 +321,7 @@ publicationController.get('/all', checkPermission('publications', 'read'), async
             include: publicationConfig,
             limit: limit,
             offset: offset,
-            order: [['id', 'ASC']],
+            order: [['createdAt', 'DESC']],
         });
 
         const transformedList = await Promise.all(

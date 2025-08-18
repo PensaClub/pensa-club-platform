@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileAlt, faClock, faUpload, faTimes, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faFileAlt, faTimes, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { uploadDocumentWithProgress, isValidDocument, formatFileSize } from '../../../../Articles/articleUtils/file-utils';
 import { notify } from '../../../../../utils/notify';
 import './FileSection.css';
@@ -16,96 +16,63 @@ const FileSection = ({
     const { t } = useTranslation();
     const fileInputRef = useRef(null);
 
-    // Handle file upload with minimum time
     const handleFileUpload = useCallback(async (e) => {
-        console.log('🚀 handleFileUpload called!');
-        console.log('📁 Event:', e);
-        console.log('📁 Files:', e.target.files);
-
         const files = e.target.files;
         if (!files || files.length === 0) {
-            console.log('❌ No files selected');
             return;
         }
 
-        const file = files[0]; // Only one file allowed
+        const file = files[0];
 
-        console.log('📁 File selected:', file.name, file.size, file.type);
-        console.log(' setValues function:', typeof setValues, setValues);
-
-        // Validate file
         const validation = isValidDocument(file);
         if (!validation.valid) {
-            console.log('❌ File validation failed:', validation.error);
-            notify('error', validation.error);
+            notify('error', null, validation.error);
             e.target.value = '';
             return;
         }
 
-        console.log('✅ File validation passed');
-
-        // Record start time for minimum upload duration
         const startTime = Date.now();
-        const minUploadTime = 2000; // 2 seconds minimum
+        const minUploadTime = 2000;
 
         try {
-            // Show uploading state
-            console.log('🔄 About to call setValues for uploading state...');
-            setValues(prev => {
-                console.log('🔄 Inside setValues callback - prev values:', prev);
-                const newValues = {
-                    ...prev,
-                    fileType: file.name.split('.').pop().toLowerCase(),
-                    fileSize: formatFileSize(file.size),
-                    downloadUrl: '',
-                    isUploading: true
-                };
-                console.log('🔄 New values after uploading state:', newValues);
-                return newValues;
-            });
+            setValues(prev => ({
+                ...prev,
+                fileType: file.name.split('.').pop().toLowerCase(),
+                fileSize: formatFileSize(file.size),
+                downloadUrl: '',
+                originalFileName: file.name,
+                isUploading: true
+            }));
 
-            console.log('📤 Starting Firebase upload...');
-            // Upload to Firebase
             const uploadedUrl = await uploadDocumentWithProgress(
                 file,
                 'publications/documents',
                 (progress) => {
-                    console.log(`📊 Upload progress: ${progress}%`);
+                    // Progress callback - could be used for progress bar if needed
                 }
             );
 
-            console.log('✅ Firebase upload successful:', uploadedUrl);
-
-            // Calculate elapsed time and ensure minimum duration
             const elapsedTime = Date.now() - startTime;
             const remainingTime = Math.max(0, minUploadTime - elapsedTime);
 
             if (remainingTime > 0) {
-                console.log(`⏱️ Waiting ${remainingTime}ms to meet minimum upload time`);
                 await new Promise(resolve => setTimeout(resolve, remainingTime));
             }
 
-            // Update with Firebase URL
-            console.log('💾 About to call setValues with Firebase URL...');
-            setValues(prev => {
-                console.log('💾 Inside setValues callback - prev values:', prev);
-                const newValues = {
-                    ...prev,
-                    fileType: file.name.split('.').pop().toLowerCase(),
-                    fileSize: formatFileSize(file.size),
-                    downloadUrl: uploadedUrl,
-                    isUploading: false,
-                };
-                console.log('📋 New values after Firebase URL:', newValues);
-                return newValues;
-            });
+            setValues(prev => ({
+                ...prev,
+                fileType: file.name.split('.').pop().toLowerCase(),
+                fileSize: formatFileSize(file.size),
+                downloadUrl: uploadedUrl,
+                originalFileName: file.name,
+                isUploading: false,
+            }));
 
-            notify('success', 'File uploaded successfully!');
+            notify('file-upload-success');
             e.target.value = '';
 
         } catch (error) {
-            console.error('❌ Upload error:', error);
-            notify('error', 'File upload failed');
+            notify('file-upload-failed');
             setValues(prev => ({
                 ...prev,
                 isUploading: false
@@ -114,7 +81,6 @@ const FileSection = ({
         }
     }, [setValues]);
 
-    // Remove uploaded file
     const removeFile = useCallback(() => {
         setValues(prev => ({
             ...prev,
@@ -130,14 +96,12 @@ const FileSection = ({
 
     return (
         <div className="publication-form-section">
-            {/* File Upload Section */}
             <div className="publication-form-group">
                 <label className="publication-form-label">
                     <FontAwesomeIcon icon={faFileAlt} className="publication-form-icon" />
                     {t('publications.fileUpload.uploadFile')}
                 </label>
 
-                {/* Hidden file input */}
                 <input
                     ref={fileInputRef}
                     type="file"
@@ -147,21 +111,17 @@ const FileSection = ({
                     disabled={values.isUploading}
                 />
 
-                {/* Upload Area */}
                 {!values.downloadUrl ? (
                     <div
                         className={`publication-file-upload-area ${values.isUploading ? 'uploading' : ''}`}
                         onClick={() => {
                             if (!values.isUploading) {
-                                console.log('🖱️ Upload area clicked!');
-                                console.log('📁 fileInputRef.current:', fileInputRef.current);
                                 fileInputRef.current?.click();
                             }
                         }}
                     >
                         {values.isUploading ? (
                             <>
-
                                 <p>{t('publications.fileUpload.uploadingDescription')}<FontAwesomeIcon icon={faSpinner} className="publication-upload-spinner" spin /></p>
                                 <small>{t('publications.fileUpload.uploadingHint')}</small>
                             </>
@@ -179,7 +139,7 @@ const FileSection = ({
                             <FontAwesomeIcon icon={faFileAlt} />
                             <div className="publication-file-details">
                                 <div className="publication-file-name">
-                                    {t('publications.fileUpload.uploadedFile')}
+                                    {values.originalFileName || t('publications.unnamedFile')}
                                 </div>
                                 <div className="publication-file-meta">
                                     {values.fileType?.toUpperCase()} • {values.fileSize}
@@ -202,7 +162,6 @@ const FileSection = ({
                 )}
             </div>
 
-            {/* Display uploaded file info (read-only) */}
             {values.downloadUrl && (
                 <div className="publication-form-group">
                     <label className="publication-form-label">
@@ -233,7 +192,6 @@ const FileSection = ({
                             </span>
                         </div>
 
-                        {/* View link row only for PDF files */}
                         {values.fileType?.toLowerCase() === 'pdf' && (
                             <div className="publication-info-row">
                                 <span className="publication-info-label">{t('publications.fileUpload.viewUrl')}:</span>

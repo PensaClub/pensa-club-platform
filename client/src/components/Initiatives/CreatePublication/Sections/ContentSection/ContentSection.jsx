@@ -112,14 +112,25 @@ const ContentSection = ({
         return sectionEditorsRef.current[index];
     };
 
-    // Handle section content changes
+    // Handle section content changes with error handling
     const handleSectionContentChange = (sectionIndex) => (value) => {
-        const updatedSections = [...(values.sections || [])];
-        updatedSections[sectionIndex] = {
-            ...updatedSections[sectionIndex],
-            content: value
-        };
-        setValues(prev => ({ ...prev, sections: updatedSections }));
+        try {
+            const updatedSections = [...(values.sections || [])];
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                content: value
+            };
+            setValues(prev => ({ ...prev, sections: updatedSections }));
+        } catch (error) {
+            console.error('Error updating section content:', error);
+            // Fallback: set empty content
+            const updatedSections = [...(values.sections || [])];
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                content: [{ type: 'paragraph', children: [{ text: '' }] }]
+            };
+            setValues(prev => ({ ...prev, sections: updatedSections }));
+        }
     };
 
     // Move section up/down
@@ -201,6 +212,41 @@ const ContentSection = ({
             return !!match;
         } catch (error) {
             return false;
+        }
+    };
+
+    // Add this function after the existing functions (around line 140, before toggleMark)
+    const handleKeyDown = (event, editor) => {
+        // Handle keyboard shortcuts
+        if (event.ctrlKey || event.metaKey) {
+            switch (event.key) {
+                case 'b':
+                    event.preventDefault();
+                    toggleMark(editor, 'bold');
+                    break;
+                case 'i':
+                    event.preventDefault();
+                    toggleMark(editor, 'italic');
+                    break;
+                case 'u':
+                    event.preventDefault();
+                    toggleMark(editor, 'underline');
+                    break;
+                case '1':
+                    event.preventDefault();
+                    toggleBlock(editor, 'heading-one');
+                    break;
+                case '2':
+                    event.preventDefault();
+                    toggleBlock(editor, 'heading-two');
+                    break;
+                case '3':
+                    event.preventDefault();
+                    toggleBlock(editor, 'heading-three');
+                    break;
+                default:
+                    break;
+            }
         }
     };
 
@@ -509,6 +555,12 @@ const ContentSection = ({
                                                     renderElement={renderElement}
                                                     renderLeaf={renderLeaf}
                                                     onKeyDown={(event) => handleKeyDown(event, getSectionEditor(index))}
+                                                    onError={(error) => {
+                                                        console.error('Slate editor error:', error);
+                                                        // Reset editor state on error
+                                                        const editor = getSectionEditor(index);
+                                                        editor.children = createSlateEditorState();
+                                                    }}
                                                 />
                                             </Slate>
                                         </div>
@@ -627,7 +679,7 @@ const ContentSection = ({
                                                                 type="text"
                                                                 placeholder={t('publications.media.imageDescription')}
                                                                 value={section.image.alt || ''}
-                                                                onChange={(e) => updateSectionImageAlt(index, 0, e.target.value)}
+                                                                onChange={(e) => updateSectionImageAlt(index, e.target.value)}
                                                                 className="publication-sections-image-input"
                                                                 maxLength={100}
                                                             />
@@ -642,7 +694,7 @@ const ContentSection = ({
                                                                 type="text"
                                                                 placeholder={t('publications.media.imageCaption')}
                                                                 value={section.image.caption || ''}
-                                                                onChange={(e) => updateSectionImageCaption(index, 0, e.target.value)}
+                                                                onChange={(e) => updateSectionImageCaption(index, e.target.value)}
                                                                 className="publication-sections-image-input"
                                                                 maxLength={150}
                                                             />

@@ -10,6 +10,7 @@ import PublicationForm from '../MainForm/MainFormPublication';
 import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { transformPublicationForDisplay } from '../utils/dataTransformationUtils';
 
 export const AllPublications = () => {
     const { t } = useTranslation();
@@ -33,7 +34,7 @@ export const AllPublications = () => {
     const [showPreview, setShowPreview] = useState(false);
     const [previewData, setPreviewData] = useState(null);
 
-    // Form state - simplified
+    // Form state
     const [formMode, setFormMode] = useState(null); // null, 'create', or 'edit'
     const [editingItem, setEditingItem] = useState(null);
 
@@ -48,14 +49,13 @@ export const AllPublications = () => {
                 const isDraft = viewMode === 'drafts';
                 await getAllPublications(1, true, isDraft);
             } catch (error) {
-                console.error('Error loading publications:', error);
+                notify('error', 'Failed to load publications');
             }
         };
 
         loadData();
     }, [viewMode]);
 
-    // Handle escape key and outside clicks for preview
     useEffect(() => {
         const handleEscape = (event) => {
             if (event.key === 'Escape' && showPreview) {
@@ -82,7 +82,6 @@ export const AllPublications = () => {
         };
     }, [showPreview]);
 
-    // Handle global clicks to close dropdowns
     useEffect(() => {
         const handleGlobalClick = (event) => {
             if (!event.target.closest('.all-publications-card-actions')) {
@@ -94,7 +93,6 @@ export const AllPublications = () => {
         return () => document.removeEventListener('click', handleGlobalClick);
     }, []);
 
-    // Scroll to top when publications change
     useEffect(() => {
         if (publications.length > 0) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -147,7 +145,7 @@ export const AllPublications = () => {
         return filtered;
     }, [publications, searchTerm, filters]);
 
-    // Handle view mode changes
+
     const handleViewModeChange = (mode) => {
         if (mode === 'create') {
             setFormMode('create');
@@ -165,12 +163,10 @@ export const AllPublications = () => {
         });
     };
 
-    // Handle search
     const handleSearch = (term) => {
         setSearchTerm(term);
     };
 
-    // Handle filter changes
     const handleFilterChange = (newFilters) => {
         setFilters(newFilters);
     };
@@ -183,7 +179,6 @@ export const AllPublications = () => {
         }
     }, [viewMode, publicationsHasMore, publicationsCurrentPage, contextLoading, getAllPublications]);
 
-    // Format date
     const formatDate = (dateString) => {
         if (!dateString) return t('publications.admin.noDate');
         const date = new Date(dateString);
@@ -194,45 +189,17 @@ export const AllPublications = () => {
         });
     };
 
-    // Optimize preview data - single function that handles everything
-    const getOptimizedPreviewData = (item) => {
-        return {
-            id: item.id || 'preview-' + Date.now(),
-            title: item.title || t('publications.admin.preview.noTitle'),
-            shortDescription: item.shortDescription || t('publications.admin.preview.noDescription'),
-            description: item.shortDescription || t('publications.admin.preview.noDescription'),
-            publishedAt: item.publishedAt || new Date().toISOString(),
-            slug: item.slug || 'preview-slug',
-            author: item.userEmail || t('publications.admin.preview.noAuthor'),
-            authorEmail: item.userEmail || null,
-            authorImage: null,
-            readTime: item.readTime || t('publications.admin.preview.noReadTime'),
-            category: item.category || t('publications.admin.preview.noCategory'),
-            tags: item.tags?.length > 0 ? item.tags : [],
-            image: item.image?.src ? {
-                src: item.image.src,
-                alt: item.image.alt || item.title || 'Publication',
-                caption: item.image.caption || ''
-            } : null,
-            mainImage: item.mainImage || item.image || null,
-            sections: item.sections?.length > 0 ? item.sections : [],
-            downloadUrl: item.downloadUrl || null,
-            fileType: item.downloadUrl ? (item.fileType || 'PDF') : null,
-            fileSize: item.downloadUrl ? (item.fileSize || t('publications.admin.preview.unknownSize')) : null,
-            commentsEnabled: item.commentsEnabled !== false,
-            views: item.views || null,
-            downloads: item.downloads || null,
-            likes: item.likes || null,
-            isLiked: false,
-            initiatives: item.initiatives || null,
-            projects: item.projects || null,
-            type: 'publication'
-        };
+    const getPreviewData = (item) => {
+        return transformPublicationForDisplay(item, {
+            includeConnections: true,
+            isEditMode: formMode === 'edit',
+            t: t
+        });
     };
 
     // Show preview modal
     const handleShowPreview = (item) => {
-        setPreviewData(getOptimizedPreviewData(item));
+        setPreviewData(getPreviewData(item));
         setShowPreview(true);
     };
 
@@ -284,7 +251,6 @@ export const AllPublications = () => {
                     break;
             }
         } catch (error) {
-            console.error(`Error performing ${action}:`, error);
             notify('error', t('publications.admin.actionError'));
         }
     };
@@ -293,14 +259,13 @@ export const AllPublications = () => {
     const handleCloseForm = async () => {
         setFormMode(null);
         setEditingItem(null);
-        setViewMode('publications'); // Changed to match header component
+        setViewMode('publications');
 
-        // Refetch data after form is closed
         try {
             const isDraft = viewMode === 'drafts';
             await getAllPublications(1, true, isDraft);
         } catch (error) {
-            console.error('Error refetching publications after form close:', error);
+            notify('error', 'Failed to refresh publications');
         }
     };
 
@@ -356,7 +321,6 @@ export const AllPublications = () => {
                         mode={formMode}
                         initialValues={editingItem}
                         onCancel={handleCloseForm}
-                        showBackButton={true}
                     />
                 </>
             )}

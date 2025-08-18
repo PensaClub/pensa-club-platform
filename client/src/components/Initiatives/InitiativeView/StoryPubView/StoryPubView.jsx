@@ -174,7 +174,8 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
     const hasConnections = () => {
         if (!content || type !== 'publication') return false;
         return (content.initiatives && content.initiatives.length > 0) ||
-               (content.projects && content.projects.length > 0);
+               (content.projects && content.projects.length > 0) ||
+               (content.relatedPublications && content.relatedPublications.length > 0);
     };
 
     // Generate a slug for section if it doesn't have one
@@ -236,8 +237,11 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                 <div className="container">
                     <h1>{t('publications.view.notFound.title')}</h1>
                     <p>{t('publications.view.notFound.description')}</p>
-                    <Link to="/initiatives" className="back-link">
-                        {t('publications.view.notFound.backToInitiatives')}
+                    <Link
+                        to='/publications'
+                        className="back-link"
+                    >
+                        {t('publications.view.notFound.backToPublications')}
                     </Link>
                 </div>
             </div>
@@ -370,7 +374,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                 )}
 
                                                 <div className="story-pub-section-content">
-                                                    {section.content}
+                                                    <p>{section.content}</p>
                                                 </div>
                                             </section>
                                         );
@@ -481,8 +485,8 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                         {t('publications.view.connections.initiatives')}
                                                     </h4>
                                                     <ul className="connections-list">
-                                                        {content.initiatives.map((initiative) => (
-                                                            <li key={initiative.id} className="connection-item">
+                                                        {content.initiatives.map((initiative, index) => (
+                                                            <li key={`initiative-${initiative.id || initiative.slug || index}`} className="connection-item">
                                                                 <Link
                                                                     to={`/initiatives/${initiative.slug}`}
                                                                     className="connection-link"
@@ -507,8 +511,8 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                         {t('publications.view.connections.projects')}
                                                     </h4>
                                                     <ul className="connections-list">
-                                                        {content.projects.map((project) => (
-                                                            <li key={project.id} className="connection-item">
+                                                        {content.projects.map((project, index) => (
+                                                            <li key={`project-${project.id || project.slug || index}`} className="connection-item">
                                                                 <Link
                                                                     to={`/projects/${project.slug}`}
                                                                     className="connection-link"
@@ -516,6 +520,32 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                                     <span className="connection-text">
                                                                         {project.title}
                                                                         {project.isDraft && (
+                                                                            <span className="draft-badge"> ({t('publications.connections.draft')})</span>
+                                                                        )}
+                                                                    </span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
+
+                                            {/* Related Publications Connections */}
+                                            {content.relatedPublications && content.relatedPublications.length > 0 && (
+                                                <>
+                                                    <h4 className="connections-group-title">
+                                                        {t('publications.view.connections.publications')}
+                                                    </h4>
+                                                    <ul className="connections-list">
+                                                        {content.relatedPublications.map((publication, index) => (
+                                                            <li key={`related-pub-${publication.id || index}`} className="connection-item">
+                                                                <Link
+                                                                    to={`/publications/${publication.slug}`}
+                                                                    className="connection-link"
+                                                                >
+                                                                    <span className="connection-text">
+                                                                        {publication.title}
+                                                                        {publication.isDraft && (
                                                                             <span className="draft-badge"> ({t('publications.connections.draft')})</span>
                                                                         )}
                                                                     </span>

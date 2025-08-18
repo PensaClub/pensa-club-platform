@@ -728,7 +728,9 @@
     "data-processing-error": "Error processing data",
     "draft-saved-both": "Draft saved in profile and browser",
     "draft-saved-browser": "Draft saved in browser",
-    "draft-saved-browser-only": "Draft saved only in browser"
+    "draft-saved-browser-only": "Draft saved only in browser",
+    "file-upload-failed": "File upload failed",
+    "file-upload-success": "File uploaded successfully"
   },
   "errors": {
     "image_type": "File of type {{type}} is not allowed! Allowed types images are PNG/JPG/JPEG.",
@@ -3188,7 +3190,7 @@
     "common": {
       "title": "Publications",
       "next": "Next",
-      "back": "Previous",
+      "back": "Back",
       "generate": "Generate",
       "add": "Add",
       "remove": "Remove",
@@ -3436,7 +3438,10 @@
       "like": "Like",
       "previewNotice": "This is a preview of your publication. Changes are not saved yet.",
       "noTitle": "No title",
-      "noDescription": "No description"
+      "noDescription": "No description",
+      "noContent": "No content",
+      "noAuthor": "Unknown Author",
+      "noFileSize": "No File Size"
     },
     "view": {
       "types": {
@@ -3459,7 +3464,8 @@
       "connections": {
         "title": "Connected",
         "initiatives": "Initiatives",
-        "projects": "Projects"
+        "projects": "Projects",
+        "publications": "Publications"
       },
       "toc": {
         "title": "Table of Contents"

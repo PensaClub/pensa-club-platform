@@ -670,7 +670,9 @@
     "data-processing-error": "Грешка при обработка на данните",
     "draft-saved-both": "Черновата е запазена в профила и браузъра",
     "draft-saved-browser": "Черновата е запазена в браузъра",
-    "draft-saved-browser-only": "Черновата е запазена само в браузъра"
+    "draft-saved-browser-only": "Черновата е запазена само в браузъра",
+    "file-upload-failed": "Неуспешно качване на файла",
+    "file-upload-success": "Файлът е качен успешно"
   },
   "errors": {
     "image_type": "Файл от тип {{type}} не е позволен! Позволените типове снимки са PNG/JPG/JPEG.",
@@ -3230,8 +3232,8 @@
   "publications": {
     "common": {
       "title": "Публикации",
-    "next": "Напред",
-    "back": "Назад",
+      "next": "Напред",
+      "back": "Назад",
       "generate": "Генерирай",
       "add": "Добави",
       "remove": "Премахни",
@@ -3502,7 +3504,8 @@
         "connections": {
           "title": "Свързани",
           "initiatives": "Инициативи",
-          "projects": "Проекти"
+          "projects": "Проекти",
+          "publications": "Публикации"
         },
         "toc": {
           "title": "Съдържание"
@@ -3549,7 +3552,9 @@
         "noAuthor": "Не е посочен автор",
         "noReadTime": "Не е посочено време за четене",
         "noCategory": "Не е избрана категория",
-        "unknownSize": "Неизвестен размер"
+        "unknownSize": "Неизвестен размер",
+        "noContent": "Без съдържание",
+        "noFileSize": "Без размер на файл"
       },
       "filters": {
         "category": "Филтрирай по категория",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faEdit, faFileAlt, faArrowLeft, faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -17,21 +17,26 @@ import useCreatePublication from '../../../hooks/useCreatePublication';
 import FileSection from "../Sections/FileSection/FileSection";
 import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
 import { useAuthContext } from '../../../contexts/UserContext';
-import { initiativeServiceFactory } from '../../../Services/StoryPubServiceFactory';
-import { isSlateEmpty } from '../../../../utils/slateToHtml';
+import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import ConnectionSection from "../Sections/ConnectionSection/ConnectionSection";
 import { notify } from '../../../../utils/notify';
+import {
+    transformPublicationForForm,
+    transformPublicationForServer,
+    transformPublicationForDisplay
+} from '../utils/dataTransformationUtils';
 
 const PublicationForm = ({
-    mode = 'create', // 'create' or 'edit'
+    mode = 'create',
     initialValues = null,
-    onCancel = null,
-    showBackButton = true
+    onCancel = null
 }) => {
     const { t } = useTranslation();
     const { userEmail, username } = useAuthContext();
+    const { getPublicationById, createPublication, updatePublication } = useInitiativeContext();
     const navigate = useNavigate();
-    const { slug } = useParams(); // Keep using slug for URL compatibility
+    const { slug } = useParams();
+
     const [publication, setPublication] = useState(null);
     const [loading, setLoading] = useState(false);
     const [activeSection, setActiveSection] = useState('basic-info');
@@ -39,43 +44,28 @@ const PublicationForm = ({
     const [showPreview, setShowPreview] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
-    const token = localStorage.getItem('token');
-    const publicationService = initiativeServiceFactory(token);
-
     // Determine if we're in edit mode
     const isEditMode = mode === 'edit' || !!slug;
-
-    // Add debugging
-    console.log('MainFormPublication debug:', {
-        mode,
-        slug,
-        isEditMode,
-        publication: publication,
-        publicationId: publication?.id,
-        initialValues: initialValues
-    });
 
     // Define onSubmitHandler function
     const onSubmitHandler = async (data) => {
         try {
             if (isEditMode && publication?.id) {
                 // Update existing publication
-                await publicationService.updatePublication(publication.id, data);
+                await updatePublication(publication.id, data);
                 notify('success', t('publications.admin.publicationUpdatedSuccess'));
             } else {
                 // Create new publication
-                await publicationService.createPublication(data);
+                await createPublication(data);
                 notify('success', t('publications.admin.publicationCreatedSuccess'));
             }
 
-            // If we have an onCancel callback (inline editing), use it instead of navigation
             if (onCancel) {
                 onCancel();
             } else {
                 navigate('/profile/publications');
             }
         } catch (error) {
-            console.error('Failed to submit publication:', error);
             notify('error', error.message || 'Failed to submit publication');
         }
     };
@@ -125,110 +115,25 @@ const PublicationForm = ({
         updateMainImageCaption
     } = useCreatePublication(initialValues, onSubmitHandler);
 
-    // Transform server data to form format
-    const transformPublicationForForm = (publicationData) => {
-        if (!publicationData) return {};
-
-        // Helper function to convert string content to Slate format
-        const convertStringToSlateContent = (content) => {
-            if (!content) return [];
-            if (Array.isArray(content)) return content;
-
-            // If it's a string, convert it to Slate format
-            return [
-                {
-                    type: 'paragraph',
-                    children: [{ text: content }]
-                }
-            ];
-        };
-
-        // Helper function to normalize image data
-        const normalizeImageData = (imageData) => {
-            if (!imageData) return null;
-
-            // Handle different image data structures
-            if (typeof imageData === 'string') {
-                return { src: imageData, alt: '', caption: '' };
-            }
-
-            if (imageData.src || imageData.url) {
-                return {
-                    src: imageData.src || imageData.url,
-                    alt: imageData.alt || '',
-                    caption: imageData.caption || ''
-                };
-            }
-
-            return null;
-        };
-
-
-        console.log('Transforming publication data:', publicationData); // Debug log
-
-        const transformed = {
-            title: publicationData.title || '',
-            slug: publicationData.slug || '',
-            shortDescription: publicationData.shortDescription || '',
-            category: publicationData.category || '',
-            tags: publicationData.tags || [],
-            readTime: publicationData.readTime || '',
-            commentsEnabled: publicationData.commentsEnabled ?? true,
-            showAuthor: publicationData.showAuthor ?? true,
-
-            mainImage: normalizeImageData(publicationData.image),
-
-            fileType: publicationData.fileType || '',
-            fileSize: publicationData.fileSize || '',
-            downloadUrl: publicationData.downloadUrl || '',
-
-            sections: publicationData.sections?.map((section, index) => ({
-                id: section.id || `section-${index + 1}`,
-                title: section.title || '',
-                titleSlug: section.titleSlug || section.slug || '',
-                content: convertStringToSlateContent(section.content),
-                order: section.order || index + 1,
-                image: normalizeImageData(section.image)
-            })) || [],
-
-            relatedPublications: publicationData.relatedPublications?.map(pub => pub.id) || [],
-            connectedInitiativeIds: publicationData.initiatives?.map(init => init.id) || [],
-            connectedProjectIds: publicationData.projects?.map(proj => proj.id) || []
-        };
-
-        return transformed;
-    };
-
+    // Transform server data to form format for inline editing
     useEffect(() => {
         if (isEditMode && initialValues) {
-            // This is inline editing mode - transform the data
             const transformedData = transformPublicationForForm(initialValues);
             setValues(transformedData);
         }
     }, [isEditMode, initialValues, setValues]);
 
+    // Fetch publication by slug for route-based editing
     useEffect(() => {
         const fetchPublication = async () => {
             if (isEditMode && slug) {
-                // This is route-based editing mode - we need to get publication by slug first
                 setLoading(true);
                 try {
-                    // Since we don't have a getPublicationBySlug endpoint, we'll need to get all publications
-                    // and find the one with matching slug. This is not ideal but works for now.
-                    // TODO: Add getPublicationBySlug endpoint to the backend
-                    const allPublications = await publicationService.getAllPublications(1, 1000);
-                    const foundPublication = allPublications.find(pub => pub.slug === slug);
-
-                    if (foundPublication) {
-                        setPublication(foundPublication);
-                        // Transform the data before setting it
-                        const transformedData = transformPublicationForForm(foundPublication);
-                        setValues(transformedData);
-                    } else {
-                        notify('error', t('publications.edit.notFound'));
-                    }
+                    const foundPublication = await getPublicationById(slug);
+                    setPublication(foundPublication);
+                    const transformedData = transformPublicationForForm(foundPublication);
+                    setValues(transformedData);
                 } catch (err) {
-                    console.error('Error fetching publication:', err);
                     notify('error', t('publications.edit.notFound'));
                 } finally {
                     setLoading(false);
@@ -237,7 +142,7 @@ const PublicationForm = ({
         };
 
         fetchPublication();
-    }, [isEditMode, slug, setValues, t, publicationService]);
+    }, [isEditMode, slug, setValues, t, getPublicationById]);
 
     if (loading) {
         return <div className="loading">Loading...</div>;
@@ -278,84 +183,7 @@ const PublicationForm = ({
         setActiveSection(sectionId);
     };
 
-    const preparePublicationData = (isDraft = true) => {
-        const nullIfEmpty = (value) => {
-            if (value === '' || value === undefined) return null;
-            return value;
-        };
-
-        // Extract file name from download URL if available
-        const getFileNameFromUrl = (url) => {
-            if (!url) return null;
-            try {
-                const urlParts = url.split('/');
-                return urlParts[urlParts.length - 1] || null;
-            } catch {
-                return null;
-            }
-        };
-
-        return {
-            title: values.title,
-            slug: values.slug,
-            shortDescription: values.shortDescription,
-            category: nullIfEmpty(values.category),
-            tags: values.tags || [],
-            readTime: nullIfEmpty(values.readTime),
-            fileType: nullIfEmpty(values.fileType),
-            fileSize: nullIfEmpty(values.fileSize),
-            downloadUrl: nullIfEmpty(values.downloadUrl),
-            fileName: getFileNameFromUrl(values.downloadUrl),
-            commentsEnabled: values.commentsEnabled ?? true,
-            showAuthor: values.showAuthor ?? true,
-            isDraft,
-            mainImage: values.mainImage?.src ? {
-                src: values.mainImage.src,
-                alt: nullIfEmpty(values.mainImage.alt),
-                caption: nullIfEmpty(values.mainImage.caption)
-            } : null,
-            sections: values.sections?.map((section, index) => {
-                let content = '';
-                if (section.content && !isSlateEmpty(section.content)) {
-                    content = section.content
-                        .map(node => {
-                            if (node.type === 'paragraph') {
-                                return node.children?.map(child => child.text || '').join('') || '';
-                            }
-                            return node.children?.map(child => child.text || '').join('') || '';
-                        })
-                        .filter(text => text.trim() !== '')
-                        .join('\n');
-                }
-
-                const sectionTitleSlug = section.titleSlug || section.title
-                    ?.toLowerCase()
-                    .replace(/[^a-z0-9\s]/g, '')
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-')
-                    .replace(/^-+|-+$/g, '')
-                    .trim() || `section-${index + 1}`;
-
-                return {
-                    title: nullIfEmpty(section.title),
-                    titleSlug: sectionTitleSlug, // Keep this for sections - it's used for navigation
-                    content: nullIfEmpty(content),
-                    order: section.order || index + 1,
-                    image: section.image?.src ? {
-                        src: section.image.src,
-                        alt: nullIfEmpty(section.image.alt),
-                        caption: nullIfEmpty(section.image.caption)
-                    } : null
-                };
-            }) || [],
-
-            relatedPublications: values.relatedPublications || [],
-            connectedInitiativeIds: values.connectedInitiativeIds || [],
-            connectedProjectIds: values.connectedProjectIds || []
-        };
-    };
-
-    // Simplified unified handler for all publication operations
+    // Unified handler for all publication operations
     const handlePublicationAction = async (action) => {
         // Validate required fields
         if (!values.title || !values.slug || !values.shortDescription) {
@@ -367,41 +195,21 @@ const PublicationForm = ({
 
         setIsSaving(true);
         try {
-            // Determine if this should be a draft or published
             const isDraft = action === 'draft';
-            const publicationData = preparePublicationData(isDraft);
+            const publicationData = transformPublicationForServer(values, isDraft);
 
-            // Get the publication ID for edit mode
-            let publicationId = null;
-            if (isEditMode) {
-                publicationId = publication?.id || initialValues?.id;
+            const isEditing = isEditMode && (publication?.id || initialValues?.id);
 
-                // If we still don't have an ID but have a slug, try to find it
-                if (!publicationId && slug) {
-                    try {
-                        const allPublications = await publicationService.getAllPublications(1, 1000);
-                        const foundPublication = allPublications.find(pub => pub.slug === slug);
-                        if (foundPublication) {
-                            publicationId = foundPublication.id;
-                            setPublication(foundPublication);
-                        }
-                    } catch (error) {
-                        console.error('Error finding publication by slug:', error);
-                    }
-                }
-            }
-
-            if (isEditMode && publicationId) {
-                // Update existing publication
-                await publicationService.updatePublication(publicationId, publicationData);
+            if (isEditing) {
+                const publicationId = publication?.id || initialValues?.id;
+                await updatePublication(publicationId, publicationData);
 
                 const successMessage = isDraft
                     ? t('publications.admin.draftUpdatedSuccess')
                     : t('publications.admin.publicationUpdatedSuccess');
                 notify('success', successMessage);
             } else {
-                // Create new publication
-                await publicationService.createPublication(publicationData);
+                await createPublication(publicationData);
 
                 const successMessage = isDraft
                     ? t('publications.admin.draftCreatedSuccess')
@@ -419,189 +227,30 @@ const PublicationForm = ({
             }
         } catch (error) {
             setIsSaving(false);
-            console.error(`Error in handlePublicationAction (${action}):`, error);
             notify('error', error.message || `Failed to ${action} publication`);
         }
     };
 
-    // Simplified handlers that call the unified handler
+    // Simplified handlers
     const handleSaveDraft = () => handlePublicationAction('draft');
     const handlePublishOrUpdate = () => handlePublicationAction('publish');
+    const handlePreview = () => setShowPreview(true);
+    const closePreview = () => setShowPreview(false);
 
-    // Preview handler remains the same
-    const handlePreview = () => {
-        setShowPreview(true);
-    };
-
-    // Remove the old complex handlers
-    // const handleConvertToDraft = async () => { ... } - REMOVED
-    // const handlePublish = async () => { ... } - REMOVED
-
-    const closePreview = () => {
-        setShowPreview(false);
-    };
-
-    const slateToText = (slateContent) => {
-        if (!slateContent || !Array.isArray(slateContent)) {
-            return '';
-        }
-
-        return slateContent
-            .map(node => {
-                if (node.type === 'paragraph') {
-                    return node.children?.map(child => child.text || '').join('') || '';
-                } else if (node.type === 'heading-one') {
-                    return `<h1>${node.children?.map(child => child.text || '').join('') || ''}</h1>`;
-                } else if (node.type === 'heading-two') {
-                    return `<h2>${node.children?.map(child => child.text || '').join('') || ''}</h2>`;
-                } else if (node.type === 'heading-three') {
-                    return `<h3>${node.children?.map(child => child.text || '').join('') || ''}</h3>`;
-                } else if (node.type === 'bulleted-list') {
-                    const items = node.children?.map(item =>
-                        `<li>${item.children?.map(child => child.text || '').join('') || ''}</li>`
-                    ).join('') || '';
-                    return `<ul>${items}</ul>`;
-                } else if (node.type === 'numbered-list') {
-                    const items = node.children?.map(item =>
-                        `<li>${item.children?.map(child => child.text || '').join('') || ''}</li>`
-                    ).join('') || '';
-                    return `<ol>${items}</ol>`;
-                } else if (node.type === 'blockquote') {
-                    return `<blockquote>${node.children?.map(child => child.text || '').join('') || ''}</blockquote>`;
-                } else {
-                    return node.children?.map(child => child.text || '').join('') || '';
-                }
-            })
-            .filter(text => text.trim() !== '')
-            .join('<br />');
-    };
-
-    const getPreviewSections = () => {
-        if (values.sections && values.sections.length > 0) {
-            return values.sections
-                .sort((a, b) => (a.order || 0) - (b.order || 0))
-                .map((section, index) => {
-                    const sectionTitleSlug = section.titleSlug || section.title
-                        ?.toLowerCase()
-                        .replace(/[^a-z0-9\s]/g, '')
-                        .replace(/\s+/g, '-')
-                        .replace(/-+/g, '-')
-                        .replace(/^-+|-+$/g, '')
-                        .trim() || `section-${index + 1}`;
-
-                    return {
-                        id: section.id || `section-${index + 1}`,
-                        title: section.title || `Section ${index + 1}`,
-                        titleSlug: sectionTitleSlug,
-                        content: section.content ? slateToText(section.content) : `This is section ${index + 1} content.`,
-                        order: section.order || index + 1,
-                        image: section.image ? {
-                            src: section.image.src,
-                            alt: section.image.alt || `Image for ${section.title}`,
-                            caption: section.image.caption || ''
-                        } : null,
-                        images: section.image ? [section.image] : []
-                    };
-                });
-        }
-        return [];
-    };
-
-    const getOptimizedPreviewData = () => {
-        // Get actual connection data from the service
-        const getConnectionData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const service = initiativeServiceFactory(token);
-
-                let initiatives = [];
-                let projects = [];
-
-                if (values.connectedInitiativeIds?.length > 0) {
-                    const initiativesResponse = await service.getAllInitiativesForConnections();
-                    if (initiativesResponse?.data) {
-                        initiatives = initiativesResponse.data.filter(init =>
-                            values.connectedInitiativeIds.includes(init.id)
-                        );
-                    }
-                }
-
-                if (values.connectedProjectIds?.length > 0) {
-                    const projectsResponse = await service.getAllProjectsForConnections();
-                    if (projectsResponse?.data) {
-                        projects = projectsResponse.data.filter(proj =>
-                            values.connectedProjectIds.includes(proj.id)
-                        );
-                    }
-                }
-
-                return { initiatives, projects };
-            } catch (error) {
-                console.error('Error fetching connection data for preview:', error);
-                return { initiatives: [], projects: [] };
-            }
-        };
-
-        // For now, return placeholder data - we'll enhance this later
-        return {
-            id: publication?.id || 'preview-' + Date.now(),
-            title: values.title || t('publications.preview.noTitle'),
-            shortDescription: values.shortDescription || t('publications.preview.noDescription'),
-            publishedAt: publication?.publishedAt || new Date().toISOString(),
-            slug: values.slug || 'preview-slug',
-
-            author: values.showAuthor ? (username || userEmail || t('publications.preview.noAuthor')) : null,
-            authorEmail: values.showAuthor ? userEmail : null,
-            authorImage: null,
-
-            readTime: values.readTime || t('publications.preview.noReadTime'),
-            category: values.category || t('publications.preview.noCategory'),
-            tags: values.tags?.length > 0 ? values.tags : [],
-
-            image: values.mainImage?.src ? {
-                src: values.mainImage.src,
-                alt: values.mainImage.alt || values.title || 'Publication',
-                caption: values.mainImage.caption || ''
-            } : null,
-            mainImage: values.mainImage || null,
-
-            sections: getPreviewSections(),
-
-            downloadUrl: values.downloadUrl || null,
-            fileType: values.downloadUrl ? (values.fileType || 'PDF') : null,
-            fileSize: values.downloadUrl ? (values.fileSize || t('publications.preview.unknownSize')) : null,
-
-            commentsEnabled: values.commentsEnabled !== false,
-
-            views: null,
-            downloads: null,
-            likes: null,
-            isLiked: false,
-
-            // Include connections for preview - for now using placeholder data
-            // In a real implementation, you'd fetch the actual connection data
-            initiatives: values.connectedInitiativeIds?.length > 0 ?
-                values.connectedInitiativeIds.map(id => ({
-                    id: id,
-                    title: `Initiative ${id}`,
-                    slug: `initiative-${id}`,
-                    isDraft: false
-                })) : [],
-            projects: values.connectedProjectIds?.length > 0 ?
-                values.connectedProjectIds.map(id => ({
-                    id: id,
-                    title: `Project ${id}`,
-                    slug: `project-${id}`,
-                    isDraft: false
-                })) : [],
-
-            type: 'publication'
-        };
+    // Get preview data
+    const getPreviewData = () => {
+        return transformPublicationForDisplay(values, {
+            userEmail,
+            username,
+            t,
+            publication,
+            includeConnections: true
+        });
     };
 
     return (
         <div className="publication-create-container">
-            {/* Show back button only in edit mode - at the top */}
+            {/* Show back button only in edit mode */}
             {isEditMode && (
                 <div className="publication-form-back-nav">
                     <button
@@ -614,7 +263,7 @@ const PublicationForm = ({
                 </div>
             )}
 
-            {/* Show header for both create and edit modes */}
+            {/* Header */}
             <div className="publication-form-header">
                 <h1 className="publication-form-title">
                     {isEditMode
@@ -765,7 +414,7 @@ const PublicationForm = ({
                 onPreview={handlePreview}
                 onSaveDraft={handleSaveDraft}
                 onCreate={handlePublishOrUpdate}
-                onToggleDraft={handleSaveDraft} // For published publications, convert to draft
+                onToggleDraft={handleSaveDraft}
                 isSaving={isSaving}
                 isDraft={publication?.isDraft}
                 isEditMode={isEditMode}
@@ -789,7 +438,7 @@ const PublicationForm = ({
                             <StoryPubView
                                 type="publication"
                                 previewMode={true}
-                                previewData={getOptimizedPreviewData()}
+                                previewData={getPreviewData()}
                             />
                         </div>
                     </div>

@@ -72,6 +72,8 @@ const UpdatePublicationSchema = z.object({
     commentsEnabled: z.boolean().optional(),
     showAuthor: z.boolean().optional(),
     isDraft: z.boolean().optional(),
+    connectedInitiativeIds: z.array(z.number()).optional(),
+    connectedProjectIds: z.array(z.number()).optional(),
 });
 
 module.exports = {
