@@ -1630,46 +1630,54 @@ export const InitiativeProvider = ({ children }) => {
   // PUBLICATION FUNCTIONS
   // =================
 
-  const getAllPublications = useCallback(async (page = 1, forceRefresh = false, isDraft = null) => {
-    if (page === 1 && publications.length > 0 && publicationsLoaded && !forceRefresh) {
-      return {
-        data: publications,
-        hasMore: publicationsHasMore,
-        currentPage: publicationsCurrentPage
-      };
-    }
-
-    try {
-      setIsLoading(true);
-      const response = await storyPubService.getAllPublications(page, 6, isDraft);
-
-      const responseData = {
-        data: response.data || response,
-        hasMore: response.pagination?.hasNextPage || false,
-        totalCount: response.pagination?.totalPublications || 0,
-        currentPage: response.pagination?.page || page
-      };
-
-      if (page === 1) {
-        setPublications(responseData.data);
-      } else {
-        setPublications(prev => [...prev, ...responseData.data]);
+  // В getAllPublications функцията - ред ~1648
+const getAllPublications = useCallback(async (page = 1, forceRefresh = false, isDraft = null) => {
+  if (page === 1 && publications.length > 0 && publicationsLoaded && !forceRefresh) {
+    return {
+      data: publications,
+      hasMore: publicationsHasMore,
+      currentPage: publicationsCurrentPage,
+      pagination: {
+        page: publicationsCurrentPage,
+        totalPublications: publications.length,
+        totalPages: Math.ceil(publications.length / 6),
+        hasNextPage: publicationsHasMore
       }
+    };
+  }
 
-      setPublicationsHasMore(responseData.hasMore);
-      setPublicationsCurrentPage(responseData.currentPage);
-      setPublicationsLoaded(true);
+  try {
+    setIsLoading(true);
+    const response = await storyPubService.getAllPublications(page, 6, isDraft); // ТУК ПРОМЕНИХ НА 6
 
-      return responseData;
-    } catch (e) {
-      console.error('Error fetching publications:', e);
-      notify('error', e.message || 'Failed to fetch publications');
-      showErrorAndSetTimeouts(e.message);
-      return { data: [], hasMore: false, currentPage: page };
-    } finally {
-      setIsLoading(false);
+    const responseData = {
+      data: response.data || response,
+      hasMore: response.pagination?.hasNextPage || false,
+      totalCount: response.pagination?.totalPublications || 0,
+      currentPage: response.pagination?.page || page,
+      pagination: response.pagination // Добавяме цялата pagination информация
+    };
+
+    if (page === 1) {
+      setPublications(responseData.data);
+    } else {
+      setPublications(prev => [...prev, ...responseData.data]);
     }
-  }, [publications.length, publicationsLoaded, publicationsHasMore, publicationsCurrentPage, storyPubService, showErrorAndSetTimeouts]);
+
+    setPublicationsHasMore(responseData.hasMore);
+    setPublicationsCurrentPage(responseData.currentPage);
+    setPublicationsLoaded(true);
+
+    return responseData;
+  } catch (e) {
+    console.error('Error fetching publications:', e);
+    notify('error', e.message || 'Failed to fetch publications');
+    showErrorAndSetTimeouts(e.message);
+    return { data: [], hasMore: false, currentPage: page, pagination: null };
+  } finally {
+    setIsLoading(false);
+  }
+}, [publications.length, publicationsLoaded, publicationsHasMore, publicationsCurrentPage, storyPubService, showErrorAndSetTimeouts]);
 
   const getPublicationById = useCallback(async (id) => {
     if (!id || id === 'undefined' || id === 'null') {

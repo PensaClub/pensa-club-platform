@@ -1,57 +1,86 @@
-.publication-stories-card-modern {
+.ps-card-new {
   background: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   border: 1px solid #f1f5f9;
   position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.publication-stories-card-modern:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+.ps-card-new:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   border-color: #e2e8f0;
 }
 
-.publication-stories-card-link {
-  display: block;
+.ps-card-link {
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   color: inherit;
   height: 100%;
 }
 
-/* Image Wrapper */
-.publication-stories-card-image-wrapper {
+/* 🔧 ДОБАВЕНО - List View Layout */
+.ps-card-new.list {
+  height: auto;
+  min-height: 120px;
+}
+
+.ps-card-new.list .ps-card-link {
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Image Wrapper - унифицирани размери */
+.ps-card-image-wrapper {
   position: relative;
   width: 100%;
-  height: 220px;
   overflow: hidden;
-  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-}
-
-.publication-stories-card-modern.featured .publication-stories-card-image-wrapper {
-  height: 320px;
-}
-
-.publication-stories-card-modern.list .publication-stories-card-image-wrapper {
-  height: 160px;
-  width: 240px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   flex-shrink: 0;
 }
 
-.publication-stories-card-image {
+/* Featured - голяма снимка */
+.ps-card-new.featured .ps-card-image-wrapper {
+  height: 280px;
+}
+
+/* Standard - средна снимка */
+.ps-card-new.standard .ps-card-image-wrapper {
+  height: 200px;
+}
+
+/* Compact - малка снимка */
+.ps-card-new.compact .ps-card-image-wrapper {
+  height: 160px;
+}
+
+/* 🔧 ДОБАВЕНО - List View Image */
+.ps-card-new.list .ps-card-image-wrapper {
+  width: 140px;
+  height: 100px;
+  margin-right: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ps-card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.publication-stories-card-modern:hover .publication-stories-card-image {
-  transform: scale(1.05);
+.ps-card-new:hover .ps-card-image {
+  transform: scale(1.03);
 }
 
-.publication-stories-card-placeholder {
+.ps-card-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
@@ -61,141 +90,201 @@
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
-.publication-stories-card-category {
+.ps-card-category {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: 12px;
+  left: 12px;
   background: rgba(59, 130, 246, 0.9);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.5px;
   backdrop-filter: blur(10px);
 }
 
-/* Content */
-.publication-stories-card-content {
-  padding: 1.5rem;
+/* 🔧 ДОБАВЕНО - List View Category */
+.ps-card-new.list .ps-card-category {
+  top: 8px;
+  left: 8px;
+  font-size: 10px;
+  padding: 3px 6px;
+}
+
+/* Content - фиксирани размери за консистентност */
+.ps-card-content {
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  height: calc(100% - 220px);
-}
-
-.publication-stories-card-modern.featured .publication-stories-card-content {
-  height: calc(100% - 320px);
-  padding: 2rem;
-}
-
-.publication-stories-card-modern.list {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-}
-
-.publication-stories-card-modern.list .publication-stories-card-content {
-  height: auto;
+  gap: 8px;
   flex: 1;
-  padding: 1.5rem;
+  min-height: 0;
+}
+
+.ps-card-new.featured .ps-card-content {
+  padding: 24px;
+  gap: 12px;
+}
+
+.ps-card-new.compact .ps-card-content {
+  padding: 12px;
+  gap: 6px;
+}
+
+/* 🔧 ДОБАВЕНО - List View Content */
+.ps-card-new.list .ps-card-content {
+  padding: 16px;
+  gap: 6px;
+  justify-content: center;
 }
 
 /* Meta */
-.publication-stories-card-meta {
+.ps-card-meta {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 0.75rem;
+  gap: 12px;
+  font-size: 11px;
   color: #64748b;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
-.publication-stories-card-date {
-  display: flex;
-  align-items: center;
+.ps-card-new.featured .ps-card-meta {
+  font-size: 12px;
+  gap: 16px;
 }
 
-.publication-stories-card-reading-time {
-  display: flex;
-  align-items: center;
+/* 🔧 ДОБАВЕНО - List View Meta */
+.ps-card-new.list .ps-card-meta {
+  gap: 8px;
+  margin-bottom: 4px;
 }
 
-.publication-stories-card-views {
+.ps-card-date,
+.ps-card-reading-time {
+  white-space: nowrap;
+}
+
+.ps-card-views {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 4px;
   margin-left: auto;
+  white-space: nowrap;
 }
 
-/* Title */
-.publication-stories-card-title {
-  font-size: 1.25rem;
+/* Title - фиксирани височини */
+.ps-card-title {
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.3;
   color: #0f172a;
   margin: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
-.publication-stories-card-modern.featured .publication-stories-card-title {
-  font-size: 1.75rem;
+.ps-card-new.featured .ps-card-title {
+  font-size: 24px;
   -webkit-line-clamp: 3;
+  min-height: 93px; /* 3 lines * 31px line-height */
 }
 
-.publication-stories-card-modern.list .publication-stories-card-title {
-  font-size: 1.125rem;
+.ps-card-new.standard .ps-card-title {
+  font-size: 18px;
   -webkit-line-clamp: 2;
+  min-height: 46px; /* 2 lines * 23px line-height */
 }
 
-/* Description */
-.publication-stories-card-description {
+.ps-card-new.compact .ps-card-title {
+  font-size: 16px;
+  -webkit-line-clamp: 2;
+  min-height: 41px; /* 2 lines * 20.5px line-height */
+}
+
+/* 🔧 ДОБАВЕНО - List View Title */
+.ps-card-new.list .ps-card-title {
+  font-size: 16px;
+  -webkit-line-clamp: 2;
+  min-height: auto;
+  margin-bottom: 4px;
+}
+
+/* Description - фиксирани височини */
+.ps-card-description {
   color: #4b5563;
-  line-height: 1.6;
-  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin: 0;
   flex: 1;
+  min-height: 0;
 }
 
-.publication-stories-card-modern.featured .publication-stories-card-description {
-  font-size: 1rem;
+.ps-card-new.featured .ps-card-description {
+  font-size: 16px;
   -webkit-line-clamp: 4;
+  min-height: 96px; /* 4 lines * 24px line-height */
 }
 
-.publication-stories-card-modern.list .publication-stories-card-description {
+.ps-card-new.standard .ps-card-description {
+  font-size: 14px;
+  -webkit-line-clamp: 3;
+  min-height: 63px; /* 3 lines * 21px line-height */
+}
+
+.ps-card-new.compact .ps-card-description {
+  font-size: 13px;
   -webkit-line-clamp: 2;
+  min-height: 39px; /* 2 lines * 19.5px line-height */
+}
+
+/* 🔧 ДОБАВЕНО - List View Description */
+.ps-card-new.list .ps-card-description {
+  font-size: 13px;
+  -webkit-line-clamp: 2;
+  min-height: auto;
+  flex: 0;
 }
 
 /* Author */
-.publication-stories-card-author {
+.ps-card-author {
   margin-top: auto;
+  flex-shrink: 0;
 }
 
-.publication-stories-author-info {
+/* 🔧 ДОБАВЕНО - List View Author */
+.ps-card-new.list .ps-card-author {
+  margin-top: 8px;
+}
+
+.ps-author-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 8px;
 }
 
-.publication-stories-author-avatar {
-  width: 32px;
-  height: 32px;
+.ps-author-avatar {
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #f1f5f9;
+  border: 1px solid #f1f5f9;
+  flex-shrink: 0;
 }
 
-.publication-stories-author-avatar-placeholder {
+.ps-card-new.featured .ps-author-avatar {
   width: 32px;
   height: 32px;
+}
+
+.ps-author-avatar-placeholder {
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
@@ -203,68 +292,141 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 10px;
+  flex-shrink: 0;
 }
 
-.publication-stories-author-name {
-  font-size: 0.875rem;
+.ps-card-new.featured .ps-author-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+
+.ps-author-name {
+  font-size: 13px;
   font-weight: 600;
   color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ps-card-new.featured .ps-author-name {
+  font-size: 14px;
 }
 
 /* Footer */
-.publication-stories-card-footer {
+.ps-card-footer {
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 8px;
   border-top: 1px solid #f1f5f9;
+  flex-shrink: 0;
 }
 
-.publication-stories-read-more-text {
+.ps-card-new.compact .ps-card-footer,
+.ps-card-new.list .ps-card-footer {
+  display: none; /* Hide footer in compact and list modes */
+}
+
+.ps-read-more-text {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  gap: 6px;
+  font-size: 13px;
   font-weight: 600;
   color: #3b82f6;
   transition: color 0.2s ease;
 }
 
-.publication-stories-card-modern:hover .publication-stories-read-more-text {
+.ps-card-new.featured .ps-read-more-text {
+  font-size: 14px;
+}
+
+.ps-card-new:hover .ps-read-more-text {
   color: #1d4ed8;
 }
 
-.publication-stories-read-more-text svg {
+.ps-read-more-text svg {
   transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
-.publication-stories-card-modern:hover .publication-stories-read-more-text svg {
+.ps-card-new:hover .ps-read-more-text svg {
   transform: translateX(2px);
 }
 
-/* Responsive Design */
+/* 🔧 ДОБАВЕНО - Responsive за List View */
 @media (max-width: 768px) {
-  .publication-stories-card-modern.list {
+  .ps-card-content {
+    padding: 12px;
+  }
+  
+  .ps-card-new.featured .ps-card-content {
+    padding: 16px;
+  }
+  
+  .ps-card-new.list {
+    min-height: 100px;
+  }
+  
+  .ps-card-new.list .ps-card-link {
     flex-direction: column;
+    text-align: center;
   }
   
-  .publication-stories-card-modern.list .publication-stories-card-image-wrapper {
+  .ps-card-new.list .ps-card-image-wrapper {
     width: 100%;
-    height: 180px;
+    height: 120px;
+    margin-right: 0;
+    margin-bottom: 12px;
+    border-radius: 8px 8px 0 0;
   }
   
-  .publication-stories-card-content {
-    padding: 1rem;
+  .ps-card-new.featured .ps-card-title {
+    font-size: 20px;
+    min-height: 78px; /* Adjust for mobile */
   }
   
-  .publication-stories-card-modern.featured .publication-stories-card-content {
-    padding: 1.5rem;
+  .ps-card-new.standard .ps-card-title {
+    font-size: 16px;
+    min-height: 41px;
   }
   
-  .publication-stories-card-title {
-    font-size: 1.125rem;
+  .ps-card-new.compact .ps-card-title {
+    font-size: 14px;
+    min-height: 36px;
   }
   
-  .publication-stories-card-modern.featured .publication-stories-card-title {
-    font-size: 1.5rem;
+  .ps-card-new.featured .ps-card-description {
+    font-size: 14px;
+    min-height: 84px;
+  }
+  
+  .ps-card-new.standard .ps-card-description {
+    font-size: 13px;
+    min-height: 58px;
+  }
+  
+  .ps-card-new.compact .ps-card-description {
+    font-size: 12px;
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ps-card-new.featured .ps-card-image-wrapper {
+    height: 200px;
+  }
+  
+  .ps-card-new.standard .ps-card-image-wrapper {
+    height: 160px;
+  }
+  
+  .ps-card-new.compact .ps-card-image-wrapper {
+    height: 120px;
+  }
+  
+  .ps-card-new.list .ps-card-image-wrapper {
+    height: 100px;
   }
 }

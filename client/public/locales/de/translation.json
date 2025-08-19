@@ -3221,6 +3221,111 @@
       "community": "Gemeinschaft & Soziales",
       "other": "Andere Themen"
     }
+  },
+   "publicationStories": {
+    "hero": {
+      "publications": {
+        "title": "Publikationen",
+        "description": "Entdecken Sie nützliche Ressourcen, Leitfäden und Materialien für digitale Kompetenz"
+      },
+      "stories": {
+        "title": "Geschichten",
+        "description": "Inspirierende Geschichten über Erfolg und Transformation in der digitalen Welt"
+      }
+    },
+    "search": {
+      "publications": {
+        "placeholder": "In Publikationen suchen..."
+      },
+      "stories": {
+        "placeholder": "In Geschichten suchen..."
+      },
+      "clear": "Suche löschen",
+      "searching": "Suche nach",
+      "results": {
+        "publications": "Publikationen",
+        "stories": "Geschichten"
+      }
+    },
+    "filters": {
+      "resultsCount": {
+        "publications": "Publikationen",
+        "stories": "Geschichten"
+      },
+      "viewMode": {
+        "grid": "Rasteransicht",
+        "list": "Listenansicht"
+      },
+      "category": {
+        "label": "Kategorie",
+        "publications": {
+          "all": "Alle",
+          "guides": "Leitfäden",
+          "security": "Sicherheit",
+          "research": "Forschung",
+          "policy": "Politik"
+        },
+        "stories": {
+          "all": "Alle",
+          "success": "Erfolgsgeschichten",
+          "education": "Bildung",
+          "community": "Gemeinschaft",
+          "technology": "Technologie"
+        }
+      },
+      "sort": {
+        "label": "Sortieren nach",
+        "newest": "Neueste",
+        "oldest": "Älteste",
+        "mostViewed": "Meist angesehen",
+        "alphabetical": "Alphabetisch"
+      }
+    },
+    "card": {
+      "publications": {
+        "readMore": "Weiterlesen"
+      },
+      "stories": {
+        "readMore": "Geschichte lesen"
+      }
+    },
+    "categories": {
+      "publications": {
+        "ръководства": "Leitfaden",
+        "безопасност": "Sicherheit",
+        "изследвания": "Forschung",
+        "политики": "Politik"
+      },
+      "stories": {
+        "успешни истории": "Erfolgsgeschichte",
+        "обучение": "Bildung",
+        "общност": "Gemeinschaft",
+        "технологии": "Technologie"
+      }
+    },
+    "noResults": {
+      "publications": {
+        "title": "Keine Publikationen gefunden",
+        "description": "Versuchen Sie, Ihre Suchkriterien zu ändern oder die Filter zu löschen."
+      },
+      "stories": {
+        "title": "Keine Geschichten gefunden",
+        "description": "Versuchen Sie, Ihre Suchkriterien zu ändern oder die Filter zu löschen."
+      }
+    },
+    "sections": {
+      "featured": "Neueste Publikation",
+      "recentlyViewed": "Kürzlich angesehen",
+      "allPublications": "Alle Publikationen"
+    },
+      "pagination": {
+      "previous": "Назад",
+      "next": "Напред", 
+      "showing": "Показвани",
+      "of": "от",
+      "publications": "публикации",
+      "stories": "истории"
+    }
   }
 
 }

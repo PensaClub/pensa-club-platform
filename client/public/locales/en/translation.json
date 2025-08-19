@@ -3538,5 +3538,110 @@
         "downloads": "Most downloaded"
       }
     }
+  },
+  "publicationStories": {
+    "hero": {
+      "publications": {
+        "title": "Publications",
+        "description": "Discover useful resources, guides and materials for digital literacy"
+      },
+      "stories": {
+        "title": "Stories",
+        "description": "Inspiring stories of success and transformation in the digital world"
+      }
+    },
+    "search": {
+      "publications": {
+        "placeholder": "Search in publications..."
+      },
+      "stories": {
+        "placeholder": "Search in stories..."
+      },
+      "clear": "Clear search",
+      "searching": "Searching for",
+      "results": {
+        "publications": "publications",
+        "stories": "stories"
+      }
+    },
+    "filters": {
+      "resultsCount": {
+        "publications": "publications",
+        "stories": "stories"
+      },
+      "viewMode": {
+        "grid": "Grid view",
+        "list": "List view"
+      },
+      "category": {
+        "label": "Category",
+        "publications": {
+          "all": "All",
+          "guides": "Guides",
+          "security": "Security",
+          "research": "Research",
+          "policy": "Policy"
+        },
+        "stories": {
+          "all": "All",
+          "success": "Success Stories",
+          "education": "Education",
+          "community": "Community",
+          "technology": "Technology"
+        }
+      },
+      "sort": {
+        "label": "Sort by",
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "mostViewed": "Most viewed",
+        "alphabetical": "Alphabetical"
+      }
+    },
+    "card": {
+      "publications": {
+        "readMore": "Read more"
+      },
+      "stories": {
+        "readMore": "Read story"
+      }
+    },
+    "categories": {
+      "publications": {
+        "ръководства": "Guide",
+        "безопасност": "Security",
+        "изследвания": "Research",
+        "политики": "Policy"
+      },
+      "stories": {
+        "успешни истории": "Success Story",
+        "обучение": "Education",
+        "общност": "Community",
+        "технологии": "Technology"
+      }
+    },
+    "noResults": {
+      "publications": {
+        "title": "No publications found",
+        "description": "Try changing your search criteria or clearing the filters."
+      },
+      "stories": {
+        "title": "No stories found",
+        "description": "Try changing your search criteria or clearing the filters."
+      }
+    },
+        "sections": {
+      "featured": "Latest Publication",
+      "recentlyViewed": "Recently Viewed",
+      "allPublications": "All Publications"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next", 
+      "showing": "Showing",
+      "of": "of",
+      "publications": "publications",
+      "stories": "stories"
+    }
   }
 }

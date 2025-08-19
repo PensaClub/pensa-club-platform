@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './publicationStoriesCard.css';
 import { useAnalytics } from '../../../../contexts/AnalyticsContext';
+import { ViewedPublicationsManager } from '../../../../../utils/viewedPublications';
 
 export const PublicationStoriesCard = ({ 
   content, 
   isFeatured = false, 
-  viewMode = 'grid', 
+  viewMode = 'standard', // 'featured', 'compact', 'standard', 'list'
   contentType = 'publications',
   index 
 }) => {
@@ -27,7 +28,13 @@ export const PublicationStoriesCard = ({
   }, [content.id, getPublicationViewCount, getStoryViewCount, contentType]);
 
   const handleCardClick = () => {
+    // Track analytics
     trackStoryOrPublication(content.id, content.title, contentType === 'publications' ? 'publication' : 'story');
+    
+    // Add to viewed publications
+    if (contentType === 'publications') {
+      ViewedPublicationsManager.addViewedPublication(content);
+    }
   };
 
   const formatDate = (dateString) => {
@@ -44,11 +51,26 @@ export const PublicationStoriesCard = ({
     return text.substring(0, limit) + '...';
   };
 
+  const getTextLimits = () => {
+    switch (viewMode) {
+      case 'featured':
+        return { title: 100, description: 200 };
+      case 'compact':
+        return { title: 50, description: 100 };
+      case 'list':
+        return { title: 80, description: 150 }; // 🔧 ДОБАВЕН list режим
+      case 'standard':
+      default:
+        return { title: 60, description: 120 };
+    }
+  };
+
+  const limits = getTextLimits();
+
   const getReadingTime = (content) => {
     if (contentType === 'publications') {
       return content.readTime || '5 мин';
     }
-    // За stories изчисляваме времето за четене
     if (!content.sections) return '5 мин';
     const totalWords = content.sections.reduce((total, section) => {
       return total + (section.content ? section.content.split(' ').length : 0);
@@ -93,28 +115,28 @@ export const PublicationStoriesCard = ({
     return `/${contentType}/${content.slug || content.id}`;
   };
 
-  const cardClassName = `publication-stories-card-modern ${viewMode} ${isFeatured ? 'featured' : ''} ${contentType}`;
-
+  // 🔧 ОБНОВЕН cardClassName с поддръжка за list view
+  const cardClassName = `ps-card-new ${viewMode} ${contentType}`;
   const author = getAuthor();
 
   return (
     <article className={cardClassName}>
       <Link 
         to={getLinkPath()}
-        className="publication-stories-card-link"
+        className="ps-card-link"
         onClick={handleCardClick}
       >
-        <div className="publication-stories-card-image-wrapper">
+        <div className="ps-card-image-wrapper">
           {getImageSrc() ? (
             <img
               src={getImageSrc()}
               alt={getImageAlt()}
-              className="publication-stories-card-image"
+              className="ps-card-image"
               loading="lazy"
             />
           ) : (
-            <div className="publication-stories-card-placeholder">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <div className="ps-card-placeholder">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
                 {contentType === 'publications' ? (
                   <>
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="2"/>
@@ -133,22 +155,22 @@ export const PublicationStoriesCard = ({
           )}
           
           {getCategory() && (
-            <div className="publication-stories-card-category">
-              {t(`publicationStories.categories.${contentType}.${getCategory().toLowerCase()}`) || getCategory()}
+            <div className="ps-card-category">
+              {getCategory()}
             </div>
           )}
         </div>
 
-        <div className="publication-stories-card-content">
-          <div className="publication-stories-card-meta">
-            <span className="publication-stories-card-date">
+        <div className="ps-card-content">
+          <div className="ps-card-meta">
+            <span className="ps-card-date">
               {formatDate(content.publishedAt || content.createdAt)}
             </span>
-            <span className="publication-stories-card-reading-time">
+            <span className="ps-card-reading-time">
               {getReadingTime(content)}
             </span>
-            <span className="publication-stories-card-views">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <span className="ps-card-views">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
                 <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
               </svg>
@@ -156,46 +178,50 @@ export const PublicationStoriesCard = ({
             </span>
           </div>
 
-          <h3 className="publication-stories-card-title">
-            {isFeatured ? content.title : truncateText(content.title, 60)}
+          <h3 className="ps-card-title">
+            {truncateText(content.title, limits.title)}
           </h3>
 
-          <p className="publication-stories-card-description">
+          <p className="ps-card-description">
             {truncateText(
               content.shortDescription || content.description,
-              isFeatured ? 200 : viewMode === 'list' ? 150 : 120
+              limits.description
             )}
           </p>
 
-          {author && (
-            <div className="publication-stories-card-author">
-              <div className="publication-stories-author-info">
+          {/* 🔧 ОБНОВЕНА ЛОГИКА за показване на автора */}
+          {author && viewMode !== 'compact' && (
+            <div className="ps-card-author">
+              <div className="ps-author-info">
                 {typeof author === 'object' && author.avatar ? (
                   <img
                     src={author.avatar}
                     alt={author.name}
-                    className="publication-stories-author-avatar"
+                    className="ps-author-avatar"
                   />
                 ) : (
-                  <div className="publication-stories-author-avatar-placeholder">
+                  <div className="ps-author-avatar-placeholder">
                     {typeof author === 'object' ? author.name?.charAt(0) : author?.charAt(0)}
                   </div>
                 )}
-                <span className="publication-stories-author-name">
+                <span className="ps-author-name">
                   {typeof author === 'object' ? author.name : author}
                 </span>
               </div>
             </div>
           )}
 
-          <div className="publication-stories-card-footer">
-            <span className="publication-stories-read-more-text">
-              {t(`publicationStories.card.${contentType}.readMore`)}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="m9 18 6-6-6-6" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-            </span>
-          </div>
+          {/* 🔧 ОБНОВЕНА ЛОГИКА за показване на footer */}
+          {viewMode !== 'compact' && viewMode !== 'list' && (
+            <div className="ps-card-footer">
+              <span className="ps-read-more-text">
+                {t(`publicationStories.card.${contentType}.readMore`)}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="m9 18 6-6-6-6" stroke="currentColor" strokeWidth="2"/>
+                </svg>
+              </span>
+            </div>
+          )}
         </div>
       </Link>
     </article>
