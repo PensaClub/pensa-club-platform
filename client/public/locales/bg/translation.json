@@ -3687,10 +3687,8 @@
       "publications": "публикации",
       "stories": "истории"
     }
-  }
-},
-
-  "clubs": {
+  },
+    "clubs": {
     "ClubView": {
       "loading": {
         "title": "Зареждане... - Pensa Club",
@@ -8793,4 +8791,7 @@
     }
   }
 }
+
+
+
 

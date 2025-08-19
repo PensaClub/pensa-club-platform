@@ -101,7 +101,26 @@ export const SportsActivities = ({ club }) => {
   };
 
   const dayMapping = getDayMapping();
-
+  const getActivityIcon = (activityName) => {
+    const name = activityName.toLowerCase();
+    const iconTerms = t('clubs.SportsActivities.activityIconTerms', { returnObjects: true });
+    
+    for (const [iconKey, terms] of Object.entries(iconTerms)) {
+      if (terms.some(term => name.includes(term))) {
+        const iconMap = {
+          yoga: faLeaf,
+          cardio: faSwimmer,
+          strength: faDumbbell,
+          running: faRunning,
+          dance: faFire,
+          gymnastics: faHeartbeat,
+          mountain: faMountain
+        };
+        return iconMap[iconKey] || faUsers;
+      }
+    }
+    return faUsers;
+  };
   const activitiesByDay = useMemo(() => {
     const grouped = {};
     weekDays.forEach(day => {
@@ -130,26 +149,7 @@ export const SportsActivities = ({ club }) => {
     return grouped;
   }, [regularActivities, dayMapping, weekDays]);
 
-  const getActivityIcon = (activityName) => {
-    const name = activityName.toLowerCase();
-    const iconTerms = t('clubs.SportsActivities.activityIconTerms', { returnObjects: true });
-    
-    for (const [iconKey, terms] of Object.entries(iconTerms)) {
-      if (terms.some(term => name.includes(term))) {
-        const iconMap = {
-          yoga: faLeaf,
-          cardio: faSwimmer,
-          strength: faDumbbell,
-          running: faRunning,
-          dance: faFire,
-          gymnastics: faHeartbeat,
-          mountain: faMountain
-        };
-        return iconMap[iconKey] || faUsers;
-      }
-    }
-    return faUsers;
-  };
+
 
   const getActivityColor = (activityName) => {
     const name = activityName.toLowerCase();
