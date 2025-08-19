@@ -1,0 +1,1457 @@
+.social-volunteering-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 50%, #fed7aa 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-volunteering-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.social-volunteering-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header with Dashboard Style */
+.social-volunteering-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 4rem;
+  background: white;
+  border-radius: 30px;
+  padding: 3rem;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-volunteering-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(45deg, rgba(251, 191, 36, 0.1), rgba(239, 68, 68, 0.05));
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.social-volunteering-header-content {
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.social-volunteering-badge svg {
+  font-size: 1.2rem;
+}
+
+.social-volunteering-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  line-height: 1.1;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.social-volunteering-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* Dashboard Stats */
+.social-volunteering-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-stat-box {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  min-width: 250px;
+}
+
+.social-volunteering-stat-box:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.social-volunteering-stat-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-volunteering-stat-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+}
+
+.social-volunteering-stat-box:hover .social-volunteering-stat-icon::before {
+  transform: rotate(45deg) translate(50%, 50%);
+}
+
+.social-volunteering-stat-icon.volunteers {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.social-volunteering-stat-icon.hours {
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+}
+
+.social-volunteering-stat-icon.programs {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.social-volunteering-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.social-volunteering-stat-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #1e293b;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.social-volunteering-stat-label {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Tab Navigation */
+.social-volunteering-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 3rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  justify-content: center;
+}
+
+.social-volunteering-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  background: transparent;
+  border: none;
+  border-radius: 15px;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  justify-content: center;
+}
+
+.social-volunteering-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.1), transparent);
+  transition: left 0.6s;
+}
+
+.social-volunteering-tab:hover::before {
+  left: 100%;
+}
+
+.social-volunteering-tab:hover {
+  color: #f59e0b;
+  transform: translateY(-2px);
+}
+
+.social-volunteering-tab.active {
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  color: white;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+  transform: translateY(-3px);
+}
+
+.social-volunteering-tab svg {
+  font-size: 1.1rem;
+}
+
+/* Content Area */
+.social-volunteering-content {
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+/* Programs Tab - Timeline Style */
+.social-volunteering-programs {
+  padding: 3rem;
+}
+
+.social-volunteering-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.social-volunteering-timeline::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #f59e0b, #ea580c, #ef4444);
+  border-radius: 3px;
+}
+
+.social-volunteering-timeline-item {
+  position: relative;
+  margin-bottom: 3rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.social-volunteering-timeline-marker {
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-timeline-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border: 4px solid white;
+  position: relative;
+}
+
+.social-volunteering-timeline-icon::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0.2;
+  z-index: -1;
+  animation: volunteerPulse 2s infinite;
+}
+
+@keyframes volunteerPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+}
+
+.social-volunteering-program-card {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-volunteering-program-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.05), transparent);
+  transition: left 0.8s;
+}
+
+.social-volunteering-program-card:hover::before {
+  left: 100%;
+}
+
+.social-volunteering-program-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+  border-color: #f59e0b;
+}
+
+.social-volunteering-program-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.social-volunteering-program-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.social-volunteering-program-type {
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.social-volunteering-program-description {
+  color: #475569;
+  line-height: 1.7;
+  margin: 0 0 2rem 0;
+  font-size: 1.05rem;
+}
+
+.social-volunteering-program-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.social-volunteering-metric {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.social-volunteering-metric svg {
+  color: #f59e0b;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Volunteers Tab */
+.social-volunteering-volunteers {
+  padding: 3rem;
+}
+
+.social-volunteering-volunteers-intro {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.social-volunteering-volunteers-intro h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.social-volunteering-volunteers-intro p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.social-volunteering-volunteers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.social-volunteering-volunteer-card {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 25px;
+  padding: 2.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-volunteering-volunteer-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.1), transparent);
+  transition: all 0.6s ease;
+}
+
+.social-volunteering-volunteer-card:hover::before {
+  transform: scale(3);
+}
+
+.social-volunteering-volunteer-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+  border-color: #f59e0b;
+}
+
+.social-volunteering-volunteer-avatar {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.social-volunteering-volunteer-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.social-volunteering-volunteer-badge {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  border: 3px solid white;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.social-volunteering-volunteer-info {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-volunteer-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.social-volunteering-volunteer-role {
+  color: #f59e0b;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.social-volunteering-volunteer-bio {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.social-volunteering-volunteer-programs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.social-volunteering-volunteer-program {
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Join Tab */
+.social-volunteering-join {
+  padding: 3rem;
+}
+
+.social-volunteering-join-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.social-volunteering-join-header {
+  margin-bottom: 3rem;
+}
+
+.social-volunteering-join-header svg {
+  font-size: 4rem;
+  color: #f59e0b;
+  margin-bottom: 1.5rem;
+}
+
+.social-volunteering-join-header h3 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.social-volunteering-join-header p {
+  color: #64748b;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.social-volunteering-join-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.social-volunteering-step {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.social-volunteering-step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.social-volunteering-step-number {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0 auto 1.5rem auto;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+}
+
+.social-volunteering-step-content h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.social-volunteering-step-content p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.social-volunteering-join-cta {
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border-radius: 25px;
+  padding: 3rem;
+  border: 1px solid #fbbf24;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-volunteering-join-cta::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.1), transparent);
+  animation: volunteerPulse 3s infinite;
+}
+
+.social-volunteering-join-cta h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #92400e;
+  margin: 0 0 2rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-join-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2.5rem;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.social-volunteering-cta-btn.primary {
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  color: white;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+}
+
+.social-volunteering-cta-btn.primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(245, 158, 11, 0.5);
+}
+
+.social-volunteering-cta-btn.secondary {
+  background: white;
+  color: #f59e0b;
+  border-color: #f59e0b;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+}
+
+.social-volunteering-cta-btn.secondary:hover {
+  background: #f59e0b;
+  color: white;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+}
+
+.social-volunteering-join-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #92400e;
+  font-weight: 600;
+  font-style: italic;
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-join-note svg {
+  color: #fbbf24;
+  font-size: 1.2rem;
+}
+
+/* No Volunteers */
+.social-volunteering-no-volunteers {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #64748b;
+}
+
+.social-volunteering-no-volunteers svg {
+  font-size: 4rem;
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+}
+
+.social-volunteering-no-volunteers h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #475569;
+  margin: 0 0 1rem 0;
+}
+
+.social-volunteering-no-volunteers p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* Modal */
+.social-volunteering-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.social-volunteering-modal-content {
+  background: white;
+  border-radius: 30px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  animation: volunteerModalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes volunteerModalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.social-volunteering-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.social-volunteering-modal-close:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.1);
+}
+
+.social-volunteering-modal-header {
+  display: flex;
+  gap: 2rem;
+  padding: 3rem 3rem 2rem 3rem;
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border-bottom: 1px solid #fbbf24;
+}
+
+.social-volunteering-modal-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.social-volunteering-modal-info {
+  flex: 1;
+}
+
+.social-volunteering-modal-info h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #92400e;
+  margin: 0 0 0.5rem 0;
+}
+
+.social-volunteering-modal-role {
+  color: #f59e0b;
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.social-volunteering-modal-bio {
+  color: #a16207;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.social-volunteering-modal-body {
+  padding: 2rem 3rem 3rem 3rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.social-volunteering-modal-body h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1.5rem 0;
+}
+
+.social-volunteering-modal-programs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.social-volunteering-modal-program {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 15px;
+  border: 1px solid #e2e8f0;
+}
+
+.social-volunteering-modal-program svg {
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.social-volunteering-modal-program h5 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.social-volunteering-modal-program p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 0.5rem 0;
+}
+
+.social-volunteering-modal-impact {
+  color: #f59e0b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.social-volunteering-modal-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.social-volunteering-modal-contact-info a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #f0f9ff;
+  border-radius: 12px;
+  color: #1e40af;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid #bfdbfe;
+}
+
+.social-volunteering-modal-contact-info a:hover {
+  background: #dbeafe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+}
+
+.social-volunteering-modal-contact-info a svg {
+  color: #3b82f6;
+  font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .social-volunteering-header {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+  
+  .social-volunteering-dashboard {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .social-volunteering-section {
+    padding: 4rem 0;
+  }
+  
+  .social-volunteering-container {
+    padding: 0 1rem;
+  }
+  
+  .social-volunteering-header {
+    padding: 2rem;
+  }
+  
+  .social-volunteering-dashboard {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .social-volunteering-tabs {
+    flex-direction: column;
+  }
+  
+  .social-volunteering-tab {
+    flex: none;
+  }
+  
+  .social-volunteering-programs,
+  .social-volunteering-volunteers,
+  .social-volunteering-join {
+    padding: 2rem;
+  }
+  
+  .social-volunteering-timeline {
+    padding-left: 1rem;
+  }
+  
+  .social-volunteering-timeline-item {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .social-volunteering-volunteers-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .social-volunteering-join-steps {
+    grid-template-columns: 1fr;
+  }
+  
+  .social-volunteering-join-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .social-volunteering-modal {
+    padding: 1rem;
+  }
+  
+  .social-volunteering-modal-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .social-volunteering-modal-body {
+    padding: 1.5rem 2rem 2rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .social-volunteering-title {
+    font-size: 2rem;
+  }
+  
+  .social-volunteering-timeline-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .social-volunteering-program-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .social-volunteering-cta-btn {
+    padding: 1rem 2rem;
+  }
+}
+/* Registration Modal */
+.social-volunteering-registration-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 2rem;
+}
+
+.social-volunteering-registration-content {
+  background: white;
+  border-radius: 25px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 95vh;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 120px rgba(0, 0, 0, 0.6);
+  animation: volunteerRegistrationIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes volunteerRegistrationIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.social-volunteering-registration-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  z-index: 2001;
+}
+
+.social-volunteering-registration-close:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.1) rotate(90deg);
+}
+
+.social-volunteering-registration-header {
+  text-align: center;
+  padding: 3rem 3rem 2rem 3rem;
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border-bottom: 1px solid #fbbf24;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-volunteering-registration-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.2), transparent);
+  animation: volunteerPulse 4s infinite;
+}
+
+.social-volunteering-registration-header svg {
+  font-size: 3.5rem;
+  color: #f59e0b;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-registration-header h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #92400e;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-registration-header p {
+  color: #a16207;
+  margin: 0;
+  font-size: 1.1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.social-volunteering-registration-form {
+  padding: 2.5rem 3rem 3rem 3rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.social-volunteering-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.social-volunteering-form-group {
+  margin-bottom: 2rem;
+}
+
+.social-volunteering-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #374151;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.social-volunteering-form-group label svg {
+  color: #f59e0b;
+  font-size: 1.1rem;
+}
+
+.social-volunteering-form-group input,
+.social-volunteering-form-group textarea,
+.social-volunteering-form-group select {
+  width: 100%;
+  padding: 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  background: white;
+}
+
+.social-volunteering-form-group input:focus,
+.social-volunteering-form-group textarea:focus,
+.social-volunteering-form-group select:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+  transform: translateY(-2px);
+}
+
+.social-volunteering-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+.social-volunteering-interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-volunteering-interest-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.social-volunteering-interest-item:hover {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  transform: translateY(-2px);
+}
+
+.social-volunteering-interest-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #f59e0b;
+  margin: 0;
+}
+
+.social-volunteering-interest-item input[type="checkbox"]:checked + span {
+  color: #15803d;
+  font-weight: 700;
+}
+
+.social-volunteering-form-actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f1f5f9;
+}
+
+.social-volunteering-submit-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f59e0b, #ea580c);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+}
+
+.social-volunteering-submit-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(245, 158, 11, 0.5);
+}
+
+.social-volunteering-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.social-volunteering-cancel-btn {
+  padding: 1.5rem 2.5rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.social-volunteering-cancel-btn:hover {
+  background: #e2e8f0;
+  color: #475569;
+  transform: translateY(-2px);
+}
+
+.social-volunteering-registration-success,
+.social-volunteering-registration-error {
+  text-align: center;
+  padding: 4rem 3rem;
+}
+
+.social-volunteering-registration-success svg {
+  font-size: 5rem;
+  color: #10b981;
+  margin-bottom: 2rem;
+}
+
+.social-volunteering-registration-error svg {
+  font-size: 5rem;
+  color: #ef4444;
+  margin-bottom: 2rem;
+}
+
+.social-volunteering-registration-success h4,
+.social-volunteering-registration-error h4 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.social-volunteering-registration-success h4 {
+  color: #059669;
+}
+
+.social-volunteering-registration-error h4 {
+  color: #dc2626;
+}
+
+.social-volunteering-registration-success p,
+.social-volunteering-registration-error p {
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+/* Responsive Design for Registration Modal */
+@media (max-width: 768px) {
+  .social-volunteering-registration-modal {
+    padding: 1rem;
+  }
+  
+  .social-volunteering-registration-content {
+    border-radius: 20px;
+    max-height: 98vh;
+  }
+  
+  .social-volunteering-registration-header {
+    padding: 2rem;
+  }
+  
+  .social-volunteering-registration-form {
+    padding: 2rem;
+  }
+  
+  .social-volunteering-form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .social-volunteering-interests-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .social-volunteering-form-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .social-volunteering-registration-success,
+  .social-volunteering-registration-error {
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .social-volunteering-registration-header h3 {
+    font-size: 1.5rem;
+  }
+  
+  .social-volunteering-form-group input,
+  .social-volunteering-form-group textarea,
+  .social-volunteering-form-group select {
+    padding: 1rem;
+  }
+  
+  .social-volunteering-submit-btn,
+  .social-volunteering-cancel-btn {
+    padding: 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+/* Custom Scrollbar for Registration Form */
+.social-volunteering-registration-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.social-volunteering-registration-form::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.social-volunteering-registration-form::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.social-volunteering-registration-form::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

@@ -1,0 +1,652 @@
+/* components/Clubs/AllClubs/allClubs.css */
+.all-clubs-container {
+  min-height: 100vh;
+  position: relative;
+  /* overflow-x: hidden; */
+  background: #fefefe;
+}
+
+/* Фонов слой със снимки */
+.all-clubs-bg-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  /* overflow: hidden; */
+}
+
+/* Основен фон с градиент */
+.all-clubs-bg-gradient {
+  position: absolute;
+background: linear-gradient(
+  180deg,
+  rgba(254, 252, 250, 0.95) 0%,
+  rgba(252, 249, 246, 0.92) 40%,
+  rgba(249, 246, 243, 0.95) 100%
+);
+  inset: 0;
+  z-index: 1;
+}
+
+/* Контейнер за фонови снимки */
+.all-clubs-bg-images {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Фонови снимки с паралакс ефект */
+.bg-image {
+  position: absolute;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  filter: contrast(120%) brightness(1.1);
+  transition: all 0.3s ease;
+  border-radius: 15px;
+  z-index: 113;
+}
+
+.bg-image-1 {
+  width: 400px;
+  height: 300px;
+  top: 10%;
+  left: 5%;
+  transform: rotate(-5deg);
+  animation: gentleFloat 20s infinite ease-in-out;
+}
+
+.bg-image-2 {
+  width: 350px;
+  height: 250px;
+  top: 25%;
+  right: 5%;
+  transform: rotate(3deg);
+  animation: gentleFloat 18s infinite ease-in-out 2s;
+}
+
+.bg-image-3 {
+  width: 300px;
+  height: 400px;
+  top: 50%;
+  left: 15%;
+  transform: rotate(-3deg);
+  animation: gentleFloat 22s infinite ease-in-out 4s;
+}
+
+.bg-image-4 {
+  width: 380px;
+  height: 280px;
+  bottom: 10%;
+  right: 13%;
+  transform: rotate(5deg);
+  animation: gentleFloat 19s infinite ease-in-out 1s;
+}
+
+/* Декоративни елементи */
+.decorative-elements {
+    width: 100%;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Топли акцентни точки */
+.warm-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(45deg, #f59e0b, #f97316);
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+.warm-dot:nth-child(1) { top: 15%; left: 20%; animation-delay: 0s; }
+.warm-dot:nth-child(2) { top: 30%; right: 25%; animation-delay: 0.5s; }
+.warm-dot:nth-child(3) { top: 60%; left: 15%; animation-delay: 1s; }
+.warm-dot:nth-child(4) { bottom: 20%; right: 30%; animation-delay: 1.5s; }
+.warm-dot:nth-child(5) { top: 45%; left: 50%; animation-delay: 2s; }
+
+@keyframes gentleFloat {
+  0%, 100% { 
+    transform: translateY(0) rotate(var(--rotate, -5deg)) scale(1);
+  }
+  25% { 
+    transform: translateY(-20px) rotate(calc(var(--rotate, -5deg) + 2deg)) scale(1.02);
+  }
+  50% { 
+    transform: translateY(10px) rotate(calc(var(--rotate, -5deg) - 1deg)) scale(0.98);
+  }
+  75% { 
+    transform: translateY(-10px) rotate(calc(var(--rotate, -5deg) + 1deg)) scale(1.01);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.5); }
+}
+
+/* Основен контент */
+.all-clubs-content-wrapper {
+  position: relative;
+  z-index: 10;
+}
+
+/* Заглавие секция със статистики */
+.all-clubs-header-section {
+  padding: 3rem 0 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.all-clubs-header-container {
+  max-width: 1600px;
+  margin: 6rem auto 1rem auto;
+  padding: 0 3rem;
+  display: flex;
+  flex-direction: column;
+  /* grid-template-columns: 800px 820px; */
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+}
+
+.all-clubs-header-content {
+  flex: 1;
+  max-width: 1000px;
+  /* margin-left: 10rem; */
+}
+
+.all-clubs-main-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #dc2626, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.all-clubs-subtitle {
+  font-size: 1.2rem;
+  color: #7c2d12;
+  font-style: italic;
+  margin-bottom: 0;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Статистики */
+.all-clubs-stats {
+  display: flex;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.stat-card-clubs {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  text-align: center;
+  min-width: 100px;
+  transition: all 0.3s ease;
+}
+
+.stat-card-clubs:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #dc2626, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.125rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #92400e;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.all-clubs-decorative-line {
+  height: 3px;
+  max-width: 1600px;
+  background: linear-gradient(90deg, transparent, #f59e0b, #dc2626, #f59e0b, transparent);
+  margin: 2rem auto 0;
+  border-radius: 2px;
+  position: relative;
+}
+
+.all-clubs-decorative-line::after {
+  content: '❤';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fefefe;
+  color: #dc2626;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+}
+
+/* Основен layout с странични ленти - ПОПРАВКА ЗА STICKY */
+.all-clubs-main-layout {
+  max-width:1750px;
+  margin: 0 auto;
+  padding: 2rem 3rem 4rem;
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  gap: 3rem;
+  position: relative;
+  align-items: start; /* ВАЖНО: за правилно подравняване */
+}
+
+/* Странични ленти - ПОПРАВЕНО STICKY */
+.all-clubs-sidebar {
+  position: -webkit-sticky; /* За Safari */
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  max-height: calc(100vh - 40px);
+  /* overflow-y: auto; */
+  z-index: 15; /* Добавяме z-index */
+}
+
+.all-clubs-sidebar-articles {
+  position: -webkit-sticky; /* За Safari */
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  max-height: calc(100vh - 40px);
+  /* overflow-y: auto; */
+  z-index: 15; /* Добавяме z-index */
+}
+
+/* Скролбар стилове за страничните ленти */
+.all-clubs-sidebar::-webkit-scrollbar,
+.all-clubs-sidebar-articles::-webkit-scrollbar {
+  width: 6px;
+}
+
+.all-clubs-sidebar::-webkit-scrollbar-track,
+.all-clubs-sidebar-articles::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.all-clubs-sidebar::-webkit-scrollbar-thumb,
+.all-clubs-sidebar-articles::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.all-clubs-sidebar::-webkit-scrollbar-thumb:hover,
+.all-clubs-sidebar-articles::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Контейнер за картите - с минимална височина */
+.all-clubs-list-container {
+  position: relative;
+  min-height: 100vh; /* Осигуряваме достатъчна височина за скролване */
+}
+
+/* Грид за карти */
+.all-clubs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  position: relative;
+}
+
+/* Стилизиране на картите */
+.club-card-wrapper {
+  position: relative;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.club-card-wrapper:hover {
+  z-index: 5;
+}
+
+.club-card {
+  background: white;
+  border-radius: 20px;
+  /* overflow: hidden; */
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.club-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b, #dc2626, #f59e0b);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.club-card:hover::before {
+  opacity: 1;
+}
+
+.club-card:hover {
+  box-shadow: 
+    0 8px 30px rgba(245, 158, 11, 0.15),
+    0 4px 10px rgba(0, 0, 0, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Състояние на зареждане */
+.all-clubs-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.all-clubs-loading-text {
+  font-size: 1.2rem;
+  color: #7c2d12;
+  font-weight: 500;
+}
+
+/* Няма намерени клубове */
+.all-clubs-no-clubs-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  border: 2px dashed rgba(245, 158, 11, 0.3);
+  max-width: 500px;
+  margin: 3rem auto;
+}
+
+.all-clubs-no-clubs-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  filter: sepia(50%);
+}
+
+.all-clubs-no-clubs-found h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #7c2d12;
+  margin-bottom: 0.5rem;
+}
+
+.all-clubs-no-clubs-found p {
+  color: #92400e;
+  font-size: 1rem;
+}
+
+/* Карта на цялата ширина */
+.all-clubs-map-full-width {
+  width: 100%;
+  animation: slideInFromTop 0.6s ease-out;
+  margin-bottom: 2rem;
+}
+
+.all-clubs-map-full-width .clubs-map-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  height: 800px;
+}
+.all-clubs-sidebar-right {
+  position: sticky;
+  top: 110px;
+  height: fit-content;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  z-index: 15;
+  
+   border-left: 2px solid rgba(146, 64, 14, 0.4);
+  border-top: 1px solid rgba(146, 64, 14, 0.2);
+  border-bottom: 1px solid rgba(146, 64, 14, 0.2);
+  background: linear-gradient(to right, rgba(254, 252, 232, 0.9), rgba(252, 246, 189, 0.5));
+  border-radius: 0 8px 8px 0;
+  /* padding-left: 1rem; */
+  box-shadow: 0 2px 8px rgba(146, 64, 14, 0.08);
+}
+
+.all-clubs-sidebar-right::-webkit-scrollbar {
+  width: 6px;
+}
+
+.all-clubs-sidebar-right::-webkit-scrollbar-track {
+  background: rgba(251, 191, 36, 0.2);
+  border-radius: 3px;
+}
+
+.all-clubs-sidebar-right::-webkit-scrollbar-thumb {
+   background: #d97706;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.all-clubs-sidebar-right::-webkit-scrollbar-thumb:hover {
+   background: linear-gradient(180deg, #ea580c, #c2410c);
+
+}
+.all-clubs-sidebar-left{
+  position: sticky;
+  top: 110px;
+  height: fit-content;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  z-index: 15;
+  
+  border-left: 2px solid rgba(146, 64, 14, 0.4);
+  border-top: 1px solid rgba(146, 64, 14, 0.2);
+  border-bottom: 1px solid rgba(146, 64, 14, 0.2);
+  background: linear-gradient(to right, rgba(254, 252, 232, 0.9), rgba(252, 246, 189, 0.5));
+  border-radius: 0 8px 8px 0;
+  /* padding-left: 1rem; */
+  box-shadow: 0 2px 8px rgba(146, 64, 14, 0.08);
+}
+
+.all-clubs-sidebar-left::-webkit-scrollbar {
+  width: 6px;
+}
+
+.all-clubs-sidebar-left::-webkit-scrollbar-track {
+  background: rgba(251, 191, 36, 0.2);
+  border-radius: 3px;
+}
+
+.all-clubs-sidebar-left::-webkit-scrollbar-thumb {
+  background: #d97706;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.all-clubs-sidebar-left::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ea580c, #c2410c);
+}
+/* Responsive дизайн */
+@media (max-width: 1400px) {
+  .all-clubs-header-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .all-clubs-header-content {
+    max-width: 100%;
+  }
+
+  .all-clubs-stats {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1200px) {
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr 280px;
+    gap: 2rem;
+    padding: 2rem 2rem 3rem;
+  }
+.all-clubs-map-full-width .clubs-map-container{
+    padding: 0 0.9rem;
+    height: 600px;
+}
+  .all-clubs-sidebar-articles {
+    display: none;
+  }
+
+  .all-clubs-header-container {
+    padding: 0 2rem;
+  }
+  .all-clubs-sidebar-left{
+    display: none;
+};
+}
+
+@media (max-width: 1024px) {
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    padding: 2rem 1.5rem 3rem;
+    gap: 2rem;
+  }
+  
+  /* Скриваме левия sidebar */
+  .all-clubs-sidebar-left {
+    display: none;
+  }
+  
+  /* Показваме дясния sidebar (търсачка) отгоре */
+  .all-clubs-sidebar-right {
+    display: block;
+    position: static;
+    order: 1;
+    max-height: none;
+    border: 1px solid rgba(146, 64, 14, 0.2);
+    border-radius: 8px;
+    margin-bottom: 0;
+  }
+  
+  /* Главното съдържание отдолу */
+  .all-clubs-main-content {
+    order: 2;
+  }
+
+  .stat-card-clubs {
+    padding: 0.75rem 1rem;
+    min-width: 80px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-icon {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .all-clubs-main-title {
+    font-size: 2rem;
+  }
+  
+  .all-clubs-subtitle {
+    font-size: 1rem;
+  }
+
+  .all-clubs-stats {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .stat-card-clubs {
+    flex: 1 1 calc(50% - 0.375rem);
+    min-width: 0;
+  }
+  
+  .all-clubs-grid {
+    gap: 1.5rem;
+  }
+  
+  /* Скриваме фоновите снимки на мобилни */
+  .bg-image {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .all-clubs-main-title {
+    font-size: 1.6rem;
+  }
+
+  .all-clubs-header-container {
+    padding: 0 1rem;
+  }
+  
+  .all-clubs-main-layout {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .stat-card-clubs {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+}
+
+/* .all-clubs-sidebar-articles {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  z-index: 15; 
+} */

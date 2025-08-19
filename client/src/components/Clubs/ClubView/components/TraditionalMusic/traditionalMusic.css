@@ -1,0 +1,860 @@
+.traditional-music-main-section {
+  padding: 6rem 0;
+  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 50%, #fef3c7 100%);
+  position: relative;
+}
+
+.traditional-music-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Header */
+.traditional-music-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.traditional-music-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.traditional-music-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.traditional-music-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Main Grid */
+.traditional-music-main-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* Section */
+.traditional-music-section {
+  background: white;
+  border-radius: 25px;
+  padding: 3rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.traditional-music-section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.traditional-music-section-header svg {
+  font-size: 3rem;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.traditional-music-section-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-music-section-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+/* Audio Player */
+.traditional-music-player {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.traditional-music-track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-track:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.traditional-music-track.active {
+  background: #dbeafe;
+  border-color: #3b82f6;
+}
+
+.traditional-music-track-info {
+  flex: 1;
+}
+
+.traditional-music-track-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-music-track-info p {
+  color: #64748b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.5;
+}
+
+.traditional-music-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.traditional-music-duration svg {
+  color: #3b82f6;
+}
+
+.traditional-music-track-controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.traditional-music-play-btn,
+.traditional-music-download-btn,
+.traditional-music-share-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-play-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.traditional-music-play-btn:hover {
+  background: #1d4ed8;
+  transform: scale(1.1);
+}
+
+.traditional-music-download-btn {
+  background: #10b981;
+  color: white;
+}
+
+.traditional-music-download-btn:hover {
+  background: #059669;
+  transform: scale(1.1);
+}
+
+.traditional-music-share-btn {
+  background: #64748b;
+  color: white;
+}
+
+.traditional-music-share-btn:hover {
+  background: #475569;
+  transform: scale(1.1);
+}
+
+/* Audio Controls */
+.traditional-music-controls {
+  background: #1e293b;
+  color: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.traditional-music-track-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #f1f5f9;
+}
+
+.traditional-music-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.traditional-music-time {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  min-width: 40px;
+}
+
+.traditional-music-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #374151;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.traditional-music-progress {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 3px;
+  transition: width 0.1s ease;
+}
+
+.traditional-music-control-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.traditional-music-control-buttons button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-control-buttons button:hover {
+  background: #1d4ed8;
+  transform: scale(1.1);
+}
+
+/* Activities */
+.traditional-music-activities {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.traditional-music-activity-card {
+  display: flex;
+  gap: 2rem;
+  background: #f0f9ff;
+  border-radius: 20px;
+  padding: 2rem;
+  border: 2px solid #bfdbfe;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-activity-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  border-color: #3b82f6;
+}
+
+.traditional-music-activity-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.traditional-music-activity-content {
+  flex: 1;
+}
+
+.traditional-music-activity-content h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-music-activity-schedule {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1e40af;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.traditional-music-activity-schedule svg {
+  color: #3b82f6;
+}
+
+.traditional-music-activity-content p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.traditional-music-activity-details {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.traditional-music-instructor,
+.traditional-music-participants {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.traditional-music-instructor svg {
+  color: #f59e0b;
+}
+
+.traditional-music-participants svg {
+  color: #3b82f6;
+}
+
+/* Events */
+.traditional-music-events {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.traditional-music-event-card {
+  display: flex;
+  gap: 2rem;
+  background: #fef3c7;
+  border-radius: 20px;
+  padding: 2rem;
+  border: 2px solid #fcd34d;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.traditional-music-event-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.traditional-music-event-content {
+  flex: 1;
+}
+
+.traditional-music-event-content h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-music-event-date {
+  color: #92400e;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.traditional-music-event-content p {
+  color: #a16207;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.traditional-music-event-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.traditional-music-event-participants {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #92400e;
+  font-weight: 500;
+}
+
+.traditional-music-event-type {
+  background: #92400e;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Videos */
+.traditional-music-videos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.traditional-music-video-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.traditional-music-video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.traditional-music-video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.traditional-music-video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.traditional-music-video-card:hover .traditional-music-video-thumbnail img {
+  transform: scale(1.05);
+}
+
+.traditional-music-play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(59, 130, 246, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-play-overlay:hover {
+  background: #3b82f6;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.traditional-music-video-duration {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.traditional-music-video-info {
+  padding: 1.5rem;
+}
+
+.traditional-music-video-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-music-video-info p {
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.traditional-music-video-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.traditional-music-video-type {
+  background: #e2e8f0;
+  color: #475569;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.traditional-music-video-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.traditional-music-video-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-video-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* Awards */
+.traditional-music-awards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.traditional-music-award-card {
+  display: flex;
+  gap: 1.5rem;
+  background: #fef3c7;
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid #fcd34d;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-award-card:hover {
+  background: #fef08a;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+}
+
+.traditional-music-award-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.traditional-music-award-content h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #92400e;
+  margin: 0 0 0.5rem 0;
+}
+
+.traditional-music-award-content p {
+  color: #a16207;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.traditional-music-award-details {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.traditional-music-award-year {
+  background: #92400e;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.traditional-music-award-by {
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Video Modal */
+.traditional-music-video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.traditional-music-video-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+}
+
+.traditional-music-video-modal-container {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+}
+
+.traditional-music-video-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 10002;
+  transition: all 0.3s ease;
+}
+
+.traditional-music-video-modal-close:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.traditional-music-video-player {
+  width: 100%;
+  background: black;
+  flex-shrink: 0;
+}
+
+.traditional-music-video-player video {
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  display: block;
+}
+
+.traditional-music-video-modal-info {
+  padding: 2rem;
+  text-align: center;
+}
+
+.traditional-music-video-modal-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.traditional-music-video-modal-info p {
+  color: #64748b;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.6;
+}
+
+.traditional-music-video-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.traditional-music-modal-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.traditional-music-modal-btn.secondary {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.traditional-music-modal-btn.secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .traditional-music-main-section {
+    padding: 4rem 0;
+  }
+  
+  .traditional-music-container {
+    padding: 0 1rem;
+  }
+  
+  .traditional-music-section {
+    padding: 2rem;
+  }
+  
+  .traditional-music-track {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .traditional-music-track-controls {
+    justify-content: center;
+  }
+  
+  .traditional-music-activity-card,
+  .traditional-music-event-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .traditional-music-activity-details {
+    justify-content: center;
+  }
+  
+  .traditional-music-videos {
+    grid-template-columns: 1fr;
+  }
+  
+  .traditional-music-awards {
+    grid-template-columns: 1fr;
+  }
+  
+  .traditional-music-award-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .traditional-music-video-modal {
+    padding: 1rem;
+  }
+  
+  .traditional-music-video-modal-container {
+    max-width: 95vw;
+  }
+  
+  .traditional-music-video-player video {
+    max-height: 40vh;
+  }
+  
+  .traditional-music-control-buttons {
+    gap: 0.5rem;
+  }
+  
+  .traditional-music-control-buttons button {
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .traditional-music-progress-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .traditional-music-time {
+    min-width: auto;
+  }
+  
+  .traditional-music-track-controls {
+    gap: 0.5rem;
+  }
+  
+  .traditional-music-play-btn,
+  .traditional-music-download-btn,
+  .traditional-music-share-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}

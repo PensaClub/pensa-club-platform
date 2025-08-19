@@ -28,6 +28,7 @@ import { renderHtml } from '../articleUtils/article-utils.jsx';
 import { useArticleLimit } from '../../contexts/ArticleLimitContext';
 import Pagination from '../Pagination/Pagination';
 import { Helmet } from 'react-helmet';
+import { TextZoom } from '../../TextZoom/TextZoom.jsx';
 const ArticleView = () => {
   const { showAssistant } = useArticleLimit();
 
@@ -448,6 +449,7 @@ const getMetaImage = () => {
       <meta name="twitter:description" content={article?.summary?.replace(/<[^>]*>/g, '').substring(0, 160)} />
       <meta name="twitter:image" content={getMetaImage()} />
     </Helmet>
+    <TextZoom />
     <div className="article-main">
       <div className="articles-hero-view">
         <div className="hero-content-view">

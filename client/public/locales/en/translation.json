@@ -12,7 +12,8 @@
     "welcome": "Welcome",
     "initiatives": "Initiatives",
     "projects": "Projects",
-    "games": "Games"
+    "games": "Games",
+    "clubs": "Clubs"
   },
   "footer": {
     "site-map": "Site Map",
@@ -3186,6 +3187,7 @@
       "resetButton": "Clear filters"
     }
   },
+
   "publications": {
     "common": {
       "title": "Publications",
@@ -3642,6 +3644,5109 @@
       "of": "of",
       "publications": "publications",
       "stories": "stories"
+    }
+  }
+}
+=======
+  "clubs": {
+    "ClubView": {
+      "loading": {
+        "title": "Loading... - Pensa Club",
+        "description": "Loading pensioners club",
+        "text": "Loading club..."
+      },
+      "notFound": {
+        "title": "Club not found - Pensa Club",
+        "description": "We're sorry, but the club you're looking for doesn't exist or has been removed.",
+        "heading": "Club not found",
+        "message": "We're sorry, but the club you're looking for doesn't exist or has been removed.",
+        "backButton": "Back to clubs"
+      },
+      "actions": {
+        "allClubs": "All clubs",
+        "addToFavorites": "Add to favorites",
+        "removeFromFavorites": "Remove from favorites",
+        "shareClub": "Share club"
+      },
+      "navigation": {
+        "title": "Navigation",
+        "home": "Home",
+        "aboutClub": "About the club",
+        "activities": "Activities",
+        "events": "Events",
+        "management": "Management",
+        "location": "Location",
+        "contacts": "Contacts",
+        "gallery": "Gallery",
+        "traditions": "Traditions",
+        "folklore": "Folklore",
+        "performances": "Performances",
+        "costumes": "Costumes",
+        "music": "Music",
+        "calendar": "Calendar",
+        "projects": "Projects",
+        "volunteering": "Volunteering",
+        "support": "Support",
+        "partners": "Partners",
+        "fitnessPrograms": "Fitness programs",
+        "healthActivities": "Health activities",
+        "wellnessServices": "Wellness services",
+        "sportsEvents": "Sports events",
+        "progressTracking": "Progress tracking"
+      },
+      "seo": {
+        "clubTitle": "{{clubName}} - Pensioners club in {{city}}",
+        "clubDescription": "Active pensioners club in {{city}}. Join our community for {{activity}}.",
+        "organizationName": "Bulgarian Pensioners Clubs",
+        "activities": {
+          "sports": "sports and activities",
+          "cultural": "culture and arts",
+          "social": "social activities",
+          "general": "active aging"
+        },
+        "keywords": {
+          "clubForPensioners": "club for pensioners",
+          "pensionersClub": "pensioners club",
+          "activePensioners": "active pensioners",
+          "socialActivities": "social activities",
+          "thirdAge": "third age"
+        }
+      }
+    },
+    "ClubHero": {
+      "status": {
+        "activeClub": "Active club"
+      },
+      "categories": {
+        "cultural": "Cultural club",
+        "sports": "Sports club",
+        "traditional": "Traditional club",
+        "social": "Social club",
+        "educational": "Educational club",
+        "active": "Active club",
+        "general": "Pensioners club"
+      },
+      "actions": {
+        "share": "Share",
+        "like": "Like",
+        "call": "Call",
+        "email": "Email",
+        "website": "Website"
+      },
+      "stats": {
+        "members": "Members",
+        "years": "Years",
+        "activities": "Activities",
+        "events": "Events",
+        "views": "views"
+      },
+      "contact": {
+        "title": "Contact us"
+      },
+      "membership": {
+        "title": "Become a member",
+        "monthly": "monthly",
+        "moreParticipants": "more benefits"
+      },
+      "gallery": {
+        "placeholder": "Expect photos from our activities soon"
+      },
+      "members": {
+        "title": "Members of",
+        "searchPlaceholder": "Search for member...",
+        "memberSince": "Since",
+        "noResults": "No members found for this search"
+      },
+      "messages": {
+        "defaultDescription": "Welcome to our club!",
+        "phoneNotAvailable": "Phone number not available",
+        "emailNotAvailable": "Email address not available",
+        "websiteNotAvailable": "Website not available",
+        "socialNotAvailable": "profile not available",
+        "linkCopied": "Link copied to clipboard!"
+      }
+    },
+    "ClubAbout": {
+      "header": {
+        "badge": "About our club",
+        "title": "Learn more about us",
+        "subtitle": "The history, mission and everything that makes our club special"
+      },
+      "stats": {
+        "years": "years",
+        "members": "members",
+        "city": "city"
+      },
+      "sections": {
+        "description": {
+          "title": "History and description"
+        },
+        "achievements": {
+          "title": "Achievements and awards"
+        },
+        "socialImpact": {
+          "title": "Social impact"
+        },
+        "services": {
+          "title": "Services and care"
+        },
+        "regional": {
+          "title": "Regional information"
+        }
+      },
+      "facts": {
+        "founded": "Founded",
+        "year": "",
+        "yearsActivity": "years of activity",
+        "location": "Location",
+        "members": "Members",
+        "people": "people",
+        "venue": "Venue",
+        "seats": "seats"
+      },
+      "demographics": {
+        "title": "Age structure",
+        "years": "years old",
+        "people": "people"
+      },
+      "achievements": {
+        "recognition": "Recognition",
+        "year": "",
+        "issued": "Issued",
+        "validUntil": "Valid until"
+      },
+      "socialImpact": {
+        "coordinator": "Coordinator",
+        "volunteering": {
+          "title": "Volunteer projects",
+          "volunteers": "volunteers",
+          "hoursPerMonth": "h/month"
+        },
+        "communityProjects": {
+          "title": "Community projects",
+          "beneficiaries": "beneficiaries"
+        },
+        "partnerships": {
+          "title": "Partnerships"
+        }
+      },
+      "services": {
+        "categories": {
+          "health": "Health services",
+          "support": "Support services",
+          "accessibility": "Accessibility"
+        },
+        "health": {
+          "regularCheckups": "Regular health checkups",
+          "bloodPressureMonitoring": "Blood pressure monitoring",
+          "healthLectures": "Health lectures"
+        },
+        "support": {
+          "homeVisits": "Home visits",
+          "shoppingAssistance": "Shopping assistance",
+          "documentHelp": "Document assistance",
+          "companionship": "Companionship",
+          "transportService": "Transport services",
+          "mealDelivery": "Meal delivery",
+          "cleaningHelp": "Cleaning assistance",
+          "techSupport": "Technical support"
+        },
+        "accessibility": {
+          "wheelchairAccess": "Wheelchair access",
+          "elevatorAccess": "Elevator access",
+          "hearingLoop": "Hearing loop",
+          "largeTextMaterials": "Large text materials",
+          "handrails": "Handrails and supports",
+          "nonSlipFloors": "Non-slip floors",
+          "goodLighting": "Good lighting",
+          "restingAreas": "Resting areas"
+        }
+      },
+      "regional": {
+        "clubType": "Club type",
+        "centralClub": "Central club",
+        "localClub": "Local club",
+        "coverageArea": "Coverage area",
+        "affiliatedClubs": "Affiliated clubs",
+        "clubsInNetwork": "clubs in network"
+      }
+    },
+    "ClubActivities": {
+      "header": {
+        "badge": "Regular activities",
+        "title": "Our activities",
+        "subtitle": "Diverse activities every week for all club members"
+      },
+      "stats": {
+        "activities": "activities",
+        "participants": "participants",
+        "daysPerWeek": "days per week"
+      },
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "schedule": {
+        "noDay": "Not specified",
+        "noTime": "Time not specified"
+      },
+      "activity": {
+        "participants": "participants",
+        "register": "Register"
+      },
+      "weeklySchedule": {
+        "title": "Weekly schedule",
+        "people": "people",
+        "noActivities": "No activities"
+      },
+      "modal": {
+        "title": "Activity registration"
+      },
+      "form": {
+        "firstName": "First name",
+        "firstNamePlaceholder": "Your first name",
+        "lastName": "Last name",
+        "lastNamePlaceholder": "Your last name",
+        "phone": "Phone",
+        "phonePlaceholder": "+359 888 123 456",
+        "email": "Email",
+        "emailPlaceholder": "email@example.com",
+        "experience": "Previous experience",
+        "selectLevel": "Select level",
+        "notes": "Additional notes",
+        "notesPlaceholder": "Do you have any questions or special requirements?",
+        "sending": "Sending...",
+        "submit": "Submit request"
+      },
+      "experience": {
+        "none": "No experience",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "registration": {
+        "emailSubject": "Registration request - {{activityName}}",
+        "emailBody": "Activity registration request\n\nName: {{firstName}} {{lastName}}\nPhone: {{phone}}\nEmail: {{email}}\n\nActivity: {{activityName}}\nDay: {{day}}\nTime: {{time}}\nInstructor: {{instructor}}\n\nExperience: {{experience}}\nAdditional notes: {{notes}}\n\n---\nSent from {{clubName}}",
+        "notSpecified": "Not specified",
+        "none": "None"
+      },
+      "messages": {
+        "success": "Request sent successfully! We will contact you soon.",
+        "error": "An error occurred. Please try again or contact us directly."
+      },
+      "contact": {
+        "directContact": "You can also contact us directly:"
+      }
+    },
+     "ClubEvents": {
+      "header": {
+        "badge": "Events and activities",
+        "title": "Our events",
+        "subtitle": "Discover interesting events, trips and courses at our club"
+      },
+      "date": {
+        "language": "en",
+        "notSpecified": "Date not specified"
+      },
+      "eventTypes": {
+        "cultural": "Cultural",
+        "social": "Social",
+        "traditional": "Traditional",
+        "sports": "Sports",
+        "educational": "Educational",
+        "health": "Health",
+        "default": "Event"
+      },
+      "stats": {
+        "events": "events",
+        "trips": "trips",
+        "courses": "courses"
+      },
+      "tabs": {
+        "upcoming": "Upcoming",
+        "past": "Past"
+      },
+      "event": {
+        "noTime": "Time not specified",
+        "participants": "participants",
+        "details": "Details"
+      },
+      "noContent": {
+        "upcomingTitle": "No upcoming events",
+        "upcomingText": "Check back soon for new announcements",
+        "pastTitle": "No past events",
+        "pastText": "Event history starts here"
+      },
+      "trips": {
+        "title": "Upcoming trips",
+        "currency": "",
+        "registered": "registered",
+        "register": "Register",
+        "emailSubject": "Trip registration request - {{destination}}",
+        "emailBody": "Trip registration request\n\nName: {{firstName}} {{lastName}}\nPhone: {{phone}}\nEmail: {{email}}\n\nTrip: {{destination}}\nDate: {{date}}\nPrice: {{price}}\n\nAdditional notes: {{notes}}\n\n---\nSent from {{clubName}}"
+      },
+      "courses": {
+        "title": "Active courses",
+        "noDuration": "Duration not specified",
+        "participants": "participants",
+        "learnMore": "Learn more"
+      },
+      "form": {
+        "firstName": "First name",
+        "firstNamePlaceholder": "Your first name",
+        "lastName": "Last name",
+        "lastNamePlaceholder": "Your last name",
+        "phone": "Phone",
+        "phonePlaceholder": "+359 888 123 456",
+        "email": "Email",
+        "emailPlaceholder": "email@example.com",
+        "notes": "Notes",
+        "notesPlaceholder": "Additional notes or questions",
+        "sending": "Sending...",
+        "submit": "Submit request",
+        "none": "None"
+      },
+      "modals": {
+        "eventDetails": {
+          "title": "Event details",
+          "organizer": "Organizer",
+          "highlights": "Highlights"
+        },
+        "tripRegistration": {
+          "title": "Trip registration"
+        },
+        "courseDetails": {
+          "title": "Course information",
+          "instructor": "Instructor"
+        }
+      },
+      "messages": {
+        "linkCopied": "Link copied to clipboard!",
+        "success": "Request sent successfully!",
+        "error": "An error occurred. Please try again."
+      },
+      "contact": {
+        "forRegistration": "For registration contact us:"
+      }
+    },
+    "ClubManagement": {
+      "header": {
+        "badge": "Club management",
+        "title": "Our leadership",
+        "subtitle": "Meet the people who lead the club and organize activities"
+      },
+      "stats": {
+        "boardMembers": "board members",
+        "managementLevels": "management levels",
+        "yearsExperience": "years experience"
+      },
+      "roles": {
+        "president": {
+          "description": "Leads club activities and represents the club to third parties"
+        },
+        "vicePresident": {
+          "description": "Assists the president and substitutes when necessary"
+        },
+        "secretary": {
+          "description": "Keeps minutes and club documentation"
+        },
+        "treasurer": {
+          "description": "Responsible for financial activities and budget"
+        },
+        "culturalCoordinator": {
+          "description": "Organizes cultural activities and events"
+        },
+        "sportsCoordinator": {
+          "description": "Coordinates sports activities and programs"
+        },
+        "member": {
+          "description": "Member of the board of directors"
+        }
+      },
+      "actions": {
+        "share": "Share",
+        "moreInfo": "More information",
+        "showLess": "Show less",
+        "showAll": "Show all ({{count}} more)"
+      },
+      "contact": {
+        "hideContacts": "Hide contacts",
+        "showContacts": "Show contacts",
+        "call": "Call",
+        "sendEmail": "Send email"
+      },
+      "structure": {
+        "title": "Management structure"
+      },
+      "contactSection": {
+        "title": "How to contact management",
+        "clubPhone": "Club phone",
+        "clubPhoneDesc": "Main phone for contacting the club",
+        "generalEmail": "General email",
+        "generalEmailDesc": "For general questions and information",
+        "clubAddress": "Club address",
+        "clubAddressDesc": "Where you can find us"
+      },
+      "modal": {
+        "title": "Member information",
+        "biography": "Biography",
+        "contactInfo": "Contact information",
+        "aboutRole": "About the role"
+      },
+      "messages": {
+        "infoCopied": "Information copied to clipboard!"
+      },
+      "shareText": "{{name}} - {{role}} at {{clubName}}"
+    },
+    "ClubGallery": {
+      "header": {
+        "badge": "Gallery",
+        "title": "Our memories",
+        "subtitle": "Browse photos and videos from our activities and events"
+      },
+      "stats": {
+        "images": "images",
+        "videos": "videos",
+        "fromEvents": "from events",
+        "totalFiles": "total files"
+      },
+      "search": {
+        "placeholder": "Search gallery..."
+      },
+      "filters": {
+        "all": "All",
+        "images": "Images",
+        "videos": "Videos",
+        "fromEvents": "From events"
+      },
+      "viewModes": {
+        "grid": "Grid view",
+        "list": "List view"
+      },
+      "categories": {
+        "gallery": "Gallery",
+        "videos": "Videos",
+        "events": "Events"
+      },
+      "media": {
+        "imageTitle": "Image {{number}}",
+        "videoTitle": "Video {{number}}",
+        "imageAlt": "Club image {{number}}",
+        "eventImageTitle": "{{eventTitle}} - Image {{number}}",
+        "eventVideoTitle": "{{eventTitle}} - Video {{number}}",
+        "fromEvent": "From event"
+      },
+      "actions": {
+        "view": "View",
+        "share": "Share",
+        "download": "Download",
+        "shareText": "{{title}} from {{clubName}}"
+      },
+      "noMedia": {
+        "title": "No files found",
+        "subtitle": "Try a different filter or search"
+      },
+      "lightbox": {
+        "counter": "{{current}} of {{total}}"
+      },
+      "video": {
+        "notSupported": "Your browser does not support the video element.",
+        "duration": "Duration"
+      },
+      "messages": {
+        "linkCopied": "Link copied to clipboard!"
+      }
+    },
+    "ClubLocation": {
+      "header": {
+        "badge": "Location and access",
+        "title": "How to find us",
+        "subtitle": "Detailed information about location, transport and amenities"
+      },
+      "actions": {
+        "directions": "Directions",
+        "share": "Share",
+        "shareText": "{{clubName}} - {{address}}, {{city}}",
+        "shareTitle": "{{clubName}} - Location"
+      },
+      "map": {
+        "title": "Interactive map",
+        "expand": "Expand map",
+        "compress": "Shrink map",
+        "openInGoogleMaps": "Open in Google Maps"
+      },
+      "address": {
+        "title": "Club address",
+        "type": "Type",
+        "floor": "Floor"
+      },
+      "transport": {
+        "title": "How to get there",
+        "details": "Details",
+        "walking": {
+          "label": "Walking",
+          "time": "10-15 min",
+          "info": "Easily accessible on foot from center",
+          "description": "Pedestrian access with convenient sidewalks and walkways. Suitable for all ages."
+        },
+        "bus": {
+          "label": "Bus",
+          "time": "5-20 min",
+          "info": "Public transport with reduced prices for seniors",
+          "description": "Regular bus lines with low prices for seniors. Stops near the club."
+        },
+        "car": {
+          "label": "Car",
+          "time": "5-10 min",
+          "info": "Free street parking",
+          "description": "Easy car access. Free parking spaces available in the area."
+        }
+      },
+      "venue": {
+        "title": "Building information",
+        "area": "Area",
+        "capacity": "Capacity",
+        "seats": "seats",
+        "accessibility": "Accessibility",
+        "accessible": "Accessible",
+        "notAccessible": "Not accessible",
+        "facilities": "Amenities",
+        "more": "more",
+        "notSpecified": "Not specified"
+      },
+      "venueTypes": {
+        "municipal": "Municipal building",
+        "rented": "Rented building",
+        "cultural_center": "Cultural center",
+        "sports_center": "Sports center",
+        "community_center": "Community center",
+        "private": "Private building",
+        "default": "Building"
+      },
+      "hours": {
+        "title": "Working hours",
+        "closed": "Closed"
+      },
+      "contacts": {
+        "title": "Quick contacts"
+      },
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday",
+        "mondayShort": "Mon",
+        "tuesdayShort": "Tue",
+        "wednesdayShort": "Wed",
+        "thursdayShort": "Thu",
+        "fridayShort": "Fri",
+        "saturdayShort": "Sat",
+        "sundayShort": "Sun"
+      },
+      "modals": {
+        "venue": {
+          "title": "Building details",
+          "buildingType": "Building type",
+          "facilitiesAndServices": "Facilities and services",
+          "description": "Description",
+          "accessibleForDisabled": "Accessible for people with disabilities"
+        },
+        "contact": {
+          "title": "Contact information",
+          "mainPhone": "Main phone",
+          "mobilePhone": "Mobile phone",
+          "emailAddress": "Email address",
+          "detailedWorkingHours": "Detailed working hours"
+        }
+      },
+      "messages": {
+        "infoCopied": "Information copied to clipboard!"
+      }
+    },
+     "ClubContact": {
+      "header": {
+        "badge": "Contact us",
+        "title": "We're here for you",
+        "subtitle": "Ready to answer all your questions and help you"
+      },
+      "actions": {
+        "faq": "Frequently Asked Questions",
+        "share": "Share",
+        "shareText": "Contact {{clubName}}"
+      },
+      "contactMethods": {
+        "primary": {
+          "title": "Primary contacts"
+        },
+        "phone": {
+          "label": "Phone",
+          "description": "Call directly"
+        },
+        "mobile": {
+          "label": "Mobile",
+          "description": "SMS and calls"
+        },
+        "email": {
+          "label": "Email",
+          "description": "Send a message"
+        },
+        "website": {
+          "label": "Website",
+          "description": "Visit our site"
+        }
+      },
+      "workingHours": {
+        "title": "Working hours",
+        "detailed": "Detailed working hours",
+        "openNow": "Open now",
+        "closed": "Closed",
+        "today": "Today",
+        "notSpecified": "Not specified",
+        "note": "Working hours may change during holidays. Contact us for current information."
+      },
+      "location": {
+        "title": "Our location",
+        "directions": "Directions"
+      },
+      "socialMedia": {
+        "title": "Social media"
+      },
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "form": {
+        "title": "Send a message",
+        "subtitle": "We'll respond within 24 hours",
+        "email": "Email",
+        "phone": "Phone",
+        "notSpecified": "Not specified",
+        "fields": {
+          "name": "Name",
+          "email": "Email",
+          "phone": "Phone",
+          "preferredContact": "Preferred contact",
+          "subject": "Subject",
+          "message": "Message"
+        },
+        "placeholders": {
+          "name": "Your name",
+          "email": "email@example.com",
+          "phone": "+1 234 567 890",
+          "message": "Write your message here..."
+        },
+        "subjects": {
+          "membership": "Club membership",
+          "activities": "Activities and programs",
+          "events": "Events",
+          "volunteer": "Volunteering",
+          "partnership": "Partnership",
+          "donation": "Donation/sponsorship",
+          "general": "General questions",
+          "complaint": "Complaint/suggestion"
+        },
+        "validation": {
+          "required": "Please fill in all required fields"
+        },
+        "messages": {
+          "success": "Your email client has opened! Send the message to reach us.",
+          "error": "An error occurred. Please try again or call us directly."
+        },
+        "submitting": "Sending...",
+        "submit": "Send message",
+        "emailBody": "Name: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nPreferred contact: {{preferredContact}}\n\nSubject: {{subject}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website\nDate: {{date}}"
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "questions": {
+          "howToBecomeMember": "How can I become a club member?",
+          "membershipCost": "How much does membership cost?",
+          "membershipRequirements": "What are the membership requirements?",
+          "membershipBenefits": "What does membership include?",
+          "visitBeforeMembership": "Can I visit the club before becoming a member?"
+        },
+        "answers": {
+          "howToBecomeMember": "To become a member, you need to fill out an application and pay the membership fee. Contact us for more information.",
+          "membershipCostWithPrices": "Monthly fee is {{monthly}} {{currency}}, and yearly fee is {{yearly}} {{currency}}.",
+          "membershipCostGeneral": "Contact us for pricing information.",
+          "membershipRequirements": "Contact us for detailed information about requirements.",
+          "membershipBenefits": "Participation in all club activities and events.",
+          "visitBeforeMembership": "Of course! Visit us during our working hours or contact us to arrange a meeting."
+        },
+        "footer": {
+          "question": "Can't find an answer to your question?",
+          "contactUs": "Contact us"
+        }
+      },
+      "messages": {
+        "contactInfoCopied": "Contact information copied to clipboard!"
+      }
+    },
+    "ClubCard": {
+      "image": {
+        "noImage": "No image"
+      },
+      "categories": {
+        "cultural": "Cultural",
+        "general": "General",
+        "sports": "Sports",
+        "educational": "Educational",
+        "traditional": "Traditional"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "suspended": "Suspended"
+      },
+      "actions": {
+        "showOnMap": "Show on map",
+        "addToFavorites": "Add to favorites",
+        "viewMore": "View more"
+      },
+      "stats": {
+        "members": "members",
+        "activities": "activities",
+        "views": "views"
+      },
+      "activities": {
+        "title": "Popular activities",
+        "moreActivities": "+{{count}} more activities"
+      },
+      "chairman": {
+        "title": "Chairman"
+      },
+      "contacts": {
+        "phone": "Call: {{phone}}",
+        "email": "Send email: {{email}}",
+        "website": "Visit website: {{website}}"
+      },
+      "founded": "Founded"
+    },
+     "ClubsHero": {
+      "title": {
+        "prefix": "Discover your",
+        "highlight": "club"
+      },
+      "subtitle": "Join the active community of seniors in Bulgaria. Find a club near you with interesting activities and new friendships.",
+      "stats": {
+        "activeClubs": "Active clubs",
+        "cities": "Cities in Bulgaria",
+        "activeMembers": "Active members"
+      }
+    },
+    "ClubsMap": {
+      "title": "Club map",
+      "categories": {
+        "cultural": "Cultural",
+        "general": "General",
+        "sports": "Sports",
+        "educational": "Educational",
+        "traditional": "Traditional"
+      },
+      "legend": {
+        "cultural": "Cultural",
+        "general": "General",
+        "sports": "Sports",
+        "educational": "Educational",
+        "traditional": "Traditional"
+      },
+      "popup": {
+        "viewDetails": "View details"
+      },
+      "loading": "Loading map...",
+      "info": {
+        "shown": "Showing {{count}} clubs in Bulgaria"
+      }
+    },
+     "ClubsSearch": {
+      "title": "Search",
+      "results_one": "{{count}} result",
+      "results_other": "{{count}} results",
+      "results": "{{count}} results",
+      "searchPlaceholder": "Search club...",
+      "filters": {
+        "title": "Filters",
+        "city": {
+          "label": "City",
+          "all": "All cities"
+        },
+        "category": {
+          "label": "Category",
+          "all": "All categories"
+        },
+        "sort": {
+          "label": "Sort by",
+          "name": "By name",
+          "members": "By members",
+          "rating": "By rating",
+          "newest": "Newest"
+        }
+      },
+      "categories": {
+        "cultural": "Cultural",
+        "general": "General",
+        "sports": "Sports",
+        "educational": "Educational",
+        "traditional": "Traditional"
+      },
+      "actions": {
+        "showMap": "Show on map",
+        "hideMap": "Hide map",
+        "clearFilters": "Clear filters"
+      },
+      "recent": {
+        "title": "Recent posts",
+        "digitalLiteracy": "DIGITAL LITERACY",
+        "example1": "Rent now with online discount",
+        "example2": "test1000",
+        "example3": "test1001"
+      }
+    },
+    "RecentArticles": {
+      "title": "Recent articles",
+      "viewAll": "View all",
+      "noArticles": "No articles available",
+      "errors": {
+        "loadingArticles": "Error loading articles:"
+      }
+    },
+    "AllClubs": {
+      "header": {
+        "title": "Find your place in the community",
+        "subtitle": "\"Together we are stronger\" - every club is a gateway to new friendships and opportunities"
+      },
+      "stats": {
+        "clubs": "Clubs",
+        "members": "Members",
+        "active": "Active",
+        "cities": "Cities"
+      },
+      "categories": {
+        "cultural": "cultural",
+        "general": "general",
+        "sports": "sports",
+        "educational": "educational",
+        "traditional": "traditional"
+      },
+      "noResults": {
+        "title": "No clubs found",
+        "subtitle": "Try different search criteria"
+      },
+      "loading": {
+        "title": "Loading clubs... | Senior Clubs",
+        "description": "Please wait, we are loading the list of all senior clubs in Bulgaria.",
+        "text": "Loading clubs..."
+      },
+      "errors": {
+        "loadingClubs": "Error loading clubs:"
+      },
+      "meta": {
+        "baseTitle": "All senior clubs in Bulgaria",
+        "baseDescription": "Find your place in the community! Browse all senior clubs in Bulgaria.",
+        "fullTitle": "{{baseTitle}} - {{totalClubs}} clubs, {{totalMembers}} members",
+        "fullDescription": "{{baseDescription}} {{totalClubs}} active clubs in {{cities}} cities with a total of {{totalMembers}} members.",
+        "filteredTitle": "Senior clubs {{filters}} - {{count}} results",
+        "filteredDescription": "Found {{count}} senior clubs {{filters}}. View detailed information, contacts and activities.",
+        "inCity": "in {{city}}",
+        "keywords": "senior clubs, third age, active aging, social activities, Bulgaria, community, friendships, health, culture, sports",
+        "siteName": "Senior Clubs",
+        "memberOf": "Senior Clubs in Bulgaria"
+      },
+      "breadcrumb": "All clubs"
+    },
+     "CulturalHero": {
+      "badge": {
+        "culturalClub": "Cultural Club"
+      },
+      "buttons": {
+        "join": "Join Us",
+        "events": "Events",
+        "tour": "Tour",
+        "members": "Members"
+      },
+      "stats": {
+        "title": "Statistics",
+        "activeMembers": "Active members",
+        "regularPrograms": "Regular programs",
+        "upcomingEvents": "Upcoming events",
+        "founded": "Founded",
+        "yearsExperience": "{{years}} years of experience"
+      },
+      "actions": {
+        "joinClub": "Join the club!",
+        "virtualTour": "Virtual tour!"
+      },
+      "membersCount_one": "{{count}} member",
+      "membersCount_other": "{{count}} members",
+      "modal": {
+        "title": "Club members",
+        "subtitle": "Our creative community of {{members}}",
+        "searchPlaceholder": "Search by name, phone or email...",
+        "clearSearch": "Clear search",
+        "noResultsFor": "No results found for \"{{term}}\"",
+        "foundMembers_one": "Found {{count}} member",
+        "foundMembers_other": "Found {{count}} members",
+        "noRegisteredMembers": {
+          "title": "No registered members",
+          "subtitle": "No members have been added to the system yet."
+        },
+        "noSearchResults": {
+          "title": "No search results",
+          "subtitle": "Try different keywords or clear the search."
+        },
+        "clearSearchButton": "Clear search",
+        "copyName": "Copy name",
+        "copyPhone": "Copy phone",
+        "copyEmail": "Copy email",
+        "copyAddress": "Copy address",
+        "memberSince": "Member since"
+      },
+      "errors": {
+        "copyError": "Copy error:",
+        "copyErrorMessage": "Error copying. Please try again."
+      }
+    },
+    "CulturalAbout": {
+      "header": {
+        "badge": "About the club",
+        "title": "Our history and mission",
+        "subtitle": "For more than {{years}} years we have been creating unforgettable moments and preserving Bulgarian culture"
+      },
+      "story": {
+        "title": "Our story",
+        "founded": "Club establishment"
+      },
+      "mission": {
+        "title": "Our mission"
+      },
+      "quote": {
+        "defaultText": "Culture is the bridge between generations. In our club, every day we build this bridge with songs, dances and warm smiles.",
+        "defaultAuthor": "Club Chairman"
+      },
+      "stats": {
+        "title": "Key figures",
+        "activeMembers": "Active members",
+        "yearsExperience": "Years of experience",
+        "regularPrograms": "Regular programs",
+        "prestigiousAwards": "Prestigious awards"
+      },
+      "achievements": {
+        "title": "Achievements"
+      },
+      "specialties": {
+        "title": "Our specialties"
+      },
+      "communityImpact": {
+        "title": "Our contribution to the community",
+        "eventsYearly": "Cultural events yearly",
+        "concertVisitors": "Concert visitors",
+        "volunteerInitiatives": "Volunteer initiatives",
+        "familiesSupported": "Families supported"
+      },
+      "cta": {
+        "title": "Become part of our cultural family",
+        "subtitle": "Join us and discover the beauty of Bulgarian culture together with new friends",
+        "joinButton": "Join us",
+        "viewProgramButton": "View the program"
+      },
+      "interests": {
+        "choralSinging": "Choral singing",
+        "folkDances": "Folk dances",
+        "visualArts": "Visual arts",
+        "literaryReadings": "Literary readings",
+        "music": "Music",
+        "theater": "Theater"
+      },
+      "modal": {
+        "title": "Join {{clubName}}",
+        "subtitle": "Fill out the form and we will contact you soon",
+        "success": {
+          "title": "Request sent!",
+          "message": "Thank you for your interest! We will contact you soon."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        },
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone (optional)",
+          "phonePlaceholder": "Enter your phone",
+          "interests": "What interests you? (select one or more)",
+          "message": "Additional message (optional)",
+          "messagePlaceholder": "Tell us more about yourself or ask a question...",
+          "sending": "Sending...",
+          "submit": "Send request",
+          "cancel": "Cancel"
+        },
+        "emailSubject": "Join request for {{clubName}}",
+        "emailBody": "Hello,\n\nYou have received a join request for {{clubName}}:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nInterests: {{interests}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}",
+        "notSpecified": "Not specified",
+        "noInterests": "None specified",
+        "noMessage": "No additional message"
+      }
+    },
+     "CulturalActivities": {
+      "header": {
+        "badge": "Activities and programs",
+        "title": "Our cultural activities",
+        "subtitle": "Discover the richness of Bulgarian culture through diverse programs and workshops"
+      },
+      "tabs": {
+        "regular": "Regular activities",
+        "courses": "Courses and training",
+        "special": "Special programs"
+      },
+      "activity": {
+        "instructor": "Instructor",
+        "participants": "participants",
+        "level": "Level",
+        "duration": "Duration",
+        "buttons": {
+          "register": "Register",
+          "more": "More"
+        }
+      },
+      "course": {
+        "teacher": "Teacher",
+        "schedule": "Schedule",
+        "starts": "Starts",
+        "buttons": {
+          "details": "Details"
+        }
+      },
+      "special": {
+        "learnMore": "Learn more"
+      },
+      "schedule": {
+        "title": "Weekly schedule",
+        "subtitle": "Overview of all activities by day",
+        "noActivities": "No planned activities"
+      },
+      "weekDays": {
+        "monday": "monday",
+        "tuesday": "tuesday",
+        "wednesday": "wednesday",
+        "thursday": "thursday",
+        "friday": "friday",
+        "saturday": "saturday",
+        "sunday": "sunday"
+      },
+      "cta": {
+        "title": "Ready to join?",
+        "subtitle": "Join one of our programs and discover new talents and friends",
+        "registerNow": "Register now",
+        "contactUs": "Contact us"
+      },
+      "form": {
+        "name": "Your name",
+        "namePlaceholder": "Enter your name",
+        "email": "Email address",
+        "emailPlaceholder": "Enter your email",
+        "phoneRequired": "Phone",
+        "phoneOptional": "Phone (optional)",
+        "phonePlaceholder": "Enter your phone",
+        "messageOptional": "Additional message (optional)",
+        "messageRequired": "Message",
+        "messagePlaceholder": "Describe your experience level or ask a question...",
+        "sending": "Sending...",
+        "submitRequest": "Send request",
+        "sendMessage": "Send message",
+        "cancel": "Cancel",
+        "notSpecified": "Not specified",
+        "noMessage": "No additional message",
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "modals": {
+        "join": {
+          "title": "Register for {{activityName}}",
+          "subtitle": "Fill out the form and we will contact you for confirmation",
+          "success": {
+            "title": "Request sent!",
+            "message": "Thank you! We will contact you soon to confirm your registration."
+          },
+          "emailSubject": "Activity registration for {{clubName}}",
+          "emailBody": "Hello,\n\nYou have received an activity registration request from {{clubName}}:\n\nActivity: {{activityName}}\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}"
+        },
+        "contact": {
+          "title": "Contact us",
+          "subtitle": "Ask your question and we will respond as soon as possible",
+          "messagePlaceholder": "What would you like to know?",
+          "infoRequestMessage": "Please send me more information about \"{{activityName}}\".",
+          "success": {
+            "title": "Message sent!",
+            "message": "Thank you! We will contact you soon."
+          },
+          "emailSubject": "Activities inquiry from {{clubName}}",
+          "emailBody": "Hello,\n\nYou have received an activities inquiry from {{clubName}}:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}"
+        }
+      }
+    },
+     "CulturalEvents": {
+      "header": {
+        "badge": "Events and activities",
+        "title": "Our cultural calendar",
+        "subtitle": "Discover exciting events, concerts and celebrations throughout the year"
+      },
+      "eventTypes": {
+        "cultural": "Cultural",
+        "social": "Social",
+        "educational": "Educational",
+        "traditional": "Traditional",
+        "celebration": "Celebrations",
+        "charity": "Charity",
+        "community": "Community",
+        "sports": "Sports",
+        "wellness": "Wellness",
+        "sportsGames": "Sports games",
+        "swimming": "Swimming",
+        "trips": "Trips"
+      },
+      "featured": {
+        "badge": "Featured event",
+        "timeAt": "at {{time}}"
+      },
+      "filters": {
+        "upcoming": "Upcoming",
+        "past": "Past events",
+        "cultural": "Cultural",
+        "traditional": "Traditional"
+      },
+      "buttons": {
+        "register": "Register",
+        "gallery": "Gallery"
+      },
+      "tooltips": {
+        "register": "Register for the event",
+        "gallery": "View gallery",
+        "share": "Share event",
+        "info": "More information"
+      },
+      "stats": {
+        "eventsYearly": "Events yearly",
+        "totalParticipants": "Total participants",
+        "concerts": "Concerts and performances",
+        "averageRating": "Average rating"
+      },
+      "cta": {
+        "title": "Don't miss any event!",
+        "subtitle": "Subscribe to our newsletter and be the first to know about new events",
+        "subscribe": "Subscribe",
+        "contact": "Contact us"
+      },
+      "gallery": {
+        "noMedia": "No media files available",
+        "videoAlt": "Video {{index}}",
+        "imageAlt": "Image {{index}}"
+      },
+      "form": {
+        "name": "Your name",
+        "namePlaceholder": "Enter your name",
+        "email": "Email address",
+        "emailPlaceholder": "Enter your email",
+        "phoneOptional": "Phone (optional)",
+        "phoneRequired": "Phone",
+        "phonePlaceholder": "Enter your phone",
+        "messageRequired": "Message",
+        "sending": "Sending...",
+        "subscribe": "Subscribe",
+        "sendMessage": "Send message",
+        "submitRequest": "Submit request",
+        "cancel": "Cancel",
+        "notSpecified": "Not specified",
+        "noMessage": "No additional message",
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "modals": {
+        "subscribe": {
+          "title": "Subscribe to our newsletter",
+          "subtitle": "Get news about all events directly in your email",
+          "interestsLabel": "What interests you? (select one or more)",
+          "success": {
+            "title": "Successfully subscribed!",
+            "message": "Thank you! You will receive news about our events."
+          },
+          "emailSubject": "Newsletter subscription - {{clubName}}",
+          "emailBody": "Hello,\n\nYou have received a newsletter subscription request from {{clubName}}:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nInterests: {{interests}}\n\n---\nSent from {{senderEmail}}",
+          "allEvents": "All events"
+        },
+        "contact": {
+          "title": "Contact us",
+          "subtitle": "Ask your question about events and we will respond as soon as possible",
+          "subjectLabel": "Subject of inquiry",
+          "subjectPlaceholder": "Briefly describe the topic",
+          "messagePlaceholder": "What would you like to know about our events?",
+          "success": {
+            "title": "Message sent!",
+            "message": "Thank you! We will contact you soon."
+          },
+          "defaultSubject": "Events inquiry - {{clubName}}",
+          "generalInquiry": "General inquiry",
+          "emailBody": "Hello,\n\nYou have received an events inquiry from {{clubName}}:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nSubject: {{subject}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}"
+        },
+        "register": {
+          "title": "Register for {{eventTitle}}",
+          "subtitle": "Fill out the form and we will contact you for confirmation",
+          "messageLabel": "Additional message (optional)",
+          "messagePlaceholder": "Do you have any special requirements or questions?",
+          "success": {
+            "title": "Request sent!",
+            "message": "Thank you! We will contact you soon to confirm your registration."
+          },
+          "emailSubject": "Event registration - {{eventTitle}}",
+          "emailBody": "Hello,\n\nYou have received an event registration request from {{clubName}}:\n\nEvent: {{eventTitle}}\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}"
+        }
+      },
+      "participants": "participants",
+      "tripTo": "Trip to {{destination}}",
+      "notSpecified": "Not specified",
+      "messages": {
+        "linkCopied": "Link copied to clipboard!"
+      }
+    },
+    "CulturalManagement": {
+      "header": {
+        "badge": "Leadership and management",
+        "title": "Our leadership",
+        "subtitle": "Meet the people who lead the club forward with dedication and experience"
+      },
+      "board": {
+        "title": "Board of directors",
+        "subtitle": "Our experienced team that ensures the excellent work of the club"
+      },
+      "roles": {
+        "chairman": "Chairman",
+        "secretary": "Secretary",
+        "treasurer": "Treasurer",
+        "viceChairman": "Vice Chairman",
+        "culturalOfficer": "Cultural Officer",
+        "member": "Member"
+      },
+      "specialties": {
+        "organization": "Organization",
+        "culturalEvents": "Cultural events",
+        "education": "Education",
+        "documentation": "Documentation",
+        "administration": "Administration",
+        "communications": "Communications",
+        "finance": "Finance",
+        "budget": "Budget",
+        "accounting": "Accounting"
+      },
+      "experience": {
+        "threeYears": "3 years",
+        "fourYears": "4 years",
+        "fiveYears": "5 years"
+      },
+      "defaultBios": {
+        "chairman": "Retired history teacher with 35 years of experience. Club chairman since 2022.",
+        "secretary": "Former accountant, responsible for documentation and communication",
+        "treasurer": "Retired banker, manages the club's finances"
+      },
+      "defaultAddresses": {
+        "address1": "45 Vitosha St., Sofia",
+        "address2": "12 Rakovski St., Sofia",
+        "address3": "78 Stamboliyski Blvd., Sofia"
+      },
+      "defaultOffice": {
+        "address": "127 Vitosha St., 2nd floor",
+        "city": "Sofia"
+      },
+      "defaultClubName": "Club 'Golden Autumn'",
+      "member": {
+        "experience": "Experience",
+        "contact": "Contact"
+      },
+      "office": {
+        "title": "Office and contacts",
+        "address": {
+          "title": "Address"
+        },
+        "contacts": {
+          "title": "Contacts",
+          "phone": "Tel",
+          "mobile": "Mobile"
+        },
+        "workingHours": {
+          "title": "Working hours"
+        }
+      },
+      "workingHours": {
+        "days": {
+          "monday": "Monday",
+          "tuesday": "Tuesday",
+          "wednesday": "Wednesday",
+          "thursday": "Thursday",
+          "friday": "Friday",
+          "saturday": "Saturday",
+          "sunday": "Sunday"
+        },
+        "closed": "Closed"
+      },
+      "contactForm": {
+        "title": "Contact us",
+        "subtitle": "Have questions? Write to us and we will respond as soon as possible"
+      },
+      "form": {
+        "name": "Full name",
+        "namePlaceholder": "Your name",
+        "email": "Email address",
+        "emailPlaceholder": "email@example.com",
+        "phone": "Phone",
+        "phonePlaceholder": "0888 123 456",
+        "subject": "Subject",
+        "subjectPlaceholder": "Select subject",
+        "message": "Message",
+        "messagePlaceholder": "Write your message here...",
+        "submit": "Send message",
+        "sending": "Sending...",
+        "notSpecified": "Not specified",
+        "subjects": {
+          "membership": "Membership",
+          "activities": "Activities",
+          "events": "Events",
+          "volunteering": "Volunteering",
+          "other": "Other"
+        },
+        "success": {
+          "title": "Message sent!",
+          "message": "Thank you! We will contact you as soon as possible."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "quickContact": {
+        "title": "Quick contacts",
+        "chairman": "Chairman",
+        "finance": "Finance",
+        "events": "Events",
+        "culturalDepartment": "Cultural department"
+      },
+      "modal": {
+        "contacts": "Contacts",
+        "specialties": "Specialties",
+        "buttons": {
+          "call": "Call",
+          "email": "Send email"
+        }
+      },
+      "modals": {
+        "contact": {
+          "emailSubject": "Inquiry from {{clubName}} - {{subject}}",
+          "emailBody": "Hello,\n\nYou have received an inquiry from {{clubName}}:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nSubject: {{subject}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}"
+        }
+      }
+    },
+    "CulturalGallery": {
+      "header": {
+        "badge": "Gallery and memories",
+        "title": "Our unforgettable moments",
+        "subtitle": "View photos and videos from our events, concerts and daily life at the club"
+      },
+      "categories": {
+        "all": "All",
+        "concerts": "Concerts",
+        "events": "Events",
+        "workshops": "Workshops",
+        "trips": "Trips",
+        "gallery": "Gallery",
+        "other": "Other"
+      },
+      "interests": {
+        "choir": "Choir",
+        "dance": "Dance",
+        "creative": "Creative",
+        "trips": "Trips",
+        "social": "Social activities",
+        "educational": "Educational lectures"
+      },
+      "actions": {
+        "like": "Like",
+        "share": "Share",
+        "download": "Download",
+        "likedMessage": "You liked the media with ID: {{itemId}}",
+        "linkCopied": "Link copied to clipboard!"
+      },
+      "stats": {
+        "images": "Images in archive",
+        "videos": "Video recordings",
+        "events": "Documented events",
+        "views": "Total views"
+      },
+      "testimonials": {
+        "title": "What our members say",
+        "subtitle": "The stories of people who make our club a special place",
+        "memberInfo": "{{age}} years old • Member since {{memberSince}}",
+        "default": {
+          "maria": "In this club I found not only hobbies, but also true friends. Every day here is like a holiday!",
+          "georgi": "The choir gives me strength and joy. I have never felt so alive and active!",
+          "elena": "The creative workshops developed talents I didn't know I had. I recommend it to everyone!"
+        }
+      },
+      "cta": {
+        "title": "Want to be part of the next photos?",
+        "subtitle": "Join our club and create unforgettable memories together with us",
+        "becomeMember": "Become a member",
+        "sendPhotos": "Send photos"
+      },
+      "form": {
+        "name": "Your name",
+        "namePlaceholder": "Enter your name",
+        "email": "Email address",
+        "emailPlaceholder": "Enter your email",
+        "phone": "Phone",
+        "phonePlaceholder": "Enter your phone",
+        "age": "Age",
+        "agePlaceholder": "Your age",
+        "experience": "Experience/skills (optional)",
+        "experiencePlaceholder": "Do you have experience in any of the activities?",
+        "message": "Additional message",
+        "messagePlaceholder": "Tell us a little about yourself",
+        "sending": "Sending...",
+        "submitRequest": "Submit request",
+        "sendMessage": "Send message",
+        "cancel": "Cancel",
+        "noMessage": "No additional message",
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "modals": {
+        "membership": {
+          "title": "Membership application",
+          "subtitle": "Fill out the form to become part of our family",
+          "interestsLabel": "What interests you?",
+          "success": {
+            "title": "Application sent!",
+            "message": "Thank you! We will contact you soon."
+          },
+          "emailSubject": "Membership application - {{clubName}}",
+          "emailBody": "Hello,\n\nYou have received a membership application for {{clubName}}:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nAge: {{age}}\nInterests: {{interests}}\nExperience: {{experience}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}"
+        },
+        "photos": {
+          "title": "Send photos",
+          "subtitle": "Share your photos from club events",
+          "eventLabel": "Event/Occasion",
+          "eventPlaceholder": "Which event are the photos from?",
+          "descriptionLabel": "Photo description",
+          "descriptionPlaceholder": "What do the photos show?",
+          "messagePlaceholder": "How will you send the photos? (email, USB, cloud, etc.)",
+          "success": {
+            "title": "Message sent!",
+            "message": "Thank you! We will contact you about the photos."
+          },
+          "emailSubject": "Photo submission - {{clubName}}",
+          "emailBody": "Hello,\n\nYou have received a photo submission request for {{clubName}}:\n\nName: {{name}}\nEmail: {{email}}\nEvent: {{eventName}}\nDescription: {{description}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}\n\nPlease contact {{contactName}} to receive the photos."
+        }
+      },
+      "defaultLocation": "Club hall",
+      "defaultClubLocation": "Club",
+      "defaultImageTitle": "Club photo",
+      "defaultImageDescription": "Memory from the club",
+      "tripTitle": "Trip to {{destination}}"
+    },
+     "CulturalLocation": {
+      "header": {
+        "badge": "Location and access",
+        "title": "How to find us",
+        "subtitle": "Detailed information about location, transport and amenities in the area"
+      },
+      "location": {
+        "defaultAddress": "Address not specified",
+        "defaultMunicipality": "Capital",
+        "defaultRegion": "Sofia-city"
+      },
+      "venue": {
+        "title": "Venue information",
+        "type": "Type",
+        "area": "Area",
+        "capacity": "Capacity",
+        "facilities": "Facilities",
+        "noSize": "Area not specified",
+        "noCapacity": "Capacity not specified",
+        "defaultFacility": "Main hall",
+        "types": {
+          "municipal": "Municipal building",
+          "community": "Community center",
+          "cultural": "Cultural center",
+          "school": "School building",
+          "private": "Private building"
+        }
+      },
+      "tabs": {
+        "map": "Map",
+        "transport": "Transport",
+        "parking": "Parking",
+        "nearby": "Nearby"
+      },
+      "transport": {
+        "instructionsTitle": "Instructions for {{method}}",
+        "walking": {
+          "name": "Walking",
+          "duration": "5-15 min",
+          "description": "From {{city}} center",
+          "instructions": [
+            "Follow the direction signs",
+            "Address: {{address}}",
+            "Look for the building entrance"
+          ]
+        },
+        "bus": {
+          "name": "Bus",
+          "duration": "10-20 min",
+          "description": "Public transport",
+          "instructions": [
+            "Use public transport",
+            "Get off at the nearest stop",
+            "Address: {{address}}"
+          ]
+        },
+        "metro": {
+          "name": "Metro",
+          "duration": "15-25 min",
+          "description": "Metro system",
+          "instructions": [
+            "Use the metro system",
+            "Get off at the nearest station",
+            "Continue on foot to the address"
+          ]
+        },
+        "car": {
+          "name": "Car",
+          "duration": "5-30 min",
+          "description": "Depending on traffic",
+          "instructions": [
+            "Use GPS navigation",
+            "Address: {{address}}, {{city}}",
+            "Look for parking nearby"
+          ]
+        }
+      },
+      "parking": {
+        "type": "Type",
+        "price": "Price",
+        "maxTime": "Max. time",
+        "workingHours": "Working hours",
+        "name": "Name",
+        "distance": "Distance",
+        "capacity": "Capacity",
+        "location": "Location",
+        "street": {
+          "title": "Street parking",
+          "defaultType": "Street parking",
+          "defaultPrice": "Check local rates",
+          "defaultMaxTime": "According to restrictions",
+          "defaultHours": "Check the signs"
+        },
+        "underground": {
+          "title": "Underground parking"
+        },
+        "free": {
+          "title": "Free parking",
+          "defaultLocation": "Streets in the area",
+          "defaultDistance": "Various distances",
+          "defaultNote": "Look for free spaces in nearby streets"
+        }
+      },
+      "accessibility": {
+        "title": "Accessibility",
+        "subtitle": "Information for people with disabilities and limited mobility",
+        "wheelchair": {
+          "name": "Wheelchair access",
+          "available": "Access provided",
+          "limited": "Limited access"
+        },
+        "elevator": {
+          "name": "Elevator",
+          "available": "Elevator available",
+          "unavailable": "No elevator"
+        },
+        "safety": {
+          "name": "Safety",
+          "basic": "Basic safety measures"
+        }
+      },
+      "nearbyPlaces": {
+        "noInfo": "Information not available",
+        "default": {
+          "transport": {
+            "name": "Public transport stop",
+            "description": "Bus lines"
+          },
+          "hospital": {
+            "name": "Medical center",
+            "description": "Emergency medical assistance"
+          }
+        }
+      },
+      "map": {
+        "distance": "Distance",
+        "walkingRadius": "200m walking from the club",
+        "legend": {
+          "club": "Club",
+          "healthcare": "Healthcare",
+          "transport": "Transport",
+          "parking": "Parking"
+        }
+      },
+      "actions": {
+        "route": "Route",
+        "share": "Share",
+        "openingMap": "Opening map...",
+        "addressCopied": "Address copied to clipboard!",
+        "noPhone": "Phone number not available"
+      },
+      "share": {
+        "title": "Location of {{clubName}}"
+      },
+      "help": {
+        "title": "Need help?",
+        "subtitle": "If you have trouble finding the club or need additional information",
+        "call": "Call",
+        "realTimeNavigation": "Real-time navigation"
+      },
+      "units": {
+        "meters": "m",
+        "people": "people"
+      }
+    },
+    "CulturalContacts": {
+      "header": {
+        "badge": "Contacts and connection",
+        "title": "Contact us",
+        "subtitle": "Looking for information or want to join? We are here to help you!"
+      },
+      "status": {
+        "open": "Open now",
+        "closed": "Closed now"
+      },
+      "quickInfo": {
+        "phone": "Phone",
+        "mobile": "Mobile",
+        "email": "Email",
+        "website": "Website"
+      },
+      "methods": {
+        "title": "Contact methods",
+        "visit": {
+          "title": "Visit us",
+          "description": "Come to the club for a personal meeting",
+          "byAppointment": "Working hours: by appointment"
+        },
+        "call": {
+          "title": "Call us",
+          "description": "Instant contact by phone"
+        },
+        "email": {
+          "title": "Send email",
+          "description": "Detailed inquiries and documents"
+        },
+        "online": {
+          "title": "Visit website",
+          "description": "Online information and resources"
+        }
+      },
+      "form": {
+        "title": "Send message",
+        "name": "Full name",
+        "namePlaceholder": "Your name",
+        "email": "Email address",
+        "emailPlaceholder": "email@example.com",
+        "phone": "Phone",
+        "phonePlaceholder": "0888 123 456",
+        "subject": "Subject",
+        "subjectPlaceholder": "Select subject",
+        "message": "Message",
+        "messagePlaceholder": "Write your message here...",
+        "preferredResponse": "Preferred response method",
+        "contactMethods": {
+          "email": "Email",
+          "phone": "Phone"
+        },
+        "subjects": {
+          "membership": "Membership information",
+          "activities": "Activities and programs",
+          "events": "Events and activities",
+          "volunteering": "Volunteering",
+          "complaint": "Complaint or suggestion",
+          "other": "Other"
+        },
+        "sending": "Sending...",
+        "submit": "Send message",
+        "success": "Message sent successfully! We will respond within 24 hours.",
+        "error": "An error occurred while sending. Please try again.",
+        "notSpecified": "Not specified",
+        "inquiry": "Inquiry",
+        "emailSubject": "{{subject}} - {{clubName}}",
+        "emailBody": "Hello,\n\nYou have received a message from {{clubName}}:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nSubject: {{subject}}\nPreferred response: {{contactMethod}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} contact form"
+      },
+      "workingHours": {
+        "title": "Working hours",
+        "closed": "Closed",
+        "days": {
+          "monday": "Monday",
+          "tuesday": "Tuesday",
+          "wednesday": "Wednesday",
+          "thursday": "Thursday",
+          "friday": "Friday",
+          "saturday": "Saturday",
+          "sunday": "Sunday"
+        }
+      },
+      "emergency": {
+        "title": "Important contacts",
+        "mainPhone": "Main phone",
+        "reception": "Club reception",
+        "workingHours": "working hours",
+        "mobilePhone": "Mobile phone",
+        "onDuty": "On duty",
+        "afterHours": "after hours",
+        "chairman": "Chairman"
+      },
+      "social": {
+        "title": "Social media",
+        "follow": "Follow us"
+      },
+      "faq": {
+        "title": "Frequently asked questions",
+        "subtitle": "Find quick answers to the most common questions",
+        "byAgreement": "by agreement",
+        "membership": {
+          "question": "How can I become a club member?",
+          "answerWithFee": "You can register by filling out the membership form or come to the club in person. The monthly fee is {{fee}} BGN.",
+          "answerGeneral": "You can register by filling out the membership form or come to the club in person during working hours."
+        },
+        "fees": {
+          "question": "How much is the monthly fee?",
+          "answerWithYearly": "The monthly fee is {{monthly}} BGN, and the yearly fee is {{yearly}} BGN.",
+          "answerMonthly": "The monthly fee is {{monthly}} BGN."
+        },
+        "ageLimit": {
+          "question": "Are there age restrictions?",
+          "answerWithAge": "The minimum age for membership is {{age}} years.",
+          "answerDefault": "The club is intended for people over 55, but we accept younger members under special circumstances."
+        },
+        "activities": {
+          "question": "What activities do you offer?",
+          "answer": "We offer {{activities}} and many other cultural activities.",
+          "events": "events",
+          "trips": "trips",
+          "classes": "classes"
+        }
+      },
+      "cta": {
+        "title": "Still have questions?",
+        "subtitle": "Our team is ready to help you and answer all your questions",
+        "callNow": "Call now",
+        "visitUs": "Visit us"
+      },
+      "actions": {
+        "noPhone": "Phone number not available",
+        "noAddress": "Address not available"
+      }
+    },
+     "SocialHero": {
+      "badge": "Social club for seniors",
+      "stats": {
+        "members": "Members",
+        "founded": "Founded",
+        "helped": "Helped",
+        "donationsDistributed": "Distributed"
+      },
+      "actions": {
+        "watchVideo": "Watch video",
+        "visitUs": "Visit us",
+        "writeUs": "Write to us",
+        "locationInfo": "Location information can be found in the contact details."
+      },
+      "scroll": {
+        "learnMore": "Learn more"
+      },
+      "video": {
+        "notSupported": "Your browser does not support the video element.",
+        "defaultTitle": "Video from the club",
+        "duration": "Duration",
+        "type": "Type"
+      },
+      "email": {
+        "subject": "Inquiry to {{clubName}}",
+        "body": "Hello,\n\nYou have received a new message from the {{clubName}} website:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}",
+        "modal": {
+          "title": "Contact us",
+          "subtitle": "Send us a message and we will respond as soon as possible"
+        }
+      },
+      "form": {
+        "name": "Your name",
+        "namePlaceholder": "Enter your name",
+        "email": "Email address",
+        "emailPlaceholder": "Enter your email",
+        "phone": "Phone (optional)",
+        "phonePlaceholder": "Enter your phone",
+        "message": "Message",
+        "messagePlaceholder": "What would you like to share with us?",
+        "sending": "Sending...",
+        "submit": "Send message",
+        "cancel": "Cancel",
+        "notSpecified": "Not specified",
+        "success": {
+          "title": "Message sent!",
+          "message": "Thank you! We will contact you soon."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "members": {
+        "ourMembers": "Our members",
+        "copyError": "Copy error:",
+        "copyName": "Copy name",
+        "copyPhone": "Copy phone",
+        "copyEmail": "Copy email",
+        "copyAddress": "Copy address",
+        "memberSince": "Member since",
+        "modal": {
+          "title": "Club members",
+          "subtitle": "Our friendly community of {{count}} {{memberWord}}"
+        },
+        "search": {
+          "placeholder": "Search by name, phone or email...",
+          "clear": "Clear search",
+          "noResults": "No results found for \"{{term}}\"",
+          "foundOne": "Found 1 member",
+          "foundMany": "Found {{count}} members",
+          "noResultsTitle": "No results found",
+          "noResultsMessage": "Try different keywords or clear the search.",
+          "clearSearch": "Clear search"
+        },
+        "noMembers": {
+          "title": "No registered members",
+          "message": "No members have been added to the system yet."
+        }
+      }
+    },
+    "SocialAbout": {
+      "header": {
+        "badge": "About our club",
+        "title": "Our mission and values"
+      },
+      "story": {
+        "title": "Our story",
+        "foundedIn": "Founded in {{year}}"
+      },
+      "stats": {
+        "title": "Our impact",
+        "activeMembers": "Active members",
+        "yearsActive": "Years active",
+        "programs": "Programs",
+        "helpedPeople": "People helped"
+      },
+      "benefits": {
+        "title": "Membership benefits"
+      },
+      "membership": {
+        "title": "How to join",
+        "fee": {
+          "title": "Membership fee",
+          "monthly": "monthly",
+          "yearly": "yearly"
+        }
+      },
+      "services": {
+        "title": "Our services",
+        "homeVisits": "Home visits",
+        "shoppingAssistance": "Shopping assistance",
+        "documentHelp": "Document help",
+        "companionship": "Companionship",
+        "transportService": "Transport services",
+        "mealDelivery": "Meal delivery",
+        "cleaningHelp": "Cleaning help",
+        "healthServices": "Health services"
+      },
+      "impact": {
+        "title": "Our social impact",
+        "subtitle": "How we make a difference in the community",
+        "volunteering": {
+          "title": "Volunteering",
+          "participants": "{{count}} participants",
+          "coordinator": "Coordinator",
+          "hoursPerMonth": "{{hours}} hours per month"
+        },
+        "projects": {
+          "title": "Community projects",
+          "beneficiaries": "{{count}} beneficiaries"
+        },
+        "projectStatus": {
+          "active": "active",
+          "completed": "completed",
+          "pending": "pending",
+          "cancelled": "cancelled"
+        }
+      },
+      "achievements": {
+        "title": "Our achievements",
+        "subtitle": "Recognition for our work",
+        "awards": {
+          "title": "Awards"
+        },
+        "recognitions": {
+          "title": "Recognitions"
+        }
+      }
+    },
+     "SocialProjects": {
+      "header": {
+        "badge": "Our projects",
+        "title": "How we make a difference",
+        "subtitle": "Discover the ways our club helps the community and makes the world a better place"
+      },
+      "stats": {
+        "activeProjects": "Active projects",
+        "helpedPeople": "People helped",
+        "donations": "donations"
+      },
+      "search": {
+        "placeholder": "Search for a project..."
+      },
+      "filters": {
+        "all": "All",
+        "community": "Community",
+        "volunteering": "Volunteering",
+        "events": "Events",
+        "health": "Healthcare",
+        "support": "Support",
+        "education": "Education"
+      },
+      "status": {
+        "active": "active",
+        "planned": "planned",
+        "completed": "completed",
+        "seasonal": "seasonal"
+      },
+      "metrics": {
+        "people": "{{count}} people",
+        "participants": "{{count}} participants"
+      },
+      "actions": {
+        "viewMore": "View more"
+      },
+      "details": {
+        "duration": "Duration",
+        "coordinator": "Coordinator",
+        "impact": "Impact",
+        "date": "Date",
+        "time": "Time",
+        "permanent": "Permanent",
+        "oneTime": "One-time",
+        "clubManagement": "Club management",
+        "helpedPeople": "{{count}} people helped",
+        "hoursPerMonth": "{{hours}} hours per month",
+        "participants": "{{count}} participants"
+      },
+      "volunteer": {
+        "description": "Volunteer activity with {{participants}} participants"
+      },
+      "categories": {
+        "healthTerms": ["health", "medical"],
+        "educationTerms": ["education", "learning"],
+        "supportTerms": ["home", "support"],
+        "volunteerSupportTerms": ["lonely", "home", "food", "meal"],
+        "volunteerHealthTerms": ["medicine", "health"]
+      },
+      "noResults": {
+        "title": "No projects found",
+        "message": "Try different search criteria",
+        "showAll": "Show all projects"
+      },
+      "modal": {
+        "coordinator": "Coordinator"
+      },
+      "currency": "BGN"
+    },
+     "SocialVolunteering": {
+      "header": {
+        "badge": "Volunteering",
+        "title": "Together we make a difference",
+        "subtitle": "Our volunteers are the heart of every change in the community"
+      },
+      "stats": {
+        "volunteers": "Volunteers",
+        "hoursPerMonth": "Hours per month",
+        "activePrograms": "Active programs"
+      },
+      "tabs": {
+        "programs": "Our programs",
+        "volunteers": "Our volunteers",
+        "join": "Join us"
+      },
+      "programTypes": {
+        "community": "Community",
+        "special": "Special"
+      },
+      "impact": {
+        "hoursPerMonth": "{{hours}} hours per month",
+        "hoursPerWeek": "{{hours}} hours per week",
+        "permanent": "Ongoing activity"
+      },
+      "metrics": {
+        "volunteers": "{{count}} volunteers",
+        "coordinator": "Coordinator"
+      },
+      "categories": {
+        "elderlyTerms": ["lonely", "elderly"],
+        "foodTerms": ["food", "meal"],
+        "healthTerms": ["medicine", "health"],
+        "homeTerms": ["home", "cleaning"]
+      },
+      "volunteers": {
+        "introTitle": "Meet our coordinators",
+        "introSubtitle": "The people who make our volunteer programs possible",
+        "noVolunteers": {
+          "title": "Volunteer information not available",
+          "message": "Contact us for more information about our volunteers"
+        }
+      },
+      "join": {
+        "header": {
+          "title": "Become part of the change",
+          "subtitle": "Everyone can make a difference in someone's life"
+        },
+        "steps": {
+          "step1": {
+            "title": "Register",
+            "description": "Fill out the registration form and share your interests"
+          },
+          "step2": {
+            "title": "We'll contact you",
+            "description": "We will reach out to discuss opportunities and answer your questions"
+          },
+          "step3": {
+            "title": "Start helping",
+            "description": "Begin your volunteer journey and make a difference"
+          }
+        },
+        "cta": {
+          "title": "Ready to get involved?",
+          "register": "Register",
+          "call": "Call us",
+          "email": "Write to us",
+          "emailSubject": "I want to become a volunteer",
+          "note": "No prior experience needed - we'll train you in everything necessary!"
+        }
+      },
+      "modal": {
+        "coordinatesPrograms": "Coordinates programs",
+        "contact": "Contact"
+      },
+      "form": {
+        "title": "Register as a volunteer",
+        "subtitle": "Share more about yourself and how you want to help",
+        "name": "Your name",
+        "namePlaceholder": "Enter your name",
+        "email": "Email address",
+        "emailPlaceholder": "Enter your email",
+        "phone": "Phone",
+        "phonePlaceholder": "Enter your phone",
+        "age": "Age",
+        "agePlaceholder": "Your age",
+        "experience": "Previous volunteer experience",
+        "experiencePlaceholder": "Tell us about your previous experience (or write 'None' if you're a beginner)",
+        "interestsLabel": "What areas would you like to help with?",
+        "interests": {
+          "elderlycare": "Elderly care",
+          "foodHelp": "Food and shopping assistance",
+          "transport": "Transport and companionship",
+          "health": "Health assistance",
+          "homeHelp": "Home help",
+          "education": "Educational activities",
+          "events": "Event organization",
+          "technical": "Technical support"
+        },
+        "availabilityLabel": "When are you available?",
+        "availability": {
+          "placeholder": "Select availability",
+          "weekdays": "Weekdays",
+          "weekends": "Weekends",
+          "evenings": "Evenings",
+          "flexible": "Flexible time",
+          "emergency": "Emergency situations"
+        },
+        "message": "Additional message",
+        "messagePlaceholder": "Share what motivates you to become a volunteer...",
+        "sending": "Sending...",
+        "submit": "Submit application",
+        "cancel": "Cancel",
+        "success": {
+          "title": "Application sent successfully!",
+          "message": "Thank you for your interest! We will contact you as soon as possible."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "email": {
+        "subject": "Volunteer application - {{name}}",
+        "body": "Hello,\n\nYou have received a new volunteer application:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nAge: {{age}}\n\nPrevious experience: {{experience}}\nAreas of interest: {{interests}}\nAvailability: {{availability}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website"
+      }
+    },
+     "SocialSupport": {
+      "header": {
+        "badge": "Our services",
+        "title": "We care for your needs",
+        "subtitle": "Discover all the services and support we offer to our members"
+      },
+      "stats": {
+        "availableServices": "Available services",
+        "emergencyHelp": "Emergency help"
+      },
+      "search": {
+        "placeholder": "Search for a service..."
+      },
+      "categories": {
+        "all": "All",
+        "health": "Healthcare",
+        "home": "Home services",
+        "daily": "Daily needs",
+        "social": "Social",
+        "transport": "Transport",
+        "emergency": "Emergency",
+        "accessibility": "Accessibility"
+      },
+      "services": {
+        "homeVisits": {
+          "name": "Home visits",
+          "description": "Regular home visits for companionship and support",
+          "details": "Our volunteers visit lonely members for conversation and moral support"
+        },
+        "shopping": {
+          "name": "Shopping assistance",
+          "description": "Accompaniment or shopping on your behalf",
+          "details": "We help with daily shopping and accompany you to stores"
+        },
+        "documents": {
+          "name": "Document assistance",
+          "description": "Help with filling out documents and applications",
+          "details": "We help with administrative procedures and documents"
+        },
+        "companionship": {
+          "name": "Companionship",
+          "description": "Company for visits and walks",
+          "details": "We accompany you to doctor visits, meetings or walks"
+        },
+        "transport": {
+          "name": "Transport services",
+          "description": "Transportation to important destinations",
+          "details": "We provide transport to hospital, pharmacy and other important places"
+        },
+        "meals": {
+          "name": "Meal delivery",
+          "description": "Hot meals delivered to your home",
+          "details": "We prepare and deliver hot lunches for members in need"
+        },
+        "cleaning": {
+          "name": "Cleaning help",
+          "description": "Assistance with household tasks",
+          "details": "We help with basic cleaning and household chores"
+        },
+        "tech": {
+          "name": "Technical support",
+          "description": "Help with computers and technology",
+          "details": "Training and assistance with using technology"
+        },
+        "checkups": {
+          "name": "Regular health checkups",
+          "description": "Organized medical examinations",
+          "details": "We coordinate regular health checkups with medical partners"
+        },
+        "bloodPressure": {
+          "name": "Blood pressure monitoring",
+          "description": "Regular blood pressure monitoring",
+          "details": "Free blood pressure measurement and tracking"
+        },
+        "healthLectures": {
+          "name": "Health lectures",
+          "description": "Educational health lectures",
+          "details": "We conduct {{count}} types of health lectures"
+        },
+        "accessibility": {
+          "name": "Accessibility and amenities",
+          "description": "Accommodations for people with disabilities",
+          "details": "Our club is equipped with amenities for everyone"
+        },
+        "emergency": {
+          "name": "Emergency assistance",
+          "description": "Emergency response protocol",
+          "details": "We have an established protocol for emergency situations"
+        }
+      },
+      "accessibility": {
+        "wheelchairAccess": "Wheelchair access",
+        "elevatorAccess": "Elevator access",
+        "hearingLoop": "Hearing equipment",
+        "largeTextMaterials": "Large text materials",
+        "handrails": "Handrails and supports",
+        "nonSlipFloors": "Non-slip floors",
+        "goodLighting": "Good lighting",
+        "restingAreas": "Resting areas"
+      },
+      "actions": {
+        "learnMore": "Learn more"
+      },
+      "details": {
+        "availableLectures": "Available lectures",
+        "lecturer": "Lecturer",
+        "frequency": "Frequency",
+        "availableFeatures": "Available features"
+      },
+      "emergency": {
+        "title": "In case of emergency",
+        "contacts": "Emergency contacts",
+        "nearestHospital": "Nearest hospital",
+        "ambulance": "Emergency services",
+        "club": "Club"
+      },
+      "noResults": {
+        "title": "No services found",
+        "message": "Try different search criteria",
+        "showAll": "Show all services"
+      }
+    },
+    "SocialImpact": {
+      "header": {
+        "badge": "Our impact",
+        "title": "We measure the change we make",
+        "subtitle": "Every number tells a story about people we've helped and the community we've supported"
+      },
+      "yearsActive": "years of activity",
+      "metrics": {
+        "beneficiaries": {
+          "label": "People helped",
+          "description": "Total number of people who have received help from our programs",
+          "period": "this year"
+        },
+        "volunteers": {
+          "label": "Active volunteers",
+          "description": "Number of people actively participating in our volunteer programs",
+          "period": "compared to last year"
+        },
+        "hours": {
+          "label": "Volunteer hours",
+          "description": "Total hours worked by volunteers during the year",
+          "period": "monthly average"
+        },
+        "projects": {
+          "label": "Active projects",
+          "description": "Number of programs and projects currently being implemented",
+          "period": "new projects"
+        }
+      },
+      "projects": {
+        "title": "Impact projects",
+        "beneficiaries": "{{count}} people"
+      },
+      "partnerships": {
+        "title": "Partner network"
+      },
+      "timeline": {
+        "title": "Our development over the years",
+        "founding": {
+          "title": "Club founding",
+          "description": "We started our journey with the mission to help the community"
+        },
+        "awardedBy": "by",
+        "current": {
+          "title": "Moving forward",
+          "description": "With {{beneficiaries}} people helped and {{programs}} active programs",
+          "many": "many"
+        }
+      },
+      "projectStatus": {
+        "active": "active",
+        "completed": "completed",
+        "planned": "planned"
+      },
+      "categories": {
+        "homeTerms": ["home", "warm"],
+        "foodTerms": ["food", "meal"],
+        "healthTerms": ["health", "medical"],
+        "educationTerms": ["education", "learning"],
+        "environmentTerms": ["environment", "park"]
+      },
+      "cta": {
+        "title": "Become part of the change",
+        "description": "Every number represents a real person who has received help. Join us and help increase these numbers.",
+        "joinUs": "Join us",
+        "learnMore": "Learn more"
+      },
+      "modals": {
+        "join": {
+          "title": "Join the change",
+          "description": "Choose how you want to help our cause",
+          "becomeVolunteer": "Become a volunteer",
+          "callUs": "Call us",
+          "financialSupport": "Financial support",
+          "volunteerEmailSubject": "I want to become a volunteer",
+          "volunteerEmailBody": "Hello,\n\nI want to become a volunteer in the club's activities.\n\nPlease contact me for more information.\n\nThank you!",
+          "donationEmailSubject": "I want to provide financial support",
+          "donationEmailBody": "Hello,\n\nI want to financially support the club's activities.\n\nPlease give me information about donation methods.\n\nThank you!"
+        },
+        "info": {
+          "title": "Learn more about our impact",
+          "description": "Discover how we work and how you can get involved",
+          "howWeWork": {
+            "title": "How we work",
+            "description": "We work directly with the community, providing services and support where there is the greatest need. All our programs are aimed at improving the quality of life of our members."
+          },
+          "yourContribution": {
+            "title": "Your contribution",
+            "description": "Every donation and every volunteer hour is used most effectively to help those in need. Transparency is an important principle in our work."
+          },
+          "results": {
+            "title": "Results",
+            "description": "Thanks to the support of people like you, we manage to change the lives of more and more people every year."
+          },
+          "writeToUs": "Write to us",
+          "emailSubject": "I want more information",
+          "emailBody": "Hello,\n\nI want to receive more information about the club's activities and ways to get involved.\n\nThank you!"
+        }
+      },
+      "currency": "BGN"
+    },
+     "CommunityEvents": {
+      "header": {
+        "badge": "Events and activities",
+        "title": "Together we make every day more special",
+        "subtitle": "Discover all the events, activities and programs waiting for you at our club"
+      },
+      "stats": {
+        "totalEvents": "Total events",
+        "upcoming": "Upcoming"
+      },
+      "viewModes": {
+        "list": "List",
+        "calendar": "Calendar"
+      },
+      "categories": {
+        "all": "All",
+        "music": "Music",
+        "food": "Food",
+        "health": "Health",
+        "education": "Education",
+        "entertainment": "Entertainment",
+        "celebration": "Celebrations",
+        "volunteer": "Volunteering",
+        "sports": "Sports",
+        "culture": "Culture",
+        "nature": "Nature"
+      },
+      "categoryTerms": {
+        "music": ["concert", "music"],
+        "food": ["food", "meal", "culinary"],
+        "health": ["health", "lecture", "medical"],
+        "education": ["education", "lesson", "course"],
+        "entertainment": ["game", "entertainment", "contest"],
+        "celebration": ["celebration", "birthday", "ceremony"],
+        "volunteer": ["volunteer", "help", "charity"],
+        "sports": ["sport", "physical", "exercise"],
+        "culture": ["exhibition", "theater", "cultural"],
+        "nature": ["nature", "walk", "excursion"]
+      },
+      "statuses": {
+        "today": "Today",
+        "soon": "Soon",
+        "upcoming": "Upcoming",
+        "recurring": "Recurring",
+        "ongoing": "Ongoing",
+        "active": "In season",
+        "inactive": "Out of season",
+        "past": "Past",
+        "unknown": "Unknown"
+      },
+      "types": {
+        "upcoming": "Event",
+        "recurring": "Recurring",
+        "regular": "Activity",
+        "seasonal": "Seasonal"
+      },
+      "seasons": {
+        "spring": "spring",
+        "summer": "summer",
+        "autumn": "autumn",
+        "winter": "winter"
+      },
+      "seasonMonths": {
+        "spring": [2, 3, 4],
+        "summer": [5, 6, 7],
+        "autumn": [8, 9, 10],
+        "winter": [11, 0, 1]
+      },
+      "details": {
+        "participants": "{{count}} participants"
+      },
+      "calendar": {
+        "comingSoon": "Calendar view will be added soon",
+        "backToList": "Back to list"
+      },
+      "noEvents": {
+        "title": "No events in this category",
+        "message": "Try a different filter or contact us for upcoming activities",
+        "showAll": "Show all events"
+      },
+      "modal": {
+        "callUs": "Call us",
+        "writeToUs": "Write to us"
+      },
+      "contact": {
+        "title": "Contact us",
+        "subtitle": "Have questions about our events? Write to us!",
+        "subjectWithEvent": "Interest in {{eventName}}",
+        "subjectGeneral": "Question about events",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "subject": "Subject",
+          "subjectPlaceholder": "Subject of your message",
+          "message": "Message",
+          "messagePlaceholder": "Write your message here...",
+          "sending": "Sending...",
+          "submit": "Send message",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Message sent successfully!",
+          "message": "Thank you for your interest! We will contact you as soon as possible."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        },
+        "emailBody": "Hello,\n\nYou have received a new message from the website:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\n\nSubject: {{subject}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website"
+      }
+    },
+    "SocialGallery": {
+      "header": {
+        "badge": "Our gallery",
+        "title": "Moments we share together",
+        "subtitle": "Browse photos and videos from our events, activities and daily life at the club"
+      },
+      "stats": {
+        "photos": "Photos",
+        "videos": "Videos"
+      },
+      "search": {
+        "placeholder": "Search photos and videos..."
+      },
+      "viewModes": {
+        "grid": "Grid",
+        "masonry": "Masonry"
+      },
+      "categories": {
+        "all": "All",
+        "events": "Events",
+        "impact": "Impact",
+        "activities": "Activities",
+        "general": "General"
+      },
+      "defaultAlt": {
+        "photo": "Photo from gallery",
+        "video": "Video from gallery"
+      },
+      "noResults": {
+        "title": "No photos or videos found",
+        "message": "Try different search criteria",
+        "showAll": "Show all"
+      },
+      "lightbox": {
+        "counter": "{{current}} of {{total}}"
+      }
+    },
+    "SocialPartnerships": {
+      "header": {
+        "badge": "Our partners",
+        "title": "Together we are stronger",
+        "subtitle": "Discover the organizations and institutions we work with to achieve our goals"
+      },
+      "stats": {
+        "partners": "Partners",
+        "strategic": "Strategic"
+      },
+      "search": {
+        "placeholder": "Search for partner or organization..."
+      },
+      "viewModes": {
+        "cards": "Cards",
+        "network": "Network"
+      },
+      "categories": {
+        "all": "All",
+        "government": "Government",
+        "healthcare": "Healthcare",
+        "education": "Education",
+        "business": "Business",
+        "ngo": "NGO",
+        "culture": "Culture",
+        "sponsor": "Sponsors"
+      },
+      "categoryTerms": {
+        "sponsor": {
+          "type": ["sponsor", "спонсор"],
+          "name": []
+        },
+        "government": {
+          "type": ["government", "municipal", "държав", "общин"],
+          "name": ["municipal", "city hall", "общин", "кметств"]
+        },
+        "healthcare": {
+          "type": ["medical", "hospital", "health", "медицин", "болниц"],
+          "name": ["hospital", "clinic", "болниц", "поликлиник"]
+        },
+        "education": {
+          "type": ["education", "school", "university", "образов", "школа", "университ"],
+          "name": ["school", "university", "училищ", "университ"]
+        },
+        "business": {
+          "type": ["business", "company", "corporate", "бизнес", "фирма", "компани"],
+          "name": []
+        },
+        "ngo": {
+          "type": ["ngo", "organization", "nonprofit", "нпо"],
+          "name": ["club", "association", "клуб", "сдружение"]
+        },
+        "culture": {
+          "type": ["culture", "arts", "cultural", "култур", "изкуств"],
+          "name": []
+        }
+      },
+      "priorityTerms": {
+        "high": ["strategic", "sponsor", "стратег", "спонсор"],
+        "medium": ["long-term", "дългосроч"]
+      },
+      "details": {
+        "since": "Since",
+        "jointProjects": "Joint projects",
+        "achievements": "Achievements"
+      },
+      "actions": {
+        "showMore": "Show more",
+        "hideDetails": "Hide details"
+      },
+      "contact": {
+        "website": "Website",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "noResults": {
+        "title": "No partners found",
+        "message": "Try different search criteria",
+        "showAll": "Show all partners"
+      }
+    },
+      "SocialLocation": {
+      "defaultCity": "Sofia",
+      "header": {
+        "badge": "Our location",
+        "title": "Find us easily",
+        "subtitle": "View our location and how you can reach us"
+      },
+      "actions": {
+        "directions": "Directions",
+        "googleMaps": "Google Maps",
+        "copyCoordinates": "Copy coordinates"
+      },
+      "map": {
+        "title": "Location",
+        "openInMaps": "Open in Google Maps"
+      },
+      "tabs": {
+        "address": "Address",
+        "contact": "Contact",
+        "hours": "Hours"
+      },
+      "address": {
+        "title": "Our address"
+      },
+      "contact": {
+        "title": "Contact us",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "hours": {
+        "title": "Working hours",
+        "note": "Please contact us before visiting for current information"
+      },
+      "tooltips": {
+        "copyAddress": "Copy address",
+        "copyPhone": "Copy phone",
+        "copyEmail": "Copy email"
+      },
+      "copyLabels": {
+        "address": "address",
+        "phone": "phone",
+        "email": "email",
+        "coordinates": "coordinates"
+      },
+      "copySuccess": "Copied {{item}}!"
+    },
+    "SocialContacts": {
+      "header": {
+        "badge": "Contact us",
+        "title": "We're here to help you",
+        "subtitle": "Have questions or need help? Contact us in the way that's convenient for you"
+      },
+      "quickActions": {
+        "call": "Call us",
+        "writeToUs": "Write to us"
+      },
+      "sections": {
+        "primaryContacts": "Primary contacts",
+        "workingHours": "Working hours",
+        "keyContacts": "Key contacts",
+        "socialMedia": "Social media",
+        "faq": "Frequently asked questions"
+      },
+      "contact": {
+        "phone": "Phone",
+        "phoneDescription": "Call us for quick help",
+        "email": "Email",
+        "emailDescription": "Write to us for detailed questions",
+        "address": "Address",
+        "addressDescription": "Visit us in person"
+      },
+      "tooltips": {
+        "copyPhone": "Copy phone",
+        "copyEmail": "Copy email",
+        "copyAddress": "Copy address"
+      },
+      "copyLabels": {
+        "phone": "phone",
+        "email": "email",
+        "address": "address"
+      },
+      "copySuccess": "Copied {{item}}!",
+      "workingHours": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "contactTypes": {
+        "general": "General question",
+        "membership": "Membership",
+        "services": "Services",
+        "events": "Events",
+        "support": "Support",
+        "other": "Other"
+      },
+      "defaultFaq": {
+        "membership": {
+          "question": "How can I become a club member?",
+          "answer": "Contact us by phone or email for information about the membership procedure."
+        },
+        "services": {
+          "question": "What services do you offer?",
+          "answer": "We offer a wide range of services for our members. For more information, check the \"Our Services\" section."
+        },
+        "hours": {
+          "question": "What are the working hours?",
+          "answer": "You can see our working hours in the contacts section or contact us directly."
+        }
+      },
+      "form": {
+        "title": "Contact us",
+        "subtitle": "Send us a message and we'll respond as soon as possible",
+        "name": "Your name",
+        "namePlaceholder": "Enter your name",
+        "email": "Email address",
+        "emailPlaceholder": "Enter your email",
+        "phone": "Phone",
+        "phonePlaceholder": "Enter your phone",
+        "type": "Inquiry type",
+        "subject": "Subject",
+        "subjectPlaceholder": "Subject of your message",
+        "message": "Message",
+        "messagePlaceholder": "Write your message here...",
+        "sending": "Sending...",
+        "submit": "Send message",
+        "cancel": "Cancel",
+        "success": {
+          "title": "Message sent successfully!",
+          "message": "Thank you! We will contact you as soon as possible."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "emailTemplate": "Hello,\n\nYou have received a new message from the website:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nInquiry type: {{type}}\n\nSubject: {{subject}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website"
+    },
+     "SportsHero": {
+      "badge": "Active aging",
+      "actions": {
+        "writeToUs": "Write to us",
+        "callUs": "Call us"
+      },
+      "quickInfo": {
+        "open": "Open"
+      },
+      "placeholder": {
+        "title": "Sports for everyone",
+        "subtitle": "Together towards a healthier life"
+      },
+      "defaultAchievement": "Certified sports club",
+      "stats": {
+        "activeMembers": "Active members",
+        "programs": "Programs",
+        "competitions": "Competitions",
+        "workoutsPerWeek": "Workouts/week",
+        "yearsActive": "Years active"
+      },
+      "activityIconTerms": {
+        "yoga": ["yoga", "meditation"],
+        "cardio": ["aerobics", "pool", "swimming"],
+        "strength": ["strength", "fitness", "gym"],
+        "running": ["walking", "running", "jogging"],
+        "dance": ["dance", "dancing"]
+      },
+      "membersButton": "Members ({{count}})",
+      "members": {
+        "single": "member",
+        "plural": "members"
+      },
+      "popularPrograms": {
+        "title": "Popular programs",
+        "participants": "{{count}} participants",
+        "enrollTooltip": "Enroll for workout"
+      },
+      "videos": {
+        "title": "See us in action"
+      },
+      "cta": {
+        "title": "Ready for change?",
+        "subtitle": "Start your journey towards a healthier and more active life",
+        "writeToUs": "Write to us",
+        "enrollForWorkout": "Enroll for workout"
+      },
+      "contactModal": {
+        "title": "Contact us",
+        "subtitle": "Have questions? Write to us and we'll respond as soon as possible!",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "message": "Message",
+          "messagePlaceholder": "Write your message here...",
+          "sending": "Sending...",
+          "submit": "Send message",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Message sent successfully!",
+          "message": "Thank you! We will contact you as soon as possible."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "enrollModal": {
+        "title": "Enroll for workout",
+        "selectedProgram": "Enrollment request for <strong>{{programName}}</strong>",
+        "selectProgram": "Choose a program and fill out the enrollment form",
+        "chooseProgram": "Choose program",
+        "chosenProgram": "Selected program",
+        "instructor": "Instructor",
+        "changeProgram": "Change",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "age": "Age",
+          "agePlaceholder": "Your age",
+          "experience": "Sports experience",
+          "healthRestrictions": "Health restrictions",
+          "healthPlaceholder": "Mention if you have health problems or restrictions (optional)",
+          "sending": "Sending...",
+          "submit": "Send request",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Request sent successfully!",
+          "message": "Thank you! We will contact you to confirm enrollment."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "experienceLevels": {
+        "select": "Select level",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "expert": "Expert"
+      },
+      "membersModal": {
+        "title": "Club members",
+        "total": "Total {{count}} {{label}}",
+        "copyName": "Copy name",
+        "copyPhone": "Copy phone",
+        "copyEmail": "Copy email",
+        "copyAddress": "Copy address",
+        "memberSince": "Member since"
+      },
+      "contactEmail": {
+        "subject": "Inquiry from {{name}} - {{clubName}}",
+        "body": "Hello,\n\nYou have received a new message from the website:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website"
+      },
+      "enrollEmail": {
+        "subject": "Enrollment request - {{programName}}",
+        "body": "Hello,\n\nYou have received a new enrollment request for the program:\n\nPROGRAM: {{programName}}\nDay: {{day}}\nTime: {{time}}\nInstructor: {{instructor}}\n\nCANDIDATE DATA:\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nAge: {{age}}\nSports experience: {{experience}}\nHealth problems: {{healthConditions}}\n\nPlease contact the candidate to finalize enrollment.\n\n---\nSent from {{clubName}} website",
+        "noInstructor": "Not specified",
+        "noHealthIssues": "None"
+      }
+    },
+    "SportsAbout": {
+      "header": {
+        "badge": "About our club",
+        "title": "Your health is our priority",
+        "subtitle": "Discover how we help our members stay active, healthy and happy"
+      },
+      "sections": {
+        "mission": "Mission",
+        "facilities": "Facilities",
+        "safety": "Safety",
+        "instructors": "Team"
+      },
+      "foundedYear": "Founded in {{year}} ({{yearsActive}} years of activity)",
+      "facilityTerms": {
+        "aquatic": ["pool", "water", "swimming"],
+        "fitness": ["fitness", "gym", "equipment"],
+        "wellness": ["sauna", "spa", "massage"],
+        "support": ["changing", "room", "office"]
+      },
+      "facilityIconTerms": {
+        "swimming": ["pool", "swimming"],
+        "fitness": ["fitness", "gym", "equipment"],
+        "wellness": ["sauna", "spa"],
+        "sports": ["hall", "room"],
+        "changing": ["changing", "locker"],
+        "medical": ["therapeutic", "medical"]
+      },
+      "facilityDescriptions": {
+        "swimming": "Suitable for water aerobics and swimming",
+        "fitness": "Modern equipment for strength training",
+        "wellness": "For relaxation and recovery",
+        "sports": "Spacious hall for group activities",
+        "changing": "Comfortable rooms with showers",
+        "medical": "For rehabilitation and therapeutic gymnastics",
+        "default": "Part of the sports complex"
+      },
+      "instructorKeywords": ["trainer", "instructor", "fitness", "sports", "coach"],
+      "intensityLevels": {
+        "low": "low",
+        "medium": "medium",
+        "high": "high"
+      },
+      "safetyFeatures": {
+        "regularCheckups": "Regular health checkups",
+        "bloodPressureMonitoring": "Blood pressure monitoring",
+        "emergencyPlan": "Emergency action plan",
+        "wheelchairAccess": "Wheelchair access",
+        "barrierFree": "Barrier-free environment"
+      },
+      "mission": {
+        "title": "Our mission",
+        "membershipBenefits": "Membership benefits",
+        "specialPrograms": "Specialized programs",
+        "intensity": "Intensity",
+        "suitableFor": "Suitable for"
+      },
+      "facilities": {
+        "title": "Our facilities",
+        "subtitle": "Modern equipment and amenities for all your sports needs",
+        "totalArea": "Total area",
+        "capacity": "Capacity"
+      },
+      "safety": {
+        "title": "Safety and health",
+        "subtitle": "Your safety and health are our main priority",
+        "measures": "Safety measures",
+        "medicalPartners": "Medical partners",
+        "emergencyHelp": "Emergency help",
+        "nearestHospital": "Nearest hospital"
+      },
+      "instructors": {
+        "title": "Our team",
+        "subtitle": "Professional instructors and specialists caring for your health",
+        "ourTeam": "Our team",
+        "teamDescription": "We have experienced specialists who will help you achieve your goals.",
+        "activitiesWithInstructors": "Activities with instructors",
+        "instructor": "Instructor"
+      }
+    },
+    "SportsActivities": {
+      "header": {
+        "badge": "Programs and activities",
+        "title": "Diverse programs for all levels",
+        "subtitle": "Discover activities that suit you and start your workouts today"
+      },
+      "tabs": {
+        "weekly": "Weekly schedule",
+        "all": "All programs",
+        "events": "Events",
+        "courses": "Courses"
+      },
+      "weekDays": {
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday"
+      },
+      "weekDaysShort": {
+        "sunday": "Sun",
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat"
+      },
+      "dayMappings": {
+        "monday": "monday",
+        "tuesday": "tuesday",
+        "wednesday": "wednesday",
+        "thursday": "thursday",
+        "friday": "friday",
+        "saturday": "saturday",
+        "sunday": "sunday",
+        "every day": "daily"
+      },
+      "activityIconTerms": {
+        "yoga": ["yoga", "meditation"],
+        "cardio": ["aerobics", "pool", "swimming"],
+        "strength": ["strength", "fitness", "gym"],
+        "running": ["walking", "running", "marathon"],
+        "dance": ["dance"],
+        "gymnastics": ["gymnastics"],
+        "mountain": ["mountain", "hiking"]
+      },
+      "activityColorTerms": {
+        "yoga": ["yoga", "meditation"],
+        "cardio": ["aerobics", "pool"],
+        "strength": ["strength", "fitness"],
+        "running": ["walking", "running"],
+        "dance": ["dance"],
+        "gymnastics": ["gymnastics"]
+      },
+      "intensityTerms": {
+        "low": ["yoga", "meditation", "light"],
+        "high": ["strength", "running", "intensive"]
+      },
+      "intensityLabels": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "experienceLevels": {
+        "select": "Select level",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "expert": "Expert"
+      },
+      "actions": {
+        "enroll": "Enroll"
+      },
+      "weekly": {
+        "title": "Weekly workout schedule",
+        "subtitle": "Select a day to see activities",
+        "flexibleTime": "Flexible time",
+        "noActivities": "No scheduled activities",
+        "noActivitiesDescription": "There are no workouts on this day or they have flexible timing"
+      },
+      "all": {
+        "searchPlaceholder": "Search activity, instructor...",
+        "filters": {
+          "allLevels": "All levels",
+          "lowIntensity": "Low intensity",
+          "mediumIntensity": "Medium intensity",
+          "highIntensity": "High intensity"
+        },
+        "participants": "{{count}} participants",
+        "noResults": "No programs found",
+        "noResultsDescription": "Try different search criteria"
+      },
+      "events": {
+        "title": "Upcoming events",
+        "subtitle": "Special activities and competitions",
+        "defaultType": "Event",
+        "participants": "{{count}} participants",
+        "noEvents": "No scheduled events",
+        "noEventsDescription": "Watch for new sports events and competitions",
+        "sportsTrips": "Sports trips",
+        "currency": "$"
+      },
+      "courses": {
+        "title": "Specialized courses",
+        "subtitle": "Training and educational programs",
+        "participants": "{{count}} participants",
+        "noCourses": "No active courses",
+        "noCoursesDescription": "Watch for new educational programs"
+      },
+      "enrollModal": {
+        "title": "Enroll for {{activityName}}",
+        "subtitle": "Fill out the form to enroll for this activity",
+        "selectedActivity": "Selected activity",
+        "instructor": "Instructor",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "experience": "Sports experience",
+          "notes": "Additional notes",
+          "notesPlaceholder": "Mention if you have questions or special requirements",
+          "sending": "Sending...",
+          "submit": "Send request",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Request sent successfully!",
+          "message": "Thank you! We will contact you to confirm enrollment."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "enrollEmail": {
+        "subject": "Enrollment request - {{activityName}}",
+        "body": "Hello,\n\nYou have received a new enrollment request for an activity:\n\nACTIVITY: {{activityName}}\n{{day ? `Day: ${day}` : ''}}\n{{time ? `Time: ${time}` : ''}}\n{{instructor ? `Instructor: ${instructor}` : ''}}\n\nCANDIDATE DATA:\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nExperience: {{experience}}\nAdditional notes: {{notes}}\n\nPlease contact the candidate to finalize enrollment.\n\n---\nSent from {{clubName}} website",
+        "noExperience": "Not specified",
+        "noNotes": "None"
+      }
+    },
+    "FitnessPrograms": {
+      "header": {
+        "badge": "Fitness programs",
+        "title": "Workouts for every level and age",
+        "subtitle": "Discover the perfect program for your goals and abilities"
+      },
+      "stats": {
+        "activePrograms": "Active programs"
+      },
+      "filters": {
+        "all": "All programs",
+        "fitness": "Fitness",
+        "cardio": "Cardio",
+        "wellness": "Wellness",
+        "aquatic": "Water sports",
+        "dance": "Dance"
+      },
+      "intensityTerms": {
+        "low": ["light", "yoga", "meditation"],
+        "high": ["intensive", "strength", "running"]
+      },
+      "intensityLevels": {
+        "low": "low",
+        "medium": "medium",
+        "high": "high"
+      },
+      "categoryTerms": {
+        "aquatic": ["pool", "swimming", "aerobics"],
+        "dance": ["dance"],
+        "wellness": ["yoga", "meditation", "light"],
+        "cardio": ["running", "gymnastics"]
+      },
+      "activityIconTerms": {
+        "wellness": ["yoga", "meditation"],
+        "aquatic": ["pool", "swimming"],
+        "strength": ["strength", "fitness"],
+        "cardio": ["running", "gymnastics"],
+        "dance": ["dance"],
+        "walking": ["walking"]
+      },
+      "activityColorTerms": {
+        "wellness": ["yoga", "meditation"],
+        "aquatic": ["pool", "swimming"],
+        "strength": ["strength", "fitness"],
+        "cardio": ["running", "gymnastics"],
+        "dance": ["dance"],
+        "walking": ["walking"]
+      },
+      "duration": "{{minutes}} min",
+      "defaultDuration": "60 min",
+      "shortDuration": "45 min",
+      "lowImpactDescription": "Gentle program suitable for {{suitableFor}}",
+      "everyone": "everyone",
+      "flexible": "Flexible",
+      "byAgreement": "By agreement",
+      "participants": "{{count}} participants",
+      "suitableFor": "Suitable for",
+      "badges": {
+        "gentle": "Gentle"
+      },
+      "actions": {
+        "enroll": "Enroll"
+      },
+      "noResults": {
+        "title": "No programs in this category",
+        "message": "Choose another category or contact us for personalized programs"
+      },
+      "fitnessLevels": {
+        "select": "Select level",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "expert": "Expert"
+      },
+      "goals": {
+        "select": "Select goal",
+        "weightLoss": "Weight loss",
+        "muscleGain": "Muscle gain",
+        "fitnessImprovement": "Fitness improvement",
+        "healthMaintenance": "Health maintenance",
+        "relaxation": "Relaxation and stress relief",
+        "rehabilitation": "Rehabilitation",
+        "socialization": "Socialization"
+      },
+      "enrollModal": {
+        "title": "Enroll for {{programName}}",
+        "subtitle": "Start your fitness journey with us today!",
+        "selectedProgram": "Selected program",
+        "intensity": "Intensity",
+        "duration": "Duration",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "fitnessLevel": "Fitness level",
+          "goals": "Your goals",
+          "notes": "Additional notes",
+          "notesPlaceholder": "Mention if you have health restrictions or special requirements",
+          "sending": "Sending...",
+          "submit": "Send request",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Request sent successfully!",
+          "message": "Thank you! We will contact you for your first workout."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "enrollEmail": {
+        "subject": "Enrollment request - {{programName}}",
+        "body": "Hello,\n\nYou have received a new enrollment request for a fitness program:\n\nPROGRAM: {{programName}}\nCategory: {{category}}\nIntensity: {{intensity}}\n{{day ? `Day: ${day}` : ''}}\n{{time ? `Time: ${time}` : ''}}\n{{instructor ? `Instructor: ${instructor}` : ''}}\n\nCANDIDATE DATA:\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nFitness level: {{fitnessLevel}}\nGoals: {{goals}}\nAdditional notes: {{notes}}\n\nPlease contact the candidate to finalize enrollment.\n\n---\nSent from {{clubName}} website",
+        "notSpecified": "Not specified",
+        "none": "None"
+      }
+    },
+    "HealthActivities": {
+      "header": {
+        "badge": "Health activities",
+        "title": "Care for your health and well-being",
+        "subtitle": "Comprehensive health services and preventive programs for active and healthy aging"
+      },
+      "tabs": {
+        "services": "Services",
+        "education": "Education",
+        "partners": "Partners",
+        "nutrition": "Nutrition",
+        "safety": "Safety"
+      },
+      "status": {
+        "active": "Active"
+      },
+      "services": {
+        "checkups": {
+          "title": "Regular checkups",
+          "description": "Professional health checkups for all members",
+          "benefits": [
+            "Early detection of health problems",
+            "Personalized health recommendations",
+            "Regular health status monitoring"
+          ]
+        },
+        "pressure": {
+          "title": "Blood pressure monitoring",
+          "description": "Regular blood pressure tracking",
+          "benefits": [
+            "Daily blood pressure monitoring",
+            "Emergency alerts for abnormalities",
+            "Connection with treating physician"
+          ]
+        },
+        "medication": {
+          "title": "Medication reminders",
+          "description": "System for medication dose reminders",
+          "benefits": [
+            "Timely medication intake",
+            "Prevention of missed doses",
+            "Drug interaction monitoring"
+          ]
+        },
+        "emergency": {
+          "title": "Emergency protocol",
+          "description": "Readiness for medical emergencies",
+          "benefits": [
+            "Quick response to emergencies",
+            "First aid trained staff",
+            "Direct connection to emergency services"
+          ]
+        }
+      },
+      "benefits": "Benefits",
+      "frequencies": {
+        "weekly": ["weekly"],
+        "monthly": ["monthly"],
+        "quarterly": ["quarterly"],
+        "yearly": ["yearly", "annually"]
+      },
+      "frequencyLabels": {
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "yearly": "Yearly"
+      },
+      "servicesTab": {
+        "title": "Health services",
+        "subtitle": "Professional care for your health and prevention"
+      },
+      "educationTab": {
+        "title": "Health education",
+        "subtitle": "Lectures and seminars for healthy lifestyle"
+      },
+      "partnersTab": {
+        "title": "Medical partners",
+        "subtitle": "Professional health services from our partners"
+      },
+      "nutritionTab": {
+        "title": "Nutritional support",
+        "subtitle": "Healthy nutrition for active aging"
+      },
+      "safetyTab": {
+        "title": "Safety and prevention",
+        "subtitle": "Safety measures and emergency protocols",
+        "fallPrevention": "Fall prevention",
+        "emergencyProtocol": "Emergency protocol",
+        "nearestHospital": "Nearest hospital",
+        "emergencyContacts": "Emergency contacts",
+        "specialEquipment": "Special equipment"
+      },
+      "actions": {
+        "schedule": "Schedule",
+        "call": "Call"
+      },
+      "scheduleModal": {
+        "title": "Lecture schedule",
+        "lecturer": "Lecturer",
+        "duration": "Duration",
+        "frequency": "Frequency",
+        "nextLecture": "Next lecture",
+        "contactInfo": "For more information contact us"
+      }
+    },
+    "WellnessServices": {
+      "header": {
+        "badge": "Wellness services",
+        "title": "Care for your complete well-being",
+        "subtitle": "Comprehensive services for physical, mental and social well-being"
+      },
+      "categories": {
+        "support": "Support services",
+        "mental": "Mental health",
+        "social": "Social services",
+        "accessibility": "Accessibility",
+        "cognitive": "Cognitive activities"
+      },
+      "serviceCount": {
+        "single": "service",
+        "plural": "services"
+      },
+      "participants": "{{count}} participants",
+      "frequencies": {
+        "weekly": ["weekly"],
+        "monthly": ["monthly"],
+        "daily": ["daily"]
+      },
+      "frequencyLabels": {
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "daily": "Daily"
+      },
+      "supportTab": {
+        "title": "Support services",
+        "subtitle": "Available support services"
+      },
+      "supportServiceLabels": {
+        "homeAssistance": "Home assistance",
+        "shoppingAssistance": "Shopping assistance",
+        "medicationManagement": "Medication management",
+        "transportationHelp": "Transportation help",
+        "mealPreparation": "Meal preparation",
+        "companionship": "Companionship",
+        "emergencyResponse": "Emergency response",
+        "healthMonitoring": "Health monitoring"
+      },
+      "mentalTab": {
+        "title": "Mental health and cognitive activities",
+        "subtitle": "Care for mental well-being and memory",
+        "psychologicalSupport": "Psychological support",
+        "memoryActivities": "Memory activities"
+      },
+      "socialTab": {
+        "title": "Social services and programs",
+        "subtitle": "Human connections and isolation prevention",
+        "intergenerationalPrograms": "Intergenerational programs",
+        "isolationPrevention": "Isolation prevention",
+        "volunteerPrograms": "Volunteer programs",
+        "volunteers": "{{count}} volunteers",
+        "hoursPerWeek": "{{hours}}h/week"
+      },
+      "accessibilityTab": {
+        "title": "Accessibility and amenities",
+        "subtitle": "Available accessibility features"
+      },
+      "accessibilityLabels": {
+        "wheelchairAccess": "Wheelchair access",
+        "hearingSupport": "Hearing support",
+        "visualSupport": "Visual support",
+        "assistiveDevices": "Assistive devices",
+        "accessibleParking": "Accessible parking",
+        "elevatorAccess": "Elevator access",
+        "accessibleBathrooms": "Accessible bathrooms",
+        "signLanguageSupport": "Sign language support"
+      },
+      "cognitiveTab": {
+        "title": "Cognitive activities",
+        "subtitle": "Available activities for mental stimulation"
+      }
+    },
+    "SportEvents": {
+      "header": {
+        "badge": "Sport events",
+        "title": "Competitions, tournaments and sports celebrations",
+        "subtitle": "Participate in our sports events and showcase your skills"
+      },
+      "filters": {
+        "all": "All events",
+        "fitness": "Fitness",
+        "aquatic": "Water sports",
+        "team": "Team sports",
+        "outdoor": "Outdoor",
+        "competition": "Competitions",
+        "trip": "Trips"
+      },
+      "stats": {
+        "totalEvents": "Total events",
+        "upcoming": "Upcoming",
+        "competitions": "Competitions",
+        "awards": "Awards"
+      },
+      "categoryTerms": {
+        "aquatic": ["swimming", "pool", "water"],
+        "team": ["football", "volleyball", "basketball"],
+        "fitness": ["running", "fitness", "marathon"],
+        "outdoor": ["mountain", "trip", "hiking"],
+        "competition": ["competition", "tournament", "championship"]
+      },
+      "iconTerms": {
+        "swimming": ["swimming", "pool"],
+        "football": ["football"],
+        "volleyball": ["volleyball"],
+        "basketball": ["basketball"],
+        "tennis": ["tennis"],
+        "bowling": ["bowling"],
+        "running": ["running", "marathon"],
+        "cycling": ["cycling", "bike"],
+        "hiking": ["mountain", "hiking"],
+        "competition": ["competition", "tournament"]
+      },
+      "colorTerms": {
+        "aquatic": ["swimming", "pool"],
+        "team": ["football", "volleyball"],
+        "running": ["running", "marathon"],
+        "cycling": ["cycling"],
+        "outdoor": ["mountain", "hiking"],
+        "competition": ["competition", "tournament"]
+      },
+      "tripTitle": "Sports trip to {{destination}}",
+      "defaultEventType": "Sports event",
+      "currency": "$",
+      "participants": "{{count}} participants",
+      "badges": {
+        "upcoming": "Upcoming"
+      },
+      "actions": {
+        "register": "Register"
+      },
+      "upcomingEvents": {
+        "title": "Upcoming events",
+        "subtitle": "Register to participate in our sports events"
+      },
+      "achievements": {
+        "title": "Achievements and awards",
+        "subtitle": "Our sports successes and recognitions",
+        "awardsReceived": "Awards received",
+        "pastEvents": "Past events",
+        "recognitions": "Recognitions"
+      },
+      "noResults": {
+        "title": "No events in this category",
+        "message": "Choose another category or watch for new sports events"
+      },
+      "experienceLevels": {
+        "select": "Select level",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "professional": "Professional"
+      },
+      "participationCategories": {
+        "select": "Select category",
+        "individual": "Individual participation",
+        "team": "Team participation",
+        "family": "Family participation",
+        "friends": "Friends participation"
+      },
+      "registerModal": {
+        "title": "Registration for {{eventTitle}}",
+        "subtitle": "Fill out the form to register for this event",
+        "selectedEvent": "Selected event",
+        "price": "Price",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "experience": "Sports experience",
+          "category": "Participation category",
+          "notes": "Additional notes",
+          "notesPlaceholder": "Mention if you have questions or special requirements",
+          "sending": "Sending...",
+          "submit": "Send registration",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Registration sent successfully!",
+          "message": "Thank you! We will contact you to confirm your participation."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "registerEmail": {
+        "subject": "Participation request - {{eventTitle}}",
+        "body": "Hello,\n\nYou have received a new participation request for a sports event:\n\nEVENT: {{eventTitle}}\nDate: {{date}}\n{{time ? `Time: ${time}` : ''}}\nType: {{type}}\n{{price ? `Price: ${price} ${currency}` : ''}}\n\nPARTICIPANT DATA:\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nSports experience: {{experience}}\nParticipation category: {{category}}\nAdditional notes: {{notes}}\n\nPlease contact the participant to confirm registration.\n\n---\nSent from {{clubName}} website",
+        "notSpecified": "Not specified",
+        "standard": "Standard",
+        "none": "None"
+      }
+    },
+      "SportsEventsCalendar": {
+      "header": {
+        "badge": "Dynamic calendar",
+        "title": "Never miss an important event",
+        "subtitle": "Interactive calendar with all activities, events and registration opportunities"
+      },
+      "stats": {
+        "plannedEvents": "Planned events",
+        "regularActivities": "Regular activities"
+      },
+      "searchPlaceholder": "Search activity, instructor...",
+      "viewModes": {
+        "timeline": "Timeline",
+        "grid": "Calendar",
+        "list": "List"
+      },
+      "filters": {
+        "all": "All",
+        "sports": "Sports",
+        "cultural": "Culture",
+        "health": "Health",
+        "education": "Education",
+        "trips": "Trips"
+      },
+      "weekDaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      "monthNames": [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ],
+      "dayMapping": {
+        "sunday": 0,
+        "monday": 1,
+        "tuesday": 2,
+        "wednesday": 3,
+        "thursday": 4,
+        "friday": 5,
+        "saturday": 6
+      },
+      "everyDay": "every day",
+      "categoryTerms": {
+        "sports": ["sport", "gymnastics", "yoga", "fitness", "running", "swimming", "workout"],
+        "cultural": ["choir", "dance", "music", "concert", "performance"],
+        "health": ["health", "lecture", "medical", "checkup"],
+        "education": ["course", "training", "computer", "education"],
+        "trips": ["trip", "travel", "hiking"]
+      },
+      "priorityTerms": {
+        "high": ["special", "tournament", "competition"],
+        "medium": ["course", "lecture", "trip"]
+      },
+      "iconTerms": {
+        "yoga": ["yoga"],
+        "swimming": ["swimming"],
+        "gymnastics": ["gymnastics"],
+        "choir": ["choir"],
+        "dance": ["dance"],
+        "trip": ["trip"]
+      },
+      "tripTitle": "Trip: {{destination}}",
+      "healthLectureDescription": "Health lecture: {{topic}}",
+      "timeline": {
+        "title": "Next 7 days",
+        "subtitle": "Overview of upcoming activities",
+        "today": "Today",
+        "noEvents": "No planned activities",
+        "showMore": "+{{count}} more"
+      },
+      "grid": {
+        "title": "Monthly calendar",
+        "inDevelopment": "Calendar view in development..."
+      },
+      "list": {
+        "title": "All events",
+        "subtitle": "Chronological list of all planned activities",
+        "eventSingle": "event",
+        "eventPlural": "events",
+        "participants": "{{count}} spots"
+      },
+      "actions": {
+        "register": "Register"
+      },
+      "modal": {
+        "registerFor": "Register for",
+        "form": {
+          "name": "Name",
+          "namePlaceholder": "Your name",
+          "email": "Email",
+          "emailPlaceholder": "your@email.com",
+          "phone": "Phone",
+          "phonePlaceholder": "+1 555 123 456",
+          "notes": "Notes",
+          "notesPlaceholder": "Questions or special requirements...",
+          "sending": "Sending...",
+          "submit": "Send request"
+        },
+        "success": {
+          "title": "Request sent!",
+          "message": "We will contact you for confirmation"
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again"
+        }
+      },
+      "registerEmail": {
+        "subject": "Registration request - {{eventTitle}}",
+        "body": "Hello,\n\nYou have received a new registration request:\n\nACTIVITY: {{eventTitle}}\nDate: {{date}}\n{{time ? `Time: ${time}` : ''}}\n{{instructor ? `Instructor: ${instructor}` : ''}}\n\nPARTICIPANT DATA:\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nNotes: {{notes}}\n\n---\nSent from {{clubName}} website",
+        "noNotes": "None"
+      }
+    },
+    "SportsHealthTracking": {
+      "header": {
+        "badge": "Health tracking",
+        "title": "Track your health every day",
+        "subtitle": "Smart tracking of health metrics with personalized goals and tips"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "metrics": "Metrics",
+        "goals": "Goals",
+        "insights": "Insights",
+        "services": "Services"
+      },
+      "units": {
+        "bpm": "BPM",
+        "mmHg": "mmHg",
+        "kg": "kg",
+        "steps": "steps",
+        "hours": "hours",
+        "liters": "liters"
+      },
+      "metrics": {
+        "heartRate": {
+          "title": "Heart Rate"
+        },
+        "bloodPressure": {
+          "title": "Blood Pressure"
+        },
+        "weight": {
+          "title": "Weight"
+        },
+        "steps": {
+          "title": "Steps"
+        },
+        "sleep": {
+          "title": "Sleep"
+        },
+        "water": {
+          "title": "Water"
+        },
+        "chartTitle": "Chart for {{metric}}",
+        "chartDescription": "Detailed chart with data for the selected period will be shown here"
+      },
+      "goalTypes": {
+        "dailySteps": "Daily steps",
+        "targetWeight": "Target weight",
+        "dailyHydration": "Daily hydration",
+        "qualitySleep": "Quality sleep"
+      },
+      "timeframes": {
+        "week": "7 days",
+        "month": "30 days",
+        "threeMonths": "3 months",
+        "year": "1 year"
+      },
+      "trends": {
+        "up": "increasing",
+        "down": "decreasing",
+        "stable": "stable"
+      },
+      "changeFromYesterday": "{{change}} from yesterday",
+      "stats": {
+        "goalsAchieved": "Goals"
+      },
+      "overview": {
+        "goalsProgress": "Goals progress",
+        "healthTips": "Health tips"
+      },
+      "goals": {
+        "title": "Health goals",
+        "subtitle": "Set realistic goals and track your progress",
+        "target": "target: {{target}} {{unit}}",
+        "achieved": "{{progress}}% achieved",
+        "by": "by"
+      },
+      "insights": {
+        "title": "Health insights",
+        "subtitle": "Personalized recommendations based on your data",
+        "trends": {
+          "title": "Trends",
+          "activityIncrease": "Your activity has increased by 15% this month",
+          "heartRateStable": "Resting heart rate remains stable",
+          "sleepDecline": "Sleep quality has slightly declined"
+        },
+        "recommendations": {
+          "title": "Recommendations",
+          "increaseWater": "Increase water intake by 0.5L daily",
+          "sleepEarlier": "Try going to bed 30 minutes earlier",
+          "moreSteps": "Add another 1500 steps daily"
+        },
+        "achievements": {
+          "title": "Achievements",
+          "sevenDaysSteps": "7 days in a row over 8000 steps",
+          "hydrationGoal": "Hydration goal achieved",
+          "bestMonth": "Best month for activity"
+        },
+        "allTips": "All health tips"
+      },
+      "services": {
+        "title": "Health services",
+        "subtitle": "Professional health services and lectures in our club",
+        "healthLectures": "Health lectures",
+        "medicalServices": "Medical services",
+        "emergencyInfo": "Emergency information",
+        "emergencyContact": "In case of emergency contact",
+        "emergencyNumber": "Emergency services",
+        "clubDoctor": "Club doctor",
+        "noData": "No data"
+      },
+      "tips": {
+        "cardio": {
+          "title": "Cardio workouts",
+          "content": "Regular cardio exercises strengthen the heart and improve circulation."
+        },
+        "nutrition": {
+          "title": "Healthy eating",
+          "content": "Consume more fruits, vegetables and whole grain foods."
+        },
+        "hydration": {
+          "title": "Hydration",
+          "content": "Drink at least 8 glasses of water daily for optimal hydration."
+        },
+        "sleep": {
+          "title": "Quality sleep",
+          "content": "Sleep 7-9 hours per night for complete recovery."
+        },
+        "stress": {
+          "title": "Stress management",
+          "content": "Practice meditation and deep breathing to reduce stress."
+        }
+      },
+      "actions": {
+        "viewAll": "View all",
+        "addEntry": "Add entry",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "modal": {
+        "addEntry": "Add new entry",
+        "metricType": "Metric type",
+        "date": "Date",
+        "time": "Time",
+        "value": "Value",
+        "bloodPressurePlaceholder": "120/80",
+        "valuePlaceholder": "Enter value",
+        "notes": "Notes (optional)",
+        "notesPlaceholder": "Additional information..."
+      }
+    },
+    "SportsGallery": {
+      "header": {
+        "badge": "Unsere Galerie",
+        "title": "Momente aus dem Clubleben",
+        "subtitle": "Durchsuchen Sie Fotos und Videos von unseren Aktivitäten, Veranstaltungen und Erfolgen"
+      },
+      "stats": {
+        "photos": "Fotos",
+        "videos": "Videos",
+        "events": "Veranstaltungen"
+      },
+      "searchPlaceholder": "In Galerie suchen...",
+      "viewModes": {
+        "grid": "Raster",
+        "masonry": "Mauerwerk",
+        "list": "Liste"
+      },
+      "filters": {
+        "all": "Alle",
+        "gallery": "Galerie",
+        "videos": "Videos",
+        "events": "Veranstaltungen",
+        "achievements": "Erfolge",
+        "fitness": "Fitness",
+        "aquaFitness": "Wassergymnastik",
+        "yoga": "Yoga"
+      },
+      "sortOptions": {
+        "newest": "Neueste",
+        "oldest": "Älteste",
+        "name": "Nach Name"
+      },
+      "categories": {
+        "gallery": "galerie",
+        "video": "video",
+        "event": "veranstaltung",
+        "award": "auszeichnung",
+        "achievement": "erfolg",
+        "general": "allgemein"
+      },
+      "defaultTitles": {
+        "photo": "Foto {{number}}",
+        "video": "Video {{number}}"
+      },
+      "actions": {
+        "like": "Gefällt mir",
+        "share": "Teilen"
+      },
+      "results": {
+        "showing": "Zeige {{filtered}} von {{total}} Elementen{{search}}",
+        "forSearch": " für \"{{term}}\""
+      },
+      "lightbox": {
+        "close": "Schließen",
+        "previous": "Vorherige",
+        "next": "Nächste"
+      },
+      "messages": {
+        "linkCopied": "Link in die Zwischenablage kopiert!"
+      }
+    },
+    "SportsPartners": {
+      "header": {
+        "badge": "Our network",
+        "title": "Partners and sponsors",
+        "subtitle": "We thank all partners who support our mission for active and healthy aging"
+      },
+      "stats": {
+        "partners": "Partners",
+        "sponsors": "Sponsors",
+        "medical": "Medical"
+      },
+      "categories": {
+        "all": "All partners",
+        "financial": "Sponsors",
+        "medical": "Medical",
+        "sports": "Sports",
+        "education": "Educational",
+        "other": "Other"
+      },
+      "partnerTypes": {
+        "sponsor": "Sponsor",
+        "partnership": "Partner",
+        "medical": "Medical partner"
+      },
+      "contributionTypes": {
+        "services": "Services",
+        "goods": "Goods",
+        "discounts": "Discounts",
+        "financial": "Financial support"
+      },
+      "partnershipTypes": {
+        "health": "Health partnership",
+        "sports": "Sports partnership",
+        "education": "Educational partnership"
+      },
+      "partnershipTerms": {
+        "health": ["health"],
+        "sports": ["sports"],
+        "education": ["educational"]
+      },
+      "labels": {
+        "discount": "Discount",
+        "contribution": "Contribution"
+      },
+      "actions": {
+        "call": "Call",
+        "copy": "Copy",
+        "website": "Website",
+        "details": "Details",
+        "email": "Email"
+      },
+      "benefits": {
+        "title": "Benefits for our members",
+        "subtitle": "Thanks to our partnerships, members receive:",
+        "discounts": {
+          "title": "Discounts",
+          "description": "Special prices for sports goods, medical services and nutritional supplements"
+        },
+        "healthServices": {
+          "title": "Health services",
+          "description": "Access to specialized medical examinations and consultations"
+        },
+        "sportsFacilities": {
+          "title": "Sports facilities",
+          "description": "Free or preferential access to gyms and swimming pools"
+        },
+        "training": {
+          "title": "Training",
+          "description": "Participation in specialized courses and seminars for healthy living"
+        }
+      },
+      "cta": {
+        "title": "Want to become our partner?",
+        "subtitle": "Join our mission to support active and healthy lifestyle among older adults in our region.",
+        "becomePartner": "Become a partner",
+        "contactUs": "Contact us",
+        "stats": {
+          "activeMembers": "Active members",
+          "yearsExperience": "Years experience",
+          "rating": "Rating"
+        }
+      },
+      "modal": {
+        "close": "Close",
+        "phone": "Phone",
+        "address": "Address",
+        "workingHours": "Working hours",
+        "website": "Website",
+        "discount": "Discount",
+        "email": "Email"
+      },
+      "contactModal": {
+        "title": "Contact us",
+        "subtitle": "For more information about partnership contact us:"
+      },
+      "messages": {
+        "phoneCopied": "Phone number copied!"
+      }
+    },
+    "SportsLocation": {
+      "header": {
+        "badge": "Destination",
+        "title": "Where we train",
+        "subtitle": "Find the fastest and most active route to your sports club"
+      },
+      "quickInfo": {
+        "title": "Our sports center",
+        "addressSoon": "Address will be announced soon"
+      },
+      "tabs": {
+        "map": "Map",
+        "transport": "Active transport",
+        "parking": "Parking",
+        "nearby": "Sports facilities"
+      },
+      "actions": {
+        "navigation": "Navigation",
+        "share": "Share",
+        "copy": "Copy",
+        "copied": "Copied!"
+      },
+      "transport": {
+        "title": "Choose your active way",
+        "subtitle": "Every trip to the club can be part of the workout!",
+        "tipsFor": "Sports tips for",
+        "running": {
+          "name": "Running",
+          "duration": "10-20 min",
+          "description": "Active arrival",
+          "instructions": [
+            "Excellent cardio workout before the club",
+            "Use safe pedestrian areas",
+            "Wear sports clothes and shoes",
+            "Plan route through parks"
+          ]
+        },
+        "cycling": {
+          "name": "Cycling",
+          "duration": "5-15 min",
+          "description": "Eco and healthy",
+          "instructions": [
+            "Check bicycle lanes",
+            "Wear helmet for safety",
+            "Look for bike locking places",
+            "Follow traffic rules"
+          ]
+        },
+        "walking": {
+          "name": "Sports walk",
+          "duration": "15-25 min",
+          "description": "Warm-up before workout",
+          "instructions": [
+            "Fast sports walk as warm-up",
+            "Use comfortable sports shoes",
+            "Do stretches along the way",
+            "Stay well hydrated"
+          ]
+        },
+        "bus": {
+          "name": "Public transport",
+          "duration": "15-30 min",
+          "description": "Convenient access",
+          "instructions": [
+            "Check bus schedules",
+            "Use sports bag for convenience",
+            "Plan arrival time",
+            "Save energy for workout"
+          ]
+        },
+        "car": {
+          "name": "Car",
+          "duration": "10-40 min",
+          "description": "Quick access",
+          "instructions": [
+            "Look for nearby parking",
+            "Check for sports facilities nearby",
+            "Use GPS for fastest route",
+            "Carry sports equipment in car"
+          ]
+        }
+      },
+      "parking": {
+        "title": "Parking for athletes",
+        "subtitle": "Parking information near the sports complex",
+        "price": "Price",
+        "maxTime": "Maximum time",
+        "workingHours": "Working hours",
+        "advantages": "Advantages",
+        "sports": {
+          "type": "Sports complex parking",
+          "price": "Usually free",
+          "maxTime": "According to workouts",
+          "workingHours": "According to complex hours",
+          "features": ["Security", "Video surveillance", "Close to locker rooms"]
+        },
+        "street": {
+          "type": "Street parking",
+          "price": "According to zone",
+          "maxTime": "According to regulations",
+          "workingHours": "Check road signs",
+          "features": ["Different zones", "Variable prices", "Limited time"]
+        },
+        "underground": {
+          "type": "Underground parking",
+          "price": "Paid",
+          "maxTime": "No limit",
+          "workingHours": "24/7",
+          "features": ["Security", "Weather protection", "Reservation possible"]
+        }
+      },
+      "nearby": {
+        "title": "Sports facilities in the area",
+        "subtitle": "Other sports opportunities near our club"
+      },
+      "map": {
+        "distance": "Distance",
+        "trainingZone": "500m sports zone",
+        "legend": {
+          "sportsClub": "Sports club",
+          "trainingZone": "Training zone"
+        }
+      },
+      "venue": {
+        "title": "Sports facilities",
+        "type": "Type",
+        "size": "Size",
+        "capacity": "Capacity",
+        "athletes": "athletes",
+        "modern": "Modern sports center",
+        "allAges": "Suitable for all ages",
+        "facilities": "Sports amenities",
+        "types": {
+          "sportsComplex": "Sports complex",
+          "sportsFacility": "Sports facility"
+        }
+      },
+      "accessibility": {
+        "title": "Sports accessibility",
+        "subtitle": "Information about sports facilities accessibility",
+        "wheelchair": {
+          "feature": "Sports wheelchair access",
+          "available": "Adapted sports facilities",
+          "limited": "Limited sports access"
+        },
+        "elevator": {
+          "feature": "Fitness elevator",
+          "description": "Easy access to all floors of the sports complex"
+        },
+        "stairs": {
+          "feature": "Sports stairs",
+          "description": "Stairs are also part of the workout!"
+        },
+        "safety": {
+          "feature": "Safe zones",
+          "description": "Medical assistance and safety during workouts"
+        }
+      },
+      "help": {
+        "title": "Ready for workout?",
+        "subtitle": "If you have questions about sports complex access or need help",
+        "callUs": "Call us",
+        "realTimeNavigation": "Real-time navigation"
+      },
+      "share": {
+        "title": "Location of {{clubName}}"
+      },
+      "messages": {
+        "copyError": "Copy error. Please try again.",
+        "openingMap": "Opening map...",
+        "noAddress": "Address not specified",
+        "addressCopied": "Address copied to clipboard!"
+      }
+    },
+    "SportsContacts": {
+      "header": {
+        "badge": "Connect",
+        "title": "Contact us",
+        "subtitle": "We are ready to answer all your questions about sports, training and membership"
+      },
+      "quickCards": {
+        "phone": {
+          "title": "Call us",
+          "note": "Direct line"
+        },
+        "email": {
+          "title": "Send email",
+          "note": "24/7 availability"
+        },
+        "location": {
+          "title": "Visit us",
+          "note": ""
+        }
+      },
+      "actions": {
+        "call": "Call",
+        "send": "Send",
+        "directions": "Directions"
+      },
+      "form": {
+        "title": "Send message",
+        "subtitle": "Fill out the form and we will contact you as soon as possible",
+        "fields": {
+          "name": {
+            "label": "Your name",
+            "placeholder": "Enter your name"
+          },
+          "email": {
+            "label": "Email address",
+            "placeholder": "your@email.com"
+          },
+          "phone": {
+            "label": "Phone",
+            "placeholder": "+1 ..."
+          },
+          "reason": {
+            "label": "Contact reason"
+          },
+          "subject": {
+            "label": "Message subject",
+            "placeholder": "Brief title of your question"
+          },
+          "message": {
+            "label": "Message",
+            "placeholder": "Describe your question or request in detail..."
+          }
+        },
+        "submit": "Send message",
+        "status": {
+          "sending": "Sending...",
+          "success": "Sent successfully!"
+        }
+      },
+      "contactReasons": {
+        "general": "General information",
+        "membership": "Membership and pricing",
+        "training": "Training and programs",
+        "events": "Events and competitions",
+        "facilities": "Facilities and equipment",
+        "emergency": "Emergency questions"
+      },
+      "workingDays": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "info": {
+        "workingHours": {
+          "title": "Working hours",
+          "closed": "Closed"
+        },
+        "additional": {
+          "title": "Additional information",
+          "mobile": "Mobile",
+          "website": "Website",
+          "capacity": "Capacity",
+          "people": "people",
+          "activeMembers": "Active members"
+        },
+        "social": {
+          "title": "Follow us"
+        },
+        "emergency": {
+          "title": "Emergency information",
+          "general": "Emergency services",
+          "generalNumber": "911",
+          "club": "Club emergency"
+        }
+      },
+      "cta": {
+        "title": "Ready for new challenges?",
+        "subtitle": "Join our sports community and start your fitness journey today!",
+        "startNow": "Start now",
+        "visitUs": "Visit us",
+        "stats": {
+          "yearsExperience": "Years experience",
+          "happyMembers": "Happy members",
+          "programs": "Programs"
+        }
+      },
+      "defaultCountry": "USA",
+      "messages": {
+        "copyError": "Copy error. Please try again."
+      }
+    },
+    "TraditionalHero": {
+      "badge": "Traditional cultural club",
+      "stats": {
+        "members": "Members",
+        "founded": "Founded",
+        "performances": "Performances",
+        "yearsExperience": "Years experience"
+      },
+      "actions": {
+        "watchVideo": "Watch video",
+        "visitUs": "Visit us",
+        "ourMembers": "Our members ({{count}})",
+        "writeToUs": "Write to us"
+      },
+      "scrollIndicator": "Learn more",
+      "video": {
+        "notSupported": "Your browser does not support the video element.",
+        "defaultTitle": "Video from the club",
+        "duration": "Duration",
+        "type": "Type"
+      },
+      "emailModal": {
+        "title": "Contact us",
+        "subtitle": "Send us a message and we will reply as soon as possible",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone (optional)",
+          "phonePlaceholder": "Enter your phone",
+          "message": "Message",
+          "messagePlaceholder": "What would you like to share with us?",
+          "sending": "Sending...",
+          "submit": "Send message",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Message sent!",
+          "message": "Thank you! We will contact you soon."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        }
+      },
+      "membersModal": {
+        "title": "Club members",
+        "subtitle": "Our traditional community of {{count}} {{memberText}}",
+        "memberSingle": "member",
+        "memberPlural": "members",
+        "searchPlaceholder": "Search by name, phone or email...",
+        "clearSearch": "Clear search",
+        "noResultsFor": "No results found for \"{{term}}\"",
+        "foundOne": "Found 1 member",
+        "foundMany": "Found {{count}} members",
+        "noMembers": {
+          "title": "No registered members",
+          "message": "No members have been added to the system yet."
+        },
+        "noResults": {
+          "title": "No results found",
+          "message": "Try different keywords or clear the search."
+        },
+        "defaultRole": "member",
+        "memberSince": "Member since",
+        "copyName": "Copy name",
+        "copyPhone": "Copy phone",
+        "copyEmail": "Copy email",
+        "copyAddress": "Copy address"
+      },
+      "email": {
+        "subject": "Inquiry to {{clubName}}",
+        "body": "Hello,\n\nYou have received a new message from the {{clubName}} website:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\n\nMessage:\n{{message}}\n\n---\nSent from {{senderEmail}}",
+        "noPhone": "Not specified"
+      },
+      "messages": {
+        "locationInfo": "Location information can be found in the contact details."
+      }
+    },
+    "TraditionalAbout": {
+      "header": {
+        "badge": "About our club",
+        "title": "Our history and mission"
+      },
+      "story": {
+        "title": "Our story",
+        "founded": "Founded in {{year}}"
+      },
+      "stats": {
+        "title": "Our numbers",
+        "activeMembers": "Active members",
+        "yearsTradition": "Years of tradition",
+        "programs": "Programs",
+        "eventsYearly": "Events yearly"
+      },
+      "demographics": {
+        "title": "Our members",
+        "ageRange": "{{range}} years old",
+        "people": "{{count}} people"
+      },
+      "benefits": {
+        "title": "Membership benefits"
+      },
+      "requirements": {
+        "title": "How to join"
+      },
+      "membershipFee": {
+        "title": "Membership fee",
+        "monthly": "monthly",
+        "yearly": "yearly"
+      },
+      "achievements": {
+        "title": "Our achievements",
+        "subtitle": "Recognition for our work over the years",
+        "awards": "Awards",
+        "recognitions": "Recognitions"
+      },
+      "impact": {
+        "title": "Our impact",
+        "subtitle": "How we contribute to the community",
+        "volunteering": "Volunteering",
+        "partnerships": "Partnerships",
+        "participants": "{{count}} participants",
+        "coordinator": "Coordinator"
+      }
+    },
+    "TraditionalTraditions": {
+      "header": {
+        "badge": "Traditions and culture",
+        "title": "Our roots and customs",
+        "subtitle": "We preserve and pass on cultural traditions"
+      },
+      "events": {
+        "title": "Traditional events",
+        "subtitle": "Festivals and cultural activities",
+        "dateTime": "{{date}} at {{time}}"
+      },
+      "activities": {
+        "title": "Traditional activities",
+        "subtitle": "Regular cultural activities",
+        "from": "from",
+        "instructor": "Instructor"
+      },
+      "trips": {
+        "title": "Cultural excursions",
+        "subtitle": "Visits to traditional places",
+        "price": "Price"
+      },
+      "heritage": {
+        "title": "Regional heritage",
+        "subtitle": "Local traditions and culture",
+        "ourRegion": "Our region",
+        "defaultCountry": "Country",
+        "coverage": "We cover",
+        "role": "Role",
+        "centralClub": "Central club",
+        "localClub": "Local club"
+      },
+      "projects": {
+        "title": "Cultural projects",
+        "subtitle": "Our initiatives to preserve traditions",
+        "beneficiaries": "{{count}} beneficiaries"
+      },
+      "partnerships": {
+        "title": "Cultural partnerships",
+        "subtitle": "Collaboration with institutions"
+      },
+      "common": {
+        "participants": "{{count}} participants"
+      },
+      "currency": "$",
+      "cta": {
+        "title": "Become part of tradition",
+        "subtitle": "Join us and help preserve our cultural heritage",
+        "becomeMember": "Become a member",
+        "upcomingEvents": "Upcoming events"
+      },
+      "membershipModal": {
+        "title": "Become a member of {{clubName}}",
+        "subtitle": "Join our community and preserve traditions together with us",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "age": "Age",
+          "agePlaceholder": "Enter your age",
+          "interests": "Interests in traditional culture",
+          "interestsPlaceholder": "E.g. folklore, crafts, cuisine...",
+          "motivation": "Why do you want to become a member?",
+          "motivationPlaceholder": "Tell us more about your motivation...",
+          "sending": "Sending...",
+          "submit": "Submit application",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Application sent!",
+          "message": "Thank you! We will contact you soon for confirmation."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        },
+        "emailSubject": "Membership application for {{clubName}}",
+        "emailBody": "Hello,\n\nMembership application:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nAge: {{age}}\nInterests: {{interests}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website",
+        "notSpecified": "Not specified",
+        "generalInterests": "General",
+        "defaultMessage": "I want to become a member of the club"
+      },
+      "messages": {
+        "upcomingEvents": "Upcoming traditional events:\n\n{{events}}",
+        "noEvents": "There are currently no upcoming traditional events."
+      }
+    },
+    "TraditionalFolklore": {
+      "header": {
+        "badge": "Traditional folklore",
+        "title": "Music, dance and performances",
+        "subtitle": "Authentic traditional songs and dances, passed down through generations"
+      },
+      "stats": {
+        "performances": "Performances",
+        "participants": "Participants",
+        "yearsExperience": "Years experience"
+      },
+      "activities": {
+        "title": "Folklore groups",
+        "subtitle": "Our musical and dance ensembles",
+        "from": "from",
+        "instructor": "Instructor"
+      },
+      "events": {
+        "title": "Cultural events",
+        "subtitle": "Concerts, festivals and performances",
+        "dateTime": "{{date}} at {{time}}",
+        "audience": "{{count}} audience"
+      },
+      "videos": {
+        "title": "Video gallery",
+        "subtitle": "Recordings from our performances",
+        "watch": "Watch",
+        "share": "Share"
+      },
+      "audio": {
+        "title": "Audio collection",
+        "subtitle": "Traditional songs and music"
+      },
+      "awards": {
+        "title": "Cultural awards",
+        "subtitle": "Recognition for our folklore activities"
+      },
+      "common": {
+        "participants": "{{count}} participants"
+      },
+      "cta": {
+        "title": "Join the folklore tradition",
+        "subtitle": "Learn authentic traditional songs and dances in our groups",
+        "register": "Register",
+        "watchVideos": "Watch videos"
+      },
+      "videoModal": {
+        "notSupported": "Your browser does not support the video element.",
+        "download": "Download",
+        "share": "Share"
+      },
+      "registrationModal": {
+        "title": "Register for folklore activities",
+        "subtitle": "Join our authentic traditional heritage",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "age": "Age",
+          "agePlaceholder": "Enter your age",
+          "experienceLabel": "Folklore experience",
+          "selectExperience": "Select experience",
+          "experience": {
+            "beginner": "Beginner",
+            "intermediate": "Intermediate",
+            "advanced": "Advanced",
+            "professional": "Professional"
+          },
+          "activityLabel": "Preferred activity",
+          "selectActivity": "Select activity",
+          "anyActivity": "Whatever is suitable",
+          "message": "Additional message",
+          "messagePlaceholder": "Tell us more about your interest in folklore...",
+          "sending": "Sending...",
+          "submit": "Submit application",
+          "cancel": "Cancel"
+        },
+        "success": {
+          "title": "Application sent!",
+          "message": "Thank you! We will contact you soon for confirmation."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly."
+        },
+        "emailSubject": "Registration for folklore activities - {{clubName}}",
+        "emailBody": "Hello,\n\nFolklore group registration request:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nAge: {{age}}\nExperience: {{experience}}\nPreferred activity: {{activity}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website",
+        "notSpecified": "Not specified",
+        "noExperience": "No experience",
+        "noMessage": "No additional message"
+      },
+      "media": {
+        "defaultFileName": "file"
+      },
+      "messages": {
+        "downloadError": "An error occurred during download",
+        "shareSuccess": "Information copied to clipboard!",
+        "noVideosAvailable": "No videos are currently available."
+      }
+    },
+    "TraditionalPerformances": {
+      "header": {
+        "badge": "Performances and shows",
+        "title": "Our stage and audience",
+        "subtitle": "We share the beauty of traditional culture through authentic performances"
+      },
+      "stats": {
+        "performances": "Performances",
+        "performers": "Performers",
+        "yearsOnStage": "Years on stage",
+        "eventsThisYear": "Events this year"
+      },
+      "upcoming": {
+        "title": "Upcoming performances",
+        "subtitle": "Don't miss our future shows",
+        "seats": "Up to {{count}} seats",
+        "reserve": "Reserve seat",
+        "share": "Share"
+      },
+      "groups": {
+        "title": "Our groups",
+        "subtitle": "Permanent ensembles and groups",
+        "from": "from",
+        "leader": "Leader",
+        "performers": "{{count}} performers"
+      },
+      "videos": {
+        "title": "Performance recordings",
+        "subtitle": "Watch our performances",
+        "watch": "Watch",
+        "download": "Download"
+      },
+      "past": {
+        "title": "Past performances",
+        "subtitle": "Our successful shows",
+        "viewers": "{{count}} viewers"
+      },
+      "awards": {
+        "title": "Performance awards",
+        "subtitle": "Recognition for our performances"
+      },
+      "cta": {
+        "title": "Become part of the performances",
+        "subtitle": "Join our groups and the art of traditional culture",
+        "register": "Register",
+        "viewSchedule": "View schedule"
+      },
+      "videoModal": {
+        "notSupported": "Your browser does not support the video element.",
+        "duration": "Duration",
+        "type": "Type",
+        "downloadVideo": "Download video",
+        "share": "Share"
+      },
+      "calendarModal": {
+        "title": "{{clubName}} schedule",
+        "regularActivities": "Regular activities",
+        "upcomingEvents": "Upcoming events"
+      },
+      "registrationModal": {
+        "title": "Register for {{clubName}}",
+        "subtitle": "Please fill out the form below",
+        "form": {
+          "name": "Your name",
+          "namePlaceholder": "Enter your name",
+          "email": "Email address",
+          "emailPlaceholder": "Enter your email",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter your phone",
+          "interest": "You are interested in",
+          "selectActivity": "Select activity",
+          "other": "Other",
+          "message": "Additional message",
+          "messagePlaceholder": "Tell us more about your interest...",
+          "submit": "Submit application",
+          "cancel": "Cancel"
+        },
+        "emailSubject": "Registration request for {{clubName}}",
+        "emailBody": "Hello,\n\nI would like to register for the club with the following details:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nI am interested in: {{activity}}\n\nMessage:\n{{message}}\n\nBest regards,\n{{name}}"
+      },
+      "days": {
+        "понеделник": "Monday",
+        "вторник": "Tuesday",
+        "сряда": "Wednesday",
+        "четвъртък": "Thursday",
+        "петък": "Friday",
+        "събота": "Saturday",
+        "неделя": "Sunday"
+      },
+      "messages": {
+        "videoNotAvailable": "Video is not available for download",
+        "downloadError": "An error occurred while downloading the video",
+        "shareDefault": "Share from club",
+        "linkCopied": "Link copied to clipboard!",
+        "reservation": "Reservation for \"{{title}}\" on {{date}} at {{time}}",
+        "emailPrepared": "Email has been prepared for sending!"
+      }
+    },
+     "TraditionalCostumes": {
+      "header": {
+        "badge": "Traditions and costumes",
+        "title": "Our cultural heritage",
+        "subtitle": "We preserve and showcase the traditions of our culture"
+      },
+      "gallery": {
+        "title": "Gallery",
+        "subtitle": "Photos from our traditional events and activities",
+        "imageAlt": "Photo {{index}} from {{clubName}}"
+      },
+      "events": {
+        "title": "Traditional events",
+        "subtitle": "Events related to our traditions",
+        "timeAt": " at {{time}}",
+        "participants": "{{count}} participants"
+      },
+      "awards": {
+        "title": "Recognition for traditions",
+        "subtitle": "Our achievements in the field of traditional culture"
+      },
+      "galleryModal": {
+        "title": "Photo from {{clubName}}",
+        "imageAlt": "Photo from {{clubName}}",
+        "download": "Download",
+        "share": "Share",
+        "shareTitle": "Photo from {{clubName}}",
+        "counter": "{{current}} of {{total}}"
+      },
+      "messages": {
+        "downloadError": "An error occurred while downloading the image",
+        "galleryFrom": "Gallery from {{clubName}}",
+        "linkCopied": "Link copied to clipboard!"
+      }
+    },
+    "TraditionalMusic": {
+      "header": {
+        "badge": "Music and songs",
+        "title": "The sounds of tradition",
+        "subtitle": "We preserve and present the musical heritage of our culture"
+      },
+      "audio": {
+        "title": "Audio recordings",
+        "subtitle": "Listen to our musical performances"
+      },
+      "activities": {
+        "title": "Musical ensembles",
+        "subtitle": "Our regular musical activities",
+        "from": "from",
+        "leader": "Leader",
+        "participants": "{{count}} participants"
+      },
+      "events": {
+        "title": "Musical events",
+        "subtitle": "Concerts and musical events",
+        "timeAt": " at {{time}}",
+        "participants": "{{count}} participants"
+      },
+      "videos": {
+        "title": "Video recordings",
+        "subtitle": "Watch our musical performances",
+        "watch": "Watch"
+      },
+      "awards": {
+        "title": "Musical achievements",
+        "subtitle": "Our awards in the field of music"
+      },
+      "videoModal": {
+        "notSupported": "Your browser does not support the video element.",
+        "share": "Share"
+      },
+      "days": {
+        "понеделник": "Monday",
+        "вторник": "Tuesday",
+        "сряда": "Wednesday",
+        "четвъртък": "Thursday",
+        "петък": "Friday",
+        "събота": "Saturday",
+        "неделя": "Sunday"
+      },
+      "messages": {
+        "downloadError": "An error occurred while downloading the audio",
+        "musicFromClub": "Music from club",
+        "linkCopied": "Link copied to clipboard!"
+      }
+    },
+    "TraditionalCalendar": {
+      "header": {
+        "badge": "Activity calendar",
+        "title": "Our schedule",
+        "subtitle": "Follow all upcoming events and regular activities"
+      },
+      "controls": {
+        "today": "Today",
+        "month": "Month",
+        "list": "List"
+      },
+      "eventTypes": {
+        "event": "Event",
+        "activity": "Regular activity",
+        "trip": "Trip",
+        "course": "Course"
+      },
+      "upcoming": {
+        "title": "Upcoming events",
+        "subtitle": "The nearest activities and events"
+      },
+      "legend": {
+        "title": "Legend",
+        "subtitle": "Types of activities in the calendar",
+        "events": "Special events",
+        "activities": "Regular activities",
+        "trips": "Trips",
+        "courses": "Courses"
+      },
+      "eventModal": {
+        "instructor": "Instructor",
+        "destination": "Destination",
+        "price": "Price",
+        "duration": "Duration",
+        "description": "Description",
+        "register": "Register",
+        "share": "Share",
+        "call": "Call"
+      },
+      "tripTitle": "Trip to {{destination}}",
+      "eventTooltip": "{{title}} at {{time}}",
+      "eventDateTime": "{{date}} at {{time}}",
+      "participantsCount": "{{count}} participants",
+      "recurring": "Regular activity",
+      "noEvents": "No events for this month",
+      "currency": "BGN",
+      "shareText": "{{title}} - {{date}} at {{time}}",
+      "reservation": {
+        "subject": "Registration for {{title}}",
+        "body": "Hello,\n\nI would like to register for \"{{title}}\" on {{date}} at {{time}}.\n\nPlease confirm my registration.\n\nBest regards"
+      },
+      "messages": {
+        "shareSuccess": "Information copied to clipboard!"
+      }
+    },
+    "TraditionalGallery": {
+      "header": {
+        "badge": "Gallery",
+        "title": "Our memories",
+        "subtitle": "View photos and videos from our activities and events"
+      },
+      "controls": {
+        "searchPlaceholder": "Search in gallery...",
+        "itemCount": "{{count}} items"
+      },
+      "categories": {
+        "all": "All",
+        "main": "Main",
+        "gallery": "Gallery",
+        "video": "Videos"
+      },
+      "mediaTypes": {
+        "video": "Video",
+        "image": "Photo"
+      },
+      "items": {
+        "mainImageTitle": "Main photo of {{clubName}}",
+        "mainImageDescription": "Representative photo of {{clubName}}",
+        "mainImageAlt": "{{clubName}} - main photo",
+        "galleryImageTitle": "Photo {{index}}",
+        "galleryImageDescription": "Photo from {{clubName}} activities",
+        "galleryImageAlt": "Photo {{index}} from {{clubName}}",
+        "videoTitle": "Video {{index}}",
+        "videoDescription": "Video recording from {{clubName}}",
+        "videoAlt": "Video {{index}} from {{clubName}}"
+      },
+      "noResults": {
+        "title": "No results found",
+        "subtitle": "Try different search criteria",
+        "clearFilters": "Clear filters"
+      },
+      "modal": {
+        "videoNotSupported": "Your browser does not support the video element.",
+        "download": "Download",
+        "share": "Share",
+        "counter": "{{current}} of {{total}}"
+      },
+      "shareText": "{{title}} - {{clubName}}",
+      "messages": {
+        "downloadError": "An error occurred during download",
+        "shareSuccess": "Information copied to clipboard!"
+      }
+    },
+    "TraditionalContacts": {
+      "header": {
+        "badge": "Contact us",
+        "title": "Contacts",
+        "subtitle": "We'll be happy to answer your questions and help you"
+      },
+      "main": {
+        "title": "Main contacts",
+        "subtitle": "How you can reach us"
+      },
+      "contactTypes": {
+        "phone": "Phone",
+        "mobile": "Mobile",
+        "email": "Email",
+        "website": "Website",
+        "address": "Address"
+      },
+      "actions": {
+        "call": "Call",
+        "sendEmail": "Send email",
+        "visit": "Visit",
+        "showOnMap": "Show on map",
+        "copy": "Copy",
+        "copied": "Copied!",
+        "copyPhone": "Copy phone",
+        "copyMobile": "Copy mobile",
+        "copyEmail": "Copy email",
+        "copyWebsite": "Copy website",
+        "copyAddress": "Copy address"
+      },
+      "workingHours": {
+        "title": "Working hours",
+        "subtitle": "When you can find us",
+        "currentlyOpen": "We are currently open",
+        "currentlyClosed": "We are currently closed",
+        "closed": "Closed"
+      },
+      "management": {
+        "title": "Management",
+        "subtitle": "People you can contact"
+      },
+      "socialMedia": {
+        "title": "Social media",
+        "subtitle": "Follow us online"
+      },
+      "cta": {
+        "title": "Send us a message",
+        "subtitle": "Have a question or want more information? Contact us!",
+        "contactUs": "Contact us"
+      },
+      "form": {
+        "title": "Contact {{clubName}}",
+        "subtitle": "Send us your message and we'll get back to you",
+        "fields": {
+          "name": "Your name",
+          "email": "Email address",
+          "phone": "Phone",
+          "subject": "Subject",
+          "message": "Message"
+        },
+        "placeholders": {
+          "name": "Enter your name",
+          "email": "Enter your email",
+          "phone": "Enter your phone",
+          "subject": "Message subject",
+          "message": "Write your message here..."
+        },
+        "sending": "Sending...",
+        "submit": "Send message",
+        "cancel": "Cancel",
+        "defaultSubject": "Message from {{name}}",
+        "notSpecified": "Not specified",
+        "emailBody": "Name: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} contact form",
+        "success": {
+          "title": "Message sent!",
+          "message": "Thank you! We'll contact you soon."
+        },
+        "error": {
+          "title": "An error occurred",
+          "message": "Please try again or contact us directly.",
+          "retry": "Try again"
+        }
+      },
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "messages": {
+        "copyError": "Copy error. Please try again."
+      }
+    },
+    "TraditionalLocation": {
+      "header": {
+        "badge": "Location",
+        "title": "Where to find us",
+        "subtitle": "Detailed information about location, transport and amenities"
+      },
+      "address": {
+        "title": "Our address",
+        "comingSoon": "Address will be announced soon"
+      },
+      "actions": {
+        "directions": "Directions",
+        "share": "Share",
+        "copy": "Copy",
+        "copied": "Copied!"
+      },
+      "tabs": {
+        "map": "Map",
+        "transport": "Transport",
+        "parking": "Parking",
+        "nearby": "Nearby"
+      },
+      "map": {
+        "radiusTooltip": "250m from club",
+        "legend": {
+          "club": "Club"
+        }
+      },
+      "venue": {
+        "title": "Venue information",
+        "type": "Type",
+        "municipal": "Municipal building",
+        "size": "Size",
+        "capacity": "Capacity",
+        "people": "people",
+        "defaultType": "Traditional cultural center",
+        "defaultDescription": "Suitable for group activities",
+        "facilities": "Facilities"
+      },
+      "transport": {
+        "instructionsFor": "Instructions for",
+        "walking": {
+          "name": "Walking",
+          "duration": "5-15 min",
+          "description": "From city center",
+          "instruction1": "From city center - 10 minutes walk",
+          "instruction2": "Follow the main street",
+          "instruction3": "Look for directional signs"
+        },
+        "bus": {
+          "name": "Bus",
+          "duration": "15-25 min",
+          "description": "Public transport",
+          "instruction1": "Use public transport",
+          "instruction2": "Check bus stop schedules",
+          "instruction3": "Follow direction instructions"
+        },
+        "metro": {
+          "name": "Metro",
+          "duration": "20-30 min",
+          "description": "Fast public transport",
+          "instruction1": "Use metro if there's a nearby station",
+          "instruction2": "Check the metro map",
+          "instruction3": "Plan the shortest route"
+        },
+        "car": {
+          "name": "Car",
+          "duration": "10-40 min",
+          "description": "Depending on traffic",
+          "instruction1": "Check for parking spaces",
+          "instruction2": "Use GPS navigation",
+          "instruction3": "Watch for traffic restrictions"
+        }
+      },
+      "parking": {
+        "labels": {
+          "type": "Type",
+          "price": "Price",
+          "maxTime": "Max time",
+          "workingHours": "Working hours",
+          "distance": "Distance",
+          "capacity": "Capacity",
+          "location": "Location"
+        },
+        "street": {
+          "title": "Street parking",
+          "type": "Street parking",
+          "price": "According to local rates",
+          "maxTime": "According to regulations",
+          "workingHours": "Check local signs"
+        },
+        "paid": {
+          "title": "Paid parking",
+          "name": "Paid parking lots in the area",
+          "distance": "Various distances",
+          "price": "According to rates",
+          "capacity": "Various capacity",
+          "workingHours": "Different working hours"
+        },
+        "free": {
+          "title": "Free parking",
+          "location": "Streets in the area",
+          "distance": "Various distances",
+          "note": "Look for free spaces around"
+        }
+      },
+      "nearby": {
+        "distance": "Distance"
+      },
+      "accessibility": {
+        "title": "Accessibility",
+        "subtitle": "Information for people with disabilities and limited mobility",
+        "wheelchair": "Wheelchair access",
+        "wheelchairAvailable": "Check on-site for accessibility",
+        "wheelchairLimited": "Limited access",
+        "entrance": "Convenient entrance",
+        "entranceDescription": "Check conditions on-site",
+        "publicAccess": "Public access",
+        "publicAccessDescription": "Open to visitors according to working hours"
+      },
+      "help": {
+        "title": "Need help?",
+        "subtitle": "If you have trouble finding the club or need additional information",
+        "call": "Call",
+        "realTimeNavigation": "Real-time navigation"
+      },
+      "messages": {
+        "copyError": "Copy error. Please try again.",
+        "addressNotSpecified": "address not specified",
+        "defaultCountry": "Country",
+        "openingMap": "Opening map...",
+        "shareTitle": "{{clubName}} location",
+        "addressCopied": "Address copied to clipboard!"
+      }
+    }
+  },
+  "common": {
+    "navigation": {
+      "home": "Home"
     }
   }
 }
