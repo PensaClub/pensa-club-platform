@@ -91,12 +91,10 @@ const PublicationStoriesList = () => {
     }
   }, [getAllPublications]);
 
-  // Initialize viewed publications САМО ВЕДНЪЖ
   useEffect(() => {
     if (contentData.length > 0) {
       setIsInitialLoad(false);
 
-      // Зареждаме само реално разгледани публикации (не инициализираме с фалшиви)
       const existingViewed = ViewedPublicationsManager.getViewedPublications();
       setViewedPublications(existingViewed);
 
@@ -109,7 +107,6 @@ const PublicationStoriesList = () => {
     }
   }, [contentData, contentType]);
 
-  // Проверяваме за нови viewed publications периодично
   useEffect(() => {
     const checkForNewViewed = () => {
       const currentViewed = ViewedPublicationsManager.getViewedPublications();
@@ -173,34 +170,30 @@ const PublicationStoriesList = () => {
   const featuredPublication = displayedContent[0];
   const remainingPublications = displayedContent.slice(1);
 
-  // 🔧 ПОПРАВЕНА ЛОГИКА - ВИНАГИ показваме всички останали публикации
   const allPublicationsForGrid = displayedContent;
 
-  // Recently Viewed - показваме само ако има РЕАЛНО разгледани публикации
   const shouldShowRecentlyViewed = viewedPublications.length > 0;
 
-  // Филтрираме recently viewed да не включва featured публикацията
   const filteredViewedPublications = viewedPublications.filter(viewed =>
     viewed.id !== featuredPublication?.id
   );
 
-  // Pagination component
   const renderPagination = () => {
     if (!paginationInfo || paginationInfo.totalPages <= 1) return null;
 
     const { page: currentPage, totalPages } = paginationInfo;
     const pages = [];
 
-    // Показваме максимум 7 страници наведнъж
+   
     let startPage = Math.max(1, currentPage - 3);
     let endPage = Math.min(totalPages, currentPage + 3);
 
-    // Ако сме в началото, показваме повече страници напред
+  
     if (currentPage <= 4) {
       endPage = Math.min(totalPages, 7);
     }
 
-    // Ако сме в края, показваме повече страници назад
+
     if (currentPage > totalPages - 4) {
       startPage = Math.max(1, totalPages - 6);
     }
@@ -357,7 +350,7 @@ const PublicationStoriesList = () => {
                   {t('publicationStories.sections.allPublications')}
                 </h2>
                 {allPublicationsForGrid.length > 0 ? (
-                  <div className={`ps-content-${viewMode}`}> {/* 🔧 ПРОМЕНЕНО */}
+                  <div className={`ps-content-${viewMode}`}> 
                     {allPublicationsForGrid.map((content, index) => (
                       <PublicationStoriesCard
                         key={content.id}

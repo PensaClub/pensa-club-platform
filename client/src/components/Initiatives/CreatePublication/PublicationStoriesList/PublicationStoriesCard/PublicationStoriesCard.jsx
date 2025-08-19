@@ -8,7 +8,7 @@ import { ViewedPublicationsManager } from '../../../../../utils/viewedPublicatio
 export const PublicationStoriesCard = ({ 
   content, 
   isFeatured = false, 
-  viewMode = 'standard', // 'featured', 'compact', 'standard', 'list'
+  viewMode = 'standard', 
   contentType = 'publications',
   index 
 }) => {
@@ -58,7 +58,7 @@ export const PublicationStoriesCard = ({
       case 'compact':
         return { title: 50, description: 100 };
       case 'list':
-        return { title: 80, description: 150 }; // 🔧 ДОБАВЕН list режим
+        return { title: 80, description: 150 }; 
       case 'standard':
       default:
         return { title: 60, description: 120 };
@@ -211,7 +211,7 @@ export const PublicationStoriesCard = ({
             </div>
           )}
 
-          {/* 🔧 ОБНОВЕНА ЛОГИКА за показване на footer */}
+          {/*  footer */}
           {viewMode !== 'compact' && viewMode !== 'list' && (
             <div className="ps-card-footer">
               <span className="ps-read-more-text">
