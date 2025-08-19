@@ -2,9 +2,9 @@
 
 
 import React from 'react';
-import './skeletonCardPublication.css';
+import './skeletonPublicationStoriesCard.css';
 
-export const SkeletonCardPublication = () => {
+export const SkeletonPublicationStoriesCard = () => {
   return (
     <div className="skeleton-publication-card">
       <div className="skeleton-publication-image"></div>

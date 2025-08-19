@@ -63,7 +63,7 @@ const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/Artic
 const InitiativesList = lazy(() => import('./components/Initiatives/InitiativesList/InitiativesList.jsx'));
 const ProjectsList = lazy(() => import('./components/Initiatives/ProjectsList/ProjectsList.jsx'));
 const PublicationForm = lazy(() => import('./components/Initiatives/CreatePublication/MainForm/MainFormPublication'));
-const PublicationsList = lazy(() => import('./components/Initiatives/CreatePublication/PublicationsList/PublicationsList.jsx'));
+const PublicationsList = lazy(() => import('./components/Initiatives/CreatePublication/PublicationStoriesList/PublicationStoriesList.jsx'));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {
