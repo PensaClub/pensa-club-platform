@@ -45,6 +45,7 @@ const SectionSchema = z.object({
     title: z.string().nullable().optional(),
     content: z.any().nullable().optional(),
     order: z.number().nullable().optional(),
+    image: ImageSchema.nullable().optional(),
     images: z.array(ImageSchema).nullable().optional(),
 });
 
@@ -115,12 +116,11 @@ const SlugSchema = z
     .regex(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens')
     .refine((slug) => !slug.startsWith('-') && !slug.endsWith('-'), 'Slug cannot start or end with hyphen')
     .refine((slug) => !slug.includes('--'), 'Slug cannot contain consecutive hyphens')
-    .nullable()
     .optional();
 
-const TitleSchema = z.string().min(3, 'Title must be at least 3 characters').nullable().optional();
+const TitleSchema = z.string().min(3, 'Title must be at least 3 characters').optional();
 
-const ShortDescriptionSchema = z.string().min(10, 'Short description must be at least 10 characters').nullable().optional();
+const ShortDescriptionSchema = z.string().min(10, 'Short description must be at least 10 characters').optional();
 
 const TagsSchema = z
     .array(z.string())

@@ -1,4 +1,4 @@
-const { initiative, section, image, comment, publication, user_account } = require('../sequelize/models');
+const { initiative, project, section, image, comment, publication, user_account } = require('../sequelize/models');
 
 const publicationConfig = [
     {
@@ -9,7 +9,12 @@ const publicationConfig = [
     {
         model: initiative,
         as: 'initiatives',
-        attributes: ['id', 'title', 'slug'],
+        attributes: ['id', 'title', 'slug', 'isDraft'],
+    },
+    {
+        model: project,
+        as: 'projects',
+        attributes: ['id', 'title', 'slug', 'isDraft'],
     },
     {
         model: section,
@@ -17,7 +22,7 @@ const publicationConfig = [
         include: [
             {
                 model: image,
-                as: 'sectionImages',
+                as: 'sectionImage',
             },
         ],
     },
@@ -32,7 +37,7 @@ const publicationConfig = [
     {
         model: publication,
         as: 'relatedPublications',
-        attributes: ['id', 'slug', 'title', 'shortDescription'],
+        attributes: ['id', 'slug', 'title', 'shortDescription', 'isDraft'],
     },
 ];
 
@@ -41,35 +46,84 @@ const transformPublication = async (pub) => {
 
     const plainPublication = pub.get({ plain: true });
 
-    // Remove junction table data and isDraft flag
-    const { publication_bookmarks, publication_likes, related_publications, isDraft, ...publicationData } = plainPublication;
+    const { publication_bookmarks, publication_likes, related_publications, project_publications, initiative_publications, likedBy, ...publicationData } =
+        plainPublication;
 
-    // Add userEmail from creator and remove creator object
     if (publicationData.creator) {
         publicationData.userEmail = publicationData.creator.email;
         delete publicationData.creator;
         delete publicationData.creatorId;
     }
 
-    // Transform sections
+    const currentPublicationIsDraft = publicationData.isDraft;
+
+    if (publicationData.initiatives) {
+        publicationData.initiatives = publicationData.initiatives
+            .filter((initiative) => {
+                if (currentPublicationIsDraft) {
+                    return true;
+                } else {
+                    return !initiative.isDraft;
+                }
+            })
+            .map((initiative) => {
+                const { initiative_publications, ...cleanInitiative } = initiative;
+                return {
+                    id: cleanInitiative.id,
+                    title: cleanInitiative.title,
+                    slug: cleanInitiative.slug,
+                };
+            });
+    }
+
+    if (publicationData.projects) {
+        publicationData.projects = publicationData.projects
+            .filter((project) => {
+                if (currentPublicationIsDraft) {
+                    return true;
+                } else {
+                    return !project.isDraft;
+                }
+            })
+            .map((project) => {
+                const { project_publications, ...cleanProject } = project;
+                return {
+                    id: cleanProject.id,
+                    title: cleanProject.title,
+                    slug: cleanProject.slug,
+                };
+            });
+    }
+
+    if (publicationData.relatedPublications) {
+        publicationData.relatedPublications = publicationData.relatedPublications
+            .filter((relatedPub) => {
+                if (currentPublicationIsDraft) {
+                    return true;
+                } else {
+                    return !relatedPub.isDraft;
+                }
+            })
+            .map((relatedPub) => {
+                const { related_publications, ...cleanRelatedPub } = relatedPub;
+                return {
+                    id: cleanRelatedPub.id,
+                    title: cleanRelatedPub.title,
+                    slug: cleanRelatedPub.slug,
+                };
+            });
+    }
+
     if (publicationData.sections) {
         publicationData.sections = publicationData.sections.map((section) => {
-            if (section.sectionImages) {
-                const { sectionImages, ...singleSection } = section;
+            if (section.sectionImage) {
+                const { sectionImage, ...singleSection } = section;
                 return {
                     ...singleSection,
-                    images: sectionImages,
+                    image: sectionImage,
                 };
             }
             return section;
-        });
-    }
-
-    // Clean up related publications
-    if (publicationData.relatedPublications) {
-        publicationData.relatedPublications = publicationData.relatedPublications.map((relatedPub) => {
-            const { related_publications, ...cleanRelatedPub } = relatedPub;
-            return cleanRelatedPub.id;
         });
     }
 
