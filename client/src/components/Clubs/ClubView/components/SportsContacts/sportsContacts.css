@@ -123,7 +123,7 @@
     0 0 40px rgba(255, 255, 255, 0.1);
 }
 
-.sports-contacts-title-icon {
+.sports-contacts-title svg.sports-contacts-title-icon {
   animation: sportsContactsTitleBolt 2s ease-in-out infinite;
   color: #fbbf24;
 }
@@ -806,7 +806,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.sports-contacts-cta-icon {
+.sports-contacts-cta svg.sports-contacts-cta-icon {
   font-size: 4rem;
   color: #fbbf24;
   margin-bottom: 2rem;

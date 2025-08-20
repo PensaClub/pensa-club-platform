@@ -193,6 +193,30 @@ initiativeController.patch('/toggle-draft/:id', isAuth, checkPermission('initiat
     }
 });
 
+initiativeController.get('/all-for-connections', isAuth, checkPermission('initiative', 'read'), async (req, res, next) => {
+    try {
+        const initiatives = await initiative.findAll({
+            attributes: ['id', 'slug', 'title', 'shortDescription', 'isDraft', 'createdAt'],
+            order: [['createdAt', 'DESC']],
+        });
+
+        const transformedInitiatives = initiatives.map((init) => ({
+            id: init.id,
+            slug: init.slug,
+            title: init.title,
+            shortDescription: init.shortDescription,
+            isDraft: init.isDraft,
+            createdAt: init.createdAt,
+        }));
+
+        return res.status(200).json({
+            data: transformedInitiatives,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 // ========================================
 // FUNCTIONS
 // ========================================

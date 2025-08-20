@@ -72,13 +72,13 @@ export const AnalyticsProvider = ({ children }) => {
   };
 
   // Проследяване на story/publication прегледи
-  const trackStoryOrPublication = (contentId, contentTitle, contentType) => {
+  const trackStoryOrPublication = async (contentId, contentTitle, contentType) => {
     try {
       // Определяме правилния тип за analytics
       const analyticsType = contentType === 'story' ? 'story' : 'publication';
 
       // Използваме общата trackView функция
-      trackView(contentId, contentTitle, analyticsType);
+      await trackView(contentId, contentTitle, analyticsType);
 
       const key = `${analyticsType}_${contentId}`;
       setViewCounts(prev => ({
@@ -91,9 +91,9 @@ export const AnalyticsProvider = ({ children }) => {
   };
 
   // Track download
-  const trackContentDownload = (contentId, contentTitle, contentType, fileType, fileSize) => {
+  const trackContentDownload = async (contentId, contentTitle, contentType, fileType, fileSize) => {
     try {
-      trackDownload(contentId, contentTitle, contentType, fileType, fileSize);
+      await trackDownload(contentId, contentTitle, contentType, fileType, fileSize);
 
       // Актуализираме state-а за downloads
       const key = `${contentType}_${contentId}_downloads`;

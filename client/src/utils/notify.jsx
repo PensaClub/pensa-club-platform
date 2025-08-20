@@ -243,6 +243,12 @@ export const notify = (key, error, customMessage = null) => {
   case 'documents-upload-failed':
     toast.error(<Trans i18nKey="notification.documents-upload-failed" />, { role: 'alert' });
     break;
+  case 'file-upload-success':
+    toast.success(<Trans i18nKey="notification.file-upload-success" />, { role: 'alert' });
+    break;
+  case 'file-upload-failed':
+    toast.error(<Trans i18nKey="notification.file-upload-failed" />, { role: 'alert' });
+    break;
   case 'opening-pdf':
     toast.info(<Trans i18nKey="notification.opening-pdf" />, { role: 'alert' });
     break;

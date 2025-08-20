@@ -2774,6 +2774,7 @@
             "total-files-size-exceeded": "Gesamtgröße der Dateien überschreitet das Limit (100MB)",
             "file-name-too-long": "Dateiname ist zu lang (maximal 255 Zeichen)",
             "file-upload-failed": "Datei-Upload fehlgeschlagen",
+            "file-upload-success": "Datei erfolgreich hochgeladen",
             "duplicate-file-name": "Datei mit diesem Namen existiert bereits",
             "empty-file": "Datei ist leer",
             "invalid-image-format": "Ungültiges Bildformat",
@@ -8306,6 +8307,7 @@
           "distance": "Verschiedene Entfernungen",
           "note": "Suchen Sie nach kostenlosen Plätzen in der Umgebung"
         }
+        
       },
       "nearby": {
         "distance": "Entfernung"
@@ -8343,3 +8345,4 @@
         }
     }
 }
+

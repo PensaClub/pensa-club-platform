@@ -586,7 +586,7 @@
   margin: 0 0 2rem 0;
 }
 
-.sport-events-awards h4 svg {
+.sport-events-achievements .sport-events-awards h4 svg {
   color: #eab308;
   font-size: 1.3rem;
 }
@@ -695,7 +695,7 @@
   margin: 0 0 2rem 0;
 }
 
-.sport-events-past h4 svg {
+.sport-events-achievements .sport-events-past h4 svg {
   color: #6b7280;
   font-size: 1.3rem;
 }
@@ -795,7 +795,7 @@
   margin: 0 0 2rem 0;
 }
 
-.sport-events-recognitions h4 svg {
+.sport-events-achievements .sport-events-recognitions h4 svg {
   color: #f59e0b;
   font-size: 1.3rem;
 }
@@ -835,7 +835,7 @@
   border-color: #f59e0b;
 }
 
-.sport-events-recognition-item svg {
+.sport-events-recognitions-list .sport-events-recognition-item svg {
   color: #f59e0b;
   font-size: 1.1rem;
   flex-shrink: 0;

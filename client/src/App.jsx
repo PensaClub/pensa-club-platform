@@ -66,11 +66,13 @@ import ClubView from './components/Clubs/ClubView/ClubView.jsx';
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
 const InitiativesList = lazy(() => import('./components/Initiatives/InitiativesList/InitiativesList.jsx'));
 const ProjectsList = lazy(() => import('./components/Initiatives/ProjectsList/ProjectsList.jsx'));
+const PublicationForm = lazy(() => import('./components/Initiatives/CreatePublication/MainForm/MainFormPublication'));
+const PublicationsList = lazy(() => import('./components/Initiatives/CreatePublication/PublicationStoriesList/PublicationStoriesList.jsx'));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {
   const { t } = useTranslation();
-  
+
   return (
     <div className="lazy-loading-container">
       <div className="lazy-loading-content">
@@ -102,7 +104,7 @@ function App() {
   useEffect(() => {
     setNavigator(navigate);
   }, [navigate]);
-  
+
   const isProfilePage = location.pathname.startsWith('/profile');
 
   return (
@@ -142,36 +144,44 @@ function App() {
                                   <Route path="/forget-password" element={<ForgetPassword />} />
                                   <Route path="/resend-email" element={<ReSendEmail />} />
                                   <Route path="/reset-password" element={<ResetPasswordPage />} />
-                                  
+
                                   {/* ✅ LAZY LOADED ROUTES */}
-                                  <Route 
-                                    path="/articles" 
+                                  <Route
+                                    path="/articles"
                                     element={
                                       <Suspense fallback={<LazyLoadingFallback type="articles" />}>
                                         <ArticlesList />
                                       </Suspense>
-                                    } 
+                                    }
                                   />
-                                  <Route 
-                                    path="/initiatives" 
+                                  <Route
+                                    path="/initiatives"
                                     element={
                                       <Suspense fallback={<LazyLoadingFallback type="initiatives" />}>
                                         <InitiativesList />
                                       </Suspense>
-                                    } 
+                                    }
                                   />
-                                  <Route 
-                                    path="/projects" 
+                                  <Route
+                                    path="/projects"
                                     element={
                                       <Suspense fallback={<LazyLoadingFallback type="projects" />}>
                                         <ProjectsList />
                                       </Suspense>
-                                    } 
+                                    }
                                   />
-
+                                  <Route
+                                    path="/publications"
+                                    element={
+                                      <Suspense fallback={<LazyLoadingFallback type="publications" />}>
+                                        <PublicationsList />
+                                      </Suspense>
+                                    }
+                                  />
+                                  <Route path="/publications/:slug" element={<PublicationView />} />
+                                  <Route path="/publications/edit/:slug" element={<PublicationForm isEditMode={true} />} />
                                   <Route path="/initiatives/:slug" element={<InitiativeView />} />
                                   <Route path="/stories/:slug" element={<StoryView />} />
-                                  <Route path="/publications/:slug" element={<PublicationView />} />
                                   <Route path="/projects/:slug" element={<ProjectView />} />
                                   <Route path="/articles/:slug" element={<ArticleView />} />
                                   <Route path="/elite-membership" element={<EliteMembershipPage />} />
@@ -190,7 +200,7 @@ function App() {
                                   <Route element={<PublicGuard />}>
                                     <Route path="/sign-up" element={<LoginRegister />} />
                                   </Route>
-                                  
+
                                   <Route path="/craigslist" element={<CommunityPage />} />
                                   <Route path="/clubs" element={<AllClubs />} />
                                   <Route path="/clubs/:slug" element={<ClubView />} />
@@ -203,7 +213,7 @@ function App() {
                                   <Route path="404/*" element={<NotFound />} />
                                   <Route path="*" element={<NotFound />} />
                                 </Routes>
-                                
+
                                 {!isProfilePage && (
                                   <FooterWithLoading
                                     additionalClasses={

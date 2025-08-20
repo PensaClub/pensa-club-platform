@@ -122,7 +122,7 @@
     0 0 40px rgba(255, 255, 255, 0.1);
 }
 
-.sports-location-title-icon {
+.sports-location-container svg.sports-location-title-icon  {
   animation: sportsLocationTitleBolt 2s ease-in-out infinite;
   color: #fbbf24;
 }
@@ -559,7 +559,7 @@
   margin-bottom: 2rem;
 }
 
-.sports-location-venue-header svg {
+.sports-location-venue-info .sports-location-venue-header svg {
   font-size: 1.5rem;
   color: #f97316;
 }
@@ -1215,7 +1215,7 @@
   50% { background-position: 100% 50%; }
 }
 
-.sports-location-help-trophy {
+.sports-location-help svg.sports-location-help-trophy {
   font-size: 4rem;
   color: #fbbf24;
   margin-bottom: 2rem;

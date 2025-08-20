@@ -22,7 +22,7 @@ const SectionsSection = ({
     updateSectionImageAlt,
     updateSectionImageCaption,
     clearSectionImages,
-    
+
 }) => {
     const { t } = useTranslation();
     const sectionEditorsRef = useRef({});
