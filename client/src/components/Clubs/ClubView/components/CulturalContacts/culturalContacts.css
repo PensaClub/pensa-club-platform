@@ -125,7 +125,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.cultural-contacts-quick-item svg {
+.cultural-contacts-quick-grid .cultural-contacts-quick-item svg {
   font-size: 1.5rem;
   color: #f59e0b;
 }
@@ -398,9 +398,9 @@
   border-bottom: 2px solid #f1f5f9;
 }
 
-.cultural-contacts-hours-header svg,
-.cultural-contacts-emergency-header svg,
-.cultural-contacts-social-header svg {
+.cultural-contacts-info-grid .cultural-contacts-hours-header svg,
+.cultural-contacts-info-grid .cultural-contacts-emergency-header svg,
+.cultural-contacts-info-grid .cultural-contacts-social-header svg {
   font-size: 1.5rem;
   color: #f59e0b;
 }
@@ -575,7 +575,7 @@
   margin-bottom: 3rem;
 }
 
-.cultural-contacts-faq-header svg {
+.cultural-contacts-faq .cultural-contacts-faq-header svg {
   font-size: 3rem;
   color: #f59e0b;
   margin-bottom: 1rem;
@@ -620,7 +620,7 @@
   margin-bottom: 1rem;
 }
 
-.cultural-contacts-faq-question svg {
+.cultural-contacts-faq-item .cultural-contacts-faq-question svg {
   color: #f59e0b;
   font-size: 1.2rem;
   margin-top: 0.25rem;

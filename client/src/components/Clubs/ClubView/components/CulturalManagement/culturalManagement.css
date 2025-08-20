@@ -234,7 +234,7 @@
   border-bottom: 2px solid #f1f5f9;
 }
 
-.cultural-management-office-header svg {
+.cultural-management-office-info .cultural-management-office-header svg {
   font-size: 1.8rem;
   color: #3b82f6;
 }
@@ -268,7 +268,7 @@
   color: #475569;
 }
 
-.cultural-management-address-info svg {
+.cultural-management-office-address .cultural-management-address-info svg {
   color: #3b82f6;
   font-size: 1.2rem;
   margin-top: 0.25rem;
@@ -287,7 +287,7 @@
   color: #475569;
 }
 
-.cultural-management-contact-row svg {
+.cultural-management-contact-list .cultural-management-contact-row svg {
   color: #3b82f6;
   font-size: 1rem;
   width: 20px;
@@ -335,7 +335,7 @@
   border-bottom: 2px solid #f1f5f9;
 }
 
-.cultural-management-form-header svg {
+.cultural-management-contact-form .cultural-management-form-header svg {
   font-size: 2rem;
   color: #3b82f6;
   margin-bottom: 1rem;

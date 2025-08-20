@@ -137,7 +137,7 @@
   margin-bottom: 2rem;
 }
 
-.general-contact-card.hours .general-card-header svg {
+.general-contact-card .general-card-header svg {
   color: #10b981;
   font-size: 1.3rem;
   margin-right: 1rem;
@@ -513,7 +513,7 @@
   font-size: 1.8rem;
 }
 
-.general-form-header h3 svg {
+.general-form-wrapper .general-form-header h3 svg {
   color: #10b981;
 }
 
