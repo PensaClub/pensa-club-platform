@@ -288,7 +288,7 @@
   font-size: 1rem;
 }
 
-.cultural-location-venue-item svg {
+.cultural-location-venue-info .cultural-location-venue-item svg {
   color: #dc2626;
   font-size: 1.1rem;
   width: 20px;

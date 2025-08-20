@@ -254,8 +254,8 @@
   font-size: 0.8rem;
 }
 
-.cultural-gallery-date svg,
-.cultural-gallery-location svg {
+.cultural-gallery-meta-info .cultural-gallery-date svg,
+.cultural-gallery-meta-info .cultural-gallery-location svg {
   color: #10b981;
   font-size: 0.7rem;
 }
@@ -273,7 +273,7 @@
   font-size: 0.8rem;
 }
 
-.cultural-gallery-stat svg {
+.cultural-gallery-stats .cultural-gallery-stat svg {
   color: #10b981;
   font-size: 0.7rem;
 }

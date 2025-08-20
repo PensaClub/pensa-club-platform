@@ -112,11 +112,11 @@
   border-bottom: 2px solid #f1f5f9;
 }
 
-.cultural-about-story-header svg,
+.cultural-about-story-card .cultural-about-story-header svg,
 .cultural-about-mission-header svg,
-.cultural-about-stats-header svg,
-.cultural-about-achievements-header svg,
-.cultural-about-specialties-header svg {
+.cultural-about-stats-card .cultural-about-stats-header svg,
+.cultural-about-achievements-card .cultural-about-achievements-header svg,
+.cultural-about-specialties-card .cultural-about-specialties-header svg {
   font-size: 1.8rem;
   color: #667eea;
 }

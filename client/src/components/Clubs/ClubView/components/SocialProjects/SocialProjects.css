@@ -194,7 +194,7 @@
   max-width: 400px;
 }
 
-.social-projects-search-wrapper svg {
+.social-projects-controls .social-projects-search-wrapper svg {
   position: absolute;
   left: 1.5rem;
   top: 50%;
@@ -232,7 +232,7 @@
   flex: 2;
 }
 
-.social-projects-filters > svg {
+.social-projects-controls .social-projects-filters svg {
   color: #64748b;
   font-size: 1.2rem;
 }

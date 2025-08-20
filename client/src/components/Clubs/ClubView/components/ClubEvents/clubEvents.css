@@ -459,8 +459,8 @@
   font-weight: 500;
 }
 
-.general-trip-detail svg,
-.general-course-detail svg {
+.general-trip-details .general-trip-detail svg,
+.general-trip-details .general-course-detail svg {
   color: #8b5cf6;
   font-size: 1.1rem;
 }

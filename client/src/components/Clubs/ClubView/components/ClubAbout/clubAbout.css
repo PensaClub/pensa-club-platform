@@ -629,7 +629,7 @@
   flex: 1;
 }
 
-.general-section-title svg {
+.general-section-header .general-section-title svg {
   font-size: 1.5rem;
   color: #6366f1;
 }
