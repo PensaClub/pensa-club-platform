@@ -304,7 +304,7 @@
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
 }
 
-.sports-gallery-search svg {
+.sports-gallery-search-sort .sports-gallery-search svg {
   color: rgba(255, 255, 255, 0.7);
   font-size: 1.2rem;
 }

@@ -91,7 +91,7 @@
   z-index: 2;
 }
 
-.social-about-story-header svg {
+.social-about-story .social-about-story-header svg {
   font-size: 2rem;
   color: #16a34a;
 }
@@ -126,7 +126,7 @@
   border-left: 4px solid #16a34a;
 }
 
-.social-about-founded svg {
+.social-about-story-content .social-about-founded svg {
   color: #16a34a;
   font-size: 1.2rem;
 }
@@ -243,7 +243,7 @@
   border-bottom: 2px solid #f1f5f9;
 }
 
-.social-about-section-header svg {
+.social-about-benefits .social-about-section-header svg {
   font-size: 1.5rem;
   color: #16a34a;
 }
@@ -278,7 +278,7 @@
   transform: translateX(5px);
 }
 
-.social-about-benefit-item svg {
+.social-about-benefits .social-about-benefit-item svg {
   color: #16a34a;
   font-size: 1rem;
   flex-shrink: 0;
@@ -314,12 +314,15 @@
   transform: translateX(5px);
 }
 
-.social-about-requirement-item svg {
+.social-about-requirements-list .social-about-requirement-item svg {
   color: #0891b2;
   font-size: 1rem;
   flex-shrink: 0;
 }
-
+.social-about-requirements .social-about-section-header svg {
+  font-size: 1.5rem;
+    color: #0891b2;
+}
 .social-about-requirement-item span {
   color: #475569;
   font-weight: 500;
@@ -398,10 +401,14 @@
   box-shadow: 0 4px 15px rgba(22, 163, 74, 0.1);
 }
 
-.social-about-service-item svg {
+.social-about-services-grid .social-about-service-item svg {
   color: #16a34a;
   font-size: 1.1rem;
   flex-shrink: 0;
+}
+.social-about-support-services .social-about-section-header svg {
+  font-size: 1.5rem;
+  color: #16a34a;
 }
 
 .social-about-service-item span {
@@ -425,7 +432,7 @@
   margin-bottom: 3rem;
 }
 
-.social-about-impact-header svg {
+.social-about-impact .social-about-impact-header svg {
   font-size: 3rem;
   color: #16a34a;
   margin-bottom: 1rem;

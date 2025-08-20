@@ -229,8 +229,8 @@
   border-left: 4px solid #22c55e;
 }
 
-.sports-about-founded svg,
-.sports-about-location svg {
+.sports-about-mission-text .sports-about-founded svg,
+.sports-about-mission-text .sports-about-location svg {
   color: #22c55e;
   font-size: 1.2rem;
 }
@@ -285,7 +285,7 @@
   margin: 0 0 1.5rem 0;
 }
 
-.sports-about-benefits h4 svg {
+.sports-about-mission .sports-about-benefits h4 svg {
   color: #f97316;
   font-size: 1.3rem;
 }
@@ -332,7 +332,7 @@
   border-color: #22c55e;
 }
 
-.sports-about-benefit-item svg {
+.sports-about-benefits-grid .sports-about-benefit-item svg {
   color: #22c55e;
   font-size: 1.5rem;
   flex-shrink: 0;
@@ -359,7 +359,7 @@
   margin: 0 0 1.5rem 0;
 }
 
-.sports-about-programs h4 svg {
+.sports-about-mission .sports-about-programs h4 svg {
   color: #059669;
   font-size: 1.3rem;
 }
