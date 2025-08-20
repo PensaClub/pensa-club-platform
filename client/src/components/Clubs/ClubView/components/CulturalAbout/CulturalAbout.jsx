@@ -19,9 +19,45 @@ import {
   faPhone,
   faEnvelope,
   faCheck,
-  faExclamationTriangle
+  faExclamationTriangle,
+  faPaintbrush,
+  faCamera,
+  faDice,
+  faGamepad,
+  faFilm,
+  faMicrophone,
+  faGuitar
 } from '@fortawesome/free-solid-svg-icons';
 import './culturalAbout.css';
+
+// 🔧 ДОБАВЕН iconMap за безопасно достъпване до икони
+const iconMap = {
+  faTheaterMasks,
+  faMusic,
+  faBookOpen,
+  faAward,
+  faHeart,
+  faPalette,
+  faUsers,
+  faHandsHelping,
+  faStar,
+  faQuoteLeft,
+  faCalendarAlt,
+  faGem,
+  faTimes,
+  faUser,
+  faPhone,
+  faEnvelope,
+  faCheck,
+  faExclamationTriangle,
+  faPaintbrush,
+  faCamera,
+  faDice,
+  faGamepad,
+  faFilm,
+  faMicrophone,
+  faGuitar
+};
 
 export const CulturalAbout = ({ club }) => {
   const { t } = useTranslation();
@@ -268,7 +304,8 @@ export const CulturalAbout = ({ club }) => {
                   {club.activities.regular.slice(0, 4).map((activity, index) => (
                     <div key={index} className="cultural-about-specialty-item">
                       <div className="cultural-about-specialty-icon">
-                        <FontAwesomeIcon icon={activity.icon ? eval(activity.icon) : faMusic} />
+                        {/* 🔧 ПОПРАВЕН РЕД - заменен eval() с безопасен iconMap */}
+                        <FontAwesomeIcon icon={activity.icon ? iconMap[activity.icon] || faMusic : faMusic} />
                       </div>
                       <div className="cultural-about-specialty-content">
                         <h4>{activity.name}</h4>
