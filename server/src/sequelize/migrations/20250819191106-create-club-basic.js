@@ -13,7 +13,6 @@ module.exports = {
             slug: {
                 type: Sequelize.STRING,
                 allowNull: true,
-                unique: true,
             },
             name: {
                 type: Sequelize.STRING,
@@ -50,13 +49,8 @@ module.exports = {
                 field: 'main_image',
             },
             createdBy: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.STRING,
                 allowNull: true,
-                references: {
-                    model: 'user_accounts',
-                    key: 'id',
-                },
-                onDelete: 'CASCADE',
                 field: 'created_by',
             },
             isVerified: {
@@ -70,6 +64,12 @@ module.exports = {
                 allowNull: true,
                 defaultValue: true,
                 field: 'is_public',
+            },
+            isDraft: {
+                type: Sequelize.BOOLEAN,
+                allowNull: true,
+                defaultValue: true,
+                field: 'is_draft',
             },
             rating: {
                 type: Sequelize.DECIMAL(2, 1),
@@ -109,6 +109,8 @@ module.exports = {
         await queryInterface.addIndex('clubs', ['category', 'status']);
         await queryInterface.addIndex('clubs', ['created_by']);
         await queryInterface.addIndex('clubs', ['is_public', 'status']);
+        await queryInterface.addIndex('clubs', ['is_draft']);
+        await queryInterface.addIndex('clubs', ['slug', 'is_draft'], { unique: true });
         await queryInterface.addIndex('clubs', ['rating']);
         await queryInterface.addIndex('clubs', ['created_at']);
         await queryInterface.addIndex('clubs', ['total_members']);
