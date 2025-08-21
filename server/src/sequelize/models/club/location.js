@@ -4,9 +4,9 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class ClubLocation extends Model {
         static associate(models) {
-            ClubLocation.belongsTo(models.Club, {
+            ClubLocation.belongsTo(models.club_Club, {
                 foreignKey: 'clubId',
-                as: 'club',
+                as: 'locationClub',
                 onDelete: 'CASCADE',
             });
         }
@@ -32,10 +32,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                references: {
-                    model: 'clubs',
-                    key: 'id',
-                },
                 unique: true,
             },
             address: {

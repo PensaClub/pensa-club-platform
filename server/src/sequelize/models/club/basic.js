@@ -5,32 +5,32 @@ module.exports = (sequelize, DataTypes) => {
     class Club extends Model {
         static associate(models) {
             // One-to-One relationships
-            Club.hasOne(models.club_details, {
+            Club.hasOne(models.club_ClubDetails, {
                 foreignKey: 'clubId',
                 as: 'details',
                 onDelete: 'CASCADE',
             });
 
-            Club.hasOne(models.club_location, {
+            Club.hasOne(models.club_ClubLocation, {
                 foreignKey: 'clubId',
                 as: 'location',
                 onDelete: 'CASCADE',
             });
 
-            Club.hasOne(models.club_membership, {
+            Club.hasOne(models.club_ClubMembership, {
                 foreignKey: 'clubId',
                 as: 'membership',
                 onDelete: 'CASCADE',
             });
 
             // One-to-Many relationships
-            Club.hasMany(models.club_member, {
+            Club.hasMany(models.club_ClubMember, {
                 foreignKey: 'clubId',
                 as: 'members',
                 onDelete: 'CASCADE',
             });
 
-            Club.hasMany(models.club_activity, {
+            Club.hasMany(models.club_ClubActivity, {
                 foreignKey: 'clubId',
                 as: 'activities',
                 onDelete: 'CASCADE',
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             slug: {
                 type: DataTypes.STRING,
-                allowNull: true,
+                allowNull: false,
             },
             name: {
                 type: DataTypes.STRING,
@@ -75,6 +75,7 @@ module.exports = (sequelize, DataTypes) => {
             status: {
                 type: DataTypes.STRING,
                 allowNull: true,
+                defaultValue: 'active',
                 // Values: "active" | "inactive" | "suspended"
             },
             logo: {
@@ -90,11 +91,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
                 // Values: "cultural" | "sports" | "social" | "educational" | "general"
-            },
-            template: {
-                type: DataTypes.STRING,
-                allowNull: true,
-                // Values: "cultural" | "sports" | "traditional" | "social" | "educational" | "active" | "general"
             },
             createdBy: {
                 type: DataTypes.STRING,

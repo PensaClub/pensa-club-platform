@@ -1,62 +1,39 @@
 const { z } = require('zod');
+const { optionalString, requiredString, optionalNumber, optionalEnum } = require('./helpers');
 
 const basicSchema = z.object({
     // Core identification
     id: z.string().optional(),
 
-    slug: z.string().min(1, 'Slug is required'),
+    slug: requiredString('Slug is required'),
 
-    name: z.string().optional(),
+    name: optionalString(),
 
-    shortDescription: z.string().optional(),
+    shortDescription: optionalString(),
 
     // Club information
-    foundedYear: z
-        .number()
-        .int('Founded year must be a whole number')
-        .min(1900, 'Founded year must be 1900 or later')
-        .max(new Date().getFullYear(), 'Founded year cannot be in the future')
-        .optional(),
+    foundedYear: optionalNumber(1900, new Date().getFullYear()),
 
-    status: z
-        .enum(['active', 'inactive', 'suspended'], {
-            errorMap: () => ({ message: 'Status must be active, inactive, or suspended' }),
-        })
-        .default('active'),
+    status: optionalEnum(['active', 'inactive', 'suspended'], 'Status must be active, inactive, or suspended'),
 
-    category: z
-        .enum(['cultural', 'sports', 'social', 'educational', 'general'], {
-            errorMap: () => ({ message: 'Category must be cultural, sports, social, educational, or general' }),
-        })
-        .optional(),
-
-    template: z
-        .enum(['cultural', 'sports', 'traditional', 'social', 'educational', 'active', 'general'], {
-            errorMap: () => ({ message: 'Template must be cultural, sports, traditional, social, educational, active, or general' }),
-        })
-        .optional(),
+    category: optionalEnum(['cultural', 'sports', 'social', 'educational', 'general'], 'Invalid category'),
 
     // Media
-    logo: z.string().url('Logo must be a valid URL').optional(),
+    logo: optionalString(),
 
-    mainImage: z.string().url('Main image must be a valid URL').optional(),
+    mainImage: optionalString(),
 
-    // Metadata
-    createdBy: z.string().optional(),
-    isVerified: z.boolean().default(false),
+    // Admin fields
+    createdBy: optionalString(),
 
-    isPublic: z.boolean().default(true),
+    isVerified: z.boolean().optional(),
+    isPublic: z.boolean().optional(),
 
-    isDraft: z.boolean().default(true),
+    rating: optionalNumber(0, 5),
+    views: optionalNumber(0),
+    followers: optionalNumber(0),
 
-    // Statistics
-    rating: z.number().min(0, 'Rating cannot be negative').max(5, 'Rating cannot exceed 5').default(0),
-
-    views: z.number().int('Views must be a whole number').min(0, 'Views cannot be negative').default(0),
-
-    followers: z.number().int('Followers must be a whole number').min(0, 'Followers cannot be negative').default(0),
-
-    totalMembers: z.number().int('Total members must be a whole number').min(0, 'Total members cannot be negative').default(0),
+    tags: z.array(z.string()).optional(),
 });
 
 module.exports = basicSchema;

@@ -29,9 +29,10 @@ function loadModels(dir, namespace = '') {
             const model = require(fullPath)(sequelize, Sequelize.DataTypes);
             const modelName = namespace ? `${namespace.replace(/\//g, '_')}${model.name}` : model.name;
 
-            db[model.name] = model;
-            if (namespace && modelName !== model.name) {
+            if (namespace) {
                 db[modelName] = model;
+            } else {
+                db[model.name] = model;
             }
         }
     });

@@ -4,17 +4,25 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class ClubMember extends Model {
         static associate(models) {
-            ClubMember.belongsTo(models.Club, {
+            ClubMember.belongsTo(models.club_Club, {
                 foreignKey: 'clubId',
-                as: 'club',
+                as: 'memberClub',
                 onDelete: 'CASCADE',
             });
+        }
 
-            ClubMember.belongsTo(models.user_account, {
-                foreignKey: 'userId',
-                as: 'user',
-                onDelete: 'CASCADE',
-            });
+        toJSON() {
+            const values = { ...this.get() };
+            if (values.id) {
+                values.id = values.id.toString();
+            }
+            if (values.clubId) {
+                values.clubId = values.clubId.toString();
+            }
+            if (values.userId) {
+                values.userId = values.userId.toString();
+            }
+            return values;
         }
     }
 
@@ -37,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             userId: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 field: 'user_id',
                 references: {
                     model: 'user_accounts',
@@ -63,30 +71,35 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             address: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: true,
             },
             photo: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: {},
-                comment: 'Photo info: {url, alt, caption}',
+                comment: 'Member photo: {"src": "", "alt": ""}',
             },
             joinDate: {
                 type: DataTypes.DATEONLY,
                 allowNull: true,
                 field: 'join_date',
             },
+            isActive: {
+                type: DataTypes.BOOLEAN,
+                allowNull: true,
+                defaultValue: true,
+                field: 'is_active',
+            },
             role: {
                 type: DataTypes.STRING,
                 allowNull: true,
-                comment: 'Member role in club - validated by app schema',
+                comment: 'Member role in the club',
             },
             status: {
                 type: DataTypes.STRING,
                 allowNull: true,
-                defaultValue: 'active',
-                comment: 'Member status - validated by app schema',
+                comment: 'Member status',
             },
             preferences: {
                 type: DataTypes.JSONB,
@@ -103,9 +116,13 @@ module.exports = (sequelize, DataTypes) => {
             underscored: true,
             indexes: [
                 {
-                    unique: true,
                     fields: ['club_id', 'user_id'],
+                    unique: true,
                     name: 'club_members_club_user_unique',
+                },
+                {
+                    fields: ['club_id', 'is_active'],
+                    name: 'club_members_club_active_idx',
                 },
             ],
         }

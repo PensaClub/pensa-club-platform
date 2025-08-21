@@ -4,9 +4,9 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class ClubDetails extends Model {
         static associate(models) {
-            ClubDetails.belongsTo(models.Club, {
+            ClubDetails.belongsTo(models.club_Club, {
                 foreignKey: 'clubId',
-                as: 'club',
+                as: 'detailsClub',
                 onDelete: 'CASCADE',
             });
         }
@@ -32,10 +32,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                references: {
-                    model: 'clubs',
-                    key: 'id',
-                },
                 unique: true,
             },
             fullDescription: {
@@ -73,6 +69,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: {},
             },
+            regionalInfo: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: {},
+                field: 'regional_info',
+            },
             achievements: {
                 type: DataTypes.JSONB,
                 allowNull: true,
@@ -84,11 +86,16 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: {},
                 field: 'social_impact',
             },
-            penClubInfo: {
+            pensionersSpecific: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: {},
-                field: 'pen_club_info',
+                field: 'pensioners_specific',
+            },
+            template: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                comment: 'Club template type',
             },
             preferences: {
                 type: DataTypes.JSONB,

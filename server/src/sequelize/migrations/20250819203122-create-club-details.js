@@ -13,11 +13,6 @@ module.exports = {
             clubId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                references: {
-                    model: 'clubs',
-                    key: 'id',
-                },
-                onDelete: 'CASCADE',
                 field: 'club_id',
             },
             fullDescription: {

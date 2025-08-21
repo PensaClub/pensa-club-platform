@@ -4,9 +4,9 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class ClubActivity extends Model {
         static associate(models) {
-            ClubActivity.belongsTo(models.Club, {
+            ClubActivity.belongsTo(models.club_Club, {
                 foreignKey: 'clubId',
-                as: 'club',
+                as: 'activityClub',
                 onDelete: 'CASCADE',
             });
         }
@@ -35,10 +35,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                references: {
-                    model: 'clubs',
-                    key: 'id',
-                },
             },
             type: {
                 type: DataTypes.STRING,
@@ -49,17 +45,36 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
+            title: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            description: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+            },
             data: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: {},
                 comment: 'Activity-specific data based on type - validated by app schema',
             },
+            schedule: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: {},
+                comment: 'Schedule info: day, time, frequency, etc.',
+            },
             isActive: {
                 type: DataTypes.BOOLEAN,
                 allowNull: true,
                 defaultValue: true,
                 field: 'is_active',
+            },
+            featured: {
+                type: DataTypes.BOOLEAN,
+                allowNull: true,
+                defaultValue: false,
             },
             order: {
                 type: DataTypes.INTEGER,

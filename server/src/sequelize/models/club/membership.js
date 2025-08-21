@@ -4,11 +4,19 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class ClubMembership extends Model {
         static associate(models) {
-            ClubMembership.belongsTo(models.Club, {
+            ClubMembership.belongsTo(models.club_Club, {
                 foreignKey: 'clubId',
-                as: 'club',
+                as: 'membershipClub',
                 onDelete: 'CASCADE',
             });
+        }
+
+        toJSON() {
+            const values = { ...this.get() };
+            if (values.id) {
+                values.id = values.id.toString();
+            }
+            return values;
         }
     }
 
@@ -24,10 +32,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                references: {
-                    model: 'clubs',
-                    key: 'id',
-                },
                 unique: true,
             },
             totalMembers: {
@@ -35,19 +39,18 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: 0,
                 field: 'total_members',
-                comment: 'Maximum allowed members - 0 means unlimited',
             },
             ageGroups: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: {},
-                comment: 'Age group distribution: {"60-70": 0, "70-80": 0, "80+": 0}',
+                comment: 'Age group distribution: {"below-60": 0, "60-70": 0, "70-80": 0, "80+": 0}',
             },
             membershipFee: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: {},
-                comment: 'Fee structure: {monthly: number, yearly: number, currency: string}',
+                comment: 'Membership fees: {"monthly": 0, "yearly": 0, "currency": "BGN"}',
             },
             requirements: {
                 type: DataTypes.JSONB,
@@ -61,35 +64,11 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: [],
                 comment: 'Array of membership benefits',
             },
-            applicationProcess: {
-                type: DataTypes.JSONB,
-                allowNull: true,
-                defaultValue: {},
-                comment: 'Application process details',
-            },
-            membershipRules: {
-                type: DataTypes.JSONB,
-                allowNull: true,
-                defaultValue: {},
-                comment: 'Club rules and policies',
-            },
-            renewalProcess: {
-                type: DataTypes.JSONB,
-                allowNull: true,
-                defaultValue: {},
-                comment: 'Membership renewal information',
-            },
-            isOpenForNewMembers: {
-                type: DataTypes.BOOLEAN,
-                allowNull: true,
-                defaultValue: true,
-                field: 'is_open_for_new_members',
-            },
         },
         {
             sequelize,
             modelName: 'ClubMembership',
-            tableName: 'club_memberships',
+            tableName: 'club_membership',
             timestamps: true,
             underscored: true,
         }
