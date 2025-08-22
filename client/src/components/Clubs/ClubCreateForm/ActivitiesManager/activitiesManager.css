@@ -1,0 +1,759 @@
+/* ===============================
+   ACTIVITIES MANAGER STYLES
+   =============================== */
+
+.activities-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* ===============================
+   SVG ICON STYLES
+   =============================== */
+
+.activities-manager .activities-manager-title svg {
+  color: #6366f1;
+  font-size: 1.5rem;
+}
+
+.activities-manager .activities-manager-section-title svg {
+  color: #6366f1;
+  font-size: 1.1rem;
+}
+
+.activities-manager .activities-manager-subsection-title svg {
+  color: #6366f1;
+  font-size: 1rem;
+}
+
+.activities-manager .activities-manager-activity-icon svg {
+  font-size: 1.2rem;
+  color: #6366f1;
+}
+
+.activities-manager .activities-manager-detail-item svg {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.activities-manager .activities-manager-remove-btn svg {
+  font-size: 0.9rem;
+}
+
+.activities-manager .activities-manager-add-btn svg {
+  font-size: 0.9rem;
+}
+
+.activities-manager .activities-manager-help-icon svg {
+  font-size: 1rem;
+}
+
+.activities-manager .activities-manager-form-label svg {
+  color: #6366f1;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   HEADER SECTION
+   =============================== */
+
+.activities-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.activities-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.activities-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   SECTION STYLES
+   =============================== */
+
+.activities-manager-section {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.activities-manager-section:hover {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+.activities-manager-section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.activities-manager-subsection-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* ===============================
+   ACTIVITIES LIST
+   =============================== */
+
+.activities-manager-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.activities-manager-activity-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.activities-manager-activity-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.activities-manager-activity-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.activities-manager-activity-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activities-manager-activity-info {
+  flex: 1;
+}
+
+.activities-manager-activity-info h5 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.activities-manager-activity-meta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.activities-manager-activity-type {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.activities-manager-activity-category {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.activities-manager-remove-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.activities-manager-remove-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.activities-manager-activity-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activities-manager-activity-description {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+.activities-manager-activity-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.activities-manager-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+/* ===============================
+   ADD FORM STYLES
+   =============================== */
+
+.activities-manager-add-form {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  border: 2px solid #e2e8f0;
+}
+
+.activities-manager-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.activities-manager-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.activities-manager-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.activities-manager-form-input,
+.activities-manager-form-select,
+.activities-manager-form-textarea {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+}
+
+.activities-manager-form-input:focus,
+.activities-manager-form-select:focus,
+.activities-manager-form-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+.activities-manager-form-input:disabled,
+.activities-manager-form-select:disabled,
+.activities-manager-form-textarea:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.activities-manager-form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ===============================
+   SUBSECTIONS
+   =============================== */
+
+.activities-manager-schedule-section,
+.activities-manager-participants-section,
+.activities-manager-fee-section,
+.activities-manager-additional-section {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ===============================
+   CHECKBOX STYLES
+   =============================== */
+
+.activities-manager-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.activities-manager-checkbox-label:hover {
+  border-color: #6366f1;
+  background: #f8fafc;
+}
+
+.activities-manager-checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.activities-manager-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.activities-manager-checkbox-label input[type="checkbox"]:checked + .activities-manager-checkbox {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #6366f1;
+}
+
+.activities-manager-checkbox-label input[type="checkbox"]:checked + .activities-manager-checkbox::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* ===============================
+   FEE SECTION
+   =============================== */
+
+.activities-manager-fee-toggle {
+  margin-bottom: 1rem;
+}
+
+/* ===============================
+   EQUIPMENT SECTION
+   =============================== */
+
+.activities-manager-equipment {
+  margin-top: 1rem;
+}
+
+.activities-manager-equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.activities-manager-equipment-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.activities-manager-equipment-item:hover {
+  border-color: #6366f1;
+  background: #f8fafc;
+}
+
+.activities-manager-equipment-item input[type="checkbox"] {
+  display: none;
+}
+
+.activities-manager-equipment-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 3px;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.activities-manager-equipment-item input[type="checkbox"]:checked + .activities-manager-equipment-checkbox {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #6366f1;
+}
+
+.activities-manager-equipment-item input[type="checkbox"]:checked + .activities-manager-equipment-checkbox::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.activities-manager-equipment-label {
+  font-weight: 500;
+  color: #374151;
+}
+
+/* ===============================
+   ADD ACTIONS
+   =============================== */
+
+.activities-manager-add-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.activities-manager-add-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-width: 200px;
+}
+
+.activities-manager-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+}
+
+.activities-manager-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===============================
+   HELP SECTION
+   =============================== */
+
+.activities-manager-help {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #bfdbfe;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.activities-manager-help-icon {
+  background: #3b82f6;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activities-manager-help-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0 0 0.5rem 0;
+}
+
+.activities-manager-help-content p {
+  color: #1e40af;
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
+  .activities-manager-form-row {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
+  .activities-manager-equipment-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+  
+  .activities-manager-activity-header {
+    flex-wrap: wrap;
+  }
+  
+  .activities-manager-activity-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .activities-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .activities-manager-section {
+    padding: 1.5rem;
+  }
+  
+  .activities-manager-add-form {
+    padding: 1.5rem;
+  }
+  
+  .activities-manager-form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .activities-manager-schedule-section,
+  .activities-manager-participants-section,
+  .activities-manager-fee-section,
+  .activities-manager-additional-section {
+    padding: 1rem;
+  }
+  
+  .activities-manager-equipment-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .activities-manager-activity-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .activities-manager-activity-details {
+    gap: 1rem;
+  }
+  
+  .activities-manager-detail-item {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .activities-manager-help {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .activities-manager-section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .activities-manager-section-title {
+    font-size: 1.1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .activities-manager-subsection-title {
+    font-size: 1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+  }
+  
+  .activities-manager-add-form {
+    padding: 1rem;
+  }
+  
+  .activities-manager-activity-card {
+    padding: 1rem;
+  }
+  
+  .activities-manager-activity-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .activities-manager-equipment-item {
+    padding: 0.75rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .activities-manager-add-btn {
+    width: 100%;
+    padding: 1.25rem;
+  }
+  
+  .activities-manager-help {
+    padding: 1rem;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY IMPROVEMENTS
+   =============================== */
+
+.activities-manager-form-input:focus-visible,
+.activities-manager-form-select:focus-visible,
+.activities-manager-form-textarea:focus-visible,
+.activities-manager-checkbox-label:focus-visible,
+.activities-manager-equipment-item:focus-visible,
+.activities-manager-add-btn:focus-visible,
+.activities-manager-remove-btn:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activities-manager-activity-card,
+  .activities-manager-form-input,
+  .activities-manager-form-select,
+  .activities-manager-form-textarea,
+  .activities-manager-checkbox-label,
+  .activities-manager-equipment-item,
+  .activities-manager-add-btn,
+  .activities-manager-remove-btn {
+    transition: none;
+  }
+}
+
+/* ===============================
+   HIGH CONTRAST MODE
+   =============================== */
+
+@media (prefers-contrast: high) {
+  .activities-manager-section,
+  .activities-manager-activity-card {
+    border-width: 3px;
+  }
+  
+  .activities-manager-form-input,
+  .activities-manager-form-select,
+  .activities-manager-form-textarea {
+    border-width: 3px;
+  }
+  
+  .activities-manager-schedule-section,
+  .activities-manager-participants-section,
+  .activities-manager-fee-section,
+  .activities-manager-additional-section {
+    border-width: 3px;
+  }
+  
+  .activities-manager-equipment-item,
+  .activities-manager-checkbox-label {
+    border-width: 3px;
+  }
+  
+  .activities-manager-help {
+    border-width: 3px;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+
+@media print {
+  .activities-manager-add-form,
+  .activities-manager-remove-btn {
+    display: none;
+  }
+  
+  .activities-manager-section {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+  
+  .activities-manager-activity-card {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+}
