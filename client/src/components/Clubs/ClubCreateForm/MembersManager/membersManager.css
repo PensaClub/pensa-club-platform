@@ -1044,7 +1044,342 @@
     padding: 1rem;
   }
 }
+/* ===============================
+   FIX FOR 350px - 400px RANGE - MEMBERS MANAGER
+   =============================== */
 
+@media (max-width: 400px) {
+  .members-manager {
+    padding: 0.5rem 0;
+  }
+
+  .members-manager-tabs {
+    padding: 0.25rem;
+    gap: 0.25rem;
+    flex-direction: column;
+  }
+
+  .members-manager-tab {
+    padding: 0.75rem;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+
+  .members-manager-controls {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .members-manager-search-filters {
+    gap: 0.75rem;
+  }
+
+  .members-manager-search {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .members-manager-filters {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .members-manager-filters select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .members-manager-actions {
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .members-manager-action-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* Основната поправка - grid за member cards */
+  .members-manager-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .members-manager-member-card {
+    padding: 0.75rem;
+    min-width: 0; /* Важно за предотвратяване на overflow */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .members-manager-content {
+    padding: 0.75rem;
+  }
+
+  .members-manager-member-photo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .members-manager-member-name {
+    font-size: 1rem;
+    word-break: break-word;
+  }
+
+  .members-manager-member-details {
+    gap: 0.5rem;
+  }
+
+  .members-manager-detail {
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  /* Add form */
+  .members-manager-add-form {
+    padding: 0.75rem;
+  }
+
+  .members-manager-add-form-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .members-manager-add-form-header h4 {
+    font-size: 1.1rem;
+  }
+
+  .members-manager-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .members-manager-form-input,
+  .members-manager-form-select,
+  .members-manager-form-textarea {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .members-manager-form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .members-manager-form-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Bulk actions */
+  .members-manager-bulk-bar {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .members-manager-bulk-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .members-manager-bulk-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  /* Empty state */
+  .members-manager-empty {
+    padding: 2rem 1rem;
+  }
+
+  .members-manager-empty h4 {
+    font-size: 1.1rem;
+  }
+
+  .members-manager-empty-add-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Help section */
+  .members-manager-help {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .members-manager-help-content h5 {
+    font-size: 0.95rem;
+  }
+
+  .members-manager-help-content p,
+  .members-manager-help-content li {
+    font-size: 0.85rem;
+  }
+
+  /* Осигуряване че нищо не излиза от контейнера */
+  .members-manager *,
+  .members-manager *:before,
+  .members-manager *:after {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Selection checkbox positioning */
+  .members-manager-selection-checkbox {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .members-manager-checkbox-btn {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 350px) {
+  .members-manager-controls {
+    padding: 0.5rem;
+  }
+
+  .members-manager-content {
+    padding: 0.5rem;
+  }
+
+  .members-manager-add-form {
+    padding: 0.5rem;
+  }
+
+  .members-manager-member-card {
+    padding: 0.5rem;
+  }
+
+  .members-manager-member-photo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .members-manager-member-name {
+    font-size: 0.95rem;
+  }
+
+  .members-manager-detail {
+    font-size: 0.75rem;
+  }
+
+  .members-manager-form-input,
+  .members-manager-form-select,
+  .members-manager-form-textarea {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .members-manager-form-btn {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .members-manager-bulk-bar {
+    padding: 0.5rem;
+  }
+
+  .members-manager-bulk-btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .members-manager-help {
+    padding: 0.75rem;
+  }
+
+  .members-manager-empty {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .members-manager-tab {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .members-manager-action-btn {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* ===============================
+   ДОПОЛНИТЕЛНИ ПОПРАВКИ ЗА FLEX WRAP
+   =============================== */
+
+@media (max-width: 400px) {
+  .members-manager-member-actions {
+    gap: 0.25rem;
+  }
+
+  .members-manager-member-actions .members-manager-action-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .members-manager-role-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    word-break: break-word;
+    text-align: center;
+  }
+
+  .members-manager-member-bio {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+
+  .members-manager-search input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    font-size: 0.9rem;
+  }
+
+  .members-manager-search svg {
+    left: 0.75rem;
+  }
+
+  .members-manager-sort-order-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Checkbox positioning improvements */
+  .members-manager-checkbox-label {
+    font-size: 0.85rem;
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  .members-manager-checkbox {
+    width: 16px;
+    height: 16px;
+  }
+}
 /* ===============================
    ACCESSIBILITY IMPROVEMENTS
    =============================== */
