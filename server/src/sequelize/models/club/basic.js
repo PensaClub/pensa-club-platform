@@ -35,6 +35,23 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'activities',
                 onDelete: 'CASCADE',
             });
+
+            // Many-to-Many relationships
+            Club.belongsToMany(models.user_account, {
+                through: 'club_bookmarks',
+                as: 'bookmarkedBy',
+                foreignKey: 'club_id',
+                otherKey: 'user_id',
+            });
+
+            Club.hasMany(models.comment, {
+                foreignKey: 'commentableId',
+                as: 'comments',
+                scope: {
+                    commentLinkConnection: 'club',
+                },
+                onDelete: 'CASCADE',
+            });
         }
 
         toJSON() {
