@@ -61,7 +61,6 @@ module.exports = {
             },
         });
 
-        await queryInterface.addIndex('club_memberships', ['club_id']);
         await queryInterface.addIndex('club_memberships', ['total_members']);
     },
 

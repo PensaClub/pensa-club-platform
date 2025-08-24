@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                unique: true,
             },
             address: {
                 type: DataTypes.STRING,

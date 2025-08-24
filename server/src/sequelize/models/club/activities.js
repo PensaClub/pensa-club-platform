@@ -76,12 +76,6 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: false,
             },
-            order: {
-                type: DataTypes.INTEGER,
-                allowNull: true,
-                defaultValue: 0,
-                comment: 'Display order for activities',
-            },
         },
         {
             sequelize,
@@ -89,20 +83,6 @@ module.exports = (sequelize, DataTypes) => {
             tableName: 'club_activities',
             timestamps: true,
             underscored: true,
-            indexes: [
-                {
-                    fields: ['club_id', 'type'],
-                    name: 'club_activities_club_type_idx',
-                },
-                {
-                    fields: ['club_id', 'is_active'],
-                    name: 'club_activities_club_active_idx',
-                },
-                {
-                    fields: ['club_id', 'order'],
-                    name: 'club_activities_club_order_idx',
-                },
-            ],
         }
     );
 

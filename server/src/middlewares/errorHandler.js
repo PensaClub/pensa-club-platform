@@ -34,17 +34,37 @@ function errorHandler(error, req, res, next) {
             };
         });
     } else if (error instanceof UniqueConstraintError) {
-        const fieldErrors = error.errors.map((err) => ({
-            field: err.path,
-            value: err.value,
-            message:
-                err.path === 'slug'
-                    ? 'This URL address is already taken'
-                    : `${err.path.charAt(0).toUpperCase() + err.path.slice(1)} '${err.value}' is already taken.`,
-        }));
-        message = 'Unique constraint violation.';
-        details = fieldErrors;
-        statusCode = 409;
+        const isCompoundConstraint = error.fields && Object.keys(error.fields).length > 1 && error.fields.slug && error.fields.is_draft;
+        if (isCompoundConstraint) {
+            const fieldErrors = [
+                {
+                    field: 'slug',
+                    value: error.fields.slug,
+                    message: 'This URL address is already taken for this draft status. You can use the same URL for a different draft status.',
+                },
+            ];
+            message = 'Unique constraint violation.';
+            details = fieldErrors;
+            statusCode = 409;
+        } else {
+            const fieldErrors = error.errors.map((err) => {
+                if (err.path === 'slug') {
+                    return {
+                        field: 'slug',
+                        value: err.value,
+                        message: 'This URL address is already taken.',
+                    };
+                }
+                return {
+                    field: err.path,
+                    value: err.value,
+                    message: `${err.path.charAt(0).toUpperCase() + err.path.slice(1)} '${err.value}' is already taken.`,
+                };
+            });
+            message = 'Unique constraint violation.';
+            details = fieldErrors;
+            statusCode = 409;
+        }
     } else if (error instanceof ForeignKeyConstraintError || error instanceof DatabaseError) {
         const dbError = dbErrors[error.original?.code];
         if (dbError) {

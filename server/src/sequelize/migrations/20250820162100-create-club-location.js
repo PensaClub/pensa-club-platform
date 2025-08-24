@@ -60,14 +60,11 @@ module.exports = {
             },
         });
 
-        await queryInterface.addIndex('club_locations', ['club_id']);
         await queryInterface.addIndex('club_locations', ['city', 'municipality']);
         await queryInterface.addIndex('club_locations', ['region']);
         await queryInterface.addIndex('club_locations', ['postal_code']);
-
-        //TODO - implement endpoint that shows different clubs based on coordinates + extra radius - nearbyClubs
         await queryInterface.addIndex('club_locations', ['coordinates'], {
-            using: 'GIST',
+            using: 'GIN',
             operator: 'jsonb_path_ops',
         });
     },

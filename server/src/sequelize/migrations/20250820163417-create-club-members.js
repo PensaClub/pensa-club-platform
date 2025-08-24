@@ -71,11 +71,10 @@ module.exports = {
             },
         });
 
-        await queryInterface.addIndex('club_members', ['club_id']);
-        await queryInterface.addIndex('club_members', ['club_id', 'is_active']);
-        await queryInterface.addIndex('club_members', ['club_id', 'role']);
         await queryInterface.addIndex('club_members', ['email']);
         await queryInterface.addIndex('club_members', ['join_date']);
+        await queryInterface.addIndex('club_members', ['club_id', 'is_active']);
+        await queryInterface.addIndex('club_members', ['club_id', 'role']);
     },
 
     async down(queryInterface, Sequelize) {

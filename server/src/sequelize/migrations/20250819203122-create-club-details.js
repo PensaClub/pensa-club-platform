@@ -106,7 +106,6 @@ module.exports = {
             },
         });
 
-        await queryInterface.addIndex('club_details', ['club_id']);
         await queryInterface.addIndex('club_details', ['template']);
     },
 

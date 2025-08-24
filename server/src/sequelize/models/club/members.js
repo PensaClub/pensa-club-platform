@@ -38,19 +38,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                references: {
-                    model: 'clubs',
-                    key: 'id',
-                },
-            },
-            userId: {
-                type: DataTypes.INTEGER,
-                allowNull: true,
-                field: 'user_id',
-                references: {
-                    model: 'user_accounts',
-                    key: 'id',
-                },
             },
             firstName: {
                 type: DataTypes.STRING,
@@ -96,17 +83,6 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 comment: 'Member role in the club',
             },
-            status: {
-                type: DataTypes.STRING,
-                allowNull: true,
-                comment: 'Member status',
-            },
-            preferences: {
-                type: DataTypes.JSONB,
-                allowNull: true,
-                defaultValue: {},
-                comment: 'Member preferences and settings',
-            },
         },
         {
             sequelize,
@@ -114,17 +90,6 @@ module.exports = (sequelize, DataTypes) => {
             tableName: 'club_members',
             timestamps: true,
             underscored: true,
-            indexes: [
-                {
-                    fields: ['club_id', 'user_id'],
-                    unique: true,
-                    name: 'club_members_club_user_unique',
-                },
-                {
-                    fields: ['club_id', 'is_active'],
-                    name: 'club_members_club_active_idx',
-                },
-            ],
         }
     );
 

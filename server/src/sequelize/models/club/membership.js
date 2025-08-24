@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                unique: true,
             },
             totalMembers: {
                 type: DataTypes.INTEGER,
@@ -68,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: 'ClubMembership',
-            tableName: 'club_membership',
+            tableName: 'club_memberships', // Change from 'club_membership' to 'club_memberships'
             timestamps: true,
             underscored: true,
         }

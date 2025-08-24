@@ -14,7 +14,6 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                // Remove references and onDelete
             },
             type: {
                 type: Sequelize.STRING,
@@ -68,9 +67,7 @@ module.exports = {
             },
         });
 
-        await queryInterface.addIndex('club_activities', ['club_id']);
         await queryInterface.addIndex('club_activities', ['type']);
-        await queryInterface.addIndex('club_activities', ['club_id', 'type']);
         await queryInterface.addIndex('club_activities', ['is_active']);
         await queryInterface.addIndex('club_activities', ['featured']);
         await queryInterface.addIndex('club_activities', ['created_at']);
