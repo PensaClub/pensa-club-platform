@@ -184,6 +184,8 @@ socialImpact: {
   const [draftId, setDraftId] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+const [isLoadedFromStorage, setIsLoadedFromStorage] = useState(false);
+const [nameChangedByUser, setNameChangedByUser] = useState(false);
 
   // Helper function за identifier (slug или ID)
   const getIdentifier = useCallback((data = formData) => {
@@ -238,37 +240,59 @@ socialImpact: {
   }, []);
 
   // Auto-generate slug при промяна на името
-  useEffect(() => {
-    if (formData.name && !clubId) { // Само при създаване, не при редактиране
-      const newSlug = generateSlug(formData.name);
-      setFormData(prev => ({ ...prev, slug: newSlug }));
+useEffect(() => {
+  const savedData = localStorage.getItem(getLocalStorageKey());
+  if (savedData) {
+    try {
+      const parsed = JSON.parse(savedData);
+      setFormData(parsed.data || initialState);
+      setLastSaved(new Date(parsed.timestamp));
+      setDraftId(parsed.draftId);
+      setIsDraft(true);
+      setIsLoadedFromStorage(true);
+    } catch (error) {
+      console.error('Error loading draft:', error);
     }
-  }, [formData.name, generateSlug, clubId]);
+  }
+  setIsLoadedFromStorage(true);
+}, []);
+
+// Auto-generate slug - САМО ако НЕ е заредено от localStorage
+useEffect(() => {
+
+  if (formData.name && !clubId && (!isDraft || nameChangedByUser)) {
+    const newSlug = generateSlug(formData.name);
+    setFormData(prev => ({ ...prev, slug: newSlug }));
+    setNameChangedByUser(false); // Reset флага
+  }
+}, [formData.name, generateSlug, clubId, isDraft, nameChangedByUser]);
 
   // LocalStorage key с fallback
-  const getLocalStorageKey = () => {
-    const identifier = getIdentifier();
-    if (identifier) {
-      return `club-draft-${identifier}`;
-    }
+ const getLocalStorageKey = useCallback(() => {
+  // За нови клубове ВИНАГИ използвай фиксиран ключ
+  if (!clubId) {
     return 'club-draft-new';
-  };
+  }
+  
+  // За редактиране на съществуващи клубове използвай clubId
+  return `club-draft-${clubId}`;
+}, [clubId]);
 
   // Load от localStorage при mount
-  useEffect(() => {
-    const savedData = localStorage.getItem(getLocalStorageKey());
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setFormData(prev => ({ ...prev, ...parsed.data }));
-        setLastSaved(new Date(parsed.timestamp));
-        setDraftId(parsed.draftId);
-        setIsDraft(true);
-      } catch (error) {
-        console.error('Error loading draft:', error);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedData = localStorage.getItem(getLocalStorageKey());
+  //   if (savedData) {
+  //     try {
+  //       const parsed = JSON.parse(savedData);
+  //       setFormData(prev => ({ ...prev, ...parsed.data }));
+  //       setLastSaved(new Date(parsed.timestamp));
+  //       setDraftId(parsed.draftId);
+  //       setIsDraft(true);
+  //     } catch (error) {
+  //       console.error('Error loading draft:', error);
+  //     }
+  //   }
+  // }, []);
 
   // Load existing draft при редактиране
   useEffect(() => {
@@ -329,15 +353,17 @@ socialImpact: {
 
   // Save в localStorage
   const saveToLocalStorage = useCallback(() => {
-    const dataToSave = {
-      data: formData,
-      timestamp: new Date().toISOString(),
-      draftId: draftId
-    };
-    localStorage.setItem(getLocalStorageKey(), JSON.stringify(dataToSave));
-    setLastSaved(new Date());
-    setHasUnsavedChanges(false);
-  }, [formData, getLocalStorageKey, draftId]);
+  const key = getLocalStorageKey(); // Винаги ще е 'club-draft-new' за нови клубове
+  const dataToSave = {
+    data: formData,
+    timestamp: new Date().toISOString(),
+    draftId: draftId
+  };
+  
+  localStorage.setItem(key, JSON.stringify(dataToSave));
+  setLastSaved(new Date());
+  setHasUnsavedChanges(false);
+}, [formData, getLocalStorageKey, draftId]);
 
   // Auto-save всеки 30 секунди ако има промени
   useEffect(() => {
@@ -351,30 +377,35 @@ socialImpact: {
   }, [hasUnsavedChanges, saveToLocalStorage]);
 
   // Update field
-  const updateField = useCallback((path, value) => {
-    setFormData(prev => {
-      const newData = { ...prev };
-      const keys = path.split('.');
-      let current = newData;
-      
-      for (let i = 0; i < keys.length - 1; i++) {
-        if (!current[keys[i]]) {
-          current[keys[i]] = {};
-        }
-        current = current[keys[i]];
+ const updateField = useCallback((path, value) => {
+  setFormData(prev => {
+    const newData = { ...prev };
+    const keys = path.split('.');
+    let current = newData;
+    
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]]) {
+        current[keys[i]] = {};
       }
-      
-      current[keys[keys.length - 1]] = value;
-      return newData;
-    });
-    
-    setHasUnsavedChanges(true);
-    
-    // Clear field error ако съществува
-    if (errors[path]) {
-      setErrors(prev => ({ ...prev, [path]: null }));
+      current = current[keys[i]];
     }
-  }, [errors]);
+    
+    current[keys[keys.length - 1]] = value;
+    return newData;
+  });
+  
+  // Ако потребителят променя името, маркирай това
+  if (path === 'name' && isLoadedFromStorage) {
+    setNameChangedByUser(true);
+  }
+  
+  setHasUnsavedChanges(true);
+  
+  // Clear field error ако съществува
+  if (errors[path]) {
+    setErrors(prev => ({ ...prev, [path]: null }));
+  }
+}, [errors, isLoadedFromStorage]);
 
   // DRAFT функции
   const saveDraft = useCallback(async () => {
@@ -459,13 +490,16 @@ socialImpact: {
 
   // RESET функция
   const resetForm = useCallback(() => {
-    setFormData(initialState);
-    setErrors({});
-    setIsDraft(false);
-    setDraftId(null);
-    setHasUnsavedChanges(false);
-    localStorage.removeItem(getLocalStorageKey());
-  }, [getLocalStorageKey]);
+  const key = getLocalStorageKey();
+  localStorage.removeItem(key);
+  setFormData(initialState);
+  setErrors({});
+  setIsDraft(false);
+  setDraftId(null);
+  setHasUnsavedChanges(false);
+  setIsLoadedFromStorage(false);
+  setNameChangedByUser(false);
+}, [getLocalStorageKey]);
 
   // CLEAR DRAFT функция
   const clearDraft = useCallback(async () => {

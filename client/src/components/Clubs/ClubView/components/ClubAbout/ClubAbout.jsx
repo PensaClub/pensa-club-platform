@@ -58,11 +58,11 @@ export const ClubAbout = ({ club }) => {
 
   // Изчисляване на възрастова структура
   const calculateAgeData = () => {
-    if (!club.membership?.ageGroups || !club.membership?.totalMembers) {
+    if (!club.membership?.ageGroups || !club.members?.length) {
       return [];
     }
 
-    const total = club.membership.totalMembers;
+    const total = club.members.length;
     const ageGroups = club.membership.ageGroups;
     
     return Object.entries(ageGroups).map(([range, count]) => ({
@@ -183,7 +183,7 @@ export const ClubAbout = ({ club }) => {
             </div>
             <div className="general-about-stat">
               <FontAwesomeIcon icon={faUsers} />
-              <span>{club.membership?.totalMembers || '—'}</span>
+              <span>{club.members?.length || '—'}</span>
               <label>{t('clubs.ClubAbout.stats.members')}</label>
             </div>
             <div className="general-about-stat">
@@ -252,14 +252,14 @@ export const ClubAbout = ({ club }) => {
                         </div>
                       )}
                       
-                      {club.membership?.totalMembers && (
+                      {club.members?.length && (
                         <div className="general-fact-card">
                           <div className="general-fact-icon">
                             <FontAwesomeIcon icon={faUsers} />
                           </div>
                           <div className="general-fact-content">
                             <span className="general-fact-label">{t('clubs.ClubAbout.facts.members')}</span>
-                            <span className="general-fact-value">{club.membership.totalMembers} {t('clubs.ClubAbout.facts.people')}</span>
+                            <span className="general-fact-value">{club.members?.length} {t('clubs.ClubAbout.facts.people')}</span>
                           </div>
                         </div>
                       )}

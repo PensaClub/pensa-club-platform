@@ -9481,8 +9481,12 @@
       "geolocationNotSupported": "Geolocation is not supported by your browser",
       "geolocationError": "Error determining location",
       "help": {
-        "title": "Why is location important?",
-        "description": "The exact address helps people easily find your club and join activities."
+       "title": "How to fill in the location?",
+        "description": "Choose your club's location with easy steps:",
+        "addressTip": "Enter address and city - coordinates will be determined automatically",
+        "autoGeocode": "Automatic coordinate finding when entering complete address",
+        "mapClick": "Click on the map for precise positioning",
+        "search": "Use the search function to find specific places"
       }
     },
     "membership": {
@@ -9505,13 +9509,26 @@
         "recommendation": "By Recommendation",
         "recommendationDesc": "Recommendation from existing member required"
       },
+      "demographicsSection": "Demographics and Statistics", 
+      "requirementsBenefitsSection": "Requirements and Benefits",
+      "requirements": {
+        "title": "Membership Requirements",
+        "placeholder": "Enter membership requirement...",
+        "empty": "No membership requirements added"
+      },
+       "benefits": {
+        "title": "Membership Benefits",
+        "placeholder": "Enter membership benefit...",
+        "empty": "No membership benefits added"
+      },
       "fields": {
         "minimumAge": "Minimum Age",
         "maxMembers": "Maximum Number of Members",
         "trialPeriod": "Trial Period (days)",
         "personName": "Person's Name",
         "contactInfo": "Contact Information",
-        "termLength": "Term Duration"
+        "termLength": "Term Duration",
+        "totalMembers": "Total Members"
       },
       "placeholders": {
         "unlimited": "Unlimited",
@@ -9521,6 +9538,20 @@
         "roleResponsibilities": "Responsibilities and tasks...",
         "feeType": "Membership Fee",
         "feeDescription": "Fee description..."
+      },
+      "ageGroups": {
+        "title": "Age Group Distribution",
+        "members": " members",
+        "under60": "Under 60 years",
+        "under60Desc": "Early retirees and active seniors",
+        "age60to70": "60-70 years",
+        "age60to70Desc": "Newly retired, active members", 
+        "age70to80": "70-80 years",
+        "age70to80Desc": "Experienced members with rich life experience",
+        "age80plus": "Over 80 years",
+        "age80plusDesc": "Honorary and wise club members",
+        "totalCalculated": "Total calculated",
+        "totalMismatch": "Total count doesn't match age group distribution"
       },
       "roles": {
         "president": "President",
@@ -9547,11 +9578,16 @@
       },
       "actions": {
         "addRole": "Add Role",
-        "addFee": "Add Fee"
+        "addFee": "Add Fee",
+             "addRequirement": "Add Requirement",
+        "removeRequirement": "Remove Requirement", 
+        "addBenefit": "Add Benefit",
+        "removeBenefit": "Remove Benefit"
       },
       "help": {
         "title": "Why is management structure important?",
-        "description": "Clear organization helps the club function better and builds trust among members."
+        "description": "Clear organization helps the club function better and builds trust among members.",
+        "totalMembers": "Enter the total number of club members"
       }
     },
     "activities": {
@@ -9775,6 +9811,8 @@
         "members": "Members",
         "board": "Board of Directors"
       },
+      "addBoardMember": "Add Board Member",
+
       "fields": {
         "firstName": "First Name",
         "lastName": "Last Name",
@@ -10381,6 +10419,15 @@
         "cancel": "Cancel",
         "delete": "Delete"
       }
+    },
+      "preview": {
+      "title": "Club Preview",
+      "badge": "PREVIEW",
+      "backToForm": "Back to Form",
+      "loading": "Loading preview...",
+      "defaultName": "New Club",
+      "noLocation": "No location specified",
+      "close": "Close Preview"
     }
   }
 }

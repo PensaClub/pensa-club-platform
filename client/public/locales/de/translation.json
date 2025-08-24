@@ -9077,8 +9077,12 @@
       "geolocationNotSupported": "Geolokalisierung wird von Ihrem Browser nicht unterstützt",
       "geolocationError": "Fehler bei der Standortbestimmung",
       "help": {
-        "title": "Warum ist der Standort wichtig?",
-        "description": "Die genaue Adresse hilft Menschen, Ihren Verein leicht zu finden und an Aktivitäten teilzunehmen."
+         "title": "Wie fülle ich den Standort aus?",
+        "description": "Wählen Sie den Standort Ihres Vereins in einfachen Schritten:",
+        "addressTip": "Adresse und Stadt eingeben - Koordinaten werden automatisch bestimmt",
+        "autoGeocode": "Automatische Koordinatenermittlung bei Eingabe einer vollständigen Adresse",
+        "mapClick": "Klicken Sie auf die Karte für präzise Positionierung",
+        "search": "Verwenden Sie die Suchfunktion, um spezifische Orte zu finden"
       }
     },
     "membership": {
@@ -9087,6 +9091,7 @@
       "typeSection": "Mitgliedschaftstyp",
       "managementSection": "Verwaltungsstruktur",
       "feesSection": "Mitgliedsbeiträge",
+      "demographicsSection": "Demografie und Statistiken",
       "required": "Erforderlich",
       "custom": "Benutzerdefinierte Rolle",
       "addCustomRole": "Benutzerdefinierte Rolle hinzufügen",
@@ -9101,13 +9106,25 @@
         "recommendation": "Auf Empfehlung",
         "recommendationDesc": "Empfehlung eines bestehenden Mitglieds erforderlich"
       },
+      "requirementsBenefitsSection": "Anforderungen und Vorteile",
+      "requirements": {
+        "title": "Mitgliedschaftsanforderungen",
+        "placeholder": "Mitgliedschaftsanforderung eingeben...",
+        "empty": "Keine Mitgliedschaftsanforderungen hinzugefügt"
+      },
+      "benefits": {
+        "title": "Mitgliedschaftsvorteile",
+        "placeholder": "Mitgliedschaftsvorteil eingeben...",
+        "empty": "Keine Mitgliedschaftsvorteile hinzugefügt"
+      },
       "fields": {
         "minimumAge": "Mindestalter",
         "maxMembers": "Maximale Anzahl von Mitgliedern",
         "trialPeriod": "Probezeit (Tage)",
         "personName": "Name der Person",
         "contactInfo": "Kontaktinformationen",
-        "termLength": "Amtsdauer"
+        "termLength": "Amtsdauer",
+        "totalMembers": "Gesamtmitglieder"
       },
       "placeholders": {
         "unlimited": "Unbegrenzt",
@@ -9143,11 +9160,30 @@
       },
       "actions": {
         "addRole": "Rolle hinzufügen",
-        "addFee": "Beitrag hinzufügen"
+        "addFee": "Beitrag hinzufügen",
+          "addRequirement": "Anforderung hinzufügen",
+        "removeRequirement": "Anforderung entfernen",
+        "addBenefit": "Vorteil hinzufügen", 
+        "removeBenefit": "Vorteil entfernen"
       },
       "help": {
         "title": "Warum ist die Verwaltungsstruktur wichtig?",
-        "description": "Eine klare Organisation hilft dem Verein besser zu funktionieren und schafft Vertrauen bei den Mitgliedern."
+        "description": "Eine klare Organisation hilft dem Verein besser zu funktionieren und schafft Vertrauen bei den Mitgliedern.",
+        "totalMembers": "Geben Sie die Gesamtzahl der Vereinsmitglieder ein"
+      },
+       "ageGroups": {
+        "title": "Altersgruppen-Verteilung",
+        "members": " Mitglieder",
+        "under60": "Unter 60 Jahre",
+        "under60Desc": "Frührentner und aktive Senioren",
+        "age60to70": "60-70 Jahre",
+        "age60to70Desc": "Neupensionierte, aktive Mitglieder",
+        "age70to80": "70-80 Jahre", 
+        "age70to80Desc": "Erfahrene Mitglieder mit reicher Lebenserfahrung",
+        "age80plus": "Über 80 Jahre",
+        "age80plusDesc": "Ehrenmitglieder und weise Vereinsmitglieder",
+        "totalCalculated": "Gesamt berechnet",
+        "totalMismatch": "Gesamtzahl stimmt nicht mit Altersgruppen-Verteilung überein"
       }
     },
     "activities": {
@@ -9394,6 +9430,8 @@
         "members": "Mitglieder",
         "board": "Vorstand"
       },
+      "addBoardMember": "Vorstandsmitglied hinzufügen",
+
       "fields": {
         "firstName": "Vorname",
         "lastName": "Nachname",
@@ -10000,6 +10038,15 @@
         "cancel": "Abbrechen",
         "delete": "Löschen"
       }
+    },
+     "preview": {
+      "title": "Club-Vorschau",
+      "badge": "VORSCHAU",
+      "backToForm": "Zurück zum Formular",
+      "loading": "Vorschau wird geladen...",
+      "defaultName": "Neuer Club",
+      "noLocation": "Kein Ort angegeben",
+      "close": "Vorschau schließen"
     }
   }
 }

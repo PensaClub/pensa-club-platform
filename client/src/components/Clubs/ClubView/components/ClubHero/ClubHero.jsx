@@ -452,8 +452,8 @@ export const ClubHero = ({ club }) => {
                   {club.membership.membershipFee && (
                     <div className="general-membership-fee">
                       <span className="general-fee-amount">
-                        {club.membership.membershipFee.monthly || 'По договаряне'}
-                        {club.membership.membershipFee.monthly && ' лв.'}
+                        {/* {club.membership.membershipFee.monthly } */}
+                        {club.membership.membershipFee.monthly } {' лв.'}
                       </span>
                       <span className="general-fee-period">{t('clubs.ClubHero.membership.monthly')}</span>
                     </div>

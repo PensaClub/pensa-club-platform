@@ -39,6 +39,7 @@ import RegionalInfoManager from './RegionalInfoManager/RegionalInfoManager';
 import AchievementsManager from './AchievementsManager/AchievementsManager';
 import SocialImpactManager from './SocialImpactManager/SocialImpactManager';
 import PensionersSpecificManager from './PensionersSpecificManager/PensionersSpecificManager';
+import ClubPreviewModal from './ClubPreviewModal/ClubPreviewModal';
 
 const ClubCreateForm = () => {
     const { t } = useTranslation();
@@ -60,6 +61,7 @@ const ClubCreateForm = () => {
 
     const [currentStep, setCurrentStep] = useState(1);
     const [showPreview, setShowPreview] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
 
     const steps = [
         {
@@ -174,6 +176,9 @@ const ClubCreateForm = () => {
             setCurrentStep(currentStep - 1);
         }
     };
+const handlePreview = () => {
+    setShowPreviewModal(true);
+};
 
     // Проверка дали стъпката е завършена
     const isStepCompleted = (stepId) => {
@@ -717,20 +722,20 @@ const ClubCreateForm = () => {
         </div>
     );
     const renderPensionersStep = () => (
-    <div className="club-form-step">
-        <PensionersSpecificManager
-            pensionersData={formData.pensionersSpecific || { 
-                healthServices: { healthLectures: [], medicalPartners: [], emergencyProtocol: {} },
-                supportServices: {},
-                accessibility: {},
-                specialPrograms: { memoryActivities: [], intergenerationalPrograms: [], volunteerPrograms: [], mentalHealthSupport: [] },
-                ageSpecificNeeds: { lowImpactActivities: [], nutritionSupport: [] }
-            }}
-            onPensionersChange={(pensionersData) => updateField('pensionersSpecific', pensionersData)}
-            disabled={isLoading}
-        />
-    </div>
-);
+        <div className="club-form-step">
+            <PensionersSpecificManager
+                pensionersData={formData.pensionersSpecific || {
+                    healthServices: { healthLectures: [], medicalPartners: [], emergencyProtocol: {} },
+                    supportServices: {},
+                    accessibility: {},
+                    specialPrograms: { memoryActivities: [], intergenerationalPrograms: [], volunteerPrograms: [], mentalHealthSupport: [] },
+                    ageSpecificNeeds: { lowImpactActivities: [], nutritionSupport: [] }
+                }}
+                onPensionersChange={(pensionersData) => updateField('pensionersSpecific', pensionersData)}
+                disabled={isLoading}
+            />
+        </div>
+    );
     const renderMediaStep = () => {
         const handleMediaChange = (value, path) => {
 
@@ -883,7 +888,7 @@ const ClubCreateForm = () => {
                     <button
                         type="button"
                         className="club-form-btn secondary"
-                        onClick={() => setShowPreview(!showPreview)}
+                        onClick={handlePreview}
                     >
                         <FontAwesomeIcon icon={faEye} />
                         {t('clubForm.actions.preview')}
@@ -928,6 +933,13 @@ const ClubCreateForm = () => {
                 </div>
             </div>
 
+            {showPreviewModal && (
+                <ClubPreviewModal
+                    isOpen={showPreviewModal}
+                    onClose={() => setShowPreviewModal(false)}
+                    formData={formData}
+                />
+            )}
         </div>
     );
 };

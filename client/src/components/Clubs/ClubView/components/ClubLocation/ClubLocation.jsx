@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
   faMapMarkerAlt,
   faDirections,
   faBus,
@@ -63,13 +63,13 @@ const createClubIcon = (isMain = false) => {
 // Компонент за изцентроване на картата
 const MapController = ({ center, zoom }) => {
   const map = useMap();
-  
+
   useEffect(() => {
     if (center && center[0] && center[1]) {
       map.setView(center, zoom);
     }
   }, [map, center, zoom]);
-  
+
   return null;
 };
 
@@ -81,37 +81,37 @@ export const ClubLocation = ({ club }) => {
   const [showContactModal, setShowContactModal] = useState(false);
 
   // ПРОВЕРКА ЗА ДАННИ
-  if (!club?.location || !club.location.coordinates || 
-      !club.location.coordinates.lat || !club.location.coordinates.lng) {
-    return null;
-  }
+  // if (!club?.location || !club.location.coordinates || 
+  //     !club.location.coordinates.lat || !club.location.coordinates.lng) {
+  //   return null;
+  // }
 
-  if (!club.location.address && !club.location.city) {
-    return null;
-  }
+  // if (!club.location.address && !club.location.city) {
+  //   return null;
+  // }
 
   const getTransportOptions = () => [
-    { 
-      id: 'walking', 
-      icon: faWalking, 
+    {
+      id: 'walking',
+      icon: faWalking,
       label: t('clubs.ClubLocation.transport.walking.label'),
       time: t('clubs.ClubLocation.transport.walking.time'),
       info: t('clubs.ClubLocation.transport.walking.info'),
       color: '#10b981',
       description: t('clubs.ClubLocation.transport.walking.description')
     },
-    { 
-      id: 'bus', 
-      icon: faBus, 
+    {
+      id: 'bus',
+      icon: faBus,
       label: t('clubs.ClubLocation.transport.bus.label'),
       time: t('clubs.ClubLocation.transport.bus.time'),
       info: t('clubs.ClubLocation.transport.bus.info'),
       color: '#3b82f6',
       description: t('clubs.ClubLocation.transport.bus.description')
     },
-    { 
-      id: 'car', 
-      icon: faCar, 
+    {
+      id: 'car',
+      icon: faCar,
       label: t('clubs.ClubLocation.transport.car.label'),
       time: t('clubs.ClubLocation.transport.car.time'),
       info: t('clubs.ClubLocation.transport.car.info'),
@@ -136,10 +136,10 @@ export const ClubLocation = ({ club }) => {
   };
 
   const handleShare = () => {
-    const text = t('clubs.ClubLocation.actions.shareText', { 
-      clubName: club.name, 
-      address: club.location.address, 
-      city: club.location.city 
+    const text = t('clubs.ClubLocation.actions.shareText', {
+      clubName: club.name,
+      address: club.location.address,
+      city: club.location.city
     });
     if (navigator.share) {
       navigator.share({
@@ -172,17 +172,17 @@ export const ClubLocation = ({ club }) => {
       'accessibility': faUniversalAccess,
       'barrierefreiheit': faUniversalAccess
     };
-    
-    const key = Object.keys(facilityIcons).find(k => 
+
+    const key = Object.keys(facilityIcons).find(k =>
       facility.toLowerCase().includes(k)
     );
-    
+
     return facilityIcons[key] || faInfoCircle;
   };
 
   const getVenueTypeLabel = (type) => {
-    return t(`clubs.ClubLocation.venueTypes.${type}`, { 
-      defaultValue: t('clubs.ClubLocation.venueTypes.default') 
+    return t(`clubs.ClubLocation.venueTypes.${type}`, {
+      defaultValue: t('clubs.ClubLocation.venueTypes.default')
     });
   };
 
@@ -194,7 +194,7 @@ export const ClubLocation = ({ club }) => {
   return (
     <section id="general-location" className="general-location-main">
       <div className="general-location-container">
-        
+
         {/* Header */}
         <div className="general-location-header">
           <div className="general-location-badge">
@@ -205,28 +205,28 @@ export const ClubLocation = ({ club }) => {
           <p className="general-location-subtitle">
             {t('clubs.ClubLocation.header.subtitle')}
           </p>
-          
+
           {/* Quick Actions */}
           <div className="general-location-actions">
-            <a 
-              href={getGoogleMapsUrl()} 
-              target="_blank" 
+            <a
+              href={getGoogleMapsUrl()}
+              target="_blank"
               rel="noopener noreferrer"
               className="general-quick-action maps"
             >
               <FontAwesomeIcon icon={faMapPin} />
               Google Maps
             </a>
-            <a 
-              href={getDirectionsUrl()} 
-              target="_blank" 
+            <a
+              href={getDirectionsUrl()}
+              target="_blank"
               rel="noopener noreferrer"
               className="general-quick-action directions"
             >
               <FontAwesomeIcon icon={faRoute} />
               {t('clubs.ClubLocation.actions.directions')}
             </a>
-            <button 
+            <button
               className="general-quick-action share"
               onClick={handleShare}
             >
@@ -237,7 +237,7 @@ export const ClubLocation = ({ club }) => {
         </div>
 
         <div className="general-location-grid">
-          
+
           {/* Map Section */}
           <div className={`general-map-section ${mapExpanded ? 'expanded' : ''}`}>
             <div className="general-map-header">
@@ -246,16 +246,16 @@ export const ClubLocation = ({ club }) => {
                 {t('clubs.ClubLocation.map.title')}
               </h3>
               <div className="general-map-actions">
-                <button 
+                <button
                   className="general-map-action"
                   onClick={() => setMapExpanded(!mapExpanded)}
                   title={mapExpanded ? t('clubs.ClubLocation.map.compress') : t('clubs.ClubLocation.map.expand')}
                 >
                   <FontAwesomeIcon icon={mapExpanded ? faCompress : faExpand} />
                 </button>
-                <a 
-                  href={getGoogleMapsUrl()} 
-                  target="_blank" 
+                <a
+                  href={getGoogleMapsUrl()}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="general-map-action"
                   title={t('clubs.ClubLocation.map.openInGoogleMaps')}
@@ -276,7 +276,7 @@ export const ClubLocation = ({ club }) => {
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                
+
                 <MapController center={clubPosition} zoom={15} />
 
                 <MarkerClusterGroup chunkedLoading maxClusterRadius={50}>
@@ -286,18 +286,18 @@ export const ClubLocation = ({ club }) => {
                         <h4>{club.name}</h4>
                         <p>{club.location.address}</p>
                         <div className="general-popup-actions">
-                          <a 
-                            href={getDirectionsUrl()} 
-                            target="_blank" 
+                          <a
+                            href={getDirectionsUrl()}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="general-popup-btn"
                           >
                             <FontAwesomeIcon icon={faRoute} />
                             {t('clubs.ClubLocation.actions.directions')}
                           </a>
-                          <a 
-                            href={getGoogleMapsUrl()} 
-                            target="_blank" 
+                          <a
+                            href={getGoogleMapsUrl()}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="general-popup-btn"
                           >
@@ -315,7 +315,7 @@ export const ClubLocation = ({ club }) => {
 
           {/* Info Column */}
           <div className="general-location-info">
-            
+
             {/* Address Card */}
             <div className="general-info-card address">
               <div className="general-card-header">
@@ -332,7 +332,7 @@ export const ClubLocation = ({ club }) => {
                   <p className="general-postal-info">📮 {club.location.postalCode}</p>
                 )}
               </div>
-              
+
               <div className="general-address-details">
                 <div className="general-address-item">
                   <FontAwesomeIcon icon={faBuilding} />
@@ -353,10 +353,10 @@ export const ClubLocation = ({ club }) => {
                 <FontAwesomeIcon icon={faDirections} />
                 <h3>{t('clubs.ClubLocation.transport.title')}</h3>
               </div>
-              
+
               <div className="general-transport-options">
                 {transportOptions.map(option => (
-                  <div 
+                  <div
                     key={option.id}
                     className={`general-transport-option ${selectedTransport === option.id ? 'active' : ''}`}
                     onClick={() => setSelectedTransport(option.id)}
@@ -393,14 +393,14 @@ export const ClubLocation = ({ club }) => {
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faBuilding} />
                   <h3>{t('clubs.ClubLocation.venue.title')}</h3>
-                  <button 
+                  <button
                     className="general-card-action"
                     onClick={() => setShowVenueModal(true)}
                   >
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </button>
                 </div>
-                
+
                 <div className="general-venue-summary">
                   <div className="general-venue-stat">
                     <span className="general-stat-label">{t('clubs.ClubLocation.venue.area')}</span>
@@ -414,8 +414,8 @@ export const ClubLocation = ({ club }) => {
                     <span className="general-stat-label">{t('clubs.ClubLocation.venue.accessibility')}</span>
                     <span className={`general-stat-value ${club.location.venue.accessibility ? 'yes' : 'no'}`}>
                       <FontAwesomeIcon icon={faUniversalAccess} />
-                      {club.location.venue.accessibility 
-                        ? t('clubs.ClubLocation.venue.accessible') 
+                      {club.location.venue.accessibility
+                        ? t('clubs.ClubLocation.venue.accessible')
                         : t('clubs.ClubLocation.venue.notAccessible')
                       }
                     </span>
@@ -445,7 +445,7 @@ export const ClubLocation = ({ club }) => {
 
             {/* Contact & Hours */}
             <div className="general-contact-hours-grid">
-              
+
               {/* Working Hours */}
               {club.contacts?.workingHours && (
                 <div className="general-info-card hours">
@@ -454,14 +454,16 @@ export const ClubLocation = ({ club }) => {
                     <h3>{t('clubs.ClubLocation.hours.title')}</h3>
                   </div>
                   <div className="general-hours-list">
-                    {Object.entries(club.contacts.workingHours).map(([day, hours]) => (
-                      <div key={day} className="general-hours-row">
-                        <span className="general-day">{getDayName(day, true)}</span>
-                        <span className={`general-hours ${hours === 'closed' ? 'closed' : ''}`}>
-                          {hours === 'closed' ? t('clubs.ClubLocation.hours.closed') : hours}
-                        </span>
-                      </div>
-                    ))}
+                    {Object.entries(club.contacts.workingHours)
+                      .filter(([day, hours]) => typeof hours === 'string')
+                      .map(([day, hours]) => (
+                        <div key={day} className="general-hours-row">
+                          <span className="general-day">{getDayName(day, true)}</span>
+                          <span className={`general-hours ${hours === 'closed' ? 'closed' : ''}`}>
+                            {hours === 'closed' ? t('clubs.ClubLocation.hours.closed') : hours}
+                          </span>
+                        </div>
+                      ))}
                   </div>
                 </div>
               )}
@@ -472,7 +474,7 @@ export const ClubLocation = ({ club }) => {
                   <div className="general-card-header">
                     <FontAwesomeIcon icon={faPhoneAlt} />
                     <h3>{t('clubs.ClubLocation.contacts.title')}</h3>
-                    <button 
+                    <button
                       className="general-card-action"
                       onClick={() => setShowContactModal(true)}
                     >
@@ -513,7 +515,7 @@ export const ClubLocation = ({ club }) => {
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
-            
+
             <div className="general-modal-content">
               <div className="general-venue-details">
                 <div className="general-venue-grid">
@@ -524,7 +526,7 @@ export const ClubLocation = ({ club }) => {
                       <span className="general-detail-value">{getVenueTypeLabel(club.location.venue.type)}</span>
                     </div>
                   </div>
-                  
+
                   <div className="general-venue-detail">
                     <FontAwesomeIcon icon={faUserFriends} />
                     <div>
@@ -532,7 +534,7 @@ export const ClubLocation = ({ club }) => {
                       <span className="general-detail-value">{club.location.venue.capacity} {t('clubs.ClubLocation.venue.seats')}</span>
                     </div>
                   </div>
-                  
+
                   <div className="general-venue-detail">
                     <FontAwesomeIcon icon={faBuilding} />
                     <div>
@@ -540,14 +542,14 @@ export const ClubLocation = ({ club }) => {
                       <span className="general-detail-value">{club.location.venue.size}</span>
                     </div>
                   </div>
-                  
+
                   <div className="general-venue-detail accessibility">
                     <FontAwesomeIcon icon={faUniversalAccess} />
                     <div>
                       <span className="general-detail-label">{t('clubs.ClubLocation.venue.accessibility')}</span>
                       <span className={`general-detail-value ${club.location.venue.accessibility ? 'accessible' : 'not-accessible'}`}>
-                        {club.location.venue.accessibility 
-                          ? t('clubs.ClubLocation.modals.venue.accessibleForDisabled') 
+                        {club.location.venue.accessibility
+                          ? t('clubs.ClubLocation.modals.venue.accessibleForDisabled')
                           : t('clubs.ClubLocation.venue.notAccessible')
                         }
                       </span>
@@ -594,7 +596,7 @@ export const ClubLocation = ({ club }) => {
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
-            
+
             <div className="general-modal-content">
               <div className="general-contact-details">
                 {club.contacts.phone && (
@@ -640,20 +642,22 @@ export const ClubLocation = ({ club }) => {
                 )}
 
                 {club.contacts.workingHours && (
-                  <div className="general-working-hours-section">
-                    <h4>{t('clubs.ClubLocation.modals.contact.detailedWorkingHours')}</h4>
-                    <div className="general-hours-detailed">
-                      {Object.entries(club.contacts.workingHours).map(([day, hours]) => (
-                        <div key={day} className="general-hours-detail">
-                          <span className="general-hours-day">{getDayName(day)}</span>
-                          <span className={`general-hours-time ${hours === 'closed' ? 'closed' : ''}`}>
-                            {hours === 'closed' ? t('clubs.ClubLocation.hours.closed') : hours}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+  <div className="general-working-hours-section">
+    <h4>{t('clubs.ClubLocation.modals.contact.detailedWorkingHours')}</h4>
+    <div className="general-hours-detailed">
+      {Object.entries(club.contacts.workingHours)
+        .filter(([day, hours]) => typeof hours === 'string') // ДОБАВИ ТАЗИ ПРОВЕРКА
+        .map(([day, hours]) => (
+          <div key={day} className="general-hours-detail">
+            <span className="general-hours-day">{getDayName(day)}</span>
+            <span className={`general-hours-time ${hours === 'closed' ? 'closed' : ''}`}>
+              {hours === 'closed' ? t('clubs.ClubLocation.hours.closed') : hours}
+            </span>
+          </div>
+        ))}
+    </div>
+  </div>
+)}
               </div>
             </div>
           </div>

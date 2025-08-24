@@ -161,13 +161,22 @@ export const ClubContact = ({ club }) => {
     return urls[platform.toLowerCase()] || `https://${handle}`;
   };
 
-  const getTodayHours = () => {
-    if (!club.contacts?.workingHours) return t('clubs.ClubContact.workingHours.notSpecified');
-    
-    const today = new Date().getDay();
-    const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
-    return club.contacts.workingHours[dayIndex] || 'closed';
-  };
+ const getTodayHours = () => {
+  if (!club.contacts?.workingHours || typeof club.contacts.workingHours !== 'object') {
+    return t('clubs.ClubContact.workingHours.notSpecified');
+  }
+  
+  const today = new Date().getDay();
+  const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
+  const hours = club.contacts.workingHours[dayIndex];
+  
+  // Проверяваме дали часовете са string или валидна стойност
+  if (!hours || typeof hours !== 'string') {
+    return 'closed';
+  }
+  
+  return hours;
+};
 
   const getTodayName = () => {
     const today = new Date().getDay();
@@ -333,44 +342,44 @@ export const ClubContact = ({ club }) => {
             </div>
 
             {/* Working Hours */}
-            {club.contacts?.workingHours && (
-              <div className="general-contact-card hours">
-                <div className="general-card-header">
-                  <FontAwesomeIcon icon={faBusinessTime} />
-                  <h3>{t('clubs.ClubContact.workingHours.title')}</h3>
-                  <button 
-                    className="general-card-action"
-                    onClick={() => setShowHoursModal(true)}
-                    title={t('clubs.ClubContact.workingHours.detailed')}
-                  >
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                  </button>
-                </div>
-                
-                <div className="general-today-status">
-                  <div className="general-today-info">
-                    <span className="general-today-label">{getTodayName()}</span>
-                    <span className={`general-today-hours ${getTodayHours() === 'closed' ? 'closed' : 'open'}`}>
-                      {getTodayHours() === 'closed' ? t('clubs.ClubContact.workingHours.closed') : getTodayHours()}
-                    </span>
-                  </div>
-                  
-                  {getTodayHours() !== 'closed' && (
-                    <div className="general-status-indicator open">
-                      <div className="general-status-dot"></div>
-                      <span>{t('clubs.ClubContact.workingHours.openNow')}</span>
-                    </div>
-                  )}
-                  
-                  {getTodayHours() === 'closed' && (
-                    <div className="general-status-indicator closed">
-                      <div className="general-status-dot"></div>
-                      <span>{t('clubs.ClubContact.workingHours.closed')}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            {club.contacts?.workingHours && Object.keys(club.contacts.workingHours).length > 0 && (
+  <div className="general-contact-card hours">
+    <div className="general-card-header">
+      <FontAwesomeIcon icon={faBusinessTime} />
+      <h3>{t('clubs.ClubContact.workingHours.title')}</h3>
+      <button 
+        className="general-card-action"
+        onClick={() => setShowHoursModal(true)}
+        title={t('clubs.ClubContact.workingHours.detailed')}
+      >
+        <FontAwesomeIcon icon={faInfoCircle} />
+      </button>
+    </div>
+    
+    <div className="general-today-status">
+      <div className="general-today-info">
+        <span className="general-today-label">{getTodayName()}</span>
+        <span className={`general-today-hours ${getTodayHours() === 'closed' ? 'closed' : 'open'}`}>
+          {getTodayHours() === 'closed' ? t('clubs.ClubContact.workingHours.closed') : getTodayHours()}
+        </span>
+      </div>
+      
+      {getTodayHours() !== 'closed' && (
+        <div className="general-status-indicator open">
+          <div className="general-status-dot"></div>
+          <span>{t('clubs.ClubContact.workingHours.openNow')}</span>
+        </div>
+      )}
+      
+      {getTodayHours() === 'closed' && (
+        <div className="general-status-indicator closed">
+          <div className="general-status-dot"></div>
+          <span>{t('clubs.ClubContact.workingHours.closed')}</span>
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
             {/* Location */}
             {club.location && (
@@ -630,48 +639,50 @@ export const ClubContact = ({ club }) => {
 
       {/* Working Hours Modal */}
       {showHoursModal && club.contacts?.workingHours && (
-        <div className="general-modal-overlay" onClick={() => setShowHoursModal(false)}>
-          <div className="general-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="general-modal-header">
-              <h3>
-                <FontAwesomeIcon icon={faBusinessTime} />
-                {t('clubs.ClubContact.workingHours.detailed')}
-              </h3>
-              <button className="general-modal-close" onClick={() => setShowHoursModal(false)}>
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-            </div>
-            
-            <div className="general-modal-content">
-              <div className="general-hours-detailed">
-                {Object.entries(club.contacts.workingHours).map(([day, hours]) => {
-                  const today = new Date().getDay();
-                  const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
-                  const isToday = day === dayIndex;
-                  
-                  return (
-                    <div key={day} className={`general-hours-row ${isToday ? 'today' : ''}`}>
-                      <div className="general-hours-day">
-                        <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span>{getDayName(day)}</span>
-                        {isToday && <span className="general-today-badge">{t('clubs.ClubContact.workingHours.today')}</span>}
-                      </div>
-                      <div className={`general-hours-time ${hours === 'closed' ? 'closed' : 'open'}`}>
-                        {hours === 'closed' ? t('clubs.ClubContact.workingHours.closed') : hours}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+  <div className="general-modal-overlay" onClick={() => setShowHoursModal(false)}>
+    <div className="general-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="general-modal-header">
+        <h3>
+          <FontAwesomeIcon icon={faBusinessTime} />
+          {t('clubs.ClubContact.workingHours.detailed')}
+        </h3>
+        <button className="general-modal-close" onClick={() => setShowHoursModal(false)}>
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
+      </div>
+      
+      <div className="general-modal-content">
+        <div className="general-hours-detailed">
+          {Object.entries(club.contacts.workingHours || {})
+            .filter(([day, hours]) => typeof hours === 'string') // Филтрираме само string стойности
+            .map(([day, hours]) => {
+              const today = new Date().getDay();
+              const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
+              const isToday = day === dayIndex;
               
-              <div className="general-hours-note">
-                <FontAwesomeIcon icon={faInfoCircle} />
-                <p>{t('clubs.ClubContact.workingHours.note')}</p>
-              </div>
-            </div>
-          </div>
+              return (
+                <div key={day} className={`general-hours-row ${isToday ? 'today' : ''}`}>
+                  <div className="general-hours-day">
+                    <FontAwesomeIcon icon={faCalendarAlt} />
+                    <span>{getDayName(day)}</span>
+                    {isToday && <span className="general-today-badge">{t('clubs.ClubContact.workingHours.today')}</span>}
+                  </div>
+                  <div className={`general-hours-time ${hours === 'closed' ? 'closed' : 'open'}`}>
+                    {hours === 'closed' ? t('clubs.ClubContact.workingHours.closed') : (hours || t('clubs.ClubContact.workingHours.notSpecified'))}
+                  </div>
+                </div>
+              );
+            })}
         </div>
-      )}
+        
+        <div className="general-hours-note">
+          <FontAwesomeIcon icon={faInfoCircle} />
+          <p>{t('clubs.ClubContact.workingHours.note')}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </section>
   );
 };
