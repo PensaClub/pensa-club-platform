@@ -71,6 +71,18 @@ module.exports = {
             },
         });
 
+        await queryInterface.addConstraint('club_members', {
+            fields: ['club_id'],
+            type: 'foreign key',
+            name: 'club_members_club_id_fkey',
+            references: {
+                table: 'clubs',
+                field: 'id',
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+        });
+
         await queryInterface.addIndex('club_members', ['email']);
         await queryInterface.addIndex('club_members', ['join_date']);
         await queryInterface.addIndex('club_members', ['club_id', 'is_active']);

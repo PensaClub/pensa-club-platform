@@ -106,6 +106,18 @@ module.exports = {
             },
         });
 
+        await queryInterface.addConstraint('club_details', {
+            fields: ['club_id'],
+            type: 'foreign key',
+            name: 'club_details_club_id_fkey',
+            references: {
+                table: 'clubs',
+                field: 'id',
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+        });
+
         await queryInterface.addIndex('club_details', ['template']);
     },
 

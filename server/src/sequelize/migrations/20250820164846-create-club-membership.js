@@ -14,7 +14,6 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 field: 'club_id',
-                // Remove references and onDelete
             },
             totalMembers: {
                 type: Sequelize.INTEGER,
@@ -59,6 +58,18 @@ module.exports = {
                 type: Sequelize.DATE,
                 field: 'updated_at',
             },
+        });
+
+        await queryInterface.addConstraint('club_memberships', {
+            fields: ['club_id'],
+            type: 'foreign key',
+            name: 'club_memberships_club_id_fkey',
+            references: {
+                table: 'clubs',
+                field: 'id',
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         });
 
         await queryInterface.addIndex('club_memberships', ['total_members']);

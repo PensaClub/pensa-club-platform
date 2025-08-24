@@ -60,6 +60,18 @@ module.exports = {
             },
         });
 
+        await queryInterface.addConstraint('club_locations', {
+            fields: ['club_id'],
+            type: 'foreign key',
+            name: 'club_locations_club_id_fkey',
+            references: {
+                table: 'clubs',
+                field: 'id',
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+        });
+
         await queryInterface.addIndex('club_locations', ['city', 'municipality']);
         await queryInterface.addIndex('club_locations', ['region']);
         await queryInterface.addIndex('club_locations', ['postal_code']);

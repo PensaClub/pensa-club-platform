@@ -67,6 +67,18 @@ module.exports = {
             },
         });
 
+        await queryInterface.addConstraint('club_activities', {
+            fields: ['club_id'],
+            type: 'foreign key',
+            name: 'club_activities_club_id_fkey',
+            references: {
+                table: 'clubs',
+                field: 'id',
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+        });
+
         await queryInterface.addIndex('club_activities', ['type']);
         await queryInterface.addIndex('club_activities', ['is_active']);
         await queryInterface.addIndex('club_activities', ['featured']);
