@@ -197,10 +197,10 @@ const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
 
             // Дейности - адаптирам структурата от activities.list към activities с подкатегории
             activities: {
-                regular: formData.activities?.list?.filter(a => a.type === 'regular') || [],
-                events: formData.activities?.list?.filter(a => a.type === 'event') || [],
-                trips: formData.activities?.list?.filter(a => a.type === 'trip') || [],
-                courses: formData.activities?.list?.filter(a => a.type === 'workshop') || []
+                regular: formData.activities?.regular || [],
+                events: formData.activities?.events || [],
+                trips: formData.activities?.trips || [],
+                courses: formData.activities?.courses || []
             },
 
             // Финанси

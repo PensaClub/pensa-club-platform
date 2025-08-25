@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -62,6 +62,11 @@ const ClubCreateForm = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [showPreview, setShowPreview] = useState(false);
     const [showPreviewModal, setShowPreviewModal] = useState(false);
+ const handleActivitiesChange = useCallback((type, data) => {
+    
+    updateField(`activities.${type}`, data);
+
+}, [updateField, formData.activities]);
 
     const steps = [
         {
@@ -176,9 +181,9 @@ const ClubCreateForm = () => {
             setCurrentStep(currentStep - 1);
         }
     };
-const handlePreview = () => {
-    setShowPreviewModal(true);
-};
+    const handlePreview = () => {
+        setShowPreviewModal(true);
+    };
 
     // Проверка дали стъпката е завършена
     const isStepCompleted = (stepId) => {
@@ -215,12 +220,16 @@ const handlePreview = () => {
             return true;
         }
 
-        if (stepId === 9) {  // ⬅️ НОВО - Pensioners
-            return true; // Pensioners specific е опционален
+        if (stepId === 9) {  
+            return true; 
         }
-        // И обнови всички останали номера:
-        if (stepId === 10) {  // беше 9
-            return formData.activities?.list && formData.activities.list.length > 0;
+
+        if (stepId === 10) {  
+
+            return (formData.activities?.regular && formData.activities.regular.length > 0) ||
+                (formData.activities?.events && formData.activities.events.length > 0) ||
+                (formData.activities?.trips && formData.activities.trips.length > 0) ||
+                (formData.activities?.courses && formData.activities.courses.length > 0);
         }
         if (stepId === 11) {  // беше 10
             return formData.logo && formData.logo !== '';
@@ -703,15 +712,32 @@ const handlePreview = () => {
             />
         </div>
     );
-    const renderActivitiesStep = () => (
+   const renderActivitiesStep = () => {
+    
+    if (!formData.activities) {
+        updateField('activities', {
+            regular: [],
+            events: [],
+            trips: [],
+            courses: []
+        });
+    }
+
+    return (
         <div className="club-form-step">
             <ActivitiesManager
-                activitiesData={formData.activities}
-                onActivitiesChange={(activitiesData) => updateField('activities', activitiesData)}
+                activitiesData={formData.activities || {
+                    regular: [],
+                    events: [],
+                    trips: [],
+                    courses: []
+                }}
+                onActivitiesChange={handleActivitiesChange}
                 disabled={isLoading}
             />
         </div>
     );
+};
     const renderSocialImpactStep = () => (
         <div className="club-form-step">
             <SocialImpactManager

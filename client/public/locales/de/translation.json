@@ -3787,7 +3787,9 @@
         "thursdayShort": "Do",
         "fridayShort": "Fr",
         "saturdayShort": "Sa",
-        "sundayShort": "So"
+        "sundayShort": "So",
+        "specialShort": "Spezial"
+
       },
       "modals": {
         "venue": {
@@ -9205,6 +9207,23 @@
         "workshop": "Workshop",
         "seasonal": "Saisonale Aktivität"
       },
+      "tabs": {
+        "regular": "Regelmäßige Aktivitäten",
+        "events": "Veranstaltungen",
+        "trips": "Ausflüge", 
+        "courses": "Kurse"
+      },
+      "eventTypes": {
+        "cultural": "Kulturell",
+        "traditional": "Traditionell",
+        "social": "Sozial",
+        "charity": "Wohltätig",
+        "community": "Gemeinschaft",
+        "sportsCompetition": "Sportwettbewerb",
+        "wellnessEvent": "Wellness-Veranstaltung",
+        "sportsFestival": "Sportfestival",
+        "swimmingCompetition": "Schwimmwettbewerb"
+      },
       "categories": {
         "general": "Allgemeine Aktivitäten",
         "cultural": "Kulturelle Aktivitäten",
@@ -9256,20 +9275,69 @@
         "feePeriod": "Gebührenzeitraum",
         "instructor": "Kursleiter/Leiter",
         "requirements": "Anforderungen",
-        "equipment": "Erforderliche Ausrüstung"
+        "equipment": "Erforderliche Ausrüstung",
+         "day": "Tag",
+        "title": "Titel",
+        "destination": "Reiseziel",
+        "highlights": "Höhepunkte",
+        "featured": "Empfohlen",
+        "location": "Ort",
+        "organizer": "Organisator",
+        "time": "Uhrzeit",
+         "date": "Datum",
+        "price": "Preis",
+        "participants": "Participants"
+
       },
       "placeholders": {
         "name": "Yoga für Anfänger",
         "description": "Beschreiben Sie was die Aktivität beinhaltet...",
         "instructor": "Maria Schmidt",
-        "requirements": "Bequeme Kleidung, Handtuch..."
+        "requirements": "Bequeme Kleidung, Handtuch...",
+          "activityName": "Name der Aktivität",
+        "eventTitle": "Titel der Veranstaltung",
+        "eventDescription": "Beschreibung der Veranstaltung",
+        "destination": "Reiseziel des Ausflugs",
+        "tripDescription": "Beschreibung des Ausflugs",
+        "courseName": "Name des Kurses",
+        "courseDescription": "Beschreibung des Kurses",
+         "location": "Ort",
+        "organizer": "Organisator"
       },
       "actions": {
-        "addActivity": "Aktivität hinzufügen"
+        "addActivity": "Aktivität hinzufügen",
+            "addEvent": "Veranstaltung hinzufügen",
+        "addTrip": "Ausflug hinzufügen",
+        "addCourse": "Kurs hinzufügen"
       },
       "help": {
         "title": "Wie erstelle ich ein attraktives Programm?",
         "description": "Vielfältige Aktivitäten ziehen verschiedene Altersgruppen und Interessen an. Schließen Sie sowohl regelmäßige Aktivitäten als auch besondere Veranstaltungen ein."
+      },
+        "uploadImages": "Bilder hochladen",
+      "uploadVideos": "Videos hochladen",
+      "imageCaption": "Bildbeschreibung",
+      "videoCaption": "Videobeschreibung",
+      "setMainImage": "Als Hauptbild festlegen",
+      "addHighlight": "Höhepunkt hinzufügen",
+      "eventMedia": "Veranstaltungsmedien",
+      "eventImages": "Veranstaltungsbilder",
+      "eventVideos": "Veranstaltungsvideos",
+      "regularActivities": "Regelmäßige Aktivitäten",
+      "regularActivitiesDesc": "Wöchentliche und wiederkehrende Vereinsaktivitäten",
+      "events": "Veranstaltungen",
+      "eventsDesc": "Besondere Veranstaltungen und Feiern",
+      "trips": "Ausflüge",
+      "tripsDesc": "Organisierte Ausflüge und Exkursionen",
+      "courses": "Kurse",
+      "coursesDesc": "Bildungskurse und Workshops",
+      "addRegularActivity": "Regelmäßige Aktivität hinzufügen",
+      "addEvent": "Veranstaltung hinzufügen",
+      "addTrip": "Ausflug hinzufügen",
+      "addCourse": "Kurs hinzufügen",
+      
+      "prompts": {
+        "addHighlight": "Höhepunkt der Veranstaltung eingeben:"
       }
     },
     "media": {

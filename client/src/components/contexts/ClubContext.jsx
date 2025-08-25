@@ -43,11 +43,11 @@ export const ClubProvider = ({ children }) => {
   // ===============================
 
   const createClub = async (clubData) => {
-    if (!isAdmin) {
-      console.warn('Потребителят не е администратор, не може да създаде клуб');
-      notify('unauthorized-action');
-      return;
-    }
+    // if (!isAdmin) {
+    //   console.warn('Потребителят не е администратор, не може да създаде клуб');
+    //   notify('unauthorized-action');
+    //   return;
+    // }
 
     try {
       setIsLoading(true);
@@ -71,84 +71,188 @@ export const ClubProvider = ({ children }) => {
   };
 
   // 📌 ЗАПАЗВАМЕ СТАРИТЕ МЕТОДИ (mock data)
-  const getAllClubs = async (forceRefresh = false) => {
-    if (clubs.length > 0 && clubsLoaded && !forceRefresh) {
-      return clubs;
-    }
+  const getAllClubs = async (forceRefresh = false, page = 1, limit = 12) => {
+  if (clubs.length > 0 && clubsLoaded && !forceRefresh) {
+    return clubs;
+  }
 
+  try {
+    setIsLoading(true);
+    
+    // 🌐 Използваме реалния API вместо mock data
+    const response = await clubService.getAllClubs(page, limit);
+    
+    console.log('🔄 Raw API response:', response);
+    
+    // Обработваме response-а правилно
+    let fetchedClubs = [];
+    
+    if (Array.isArray(response)) {
+      // Ако response е директно масив
+      fetchedClubs = response;
+    } else if (response && Array.isArray(response.data)) {
+      // Ако response е обект с data property
+      fetchedClubs = response.data;
+    } else if (response && Array.isArray(response.clubs)) {
+      // Ако response е обект с clubs property
+      fetchedClubs = response.clubs;
+    } else {
+      console.warn('⚠️ Unexpected response format:', response);
+      fetchedClubs = [];
+    }
+    
+    console.log('📊 Processed clubs data:', fetchedClubs);
+    
+    // Сортираме само ако имаме валиден масив
+    if (Array.isArray(fetchedClubs) && fetchedClubs.length > 0) {
+      fetchedClubs.sort((a, b) => {
+        const dateA = new Date(a.metadata?.updatedAt || a.updatedAt || 0);
+        const dateB = new Date(b.metadata?.updatedAt || b.updatedAt || 0);
+        return dateB - dateA;
+      });
+    }
+    
+    setClubs(fetchedClubs);
+    setClubsLoaded(true);
+    
+    // Връщаме пълния response ако има pagination info
+    return {
+      clubs: fetchedClubs,
+      pagination: response?.pagination || null,
+      total: response?.total || fetchedClubs.length
+    };
+    
+  } catch (e) {
+    console.error('❌ Грешка при получаване на клубове:', e);
+    notify('error', e);
+    showErrorAndSetTimeouts(e.message);
+    
+    // Fallback към mock data в случай на грешка
     try {
-      setIsLoading(true);
-      
-      // Симулираме API заявка - за сега връщаме mock data
-      const fetchedClubs = await simulateApiCall(mockClubsData);
-      
-      // Сортираме по най-нови първо
-      const sortedClubs = fetchedClubs.sort((a, b) => {
+      console.log('🔄 Using fallback mock data...');
+      const fallbackClubs = await simulateApiCall(mockClubsData);
+      const sortedFallback = fallbackClubs.sort((a, b) => {
         return new Date(b.metadata.updatedAt) - new Date(a.metadata.updatedAt);
       });
-      
-      setClubs(sortedClubs);
+      setClubs(sortedFallback);
       setClubsLoaded(true);
-      return sortedClubs;
-    } catch (e) {
-      console.error('Грешка при получаване на клубове:', e);
-      notify('error', e);
-      showErrorAndSetTimeouts(e.message);
-    } finally {
-      setIsLoading(false);
+      return {
+        clubs: sortedFallback,
+        pagination: null,
+        total: sortedFallback.length,
+        isFromFallback: true
+      };
+    } catch (fallbackError) {
+      console.error('❌ Грешка и с fallback данните:', fallbackError);
+      setClubs([]);
+      setClubsLoaded(true);
+      return {
+        clubs: [],
+        pagination: null,
+        total: 0,
+        error: e.message
+      };
     }
-  };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-  const getClubBySlug = async (slug) => {
+ const getClubBySlug = async (slug) => {
+  try {
+    setIsLoading(true);
+    
+    console.log('🔄 Fetching club by slug:', slug);
+    
+    // 🌐 Използваме реалния API
+    const fetchedClub = await clubService.getClubByIdentifier(slug);
+    
+    console.log('✅ Club fetched from API:', fetchedClub);
+    
+    setCurrentClub(fetchedClub);
+    
+    // Увеличаваме броя прегледи ако имаме metadata
+    if (fetchedClub?.metadata) {
+      fetchedClub.metadata.views = (fetchedClub.metadata.views || 0) + 1;
+    }
+    
+    return fetchedClub;
+    
+  } catch (e) {
+    console.error('❌ Грешка при получаване на клуб по slug от API:', e);
+    
+    // Fallback към mock data
     try {
-      setIsLoading(true);
+      console.log('🔄 Using fallback mock data for slug:', slug);
       
-      // Симулираме API заявка
       const club = mockClubsData.find(club => club.slug === slug);
       
       if (!club) {
-        throw new Error('Клубът не беше намерен');
+        throw new Error('Клубът не беше намерен нито в API, нито в mock данните');
       }
 
-      const fetchedClub = await simulateApiCall(club);
-      setCurrentClub(fetchedClub);
+      const fallbackClub = await simulateApiCall(club);
+      setCurrentClub(fallbackClub);
       
       // Увеличаваме броя прегледи
-      fetchedClub.metadata.views += 1;
+      if (fallbackClub?.metadata) {
+        fallbackClub.metadata.views = (fallbackClub.metadata.views || 0) + 1;
+      }
       
-      return fetchedClub;
-    } catch (e) {
-      console.error('Грешка при получаване на клуб по slug:', e);
-      notify('error', e);
-      showErrorAndSetTimeouts(e.message);
+      console.log('✅ Using fallback club data:', fallbackClub);
+      return fallbackClub;
+      
+    } catch (fallbackError) {
+      console.error('❌ Грешка и с fallback данните:', fallbackError);
+      notify('error', 'Клубът не беше намерен');
+      showErrorAndSetTimeouts(fallbackError.message);
       return null;
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-  const getClubById = async (id) => {
+ const getClubById = async (id) => {
+  try {
+    setIsLoading(true);
+    
+    console.log('🔄 Fetching club by ID:', id);
+    
+    // 🌐 Използваме реалния API
+    const fetchedClub = await clubService.getClubByIdentifier(id);
+    
+    console.log('✅ Club fetched from API by ID:', fetchedClub);
+    
+    return fetchedClub;
+    
+  } catch (e) {
+    console.error('❌ Грешка при получаване на клуб по ID от API:', e);
+    
+    // Fallback към mock data
     try {
-      setIsLoading(true);
+      console.log('🔄 Using fallback mock data for ID:', id);
       
-      // Симулираме API заявка
       const club = mockClubsData.find(club => club.id === id);
       
       if (!club) {
-        throw new Error('Клубът не беше намерен');
+        throw new Error('Клубът не беше намерен нито в API, нито в mock данните');
       }
 
-      const fetchedClub = await simulateApiCall(club);
-      return fetchedClub;
-    } catch (e) {
-      console.error('Грешка при получаване на клуб по ID:', e);
-      notify('error', e);
-      showErrorAndSetTimeouts(e.message);
+      const fallbackClub = await simulateApiCall(club);
+      console.log('✅ Using fallback club data by ID:', fallbackClub);
+      return fallbackClub;
+      
+    } catch (fallbackError) {
+      console.error('❌ Грешка и с fallback данните по ID:', fallbackError);
+      notify('error', 'Клубът не беше намерен');
+      showErrorAndSetTimeouts(fallbackError.message);
       return null;
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const updateClub = async (identifier, clubData) => {
     if (!isAdmin) {

@@ -96,11 +96,11 @@ pensionersSpecific: {
 
     // Дейности
     activities: {
-      regular: [],
-      events: [],
-      trips: [],
-      courses: []
-    },
+  regular: [],
+  events: [],
+  trips: [],
+  courses: []
+},
 achievements: {
   awards: [],
   certificates: [],
@@ -440,53 +440,58 @@ useEffect(() => {
   }, [formData, draftId, saveDraftClub, updateDraftClub, saveToLocalStorage, getIdentifier]);
 
   // SUBMIT функция
-  const submitClub = useCallback(async () => {
-    if (!validateForm()) {
-      notify('error', 'Моля, поправете грешките във формата');
-      return false;
-    }
+  // SUBMIT функция - ПРАВИЛНА ЛОГИКА ЗА SLUG
+const submitClub = useCallback(async () => {
+  if (!validateForm()) {
+    notify('error', 'Моля, поправете грешките във формата');
+    return false;
+  }
 
-    try {
-      setIsLoading(true);
-      
-      let result;
-      const identifier = getIdentifier();
-      
-      if (clubId || identifier) {
-        // Update съществуващ клуб - използваме identifier
-        const updateIdentifier = clubId || identifier;
-        result = await updateClub(updateIdentifier, formData);
-      } else {
-        // Създай нов клуб
-        result = await createClub(formData);
-      }
-      
-      if (result) {
-        // Изчисти чернова след успешно създаване
-        if (draftId) {
-          try {
-            await deleteDraftClub(draftId);
-          } catch (deleteError) {
-            console.warn('Could not delete draft:', deleteError);
-          }
-        }
-        localStorage.removeItem(getLocalStorageKey());
-        
-        setIsDraft(false);
-        setDraftId(null);
-        setHasUnsavedChanges(false);
-        
-        return result;
-      }
-      
-      return false;
-    } catch (error) {
-      console.error('Error submitting club:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
+  try {
+    setIsLoading(true);
+    
+    let result;
+    
+    // ПРАВИЛНА ЛОГИКА: 
+    // UPDATE само ако редактираме СЪЩЕСТВУВАЩ клуб (имаме clubId или formData.id)
+    // CREATE във всички други случаи (дори и да има slug в данните)
+    if (clubId || formData.id) {
+      // UPDATE - редактираме съществуващ клуб
+      const updateIdentifier = clubId || formData.id;
+      console.log('🔄 UPDATE клуб с identifier:', updateIdentifier);
+      result = await updateClub(updateIdentifier, formData);
+    } else {
+      // CREATE - създаваме нов клуб (slug е в formData)
+      console.log('✅ CREATE нов клуб със slug:', formData.slug);
+      result = await createClub(formData);
     }
-  }, [formData, clubId, validateForm, createClub, updateClub, draftId, deleteDraftClub, getLocalStorageKey, getIdentifier]);
+    
+    if (result) {
+      // Изчисти чернова след успешно създаване/обновяване
+      if (draftId) {
+        try {
+          await deleteDraftClub(draftId);
+        } catch (deleteError) {
+          console.warn('Could not delete draft:', deleteError);
+        }
+      }
+      localStorage.removeItem(getLocalStorageKey());
+      
+      setIsDraft(false);
+      setDraftId(null);
+      setHasUnsavedChanges(false);
+      
+      return result;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('Error submitting club:', error);
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, [formData, clubId, validateForm, createClub, updateClub, draftId, deleteDraftClub, getLocalStorageKey]);
 
   // RESET функция
   const resetForm = useCallback(() => {

@@ -4251,7 +4251,8 @@
         "thursdayShort": "Thu",
         "fridayShort": "Fri",
         "saturdayShort": "Sat",
-        "sundayShort": "Sun"
+        "sundayShort": "Sun",
+        "specialShort": "Special"
       },
       "modals": {
         "venue": {
@@ -9499,6 +9500,7 @@
       "custom": "Custom Role",
       "addCustomRole": "Add Custom Role",
       "addFee": "Add Membership Fee",
+      
       "types": {
         "open": "Open Membership",
         "openDesc": "Anyone can join freely",
@@ -9609,6 +9611,23 @@
         "workshop": "Workshop",
         "seasonal": "Seasonal Activity"
       },
+       "tabs": {
+        "regular": "Regular Activities",
+        "events": "Events",
+        "trips": "Trips", 
+        "courses": "Courses"
+      },
+      "eventTypes": {
+        "cultural": "Cultural",
+        "traditional": "Traditional",
+        "social": "Social",
+        "charity": "Charity",
+        "community": "Community",
+        "sportsCompetition": "Sports Competition",
+        "wellnessEvent": "Wellness Event",
+        "sportsFestival": "Sports Festival",
+        "swimmingCompetition": "Swimming Competition"
+      },
       "categories": {
         "general": "General Activities",
         "cultural": "Cultural Activities",
@@ -9660,20 +9679,69 @@
         "feePeriod": "Fee Period",
         "instructor": "Instructor/Leader",
         "requirements": "Requirements",
-        "equipment": "Required Equipment"
+        "equipment": "Required Equipment",
+         "day": "Day",
+        "title": "Title",
+        "destination": "Destination",
+        "highlights": "Highlights",
+        "featured": "Featured",
+        "location": "Location",
+        "organizer": "Organizer",
+        "time": "Time",
+         "date": "Date",
+        "price": "Price",
+        "participants": "Participants"
       },
       "placeholders": {
         "name": "Beginner Yoga",
         "description": "Describe what the activity includes...",
         "instructor": "Mary Johnson",
-        "requirements": "Comfortable clothes, towel..."
+        "requirements": "Comfortable clothes, towel...",
+          "activityName": "Activity name",
+        "eventTitle": "Event title",
+        "eventDescription": "Event description",
+        "destination": "Trip destination",
+        "tripDescription": "Trip description",
+        "courseName": "Course name",
+        "courseDescription": "Course description",
+         "location": "Location",
+        "organizer": "Organizer"
       },
       "actions": {
-        "addActivity": "Add Activity"
+        "addActivity": "Add Activity",
+         "addEvent": "Add Event",
+        "addTrip": "Add Trip",
+        "addCourse": "Add Course"
       },
       "help": {
         "title": "How to create an attractive program?",
         "description": "Diverse activities attract different age groups and interests. Include both regular activities and special events."
+      },
+       "uploadImages": "Upload Images",
+      "uploadVideos": "Upload Videos",
+      "imageCaption": "Image caption",
+      "videoCaption": "Video caption",
+      "setMainImage": "Set as main image",
+      "addHighlight": "Add Highlight",
+      "eventMedia": "Event Media",
+      "eventImages": "Event Images",
+      "eventVideos": "Event Videos",
+      "regularActivities": "Regular Activities",
+      "regularActivitiesDesc": "Weekly and recurring club activities",
+      "events": "Events",
+      "eventsDesc": "Special events and celebrations",
+      "trips": "Trips",
+      "tripsDesc": "Organized trips and excursions",
+      "courses": "Courses",
+      "coursesDesc": "Educational courses and workshops",
+      "addRegularActivity": "Add Regular Activity",
+      "addEvent": "Add Event",
+      "addTrip": "Add Trip",
+      "addCourse": "Add Course",
+      
+      "prompts": {
+        "addHighlight": "Enter event highlight:"
+        
       }
     },
     "media": {

@@ -22,7 +22,9 @@ import {
   faBookOpen,
   faUtensils,
   faTheaterMasks,
-  faRunning
+  faRunning,
+  faCalendarDay,
+  faRoute
 } from '@fortawesome/free-solid-svg-icons';
 import './clubActivities.css';
 
@@ -40,57 +42,205 @@ export const ClubActivities = ({ club }) => {
   });
   const [formStatus, setFormStatus] = useState(null);
 
-  // ПРОВЕРКА ЗА ДАННИ - ако няма дейности, не показваме компонента
-  if (!club?.activities?.regular || club.activities.regular.length === 0) {
-    return null;
-  }
+  // Безопасна функция за конвертиране на номер на ден в име на ден
+  const getNumericDayName = (dayOfWeek) => {
+    if (dayOfWeek === undefined || dayOfWeek === null) return '';
+    
+    const dayNames = {
+      0: 'sunday',
+      1: 'monday', 
+      2: 'tuesday',
+      3: 'wednesday',
+      4: 'thursday',
+      5: 'friday',
+      6: 'saturday'
+    };
+    return dayNames[dayOfWeek] || '';
+  };
 
-  const activities = club.activities.regular.filter(activity => 
-    activity && activity.name && (activity.day || activity.time)
-  );
+  // Безопасна функция за получаване на ден от дата
+  const getEventDay = (dateString) => {
+    if (!dateString || typeof dateString !== 'string') return '';
+    
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return ''; // Проверка за невалидна дата
+      
+      const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      return dayNames[date.getDay()] || '';
+    } catch (error) {
+      console.error('Error parsing date:', dateString, error);
+      return '';
+    }
+  };
 
-  if (activities.length === 0) {
+  // ОБЕДИНЯВАНЕ НА ВСИЧКИ ДЕЙНОСТИ със защити
+  const getAllActivities = () => {
+    const allActivities = [];
+
+    try {
+      // Regular activities
+      if (club?.activities?.regular && Array.isArray(club.activities.regular)) {
+        club.activities.regular.forEach((activity, index) => {
+          try {
+            if (activity && typeof activity === 'object' && activity.name) {
+              allActivities.push({
+                ...activity,
+                type: 'regular',
+                displayName: activity.name,
+                day: getNumericDayName(activity.schedule?.dayOfWeek),
+                time: activity.schedule?.startTime || '—',
+                duration: activity.schedule?.duration || null,
+                participants: activity.capacity?.max || activity.participants || 0,
+                id: activity.id || `regular-${index}`
+              });
+            }
+          } catch (error) {
+            console.error('Error processing regular activity:', activity, error);
+          }
+        });
+      }
+
+      // Events
+      if (club?.activities?.events && Array.isArray(club.activities.events)) {
+        club.activities.events.forEach((event, index) => {
+          try {
+            if (event && typeof event === 'object' && event.title) {
+              allActivities.push({
+                ...event,
+                type: 'event',
+                displayName: event.title,
+                name: event.title,
+                day: getEventDay(event.date),
+                time: event.time || '—',
+                participants: event.participants || 0,
+                instructor: event.organizer || null,
+                id: event.id || `event-${index}`
+              });
+            }
+          } catch (error) {
+            console.error('Error processing event:', event, error);
+          }
+        });
+      }
+
+      // Trips
+      if (club?.activities?.trips && Array.isArray(club.activities.trips)) {
+        club.activities.trips.forEach((trip, index) => {
+          try {
+            if (trip && typeof trip === 'object' && trip.destination) {
+              allActivities.push({
+                ...trip,
+                type: 'trip',
+                displayName: trip.destination,
+                name: trip.destination,
+                day: getEventDay(trip.date),
+                time: '—',
+                participants: trip.participants || 0,
+                instructor: null,
+                id: trip.id || `trip-${index}`
+              });
+            }
+          } catch (error) {
+            console.error('Error processing trip:', trip, error);
+          }
+        });
+      }
+
+      // Courses
+      if (club?.activities?.courses && Array.isArray(club.activities.courses)) {
+        club.activities.courses.forEach((course, index) => {
+          try {
+            if (course && typeof course === 'object' && course.name) {
+              allActivities.push({
+                ...course,
+                type: 'course',
+                displayName: course.name,
+                name: course.name,
+                day: '—',
+                time: '—',
+                participants: course.participants || 0,
+                id: course.id || `course-${index}`
+              });
+            }
+          } catch (error) {
+            console.error('Error processing course:', course, error);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error processing activities:', error);
+    }
+
+    return allActivities;
+  };
+
+  const activities = getAllActivities();
+
+
+  // Ако няма дейности, не показваме компонента
+  if (!activities || activities.length === 0) {
     return null;
   }
 
   // Получаване на икона според типа дейност
-  const getActivityIcon = (activityName) => {
-    const name = activityName.toLowerCase();
+  const getActivityIcon = (activity) => {
+    if (!activity) return faHeart;
     
-    if (name.includes('хор') || name.includes('пеене') || name.includes('музика') || 
-        name.includes('choir') || name.includes('music') || name.includes('singing')) {
-      return faMusic;
-    } else if (name.includes('танц') || name.includes('народни') || 
-               name.includes('dance') || name.includes('traditional')) {
-      return faTheaterMasks;
-    } else if (name.includes('рисуване') || name.includes('изкуство') || name.includes('творчески') ||
-               name.includes('art') || name.includes('drawing') || name.includes('creative')) {
-      return faPalette;
-    } else if (name.includes('четене') || name.includes('книги') || name.includes('литература') ||
-               name.includes('reading') || name.includes('books') || name.includes('literature')) {
-      return faBookOpen;
-    } else if (name.includes('готвене') || name.includes('кулинария') || name.includes('храна') ||
-               name.includes('cooking') || name.includes('culinary') || name.includes('food')) {
-      return faUtensils;
-    } else if (name.includes('гимнастика') || name.includes('упражнения') || name.includes('фитнес') ||
-               name.includes('gym') || name.includes('exercise') || name.includes('fitness')) {
-      return faDumbbell;
-    } else if (name.includes('разходка') || name.includes('туризъм') || name.includes('спорт') ||
-               name.includes('walk') || name.includes('tourism') || name.includes('sport')) {
-      return faRunning;
-    } else if (name.includes('образование') || name.includes('курс') || name.includes('обучение') ||
-               name.includes('education') || name.includes('course') || name.includes('learning')) {
+    const activityName = activity.displayName?.toLowerCase() || '';
+    const activityType = activity.type;
+
+    // По тип дейност
+    if (activityType === 'event') {
+      return faCalendarDay;
+    } else if (activityType === 'trip') {
+      return faRoute;
+    } else if (activityType === 'course') {
       return faGraduationCap;
+    }
+
+    // По име на дейността
+    if (activityName.includes('хор') || activityName.includes('пеене') || activityName.includes('музика') || 
+        activityName.includes('choir') || activityName.includes('music') || activityName.includes('singing')) {
+      return faMusic;
+    } else if (activityName.includes('танц') || activityName.includes('народни') || 
+               activityName.includes('dance') || activityName.includes('traditional')) {
+      return faTheaterMasks;
+    } else if (activityName.includes('рисуване') || activityName.includes('изкуство') || activityName.includes('творчески') ||
+               activityName.includes('art') || activityName.includes('drawing') || activityName.includes('creative')) {
+      return faPalette;
+    } else if (activityName.includes('четене') || activityName.includes('книги') || activityName.includes('литература') ||
+               activityName.includes('reading') || activityName.includes('books') || activityName.includes('literature')) {
+      return faBookOpen;
+    } else if (activityName.includes('готвене') || activityName.includes('кулинария') || activityName.includes('храна') ||
+               activityName.includes('cooking') || activityName.includes('culinary') || activityName.includes('food')) {
+      return faUtensils;
+    } else if (activityName.includes('гимнастика') || activityName.includes('упражнения') || activityName.includes('фитнес') ||
+               activityName.includes('gym') || activityName.includes('exercise') || activityName.includes('fitness') ||
+               activityName.includes('йога') || activityName.includes('yoga')) {
+      return faDumbbell;
+    } else if (activityName.includes('разходка') || activityName.includes('туризъм') || activityName.includes('спорт') ||
+               activityName.includes('walk') || activityName.includes('tourism') || activityName.includes('sport')) {
+      return faRunning;
     } else {
       return faHeart; // За общи дейности
     }
   };
 
   const getDayInBulgarian = (day) => {
-    if (!day) return t('clubs.ClubActivities.schedule.noDay');
-    return t(`clubs.ClubActivities.days.${day.toLowerCase()}`, { 
-      defaultValue: day 
-    });
+    if (!day || day === '—' || day === '') return 'Не е определен';
+    
+    const dayTranslations = {
+      'monday': 'Понеделник',
+      'tuesday': 'Вторник', 
+      'wednesday': 'Сряда',
+      'thursday': 'Четвъртък',
+      'friday': 'Петък',
+      'saturday': 'Събота',
+      'sunday': 'Неделя'
+    };
+    
+    return dayTranslations[day] || day;
   };
 
   // Групиране на дейности по дни
@@ -98,15 +248,23 @@ export const ClubActivities = ({ club }) => {
     const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const schedule = {};
     
-    daysOrder.forEach(day => {
-      schedule[day] = activities.filter(activity => 
-        activity.day?.toLowerCase() === day
-      ).sort((a, b) => {
-        const timeA = a.time ? a.time.split(':')[0] : '00';
-        const timeB = b.time ? b.time.split(':')[0] : '00';
-        return parseInt(timeA) - parseInt(timeB);
+    try {
+      daysOrder.forEach(day => {
+        schedule[day] = activities.filter(activity => 
+          activity && activity.day === day
+        ).sort((a, b) => {
+          try {
+            const timeA = a.time && a.time !== '—' ? a.time.split(':')[0] : '00';
+            const timeB = b.time && b.time !== '—' ? b.time.split(':')[0] : '00';
+            return parseInt(timeA) - parseInt(timeB);
+          } catch (error) {
+            return 0;
+          }
+        });
       });
-    });
+    } catch (error) {
+      console.error('Error creating weekly schedule:', error);
+    }
     
     return schedule;
   };
@@ -115,6 +273,8 @@ export const ClubActivities = ({ club }) => {
 
   // Отваряне на модал за записване
   const openRegistrationModal = (activity) => {
+    if (!activity) return;
+    
     setSelectedActivity(activity);
     setShowRegistrationModal(true);
     setFormStatus(null);
@@ -137,36 +297,41 @@ export const ClubActivities = ({ club }) => {
 
   // Обработка на формата
   const handleFormChange = (field, value) => {
+    if (!field) return;
     setRegistrationForm(prev => ({ ...prev, [field]: value }));
   };
 
   const handleRegistrationSubmit = (e) => {
     e.preventDefault();
+    if (!selectedActivity) return;
+    
     setFormStatus('sending');
 
     // Симулация на изпращане - в реалност би се изпратил към сървър
-    const recipientEmail = club.contacts?.email;
+    const recipientEmail = club?.contacts?.basic?.email || club?.contacts?.email;
     
     if (recipientEmail) {
-      const subject = encodeURIComponent(t('clubs.ClubActivities.registration.emailSubject', { 
-        activityName: selectedActivity.name 
-      }));
-      
-      const body = encodeURIComponent(t('clubs.ClubActivities.registration.emailBody', {
-        firstName: registrationForm.firstName,
-        lastName: registrationForm.lastName,
-        phone: registrationForm.phone,
-        email: registrationForm.email,
-        activityName: selectedActivity.name,
-        day: getDayInBulgarian(selectedActivity.day),
-        time: selectedActivity.time,
-        instructor: selectedActivity.instructor || t('clubs.ClubActivities.registration.notSpecified'),
-        experience: registrationForm.experience ? t(`clubs.ClubActivities.experience.${registrationForm.experience}`) : t('clubs.ClubActivities.registration.notSpecified'),
-        notes: registrationForm.notes || t('clubs.ClubActivities.registration.none'),
-        clubName: club.name
-      }));
-
       try {
+        const subject = encodeURIComponent(`Записване за ${selectedActivity.displayName || 'дейност'}`);
+        
+        const body = encodeURIComponent(`Здравейте,
+
+Искам да се запиша за: ${selectedActivity.displayName || 'дейност'}
+Ден: ${getDayInBulgarian(selectedActivity.day)}
+Час: ${selectedActivity.time || '—'}
+${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instructor}` : ''}
+
+Моите данни:
+Име: ${registrationForm.firstName}
+Фамилия: ${registrationForm.lastName}
+Телефон: ${registrationForm.phone}
+Email: ${registrationForm.email}
+${registrationForm.experience ? `Опит: ${registrationForm.experience}` : ''}
+${registrationForm.notes ? `Бележки: ${registrationForm.notes}` : ''}
+
+С уважение,
+${registrationForm.firstName} ${registrationForm.lastName}`);
+
         window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
         setFormStatus('success');
         
@@ -174,6 +339,7 @@ export const ClubActivities = ({ club }) => {
           closeRegistrationModal();
         }, 2000);
       } catch (error) {
+        console.error('Error sending email:', error);
         setFormStatus('error');
         setTimeout(() => setFormStatus(null), 3000);
       }
@@ -191,26 +357,26 @@ export const ClubActivities = ({ club }) => {
         <div className="general-activities-header">
           <div className="general-activities-badge">
             <FontAwesomeIcon icon={faCalendarWeek} />
-            <span>{t('clubs.ClubActivities.header.badge')}</span>
+            <span>Дейности на клуба</span>
           </div>
-          <h2 className="general-activities-title">{t('clubs.ClubActivities.header.title')}</h2>
+          <h2 className="general-activities-title">Нашите дейности</h2>
           <p className="general-activities-subtitle">
-            {t('clubs.ClubActivities.header.subtitle')}
+            Разнообразна програма за активен и здравословен живот
           </p>
           
           {/* Stats overview */}
           <div className="general-activities-stats">
             <div className="general-activities-stat">
               <span>{activities.length}</span>
-              <label>{t('clubs.ClubActivities.stats.activities')}</label>
+              <label>Дейности</label>
             </div>
             <div className="general-activities-stat">
               <span>{activities.reduce((sum, act) => sum + (act.participants || 0), 0)}</span>
-              <label>{t('clubs.ClubActivities.stats.participants')}</label>
+              <label>Участници</label>
             </div>
             <div className="general-activities-stat">
-              <span>{new Set(activities.map(act => act.day)).size}</span>
-              <label>{t('clubs.ClubActivities.stats.daysPerWeek')}</label>
+              <span>{new Set(activities.filter(act => act.day && act.day !== '—' && act.day !== '').map(act => act.day)).size}</span>
+              <label>Дни в седмицата</label>
             </div>
           </div>
         </div>
@@ -218,13 +384,21 @@ export const ClubActivities = ({ club }) => {
         {/* Activities Grid */}
         <div className="general-activities-grid">
           {activities.map((activity, index) => (
-            <div key={index} className="general-activity-card">
+            <div key={activity.id || index} className={`general-activity-card activity-type-${activity.type}`}>
               <div className="general-activity-icon">
-                <FontAwesomeIcon icon={getActivityIcon(activity.name)} />
+                <FontAwesomeIcon icon={getActivityIcon(activity)} />
               </div>
               
               <div className="general-activity-content">
-                <h3 className="general-activity-name">{activity.name}</h3>
+                <h3 className="general-activity-name">{activity.displayName || 'Без име'}</h3>
+                
+                {/* Activity type badge */}
+                <div className="general-activity-type-badge">
+                  {activity.type === 'regular' && 'Редовна дейност'}
+                  {activity.type === 'event' && 'Събитие'}
+                  {activity.type === 'trip' && 'Екскурзия'}
+                  {activity.type === 'course' && 'Курс'}
+                </div>
                 
                 <div className="general-activity-details">
                   <div className="general-activity-schedule">
@@ -234,7 +408,8 @@ export const ClubActivities = ({ club }) => {
                     </div>
                     <div className="general-schedule-item">
                       <FontAwesomeIcon icon={faClock} />
-                      <span>{activity.time || t('clubs.ClubActivities.schedule.noTime')}</span>
+                      <span>{activity.time || '—'}</span>
+                      {activity.duration && <small>({activity.duration} мин)</small>}
                     </div>
                   </div>
                   
@@ -244,6 +419,19 @@ export const ClubActivities = ({ club }) => {
                       <span>{activity.instructor}</span>
                     </div>
                   )}
+
+                  {activity.location && (
+                    <div className="general-activity-location">
+                      <FontAwesomeIcon icon={faMapPin} />
+                      <span>{activity.location}</span>
+                    </div>
+                  )}
+
+                  {activity.price && (
+                    <div className="general-activity-price">
+                      <span>💰 {activity.price}</span>
+                    </div>
+                  )}
                   
                   {activity.description && (
                     <p className="general-activity-description">{activity.description}</p>
@@ -251,7 +439,7 @@ export const ClubActivities = ({ club }) => {
                   
                   <div className="general-activity-participants">
                     <FontAwesomeIcon icon={faUsers} />
-                    <span>{activity.participants || 0} {t('clubs.ClubActivities.activity.participants')}</span>
+                    <span>{activity.participants || 0} участници</span>
                   </div>
                 </div>
               </div>
@@ -262,7 +450,7 @@ export const ClubActivities = ({ club }) => {
                   onClick={() => openRegistrationModal(activity)}
                 >
                   <FontAwesomeIcon icon={faUserPlus} />
-                  {t('clubs.ClubActivities.activity.register')}
+                  Записване
                 </button>
               </div>
             </div>
@@ -273,7 +461,7 @@ export const ClubActivities = ({ club }) => {
         <div className="general-weekly-schedule">
           <h3>
             <FontAwesomeIcon icon={faCalendarWeek} />
-            {t('clubs.ClubActivities.weeklySchedule.title')}
+            Седмичен график
           </h3>
           
           <div className="general-schedule-grid">
@@ -284,25 +472,30 @@ export const ClubActivities = ({ club }) => {
                 </div>
                 
                 <div className="general-day-activities">
-                  {dayActivities.length > 0 ? (
+                  {dayActivities && dayActivities.length > 0 ? (
                     dayActivities.map((activity, index) => (
-                      <div key={index} className="general-schedule-activity">
+                      <div key={activity.id || index} className="general-schedule-activity">
                         <div className="general-schedule-time">
                           {activity.time || '—'}
                         </div>
                         <div className="general-schedule-name">
-                          {activity.name}
+                          {activity.displayName || 'Без име'}
                         </div>
-                        {activity.participants && (
+                        <div className="general-schedule-type">
+                          {activity.type === 'event' ? '📅' : 
+                           activity.type === 'trip' ? '🚌' : 
+                           activity.type === 'course' ? '📚' : '🔄'}
+                        </div>
+                        {activity.participants > 0 && (
                           <div className="general-schedule-participants">
-                            {activity.participants} {t('clubs.ClubActivities.weeklySchedule.people')}
+                            {activity.participants} души
                           </div>
                         )}
                       </div>
                     ))
                   ) : (
                     <div className="general-no-activity">
-                      {t('clubs.ClubActivities.weeklySchedule.noActivities')}
+                      Няма дейности
                     </div>
                   )}
                 </div>
@@ -319,7 +512,7 @@ export const ClubActivities = ({ club }) => {
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faUserPlus} />
-                {t('clubs.ClubActivities.modal.title')}
+                Записване за {selectedActivity.displayName || 'дейност'}
               </h3>
               <button className="general-modal-close" onClick={closeRegistrationModal}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -330,15 +523,21 @@ export const ClubActivities = ({ club }) => {
               {/* Activity Info */}
               <div className="general-selected-activity">
                 <div className="general-selected-activity-icon">
-                  <FontAwesomeIcon icon={getActivityIcon(selectedActivity.name)} />
+                  <FontAwesomeIcon icon={getActivityIcon(selectedActivity)} />
                 </div>
                 <div className="general-selected-activity-info">
-                  <h4>{selectedActivity.name}</h4>
+                  <h4>{selectedActivity.displayName || 'Дейност'}</h4>
                   <div className="general-selected-activity-meta">
                     <span>📅 {getDayInBulgarian(selectedActivity.day)}</span>
-                    <span>🕐 {selectedActivity.time}</span>
+                    <span>🕐 {selectedActivity.time || '—'}</span>
                     {selectedActivity.instructor && (
                       <span>👨‍🏫 {selectedActivity.instructor}</span>
+                    )}
+                    {selectedActivity.location && (
+                      <span>📍 {selectedActivity.location}</span>
+                    )}
+                    {selectedActivity.price && (
+                      <span>💰 {selectedActivity.price}</span>
                     )}
                   </div>
                 </div>
@@ -348,23 +547,23 @@ export const ClubActivities = ({ club }) => {
               <form onSubmit={handleRegistrationSubmit} className="general-registration-form">
                 <div className="general-form-row">
                   <div className="general-form-group">
-                    <label>{t('clubs.ClubActivities.form.firstName')} *</label>
+                    <label>Име *</label>
                     <input
                       type="text"
                       value={registrationForm.firstName}
                       onChange={(e) => handleFormChange('firstName', e.target.value)}
-                      placeholder={t('clubs.ClubActivities.form.firstNamePlaceholder')}
+                      placeholder="Въведете вашето име"
                       required
                     />
                   </div>
                   
                   <div className="general-form-group">
-                    <label>{t('clubs.ClubActivities.form.lastName')} *</label>
+                    <label>Фамилия *</label>
                     <input
                       type="text"
                       value={registrationForm.lastName}
                       onChange={(e) => handleFormChange('lastName', e.target.value)}
-                      placeholder={t('clubs.ClubActivities.form.lastNamePlaceholder')}
+                      placeholder="Въведете вашата фамилия"
                       required
                     />
                   </div>
@@ -372,47 +571,47 @@ export const ClubActivities = ({ club }) => {
                 
                 <div className="general-form-row">
                   <div className="general-form-group">
-                    <label>{t('clubs.ClubActivities.form.phone')} *</label>
+                    <label>Телефон *</label>
                     <input
                       type="tel"
                       value={registrationForm.phone}
                       onChange={(e) => handleFormChange('phone', e.target.value)}
-                      placeholder={t('clubs.ClubActivities.form.phonePlaceholder')}
+                      placeholder="0888 123 456"
                       required
                     />
                   </div>
                   
                   <div className="general-form-group">
-                    <label>{t('clubs.ClubActivities.form.email')}</label>
+                    <label>Email</label>
                     <input
                       type="email"
                       value={registrationForm.email}
                       onChange={(e) => handleFormChange('email', e.target.value)}
-                      placeholder={t('clubs.ClubActivities.form.emailPlaceholder')}
+                      placeholder="име@email.com"
                     />
                   </div>
                 </div>
                 
                 <div className="general-form-group">
-                  <label>{t('clubs.ClubActivities.form.experience')}</label>
+                  <label>Опит</label>
                   <select
                     value={registrationForm.experience}
                     onChange={(e) => handleFormChange('experience', e.target.value)}
                   >
-                    <option value="">{t('clubs.ClubActivities.form.selectLevel')}</option>
-                    <option value="none">{t('clubs.ClubActivities.experience.none')}</option>
-                    <option value="beginner">{t('clubs.ClubActivities.experience.beginner')}</option>
-                    <option value="intermediate">{t('clubs.ClubActivities.experience.intermediate')}</option>
-                    <option value="advanced">{t('clubs.ClubActivities.experience.advanced')}</option>
+                    <option value="">Изберете ниво</option>
+                    <option value="none">Няма опит</option>
+                    <option value="beginner">Начинаещ</option>
+                    <option value="intermediate">Среднонапреднал</option>
+                    <option value="advanced">Напреднал</option>
                   </select>
                 </div>
                 
                 <div className="general-form-group">
-                  <label>{t('clubs.ClubActivities.form.notes')}</label>
+                  <label>Бележки</label>
                   <textarea
                     value={registrationForm.notes}
                     onChange={(e) => handleFormChange('notes', e.target.value)}
-                    placeholder={t('clubs.ClubActivities.form.notesPlaceholder')}
+                    placeholder="Допълнителна информация или въпроси..."
                     rows="3"
                   />
                 </div>
@@ -425,12 +624,12 @@ export const ClubActivities = ({ club }) => {
                   {formStatus === 'sending' ? (
                     <>
                       <div className="general-spinner"></div>
-                      {t('clubs.ClubActivities.form.sending')}
+                      Изпращане...
                     </>
                   ) : (
                     <>
                       <FontAwesomeIcon icon={faCheck} />
-                      {t('clubs.ClubActivities.form.submit')}
+                      Изпрати заявка
                     </>
                   )}
                 </button>
@@ -438,32 +637,32 @@ export const ClubActivities = ({ club }) => {
                 {formStatus === 'success' && (
                   <div className="general-success-message">
                     <FontAwesomeIcon icon={faCheck} />
-                    {t('clubs.ClubActivities.messages.success')}
+                    Заявката е изпратена успешно!
                   </div>
                 )}
 
                 {formStatus === 'error' && (
                   <div className="general-error-message">
                     <FontAwesomeIcon icon={faExclamationTriangle} />
-                    {t('clubs.ClubActivities.messages.error')}
+                    Възникна грешка при изпращането!
                   </div>
                 )}
               </form>
 
               {/* Contact info */}
               <div className="general-contact-info">
-                <p>{t('clubs.ClubActivities.contact.directContact')}</p>
+                <p>Можете да се свържете директно:</p>
                 <div className="general-contact-methods">
-                  {club.contacts?.phone && (
-                    <a href={`tel:${club.contacts.phone}`} className="general-contact-method">
+                  {(club?.contacts?.basic?.phone || club?.contacts?.phone) && (
+                    <a href={`tel:${club.contacts.basic?.phone || club.contacts.phone}`} className="general-contact-method">
                       <FontAwesomeIcon icon={faPhone} />
-                      {club.contacts.phone}
+                      {club.contacts.basic?.phone || club.contacts.phone}
                     </a>
                   )}
-                  {club.contacts?.email && (
-                    <a href={`mailto:${club.contacts.email}`} className="general-contact-method">
+                  {(club?.contacts?.basic?.email || club?.contacts?.email) && (
+                    <a href={`mailto:${club.contacts.basic?.email || club.contacts.email}`} className="general-contact-method">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      {club.contacts.email}
+                      {club.contacts.basic?.email || club.contacts.email}
                     </a>
                   )}
                 </div>

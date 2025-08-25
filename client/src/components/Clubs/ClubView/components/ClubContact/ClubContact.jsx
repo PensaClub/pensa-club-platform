@@ -53,7 +53,7 @@ export const ClubContact = ({ club }) => {
   const [showFAQ, setShowFAQ] = useState(false);
   const [showHoursModal, setShowHoursModal] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState(null);
-
+  console.log("club", club);
   // ПРОВЕРКА ЗА ДАННИ
   if (!club?.contacts || (!club.contacts.phone && !club.contacts.email)) {
     return null;

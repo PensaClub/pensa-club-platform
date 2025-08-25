@@ -21,7 +21,6 @@ import {
   faExternalLinkAlt,
   faCopy,
   faShareAlt,
-
 } from '@fortawesome/free-solid-svg-icons';
 import { 
   faFacebookF,
@@ -87,34 +86,138 @@ const ContactsManager = ({
     { id: 'sunday', label: t('clubForm.contacts.days.sunday'), short: 'Нд' }
   ];
 
-  // Handle field changes
-  const handleFieldChange = (field, value) => {
-    const updatedContacts = { ...contactsData };
-    
-    if (field.includes('.')) {
-      const keys = field.split('.');
-      let current = updatedContacts;
-      for (let i = 0; i < keys.length - 1; i++) {
-        if (!current[keys[i]]) current[keys[i]] = {};
-        current = current[keys[i]];
-      }
-      current[keys[keys.length - 1]] = value;
+  // Convert working hours from new structure to legacy format
+ const convertWorkingHoursToLegacy = (workingHours) => {
+  if (!workingHours?.days) return workingHours || {};
+  
+  const legacy = {};
+  
+  // Copy special hours if exists
+  if (workingHours.special) {
+    legacy.special = workingHours.special;
+  }
+  
+  // Convert each day to legacy format
+  const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  
+  daysOrder.forEach(day => {
+    const dayData = workingHours.days[day];
+    if (dayData && dayData.enabled && dayData.open && dayData.close) {
+      legacy[day] = `${dayData.open}-${dayData.close}`;
     } else {
-      updatedContacts[field] = value;
+      legacy[day] = 'closed';
     }
+  });
+  
+  return legacy;
+};
+
+  // Convert legacy working hours to new structure (for loading existing data)
+  const convertLegacyToNewWorkingHours = (legacyHours) => {
+    if (!legacyHours) return { days: {} };
     
-    onContactsChange(updatedContacts);
+    const days = {};
+    const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    
+    daysOrder.forEach(day => {
+      const timeString = legacyHours[day];
+      if (timeString && timeString !== 'closed' && timeString.includes('-')) {
+        const [open, close] = timeString.split('-');
+        days[day] = { enabled: true, open: open.trim(), close: close.trim() };
+      } else {
+        days[day] = { enabled: false, open: '09:00', close: '17:00' };
+      }
+    });
+    
+    return {
+      days,
+      special: legacyHours.special || ''
+    };
   };
+
+  // Get working hours in new format for UI (convert from legacy if needed)
+  const getWorkingHoursForUI = () => {
+    if (contactsData?.workingHours?.days) {
+      // Already in new format
+      return contactsData.workingHours;
+    } else if (contactsData?.workingHours) {
+      // Convert from legacy format
+      return convertLegacyToNewWorkingHours(contactsData.workingHours);
+    }
+    return { days: {} };
+  };
+
+  // Handle field changes
+ const handleFieldChange = (field, value) => {
+  const updatedContacts = { ...contactsData };
+  
+  if (field.includes('.')) {
+    const keys = field.split('.');
+    let current = updatedContacts;
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]]) current[keys[i]] = {};
+      current = current[keys[i]];
+    }
+    current[keys[keys.length - 1]] = value;
+  } else {
+    updatedContacts[field] = value;
+  }
+  
+  // If working hours special changed, update legacy format too
+  if (field === 'workingHours.special') {
+    const currentUIHours = getWorkingHoursForUI();
+    const newWorkingHours = {
+      days: currentUIHours.days,
+      special: value
+    };
+    
+    const legacyFormat = convertWorkingHoursToLegacy(newWorkingHours);
+    
+    updatedContacts.workingHours = {
+      ...legacyFormat,
+      days: currentUIHours.days,
+      special: value
+    };
+  }
+  
+  onContactsChange(updatedContacts);
+};
 
   // Handle working hours change
   const handleWorkingHoursChange = (day, field, value) => {
-    const updatedHours = { ...contactsData.workingHours?.days || {} };
-    if (!updatedHours[day]) {
-      updatedHours[day] = { enabled: false, open: '09:00', close: '17:00' };
-    }
-    updatedHours[day][field] = value;
-    handleFieldChange('workingHours.days', updatedHours);
+  // Get current working hours in new format
+  const currentUIHours = getWorkingHoursForUI();
+  const updatedDays = { ...currentUIHours.days };
+  
+  if (!updatedDays[day]) {
+    updatedDays[day] = { enabled: false, open: '09:00', close: '17:00' };
+  }
+  updatedDays[day][field] = value;
+  
+  // Create new working hours structure with days
+  const newWorkingHours = {
+    days: updatedDays,
+    special: currentUIHours.special || ''
   };
+  
+  // Convert to legacy format
+  const legacyFormat = convertWorkingHoursToLegacy(newWorkingHours);
+  
+  // Create final structure with BOTH new and legacy formats
+  const finalWorkingHours = {
+    ...legacyFormat,  // Legacy fields: monday: "09:00-17:00", etc.
+    days: updatedDays, // New format for UI
+    special: currentUIHours.special || ''
+  };
+  
+  // Update contacts
+  const updatedContacts = {
+    ...contactsData,
+    workingHours: finalWorkingHours
+  };
+  
+  onContactsChange(updatedContacts);
+};
 
   // Add contact person
   const addContactPerson = () => {
@@ -318,8 +421,7 @@ const ContactsManager = ({
             />
             
             {contactsData?.social?.[platform.id] && (
-              
-               <a href={contactsData.social[platform.id]}
+              <a href={contactsData.social[platform.id]}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contacts-manager-social-link"
@@ -425,65 +527,69 @@ const ContactsManager = ({
   );
 
   // Render working hours section
-  const renderHoursSection = () => (
-    <div className="contacts-manager-section-content">
-      <div className="contacts-manager-hours-grid">
-        {daysOfWeek.map(day => {
-          const dayData = contactsData?.workingHours?.days?.[day.id] || { enabled: false, open: '09:00', close: '17:00' };
-          
-          return (
-            <div key={day.id} className="contacts-manager-hours-item">
-              <div className="contacts-manager-hours-header">
-                <label className="contacts-manager-checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={dayData.enabled}
-                    onChange={(e) => handleWorkingHoursChange(day.id, 'enabled', e.target.checked)}
-                    disabled={disabled}
-                  />
-                  <span className="contacts-manager-checkbox"></span>
-                  <span className="contacts-manager-day-label">{day.label}</span>
-                </label>
-              </div>
-              
-              {dayData.enabled && (
-                <div className="contacts-manager-hours-times">
-                  <input
-                    type="time"
-                    className="contacts-manager-time-input"
-                    value={dayData.open}
-                    onChange={(e) => handleWorkingHoursChange(day.id, 'open', e.target.value)}
-                    disabled={disabled}
-                  />
-                  <span className="contacts-manager-time-separator">-</span>
-                  <input
-                    type="time"
-                    className="contacts-manager-time-input"
-                    value={dayData.close}
-                    onChange={(e) => handleWorkingHoursChange(day.id, 'close', e.target.value)}
-                    disabled={disabled}
-                  />
+  const renderHoursSection = () => {
+    const workingHoursUI = getWorkingHoursForUI();
+    
+    return (
+      <div className="contacts-manager-section-content">
+        <div className="contacts-manager-hours-grid">
+          {daysOfWeek.map(day => {
+            const dayData = workingHoursUI.days?.[day.id] || { enabled: false, open: '09:00', close: '17:00' };
+            
+            return (
+              <div key={day.id} className="contacts-manager-hours-item">
+                <div className="contacts-manager-hours-header">
+                  <label className="contacts-manager-checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={dayData.enabled}
+                      onChange={(e) => handleWorkingHoursChange(day.id, 'enabled', e.target.checked)}
+                      disabled={disabled}
+                    />
+                    <span className="contacts-manager-checkbox"></span>
+                    <span className="contacts-manager-day-label">{day.label}</span>
+                  </label>
                 </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                
+                {dayData.enabled && (
+                  <div className="contacts-manager-hours-times">
+                    <input
+                      type="time"
+                      className="contacts-manager-time-input"
+                      value={dayData.open}
+                      onChange={(e) => handleWorkingHoursChange(day.id, 'open', e.target.value)}
+                      disabled={disabled}
+                    />
+                    <span className="contacts-manager-time-separator">-</span>
+                    <input
+                      type="time"
+                      className="contacts-manager-time-input"
+                      value={dayData.close}
+                      onChange={(e) => handleWorkingHoursChange(day.id, 'close', e.target.value)}
+                      disabled={disabled}
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
 
-      {/* Special Hours */}
-      <div className="contacts-manager-special-hours">
-        <h5>{t('clubForm.contacts.hours.special')}</h5>
-        <textarea
-          className="contacts-manager-form-textarea"
-          placeholder={t('clubForm.contacts.placeholders.specialHours')}
-          value={contactsData?.workingHours?.special || ''}
-          onChange={(e) => handleFieldChange('workingHours.special', e.target.value)}
-          disabled={disabled}
-          rows={3}
-        />
+        {/* Special Hours */}
+        <div className="contacts-manager-special-hours">
+          <h5>{t('clubForm.contacts.hours.special')}</h5>
+          <textarea
+            className="contacts-manager-form-textarea"
+            placeholder={t('clubForm.contacts.placeholders.specialHours')}
+            value={workingHoursUI.special || ''}
+            onChange={(e) => handleFieldChange('workingHours.special', e.target.value)}
+            disabled={disabled}
+            rows={3}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Render contact people section
   const renderPeopleSection = () => (

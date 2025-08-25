@@ -4290,7 +4290,8 @@
         "thursdayShort": "Чет",
         "fridayShort": "Пет",
         "saturdayShort": "Съб",
-        "sundayShort": "Нед"
+        "sundayShort": "Нед",
+        "specialShort": "Специално"
       },
       "modals": {
         "venue": {
@@ -9509,6 +9510,8 @@
       "custom": "Персонализирана роля",
       "addCustomRole": "Добави персонализирана роля",
       "addFee": "Добави членски внос",
+      "demographicsSection": "Демография и статистики",
+
       "types": {
         "open": "Отворено членство",
         "openDesc": "Всеки може да се присъедини свободно",
@@ -9517,8 +9520,7 @@
         "application": "По заявление",
         "applicationDesc": "Необходимо е одобрение на заявлението",
         "recommendation": "По препоръка",
-        "recommendationDesc": "Необходима е препоръка от съществуващ член",
-         "demographicsSection": "Демография и статистики"
+        "recommendationDesc": "Необходима е препоръка от съществуващ член"
       },
       "requirementsBenefitsSection": "Изисквания и предимства",
       "requirements": {
@@ -9610,6 +9612,7 @@
       "scheduleSection": "График",
       "participantsSection": "Участници",
       "feeSection": "Такси",
+      "addEventSection": "Добави събитие",
       "additionalSection": "Допълнителна информация",
       "ageRange": "Възрастова група",
       "years": "години",
@@ -9631,6 +9634,23 @@
         "music": "Музикални дейности",
         "arts": "Изкуства",
         "charity": "Благотворителни дейности"
+      },
+      "eventTypes": {
+        "cultural": "Културно",
+        "traditional": "Традиционно",
+        "social": "Социално",
+        "charity": "Благотворително",
+        "community": "Общностно",
+        "sportsCompetition": "Спортно състезание",
+        "wellnessEvent": "Здравно събитие",
+        "sportsFestival": "Спортен фестивал",
+        "swimmingCompetition": "Плувно състезание"
+      },
+      "tabs": {
+        "regular": "Редовни дейности",
+        "events": "Събития",
+        "trips": "Екскурзии", 
+        "courses": "Курсове"
       },
       "frequency": {
         "daily": "Ежедневно",
@@ -9672,21 +9692,68 @@
         "feePeriod": "Период на таксата",
         "instructor": "Инструктор/Водещ",
         "requirements": "Изисквания",
-        "equipment": "Необходимо оборудване"
+        "equipment": "Необходимо оборудване",
+           "day": "Ден",
+        "title": "Заглавие",
+        "destination": "Дестинация",
+        "highlights": "Акценти",
+        "featured": "Препоръчано",
+        "location": "Място",
+        "organizer": "Организатор",
+        "time": "Време",
+        "participants": "Участници",
+          "date": "Дата",
+        "price": "Цена"
       },
       "placeholders": {
         "name": "Йога за начинаещи",
         "description": "Опишете какво включва дейността...",
         "instructor": "Мария Петрова",
-        "requirements": "Удобни дрехи, кърпа..."
+        "requirements": "Удобни дрехи, кърпа...",
+           "activityName": "Име на дейността",
+        "eventTitle": "Заглавие на събитието",
+        "eventDescription": "Описание на събитието",
+        "destination": "Дестинация на екскурзията",
+        "tripDescription": "Описание на екскурзията",
+        "courseName": "Име на курса",
+        "courseDescription": "Описание на курса",
+        "location": "Място на провеждане",
+        "organizer": "Организатор"
       },
       "actions": {
-        "addActivity": "Добави дейност"
+        "addActivity": "Добави дейност",
+          "addEvent": "Добави събитие",
+        "addTrip": "Добави екскурзия",
+        "addCourse": "Добави курс"
       },
       "help": {
         "title": "Как да създам атрактивна програма?",
         "description": "Разнообразните дейности привличат различни възрастови групи и интереси. Включете както редовни дейности, така и специални събития."
-      }
+      },
+      "uploadImages": "Качи снимки",
+      "uploadVideos": "Качи видеа",
+      "imageCaption": "Описание на снимката",
+      "videoCaption": "Описание на видеото",
+      "setMainImage": "Задай като главна",
+      "addHighlight": "Добави акцент",
+      "eventMedia": "Медия за събитието",
+      "eventImages": "Снимки от събитието",
+      "eventVideos": "Видеа от събитието",
+      "prompts": {
+        "addHighlight": "Въведете акцент за събитието:"
+      },
+        "regularActivities": "Редовни дейности",
+      "regularActivitiesDesc": "Седмични и повтарящи се клубни активности",
+      "events": "Събития", 
+      "eventsDesc": "Специални събития и празненства",
+      "trips": "Екскурзии",
+      "tripsDesc": "Организирани екскурзии и излети",
+      "courses": "Курсове",
+      "coursesDesc": "Образователни курсове и семинари",
+      "addCourse": "Добави курс",
+      "addEvent": "Добави събитие",
+      "addRegularActivity": "Добави редовна дейност"
+
     },
     "media": {
       "title": "Снимки и медия",
