@@ -14,9 +14,9 @@ const basicSchema = z.object({
     // Club information
     foundedYear: optionalNumber(1900, new Date().getFullYear()),
 
-    status: optionalEnum(['active', 'inactive', 'suspended'], 'Status must be active, inactive, or suspended'),
+    status: optionalString(), // TODO: change to enum when FE values are finalized
 
-    category: optionalEnum(['cultural', 'sports', 'social', 'educational', 'general'], 'Invalid category'),
+    category: optionalString(), // TODO: change to enum when FE values are finalized
 
     // Media
     logo: optionalString(),

@@ -5,15 +5,41 @@ const activitiesSchema = z.object({
     regular: z
         .array(
             z.object({
+                id: optionalString(), // Frontend generates: regular_{timestamp}_{randomString}
                 name: optionalString(),
-                day: optionalEnum(
-                    ['понеделник', 'вторник', 'сряда', 'четвъртък', 'петък', 'събота', 'неделя', 'всеки ден', 'понеделник, сряда, петък'],
-                    'Invalid day'
-                ),
-                time: optionalString(),
-                instructor: optionalString(),
-                participants: optionalNumber(0),
                 description: optionalString(),
+                type: optionalString(), // TODO: change to enum when FE values are finalized
+                category: optionalString(), // TODO: change to enum when FE values are finalized
+                schedule: z
+                    .object({
+                        frequency: optionalString(), // TODO: change to enum when FE values are finalized
+                        dayOfWeek: optionalNumber(1, 7), // 1-7 for Monday-Sunday
+                        startTime: optionalString(),
+                        duration: optionalNumber(0), // in minutes
+                    })
+                    .optional(),
+                ageGroup: z
+                    .object({
+                        min: optionalNumber(0),
+                        max: optionalNumber(150),
+                    })
+                    .optional(),
+                capacity: z
+                    .object({
+                        min: optionalNumber(0),
+                        max: optionalNumber(1000),
+                    })
+                    .optional(),
+                fee: z
+                    .object({
+                        amount: optionalNumber(0),
+                        period: optionalString(), // TODO: change to enum when FE values are finalized
+                        required: z.boolean().optional(),
+                    })
+                    .optional(),
+                instructor: optionalString(),
+                requirements: optionalString(),
+                equipment: z.array(z.string()).optional(),
             })
         )
         .optional(),
@@ -21,24 +47,11 @@ const activitiesSchema = z.object({
     events: z
         .array(
             z.object({
-                id: optionalString(),
+                id: optionalString(), // Frontend generates: event_{timestamp}_{randomString}
                 title: optionalString(),
                 date: optionalString(),
                 time: optionalString(),
-                type: optionalEnum(
-                    [
-                        'cultural',
-                        'traditional',
-                        'social',
-                        'charity',
-                        'community',
-                        'sports_competition',
-                        'wellness_event',
-                        'sports_festival',
-                        'swimming_competition',
-                    ],
-                    'Invalid event type'
-                ),
+                type: optionalString(), // TODO: change to enum when FE values are finalized
                 participants: optionalNumber(0),
                 description: optionalString(),
                 location: optionalString(),

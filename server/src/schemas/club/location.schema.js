@@ -20,7 +20,7 @@ const locationSchema = z.object({
 
     venue: z
         .object({
-            type: optionalEnum(['municipal', 'rented', 'owned', 'sports_complex', 'private', 'cultural_center', 'community_center'], 'Invalid venue type'),
+            type: optionalString(), // TODO: change to enum when FE values are finalized
             size: optionalString(),
             capacity: optionalNumber(0),
             facilities: z.array(z.string()).optional(),

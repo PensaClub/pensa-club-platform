@@ -21,20 +21,7 @@ const membersSchema = z.object({
 
     joinDate: optionalString(), // YYYY-MM-DD format
     isActive: z.boolean().optional(),
-    role: optionalEnum(
-        [
-            'председател',
-            'заместник-председател',
-            'секретар',
-            'касиер',
-            'културен деец',
-            'треньор-координатор',
-            'инструктор йога',
-            'координатор проекти',
-            'член',
-        ],
-        'Invalid role'
-    ),
+    role: optionalString(), // TODO: change to enum when FE values are finalized
     status: optionalString(),
     preferences: z.record(z.any()).optional(),
 });

@@ -20,7 +20,7 @@ const membershipSchema = z.object({
         .object({
             monthly: optionalNumber(0),
             yearly: optionalNumber(0),
-            currency: optionalEnum(['BGN', 'EUR', 'USD'], 'Invalid currency'),
+            currency: optionalString(), // TODO: change to enum when FE values are finalized
         })
         .optional(),
 

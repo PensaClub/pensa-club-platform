@@ -101,6 +101,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: {},
             },
+            address: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: {},
+                comment: 'Club address information: street, city, postalCode, poBox',
+            },
         },
         {
             sequelize,
