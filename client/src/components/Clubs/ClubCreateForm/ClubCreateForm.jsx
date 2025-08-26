@@ -747,21 +747,58 @@ const ClubCreateForm = () => {
             />
         </div>
     );
-    const renderPensionersStep = () => (
-        <div className="club-form-step">
-            <PensionersSpecificManager
-                pensionersData={formData.pensionersSpecific || {
-                    healthServices: { healthLectures: [], medicalPartners: [], emergencyProtocol: {} },
-                    supportServices: {},
-                    accessibility: {},
-                    specialPrograms: { memoryActivities: [], intergenerationalPrograms: [], volunteerPrograms: [], mentalHealthSupport: [] },
-                    ageSpecificNeeds: { lowImpactActivities: [], nutritionSupport: [] }
-                }}
-                onPensionersChange={(pensionersData) => updateField('pensionersSpecific', pensionersData)}
-                disabled={isLoading}
-            />
-        </div>
-    );
+   const renderPensionersStep = () => (
+  <div className="club-form-step">
+    <PensionersSpecificManager
+      pensionersData={formData.pensionersSpecific || {
+        healthServices: { 
+          regularCheckups: false,
+          bloodPressureMonitoring: false,
+          healthLectures: [], 
+          medicalPartners: [], 
+          emergencyProtocol: {
+            hasEmergencyPlan: false,
+            emergencyContacts: [],
+            nearestHospital: '',
+            specialNeeds: []
+          }
+        },
+        supportServices: {
+          homeVisits: false,
+          shoppingAssistance: false,
+          documentHelp: false,
+          companionship: false,
+          transportService: false,
+          mealDelivery: false,
+          cleaningHelp: false,
+          techSupport: false
+        },
+        accessibility: {
+          wheelchairAccess: false,
+          elevatorAccess: false,
+          hearingLoop: false,
+          largeTextMaterials: false,
+          handrails: false,
+          nonSlipFloors: false,
+          goodLighting: false,
+          restingAreas: false
+        },
+        specialPrograms: { 
+          memoryActivities: [], 
+          intergenerationalPrograms: [], 
+          volunteerPrograms: [], 
+          mentalHealthSupport: [] 
+        },
+        ageSpecificNeeds: { 
+          lowImpactActivities: [], 
+          nutritionSupport: [] 
+        }
+      }}
+      onPensionersChange={(pensionersData) => updateField('pensionersSpecific', pensionersData)}
+      disabled={isLoading}
+    />
+  </div>
+);
     const renderMediaStep = () => {
         const handleMediaChange = (value, path) => {
 

@@ -9605,6 +9605,7 @@
       "years": "years",
       "capacity": "Capacity",
       "people": "people",
+      
       "types": {
         "regular": "Regular Activity",
         "event": "Event",

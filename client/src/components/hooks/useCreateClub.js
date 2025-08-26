@@ -17,25 +17,50 @@ export const useCreateClub = (clubId = null) => {
     mainImage: '',         // ОБНОВЕНО: string URL  
     gallery: [],           // ОБНОВЕНО: string[] URLs
     // Специфични за пенсионери
-pensionersSpecific: {
-  healthServices: {
-    healthLectures: [],
-    medicalPartners: [],
-    emergencyProtocol: {}
-  },
-  supportServices: {},
-  accessibility: {},
-  specialPrograms: {
-    memoryActivities: [],
-    intergenerationalPrograms: [],
-    volunteerPrograms: [],
-    mentalHealthSupport: []
-  },
-  ageSpecificNeeds: {
-    lowImpactActivities: [],
-    nutritionSupport: []
-  }
-},
+   pensionersSpecific: {
+    healthServices: {
+      regularCheckups: false,           // Редовни прегледи
+      bloodPressureMonitoring: false,  // Мерене на кръвно
+      healthLectures: [],              // Здравни лекции
+      medicalPartners: [],             // Медицински партньори
+      emergencyProtocol: {
+        hasEmergencyPlan: false,       // Има ли спешен план
+        emergencyContacts: [],         // Спешни контакти
+        nearestHospital: '',           // Най-близка болница
+        specialNeeds: []               // Специални нужди
+      }
+    },
+   supportServices: {
+      homeVisits: false,               // Домашни посещения
+      shoppingAssistance: false,       // Помощ при пазаруване
+      documentHelp: false,             // Помощ с документи
+      companionship: false,            // Придружаване
+      transportService: false,         // Транспортна услуга
+      mealDelivery: false,             // Доставка на храна
+      cleaningHelp: false,             // Помощ за почистване
+      techSupport: false               // Техническа помощ
+    },
+       accessibility: {
+      wheelchairAccess: false,         // Достъп с инвалидна количка
+      elevatorAccess: false,           // Достъп с асансьор
+      hearingLoop: false,              // Слухово оборудване
+      largeTextMaterials: false,       // Материали с едър шрифт
+      handrails: false,                // Парапети и опори
+      nonSlipFloors: false,            // Нехлъзгащи подове
+      goodLighting: false,             // Добро осветление
+      restingAreas: false              // Места за почивка
+    },
+       specialPrograms: {
+      memoryActivities: [],            // Дейности за памет
+      intergenerationalPrograms: [],   // Междупоколенчески програми
+      volunteerPrograms: [],           // Доброволчески програми
+      mentalHealthSupport: []          // Психологическа подкрепа
+    },
+       ageSpecificNeeds: {
+      lowImpactActivities: [],         // Дейности с ниска интензивност
+      nutritionSupport: []             // Хранителна подкрепа
+    }
+    },
     // Местоположение
     location: {
       address: '',
@@ -56,11 +81,11 @@ pensionersSpecific: {
     // Членство с добавена възрастова група под 60
     membership: {
       totalMembers: 0,
-      ageGroups: { 
+      ageGroups: {
         "под-60": 0,    // НОВО за ветерани и други пенсионери
-        "60-70": 0, 
-        "70-80": 0, 
-        "80+": 0 
+        "60-70": 0,
+        "70-80": 0,
+        "80+": 0
       },
       membershipFee: { monthly: 0, yearly: 0, currency: 'BGN' },
       requirements: [],
@@ -96,21 +121,21 @@ pensionersSpecific: {
 
     // Дейности
     activities: {
-  regular: [],
-  events: [],
-  trips: [],
-  courses: []
-},
-achievements: {
-  awards: [],
-  certificates: [],
-  recognitions: []
-},
-socialImpact: {
-  volunteering: [],
-  communityProjects: [],
-  partnerships: []
-},
+      regular: [],
+      events: [],
+      trips: [],
+      courses: []
+    },
+    achievements: {
+      awards: [],
+      certificates: [],
+      recognitions: []
+    },
+    socialImpact: {
+      volunteering: [],
+      communityProjects: [],
+      partnerships: []
+    },
     // Управление
     management: {
       board: []
@@ -166,7 +191,7 @@ socialImpact: {
   };
 
   // Взимаме функциите от ClubContext
-  const { 
+  const {
     createClub,
     updateClub,
     deleteClub,
@@ -175,7 +200,7 @@ socialImpact: {
     getDraftById,
     deleteDraftClub
   } = useClubContext();
-  
+
   // State
   const [formData, setFormData] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
@@ -184,8 +209,8 @@ socialImpact: {
   const [draftId, setDraftId] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-const [isLoadedFromStorage, setIsLoadedFromStorage] = useState(false);
-const [nameChangedByUser, setNameChangedByUser] = useState(false);
+  const [isLoadedFromStorage, setIsLoadedFromStorage] = useState(false);
+  const [nameChangedByUser, setNameChangedByUser] = useState(false);
 
   // Helper function за identifier (slug или ID)
   const getIdentifier = useCallback((data = formData) => {
@@ -214,7 +239,7 @@ const [nameChangedByUser, setNameChangedByUser] = useState(false);
   // Slug генератор
   const generateSlug = useCallback((name) => {
     if (!name) return '';
-    
+
     return name
       .toLowerCase()
       .trim()
@@ -240,43 +265,43 @@ const [nameChangedByUser, setNameChangedByUser] = useState(false);
   }, []);
 
   // Auto-generate slug при промяна на името
-useEffect(() => {
-  const savedData = localStorage.getItem(getLocalStorageKey());
-  if (savedData) {
-    try {
-      const parsed = JSON.parse(savedData);
-      setFormData(parsed.data || initialState);
-      setLastSaved(new Date(parsed.timestamp));
-      setDraftId(parsed.draftId);
-      setIsDraft(true);
-      setIsLoadedFromStorage(true);
-    } catch (error) {
-      console.error('Error loading draft:', error);
+  useEffect(() => {
+    const savedData = localStorage.getItem(getLocalStorageKey());
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        setFormData(parsed.data || initialState);
+        setLastSaved(new Date(parsed.timestamp));
+        setDraftId(parsed.draftId);
+        setIsDraft(true);
+        setIsLoadedFromStorage(true);
+      } catch (error) {
+        console.error('Error loading draft:', error);
+      }
     }
-  }
-  setIsLoadedFromStorage(true);
-}, []);
+    setIsLoadedFromStorage(true);
+  }, []);
 
-// Auto-generate slug - САМО ако НЕ е заредено от localStorage
-useEffect(() => {
+  // Auto-generate slug - САМО ако НЕ е заредено от localStorage
+  useEffect(() => {
 
-  if (formData.name && !clubId && (!isDraft || nameChangedByUser)) {
-    const newSlug = generateSlug(formData.name);
-    setFormData(prev => ({ ...prev, slug: newSlug }));
-    setNameChangedByUser(false); // Reset флага
-  }
-}, [formData.name, generateSlug, clubId, isDraft, nameChangedByUser]);
+    if (formData.name && !clubId && (!isDraft || nameChangedByUser)) {
+      const newSlug = generateSlug(formData.name);
+      setFormData(prev => ({ ...prev, slug: newSlug }));
+      setNameChangedByUser(false); // Reset флага
+    }
+  }, [formData.name, generateSlug, clubId, isDraft, nameChangedByUser]);
 
   // LocalStorage key с fallback
- const getLocalStorageKey = useCallback(() => {
-  // За нови клубове ВИНАГИ използвай фиксиран ключ
-  if (!clubId) {
-    return 'club-draft-new';
-  }
-  
-  // За редактиране на съществуващи клубове използвай clubId
-  return `club-draft-${clubId}`;
-}, [clubId]);
+  const getLocalStorageKey = useCallback(() => {
+    // За нови клубове ВИНАГИ използвай фиксиран ключ
+    if (!clubId) {
+      return 'club-draft-new';
+    }
+
+    // За редактиране на съществуващи клубове използвай clubId
+    return `club-draft-${clubId}`;
+  }, [clubId]);
 
   // Load от localStorage при mount
   // useEffect(() => {
@@ -353,17 +378,17 @@ useEffect(() => {
 
   // Save в localStorage
   const saveToLocalStorage = useCallback(() => {
-  const key = getLocalStorageKey(); // Винаги ще е 'club-draft-new' за нови клубове
-  const dataToSave = {
-    data: formData,
-    timestamp: new Date().toISOString(),
-    draftId: draftId
-  };
-  
-  localStorage.setItem(key, JSON.stringify(dataToSave));
-  setLastSaved(new Date());
-  setHasUnsavedChanges(false);
-}, [formData, getLocalStorageKey, draftId]);
+    const key = getLocalStorageKey(); // Винаги ще е 'club-draft-new' за нови клубове
+    const dataToSave = {
+      data: formData,
+      timestamp: new Date().toISOString(),
+      draftId: draftId
+    };
+
+    localStorage.setItem(key, JSON.stringify(dataToSave));
+    setLastSaved(new Date());
+    setHasUnsavedChanges(false);
+  }, [formData, getLocalStorageKey, draftId]);
 
   // Auto-save всеки 30 секунди ако има промени
   useEffect(() => {
@@ -371,47 +396,47 @@ useEffect(() => {
       const autoSaveTimer = setTimeout(() => {
         saveToLocalStorage();
       }, 30000);
-      
+
       return () => clearTimeout(autoSaveTimer);
     }
   }, [hasUnsavedChanges, saveToLocalStorage]);
 
   // Update field
- const updateField = useCallback((path, value) => {
-  setFormData(prev => {
-    const newData = { ...prev };
-    const keys = path.split('.');
-    let current = newData;
-    
-    for (let i = 0; i < keys.length - 1; i++) {
-      if (!current[keys[i]]) {
-        current[keys[i]] = {};
+  const updateField = useCallback((path, value) => {
+    setFormData(prev => {
+      const newData = { ...prev };
+      const keys = path.split('.');
+      let current = newData;
+
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) {
+          current[keys[i]] = {};
+        }
+        current = current[keys[i]];
       }
-      current = current[keys[i]];
+
+      current[keys[keys.length - 1]] = value;
+      return newData;
+    });
+
+    // Ако потребителят променя името, маркирай това
+    if (path === 'name' && isLoadedFromStorage) {
+      setNameChangedByUser(true);
     }
-    
-    current[keys[keys.length - 1]] = value;
-    return newData;
-  });
-  
-  // Ако потребителят променя името, маркирай това
-  if (path === 'name' && isLoadedFromStorage) {
-    setNameChangedByUser(true);
-  }
-  
-  setHasUnsavedChanges(true);
-  
-  // Clear field error ако съществува
-  if (errors[path]) {
-    setErrors(prev => ({ ...prev, [path]: null }));
-  }
-}, [errors, isLoadedFromStorage]);
+
+    setHasUnsavedChanges(true);
+
+    // Clear field error ако съществува
+    if (errors[path]) {
+      setErrors(prev => ({ ...prev, [path]: null }));
+    }
+  }, [errors, isLoadedFromStorage]);
 
   // DRAFT функции
   const saveDraft = useCallback(async () => {
     try {
       setIsLoading(true);
-      
+
       let result;
       if (draftId) {
         // Update съществуваща чернова - използваме identifier
@@ -424,12 +449,12 @@ useEffect(() => {
           setDraftId(result.id);
         }
       }
-      
+
       setIsDraft(true);
       setLastSaved(new Date());
       setHasUnsavedChanges(false);
       saveToLocalStorage();
-      
+
       return result;
     } catch (error) {
       console.error('Error saving draft:', error);
@@ -441,70 +466,70 @@ useEffect(() => {
 
   // SUBMIT функция
   // SUBMIT функция - ПРАВИЛНА ЛОГИКА ЗА SLUG
-const submitClub = useCallback(async () => {
-  if (!validateForm()) {
-    notify('error', 'Моля, поправете грешките във формата');
-    return false;
-  }
+  const submitClub = useCallback(async () => {
+    if (!validateForm()) {
+      notify('error', 'Моля, поправете грешките във формата');
+      return false;
+    }
 
-  try {
-    setIsLoading(true);
-    
-    let result;
-    
-    // ПРАВИЛНА ЛОГИКА: 
-    // UPDATE само ако редактираме СЪЩЕСТВУВАЩ клуб (имаме clubId или formData.id)
-    // CREATE във всички други случаи (дори и да има slug в данните)
-    if (clubId || formData.id) {
-      // UPDATE - редактираме съществуващ клуб
-      const updateIdentifier = clubId || formData.id;
-      console.log('🔄 UPDATE клуб с identifier:', updateIdentifier);
-      result = await updateClub(updateIdentifier, formData);
-    } else {
-      // CREATE - създаваме нов клуб (slug е в formData)
-      console.log('✅ CREATE нов клуб със slug:', formData.slug);
-      result = await createClub(formData);
-    }
-    
-    if (result) {
-      // Изчисти чернова след успешно създаване/обновяване
-      if (draftId) {
-        try {
-          await deleteDraftClub(draftId);
-        } catch (deleteError) {
-          console.warn('Could not delete draft:', deleteError);
-        }
+    try {
+      setIsLoading(true);
+
+      let result;
+
+      // ПРАВИЛНА ЛОГИКА: 
+      // UPDATE само ако редактираме СЪЩЕСТВУВАЩ клуб (имаме clubId или formData.id)
+      // CREATE във всички други случаи (дори и да има slug в данните)
+      if (clubId || formData.id) {
+        // UPDATE - редактираме съществуващ клуб
+        const updateIdentifier = clubId || formData.id;
+        console.log('🔄 UPDATE клуб с identifier:', updateIdentifier);
+        result = await updateClub(updateIdentifier, formData);
+      } else {
+        // CREATE - създаваме нов клуб (slug е в formData)
+        console.log('✅ CREATE нов клуб със slug:', formData.slug);
+        result = await createClub(formData);
       }
-      localStorage.removeItem(getLocalStorageKey());
-      
-      setIsDraft(false);
-      setDraftId(null);
-      setHasUnsavedChanges(false);
-      
-      return result;
+
+      if (result) {
+        // Изчисти чернова след успешно създаване/обновяване
+        if (draftId) {
+          try {
+            await deleteDraftClub(draftId);
+          } catch (deleteError) {
+            console.warn('Could not delete draft:', deleteError);
+          }
+        }
+        localStorage.removeItem(getLocalStorageKey());
+
+        setIsDraft(false);
+        setDraftId(null);
+        setHasUnsavedChanges(false);
+
+        return result;
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Error submitting club:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
-    
-    return false;
-  } catch (error) {
-    console.error('Error submitting club:', error);
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, [formData, clubId, validateForm, createClub, updateClub, draftId, deleteDraftClub, getLocalStorageKey]);
+  }, [formData, clubId, validateForm, createClub, updateClub, draftId, deleteDraftClub, getLocalStorageKey]);
 
   // RESET функция
   const resetForm = useCallback(() => {
-  const key = getLocalStorageKey();
-  localStorage.removeItem(key);
-  setFormData(initialState);
-  setErrors({});
-  setIsDraft(false);
-  setDraftId(null);
-  setHasUnsavedChanges(false);
-  setIsLoadedFromStorage(false);
-  setNameChangedByUser(false);
-}, [getLocalStorageKey]);
+    const key = getLocalStorageKey();
+    localStorage.removeItem(key);
+    setFormData(initialState);
+    setErrors({});
+    setIsDraft(false);
+    setDraftId(null);
+    setHasUnsavedChanges(false);
+    setIsLoadedFromStorage(false);
+    setNameChangedByUser(false);
+  }, [getLocalStorageKey]);
 
   // CLEAR DRAFT функция
   const clearDraft = useCallback(async () => {
@@ -529,14 +554,14 @@ const submitClub = useCallback(async () => {
     draftId,
     lastSaved,
     hasUnsavedChanges,
-    
+
     // Methods
     updateField,
     generateSlug,
     saveToLocalStorage,
     getIdentifier,
     hasValidIdentifier,
-    
+
     // CRUD операции
     saveDraft,
     submitClub,

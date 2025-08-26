@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
   faEnvelope,
   faPhone,
   faClock,
@@ -29,9 +29,9 @@ import {
   faChevronDown,
   faChevronUp
 } from '@fortawesome/free-solid-svg-icons';
-import { 
-  faFacebook, 
-  faInstagram, 
+import {
+  faFacebook,
+  faInstagram,
   faYoutube,
   faTwitter,
   faLinkedin
@@ -98,17 +98,17 @@ export const ClubContact = ({ club }) => {
     try {
       // Симулация на изпращане
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // Отваряне на mailto
       if (recipientEmail) {
         window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
       }
-      
+
       setFormStatus({
         type: 'success',
         message: t('clubs.ClubContact.form.messages.success')
       });
-      
+
       // Изчистване на формата след успех
       setTimeout(() => {
         setFormData({
@@ -121,7 +121,7 @@ export const ClubContact = ({ club }) => {
         });
         setFormStatus({ type: '', message: '' });
       }, 3000);
-      
+
     } catch (error) {
       setFormStatus({
         type: 'error',
@@ -148,8 +148,11 @@ export const ClubContact = ({ club }) => {
   };
 
   const getSocialUrl = (platform, handle) => {
+    // Проверка за null/undefined/празен string
+    if (!handle || typeof handle !== 'string') return '#';
+
     if (handle.startsWith('http')) return handle;
-    
+
     const urls = {
       'facebook': `https://${handle}`,
       'instagram': `https://instagram.com/${handle.replace('@', '')}`,
@@ -157,26 +160,40 @@ export const ClubContact = ({ club }) => {
       'twitter': `https://twitter.com/${handle.replace('@', '')}`,
       'linkedin': `https://linkedin.com/company/${handle}`
     };
-    
+
     return urls[platform.toLowerCase()] || `https://${handle}`;
   };
 
- const getTodayHours = () => {
-  if (!club.contacts?.workingHours || typeof club.contacts.workingHours !== 'object') {
-    return t('clubs.ClubContact.workingHours.notSpecified');
-  }
-  
-  const today = new Date().getDay();
-  const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
-  const hours = club.contacts.workingHours[dayIndex];
-  
-  // Проверяваме дали часовете са string или валидна стойност
-  if (!hours || typeof hours !== 'string') {
-    return 'closed';
-  }
-  
-  return hours;
-};
+  const getTodayHours = () => {
+    if (!club.contacts?.workingHours || typeof club.contacts.workingHours !== 'object') {
+      return t('clubs.ClubContact.workingHours.notSpecified');
+    }
+
+    const today = new Date().getDay();
+    const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
+
+    let hours;
+
+    // Проверява дали има нова структура с days
+    if (club.contacts.workingHours.days && club.contacts.workingHours.days[dayIndex]) {
+      const dayData = club.contacts.workingHours.days[dayIndex];
+      if (dayData.enabled && dayData.open && dayData.close) {
+        hours = `${dayData.open}-${dayData.close}`;
+      } else {
+        hours = 'closed';
+      }
+    } else {
+      // Legacy структура
+      hours = club.contacts.workingHours[dayIndex];
+    }
+
+    // Проверяваме дали часовете са string или валидна стойност
+    if (!hours || typeof hours !== 'string') {
+      return 'closed';
+    }
+
+    return hours;
+  };
 
   const getTodayName = () => {
     const today = new Date().getDay();
@@ -191,7 +208,7 @@ export const ClubContact = ({ club }) => {
   const handleShare = () => {
     const text = t('clubs.ClubContact.actions.shareText', { clubName: club.name });
     const contactInfo = `📞 ${club.contacts.phone || ''} 📧 ${club.contacts.email || ''}`;
-    
+
     if (navigator.share) {
       navigator.share({
         title: text,
@@ -212,7 +229,7 @@ export const ClubContact = ({ club }) => {
     },
     {
       question: t('clubs.ClubContact.faq.questions.membershipCost'),
-      answer: club.membership?.membershipFee ? 
+      answer: club.membership?.membershipFee ?
         t('clubs.ClubContact.faq.answers.membershipCostWithPrices', {
           monthly: club.membership.membershipFee.monthly,
           currency: club.membership.membershipFee.currency,
@@ -243,7 +260,7 @@ export const ClubContact = ({ club }) => {
   return (
     <section id="general-contact" className="general-contact-main">
       <div className="general-contact-container">
-        
+
         {/* Header */}
         <div className="general-contact-header">
           <div className="general-contact-badge">
@@ -254,17 +271,17 @@ export const ClubContact = ({ club }) => {
           <p className="general-contact-subtitle">
             {t('clubs.ClubContact.header.subtitle')}
           </p>
-          
+
           {/* Quick actions */}
           <div className="general-contact-actions">
-            <button 
+            <button
               className="general-quick-action faq"
               onClick={() => setShowFAQ(true)}
             >
               <FontAwesomeIcon icon={faQuestionCircle} />
               {t('clubs.ClubContact.actions.faq')}
             </button>
-            <button 
+            <button
               className="general-quick-action share"
               onClick={handleShare}
             >
@@ -275,17 +292,17 @@ export const ClubContact = ({ club }) => {
         </div>
 
         <div className="general-contact-layout">
-          
+
           {/* Contact Methods */}
           <div className="general-contact-methods">
-            
+
             {/* Primary Contact */}
             <div className="general-contact-card primary">
               <div className="general-card-header">
                 <FontAwesomeIcon icon={faHeadset} />
                 <h3>{t('clubs.ClubContact.contactMethods.primary.title')}</h3>
               </div>
-              
+
               <div className="general-contact-options">
                 {club.contacts.phone && (
                   <a href={`tel:${club.contacts.phone}`} className="general-contact-option phone">
@@ -299,7 +316,7 @@ export const ClubContact = ({ club }) => {
                     </div>
                   </a>
                 )}
-                
+
                 {club.contacts.mobile && club.contacts.mobile !== club.contacts.phone && (
                   <a href={`tel:${club.contacts.mobile}`} className="general-contact-option mobile">
                     <div className="general-option-icon">
@@ -312,7 +329,7 @@ export const ClubContact = ({ club }) => {
                     </div>
                   </a>
                 )}
-                
+
                 {club.contacts.email && (
                   <a href={`mailto:${club.contacts.email}`} className="general-contact-option email">
                     <div className="general-option-icon">
@@ -343,43 +360,43 @@ export const ClubContact = ({ club }) => {
 
             {/* Working Hours */}
             {club.contacts?.workingHours && Object.keys(club.contacts.workingHours).length > 0 && (
-  <div className="general-contact-card hours">
-    <div className="general-card-header">
-      <FontAwesomeIcon icon={faBusinessTime} />
-      <h3>{t('clubs.ClubContact.workingHours.title')}</h3>
-      <button 
-        className="general-card-action"
-        onClick={() => setShowHoursModal(true)}
-        title={t('clubs.ClubContact.workingHours.detailed')}
-      >
-        <FontAwesomeIcon icon={faInfoCircle} />
-      </button>
-    </div>
-    
-    <div className="general-today-status">
-      <div className="general-today-info">
-        <span className="general-today-label">{getTodayName()}</span>
-        <span className={`general-today-hours ${getTodayHours() === 'closed' ? 'closed' : 'open'}`}>
-          {getTodayHours() === 'closed' ? t('clubs.ClubContact.workingHours.closed') : getTodayHours()}
-        </span>
-      </div>
-      
-      {getTodayHours() !== 'closed' && (
-        <div className="general-status-indicator open">
-          <div className="general-status-dot"></div>
-          <span>{t('clubs.ClubContact.workingHours.openNow')}</span>
-        </div>
-      )}
-      
-      {getTodayHours() === 'closed' && (
-        <div className="general-status-indicator closed">
-          <div className="general-status-dot"></div>
-          <span>{t('clubs.ClubContact.workingHours.closed')}</span>
-        </div>
-      )}
-    </div>
-  </div>
-)}
+              <div className="general-contact-card hours">
+                <div className="general-card-header">
+                  <FontAwesomeIcon icon={faBusinessTime} />
+                  <h3>{t('clubs.ClubContact.workingHours.title')}</h3>
+                  <button
+                    className="general-card-action"
+                    onClick={() => setShowHoursModal(true)}
+                    title={t('clubs.ClubContact.workingHours.detailed')}
+                  >
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                  </button>
+                </div>
+
+                <div className="general-today-status">
+                  <div className="general-today-info">
+                    <span className="general-today-label">{getTodayName()}</span>
+                    <span className={`general-today-hours ${getTodayHours() === 'closed' ? 'closed' : 'open'}`}>
+                      {getTodayHours() === 'closed' ? t('clubs.ClubContact.workingHours.closed') : getTodayHours()}
+                    </span>
+                  </div>
+
+                  {getTodayHours() !== 'closed' && (
+                    <div className="general-status-indicator open">
+                      <div className="general-status-dot"></div>
+                      <span>{t('clubs.ClubContact.workingHours.openNow')}</span>
+                    </div>
+                  )}
+
+                  {getTodayHours() === 'closed' && (
+                    <div className="general-status-indicator closed">
+                      <div className="general-status-dot"></div>
+                      <span>{t('clubs.ClubContact.workingHours.closed')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Location */}
             {club.location && (
@@ -388,7 +405,7 @@ export const ClubContact = ({ club }) => {
                   <FontAwesomeIcon icon={faLocationDot} />
                   <h3>{t('clubs.ClubContact.location.title')}</h3>
                 </div>
-                
+
                 <div className="general-location-info">
                   <div className="general-address">
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
@@ -397,9 +414,9 @@ export const ClubContact = ({ club }) => {
                       <span className="general-city-line">{club.location.city}{club.location.region && `, ${club.location.region}`}</span>
                     </div>
                   </div>
-                  
+
                   <div className="general-location-actions">
-                    <a 
+                    <a
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -408,9 +425,9 @@ export const ClubContact = ({ club }) => {
                       <FontAwesomeIcon icon={faMapMarkerAlt} />
                       Google Maps
                     </a>
-                    
+
                     {club.location.coordinates && (
-                      <a 
+                      <a
                         href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -425,6 +442,7 @@ export const ClubContact = ({ club }) => {
               </div>
             )}
 
+          
             {/* Social Media */}
             {club.contacts?.socialMedia && Object.keys(club.contacts.socialMedia).length > 0 && (
               <div className="general-contact-card social">
@@ -432,19 +450,21 @@ export const ClubContact = ({ club }) => {
                   <FontAwesomeIcon icon={faUserFriends} />
                   <h3>{t('clubs.ClubContact.socialMedia.title')}</h3>
                 </div>
-                
+
                 <div className="general-social-links">
-                  {Object.entries(club.contacts.socialMedia).map(([platform, handle]) => (
-                    <a key={platform}
-                      href={getSocialUrl(platform, handle)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`general-social-link ${platform.toLowerCase()}`}
-                    >
-                      <FontAwesomeIcon icon={getSocialIcon(platform)} />
-                      <span>{platform}</span>
-                    </a>
-                  ))}
+                  {Object.entries(club.contacts.socialMedia)
+                    .filter(([platform, handle]) => handle && typeof handle === 'string' && handle.trim() !== '') // Филтрирай null/undefined/празни
+                    .map(([platform, handle]) => (
+                      <a key={platform}
+                        href={getSocialUrl(platform, handle)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`general-social-link ${platform.toLowerCase()}`}
+                      >
+                        <FontAwesomeIcon icon={getSocialIcon(platform)} />
+                        <span>{platform}</span>
+                      </a>
+                    ))}
                 </div>
               </div>
             )}
@@ -460,7 +480,7 @@ export const ClubContact = ({ club }) => {
                 </h3>
                 <p>{t('clubs.ClubContact.form.subtitle')}</p>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="general-contact-form">
                 <div className="general-form-grid">
                   <div className="general-form-field">
@@ -476,7 +496,7 @@ export const ClubContact = ({ club }) => {
                     />
                     <FontAwesomeIcon icon={faUser} className="general-field-icon" />
                   </div>
-                  
+
                   <div className="general-form-field">
                     <label htmlFor="email">{t('clubs.ClubContact.form.fields.email')} *</label>
                     <input
@@ -503,7 +523,7 @@ export const ClubContact = ({ club }) => {
                     />
                     <FontAwesomeIcon icon={faPhone} className="general-field-icon" />
                   </div>
-                  
+
                   <div className="general-form-field">
                     <label htmlFor="preferredContact">{t('clubs.ClubContact.form.fields.preferredContact')}</label>
                     <select
@@ -555,15 +575,15 @@ export const ClubContact = ({ club }) => {
 
                 {formStatus.message && (
                   <div className={`general-form-alert ${formStatus.type}`}>
-                    <FontAwesomeIcon 
-                      icon={formStatus.type === 'success' ? faCheckCircle : faExclamationTriangle} 
+                    <FontAwesomeIcon
+                      icon={formStatus.type === 'success' ? faCheckCircle : faExclamationTriangle}
                     />
                     <span>{formStatus.message}</span>
                   </div>
                 )}
 
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="general-submit-button"
                   disabled={isSubmitting}
                 >
@@ -598,7 +618,7 @@ export const ClubContact = ({ club }) => {
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
-            
+
             <div className="general-modal-content">
               <div className="general-faq-list">
                 {faqData.map((faq, index) => (
@@ -608,11 +628,11 @@ export const ClubContact = ({ club }) => {
                       onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
                     >
                       <span>{faq.question}</span>
-                      <FontAwesomeIcon 
-                        icon={expandedFAQ === index ? faChevronUp : faChevronDown} 
+                      <FontAwesomeIcon
+                        icon={expandedFAQ === index ? faChevronUp : faChevronDown}
                       />
                     </button>
-                    
+
                     {expandedFAQ === index && (
                       <div className="general-faq-answer">
                         <p>{faq.answer}</p>
@@ -621,10 +641,10 @@ export const ClubContact = ({ club }) => {
                   </div>
                 ))}
               </div>
-              
+
               <div className="general-faq-footer">
                 <p>{t('clubs.ClubContact.faq.footer.question')}</p>
-                <button 
+                <button
                   className="general-contact-us-btn"
                   onClick={() => setShowFAQ(false)}
                 >
@@ -639,50 +659,81 @@ export const ClubContact = ({ club }) => {
 
       {/* Working Hours Modal */}
       {showHoursModal && club.contacts?.workingHours && (
-  <div className="general-modal-overlay" onClick={() => setShowHoursModal(false)}>
-    <div className="general-modal" onClick={(e) => e.stopPropagation()}>
-      <div className="general-modal-header">
-        <h3>
-          <FontAwesomeIcon icon={faBusinessTime} />
-          {t('clubs.ClubContact.workingHours.detailed')}
-        </h3>
-        <button className="general-modal-close" onClick={() => setShowHoursModal(false)}>
-          <FontAwesomeIcon icon={faTimes} />
-        </button>
-      </div>
-      
-      <div className="general-modal-content">
-        <div className="general-hours-detailed">
-          {Object.entries(club.contacts.workingHours || {})
-            .filter(([day, hours]) => typeof hours === 'string') // Филтрираме само string стойности
-            .map(([day, hours]) => {
-              const today = new Date().getDay();
-              const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
-              const isToday = day === dayIndex;
-              
-              return (
-                <div key={day} className={`general-hours-row ${isToday ? 'today' : ''}`}>
-                  <div className="general-hours-day">
-                    <FontAwesomeIcon icon={faCalendarAlt} />
-                    <span>{getDayName(day)}</span>
-                    {isToday && <span className="general-today-badge">{t('clubs.ClubContact.workingHours.today')}</span>}
-                  </div>
-                  <div className={`general-hours-time ${hours === 'closed' ? 'closed' : 'open'}`}>
-                    {hours === 'closed' ? t('clubs.ClubContact.workingHours.closed') : (hours || t('clubs.ClubContact.workingHours.notSpecified'))}
-                  </div>
-                </div>
-              );
-            })}
+        <div className="general-modal-overlay" onClick={() => setShowHoursModal(false)}>
+          <div className="general-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="general-modal-header">
+              <h3>
+                <FontAwesomeIcon icon={faBusinessTime} />
+                {t('clubs.ClubContact.workingHours.detailed')}
+              </h3>
+              <button className="general-modal-close" onClick={() => setShowHoursModal(false)}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
+
+            <div className="general-modal-content">
+              <div className="general-hours-detailed">
+                {(() => {
+                  const workingHours = club.contacts.workingHours;
+                  let hoursEntries = [];
+
+                  // Определяме дните на седмицата в правилен ред
+                  const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+                  // Ако има нова структура с days обекти
+                  if (workingHours.days && typeof workingHours.days === 'object') {
+                    hoursEntries = daysOrder.map(day => {
+                      const dayData = workingHours.days[day];
+                      let hours;
+
+                      if (dayData && typeof dayData === 'object' && dayData.enabled && dayData.open && dayData.close) {
+                        hours = `${dayData.open}-${dayData.close}`;
+                      } else {
+                        hours = 'closed';
+                      }
+
+                      return [day, hours];
+                    }).filter(([day, hours]) => day && hours !== undefined);
+                  } else {
+                    // Legacy структура - директно string стойности
+                    hoursEntries = daysOrder.map(day => {
+                      const hours = workingHours[day];
+                      return [day, hours || 'closed'];
+                    }).filter(([day, hours]) => day && typeof hours === 'string');
+                  }
+
+                  return hoursEntries.map(([day, hours]) => {
+                    const today = new Date().getDay();
+                    const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
+                    const isToday = day === dayIndex;
+
+                    return (
+                      <div key={day} className={`general-hours-row ${isToday ? 'today' : ''}`}>
+                        <div className="general-hours-day">
+                          <FontAwesomeIcon icon={faCalendarAlt} />
+                          <span>{getDayName(day)}</span>
+                          {isToday && <span className="general-today-badge">{t('clubs.ClubContact.workingHours.today')}</span>}
+                        </div>
+                        <div className={`general-hours-time ${hours === 'closed' ? 'closed' : 'open'}`}>
+                          {hours === 'closed' ?
+                            t('clubs.ClubContact.workingHours.closed') :
+                            (hours || t('clubs.ClubContact.workingHours.notSpecified'))
+                          }
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+
+              <div className="general-hours-note">
+                <FontAwesomeIcon icon={faInfoCircle} />
+                <p>{t('clubs.ClubContact.workingHours.note')}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div className="general-hours-note">
-          <FontAwesomeIcon icon={faInfoCircle} />
-          <p>{t('clubs.ClubContact.workingHours.note')}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </section>
   );
 };

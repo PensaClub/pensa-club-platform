@@ -252,190 +252,173 @@ const ContactsManager = ({
 
   // Generate QR code data
   const generateQrCodeData = () => {
-    const data = [];
-    if (contactsData.basic?.phone) data.push(`Tel: ${contactsData.basic.phone}`);
-    if (contactsData.basic?.email) data.push(`Email: ${contactsData.basic.email}`);
-    if (contactsData.basic?.website) data.push(`Web: ${contactsData.basic.website}`);
-    return data.join('\n');
-  };
+  const data = [];
+  if (contactsData.phone) data.push(`Tel: ${contactsData.phone}`);
+  if (contactsData.email) data.push(`Email: ${contactsData.email}`);
+  if (contactsData.website) data.push(`Web: ${contactsData.website}`);
+  return data.join('\n');
+};
 
   // Copy contact info to clipboard
   const copyContactInfo = () => {
-    const info = [];
-    if (contactsData.basic?.phone) info.push(`📞 ${contactsData.basic.phone}`);
-    if (contactsData.basic?.email) info.push(`📧 ${contactsData.basic.email}`);
-    if (contactsData.basic?.website) info.push(`🌐 ${contactsData.basic.website}`);
-    
-    navigator.clipboard.writeText(info.join('\n'));
-  };
+  const info = [];
+  if (contactsData.phone) info.push(`📞 ${contactsData.phone}`);
+  if (contactsData.mobile) info.push(`📱 ${contactsData.mobile}`);
+  if (contactsData.email) info.push(`📧 ${contactsData.email}`);
+  if (contactsData.website) info.push(`🌐 ${contactsData.website}`);
+  
+  navigator.clipboard.writeText(info.join('\n'));
+};
 
   // Render basic contacts section
-  const renderBasicSection = () => (
-    <div className="contacts-manager-section-content">
-      <div className="contacts-manager-form-grid">
-        
-        {/* Phone */}
-        <div className="contacts-manager-form-group">
-          <label className="contacts-manager-form-label">
-            <FontAwesomeIcon icon={faPhone} />
-            {t('clubForm.contacts.fields.phone')}
-          </label>
-          <input
-            type="tel"
-            className="contacts-manager-form-input"
-            placeholder={t('clubForm.contacts.placeholders.phone')}
-            value={contactsData?.basic?.phone || ''}
-            onChange={(e) => handleFieldChange('basic.phone', e.target.value)}
-            disabled={disabled}
-          />
-        </div>
-
-        {/* Email */}
-        <div className="contacts-manager-form-group">
-          <label className="contacts-manager-form-label">
-            <FontAwesomeIcon icon={faEnvelope} />
-            {t('clubForm.contacts.fields.email')}
-          </label>
-          <input
-            type="email"
-            className="contacts-manager-form-input"
-            placeholder={t('clubForm.contacts.placeholders.email')}
-            value={contactsData?.basic?.email || ''}
-            onChange={(e) => handleFieldChange('basic.email', e.target.value)}
-            disabled={disabled}
-          />
-        </div>
-
-        {/* Website */}
-        <div className="contacts-manager-form-group">
-          <label className="contacts-manager-form-label">
-            <FontAwesomeIcon icon={faGlobe} />
-            {t('clubForm.contacts.fields.website')}
-          </label>
-          <input
-            type="url"
-            className="contacts-manager-form-input"
-            placeholder={t('clubForm.contacts.placeholders.website')}
-            value={contactsData?.basic?.website || ''}
-            onChange={(e) => handleFieldChange('basic.website', e.target.value)}
-            disabled={disabled}
-          />
-        </div>
-
-        {/* Secondary Phone */}
-        <div className="contacts-manager-form-group">
-          <label className="contacts-manager-form-label">
-            <FontAwesomeIcon icon={faPhone} />
-            {t('clubForm.contacts.fields.secondaryPhone')}
-          </label>
-          <input
-            type="tel"
-            className="contacts-manager-form-input"
-            placeholder={t('clubForm.contacts.placeholders.secondaryPhone')}
-            value={contactsData?.basic?.secondaryPhone || ''}
-            onChange={(e) => handleFieldChange('basic.secondaryPhone', e.target.value)}
-            disabled={disabled}
-          />
-        </div>
-
-        {/* Fax */}
-        <div className="contacts-manager-form-group">
-          <label className="contacts-manager-form-label">
-            <FontAwesomeIcon icon={faPhone} />
-            {t('clubForm.contacts.fields.fax')}
-          </label>
-          <input
-            type="tel"
-            className="contacts-manager-form-input"
-            placeholder={t('clubForm.contacts.placeholders.fax')}
-            value={contactsData?.basic?.fax || ''}
-            onChange={(e) => handleFieldChange('basic.fax', e.target.value)}
-            disabled={disabled}
-          />
-        </div>
-
+ const renderBasicSection = () => (
+  <div className="contacts-manager-section-content">
+    <div className="contacts-manager-form-grid">
+      
+      {/* Phone */}
+      <div className="contacts-manager-form-group">
+        <label className="contacts-manager-form-label">
+          <FontAwesomeIcon icon={faPhone} />
+          {t('clubForm.contacts.fields.phone')}
+        </label>
+        <input
+          type="tel"
+          className="contacts-manager-form-input"
+          placeholder={t('clubForm.contacts.placeholders.phone')}
+          value={contactsData?.phone || ''}
+          onChange={(e) => handleFieldChange('phone', e.target.value)}
+          disabled={disabled}
+        />
       </div>
 
-      {/* Contact Actions */}
-      <div className="contacts-manager-actions">
-        <button
-          type="button"
-          className="contacts-manager-action-btn copy"
-          onClick={copyContactInfo}
-          title={t('clubForm.contacts.actions.copyInfo')}
-        >
-          <FontAwesomeIcon icon={faCopy} />
-          {t('clubForm.contacts.actions.copyInfo')}
-        </button>
-        
-        <button
-          type="button"
-          className="contacts-manager-action-btn qr"
-          onClick={() => setShowQrCode(!showQrCode)}
-          title={t('clubForm.contacts.actions.showQr')}
-        >
-          <FontAwesomeIcon icon={faQrcode} />
-          {t('clubForm.contacts.actions.showQr')}
-        </button>
+      {/* Mobile */}
+      <div className="contacts-manager-form-group">
+        <label className="contacts-manager-form-label">
+          <FontAwesomeIcon icon={faPhone} />
+          {t('clubForm.contacts.fields.mobile')}
+        </label>
+        <input
+          type="tel"
+          className="contacts-manager-form-input"
+          placeholder={t('clubForm.contacts.placeholders.mobile')}
+          value={contactsData?.mobile || ''}
+          onChange={(e) => handleFieldChange('mobile', e.target.value)}
+          disabled={disabled}
+        />
       </div>
 
-      {/* QR Code */}
-      {showQrCode && (
-        <div className="contacts-manager-qr-section">
-          <h5>{t('clubForm.contacts.qr.title')}</h5>
-          <p>{t('clubForm.contacts.qr.description')}</p>
-          <div className="contacts-manager-qr-placeholder">
-            <FontAwesomeIcon icon={faQrcode} />
-            <span>{t('clubForm.contacts.qr.placeholder')}</span>
-          </div>
-        </div>
-      )}
+      {/* Email */}
+      <div className="contacts-manager-form-group">
+        <label className="contacts-manager-form-label">
+          <FontAwesomeIcon icon={faEnvelope} />
+          {t('clubForm.contacts.fields.email')}
+        </label>
+        <input
+          type="email"
+          className="contacts-manager-form-input"
+          placeholder={t('clubForm.contacts.placeholders.email')}
+          value={contactsData?.email || ''}
+          onChange={(e) => handleFieldChange('email', e.target.value)}
+          disabled={disabled}
+        />
+      </div>
+
+      {/* Website */}
+      <div className="contacts-manager-form-group">
+        <label className="contacts-manager-form-label">
+          <FontAwesomeIcon icon={faGlobe} />
+          {t('clubForm.contacts.fields.website')}
+        </label>
+        <input
+          type="url"
+          className="contacts-manager-form-input"
+          placeholder={t('clubForm.contacts.placeholders.website')}
+          value={contactsData?.website || ''}
+          onChange={(e) => handleFieldChange('website', e.target.value)}
+          disabled={disabled}
+        />
+      </div>
     </div>
-  );
+
+    {/* Contact Actions */}
+    <div className="contacts-manager-actions">
+      <button
+        type="button"
+        className="contacts-manager-action-btn copy"
+        onClick={copyContactInfo}
+        title={t('clubForm.contacts.actions.copyInfo')}
+      >
+        <FontAwesomeIcon icon={faCopy} />
+        {t('clubForm.contacts.actions.copyInfo')}
+      </button>
+      
+      <button
+        type="button"
+        className="contacts-manager-action-btn qr"
+        onClick={() => setShowQrCode(!showQrCode)}
+        title={t('clubForm.contacts.actions.showQr')}
+      >
+        <FontAwesomeIcon icon={faQrcode} />
+        {t('clubForm.contacts.actions.showQr')}
+      </button>
+    </div>
+
+    {/* QR Code */}
+    {showQrCode && (
+      <div className="contacts-manager-qr-section">
+        <h5>{t('clubForm.contacts.qr.title')}</h5>
+        <p>{t('clubForm.contacts.qr.description')}</p>
+        <div className="contacts-manager-qr-placeholder">
+          <FontAwesomeIcon icon={faQrcode} />
+          <span>{t('clubForm.contacts.qr.placeholder')}</span>
+        </div>
+      </div>
+    )}
+  </div>
+);
 
   // Render social media section
-  const renderSocialSection = () => (
-    <div className="contacts-manager-section-content">
-      <div className="contacts-manager-social-grid">
-        {socialPlatforms.map(platform => (
-          <div key={platform.id} className="contacts-manager-social-item">
-            <div className="contacts-manager-social-header">
-              <div 
-                className="contacts-manager-social-icon"
-                style={{ backgroundColor: platform.color }}
-              >
-                <FontAwesomeIcon icon={platform.icon} />
-              </div>
-              <label className="contacts-manager-social-label">
-                {platform.label}
-              </label>
+ const renderSocialSection = () => (
+  <div className="contacts-manager-section-content">
+    <div className="contacts-manager-social-grid">
+      {socialPlatforms.slice(0, 5).map(platform => ( // Само първите 5 - facebook, instagram, youtube, twitter, linkedin
+        <div key={platform.id} className="contacts-manager-social-item">
+          <div className="contacts-manager-social-header">
+            <div 
+              className="contacts-manager-social-icon"
+              style={{ backgroundColor: platform.color }}
+            >
+              <FontAwesomeIcon icon={platform.icon} />
             </div>
-            
-            <input
-              type="text"
-              className="contacts-manager-form-input"
-              placeholder={platform.placeholder}
-              value={contactsData?.social?.[platform.id] || ''}
-              onChange={(e) => handleFieldChange(`social.${platform.id}`, e.target.value)}
-              disabled={disabled}
-            />
-            
-            {contactsData?.social?.[platform.id] && (
-              <a href={contactsData.social[platform.id]}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contacts-manager-social-link"
-                title={t('clubForm.contacts.actions.openLink')}
-              >
-                <FontAwesomeIcon icon={faExternalLinkAlt} />
-              </a>
-            )}
+            <label className="contacts-manager-social-label">
+              {platform.label}
+            </label>
           </div>
-        ))}
-      </div>
+          
+          <input
+            type="text"
+            className="contacts-manager-form-input"
+            placeholder={platform.placeholder}
+            value={contactsData?.socialMedia?.[platform.id] || ''}
+            onChange={(e) => handleFieldChange(`socialMedia.${platform.id}`, e.target.value)}
+            disabled={disabled}
+          />
+          
+          {contactsData?.socialMedia?.[platform.id] && (
+            <a href={contactsData.socialMedia[platform.id]}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contacts-manager-social-link"
+              title={t('clubForm.contacts.actions.openLink')}
+            >
+              <FontAwesomeIcon icon={faExternalLinkAlt} />
+            </a>
+          )}
+        </div>
+      ))}
     </div>
-  );
-
+  </div>
+);
   // Render address section
   const renderAddressSection = () => (
     <div className="contacts-manager-section-content">

@@ -274,7 +274,6 @@ export const ClubProvider = ({ children }) => {
         )
       );
       
-      // Ако редактираме текущо избрания клуб
       if (currentClub && (currentClub.id === identifier || currentClub.slug === identifier)) {
         setCurrentClub(updatedClub);
       }
