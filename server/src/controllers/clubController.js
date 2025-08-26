@@ -17,6 +17,7 @@ const { findBySlugOrId } = require('../utils/modelLookup');
 // Add the import for comment utils
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { comment } = require('../sequelize/models');
+const { Op } = require('sequelize');
 
 // ========================================
 // ENDPOINTS
@@ -39,7 +40,7 @@ clubController.post('/create', isAuth, async (req, res, next) => {
         });
 
         if (existing) {
-            req.params.id = existing.id;
+            req.params.identifier = existing.slug;
             return updateClub(clubData, req, res, next, false);
         } else {
             return createClub(clubData, req, res, next);
@@ -222,6 +223,54 @@ clubController.get('/user-bookmarks/:email', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+});
+
+clubController.get('/category/:category', async (req, res, next) => {
+    return searchClubsWithFilters({ category: req.params.category }, req, res, next);
+});
+
+clubController.get('/region/:region', async (req, res, next) => {
+    return searchClubsWithFilters({ region: req.params.region }, req, res, next);
+});
+
+clubController.get('/city/:city', async (req, res, next) => {
+    return searchClubsWithFilters({ city: req.params.city }, req, res, next);
+});
+
+clubController.get('/search', async (req, res, next) => {
+    return searchClubsWithFilters(req.query, req, res, next);
+});
+
+clubController.get('/featured', async (req, res, next) => {
+    return searchClubsWithFilters({ featured: true }, req, res, next);
+});
+
+clubController.get('/active', async (req, res, next) => {
+    return searchClubsWithFilters({ active: true }, req, res, next);
+});
+
+clubController.get('/:identifier/events', async (req, res, next) => {
+    return getClubSpecificData(req.params.identifier, 'events', req, res, next);
+});
+
+clubController.get('/:identifier/activities', async (req, res, next) => {
+    return getClubSpecificData(req.params.identifier, 'activities', req, res, next);
+});
+
+clubController.get('/:identifier/trips', async (req, res, next) => {
+    return getClubSpecificData(req.params.identifier, 'trips', req, res, next);
+});
+
+clubController.get('/:identifier/courses', async (req, res, next) => {
+    return getClubSpecificData(req.params.identifier, 'courses', req, res, next);
+});
+
+clubController.get('/:identifier/members', async (req, res, next) => {
+    return getClubSpecificData(req.params.identifier, 'members', req, res, next);
+});
+
+clubController.get('/:identifier/management', async (req, res, next) => {
+    return getClubSpecificData(req.params.identifier, 'management', req, res, next);
 });
 
 // ========================================
@@ -526,6 +575,175 @@ const deleteClubByDraftStatus = async (isDraft, req, res, next) => {
             message: `Club '${result.name}' has been successfully deleted.`,
             deletedClub: result,
         });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const searchClubsWithFilters = async (filters, req, res, next) => {
+    try {
+        const { page = 1, limit = 12 } = req.query;
+        const offset = (page - 1) * limit;
+
+        const whereClause = { isDraft: false };
+        const locationWhere = {};
+        const activityWhere = {};
+
+        if (filters.category) {
+            whereClause.category = filters.category;
+        }
+
+        if (filters.region) {
+            locationWhere.region = filters.region;
+        }
+
+        if (filters.city) {
+            locationWhere.city = filters.city;
+        }
+
+        if (filters.featured) {
+            activityWhere.featured = true;
+        }
+
+        if (filters.active) {
+            activityWhere.isActive = true;
+        }
+
+        if (filters.query) {
+            whereClause[Op.or] = [
+                { name: { [Op.iLike]: `%${filters.query}%` } },
+                { slug: { [Op.iLike]: `%${filters.query}%` } },
+                { shortDescription: { [Op.iLike]: `%${filters.query}%` } },
+            ];
+        }
+
+        const includeClause = [
+            { model: club_ClubDetails, as: 'details' },
+            { model: club_ClubLocation, as: 'location', where: Object.keys(locationWhere).length > 0 ? locationWhere : undefined },
+            { model: club_ClubMembership, as: 'membership' },
+            { model: club_ClubMember, as: 'members' },
+            { model: club_ClubActivity, as: 'activities', where: Object.keys(activityWhere).length > 0 ? activityWhere : undefined },
+        ];
+
+        const cleanInclude = includeClause.map((include) => {
+            if (include.where && Object.keys(include.where).length === 0) {
+                delete include.where;
+            }
+            return include;
+        });
+
+        const clubs = await club_Club.findAndCountAll({
+            where: whereClause,
+            limit: parseInt(limit),
+            offset: parseInt(offset),
+            include: cleanInclude,
+            order: [['createdAt', 'DESC']],
+        });
+
+        const clubsWithComments = await Promise.all(
+            clubs.rows.map(async (club) => {
+                const comments = await comment.findAll(getCommentConfig(club.id, 'club'));
+                const transformed = transformClub(club);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
+
+        return res.status(200).json({
+            clubs: clubsWithComments,
+            pagination: {
+                currentPage: parseInt(page),
+                totalPages: Math.ceil(clubs.count / limit),
+                totalItems: clubs.count,
+                itemsPerPage: parseInt(limit),
+            },
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const getClubSpecificData = async (identifier, dataType, req, res, next) => {
+    try {
+        const { page = 1, limit = 20 } = req.query;
+        const offset = (page - 1) * limit;
+
+        const club = await findBySlugOrId(club_Club, identifier, {
+            where: { isDraft: false },
+            include: [
+                { model: club_ClubDetails, as: 'details' },
+                { model: club_ClubLocation, as: 'location' },
+                { model: club_ClubMembership, as: 'membership' },
+                { model: club_ClubMember, as: 'members' },
+                { model: club_ClubActivity, as: 'activities' },
+            ],
+        });
+
+        if (!club) {
+            throw new CustomError({
+                message: 'Club not found',
+                statusCode: 404,
+            });
+        }
+
+        let result;
+        let pagination = null;
+
+        switch (dataType) {
+            case 'events':
+                const events = club.activities?.filter((activity) => activity.type === 'events') || [];
+                result = events;
+                break;
+
+            case 'activities':
+                const activities = club.activities?.filter((activity) => activity.type === 'regular') || [];
+                result = activities;
+                break;
+
+            case 'trips':
+                const trips = club.activities?.filter((activity) => activity.type === 'trips') || [];
+                result = trips;
+                break;
+
+            case 'courses':
+                const courses = club.activities?.filter((activity) => activity.type === 'courses') || [];
+                result = courses;
+                break;
+
+            case 'members':
+                const members = club.members || [];
+                if (req.query.page && req.query.limit) {
+                    const startIndex = offset;
+                    const endIndex = startIndex + parseInt(limit);
+                    result = members.slice(startIndex, endIndex);
+                    pagination = {
+                        currentPage: parseInt(page),
+                        totalPages: Math.ceil(members.length / limit),
+                        totalItems: members.length,
+                        itemsPerPage: parseInt(limit),
+                    };
+                } else {
+                    result = members;
+                }
+                break;
+
+            case 'management':
+                result = club.details?.management || {};
+                break;
+
+            default:
+                throw new CustomError({
+                    message: 'Invalid data type',
+                    statusCode: 400,
+                });
+        }
+
+        const response = { [dataType]: result };
+        if (pagination) {
+            response.pagination = pagination;
+        }
+
+        return res.status(200).json(response);
     } catch (err) {
         next(err);
     }
