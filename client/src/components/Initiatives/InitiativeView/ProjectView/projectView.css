@@ -1362,6 +1362,10 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
         padding: 0 0.5rem;
         gap: 1.5rem;
     }
+    .project-view-section:nth-child(even) .project-view-section-content{
+    display: flex;
+    flex-direction: column;
+}
   .deadline-status {
     font-size: 0.65rem;
     padding: 0.5rem 0.875rem;
