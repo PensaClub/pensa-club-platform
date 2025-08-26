@@ -105,11 +105,7 @@ export const notify = (key, error, customMessage = null) => {
       role: 'alert',
     });
     break;
-  case 'google-user-not-found':
-    toast.error(<Trans i18nKey="notification.google-not-found-user-register" />, {
-      role: 'alert',
-    });
-    break;
+ 
   case 'google-user-exists':
     toast.warning(<Trans i18nKey="notification.user-already-exists" />, {
       role: 'alert',
