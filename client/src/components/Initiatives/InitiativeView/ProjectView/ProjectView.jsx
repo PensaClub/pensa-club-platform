@@ -439,10 +439,10 @@ export const ProjectView = () => {
                                         {/* ЗАЩИТЕНА ПРОВЕРКА ЗА PARTICIPANTS */}
                                         {(currentProject.currentParticipants !== undefined || currentProject.maxParticipants !== undefined) && (
                                             <div className="project-view-meta-item">
-                                                <span className="project-view-meta-label">{t('projectView.meta.participants')}:</span>
-                                                <span className="project-view-meta-value">
+                                                {currentProject.currentParticipants && <span className="project-view-meta-label">{t('projectView.meta.participants')}:</span>}
+                                                {currentProject.currentParticipants && <span className="project-view-meta-value">
                                                     {currentProject.currentParticipants || 0} / {currentProject.maxParticipants || '∞'}
-                                                </span>
+                                                </span>}
                                             </div>
                                         )}
                                     </div>
@@ -476,32 +476,50 @@ export const ProjectView = () => {
                                 </div>
 
                                 {/* ЗАЩИТЕНА ПРОВЕРКА ЗА STATS */}
-                                {(currentProject.budget || currentProject.timeline || currentProject.team) && (
-                                    <div className="project-view-stats-card">
-                                        {currentProject.budget?.funded && currentProject.budget?.total && (
-                                            <div className="project-view-stats-item">
-                                                <div className="project-view-stats-number">
-                                                    {Math.round((currentProject.budget.funded / currentProject.budget.total) * 100)}%
+
+                                {(() => {
+                                    // Проверяваме дали имаме валидни данни за показване
+                                    const hasBudget = currentProject.budget?.funded && currentProject.budget?.total &&
+                                        Number(currentProject.budget.funded) > 0 && Number(currentProject.budget.total) > 0;
+
+                                    const hasDuration = currentProject.timeline?.estimatedDuration &&
+                                        currentProject.timeline.estimatedDuration !== null &&
+                                        currentProject.timeline.estimatedDuration !== '' &&
+                                        currentProject.timeline.estimatedDuration !== '0' &&
+                                        String(currentProject.timeline.estimatedDuration).trim() !== '';
+
+                                    const hasTeam = currentProject.team &&
+                                        Array.isArray(currentProject.team) &&
+                                        currentProject.team.length > 0;
+
+                                    // Показваме секцията само ако има поне една валидна стойност
+                                    return (hasBudget || hasDuration || hasTeam) ? (
+                                        <div className="project-view-stats-card">
+                                            {hasBudget && (
+                                                <div className="project-view-stats-item">
+                                                    <div className="project-view-stats-number">
+                                                        {Math.round((Number(currentProject.budget.funded) / Number(currentProject.budget.total)) * 100)}%
+                                                    </div>
+                                                    <div className="project-view-stats-label">{t('projectView.stats.funded')}</div>
                                                 </div>
-                                                <div className="project-view-stats-label">{t('projectView.stats.funded')}</div>
-                                            </div>
-                                        )}
+                                            )}
 
-                                        {currentProject.timeline?.estimatedDuration && (
-                                            <div className="project-view-stats-item">
-                                                <div className="project-view-stats-number">{currentProject.timeline.estimatedDuration}</div>
-                                                <div className="project-view-stats-label">{t('projectView.stats.duration')}</div>
-                                            </div>
-                                        )}
+                                            {hasDuration && (
+                                                <div className="project-view-stats-item">
+                                                    <div className="project-view-stats-number">{currentProject.timeline.estimatedDuration}</div>
+                                                    <div className="project-view-stats-label">{t('projectView.stats.duration')}</div>
+                                                </div>
+                                            )}
 
-                                        {currentProject.team?.length && (
-                                            <div className="project-view-stats-item">
-                                                <div className="project-view-stats-number">{currentProject.team.length}</div>
-                                                <div className="project-view-stats-label">{t('projectView.stats.team')}</div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                                            {hasTeam && (
+                                                <div className="project-view-stats-item">
+                                                    <div className="project-view-stats-number">{currentProject.team.length}</div>
+                                                    <div className="project-view-stats-label">{t('projectView.stats.team')}</div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : null;
+                                })()}
                             </div>
 
                         </div>
@@ -861,7 +879,7 @@ export const ProjectView = () => {
                             </section>
                         )}
                         {/* Application Form Section - Винаги видима */}
-                        {isAuthentication && !deadlinePassed && (
+                        {isAuthentication && !deadlinePassed && currentProject?.applicationStatus === 'open' && (
                             <section id="application-form" className="project-view-section">
                                 <ApplicationForm
                                     project={currentProject}
