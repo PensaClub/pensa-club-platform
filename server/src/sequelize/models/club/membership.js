@@ -39,35 +39,65 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: 0,
                 field: 'total_members',
             },
+            maxMembers: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                defaultValue: 0,
+                field: 'max_members',
+            },
             ageGroups: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: {},
-                comment: 'Age group distribution: {"below-60": 0, "60-70": 0, "70-80": 0, "80+": 0}',
+                field: 'age_groups',
             },
             membershipFee: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: {},
-                comment: 'Membership fees: {"monthly": 0, "yearly": 0, "currency": "BGN"}',
+                field: 'membership_fee',
+            },
+            type: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            minimumAge: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                defaultValue: 0,
+                field: 'minimum_age',
+            },
+            trialPeriod: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: {},
+                field: 'trial_period',
+            },
+            fees: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: {},
+            },
+            management: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: {},
             },
             requirements: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: [],
-                comment: 'Array of membership requirements',
             },
             benefits: {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: [],
-                comment: 'Array of membership benefits',
             },
         },
         {
             sequelize,
             modelName: 'ClubMembership',
-            tableName: 'club_memberships', // Change from 'club_membership' to 'club_memberships'
+            tableName: 'club_memberships',
             timestamps: true,
             underscored: true,
         }

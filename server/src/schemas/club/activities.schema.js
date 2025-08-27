@@ -21,13 +21,13 @@ const activitiesSchema = z.object({
                 ageGroup: z
                     .object({
                         min: optionalNumber(0),
-                        max: optionalNumber(150),
+                        max: optionalNumber(0, 150),
                     })
                     .optional(),
                 capacity: z
                     .object({
                         min: optionalNumber(0),
-                        max: optionalNumber(1000),
+                        max: optionalNumber(0, 1000),
                     })
                     .optional(),
                 fee: z
