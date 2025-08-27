@@ -43,8 +43,9 @@ const transformClub = (clubData) => {
         membership: club.membership
             ? {
                   totalMembers: club.membership.totalMembers || 0,
+                  maxMembers: club.membership.maxMembers || 0,
                   ageGroups: club.membership.ageGroups || {
-                      'below-60': 0,
+                      'под-60': 0,
                       '60-70': 0,
                       '70-80': 0,
                       '80+': 0,
@@ -54,6 +55,11 @@ const transformClub = (clubData) => {
                       yearly: 0,
                       currency: '',
                   },
+                  type: club.membership.type || '',
+                  minimumAge: club.membership.minimumAge || 0,
+                  trialPeriod: club.membership.trialPeriod || {},
+                  fees: club.membership.fees || {},
+                  management: club.membership.management || {},
                   requirements: club.membership.requirements || [],
                   benefits: club.membership.benefits || [],
               }
@@ -65,6 +71,8 @@ const transformClub = (clubData) => {
                   const memberData = member.get ? member.get() : member;
                   return {
                       id: memberData.id?.toString() || '',
+                      clubId: memberData.clubId?.toString() || '',
+                      userId: memberData.userId?.toString() || '',
                       firstName: memberData.firstName || '',
                       lastName: memberData.lastName || '',
                       phone: memberData.phone || '',
@@ -74,6 +82,8 @@ const transformClub = (clubData) => {
                       joinDate: memberData.joinDate || '',
                       isActive: memberData.isActive || false,
                       role: memberData.role || '',
+                      status: memberData.status || '',
+                      preferences: memberData.preferences || {},
                   };
               })
             : [],
@@ -127,6 +137,22 @@ const transformClub = (clubData) => {
                 friday: '',
                 saturday: '',
                 sunday: '',
+                days: {
+                    monday: { enabled: false, open: '', close: '' },
+                    tuesday: { enabled: false, open: '', close: '' },
+                    wednesday: { enabled: false, open: '', close: '' },
+                    thursday: { enabled: false, open: '', close: '' },
+                    friday: { enabled: false, open: '', close: '' },
+                    saturday: { enabled: false, open: '', close: '' },
+                    sunday: { enabled: false, open: '', close: '' },
+                },
+                special: '',
+            },
+            address: {
+                street: '',
+                city: '',
+                postalCode: '',
+                poBox: '',
             },
         },
 
@@ -242,9 +268,6 @@ const transformClub = (clubData) => {
     };
 };
 
-/**
- * Transform activities from database format to frontend format
- */
 const transformActivities = (activities) => {
     if (!activities || !Array.isArray(activities)) {
         return {
@@ -269,12 +292,33 @@ const transformActivities = (activities) => {
         switch (activityData.type) {
             case 'regular':
                 transformed.regular.push({
+                    id: data.id || '',
                     name: activityData.name || '',
-                    day: data.day || '',
-                    time: data.time || '',
-                    instructor: data.instructor || '',
-                    participants: data.participants || 0,
                     description: activityData.description || '',
+                    type: data.type || '',
+                    category: data.category || '',
+                    schedule: data.schedule || {
+                        frequency: '',
+                        dayOfWeek: 0,
+                        startTime: '',
+                        duration: 0,
+                    },
+                    ageGroup: data.ageGroup || {
+                        min: 0,
+                        max: 0,
+                    },
+                    capacity: data.capacity || {
+                        min: 0,
+                        max: 0,
+                    },
+                    fee: data.fee || {
+                        amount: 0,
+                        period: '',
+                        required: false,
+                    },
+                    instructor: data.instructor || '',
+                    requirements: data.requirements || '',
+                    equipment: data.equipment || [],
                 });
                 break;
             case 'events':

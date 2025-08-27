@@ -14,7 +14,6 @@ const {
 const CustomError = require('../utils/customError');
 const { transformClub } = require('../utils/clubUtils');
 const { findBySlugOrId } = require('../utils/modelLookup');
-// Add the import for comment utils
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { comment } = require('../sequelize/models');
 const { Op } = require('sequelize');
@@ -225,6 +224,66 @@ clubController.get('/user-bookmarks/:email', async (req, res, next) => {
     }
 });
 
+clubController.get('/user-clubs/:email', async (req, res, next) => {
+    try {
+        const { email } = req.params;
+        const { page = 1, limit = 12 } = req.query;
+        const offset = (page - 1) * limit;
+
+        const totalCount = await club_Club.count({
+            where: { isDraft: false },
+            include: [
+                {
+                    model: club_ClubMember,
+                    as: 'members',
+                    where: { email: email },
+                    required: true,
+                },
+            ],
+        });
+
+        const clubs = await club_Club.findAll({
+            where: { isDraft: false },
+            limit: parseInt(limit),
+            offset: parseInt(offset),
+            include: [
+                { model: club_ClubDetails, as: 'details' },
+                { model: club_ClubLocation, as: 'location' },
+                { model: club_ClubMembership, as: 'membership' },
+                {
+                    model: club_ClubMember,
+                    as: 'members',
+                    where: { email: email },
+                    required: true,
+                },
+                { model: club_ClubActivity, as: 'activities' },
+            ],
+            order: [['createdAt', 'DESC']],
+        });
+
+        const clubsWithComments = await Promise.all(
+            clubs.map(async (club) => {
+                const comments = await comment.findAll(getCommentConfig(club.id, 'club'));
+                const transformed = transformClub(club);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
+
+        return res.status(200).json({
+            clubs: clubsWithComments,
+            pagination: {
+                currentPage: parseInt(page),
+                totalPages: Math.ceil(totalCount / limit),
+                totalItems: totalCount,
+                itemsPerPage: parseInt(limit),
+            },
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 clubController.get('/category/:category', async (req, res, next) => {
     return searchClubsWithFilters({ category: req.params.category }, req, res, next);
 });
@@ -317,8 +376,14 @@ const createClub = async (clubData, req, res, next) => {
             const membershipData = {
                 clubId: club.id,
                 totalMembers: clubData.membership?.totalMembers || 0,
+                maxMembers: clubData.membership?.maxMembers || 0,
                 ageGroups: clubData.membership?.ageGroups || {},
                 membershipFee: clubData.membership?.membershipFee || {},
+                type: clubData.membership?.type || null,
+                minimumAge: clubData.membership?.minimumAge || 0,
+                trialPeriod: clubData.membership?.trialPeriod || {},
+                fees: clubData.membership?.fees || {},
+                management: clubData.membership?.management || {},
                 requirements: clubData.membership?.requirements || [],
                 benefits: clubData.membership?.benefits || [],
             };
@@ -388,7 +453,11 @@ const getClubsByDraftStatus = async (isDraft, req, res, next) => {
         const { page = 1, limit = 12 } = req.query;
         const offset = (page - 1) * limit;
 
-        const clubs = await club_Club.findAndCountAll({
+        const totalCount = await club_Club.count({
+            where: { isDraft },
+        });
+
+        const clubs = await club_Club.findAll({
             where: { isDraft },
             limit: parseInt(limit),
             offset: parseInt(offset),
@@ -403,7 +472,7 @@ const getClubsByDraftStatus = async (isDraft, req, res, next) => {
         });
 
         const clubsWithComments = await Promise.all(
-            clubs.rows.map(async (club) => {
+            clubs.map(async (club) => {
                 const comments = await comment.findAll(getCommentConfig(club.id, 'club'));
                 const transformed = transformClub(club);
                 transformed.comments = comments.map((comment) => transformComment(comment));
@@ -415,8 +484,8 @@ const getClubsByDraftStatus = async (isDraft, req, res, next) => {
             clubs: clubsWithComments,
             pagination: {
                 currentPage: parseInt(page),
-                totalPages: Math.ceil(clubs.count / limit),
-                totalItems: clubs.count,
+                totalPages: Math.ceil(totalCount / limit),
+                totalItems: totalCount,
                 itemsPerPage: parseInt(limit),
             },
         });
@@ -519,9 +588,16 @@ const updateClub = async (clubData, req, res, next, isDraft) => {
             );
 
             const membershipData = {
+                clubId: club.id,
                 totalMembers: clubData.membership?.totalMembers || 0,
+                maxMembers: clubData.membership?.maxMembers || 0,
                 ageGroups: clubData.membership?.ageGroups || {},
                 membershipFee: clubData.membership?.membershipFee || {},
+                type: clubData.membership?.type || null,
+                minimumAge: clubData.membership?.minimumAge || 0,
+                trialPeriod: clubData.membership?.trialPeriod || {},
+                fees: clubData.membership?.fees || {},
+                management: clubData.membership?.management || {},
                 requirements: clubData.membership?.requirements || [],
                 benefits: clubData.membership?.benefits || [],
             };
@@ -632,7 +708,12 @@ const searchClubsWithFilters = async (filters, req, res, next) => {
             return include;
         });
 
-        const clubs = await club_Club.findAndCountAll({
+        const totalCount = await club_Club.count({
+            where: whereClause,
+            include: cleanInclude,
+        });
+
+        const clubs = await club_Club.findAll({
             where: whereClause,
             limit: parseInt(limit),
             offset: parseInt(offset),
@@ -641,7 +722,7 @@ const searchClubsWithFilters = async (filters, req, res, next) => {
         });
 
         const clubsWithComments = await Promise.all(
-            clubs.rows.map(async (club) => {
+            clubs.map(async (club) => {
                 const comments = await comment.findAll(getCommentConfig(club.id, 'club'));
                 const transformed = transformClub(club);
                 transformed.comments = comments.map((comment) => transformComment(comment));
@@ -653,8 +734,8 @@ const searchClubsWithFilters = async (filters, req, res, next) => {
             clubs: clubsWithComments,
             pagination: {
                 currentPage: parseInt(page),
-                totalPages: Math.ceil(clubs.count / limit),
-                totalItems: clubs.count,
+                totalPages: Math.ceil(totalCount / limit),
+                totalItems: totalCount,
                 itemsPerPage: parseInt(limit),
             },
         });
