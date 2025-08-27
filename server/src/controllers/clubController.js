@@ -435,10 +435,20 @@ const createClub = async (clubData, req, res, next) => {
                 }
             }
 
-            return club;
+            return club.id;
         });
 
-        const transformedClub = transformClub(result);
+        const completeClub = await club_Club.findByPk(result, {
+            include: [
+                { model: club_ClubDetails, as: 'details' },
+                { model: club_ClubLocation, as: 'location' },
+                { model: club_ClubMembership, as: 'membership' },
+                { model: club_ClubMember, as: 'members' },
+                { model: club_ClubActivity, as: 'activities' },
+            ],
+        });
+
+        const transformedClub = transformClub(completeClub);
 
         res.status(201).json({
             ...transformedClub,
@@ -610,10 +620,20 @@ const updateClub = async (clubData, req, res, next, isDraft) => {
                 { transaction: t }
             );
 
-            return club;
+            return club.id;
         });
 
-        const transformedClub = transformClub(result);
+        const completeClub = await club_Club.findByPk(result, {
+            include: [
+                { model: club_ClubDetails, as: 'details' },
+                { model: club_ClubLocation, as: 'location' },
+                { model: club_ClubMembership, as: 'membership' },
+                { model: club_ClubMember, as: 'members' },
+                { model: club_ClubActivity, as: 'activities' },
+            ],
+        });
+
+        const transformedClub = transformClub(completeClub);
 
         return res.status(200).json(transformedClub);
     } catch (err) {
